@@ -1,183 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1">
 <context>
-    <name>ThickSlabExtension</name>
+    <name>udg::QThickSlabWidget</name>
     <message>
-        <location filename="thickslabextension.cpp" line="76"/>
-        <source>&amp;Axial View</source>
+        <location filename="qthickslabwidget.cpp" line="28"/>
+        <source>Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabextension.cpp" line="77"/>
-        <source>Ctrl+A</source>
+        <location filename="qthickslabwidget.cpp" line="29"/>
+        <source>Enable/Disable Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabextension.cpp" line="78"/>
-        <source>Change Current View To Axial</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="83"/>
-        <source>&amp;Sagital View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="84"/>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="85"/>
-        <source>Change Current View To Saggital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="90"/>
-        <source>&amp;Coronal View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="91"/>
-        <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="92"/>
-        <source>Change Current View To Coronal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="98"/>
-        <source>PS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="99"/>
-        <source>Enable/Disable the current attached</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="106"/>
-        <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="107"/>
-        <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="108"/>
-        <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="116"/>
-        <source>Rotate Clockwise</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="118"/>
-        <source>Rotate the image in clockwise direction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="125"/>
-        <source>Rotate Counter Clockwise</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="127"/>
-        <source>Rotate the image in counter clockwise direction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="134"/>
-        <source>Flip Horizontal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="135"/>
-        <source>Flip the image horizontally</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="142"/>
-        <source>Flip Vertical</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="143"/>
-        <source>Flip the image vertically</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="254"/>
-        <source>Default %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="261"/>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="667"/>
-        <source>Loading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextension.cpp" line="668"/>
-        <source>Loading data, please wait...</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ThickSlabExtensionMediator</name>
-    <message>
-        <location filename="thickslabextensionmediator.cpp" line="26"/>
-        <source>Thick Slab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextensionmediator.cpp" line="41"/>
-        <source>Starviewer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextensionmediator.cpp" line="41"/>
-        <source>The selected item is not an image</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ThickSlabWidget</name>
-    <message>
-        <location filename="thickslabwidget.cpp" line="128"/>
+        <location filename="qthickslabwidget.cpp" line="110"/>
         <source>XY : Axial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabwidget.cpp" line="146"/>
+        <location filename="qthickslabwidget.cpp" line="127"/>
         <source>XY : Sagital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabwidget.cpp" line="164"/>
+        <location filename="qthickslabwidget.cpp" line="144"/>
         <source>XY : Coronal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabwidget.cpp" line="207"/>
+        <location filename="qthickslabwidget.cpp" line="194"/>
         <source>Phases: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QThickSlabWidgetBase</name>
+    <message>
+        <location filename="qthickslabwidgetbase.ui" line="13"/>
+        <source>ViewerWidget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidgetbase.ui" line="42"/>
+        <source>XY : Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidgetbase.ui" line="72"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::ThickSlabExtension</name>
+    <message>
+        <location filename="thickslabextension.cpp" line="77"/>
+        <source>&amp;Axial View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="78"/>
+        <source>Ctrl+A</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="79"/>
+        <source>Change Current View To Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="84"/>
+        <source>&amp;Sagital View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="85"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="86"/>
+        <source>Change Current View To Saggital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="91"/>
+        <source>&amp;Coronal View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="92"/>
+        <source>Ctrl+C</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="93"/>
+        <source>Change Current View To Coronal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="99"/>
+        <source>PS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="100"/>
+        <source>Enable/Disable the current attached</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="107"/>
+        <source>Rotate Clockwise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="109"/>
+        <source>Rotate the image in clockwise direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="116"/>
+        <source>Rotate Counter Clockwise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="118"/>
+        <source>Rotate the image in counter clockwise direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="125"/>
+        <source>Flip Horizontal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="126"/>
+        <source>Flip the image horizontally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="133"/>
+        <source>Flip Vertical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="134"/>
+        <source>Flip the image vertically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="609"/>
+        <source>Loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextension.cpp" line="610"/>
+        <source>Loading data, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::ThickSlabExtensionBase</name>
     <message>
-        <location filename="thickslabextensionbase.ui" line="432"/>
+        <location filename="thickslabextensionbase.ui" line="410"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -212,31 +197,36 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabextensionbase.ui" line="410"/>
-        <source>voxel information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="thickslabextensionbase.ui" line="472"/>
+        <location filename="thickslabextensionbase.ui" line="477"/>
         <source>PS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabextensionbase.ui" line="490"/>
+        <location filename="thickslabextensionbase.ui" line="495"/>
         <source>WW/WL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextensionbase.ui" line="447"/>
+        <source>Slab thickness (mm)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>udg::ThickSlabWidgetBase</name>
+    <name>udg::ThickSlabExtensionMediator</name>
     <message>
-        <location filename="thickslabwidgetbase.ui" line="13"/>
-        <source>ViewerWidget</source>
+        <location filename="thickslabextensionmediator.cpp" line="26"/>
+        <source>Thick Slab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thickslabwidgetbase.ui" line="42"/>
-        <source>XY : Axial</source>
+        <location filename="thickslabextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thickslabextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

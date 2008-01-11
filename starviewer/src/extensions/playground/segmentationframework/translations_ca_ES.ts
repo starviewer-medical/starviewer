@@ -196,91 +196,101 @@
 <context>
     <name>udg::QSegmentationFrameworkExtension</name>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="132"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="131"/>
         <source>&amp;Axial View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="133"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="132"/>
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="134"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="133"/>
         <source>Change Current View To Axial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="139"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="138"/>
         <source>&amp;Sagital View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="140"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="139"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="141"/>
-        <source>Change Current View To Sagital</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="146"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="145"/>
         <source>&amp;Coronal View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="147"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="146"/>
         <source>Ctrl+C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="148"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="147"/>
         <source>Change Current View To Coronal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="156"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="155"/>
         <source>Voxel Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="157"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="156"/>
         <source>Ctrl+I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="158"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="157"/>
         <source>Enable voxel information over cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="166"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="165"/>
         <source>Rotate Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="168"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="167"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="194"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="193"/>
         <source>CONTORN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qsegmentationframeworkextension.cpp" line="195"/>
+        <location filename="qsegmentationframeworkextension.cpp" line="194"/>
         <source>Enable/Disable Contourn tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qsegmentationframeworkextension.cpp" line="140"/>
+        <source>Change Current View To Saggital</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::SegmentationFrameworkExtensionMediator</name>
     <message>
-        <location filename="segmentationframeworkextensionmediator.cpp" line="24"/>
+        <location filename="segmentationframeworkextensionmediator.cpp" line="27"/>
         <source>Segmentation Framework</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="segmentationframeworkextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="segmentationframeworkextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -49,22 +49,22 @@
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
-        <location filename="extensionhandler.cpp" line="150"/>
+        <location filename="extensionhandler.cpp" line="144"/>
         <source>Loading, please wait...</source>
         <translation>Carregant, si us plau espereu...</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="149"/>
+        <location filename="extensionhandler.cpp" line="143"/>
         <source>Patient loading</source>
         <translation>Carregant el pacient</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="236"/>
+        <location filename="extensionhandler.cpp" line="226"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="236"/>
+        <location filename="extensionhandler.cpp" line="226"/>
         <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
         <translation>Ho sentim, hi ha hagut algun error mentres es carregaven les dades dels pacients:&lt;br&gt; %1</translation>
     </message>
@@ -147,7 +147,7 @@
         <translation>&amp;Ajuda</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="420"/>
+        <location filename="qapplicationmainwindow.cpp" line="393"/>
         <source>About Starviewer</source>
         <translation>Sobre l&apos;Starviewer</translation>
     </message>
@@ -242,7 +242,7 @@
         <translation>Els canvis tindran efecte el pròxim cop que iniciïs l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="434"/>
+        <location filename="qapplicationmainwindow.cpp" line="407"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2007 Grup de Gr&#xc3;&#xa0;fics Girona&lt;p align=&apos;justify&apos;&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and molecular imaging.&lt;p&gt;Version : %1 &lt;/p&gt;</source>
         <translation>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2007 Grup de Gràfics de Girona&lt;p align=&apos;justify&apos;&gt;Starviewer és un software de processament d&apos;imatges DICOM produïdes a partir d&apos;equipament mèdic (MRI, CT, PET, PET-CT...). Pot llegir altres formats d&apos;arxiu especificats per l&apos;estàndard MetalO (arxius *.mhd). És completament compatible amb l&apos;estàndard DICOM per la comunicació d&apos;imatges i els seus formats. Starviewer està dissenyat específicament per la navegació i visualització d&apos;imatges multi modalitat i multidimensinals: visualitzador 2D, visualitzador MPR 2D (reconstrucció multi planar), visualitzador MPR 3D i un visualitzador híbrid MPR i MIP (Maximum Intensity Projection), &lt;p align=&apos;justify&apos;&gt;Starviewer és al mateix temps una estació de treball de DICOM PACS per a la visualització mèdica i un software per el processament d&apos;imatges mèdiques per la recerca (radiologia i visualització imatges nuclears), imatges funcionals, visualització imatges 3D i visualització imatges moleculars.&lt;p&gt;Versió: %1&lt;/p&gt;</translation>
     </message>
@@ -297,12 +297,12 @@
         <translation>Canviar al llenguatge %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="474"/>
+        <location filename="qapplicationmainwindow.cpp" line="447"/>
         <source>Beta version</source>
         <translation>Versió Beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="483"/>
+        <location filename="qapplicationmainwindow.cpp" line="456"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This version of Starviewer is a preview release of our next Starviewer version and it is being made available for testing purposes only.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologist and our testing members that are helping us to improve this software. Current users of this version should not expect all of the extensions to work properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you  want to help us to improve our software, please, report any bug you found or any other feature request you have to us.&lt;/p&gt;&lt;h3&gt;We really appreciate that you give us your feedback!&lt;/h3&gt;</source>
         <translation>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta versió d&apos;Starviewer és una versió prèvia de la propera versió oficial d&apos;Starviewer i està en una fase de proves.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta versió prèvia està pensada per als radiòlegs i membres de testeig que ens ajuden a millorar aquesta aplicació. Els usuaris actuals d&apos;aquesta versió han de ser conscients que no totes les funcionalitats funcionaran a la perfecció durant aquesta fase.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si vols ajudar-nos a millorar l&apos;aplicació, si us plau informa&apos;ns de qualsevol error o qualsevol altre petició de funcionalitats que creguis convenients.&lt;/p&gt;&lt;h3&gt;El vostre feedback és fonamental per la millora de l&apos;Starviewer!&lt;/h3&gt;</translation>
     </message>

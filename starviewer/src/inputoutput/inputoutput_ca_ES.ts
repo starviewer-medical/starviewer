@@ -327,6 +327,11 @@ N&apos;hauries de triar només un.</translation>
         <source>Delete all Studies</source>
         <translation>Esborrar tots els estudis</translation>
     </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1007"/>
+        <source>9999; </source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>QPacsListBase</name>
@@ -1122,20 +1127,20 @@ Codi d&apos;error: %1</translation>
     <message>
         <location filename="qstudytreewidget.cpp" line="81"/>
         <source>&amp;View</source>
-        <translation>&amp;Obrir</translation>
+        <translation>&amp;Visualitzar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="91"/>
+        <location filename="qstudytreewidget.cpp" line="92"/>
         <source>&amp;Retrieve</source>
         <translation>&amp;Descarregar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="103"/>
+        <location filename="qstudytreewidget.cpp" line="104"/>
         <source>&amp;Delete</source>
         <translation>&amp;Esborrar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="529"/>
+        <location filename="qstudytreewidget.cpp" line="531"/>
         <source>Series</source>
         <translation>Sèrie</translation>
     </message>
@@ -1145,42 +1150,42 @@ Codi d&apos;error: %1</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="92"/>
+        <location filename="qstudytreewidget.cpp" line="93"/>
         <source>Ctrl+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="110"/>
+        <location filename="qstudytreewidget.cpp" line="112"/>
         <source>Ctrl+M</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="115"/>
+        <location filename="qstudytreewidget.cpp" line="117"/>
         <source>Store to PACS</source>
         <translation>Emmagatzemar al PACS</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="116"/>
+        <location filename="qstudytreewidget.cpp" line="118"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="109"/>
+        <location filename="qstudytreewidget.cpp" line="111"/>
         <source>Send to DICOMDIR List</source>
         <translation>Enviar a la llista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="232"/>
+        <location filename="qstudytreewidget.cpp" line="234"/>
         <source>Series %1</source>
         <translation>Sèrie %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="180"/>
+        <location filename="qstudytreewidget.cpp" line="182"/>
         <source>Study %1</source>
         <translation>Estudi %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="293"/>
+        <location filename="qstudytreewidget.cpp" line="295"/>
         <source>Image %1</source>
         <translation>Imatge %1</translation>
     </message>

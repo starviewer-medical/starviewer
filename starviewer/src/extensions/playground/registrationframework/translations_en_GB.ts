@@ -11,8 +11,18 @@
 <context>
     <name>udg::RegistrationFrameworkExtensionMediator</name>
     <message>
-        <location filename="registrationframeworkextensionmediator.cpp" line="24"/>
+        <location filename="registrationframeworkextensionmediator.cpp" line="27"/>
         <source>Registration Framework</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="registrationframeworkextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="registrationframeworkextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
