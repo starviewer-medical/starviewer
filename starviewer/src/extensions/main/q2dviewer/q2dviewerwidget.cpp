@@ -24,7 +24,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_buttonSynchronizeAction = new QAction( 0 );
     m_buttonSynchronizeAction->setText( tr("Synchronize tool") );
     m_buttonSynchronizeAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
-    m_buttonSynchronizeAction->setIcon( QIcon(":/images/boomerang.png") );
+    m_buttonSynchronizeAction->setIcon( QIcon(":/images/synchronize.png") );
     m_buttonSynchronizeAction->setCheckable( true );
     m_synchronizeButton->setDefaultAction( m_buttonSynchronizeAction );
 
@@ -149,18 +149,11 @@ Q2DViewer * Q2DViewerWidget::getViewer()
 
 bool Q2DViewerWidget::hasPhases()
 {
-
     int phases = 0 ;
-
     if( m_mainVolume )
     {
         phases = m_mainVolume->getSeries()->getNumberOfPhases();
     }
-
-
-    DEBUG_LOG( QString( tr("Phases: %1").arg( phases) ) );
-
-
     return ( phases > 1 ) ;
 }
 

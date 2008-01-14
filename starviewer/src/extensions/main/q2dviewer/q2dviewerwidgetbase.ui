@@ -72,7 +72,7 @@
         <string>...</string>
        </property>
        <property name="icon" >
-        <iconset resource="../../../main/main.qrc" >:/images/boomerang.png</iconset>
+        <iconset resource="../../../main/main.qrc" >:/images/synchronize.png</iconset>
        </property>
        <property name="checkable" >
         <bool>true</bool>
