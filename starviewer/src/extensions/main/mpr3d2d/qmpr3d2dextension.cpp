@@ -157,7 +157,7 @@ void QMPR3D2DExtension::initializeTools()
     m_toolManager->setViewerTools( m_coronal2DView, tools2DList );
 
     QStringList toolsMPRList;
-    toolsMPRList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
+    toolsMPRList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_mpr3DView, toolsMPRList );
 
     // creem la configuració
