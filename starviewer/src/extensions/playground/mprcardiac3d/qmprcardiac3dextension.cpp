@@ -5,12 +5,15 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qmprcardiac3dextension.h"
-#include "qcardiac3dmprviewer.h"
 
+#include "qcardiac3dmprviewer.h"
 #include "volume.h"
 #include "series.h"
 #include "logging.h"
 #include "toolmanager.h"
+#include "windowlevelpresetstooldata.h"
+
+// Qt
 #include <QToolButton>
 #include <QMessageBox>
 #include <QAction>
@@ -23,7 +26,6 @@
 #include <vtkRenderWindow.h>
 #include <vtkGenericMovieWriter.h>
 #include <vtkMPEG2Writer.h>
-// #include <vtkAVIWriter.h>
 #include <vtkImageData.h>
 // stl
 #include <vector>
@@ -48,6 +50,10 @@ QMPRCardiac3DExtension::QMPRCardiac3DExtension( QWidget *parent )
     m_sagitalViewEnabledButton->setChecked( true );
     m_coronalViewEnabledButton->setChecked( true );
     m_mpr3DView->orientationMarkerOff();
+
+    // ajustaments de window level pel combo box
+    m_windowLevelComboBox->setPresetsData( m_mpr3DView->getWindowLevelData() );
+    m_windowLevelComboBox->selectPreset( m_mpr3DView->getWindowLevelData()->getCurrentPreset() );
 }
 
 QMPRCardiac3DExtension::~QMPRCardiac3DExtension()
@@ -65,6 +71,10 @@ void QMPRCardiac3DExtension::initializeTools()
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
 
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     m_zoomToolButton->defaultAction()->trigger();
     m_moveToolButton->defaultAction()->trigger();
@@ -72,7 +82,7 @@ void QMPRCardiac3DExtension::initializeTools()
 
     // registrem al manager les tools que van amb el viewer principal
     QStringList toolsList;
-    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
+    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_mpr3DView, toolsList );
 
     m_toolManager->refreshConnections();
@@ -87,9 +97,6 @@ void QMPRCardiac3DExtension::createConnections()
     connect( m_sagitalOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToSagital() ) );
     connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToCoronal() ) );
     connect( m_axialOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToAxial() ) );
-
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_mpr3DView , SLOT( setWindowLevel(double,double) ) );
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_mpr3DView , SLOT( resetWindowLevelToDefault() ) );
 
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_mpr3DView , SLOT( setSubVolume(int) ) );
 
@@ -110,8 +117,7 @@ void QMPRCardiac3DExtension::setInput( Volume *input )
     m_volume = input;
     m_mpr3DView->setInput( m_volume );
     double wl[2];
-    m_mpr3DView->getWindowLevel( wl );
-    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
+    m_mpr3DView->getCurrentWindowLevel( wl );
     INFO_LOG("QMPRCardiac3DExtension:: Donem Input ");
 
     m_firstSliceInterval = 0;

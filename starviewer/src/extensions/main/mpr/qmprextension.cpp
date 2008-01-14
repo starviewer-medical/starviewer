@@ -15,6 +15,7 @@
 #include "toolsactionfactory.h"
 #include "toolmanager.h"
 #include "toolconfiguration.h"
+#include "windowlevelpresetstooldata.h"
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
@@ -51,6 +52,12 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     createConnections();
     createActors();
     readSettings();
+    // ajustaments de window level pel combo box
+    m_windowLevelComboBox->setPresetsData( m_axial2DView->getWindowLevelData() );
+    m_sagital2DView->setWindowLevelData( m_axial2DView->getWindowLevelData() );
+    m_coronal2DView->setWindowLevelData( m_axial2DView->getWindowLevelData() );
+    m_windowLevelComboBox->selectPreset( m_axial2DView->getWindowLevelData()->getCurrentPreset() );
+
     initializeTools();
 
     m_thickSlab = 0.0;
@@ -189,6 +196,10 @@ void QMPRExtension::initializeTools()
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
 
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
     // definim els grups exclusius
     QStringList exclusiveTools;
     exclusiveTools << "ZoomTool" << "SlicingTool";
@@ -217,8 +228,8 @@ void QMPRExtension::initializeTools()
 void QMPRExtension::initializeDefaultTools()
 {
     QStringList toolsList1, toolsList2;
-    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
-    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
+    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
+    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_axial2DView, toolsList1 );
     m_toolManager->setViewerTools( m_sagital2DView, toolsList2 );
     m_toolManager->setViewerTools( m_coronal2DView, toolsList2 );
@@ -254,11 +265,6 @@ void QMPRExtension::createConnections()
 
     connect( m_thickSlabSpinBox, SIGNAL( valueChanged(double) ), SLOT( updateThickSlab(double) ) );
     connect( m_thickSlabSlider, SIGNAL( valueChanged(int) ), SLOT( updateThickSlab(int) ) );
-
-    // window level
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_axial2DView , SLOT( setWindowLevel(double,double) ) );
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_sagital2DView , SLOT( setWindowLevel(double,double) ) );
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_coronal2DView , SLOT( setWindowLevel(double,double) ) );
 
     // layouts
     connect( m_horizontalLayoutAction , SIGNAL( triggered() ), SLOT( switchHorizontalLayout() ) );
@@ -769,7 +775,6 @@ void QMPRExtension::setInput( Volume *input )
 
     double wl[2];
     m_axial2DView->getDefaultWindowLevel( wl );
-    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
 
     // Totes les vistes tindran com a referència el sistema de coordenades Axial, base de tots els reslice que aplicarem.
     m_axial2DView->setViewToAxial();

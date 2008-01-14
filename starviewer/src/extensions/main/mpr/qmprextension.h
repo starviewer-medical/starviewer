@@ -83,10 +83,10 @@ private:
     void getCoronalYVector( double y[3] );
     void getAxialXVector( double x[3] );
     void getAxialYVector( double y[3] );
-    
+
     ///Inicialitza les tools que tindrà l'extensió
     void initializeTools();
-    
+
     /**
      * Inicialitza les tools per defecte dels visors de l'extensió
      */
@@ -103,11 +103,11 @@ private:
 
     /// inicialitza les orientacions dels plans de tall correctament perquè tinguin un espaiat, dimensions i límits correctes
     void initOrientation();
-    
+
     /// Llegir/Escriure la configuració de l'aplicació
     void readSettings();
     void writeSettings();
-    
+
     /// Torna a pintar els controls per modificar els plans
     void updateControls();
 
@@ -119,7 +119,7 @@ private:
 
     /// crea les connexions entre signals i slots
     void createConnections();
-    
+
     /// ens retorna la línia d'intersecció entre dos plans definida per un punt i un vector
     void planeIntersection( vtkPlaneSource* plane1 , vtkPlaneSource *plane2 , double r[3] , double t[3] );
 
@@ -131,13 +131,13 @@ private:
 
     /// Inicialitzador d'objectes pel constructor
     void init();
-    
+
     ///activa totes les tools de tots els visors
     void enableAllTools();
-    
+
     ///desactiva totes les tools de tots els visors
     void disableAllTools();
-    
+
 private slots:
     /// gestiona els events de cada finestra per controlar els eixos de manipulació
     void handleAxialViewEvents( unsigned long eventID );
@@ -172,7 +172,7 @@ private slots:
     /// Actualitza el valor del thickSlab i tot el que hi estigui relacionat amb ell
     void updateThickSlab( double value );
     void updateThickSlab( int value );
-    
+
 private:
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;
@@ -182,7 +182,7 @@ private:
 
     /// El volum al que se li practica l'MPR
     Volume *m_volume;
-    
+
     /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) respectivament i el thickSlab ( línies puntejades blaves en vista axial i sagital ).
     vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis , *m_coronalOverSagitalIntersectionAxis, *m_thickSlabOverAxialActor , *m_thickSlabOverSagitalActor;
 
@@ -203,7 +203,7 @@ private:
 
     /// Filtre de fitxers que es poden desar
     QString m_fileSaveFilter;
-    
+
     ///conjunt de tools disponibles en aquesta extensió
     QStringList m_extensionToolsList;
 
@@ -239,7 +239,7 @@ private:
     /// Estat en el que es troba la manipulació de plans
     enum { NONE , ROTATING , PUSHING };
     int m_state;
-    
+
     /// ToolManager per configurar l'entorn de tools de l'extensió
     ToolManager *m_toolManager;
 

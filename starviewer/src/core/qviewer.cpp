@@ -7,8 +7,10 @@
 #include "qviewer.h"
 #include "volume.h"
 #include "series.h"
+#include "image.h"
 #include "toolproxy.h"
 #include "patientbrowsermenu.h"
+#include "windowlevelpresetstooldata.h" // per poder afegir i modificar els presets que visualitzem
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -36,7 +38,7 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false), m_isActive(false)
+ : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isActive(false)
 {
     m_vtkWidget = new QVTKWidget( this );
     m_vtkWidget->setFocusPolicy( Qt::WheelFocus );
@@ -62,6 +64,9 @@ QViewer::QViewer( QWidget *parent )
     m_vtkQtConnections = 0;
     m_toolProxy = new ToolProxy(this);
     connect( this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)) );
+
+    // inicialitzem el window level data
+    setWindowLevelData( new WindowLevelPresetsToolData(this) );
 }
 
 QViewer::~QViewer()
@@ -382,6 +387,19 @@ void QViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX,
     this->getRenderer()->ResetCameraClippingRange();
 }
 
+WindowLevelPresetsToolData *QViewer::getWindowLevelData() const
+{
+    return m_windowLevelData;
+}
+
+void QViewer::setWindowLevelData( WindowLevelPresetsToolData *windowLevelData )
+{
+    if( m_windowLevelData )
+        delete m_windowLevelData;
+
+    m_windowLevelData = windowLevelData;
+    connect( m_windowLevelData, SIGNAL( currentWindowLevel(double,double) ), SLOT( setWindowLevel(double,double) ) );
+}
 void QViewer::grabCurrentView()
 {
     m_windowToImageFilter->Update();
@@ -410,6 +428,16 @@ void QViewer::setSeries(Series *series)
     }
 }
 
+void QViewer::getDefaultWindowLevel( double wl[2] )
+{
+    wl[0] = m_defaultWindow;
+    wl[1] = m_defaultLevel;
+    if( !m_mainVolume )
+    {
+        DEBUG_LOG( "::getDefaultWindowLevel() : No tenim input " );
+    }
+}
+
 void QViewer::enableContextMenu()
 {
     m_contextMenuActive = true;
@@ -418,6 +446,12 @@ void QViewer::enableContextMenu()
 void QViewer::disableContextMenu()
 {
     m_contextMenuActive = false;
+}
+
+void QViewer::setDefaultWindowLevel( double window, double level )
+{
+    m_defaultWindow = window;
+    m_defaultLevel = level;
 }
 
 void QViewer::contextMenuRelease()
@@ -436,6 +470,37 @@ void QViewer::contextMenuRelease()
     QPoint globalPoint = this->mapToGlobal( point );
 //     emit showContextMenu( globalPoint );
     this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point, globalPoint));
+}
+
+void QViewer::updateWindowLevelData()
+{
+    if( !m_mainVolume )
+        return;
+
+    m_windowLevelData->removePresetsFromGroup( WindowLevelPresetsToolData::FileDefined );
+    int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
+    if( wlCount )
+    {
+        for( int i = 0; i < wlCount; i++ )
+        {
+            QPair<double, double> windowLevel = m_mainVolume->getImages().at(0)->getWindowLevel( i );
+            QString description = m_mainVolume->getImages().at(0)->getWindowLevelExplanation( i );
+            if( description.isEmpty() )
+            {
+                description = tr("Default %1").arg(i);
+            }
+            m_windowLevelData->addPreset( description, windowLevel.first, windowLevel.second, WindowLevelPresetsToolData::FileDefined );
+            if( i == 0 )
+                m_windowLevelData->activatePreset( description );
+        }
+    }
+    else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
+    {
+        double wl[2];
+        this->getDefaultWindowLevel( wl );
+        m_windowLevelData->addPreset( tr("Default"), wl[0], wl[1], WindowLevelPresetsToolData::FileDefined );
+        m_windowLevelData->activatePreset( tr("Default") );
+    }
 }
 
 void QViewer::contextMenuEvent(QContextMenuEvent *event)

@@ -35,7 +35,6 @@
 
 namespace udg {
 
-
 QCardiac3DMPRViewer::QCardiac3DMPRViewer( QWidget *parent )
  : Q3DMPRViewer( parent )
 {
@@ -70,7 +69,7 @@ void QCardiac3DMPRViewer::setInput( Volume *volume )
     // li proporcionem les dades als plans
     this->updatePlanesData();
     // ajustem els valors del window Level per defecte
-    this->initializeWindowLevel();
+    this->updateWindowLevelData();
     //li donem la orientació per defecte
     this->resetViewToAxial();
     render();
@@ -115,11 +114,9 @@ void QCardiac3DMPRViewer::resetPlanes()
 {
     if( m_mainVolume )
     {
-        cout << "reset Planes " << endl;
+        DEBUG_LOG("Reset Planes");
         int *size = m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData()->GetDimensions();
-        cout << "Mides: "<< size[0] << "," << size[1] << "," << size[2] << endl;
-
-        m_axialImagePlaneWidget->SetPlaneOrientationToZAxes();
+        DEBUG_LOG( QString("Mides: %1,%2,%3").arg(size[0]).arg(size[1]).arg(size[2]) );        m_axialImagePlaneWidget->SetPlaneOrientationToZAxes();
         m_axialImagePlaneWidget->SetSliceIndex(size[2]/2);
 
         m_sagitalImagePlaneWidget->SetPlaneOrientationToXAxes();
@@ -142,29 +139,6 @@ void QCardiac3DMPRViewer::resetPlanes()
         }
     }
 }
-
-void QCardiac3DMPRViewer::initializeWindowLevel()
-{
-    if( m_mainVolume )
-    {
-        m_defaultWindow = m_mainVolume->getImages().at(0)->getWindowLevel().first;
-        m_defaultLevel = m_mainVolume->getImages().at(0)->getWindowLevel().second;
-        if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
-        {
-            double *range = m_mainVolume->getSubVolume( m_actualSubVolume )->getVtkData()->GetScalarRange();
-            m_defaultWindow = fabs(range[1] - range[0]);
-            m_defaultLevel = ( range[1] + range[0] )/ 2.0;
-        }
-        this->resetWindowLevelToDefault();
-    }
-    else
-    {
-        DEBUG_LOG( "Intentant inicialitzar el window level sense haver donat input abans" );
-    }
-}
-
-
-
 
 void QCardiac3DMPRViewer::setSubVolume( int index )
 {
@@ -225,7 +199,5 @@ void QCardiac3DMPRViewer::setSubVolume( int index )
     m_sagitalImagePlaneWidget->SetWindowLevel(wl1[0], wl1[1]);
     m_coronalImagePlaneWidget->SetWindowLevel(wl2[0], wl2[1]);
 }
-
-
 
 }; // end namespace udg

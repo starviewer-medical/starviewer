@@ -139,10 +139,6 @@ public:
     /// retorna el nombre de llesques
     int getNumberOfSlices();
 
-    /// Obté el window/level original
-    void getDefaultWindowLevel( double wl[2] );
-
-    /// Obté el window level actual de la imatge
     void getCurrentWindowLevel( double wl[2] );
 
     /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
@@ -272,13 +268,7 @@ public slots:
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
     void removeAnnotation( AnnotationFlags annotation );
 
-    /// Ajusta ÚNICAMENT els valors de window i level per defecte. Mètode de conveniència pels presentation states
-    void setDefaultWindowLevel( double window, double level );
-
-    /// Ajusta el window/level
-    void setWindowLevel( double window , double level );
-
-    /// Reseteja el window level al que tingui per defecte el volum
+    void setWindowLevel(double window, double level);
     void resetWindowLevelToDefault();
 
     /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
@@ -521,9 +511,6 @@ private:
 
     /// Mides (x,y) de la imatge que mostrarem com informació adicional
     int m_imageSizeInformation[2];
-
-    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
-    double m_defaultWindow, m_defaultLevel;
 
     /// Barra que mostra l'escala de colors del model que estem visualitzant \TODO quan tinguem models fusionats tindrem una o dues barres d'escala de colors?
     vtkScalarBarActor *m_scalarBar;

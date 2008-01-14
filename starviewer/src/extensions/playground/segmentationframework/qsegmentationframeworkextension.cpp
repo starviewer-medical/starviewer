@@ -278,7 +278,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
 
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
-    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
+//     m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
 
     /*typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
     ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );

@@ -23,17 +23,17 @@ class vtkEventQtSlotConnect;
 
 namespace udg {
 
+// Fordward declarations
+class Volume;
+class Series;
+class ToolProxy;
+class WindowLevelPresetsToolData;
+
 /**
 Classe base per a totes les finestres de visualització
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-
-// Fordward declarations
-class Volume;
-class Series;
-class ToolProxy;
-
 class QViewer : public QWidget{
 Q_OBJECT
 public:
@@ -124,6 +124,19 @@ public:
      */
     void scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY );
 
+    /**
+     * Ens retorna l'objecte que conté tota la informació referent al window level
+     * que es pot aplicar sobre aquest visor
+     * @return L'objecte WindowLevelPresetsToolData
+     */
+    WindowLevelPresetsToolData *getWindowLevelData() const;
+
+    /**
+     * Li assignem el window level data externament
+     * @param windowLevelData
+     */
+    void setWindowLevelData( WindowLevelPresetsToolData *windowLevelData );
+
 public slots:
     /// Gestiona els events que rep de la finestra
     virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
@@ -160,12 +173,28 @@ public slots:
 
     void setSeries(Series *series);
 
+    /// Obté el window/level per defecte
+    void getDefaultWindowLevel( double wl[2] );
+
+    /// Obté el window level actual de la imatge
+    virtual void getCurrentWindowLevel( double wl[2] ){};
+
 public slots:
     /**
      * Activa o desactiva el menú de contexte
      */
     void enableContextMenu();
     void disableContextMenu();
+
+    /// Ajusta ÚNICAMENT els valors de window i level per defecte. No els aplica sobre la imatge.
+    /// Mètode de conveniència pels presentation states
+    void setDefaultWindowLevel( double window, double level );
+
+    /// Ajusta el window/level
+    virtual void setWindowLevel( double window , double level ){};
+
+    /// Reseteja el window level al que tingui per defecte el volum
+    virtual void resetWindowLevelToDefault(){};
 
 signals:
     /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
@@ -190,6 +219,11 @@ protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
     void contextMenuRelease();
+
+    /**
+     * Actualitza les dades contingudes a m_windowLevelData
+     */
+    void updateWindowLevelData();
 
 protected:
     /// El volum a visualitzar
@@ -220,6 +254,12 @@ protected:
 
     /// Ens servirà per controlar si entre event o event s'ha mogut el mouse
     bool m_mouseHasMoved;
+
+    /// Dades de valors predeterminats de window level i dels valors actuals que s'apliquen
+    WindowLevelPresetsToolData *m_windowLevelData;
+
+    /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
+    double m_defaultWindow, m_defaultLevel;
 
 private:
     /// Indica si el viewer és actiu o no

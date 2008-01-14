@@ -68,8 +68,7 @@ public:
     /// Retorna la LUT en format vtk
     vtkLookupTable *getVtkLUT();
 
-    /// Retorna el window level
-    void getWindowLevel( double wl[2] );
+    void getCurrentWindowLevel( double wl[2] );
 
 signals:
     /// senyal que indica que algun dels plans han canviat
@@ -89,10 +88,7 @@ public slots:
     /// Reinicia de nou els plans
     virtual void resetPlanes();
 
-    /// Ajusta el window/level
     void setWindowLevel( double window , double level );
-
-    /// Mètodes per donar diversos window level per defecte
     void resetWindowLevelToDefault();
 
     /// mètodes per controlar la visibilitat de l'outline
@@ -111,16 +107,12 @@ public slots:
     virtual void render();
     void reset();
 
-
 protected:
     /// Els respectius volums sobre cada pla de reslice
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
 
     /// Crea l'actor que mostra una referència de l'orientació dels eixos
     void setCameraOrientation( int orientation );
-
-    /// inicialitza els valors de window level
-    virtual void initializeWindowLevel();
 
     /// Inicialitza els plans
     void initializePlanes();

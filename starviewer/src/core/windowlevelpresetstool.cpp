@@ -7,6 +7,8 @@
 #include "windowlevelpresetstool.h"
 #include "q2dviewer.h"
 #include "logging.h"
+#include "windowlevelpresetstooldata.h"
+
 // vtk
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
@@ -14,12 +16,15 @@
 namespace udg {
 
 WindowLevelPresetsTool::WindowLevelPresetsTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent)
+ : Tool(viewer,parent), m_myToolData(0)
 {
     m_toolName = "WindowLevelPresetsTool";
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    if( !m_2DViewer )
-        DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
+//     m_hasSharedData = true;
+//     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+//     if( !m_2DViewer )
+//         DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
+
+    setToolData( m_viewer->getWindowLevelData() );
 }
 
 WindowLevelPresetsTool::~WindowLevelPresetsTool()
@@ -31,7 +36,7 @@ void WindowLevelPresetsTool::handleEvent( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::KeyPressEvent:
-        applyPreset( m_2DViewer->getInteractor()->GetKeyCode() );
+        applyPreset( m_viewer->getInteractor()->GetKeyCode() );
     break;
 
     default:
@@ -41,56 +46,78 @@ void WindowLevelPresetsTool::handleEvent( unsigned long eventID )
 
 void WindowLevelPresetsTool::applyPreset(char key)
 {
+    if( m_standardPresets.isEmpty() )
+        return;
+
+    double window, level;
+    QString preset;
     switch(key)
     {
+    // de l'1 al 0 apliquem els window level standard que estaran ordenats alfabèticament
     case '1':
-        m_2DViewer->setWindowLevel(2000,500);//CT Bone
+        preset = m_standardPresets.at(0);
     break;
 
     case '2':
-        m_2DViewer->setWindowLevel(1500,-650);// CT Lung
+        preset = m_standardPresets.at(1);
     break;
 
     case '3':
-        m_2DViewer->setWindowLevel(400,40); //CT Soft Tissues, Non Contrast
+        preset = m_standardPresets.at(2);
     break;
 
     case '4':
-        m_2DViewer->setWindowLevel(400,70); //CT Soft Tissues, Contrast Medium
+        preset = m_standardPresets.at(3);
     break;
 
     case '5':
-        m_2DViewer->setWindowLevel(300,60); //CT Liver, Contrast Medium // 60-100
+        preset = m_standardPresets.at(4);
     break;
 
     case '6':
-        m_2DViewer->setWindowLevel(200,40); //CT Liver, Non Contrast
+        preset = m_standardPresets.at(5);
     break;
 
     case '7':
-        m_2DViewer->setWindowLevel(300,50); //CT Neck, Contrast Medium
+        preset = m_standardPresets.at(6);
     break;
 
     case '8':
-        m_2DViewer->setWindowLevel(500,100); //Angiography // 100-200
+        preset = m_standardPresets.at(7);
     break;
 
     case '9':
-        m_2DViewer->setWindowLevel(1000,300); //Osteoporosis// 100-1500:window!
+        preset = m_standardPresets.at(8);
     break;
 
     case '0':
-        m_2DViewer->setWindowLevel(800,-800); //Emphysema
+        preset = m_standardPresets.at(9);
     break;
 
     case '\'':
-        m_2DViewer->setWindowLevel(4000,700); //Petrous Bone
+        preset = m_standardPresets.at(10);
     break;
 
     default:
     break;
     }
 
+    m_myToolData->activatePreset( preset );
+}
+
+void WindowLevelPresetsTool::setToolData( ToolData *toolData )
+{
+    m_toolData = toolData;
+    m_myToolData = qobject_cast<WindowLevelPresetsToolData *>(toolData);
+    if( !m_myToolData )
+    {
+        DEBUG_LOG("El tooldata proporcionat no és un WindwoLevelPresetsToolData que és l'esperat");
+    }
+    else
+    {
+        m_standardPresets.clear();
+        m_standardPresets = m_myToolData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets );
+    }
 }
 
 }
