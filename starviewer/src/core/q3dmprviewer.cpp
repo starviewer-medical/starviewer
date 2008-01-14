@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "q3dmprviewer.h"
 
+#include "windowlevelpresetstooldata.h"
+
 //includes vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -41,8 +43,29 @@ public:
     Q3DMPRViewer *m_viewer;
     virtual void Execute( vtkObject *caller, unsigned long event, void *vtkNotUsed(callData) )
     {
+        static double lastWindowLevel[2] = {0.,0.};
         if( m_viewer )
         {
+            switch( event )
+            {
+            case vtkCommand::StartInteractionEvent:
+                m_viewer->getCurrentWindowLevel( lastWindowLevel );
+            break;
+
+            case vtkCommand::EndInteractionEvent:
+
+            break;
+
+            case vtkCommand::InteractionEvent:
+                // actualitzem únicament si ha canviat el window level
+                double wl[2];
+                m_viewer->getCurrentWindowLevel( wl );
+                if( wl[0] != lastWindowLevel[0] || wl[1] != lastWindowLevel[1] )
+                {
+                    m_viewer->getWindowLevelData()->setCustomWindowLevel( wl[0], wl[1] );
+                }
+            break;
+            }
             m_viewer->planeInteraction();
         }
     }
@@ -85,10 +108,9 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     // \TODO fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
-
+    this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
 
     this->enableTools();
-
     this->createActors();
     this->addActors();
 }
@@ -110,7 +132,7 @@ void Q3DMPRViewer::setInput( Volume *volume )
     // li proporcionem les dades als plans
     this->updatePlanesData();
     // ajustem els valors del window Level per defecte
-    this->initializeWindowLevel();
+    this->updateWindowLevelData();
     //li donem la orientació per defecte
     this->resetViewToAxial();
     render();
@@ -131,26 +153,6 @@ void Q3DMPRViewer::addActors()
     else
     {
         m_renderer->AddActor( m_outlineActor );
-    }
-}
-
-void Q3DMPRViewer::initializeWindowLevel()
-{
-    if( m_mainVolume )
-    {
-        m_defaultWindow = m_mainVolume->getImages().at(0)->getWindowLevel().first;
-        m_defaultLevel = m_mainVolume->getImages().at(0)->getWindowLevel().second;
-        if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
-        {
-            double *range = m_mainVolume->getVtkData()->GetScalarRange();
-            m_defaultWindow = fabs(range[1] - range[0]);
-            m_defaultLevel = ( range[1] + range[0] )/ 2.0;
-        }
-        this->resetWindowLevelToDefault();
-    }
-    else
-    {
-        DEBUG_LOG( "Intentant inicialitzar el window level sense haver donat input abans" );
     }
 }
 
@@ -212,9 +214,12 @@ void Q3DMPRViewer::initializePlanes()
 
     PlanesInteractionCallback *planesInteractionCallback = PlanesInteractionCallback::New();
     planesInteractionCallback->m_viewer = this;
-    m_axialImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
-    m_sagitalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
-    m_coronalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
+//     m_axialImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
+//     m_sagitalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
+//     m_coronalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
+    m_axialImagePlaneWidget->AddObserver( vtkCommand::AnyEvent , planesInteractionCallback );
+    m_sagitalImagePlaneWidget->AddObserver( vtkCommand::AnyEvent , planesInteractionCallback );
+    m_coronalImagePlaneWidget->AddObserver( vtkCommand::AnyEvent , planesInteractionCallback );
 }
 
 void Q3DMPRViewer::updatePlanesData()
@@ -459,7 +464,7 @@ vtkLookupTable *Q3DMPRViewer::getVtkLUT( )
     return vtkLookupTable::SafeDownCast( m_axialImagePlaneWidget->GetLookupTable() );
 }
 
-void Q3DMPRViewer::getWindowLevel( double wl[2] )
+void Q3DMPRViewer::getCurrentWindowLevel( double wl[2] )
 {
     m_axialImagePlaneWidget->GetWindowLevel( wl );
 }

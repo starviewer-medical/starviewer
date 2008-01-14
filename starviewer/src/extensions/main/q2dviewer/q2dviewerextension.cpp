@@ -18,6 +18,8 @@
 #include "study.h"
 #include "toolmanager.h"
 #include "toolconfiguration.h"
+#include "windowlevelpresetstooldata.h"
+
 #include <QAction>
 #include <QSettings>
 #include <QPoint>
@@ -47,6 +49,9 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     m_patient = NULL;
     m_selectedViewer = new Q2DViewerWidget( m_workingArea );
+    // activem les dades de ww/wl de la combo box
+    m_windowLevelComboBox->setPresetsData( m_selectedViewer->getViewer()->getWindowLevelData() );
+    m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
 
     m_predefinedSeriesGrid = new MenuGridWidget();
     m_seriesTableGrid = new TableMenu();
@@ -177,11 +182,6 @@ void Q2DViewerExtension::createConnections()
     connect( m_downImageGrid, SIGNAL( clicked ( bool ) ), SLOT( showPredefinedImageGrid() ) );
     connect( m_imageGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveImageTable() ) );
 
-    // window level combo box
-    connect( m_windowLevelComboBox, SIGNAL( windowLevel(double,double) ), SLOT( setWindowLevel(double,double) ) );
-
-    connect( m_windowLevelComboBox, SIGNAL( defaultValue() ), SLOT( resetWindowLevelToDefault() ) );
-
     // Connexions del menu
     connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
     connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
@@ -203,29 +203,6 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_mainVolume = input;
     m_vectorViewers.value( 0 )->setInput( m_mainVolume );
     validePhases();
-
-    // Omplim el combo amb tants window levels com tingui el volum
-    int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
-    if( wlCount )
-    {
-        for( int i = 0; i < wlCount; i++ )
-        {
-            QPair<double, double> windowLevel = m_mainVolume->getImages().at(0)->getWindowLevel( i );
-            QString description = m_mainVolume->getImages().at(0)->getWindowLevelExplanation( i );
-            if( !description.isEmpty() )
-                m_windowLevelComboBox->insertWindowLevelPreset( windowLevel.first, windowLevel.second, i, description );
-            else
-                m_windowLevelComboBox->insertWindowLevelPreset( windowLevel.first, windowLevel.second, i, tr("Default %1").arg(i) );
-        }
-    }
-    else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
-    {
-        double wl[2];
-        m_vectorViewers.value( 0 )->getViewer()->getDefaultWindowLevel( wl );
-        m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
-    }
-    m_windowLevelComboBox->setCurrentIndex( 0 );
-
     INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 }
 
@@ -312,7 +289,7 @@ void Q2DViewerExtension::initLayouts()
     m_viewersLayout = new QGridLayout();
     m_viewersLayout->setSpacing(0);
     m_viewersLayout->setMargin(0);
-    
+
     m_viewersLayout->addWidget( m_selectedViewer, 0, 0 );
     m_gridLayout->addLayout( m_viewersLayout, 0, 0 );
 
@@ -351,7 +328,6 @@ void Q2DViewerExtension::addColumns( int columns )
 
 void Q2DViewerExtension::addRows( int rows )
 {
-//     QHBoxLayout *horizontal;
     Q2DViewerWidget *newViewer;
     int column;
 
@@ -514,6 +490,11 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
         connect( m_predefinedSlicesGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_sliceTableGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
+
+        // TODO potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
+        // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
+        m_windowLevelComboBox->setPresetsData( m_selectedViewer->getViewer()->getWindowLevelData() );
+        m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
     }
 }
 
@@ -535,16 +516,6 @@ void Q2DViewerExtension::horizontalFlip()
 void Q2DViewerExtension::verticalFlip()
 {
     ( m_selectedViewer->getViewer() )->verticalFlip();
-}
-
-void Q2DViewerExtension::setWindowLevel(double wl1 ,double wl2)
-{
-    ( m_selectedViewer->getViewer() )->setWindowLevel( wl1, wl2 );
-}
-
-void Q2DViewerExtension::resetWindowLevelToDefault()
-{
-    ( m_selectedViewer->getViewer() )->resetWindowLevelToDefault();
 }
 
 void Q2DViewerExtension::showPredefinedGrid()

@@ -9,9 +9,12 @@
 
 #include "tool.h"
 
+#include <QStringList>
+
 namespace udg {
 
 class Q2DViewer;
+class WindowLevelPresetsToolData;
 /**
 Tool per canviar window levels predefinits
 
@@ -27,6 +30,14 @@ public:
 
     void handleEvent( unsigned long eventID );
 
+    /**
+     * Ens retorna el nombre de presets que té carregats
+     * @return
+     */
+    int getNumberOfPresets() const;
+
+    void setToolData( ToolData *toolData );
+
 private:
     /**
      * Aplica el window level predeterminat per la tecla donada
@@ -35,7 +46,11 @@ private:
     void applyPreset(char key);
 
 private:
-    Q2DViewer *m_2DViewer;
+//     Q2DViewer *m_2DViewer;
+
+    WindowLevelPresetsToolData *m_myToolData;
+
+    QStringList m_standardPresets;
 };
 
 }

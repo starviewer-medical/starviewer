@@ -209,28 +209,6 @@ void ThickSlabExtension::setInput( Volume *input )
     m_vectorViewers.value( 0 )->setInput( m_mainVolume );
     validePhases();
 
-    // Omplim el combo amb tants window levels com tingui el volum
-    int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
-    if( wlCount )
-    {
-        for( int i = 0; i < wlCount; i++ )
-        {
-            QPair<double, double> windowLevel = m_mainVolume->getImages().at(0)->getWindowLevel( i );
-            QString description = m_mainVolume->getImages().at(0)->getWindowLevelExplanation( i );
-            if( !description.isEmpty() )
-                m_windowLevelComboBox->insertWindowLevelPreset( windowLevel.first, windowLevel.second, i, description );
-            else
-                m_windowLevelComboBox->insertWindowLevelPreset( windowLevel.first, windowLevel.second, i, tr("Default %1").arg(i) );
-        }
-    }
-    else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
-    {
-        double wl[2];
-        m_vectorViewers.value( 0 )->getViewer()->getDefaultWindowLevel( wl );
-        m_windowLevelComboBox->insertWindowLevelPreset( wl[0], wl[1], 0, tr("Default") );
-    }
-    m_windowLevelComboBox->setCurrentIndex( 0 );
-
     INFO_LOG("ThickSlabExtension: Donem l'input principal")
     changeViewToAxial();
 }

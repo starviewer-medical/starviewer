@@ -7,6 +7,8 @@
 #include "windowleveltool.h"
 #include "q2dviewer.h"
 #include "logging.h"
+#include "windowlevelpresetstooldata.h"
+
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -121,8 +123,7 @@ void WindowLevelTool::doWindowLevel()
         {
             newLevel = 0.01 * ( newLevel < 0 ? -1 : 1 );
         }
-
-        m_2DViewer->setWindowLevel( newWindow , newLevel );
+        m_2DViewer->getWindowLevelData()->setCustomWindowLevel( newWindow , newLevel );
     }
     else
         DEBUG_LOG( "::doWindowLevel(): El 2DViewer és NUL!" );

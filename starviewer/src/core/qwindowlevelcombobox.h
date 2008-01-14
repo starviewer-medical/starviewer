@@ -13,6 +13,7 @@ namespace udg {
 
 // FWD declarations
 class QCustomWindowLevelDialog;
+class WindowLevelPresetsToolData;
 
 /**
 Combo box personalitzat per a escollir valors de window level predeterminats i personalitzats
@@ -27,37 +28,41 @@ public:
 
     ~QWindowLevelComboBox();
 
-    /// afegeix un window level
-    void insertWindowLevelPreset( double window, double level, int position, QString description );
-
-signals:
-    /// Emet els valors de window level escollits
-    void windowLevel( double window , double level );
-
-    /// S'emet quan el valor a posar a de ser el que ens doni l'imatge per defecte
-    void defaultValue();
+    /**
+     * Li assignem la font de dades a partir de la qual obté els valors de window level
+     * @param windowLevelData Les dades en sí
+     */
+    void setPresetsData( WindowLevelPresetsToolData *windowLevelData );
 
 public slots:
-    /// Actualitza el window level i emet senyal
-    void updateWindowLevel( double window , double level );
+    /**
+     * Selecciona el preset indicat en el combo, però no l'activa
+     * @param preset Descripció del preset
+     */
+    void selectPreset( const QString &preset );
+
+private slots:
+    /**
+     * Afegeix o elimina un preset de la llista
+     * @param preset Preset a afegir o eliminar
+     */
+    void addPreset(QString preset);
+    void removePreset(QString preset);
+
+    /// Seleccionem el window level que volem aplicar com a actiu
+    void setActiveWindowLevel( int value );
 
 private:
     /// Diàleg per escollir un window level personalitzat
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
-    /// Omple el combo
-    void populate();
+    /**
+     * Omple el combo a partir de les dades de presets. Neteja les dades que hi pugui haver anteriorment
+     */
+    void populateFromPresetsData();
 
-    /// Crea les connexions
-    void createConnections();
-
-    /// Llista de valors de window Level
-    std::vector<double *> m_windowLevelArray;
-
-private slots:
-    /// Seleccionem el window level que volem aplicar com a actiu
-    void setActiveWindowLevel( int value );
-
+    /// Les dades dels valors pre-establerts
+    WindowLevelPresetsToolData *m_presetsData;
 };
 
 }

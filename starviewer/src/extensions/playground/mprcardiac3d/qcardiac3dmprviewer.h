@@ -27,10 +27,6 @@ namespace udg {
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
-
-// FWD declarations
-
-
 class QCardiac3DMPRViewer : public Q3DMPRViewer{
 Q_OBJECT
 public:
@@ -43,20 +39,14 @@ public:
     virtual void resetPlanes();
 
 public slots:
-
     void setSubVolume( int index );
-
-private:
-
-    int m_actualSubVolume;
 
 protected:
     virtual void createOutline();
-
-    virtual void initializeWindowLevel();
-
     virtual void updatePlanesData();
 
+private:
+    int m_actualSubVolume;
 };
 
 }; //  end  namespace udg

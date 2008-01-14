@@ -78,7 +78,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
- : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_defaultWindow(.0), m_defaultLevel(.0),  m_scalarBar(0), m_rotateFactor(0), m_columns(1), m_rows(1), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
+ : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_columns(1), m_rows(1), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0)
 {
     m_enabledAnnotations = Q2DViewer::AllAnnotation;
     m_lastView = Q2DViewer::Axial;
@@ -851,6 +851,9 @@ void Q2DViewer::setInput( Volume* volume )
     updateGrid();
     setViewToAxial();
     this->enableAnnotation( m_enabledAnnotations );
+
+    // actualitzem la informació de window level
+    this->updateWindowLevelData();
 }
 
 vtkInteractorStyle *Q2DViewer::getInteractorStyle()
@@ -1291,19 +1294,6 @@ void Q2DViewer::setWindowLevel( double window , double level )
     else
     {
         DEBUG_LOG( "::setWindowLevel() : No tenim input " );
-    }
-}
-
-void Q2DViewer::getDefaultWindowLevel( double wl[2] )
-{
-    if( m_mainVolume )
-    {
-        wl[0] = m_defaultWindow;
-        wl[1] = m_defaultLevel;
-    }
-    else
-    {
-        DEBUG_LOG( "::getDefaultWindowLevel() : No tenim input " );
     }
 }
 
@@ -2448,12 +2438,6 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
 void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
 {
     enableAnnotation( annotation, false );
-}
-
-void Q2DViewer::setDefaultWindowLevel( double window, double level )
-{
-    m_defaultWindow = window;
-    m_defaultLevel = level;
 }
 
 void Q2DViewer::computeInputGrayscalePipeline()

@@ -138,8 +138,6 @@ private slots:
     void rotateCounterClockWise();
     void horizontalFlip();
     void verticalFlip();
-    void setWindowLevel(double wl1 ,double wl2);
-    void resetWindowLevelToDefault();
 
     /**
      * Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície

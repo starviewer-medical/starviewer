@@ -11,6 +11,8 @@
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
 #include "toolmanager.h"
+#include "windowlevelpresetstooldata.h"
+// Qt
 #include <QAction>
 #include <QSettings>
 #include <QBasicTimer>
@@ -23,7 +25,6 @@
 #include <vtkRenderWindow.h>
 #include <vtkGenericMovieWriter.h>
 #include <vtkMPEG2Writer.h>
-// #include <vtkAVIWriter.h>
 #include <vtkImageData.h>
 #include <vector>
 
@@ -45,6 +46,9 @@ QCardiac2DViewerExtension::QCardiac2DViewerExtension( QWidget *parent )
     createActions();
     createConnections();
     initializeTools();
+    // activem les dades de ww/wl de la combo box
+    m_windowLevelComboBox->setPresetsData( m_2DView->getWindowLevelData() );
+    m_windowLevelComboBox->selectPreset( m_2DView->getWindowLevelData()->getCurrentPreset() );
 }
 
 QCardiac2DViewerExtension::~QCardiac2DViewerExtension()
@@ -106,10 +110,6 @@ void QCardiac2DViewerExtension::createActions()
     m_sequenceEndAction->setCheckable( true );
     m_sequenceEndButton->setDefaultAction( m_sequenceEndAction );
 
-
-
-
-
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
@@ -132,7 +132,6 @@ void QCardiac2DViewerExtension::createActions()
 void QCardiac2DViewerExtension::createConnections()
 {
     // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
-
     connect( m_slider, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setPhase(int) ) );
     //connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
     connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
@@ -151,10 +150,6 @@ void QCardiac2DViewerExtension::createConnections()
     connect( m_axialViewAction, SIGNAL( triggered() ), SLOT( changeViewToAxial() ) );
     connect( m_sagitalViewAction, SIGNAL( triggered() ), SLOT( changeViewToSagital() ) );
     connect( m_coronalViewAction, SIGNAL( triggered() ), SLOT( changeViewToCoronal() ) );
-
-    // window level combo box
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_2DView , SLOT( setWindowLevel(double,double) ) );
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_2DView , SLOT( resetWindowLevelToDefault() ) );
 }
 
 void QCardiac2DViewerExtension::initializeTools()
@@ -168,6 +163,10 @@ void QCardiac2DViewerExtension::initializeTools()
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
 
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
     // definim els grups exclusius
     QStringList exclusiveTools;
     exclusiveTools << "ZoomTool" << "SlicingTool";
@@ -179,7 +178,7 @@ void QCardiac2DViewerExtension::initializeTools()
     m_windowLevelToolButton->defaultAction()->trigger();
 
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_2DView, toolsList );
     m_toolManager->refreshConnections();
 }
@@ -194,7 +193,6 @@ void QCardiac2DViewerExtension::setInput( Volume *input )
 
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
-    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
     INFO_LOG("QCardiac2DViewerExtension: Donem l'input principal")
     changeViewToAxial();
 }

@@ -7,59 +7,106 @@
 #include "qwindowlevelcombobox.h"
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
+#include "windowlevelpresetstooldata.h"
 
 namespace udg {
 
 QWindowLevelComboBox::QWindowLevelComboBox(QWidget *parent)
- : QComboBox(parent)
+ : QComboBox(parent), m_presetsData(0)
 {
     m_customWindowLevelDialog = new QCustomWindowLevelDialog;
-    populate();
-    createConnections();
+    connect( this, SIGNAL( activated(int) ), SLOT( setActiveWindowLevel(int) ) );
 }
 
 QWindowLevelComboBox::~QWindowLevelComboBox()
 {
 }
 
-void QWindowLevelComboBox::insertWindowLevelPreset( double window, double level, int position, QString description )
+void QWindowLevelComboBox::setPresetsData( WindowLevelPresetsToolData *windowLevelData )
 {
-    std::vector< double *>::iterator iterator;
-    iterator = m_windowLevelArray.begin();
-    int i = 0;
-    while( iterator != m_windowLevelArray.end() && i < position )
+    if( m_presetsData )
     {
-        i++;
-        iterator++;
+        // desconectem tot el que teníem connectat aquí
+        disconnect( m_presetsData, 0, this, 0 );
+        disconnect( m_presetsData, 0, m_customWindowLevelDialog, 0 );
+        disconnect( m_customWindowLevelDialog, 0, m_presetsData, 0 );
     }
-    this->insertItem( i, description );
-    double *wl = new double[2];
-    wl[0] = window;
-    wl[1] = level;
-    m_windowLevelArray.insert( iterator, wl );
+    m_presetsData = windowLevelData;
+    populateFromPresetsData();
+    connect( m_presetsData, SIGNAL(presetAdded(QString)), SLOT( addPreset(QString) ) );
+    connect( m_presetsData, SIGNAL(presetRemoved(QString)), SLOT( removePreset(QString) ) );
+    connect( m_presetsData, SIGNAL(presetChanged(QString)), SLOT( selectPreset(QString) ) );
+    connect( m_presetsData, SIGNAL( currentWindowLevel( double , double ) ), m_customWindowLevelDialog, SLOT( setDefaultWindowLevel( double , double ) ) );
+    // TODO això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
+    // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
+    connect( m_customWindowLevelDialog, SIGNAL( windowLevel(double,double) ), m_presetsData, SLOT( setCustomWindowLevel(double,double) ) );
 }
 
-void QWindowLevelComboBox::createConnections()
+void QWindowLevelComboBox::addPreset(QString preset)
 {
-    connect( this , SIGNAL( activated(int) ) , this , SLOT( setActiveWindowLevel(int) ) );
-    connect( this , SIGNAL( windowLevel( double , double ) ) , m_customWindowLevelDialog , SLOT( setDefaultWindowLevel( double , double ) ) );
-    connect( m_customWindowLevelDialog , SIGNAL( windowLevel(double,double) ) , this , SLOT( updateWindowLevel(double,double) ) );
+    int group;
+    if( m_presetsData->getGroup( preset, group ) )
+    {
+        int index;
+        switch( group )
+        {
+        case WindowLevelPresetsToolData::FileDefined:
+            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() - 1;
+        break;
+
+        case WindowLevelPresetsToolData::StandardPresets:
+            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() +
+                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ).count() - 1;
+        break;
+
+        case WindowLevelPresetsToolData::UserDefined:
+            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() +
+                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ).count() +
+                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::UserDefined ).count() - 1;
+        break;
+
+        case WindowLevelPresetsToolData::Other:
+            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() +
+                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ).count() +
+                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::UserDefined ).count() +
+                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::Other ).count() - 1;
+        break;
+        }
+        this->insertItem( index, preset );
+    }
+    else
+    {
+        DEBUG_LOG("El preset " + preset + " no està present en les dades de window level proporcionades" );
+    }
 }
 
-void QWindowLevelComboBox::populate()
+void QWindowLevelComboBox::removePreset(QString preset)
 {
-    this->insertWindowLevelPreset( 2000 , 500, 0, tr("CT Bone") );
-    this->insertWindowLevelPreset( 1500 , -650, 1, tr("CT Lung") );
-    this->insertWindowLevelPreset( 400 , 40, 2, tr("CT Soft Tissues, Non Contrast") );
-    this->insertWindowLevelPreset( 200 , 40, 3, tr("CT Liver, Non Contrast") );
-    this->insertWindowLevelPreset( 400 , 70, 4, tr("CT Soft Tissues, Contrast Medium") );
-    this->insertWindowLevelPreset( 300 , 60, 5, tr("CT Liver, Contrast Medium") ); // 60-100
-    this->insertWindowLevelPreset( 300 , 50, 6, tr("CT Neck, Contrast Medium") );
-    this->insertWindowLevelPreset( 500 , 100, 7, tr("Angiography") ); // 100-200
-    this->insertWindowLevelPreset( 1000 , 300, 8, tr("Osteoporosis") );// 100-1500:window!
-    this->insertWindowLevelPreset( 800 , -800, 9, tr("Emphysema") );
-    this->insertWindowLevelPreset( 4000 , 700, 10, tr("Petrous Bone") );
-    this->insertWindowLevelPreset( 0 , 0, 11, tr("Custom") );
+    int index = this->findText( preset );
+    if( index > -1 )
+        this->removeItem( index );
+}
+
+void QWindowLevelComboBox::selectPreset( const QString &preset )
+{
+    int index = this->findText( preset );
+    if( index > -1 )
+        this->setCurrentIndex( index );
+    else
+        this->setCurrentIndex( this->findText( tr("Custom") ) );
+}
+
+void QWindowLevelComboBox::populateFromPresetsData()
+{
+    if( !m_presetsData )
+        return;
+
+    this->clear();
+    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ) );
+    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ) );
+    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::UserDefined ) );
+    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::Other ) );
+    this->addItem( tr("Custom") );
 }
 
 void QWindowLevelComboBox::setActiveWindowLevel( int value )
@@ -67,22 +114,12 @@ void QWindowLevelComboBox::setActiveWindowLevel( int value )
     int customIndex = this->findText( tr("Custom") );
     if( customIndex != value  )
     {
-        this->updateWindowLevel( m_windowLevelArray[ value ][0], m_windowLevelArray[ value ][1] );
+        m_presetsData->activatePreset( this->itemText( value ) );
     }
     else
     {
         m_customWindowLevelDialog->exec();
     }
-}
-
-void QWindowLevelComboBox::updateWindowLevel( double window , double level )
-{
-    double *wl = new double[2];
-    wl[0] = window;
-    wl[1] = level;
-    int customIndex = this->findText( tr("Custom") );
-    m_windowLevelArray[ customIndex ] = wl;
-    emit windowLevel( wl[0] , wl[1] );
 }
 
 };

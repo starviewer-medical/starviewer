@@ -14,8 +14,8 @@
 #include "volume.h"
 #include "series.h"
 #include "toolconfiguration.h"
+#include "windowlevelpresetstooldata.h"
 // qt
-#include <QToolButton>
 #include <QSplitter>
 #include <QSettings>
 #include <QAction>
@@ -32,10 +32,6 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
-
-    createActions();
-    createConnections();
-
     m_axialViewEnabledButton->setChecked( true );
     m_sagitalViewEnabledButton->setChecked( true );
     m_coronalViewEnabledButton->setChecked( true );
@@ -43,6 +39,9 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     initializeTools();
     createActors();
     updateActors();
+
+    createActions();
+    createConnections();
 
     m_axial2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
     m_sagital2DView->enableAnnotation( Q2DViewer::ScalarBarAnnotation, false );
@@ -52,6 +51,9 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     m_sagital2DView->disableContextMenu();
     m_coronal2DView->disableContextMenu();
     readSettings();
+    // activem les dades de ww/wl de la combo box
+    m_windowLevelComboBox->setPresetsData( m_axial2DView->getWindowLevelData() );
+    m_windowLevelComboBox->selectPreset( m_axial2DView->getWindowLevelData()->getCurrentPreset() );
 }
 
 QMPR3D2DExtension::~QMPR3D2DExtension()
@@ -82,7 +84,6 @@ void QMPR3D2DExtension::setInput( Volume *input )
     }
     double wl[2];
     m_axial2DView->getDefaultWindowLevel( wl );
-    m_windowLevelComboBox->updateWindowLevel( wl[0] , wl[1] );
 
     m_sagital2DView->setInput( m_mpr3DView->getSagitalResliceOutput() );
     m_sagital2DView->render();
@@ -144,9 +145,13 @@ void QMPR3D2DExtension::initializeTools()
     m_translateToolButton->defaultAction()->trigger();
     m_rotate3DToolButton->defaultAction()->trigger();
 
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
     // registrem al manager les tools que van amb el viewer principal
     QStringList tools2DList;
-    tools2DList << "ZoomTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "VoxelInformationTool";
+    tools2DList << "ZoomTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "VoxelInformationTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_axial2DView, tools2DList );
     m_toolManager->setViewerTools( m_sagital2DView, tools2DList );
     m_toolManager->setViewerTools( m_coronal2DView, tools2DList );
@@ -344,16 +349,6 @@ void QMPR3D2DExtension::createConnections()
     // connexions que determinen els canvis del plans a l'MPR 3D que s'han de reflexar a les vistes 2D
     connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( update2DViews() ) );
     connect( m_mpr3DView , SIGNAL( planesHasChanged() ) , this , SLOT( updateActors() ) );
-
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_mpr3DView , SLOT( setWindowLevel(double,double) ) );
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_axial2DView , SLOT( setWindowLevel(double,double) ) );
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_sagital2DView , SLOT( setWindowLevel(double,double) ) );
-    connect( m_windowLevelComboBox , SIGNAL( windowLevel(double,double) ) , m_coronal2DView , SLOT( setWindowLevel(double,double) ) );
-
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_mpr3DView , SLOT( resetWindowLevelToDefault() ) );
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_axial2DView , SLOT( resetWindowLevelToDefault() ) );
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_sagital2DView , SLOT( resetWindowLevelToDefault() ) );
-    connect( m_windowLevelComboBox , SIGNAL( defaultValue() ) , m_coronal2DView , SLOT( resetWindowLevelToDefault() ) );
 
     // layouts
     connect( m_leftRightLayoutAction , SIGNAL( triggered() ) , this , SLOT( switchBigView() ) );
