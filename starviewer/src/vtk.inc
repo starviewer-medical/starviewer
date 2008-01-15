@@ -14,17 +14,3 @@ LIBS += -L$${VTKLIBDIR} \
         -lQVTK \
         -lvtkWidgets
  
-#        -lvtkexoIIc \
-#        -lvtkNetCDF \
-#        -lvtkMPEG2Encode \
-#        -lvtkParallel 
-#        -lvtkDICOMParser \
-#        -lvtkFiltering \
-#        -lvtkftgl \
-#        -lvtkIO \        
-#	 -lvtkjpeg \
-#	 -lvtkpng \
-#	 -lvtktiff \
-#	 -lvtkzlib \
-#	 -lvtkexpat \
-#	 -lvtkfreetype \
