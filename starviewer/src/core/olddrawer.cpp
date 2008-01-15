@@ -357,7 +357,7 @@ void OldDrawer::validateCoordinates( double coordinates[3], int view )
             //no cal fer res perquè les coordenades ja són les desitjades
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             aux = coordinates[2];
             coordinates[2] = coordinates[0];
             coordinates[0] = aux;
@@ -385,7 +385,7 @@ void OldDrawer::adaptCoordinatesToCurrentView( double *coordinates, int view )
             //no cal fer res perquè les coordenades ja són les desitjades
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             aux = coordinates[2];
             coordinates[2] = coordinates[0];
             coordinates[0] = aux;
@@ -522,7 +522,7 @@ OldDrawer::EllipsePoints OldDrawer::computeEllipsePoints( Ellipse *ellipse )
         {
             points->InsertPoint( i, cos( degrees )*xRadius + intersection[0], sin( degrees )*yRadius + intersection[1], .0 );
         }
-        else if ( m_2DViewer->getView() == Q2DViewer::Sagittal )
+        else if ( m_2DViewer->getView() == Q2DViewer::Sagital )
         {
             points->InsertPoint( i, 0., sin( degrees )*yRadius + intersection[1],cos( degrees )*xRadius + intersection[0] );
         }
@@ -592,7 +592,7 @@ OldDrawer::PrimitivesPairsList OldDrawer::getPrimitivesPairsList( int slice, int
             list = m_axialPairs.values( slice );
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             list = m_sagittalPairs.values( slice );
             break;
 
@@ -616,7 +616,7 @@ void OldDrawer::addPrimitive( PrimitiveActorPair *pair, int slice, int view )
             m_axialPairs.insert( slice, pair );
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             m_sagittalPairs.insert( slice, pair );
             break;
 
@@ -676,7 +676,7 @@ void OldDrawer::hidePrimitivesOfView( int view )
             allPairsOfSelectedView = m_axialPairs.values();
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             allPairsOfSelectedView = m_sagittalPairs.values();
             break;
 
@@ -1136,7 +1136,7 @@ void OldDrawer::highlightNearestPrimitives()
             point[1] = toWorld[1];
             currentViewMap = m_axialPairs;
             break;
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             point[1] = toWorld[1];
             point[2] = toWorld[2];
             currentViewMap = m_sagittalPairs;
@@ -1209,7 +1209,7 @@ void OldDrawer::selectNearestSet()
         case Q2DViewer::Axial:
             currentViewMap = m_axialPairs;
             break;
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             currentViewMap = m_sagittalPairs;
             break;
         case Q2DViewer::Coronal:
@@ -1252,7 +1252,7 @@ void OldDrawer::unselectSet()
         case Q2DViewer::Axial:
             currentViewMap = m_axialPairs;
             break;
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             currentViewMap = m_sagittalPairs;
             break;
         case Q2DViewer::Coronal:
@@ -1344,7 +1344,7 @@ OldDrawer::PrimitivesPairsList OldDrawer::getAllPrimitivesOfType( QString primit
         case Q2DViewer::Axial:
             map = m_axialPairs;
             break;
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             map = m_sagittalPairs;
             break;
         case Q2DViewer::Coronal:
@@ -1402,7 +1402,7 @@ OldDrawer::PrimitiveActorPair* OldDrawer::getNearestPrimitivePair( double point[
             coordinateToZero = 2;
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             list = m_sagittalPairs.values( m_2DViewer->getCurrentSlice() );
             //la coordenada que s'ha de deixar a 0 és la x.
             coordinateToZero = 0;
@@ -1459,7 +1459,7 @@ bool OldDrawer::isPointIncludedInLineBounds( double point[3], double *lineP1, do
             coordinate1 = 0;
             coordinate2 = 1;
             break;
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             coordinate1 = 2;
             coordinate2 = 1;
             break;
@@ -1556,7 +1556,7 @@ void OldDrawer::removeSelectedSet()
             iterator = new QMutableMapIterator< int , PrimitiveActorPair* >( m_axialPairs );
         break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             iterator = new QMutableMapIterator< int , PrimitiveActorPair* >( m_sagittalPairs );
         break;
 

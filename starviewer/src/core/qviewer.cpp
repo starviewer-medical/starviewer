@@ -503,6 +503,36 @@ void QViewer::updateWindowLevelData()
     }
 }
 
+void QViewer::setCameraOrientation( int orientation )
+{
+    vtkCamera *cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
+    if (cam)
+    {
+        switch (orientation)
+        {
+        case Axial:
+            cam->SetFocalPoint(0,0,0);
+            cam->SetPosition(0,0,-1); // -1 if medical ?
+            cam->SetViewUp(0,-1,0);
+            break;
+
+        case Coronal:
+            cam->SetFocalPoint(0,0,0);
+            cam->SetPosition(0,-1,0); // 1 if medical ?
+            cam->SetViewUp(0,0,1);
+            break;
+
+        case Sagital:
+            cam->SetFocalPoint(0,0,0);
+            cam->SetPosition(1,0,0); // -1 if medical ?
+            cam->SetViewUp(0,0,1);
+            break;
+        }
+        this->getRenderer()->ResetCamera();
+        this->refresh();
+    }
+}
+
 void QViewer::contextMenuEvent(QContextMenuEvent *event)
 {
     if (m_contextMenuActive)

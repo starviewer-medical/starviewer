@@ -295,25 +295,22 @@ void Q3DMPRViewer::reset()
     this->resetWindowLevelToDefault();
 }
 
+void Q3DMPRViewer::resetViewToAxial()
+{
+    this->resetPlanes();
+    this->setCameraOrientation(Axial);
+}
+
 void Q3DMPRViewer::resetViewToSagital()
 {
     this->resetPlanes();
-    this->setCameraOrientation(SAGITAL);
-    this->refresh();
+    this->setCameraOrientation(Sagital);
 }
 
 void Q3DMPRViewer::resetViewToCoronal()
 {
     this->resetPlanes();
-    this->setCameraOrientation(CORONAL);
-    this->refresh();
-}
-
-void Q3DMPRViewer::resetViewToAxial()
-{
-    this->resetPlanes();
-    this->setCameraOrientation(AXIAL);
-    this->refresh();
+    this->setCameraOrientation(Coronal);
 }
 
 void Q3DMPRViewer::setSagitalVisibility(bool enable)
@@ -364,35 +361,6 @@ void Q3DMPRViewer::resetPlanes()
             m_sagitalImagePlaneWidget->On();
         if( m_coronalPlaneVisible )
             m_coronalImagePlaneWidget->On();
-    }
-}
-
-void Q3DMPRViewer::setCameraOrientation(int orientation)
-{
-    vtkCamera *cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
-    if (cam)
-    {
-        switch (orientation)
-        {
-        case AXIAL:
-            cam->SetFocalPoint(0,0,0);
-            cam->SetPosition(0,0,-1); // -1 if medical ?
-            cam->SetViewUp(0,-1,0);
-            break;
-
-        case CORONAL:
-            cam->SetFocalPoint(0,0,0);
-            cam->SetPosition(0,-1,0); // 1 if medical ?
-            cam->SetViewUp(0,0,1);
-            break;
-
-        case SAGITAL:
-            cam->SetFocalPoint(0,0,0);
-            cam->SetPosition(1,0,0); // -1 if medical ?
-            cam->SetViewUp(0,0,1);
-            break;
-        }
-        this->getRenderer()->ResetCamera();
     }
 }
 

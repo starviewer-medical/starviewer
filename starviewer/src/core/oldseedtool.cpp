@@ -30,14 +30,14 @@ OldSeedTool::OldSeedTool( Q2DViewer *viewer, QObject *parent )
     m_point = vtkSphereSource::New();
     m_point->SetRadius( 2 );
     m_pointActor -> GetProperty()->SetColor( 0.85, 0.13, 0.26 );
-    
+
     m_pointMapper = vtkPolyDataMapper::New();
     m_pointMapper->SetInput( m_point->GetOutput() );
     m_pointActor->SetMapper( m_pointMapper );
-    
+
     m_pointActor->VisibilityOff();
     m_2DViewer->getRenderer()-> AddActor( m_pointActor );
-    
+
     connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
 }
 
@@ -79,18 +79,18 @@ void OldSeedTool::setSeed()
     m_state=SEEDING;
 
     m_2DViewer->getCurrentCursorPosition( m_seedPosition );
-    
+
     //es calcula correctament el valor de profunditat per a corretgir el bug #245
     int slice = m_2DViewer->getCurrentSlice();
     double *spacing = m_2DViewer->getInput()->getSpacing();
     double *origin = m_2DViewer->getInput()->getOrigin();
-    
+
         switch( m_2DViewer->getView() )
         {
             case Q2DViewer::Axial:
                 m_seedPosition[2] = origin[2] + (slice * spacing[2]);
             break;
-            case Q2DViewer::Sagittal:
+            case Q2DViewer::Sagital:
                 m_seedPosition[0] = origin[0] + (slice * spacing[0]);
             break;
             case Q2DViewer::Coronal:
@@ -98,7 +98,7 @@ void OldSeedTool::setSeed()
             break;
         }
     //
-    
+
     m_2DViewer->setSeedPosition(m_seedPosition);
     m_point-> SetCenter(m_seedPosition);
     m_seedSlice = m_2DViewer->getCurrentSlice();
@@ -117,7 +117,7 @@ void OldSeedTool::doSeeding( )
         m_point-> SetCenter(m_seedPosition);
         m_seedSlice = m_2DViewer->getCurrentSlice();
         m_pointActor->VisibilityOn();
-        
+
         m_2DViewer->refresh();
     }
 }

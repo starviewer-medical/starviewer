@@ -43,6 +43,9 @@ public:
     /// Per definir els diferents plans on podem operar
     enum PlaneType{ AxialPlane, SagitalPlane, CoronalPlane, Top2DPlane };
 
+    /// Definim les diverses orientacions que podem tenir: Axial: XY, Sagital: YZ, Coronal: XZ, Other: orientació arbitrària
+    enum CameraOrientationType{ Axial = AxialPlane, Sagital = SagitalPlane, Coronal = CoronalPlane, Other };
+
     /// Tipus de fitxer que pot desar
     enum FileType{ PNG , JPEG , TIFF , DICOM , PNM , META , BMP };
 
@@ -179,6 +182,12 @@ public slots:
     /// Obté el window level actual de la imatge
     virtual void getCurrentWindowLevel( double wl[2] ){};
 
+    /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
+    virtual void resetView( CameraOrientationType view ){};
+    virtual void resetViewToAxial(){};
+    virtual void resetViewToSagital(){};
+    virtual void resetViewToCoronal(){};
+
 public slots:
     /**
      * Activa o desactiva el menú de contexte
@@ -224,6 +233,13 @@ protected:
      * Actualitza les dades contingudes a m_windowLevelData
      */
     void updateWindowLevelData();
+
+    /**
+     * Fixem la orientació de la càmera del renderer principal
+     * Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
+     * @param orientation Orientació, valors enumerats que podran ser Axial, Sagital o Coronal
+     */
+    void setCameraOrientation( int orientation );
 
 protected:
     /// El volum a visualitzar

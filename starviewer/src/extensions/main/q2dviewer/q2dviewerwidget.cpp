@@ -82,7 +82,7 @@ void Q2DViewerWidget::changeViewToAxial()
     m_spinBox->setMaximum( extent[5] / phases );
     m_slider->setMaximum( extent[5] / phases);
     m_viewText->setText( tr("XY : Axial") );
-    m_2DView->setViewToAxial();
+    m_2DView->resetViewToAxial();
 
     INFO_LOG("Visor per defecte: Canviem a vista axial");
 }
@@ -99,7 +99,7 @@ void Q2DViewerWidget::changeViewToSagital()
     m_spinBox->setMaximum( extent[1] );
     m_slider->setMaximum( extent[1] );
     m_viewText->setText( tr( "XY : Sagital" ) );
-    m_2DView->setViewToSagittal();
+    m_2DView->resetViewToSagital();
 
     INFO_LOG( "Visor per defecte: Canviem a vista sagital" );
 }
@@ -116,7 +116,7 @@ void Q2DViewerWidget::changeViewToCoronal()
     m_spinBox->setMaximum( extent[3] );
     m_slider->setMaximum( extent[3] );
     m_viewText->setText( tr( "XY : Coronal" ) );
-    m_2DView->setViewToCoronal();
+    m_2DView->resetViewToCoronal();
 
     INFO_LOG( "Visor per defecte: Canviem a vista coronal" );
 }

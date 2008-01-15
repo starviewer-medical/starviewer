@@ -58,7 +58,7 @@ Normalment per poder visualitzar un volum farem el següent
 \code
 Q2DViewer* visor = new Q2DViewer();
 visor->setInput( volum );
-visor->setView( Q2DViewer::Axial );
+visor->resetView( Q2DViewer::Axial );
 visor->render();
 
 En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat mab el mètode setOverlayInput().
@@ -74,9 +74,6 @@ Podem escollir quines annotacions textuals i de referència apareixeran en la vi
 class Q2DViewer : public QViewer{
 Q_OBJECT
 public:
-    /// Axial: XY, Coronal: XZ, Sagittal: YZ
-    enum ViewType{ Axial = AxialPlane, Coronal = CoronalPlane, Sagittal = SagitalPlane };
-
     /// tipus de fusió dels models
     enum OverlayType{ None, Blend , CheckerBoard , RectilinearWipe };
 
@@ -93,17 +90,16 @@ public:
 
     vtkInteractorStyle *getInteractorStyle();
 
-    /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
-    void setView( ViewType view );
-    void setViewToAxial();
-    void setViewToCoronal();
-    void setViewToSagittal();
+    void resetView( CameraOrientationType view );
+    void resetViewToAxial();
+    void resetViewToCoronal();
+    void resetViewToSagital();
 
     /// Actualització d'anotacions vàries
     void updateWindowLevelAnnotation();
 
     /// ens retorna la vista que tenim en aquells moments del volum
-    ViewType getView() const;
+    CameraOrientationType getView() const;
 
     /// Ens retorna l'ImageViewer
     vtkImageViewer2 *getImageViewer() const;
@@ -452,7 +448,7 @@ protected:
     vtkImageViewer2 *m_viewer;
 
     /// conserva la vista actual
-    ViewType m_lastView;
+    CameraOrientationType m_lastView;
 
     /// La llesca actual que estem visualitzant
     int m_currentSlice;
