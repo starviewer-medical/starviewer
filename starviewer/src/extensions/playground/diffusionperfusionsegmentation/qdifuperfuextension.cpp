@@ -396,7 +396,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_diffusion2DView->setInput( m_diffusionMainVolume );
-    m_diffusion2DView->setView( Q2DViewer::Axial );
+    m_diffusion2DView->resetView( Q2DViewer::Axial );
     m_diffusion2DView->resetWindowLevelToDefault();
     m_diffusion2DView->render();
 }
@@ -486,7 +486,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
 
      // TODO ara ho fem "a saco" però s'hauria de millorar
     m_perfusion2DView->setInput( m_perfusionMainVolume );
-    m_perfusion2DView->setView( Q2DViewer::Axial );
+    m_perfusion2DView->resetView( Q2DViewer::Axial );
 
     //Ho fem per tal de que es vegi tot "blanc" i per tant en color "vius"
     m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);

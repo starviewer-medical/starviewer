@@ -44,7 +44,7 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
 
     case QViewer::SagitalPlane:
         m_sagitalPrimitives.insert( slice, primitive );
-        if( m_2DViewer->getView() == Q2DViewer::Sagittal )
+        if( m_2DViewer->getView() == Q2DViewer::Sagital )
         {
             if( slice < 0 || m_2DViewer->getCurrentSlice() == slice )
                 primitive->setVisibility( true );
@@ -120,20 +120,20 @@ void Drawer::refresh()
 void Drawer::removeAllPrimitives()
 {
     QList <DrawerPrimitive*> list = m_axialPrimitives.values();
-    
+
     QList <DrawerPrimitive*> sagitalList = m_sagitalPrimitives.values();
     QList <DrawerPrimitive*> coronalList = m_coronalPrimitives.values();
-    
+
     list += sagitalList;
     list += coronalList;
     list += m_top2DPlanePrimitives;
-    
+
     foreach(DrawerPrimitive *primitive, list)
     {
         m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
         delete primitive;
     }
-    
+
     m_primitiveGroups.clear();
 }
 

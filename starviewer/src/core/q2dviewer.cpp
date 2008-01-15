@@ -303,7 +303,7 @@ void Q2DViewer::updateRulers()
         }
     break;
 
-    case Sagittal:
+    case Sagital:
         for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
         {
             anchoredRulerCoordinates = vtkCoordinate::SafeDownCast ( m_anchoredRulerCoordinatesCollection->GetItemAsObject( i ));
@@ -474,7 +474,7 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
             m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
         }
-        else if( m_lastView == Sagittal )
+        else if( m_lastView == Sagital )
         {
             m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
             m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
@@ -605,7 +605,7 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
 //         case Axial:
 //             thickness = m_mainVolume->getSpacing()[2];
 //         break;
-//         case Sagittal:
+//         case Sagital:
 //             thickness = m_mainVolume->getSpacing()[0];
 //         break;
 //         case Coronal:
@@ -631,7 +631,7 @@ double Q2DViewer::getThickness()
     case Axial:
         thickness = m_mainVolume->getSpacing()[2];
     break;
-    case Sagittal:
+    case Sagital:
         thickness = m_mainVolume->getSpacing()[0];
     break;
     case Coronal:
@@ -849,7 +849,7 @@ void Q2DViewer::setInput( Volume* volume )
     updateScalarBar();
     updatePatientAnnotationInformation();
     updateGrid();
-    setViewToAxial();
+    resetViewToAxial();
     this->enableAnnotation( m_enabledAnnotations );
 
     // actualitzem la informació de window level
@@ -938,26 +938,26 @@ void Q2DViewer::render()
     }
 }
 
-void Q2DViewer::setView( ViewType view )
+void Q2DViewer::resetView( CameraOrientationType view )
 {
     m_lastView = view;
     emit viewChanged( m_lastView );
     resetCamera();
 }
 
-void Q2DViewer::setViewToAxial()
+void Q2DViewer::resetViewToAxial()
 {
-    setView( Q2DViewer::Axial );
+    resetView( Q2DViewer::Axial );
 }
 
-void Q2DViewer::setViewToCoronal()
+void Q2DViewer::resetViewToCoronal()
 {
-    setView( Q2DViewer::Coronal );
+    resetView( Q2DViewer::Coronal );
 }
 
-void Q2DViewer::setViewToSagittal()
+void Q2DViewer::resetViewToSagital()
 {
-    setView( Q2DViewer::Sagittal );
+    resetView( Q2DViewer::Sagital );
 }
 
 void Q2DViewer::updateCamera()
@@ -986,7 +986,7 @@ void Q2DViewer::updateCamera()
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
-        case Sagittal:
+        case Sagital:
             while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
@@ -1093,7 +1093,7 @@ void Q2DViewer::resetCamera()
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
 
-        case Sagittal:
+        case Sagital:
             m_viewer->SetSliceOrientationToYZ();
             while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
             {
@@ -1478,7 +1478,7 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                 imagePlane->setColumns( image->getColumns() );
             break;
 
-            case Sagittal: // XZ
+            case Sagital: // XZ
                 imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
                 imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
                 imagePlane->setSpacing( spacing[0], spacing[2] );
@@ -1596,7 +1596,7 @@ void Q2DViewer::updateWindowLevelAnnotation()
     updateScalarBar();
 }
 
-Q2DViewer::ViewType Q2DViewer::getView() const
+Q2DViewer::CameraOrientationType Q2DViewer::getView() const
 {
     return m_lastView;
 }
@@ -1609,7 +1609,7 @@ vtkImageViewer2 *Q2DViewer::getImageViewer() const
 void Q2DViewer::reset()
 {
     //\TODO: completar, encara és incomplert
-    setViewToAxial();
+    resetViewToAxial();
 }
 
 void Q2DViewer::setDivisions( int x , int y , int z )

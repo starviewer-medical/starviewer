@@ -193,7 +193,7 @@ double PolylineROITool::computeGrayMean()
             mean = computeGrayMeanAxial();
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             mean = computeGrayMeanSagittal();
             break;
 
@@ -489,7 +489,7 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
             index[2] = m_2DViewer->getCurrentSlice();
             break;
 
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             index[0] = m_2DViewer->getCurrentSlice();
             index[1] = (int)((coords[1] - origin[1])/spacing1);
             index[2] = (int)((coords[2] - origin[2])/spacing2);

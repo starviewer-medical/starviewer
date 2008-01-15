@@ -260,7 +260,7 @@ void QSegmentationFrameworkExtension::setInput( Volume *input )
 
     m_2DView->setInput( m_mainVolume );
 
-    m_2DView->setView( Q2DViewer::Axial );
+    m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
@@ -356,7 +356,7 @@ void QSegmentationFrameworkExtension::changeViewToAxial()
     m_sliceSpinBox->setMinimum( extent[4] );
     m_sliceSpinBox->setMaximum( extent[5] );
     m_sliceViewSlider->setMaximum( extent[5] );
-    m_2DView->setViewToAxial();
+    m_2DView->resetViewToAxial();
     m_2DView->setSlice(extent[5]/2);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
@@ -373,7 +373,7 @@ void QSegmentationFrameworkExtension::changeViewToSagital()
     m_sliceSpinBox->setMinimum( extent[0] );
     m_sliceSpinBox->setMaximum( extent[1] );
     m_sliceViewSlider->setMaximum( extent[1] );
-    m_2DView->setViewToSagittal();
+    m_2DView->resetViewToSagital();
     m_2DView->setSlice(extent[1]/2);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
@@ -391,7 +391,7 @@ void QSegmentationFrameworkExtension::changeViewToCoronal()
     m_sliceSpinBox->setMinimum( extent[2] );
     m_sliceSpinBox->setMaximum( extent[3] );
     m_sliceViewSlider->setMaximum( extent[3] );
-    m_2DView->setViewToCoronal();
+    m_2DView->resetViewToCoronal();
     m_2DView->setSlice(extent[3]/2);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 

@@ -217,7 +217,7 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_firstVolume );
-    m_2DView->setView( Q2DViewer::Axial );
+    m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
 
@@ -249,7 +249,7 @@ void QLandmarkRegistrationExtension::setPhase( int phase )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_firstVolume );
-    m_2DView->setView( Q2DViewer::Axial );
+    m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
 
@@ -278,7 +278,7 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView_2->setInput( m_secondVolume );
-    m_2DView_2->setView( Q2DViewer::Axial );
+    m_2DView_2->resetView( Q2DViewer::Axial );
     m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView_2->resetWindowLevelToDefault();
 
@@ -305,7 +305,7 @@ void QLandmarkRegistrationExtension::setSecondPhase( int phase )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView_2->setInput( m_secondVolume );
-    m_2DView_2->setView( Q2DViewer::Axial );
+    m_2DView_2->resetView( Q2DViewer::Axial );
     m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView_2->resetWindowLevelToDefault();
 

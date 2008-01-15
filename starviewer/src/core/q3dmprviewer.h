@@ -75,10 +75,9 @@ signals:
     void planesHasChanged( void );
 
 public slots:
-    /// Inicialitza la vista de la càmara per veure el model des d'una orientació per defecte determinada ( acial , sagital o coronal )
+    void resetViewToAxial();
     void resetViewToSagital();
     void resetViewToCoronal();
-    void resetViewToAxial();
 
     /// Habilitar/Deshabilitar la visibilitat d'un dels plans
     void setSagitalVisibility( bool enable );
@@ -111,9 +110,6 @@ protected:
     /// Els respectius volums sobre cada pla de reslice
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
 
-    /// Crea l'actor que mostra una referència de l'orientació dels eixos
-    void setCameraOrientation( int orientation );
-
     /// Inicialitza els plans
     void initializePlanes();
 
@@ -128,8 +124,6 @@ protected:
 
     /// Afegeix els actors a l'escena
     void addActors();
-
-    enum {SAGITAL, CORONAL, AXIAL};
 
     /// El renderer
     vtkRenderer *m_renderer;

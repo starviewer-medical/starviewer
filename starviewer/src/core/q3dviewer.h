@@ -55,7 +55,6 @@ public slots:
     void setRenderFunctionToTexture2D();
     void setRenderFunctionToTexture3D();
 
-    /// Reinicia la vista
     void resetViewToAxial();
     void resetViewToSagital();
     void resetViewToCoronal();
@@ -89,10 +88,6 @@ private:
 
     /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
     bool rescale();
-
-    enum { Axial , Sagital , Coronal };
-    /// Canvia la orientació de la càmera
-    void setCameraOrientation( int orientation );
 
     /// Orientació que tenim
     int m_currentOrientation;

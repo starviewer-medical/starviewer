@@ -117,7 +117,7 @@ void VoxelInformationTool::depthAccordingViewAndSlice( double xyz[3] )
         case Q2DViewer::Axial:
             xyz[2] = origin[2] + (slice * spacing[2]);
         break;
-        case Q2DViewer::Sagittal:
+        case Q2DViewer::Sagital:
             xyz[0] = origin[0] + (slice * spacing[0]);
         break;
         case Q2DViewer::Coronal:

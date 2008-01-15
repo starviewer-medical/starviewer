@@ -70,7 +70,7 @@ double* DrawerPolyline::getPoint( int position )
     {
         double *array = new double[3];
         return array;
-    } 
+    }
    else
     {
         return m_pointsList.at( position );
@@ -207,16 +207,16 @@ double DrawerPolyline::computeArea( int view )
             case Q2DViewer::Axial:
                 area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[1] + actualPoint[1] ) )/2.0;
                 break;
-                        
-            case Q2DViewer::Sagittal:
+
+            case Q2DViewer::Sagital:
                 area += ( ( followPoint[2]-actualPoint[2] )*(followPoint[1] + actualPoint[1] ) )/2.0;
                 break;
-                        
+
             case Q2DViewer::Coronal:
                 area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[2] + actualPoint[2] ) )/2.0;
                 break;
         }
-    }        
+    }
 
      //en el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
      //per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI

@@ -777,7 +777,7 @@ void QMPRExtension::setInput( Volume *input )
     m_axial2DView->getDefaultWindowLevel( wl );
 
     // Totes les vistes tindran com a referència el sistema de coordenades Axial, base de tots els reslice que aplicarem.
-    m_axial2DView->setViewToAxial();
+    m_axial2DView->resetViewToAxial();
     int extent[6];
     m_volume->getWholeExtent( extent );
     // refrescar el controls

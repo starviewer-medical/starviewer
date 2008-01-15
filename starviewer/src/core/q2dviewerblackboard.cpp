@@ -314,7 +314,7 @@ Q2DViewerBlackBoard::ActorsListType Q2DViewerBlackBoard::getActorsList( int slic
         list = m_axialAnnotations.values( slice );
     break;
 
-    case Q2DViewer::Sagittal:
+    case Q2DViewer::Sagital:
         list = m_sagitalAnnotations.values( slice );
     break;
 
@@ -338,7 +338,7 @@ void Q2DViewerBlackBoard::addActor( vtkActor2D *actor, int slice, int view )
         m_axialAnnotations.insert( slice, actor );
     break;
 
-    case Q2DViewer::Sagittal:
+    case Q2DViewer::Sagital:
         m_sagitalAnnotations.insert( slice, actor );
     break;
 
