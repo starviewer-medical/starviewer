@@ -40,6 +40,10 @@ private:
 
     /// Estableix les connexions de signals i slots
     void createConnections();
+
+    /// Crea les accions
+    void createActions();
+
     void timerEvent(QTimerEvent *event);
 
 private slots:
@@ -79,6 +83,17 @@ private:
 
     /// Gestor de tools de l'extensió
     ToolManager *m_toolManager;
+
+    /// Accions
+    QAction *m_axialViewAction;
+    QAction *m_sagitalViewAction;
+    QAction *m_coronalViewAction;
+    QAction *m_playAction;
+    QAction *m_recordAction;
+    QAction *m_boomerangAction;
+    QAction *m_repeatAction;
+    QAction *m_sequenceBeginAction;
+    QAction *m_sequenceEndAction;
 };
 
 };  //  end  namespace udg

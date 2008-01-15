@@ -44,6 +44,7 @@ QMPRCardiac3DExtension::QMPRCardiac3DExtension( QWidget *parent )
     m_slider->setPageStep(1);
 
     initializeTools();
+    createActions();
     createConnections();
 
     m_axialViewEnabledButton->setChecked( true );
@@ -58,7 +59,6 @@ QMPRCardiac3DExtension::QMPRCardiac3DExtension( QWidget *parent )
 
 QMPRCardiac3DExtension::~QMPRCardiac3DExtension()
 {
-
 }
 
 void QMPRCardiac3DExtension::initializeTools()
@@ -88,28 +88,80 @@ void QMPRCardiac3DExtension::initializeTools()
     m_toolManager->refreshConnections();
 }
 
+void QMPRCardiac3DExtension::createActions()
+{
+    m_axialViewAction = new QAction( 0 );
+    m_axialViewAction->setText( tr("&Axial View") );
+    m_axialViewAction->setShortcut( tr("Ctrl+A") );
+    m_axialViewAction->setStatusTip( tr("Change Current View To Axial") );
+    m_axialViewAction->setIcon( QIcon(":/images/axial.png") );
+    m_axialViewToolButton->setDefaultAction( m_axialViewAction );
+
+    m_sagitalViewAction = new QAction( 0 );
+    m_sagitalViewAction->setText( tr("&Sagital View") );
+    m_sagitalViewAction->setShortcut( tr("Ctrl+S") );
+    m_sagitalViewAction->setStatusTip( tr("Change Current View To Saggital") );
+    m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
+    m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
+    m_sagitalViewToolButton->setEnabled( false );
+
+    m_coronalViewAction = new QAction( 0 );
+    m_coronalViewAction->setText( tr("&Coronal View") );
+    m_coronalViewAction->setShortcut( tr("Ctrl+C") );
+    m_coronalViewAction->setStatusTip( tr("Change Current View To Coronal") );
+    m_coronalViewAction->setIcon( QIcon(":/images/coronal.png") );
+    m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
+    m_coronalViewToolButton->setEnabled( false );
+
+    m_playAction = new QAction( 0 );
+    m_playAction->setShortcut( tr("Space") );
+    m_playAction->setIcon( QIcon(":/images/play.png") );
+    m_playButton->setDefaultAction( m_playAction );
+
+    m_recordAction = new QAction( 0 );
+    m_recordAction->setIcon( QIcon(":/images/record.png") );
+    m_recordButton->setDefaultAction( m_recordAction );
+
+    m_boomerangAction = new QAction( 0 );
+    m_boomerangAction->setIcon( QIcon(":/images/boomerang.png") );
+    m_boomerangAction->setCheckable( true );
+    m_boomerangButton->setDefaultAction( m_boomerangAction );
+
+    m_repeatAction = new QAction( 0 );
+    m_repeatAction->setIcon( QIcon(":/images/repeat.png") );
+    m_repeatAction->setCheckable( true );
+    m_repeatButton->setDefaultAction( m_repeatAction );
+
+    m_sequenceBeginAction = new QAction( 0 );
+    m_sequenceBeginAction->setIcon( QIcon(":/images/sequenceBegin.png") );
+    m_sequenceBeginAction->setCheckable( true );
+    m_sequenceBeginButton->setDefaultAction( m_sequenceBeginAction );
+
+    m_sequenceEndAction = new QAction( 0 );
+    m_sequenceEndAction->setIcon( QIcon(":/images/sequenceEnd.png") );
+    m_sequenceEndAction->setCheckable( true );
+    m_sequenceEndButton->setDefaultAction( m_sequenceEndAction );
+}
+
 void QMPRCardiac3DExtension::createConnections()
 {
     connect( m_axialViewEnabledButton , SIGNAL( toggled(bool) ) , m_mpr3DView , SLOT( setAxialVisibility(bool) ) );
     connect( m_sagitalViewEnabledButton , SIGNAL( toggled(bool) ) , m_mpr3DView , SLOT( setSagitalVisibility(bool) ) );
     connect( m_coronalViewEnabledButton , SIGNAL( toggled(bool) ) , m_mpr3DView , SLOT( setCoronalVisibility(bool) ) );
 
-    connect( m_sagitalOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToSagital() ) );
-    connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToCoronal() ) );
-    connect( m_axialOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToAxial() ) );
+    connect( m_axialViewAction, SIGNAL( triggered() ), m_mpr3DView, SLOT( resetViewToAxial() ) );
+    connect( m_sagitalViewAction, SIGNAL( triggered() ), m_mpr3DView, SLOT( resetViewToSagital() ) );
+    connect( m_coronalViewAction, SIGNAL( triggered() ), m_mpr3DView, SLOT( resetViewToCoronal() ) );
 
     connect( m_slider , SIGNAL( valueChanged(int) ) , m_mpr3DView , SLOT( setSubVolume(int) ) );
-
-    connect( m_ButtonPlay , SIGNAL( clicked() ) , this , SLOT( playImages() ) );
-    connect( m_ButtonRecord , SIGNAL( clicked() ) , this , SLOT( recordVideo() ) );
-
     connect( m_spinBox , SIGNAL( valueChanged( int ) ) , this , SLOT( changeVelocity( int ) ) );
 
-    connect( m_ButtonOpenParentesis , SIGNAL( toggled( bool ) ) , this , SLOT( initInterval( bool ) ));
-    connect( m_ButtonCloseParentesis , SIGNAL( toggled( bool ) ) , this , SLOT( finishInterval( bool ) ));
-
-    connect( m_ButtonLoop , SIGNAL (toggled( bool )) , this , SLOT ( changeToLoopMode( bool ) ));
-    connect( m_ButtonComeBack , SIGNAL (toggled( bool )) , this , SLOT ( changeToComeBackMode( bool ) ));
+    connect( m_playAction , SIGNAL( triggered() ), SLOT( playImages() ) );
+    connect( m_recordAction, SIGNAL( triggered() ), SLOT( recordVideo() ) );
+    connect( m_sequenceBeginAction, SIGNAL( toggled( bool ) ), SLOT( initInterval( bool ) ));
+    connect( m_sequenceEndAction, SIGNAL( toggled( bool ) ), SLOT( finishInterval( bool ) ));
+    connect( m_repeatAction, SIGNAL(toggled( bool )), SLOT( changeToLoopMode( bool ) ));
+    connect( m_boomerangAction, SIGNAL(toggled( bool )), SLOT( changeToComeBackMode( bool ) ));
 }
 
 void QMPRCardiac3DExtension::setInput( Volume *input )
@@ -131,7 +183,7 @@ void QMPRCardiac3DExtension::playImages(){
 
    if ( !m_timer->isActive() )
     {
-        m_ButtonPlay->setIcon( QIcon(":/images/player_pause32.png") );
+        m_playAction->setIcon( QIcon(":/images/pause.png") );
         m_timer->start( ( 1000 / m_spinBox->value() ) , this );
     }
     else
@@ -143,8 +195,7 @@ void QMPRCardiac3DExtension::playImages(){
 void QMPRCardiac3DExtension::pauseImages()
 {
     m_timer->stop();
-    m_ButtonPlay->setIcon( QIcon(":/images/player_play32.png") );
-//     m_ButtonPlay->setChecked( false );
+    m_playAction->setIcon( QIcon(":/images/play.png") );
 }
 
 void QMPRCardiac3DExtension::recordVideo()
@@ -253,11 +304,11 @@ void QMPRCardiac3DExtension::timerEvent(QTimerEvent *event)
         // Si estem al final de l'interval
         if (  m_slider->value() == m_lastSliceInterval )
         {
-            if ( m_ButtonLoop->isChecked() )
+            if ( m_repeatAction->isChecked() )
             {
                 m_slider->setValue( m_firstSliceInterval );
             }
-            else if ( m_ButtonComeBack->isChecked() )
+            else if ( m_boomerangAction->isChecked() )
             {
                 m_nextStep = -1;
                 m_slider->setValue( m_slider->value() + m_nextStep );
@@ -272,7 +323,7 @@ void QMPRCardiac3DExtension::timerEvent(QTimerEvent *event)
         else if ( ( m_slider->value() == m_firstSliceInterval )  )
         {
             // Si tenim algun tipus de loop activat
-            if ( m_ButtonLoop->isChecked() ||  m_ButtonComeBack->isChecked() )
+            if ( m_repeatAction->isChecked() ||  m_boomerangAction->isChecked() )
             {
                 m_nextStep = 1;
                 m_slider->setValue( m_slider->value() + m_nextStep );
@@ -311,7 +362,7 @@ void QMPRCardiac3DExtension::changeToLoopMode( bool checked )
 {
     if ( checked )
     {
-        m_ButtonComeBack->setChecked( false );
+        m_boomerangAction->setChecked( false );
     }
 }
 
@@ -319,7 +370,7 @@ void QMPRCardiac3DExtension::changeToComeBackMode( bool checked )
 {
     if ( checked )
     {
-        m_ButtonLoop->setChecked( false );
+        m_repeatAction->setChecked( false );
     }
 }
 
