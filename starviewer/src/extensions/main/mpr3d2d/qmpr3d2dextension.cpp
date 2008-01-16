@@ -13,7 +13,6 @@
 #include "toolmanager.h"
 #include "volume.h"
 #include "series.h"
-#include "toolconfiguration.h"
 #include "windowlevelpresetstooldata.h"
 // qt
 #include <QSplitter>
@@ -36,7 +35,6 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     m_sagitalViewEnabledButton->setChecked( true );
     m_coronalViewEnabledButton->setChecked( true );
 
-    initializeTools();
     createActors();
     updateActors();
 
@@ -51,9 +49,17 @@ QMPR3D2DExtension::QMPR3D2DExtension( QWidget *parent )
     m_sagital2DView->disableContextMenu();
     m_coronal2DView->disableContextMenu();
     readSettings();
-    // activem les dades de ww/wl de la combo box
+
+    // ajustaments de window level pel combo box
     m_windowLevelComboBox->setPresetsData( m_axial2DView->getWindowLevelData() );
+    m_sagital2DView->setWindowLevelData( m_axial2DView->getWindowLevelData() );
+    m_coronal2DView->setWindowLevelData( m_axial2DView->getWindowLevelData() );
+    m_mpr3DView->setWindowLevelData( m_axial2DView->getWindowLevelData() );
+
     m_windowLevelComboBox->selectPreset( m_axial2DView->getWindowLevelData()->getCurrentPreset() );
+    // important, sempre cal abans configurar el window level i després inicialitzar les tools
+    // per tenir les window level data correctes
+    initializeTools();
 }
 
 QMPR3D2DExtension::~QMPR3D2DExtension()
@@ -82,8 +88,6 @@ void QMPR3D2DExtension::setInput( Volume *input )
         axialCam->SetPosition(0,0,-1);
         m_axial2DView->getRenderer()->ResetCamera();
     }
-    double wl[2];
-    m_axial2DView->getDefaultWindowLevel( wl );
 
     m_sagital2DView->setInput( m_mpr3DView->getSagitalResliceOutput() );
     m_sagital2DView->render();
@@ -159,17 +163,6 @@ void QMPR3D2DExtension::initializeTools()
     QStringList toolsMPRList;
     toolsMPRList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_mpr3DView, toolsMPRList );
-
-    // creem la configuració
-    ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
-    synchronizeConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
-
-    m_toolManager->setViewerTool( m_axial2DView, "SynchronizeTool", synchronizeConfiguration );
-    m_toolManager->setViewerTool( m_sagital2DView, "SynchronizeTool", synchronizeConfiguration );
-    m_toolManager->setViewerTool( m_coronal2DView, "SynchronizeTool", synchronizeConfiguration );
-    // TODO tenim pendent d'incorporar l'MPR 3D en la sincronització
-//     m_toolManager->setViewerTool( m_mpr3DView, "SynchronizeTool", synchronizeConfiguration );
-    m_toolManager->activateTool("SynchronizeTool");
 
     m_toolManager->refreshConnections();
 }
