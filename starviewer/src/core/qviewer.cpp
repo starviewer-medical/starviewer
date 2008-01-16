@@ -395,7 +395,10 @@ WindowLevelPresetsToolData *QViewer::getWindowLevelData() const
 void QViewer::setWindowLevelData( WindowLevelPresetsToolData *windowLevelData )
 {
     if( m_windowLevelData )
+    {
+        disconnect(m_windowLevelData,0,this,0);
         delete m_windowLevelData;
+    }
 
     m_windowLevelData = windowLevelData;
     connect( m_windowLevelData, SIGNAL( currentWindowLevel(double,double) ), SLOT( setWindowLevel(double,double) ) );
