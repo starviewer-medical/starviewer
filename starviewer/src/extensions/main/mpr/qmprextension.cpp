@@ -14,7 +14,6 @@
 #include "logging.h"
 #include "toolsactionfactory.h"
 #include "toolmanager.h"
-#include "toolconfiguration.h"
 #include "windowlevelpresetstooldata.h"
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
@@ -212,17 +211,6 @@ void QMPRExtension::initializeTools()
 
     // registrem al manager les tools que van als diferents viewers
     initializeDefaultTools();
-
-    // Per defecte sincronitzem només la tool de window level
-    // Amb una sola configuració en tenim prou per totes
-    ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
-    synchronizeConfiguration->addAttribute( "WindowLevel", QVariant( true ) );
-
-    m_toolManager->setViewerTool( m_axial2DView, "SynchronizeTool", synchronizeConfiguration );
-    m_toolManager->setViewerTool( m_sagital2DView, "SynchronizeTool", synchronizeConfiguration );
-    m_toolManager->setViewerTool( m_coronal2DView, "SynchronizeTool", synchronizeConfiguration );
-
-    m_toolManager->activateTool("SynchronizeTool");
 }
 
 void QMPRExtension::initializeDefaultTools()
@@ -772,9 +760,6 @@ void QMPRExtension::setInput( Volume *input )
 
     // faltaria refrescar l'input dels 3 mpr
     m_axial2DView->setInput( m_volume );
-
-    double wl[2];
-    m_axial2DView->getDefaultWindowLevel( wl );
 
     // Totes les vistes tindran com a referència el sistema de coordenades Axial, base de tots els reslice que aplicarem.
     m_axial2DView->resetViewToAxial();
