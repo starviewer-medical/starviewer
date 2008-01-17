@@ -27,6 +27,9 @@ OptimalViewpointViewer::OptimalViewpointViewer( QWidget * parent )
     style->Delete();
 
     m_renderer = vtkRenderer::New();
+
+    m_renderer->SetBackground( 1.0, 1.0, 1.0 );
+
     m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
 }
 

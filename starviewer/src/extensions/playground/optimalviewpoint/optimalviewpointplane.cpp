@@ -36,6 +36,9 @@ OptimalViewpointPlane::OptimalViewpointPlane( unsigned short id, unsigned short 
     m_id = id;
     m_size = size;
     m_renderer = vtkRenderer::New();
+
+    m_renderer->SetBackground( 1.0, 1.0, 1.0 );
+
     m_camera = vtkCamera::New();
     m_camera->ParallelProjectionOn();
     m_camera->SetParallelScale( m_size / 2.0 );
