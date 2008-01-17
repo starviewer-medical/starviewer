@@ -1137,7 +1137,6 @@ void Q2DViewer::resetCamera()
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
-        this->refresh();
         //  Si no tenim dimensions temporals ens quedem amb el màxim de llesques
         if( m_numberOfPhases == 1 )
         {
@@ -1150,6 +1149,7 @@ void Q2DViewer::resetCamera()
 
         emit cameraChanged();
         mapOrientationStringToAnnotation();
+        updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
         this->updateDisplayExtent();
         this->refresh();
     }
