@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu és una biblioteca:  
+# L'objectiu Ã©s una biblioteca:  
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui 
@@ -139,7 +139,8 @@ HEADERS += extensionfactory.h \
            polylineroitooldata.h \
            polylineroitool.h \
            distancetool.h  \
-           windowlevelpresetstooldata.h
+           windowlevelpresetstooldata.h \
+           qviewercinecontroller.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -259,7 +260,8 @@ SOURCES += extensionmediator.cpp \
            polylineroitool.cpp \
            polylineroitooldata.cpp \
            distancetool.cpp  \
-           windowlevelpresetstooldata.cpp
+           windowlevelpresetstooldata.cpp \
+           qviewercinecontroller.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
