@@ -12,21 +12,12 @@
 #include "qwindowlevelcombobox.h"
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
+#include "qviewercinecontroller.h"
 // Qt
 #include <QAction>
-#include <QSettings>
-#include <QBasicTimer>
 #include <QString>
 #include <QProgressDialog>
 #include <QFileDialog>
-// VTK
-#include <vtkRenderer.h>
-#include <vtkWindowToImageFilter.h>
-#include <vtkRenderWindow.h>
-#include <vtkGenericMovieWriter.h>
-#include <vtkMPEG2Writer.h>
-#include <vtkImageData.h>
-#include <vector>
 
 namespace udg {
 
@@ -36,13 +27,11 @@ QCardiac2DViewerExtension::QCardiac2DViewerExtension( QWidget *parent )
     setupUi( this );
     m_mainVolume = 0;
 
-    m_timer = new QBasicTimer();
-    m_nextStep = 1;
+    m_viewerCineController = new QViewerCINEController( m_2DView );
 
     m_spinBox->setValue( 20 );
     m_slider->setPageStep(1);
 
-    readSettings();
     createActions();
     createConnections();
     initializeTools();
@@ -53,7 +42,6 @@ QCardiac2DViewerExtension::QCardiac2DViewerExtension( QWidget *parent )
 
 QCardiac2DViewerExtension::~QCardiac2DViewerExtension()
 {
-    writeSettings();
 }
 
 void QCardiac2DViewerExtension::createActions()
@@ -81,23 +69,18 @@ void QCardiac2DViewerExtension::createActions()
     m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
     m_coronalViewToolButton->setEnabled( false );
 
-    m_playAction = new QAction( 0 );
-    m_playAction->setShortcut( tr("Space") );
-    m_playAction->setIcon( QIcon(":/images/play.png") );
+    m_playAction = m_viewerCineController->getPlayAction();
     m_playButton->setDefaultAction( m_playAction );
 
-    m_recordAction = new QAction( 0 );
+    m_recordAction = new QAction(0);
     m_recordAction->setIcon( QIcon(":/images/record.png") );
+    connect( m_recordAction, SIGNAL( triggered() ), this, SLOT(recordVideo()) );
     m_recordButton->setDefaultAction( m_recordAction );
 
-    m_boomerangAction = new QAction( 0 );
-    m_boomerangAction->setIcon( QIcon(":/images/boomerang.png") );
-    m_boomerangAction->setCheckable( true );
+    m_boomerangAction = m_viewerCineController->getBoomerangAction();
     m_boomerangButton->setDefaultAction( m_boomerangAction );
 
-    m_repeatAction = new QAction( 0 );
-    m_repeatAction->setIcon( QIcon(":/images/repeat.png") );
-    m_repeatAction->setCheckable( true );
+    m_repeatAction = m_viewerCineController->getLoopAction();
     m_repeatButton->setDefaultAction( m_repeatAction );
 
     m_sequenceBeginAction = new QAction( 0 );
@@ -131,21 +114,14 @@ void QCardiac2DViewerExtension::createActions()
 
 void QCardiac2DViewerExtension::createConnections()
 {
-    // adicionals, \TODO ara es fa "a saco" però s'ha de millorar
     connect( m_slider, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setPhase(int) ) );
-    //connect( m_2DView , SIGNAL( sliceChanged(int) ) , m_slider , SLOT( setValue(int) ) );
+    connect( m_2DView , SIGNAL( phaseChanged(int) ) , m_slider , SLOT( setValue(int) ) );
     connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
 
-    connect( m_playAction , SIGNAL( triggered() ), SLOT( playImages() ) );
-    connect( m_recordAction, SIGNAL( triggered() ), SLOT( recordVideo() ) );
-
-    connect( m_spinBox, SIGNAL( valueChanged( int ) ), SLOT( changeVelocity( int ) ) );
+    connect( m_spinBox, SIGNAL( valueChanged( int ) ), m_viewerCineController, SLOT( setVelocity( int ) ) );
 
     connect( m_sequenceBeginAction, SIGNAL( toggled( bool ) ), SLOT( initInterval( bool ) ));
     connect( m_sequenceEndAction, SIGNAL( toggled( bool ) ), SLOT( finishInterval( bool ) ));
-
-    connect( m_repeatAction, SIGNAL(toggled( bool )), SLOT( changeToLoopMode( bool ) ));
-    connect( m_boomerangAction, SIGNAL(toggled( bool )), SLOT( changeToComeBackMode( bool ) ));
 
     connect( m_axialViewAction, SIGNAL( triggered() ), SLOT( changeViewToAxial() ) );
     connect( m_sagitalViewAction, SIGNAL( triggered() ), SLOT( changeViewToSagital() ) );
@@ -187,6 +163,7 @@ void QCardiac2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( m_mainVolume );
+    m_viewerCineController->resetCINEInformation( m_mainVolume );
 
     m_firstSliceInterval = 0;
     m_lastSliceInterval = m_mainVolume->getSeries()->getNumberOfPhases() - 1;
@@ -258,54 +235,8 @@ void QCardiac2DViewerExtension::setView( ViewType view )
     }
 }
 
-void QCardiac2DViewerExtension::playImages()
-{
-    if( !m_timer->isActive() )
-    {
-        m_playAction->setIcon( QIcon(":/images/pause.png") );
-        m_timer->start(1000 / m_spinBox->value(), this);
-    }
-    else
-    {
-        pauseImages();
-    }
-}
-
-void QCardiac2DViewerExtension::pauseImages()
-{
-    m_timer->stop();
-    m_playAction->setIcon( QIcon(":/images/play.png") );
-}
-
 void QCardiac2DViewerExtension::recordVideo()
 {
-    int phases = m_mainVolume->getSeries()->getNumberOfPhases();
-    int currentSlice = m_slider->value();
-    std::vector< vtkImageData * > frames;
-
-    // Guardar els fotogrames
-    for (int i = 0 ; i < phases ; i++ )
-    {
-        m_2DView->setPhase(i);
-
-        vtkWindowToImageFilter * windowToImageFilter = vtkWindowToImageFilter::New();
-
-        vtkRenderWindow * renderWindow = m_2DView->getRenderWindow();
-        renderWindow->OffScreenRenderingOn();
-
-        if( !renderWindow )
-            DEBUG_LOG( "La vtkRenderWindow és NUL·LA!" );
-
-        windowToImageFilter->SetInput( renderWindow );
-        windowToImageFilter->Update();
-
-        renderWindow->Render();
-
-        vtkImageData * image = windowToImageFilter->GetOutput();
-        frames.push_back( image );
-    }
-    m_2DView->setSlice( currentSlice );
-
     // Guardar el nom del fitxer
     QFileDialog saveAsDialog(0);
     saveAsDialog.setWindowTitle( tr("Save video file as...") );
@@ -325,18 +256,15 @@ void QCardiac2DViewerExtension::recordVideo()
         return;
     QString fileName = fileNames.first();
 
-    vtkGenericMovieWriter *videoWriter;
     QString pattern;
     if( saveAsDialog.selectedFilter() == tr("MPEG (*.mpg)") )
     {
-        videoWriter = vtkMPEG2Writer::New();
         pattern = ".mpg";
     }
     else if( saveAsDialog.selectedFilter() == tr("AVI (*.avi)") )
     {
            //\TODO Sembla que les vtk no s'han compilat amb suport per avi. Repassar-ho.
-//         videoWriter = vtkAVIWriter::New();
-//         pattern = ".avi";
+        pattern = ".avi";
         return;
     }
     else
@@ -344,118 +272,20 @@ void QCardiac2DViewerExtension::recordVideo()
         DEBUG_LOG("No coincideix cap patró, no es pot desar el video! RETURN!");
         return;
     }
+    m_viewerCineController->setRecordFilename( fileName );
 
-    // Gravar el fitxer
-    QProgressDialog *m_progressDialog = new QProgressDialog;
+    // connectem el progrés
+    QProgressDialog *progressDialog = new QProgressDialog;
 
-    m_progressDialog->setRange( 0 , frames.size() );
-    m_progressDialog->setMinimumDuration( 0 );
-    m_progressDialog->setWindowTitle( tr("Making video") );
+    progressDialog->setRange( 0 , 100 );
+    progressDialog->setMinimumDuration( 0 );
+    progressDialog->setWindowTitle( tr("Making video") );
 //     atenció: el missatge triga una miqueta a aparèixer...
 //     m_progressDialog->setLabelText( tr("Loading, please wait...") );
-    m_progressDialog->setCancelButton( 0 );
-
-    videoWriter->SetFileName( qPrintable( fileName+pattern ) );
-
-    DEBUG_LOG("Writing file prova-cor2D.mpg...");
-    vtkImageData * data = frames[0];
-    videoWriter->SetInput( data );
-    videoWriter->Start();
-
-    for ( unsigned int i = 0 ; i < frames.size() ; i++ )
-    {
-        videoWriter->SetInput( frames[i] );
-
-        for ( int j = 0 ; j < 3 ; j++ )
-        {
-            videoWriter->Write();
-        }
-
-        m_progressDialog->setValue(i);
-        qApp->processEvents();
-    }
-    videoWriter->End();
-    m_progressDialog->setValue( frames.size() );
-    DEBUG_LOG("End writing file prova-cor.mpg...");
-    frames.clear();
-}
-
-void QCardiac2DViewerExtension::timerEvent(QTimerEvent *event)
-{
-    if ( event->timerId() == m_timer->timerId() )
-    {
-        // Si estem al final de l'interval
-        if (  m_slider->value() == m_lastSliceInterval )
-        {
-            if ( m_repeatAction->isChecked() )
-            {
-                m_slider->setValue( m_firstSliceInterval );
-            }
-            else if ( m_boomerangAction->isChecked() )
-            {
-                m_nextStep = -1;
-                m_slider->setValue( m_slider->value() + m_nextStep );
-            }
-            else
-            {
-                m_slider->setValue( m_firstSliceInterval );
-                pauseImages();
-            }
-        }
-        // Si estem a l'inici de l'interval
-        else if ( ( m_slider->value() == m_firstSliceInterval )  )
-        {
-            // Si tenim algun tipus de repeat activat
-            if ( m_repeatAction->isChecked() ||  m_boomerangAction->isChecked() )
-            {
-                m_nextStep = 1;
-                m_slider->setValue( m_slider->value() + m_nextStep );
-            }
-            else
-            {
-                // Fins ara reproduia endavant-endarrera
-                if ( m_nextStep == -1 )
-                {
-                    m_nextStep = 1;
-                    pauseImages();
-                }
-                // Inici de la reproduccio
-                else
-                {
-                    m_slider->setValue( m_slider->value() + m_nextStep );
-                }
-            }
-        }
-        else
-        {
-            m_slider->setValue( m_slider->value() + m_nextStep );
-        }
-
-    }
-}
-
-void QCardiac2DViewerExtension::changeVelocity( int velocity )
-{
-    if ( m_timer->isActive() )
-    {
-        m_timer->start( 1000 / velocity , this );
-    }
-}
-
-void QCardiac2DViewerExtension::changeToLoopMode( bool checked )
-{
-    if ( checked )
-    {
-        m_boomerangAction->setChecked( false );
-    }
-}
-
-void QCardiac2DViewerExtension::changeToComeBackMode( bool checked )
-{
-    if ( checked )
-    {
-        m_repeatAction->setChecked( false );
-    }
+    progressDialog->setCancelButton( 0 );
+    connect( m_viewerCineController, SIGNAL( recording(int) ), progressDialog, SLOT( setValue(int) ) );
+    qApp->processEvents();
+    m_viewerCineController->record();
 }
 
 void QCardiac2DViewerExtension::initInterval( bool checked )
@@ -469,6 +299,7 @@ void QCardiac2DViewerExtension::initInterval( bool checked )
         m_firstSliceInterval = 0;
     }
     m_slider->setMinimum( m_firstSliceInterval );
+    m_viewerCineController->setPlayInterval( m_firstSliceInterval, m_lastSliceInterval );
 }
 
 void QCardiac2DViewerExtension::finishInterval( bool checked )
@@ -482,22 +313,7 @@ void QCardiac2DViewerExtension::finishInterval( bool checked )
         m_lastSliceInterval = m_mainVolume->getSeries()->getNumberOfPhases() - 1;
     }
     m_slider->setMaximum( m_lastSliceInterval );
-}
-
-void QCardiac2DViewerExtension::readSettings()
-{
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-2DViewer");
-
-    settings.endGroup();
-}
-
-void QCardiac2DViewerExtension::writeSettings()
-{
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-2DViewer");
-
-    settings.endGroup();
+    m_viewerCineController->setPlayInterval( m_firstSliceInterval, m_lastSliceInterval );
 }
 
 }

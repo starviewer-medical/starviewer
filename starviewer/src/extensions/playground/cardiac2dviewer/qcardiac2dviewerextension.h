@@ -11,13 +11,13 @@
 
 // FWD declarations
 class QAction;
-class QBasicTimer;
 
 namespace udg {
 
 // FWD declarations
 class Volume;
 class ToolManager;
+class QViewerCINEController;
 
 /**
 Extensió que s'executarà per defecte a l'obrir un model
@@ -40,27 +40,9 @@ public slots:
     void changeViewToSagital();
     void changeViewToCoronal();
 
-protected:
-    void timerEvent(QTimerEvent *event);
-
 private slots:
-    /// Fa la reproducció de la llesca
-    void playImages();
-
-    /// Atura la reporducció de la llesca
-    void pauseImages();
-
     ///Genera un fitxer de video
     void recordVideo();
-
-    /// Canvia la velocitat de la reproducció mentres s'està reproduint
-    void changeVelocity( int velocity );
-
-    /// Canvia al mode de reproducció cíclic
-    void changeToLoopMode( bool checked );
-
-    /// Canvia al mode de reproducció de davant-endarrera
-    void changeToComeBackMode( bool checked );
 
     /// Fixa l'inici de l'interval de reproducció
     void initInterval( bool checked );
@@ -84,10 +66,6 @@ private:
     /// Inicialitza les tools de l'extensió
     void initializeTools();
 
-    /// Llegir/Escriure la configuració de l'aplicació
-    void readSettings();
-    void writeSettings();
-
 private:
     /// La vista actual amb la que estem treballant
     ViewType m_currentView;
@@ -98,8 +76,6 @@ private:
     /// Variables de reproducció
     int m_firstSliceInterval;
     int m_lastSliceInterval;
-    int m_nextStep;
-    QBasicTimer *m_timer;
 
     /// Accions
     QAction *m_axialViewAction;
@@ -119,6 +95,9 @@ private:
 
     /// Gestor de tools de l'extensió
     ToolManager *m_toolManager;
+
+    /// Controlador de CINE
+    QViewerCINEController *m_viewerCineController;
 };
 
 } // end namespace udg
