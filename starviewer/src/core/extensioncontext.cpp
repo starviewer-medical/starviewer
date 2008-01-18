@@ -37,7 +37,29 @@ Volume *ExtensionContext::getDefaultVolume() const
     // TODO de moment només agafem la primera
     if( !selectedSeries.isEmpty() )
     {
-        defaultVolume = selectedSeries.at(0)->getFirstVolume();
+        Series *defaultSeries = selectedSeries.at(0);
+        QString modality = defaultSeries->getModality();
+        // si la modalitat no és una de les suportades, busquem un altre volum per defecte
+        if( modality == "PR" || modality == "KO" || modality == "SR" )
+        {
+            bool ok = false;
+            foreach( Study *study, m_patient->getStudies() )
+            {
+                foreach( Series *series, study->getSeries() )
+                {
+                    modality = series->getModality();
+                    if( modality != "PR" && modality != "KO" && modality != "SR" )
+                    {
+                        ok = true;
+                        defaultSeries = series;
+                        break;
+                    }
+                }
+            }
+            if( !ok )
+                DEBUG_LOG("No hi ha cap serie de l'actual pacient amb modalitat suportada");
+        }
+        defaultVolume = defaultSeries->getFirstVolume();
     }
     else
         DEBUG_LOG("EI! No tenim cap sèrie seleccionada!");
