@@ -9,7 +9,7 @@
 
 #include <QWidget>
 // llista de captures de pantalla
-#include <list>
+#include <QList>
 #include <vtkImageData.h>
 
 // Fordward declarations
@@ -248,13 +248,8 @@ protected:
     /// El widget per poder mostrar una finestra vtk amb qt
     QVTKWidget* m_vtkWidget;
 
-    typedef std::list< vtkImageData * > GrabListType;
-
     /// La llista de captures de pantalla
-    GrabListType m_grabList;
-
-    /// L'iterador de la llista de captures de pantalla
-    GrabListType::iterator m_grabListIterator;
+    QList<vtkImageData *> m_grabList;
 
     /// Filtre per connectar el que es visualitza pel renderer en un pipeline, epr guardar les imatges en un arxiu, per exemple
     vtkWindowToImageFilter *m_windowToImageFilter;

@@ -228,11 +228,10 @@ bool QViewer::saveGrabbedViews( QString baseName , FileType extension )
         case META:
         break;
         }
-        char fileName[128];
         int i = 0;
-        for( m_grabListIterator = m_grabList.begin(); m_grabListIterator != m_grabList.end(); m_grabListIterator++ )
+        foreach( vtkImageData *image, m_grabList )
         {
-            writer->SetInput( *m_grabListIterator );
+            writer->SetInput( image );
             writer->SetFileName( qPrintable( QString("%1-%2.%3").arg( baseName ).arg( i ).arg( fileType ) ) );
             writer->Write();
             i++;
@@ -410,7 +409,7 @@ void QViewer::grabCurrentView()
 
     vtkImageData *image = vtkImageData::New();
     image->ShallowCopy( m_windowToImageFilter->GetOutput() );
-    m_grabList.push_back( image );
+    m_grabList << image;
 }
 
 void QViewer::setSeries(Series *series)
