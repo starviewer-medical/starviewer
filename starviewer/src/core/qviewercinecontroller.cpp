@@ -26,7 +26,7 @@
 
 namespace udg {
 
-QViewerCINEController::QViewerCINEController(QViewer *viewer, QObject *parent)
+QViewerCINEController::QViewerCINEController(QObject *parent)
   : QObject(parent), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false), m_cineDimension(TemporalDimension), m_recordFilename( QDir::homePath() + "/cineMovie" )
 {
     m_timer = new QBasicTimer();
@@ -49,8 +49,6 @@ QViewerCINEController::QViewerCINEController(QViewer *viewer, QObject *parent)
     m_loopAction->setIcon( QIcon(":/images/repeat.png") );
     m_loopAction->setCheckable( true );
     connect( m_loopAction, SIGNAL(triggered(bool)), SLOT( loopMode(bool) ) );
-
-    setInputViewer(viewer);
 }
 
 QViewerCINEController::~QViewerCINEController()
@@ -77,8 +75,13 @@ void QViewerCINEController::setInputViewer( QViewer *viewer )
 
 void QViewerCINEController::setCINEDimension( int dimension )
 {
-    // TODO fer check!
-    m_cineDimension = dimension;
+    // checkejem per si el que ens passen és vàlid o no
+    if( dimension != SpatialDimension &&  dimension != TemporalDimension )
+    {
+        DEBUG_LOG("Paràmetre ilegal!");
+    }
+    else
+        m_cineDimension = dimension;
 }
 
 QAction *QViewerCINEController::getPlayAction() const
@@ -132,6 +135,8 @@ void QViewerCINEController::pause()
 void QViewerCINEController::record()
 {
     //ens curem en salut
+    if( !m_2DViewer )
+        return;
     if( !m_2DViewer->getInput() )
         return;
 
@@ -142,6 +147,7 @@ void QViewerCINEController::record()
     // Guardar els fotogrames
     for( int i = 0 ; i < phases ; i++ )
     {
+        // TODO això es podria fer amb la crida QViewer::grabCurrentView()
         m_2DViewer->setPhase(i);
 
         vtkWindowToImageFilter *windowToImageFilter = vtkWindowToImageFilter::New();
@@ -161,7 +167,7 @@ void QViewerCINEController::record()
 
     // Fer la gravació
     // TODO ara només gravem en mpg, hauríem d'incoporar mètodes per gravar en altres formats
-    vtkGenericMovieWriter *videoWriter = videoWriter = vtkMPEG2Writer::New();
+    vtkGenericMovieWriter *videoWriter = vtkMPEG2Writer::New();
     videoWriter->SetFileName( qPrintable( m_recordFilename+".mpg" ) );
 
     vtkImageData *data = frames[0];
@@ -188,6 +194,7 @@ void QViewerCINEController::record()
 void QViewerCINEController::setVelocity( int imagesPerSecond )
 {
     m_velocity = imagesPerSecond;
+    emit velocityChanged( m_velocity );
     if( m_playing )
     {
         m_timer->start(1000/m_velocity,this);
@@ -228,6 +235,9 @@ void QViewerCINEController::timerEvent(QTimerEvent *event)
 
 void QViewerCINEController::handleCINETimerEvent()
 {
+    if( !m_2DViewer )
+        return;
+
     int currentImageIndex;
     int nextImageIndex;
 
@@ -293,9 +303,23 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
 {
     if( input )
     {
-        m_velocity = input->getNumberOfPhases();
-        m_firstSliceInterval = 0;
-        m_lastSliceInterval = input->getNumberOfPhases() - 1;
+        int phases = input->getNumberOfPhases();
+        if( phases > 1 )
+        {
+            setCINEDimension( TemporalDimension ); // si tenim fases, per defecte treballem sota la temporal
+            setVelocity( input->getNumberOfPhases() );
+            m_firstSliceInterval = 0;
+            m_lastSliceInterval = input->getNumberOfPhases() - 1;
+        }
+        else
+        {
+            // TODO potser seria més correcte si s'interrogués a partir d'input!
+            setCINEDimension( SpatialDimension ); // si no tenim fases, només podem treballar sobre la dim espaial
+            setVelocity( 10 ); // li donarem una velocitat de 10 img/sec
+            m_firstSliceInterval = 0;
+            m_lastSliceInterval = m_2DViewer->getNumberOfSlices() - 1;
+        }
+
     }
 }
 

@@ -27,12 +27,12 @@ class QViewerCINEController: public QObject
 {
 Q_OBJECT
 public:
-    QViewerCINEController(QViewer *viewer, QObject *parent = 0);
+    QViewerCINEController(QObject *parent = 0);
 
     ~QViewerCINEController();
 
     /**
-     * Li assignem un altre viewer amb el que treballar
+     * Li assignem el viewer amb el que treballar
      * @param viewer
      */
     void setInputViewer( QViewer *viewer );
@@ -55,6 +55,7 @@ signals:
     void playing();
     void paused();
     void recording( int progress );
+    void velocityChanged( int velocity );
 
 public slots:
     /// Engega la reproducció
