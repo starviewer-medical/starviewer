@@ -65,6 +65,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
 
     createConnections();
+
+    connect( m_obscurancesPushButton, SIGNAL( clicked() ), m_method, SLOT( computeObscurances() ) );
 }
 
 

@@ -28,6 +28,14 @@
 #include "vtk4DLinearRegressionGradientEstimator.h"
 #include "vtkVolumeRayCastCompositeFunctionOptimalViewpoint.h"
 
+#include "povspherecloud.h"
+#include "vector3.h"
+#include <QLinkedList>
+#include <QList>
+#include <QMultiMap>
+#include <vtkDirectionEncoder.h>
+#include <QDir>
+
 
 namespace udg {
 
@@ -220,6 +228,11 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_clusterImage = 0;
     m_clusterVolume = 0;
     m_clusterMapper = 0;
+
+
+    m_obscurance = 0;
+
+
     DEBUG_LOG( "end constructor" );
 }
 
@@ -879,6 +892,278 @@ signed char OptimalViewpointVolume::rescale( int bins )
     generateAdjustedTransferFunction( limits );
 
     return limits.size() + 1;
+}
+
+
+// synchronized? potser no, si els threads es reparteixen el model sense interseccions
+void OptimalViewpointVolume::handleObscurances( int rayId, int offset )
+{
+//     emit visited( rayId, *(m_labeledData + offset) );
+}
+
+
+void OptimalViewpointVolume::endRayObscurances( int rayId )
+{
+//     emit rayEnd( rayId );
+}
+
+
+void OptimalViewpointVolume::computeObscurances()
+{
+    double dmax = 64.0;
+
+    synchronize();
+
+    vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
+    unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
+
+    // càlcul de direccions
+    POVSphereCloud cloud( 1.0, 2 ); // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    cloud.createPOVCloud();
+    const QVector<Vector3> & vertices = cloud.getVertices();
+
+    // variables necessàries
+    int dimensions[3];
+    m_image->GetDimensions( dimensions );
+    int increments[3];
+    m_image->GetIncrements( increments );
+
+    delete [] m_obscurance;
+    m_obscurance = new double[m_dataSize];
+    for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] = 0.0;
+
+    unsigned int progress = 0, total = vertices.count();
+
+    // iterem per les direccions
+    foreach ( Vector3 direction, vertices )
+    {
+        DEBUG_LOG( QString( "Direcció " ) + direction.toString() );
+
+        // direcció dominant (0 = x, 1 = y, 2 = z)
+        int dominant;
+        Vector3 absDirection( qAbs( direction.x ), qAbs( direction.y ), qAbs( direction.z ) );
+        if ( absDirection.x >= absDirection.y )
+        {
+            if ( absDirection.x >= absDirection.z ) dominant = 0;
+            else dominant = 2;
+        }
+        else
+        {
+            if ( absDirection.y >= absDirection.z ) dominant = 1;
+            else dominant = 2;
+        }
+
+        // vector per avançar
+        Vector3 forward;
+        switch ( dominant )
+        {
+            case 0: forward = Vector3( direction.x, direction.y, direction.z ); break;
+            case 1: forward = Vector3( direction.y, direction.z, direction.x ); break;
+            case 2: forward = Vector3( direction.z, direction.x, direction.y ); break;
+        }
+        forward /= forward.x;   // la direcció x passa a ser 1
+        DEBUG_LOG( QString( "forward = " ) + forward.toString() );
+
+        // dimensions i increments segons la direcció dominant
+        int dimX = dimensions[dominant], dimY = dimensions[(dominant+1)%3], dimZ = dimensions[(dominant+2)%3];
+        int incX = increments[dominant], incY = increments[(dominant+1)%3], incZ = increments[(dominant+2)%3];
+        qptrdiff startDelta = 0;
+        if ( forward.y < 0.0 )
+        {
+            startDelta += incY * ( dimY - 1 );
+            incY = -incY;
+            forward.y = -forward.y;
+        }
+        if ( forward.z < 0.0 )
+        {
+            startDelta += incZ * ( dimZ - 1 );
+            incZ = -incZ;
+            forward.z = -forward.z;
+        }
+        DEBUG_LOG( QString( "forward = " ) + forward.toString() );
+        // ara els 3 components són positius
+
+        // llista dels vòxels que són començament de línia
+        QList<Vector3> lineStarts = getLineStarts( dimX, dimY, dimZ, forward );
+
+//         uint i = 0;
+//         uint c = 0;
+
+//         // prova
+//         int length = dimX * dimY * dimZ;
+//         unsigned char array[length];
+//         for (int k = 0; k < length; k++) array[k] = 0;
+//         unsigned char * ptr = array;
+//         ptr += startDelta;
+
+        unsigned char * dataPtr = m_data + startDelta;
+
+        // iterar per cada línia
+        while ( !lineStarts.isEmpty() )
+        {
+//             i++;
+            Vector3 rv = lineStarts.takeFirst();
+            Voxel v = { round( rv.x ), round( rv.y ), round( rv.z ) };
+            Voxel pv = v;
+            QMultiMap<uchar,Vector3> unresolvedVoxels;
+
+            // iterar per la línia
+            while ( v.x < dimX && v.y < dimY && v.z < dimZ )
+            {
+//                 // prova
+//                 ptr[v.x * incX + v.y * incY + v.z * incZ]++;
+
+                // tractar el vòxel
+                uchar value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+
+                QMultiMap<uchar,Vector3>::iterator it = unresolvedVoxels.begin();
+                while ( it != unresolvedVoxels.end() && it.key() <= value )
+                {
+                    Vector3 ru = it.value();
+                    Voxel u = { round( ru.x ), round( ru.y ), round( ru.z ) };
+
+                    int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                    float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
+                    Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+                    // sembla que ja venen normalitzades
+//                     if ( uNormal.length() != 0.0 && uNormal.length() != 1.0 )
+//                     {
+//                         DEBUG_LOG( QString( "normal: " ) + uNormal.toString() + QString( " | length = %1" ).arg( uNormal.length() ) );
+//                         uNormal.normalize();
+//                     }
+
+                    if ( uNormal * direction > 0.0 )
+                    {
+//                         DEBUG_LOG( QString( "entro: " ) + ru.toString() );
+                        double distance = ( rv - ru ).length();
+                        if ( distance > dmax ) m_obscurance[uIndex]++;  // provar amb la funció com déu mana a veure si així no surten les ratlles
+                    }
+
+                    it = unresolvedVoxels.erase( it );
+                }
+
+                unresolvedVoxels.insert( value, rv );
+
+                // avançar el vòxel
+                rv += forward;
+                pv = v;
+                v.x = round( rv.x ); v.y = round( rv.y ); v.z = round( rv.z );
+//                 c++;
+            }
+
+            QMultiMap<uchar,Vector3>::iterator it;
+            for ( it = unresolvedVoxels.begin(); it != unresolvedVoxels.end(); it++ )
+            {
+                Vector3 ru = it.value();
+                Voxel u = { round( ru.x ), round( ru.y ), round( ru.z ) };
+                int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
+                Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+
+                if ( uNormal * direction > 0.0 ) m_obscurance[uIndex]++;
+            }
+        }
+
+//         DEBUG_LOG( QString( "i = %1" ).arg( i ) );
+//         DEBUG_LOG( QString( "c = %1" ).arg( c ) );
+//         for ( int k = 0; k < length; k++ )
+//         {
+//             if ( array[k] != 1 )
+//                 DEBUG_LOG( QString( "malament!!!! a[%1] = %2" ).arg( k ).arg( array[k] ) );
+//         }
+
+        DEBUG_LOG( QString( "progress: %1/%2" ).arg( ++progress ).arg( total ) );
+    }
+
+    unsigned int count = vertices.count();
+    for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] /= count;
+
+    for ( int i = 0; i < m_dataSize; i++ )
+    {
+        if ( m_obscurance[i] > 1.0 )
+            DEBUG_LOG( QString( "bad obscurance: o[%1] = %2" ).arg( i ).arg( m_obscurance[i] ) );
+    }
+
+    {
+        // obscurances to file
+        QFile outFile( QDir::tempPath().append( QString( "/obscurance.raw" ) ) );
+        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QDataStream out( &outFile );
+            for ( int i = 0; i < m_dataSize; i++ )
+                out << static_cast<uchar>( round( m_obscurance[i] * 255.0 ) );
+            outFile.close();
+        }
+        QFile outFileMhd( QDir::tempPath().append( QString( "/obscurance.mhd" ) ) );
+        if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFileMhd );
+            out << "NDims = 3\n";
+            out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+            double spacing[3];
+            m_image->GetSpacing( spacing );
+            out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
+            out << "ElementType = MET_UCHAR\n";
+            out << "ElementDataFile = obscurance.raw";
+            outFileMhd.close();
+        }
+    }
+}
+
+
+QList<Vector3> OptimalViewpointVolume::getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const
+{
+    // llista dels vòxels que són començament de línia
+    QList<Vector3> lineStarts;
+
+    // tots els (0,y,z) són començament de línia
+    Vector3 lineStart( 0, 0, 0 );
+    for ( int iy = 0; iy < dimY; iy++ )
+    {
+        lineStart.y = iy;
+        for ( int iz = 0; iz < dimZ; iz++ )
+        {
+            lineStart.z = iz;
+            lineStarts << lineStart;
+//             DEBUG_LOG( QString( "line start: (%1,%2,%3)" ).arg( lineStart.x ).arg( lineStart.y ).arg( lineStart.z ) );
+        }
+    }
+    DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.count() ) );
+
+    // més començaments de línia
+    Vector3 rv;
+    Voxel v = { 0, 0, 0 }, pv = v;
+
+    // iterar per la línia que comença a (0,0,0)
+    while ( v.x < dimX )
+    {
+        if ( v.y != pv.y )
+        {
+            lineStart.x = rv.x; lineStart.y = rv.y - v.y;   // y = 0
+            for ( double iz = rv.z - v.z; iz < dimZ; iz++ )
+            {
+                lineStart.z = iz;
+                lineStarts << lineStart;
+            }
+        }
+        if ( v.z != pv.z )
+        {
+            lineStart.x = rv.x; lineStart.z = rv.z - v.z;   // z = 0
+            for ( double iy = rv.y - v.y; iy < dimY; iy++ )
+            {
+                lineStart.y = iy;
+                lineStarts << lineStart;
+            }
+        }
+
+        // avançar el vòxel
+        rv += forward;
+        pv = v;
+        v.x = round( rv.x ); v.y = round( rv.y ); v.z = round( rv.z );
+    }
+    DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.count() ) );
+
+    return lineStarts;
 }
 
 

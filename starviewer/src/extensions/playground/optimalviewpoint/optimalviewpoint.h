@@ -152,6 +152,7 @@ public:
 public slots:
 
     void newMethod2( int step, bool normalized );
+    void computeObscurances();
 
 signals:
 
