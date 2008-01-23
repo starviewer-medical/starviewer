@@ -27,7 +27,8 @@ QCardiac2DViewerExtension::QCardiac2DViewerExtension( QWidget *parent )
     setupUi( this );
     m_mainVolume = 0;
 
-    m_viewerCineController = new QViewerCINEController( m_2DView );
+    m_viewerCineController = new QViewerCINEController(this);
+    m_viewerCineController->setInputViewer( m_2DView );
 
     m_spinBox->setValue( 20 );
     m_slider->setPageStep(1);
