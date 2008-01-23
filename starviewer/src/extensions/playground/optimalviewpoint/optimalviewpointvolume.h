@@ -13,6 +13,7 @@
 #include <QObject>
 
 #include <QVector>
+#include <QList>
 
 
 class vtkImageData;
@@ -27,6 +28,7 @@ namespace udg {
 
 
 class TransferFunction;
+class Vector3;
 
 
 /**
@@ -130,6 +132,14 @@ public:
 
 
 
+    // synchronized? potser no, si els threads es reparteixen el model sense interseccions
+    void handleObscurances( int rayId, int offset );
+    void endRayObscurances( int rayId );
+
+    void computeObscurances();
+
+
+
 
 public slots:
 
@@ -145,6 +155,11 @@ signals:
     void adjustedTransferFunctionDefined( const TransferFunction & adjustedTransferFunction );
 
 private:
+
+    // definició d'un vòxel
+    struct Voxel { int x, y, z; };
+
+    QList<Vector3> getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
     void labelize( const QVector< unsigned char > & limits );
@@ -205,6 +220,7 @@ private:
 
 
 
+    double * m_obscurance;
 
 };
 

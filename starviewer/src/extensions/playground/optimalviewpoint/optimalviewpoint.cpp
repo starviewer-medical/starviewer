@@ -858,4 +858,11 @@ void OptimalViewpoint::doRegularSegmentation( unsigned char numberOfBins )
     }
 }
 
+
+void OptimalViewpoint::computeObscurances()
+{
+    m_volume->computeObscurances();
+}
+
+
 }; // end namespace udg

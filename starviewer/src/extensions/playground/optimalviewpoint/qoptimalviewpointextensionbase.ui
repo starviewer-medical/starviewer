@@ -620,6 +620,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="m_obscurancesPushButton" >
+         <property name="text" >
+          <string>Obscurances</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="udg::OptimalViewpointInputParametersForm" native="1" name="m_inputParametersWidget" />
        </item>
       </layout>
