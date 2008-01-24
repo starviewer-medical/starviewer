@@ -463,6 +463,36 @@ int Series::getNumberOfSlicesPerPhase() const
     return m_numberOfSlicesPerPhase;
 }
 
+void Series::setManufacturer( QString manufacturer )
+{
+    m_manufacturer = manufacturer;
+}
+
+QString Series::getManufacturer() const
+{
+    return m_manufacturer;
+}
+
+void Series::setPhilipsScanningTechnique( QString philipsScanningTechnique )
+{
+    m_philipsScanningTechnique = philipsScanningTechnique;
+}
+
+QString Series::getPhilipsScanningTechnique() const
+{
+    return m_philipsScanningTechnique;
+}
+
+void Series::setPhilipsNumberOfStacks( QString philipsNumberOfStacks )
+{
+    m_philipsNumberOfStacks = philipsNumberOfStacks;
+}
+
+QString Series::getPhilipsNumberOfStacks() const
+{
+    return m_philipsNumberOfStacks;
+}
+
 void Series::insertImage( Image *image )
 {
     int i = 0;

@@ -162,6 +162,7 @@ Series *DICOMFileClassifierFillerStep::createSeries()
     series->setDescription( m_dicomReader->getAttributeByName( DCM_SeriesDescription ) );
     series->setFrameOfReferenceUID( m_dicomReader->getAttributeByName( DCM_FrameOfReferenceUID ) );
     series->setPositionReferenceIndicator( m_dicomReader->getAttributeByName( DCM_PositionReferenceIndicator ) );
+    series->setManufacturer( m_dicomReader->getAttributeByName( DCM_Manufacturer ) );
 
     return series;
 }

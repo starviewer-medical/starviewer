@@ -19,6 +19,7 @@
 #include "toolmanager.h"
 #include "toolconfiguration.h"
 #include "windowlevelpresetstooldata.h"
+#include "qdicomdump.h"
 
 #include <QAction>
 #include <QSettings>
@@ -57,6 +58,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_seriesTableGrid = new TableMenu();
     m_predefinedSlicesGrid = new MenuGridWidget();
     m_sliceTableGrid = new TableMenu();
+    m_dicomDumpCurrentDisplayedImage = new QDicomDump();
 
     createProgressDialog();
     readSettings();
@@ -196,6 +198,8 @@ void Q2DViewerExtension::createConnections()
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
+
+    connect( m_dicomDumpToolButton, SIGNAL( clicked() ) , SLOT( showDicomDumpCurrentDisplayedImage() ) );
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
@@ -732,6 +736,12 @@ void Q2DViewerExtension::showViewerInformation( bool show )
             m_vectorViewers.value( numViewer )->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
         }
     }
+}
+
+void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
+{
+    m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_selectedViewer->getViewer()->getCurrentDisplayedImage() );
+    m_dicomDumpCurrentDisplayedImage->show();
 }
 
 void Q2DViewerExtension::validePhases()

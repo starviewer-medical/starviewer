@@ -123,6 +123,18 @@ public:
     void setNumberOfSlicesPerPhase( int slices );
     int getNumberOfSlicesPerPhase() const;
 
+    ///Assigna/Obté el nom del fabricat de l'equip amb el que s'ha n capturar les imatges de la sèrie
+    void setManufacturer( QString manufactures );
+    QString getManufacturer() const;
+
+    /// Assignar/Obtenir la tècnica d'escaneig
+    void setPhilipsScanningTechnique( QString philipsScanningTechnique );
+    QString getPhilipsScanningTechnique() const;
+
+    /// Assignar/Obtenir el número d'stacks
+    void setPhilipsNumberOfStacks( QString philipsNumberOfStacks );
+    QString getPhilipsNumberOfStacks() const;
+
     /// assigna l'estudi pare de la sèrie
     void setParentStudy( Study *study );
     Study *getParentStudy() const;
@@ -291,6 +303,15 @@ private:
 
     /// Vista radiogràfica associada amb la posició del pacient[(0018,5101)]. (0018,5101). Tipus 2/3, segons modalitat
     QString m_viewPosition;
+
+    ///Obté el fabricant de l'aparell amb que s'ha obtingut la sèrie (0008,0070) Tipus 2.
+    QString m_manufacturer;
+
+    /// Indica la tècnica d'escaneig utilitza per MR. Tag de Philips (2001,1020)
+    QString m_philipsScanningTechnique;
+
+    ///Ens indica el numero d'stacks d'una sèrie. Tag de philips (2001,1060)
+    QString m_philipsNumberOfStacks;
 };
 
 }

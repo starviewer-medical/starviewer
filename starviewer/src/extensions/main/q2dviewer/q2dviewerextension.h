@@ -32,6 +32,7 @@ class Q2DViewer;
 // Menus
 class MenuGridWidget;
 class TableMenu;
+class QDicomDump;
 
 /**
 Extensió que s'executarà  per defecte a l'obrir un model
@@ -95,6 +96,9 @@ public slots:
 
     /// Mostrar la informació del volum a cada visualitzador o no.
     void showViewerInformation( bool show );
+
+    ///Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
+    void showDicomDumpCurrentDisplayedImage();
 
 private:
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
@@ -193,6 +197,9 @@ private:
 
     /// Visualitzador seleccionat, també sempre en tindrem un
     Q2DViewerWidget *m_selectedViewer;
+
+    ///Obre la finestra de dicomdump per la imatge que tenim seleccionada en aquests moments
+    QDicomDump *m_dicomDumpCurrentDisplayedImage;
 
     /// Nombre de files i columnes per els layouts
     int m_rows;
