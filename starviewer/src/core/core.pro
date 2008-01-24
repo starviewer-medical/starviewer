@@ -4,7 +4,12 @@
 # L'objectiu Ã©s una biblioteca:  
 
 FORMS += qlogviewerbase.ui \
-         qcustomwindowleveldialogbase.ui 
+         qcustomwindowleveldialogbase.ui  \
+ qdicomdumpbase.ui \
+ qdicomdumpcthelixwidgetbase.ui \
+ qdicomdumpctsurveywidgetbase.ui \
+ qdicomdumpmrwidgetbase.ui \
+ qdicomdumpctwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
                 core_en_GB.ts 
@@ -140,7 +145,13 @@ HEADERS += extensionfactory.h \
            polylineroitool.h \
            distancetool.h  \
            windowlevelpresetstooldata.h \
-           qviewercinecontroller.h
+           qviewercinecontroller.h \
+           qdicomdumpcthelixwidget.h \
+           qdicomdumpctsurveywidget.h \
+           qdicomdump.h \
+           qdicomdumpmrwidget.h \
+           qdicomdumpctwidget.h \
+           philipstagsfillerstep.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -261,7 +272,13 @@ SOURCES += extensionmediator.cpp \
            polylineroitooldata.cpp \
            distancetool.cpp  \
            windowlevelpresetstooldata.cpp \
-           qviewercinecontroller.cpp
+           qviewercinecontroller.cpp \
+           qdicomdump.cpp \
+           qdicomdumpcthelixwidget.cpp \
+           qdicomdumpctsurveywidget.cpp \
+           qdicomdumpmrwidget.cpp \
+           qdicomdumpctwidget.cpp \
+           philipstagsfillerstep.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

@@ -332,7 +332,297 @@ void Image::setMilliAmpersSecond( double mas )
 
 double Image::getMilliAmpersSecond()
 {
-     return m_milliAmpersSecond;
+    return m_milliAmpersSecond;
+}
+
+void Image::setRepetitionTime( QString repetitionTime )
+{
+    m_repetitionTime = repetitionTime;
+}
+
+QString Image::getRepetitionTime()
+{
+    return m_repetitionTime;
+}
+
+void Image::setEchoTime( QString echoTime )
+{
+    m_echoTime = echoTime;
+}
+
+QString Image::getEchoTime()
+{
+    return m_echoTime;
+}
+
+void Image::setInversionTime( QString inversionTime )
+{
+    m_inversionTime = inversionTime;
+}
+
+QString Image::getInversionTime()
+{
+    return m_inversionTime;
+}
+
+void Image::setSpacingBetweenSlices( QString spacingBetweenSlices )
+{
+    m_spacingBetweenSlices = spacingBetweenSlices;
+}
+
+QString Image::getSpacingBetweenSlices()
+{
+    return m_spacingBetweenSlices;
+}
+
+void Image::setFlipAngle( QString flipAngle )
+{
+    m_flipAngle = flipAngle;
+}
+
+QString Image::getFlipAngle()
+{
+    return m_flipAngle;
+}
+
+void Image::setPhilipsTurboFactor( QString philipsTurboFactor )
+{
+    m_philipsTurboFactor = philipsTurboFactor ;
+}
+
+QString Image::getPhilipsTurboFactor()
+{
+    return m_philipsTurboFactor;
+}
+
+void Image::setPhilipsEPIFactor( QString philipsEPIFactor )
+{
+    m_philipsEPIFactor = philipsEPIFactor;
+}
+
+QString Image::getPhilipsEPIFactor()
+{
+    return m_philipsEPIFactor;
+}
+
+void Image::setPhilipsImagePosition( QString philipsImagePosition )
+{
+    m_philipsImagePosition = philipsImagePosition;
+}
+
+QString Image::getPhilipsImagePosition()
+{
+    return m_philipsImagePosition;
+}
+
+void Image::setNumberOfAverages( QString numberOfAverages )
+{
+    m_numberOfAverages = numberOfAverages;
+}
+
+QString Image::getNumberOfAverages()
+{
+    return m_numberOfAverages;
+}
+
+void Image::setPercentPhaseFieldOfView( QString PercentPhaseFieldOfView )
+{
+    m_percentPhaseFieldOfView = PercentPhaseFieldOfView;
+}
+
+QString Image::getPercentPhaseFieldOfView()
+{
+    return m_percentPhaseFieldOfView;
+}
+
+void Image::setReceiveCoilName( QString ReceiveCoilName )
+{
+    m_receiveCoilName = ReceiveCoilName;
+}
+
+QString Image::getReceiveCoilName()
+{
+    return m_receiveCoilName;
+}
+
+void Image::setPhilipsBFactor( QString philipsBFactor )
+{
+    m_philipsBFactor = philipsBFactor;
+}
+
+QString Image::getPhilipsBFactor()
+{
+    return m_philipsBFactor;
+}
+
+void Image::setReconstructionDiameter( QString reconstructionDiameter )
+{
+    m_reconstructionDiameter = reconstructionDiameter;
+}
+
+QString Image::getReconstructionDiameter()
+{
+    return m_reconstructionDiameter;
+}
+
+void Image::setExposureTime( QString exposureTime )
+{
+    m_exposureTime = exposureTime;
+}
+
+QString Image::getExposureTime()
+{
+    return m_exposureTime;
+}
+
+void Image::setPhilipsScanLength( QString philipsScanLength )
+{
+    m_philipsScanLength = philipsScanLength;
+}
+
+QString Image::getPhilipsScanLength()
+{
+    return m_philipsScanLength;
+}
+
+void Image::setTableHeight( QString tableHeight )
+{
+    m_tableHeight = tableHeight;
+}
+
+QString Image::getTableHeight()
+{
+    return m_tableHeight;
+}
+
+void Image::setSliceLocation( QString sliceLocation )
+{
+    m_sliceLocation = sliceLocation;
+}
+
+QString Image::getSliceLocation()
+{
+    return m_sliceLocation;
+}
+
+void Image::setPhilipsViewConvention( QString philipsViewConvention )
+{
+    m_philipsViewConvention = philipsViewConvention;
+}
+
+QString Image::getPhilipsViewConvention()
+{
+    return m_philipsViewConvention;
+}
+
+void Image::setFilterType( QString filterType )
+{
+    m_filterType = filterType;
+}
+
+QString Image::getFilterType()
+{
+    return m_filterType;
+}
+
+void Image::setImageType( QString imageType )
+{
+    m_imageType = imageType;
+}
+
+QString Image::getImageType()
+{
+    return m_imageType;
+}
+
+void Image::setPhilipsTableSpeed( QString philipsTableSpeed )
+{
+    m_philipsTableSpeed = philipsTableSpeed;
+}
+
+QString Image::getPhilipsTableSpeed()
+{
+    return m_philipsTableSpeed;
+}
+
+void Image::setPhilipsCollimation( QString philipsCollimation )
+{
+    m_philipsCollimation = philipsCollimation;
+}
+
+QString  Image::getPhilipsCollimation()
+{
+    return m_philipsCollimation;
+}
+
+void Image::setScanArc( QString scanArc )
+{
+    m_scanArc = scanArc;
+}
+
+QString Image::getScanArc()
+{
+    return m_scanArc;
+}
+
+void Image::setTilt( QString tilt )
+{
+    m_tilt = tilt;
+}
+
+QString Image::getTilt()
+{
+    return m_tilt;
+}
+
+void Image::setPhilipsCycleTime( QString philipsCycleTime )
+{
+    m_philipsCycleTime = philipsCycleTime;
+}
+
+QString Image::getPhilipsCycleTime()
+{
+    return m_philipsCycleTime;
+}
+
+void Image::setPhilipsPitch( QString philipsPitch )
+{
+    m_philipsPitch = philipsPitch;
+}
+
+QString Image::getPhilipsPitch()
+{
+    return m_philipsPitch;
+}
+
+void Image::setPhilipsRotationTime( QString philipsRotationTime )
+{
+    m_philipsRotationTime = philipsRotationTime;
+}
+
+QString Image::getPhilipsRotationTime()
+{
+    return m_philipsRotationTime;
+}
+
+void Image::setPhilipsTableIncrement( QString philipsTableIncrement )
+{
+    m_philipsTableIncrement = philipsTableIncrement;
+}
+
+QString Image::getPhilipsTableIncrement()
+{
+    return m_philipsTableIncrement;
+}
+
+void Image::setPhilipsScanTime( QString philipsScanTime )
+{
+    m_philipsScanTime = philipsScanTime;
+}
+
+QString Image::getPhilipsScanTime()
+{
+    return m_philipsScanTime;
 }
 
 void Image::addWindowLevel( double window, double level )

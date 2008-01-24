@@ -23,6 +23,7 @@
 #include "referencelinesfillerstep.h"
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
+#include "philipstagsfillerstep.h"
 
 namespace udg {
 
@@ -108,6 +109,7 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new ReferenceLinesFillerStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
     m_registeredSteps.append(new OrderImagesFillerStep() );
+    m_registeredSteps.append(new PhilipsTagsFillerStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
