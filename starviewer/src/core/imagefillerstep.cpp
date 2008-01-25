@@ -187,14 +187,14 @@ void ImageFillerStep::processImage( Image *image )
         
         image->setImageType( dicomReader.getAttributeByName( DCM_ImageType ) );
 
-        if (dicomReader.tagExists( 0x0018, 0x0060 ))
+        if (dicomReader.tagExists( DCM_KVP ))
         {
-            image->setKiloVoltagePeak( dicomReader.getAttributeByTag( 0x018, 0x0060 ).toDouble() );
+            image->setKiloVoltagePeak( dicomReader.getAttributeByName( DCM_KVP ).toDouble() );
         }
         
-        if (dicomReader.tagExists( 0x0018, 0x1153 ))
+        if (dicomReader.tagExists( DCM_ExposureInMicroAs ))
         {
-            image->setMicroAmpersSecond( dicomReader.getAttributeByTag( 0x018, 0x1153 ).toDouble() );
+            image->setMicroAmpersSecond( dicomReader.getAttributeByName( DCM_ExposureInMicroAs ).toDouble() );
         }
         
         if (dicomReader.tagExists( 0x0018, 0x9332 ))
