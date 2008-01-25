@@ -36,7 +36,7 @@
      <property name="minimumSize" >
       <size>
        <width>630</width>
-       <height>160</height>
+       <height>0</height>
       </size>
      </property>
      <property name="autoFillBackground" >
@@ -361,7 +361,7 @@
      <property name="minimumSize" >
       <size>
        <width>630</width>
-       <height>64</height>
+       <height>0</height>
       </size>
      </property>
      <property name="frameShape" >

@@ -124,10 +124,20 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
         m_labelPhilipsCollimationValue->setText( currentImage->getPhilipsCollimation() );
     }
 
-    m_labelImageMatrixValue->setText( QString::number(currentImage->getColumns() , 10 ) +  QString( tr( " x " ) ) + QString::number( currentImage->getRows() , 10 ) );
-    m_labelVoltageValue->setText( QString::number( currentImage->getKiloVoltagePeak() , 'f' , 0 ) +  QString( tr( " KV" ) ) );
-    m_labelExposureValue->setText( QString::number( currentImage->getMilliAmpersSecond() , 'f' , 0 ) +  QString( tr( " mA" ) ) );
+    if ( currentImage->getKiloVoltagePeak() != 0 )
+    {
+        m_labelVoltageValue->setText( QString::number( currentImage->getKiloVoltagePeak() , 'f' , 0 ) +  QString( tr( " KV" ) ) );
+    }
+    else m_labelVoltageValue->setText( "-" );
+
+    if ( currentImage->getMilliAmpersSecond() != 0 )
+    {
+        m_labelExposureValue->setText( QString::number( currentImage->getMilliAmpersSecond() , 'f' , 0 ) +  QString( tr( " mA" ) ) );
+    }
+    else m_labelExposureValue->setText( "-" );
+
     m_labelSliceThicknessValue->setText( QString::number( currentImage->getSliceThickness() , 'f' , 2 )+  QString( tr( " mm" ) ) );
+    m_labelImageMatrixValue->setText( QString::number(currentImage->getColumns() , 10 ) +  QString( tr( " x " ) ) + QString::number( currentImage->getRows() , 10 ) );
 }
 
 void QDicomDumpCTHelixWidget::setSeriesDicomTagsValue( Series *currentSeries )

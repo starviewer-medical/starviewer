@@ -36,7 +36,7 @@
      <property name="minimumSize" >
       <size>
        <width>630</width>
-       <height>120</height>
+       <height>0</height>
       </size>
      </property>
      <property name="autoFillBackground" >
@@ -269,7 +269,7 @@
      <property name="minimumSize" >
       <size>
        <width>630</width>
-       <height>100</height>
+       <height>0</height>
       </size>
      </property>
      <property name="accessibleName" >
