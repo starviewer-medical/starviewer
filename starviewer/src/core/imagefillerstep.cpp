@@ -196,12 +196,16 @@ void ImageFillerStep::processImage( Image *image )
         {
             image->setMicroAmpersSecond( dicomReader.getAttributeByName( DCM_ExposureInMicroAs ).toDouble() );
         }
-        
-        if (dicomReader.tagExists( 0x0018, 0x9332 ))
-        {
-            image->setMilliAmpersSecond( dicomReader.getAttributeByTag( 0x018, 0x9332 ).toDouble() );
+
+        if (dicomReader.getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs ).count() > 0)
+        {//Comprovem si tenim la informació dins la seqüència d'exposició, ja el DCM_ExposureInmAs és de tipus 1 si existeix la seqüència Exposure, que conté informació sobre l'exposició del pacient
+                image->setMilliAmpersSecond( dicomReader.getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs )[0].toDouble() );//Accedim a la posició 0 per llegir el valor de MiliAmpers
         }
-        
+        else if (dicomReader.tagExists( DCM_Exposure ))
+        {//si no existeix al seqüència provem amb el camp DCM_Exposure que conté l'exposició en mAs
+            image->setMilliAmpersSecond( dicomReader.getAttributeByName( DCM_Exposure ).toDouble() );
+        }
+
         if (dicomReader.tagExists( DCM_RepetitionTime ))
         {
             image->setRepetitionTime( QString::number( dicomReader.getAttributeByName( DCM_RepetitionTime ).toDouble() , 'f' , 0 ) );
