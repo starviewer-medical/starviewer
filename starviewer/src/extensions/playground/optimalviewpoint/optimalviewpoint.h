@@ -152,7 +152,7 @@ public:
 public slots:
 
     void newMethod2( int step, bool normalized );
-    void computeObscurances();
+    void computeObscurances( int directions, double maximumDistance, int obscuranceFunction );
 
 signals:
 

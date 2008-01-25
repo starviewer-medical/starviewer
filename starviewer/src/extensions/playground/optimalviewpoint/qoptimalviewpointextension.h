@@ -86,6 +86,7 @@ private slots:
 
     void openSegmentationFile();
     void toggleSegmentationParameters();
+    void computeObscurances();
 
 private:
 
