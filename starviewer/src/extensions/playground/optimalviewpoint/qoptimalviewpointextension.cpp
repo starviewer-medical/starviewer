@@ -66,7 +66,7 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
     createConnections();
 
-    connect( m_obscurancesPushButton, SIGNAL( clicked() ), m_method, SLOT( computeObscurances() ) );
+    connect( m_obscurancesPushButton, SIGNAL( clicked() ), this, SLOT( computeObscurances() ) );
 }
 
 
@@ -313,6 +313,14 @@ void QOptimalViewpointExtension::createConnections()
 {
 //     connect( m_interpolationComboBox, SIGNAL( currentIndexChanged(int) ), m_parameters, SLOT( setInterpolation(int) ) );
 //     connect( m_shadeCheckBox, SIGNAL( toggled(bool) ), m_parameters, SLOT( setShade(bool) ) );
+}
+
+
+void QOptimalViewpointExtension::computeObscurances()
+{
+    m_method->computeObscurances( m_obscuranceDirectionsSpinBox->value(),
+                                  m_obscuranceMaximumDistanceDoubleSpinBox->value(),
+                                  m_obscuranceFunctionComboBox->currentIndex() );
 }
 
 

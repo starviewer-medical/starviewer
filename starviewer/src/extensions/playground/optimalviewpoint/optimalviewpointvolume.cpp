@@ -231,6 +231,9 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
     m_obscurance = 0;
+    m_obscuranceDirections = 2;
+    m_obscuranceMaximumDistance = 64.0;
+    m_obscuranceFunction = Visibility;
 
 
     DEBUG_LOG( "end constructor" );
@@ -252,6 +255,8 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
 //     m_segmentedImage->Delete();  // ja no cal
 
     if ( m_clusterImage ) m_clusterImage->Delete();
+
+    delete [] m_obscurance;
 }
 
 void OptimalViewpointVolume::setShade( bool on )
@@ -910,15 +915,14 @@ void OptimalViewpointVolume::endRayObscurances( int rayId )
 
 void OptimalViewpointVolume::computeObscurances()
 {
-    double dmax = 64.0;
-
     synchronize();
 
     vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
     unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
+    unsigned char * gradientMagnitudes = m_mainMapper->GetGradientEstimator()->GetGradientMagnitudes();
 
     // càlcul de direccions
-    POVSphereCloud cloud( 1.0, 2 ); // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    POVSphereCloud cloud( 1.0, m_obscuranceDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
     cloud.createPOVCloud();
     const QVector<Vector3> & vertices = cloud.getVertices();
 
@@ -934,9 +938,17 @@ void OptimalViewpointVolume::computeObscurances()
 
     unsigned int progress = 0, total = vertices.count();
 
+    int selection = static_cast<int>( round( m_obscuranceMaximumDistance * 100.0 ) ) % 100;
+
     // iterem per les direccions
     foreach ( Vector3 direction, vertices )
     {
+//         if ( progress != selection )
+//         {
+//             progress++;
+//             continue;
+//         }
+
         DEBUG_LOG( QString( "Direcció " ) + direction.toString() );
 
         // direcció dominant (0 = x, 1 = y, 2 = z)
@@ -961,13 +973,19 @@ void OptimalViewpointVolume::computeObscurances()
             case 1: forward = Vector3( direction.y, direction.z, direction.x ); break;
             case 2: forward = Vector3( direction.z, direction.x, direction.y ); break;
         }
-        forward /= forward.x;   // la direcció x passa a ser 1
+        forward /= qAbs( forward.x );   // la direcció x passa a ser 1 o -1
         DEBUG_LOG( QString( "forward = " ) + forward.toString() );
 
         // dimensions i increments segons la direcció dominant
         int dimX = dimensions[dominant], dimY = dimensions[(dominant+1)%3], dimZ = dimensions[(dominant+2)%3];
         int incX = increments[dominant], incY = increments[(dominant+1)%3], incZ = increments[(dominant+2)%3];
         qptrdiff startDelta = 0;
+        if ( forward.x < 0.0 )
+        {
+            startDelta += incX * ( dimX - 1 );
+            incX = -incX;
+            forward.x = -forward.x;
+        }
         if ( forward.y < 0.0 )
         {
             startDelta += incY * ( dimY - 1 );
@@ -1025,6 +1043,12 @@ void OptimalViewpointVolume::computeObscurances()
                     int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
                     float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
                     Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+//                     DEBUG_LOG( "-------------" );
+//                     DEBUG_LOG( QString( "voxel: " ) + ru.toString() );
+//                     DEBUG_LOG( QString( "normal: " ) + uNormal.toString() );
+//                     DEBUG_LOG( QString( "direction: " ) + direction.toString() );
+//                     DEBUG_LOG( QString( "normal · direction = %1" ).arg( uNormal * direction ) );
+//                     DEBUG_LOG( "-------------" );
                     // sembla que ja venen normalitzades
 //                     if ( uNormal.length() != 0.0 && uNormal.length() != 1.0 )
 //                     {
@@ -1035,8 +1059,10 @@ void OptimalViewpointVolume::computeObscurances()
                     if ( uNormal * direction > 0.0 )
                     {
 //                         DEBUG_LOG( QString( "entro: " ) + ru.toString() );
-                        double distance = ( rv - ru ).length();
-                        if ( distance > dmax ) m_obscurance[uIndex]++;  // provar amb la funció com déu mana a veure si així no surten les ratlles
+//                         double distance = ( rv - ru ).length();
+                        Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
+                        double distance = ( dv - du ).length();
+                        m_obscurance[uIndex] += obscurance( distance );
                     }
 
                     it = unresolvedVoxels.erase( it );
@@ -1060,7 +1086,8 @@ void OptimalViewpointVolume::computeObscurances()
                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
                 Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-                if ( uNormal * direction > 0.0 ) m_obscurance[uIndex]++;
+                if ( uNormal * direction > 0.0 )
+                    m_obscurance[uIndex]++;
             }
         }
 
@@ -1092,6 +1119,7 @@ void OptimalViewpointVolume::computeObscurances()
             QDataStream out( &outFile );
             for ( int i = 0; i < m_dataSize; i++ )
                 out << static_cast<uchar>( round( m_obscurance[i] * 255.0 ) );
+//                 out << gradientMagnitudes[i];
             outFile.close();
         }
         QFile outFileMhd( QDir::tempPath().append( QString( "/obscurance.mhd" ) ) );
@@ -1164,6 +1192,36 @@ QList<Vector3> OptimalViewpointVolume::getLineStarts( int dimX, int dimY, int di
     DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.count() ) );
 
     return lineStarts;
+}
+
+
+void OptimalViewpointVolume::setObscuranceDirections( int obscuranceDirections )
+{
+    m_obscuranceDirections = obscuranceDirections;
+}
+
+
+void OptimalViewpointVolume::setObscuranceMaximumDistance( double obscuranceMaximumDistance )
+{
+    m_obscuranceMaximumDistance = obscuranceMaximumDistance;
+}
+
+
+void OptimalViewpointVolume::setObscuranceFunction( ObscuranceFunction obscuranceFunction )
+{
+    m_obscuranceFunction = obscuranceFunction;
+}
+
+
+double OptimalViewpointVolume::obscurance( double distance ) const
+{
+    if ( distance > m_obscuranceMaximumDistance ) return 1.0;
+
+    switch ( m_obscuranceFunction )
+    {
+        case Visibility: return 0.0;
+        case SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
+    }
 }
 
 
