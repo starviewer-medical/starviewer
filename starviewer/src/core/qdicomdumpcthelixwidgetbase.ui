@@ -13,23 +13,11 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
+   <property name="margin" >
+    <number>9</number>
    </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>0</number>
-   </property>
-   <property name="verticalSpacing" >
-    <number>0</number>
+   <property name="spacing" >
+    <number>6</number>
    </property>
    <item row="0" column="0" >
     <widget class="QFrame" name="frame" >
@@ -49,6 +37,12 @@
       <enum>QFrame::Sunken</enum>
      </property>
      <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="m_labelProtocolName" >
         <property name="font" >
@@ -316,12 +310,18 @@
       </size>
      </property>
      <property name="frameShape" >
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Sunken</enum>
      </property>
      <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="m_labePhilipsTableSpeed" >
         <property name="minimumSize" >
