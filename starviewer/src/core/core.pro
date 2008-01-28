@@ -1,15 +1,18 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu Ã©s una biblioteca:  
+# L'objectiu ÃÂ©s una biblioteca:  
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui  \
- qdicomdumpbase.ui \
- qdicomdumpcthelixwidgetbase.ui \
- qdicomdumpctsurveywidgetbase.ui \
- qdicomdumpmrwidgetbase.ui \
- qdicomdumpctwidgetbase.ui
+         qcustomwindowleveldialogbase.ui  \
+ 	 qdicomdumpbase.ui \
+	 qdicomdumpcthelixwidgetbase.ui \
+	 qdicomdumpctsurveywidgetbase.ui \
+	 qdicomdumpmrwidgetbase.ui \
+	 qdicomdumpctwidgetbase.ui \
+	 qcinecontrollerbase.ui 
+
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
                 core_en_GB.ts 
@@ -151,7 +154,9 @@ HEADERS += extensionfactory.h \
            qdicomdump.h \
            qdicomdumpmrwidget.h \
            qdicomdumpctwidget.h \
-           philipstagsfillerstep.h
+           philipstagsfillerstep.h \
+	   qcinecontroller.h
+
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -278,7 +283,9 @@ SOURCES += extensionmediator.cpp \
            qdicomdumpctsurveywidget.cpp \
            qdicomdumpmrwidget.cpp \
            qdicomdumpctwidget.cpp \
-           philipstagsfillerstep.cpp
+           philipstagsfillerstep.cpp \
+	   qcinecontroller.cpp
+
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
