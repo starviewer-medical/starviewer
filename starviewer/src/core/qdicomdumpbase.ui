@@ -5,9 +5,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>190</height>
+    <width>100</width>
+    <height>100</height>
    </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>5</hsizetype>
+    <vsizetype>5</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize" >
    <size>
@@ -15,11 +23,26 @@
     <height>0</height>
    </size>
   </property>
-  <property name="windowTitle" >
-   <string>Dicom dump</string>
+  <property name="maximumSize" >
+   <size>
+    <width>100</width>
+    <height>100</height>
+   </size>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
+  <property name="windowTitle" >
+   <string>DICOM Data</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../main/main.qrc" >:/images/info.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>3</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
     <widget class="QFrame" name="Frame" >
      <property name="minimumSize" >
       <size>
@@ -31,9 +54,15 @@
       <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Sunken</enum>
      </property>
      <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="m_labelPatientName" >
         <property name="font" >
@@ -186,20 +215,26 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
+   <item>
     <widget class="udg::QDicomDumpMRWidget" native="1" name="m_qdicomDumpMRWidget" />
    </item>
-   <item row="2" column="0" >
+   <item>
     <widget class="QDicomDumpCTSurveyWidget" native="1" name="m_qdicomDumpCTSurveyWidget" />
    </item>
-   <item row="3" column="0" >
-    <widget class="QDicomDumpCTWidget" native="1" name="m_qdicomDumpCTWidget" />
-   </item>
-   <item row="4" column="0" >
+   <item>
     <widget class="QDicomDumpCTHelixWidget" native="1" name="m_qdicomDumpCTHelixWidget" />
    </item>
-   <item row="5" column="0" >
+   <item>
+    <widget class="QDicomDumpCTWidget" native="1" name="m_qdicomDumpCTWidget" />
+   </item>
+   <item>
     <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
      <item>
       <spacer>
        <property name="orientation" >
@@ -216,31 +251,27 @@
      <item>
       <widget class="QPushButton" name="m_pushButtonAccept" >
        <property name="text" >
-        <string>Accept</string>
+        <string>Ok</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../main/main.qrc" >:/images/button_ok.png</iconset>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="6" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType" >
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QDicomDumpCTWidget</class>
+   <extends>QWidget</extends>
+   <header>qdicomdumpctwidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>udg::QDicomDumpMRWidget</class>
    <extends>QWidget</extends>
@@ -259,13 +290,9 @@
    <header>qdicomdumpcthelixwidget.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>QDicomDumpCTWidget</class>
-   <extends>QWidget</extends>
-   <header>qdicomdumpctwidget.h</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../main/main.qrc" />
+ </resources>
  <connections/>
 </ui>
