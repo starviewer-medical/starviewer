@@ -215,18 +215,21 @@ void Q2DViewerExtension::changeViewToAxial()
 {
     m_currentView = Axial;
     m_selectedViewer->changeViewToAxial();
+    m_dicomDumpToolButton->setEnabled(true);
 }
 
 void Q2DViewerExtension::changeViewToSagital()
 {
     m_currentView = Sagital;
     m_selectedViewer->changeViewToSagital();
+    m_dicomDumpToolButton->setEnabled(false);
 }
 
 void Q2DViewerExtension::changeViewToCoronal()
 {
     m_currentView = Coronal;
     m_selectedViewer->changeViewToCoronal();
+    m_dicomDumpToolButton->setEnabled(false);
 }
 
 void Q2DViewerExtension::setView( ViewType view )
