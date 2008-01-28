@@ -49,7 +49,7 @@ QViewerCINEController::QViewerCINEController(QObject *parent)
     m_loopAction = new QAction( 0 );
     m_loopAction->setIcon( QIcon(":/images/repeat.png") );
     m_loopAction->setCheckable( true );
-    connect( m_loopAction, SIGNAL(triggered(bool)), SLOT( enableLoopMode(bool) ) );
+    connect( m_loopAction, SIGNAL(triggered(bool)), SLOT( enableLoop(bool) ) );
 }
 
 QViewerCINEController::~QViewerCINEController()
