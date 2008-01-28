@@ -207,6 +207,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_mainVolume = input;
     m_vectorViewers.value( 0 )->setInput( m_mainVolume );
     validePhases();
+    m_cineController->setQViewer( m_vectorViewers.value(0)->getViewer() );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 }
 
@@ -499,6 +500,8 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
         // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
         m_windowLevelComboBox->setPresetsData( m_selectedViewer->getViewer()->getWindowLevelData() );
         m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
+
+        m_cineController->setQViewer( viewer->getViewer() );
     }
 }
 

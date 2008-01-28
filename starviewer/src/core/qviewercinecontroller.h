@@ -72,11 +72,11 @@ public slots:
 
     /// L'indiquem que volem engegar el mode loop
     /// En aquest mode, un cop arribem a la última imatge, tornem a començar de nou des de la inicial
-    void loopMode( bool enable );
+    void enableLoop( bool enable );
 
     /// L'indiquem que volem engegar el mode boomerang
     /// En aquest mode es recorren les imatges repetidament en l'ordre 1..n n..1 (endavant i endarrera)
-    void boomerangMode( bool enable );
+    void enableBoomerang( bool enable );
 
     /// Li indiquem l'interval de reproducció
     void setPlayInterval( int firstImage, int lastImage );
@@ -104,7 +104,10 @@ private:
 
     /// ens indica si la reproducció va cap endavant o cap endarera
     int m_nextStep;
+
+    /// Velocitat expresada en imatges per segon
     int m_velocity;
+
     QBasicTimer *m_timer;
 
     Q2DViewer *m_2DViewer;
@@ -115,11 +118,16 @@ private:
     /// Dimensió sobre la qual es reproduirà
     int m_cineDimension;
 
+    /// Control de loop
+    bool m_loopEnabled;
+    bool m_boomerangEnabled;
+
     QAction *m_playAction;
     QAction *m_recordAction;
     QAction *m_loopAction;
     QAction *m_boomerangAction;
 
+    /// Nom de l'arxiu on es guarda la "peli"
     QString m_recordFilename;
 
 };

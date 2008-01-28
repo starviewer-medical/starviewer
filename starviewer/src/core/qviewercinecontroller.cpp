@@ -27,13 +27,14 @@
 namespace udg {
 
 QViewerCINEController::QViewerCINEController(QObject *parent)
-  : QObject(parent), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false), m_cineDimension(TemporalDimension), m_recordFilename( QDir::homePath() + "/cineMovie" )
+  : QObject(parent), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false), m_cineDimension(TemporalDimension), m_loopEnabled(false), m_boomerangEnabled(false), m_recordFilename( QDir::homePath() + "/cineMovie" )
 {
     m_timer = new QBasicTimer();
 
     m_playAction = new QAction( 0 );
     m_playAction->setShortcut( tr("Space") );
     m_playAction->setIcon( QIcon(":/images/play.png") );
+    m_playAction->setText( tr("Play") );
     connect( m_playAction, SIGNAL(triggered()), SLOT(play()) );
 
     m_recordAction = new QAction( 0 );
@@ -43,12 +44,12 @@ QViewerCINEController::QViewerCINEController(QObject *parent)
     m_boomerangAction = new QAction( 0 );
     m_boomerangAction->setIcon( QIcon(":/images/boomerang.png") );
     m_boomerangAction->setCheckable( true );
-    connect( m_boomerangAction, SIGNAL(triggered(bool)), SLOT( boomerangMode(bool) ) );
+    connect( m_boomerangAction, SIGNAL(triggered(bool)), SLOT( enableBoomerang(bool) ) );
 
     m_loopAction = new QAction( 0 );
     m_loopAction->setIcon( QIcon(":/images/repeat.png") );
     m_loopAction->setCheckable( true );
-    connect( m_loopAction, SIGNAL(triggered(bool)), SLOT( loopMode(bool) ) );
+    connect( m_loopAction, SIGNAL(triggered(bool)), SLOT( enableLoopMode(bool) ) );
 }
 
 QViewerCINEController::~QViewerCINEController()
@@ -115,6 +116,7 @@ void QViewerCINEController::play()
     {
         m_playing = true;
         m_playAction->setIcon( QIcon(":/images/pause.png") );
+        m_playAction->setText( tr("Pause") );
         emit playing();
         m_timer->start(1000/m_velocity, this);
     }
@@ -129,6 +131,7 @@ void QViewerCINEController::pause()
     m_timer->stop();
     m_playing = false;
     m_playAction->setIcon( QIcon(":/images/play.png") );
+    m_playAction->setText( tr("Play") );
     emit paused();
 }
 
@@ -201,22 +204,16 @@ void QViewerCINEController::setVelocity( int imagesPerSecond )
     }
 }
 
-void QViewerCINEController::loopMode( bool enable )
+void QViewerCINEController::enableLoop( bool enable )
 {
-    m_loopAction->setChecked( enable );
-    if( enable )
-        m_boomerangAction->setChecked( false );
+    m_loopEnabled = enable;
+    if( !m_loopEnabled )
+        pause();
 }
 
-void QViewerCINEController::boomerangMode( bool enable )
+void QViewerCINEController::enableBoomerang( bool enable )
 {
-    m_boomerangAction->setChecked( enable );
-    if( enable )
-    {
-        m_loopAction->setChecked( false );
-    }
-    else
-        m_nextStep = 1;
+    m_boomerangEnabled = enable;
 }
 
 void QViewerCINEController::setPlayInterval( int firstImage, int lastImage )
@@ -249,17 +246,21 @@ void QViewerCINEController::handleCINETimerEvent()
     // Si estem al final de l'interval
     if( currentImageIndex == m_lastSliceInterval )
     {
-        if( m_loopAction->isChecked() )
+        if( m_loopEnabled )
         {
-            nextImageIndex = m_firstSliceInterval;
+            if( m_boomerangEnabled )
+            {
+                m_nextStep = -1;
+                nextImageIndex = currentImageIndex + m_nextStep;
+            }
+            else
+                nextImageIndex = m_firstSliceInterval;
         }
-        else if( m_boomerangAction->isChecked() )
-        {
-            m_nextStep = -1;
-            nextImageIndex = currentImageIndex + m_nextStep;
-        }
+        else if( m_boomerangEnabled ) // pot ser que hagim desactivat el repeat, però no el boomerang!
+            m_nextStep = 1;
         else
         {
+            // tornem a l'inici TODO potser no hauria de ser així... i deixar en la última imatge de la seqüència
             nextImageIndex = m_firstSliceInterval;
             pause();
         }
@@ -268,7 +269,7 @@ void QViewerCINEController::handleCINETimerEvent()
     else if( ( currentImageIndex == m_firstSliceInterval )  )
     {
         // Si tenim algun tipus de repeat activat
-        if( m_loopAction->isChecked() ||  m_boomerangAction->isChecked() )
+        if( m_loopEnabled /*|| m_boomerangEnabled*/ )
         {
             m_nextStep = 1;
             nextImageIndex = currentImageIndex + m_nextStep;
@@ -281,8 +282,7 @@ void QViewerCINEController::handleCINETimerEvent()
                 m_nextStep = 1;
                 pause();
             }
-            // Inici de la reproduccio
-            else
+            else // Inici de la reproduccio
             {
                 nextImageIndex = currentImageIndex + m_nextStep;
             }
@@ -317,7 +317,7 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
             setCINEDimension( SpatialDimension ); // si no tenim fases, només podem treballar sobre la dim espaial
             setVelocity( 10 ); // li donarem una velocitat de 10 img/sec
             m_firstSliceInterval = 0;
-            m_lastSliceInterval = m_2DViewer->getNumberOfSlices() - 1;
+            m_lastSliceInterval = m_2DViewer->getNumberOfSlices()/* - 1*/;
         }
 
     }
