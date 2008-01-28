@@ -32,7 +32,7 @@ QViewerCINEController::QViewerCINEController(QObject *parent)
     m_timer = new QBasicTimer();
 
     m_playAction = new QAction( 0 );
-    m_playAction->setShortcut( tr("Space") );
+//     m_playAction->setShortcut( tr("Space") );
     m_playAction->setIcon( QIcon(":/images/play.png") );
     m_playAction->setText( tr("Play") );
     connect( m_playAction, SIGNAL(triggered()), SLOT(play()) );
