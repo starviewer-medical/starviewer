@@ -626,6 +626,10 @@ void Q2DViewerExtension::initializeTools()
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
     windowLevelPresetsTool->trigger();
 
+    // Tool d'slicing per teclat
+    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
+    slicingKeyboardTool->trigger();
+
     // definim els grups exclusius
     QStringList exclusiveTools;
     exclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool";
@@ -648,7 +652,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }
