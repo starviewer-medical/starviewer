@@ -78,36 +78,6 @@ void SlicingTool::handleEvent( unsigned long eventID )
         if( !m_mouseMovement )
             switchSlicingMode();
     break;
-    case vtkCommand::KeyPressEvent:
-    {
-        QString keySymbol = m_2DViewer->getInteractor()->GetKeySym();
-        if( keySymbol == "Home" )
-        {
-            m_2DViewer->setSlice(0);
-        }
-        else if( keySymbol == "End" )
-        {
-            m_2DViewer->setSlice( m_2DViewer->getNumberOfSlices() );
-        }
-        else if( keySymbol == "Up" )
-        {
-            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() + 1 );
-        }
-        else if( keySymbol == "Down" )
-        {
-            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() - 1 );
-        }
-        else if( keySymbol == "Left" )
-        {
-            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() - 1 );
-        }
-        else if( keySymbol == "Right" )
-        {
-            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + 1 );
-        }
-    }
-    break;
-
     default:
     break;
     }
