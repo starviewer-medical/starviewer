@@ -11,6 +11,7 @@
 // tools registrades
 #include "zoomtool.h"
 #include "slicingtool.h"
+#include "slicingkeyboardtool.h"
 #include "windowleveltool.h"
 #include "referencelinestool.h"
 #include "translatetool.h"
@@ -90,6 +91,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "DistanceTool" )
     {
         tool = new DistanceTool( viewer );
+    }
+    else if( toolName == "SlicingKeyboardTool" )
+    {
+        tool = new SlicingKeyboardTool( viewer );
     }
     else
     {
@@ -184,6 +189,11 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Polyline ROI tool") );
         toolAction->setStatusTip( tr("Enable/Disable Polyline ROI tool") );
         toolAction->setIcon( QIcon(":/images/polyline.png") );
+    }
+    else if( toolName == "SlicingKeyboardTool" )
+    {
+        toolAction->setText( tr("Keyboard slicing tool") );
+        toolAction->setStatusTip( tr("Enable/Disable keyboard slicing tool") );
     }
     else
     {
