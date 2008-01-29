@@ -155,7 +155,8 @@ HEADERS += extensionfactory.h \
            qdicomdumpmrwidget.h \
            qdicomdumpctwidget.h \
            philipstagsfillerstep.h \
-	   qcinecontroller.h
+	       qcinecontroller.h \
+           slicingkeyboardtool.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -284,7 +285,8 @@ SOURCES += extensionmediator.cpp \
            qdicomdumpmrwidget.cpp \
            qdicomdumpctwidget.cpp \
            philipstagsfillerstep.cpp \
-	   qcinecontroller.cpp
+	       qcinecontroller.cpp \
+           slicingkeyboardtool.cpp
 
 TEMPLATE = lib
 CONFIG += warn_on \
