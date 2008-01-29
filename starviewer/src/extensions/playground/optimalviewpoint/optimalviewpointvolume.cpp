@@ -35,7 +35,8 @@
 #include <QMultiMap>
 #include <vtkDirectionEncoder.h>
 #include <QDir>
-
+#include <QStack>
+#include <QPair>
 
 namespace udg {
 
@@ -939,6 +940,7 @@ void OptimalViewpointVolume::computeObscurances()
     unsigned int progress = 0, total = vertices.count();
 
     int selection = static_cast<int>( round( m_obscuranceMaximumDistance * 100.0 ) ) % 100;
+    double maximumObscurance = 0.0;
 
     // iterem per les direccions
     foreach ( Vector3 direction, vertices )
@@ -1023,7 +1025,7 @@ void OptimalViewpointVolume::computeObscurances()
             Vector3 rv = lineStarts.takeFirst();
             Voxel v = { round( rv.x ), round( rv.y ), round( rv.z ) };
             Voxel pv = v;
-            QMultiMap<uchar,Vector3> unresolvedVoxels;
+            QStack< QPair<uchar,Vector3> > unresolvedVoxels;
 
             // iterar per la línia
             while ( v.x < dimX && v.y < dimY && v.z < dimZ )
@@ -1034,10 +1036,9 @@ void OptimalViewpointVolume::computeObscurances()
                 // tractar el vòxel
                 uchar value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
 
-                QMultiMap<uchar,Vector3>::iterator it = unresolvedVoxels.begin();
-                while ( it != unresolvedVoxels.end() && it.key() <= value )
+                while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= value )
                 {
-                    Vector3 ru = it.value();
+                    Vector3 ru = unresolvedVoxels.pop().second;
                     Voxel u = { round( ru.x ), round( ru.y ), round( ru.z ) };
 
                     int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
@@ -1045,6 +1046,8 @@ void OptimalViewpointVolume::computeObscurances()
                     Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 //                     DEBUG_LOG( "-------------" );
 //                     DEBUG_LOG( QString( "voxel: " ) + ru.toString() );
+//                     DEBUG_LOG( QString( "value: %1" ).arg( it.key() ) );
+//                     DEBUG_LOG( QString( "gradient: %1" ).arg( gradientMagnitudes[uIndex] ) );
 //                     DEBUG_LOG( QString( "normal: " ) + uNormal.toString() );
 //                     DEBUG_LOG( QString( "direction: " ) + direction.toString() );
 //                     DEBUG_LOG( QString( "normal · direction = %1" ).arg( uNormal * direction ) );
@@ -1056,19 +1059,19 @@ void OptimalViewpointVolume::computeObscurances()
 //                         uNormal.normalize();
 //                     }
 
-                    if ( uNormal * direction > 0.0 )
+                    if ( uNormal * direction < 0.0 )
                     {
 //                         DEBUG_LOG( QString( "entro: " ) + ru.toString() );
-//                         double distance = ( rv - ru ).length();
-                        Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-                        double distance = ( dv - du ).length();
+                        double distance = ( rv - ru ).length();
+//                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
+//                         double distance = ( dv - du ).length();
                         m_obscurance[uIndex] += obscurance( distance );
+                        if ( m_obscurance[uIndex] > maximumObscurance )
+                            maximumObscurance = m_obscurance[uIndex];
                     }
-
-                    it = unresolvedVoxels.erase( it );
                 }
 
-                unresolvedVoxels.insert( value, rv );
+                unresolvedVoxels.push( qMakePair( value, rv ) );
 
                 // avançar el vòxel
                 rv += forward;
@@ -1077,17 +1080,29 @@ void OptimalViewpointVolume::computeObscurances()
 //                 c++;
             }
 
-            QMultiMap<uchar,Vector3>::iterator it;
-            for ( it = unresolvedVoxels.begin(); it != unresolvedVoxels.end(); it++ )
+            while ( !unresolvedVoxels.isEmpty() )
             {
-                Vector3 ru = it.value();
+                Vector3 ru = unresolvedVoxels.pop().second;
                 Voxel u = { round( ru.x ), round( ru.y ), round( ru.z ) };
                 int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
                 Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-                if ( uNormal * direction > 0.0 )
+//                 DEBUG_LOG( "-------------" );
+//                 DEBUG_LOG( QString( "voxel: " ) + ru.toString() );
+//                 DEBUG_LOG( QString( "value: %1" ).arg( it.key() ) );
+//                 DEBUG_LOG( QString( "gradient: %1" ).arg( gradientMagnitudes[uIndex] ) );
+//                 DEBUG_LOG( QString( "normal: " ) + uNormal.toString() );
+//                 DEBUG_LOG( QString( "direction: " ) + direction.toString() );
+//                 DEBUG_LOG( QString( "normal · direction = %1" ).arg( uNormal * direction ) );
+//                 DEBUG_LOG( "-------------" );
+
+                if ( uNormal * direction < 0.0 )
+                {
                     m_obscurance[uIndex]++;
+                    if ( m_obscurance[uIndex] > maximumObscurance )
+                            maximumObscurance = m_obscurance[uIndex];
+                }
             }
         }
 
@@ -1103,7 +1118,7 @@ void OptimalViewpointVolume::computeObscurances()
     }
 
     unsigned int count = vertices.count();
-    for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] /= count;
+    for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] /= maximumObscurance;
 
     for ( int i = 0; i < m_dataSize; i++ )
     {
@@ -1118,8 +1133,13 @@ void OptimalViewpointVolume::computeObscurances()
         {
             QDataStream out( &outFile );
             for ( int i = 0; i < m_dataSize; i++ )
-                out << static_cast<uchar>( round( m_obscurance[i] * 255.0 ) );
+            {
+                uchar value = m_data[i] > 0 ? static_cast<uchar>( round( m_obscurance[i] * 255.0 ) ) : 0;
+                out << value;
 //                 out << gradientMagnitudes[i];
+//                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
+//                 out << static_cast<uchar>( round( ( uGradient[selection] + 1.0 ) * 127.5 ) );
+            }
             outFile.close();
         }
         QFile outFileMhd( QDir::tempPath().append( QString( "/obscurance.mhd" ) ) );
