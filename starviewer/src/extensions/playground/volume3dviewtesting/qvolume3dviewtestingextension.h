@@ -34,9 +34,6 @@ public:
     void setInput( Volume * input );
 
 public slots:
-    /// Actualitza el viewer 3D amb la funció de transferència que estem editant
-    void updateTransferFunctionFromEditor();
-
     /// Actualitza el mètode de rendering que s'aplica al volum segons el que s'ha escollit al combo box
     void updateRenderingMethodFromCombo( int index );
 

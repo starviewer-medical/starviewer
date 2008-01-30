@@ -56,9 +56,6 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_sagitalOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToSagital() ) );
     connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToCoronal() ) );
 
-    // actualització de la funció de transferència
-    connect( m_transferFunctionUpdateButton, SIGNAL( clicked() ), SLOT( updateTransferFunctionFromEditor() ) );
-
     // actualització del mètode de rendering
     connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
 }
@@ -68,11 +65,6 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
     m_input = input;
     m_3DView->setInput( m_input );
     m_3DView->render();
-}
-
-void QVolume3DViewTestingExtension::updateTransferFunctionFromEditor()
-{
-    // obtenim la funció de transferència de l'editor i li assignem al 3D viewer
 }
 
 void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
@@ -108,9 +100,6 @@ void QVolume3DViewTestingExtension::readSettings()
 {
     QSettings settings;
     settings.beginGroup("Starviewer-App-3DTesting");
-
-    m_3DViewSplitter->restoreState( settings.value("3DViewSplitter").toByteArray() );
-
     settings.endGroup();
 }
 
@@ -118,9 +107,6 @@ void QVolume3DViewTestingExtension::writeSettings()
 {
     QSettings settings;
     settings.beginGroup("Starviewer-App-3DTesting");
-
-    settings.setValue("3DViewSplitter", m_3DViewSplitter->saveState() );
-
     settings.endGroup();
 }
 
