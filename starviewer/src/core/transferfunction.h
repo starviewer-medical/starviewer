@@ -4,22 +4,16 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
-
 #ifndef UDGTRANSFERFUNCTION_H
 #define UDGTRANSFERFUNCTION_H
-
 
 #include <QColor>
 #include <QMap>
 
-
 class vtkColorTransferFunction;
 class vtkPiecewiseFunction;
 
-
 namespace udg {
-
 
 /**
  * Encapsula les dades i la funcionalitat d'una funció de transferència.
@@ -35,15 +29,13 @@ namespace udg {
  *
  * Hi ha mètodes per treballar amb la part de color i la d'opacitat per separat
  * i mètodes per treballar-hi alhora. Es poden usar indistintament els dos modes
- * de treball amb el mateix objecte TransferFunction. 
+ * de treball amb el mateix objecte TransferFunction.
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
 class TransferFunction
 {
-
 public:
-
     /// Construeix una funció de transferència buida (sense punts).
     TransferFunction();
     TransferFunction( const TransferFunction & transferFunction );
@@ -51,48 +43,61 @@ public:
 
     /// Retorna el color i l'opacitat corresponents a \a x en un QColor RGBA.
     QColor get( double x ) const;
+
     /// Retorna el color corresponent a \a x.
     QColor getColor( double x ) const;
+
     /// Retorna l'opacitat corresponent a \a x.
     double getOpacity( double x ) const;
 
     /// Afegeix o modifica un punt de color i d'opacitat mitjançant un QColor RGBA.
     void addPoint( double x, const QColor & rgba );
+
     /// Afegeix o modifica un punt de color i d'opacitat.
     void addPoint( double x, const QColor & color, double opacity );
+
     /// Esborra un punt de color i d'opacitat (si existeix).
     void removePoint( double x );
 
     /// Afegeix o modifica un punt de color.
     void addPointToColor( double x, const QColor & color );
+
     /// Afegeix o modifica un punt de color, en format RGB enter.
     void addPointToColorRGB( double x, int r, int g, int b );
+
     /// Afegeix o modifica un punt de color, en format RGB real.
     void addPointToColorRGB( double x, double r, double g, double b );
+
     /// Esborra un punt de color (si existeix).
     void removePointFromColor( double x );
 
     /// Afegeix o modifica un punt d'opacitat.
     void addPointToOpacity( double x, double opacity );
+
     /// Esborra un punt d'opacitat (si existeix).
     void removePointFromOpacity( double x );
 
     /// Esborra tots els punts de color i d'opacitat.
     void clear();
+
     /// Esborra tots els punts de color.
     void clearColor();
+
     /// Esborra tots els punts d'opacitat.
     void clearOpacity();
 
     /// Retorna els punts x de color i d'opacitat. Per accedir al valor d'un punt cal cridar get( x ).
     QList< double > getPoints() const;
+
     /// Retorna els punts x de color. Per accedir al valor d'un punt cal cridar getColor( x ).
     QList< double > getColorPoints() const;
+
     /// Retorna els punts x d'opacitat. Per accedir al valor d'un punt cal cridar getOpacity( x ).
     QList< double > getOpacityPoints() const;
 
     /// Retorna la funció de transferència de color en format VTK.
     vtkColorTransferFunction * getColorTransferFunction() const;
+
     /// Retorna la funció de transferència d'opacitat en format VTK.
     vtkPiecewiseFunction * getOpacityTransferFunction() const;
 
@@ -103,23 +108,27 @@ public:
     bool operator ==( const TransferFunction & transferFunction ) const;
 
 private:
-
     /// Punts de color RGB.
     QMap< double, QColor > m_color;
+
     /// Punts d'opacitat A.
     QMap< double, double > m_opacity;
 
     /// Punts RGBA. S'actualitza només quan es necessita.
     mutable QMap< double, QColor > m_rgba;
+
     /// Indica si hi ha hagut canvis a la funció des de l'últim cop que s'ha actualitzat m_rgba.
     mutable bool m_changed;
 
     /// Funció de transferència de color. S'actualitza només quan es necessita.
     mutable vtkColorTransferFunction * m_colorTransferFunction;
+
     /// Indica si hi ha hagut canvis de color des de l'últim cop que s'ha actualitzat m_colorTransferFunction.
     mutable bool m_colorChanged;
+
     /// Funció de transferència d'opacitat. S'actualitza només quan es necessita.
     mutable vtkPiecewiseFunction * m_opacityTransferFunction;
+
     /// Indica si hi ha hagut canvis d'opacitat des de l'últim cop que s'ha actualitzat m_opacityTransferFunction.
     mutable bool m_opacityChanged;
 
