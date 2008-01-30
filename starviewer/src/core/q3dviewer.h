@@ -15,6 +15,7 @@ class vtkImageCast;
 class vtkRenderWindowInteractor;
 class vtkInteractorStyle;
 class vtkVolume;
+class vtkVolumeProperty;
 
 namespace udg {
 
@@ -68,7 +69,7 @@ public slots:
     void reset();
 
     /// Li assignem la funció de transferència que volem aplicar
-    void setTransferFunction( TransferFunction* ){};
+    void setTransferFunction( TransferFunction *transferFunction );
 
 private:
     /// fa la visualització per raycasting
@@ -111,6 +112,9 @@ private:
 
     /// El prop 3D de vtk per representar el volum
     vtkVolume *m_vtkVolume;
+
+    /// Propietats que defineixen com es renderitzarà el volum
+    vtkVolumeProperty *m_volumeProperty;
 
     /// La funció de transferència que s'aplica
     TransferFunction *m_transferFunction;
