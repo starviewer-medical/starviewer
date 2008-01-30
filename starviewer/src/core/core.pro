@@ -11,6 +11,8 @@ FORMS += qlogviewerbase.ui \
 	 qdicomdumpctsurveywidgetbase.ui \
 	 qdicomdumpmrwidgetbase.ui \
 	 qdicomdumpctwidgetbase.ui \
+     qtransferfunctioneditorbyvaluesbase.ui \
+     qtransferfunctionintervaleditorbase.ui \
 	 qcinecontrollerbase.ui 
 
 TRANSLATIONS += core_ca_ES.ts \
@@ -156,6 +158,15 @@ HEADERS += extensionfactory.h \
            qdicomdumpctwidget.h \
            philipstagsfillerstep.h \
 	       qcinecontroller.h \
+           hoverpoints.h \
+           qcolorspinbox.h \
+           qtransferfunctioneditorbyvalues.h \
+           qtransferfunctionintervaleditor.h \
+           shadewidget.h \
+           transferfunction.h \
+           transferfunctionio.h \
+           qtransferfunctioneditor.h \
+           qtransferfunctioneditorbygradient.h \
            slicingkeyboardtool.h
 
 SOURCES += extensionmediator.cpp \
@@ -286,6 +297,15 @@ SOURCES += extensionmediator.cpp \
            qdicomdumpctwidget.cpp \
            philipstagsfillerstep.cpp \
 	       qcinecontroller.cpp \
+           hoverpoints.cpp \
+           qcolorspinbox.cpp \
+           qtransferfunctioneditorbyvalues.cpp \
+           qtransferfunctionintervaleditor.cpp \
+           shadewidget.cpp \
+           transferfunction.cpp \
+           transferfunctionio.cpp \
+           qtransferfunctioneditor.cpp \
+           qtransferfunctioneditorbygradient.cpp \
            slicingkeyboardtool.cpp
 
 TEMPLATE = lib
