@@ -171,8 +171,8 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 
     QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
 
-    item->setIcon( PatientName, m_closeFolder );
-    item->setText( PatientName , study->getPatientName() );
+    item->setIcon( ObjectName, m_closeFolder );
+    item->setText( ObjectName , study->getPatientName() );
     item->setText( PatientID , study->getPatientId() );
     item->setText( PatientAge , formatAge( study->getPatientAge() ) );
     item->setText( Modality , study->getStudyModality() );
@@ -230,8 +230,8 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
     studyItem = getStudyItem( serie->getStudyUID() , serie->getPacsAETitle() );
     item = new QTreeWidgetItem( studyItem );
 
-    item->setIcon(PatientName, m_iconSeries);
-    item->setText(PatientName, tr( "Series %1" ).arg(serie->getSeriesNumber()) );
+    item->setIcon(ObjectName, m_iconSeries);
+    item->setText(ObjectName, tr( "Series %1" ).arg(serie->getSeriesNumber()) );
     item->setText(Modality, serie->getSeriesModality() );
 
     item->setText( Description , serie->getSeriesDescription().simplified() );//treiem els espaics en blanc del davant i darrera
@@ -291,8 +291,8 @@ void QStudyTreeWidget::insertImage( DICOMImage * image )
 
     item = new QTreeWidgetItem( studyItem->child( index ) );
 
-    item->setIcon( PatientName, m_iconSeries );
-    item->setText( PatientName , tr( "Image %1" ).arg(image->getImageNumber()) );
+    item->setIcon( ObjectName, m_iconSeries );
+    item->setText( ObjectName , tr( "Image %1" ).arg(image->getImageNumber()) );
 
     item->setText( PACSAETitle , image->getPacsAETitle() );
     item->setText( UID , image->getSOPInstanceUID() );
@@ -528,7 +528,7 @@ void QStudyTreeWidget::setSeriesToSeriesListWidget( QTreeWidgetItem *item )
             serie.setSeriesUID( child->text( UID ) );
             serie.setImageNumber( child->text( ImageNumber ).toInt( NULL , 10 ) );
             serie.setSeriesModality( child->text( Modality ) );
-            serie.setSeriesNumber( child->text( Type ).remove( tr("Series") ) );
+            serie.setSeriesNumber( child->text( ObjectName ).remove( tr("Series") ) );//El numero de serie està dins l'ObjectName
             serie.setStudyUID( getSelectedStudyUID() );
             serie.setProtocolName( child->text( ProtocolName ) );
             emit( addSeries( &serie ) );
@@ -627,7 +627,7 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
         {
             if ( item->text( Type ) == "STUDY" ) //volem expandir les series d'un estudi
             {
-                item->setIcon( PatientName , m_openFolder );
+                item->setIcon( ObjectName , m_openFolder );
                 emit( expandStudy( item->text(UID) , item->text(PACSAETitle) ) );
                 setSeriesToSeriesListWidget( item ); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
             }
@@ -639,7 +639,7 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
     {
         if ( item->text(Type)== "STUDY")
         {
-            item->setIcon(PatientName, m_closeFolder);
+            item->setIcon(ObjectName, m_closeFolder);
             emit( clearSeriesListWidget() );
         }
     }
