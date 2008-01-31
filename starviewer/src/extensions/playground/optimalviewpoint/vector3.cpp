@@ -8,24 +8,10 @@
 
 #include "vector3.h"
 
-#include <cmath>
-
 #include <QString>
 
 
 namespace udg {
-
-
-Vector3::Vector3( double x, double y, double z )
-{
-    this->x = x; this->y = y; this->z = z;
-}
-
-
-double Vector3::length() const
-{
-    return sqrt( x * x + y * y + z * z );
-}
 
 
 Vector3 & Vector3::normalize()
@@ -61,22 +47,10 @@ Vector3 & Vector3::operator +=( const Vector3 & v )
 }
 
 
-Vector3 Vector3::operator -( const Vector3 & v ) const
-{
-    return Vector3( x - v.x, y - v.y, z - v.z );
-}
-
-
 Vector3 & Vector3::operator -=( const Vector3 & v )
 {
     x -= v.x; y -= v.y; z -= v.z;
     return *this;
-}
-
-
-double Vector3::operator *( const Vector3 & v ) const   // producte escalar
-{
-    return x * v.x + y * v.y + z * v.z;
 }
 
 

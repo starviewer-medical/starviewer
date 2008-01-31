@@ -864,7 +864,13 @@ void OptimalViewpoint::computeObscurances( int directions, double maximumDistanc
     m_volume->setObscuranceDirections( directions );
     m_volume->setObscuranceMaximumDistance( maximumDistance );
     m_volume->setObscuranceFunction( static_cast<OptimalViewpointVolume::ObscuranceFunction>( obscuranceFunction ) );
+
+    QTime t;
+    t.start();
     m_volume->computeObscurances();
+    int elapsed = t.elapsed();
+    DEBUG_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
+    INFO_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
 }
 
 

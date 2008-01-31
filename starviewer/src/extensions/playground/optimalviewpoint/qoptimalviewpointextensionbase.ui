@@ -651,12 +651,17 @@
           <widget class="QComboBox" name="m_obscuranceFunctionComboBox" >
            <item>
             <property name="text" >
-             <string>Visibility</string>
+             <string>Constant 0</string>
             </property>
            </item>
            <item>
             <property name="text" >
-             <string>Square Root</string>
+             <string>Square root</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Exponential</string>
             </property>
            </item>
           </widget>
