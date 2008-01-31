@@ -41,14 +41,14 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
     {
         QString seriesModality = currentImage->getParentSeries()->getModality();
         
-        setCommonImageTagsValue( currentImage ); 
+        setCommonImageTagsValue( currentImage ); //Descodifiquem els tags comuns per totes les imatges
         
-        if ( seriesModality == "MR" )
+        if ( seriesModality == "MR" ) //En funció de la modalitat cridem el QWidget que ens implementi el dicomdump per la modalitat
         {
             m_qdicomDumpMRWidget->setVisible( true );
             m_qdicomDumpMRWidget->setCurrentDisplayedImage( currentImage );
         }
-        else if ( seriesModality == "CT" )
+        else if ( seriesModality == "CT" ) //Per a CT en funció del tipus d'imatge hem de mostrar informació diferent pel dicomdump
         {
             QString imageType = currentImage->getImageType();
     
@@ -62,7 +62,7 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
                 m_qdicomDumpCTHelixWidget->setVisible( true );
                 m_qdicomDumpCTHelixWidget->setCurrentDisplayedImage( currentImage );
             }
-            else
+            else //QWidget de ct Genèric
             {
                 m_qdicomDumpCTWidget->setVisible( true );
                 m_qdicomDumpCTWidget->setCurrentDisplayedImage( currentImage );
