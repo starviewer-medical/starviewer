@@ -54,8 +54,8 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
     
             if ( imageType.contains( "LOCALIZER" , Qt::CaseInsensitive ) )//Es tracta d'un survey
             {
-                m_qdicomDumpCTSurveyWidget->setVisible( true );
-                m_qdicomDumpCTSurveyWidget->setCurrentDisplayedImage( currentImage );
+                m_qdicomDumpCTLocalizerWidget->setVisible( true );
+                m_qdicomDumpCTLocalizerWidget->setCurrentDisplayedImage( currentImage );
             }
             else if ( imageType.contains( "HELIX" , Qt::CaseInsensitive ) )//Es tracta d'una imatge helicoïdal
             {
@@ -128,7 +128,7 @@ void QDicomDump::setNoVisibleAllDicomDumpWidgets()
     m_qdicomDumpCTHelixWidget->setVisible( false );
     m_qdicomDumpMRWidget->setVisible( false );
     m_qdicomDumpCTWidget->setVisible( false );
-    m_qdicomDumpCTSurveyWidget->setVisible( false );
+    m_qdicomDumpCTLocalizerWidget->setVisible( false );
 }
 
 void QDicomDump::closeWindow()

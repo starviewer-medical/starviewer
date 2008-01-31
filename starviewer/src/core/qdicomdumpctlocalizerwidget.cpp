@@ -5,25 +5,25 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "qdicomdumpctsurveywidget.h"
+#include "qdicomdumpctlocalizerwidget.h"
 #include "series.h"
 #include "image.h"
 
 namespace udg {
 
-QDicomDumpCTSurveyWidget::QDicomDumpCTSurveyWidget( QWidget *parent )
+QDicomDumpCTLocalizerWidget::QDicomDumpCTLocalizerWidget( QWidget *parent )
  : QWidget(parent)
 {
     setupUi( this );
 
 }
 
-QDicomDumpCTSurveyWidget::~QDicomDumpCTSurveyWidget()
+QDicomDumpCTLocalizerWidget::~QDicomDumpCTLocalizerWidget()
 {
 
 }
 
-void QDicomDumpCTSurveyWidget::setCurrentDisplayedImage( Image *currentImage )
+void QDicomDumpCTLocalizerWidget::setCurrentDisplayedImage( Image *currentImage )
 {
     initialize();
     
@@ -34,7 +34,7 @@ void QDicomDumpCTSurveyWidget::setCurrentDisplayedImage( Image *currentImage )
     }
 }
 
-void QDicomDumpCTSurveyWidget::initialize()
+void QDicomDumpCTLocalizerWidget::initialize()
 {
     m_labelReconstructionDiameterValue->setText( "-" );
     m_labelTableHeightValue->setText( "-" );
@@ -51,7 +51,7 @@ void QDicomDumpCTSurveyWidget::initialize()
     m_labelPatientPositionValue->setText( "-" );
 }
 
-void QDicomDumpCTSurveyWidget::setImageDicomTagsValue(Image *currentImage)
+void QDicomDumpCTLocalizerWidget::setImageDicomTagsValue(Image *currentImage)
 { 
     if ( currentImage->getReconstructionDiameter() != "" )
     {
@@ -108,7 +108,7 @@ void QDicomDumpCTSurveyWidget::setImageDicomTagsValue(Image *currentImage)
     else m_labelExposureValue->setText( "-" );
 }
 
-void QDicomDumpCTSurveyWidget::setSeriesDicomTagsValue( Series *currentSeries )
+void QDicomDumpCTLocalizerWidget::setSeriesDicomTagsValue( Series *currentSeries )
 {
     if ( currentSeries->getProtocolName() != "" )
     {

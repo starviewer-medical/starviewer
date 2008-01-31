@@ -8,7 +8,7 @@ FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui  \
  	 qdicomdumpbase.ui \
 	 qdicomdumpcthelixwidgetbase.ui \
-	 qdicomdumpctsurveywidgetbase.ui \
+	 qdicomdumpctlocalizerwidgetbase.ui \
 	 qdicomdumpmrwidgetbase.ui \
 	 qdicomdumpctwidgetbase.ui \
      qtransferfunctioneditorbyvaluesbase.ui \
@@ -152,7 +152,7 @@ HEADERS += extensionfactory.h \
            windowlevelpresetstooldata.h \
            qviewercinecontroller.h \
            qdicomdumpcthelixwidget.h \
-           qdicomdumpctsurveywidget.h \
+           qdicomdumpctlocalizerwidget.h \
            qdicomdump.h \
            qdicomdumpmrwidget.h \
            qdicomdumpctwidget.h \
@@ -292,7 +292,7 @@ SOURCES += extensionmediator.cpp \
            qviewercinecontroller.cpp \
            qdicomdump.cpp \
            qdicomdumpcthelixwidget.cpp \
-           qdicomdumpctsurveywidget.cpp \
+           qdicomdumpctlocalizerwidget.cpp \
            qdicomdumpmrwidget.cpp \
            qdicomdumpctwidget.cpp \
            philipstagsfillerstep.cpp \
