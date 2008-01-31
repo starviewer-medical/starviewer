@@ -15,8 +15,7 @@ namespace udg {
 class Series;
 class Image;
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+/** Classe encaragada de fer el dicom dump per a imatges CT, que no siguin ni Helicoïdals ni localizers 
 */
 class QDicomDumpCTWidget : public QWidget , private Ui::QDicomDumpCTWidgetBase{
 Q_OBJECT

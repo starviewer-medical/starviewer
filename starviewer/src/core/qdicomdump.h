@@ -9,7 +9,11 @@
 
 #include "ui_qdicomdumpbase.h"
 
-/// Interfície que implementa la llista d'operacions realitzades cap a un PACS
+/** Aquest classe és l'encarregada de realitzar el dicomdump de la imatge que s'està visualizant per part de l'usuari.
+  *Totes les imatges tenen una sèrie de tags que es descodifiquen en aquesta classe que són comuns a totes les imatges, llavors
+  *en funció de la modalitat d'imatge i del Vendor mostrem el QWidget que conté els camps més adients per generar el dicom dump.
+ * per aquella modalitat
+ */
 namespace udg {
 
 class Image;
@@ -27,7 +31,7 @@ public:
     /// destructor de la classe
     ~QDicomDump();
 
-    ///Displaya les dades de la imatge que se li passa per paràmetre
+    ///Genera el dicomdump de la iamtge que se li passa per paràmetre
     void setCurrentDisplayedImage( Image *currentImage );
 
 private:
@@ -48,9 +52,9 @@ private:
     void setNoVisibleAllDicomDumpWidgets();
 
 private slots:
+
     /// tanquem la finestra
     void closeWindow();
-
 };
 
 };

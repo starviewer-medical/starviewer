@@ -15,9 +15,8 @@ namespace udg {
 class Series;
 class Image;
 
-/** Dicom dump del survey d'un CT
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
+/** Dicom dump del Localizer d'un CT, mostra els la informació especifica de dicom dump per un CT Localizer
+ */
 class QDicomDumpCTSurveyWidget : public QWidget , private Ui::QDicomDumpCTSurveyWidgetBase{
 Q_OBJECT
 public:
@@ -45,7 +44,6 @@ private:
      * @param seriesInformation  serie
      */
     void setSeriesDicomTagsValue( Series *seriesInformation );
-
 };
 
 }
