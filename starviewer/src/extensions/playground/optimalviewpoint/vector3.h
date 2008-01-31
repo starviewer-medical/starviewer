@@ -10,6 +10,9 @@
 #define VECTOR3_H
 
 
+#include <cmath>
+
+
 class QString;
 
 
@@ -71,6 +74,30 @@ public:
     double x, y, z;
 
 };
+
+
+inline Vector3::Vector3( double aX, double aY, double aZ )
+    : x( aX ), y( aY ), z( aZ )
+{
+}
+
+
+inline double Vector3::length() const
+{
+    return sqrt( x * x + y * y + z * z );
+}
+
+
+inline Vector3 Vector3::operator -( const Vector3 & v ) const
+{
+    return Vector3( x - v.x, y - v.y, z - v.z );
+}
+
+
+inline double Vector3::operator *( const Vector3 & v ) const    // producte escalar
+{
+    return x * v.x + y * v.y + z * v.z;
+}
 
 
 }

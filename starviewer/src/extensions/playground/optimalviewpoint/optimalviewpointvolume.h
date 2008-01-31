@@ -51,7 +51,7 @@ class OptimalViewpointVolume : public QObject {
 
 public:
 
-    enum ObscuranceFunction { Visibility, SquareRoot };
+    enum ObscuranceFunction { Constant0, SquareRoot, Exponential };
 
     /// Construeix el volum a partir de la imatge \a image.
     OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
@@ -162,10 +162,10 @@ signals:
 private:
 
     // definició d'un vòxel
-    struct Voxel { int x, y, z; };
+//     struct Voxel { int x, y, z; };
 
-    QList<Vector3> getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
-    double obscurance( double distance ) const;
+//     QList<Vector3> getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
+//     double obscurance( double distance ) const;
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
     void labelize( const QVector< unsigned char > & limits );
