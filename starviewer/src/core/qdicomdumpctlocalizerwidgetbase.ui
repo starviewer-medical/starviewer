@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>udg::QDicomDumpCTSurveyWidgetBase</class>
- <widget class="QWidget" name="udg::QDicomDumpCTSurveyWidgetBase" >
+ <class>udg::QDicomDumpCTLocalizerWidgetBase</class>
+ <widget class="QWidget" name="udg::QDicomDumpCTLocalizerWidgetBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

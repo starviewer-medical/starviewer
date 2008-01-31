@@ -5,10 +5,10 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#ifndef UDGQDICOMDUMPCTSURVEYWIDGET_H
-#define UDGQDICOMDUMPCTSURVEYIDGET_H
+#ifndef UDGQDICOMDUMPCTLOCALIZERWIDGET_H
+#define UDGQDICOMDUMPCTLOCALIZERWIDGET_H
 
-#include <ui_qdicomdumpctsurveywidgetbase.h>
+#include <ui_qdicomdumpctlocalizerwidgetbase.h>
 
 namespace udg {
 
@@ -17,13 +17,13 @@ class Image;
 
 /** Dicom dump del Localizer d'un CT, mostra els la informació especifica de dicom dump per un CT Localizer
  */
-class QDicomDumpCTSurveyWidget : public QWidget , private Ui::QDicomDumpCTSurveyWidgetBase{
+class QDicomDumpCTLocalizerWidget : public QWidget , private Ui::QDicomDumpCTLocalizerWidgetBase{
 Q_OBJECT
 public:
     
-    QDicomDumpCTSurveyWidget( QWidget *parent = 0 );
+    QDicomDumpCTLocalizerWidget( QWidget *parent = 0 );
     
-    ~QDicomDumpCTSurveyWidget();
+    ~QDicomDumpCTLocalizerWidget();
 
     /** Fa el DicomDump dels tags dicom de la imatge 
      * @param image imatge de la que s'ha de fer el dicomdump

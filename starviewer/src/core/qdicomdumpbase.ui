@@ -219,7 +219,7 @@
     <widget class="udg::QDicomDumpMRWidget" native="1" name="m_qdicomDumpMRWidget" />
    </item>
    <item>
-    <widget class="QDicomDumpCTSurveyWidget" native="1" name="m_qdicomDumpCTSurveyWidget" />
+    <widget class="QDicomDumpCTLocalizerWidget" native="1" name="m_qdicomDumpCTLocalizerWidget" />
    </item>
    <item>
     <widget class="QDicomDumpCTHelixWidget" native="1" name="m_qdicomDumpCTHelixWidget" />
@@ -279,9 +279,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QDicomDumpCTSurveyWidget</class>
+   <class>QDicomDumpCTLocalizerWidget</class>
    <extends>QWidget</extends>
-   <header>qdicomdumpctsurveywidget.h</header>
+   <header>qdicomdumpctlocalizerwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
