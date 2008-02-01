@@ -625,6 +625,7 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
 
 double Q2DViewer::getThickness()
 {
+    // TODO falta tenir en compte el thickSlab que estem aplicant
     double thickness;
     switch( m_lastView )
     {
@@ -639,6 +640,49 @@ double Q2DViewer::getThickness()
     break;
     }
     return thickness;
+}
+
+void Q2DViewer::getSliceRange(int &min, int &max)
+{
+    if( m_mainVolume )
+    {
+        m_mainVolume->updateInformation();
+        int *extent = m_mainVolume->getWholeExtent();
+        min = extent[m_lastView * 2];
+        max = extent[m_lastView * 2 + 1];
+    }
+    else
+    {
+        min = max = 0;
+        DEBUG_LOG("Alerta! Demanem el rang de llesques però no tenim volum! Valors de sortida = 0!");
+    }
+}
+
+int *Q2DViewer::getSliceRange()
+{
+    if( m_mainVolume )
+    {
+        m_mainVolume->updateInformation();
+        return m_mainVolume->getWholeExtent() + m_lastView*2;
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+int Q2DViewer::getMinimumSlice()
+{
+    int min, trash;
+    this->getSliceRange(min,trash);
+    return min;
+}
+
+int Q2DViewer::getMaximumSlice()
+{
+    int max, trash;
+    this->getSliceRange(trash,max);
+    return max;
 }
 
 void Q2DViewer::addActors()
@@ -831,7 +875,7 @@ void Q2DViewer::setInput( Volume* volume )
         m_maxSliceValue = m_mainVolume->getSeries()->getNumberOfSlicesPerPhase() - 1;
     else
     {
-        m_maxSliceValue = m_viewer->GetSliceMax();
+        m_maxSliceValue = this->getMaximumSlice();
         m_numberOfPhases = 1;
     }
 
@@ -854,6 +898,8 @@ void Q2DViewer::setInput( Volume* volume )
 
     // actualitzem la informació de window level
     this->updateWindowLevelData();
+
+    DEBUG_LOG( "Posició del pacient: " + m_mainVolume->getSeries()->getPatientPosition() );
 }
 
 vtkInteractorStyle *Q2DViewer::getInteractorStyle()
@@ -972,7 +1018,7 @@ void Q2DViewer::updateCamera()
         switch( this->m_lastView )
         {
         case Axial:
-            while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
+            while( i < (renderCollection->GetNumberOfItems()) && i <= this->getMaximumSlice() )
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
@@ -987,7 +1033,7 @@ void Q2DViewer::updateCamera()
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
         case Sagital:
-            while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
+            while( i < (renderCollection->GetNumberOfItems()) && i <= this->getMaximumSlice() )
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
@@ -1003,7 +1049,7 @@ void Q2DViewer::updateCamera()
         break;
 
         case Coronal:
-            while( i < (renderCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
+            while( i < (renderCollection->GetNumberOfItems()) && i <= this->getMaximumSlice() )
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
@@ -1074,7 +1120,7 @@ void Q2DViewer::resetCamera()
         {
         case Axial:
             m_viewer->SetSliceOrientationToXY();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= (m_viewer->GetSliceMax()))
+            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= this->getMaximumSlice() )
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
@@ -1095,7 +1141,7 @@ void Q2DViewer::resetCamera()
 
         case Sagital:
             m_viewer->SetSliceOrientationToYZ();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
+            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= this->getMaximumSlice() )
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
@@ -1117,7 +1163,7 @@ void Q2DViewer::resetCamera()
 
         case Coronal:
             m_viewer->SetSliceOrientationToXZ();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_viewer->GetSliceMax())
+            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= this->getMaximumSlice() )
             {
                 renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
@@ -1140,12 +1186,12 @@ void Q2DViewer::resetCamera()
         //  Si no tenim dimensions temporals ens quedem amb el màxim de llesques
         if( m_numberOfPhases == 1 )
         {
-            m_maxSliceValue = m_viewer->GetSliceRange()[1];
+            m_maxSliceValue = this->getMaximumSlice();
         }
         if( m_lastView == Axial ) // en axial sempre començarem a visualitzar des de la llesca 0
             setSlice(0);
         else // posem la llesca del mig
-            setSlice( m_viewer->GetSliceRange()[1]/2 );
+            setSlice( this->getMaximumSlice()/2 );
 
         emit cameraChanged();
         mapOrientationStringToAnnotation();
@@ -1162,11 +1208,6 @@ void Q2DViewer::resetCamera()
 vtkImageMapToWindowLevelColors *Q2DViewer::getWindowLevelMapper() const
 {
     return m_windowLevelLUTMapper;
-}
-
-int Q2DViewer::getNumberOfSlices()
-{
-    return m_viewer->GetSliceMax();
 }
 
 void Q2DViewer::setSlice( int value )
@@ -2047,7 +2088,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
                 if( sliceAnnotation )
                 {
                     this->updateSliceAnnotation( sliceAnnotation, ((int)(value/m_numberOfPhases)) + 1, m_maxSliceValue+1, value+1, m_numberOfPhases );
-                    if( value >=  m_viewer->GetSliceMax() )
+                    if( value >=  this->getMaximumSlice() )
                         value = 0;
                     else
                         value++;
@@ -2075,7 +2116,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
                 {
                     this->updateSliceAnnotation( sliceAnnotation, value+1, m_maxSliceValue+1 );
                 }
-                if( value >=  m_viewer->GetSliceMax() )
+                if( value >=  this->getMaximumSlice() )
                     value = 0;
                 else
                     value += m_numberOfPhases;
@@ -2231,16 +2272,16 @@ void Q2DViewer::updateGrid()
     {
         // afegim nous viewports
         i = m_numberOfSlicesWindows;
-        while( i < (m_columns*m_rows) && i < m_viewer->GetSliceMax())
+        while( i < (m_columns*m_rows) && i < this->getMaximumSlice() )
         {
             addRenderScene();
             i++;
         }
     }
-    else if( (m_numberOfSlicesWindows > m_columns*m_rows || m_numberOfSlicesWindows > m_viewer->GetSliceMax()) && m_numberOfSlicesWindows > 1 )
+    else if( (m_numberOfSlicesWindows > m_columns*m_rows || m_numberOfSlicesWindows > this->getMaximumSlice() ) && m_numberOfSlicesWindows > 1 )
     {
         i = m_numberOfSlicesWindows;
-        while( i > (m_columns*m_rows) || i > m_viewer->GetSliceMax() )
+        while( i > (m_columns*m_rows) || i > this->getMaximumSlice() )
         {
             removeRenderScene();
             i--;
@@ -2271,7 +2312,7 @@ void Q2DViewer::updateViewports()
     double sizePhaseVertical;
     double xPhaseMin, yPhaseMin;
 
-    int maxSlice = m_viewer->GetSliceMax();
+    int maxSlice = this->getMaximumSlice();
     vtkRenderer* renderer;
 
     int rendererIndex = 0;
@@ -2369,7 +2410,7 @@ void Q2DViewer::updateDisplayExtent()
                             break;
                     }
                     this->updateSliceAnnotation( sliceAnnotation, ((int)(value/m_numberOfPhases)) + 1, m_maxSliceValue+1, value+1, m_numberOfPhases );
-                    if( value >=  m_viewer->GetSliceMax() )
+                    if( value >=  this->getMaximumSlice() )
                         value = 0;
                     else
                         value++;
@@ -2414,7 +2455,7 @@ void Q2DViewer::updateDisplayExtent()
                     this->updateSliceAnnotation( sliceAnnotation, value+1, m_maxSliceValue+1 );
                 }
 
-                if( value >=  m_viewer->GetSliceMax() )
+                if( value >=  this->getMaximumSlice() )
                     value = 0;
                 else
                     value += m_numberOfPhases;

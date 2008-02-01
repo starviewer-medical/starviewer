@@ -42,7 +42,7 @@ void SlicingKeyboardTool::handleEvent( unsigned long eventID )
         }
         else if( keySymbol == "End" )
         {
-            m_2DViewer->setSlice( m_2DViewer->getNumberOfSlices() );
+            m_2DViewer->setSlice( m_2DViewer->getMaximumSlice() );
         }
         else if( keySymbol == "Up" )
         {

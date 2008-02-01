@@ -132,9 +132,6 @@ public:
     int getCurrentSlice() const;
     int getCurrentPhase() const;
 
-    /// retorna el nombre de llesques
-    int getNumberOfSlices();
-
     void getCurrentWindowLevel( double wl[2] );
 
     /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
@@ -231,6 +228,23 @@ public:
 
     /// Retorna el thickness
     double getThickness();
+
+    /**
+     * Ens retorna el rang actual de llesques, tenint en compte totes les imatges,
+     * tant com si hi ha fases com si no
+     * @param min valor mínim
+     * @param max valor màxim
+     */
+    void getSliceRange(int &min, int &max);
+    int *getSliceRange();
+
+    /**
+     * Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
+     * tant com si hi ha fases com si no
+     * @return valor de la llesca mínima/màxima
+     */
+    int getMinimumSlice();
+    int getMaximumSlice();
 
 public slots:
     virtual void render();
