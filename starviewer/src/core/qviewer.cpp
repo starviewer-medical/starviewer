@@ -386,6 +386,34 @@ void QViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX,
     this->getRenderer()->ResetCameraClippingRange();
 }
 
+void QViewer::scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, double bottomRightX, double bottomRightY, double bottomRightZ, double marginRate )
+{
+    if( !m_mainVolume )
+        return;
+
+    int *size = this->getRenderer()->GetSize();
+
+    // Calcular la width i height en coordenades de display
+    double displayTopLeft[3], displayBottomRight[3];
+    this->computeWorldToDisplay( this->getRenderer(), topLeftX, topLeftY, topLeftZ, displayTopLeft );
+    this->computeWorldToDisplay( this->getRenderer(), bottomRightX, bottomRightY, bottomRightZ, displayBottomRight );
+
+    // recalculem tenint en compte el display
+    double width, height;
+    width = fabs( displayTopLeft[0] - displayBottomRight[0] );
+    height = fabs( displayTopLeft[1] - displayBottomRight[1] );
+        
+    //\TODO caldria considerar l'opció d'afegir un marge per si no volem que la regió escollida mantingui una distància amb les vores de la finestra
+    // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
+
+    if( size[0] < size[1] )
+        this->zoom( (size[0] / (float)width ) * ( 1.0 - marginRate ) );
+    else
+        this->zoom( (size[1] / (float)height ) * ( 1.0 - marginRate ) ); 
+    
+    this->getRenderer()->ResetCameraClippingRange();
+}
+
 WindowLevelPresetsToolData *QViewer::getWindowLevelData() const
 {
     return m_windowLevelData;

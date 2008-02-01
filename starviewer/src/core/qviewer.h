@@ -128,6 +128,19 @@ public:
     void scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY );
 
     /**
+     * Fem un zoom del requadre definit pels paràmetres topLeft i rightBottom en coordenades de món i en 3D
+     * perquè s'ajusti a la mida de la finestra
+     * @param topLeftX coordenada X superior esquerra del requadre
+     * @param topLeftY coordenada Y superior esquerra del requadre
+     * @param topLeftZ coordenada Z superior esquerra del requadre
+     * @param bottomRightX coordenada X inferior dreta del requadre
+     * @param bottomRightY coordenada Y inferior dreta del requadre
+     * @param bottomRightZ coordenada Z inferior dreta del requadre
+     * @param marginRate valor en percentatge del marge que es vol deixar
+     */
+    void scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, double bottomRightX, double bottomRightY, double bottomRightZ, double marginRate );
+
+    /**
      * Ens retorna l'objecte que conté tota la informació referent al window level
      * que es pot aplicar sobre aquest visor
      * @return L'objecte WindowLevelPresetsToolData
