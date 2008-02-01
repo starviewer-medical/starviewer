@@ -41,7 +41,7 @@ public:
     ~QViewer();
 
     /// Per definir els diferents plans on podem operar
-    enum PlaneType{ AxialPlane, SagitalPlane, CoronalPlane, Top2DPlane };
+    enum PlaneType{ AxialPlane = 2, SagitalPlane = 0, CoronalPlane = 1, Top2DPlane = 3 };
 
     /// Definim les diverses orientacions que podem tenir: Axial: XY, Sagital: YZ, Coronal: XZ, Other: orientació arbitrària
     enum CameraOrientationType{ Axial = AxialPlane, Sagital = SagitalPlane, Coronal = CoronalPlane, Other };
