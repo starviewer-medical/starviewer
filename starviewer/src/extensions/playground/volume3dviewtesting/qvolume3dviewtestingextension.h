@@ -10,6 +10,8 @@
 
 #include "ui_qvolume3dviewtestingextensionbase.h"
 
+#include <QDir>
+
 class QAction;
 
 namespace udg {
@@ -37,9 +39,15 @@ public slots:
     /// Actualitza el mètode de rendering que s'aplica al volum segons el que s'ha escollit al combo box
     void updateRenderingMethodFromCombo( int index );
 
+    /// Aplica una funció de transferència predefinida a la visualització.
+    void applyPresetClut( const QString & clutName );
+
 private:
     /// posa a punt les tools que es poden fer servir en l'extensió
     void initializeTools();
+
+    /// Obté la llista de funcions de transferència predefinides.
+    void loadClutPresets();
 
     /// Estableix les connexions de signals i slots
     void createConnections();
@@ -54,6 +62,9 @@ private:
 
     /// Gestor de tools
     ToolManager *m_toolManager;
+
+    /// Directori de funcions de transferència predefinides
+    QDir m_clutsDir;
 };
 
 } // end namespace udg

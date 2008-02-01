@@ -8,6 +8,7 @@
 #include "qvolume3dviewtestingextension.h"
 #include "volume.h"
 #include "toolmanager.h"
+#include "transferfunctionio.h"
 // qt
 #include <QAction>
 #include <QSettings>
@@ -20,6 +21,7 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     setupUi( this );
 
     initializeTools();
+    loadClutPresets();
     createConnections();
     readSettings();
 }
@@ -49,6 +51,20 @@ void QVolume3DViewTestingExtension::initializeTools()
     m_toolManager->refreshConnections();
 }
 
+void QVolume3DViewTestingExtension::loadClutPresets()
+{
+    m_clutsDir.setPath( QDir::homePath() + "/.starviewer/cluts" );
+
+    if ( !( m_clutsDir.exists() && m_clutsDir.isReadable() ) ) return;  // no es pot accedir al directori
+
+    QStringList nameFilters;
+    nameFilters << "*.tf";
+
+    QStringList clutList = m_clutsDir.entryList( nameFilters );
+
+    m_clutPresetsComboBox->addItems( clutList );
+}
+
 void QVolume3DViewTestingExtension::createConnections()
 {
     // orientacions axial,sagital i coronal
@@ -58,6 +74,9 @@ void QVolume3DViewTestingExtension::createConnections()
 
     // actualització del mètode de rendering
     connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
+
+    // funció de transferència
+    connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), SLOT( applyPresetClut(const QString&) ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -94,6 +113,13 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
     }
     m_3DView->render();
     this->setCursor( QCursor(Qt::ArrowCursor) );
+}
+
+void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
+{
+    TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( clutName ) );
+    if ( transferFunction ) m_3DView->setTransferFunction( transferFunction );
+    m_3DView->render();
 }
 
 void QVolume3DViewTestingExtension::readSettings()
