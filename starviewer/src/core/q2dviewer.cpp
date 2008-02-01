@@ -1116,6 +1116,8 @@ void Q2DViewer::resetCamera()
         vtkCamera *camera;
         vtkRenderer *renderer;
         int i = 0;
+        double *bounds = m_viewer->GetImageActor()->GetBounds();
+        
         switch( m_lastView )
         {
         case Axial:
@@ -1131,6 +1133,9 @@ void Q2DViewer::resetCamera()
                     camera->SetPosition(0,0,-1);
                     camera->SetRoll( -m_rotateFactor*90. + 180. );
                     renderer->ResetCamera();
+                    scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0, 0.0 );
+                    //scaleToFit( bounds[1], bounds[3], bounds[0], bounds[2] );
+                    updateCamera();
                 }
                 i++;
             }
@@ -1152,6 +1157,8 @@ void Q2DViewer::resetCamera()
                     camera->SetViewUp(0,0,1);
                     camera->SetRoll( -m_rotateFactor*90. -90. );
                     renderer->ResetCamera();
+                    scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4], 0.1 );
+                    updateCamera();
                 }
                 emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
                 i++;
@@ -1174,6 +1181,8 @@ void Q2DViewer::resetCamera()
                     camera->SetViewUp(0,0,1);
                     camera->SetRoll( -m_rotateFactor*90. );
                     renderer->ResetCamera();
+                    scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5], 0.1 );
+                    updateCamera();
                 }
                 emit rotationDegreesChanged( -m_rotateFactor*90. );
                 i++;
