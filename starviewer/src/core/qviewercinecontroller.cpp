@@ -317,7 +317,7 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
             setCINEDimension( SpatialDimension ); // si no tenim fases, només podem treballar sobre la dim espaial
             setVelocity( 10 ); // li donarem una velocitat de 10 img/sec
             m_firstSliceInterval = 0;
-            m_lastSliceInterval = m_2DViewer->getNumberOfSlices()/* - 1*/;
+            m_lastSliceInterval = m_2DViewer->getMaximumSlice()/* - 1*/;
         }
 
     }

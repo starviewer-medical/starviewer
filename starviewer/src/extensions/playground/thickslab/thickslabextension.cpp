@@ -564,7 +564,7 @@ void ThickSlabExtension::showPredefinedImageGrid()
 {
     QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
     m_predefinedSlicesGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
-    m_predefinedSlicesGrid->createPredefinedGrids( m_selectedViewer->getViewer()->getNumberOfSlices() );
+    m_predefinedSlicesGrid->createPredefinedGrids( m_selectedViewer->getViewer()->getMaximumSlice() );
     m_predefinedSlicesGrid->show();
 }
 
