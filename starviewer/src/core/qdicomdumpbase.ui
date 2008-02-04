@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>100</width>
+    <width>706</width>
     <height>100</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
   </property>
   <property name="maximumSize" >
    <size>
-    <width>100</width>
+    <width>16777215</width>
     <height>100</height>
    </size>
   </property>
@@ -44,9 +44,17 @@
    </property>
    <item>
     <widget class="QFrame" name="Frame" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize" >
       <size>
-       <width>630</width>
+       <width>700</width>
        <height>0</height>
       </size>
      </property>
@@ -55,6 +63,12 @@
      </property>
      <property name="frameShadow" >
       <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="lineWidth" >
+      <number>1</number>
+     </property>
+     <property name="midLineWidth" >
+      <number>0</number>
      </property>
      <layout class="QGridLayout" >
       <property name="margin" >
@@ -216,16 +230,58 @@
     </widget>
    </item>
    <item>
-    <widget class="udg::QDicomDumpMRWidget" native="1" name="m_qdicomDumpMRWidget" />
+    <widget class="udg::QDicomDumpMRWidget" native="1" name="m_qdicomDumpMRWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item>
-    <widget class="QDicomDumpCTLocalizerWidget" native="1" name="m_qdicomDumpCTLocalizerWidget" />
+    <widget class="QDicomDumpCTLocalizerWidget" native="1" name="m_qdicomDumpCTLocalizerWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item>
-    <widget class="QDicomDumpCTHelixWidget" native="1" name="m_qdicomDumpCTHelixWidget" />
+    <widget class="QDicomDumpCTHelixWidget" native="1" name="m_qdicomDumpCTHelixWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item>
-    <widget class="QDicomDumpCTWidget" native="1" name="m_qdicomDumpCTWidget" />
+    <widget class="QDicomDumpCTWidget" native="1" name="m_qdicomDumpCTWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" >
@@ -267,18 +323,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QDicomDumpCTWidget</class>
-   <extends>QWidget</extends>
-   <header>qdicomdumpctwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>udg::QDicomDumpMRWidget</class>
-   <extends>QWidget</extends>
-   <header>qdicomdumpmrwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QDicomDumpCTLocalizerWidget</class>
    <extends>QWidget</extends>
    <header>qdicomdumpctlocalizerwidget.h</header>
@@ -288,6 +332,18 @@
    <class>QDicomDumpCTHelixWidget</class>
    <extends>QWidget</extends>
    <header>qdicomdumpcthelixwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QDicomDumpCTWidget</class>
+   <extends>QWidget</extends>
+   <header>qdicomdumpctwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>udg::QDicomDumpMRWidget</class>
+   <extends>QWidget</extends>
+   <header>qdicomdumpmrwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
