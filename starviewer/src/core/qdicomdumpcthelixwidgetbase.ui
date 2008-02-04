@@ -52,7 +52,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Protocol Name :</string>
+         <string>Protocol Name:</string>
         </property>
        </widget>
       </item>
@@ -75,7 +75,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Image Type :</string>
+         <string>Image Type:</string>
         </property>
        </widget>
       </item>
@@ -95,7 +95,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Slice Thickness :</string>
+         <string>Slice Thickness:</string>
         </property>
        </widget>
       </item>
@@ -115,7 +115,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Spacing Between Slices :</string>
+         <string>Spacing Between Slices:</string>
         </property>
        </widget>
       </item>
@@ -138,7 +138,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Voltage :</string>
+         <string>Voltage:</string>
         </property>
        </widget>
       </item>
@@ -161,7 +161,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Exposure :</string>
+         <string>Exposure:</string>
         </property>
        </widget>
       </item>
@@ -181,7 +181,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Patient Position :</string>
+         <string>Patient Position:</string>
         </property>
        </widget>
       </item>
@@ -201,7 +201,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Filter Type :</string>
+         <string>Filter Type:</string>
         </property>
        </widget>
       </item>
@@ -221,7 +221,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Table Height :</string>
+         <string>Table Height:</string>
         </property>
        </widget>
       </item>
@@ -244,7 +244,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Slice Location :</string>
+         <string>Slice Location:</string>
         </property>
        </widget>
       </item>
@@ -264,7 +264,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Reconstruction Diameter :</string>
+         <string>Reconstruction Diameter:</string>
         </property>
        </widget>
       </item>
@@ -287,7 +287,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Image Matrix :</string>
+         <string>Image Matrix:</string>
         </property>
        </widget>
       </item>
@@ -340,7 +340,7 @@
          <enum>Qt::DefaultContextMenu</enum>
         </property>
         <property name="text" >
-         <string>Table Speed :</string>
+         <string>Table Speed:</string>
         </property>
        </widget>
       </item>
@@ -369,7 +369,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Scan Length :</string>
+         <string>Scan Length:</string>
         </property>
        </widget>
       </item>
@@ -392,7 +392,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>View Convention :</string>
+         <string>View Convention:</string>
         </property>
        </widget>
       </item>
@@ -415,7 +415,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Collimation :</string>
+         <string>Collimation:</string>
         </property>
        </widget>
       </item>
@@ -435,7 +435,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Scan Time :</string>
+         <string>Scan Time:</string>
         </property>
        </widget>
       </item>
@@ -455,7 +455,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Rotation Time :</string>
+         <string>Rotation Time:</string>
         </property>
        </widget>
       </item>
@@ -475,7 +475,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Pitch :</string>
+         <string>Pitch:</string>
         </property>
        </widget>
       </item>
