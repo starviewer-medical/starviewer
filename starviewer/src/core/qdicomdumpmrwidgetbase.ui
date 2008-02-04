@@ -55,7 +55,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Protocol Name :</string>
+         <string>Protocol Name:</string>
         </property>
        </widget>
       </item>
@@ -75,7 +75,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Field Of View :</string>
+         <string>Field Of View:</string>
         </property>
        </widget>
       </item>
@@ -98,7 +98,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Slice thickness :</string>
+         <string>Slice thickness:</string>
         </property>
        </widget>
       </item>
@@ -121,7 +121,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Ratio Field Of View :</string>
+         <string>Ratio Field Of View:</string>
         </property>
        </widget>
       </item>
@@ -141,7 +141,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Repetition Time :</string>
+         <string>Repetition Time:</string>
         </property>
        </widget>
       </item>
@@ -161,7 +161,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Echo Time :</string>
+         <string>Echo Time:</string>
         </property>
        </widget>
       </item>
@@ -204,7 +204,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Flip Angle :</string>
+         <string>Flip Angle:</string>
         </property>
        </widget>
       </item>
@@ -244,7 +244,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Number Of Averages :</string>
+         <string>Number Of Averages:</string>
         </property>
        </widget>
       </item>
@@ -297,7 +297,7 @@
          <enum>Qt::DefaultContextMenu</enum>
         </property>
         <property name="text" >
-         <string>Scanning Technique :</string>
+         <string>Scanning Technique:</string>
         </property>
        </widget>
       </item>
@@ -317,7 +317,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>Spacial plane : </string>
+         <string>Spacial plane: </string>
         </property>
        </widget>
       </item>
@@ -340,7 +340,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Turbo Factor :</string>
+         <string>Turbo Factor:</string>
         </property>
        </widget>
       </item>
@@ -360,7 +360,7 @@
          </font>
         </property>
         <property name="text" >
-         <string>EPI Factor :</string>
+         <string>EPI Factor:</string>
         </property>
        </widget>
       </item>
@@ -383,7 +383,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Number Of Stacks :</string>
+         <string>Number Of Stacks:</string>
         </property>
        </widget>
       </item>
@@ -406,7 +406,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>B Factor :</string>
+         <string>B Factor:</string>
         </property>
        </widget>
       </item>
@@ -429,7 +429,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string>Dynamic Scans :</string>
+         <string>Dynamic Scans:</string>
         </property>
        </widget>
       </item>
