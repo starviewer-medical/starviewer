@@ -405,14 +405,14 @@ QString Image::getPhilipsEPIFactor()
     return m_philipsEPIFactor;
 }
 
-void Image::setPhilipsImagePosition( QString philipsImagePosition )
+void Image::setPhilipsSpacialPlane( QString philipsSpacialPlane )
 {
-    m_philipsImagePosition = philipsImagePosition;
+    m_philipsSpacialPlane = philipsSpacialPlane;
 }
 
-QString Image::getPhilipsImagePosition()
+QString Image::getPhilipsSpacialPlane()
 {
-    return m_philipsImagePosition;
+    return m_philipsSpacialPlane;
 }
 
 void Image::setNumberOfAverages( QString numberOfAverages )

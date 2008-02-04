@@ -44,7 +44,7 @@ void QDicomDumpMRWidget::initialize()
     m_labelPhilipsTurboFactorValue->setText( "-" );
     m_labelNumberOfAveragesValue->setText( "-" );
     m_labelPhilipsBFactorValue->setText( "-" );
-    m_labelPhilipsImagePositionValue->setText( "-" );
+    m_labelPhilipsSpacialPlaneValue->setText( "-" );
     m_labelReceiveCoilValue->setText( "-" );
     m_labelPhilipsNumberOfStacksValue->setText( "-" );
     m_labelProtocolNameValue->setText( "-" );
@@ -103,9 +103,9 @@ void QDicomDumpMRWidget::setImageDicomTagsValue( Image *currentImage )
         m_labelPhilipsBFactorValue->setText( currentImage->getPhilipsBFactor() );
     }
 
-    if ( currentImage->getPhilipsImagePosition() != "" )  
+    if ( currentImage->getPhilipsSpacialPlane() != "" )  
     {
-        m_labelPhilipsImagePositionValue->setText( currentImage->getPhilipsImagePosition() );
+        m_labelPhilipsSpacialPlaneValue->setText( currentImage->getPhilipsSpacialPlane() );
     }
 
     if ( currentImage->getReceiveCoilName() != "" ) 

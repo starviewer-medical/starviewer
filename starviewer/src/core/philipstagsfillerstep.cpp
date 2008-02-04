@@ -136,7 +136,7 @@ void PhilipsTagsFillerStep::processImage( Image *image )
 
         if (dicomReader.tagExists( 0x2001, 0x100b )) //Tag Image Position
         {  
-            image->setPhilipsImagePosition( dicomReader.getAttributeByTag( 0x2001, 0x100b ) );
+            image->setPhilipsSpacialPlane( dicomReader.getAttributeByTag( 0x2001, 0x100b ) );
         }
 
         if (dicomReader.tagExists( 0x01f1, 0x1026)) //Tag Pitch

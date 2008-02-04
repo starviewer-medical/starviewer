@@ -181,9 +181,9 @@ public:
     void setPhilipsEPIFactor( QString philipsEPIFactor );
     QString getPhilipsEPIFactor();
 
-    ///assigna / retorna la posició de la imatge
-    void setPhilipsImagePosition( QString philipsImagePosition );
-    QString getPhilipsImagePosition();
+    ///assigna / retorna la posició del pla de la imatge a l'espai
+    void setPhilipsSpacialPlane( QString philipsSpacialPlane );
+    QString getPhilipsSpacialPlane();
 
     ///assigna / retorna el Number Of Averages de la imatge
     void setNumberOfAverages( QString numberOfAverages );
@@ -500,9 +500,9 @@ private:
     QString m_philipsEPIFactor;
 
     //TODO Esbrinar si el nom del camp correcte
-    /** Posició de la imatge per MR. Tag de philips (2001,100b)
+    /** Posició de espaial del pla de la imatge per MR. Tag de philips (2001,100b)
      */
-    QString m_philipsImagePosition;
+    QString m_philipsSpacialPlane;
 
     /** Factor b corresponent a una imatge per MR. Tag de Philips (2001,1003)
      */
