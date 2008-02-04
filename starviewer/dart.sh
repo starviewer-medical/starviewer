@@ -109,7 +109,7 @@ _EOF_DART_CONFIG
 CheckRequired
 case "$1" in
     style)
-        $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -1 1 -D kwsFiles.txt
+        $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -D kwsFiles.txt
         ;;
     Continuous)
         SetBuildFromSVN
