@@ -5,13 +5,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
-    <height>212</height>
+    <width>647</width>
+    <height>222</height>
    </rect>
   </property>
   <property name="minimumSize" >
    <size>
-    <width>630</width>
+    <width>0</width>
     <height>0</height>
    </size>
   </property>
@@ -20,7 +20,7 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -29,7 +29,7 @@
     <widget class="QFrame" name="frame" >
      <property name="minimumSize" >
       <size>
-       <width>630</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -291,7 +291,7 @@
     <widget class="QFrame" name="frame_2" >
      <property name="minimumSize" >
       <size>
-       <width>630</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -312,7 +312,7 @@
        <widget class="QLabel" name="m_labelPhilipsScanLength" >
         <property name="minimumSize" >
          <size>
-          <width>177</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -368,10 +368,13 @@
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>10</height>
       </size>
      </property>
     </spacer>

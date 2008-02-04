@@ -14,7 +14,7 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -23,7 +23,7 @@
     <widget class="QFrame" name="frame" >
      <property name="minimumSize" >
       <size>
-       <width>630</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -305,7 +305,7 @@
     <widget class="QFrame" name="frame_2" >
      <property name="minimumSize" >
       <size>
-       <width>630</width>
+       <width>0</width>
        <height>0</height>
       </size>
      </property>
@@ -326,7 +326,7 @@
        <widget class="QLabel" name="m_labePhilipsTableSpeed" >
         <property name="minimumSize" >
          <size>
-          <width>177</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
