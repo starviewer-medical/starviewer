@@ -12,6 +12,7 @@
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkActor2D.h>
+#include <vtkLine.h>
 namespace udg {
 
 DrawerLine::DrawerLine(QObject *parent) : DrawerPrimitive(parent), m_vtkLineSource(0), m_vtkActor(0), m_vtkMapper(0)
@@ -140,4 +141,8 @@ double DrawerLine::computeDistance()
     return ( d.getDistance3D() );
 }
 
+double DrawerLine::getDistanceToPoint( double *point3D )
+{
+    return vtkLine::DistanceToLine( point3D , m_firstPoint , m_secondPoint );
+}
 }

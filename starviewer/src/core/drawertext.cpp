@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "drawertext.h"
 #include "logging.h"
+#include "distance.h"
 // vtk
 #include <vtkTextProperty.h>
 #include <vtkTextActor.h>
@@ -344,6 +345,12 @@ bool DrawerText::isTextScaled()
 {
     return( m_scaled );
     emit changed();
+}
+
+double DrawerText::getDistanceToPoint( double *point3D )
+{
+    Distance d(m_attatchPoint, point3D);
+    return d.getDistance3D();
 }
 
 }

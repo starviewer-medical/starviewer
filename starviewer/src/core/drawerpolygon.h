@@ -46,6 +46,9 @@ public:
     void setVertix( int i, double point[3] );
 
     vtkProp *getAsVtkProp();
+    
+    ///calcula la distància que té respecte al punt passat per paràmetre
+    double getDistanceToPoint( double *point3D );
 
 public slots:
     void update( int representation );
@@ -59,6 +62,9 @@ private:
 
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
+    
+    ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment del polígon
+    bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
 
 private:
     /// Llista de punts del polígon
