@@ -309,4 +309,19 @@ void OptimalViewpointParameters::setGroupingMethod( int groupingMethod )
 }
 
 
+bool OptimalViewpointParameters::getObscurances() const
+{
+    return m_obscurances;
+}
+
+
+void OptimalViewpointParameters::setObscurances( bool obscurances )
+{
+    if ( m_obscurances != obscurances )
+    {
+        m_obscurances = obscurances; emit changed( Obscurances );
+    }
+}
+
+
 }
