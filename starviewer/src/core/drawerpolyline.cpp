@@ -13,6 +13,7 @@
 #include <vtkActor2D.h>
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
+#include <vtkLine.h>
 // qt
 #include <QVector>
 
@@ -235,6 +236,57 @@ void DrawerPolyline::swap()
 {
     for ( int i = 0; i < (int)(m_pointsList.count()/2); i++ )
         m_pointsList.swap( i, (m_pointsList.count()-1)-i );
+}
+
+double DrawerPolyline::getDistanceToPoint( double *point3D )
+{
+    double minDistanceLine = VTK_DOUBLE_MAX;
+    double *p1, *p2, distance, *auxPoint;
+    bool found = false;
+    int j;
+    
+    if ( !m_pointsList.isEmpty() )
+    {
+        //mirem si el polígon conté com a últim punt el primer punt, és a dir, si està tancat o no.
+        //ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
+        QList< double* > auxList;
+        auxList += m_pointsList;
+                
+        if ( auxList.first()[0] != auxList.last()[0] || auxList.first()[1] != auxList.last()[1] || auxList.first()[2] != auxList.last()[2] )
+        {
+            //si el primer i últim punt no són iguals, dupliquem el primer punt.
+            auxList << auxList.first();
+        }
+    
+        for ( int i = 0; ( i < auxList.count() - 1 ) && !found ; i++ )
+        {
+            if ( isPointIncludedInLineBounds( point3D, auxList[i], auxList[i+1] ) )
+            {
+                minDistanceLine = 0.0;
+                found = true;
+            }
+            else
+            {
+                distance = vtkLine::DistanceToLine( point3D , auxList[i] , auxList[i+1] );
+                
+                if ( ( minDistanceLine != VTK_DOUBLE_MAX ) && ( distance < minDistanceLine ) ) 
+                        minDistanceLine = distance;
+            }
+        }
+    }
+    return minDistanceLine;
+}
+
+bool DrawerPolyline::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
+{
+    double range = 5.0;
+    
+    /*
+        mirem si la distància entre un dels extrems del segment i el punt dóna un valor igual o iferior a un llindar determinat.
+        si és així, retornem cert, altrament retornem fals
+    */
+    return( ( ( fabs( point[0] - lineP1[0] ) <= range ) && ( fabs( point[1] - lineP1[1] ) <= range ) && ( fabs( point[2] - lineP1[2] ) <= range ) ) || 
+            ( ( fabs( point[0] - lineP2[0] ) <= range ) && ( fabs( point[1] - lineP2[1] ) <= range ) && ( fabs(point[2] - lineP2[2] ) <= range ) ) );
 }
 
 }

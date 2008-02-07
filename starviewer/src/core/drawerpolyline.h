@@ -69,6 +69,9 @@ public:
 
     /// Calcula l'area del poligon
     double computeArea( int view );
+    
+    ///calcula la distància que té respecte al punt passat per paràmetre
+    double getDistanceToPoint( double *point3D );
 
 public slots:
     void update( int representation );
@@ -85,6 +88,9 @@ private:
 
     /// Mètode que intercanvia els punts de sentit antihorari a horari
     void swap();
+    
+    ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
+    bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
 
 private:
     /// Llista de punts de la polilínia

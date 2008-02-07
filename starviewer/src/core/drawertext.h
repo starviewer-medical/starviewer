@@ -129,6 +129,9 @@ public:
     
     ///ens diu si el text és escalat o no
     bool isTextScaled();
+    
+    ///calcula la distància que té respecte al punt passat per paràmetre
+    double getDistanceToPoint( double *point3D );
 
 public slots:
     void update( int representation );

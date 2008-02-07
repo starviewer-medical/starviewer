@@ -42,6 +42,9 @@ public:
     /// Calcula la distancia entre punt i punt
     double computeDistance();
     
+    ///calcula la distància que té respecte al punt passat per paràmetre
+    double getDistanceToPoint( double *point3D );
+    
 public slots:
     
     void update( int representation );
