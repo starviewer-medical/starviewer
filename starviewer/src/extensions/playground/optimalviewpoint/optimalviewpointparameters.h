@@ -52,7 +52,9 @@ public:
 
         ReadExtentFromFile,
 
-        GroupingMethod
+        GroupingMethod,
+
+        Obscurances
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -124,6 +126,9 @@ public:
     int getGroupingMethod() const;
     void setGroupingMethod( int groupingMethod );
 
+    bool getObscurances() const;
+    void setObscurances( bool obscurances );
+
 public slots:
 
     void setInterpolation( int interpolation );
@@ -165,6 +170,8 @@ private:
     bool m_readExtentFromFile;
 
     int m_groupingMethod;
+
+    bool m_obscurances;
 
 
 };

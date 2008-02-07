@@ -39,7 +39,9 @@
 #include <QPair>
 #include <QThread>
 #include "obscurancethread.h"
-#include "vtkMultiThreader.h"
+#include <vtkMultiThreader.h>
+
+#include "vtkVolumeRayCastCompositeFunctionObscurances.h"
 
 namespace udg {
 
@@ -122,8 +124,9 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
 
-    m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New(); m_mainVolumeRayCastFunction->Register( 0 );
-    m_planeVolumeRayCastFunction = vtkVolumeRayCastCompositeFunctionOptimalViewpoint::New(); m_planeVolumeRayCastFunction->Register( 0 );
+    m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New(); //m_mainVolumeRayCastFunction->Register( 0 );
+    m_planeVolumeRayCastFunction = vtkVolumeRayCastCompositeFunctionOptimalViewpoint::New(); //m_planeVolumeRayCastFunction->Register( 0 );
+    m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New(); //m_volumeRayCastFunctionObscurances->Register( 0 );
 
 
 
@@ -239,6 +242,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_obscuranceMaximumDistance = 64.0;
     m_obscuranceFunction = Constant0;
 
+    m_renderWithObscurances = false;
+
 
     DEBUG_LOG( "end constructor" );
 }
@@ -250,6 +255,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_volumeProperty->Delete();
     m_mainVolumeRayCastFunction->Delete();
     m_planeVolumeRayCastFunction->Delete();
+    m_volumeRayCastFunctionObscurances->Delete();
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -814,11 +820,13 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
             m_volumeProperty->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_planeVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
             break;
         case INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE:
             m_volumeProperty->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
             break;
     }
 }
@@ -1002,6 +1010,8 @@ void OptimalViewpointVolume::computeObscurances()
             outFileMhd.close();
         }
     }
+
+    m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
 }
 
 
@@ -1336,6 +1346,25 @@ void OptimalViewpointVolume::setObscuranceFunction( ObscuranceFunction obscuranc
 //         case Exponential: return 1.0 - exp( distance / m_obscuranceMaximumDistance );
 //     }
 // }
+
+
+void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurances )
+{
+    DEBUG_LOG( QString( "srwo:b (%1,%2)" ).arg( m_renderWithObscurances ).arg( renderWithObscurances ) );
+    if ( m_renderWithObscurances == renderWithObscurances ) return;
+
+    m_renderWithObscurances = renderWithObscurances;
+
+    if ( m_renderWithObscurances )
+    {
+        m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionObscurances );
+    }
+    else
+    {
+        m_mainMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
+    }
+    DEBUG_LOG( "srwo:e" );
+}
 
 
 }

@@ -779,6 +779,9 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::SpecularPower:
             setSpecularPower( m_parameters->getSpecularPower() );
             break;
+        case OptimalViewpointParameters::Obscurances:
+            setObscurances( m_parameters->getObscurances() );
+            break;
         case OptimalViewpointParameters::NumberOfPlanes:
             setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             break;
@@ -877,6 +880,12 @@ void OptimalViewpoint::computeObscurances( int directions, double maximumDistanc
     int elapsed = t.elapsed();
     DEBUG_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
     INFO_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
+}
+
+
+void OptimalViewpoint::setObscurances( bool obscurances )
+{
+    m_volume->setRenderWithObscurances( obscurances );
 }
 
 

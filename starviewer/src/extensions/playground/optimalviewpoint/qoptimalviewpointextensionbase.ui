@@ -614,6 +614,13 @@
            </layout>
           </item>
           <item>
+           <widget class="QCheckBox" name="m_obscurancesCheckBox">
+            <property name="text" >
+             <string>Obscurances</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="Line" name="m_visualizationLine" >
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>

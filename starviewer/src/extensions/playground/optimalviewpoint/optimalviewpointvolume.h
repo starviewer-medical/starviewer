@@ -20,6 +20,7 @@ class vtkImageData;
 class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
+class vtkVolumeRayCastCompositeFunctionObscurances;
 class vtkVolumeRayCastCompositeFunctionOptimalViewpoint;
 class vtkVolumeRayCastMapper;
 
@@ -143,6 +144,8 @@ public:
     void setObscuranceMaximumDistance( double obscuranceMaximumDistance );
     void setObscuranceFunction( ObscuranceFunction obscuranceFunction );
 
+    void setRenderWithObscurances( bool renderWithObscurances );
+
 
 
 
@@ -188,6 +191,7 @@ private:
     /// Vector de funcions de ray-cast.
     vtkVolumeRayCastCompositeFunction * m_mainVolumeRayCastFunction;
     vtkVolumeRayCastCompositeFunctionOptimalViewpoint * m_planeVolumeRayCastFunction;
+    vtkVolumeRayCastCompositeFunctionObscurances * m_volumeRayCastFunctionObscurances;
 
     /// Vector de funcions de transferència d'opacitat.
 //     vtkPiecewiseFunction * m_opacityTransferFunction;
@@ -230,6 +234,8 @@ private:
     int m_obscuranceDirections;
     double m_obscuranceMaximumDistance;
     ObscuranceFunction m_obscuranceFunction;
+
+    bool m_renderWithObscurances;
 
 };
 

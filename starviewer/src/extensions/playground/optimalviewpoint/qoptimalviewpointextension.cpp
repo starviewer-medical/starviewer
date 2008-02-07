@@ -82,7 +82,7 @@ void QOptimalViewpointExtension::setInput( Volume * input )
 
     Volume * volume = input;
 
-    if ( volume->getNumberOfPhases() > 1 ) volume = volume->getPhaseVolume( 8 );
+    if ( volume->getNumberOfPhases() > 1 ) volume = volume->getPhaseVolume( 14 );
 
     m_method->setImage( volume->getVtkData() );
     int dims[3];
@@ -148,6 +148,7 @@ void QOptimalViewpointExtension::doSegmentation()
     m_method->setTransferFunction( m_parameters->getTransferFunctionObject() );
     m_viewerWidget->render();
 
+    m_segmentationWidget->setChecked( false );
     m_visualizationOkPushButton->setEnabled( true );
     m_visualizationWidget->setChecked( true );
 }
@@ -293,6 +294,10 @@ void QOptimalViewpointExtension::readParameter( int index )
             case OptimalViewpointParameters::SpecularPower:
                 m_specularPowerDoubleSpinBox->setValue( m_parameters->getSpecularPower() );
                 break;
+
+            case OptimalViewpointParameters::Obscurances:
+                m_obscurancesCheckBox->setChecked( m_parameters->getObscurances() );
+                break;
         }
     }
 }
@@ -317,6 +322,7 @@ void QOptimalViewpointExtension::doVisualization()
     m_parameters->setInterpolation( m_interpolationComboBox->currentIndex() );
     m_parameters->setSpecular( m_specularCheckBox->isChecked() );
     m_parameters->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
+    m_parameters->setObscurances( m_obscurancesCheckBox->isChecked() );
 
     m_viewerWidget->render();
 }

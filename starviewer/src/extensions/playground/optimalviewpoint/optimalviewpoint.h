@@ -149,6 +149,8 @@ public:
 
     void setParameters( OptimalViewpointParameters * parameters );
 
+    void setObscurances( bool obscurances );
+
 public slots:
 
     void newMethod2( int step, bool normalized );
