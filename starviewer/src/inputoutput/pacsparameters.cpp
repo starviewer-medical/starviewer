@@ -1,6 +1,5 @@
 #include "pacsparameters.h"
 #include "const.h"
-#include "dicomstudy.h"
 
 namespace udg{
 
