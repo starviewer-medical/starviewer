@@ -184,8 +184,6 @@ void QOptimalViewpointExtension::execute()
     // nous paràmetres
 
     m_method->setOpacityForComputing( m_parameters->getComputeWithOpacity() );
-    m_method->setSpecular( m_parameters->getSpecular() );
-    m_method->setSpecularPower( m_parameters->getSpecularPower() );
     m_method->setUpdatePlane( m_parameters->getUpdatePlane() );
     m_method->setCompute( m_parameters->getCompute() );
     m_method->setSimilarityThreshold( m_parameters->getSimilarityThreshold() );
@@ -287,6 +285,14 @@ void QOptimalViewpointExtension::readParameter( int index )
             case OptimalViewpointParameters::Interpolation:
                 m_interpolationComboBox->setCurrentIndex( m_parameters->getInterpolation() );
                 break;
+
+            case OptimalViewpointParameters::Specular:
+                m_specularCheckBox->setChecked( m_parameters->getSpecular() );
+                break;
+
+            case OptimalViewpointParameters::SpecularPower:
+                m_specularPowerDoubleSpinBox->setValue( m_parameters->getSpecularPower() );
+                break;
         }
     }
 }
@@ -309,6 +315,8 @@ void QOptimalViewpointExtension::doVisualization()
     if ( m_interpolationComboBox->currentIndex() < 0 )
         m_interpolationComboBox->setCurrentIndex( 0 );
     m_parameters->setInterpolation( m_interpolationComboBox->currentIndex() );
+    m_parameters->setSpecular( m_specularCheckBox->isChecked() );
+    m_parameters->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
 
     m_viewerWidget->render();
 }

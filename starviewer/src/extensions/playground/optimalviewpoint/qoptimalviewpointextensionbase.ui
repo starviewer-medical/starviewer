@@ -21,7 +21,7 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget" >
+     <widget class="QWidget">
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>0</number>
@@ -567,14 +567,51 @@
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="m_shadeCheckBox" >
-            <property name="statusTip" >
-             <string>If checked, shading will be applied when rendering the volume</string>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
             </property>
-            <property name="text" >
-             <string>S&amp;hade</string>
+            <property name="spacing" >
+             <number>6</number>
             </property>
-           </widget>
+            <item>
+             <widget class="QCheckBox" name="m_shadeCheckBox" >
+              <property name="statusTip" >
+               <string>If checked, shading will be applied when rendering the volume</string>
+              </property>
+              <property name="text" >
+               <string>S&amp;hade</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="m_specularCheckBox" >
+              <property name="text" >
+               <string>Specular</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_specularPowerLabel" >
+              <property name="text" >
+               <string>Power</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox" >
+              <property name="decimals" >
+               <number>1</number>
+              </property>
+              <property name="maximum" >
+               <double>128.000000000000000</double>
+              </property>
+              <property name="value" >
+               <double>64.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="Line" name="m_visualizationLine" >

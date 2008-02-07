@@ -106,14 +106,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
                 m_computeWithOpacityCheckBox->setChecked( m_parameters->getComputeWithOpacity() );
                 break;
 
-            case OptimalViewpointParameters::Specular:
-                m_specularCheckBox->setChecked( m_parameters->getSpecular() );
-                break;
-
-            case OptimalViewpointParameters::SpecularPower:
-                m_specularPowerDoubleSpinBox->setValue( m_parameters->getSpecularPower() );
-                break;
-
             case OptimalViewpointParameters::UpdatePlane:
                 m_updatePlaneSpinBox->setValue( m_parameters->getUpdatePlane() );
                 break;
@@ -174,8 +166,6 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
 
         // nous paràmetres
         m_parameters->setComputeWithOpacity( m_computeWithOpacityCheckBox->isChecked() );
-        m_parameters->setSpecular( m_specularCheckBox->isChecked() );
-        m_parameters->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
         m_parameters->setUpdatePlane( m_updatePlaneSpinBox->value() );
         m_parameters->setCompute( m_computeCheckBox->isChecked() );
         m_parameters->setSimilarityThreshold( m_similarityThresholdDoubleSpinBox->value() );

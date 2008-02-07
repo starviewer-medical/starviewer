@@ -767,11 +767,20 @@ void OptimalViewpoint::readParameter( int parameter )
     DEBUG_LOG( "readParameter" );
     switch ( parameter )
     {
-        case OptimalViewpointParameters::NumberOfPlanes:
-            setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
-            break;
         case OptimalViewpointParameters::Shade:
             setShade( m_parameters->getShade() );
+            break;
+        case OptimalViewpointParameters::Interpolation:
+            setInterpolation( m_parameters->getInterpolation() );
+            break;
+        case OptimalViewpointParameters::Specular:
+            setSpecular( m_parameters->getSpecular() );
+            break;
+        case OptimalViewpointParameters::SpecularPower:
+            setSpecularPower( m_parameters->getSpecularPower() );
+            break;
+        case OptimalViewpointParameters::NumberOfPlanes:
+            setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             break;
         case OptimalViewpointParameters::VisualizationImageSampleDistance:
             setImageSampleDistance( m_parameters->getVisualizationImageSampleDistance() );
@@ -784,9 +793,6 @@ void OptimalViewpoint::readParameter( int parameter )
             break;
         case OptimalViewpointParameters::TransferFunctionObject:
             setTransferFunction( m_parameters->getTransferFunctionObject() );
-            break;
-        case OptimalViewpointParameters::Interpolation:
-            setInterpolation( m_parameters->getInterpolation() );
             break;
     }
 }
