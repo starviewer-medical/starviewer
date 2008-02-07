@@ -79,10 +79,15 @@ QOptimalViewpointExtension::~QOptimalViewpointExtension()
 void QOptimalViewpointExtension::setInput( Volume * input )
 {
     Q_ASSERT( input );
-    m_method->setImage( input->getVtkData() );
+
+    Volume * volume = input;
+
+    if ( volume->getNumberOfPhases() > 1 ) volume = volume->getPhaseVolume( 8 );
+
+    m_method->setImage( volume->getVtkData() );
     int dims[3];
     DEBUG_LOG( "input->getDimensions" );
-    input->getDimensions( dims );
+    volume->getDimensions( dims );
     DEBUG_LOG( "m_inputParametersWidget->setNumberOfSlices" );
     m_inputParametersWidget->setNumberOfSlices( dims[2] );
     DEBUG_LOG( "end setInput" );
