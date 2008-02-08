@@ -10,6 +10,7 @@
 #include "logging.h"
 //vtk
 #include <vtkRenderer.h>
+#include <QColor>
 
 namespace udg {
 
@@ -298,4 +299,72 @@ void Drawer::showGroup(const QString &groupName)
     this->refresh();
 }
 
+DrawerPrimitive* Drawer::getPrimitiveNearerToPoint( double point[3], int view, int slice )
+{
+    double minDistance = VTK_DOUBLE_MAX;
+    double distance;
+    double range = 5.0;
+    QList< DrawerPrimitive *> primitivesList;
+    
+    DrawerPrimitive *nearestPrimitive = 0;
+
+    switch( view )
+    {
+    case QViewer::AxialPlane:
+        primitivesList = m_axialPrimitives.values( slice );
+    break;
+
+    case QViewer::SagitalPlane:
+        primitivesList = m_sagitalPrimitives.values( slice );
+    break;
+
+    case QViewer::CoronalPlane:
+        primitivesList = m_coronalPrimitives.values( slice );
+    break;
+    
+    default:
+    break;
+    }
+    
+    foreach( DrawerPrimitive *primitive, primitivesList )
+    {
+        distance = primitive->getDistanceToPoint( point );
+        
+        if( distance <= range )
+        {
+            minDistance = distance;
+            nearestPrimitive = primitive;
+        }
+    }
+    return nearestPrimitive;
+}
+
+void Drawer::erasePrimitivesInsideBounds( double p1[3], double p2[3], int view, int slice )
+{
+  QList< DrawerPrimitive *> primitivesList;
+
+  switch( view )
+  {
+    case QViewer::AxialPlane:
+      primitivesList = m_axialPrimitives.values( slice );
+      break;
+
+    case QViewer::SagitalPlane:
+      primitivesList = m_sagitalPrimitives.values( slice );
+      break;
+
+    case QViewer::CoronalPlane:
+      primitivesList = m_coronalPrimitives.values( slice );
+      break;
+    
+    default:
+      break;
+  }
+    
+  foreach( DrawerPrimitive *primitive, primitivesList )
+  {
+    if ( primitive->isInsideOfBounds( p1, p2, view ) )
+        erasePrimitive( primitive );
+  }
+}
 }

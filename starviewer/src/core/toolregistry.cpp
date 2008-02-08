@@ -23,6 +23,7 @@
 #include "windowlevelpresetstool.h"
 #include "polylineroitool.h"
 #include "distancetool.h"
+#include "erasertool.h"
 
 #include <QAction>
 
@@ -95,6 +96,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "SlicingKeyboardTool" )
     {
         tool = new SlicingKeyboardTool( viewer );
+    }
+    else if( toolName == "EraserTool" )
+    {
+        tool = new EraserTool( viewer );
     }
     else
     {
@@ -194,6 +199,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     {
         toolAction->setText( tr("Keyboard slicing tool") );
         toolAction->setStatusTip( tr("Enable/Disable keyboard slicing tool") );
+    }
+    else if( toolName == "EraserTool" )
+    {
+        toolAction->setText( tr("Eraser tool") );
+        toolAction->setStatusTip( tr("Enable/Disable eraser tool") );
+        toolAction->setIcon( QIcon(":/images/eraser2.png") );
     }
     else
     {

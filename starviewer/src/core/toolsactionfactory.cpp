@@ -94,6 +94,14 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_voxelInformationAction->setCheckable( true );
     m_signalMapper->setMapping( m_voxelInformationAction , "VoxelInformationTool" );
     connect( m_voxelInformationAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    
+    m_eraserAction = new QAction( 0 );
+    m_eraserAction->setText( tr("Eraser") );
+    m_eraserAction->setStatusTip( tr("Enable/Disable Eraser tool") );
+    m_eraserAction->setIcon( QIcon(":/images/eraser2.png") );
+    m_eraserAction->setCheckable( true );
+    m_signalMapper->setMapping( m_eraserAction , "EraserTool" );
+    connect( m_eraserAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
 
@@ -108,6 +116,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["DistanceTool"] = m_distanceAction;
     m_availableToolActions["ROITool"] = m_roiAction;
     m_availableToolActions["VoxelInformationTool"] = m_voxelInformationAction;
+    m_availableToolActions["EraserTool"] = m_eraserAction;
 }
 
 ToolsActionFactory::~ToolsActionFactory()

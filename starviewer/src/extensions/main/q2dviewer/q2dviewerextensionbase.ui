@@ -341,6 +341,28 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QToolButton" name="m_eraserToolButton" >
+         <property name="text" >
+          <string>distance</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/eraser2.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>

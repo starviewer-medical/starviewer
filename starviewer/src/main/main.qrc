@@ -98,5 +98,6 @@
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
+        <file>images/eraser2.png</file>
     </qresource>
 </RCC>

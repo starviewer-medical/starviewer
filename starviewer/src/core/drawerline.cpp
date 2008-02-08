@@ -7,6 +7,7 @@
 #include "drawerline.h"
 #include "logging.h"
 #include "distance.h"
+#include "q2dviewer.h"
 // vtk
 #include <vtkLineSource.h>
 #include <vtkPolyDataMapper2D.h>
@@ -144,5 +145,41 @@ double DrawerLine::computeDistance()
 double DrawerLine::getDistanceToPoint( double *point3D )
 {
     return vtkLine::DistanceToLine( point3D , m_firstPoint , m_secondPoint );
+}
+
+bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
+{
+    double minX, maxX, minY, maxY;
+        
+    //determinem x i y màximes i mínimes segons la vista
+    ///\TODO falten les altres vistes
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+        if ( p1[0] < p2[0] )
+        {
+            minX = p1[0];
+            maxX = p2[0];
+        }
+        else
+        {
+            maxX = p1[0];
+            minX = p2[0];
+        }
+                        
+        if ( p1[1] < p2[1] )
+        {
+            minY = p1[1];
+            maxY = p2[1];
+        }
+        else
+        {
+            maxY = p1[1];
+            minY = p2[1];
+        }
+        break;
+    }
+                
+    return ( m_firstPoint[0] <= maxX && m_firstPoint[0] >= minX && m_firstPoint[1] <= maxY && m_firstPoint[1] >= minY && m_secondPoint[0] <= maxX && m_secondPoint[0] >= minX && m_secondPoint[1] <= maxY && m_secondPoint[1] >= minY ); 
 }
 }

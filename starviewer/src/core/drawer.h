@@ -49,8 +49,15 @@ public:
      * Mostra/amaga les primitives que hi ha en un determinat grup
      * @param groupName nom del grup que volem mostrar/amagar
      */
-    void hideGroup(const QString &groupName);
-    void showGroup(const QString &groupName);
+    void hideGroup( const QString &groupName );
+    void showGroup( const QString &groupName );
+    
+    ///ens retorna la primitiva més propera la punt especificat, dins d'un llindar. Si no en troba cap, retorna nul.
+    ///especifiquem el pla i la llesca perquè així acotem més la cerca de primitives properes i no cal mirar per totes les possibles.
+    DrawerPrimitive* getPrimitiveNearerToPoint( double point[3], int view, int slice );
+    
+    ///ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
+    void erasePrimitivesInsideBounds( double p1[3], double p2[3], int view, int slice );
 
 public slots:
     /**
@@ -63,7 +70,7 @@ public slots:
      * i l'elimina de l'escena on s'estava pintant
      * @param primitive Primitiva que volem deixar de controlar
      */
-    void erasePrimitive(DrawerPrimitive *primitive);
+    void erasePrimitive( DrawerPrimitive *primitive );
     
     ///esborra totes les primitives registrades al drawer.
     void removeAllPrimitives();
