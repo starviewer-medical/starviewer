@@ -1205,6 +1205,7 @@ void Q2DViewer::resetCamera()
         emit cameraChanged();
         mapOrientationStringToAnnotation();
         updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
+	// TODO observar si aquest updateDisplayExtent es necessari
         this->updateDisplayExtent();
         this->refresh();
     }
@@ -2403,18 +2404,17 @@ void Q2DViewer::updateDisplayExtent()
 
                 if( imageActor )
                 {
-                    //\TODO aquest switch no hauria de dependre de l'm_viewer, hauria d'anar en funció de les vistes que controlem nosaltres ab m_lastView
-                    switch( m_viewer->GetSliceOrientation() )
+                    switch( m_lastView )
                     {
-                        case vtkImageViewer2::SLICE_ORIENTATION_XY:
+                        case Axial:
                             imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], value, value );
                             break;
 
-                        case vtkImageViewer2::SLICE_ORIENTATION_XZ:
+                        case Coronal:
                             imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], value, value, wholeExtent[4], wholeExtent[5] );
                             break;
 
-                        case vtkImageViewer2::SLICE_ORIENTATION_YZ:
+                        case Sagital:
                             imageActor->SetDisplayExtent( value, value, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
                             break;
                     }
@@ -2440,17 +2440,17 @@ void Q2DViewer::updateDisplayExtent()
 
             if( imageActor )
             {
-                switch( m_viewer->GetSliceOrientation() )
+                switch( m_lastView )
                 {
-                    case vtkImageViewer2::SLICE_ORIENTATION_XY:
+                    case Axial:
                         imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], value, value );
                         break;
 
-                    case vtkImageViewer2::SLICE_ORIENTATION_XZ:
+                    case Coronal:
                         imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], value, value, wholeExtent[4], wholeExtent[5] );
                         break;
 
-                    case vtkImageViewer2::SLICE_ORIENTATION_YZ:
+                    case Sagital:
                         imageActor->SetDisplayExtent( value, value, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
                         break;
                 }
