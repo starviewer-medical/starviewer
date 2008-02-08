@@ -180,7 +180,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
             inside = ( m_firstPoint[0] <= maxX && m_firstPoint[0] >= minX && m_firstPoint[1] <= maxY && m_firstPoint[1] >= minY && m_secondPoint[0] <= maxX && m_secondPoint[0] >= minX && m_secondPoint[1] <= maxY && m_secondPoint[1] >= minY );
             break;
         case Q2DViewer::SagitalPlane:
-            if ( p1[0] < p2[0] )
+            if ( p1[2] < p2[2] )
             {
                 minX = p1[2];
                 maxX = p2[2];
@@ -215,7 +215,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
                 minX = p2[0];
             }
         
-            if ( p1[1] < p2[1] )
+            if ( p1[2] < p2[2] )
             {
                 minY = p1[2];
                 maxY = p2[2];
@@ -225,8 +225,8 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxY = p1[2];
                 minY = p2[2];
             }
-            break; 
             inside = ( m_firstPoint[0] <= maxX && m_firstPoint[0] >= minX && m_firstPoint[2] <= maxY && m_firstPoint[2] >= minY && m_secondPoint[0] <= maxX && m_secondPoint[0] >= minX && m_secondPoint[2] <= maxY && m_secondPoint[2] >= minY );
+            break; 
     }
     return ( inside );
 }

@@ -330,7 +330,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
             }
             break;
         case Q2DViewer::SagitalPlane:
-            if ( p1[0] < p2[0] )
+            if ( p1[2] < p2[2] )
             {
                 minX = p1[2];
                 maxX = p2[2];
@@ -371,7 +371,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
                 minX = p2[0];
             }
         
-            if ( p1[1] < p2[1] )
+            if ( p1[2] < p2[2] )
             {
                 minY = p1[2];
                 maxY = p2[2];

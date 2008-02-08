@@ -387,7 +387,7 @@ bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
             inside = ( m_attatchPoint[0] <= maxX && m_attatchPoint[0] >= minX && m_attatchPoint[1] <= maxY && m_attatchPoint[1] >= minY );
         break;
         case Q2DViewer::SagitalPlane:
-            if ( p1[0] < p2[0] )
+            if ( p1[2] < p2[2] )
             {
                 minX = p1[2];
                 maxX = p2[2];
@@ -422,7 +422,7 @@ bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
                 minX = p2[0];
             }
         
-            if ( p1[1] < p2[1] )
+            if ( p1[2] < p2[2] )
             {
                 minY = p1[2];
                 maxY = p2[2];
@@ -432,9 +432,9 @@ bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxY = p1[2];
                 minY = p2[2];
             }
+            inside = ( m_attatchPoint[0] <= maxX && m_attatchPoint[0] >= minX && m_attatchPoint[2] <= maxY && m_attatchPoint[2] >= minY );
         break; 
-        inside = ( m_attatchPoint[0] <= maxX && m_attatchPoint[0] >= minX && m_attatchPoint[2] <= maxY && m_attatchPoint[2] >= minY );
-    }
+        }
     
     return ( inside );
 }
