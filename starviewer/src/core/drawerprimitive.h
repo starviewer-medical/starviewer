@@ -102,10 +102,15 @@ public:
     
     /**
     * Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
-    * Ens permetrà saber si una determinada primitiva està suficientment aprop per a ser esborrada.
-    * mètode virtual pur per obligar a les subclasses que l'implementin.
     */
-    virtual double getDistanceToPoint( double *point3D ) = 0;
+    virtual double getDistanceToPoint( double *point3D )=0;
+    
+    /**
+     * Aquest mètode diu si la primitiva està dins dels límits especificats per paràmetre.
+     * Ens permetrà saber si una determinada primitiva està dins de la zona d'esborrat.
+     * mètode virtual pur per obligar a les subclasses que l'implementin.
+     */
+    virtual bool isInsideOfBounds( double p1[3], double p2[3], int view ) = 0;
 
 public slots:
     /**

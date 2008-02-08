@@ -72,6 +72,9 @@ public:
     
     ///calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
+    
+    ///mira si està dins dels límits que marquen els punts
+    bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
 public slots:
     void update( int representation );
@@ -91,7 +94,7 @@ private:
     
     ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
     bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
-
+    
 private:
     /// Llista de punts de la polilínia
     QList< double* > m_pointsList;

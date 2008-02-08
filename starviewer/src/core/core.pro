@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu ÃÂ©s una biblioteca:  
+# L'objectiu ÃÂÃÂ©s una biblioteca:  
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui  \
@@ -167,8 +167,8 @@ HEADERS += extensionfactory.h \
            transferfunctionio.h \
            qtransferfunctioneditor.h \
            qtransferfunctioneditorbygradient.h \
-           slicingkeyboardtool.h
-
+           slicingkeyboardtool.h \
+           erasertool.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -306,8 +306,8 @@ SOURCES += extensionmediator.cpp \
            transferfunctionio.cpp \
            qtransferfunctioneditor.cpp \
            qtransferfunctioneditorbygradient.cpp \
-           slicingkeyboardtool.cpp
-
+           slicingkeyboardtool.cpp \
+           erasertool.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

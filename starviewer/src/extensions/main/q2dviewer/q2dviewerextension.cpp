@@ -621,7 +621,8 @@ void Q2DViewerExtension::initializeTools()
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
     m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction( "DistanceTool" ) );
-
+    m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction( "EraserTool" ) );
+    
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
     windowLevelPresetsTool->trigger();
@@ -632,7 +633,7 @@ void Q2DViewerExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList exclusiveTools;
-    exclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool";
+    exclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool";
     m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
@@ -652,7 +653,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }
