@@ -138,7 +138,6 @@ void EraserTool::erasePrimitive()
     m_2DViewer->getDrawer()->erasePrimitivesInsideBounds( m_startPoint, m_endPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     m_polyline->deleteAllPoints();
     m_polyline->update( DrawerPrimitive::VTKRepresentation );
-    m_2DViewer->getDrawer()->erasePrimitive( m_polyline );
     m_2DViewer->getDrawer()->refresh();
     m_2DViewer->refresh();
     
