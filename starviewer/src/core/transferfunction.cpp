@@ -41,6 +41,16 @@ TransferFunction::~TransferFunction()
     if ( m_opacityTransferFunction ) m_opacityTransferFunction->Delete();
 }
 
+const QString & TransferFunction::name() const
+{
+    return m_name;
+}
+
+void TransferFunction::setName( const QString & name )
+{
+    m_name = name;
+}
+
 QColor TransferFunction::get( double x ) const
 {
     QColor rgba = getColor( x );

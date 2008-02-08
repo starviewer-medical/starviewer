@@ -39,7 +39,8 @@ TransferFunction * TransferFunctionIO::fromFile( QFile & file )
 
     QTextStream in( &file );
     TransferFunction * transferFunction = new TransferFunction();
-    bool modeColor = true;
+    transferFunction->setName( file.fileName() );
+    enum { NAME, COLOR, OPACITY } mode = COLOR;
 
     while ( !in.atEnd() )
     {
@@ -48,29 +49,39 @@ TransferFunction * TransferFunctionIO::fromFile( QFile & file )
         QString first;
         bool ok;
         lineIn >> first;
+        first = first.trimmed();
 
-        if ( first.trimmed() == "[Color]" ) modeColor = true;
-        else if ( first.trimmed() == "[Opacity]" ) modeColor = false;
+        if ( first.isEmpty() ) continue;
+        else if ( first == "[Name]" ) mode = NAME;
+        else if ( first == "[Color]" ) mode = COLOR;
+        else if ( first == "[Opacity]" ) mode = OPACITY;
         else
         {
-            double x = first.toDouble( &ok );
-
-            if ( ok )
+            if ( mode == NAME )
             {
-                if ( modeColor )
-                {
-                    double r, g, b;
-                    lineIn >> r >> g >> b;
-                    transferFunction->addPointToColorRGB( x, r, g, b );
-                }
-                else
-                {
-                    double opacity;
-                    lineIn >> opacity;
-                    transferFunction->addPointToOpacity( x, opacity );
-                }
+                transferFunction->setName( first );
             }
-            else continue;
+            else
+            {
+                double x = first.toDouble( &ok );
+
+                if ( ok )
+                {
+                    if ( mode == COLOR )
+                    {
+                        double r, g, b;
+                        lineIn >> r >> g >> b;
+                        transferFunction->addPointToColorRGB( x, r, g, b );
+                    }
+                    else
+                    {
+                        double opacity;
+                        lineIn >> opacity;
+                        transferFunction->addPointToOpacity( x, opacity );
+                    }
+                }
+                else continue;
+            }
         }
     }
 
@@ -96,6 +107,11 @@ void TransferFunctionIO::toFile( QFile & file, const TransferFunction & transfer
     }
 
     QTextStream out( &file );
+
+    out << "[Name]\n";
+    out << transferFunction.name() << "\n";
+
+    out << "\n";
 
     out << "[Color]\n";
     QList< double > colorPoints = transferFunction.getColorPoints();

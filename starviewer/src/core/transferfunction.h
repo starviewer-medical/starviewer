@@ -41,6 +41,11 @@ public:
     TransferFunction( const TransferFunction & transferFunction );
     ~TransferFunction();
 
+    /// Retorna el nom de la funció de transferència.
+    const QString & name() const;
+    /// Assigna un nom a la funció de transferència.
+    void setName( const QString & name );
+
     /// Retorna el color i l'opacitat corresponents a \a x en un QColor RGBA.
     QColor get( double x ) const;
 
@@ -108,6 +113,9 @@ public:
     bool operator ==( const TransferFunction & transferFunction ) const;
 
 private:
+    /// Nom de la funció de transferència.
+    QString m_name;
+
     /// Punts de color RGB.
     QMap< double, QColor > m_color;
 
