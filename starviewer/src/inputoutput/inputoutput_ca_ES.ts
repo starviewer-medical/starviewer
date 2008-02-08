@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QChooseOneObjectDialogBase</name>
     <message>
@@ -334,6 +335,52 @@ N&apos;hauries de triar només un.</translation>
     </message>
 </context>
 <context>
+    <name>QFileDialog</name>
+    <message>
+        <location filename="queryscreen.cpp" line="1201"/>
+        <source>Open</source>
+        <translation>Obrir</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="databaseconnection.cpp" line="76"/>
+        <source>Normal</source>
+        <translation>Normal</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="78"/>
+        <source>Database is corrupted or SQL error syntax</source>
+        <translation>La base de dades està corrupta o bé error de sintaxis SQL</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="80"/>
+        <source>Database is locked</source>
+        <translation>La base de dades està bloquejada</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="82"/>
+        <source>Database corrupted</source>
+        <translation>La base de dades està corrupta</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="84"/>
+        <source>The new register is duplicated</source>
+        <translation>El nou registre està duplicat</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="86"/>
+        <source>Not connected to database</source>
+        <translation>Sense connexió a la base de dades</translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="91"/>
+        <source>Internal Database error (SQLITE)</source>
+        <translation>Error intern de la base de dades (SQLITE)</translation>
+    </message>
+</context>
+<context>
     <name>QPacsListBase</name>
     <message>
         <location filename="qpacslistbase.ui" line="16"/>
@@ -550,6 +597,16 @@ Error número: %1</translation>
         <location filename="qconfigurationscreen.cpp" line="489"/>
         <source>To do a test of a pacs it is necessary to select an item of the list.</source>
         <translation>Per a poder testejar un pacs cal escollir un element de la llista.</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="410"/>
+        <source>Yes</source>
+        <translation>Si</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="412"/>
+        <source>No</source>
+        <translation>No</translation>
     </message>
 </context>
 <context>
@@ -924,7 +981,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="queryscreen.cpp" line="1201"/>
         <source>Open</source>
-        <translation>Obrir</translation>
+        <translation type="obsolete">Obrir</translation>
     </message>
 </context>
 <context>
@@ -932,37 +989,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="databaseconnection.cpp" line="76"/>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="obsolete">Normal</translation>
     </message>
     <message>
         <location filename="databaseconnection.cpp" line="78"/>
         <source>Database is corrupted or SQL error syntax</source>
-        <translation>La base de dades està corrupta o bé error de sintaxi SQL</translation>
+        <translation type="obsolete">La base de dades està corrupta o bé error de sintaxi SQL</translation>
     </message>
     <message>
         <location filename="databaseconnection.cpp" line="80"/>
         <source>Database is locked</source>
-        <translation>La base de dades està bloquejada</translation>
+        <translation type="obsolete">La base de dades està bloquejada</translation>
     </message>
     <message>
         <location filename="databaseconnection.cpp" line="82"/>
         <source>Database corrupted</source>
-        <translation>La base de dades està corrupta</translation>
+        <translation type="obsolete">La base de dades està corrupta</translation>
     </message>
     <message>
         <location filename="databaseconnection.cpp" line="84"/>
         <source>The new register is duplicated</source>
-        <translation>El nou registre està duplicat</translation>
+        <translation type="obsolete">El nou registre està duplicat</translation>
     </message>
     <message>
         <location filename="databaseconnection.cpp" line="86"/>
         <source>Not connected to database</source>
-        <translation>Sense connexió a la base de dades</translation>
+        <translation type="obsolete">Sense connexió a la base de dades</translation>
     </message>
     <message>
         <location filename="databaseconnection.cpp" line="91"/>
         <source>Internal Database error (SQLITE)</source>
-        <translation>Error intern de la base de dades (SQLITE)</translation>
+        <translation type="obsolete">Error intern de la base de dades (SQLITE)</translation>
     </message>
 </context>
 <context>

@@ -407,9 +407,9 @@ void QConfigurationScreen::fillPacsListView()
 
             if ( pacs.getDefault() == "S" )
             {
-                item->setText( 6 , tr( "&Yes" ) );
+                item->setText( 6 , tr( "Yes" ) );
             }
-            else item->setText( 6 , tr( "&No" ) );
+            else item->setText( 6 , tr( "No" ) );
 
             list.nextPacs();
         }

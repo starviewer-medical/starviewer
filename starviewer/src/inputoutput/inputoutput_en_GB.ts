@@ -333,6 +333,52 @@ You would have to choose only one.</source>
     </message>
 </context>
 <context>
+    <name>QFileDialog</name>
+    <message>
+        <location filename="queryscreen.cpp" line="1201"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="databaseconnection.cpp" line="76"/>
+        <source>Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="78"/>
+        <source>Database is corrupted or SQL error syntax</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="80"/>
+        <source>Database is locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="82"/>
+        <source>Database corrupted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="84"/>
+        <source>The new register is duplicated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="86"/>
+        <source>Not connected to database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseconnection.cpp" line="91"/>
+        <source>Internal Database error (SQLITE)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QPacsListBase</name>
     <message>
         <location filename="qpacslistbase.ui" line="16"/>
@@ -547,6 +593,16 @@ Error Number: %1</source>
     <message>
         <location filename="qconfigurationscreen.cpp" line="489"/>
         <source>To do a test of a pacs it is necessary to select an item of the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="410"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="412"/>
+        <source>No</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -918,49 +974,9 @@ p, li { white-space: pre-wrap; }
 </context>
 <context>
     <name>udg::QFileDialog</name>
-    <message>
-        <location filename="queryscreen.cpp" line="1201"/>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QObject</name>
-    <message>
-        <location filename="databaseconnection.cpp" line="76"/>
-        <source>Normal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="78"/>
-        <source>Database is corrupted or SQL error syntax</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="80"/>
-        <source>Database is locked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="82"/>
-        <source>Database corrupted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="84"/>
-        <source>The new register is duplicated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="86"/>
-        <source>Not connected to database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="91"/>
-        <source>Internal Database error (SQLITE)</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QOperationStateScreen</name>
