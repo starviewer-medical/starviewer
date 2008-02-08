@@ -68,7 +68,7 @@ void EraserTool::startEraserAction()
     if (!m_polyline )
     {
         m_polyline = new DrawerPolyline;
-        m_2DViewer->getDrawer()->draw( m_polyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        m_2DViewer->getDrawer()->draw( m_polyline , Q2DViewer::Top2DPlane, m_2DViewer->getCurrentSlice() );
     }
 
     //guardem el primer punt de la zona d'esborrat i posem l'estat adequat a la tool
@@ -78,7 +78,7 @@ void EraserTool::startEraserAction()
     int x = m_2DViewer->getEventPositionX();
     int y = m_2DViewer->getEventPositionY();
         
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, m_2DViewer->getCurrentSlice(), position );
     m_startPoint[0] = position[0];
     m_startPoint[1] = position[1];
     m_startPoint[2] = position[2];
@@ -100,7 +100,7 @@ void EraserTool::drawAreaOfErasure()
     int x = m_2DViewer->getEventPositionX();
     int y = m_2DViewer->getEventPositionY();
             
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, m_2DViewer->getCurrentSlice(), position );
     m_endPoint[0] = position[0];
     m_endPoint[1] = position[1];
     m_endPoint[2] = position[2];
@@ -114,14 +114,36 @@ void EraserTool::drawAreaOfErasure()
     }
     
     //calculem el segon punt i el tercer
-    p2[0] = m_endPoint[0];
-    p2[1] = m_startPoint[1];
-    p2[2] = m_endPoint[2];
-    
-    p3[0] = m_startPoint[0];
-    p3[1] = m_endPoint[1];
-    p3[2] = m_endPoint[2];
-    
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::AxialPlane:
+            p2[0] = m_endPoint[0];
+            p2[1] = m_startPoint[1];
+            p2[2] = m_2DViewer->getCurrentSlice();
+            
+            p3[0] = m_startPoint[0];
+            p3[1] = m_endPoint[1];
+            p3[2] = m_2DViewer->getCurrentSlice();
+            break;
+        case Q2DViewer::SagitalPlane:
+            p2[0] = m_2DViewer->getCurrentSlice();
+            p2[1] = m_startPoint[1];
+            p2[2] = m_endPoint[2];
+            
+            p3[0] = m_2DViewer->getCurrentSlice();
+            p3[1] = m_endPoint[1];
+            p3[2] = m_startPoint[2];
+            break;
+        case Q2DViewer::CoronalPlane:
+            p2[0] = m_startPoint[0];
+            p2[1] = m_2DViewer->getCurrentSlice();
+            p2[2] = m_endPoint[2];
+            
+            p3[0] = m_endPoint[0];
+            p3[1] = m_2DViewer->getCurrentSlice();
+            p3[2] = m_startPoint[2];
+            break;   
+    }
     m_polyline->addPoint( p2 );
     m_polyline->addPoint( m_endPoint );
     m_polyline->addPoint( p3 );

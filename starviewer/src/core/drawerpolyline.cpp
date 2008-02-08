@@ -292,46 +292,104 @@ bool DrawerPolyline::isPointIncludedInLineBounds( double point[3], double *lineP
 bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
 {
     double minX, maxX, minY, maxY;
-        
-    //determinem x i y màximes i mínimes segons la vista
-    ///\TODO falten les altres vistes
-    switch( view )
-    {
-        case Q2DViewer::Axial:
-        if ( p1[0] < p2[0] )
-        {
-            minX = p1[0];
-            maxX = p2[0];
-        }
-        else
-        {
-            maxX = p1[0];
-            minX = p2[0];
-        }
-                    
-        if ( p1[1] < p2[1] )
-        {
-            minY = p1[1];
-            maxY = p2[1];
-        }
-        else
-        {
-            maxY = p1[1];
-            minY = p2[1];
-        }
-        break;
-    }
-            
+    
     int numberOfPoints = m_pointsList.count();
     bool allPointsAreInside = true;
-        
-    for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
+    
+    //determinem x i y màximes i mínimes segons la vista
+    switch( view )
     {
-        double *currentPoint = m_pointsList.at( i );
-        if ( currentPoint[0] >= maxX || currentPoint[0] <= minX || currentPoint[1] >= maxY || currentPoint[1] <= minY )
-        allPointsAreInside = false;
-    }
+        case Q2DViewer::AxialPlane:
+            if ( p1[0] < p2[0] )
+            {
+                minX = p1[0];
+                maxX = p2[0];
+            }
+            else
+            {
+                maxX = p1[0];
+                minX = p2[0];
+            }
+            
+            if ( p1[1] < p2[1] )
+            {
+                minY = p1[1];
+                maxY = p2[1];
+            }
+            else
+            {
+                maxY = p1[1];
+                minY = p2[1];
+            }
+            
+            for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
+            {
+                double *currentPoint = m_pointsList.at( i );
+                if ( currentPoint[0] >= maxX || currentPoint[0] <= minX || currentPoint[1] >= maxY || currentPoint[1] <= minY )
+                    allPointsAreInside = false;
+            }
+            break;
+        case Q2DViewer::SagitalPlane:
+            if ( p1[0] < p2[0] )
+            {
+                minX = p1[2];
+                maxX = p2[2];
+            }
+            else
+            {
+                maxX = p1[2];
+                minX = p2[2];
+            }
         
+            if ( p1[1] < p2[1] )
+            {
+                minY = p1[1];
+                maxY = p2[1];
+            }
+            else
+            {
+                maxY = p1[1];
+                minY = p2[1];
+            }
+            
+            for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
+            {
+                double *currentPoint = m_pointsList.at( i );
+                if ( currentPoint[2] >= maxX || currentPoint[2] <= minX || currentPoint[1] >= maxY || currentPoint[1] <= minY )
+                    allPointsAreInside = false;
+            }
+            break;
+        case Q2DViewer::CoronalPlane:
+            if ( p1[0] < p2[0] )
+            {
+                minX = p1[0];
+                maxX = p2[0];
+            }
+            else
+            {
+                maxX = p1[0];
+                minX = p2[0];
+            }
+        
+            if ( p1[1] < p2[1] )
+            {
+                minY = p1[2];
+                maxY = p2[2];
+            }
+            else
+            {
+                maxY = p1[2];
+                minY = p2[2];
+            }
+            for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
+            {
+                double *currentPoint = m_pointsList.at( i );
+                if ( currentPoint[0] >= maxX || currentPoint[0] <= minX || currentPoint[2] >= maxY || currentPoint[2] <= minY )
+                    allPointsAreInside = false;
+            }
+            break; 
+    }
+    
     return ( allPointsAreInside ); 
 }
 
