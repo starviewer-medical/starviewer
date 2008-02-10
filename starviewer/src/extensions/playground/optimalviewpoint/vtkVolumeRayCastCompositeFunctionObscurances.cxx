@@ -409,14 +409,9 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         // This is grey-scale so green and blue are the same as red
         if ( opacity )
           {
-          //////////////////////////////////////////////////////////////////////////////////////////
-//           red_shaded_value = opacity * remaining_opacity *
-//             ( red_d_shade[*(encoded_normals + offset)] * GTF[value] +
-//               red_s_shade[*(encoded_normals + offset)] );
           red_shaded_value = opacity * remaining_opacity *
             ( red_d_shade[*(encoded_normals + offset)] * GTF[value] +
-              red_s_shade[*(encoded_normals + offset)] ) * aObscurance[offset];
-          //////////////////////////////////////////////////////////////////////////////////////////
+              red_s_shade[*(encoded_normals + offset)] );
           }
         else
           {
@@ -430,7 +425,10 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
     
     
       // Accumulate the shaded intensity and opacity of this sample
-      accum_red_intensity += red_shaded_value;
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity += red_shaded_value;
+      accum_red_intensity += red_shaded_value * aObscurance[offset];
+      //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
     
       // Increment our position and compute our voxel location
@@ -485,26 +483,15 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         // is some opacity)
         if ( opacity )
           {
-          //////////////////////////////////////////////////////////////////////////////////////////
-//           red_shaded_value = opacity *  remaining_opacity *
-//             ( red_d_shade[*(encoded_normals + offset)] * CTF[value*3] +
-//               red_s_shade[*(encoded_normals + offset)] );
-//           green_shaded_value = opacity *  remaining_opacity *
-//             ( green_d_shade[*(encoded_normals + offset)] * CTF[value*3 + 1] +
-//               green_s_shade[*(encoded_normals + offset)] );
-//           blue_shaded_value = opacity *  remaining_opacity *
-//             ( blue_d_shade[*(encoded_normals + offset)] * CTF[value*3 + 2] +
-//               blue_s_shade[*(encoded_normals + offset)] );
           red_shaded_value = opacity *  remaining_opacity *
             ( red_d_shade[*(encoded_normals + offset)] * CTF[value*3] +
-              red_s_shade[*(encoded_normals + offset)] ) * aObscurance[offset];
+              red_s_shade[*(encoded_normals + offset)] );
           green_shaded_value = opacity *  remaining_opacity *
             ( green_d_shade[*(encoded_normals + offset)] * CTF[value*3 + 1] +
-              green_s_shade[*(encoded_normals + offset)] ) * aObscurance[offset];
+              green_s_shade[*(encoded_normals + offset)] );
           blue_shaded_value = opacity *  remaining_opacity *
             ( blue_d_shade[*(encoded_normals + offset)] * CTF[value*3 + 2] +
-              blue_s_shade[*(encoded_normals + offset)] ) * aObscurance[offset];
-          //////////////////////////////////////////////////////////////////////////////////////////
+              blue_s_shade[*(encoded_normals + offset)] );
           }
         else
           {
@@ -520,9 +507,14 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
     
     
       // Accumulate the shaded intensity and opacity of this sample
-      accum_red_intensity += red_shaded_value;
-      accum_green_intensity += green_shaded_value;
-      accum_blue_intensity += blue_shaded_value;
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity += red_shaded_value;
+//       accum_green_intensity += green_shaded_value;
+//       accum_blue_intensity += blue_shaded_value;
+      accum_red_intensity += red_shaded_value * aObscurance[offset];
+      accum_green_intensity += green_shaded_value * aObscurance[offset];
+      accum_blue_intensity += blue_shaded_value * aObscurance[offset];
+      //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
     
       // Increment our position and compute our voxel location
@@ -569,7 +561,7 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
 // does not compute shading
 template <class T>
 void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                       vtkVolumeRayCastStaticInfo *staticInfo )
+                                       vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -755,7 +747,10 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         red_value   = opacity * GTF[(int)(scalar_value)];
         
         // Accumulate intensity and opacity for this sample location
-        accum_red_intensity   += remaining_opacity * red_value;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+//         accum_red_intensity   += remaining_opacity * red_value;
+        accum_red_intensity   += remaining_opacity * red_value * aObscurance[offset];
+        ////////////////////////////////////////////////////////////////////////////////////////////
         remaining_opacity *= (1.0 - opacity);
         }
     
@@ -869,9 +864,14 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         blue_value  = opacity * CTF[(int)(scalar_value) * 3 + 2];
         
         // Accumulate intensity and opacity for this sample location
-        accum_red_intensity   += remaining_opacity * red_value;
-        accum_green_intensity += remaining_opacity * green_value;
-        accum_blue_intensity  += remaining_opacity * blue_value;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+//         accum_red_intensity   += remaining_opacity * red_value;
+//         accum_green_intensity += remaining_opacity * green_value;
+//         accum_blue_intensity  += remaining_opacity * blue_value;
+        accum_red_intensity   += remaining_opacity * red_value * aObscurance[offset];
+        accum_green_intensity += remaining_opacity * green_value * aObscurance[offset];
+        accum_blue_intensity  += remaining_opacity * blue_value * aObscurance[offset];
+        ////////////////////////////////////////////////////////////////////////////////////////////
         remaining_opacity *= (1.0 - opacity);
         }
     
@@ -920,7 +920,7 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 // does perform shading.
 template <class T>
 void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                     vtkVolumeRayCastStaticInfo *staticInfo )
+                                     vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -1158,8 +1158,11 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
         // shaded intensity yet
         red_shaded_value   = opacity * ( final_rd * r + final_rs );
         
-        // Accumulate intensity and opacity for this sample location   
-        accum_red_intensity   += red_shaded_value * remaining_opacity;
+        // Accumulate intensity and opacity for this sample location
+        ////////////////////////////////////////////////////////////////////////////////////////////
+//         accum_red_intensity   += red_shaded_value * remaining_opacity;
+        accum_red_intensity   += red_shaded_value * remaining_opacity * aObscurance[offset];
+        ////////////////////////////////////////////////////////////////////////////////////////////
         remaining_opacity *= (1.0 - opacity);
         }
 
@@ -1324,10 +1327,15 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
         green_shaded_value = opacity * ( final_gd * g + final_gs );
         blue_shaded_value  = opacity * ( final_bd * b + final_bs );
         
-        // Accumulate intensity and opacity for this sample location   
-        accum_red_intensity   += red_shaded_value   * remaining_opacity;
-        accum_green_intensity += green_shaded_value * remaining_opacity;
-        accum_blue_intensity  += blue_shaded_value  * remaining_opacity;
+        // Accumulate intensity and opacity for this sample location
+        ////////////////////////////////////////////////////////////////////////////////////////////
+//         accum_red_intensity   += red_shaded_value   * remaining_opacity;
+//         accum_green_intensity += green_shaded_value * remaining_opacity;
+//         accum_blue_intensity  += blue_shaded_value  * remaining_opacity;
+        accum_red_intensity   += red_shaded_value   * remaining_opacity * aObscurance[offset];
+        accum_green_intensity += green_shaded_value * remaining_opacity * aObscurance[offset];
+        accum_blue_intensity  += blue_shaded_value  * remaining_opacity * aObscurance[offset];
+        ////////////////////////////////////////////////////////////////////////////////////////////
         remaining_opacity *= (1.0 - opacity);
         }
 
@@ -1377,7 +1385,7 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
 // does not compute shading
 template <class T>
 void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                         vtkVolumeRayCastStaticInfo *staticInfo )
+                                         vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -1626,7 +1634,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         }
       
       // Accumulate intensity and opacity for this sample location
-      accum_red_intensity   += remaining_opacity * red_value;
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity   += remaining_opacity * red_value;
+      accum_red_intensity   += remaining_opacity * red_value * aObscurance[offset];
+      //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
       // Increment our position and compute our voxel location
@@ -1781,9 +1792,14 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         }
       
       // Accumulate intensity and opacity for this sample location
-      accum_red_intensity   += remaining_opacity * red_value;
-      accum_green_intensity += remaining_opacity * green_value;
-      accum_blue_intensity  += remaining_opacity * blue_value;
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity   += remaining_opacity * red_value;
+//       accum_green_intensity += remaining_opacity * green_value;
+//       accum_blue_intensity  += remaining_opacity * blue_value;
+      accum_red_intensity   += remaining_opacity * red_value * aObscurance[offset];
+      accum_green_intensity += remaining_opacity * green_value * aObscurance[offset];
+      accum_blue_intensity  += remaining_opacity * blue_value * aObscurance[offset];
+      //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
       // Increment our position and compute our voxel location
@@ -1833,7 +1849,7 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 // does perform shading.
 template <class T>
 void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                       vtkVolumeRayCastStaticInfo *staticInfo )
+                                       vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -2120,8 +2136,11 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
                                      red_s_shade[ *(nptr + Hinc) ] );
         }
       
-      // Accumulate intensity and opacity for this sample location   
-      accum_red_intensity   += red_shaded_value   * remaining_opacity;
+      // Accumulate intensity and opacity for this sample location
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity   += red_shaded_value   * remaining_opacity;
+      accum_red_intensity   += red_shaded_value   * remaining_opacity * aObscurance[offset];
+      //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
       // Increment our position and compute our voxel location
@@ -2325,10 +2344,15 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
                                      blue_s_shade[ *(nptr + Hinc) ] );
         }
       
-      // Accumulate intensity and opacity for this sample location   
-      accum_red_intensity   += red_shaded_value   * remaining_opacity;
-      accum_green_intensity += green_shaded_value * remaining_opacity;
-      accum_blue_intensity  += blue_shaded_value  * remaining_opacity;
+      // Accumulate intensity and opacity for this sample location
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity   += red_shaded_value   * remaining_opacity;
+//       accum_green_intensity += green_shaded_value * remaining_opacity;
+//       accum_blue_intensity  += blue_shaded_value  * remaining_opacity;
+      accum_red_intensity   += red_shaded_value   * remaining_opacity * aObscurance[offset];
+      accum_green_intensity += green_shaded_value * remaining_opacity * aObscurance[offset];
+      accum_blue_intensity  += blue_shaded_value  * remaining_opacity * aObscurance[offset];
+      //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
       // Increment our position and compute our voxel location
@@ -2445,11 +2469,11 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
           {
           case VTK_UNSIGNED_CHAR:
             vtkCastRay_TrilinSample_Unshaded( (unsigned char *)data_ptr,
-                                              dynamicInfo, staticInfo );
+                                              dynamicInfo, staticInfo, Obscurance );
             break;
           case VTK_UNSIGNED_SHORT:
             vtkCastRay_TrilinSample_Unshaded( (unsigned short *)data_ptr,
-                                              dynamicInfo, staticInfo );
+                                              dynamicInfo, staticInfo, Obscurance );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -2462,11 +2486,11 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
           {
           case VTK_UNSIGNED_CHAR:
             vtkCastRay_TrilinVertices_Unshaded( (unsigned char *)data_ptr,
-                                                dynamicInfo, staticInfo );
+                                                dynamicInfo, staticInfo, Obscurance );
             break;
           case VTK_UNSIGNED_SHORT:
             vtkCastRay_TrilinVertices_Unshaded( (unsigned short *)data_ptr,
-                                                dynamicInfo, staticInfo );
+                                                dynamicInfo, staticInfo, Obscurance );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -2483,11 +2507,11 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
           {
           case VTK_UNSIGNED_CHAR:
             vtkCastRay_TrilinSample_Shaded( (unsigned char *)data_ptr, 
-                                            dynamicInfo, staticInfo );
+                                            dynamicInfo, staticInfo, Obscurance );
             break;
           case VTK_UNSIGNED_SHORT:
             vtkCastRay_TrilinSample_Shaded( (unsigned short *)data_ptr, 
-                                            dynamicInfo, staticInfo );
+                                            dynamicInfo, staticInfo, Obscurance );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -2500,11 +2524,11 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
           {
           case VTK_UNSIGNED_CHAR:
             vtkCastRay_TrilinVertices_Shaded( (unsigned char *)data_ptr, 
-                                              dynamicInfo, staticInfo );
+                                              dynamicInfo, staticInfo, Obscurance );
             break;
           case VTK_UNSIGNED_SHORT:
             vtkCastRay_TrilinVertices_Shaded( (unsigned short *)data_ptr, 
-                                              dynamicInfo, staticInfo );
+                                              dynamicInfo, staticInfo, Obscurance );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
