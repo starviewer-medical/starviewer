@@ -61,13 +61,13 @@ public slots:
 
     void doVisualization();
 
+    void doViewpointSelection();
+
     ///Aplica el mètode segons els paràmetres actuals.
     void execute();
 
     /// Assinge el rang escalar als editors de la funció de transferència.
     void setScalarRange( unsigned char rangeMin, unsigned char rangeMax );
-
-    void renderPlane( short plane );
 
     /**
      * Slot que ens serveix per indicar que hem d'actualitzar el paràmetre que
@@ -87,6 +87,8 @@ private slots:
     void openSegmentationFile();
     void toggleSegmentationParameters();
     void computeObscurances();
+    void renderPlane();
+    void setNumberOfPlanes( const QString & numberOfPlanes );
 
 private:
 

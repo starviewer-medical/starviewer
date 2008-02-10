@@ -51,8 +51,6 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
     connect( m_method, SIGNAL( scalarRange(unsigned char,unsigned char) ), SLOT( setScalarRange(unsigned char,unsigned char) ) );
 
-    connect( m_inputParametersWidget, SIGNAL( renderPlaneRequested(short) ), SLOT( renderPlane(short) ) );
-
 
     m_automaticSegmentationWidget->hide();
     m_regularSegmentationWidget->hide();
@@ -67,6 +65,10 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     createConnections();
 
     connect( m_obscurancesPushButton, SIGNAL( clicked() ), this, SLOT( computeObscurances() ) );
+
+    connect( m_comboNumberOfPlanes, SIGNAL( currentIndexChanged(const QString &) ), SLOT( setNumberOfPlanes(const QString &) ) );
+    connect( m_viewpointSelectionOkPushButton, SIGNAL( clicked() ), SLOT( doViewpointSelection() ) );
+    connect( m_updatePlaneRenderPushButton, SIGNAL( clicked() ), SLOT( renderPlane() ) );
 }
 
 
@@ -151,6 +153,7 @@ void QOptimalViewpointExtension::doSegmentation()
     m_segmentationWidget->setChecked( false );
     m_visualizationOkPushButton->setEnabled( true );
     m_visualizationWidget->setChecked( true );
+    m_viewpointSelectionOkPushButton->setEnabled( true );
 }
 
 
@@ -236,9 +239,9 @@ void QOptimalViewpointExtension::setScalarRange( unsigned char rangeMin, unsigne
 }
 
 
-void QOptimalViewpointExtension::renderPlane( short plane )
+void QOptimalViewpointExtension::renderPlane()
 {
-    m_method->renderPlanes( plane );
+    m_method->renderPlanes( m_updatePlaneSpinBox->value() );
 }
 
 
@@ -298,6 +301,14 @@ void QOptimalViewpointExtension::readParameter( int index )
             case OptimalViewpointParameters::Obscurances:
                 m_obscurancesCheckBox->setChecked( m_parameters->getObscurances() );
                 break;
+
+            case OptimalViewpointParameters::NumberOfPlanes:
+                m_comboNumberOfPlanes->setCurrentIndex( m_comboNumberOfPlanes->findText( QString::number( m_parameters->getNumberOfPlanes() ) ) );
+                break;
+
+            case OptimalViewpointParameters::UpdatePlane:
+                m_updatePlaneSpinBox->setValue( m_parameters->getUpdatePlane() );
+                break;
         }
     }
 }
@@ -340,6 +351,19 @@ void QOptimalViewpointExtension::computeObscurances()
     m_method->computeObscurances( m_obscuranceDirectionsSpinBox->value(),
                                   m_obscuranceMaximumDistanceDoubleSpinBox->value(),
                                   m_obscuranceFunctionComboBox->currentIndex() );
+}
+
+
+void QOptimalViewpointExtension::doViewpointSelection()
+{
+    m_parameters->setNumberOfPlanes( m_comboNumberOfPlanes->currentText().toUShort() );
+    m_parameters->setUpdatePlane( m_updatePlaneSpinBox->value() );
+}
+
+
+void QOptimalViewpointExtension::setNumberOfPlanes( const QString & numberOfPlanes )
+{
+    m_updatePlaneSpinBox->setMaximum( numberOfPlanes.toInt() );
 }
 
 
