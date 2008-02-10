@@ -35,7 +35,6 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
 
 //     connect( m_gradientEditor, SIGNAL( gradientStopsChanged(const QGradientStops &) ),
 //              this, SLOT( setTransferFunction(const QGradientStops &) ) );
-    connect( m_comboNumberOfPlanes, SIGNAL( currentIndexChanged(const QString &) ), SLOT( setNumberOfPlanes(const QString &) ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SLOT( writeAllParameters() ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SIGNAL( executionRequested() ) );
 
@@ -46,8 +45,6 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     connect( m_clusterLastSpinBox, SIGNAL( valueChanged(int) ), SLOT( setClusterLast(int) ) );
 
     connect( m_newMethodOkPushButton, SIGNAL( clicked() ), SLOT( requestNewMethod() ) );
-
-    connect( m_updatePlaneRenderPushButton, SIGNAL( clicked() ), SLOT( requestRenderPlane() ) );
 }
 
 OptimalViewpointInputParametersForm::~OptimalViewpointInputParametersForm()
@@ -77,11 +74,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
     {
         switch ( index )
         {
-            case OptimalViewpointParameters::NumberOfPlanes:
-                m_comboNumberOfPlanes->setCurrentIndex( m_comboNumberOfPlanes->findText(
-                        QString::number( m_parameters->getNumberOfPlanes() ) ) );
-                break;
-
             case OptimalViewpointParameters::VisualizationImageSampleDistance:
                 m_doubleSpinBoxVisualizationImageSampleDistance->setValue( m_parameters->getVisualizationImageSampleDistance() );
                 break;
@@ -104,10 +96,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
 
             case OptimalViewpointParameters::ComputeWithOpacity:
                 m_computeWithOpacityCheckBox->setChecked( m_parameters->getComputeWithOpacity() );
-                break;
-
-            case OptimalViewpointParameters::UpdatePlane:
-                m_updatePlaneSpinBox->setValue( m_parameters->getUpdatePlane() );
                 break;
 
             case OptimalViewpointParameters::Compute:
@@ -157,7 +145,6 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         this->setTransferFunction( m_editorByValues->getTransferFunction() );
 
         // actualitzem els valors dels paràmetres
-        m_parameters->setNumberOfPlanes( m_comboNumberOfPlanes->currentText().toUShort() );
         m_parameters->setVisualizationImageSampleDistance( m_doubleSpinBoxVisualizationImageSampleDistance->value() );
         m_parameters->setVisualizationSampleDistance( m_doubleSpinBoxVisualizationSampleDistance->value() );
         m_parameters->setVisualizationBlockLength( m_spinBoxVisualizationBlockLength->value() );
@@ -166,7 +153,6 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
 
         // nous paràmetres
         m_parameters->setComputeWithOpacity( m_computeWithOpacityCheckBox->isChecked() );
-        m_parameters->setUpdatePlane( m_updatePlaneSpinBox->value() );
         m_parameters->setCompute( m_computeCheckBox->isChecked() );
         m_parameters->setSimilarityThreshold( m_similarityThresholdDoubleSpinBox->value() );
 
@@ -224,12 +210,6 @@ void OptimalViewpointInputParametersForm::setAdjustedTransferFunction( const Tra
 //     m_openSegmentationFilePushButton->setDisabled( true );
 
     m_applyPushButton->setEnabled( true );
-}
-
-
-void OptimalViewpointInputParametersForm::setNumberOfPlanes( const QString & numberOfPlanes )
-{
-    m_updatePlaneSpinBox->setMaximum( numberOfPlanes.toInt() );
 }
 
 
@@ -318,9 +298,5 @@ void OptimalViewpointInputParametersForm::setRangeMax( unsigned char rangeMax )
     m_editorByValues->setMaximum( rangeMax );
 }
 
-void OptimalViewpointInputParametersForm::requestRenderPlane()
-{
-    emit renderPlaneRequested( m_updatePlaneSpinBox->value() );
-}
 
 };

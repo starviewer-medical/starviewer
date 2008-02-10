@@ -66,15 +66,12 @@ protected:
 private slots:
 
     void setAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
-    void setNumberOfPlanes( const QString & numberOfPlanes );
     void loadTransferFunction();
     void saveTransferFunction();
     void setClusterFirst( int slice );
     void setClusterLast( int slice );
 
     void requestNewMethod();
-
-    void requestRenderPlane();
 
 signals:
 
