@@ -9,9 +9,12 @@
 #include "volume.h"
 #include "toolmanager.h"
 #include "transferfunctionio.h"
+#include "qcluteditordialog.h"
 // qt
 #include <QAction>
 #include <QSettings>
+// vtk
+#include <vtkImageData.h>
 
 namespace udg {
 
@@ -24,6 +27,8 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     loadClutPresets();
     createConnections();
     readSettings();
+
+    m_clutEditorDialog = 0;
 }
 
 QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
@@ -53,16 +58,35 @@ void QVolume3DViewTestingExtension::initializeTools()
 
 void QVolume3DViewTestingExtension::loadClutPresets()
 {
-    m_clutsDir.setPath( QDir::homePath() + "/.starviewer/cluts" );
+    disconnect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
 
-    if ( !( m_clutsDir.exists() && m_clutsDir.isReadable() ) ) return;  // no es pot accedir al directori
+    m_clutPresetsComboBox->clear();
+
+    QString path = QDir::homePath() + "/.starviewer/cluts";
+    m_clutsDir.setPath( path );
+
+    if ( !m_clutsDir.exists() ) m_clutsDir.mkpath( path );
+    if ( !m_clutsDir.isReadable() ) return; // no es pot accedir al directori
 
     QStringList nameFilters;
     nameFilters << "*.tf";
 
     QStringList clutList = m_clutsDir.entryList( nameFilters );
 
-    m_clutPresetsComboBox->addItems( clutList );
+    foreach ( const QString & clutName, clutList )
+    {
+        TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( clutName ) );
+        if ( transferFunction )
+        {
+            m_clutNameToFileName[transferFunction->name()] = clutName;
+            delete transferFunction;
+        }
+    }
+
+    m_clutPresetsComboBox->addItems( m_clutNameToFileName.keys() );
+    m_clutPresetsComboBox->setCurrentIndex( -1 );
+
+    connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
 }
 
 void QVolume3DViewTestingExtension::createConnections()
@@ -75,8 +99,7 @@ void QVolume3DViewTestingExtension::createConnections()
     // actualització del mètode de rendering
     connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
 
-    // funció de transferència
-    connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), SLOT( applyPresetClut(const QString&) ) );
+    connect( m_clutEditToolButton, SIGNAL( clicked() ), SLOT( showClutEditorDialog() ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -84,6 +107,10 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
     m_input = input;
     m_3DView->setInput( m_input );
     m_3DView->render();
+
+    double range[2];
+    input->getVtkData()->GetScalarRange( range );
+    m_maximumValue = range[1];
 }
 
 void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
@@ -117,9 +144,38 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
 
 void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
 {
-    TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( clutName ) );
-    if ( transferFunction ) m_3DView->setTransferFunction( transferFunction );
+    const QString & fileName = m_clutNameToFileName[clutName];
+    TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( fileName ) );
+    if ( transferFunction )
+    {
+        m_3DView->setTransferFunction( transferFunction );
+    }
     m_3DView->render();
+}
+
+void QVolume3DViewTestingExtension::showClutEditorDialog()
+{
+    if ( m_clutEditorDialog ) return;
+
+    m_clutEditorDialog = new QClutEditorDialog( this );
+    m_clutEditorDialog->setCluts( m_clutsDir, m_clutNameToFileName );
+    m_clutEditorDialog->setMaximum( m_maximumValue );
+    m_clutEditorDialog->show();
+
+    connect( m_clutEditorDialog, SIGNAL( clutApplied(const TransferFunction&) ), SLOT( applyClut(const TransferFunction&) ) );
+    connect( m_clutEditorDialog, SIGNAL( rejected() ), SLOT( manageClosedDialog() ) );
+}
+
+void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut )
+{
+    m_3DView->setTransferFunction( new TransferFunction( clut ) );
+    m_3DView->render();
+}
+
+void QVolume3DViewTestingExtension::manageClosedDialog()
+{
+    m_clutEditorDialog = 0;
+    loadClutPresets();
 }
 
 void QVolume3DViewTestingExtension::readSettings()

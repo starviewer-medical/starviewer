@@ -11,6 +11,7 @@
 #include "ui_qvolume3dviewtestingextensionbase.h"
 
 #include <QDir>
+#include <QMap>
 
 class QAction;
 
@@ -19,6 +20,7 @@ namespace udg {
 class Volume3DViewTesting;
 class Volume;
 class ToolManager;
+class QClutEditorDialog;
 
 /**
  * ...
@@ -42,6 +44,14 @@ public slots:
     /// Aplica una funció de transferència predefinida a la visualització.
     void applyPresetClut( const QString & clutName );
 
+    /// Mostra el diàleg per editar funcions de transferència.
+    void showClutEditorDialog();
+
+    /// Aplica la funció de transferència passada a la visualització.
+    void applyClut( const TransferFunction & clut );
+
+    void manageClosedDialog();
+
 private:
     /// posa a punt les tools que es poden fer servir en l'extensió
     void initializeTools();
@@ -63,8 +73,14 @@ private:
     /// Gestor de tools
     ToolManager *m_toolManager;
 
-    /// Directori de funcions de transferència predefinides
+    /// Directori de funcions de transferència predefinides.
     QDir m_clutsDir;
+    /// Mapa entre noms de funcions de transferència i el nom de fitxer corresponent.
+    QMap<QString, QString> m_clutNameToFileName;
+    /// Valor de propietat màxim del volum.
+    unsigned short m_maximumValue;
+
+    QClutEditorDialog * m_clutEditorDialog;
 };
 
 } // end namespace udg
