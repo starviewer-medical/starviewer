@@ -21,7 +21,6 @@
 #include "dicommask.h"
 #include <QDir>
 #include <QFile>
-#include "starviewersettings.h"
 #include "logging.h"
 #include "scalestudy.h"
 
