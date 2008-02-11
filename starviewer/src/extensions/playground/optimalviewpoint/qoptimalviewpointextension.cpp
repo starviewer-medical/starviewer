@@ -69,6 +69,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     connect( m_comboNumberOfPlanes, SIGNAL( currentIndexChanged(const QString &) ), SLOT( setNumberOfPlanes(const QString &) ) );
     connect( m_viewpointSelectionOkPushButton, SIGNAL( clicked() ), SLOT( doViewpointSelection() ) );
     connect( m_updatePlaneRenderPushButton, SIGNAL( clicked() ), SLOT( renderPlane() ) );
+
+    m_parameters->setUpdatePlane( -1 ); // de moment ho poso aquí, perquè s'ha d'inicialitzar a algun lloc
 }
 
 
