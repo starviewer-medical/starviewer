@@ -10,6 +10,7 @@
 
 #include <QColor>
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 
 #include "logging.h"
@@ -39,7 +40,7 @@ TransferFunction * TransferFunctionIO::fromFile( QFile & file )
 
     QTextStream in( &file );
     TransferFunction * transferFunction = new TransferFunction();
-    transferFunction->setName( file.fileName() );
+    transferFunction->setName( QFileInfo( file ).fileName() );  // nom per defecte
     enum { NAME, COLOR, OPACITY } mode = COLOR;
 
     while ( !in.atEnd() )
@@ -59,7 +60,7 @@ TransferFunction * TransferFunctionIO::fromFile( QFile & file )
         {
             if ( mode == NAME )
             {
-                transferFunction->setName( first );
+                transferFunction->setName( line.trimmed() );
             }
             else
             {
