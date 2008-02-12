@@ -65,6 +65,7 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     createConnections();
 
     connect( m_obscurancesPushButton, SIGNAL( clicked() ), this, SLOT( computeObscurances() ) );
+    connect( m_saliencyPushButton, SIGNAL( clicked() ), this, SLOT( computeSaliency() ) );
 
     connect( m_comboNumberOfPlanes, SIGNAL( currentIndexChanged(const QString &) ), SLOT( setNumberOfPlanes(const QString &) ) );
     connect( m_viewpointSelectionOkPushButton, SIGNAL( clicked() ), SLOT( doViewpointSelection() ) );
@@ -366,6 +367,12 @@ void QOptimalViewpointExtension::doViewpointSelection()
 void QOptimalViewpointExtension::setNumberOfPlanes( const QString & numberOfPlanes )
 {
     m_updatePlaneSpinBox->setMaximum( numberOfPlanes.toInt() );
+}
+
+
+void QOptimalViewpointExtension::computeSaliency()
+{
+    m_method->computeSaliency();
 }
 
 

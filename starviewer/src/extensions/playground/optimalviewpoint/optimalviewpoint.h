@@ -155,6 +155,7 @@ public slots:
 
     void newMethod2( int step, bool normalized );
     void computeObscurances( int directions, double maximumDistance, int obscuranceFunction );
+    void computeSaliency();
 
 signals:
 

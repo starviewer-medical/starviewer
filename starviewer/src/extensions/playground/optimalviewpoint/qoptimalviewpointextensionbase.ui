@@ -886,11 +886,28 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="m_obscurancesPushButton" >
-         <property name="text" >
-          <string>Obscurances</string>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
          </property>
-        </widget>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="m_obscurancesPushButton" >
+           <property name="text" >
+            <string>Obscurances</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saliencyPushButton" >
+           <property name="text" >
+            <string>Saliency</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="udg::OptimalViewpointInputParametersForm" native="1" name="m_inputParametersWidget" />
