@@ -12,8 +12,7 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              cardiac2dviewer \
              multiq2dviewer \
              segmentationframework \
-             registrationframework \
-             thickslab
+             registrationframework 
 
 #CONTRIB_EXTENSIONS =
 

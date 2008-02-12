@@ -38,6 +38,7 @@ class vtkActor2DCollection;
 class vtkImageMapToWindowLevelColors;
 class vtkImageShiftScale;
 class vtkWindowLevelLookupTable;
+class vtkProjectionImageFilter;
 
 namespace udg {
 
@@ -246,6 +247,26 @@ public:
     int getMinimumSlice();
     int getMaximumSlice();
 
+    /**
+     * Ens indica si s'està aplicant o no thick slab
+     * @return
+     */
+    bool isThickSlabActive() const;
+
+    /**
+     * Obtenim el mode de projecció del thickslab.
+     * Si el thickslab no està actiu, el valor és indefinit
+     * @return
+     */
+    int getSlabProjectionMode() const;
+
+    /**
+     * Obtenim el gruix de l'slab
+     * Si el thickslab no està actiu, el valor és indefinit
+     * @return
+     */
+    int getSlabThickness() const;
+
 public slots:
     virtual void render();
     void reset();
@@ -312,6 +333,25 @@ public slots:
     /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat. Això permet que el càlcul s'hagi fet en un presentation state, per exemple
     void applyGrayscalePipeline();
 
+    // TODO aquests mètodes també haurien d'estar en versió QString!
+    /**
+     * Li indiquem quin mode de projecció volem aplicar sobre l'slab
+     * @param projectionMode valor que identifica quina projecció apliquem
+     */
+    void setSlabProjectionMode( int projectionMode );
+
+    /**
+     * Indiquem el gruix de l'slab
+     * @param thickness Nombre de llesques que formen l'slab
+     */
+    void setSlabThickness( int thickness );
+
+    /**
+     * Activem a desactivem l'aplicació del thick slab sobre la imatge
+     * @param enable
+     */
+    void enableThickSlab( bool enable = true );
+
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
@@ -333,6 +373,12 @@ signals:
 
     /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
     void rotationDegreesChanged(double);
+
+    /**
+     * S'emet quan canvia l'slab thickness
+     * @param thickness nou valor de thickness
+     */
+    void slabThicknessChanged(int thickness);
 
 protected:
     /// Processem l'event de resize de la finestra Qt
@@ -447,12 +493,19 @@ private:
      */
     void computeVOILUT();
 
+    // thick slab
+    void computeRangeAndSlice( int newSlabThickness );
+
 private slots:
     /// Actualitza les transformacions de càmera ( de moment rotació i flip )
     void updateCamera();
 
     /// Actualitza els rulers
     void updateRulers();
+
+    // thick slab
+    void setupDefaultPipeline();
+    void setupThickSlabPipeline();
 
 protected:
     /// Connector d'events vtk i slots qt
@@ -596,6 +649,23 @@ private:
     /// Variable que controla si les tools estant habilitades
     /// Aquesta variable evita que es faci més d'un "connect" quan es fa l'enableTool i ja estan habilitades
     bool m_enabledTools;
+
+    // Secció "ThickSlab"
+    /// Nombre de llesques que composen el thickSlab
+    int m_slabThickness;
+
+    /// Filtre per composar les imatges del thick slab
+    vtkProjectionImageFilter *m_thickSlabProjectionFilter;
+
+    /// Variables per controlar el rang de llesques en el que es troba l'slab
+    int m_firstSlabSlice, m_lastSlabSlice;
+
+    /// Variable per controlar si el thickSlab s'està aplicant o no.
+    /// Perquè sigui true, m_slabThickness > 1, altrament false
+    bool m_thickSlabActive;
+
+    /// Indica quin tipus de projecció apliquem sobre l'slab
+    int m_slabProjectionMode;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)

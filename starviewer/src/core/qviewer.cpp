@@ -56,7 +56,7 @@ QViewer::QViewer( QWidget *parent )
     m_mainVolume = 0;
 
     // 2x buffer
-    m_vtkWidget->GetRenderWindow()->DoubleBufferOn();
+    m_vtkWidget->GetRenderWindow()->DoubleBufferOff();
 
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     this->setMouseTracking( true );
@@ -402,15 +402,15 @@ void QViewer::scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, d
     double width, height;
     width = fabs( displayTopLeft[0] - displayBottomRight[0] );
     height = fabs( displayTopLeft[1] - displayBottomRight[1] );
-        
+
     //\TODO caldria considerar l'opció d'afegir un marge per si no volem que la regió escollida mantingui una distància amb les vores de la finestra
     // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
 
     if( size[0] < size[1] )
         this->zoom( (size[0] / (float)width ) * ( 1.0 - marginRate ) );
     else
-        this->zoom( (size[1] / (float)height ) * ( 1.0 - marginRate ) ); 
-    
+        this->zoom( (size[1] / (float)height ) * ( 1.0 - marginRate ) );
+
     this->getRenderer()->ResetCameraClippingRange();
 }
 

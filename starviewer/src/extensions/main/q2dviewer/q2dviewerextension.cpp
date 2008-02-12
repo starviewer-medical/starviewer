@@ -51,6 +51,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     m_patient = NULL;
     m_selectedViewer = new Q2DViewerWidget( m_workingArea );
+    m_thickSlabWidget->link( m_selectedViewer->getViewer() );
     // activem les dades de ww/wl de la combo box
     m_windowLevelComboBox->setPresetsData( m_selectedViewer->getViewer()->getWindowLevelData() );
     m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
@@ -506,6 +507,7 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
         m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
 
         m_cineController->setQViewer( viewer->getViewer() );
+        m_thickSlabWidget->link( m_selectedViewer->getViewer() );
     }
 }
 

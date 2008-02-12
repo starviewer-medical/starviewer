@@ -12,8 +12,7 @@ SUBDIRS = diffusionperfusionsegmentation \
           cardiac2dviewer \
           multiq2dviewer \
           segmentationframework \
-          registrationframework \
-          thickslab
+          registrationframework 
 
 include(../../extensions.inc)
 

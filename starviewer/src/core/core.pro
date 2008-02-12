@@ -1,7 +1,7 @@
-# Fitxer generat pel gestor de qmake de kdevelop. 
-# ------------------------------------------- 
+# Fitxer generat pel gestor de qmake de kdevelop.
+# -------------------------------------------
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu ÃÂÃÂ©s una biblioteca:  
+# L'objectiu ÃÂÃÂ©s una biblioteca:
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui  \
@@ -13,11 +13,11 @@ FORMS += qlogviewerbase.ui \
 	 qdicomdumpctwidgetbase.ui \
      qtransferfunctioneditorbyvaluesbase.ui \
      qtransferfunctionintervaleditorbase.ui \
-	 qcinecontrollerbase.ui 
-
+	 qcinecontrollerbase.ui  \
+         qthickslabwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
-                core_en_GB.ts 
+                core_en_GB.ts
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \
@@ -167,8 +167,15 @@ HEADERS += extensionfactory.h \
            transferfunctionio.h \
            qtransferfunctioneditor.h \
            qtransferfunctioneditorbygradient.h \
+           accumulator.h \
+           averageaccumulator.h \
+           minimumaccumulator.h \
+           maximumaccumulator.h \
+           vtkProjectionImageFilter.h \
            slicingkeyboardtool.h \
+           qthickslabwidget.h \
            erasertool.h
+
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -306,8 +313,12 @@ SOURCES += extensionmediator.cpp \
            transferfunctionio.cpp \
            qtransferfunctioneditor.cpp \
            qtransferfunctioneditorbygradient.cpp \
+           accumulator.cpp \
+           vtkProjectionImageFilter.cxx \
            slicingkeyboardtool.cpp \
+           qthickslabwidget.cpp \
            erasertool.cpp
+
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
