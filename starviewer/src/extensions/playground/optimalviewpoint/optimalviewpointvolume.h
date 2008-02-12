@@ -146,6 +146,8 @@ public:
 
     void setRenderWithObscurances( bool renderWithObscurances );
 
+    void computeSaliency();
+
 
 
 

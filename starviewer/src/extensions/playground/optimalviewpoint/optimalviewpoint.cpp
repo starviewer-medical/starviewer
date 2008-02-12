@@ -889,4 +889,10 @@ void OptimalViewpoint::setObscurances( bool obscurances )
 }
 
 
+void OptimalViewpoint::computeSaliency()
+{
+    m_volume->computeSaliency();
+}
+
+
 }; // end namespace udg

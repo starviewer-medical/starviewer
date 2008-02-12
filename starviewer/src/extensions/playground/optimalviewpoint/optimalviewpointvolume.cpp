@@ -42,6 +42,7 @@
 #include <vtkMultiThreader.h>
 
 #include "vtkVolumeRayCastCompositeFunctionObscurances.h"
+#include <vtkDoubleArray.h>
 
 namespace udg {
 
@@ -1364,6 +1365,61 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
         m_mainMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
     }
     DEBUG_LOG( "srwo:e" );
+}
+
+
+void OptimalViewpointVolume::computeSaliency()
+{
+    if ( !m_obscurance ) return;
+
+    vtkDoubleArray * obscuranceArray = vtkDoubleArray::New();
+    obscuranceArray->SetArray( m_obscurance, m_dataSize, 1 );
+
+    vtkImageData * obscuranceData = vtkImageData::New();
+    obscuranceData->CopyStructure( m_image );
+    obscuranceData->SetScalarTypeToDouble();
+
+    vtkPointData * obscurancePointData = obscuranceData->GetPointData();
+    obscurancePointData->SetScalars( obscuranceArray );
+
+    vtk4DLinearRegressionGradientEstimator * gradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+    gradientEstimator->SetInput( obscuranceData );
+
+    unsigned char * gradientMagnitudes = gradientEstimator->GetGradientMagnitudes();
+
+    {
+        // saliency to file
+        QFile outFile( QDir::tempPath().append( QString( "/saliency.raw" ) ) );
+        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QDataStream out( &outFile );
+            for ( int i = 0; i < m_dataSize; ++i )
+            {
+                uchar value = m_data[i] > 0 ? gradientMagnitudes[i] : 0;
+                out << value;
+            }
+            outFile.close();
+        }
+        QFile outFileMhd( QDir::tempPath().append( QString( "/saliency.mhd" ) ) );
+        if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFileMhd );
+            out << "NDims = 3\n";
+            int dimensions[3];
+            m_image->GetDimensions( dimensions );
+            out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+            double spacing[3];
+            m_image->GetSpacing( spacing );
+            out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
+            out << "ElementType = MET_UCHAR\n";
+            out << "ElementDataFile = saliency.raw";
+            outFileMhd.close();
+        }
+    }
+
+    obscuranceArray->Delete();
+    obscuranceData->Delete();
+    gradientEstimator->Delete();
 }
 
 
