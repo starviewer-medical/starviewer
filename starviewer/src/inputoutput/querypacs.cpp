@@ -12,6 +12,9 @@
 
 namespace udg{
 
+/*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
+ *de comunicació amb el PACS es fessin en mode verbose */
+
 void QueryPacs::setConnection( PacsConnection connection )
 {
     m_assoc = connection.getPacsConnection();
