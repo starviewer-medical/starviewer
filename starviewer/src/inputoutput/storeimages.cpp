@@ -9,6 +9,7 @@
 #include "imagelist.h"
 #include "storeimages.h"
 #include "processimagesingleton.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -206,7 +207,7 @@ Status StoreImages::store( ImageList imageList )
     {
         cond = storeSCU( m_assoc , qPrintable(imageList.getImage().getImagePath()) );
         piSingleton->process( imageList.getImage().getStudyUID() , &imageList.getImage() );
-        imageList.nextImage();
+        if ( m_lastStatusCode == STATUS_Success ) imageList.nextImage();
     }
 
     /*aquest codi és un altre que s'ha de comprovar que no s'hi hagi produït cap error, el retorna
@@ -216,8 +217,8 @@ Status StoreImages::store( ImageList imageList )
 
     if ( m_lastStatusCode != STATUS_Success )
     {
-        state.setStatus( QString("Error %1 al fer el store de la imatge per coneixer el significat de l'error consultar el fitxer dcmtkxxx/dcmnet/include/dcmtk/dcmnet/dimse.h").arg( m_lastStatusCode ), false , 1400 );
-
+        state.setStatus( QString("Error %1 al fer el store de les imatges " ).arg( m_lastStatusCode ), false , 1400 );
+        ERROR_LOG( QString("Error %1 al fer el store de la imatge " ).arg( m_lastStatusCode ) + imageList.getImage().getImagePath() );  
         return state;
     }
     else return state.setStatus( cond );
