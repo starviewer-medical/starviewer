@@ -44,7 +44,7 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
     else
     {
         // primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
-        disconnect( m_currentViewer, 0, 0, 0 );
+        disconnect( m_currentViewer, 0, this, 0 );
         disconnect( m_slabThicknessSlider, 0, m_currentViewer, 0 );
     }
     // posem a punt el widget d'acord amb les dades del viewer
