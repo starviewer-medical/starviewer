@@ -20,13 +20,20 @@ ARG2=$2
 
 # Funcions
 Error() {
-	echo "Error: $1" >&2
-	echo >&2
-	exit $2
+    echo "Error: $1" >&2
+    echo >&2
+    exit $2
 }
 
 Usage() {
     echo "$0: <tipus_build> [nom_build]" >&2
+    echo "Tipus de builds possibles:" >&2
+    echo "  style           Fa la validació d'estil (sense enviar resultats)" >&2
+    echo "  KWStyle         Fa validació d'estil per al Dart" >&2
+    echo "  Experimental    Compilació al track Experimental" >&2
+    echo "  Nightly         Compilació diaria" >&2
+    echo "  Continuous      Compilació continua (recompilació a cada canvi al SVN" >&2
+    echo "  config          Generar fitxer de configuració per al Dart" >&2
     echo >&2
     exit 1
 }
@@ -41,7 +48,7 @@ CheckRequired() {
     [ -z "$QMAKE" ] && Error "QMake not found" 2
     [ -z "$KWSTYLE" ] && Error "KWStyle not found" 2
 
-    $QMAKE --version 2>&1 | grep "4.2" || Error "Qt version 4.2" 3
+#    $QMAKE --version 2>&1 | grep "4.2" || Error "Qt version 4.2" 3
 }
 
 # Configura el Buildname amb la release de la distribució i compilador
@@ -60,7 +67,7 @@ SetBuildFromSVN() {
         REVISION=`svn info|grep Revision|cut -f2 -d' '`
         SVN=${SVN%%/starviewer}
         SVN=${SVN##URL: https://trueta.udg.edu/repos/starviewer/}
-	    
+
         # Check if tainted source
         if [ `svn status src/ | grep "^M" | wc -l` -eq 0 ]
         then
@@ -120,9 +127,16 @@ case "$1" in
         SetBuildFromSVN
         CreateCTestConfig
         $CTEST -VV -S CTest.cmake,Nightly
-        BUILDNAME="${BUILDNAME%%gcc*} Style"
+        ;;
+    KWStyle)
+        SetBuildFromSVN
+        BUILDNAME="$BUILDNAME Style"
         CreateCTestConfig
         $CTEST -VV -S CTest.cmake,Style
+        ;;
+    config)
+        SetBuildFromOS
+        CreateCTestConfig
         ;;
     help)
         Usage
