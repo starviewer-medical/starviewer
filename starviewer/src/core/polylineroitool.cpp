@@ -69,10 +69,13 @@ void PolylineROITool::handleEvent( long unsigned eventID )
         break;
 
         case vtkCommand::MouseMoveEvent:
-            if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
+            if( m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() ) )
             {
-                this->simulateClosingPolyline();
-                m_2DViewer->getDrawer()->refresh();
+                if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
+                {
+                    this->simulateClosingPolyline();
+                    m_2DViewer->getDrawer()->refresh();
+                }
             }
         break;
         case vtkCommand::KeyPressEvent:
@@ -92,20 +95,31 @@ void PolylineROITool::annotateNewPoint()
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 
-    int x,y;
-    double position[4];
-    double computed[3];
+    if( (m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() ) ) )
+    {
+        
+        int x,y;
+        double position[4];
+        double computed[3];
 
-    //capturem l'event de clic esquerre
-    x = m_2DViewer->getEventPositionX();
-    y = m_2DViewer->getEventPositionY();
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
+        //capturem l'event de clic esquerre
+        x = m_2DViewer->getEventPositionX();
+        y = m_2DViewer->getEventPositionY();
+        m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
+        computed[0] = position[0];
+        computed[1] = position[1];
+        computed[2] = position[2];
 
-    //afegim el punt
-    m_mainPolyline->addPoint( computed );
+        //afegim el punt
+        m_mainPolyline->addPoint( computed );
+    }
+    else  //el punt cau fora del model
+    {
+        if ( m_closingPolyline ) // Si no és el primer punt
+            m_mainPolyline->addPoint( m_closingPolyline->getPoint( 1 ) );
+    }
+
+
 
 //actualitzem els atributs de la polilinia
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
@@ -141,7 +155,7 @@ void PolylineROITool::simulateClosingPolyline()
     m_closingPolyline->addPoint( computed );
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
 
-//actualitzem els atributs de la polilinia
+    //actualitzem els atributs de la polilinia
     m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
@@ -640,4 +654,5 @@ double PolylineROITool::computeGrayMeanCoronal()
 
     return mean;
 }
+
 }
