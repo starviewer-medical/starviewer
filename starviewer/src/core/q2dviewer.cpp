@@ -2968,6 +2968,27 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
     m_currentSlice = m_firstSlabSlice;
 }
 
+bool Q2DViewer::pointInModel( int screen_x, int screen_y )
+{
+    double *bounds = m_viewer->GetImageActor()->GetBounds();
+    double position[4];
+    computeDisplayToWorld( getRenderer(), screen_x, screen_y, m_currentSlice, position );
+    
+    //Cas axial
+    switch( m_lastView )
+    {
+        case Axial:
+            return ( bounds[0] < position[0] && bounds[1] > position[0] && bounds[2] < position[1] && bounds[3] > position[1] );
+            break;
+        case Coronal:
+            return ( bounds[0] < position[0] && bounds[1] > position[0] && bounds[4] < position[2] && bounds[5] > position[2] );
+            break;
+        case Sagital:
+            return ( bounds[4] < position[2] && bounds[5] > position[2] && bounds[2] < position[1] && bounds[3] > position[1] );
+            break;
+    }
+    
+}
 
 };  // end namespace udg
 
