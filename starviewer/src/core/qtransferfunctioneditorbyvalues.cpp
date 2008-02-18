@@ -29,7 +29,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
     // Creem una scroll area per si hi ha molts intervals (no es pot crear des del Qt Designer)
 
     QScrollArea * scrollArea = new QScrollArea( this );
-    qobject_cast< QBoxLayout * >( this->layout() )->insertWidget( 0, scrollArea );
+    qobject_cast< QBoxLayout * >( this->layout() )->insertWidget( 1, scrollArea );
 
     m_intervalEditorsWidget = new QWidget( scrollArea );
     QBoxLayout * layout = new QVBoxLayout( m_intervalEditorsWidget );
@@ -70,6 +70,7 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
 
     connect( m_addPushButton, SIGNAL( clicked() ), SLOT( addInterval() ) );
     connect( m_removePushButton, SIGNAL( clicked() ), SLOT( removeInterval() ) );
+    connect( m_nameLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( markAsChanged() ) );
 }
 
 
@@ -98,6 +99,8 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
 {
     // si no hi ha hagut canvis i ens passen una funció igual llavors no cal fer res
     if ( !m_changed && m_transferFunction == transferFunction ) return;
+
+    m_nameLineEdit->setText( transferFunction.name() );
 
     while ( m_numberOfIntervals > 1 ) removeInterval();
 
@@ -147,6 +150,8 @@ const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() 
     if ( m_changed )
     {
         m_transferFunction.clear();
+
+        m_transferFunction.setName( m_nameLineEdit->text() );
 
         QList< QTransferFunctionIntervalEditor * > intervalList =
                 m_intervalEditorsWidget->findChildren< QTransferFunctionIntervalEditor * >();
