@@ -350,7 +350,7 @@ bool DrawerText::isTextScaled()
 
 double DrawerText::getDistanceToPoint( double *point3D )
 {
-    Distance d(m_attatchPoint, point3D);
+    Distance d( m_attatchPoint, point3D );
     return d.getDistance3D();
 }
 

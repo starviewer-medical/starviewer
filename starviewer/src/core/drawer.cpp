@@ -303,7 +303,7 @@ DrawerPrimitive* Drawer::getPrimitiveNearerToPoint( double point[3], int view, i
 {
     double minDistance = VTK_DOUBLE_MAX;
     double distance;
-    double range = 5.0;
+    double range = 10.0;
     QList< DrawerPrimitive *> primitivesList;
     
     DrawerPrimitive *nearestPrimitive = 0;
@@ -329,7 +329,6 @@ DrawerPrimitive* Drawer::getPrimitiveNearerToPoint( double point[3], int view, i
     foreach( DrawerPrimitive *primitive, primitivesList )
     {
         distance = primitive->getDistanceToPoint( point );
-        
         if( distance <= range )
         {
             minDistance = distance;
