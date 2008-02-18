@@ -24,7 +24,6 @@
 #include "pacsparameters.h"
 #include "pacsserver.h"
 #include "qserieslistwidget.h"
-#include "retrieveimages.h"
 #include "pacslist.h"
 #include "qpacslist.h"
 #include "starviewersettings.h"
