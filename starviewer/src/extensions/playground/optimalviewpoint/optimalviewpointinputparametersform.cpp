@@ -74,18 +74,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
     {
         switch ( index )
         {
-            case OptimalViewpointParameters::VisualizationImageSampleDistance:
-                m_doubleSpinBoxVisualizationImageSampleDistance->setValue( m_parameters->getVisualizationImageSampleDistance() );
-                break;
-
-            case OptimalViewpointParameters::VisualizationSampleDistance:
-                m_doubleSpinBoxVisualizationSampleDistance->setValue( m_parameters->getVisualizationSampleDistance() );
-                break;
-
-            case OptimalViewpointParameters::VisualizationBlockLength:
-                m_spinBoxVisualizationBlockLength->setValue( m_parameters->getVisualizationBlockLength() );
-                break;
-
             case OptimalViewpointParameters::TransferFunctionObject:
 //                 m_transferFunction = m_parameters->getTransferFunction();
                 this->setTransferFunction( m_parameters->getTransferFunctionObject() );
@@ -98,15 +86,6 @@ void OptimalViewpointInputParametersForm::readParameter( int index )
                 m_computeWithOpacityCheckBox->setChecked( m_parameters->getComputeWithOpacity() );
                 break;
 
-            case OptimalViewpointParameters::Compute:
-                m_computeCheckBox->setChecked( m_parameters->getCompute() );
-                break;
-/*
-            case OptimalViewpointParameters::NumberOfClusters:
-                m_numberOfClustersLabel->setText( QString("<b>%1 clusters</b>").arg( (short) m_parameters->getNumberOfClusters() ) );
-                DEBUG_LOG( QString("nclusters = %1").arg((short) m_parameters->getNumberOfClusters()) );
-                break;
-*/
             case OptimalViewpointParameters::SimilarityThreshold:
                 m_similarityThresholdDoubleSpinBox->setValue( m_parameters->getSimilarityThreshold() );
                 break;
@@ -145,15 +124,11 @@ void OptimalViewpointInputParametersForm::writeAllParameters()
         this->setTransferFunction( m_editorByValues->getTransferFunction() );
 
         // actualitzem els valors dels paràmetres
-        m_parameters->setVisualizationImageSampleDistance( m_doubleSpinBoxVisualizationImageSampleDistance->value() );
-        m_parameters->setVisualizationSampleDistance( m_doubleSpinBoxVisualizationSampleDistance->value() );
-        m_parameters->setVisualizationBlockLength( m_spinBoxVisualizationBlockLength->value() );
         m_parameters->setTransferFunctionObject( m_transferFunction );
 
 
         // nous paràmetres
         m_parameters->setComputeWithOpacity( m_computeWithOpacityCheckBox->isChecked() );
-        m_parameters->setCompute( m_computeCheckBox->isChecked() );
         m_parameters->setSimilarityThreshold( m_similarityThresholdDoubleSpinBox->value() );
 
         m_parameters->setCluster( m_clusterCheckBox->isChecked() );

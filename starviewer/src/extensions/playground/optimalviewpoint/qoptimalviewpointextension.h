@@ -62,6 +62,7 @@ public slots:
     void doVisualization();
 
     void doViewpointSelection();
+    void computeViewpointEntropies();
 
     ///Aplica el mètode segons els paràmetres actuals.
     void execute();

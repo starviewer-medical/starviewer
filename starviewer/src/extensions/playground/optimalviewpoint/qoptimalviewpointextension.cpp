@@ -72,6 +72,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     connect( m_updatePlaneRenderPushButton, SIGNAL( clicked() ), SLOT( renderPlane() ) );
 
     m_parameters->setUpdatePlane( -1 ); // de moment ho poso aquí, perquè s'ha d'inicialitzar a algun lloc
+
+    connect( m_viewpointEntropiesOkPushButton, SIGNAL( clicked() ), SLOT( computeViewpointEntropies() ) );
 }
 
 
@@ -157,6 +159,7 @@ void QOptimalViewpointExtension::doSegmentation()
     m_visualizationOkPushButton->setEnabled( true );
     m_visualizationWidget->setChecked( true );
     m_viewpointSelectionOkPushButton->setEnabled( true );
+    m_viewpointEntropiesOkPushButton->setEnabled( true );
 }
 
 
@@ -192,7 +195,6 @@ void QOptimalViewpointExtension::execute()
 
     m_method->setOpacityForComputing( m_parameters->getComputeWithOpacity() );
     m_method->setUpdatePlane( m_parameters->getUpdatePlane() );
-    m_method->setCompute( m_parameters->getCompute() );
     m_method->setSimilarityThreshold( m_parameters->getSimilarityThreshold() );
 
     bool renderCluster = m_parameters->getCluster();
@@ -312,6 +314,18 @@ void QOptimalViewpointExtension::readParameter( int index )
             case OptimalViewpointParameters::UpdatePlane:
                 m_updatePlaneSpinBox->setValue( m_parameters->getUpdatePlane() );
                 break;
+
+            case OptimalViewpointParameters::VisualizationImageSampleDistance:
+                m_doubleSpinBoxVisualizationImageSampleDistance->setValue( m_parameters->getVisualizationImageSampleDistance() );
+                break;
+
+            case OptimalViewpointParameters::VisualizationSampleDistance:
+                m_doubleSpinBoxVisualizationSampleDistance->setValue( m_parameters->getVisualizationSampleDistance() );
+                break;
+
+            case OptimalViewpointParameters::VisualizationBlockLength:
+                m_spinBoxVisualizationBlockLength->setValue( m_parameters->getVisualizationBlockLength() );
+                break;
         }
     }
 }
@@ -373,6 +387,37 @@ void QOptimalViewpointExtension::setNumberOfPlanes( const QString & numberOfPlan
 void QOptimalViewpointExtension::computeSaliency()
 {
     m_method->computeSaliency();
+}
+
+
+void QOptimalViewpointExtension::computeViewpointEntropies()
+{
+    m_parameters->setVisualizationImageSampleDistance( m_doubleSpinBoxVisualizationImageSampleDistance->value() );
+    m_parameters->setVisualizationSampleDistance( m_doubleSpinBoxVisualizationSampleDistance->value() );
+    m_parameters->setVisualizationBlockLength( m_spinBoxVisualizationBlockLength->value() );
+    m_method->computeViewpointEntropies();
+
+    {
+        std::vector<double> * entropyRateResults = m_method->getEntropyRateResults();
+        std::vector<double> * excessEntropyResults = m_method->getExcessEntropyResults();
+
+        QMessageBox * resultsDialog = new QMessageBox( tr("Results"), "", QMessageBox::Information,
+                QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, m_viewerWidget );
+        resultsDialog->setModal( false );
+        resultsDialog->setAttribute( Qt::WA_DeleteOnClose );
+
+        QString text = "<table cellspacing=\"8\"><tr><td></td><td align=\"center\"><b><i><u>entropy rate</u></i></b></td><td align=\"center\"><b><i><u>excess entropy</u></i></b></td></tr>";
+        QString planeString = tr("Plane");
+        for ( unsigned char i = 1; i <= m_parameters->getNumberOfPlanes(); i++ )
+            text += "<tr><td><b>" + planeString + QString( " %1:</b></td><td align=\"center\">%2</td><td align=\"center\">%3</td></tr>" ).arg( i ).arg( (*entropyRateResults)[i], 0, 'g', 7 ).arg( (*excessEntropyResults)[i], 0, 'g', 7 );
+        text += "</table>";
+
+        resultsDialog->setText( text );
+        resultsDialog->show();
+
+        delete entropyRateResults;
+        delete excessEntropyResults;
+    }
 }
 
 

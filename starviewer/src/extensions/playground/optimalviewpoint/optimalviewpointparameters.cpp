@@ -189,21 +189,6 @@ void OptimalViewpointParameters::setUpdatePlane( short updatePlane )
 }
 
 
-
-bool OptimalViewpointParameters::getCompute() const
-{
-    return m_compute;
-}
-
-void OptimalViewpointParameters::setCompute( bool compute )
-{
-    if ( m_compute != compute )
-    {
-        m_compute = compute; emit changed( Compute );
-    }
-}
-
-
 void OptimalViewpointParameters::setSimilarityThreshold( double similarityThreshold )
 {
     if ( m_similarityThreshold != similarityThreshold )

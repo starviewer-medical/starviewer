@@ -45,7 +45,6 @@ public:
 
         // nous paràmetres
         ComputeWithOpacity, Interpolation, Specular, SpecularPower, UpdatePlane,
-        Compute,
         SimilarityThreshold,
         Cluster, ClusterFirst, ClusterLast,
 //         NumberOfSlices,
@@ -104,8 +103,6 @@ public:
     void setSpecularPower( double specularPower );
     short getUpdatePlane() const;
     void setUpdatePlane( short updatePlane );
-    bool getCompute() const;
-    void setCompute( bool compute );
 
     void setSimilarityThreshold( double similarityThreshold );
     double getSimilarityThreshold() const;
@@ -158,7 +155,6 @@ private:
     bool m_specular;
     double m_specularPower;
     short m_updatePlane;
-    bool m_compute;
 
     double m_similarityThreshold;
 
