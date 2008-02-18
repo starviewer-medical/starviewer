@@ -470,18 +470,19 @@ void OptimalViewpoint::updatePlanes()
             t.start();
             for ( unsigned char i = 1; i <= m_numberOfPlanes; i++ )
             {
-                QObject::connect( m_volume, SIGNAL( visited(int,unsigned char) ),
-                                  (*m_planes)[i], SLOT( compute(int,unsigned char) ),
-                                  Qt::DirectConnection );
-                QObject::connect( m_volume, SIGNAL( rayEnd(int) ),
-                                  (*m_planes)[i], SLOT( endLBlock(int) ),
-                                  Qt::DirectConnection );
-                if ( m_compute ) (*m_planes)[i]->updateAndRecompute();
-                else (*m_planes)[i]->update();
-                QObject::disconnect( m_volume, SIGNAL( visited(int,unsigned char) ),
-                                  (*m_planes)[i], SLOT( compute(int,unsigned char) ) );
-                QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
-                                  (*m_planes)[i], SLOT( endLBlock(int) ) );
+//                 QObject::connect( m_volume, SIGNAL( visited(int,unsigned char) ),
+//                                   (*m_planes)[i], SLOT( compute(int,unsigned char) ),
+//                                   Qt::DirectConnection );
+//                 QObject::connect( m_volume, SIGNAL( rayEnd(int) ),
+//                                   (*m_planes)[i], SLOT( endLBlock(int) ),
+//                                   Qt::DirectConnection );
+//                 if ( m_compute ) (*m_planes)[i]->updateAndRecompute();
+//                 else (*m_planes)[i]->update();
+//                 QObject::disconnect( m_volume, SIGNAL( visited(int,unsigned char) ),
+//                                   (*m_planes)[i], SLOT( compute(int,unsigned char) ) );
+//                 QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
+//                                   (*m_planes)[i], SLOT( endLBlock(int) ) );
+                (*m_planes)[i]->update();
             }
             int elapsed = t.elapsed();
             DEBUG_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
@@ -493,18 +494,19 @@ void OptimalViewpoint::updatePlanes()
             break;
 
         default:
-            QObject::connect( m_volume, SIGNAL( visited(int,unsigned char) ),
-                              (*m_planes)[m_updatePlane], SLOT( compute(int,unsigned char) ),
-                              Qt::DirectConnection );
-            QObject::connect( m_volume, SIGNAL( rayEnd(int) ),
-                              (*m_planes)[m_updatePlane], SLOT( endLBlock(int) ),
-                              Qt::DirectConnection );
-            if ( m_compute ) (*m_planes)[m_updatePlane]->updateAndRecompute();
-            else (*m_planes)[m_updatePlane]->update();
-            QObject::disconnect( m_volume, SIGNAL( visited(int,unsigned char) ),
-                              (*m_planes)[m_updatePlane], SLOT( compute(int,unsigned char) ) );
-            QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
-                              (*m_planes)[m_updatePlane], SLOT( endLBlock(int) ) );
+//             QObject::connect( m_volume, SIGNAL( visited(int,unsigned char) ),
+//                               (*m_planes)[m_updatePlane], SLOT( compute(int,unsigned char) ),
+//                               Qt::DirectConnection );
+//             QObject::connect( m_volume, SIGNAL( rayEnd(int) ),
+//                               (*m_planes)[m_updatePlane], SLOT( endLBlock(int) ),
+//                               Qt::DirectConnection );
+//             if ( m_compute ) (*m_planes)[m_updatePlane]->updateAndRecompute();
+//             else (*m_planes)[m_updatePlane]->update();
+//             QObject::disconnect( m_volume, SIGNAL( visited(int,unsigned char) ),
+//                               (*m_planes)[m_updatePlane], SLOT( compute(int,unsigned char) ) );
+//             QObject::disconnect( m_volume, SIGNAL( rayEnd(int) ),
+//                               (*m_planes)[m_updatePlane], SLOT( endLBlock(int) ) );
+            (*m_planes)[m_updatePlane]->update();
 
 
 
@@ -669,11 +671,6 @@ void OptimalViewpoint::setUpdatePlane( short updatePlane )
     m_updatePlane = updatePlane;
 }
 
-void OptimalViewpoint::setCompute( bool compute )
-{
-    m_compute = compute;
-}
-
 bool OptimalViewpoint::doLoadSegmentation( const QString & fileName )
 {
     m_numberOfClusters = m_volume->loadSegmentationFromFile( fileName );
@@ -785,6 +782,9 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::NumberOfPlanes:
             setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             break;
+        case OptimalViewpointParameters::UpdatePlane:
+            setUpdatePlane( m_parameters->getUpdatePlane() );
+            break;
         case OptimalViewpointParameters::VisualizationImageSampleDistance:
             setImageSampleDistance( m_parameters->getVisualizationImageSampleDistance() );
             break;
@@ -892,6 +892,36 @@ void OptimalViewpoint::setObscurances( bool obscurances )
 void OptimalViewpoint::computeSaliency()
 {
     m_volume->computeSaliency();
+}
+
+
+void OptimalViewpoint::computeViewpointEntropies()
+{
+    m_volume->synchronize();
+
+    switch ( m_updatePlane )
+    {
+        case -1:    // All
+        {
+            QTime t;
+            t.start();
+            for ( unsigned char i = 1; i <= m_numberOfPlanes; i++ )
+            {
+                (*m_planes)[i]->updateAndRecompute();
+            }
+            int elapsed = t.elapsed();
+            DEBUG_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
+            INFO_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
+        }
+            break;
+
+        case 0:     // None
+            break;
+
+        default:
+            (*m_planes)[m_updatePlane]->updateAndRecompute();
+            break;
+    }
 }
 
 

@@ -121,7 +121,6 @@ public:
     void setSpecular( bool specular );
     void setSpecularPower( double specularPower );
     void setUpdatePlane( short updatePlane );
-    void setCompute( bool compute );
     void setSimilarityThreshold( double similarityThreshold );
 
 
@@ -156,6 +155,7 @@ public slots:
     void newMethod2( int step, bool normalized );
     void computeObscurances( int directions, double maximumDistance, int obscuranceFunction );
     void computeSaliency();
+    void computeViewpointEntropies();
 
 signals:
 
@@ -189,7 +189,6 @@ private:
 
     // nous paràmetres
     short m_updatePlane;
-    bool m_compute;
     double m_similarityThreshold;
 
     bool m_readExtentFromFile;
