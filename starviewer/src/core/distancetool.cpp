@@ -42,7 +42,6 @@ DistanceTool::~DistanceTool()
 
 void DistanceTool::handleEvent( long unsigned eventID )
 {
-    DEBUG_LOG("INICI HANDLE EVENT");
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
