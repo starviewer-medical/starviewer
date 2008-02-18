@@ -52,20 +52,11 @@ void PolylineROITool::handleEvent( long unsigned eventID )
             this->annotateNewPoint();
             m_2DViewer->getDrawer()->refresh();
 
-//             int totalTimeElapsed = m_time.elapsed();
-//             int timeElapsed = ( totalTimeElapsed - m_latestTime );
-//
-//             DEBUG_LOG( tr("CLIKS: %1").arg( m_2DViewer->getInteractor()->GetRepeatCount() ) );
-//
-//             if( timeElapsed < 350 )
-//             {
-//                 DEBUG_LOG( "DOBLE CLICK");
-//             }
-//             else
-//             {
-//                 DEBUG_LOG( "SIMPLE CLICK");
-//             }
-//             m_latestTime = totalTimeElapsed;
+            if ( m_2DViewer->getInteractor()->GetRepeatCount() == 1 )
+            {
+                closeForm();
+            }
+            
         break;
 
         case vtkCommand::MouseMoveEvent:
@@ -76,12 +67,6 @@ void PolylineROITool::handleEvent( long unsigned eventID )
                     this->simulateClosingPolyline();
                     m_2DViewer->getDrawer()->refresh();
                 }
-            }
-        break;
-        case vtkCommand::KeyPressEvent:
-            if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 3 ) )
-            {
-                this->answerToKeyEvent();
             }
         break;
     }
@@ -159,45 +144,6 @@ void PolylineROITool::simulateClosingPolyline()
     m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
-void PolylineROITool::answerToKeyEvent()
-{
-    //responem a la intenció d'esborrar una distància, sempre que hi hagi una distància seleccionada i
-    //s'hagi polsat la tecla adequada (tecla sup) o seleccionar una distància amb el Ctrl i un botó del mouse
-
-    char keyChar = m_2DViewer->getInteractor()->GetKeyCode();
-    int keyInt = (int)keyChar;
-
-
-   if ( keyInt == 32 ) // s'ha polsat l'espai per tancar la forma
-    {
-        m_mainPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-        m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-
-        double *bounds = m_mainPolyline->getPolylineBounds();
-        if( !bounds )
-        {
-            DEBUG_LOG( "Bounds no definits" );
-        }
-        else
-        {
-            double *intersection = new double[3];
-
-            intersection[0] = (bounds[1]+bounds[0])/2.0;
-            intersection[1] = (bounds[3]+bounds[2])/2.0;
-            intersection[2] = (bounds[5]+bounds[4])/2.0;
-
-            DrawerText * text = new DrawerText;
-            text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean() ) );
-            text->setAttatchmentPoint( intersection );
-            text->update( DrawerPrimitive::VTKRepresentation );
-            m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-        }
-        delete m_closingPolyline;
-        m_closingPolyline=NULL;
-        m_2DViewer->getDrawer()->refresh();
-        m_mainPolyline=NULL;
-    }
-}
 double PolylineROITool::computeGrayMean()
 {
     double mean = 0.0;
@@ -653,6 +599,36 @@ double PolylineROITool::computeGrayMeanCoronal()
         segments[index]->Delete();
 
     return mean;
+}
+
+void PolylineROITool::closeForm()
+{
+    m_mainPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
+    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+
+    double *bounds = m_mainPolyline->getPolylineBounds();
+    if( !bounds )
+    {
+        DEBUG_LOG( "Bounds no definits" );
+    }
+    else
+    {
+        double *intersection = new double[3];
+
+        intersection[0] = (bounds[1]+bounds[0])/2.0;
+        intersection[1] = (bounds[3]+bounds[2])/2.0;
+        intersection[2] = (bounds[5]+bounds[4])/2.0;
+
+        DrawerText * text = new DrawerText;
+        text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean() ) );
+        text->setAttatchmentPoint( intersection );
+        text->update( DrawerPrimitive::VTKRepresentation );
+        m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    }
+    delete m_closingPolyline;
+    m_closingPolyline=NULL;
+    m_2DViewer->getDrawer()->refresh();
+    m_mainPolyline=NULL;
 }
 
 }

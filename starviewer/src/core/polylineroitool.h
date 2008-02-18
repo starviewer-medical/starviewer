@@ -44,8 +44,8 @@ private:
     ///ns simula com quedaria la polilinia que estem editant si la tanquessim. ens serveix per a veure dinamicament l'evolucio de la polilinia.
     void simulateClosingPolyline();
 
-    /// metode per respondre els diferents tipus d'events de teclat
-    void answerToKeyEvent();
+    /// metode que tanca la forma de la polilinia que s'ha dibuixat
+    void closeForm();
 
     /// metode per calcular la mitjana de gris de la regio del polyline
     double computeGrayMean();
