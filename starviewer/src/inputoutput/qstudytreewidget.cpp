@@ -24,7 +24,6 @@
 #include <QShortcut>
 
 #include "qstudytreewidget.h"
-#include "qserieslistwidget.h"
 #include "pacslistdb.h"
 #include "starviewersettings.h"
 #include "studylist.h"
