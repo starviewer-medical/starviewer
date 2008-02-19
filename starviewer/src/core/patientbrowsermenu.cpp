@@ -27,10 +27,16 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) : QWidget(parent)
     connect( m_patientAdditionalInfo, SIGNAL( close() ), m_patientBrowserList, SLOT( close() ) );
 
     m_patientBrowserList->setWindowFlags( Qt::Popup );
-    m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
-    // TODO Canvis per la 4.3
-//     m_patientAdditionalInfo->setWindowFlags( Qt::SplashScreen );
 
+    if ( QT_VERSION < 0x040300 ) // Abans de 4.3
+    {
+        m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
+    }
+    else
+    {
+        m_patientAdditionalInfo->setWindowFlags( Qt::SplashScreen );
+    }
+    
     //TODO Hack per fer desapareixer els 2 popups al clickar fora d'aquest: veure eventFilter
     //S'hauria de fer que el browser i additional info fossin, realment, fills d'aquest widget i tractar-ho com un de sol.
     m_patientAdditionalInfo->installEventFilter(this);
@@ -100,10 +106,13 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
     }
     m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
     m_patientAdditionalInfo->show();
-//     m_patientBrowserList->show();
-// 
-//     //TODO Es fa un updatePosition per tal de moure amb 4.3 el widget adicional al punt que toca, ja que dóna problemes.
-//     updatePosition();
+
+    if ( QT_VERSION >= 0x040300 ) // Amb qt 4.3
+    {
+        m_patientBrowserList->show();
+        //TODO Es fa un updatePosition per tal de moure amb 4.3 el widget adicional al punt que toca, ja que dóna problemes.
+        updatePosition();
+    }
 }
 
 bool PatientBrowserMenu::eventFilter(QObject *watched, QEvent *event)
