@@ -27,6 +27,7 @@ QClutEditorDialog::QClutEditorDialog( QWidget * parent )
     connect( m_loadClutPushButton, SIGNAL( clicked() ), SLOT( loadClut() ) );
     connect( m_saveClutPushButton, SIGNAL( clicked() ), SLOT( saveClut() ) );
     connect( m_buttonBox, SIGNAL( clicked(QAbstractButton*) ), SLOT( manageClick(QAbstractButton*) ) );
+    connect( m_switchEditorPushButton, SIGNAL( clicked() ), SLOT( switchEditor() ) );
 }
 
 
@@ -49,6 +50,7 @@ void QClutEditorDialog::setCluts( const QDir & clutsDir, const QMap<QString, QSt
 
 void QClutEditorDialog::setMaximum( unsigned short maximum )
 {
+    m_gradientEditor->setMaximum( maximum );
     m_editorByValues->setMaximum( maximum );
 }
 
@@ -59,7 +61,8 @@ void QClutEditorDialog::loadPresetClut( const QString & clutName )
     TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( fileName ) );
     if ( transferFunction )
     {
-        m_editorByValues->setTransferFunction( *transferFunction );
+        QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+        currentEditor->setTransferFunction( *transferFunction );
         delete transferFunction;
     }
 }
@@ -78,7 +81,8 @@ void QClutEditorDialog::loadClut()
     if ( !transferFunctionFileName.isNull() )
     {
         TransferFunction * transferFunction = TransferFunctionIO::fromFile( transferFunctionFileName );
-        m_editorByValues->setTransferFunction( *transferFunction );
+        QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+        currentEditor->setTransferFunction( *transferFunction );
         delete transferFunction;
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
@@ -102,7 +106,8 @@ void QClutEditorDialog::saveClut()
     if ( saveDialog.exec() == QDialog::Accepted )
     {
         QString transferFunctionFileName = saveDialog.selectedFiles().first();
-        TransferFunctionIO::toFile( transferFunctionFileName, m_editorByValues->getTransferFunction() );
+        QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+        TransferFunctionIO::toFile( transferFunctionFileName, currentEditor->getTransferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
         settings.setValue( "customClutsDir", transferFunctionFileInfo.absolutePath() );
@@ -114,10 +119,22 @@ void QClutEditorDialog::saveClut()
 
 void QClutEditorDialog::manageClick( QAbstractButton * button )
 {
+    QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+
     switch ( m_buttonBox->buttonRole( button ) )
     {
-        case QDialogButtonBox::ApplyRole: emit clutApplied( m_editorByValues->getTransferFunction() ); break;
+        case QDialogButtonBox::ApplyRole: emit clutApplied( currentEditor->getTransferFunction() ); break;
     }
+}
+
+
+void QClutEditorDialog::switchEditor()
+{
+    QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+    const TransferFunction & currentTransferFunction = currentEditor->getTransferFunction();
+    m_editorsStackedWidget->setCurrentIndex( 1 - m_editorsStackedWidget->currentIndex() );
+    currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+    currentEditor->setTransferFunction( currentTransferFunction );
 }
 
 

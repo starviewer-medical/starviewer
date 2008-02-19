@@ -49,6 +49,7 @@ private slots:
     void loadClut();
     void saveClut();
     void manageClick( QAbstractButton * button );
+    void switchEditor();
 
 private:
 
