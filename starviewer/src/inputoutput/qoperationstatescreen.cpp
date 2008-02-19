@@ -11,7 +11,6 @@
 #include <qdatetime.h>
 #include <QCloseEvent>
 #include <QHeaderView>
-#include "processimagesingleton.h"
 #include "operation.h"
 #include "const.h"
 #include "starviewersettings.h"
