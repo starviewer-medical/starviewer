@@ -32,9 +32,9 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
-    m_referencePlane = new DrawerPolygon;
-    m_2DViewer->getDrawer()->draw( m_referencePlane, QViewer::Top2DPlane );
-    m_2DViewer->getDrawer()->addToGroup( m_referencePlane, "ReferenceLines" );
+    m_projectedReferencePlane = new DrawerPolygon;
+    m_2DViewer->getDrawer()->draw( m_projectedReferencePlane, QViewer::Top2DPlane );
+    m_2DViewer->getDrawer()->addToGroup( m_projectedReferencePlane, "ReferenceLines" );
     refreshInput();
 
     // cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
@@ -47,7 +47,7 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
 
 ReferenceLinesTool::~ReferenceLinesTool()
 {
-    delete m_referencePlane;
+    delete m_projectedReferencePlane;
 }
 
 void ReferenceLinesTool::setToolData(ToolData * data)
@@ -147,10 +147,10 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             p4[j] = blhc[j];
         }
 
-        m_referencePlane->setVertix( 0,p1 );
-        m_referencePlane->setVertix( 1,p2 );
-        m_referencePlane->setVertix( 2,p3 );
-        m_referencePlane->setVertix( 3,p4 );
+        m_projectedReferencePlane->setVertix( 0,p1 );
+        m_projectedReferencePlane->setVertix( 1,p2 );
+        m_projectedReferencePlane->setVertix( 2,p3 );
+        m_projectedReferencePlane->setVertix( 3,p4 );
         m_2DViewer->getDrawer()->showGroup("ReferenceLines");
     }
 }

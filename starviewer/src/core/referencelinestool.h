@@ -66,7 +66,7 @@ private:
     QString m_myFrameOfReferenceUID;
 
     /// Polígon que projectem
-    DrawerPolygon *m_referencePlane;
+    DrawerPolygon *m_projectedReferencePlane;
 };
 
 }
