@@ -282,6 +282,7 @@ void TransferFunction::print() const
 
 TransferFunction & TransferFunction::operator =( const TransferFunction & transferFunction )
 {
+    m_name = transferFunction.m_name;
     m_color = transferFunction.m_color;
     m_opacity = transferFunction.m_opacity;
 
@@ -295,7 +296,7 @@ TransferFunction & TransferFunction::operator =( const TransferFunction & transf
 
 bool TransferFunction::operator ==( const TransferFunction & transferFunction ) const
 {
-    return m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;
+    return m_name == transferFunction.m_name && m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;
 }
 
 }
