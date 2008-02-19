@@ -37,6 +37,7 @@
 #include "hoverpoints.h"
 
 #include "transferfunction.h"
+#include "logging.h"
 
 
 namespace udg {
@@ -49,16 +50,28 @@ QTransferFunctionEditorByGradient::QTransferFunctionEditorByGradient( QWidget * 
     vbox->setSpacing(1);
     vbox->setMargin(1);
 
+    QHBoxLayout * hbox = new QHBoxLayout();
+    hbox->setSpacing( 6 );
+    hbox->setMargin( 0 );
+
+    QLabel * nameLabel = new QLabel( tr("Name"), this );
+    m_nameLineEdit = new QLineEdit( this );
+
+    hbox->addWidget( nameLabel );
+    hbox->addWidget( m_nameLineEdit );
+
     m_red_shade = new ShadeWidget(ShadeWidget::RedShade, this);
     m_green_shade = new ShadeWidget(ShadeWidget::GreenShade, this);
     m_blue_shade = new ShadeWidget(ShadeWidget::BlueShade, this);
     m_alpha_shade = new ShadeWidget(ShadeWidget::ARGBShade, this);
 
+    vbox->addLayout( hbox );
     vbox->addWidget(m_red_shade);
     vbox->addWidget(m_green_shade);
     vbox->addWidget(m_blue_shade);
     vbox->addWidget(m_alpha_shade);
 
+    connect( m_nameLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( setTransferFunctionName(const QString&) ) );
     connect(m_red_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_green_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
     connect(m_blue_shade, SIGNAL(colorsChanged()), SLOT(pointsUpdated()));
@@ -77,6 +90,8 @@ void QTransferFunctionEditorByGradient::setTransferFunction( const TransferFunct
 {
     if ( m_transferFunction == transferFunction ) return;
 
+    m_nameLineEdit->setText( transferFunction.name() );
+
     QGradientStops gradientStops;
 
     QList< double > points = transferFunction.getPoints();
@@ -87,6 +102,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction( const TransferFunct
     }
 
     setGradientStops( gradientStops );
+    pointsUpdated();
 }
 
 
@@ -179,6 +195,12 @@ void QTransferFunctionEditorByGradient::setTransferFunction( const QGradientStop
     {
         m_transferFunction.addPoint( stops.at( i ).first * m_maximum, stops.at( i ).second );
     }
+}
+
+
+void QTransferFunctionEditorByGradient::setTransferFunctionName( const QString & name )
+{
+    m_transferFunction.setName( name );
 }
 
 
