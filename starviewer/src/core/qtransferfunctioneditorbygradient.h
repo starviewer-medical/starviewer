@@ -36,6 +36,7 @@
 
 #include "qtransferfunctioneditor.h"
 
+#include <QLineEdit>
 #include "transferfunction.h"
 
 
@@ -85,8 +86,10 @@ signals:
 private slots:
 
     void setTransferFunction( const QGradientStops & stops );
+    void setTransferFunctionName( const QString & name );
 
 private:
+    QLineEdit * m_nameLineEdit;
     ShadeWidget *m_red_shade;
     ShadeWidget *m_green_shade;
     ShadeWidget *m_blue_shade;
