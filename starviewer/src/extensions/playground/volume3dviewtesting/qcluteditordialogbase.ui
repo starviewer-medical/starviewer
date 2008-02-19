@@ -53,10 +53,23 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="m_switchEditorPushButton">
+       <property name="text">
+        <string>Switch editor</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
-    <widget class="udg::QTransferFunctionEditorByValues" native="1" name="m_editorByValues" />
+    <widget class="QStackedWidget" name="m_editorsStackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="udg::QTransferFunctionEditorByGradient" native="1" name="m_gradientEditor"/>
+     <widget class="udg::QTransferFunctionEditorByValues" native="1" name="m_editorByValues"/>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="m_buttonBox" >
@@ -71,6 +84,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>udg::QTransferFunctionEditorByGradient</class>
+   <extends>QWidget</extends>
+   <header>qtransferfunctioneditorbygradient.h</header>
+  </customwidget>
   <customwidget>
    <class>udg::QTransferFunctionEditorByValues</class>
    <extends>QWidget</extends>
