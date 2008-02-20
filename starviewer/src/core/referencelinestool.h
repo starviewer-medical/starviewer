@@ -13,7 +13,6 @@ namespace udg {
 
 class ReferenceLinesToolData;
 class Q2DViewer;
-class Volume;
 class ImagePlane;
 class DrawerPolygon;
 
@@ -43,13 +42,21 @@ private slots:
     void updateProjectionLines();
 
     /// Actualitza el frame of reference de les dades a partir del volum donat
-    void updateFrameOfReference(Volume *volume);
+    void updateFrameOfReference();
 
     /// Actualitza el pla d'imatge a projectar. Es crida cada cop que al viewer es canvia de llesca
     void updateImagePlane();
 
-    /// Aquest slot es crida per actualitzar les dades quan tenim un nou input
-    void refreshInput();
+    /// Aquest slot es crida per actualitzar les dades que marquen quin és el pla de referència
+    /// Es cridarà quan el viewer sigui actiu o quan el viewer actiu canvïi d'input
+    void refreshReferenceViewerData();
+
+    /// Resucita el polígon que estàvem pintant. Aquest slot queda connectat
+    /// al signal dying(). Si ens fan un delete de la nostra primitiva, ens assebentem
+    /// i en creem una de nou i fora problemes :)
+    /// Aquesta és una solució temporal, el que hauríem de tenir realment
+    /// és alguna mena d'smart pointers per fer una gestió com cal
+    void resurrectPolygon();
 
 private:
     /// Projecta el pla de referència sobre el pla de localitzador
