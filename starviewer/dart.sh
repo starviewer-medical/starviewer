@@ -28,12 +28,13 @@ Error() {
 Usage() {
     echo "$0: <tipus_build> [nom_build]" >&2
     echo "Tipus de builds possibles:" >&2
-    echo "  style           Fa la validació d'estil (sense enviar resultats)" >&2
-    echo "  KWStyle         Fa validació d'estil per al Dart" >&2
-    echo "  Experimental    Compilació al track Experimental" >&2
-    echo "  Nightly         Compilació diaria" >&2
-    echo "  Continuous      Compilació continua (recompilació a cada canvi al SVN" >&2
-    echo "  config          Generar fitxer de configuració per al Dart" >&2
+    echo "  style           Fa la validació d'estil de tot el codi" >&2
+    echo "  style <fitxers> Fa la validació d'estil dels fitxers indicats" >&2
+    echo "  KWStyle         Test d'estil per al Dart" >&2
+    echo "  Experimental    Test de compilació al track Experimental" >&2
+    echo "  Nightly         Test de compilació diaria" >&2
+    echo "  Continuous      Test de compilació continua (recompilació a cada canvi al SVN" >&2
+    echo "  config          Generar fitxer de configuració" >&2
     echo >&2
     exit 1
 }
@@ -116,34 +117,47 @@ _EOF_DART_CONFIG
 CheckRequired
 case "$1" in
     style)
-        $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -D kwsFiles.txt
+        shift
+        if [ -z "$1" ]
+        then
+            # Fem check complet
+            $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -D kwsFiles.txt
+        else
+            # Fem check dels fitxers indicats com a paràmetres
+            $KWSTYLE -xml kws.xml -html KWStyle -lesshtml $*
+        fi
         ;;
     Continuous)
-        SetBuildFromSVN
+        # Continuous Test
+        SetBuildFromOS
         CreateCTestConfig
         $CTEST -VV -S CTest.cmake,Continuous
         ;;
     Nightly)
+        # Nightly Test
         SetBuildFromSVN
         CreateCTestConfig
         $CTEST -VV -S CTest.cmake,Nightly
         ;;
     KWStyle)
+        # Style Test
         SetBuildFromSVN
         BUILDNAME="$BUILDNAME Style"
         CreateCTestConfig
         $CTEST -VV -S CTest.cmake,Style
         ;;
     config)
+        # Generar configuració
         SetBuildFromOS
         CreateCTestConfig
         ;;
-    help)
-        Usage
-        ;;
-    *|Experimental)
+    Experimental)
+        # Experimental Test
         SetBuildFromOS
         CreateCTestConfig
         $CTEST -VV -S CTest.cmake,Experimental
+        ;;
+    *|help)
+        Usage
         ;;
 esac
