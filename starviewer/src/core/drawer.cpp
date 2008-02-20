@@ -121,7 +121,6 @@ void Drawer::refresh()
 void Drawer::removeAllPrimitives()
 {
     QList <DrawerPrimitive*> list = m_axialPrimitives.values();
-
     QList <DrawerPrimitive*> sagitalList = m_sagitalPrimitives.values();
     QList <DrawerPrimitive*> coronalList = m_coronalPrimitives.values();
 
@@ -134,8 +133,6 @@ void Drawer::removeAllPrimitives()
         m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
         delete primitive;
     }
-
-    m_primitiveGroups.clear();
 }
 
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
@@ -288,7 +285,7 @@ void Drawer::hideGroup(const QString &groupName)
 void Drawer::showGroup(const QString &groupName)
 {
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values( groupName );
-    foreach( DrawerPrimitive *primitive, primitiveList )
+   foreach( DrawerPrimitive *primitive, primitiveList )
     {
         if( primitive->isModified() || !primitive->isVisible() )
         {
@@ -305,7 +302,7 @@ DrawerPrimitive* Drawer::getPrimitiveNearerToPoint( double point[3], int view, i
     double distance;
     double range = 10.0;
     QList< DrawerPrimitive *> primitivesList;
-    
+
     DrawerPrimitive *nearestPrimitive = 0;
 
     switch( view )
@@ -321,11 +318,11 @@ DrawerPrimitive* Drawer::getPrimitiveNearerToPoint( double point[3], int view, i
     case QViewer::CoronalPlane:
         primitivesList = m_coronalPrimitives.values( slice );
     break;
-    
+
     default:
     break;
     }
-    
+
     foreach( DrawerPrimitive *primitive, primitivesList )
     {
         distance = primitive->getDistanceToPoint( point );
@@ -355,15 +352,16 @@ void Drawer::erasePrimitivesInsideBounds( double p1[3], double p2[3], int view, 
     case QViewer::CoronalPlane:
       primitivesList = m_coronalPrimitives.values( slice );
       break;
-    
+
     default:
       break;
   }
-    
+
   foreach( DrawerPrimitive *primitive, primitivesList )
   {
     if ( primitive->isInsideOfBounds( p1, p2, view ) )
         erasePrimitive( primitive );
   }
 }
+
 }
