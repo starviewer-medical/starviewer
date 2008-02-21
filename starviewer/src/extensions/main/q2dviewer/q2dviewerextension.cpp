@@ -42,6 +42,10 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     //per a la release 0.4 les ROI no es podran utilitzar TODO ocultem fins que funcionin correctament com volem
     m_roiToolButton->setVisible( false );
     m_oldDistanceToolButton->setVisible( false );
+    m_rotateCounterClockWiseToolButton->setVisible( false );
+    m_flipVerticalToolButton->setVisible( false );
+    m_flipHorizontalToolButton->setVisible( false );
+    m_voxelInformationToolButton->setVisible( false );
     // TODO deshabilitem els presentation states fins la release en què es tornin a habilitar
     m_presentationStateSwitchToolButton->setVisible(false);
 
