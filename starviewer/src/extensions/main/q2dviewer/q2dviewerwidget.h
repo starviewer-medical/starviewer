@@ -33,7 +33,7 @@ public:
     void setSelected( bool option );
 
     /// Retorna el visualitzador
-    Q2DViewer * getViewer();
+    Q2DViewer *getViewer();
 
     /// Retorna cert si el model té fases, fals altrament.
     bool hasPhases();
@@ -44,9 +44,9 @@ public:
     void setInput( Volume *input );
 
 public slots:
-    void changeViewToAxial();
-    void changeViewToSagital();
-    void changeViewToCoronal();
+    void resetViewToAxial();
+    void resetViewToSagital();
+    void resetViewToCoronal();
 
 signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget

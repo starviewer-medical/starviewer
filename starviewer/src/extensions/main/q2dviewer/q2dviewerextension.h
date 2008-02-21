@@ -57,9 +57,9 @@ public:
 
 public slots:
     /// Canvia a la vista axial, sagital o coronal
-    void changeViewToAxial();
-    void changeViewToSagital();
-    void changeViewToCoronal();
+    void resetViewToAxial();
+    void resetViewToSagital();
+    void resetViewToCoronal();
 
     /// Carrega un Key Image Note
     void loadKeyImageNote(const QString &filename);
@@ -153,16 +153,16 @@ private slots:
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
 
+    /**
+     * Habilita o deshabilita el botó de Dump d'info DICOM
+     * segons en la vista en la que ens trobem
+     */
+    void updateDICOMInformationButton( int view );
+
     /// Activa la sincronització al visualitzador
     void synchronization( Q2DViewerWidget *, bool );
 
 private:
-    /// Tipus de vistes que podem tenir
-    enum ViewType{ Axial , Sagital , Coronal };
-
-    /// La vista actual amb la que estem treballant
-    ViewType m_currentView;
-
     /// El volum principal
     Volume *m_mainVolume;
 
@@ -226,11 +226,6 @@ private:
     /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
     ToolManager *m_toolManager;
 
-private:
-
-    /// canvia la vista actual. Ho declarem en aquesta posició perque primer
-    /// s'ha de declarar el ViewType
-    void setView( ViewType view );
 };
 
 } // end namespace udg

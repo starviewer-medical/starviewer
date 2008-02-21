@@ -35,7 +35,7 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
- : QWidget( parent ), m_currentView(Axial), m_presentationStateAttacher(0)
+ : QWidget( parent ), m_presentationStateAttacher(0)
 {
     setupUi( this );
 
@@ -50,11 +50,14 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_keyImageNote = NULL;
 
     m_patient = NULL;
+
+    // TODO estem duplicant codi que es posa a setViewerSelected. Caldria fer algo per unificar-ho i que estigui més consistent
     m_selectedViewer = new Q2DViewerWidget( m_workingArea );
     m_thickSlabWidget->link( m_selectedViewer->getViewer() );
     // activem les dades de ww/wl de la combo box
     m_windowLevelComboBox->setPresetsData( m_selectedViewer->getViewer()->getWindowLevelData() );
     m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
+    connect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
 
     m_predefinedSeriesGrid = new MenuGridWidget();
     m_seriesTableGrid = new TableMenu();
@@ -81,22 +84,19 @@ Q2DViewerExtension::~Q2DViewerExtension()
 void Q2DViewerExtension::createActions()
 {
     m_axialViewAction = new QAction( 0 );
-    m_axialViewAction->setText( tr("&Axial View") );
-    m_axialViewAction->setShortcut( tr("Ctrl+A") );
+    m_axialViewAction->setText( tr("Axial") );
     m_axialViewAction->setStatusTip( tr("Change Current View To Axial") );
     m_axialViewAction->setIcon( QIcon(":/images/axial.png") );
     m_axialViewToolButton->setDefaultAction( m_axialViewAction );
 
     m_sagitalViewAction = new QAction( 0 );
-    m_sagitalViewAction->setText( tr("&Sagital View") );
-    m_sagitalViewAction->setShortcut( tr("Ctrl+S") );
+    m_sagitalViewAction->setText( tr("Sagital") );
     m_sagitalViewAction->setStatusTip( tr("Change Current View To Saggital") );
     m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
     m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
 
     m_coronalViewAction = new QAction( 0 );
-    m_coronalViewAction->setText( tr("&Coronal View") );
-    m_coronalViewAction->setShortcut( tr("Ctrl+C") );
+    m_coronalViewAction->setText( tr("Coronal") );
     m_coronalViewAction->setStatusTip( tr("Change Current View To Coronal") );
     m_coronalViewAction->setIcon( QIcon(":/images/coronal.png") );
     m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
@@ -175,10 +175,11 @@ void Q2DViewerExtension::enablePresentationState(bool enable)
 
 void Q2DViewerExtension::createConnections()
 {
-    // adicionals, TODO ara es fa "a saco" però s'ha de millorar
-    connect( m_axialViewAction, SIGNAL( triggered() ), SLOT( changeViewToAxial() ) );
-    connect( m_sagitalViewAction, SIGNAL( triggered() ), SLOT( changeViewToSagital() ) );
-    connect( m_coronalViewAction, SIGNAL( triggered() ), SLOT( changeViewToCoronal() ) );
+    // adicionals, TODO ara es fa "a saco" però s'ha de millorar, ens podríem estalviar un slot i fer la connexió cada cop que
+    // se selecciona un de nou directament amb els slots del Q2DViewer
+    connect( m_axialViewAction, SIGNAL( triggered() ), SLOT( resetViewToAxial() ) );
+    connect( m_sagitalViewAction, SIGNAL( triggered() ), SLOT( resetViewToSagital() ) );
+    connect( m_coronalViewAction, SIGNAL( triggered() ), SLOT( resetViewToCoronal() ) );
 
     // Menus
     connect( m_downButtonGrid, SIGNAL( clicked ( bool ) ), SLOT( showPredefinedGrid() ) );
@@ -213,41 +214,19 @@ void Q2DViewerExtension::setInput( Volume *input )
     INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 }
 
-void Q2DViewerExtension::changeViewToAxial()
+void Q2DViewerExtension::resetViewToAxial()
 {
-    m_currentView = Axial;
-    m_selectedViewer->changeViewToAxial();
-    m_dicomDumpToolButton->setEnabled(true);
+    m_selectedViewer->resetViewToAxial();
 }
 
-void Q2DViewerExtension::changeViewToSagital()
+void Q2DViewerExtension::resetViewToSagital()
 {
-    m_currentView = Sagital;
-    m_selectedViewer->changeViewToSagital();
-    m_dicomDumpToolButton->setEnabled(false);
+    m_selectedViewer->resetViewToSagital();
 }
 
-void Q2DViewerExtension::changeViewToCoronal()
+void Q2DViewerExtension::resetViewToCoronal()
 {
-    m_currentView = Coronal;
-    m_selectedViewer->changeViewToCoronal();
-    m_dicomDumpToolButton->setEnabled(false);
-}
-
-void Q2DViewerExtension::setView( ViewType view )
-{
-    switch( view )
-    {
-    case Axial:
-        changeViewToAxial();
-    break;
-    case Sagital:
-        changeViewToSagital();
-    break;
-    case Coronal:
-        changeViewToCoronal();
-    break;
-    }
+    m_selectedViewer->resetViewToCoronal();
 }
 
 void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
@@ -491,6 +470,7 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
         disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         disconnect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
+        disconnect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
 
         m_selectedViewer->setSelected( false );
         m_selectedViewer = viewer;
@@ -500,6 +480,7 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
         connect( m_predefinedSlicesGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_sliceTableGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
         connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
+        connect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
 
         // TODO potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
         // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
@@ -508,6 +489,7 @@ void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
 
         m_cineController->setQViewer( viewer->getViewer() );
         m_thickSlabWidget->link( m_selectedViewer->getViewer() );
+        updateDICOMInformationButton( m_selectedViewer->getViewer()->getView() );
     }
 }
 
@@ -624,7 +606,7 @@ void Q2DViewerExtension::initializeTools()
     m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
     m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction( "DistanceTool" ) );
     m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction( "EraserTool" ) );
-    
+
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
     windowLevelPresetsTool->trigger();
@@ -770,6 +752,14 @@ void Q2DViewerExtension::validePhases()
         m_sagitalViewAction->setEnabled( true );
         m_coronalViewAction->setEnabled( true );
     }
+}
+
+void Q2DViewerExtension::updateDICOMInformationButton( int view )
+{
+    if( view == Q2DViewer::Axial )
+        m_dicomDumpToolButton->setEnabled(true);
+    else
+        m_dicomDumpToolButton->setEnabled(false);
 }
 
 void Q2DViewerExtension::readSettings()
