@@ -60,13 +60,11 @@ void PolylineROITool::handleEvent( long unsigned eventID )
         break;
 
         case vtkCommand::MouseMoveEvent:
-            if( m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() ) )
+
+            if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
             {
-                if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
-                {
-                    this->simulateClosingPolyline();
-                    m_2DViewer->getDrawer()->refresh();
-                }
+                this->simulateClosingPolyline();
+                m_2DViewer->getDrawer()->refresh();
             }
         break;
     }
@@ -80,37 +78,20 @@ void PolylineROITool::annotateNewPoint()
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 
-    if( (m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() ) ) )
-    {
-        
-        int x,y;
-        double position[4];
-        double computed[3];
+    double * lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
+    double point[3]; // TODO caldria fer aquesta conversio??
+    point[0] = lastPointInModel[0];
+    point[1] = lastPointInModel[1];
+    point[2] = lastPointInModel[2];
+    
+    //afegim el punt
+    m_mainPolyline->addPoint( point );
 
-        //capturem l'event de clic esquerre
-        x = m_2DViewer->getEventPositionX();
-        y = m_2DViewer->getEventPositionY();
-        m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
-        computed[0] = position[0];
-        computed[1] = position[1];
-        computed[2] = position[2];
-
-        //afegim el punt
-        m_mainPolyline->addPoint( computed );
-    }
-    else  //el punt cau fora del model
-    {
-        if ( m_closingPolyline ) // Si no és el primer punt
-            m_mainPolyline->addPoint( m_closingPolyline->getPoint( 1 ) );
-    }
-
-
-
-//actualitzem els atributs de la polilinia
+    //actualitzem els atributs de la polilinia
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
-void PolylineROITool::simulateClosingPolyline()
+void PolylineROITool::simulateClosingPolyline( )
 {
     if (!m_closingPolyline )
     {
@@ -121,23 +102,15 @@ void PolylineROITool::simulateClosingPolyline()
 
     m_closingPolyline->deleteAllPoints();
 
-    int x,y;
-    double position[4];
-    double computed[3];
-
-    //capturem l'event de clic esquerre
-    x = m_2DViewer->getEventPositionX();
-    y = m_2DViewer->getEventPositionY();
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
-
-    //només ens interessen els 3 primers valors de l'array de 4
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
+    double * lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
+    double point[3]; // TODO caldria fer aquesta conversio??
+    point[0] = lastPointInModel[0];
+    point[1] = lastPointInModel[1];
+    point[2] = lastPointInModel[2];
 
     //afegim els punts que simulen aquesta polilinia
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-    m_closingPolyline->addPoint( computed );
+    m_closingPolyline->addPoint( point );
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
 
     //actualitzem els atributs de la polilinia

@@ -267,8 +267,8 @@ public:
      */
     int getSlabThickness() const;
 
-    /// Informa si el punt de la pantalla [x,y] està dins el model, tenint en compte la vista actual.
-    bool pointInModel( int screen_x, int screen_y );
+    /// Donada les coordenades x,y d'on s'ha clicat de la pantalla, retorna el punt més proper i que caigui dins del model.
+    double * pointInModel( int screen_x, int screen_y );
     
 public slots:
     virtual void render();
