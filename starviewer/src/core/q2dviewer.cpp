@@ -2757,7 +2757,7 @@ void Q2DViewer::setSlabThickness( int thickness )
 {
     computeRangeAndSlice( thickness );
     // TODO comprovar aquest pipeline si és millor calcular ara o més tard
-    if ( m_slabThickness == 1 /*&& m_thickSlabActive*/ )
+    if ( m_slabThickness == 1 && isThickSlabActive() )
     {
         DEBUG_LOG( "desconnectar" );
         setupDefaultPipeline();
@@ -2779,6 +2779,7 @@ void Q2DViewer::setSlabThickness( int thickness )
         updateDisplayExtent();
         this->refresh();
     }
+
     emit slabThicknessChanged( m_slabThickness );
 }
 
@@ -2968,7 +2969,7 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
     m_currentSlice = m_firstSlabSlice;
 }
 
-double * Q2DViewer::pointInModel( int screen_x, int screen_y )
+double *Q2DViewer::pointInModel( int screen_x, int screen_y )
 {
     double *bounds = m_viewer->GetImageActor()->GetBounds();
     double position[4];
@@ -2978,7 +2979,6 @@ double * Q2DViewer::pointInModel( int screen_x, int screen_y )
     lastPointInModel[0] = position[0];
     lastPointInModel[1] = position[1];
     lastPointInModel[2] = position[2];
-    
     //Cas axial
     switch( m_lastView )
     {
@@ -3004,7 +3004,7 @@ double * Q2DViewer::pointInModel( int screen_x, int screen_y )
                 else lastPointInModel[1] = bounds[3];
             }
             break;
-        
+
         case Coronal:
 
             if( bounds[0] < position[0] && bounds[1] > position[0] )
@@ -3027,7 +3027,7 @@ double * Q2DViewer::pointInModel( int screen_x, int screen_y )
                 else lastPointInModel[2] = bounds[5];
             }
             break;
-        
+
         case Sagital:
 
             if( bounds[4] < position[2] && bounds[5] > position[2] )
@@ -3051,9 +3051,7 @@ double * Q2DViewer::pointInModel( int screen_x, int screen_y )
             }
             break;
     }
-
     return lastPointInModel;
-    
 }
 
 };  // end namespace udg
