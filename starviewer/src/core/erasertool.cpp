@@ -40,10 +40,6 @@ EraserTool::~EraserTool()
 
 void EraserTool::handleEvent( unsigned long eventID )
 {
-    //         m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
-        // \TODO es podria afegir una variable membre 'm_factor' per poder controlar desde fora com de ràpid és l'augment o disminució del zoom
-//         m_viewer->zoom( pow((double)1.1, 2.0) );
-//         m_viewer->setCursor( Qt::ArrowCursor );
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
