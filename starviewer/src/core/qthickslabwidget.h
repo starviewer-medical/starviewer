@@ -62,6 +62,11 @@ protected slots:
      */
     void updateThicknessLabel(int value);
 
+    /**
+     * Reseteja el viewer associat. Útil per quan ens canvien l'input, per exemple
+     */
+    void reset();
+
 private:
     void populateProjectionModeCombo();
 
