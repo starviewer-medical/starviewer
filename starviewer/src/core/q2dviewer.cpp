@@ -641,7 +641,7 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
             }
         }
         //afegim el thickness de la llesca
-        lowerLeftText += tr(" Slice Thickness: %1 mm").arg( this->getThickness() );
+        lowerLeftText += tr(" Slice Thickness: %1 mm").arg( this->getThickness(), 0, 'g', 2 );
 
         sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
     }
