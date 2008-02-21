@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "drawerpolyline.h"
 #include "logging.h"
+#include "distance.h"
 #include "q2dviewer.h"
 // vtk
 #include <vtkPolyData.h>
@@ -269,7 +270,9 @@ double DrawerPolyline::getDistanceToPoint( double *point3D )
             {
                 distance = vtkLine::DistanceToLine( point3D , auxList[i] , auxList[i+1] );
                 
-                if ( ( minDistanceLine != VTK_DOUBLE_MAX ) && ( distance < minDistanceLine ) ) 
+                if ( minDistanceLine == VTK_DOUBLE_MAX )
+                    minDistanceLine = distance;
+                else if ( distance < minDistanceLine ) 
                         minDistanceLine = distance;
             }
         }
@@ -279,14 +282,12 @@ double DrawerPolyline::getDistanceToPoint( double *point3D )
 
 bool DrawerPolyline::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
 {
-    double range = 5.0;
+    double range = 10.0;
     
-    /*
-        mirem si la distància entre un dels extrems del segment i el punt dóna un valor igual o iferior a un llindar determinat.
-        si és així, retornem cert, altrament retornem fals
-    */
-    return( ( ( fabs( point[0] - lineP1[0] ) <= range ) && ( fabs( point[1] - lineP1[1] ) <= range ) && ( fabs( point[2] - lineP1[2] ) <= range ) ) || 
-            ( ( fabs( point[0] - lineP2[0] ) <= range ) && ( fabs( point[1] - lineP2[1] ) <= range ) && ( fabs(point[2] - lineP2[2] ) <= range ) ) );
+    Distance d1(point, lineP1);
+    Distance d2(point, lineP2);
+    
+    return ( d1.getDistance3D() <= range || d2.getDistance3D() <= range );
 }
 
 bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
