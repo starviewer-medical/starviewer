@@ -49,13 +49,13 @@ void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( input );
-    changeViewToAxial();
+    resetViewToAxial();
 }
 
 void Q2DViewerWidget::updateInput( Volume *input )
 {
     m_mainVolume = input;
-    changeViewToAxial();
+    resetViewToAxial();
 }
 
 void Q2DViewerWidget::mousePressEvent( QMouseEvent * event )
@@ -68,7 +68,7 @@ void Q2DViewerWidget::emitSelectedViewer()
     emit selected( this );
 }
 
-void Q2DViewerWidget::changeViewToAxial()
+void Q2DViewerWidget::resetViewToAxial()
 {
     if( !m_mainVolume )
         return;
@@ -87,7 +87,7 @@ void Q2DViewerWidget::changeViewToAxial()
     INFO_LOG("Visor per defecte: Canviem a vista axial");
 }
 
-void Q2DViewerWidget::changeViewToSagital()
+void Q2DViewerWidget::resetViewToSagital()
 {
     if( !m_mainVolume )
         return;
@@ -104,7 +104,7 @@ void Q2DViewerWidget::changeViewToSagital()
     INFO_LOG( "Visor per defecte: Canviem a vista sagital" );
 }
 
-void Q2DViewerWidget::changeViewToCoronal()
+void Q2DViewerWidget::resetViewToCoronal()
 {
     if( !m_mainVolume )
         return;
