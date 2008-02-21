@@ -45,24 +45,26 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
     {
         // primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
         disconnect( m_currentViewer, 0, this, 0 );
+        disconnect( m_currentViewer, 0, this, 0 );
         disconnect( m_slabThicknessSlider, 0, m_currentViewer, 0 );
     }
     // posem a punt el widget d'acord amb les dades del viewer
     m_currentViewer = viewer;
     if( m_currentViewer->isThickSlabActive() )
     {
-        m_slabThicknessSlider->setValue( m_currentViewer->getSlabThickness() );
         updateMaximumThickness();
-        applyProjectionMode( m_currentViewer->getSlabProjectionMode()+1 );
+        m_slabThicknessSlider->setValue( m_currentViewer->getSlabThickness() );
+        m_projectionModeComboBox->setCurrentIndex( m_currentViewer->getSlabProjectionMode()+1 );
     }
     else
     {
-        m_slabThicknessSlider->setRange(2,2);
         m_slabThicknessSlider->setValue(2);
         applyProjectionMode(0);
+        m_projectionModeComboBox->setCurrentIndex(0);
     }
 
     // creem els vincles
+    connect( m_currentViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( reset() ) );
     connect( m_currentViewer, SIGNAL( viewChanged(int) ), SLOT( updateMaximumThickness() ) );
     connect( m_currentViewer, SIGNAL( slabThicknessChanged(int) ), m_slabThicknessSlider, SLOT( setValue(int) ) );
     // TODO es podria fer l'actualització de l'slab quan es deixa d'interactuar ( sliderReleased() )si és que fer-ho
@@ -76,8 +78,11 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
     if( projectionType == tr("Inactive") )
     {
         m_currentViewer->enableThickSlab(false);
+        m_currentViewer->setSlabThickness( 1 );
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
+        // TODO això s'hauria de fer automàticament quan tenim slab thickness d'1. Cal repassar bé tot el pipeline del Q2DViewer
+        m_currentViewer->updateSliceAnnotationInformation();
     }
     else
     {
@@ -111,6 +116,13 @@ void QThickSlabWidget::updateMaximumThickness()
 void QThickSlabWidget::updateThicknessLabel(int value)
 {
     m_slabThicknessLabel->setText( QString::number( value ) );
+}
+
+void QThickSlabWidget::reset()
+{
+    m_currentViewer->enableThickSlab(false);
+    m_currentViewer->setSlabThickness( 1 );
+    this->link( m_currentViewer );
 }
 
 }
