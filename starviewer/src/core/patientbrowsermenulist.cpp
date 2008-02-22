@@ -75,7 +75,12 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
     gridLayout->addLayout(gridLayoutWidgets);
 
     QList<Series*> seriesToAdd = study->getSeries();
+    
     int maxColumns = 2;
+    
+    if ( seriesToAdd.count() >= 20 )
+        maxColumns = 3;
+    
     int row = 0;
 
     while (!seriesToAdd.isEmpty())
