@@ -1269,6 +1269,7 @@ void Q2DViewer::resetCamera()
         emit cameraChanged();
         mapOrientationStringToAnnotation();
         updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
+        this->updateDisplayExtent();
         this->refresh();
     }
     else
