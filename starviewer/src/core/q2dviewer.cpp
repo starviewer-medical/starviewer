@@ -888,6 +888,11 @@ void Q2DViewer::setInput( Volume* volume )
     m_currentSlice = 0;
     m_currentPhase = 0;
 
+    // Inicialització del thickSlab
+    m_slabThickness = 1;
+    m_firstSlabSlice = 0;
+    m_lastSlabSlice = 0;
+    m_thickSlabActive = false;
     // obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador
     this->computeInputGrayscalePipeline();
