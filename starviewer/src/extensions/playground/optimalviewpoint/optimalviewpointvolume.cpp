@@ -306,6 +306,8 @@ void OptimalViewpointVolume::setTransferFunction( const TransferFunction & trans
 {
     m_volumeProperty->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_volumeProperty->SetColor( transferFunction.getColorTransferFunction() );
+
+    m_transferFunction = transferFunction;
 }
 
 
@@ -950,7 +952,7 @@ void OptimalViewpointVolume::computeObscurances()
 
     for ( unsigned char i = 0; i < numberOfThreads; ++i )
     {
-        ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, directions, this );
+        ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, directions, m_transferFunction, this );
         thread->setNormals( directionEncoder, encodedNormals );
         thread->setData( m_data, m_dataSize, dimensions, increments );
         thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction );
@@ -989,7 +991,7 @@ void OptimalViewpointVolume::computeObscurances()
             QDataStream out( &outFile );
             for ( int i = 0; i < m_dataSize; ++i )
             {
-                uchar value = m_data[i] > 0 ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
+                uchar value = m_data[i] > 0 && m_transferFunction.getOpacity( m_data[i] ) > 0 ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
                 out << value;
 //                 out << gradientMagnitudes[i];
 //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
@@ -1011,6 +1013,8 @@ void OptimalViewpointVolume::computeObscurances()
             outFileMhd.close();
         }
     }
+
+    for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
     m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
 }
