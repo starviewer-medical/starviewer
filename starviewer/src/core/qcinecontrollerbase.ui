@@ -13,19 +13,37 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
+   <property name="spacing" >
     <number>1</number>
    </property>
-   <property name="spacing" >
+   <property name="leftMargin" >
+    <number>1</number>
+   </property>
+   <property name="topMargin" >
+    <number>1</number>
+   </property>
+   <property name="rightMargin" >
+    <number>1</number>
+   </property>
+   <property name="bottomMargin" >
     <number>1</number>
    </property>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QToolButton" name="m_playToolButton" >
@@ -51,11 +69,20 @@
      </item>
      <item>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
        </property>
        <item>
         <widget class="QCheckBox" name="m_loopCheckBox" >
@@ -86,11 +113,20 @@
    </item>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QSlider" name="m_velocityControl" >
@@ -98,7 +134,7 @@
         <number>1</number>
        </property>
        <property name="maximum" >
-        <number>60</number>
+        <number>30</number>
        </property>
        <property name="pageStep" >
         <number>1</number>
