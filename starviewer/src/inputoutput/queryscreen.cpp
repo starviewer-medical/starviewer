@@ -1124,6 +1124,9 @@ void QueryScreen::deleteSelectedStudiesInCache()
                 )
         {
             case 0:
+                //Posem el cursor en espera
+                QApplication::setOverrideCursor(Qt::WaitCursor);
+
                 Status state;
                 CacheStudyDAL cacheStudyDAL;
                 foreach(QString studyUID, studiesList)
@@ -1149,6 +1152,8 @@ void QueryScreen::deleteSelectedStudiesInCache()
                         }
                     }
                 }
+
+                QApplication::restoreOverrideCursor();
         }
     }
 }
