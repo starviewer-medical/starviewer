@@ -15,6 +15,8 @@
 #include <QVector>
 #include <QList>
 
+#include "transferfunction.h"
+
 
 class vtkImageData;
 class vtkVolume;
@@ -28,7 +30,6 @@ class vtkVolumeRayCastMapper;
 namespace udg {
 
 
-class TransferFunction;
 class Vector3;
 
 
@@ -238,6 +239,8 @@ private:
     ObscuranceFunction m_obscuranceFunction;
 
     bool m_renderWithObscurances;
+
+    TransferFunction m_transferFunction;
 
 };
 

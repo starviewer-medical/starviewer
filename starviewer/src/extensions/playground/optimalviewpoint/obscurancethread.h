@@ -11,6 +11,7 @@
 
 #include <QVector>
 #include "optimalviewpointvolume.h"
+#include "transferfunction.h"
 
 
 class vtkDirectionEncoder;
@@ -30,7 +31,7 @@ class ObscuranceThread : public QThread
 
 public:
 
-    ObscuranceThread( unsigned char id, unsigned char numberOfThreads, const QVector<Vector3> & directions, QObject * parent = 0 );
+    ObscuranceThread( unsigned char id, unsigned char numberOfThreads, const QVector<Vector3> & directions, const TransferFunction & transferFunction, QObject * parent = 0 );
     virtual ~ObscuranceThread();
 
     void setNormals( vtkDirectionEncoder * directionEncoder, const unsigned short * encodedNormals );
@@ -47,11 +48,16 @@ private:
 
     struct Voxel { unsigned short x, y, z; };
 
+    void runDensity();
+    void runDensitySmooth();
+    void runOpacity();
+    void runOpacitySmooth();
     void getLineStarts( QVector<Vector3> & lineStarts, int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
     double obscurance( double distance ) const;
 
     unsigned char m_id, m_numberOfThreads;
     const QVector<Vector3> & m_directions;
+    const TransferFunction & m_transferFunction;
     vtkDirectionEncoder * m_directionEncoder;
     const unsigned short * m_encodedNormals;
     const unsigned char * m_data;
