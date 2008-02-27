@@ -2980,7 +2980,7 @@ double *Q2DViewer::pointInModel( int screen_x, int screen_y )
     double *bounds = m_viewer->GetImageActor()->GetBounds();
     double position[4];
     computeDisplayToWorld( getRenderer(), screen_x, screen_y, 0, position );
-    double lastPointInModel[3];
+    double *lastPointInModel = new double[3];
 
     lastPointInModel[0] = position[0];
     lastPointInModel[1] = position[1];

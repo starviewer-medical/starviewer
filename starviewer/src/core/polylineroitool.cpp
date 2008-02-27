@@ -35,9 +35,8 @@ PolylineROITool::PolylineROITool( QViewer *viewer, QObject *parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
-    m_latestTime = 0;
     m_closingPolyline = NULL;
-    m_mainPolyline=NULL;
+    m_mainPolyline = NULL;
 }
 
 PolylineROITool::~PolylineROITool()
@@ -78,14 +77,10 @@ void PolylineROITool::annotateNewPoint()
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 
-    double * lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
-    double point[3]; // TODO caldria fer aquesta conversio??
-    point[0] = lastPointInModel[0];
-    point[1] = lastPointInModel[1];
-    point[2] = lastPointInModel[2];
+    double *lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
     
     //afegim el punt
-    m_mainPolyline->addPoint( point );
+    m_mainPolyline->addPoint( lastPointInModel );
 
     //actualitzem els atributs de la polilinia
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
@@ -102,15 +97,11 @@ void PolylineROITool::simulateClosingPolyline( )
 
     m_closingPolyline->deleteAllPoints();
 
-    double * lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
-    double point[3]; // TODO caldria fer aquesta conversio??
-    point[0] = lastPointInModel[0];
-    point[1] = lastPointInModel[1];
-    point[2] = lastPointInModel[2];
+    double *lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
 
     //afegim els punts que simulen aquesta polilinia
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-    m_closingPolyline->addPoint( point );
+    m_closingPolyline->addPoint( lastPointInModel );
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
 
     //actualitzem els atributs de la polilinia
@@ -599,9 +590,10 @@ void PolylineROITool::closeForm()
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
     delete m_closingPolyline;
+    //\TODO cal aquesta assignació de NULLs??
     m_closingPolyline=NULL;
-    m_2DViewer->getDrawer()->refresh();
     m_mainPolyline=NULL;
+    m_2DViewer->getDrawer()->refresh();
 }
 
 }

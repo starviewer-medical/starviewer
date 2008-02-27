@@ -9,8 +9,6 @@
 
 #include "tool.h"
 
-#include <QTime>
-
 namespace udg {
 
 class PolylineROIToolData;
@@ -59,12 +57,6 @@ private:
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
-
-    /// Temps que ha passat des de que s'ha iniciat la tool
-    QTime m_time;
-
-    /// Temps en milisegons de l'ultim event tractat
-    int m_latestTime;
 
     ///polilinia principal: es la polilinia que ens marca la forma que hem anat editant.
     DrawerPolyline *m_mainPolyline;
