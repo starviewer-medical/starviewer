@@ -81,7 +81,7 @@ void QApplicationMainWindow::createActions()
     connect( m_newAction , SIGNAL( triggered() ), SLOT( openBlankWindow() ) );
 
     m_openAction = new QAction( this );
-    m_openAction->setText( tr("&Open...") );
+    m_openAction->setText( tr("&Open file...") );
     m_openAction->setShortcut( tr("Ctrl+O") );
     m_openAction->setStatusTip(tr("Open an existing volume file"));
     m_openAction->setIcon( QIcon(":/images/open.png") );
@@ -89,7 +89,7 @@ void QApplicationMainWindow::createActions()
     connect( m_openAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_openDirAction = new QAction( this );
-    m_openDirAction->setText( tr("Open Files from a Directory") );
+    m_openDirAction->setText( tr("Open files from a directory...") );
     m_openDirAction->setShortcut( tr("Ctrl+D") );
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
@@ -105,7 +105,7 @@ void QApplicationMainWindow::createActions()
     connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_openDICOMDIRAction = new QAction( this );
-    m_openDICOMDIRAction->setText(tr("Open DICOMDIR") );
+    m_openDICOMDIRAction->setText(tr("Open DICOMDIR...") );
 //     m_openDICOMDIRAction->setShortcut( tr("Ctrl+ ") );
     m_openDICOMDIRAction->setStatusTip( tr("Open DICOMDIR from CD,DVD,Pendrive or HardDisk") );
     m_openDICOMDIRAction->setIcon( QIcon(":/images/createDICOMDIR.png") );
