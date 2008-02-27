@@ -50,4 +50,7 @@
 /// Macro per a missatges d'error fatals/crítics
 #define FATAL_LOG( msg ){ LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release") , qPrintable( QString(msg) ) ) }
 
+/// Macro per a missatges d'estadístiques
+#define STAT_LOG( msg ){ LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release") , qPrintable( QString("STAT: ") + QString(msg) ) ) }
+
 #endif
