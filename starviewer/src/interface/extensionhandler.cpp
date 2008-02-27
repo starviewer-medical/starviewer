@@ -53,6 +53,7 @@ void ExtensionHandler::request( int who )
 {
     // \TODO: crear l'extensió amb el factory ::createExtension, no com està ara
     // \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
+    STAT_LOG("Activated open " + QString::number(who));
     switch( who )
     {
         case 1:
@@ -80,6 +81,7 @@ void ExtensionHandler::request( const QString &who )
 
     if (mediator && extension)
     {
+        STAT_LOG("Activated extension " + who);
         mediator->initializeExtension(extension, m_extensionContext );
         m_mainApp->getExtensionWorkspace()->addApplication(extension, mediator->getExtensionID().getLabel() );
     }
