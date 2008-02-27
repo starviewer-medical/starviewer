@@ -12,7 +12,6 @@
 #include "q3dviewer.h"
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
-#include "toolsactionfactory.h"
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
 // qt
@@ -147,8 +146,7 @@ void QMPRExtension::init()
 
     m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
 
-    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool";
-
+    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
 }
 
 void QMPRExtension::createActions()
@@ -166,21 +164,6 @@ void QMPRExtension::createActions()
     m_mipAction->setIcon( QIcon(":/images/mip.png") );
     m_mipAction->setCheckable( true );
     m_mipToolButton->setDefaultAction( m_mipAction );
-
-    // Tools
-    m_actionFactory = new ToolsActionFactory( 0 );
-
-    m_distanceAction= m_actionFactory->getActionFrom( "DistanceTool" );
-    m_distanceToolButton->setDefaultAction( m_distanceAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_axial2DView , SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_sagital2DView , SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_coronal2DView , SLOT( setTool(QString) ) );
-
-    // posem a punt els botons per accedir a les tools
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( false );
-    m_toolsActionGroup->addAction( m_distanceAction );
 }
 
 void QMPRExtension::initializeTools()
@@ -194,15 +177,26 @@ void QMPRExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+    m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction("DistanceTool") );
+    m_polylineROIToolButton->setDefaultAction( m_toolManager->getToolAction("PolylineROITool") );
+    m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction("EraserTool") );
 
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
     windowLevelPresetsTool->trigger();
 
     // definim els grups exclusius
-    QStringList exclusiveTools;
-    exclusiveTools << "ZoomTool" << "SlicingTool";
-    m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
+
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
+
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RighttButtonGroup", rightButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     m_slicingToolButton->defaultAction()->trigger();
@@ -216,8 +210,8 @@ void QMPRExtension::initializeTools()
 void QMPRExtension::initializeDefaultTools()
 {
     QStringList toolsList1, toolsList2;
-    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
-    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
+    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
+    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
     m_toolManager->setViewerTools( m_axial2DView, toolsList1 );
     m_toolManager->setViewerTools( m_sagital2DView, toolsList2 );
     m_toolManager->setViewerTools( m_coronal2DView, toolsList2 );
@@ -292,7 +286,6 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
             else if( m_screenShotAction->isChecked() )
                 m_mipViewer->setTool("ScreenShotTool");
             // fi parxe
-            connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_mipViewer , SLOT( setTool(QString) ) );
             m_mipViewer->setRenderFunctionToMIP3D();
         }
         Volume *mipInput = new Volume;

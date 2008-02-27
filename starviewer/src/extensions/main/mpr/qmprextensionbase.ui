@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>874</width>
+    <width>1463</width>
     <height>506</height>
    </rect>
   </property>
@@ -48,6 +48,9 @@
            <property name="text" >
             <string>Slicing</string>
            </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/slicing.png</iconset>
+           </property>
            <property name="iconSize" >
             <size>
              <width>32</width>
@@ -66,6 +69,9 @@
           <widget class="QToolButton" name="m_windowLevelToolButton" >
            <property name="text" >
             <string>Window Level</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/windowLevel.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -86,6 +92,9 @@
            <property name="text" >
             <string>Zoom</string>
            </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/zoom.png</iconset>
+           </property>
            <property name="iconSize" >
             <size>
              <width>32</width>
@@ -104,6 +113,9 @@
           <widget class="QToolButton" name="m_moveToolButton" >
            <property name="text" >
             <string>Move</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/move.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -125,7 +137,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset/>
+            <iconset resource="../../../main/main.qrc" >:/images/rotate3d.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -142,12 +154,31 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="m_distanceToolButton" >
+          <widget class="QToolButton" name="m_polylineROIToolButton" >
            <property name="text" >
-            <string>zoom</string>
+            <string>ROI</string>
            </property>
            <property name="icon" >
-            <iconset/>
+            <iconset resource="../../../main/main.qrc" >:/images/polyline.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_distanceToolButton" >
+           <property name="text" >
+            <string>Distance</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/distance.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -157,6 +188,25 @@
            </property>
            <property name="checkable" >
             <bool>true</bool>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_eraserToolButton" >
+           <property name="text" >
+            <string>Rubber</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/eraser2.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
            </property>
            <property name="autoRaise" >
             <bool>true</bool>
@@ -169,7 +219,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset/>
+            <iconset resource="../../../main/main.qrc" >:/images/photo.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -191,7 +241,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset/>
+            <iconset resource="../../../main/main.qrc" >:/images/voxelInformation.png</iconset>
            </property>
            <property name="iconSize" >
             <size>
@@ -440,6 +490,7 @@ p, li { white-space: pre-wrap; }
  </customwidgets>
  <resources>
   <include location="../main/main.qrc" />
+  <include location="../../../main/main.qrc" />
  </resources>
  <connections/>
 </ui>
