@@ -5,7 +5,6 @@
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui  \
-         qcustomwindowleveldialogbase.ui  \
  	 qdicomdumpbase.ui \
 	 qdicomdumpcthelixwidgetbase.ui \
 	 qdicomdumpctlocalizerwidgetbase.ui \
