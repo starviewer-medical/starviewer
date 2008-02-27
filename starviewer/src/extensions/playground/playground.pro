@@ -9,10 +9,7 @@ SUBDIRS = diffusionperfusionsegmentation \
           rectumsegmentation \
           volume3dviewtesting \
           mprcardiac3d \
-          cardiac2dviewer \
-          multiq2dviewer \
-          segmentationframework \
-          registrationframework 
+          cardiac2dviewer
 
 include(../../extensions.inc)
 
