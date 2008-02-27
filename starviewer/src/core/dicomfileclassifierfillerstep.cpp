@@ -13,6 +13,8 @@
 #include "series.h"
 #include "image.h"
 
+#include <QApplication> //Per el process events, TODO Treure i fer amb threads.
+
 namespace udg {
 
 DICOMFileClassifierFillerStep::DICOMFileClassifierFillerStep()
@@ -39,6 +41,7 @@ bool DICOMFileClassifierFillerStep::fill()
             {
                 m_input->addLabel("DICOMFileClassifierFillerStep");
             }
+            qApp->processEvents();
         }
     }
     else

@@ -138,16 +138,17 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
     QProgressDialog progressDialog( m_mainApp );
     progressDialog.setModal( true );
-    progressDialog.setRange( 0 , 100 );
+    progressDialog.setRange(0, 0);
     progressDialog.setMinimumDuration( 0 );
     progressDialog.setWindowTitle( tr("Patient loading") );
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
-    progressDialog.setValue(0);
-    qApp->processEvents();
 
     PatientFiller patientFiller;
     connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
+
+    qApp->processEvents();
+
     patientFiller.fill( fillerInput );
 
     unsigned int numberOfPatients = fillerInput->getNumberOfPatients();

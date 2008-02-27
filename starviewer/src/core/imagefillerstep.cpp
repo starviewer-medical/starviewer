@@ -14,6 +14,7 @@
 #include "image.h"
 
 #include <cmath> // pel fabs
+#include <QApplication> //Per el process events, TODO Treure i fer amb threads.
 
 namespace udg {
 
@@ -73,8 +74,9 @@ void ImageFillerStep::processSeries( Series *series )
             image->setPath( file );
 
             processImage( image );
-
             series->addImage( image );
+
+            qApp->processEvents();
         }
         m_input->addLabelToSeries("ImageFillerStep", series );
     }
