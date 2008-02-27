@@ -630,7 +630,6 @@ void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
     QStringList toolsList;
     toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool";
     m_toolManager->setViewerTools( viewer, toolsList );
-    m_toolManager->refreshConnections();
 }
 
 void Q2DViewerExtension::showRows( int rows )

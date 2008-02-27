@@ -157,7 +157,6 @@ void QCardiac2DViewerExtension::initializeTools()
     QStringList toolsList;
     toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_2DView, toolsList );
-    m_toolManager->refreshConnections();
 }
 
 void QCardiac2DViewerExtension::setInput( Volume *input )

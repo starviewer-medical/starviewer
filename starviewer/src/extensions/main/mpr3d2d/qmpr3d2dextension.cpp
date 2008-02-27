@@ -163,8 +163,6 @@ void QMPR3D2DExtension::initializeTools()
     QStringList toolsMPRList;
     toolsMPRList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_mpr3DView, toolsMPRList );
-
-    m_toolManager->refreshConnections();
 }
 
 void QMPR3D2DExtension::switchBigView()

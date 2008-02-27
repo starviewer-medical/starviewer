@@ -43,6 +43,7 @@ void ToolManager::setViewerTools( QViewer *viewer, const QStringList &toolsList 
     {
         m_toolViewerMap.insert( toolName, pair );
     }
+    refreshConnections(); //TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
 }
 
 void ToolManager::setViewerTool( QViewer *viewer, const QString &toolName, ToolConfiguration *configuration )
@@ -51,6 +52,7 @@ void ToolManager::setViewerTool( QViewer *viewer, const QString &toolName, ToolC
     pair.first = viewer;
     pair.second = configuration;
     m_toolViewerMap.insert( toolName, pair );
+    refreshConnections(); //TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
 }
 
 void ToolManager::removeViewerTool( QViewer *viewer, const QString &toolName )
@@ -110,6 +112,20 @@ void ToolManager::addExclusiveToolsGroup( const QString &groupName, const QStrin
     connect( actionGroup, SIGNAL(triggered(QAction *)), SLOT(refreshConnections()) );
 }
 
+void ToolManager::disableAllToolsTemporarily()
+{
+    QStringList toolsList = m_toolViewerMap.uniqueKeys();
+    foreach(QString toolName, toolsList)
+    {
+        deactivateTool(toolName);
+    }
+}
+
+void ToolManager::undoDisableAllToolsTemporarily()
+{
+    refreshConnections();
+}
+
 void ToolManager::activateTool( const QString &toolName )
 {
     // TODO caldria comprovar si la tool es troba en un grup exclusiu per "fer fora" les altres tools? o es farà automàticament?
@@ -138,6 +154,7 @@ void ToolManager::activateTool( const QString &toolName )
         {
             tool = viewer->getToolProxy()->getTool( toolName );
         }
+
         // comprovem les dades per si cal donar-n'hi
         if( tool->hasSharedData() )
         {
@@ -164,6 +181,7 @@ void ToolManager::deactivateTool( const QString &toolName )
 
 void ToolManager::triggeredToolAction( const QString &toolName )
 {
+    // TODO: Cal repassar tot això. Hauria d'anar amb llistes internes de tools activades/desactivades
     // obtenim l'acció que l'ha provocat
     QAction *toolAction = qobject_cast<QAction *>( m_toolsActionSignalMapper->mapping(toolName) );
     if( toolAction )
@@ -175,7 +193,9 @@ void ToolManager::triggeredToolAction( const QString &toolName )
             deactivateTool(toolName);
     }
     else
+    {
         DEBUG_LOG( QString("No hi ha cap tool Action per la tool anomenada: ") + toolName );
+    }
 }
 
 QAction *ToolManager::getToolAction( const QString &toolName )
