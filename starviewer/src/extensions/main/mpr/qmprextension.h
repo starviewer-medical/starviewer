@@ -24,7 +24,6 @@ namespace udg {
 // FWD declarations
 class Volume;
 class Q3DViewer;
-class ToolsActionFactory;
 class ToolManager;
 /**
 Extensió encarregada de fer l'MPR 2D
@@ -227,8 +226,6 @@ private:
     QAction *m_screenShotAction;
     QAction *m_voxelInformationAction;
     QAction *m_rotate3DAction;
-    QAction *m_distanceAction;
-    ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
