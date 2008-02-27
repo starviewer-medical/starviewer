@@ -215,20 +215,6 @@ void QMPRExtension::initializeDefaultTools()
     m_toolManager->setViewerTools( m_axial2DView, toolsList1 );
     m_toolManager->setViewerTools( m_sagital2DView, toolsList2 );
     m_toolManager->setViewerTools( m_coronal2DView, toolsList2 );
-    m_toolManager->refreshConnections();
-}
-
-void QMPRExtension::enableAllTools()
-{
-    m_toolManager->refreshConnections();
-}
-
-void QMPRExtension::disableAllTools()
-{
-    foreach ( QString toolName, m_extensionToolsList )
-    {
-        m_toolManager->deactivateTool( toolName );
-    }
 }
 
 void QMPRExtension::createConnections()
@@ -415,7 +401,7 @@ void QMPRExtension::detectAxialViewAxisActor()
         }
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
         // desactivem les tools que puguin estar actives
-        disableAllTools();
+        m_toolManager->disableAllToolsTemporarily();
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
         m_state = ROTATING;
@@ -476,7 +462,7 @@ void QMPRExtension::releaseAxialViewAxisActor()
             m_coronal2DView->refresh();
         }
         // reactivem les tools
-        enableAllTools();
+        m_toolManager->undoDisableAllToolsTemporarily();
         m_state = NONE;
         m_pickedActorReslice = 0;
         m_pickedActorPlaneSource = 0;
@@ -509,7 +495,7 @@ void QMPRExtension::detectSagitalViewAxisActor()
         m_pickedActorPlaneSource = m_coronalPlaneSource;
         // desactivem les tools que puguin estar actives
 
-       disableAllTools();
+       m_toolManager->disableAllToolsTemporarily();
 
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
@@ -571,7 +557,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
         m_pickedActorReslice = 0;
         m_pickedActorPlaneSource = 0;
         // reactivem les tools
-        enableAllTools();
+        m_toolManager->undoDisableAllToolsTemporarily();
     }
 }
 
@@ -612,7 +598,7 @@ void QMPRExtension::detectPushAxialViewAxisActor()
     {
         this->setCursor( QCursor( Qt::OpenHandCursor ) );
         //desactivem les tools perquè no facin interferència
-        disableAllTools();
+        m_toolManager->disableAllToolsTemporarily();
         if( distanceToCoronal < distanceToSagital )
         {
             m_pickedActorPlaneSource = m_coronalPlaneSource;
@@ -671,7 +657,7 @@ void QMPRExtension::releasePushAxialViewAxisActor()
         m_pickedActorPlaneSource = 0;
         m_pickedActorReslice = 0;
         //activem les tools
-        enableAllTools();
+        m_toolManager->undoDisableAllToolsTemporarily();
     }
 }
 

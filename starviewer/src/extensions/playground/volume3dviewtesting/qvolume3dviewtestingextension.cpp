@@ -53,7 +53,6 @@ void QVolume3DViewTestingExtension::initializeTools()
     QStringList toolsList;
     toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool";
     m_toolManager->setViewerTools( m_3DView, toolsList );
-    m_toolManager->refreshConnections();
 }
 
 void QVolume3DViewTestingExtension::loadClutPresets()

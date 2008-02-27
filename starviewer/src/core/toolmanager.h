@@ -76,6 +76,21 @@ public:
      */
     void addExclusiveToolsGroup( const QString &groupName, const QStringList &tools );
 
+    /**
+     * Desactiva totes les tools temporalment.
+     * Útil per si volem interactuar amb els events de teclat i mouse i no volem que les tools
+     * interfereixin.
+     * @see undoDisableAllToolsTemporarily()
+     */
+    void disableAllToolsTemporarily();
+
+    /**
+      * Desfà la desactivació temporal de les tools.
+      * Per tal de que les tools tornin a funcionar normalment un cop cridat disableAllToolsTemporarily(), cal cridar aquest
+      * mètode.
+      */
+    void undoDisableAllToolsTemporarily();
+
 public slots:
     /**
      * Activa/Desactiva la tool especificada en tots els viewers registrats
@@ -84,14 +99,8 @@ public slots:
     void activateTool( const QString &toolName );
     void deactivateTool( const QString &toolName );
 
-    /**
-     * Comprova per cada tool registrada, si l'acció associada està checked o no per activar/desactivar
-     * la tool en els viewers indicats. Es pot fer servir per quan per exemple afegim nous viewers en un mateix contexte
-     * i volem que s'activin les mateixes tools que estan actives en els altres viewers.
-     */
-    void refreshConnections();
-
 private slots:
+
     /**
      * Quan es dispara l'acció d'una tool, aquest slot la rep i a partir del seu nom
      * esbrina si l'acció ha estat d'activar o desactivar la tool (isChecked())
@@ -99,6 +108,13 @@ private slots:
      * @param toolName Nom de la tool disparada
      */
     void triggeredToolAction( const QString &toolName );
+
+    /**
+     * Comprova per cada tool registrada, si l'acció associada està checked o no per activar/desactivar
+     * la tool en els viewers indicats. Es pot fer servir per quan per exemple afegim nous viewers en un mateix contexte
+     * i volem que s'activin les mateixes tools que estan actives en els altres viewers.
+     */
+    void refreshConnections();
 
 private:
     /// Registre que ens proporcionarà tools i accions associades

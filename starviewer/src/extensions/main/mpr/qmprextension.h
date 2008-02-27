@@ -131,12 +131,6 @@ private:
     /// Inicialitzador d'objectes pel constructor
     void init();
 
-    ///activa totes les tools de tots els visors
-    void enableAllTools();
-
-    ///desactiva totes les tools de tots els visors
-    void disableAllTools();
-
 private slots:
     /// gestiona els events de cada finestra per controlar els eixos de manipulació
     void handleAxialViewEvents( unsigned long eventID );

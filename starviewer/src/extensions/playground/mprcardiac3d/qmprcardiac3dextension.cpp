@@ -84,8 +84,6 @@ void QMPRCardiac3DExtension::initializeTools()
     QStringList toolsList;
     toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
     m_toolManager->setViewerTools( m_mpr3DView, toolsList );
-
-    m_toolManager->refreshConnections();
 }
 
 void QMPRCardiac3DExtension::createActions()
