@@ -63,7 +63,7 @@ void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
 
     int totalFillerSteps = m_registeredSteps.size();
 
-    emit progress(0);
+    emit progress(1);
     qApp->processEvents();
 
     while (!input->getLabels().contains(stopLabel) && !candidatesFillerSteps.isEmpty() && continueIterating)
