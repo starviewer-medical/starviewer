@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>164</width>
+    <width>338</width>
     <height>110</height>
    </rect>
   </property>
@@ -13,19 +13,19 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="spacing" >
+   <property name="margin" >
     <number>1</number>
    </property>
-   <property name="margin" >
+   <property name="spacing" >
     <number>1</number>
    </property>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
      <property name="margin" >
       <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
      </property>
      <item>
       <widget class="QToolButton" name="m_playToolButton" >
@@ -51,11 +51,11 @@
      </item>
      <item>
       <layout class="QVBoxLayout" >
-       <property name="spacing" >
-        <number>6</number>
-       </property>
        <property name="margin" >
         <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
        </property>
        <item>
         <widget class="QCheckBox" name="m_loopCheckBox" >
@@ -86,14 +86,22 @@
    </item>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
      <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
       <number>0</number>
      </property>
      <item>
       <widget class="QSlider" name="m_velocityControl" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum" >
         <number>1</number>
        </property>
@@ -116,6 +124,14 @@
      </item>
      <item>
       <widget class="QLabel" name="m_velocityLabel" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text" >
         <string>10 img/sec</string>
        </property>

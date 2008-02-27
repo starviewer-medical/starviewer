@@ -10,7 +10,6 @@
 #include "image.h"
 #include "logging.h"
 #include "qwindowlevelcombobox.h"
-#include "toolsactionfactory.h"
 #include "q2dviewerwidget.h"
 #include "menugridwidget.h"
 #include "tablemenu.h"
@@ -39,13 +38,10 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 {
     setupUi( this );
 
-    //per a la release 0.4 les ROI no es podran utilitzar TODO ocultem fins que funcionin correctament com volem
-    m_roiToolButton->setVisible( false );
-    m_oldDistanceToolButton->setVisible( false );
+    //TODO ocultem botons que no son del tot necessaris o que no es faran servir
     m_rotateCounterClockWiseToolButton->setVisible( false );
     m_flipVerticalToolButton->setVisible( false );
     m_flipHorizontalToolButton->setVisible( false );
-    m_voxelInformationToolButton->setVisible( false );
     // TODO deshabilitem els presentation states fins la release en què es tornin a habilitar
     m_presentationStateSwitchToolButton->setVisible(false);
 
@@ -147,21 +143,6 @@ void Q2DViewerExtension::createActions()
     m_flipVerticalToolButton->setDefaultAction( m_flipVerticalAction );
 
     connect( m_flipVerticalAction , SIGNAL( triggered() ), SLOT( verticalFlip() ) );
-
-    // Tools
-    m_actionFactory = new ToolsActionFactory( 0 );
-    m_distanceAction = m_actionFactory->getActionFrom( "DistanceTool" );
-    m_oldDistanceToolButton->setDefaultAction( m_distanceAction );
-
-    m_roiAction = m_actionFactory->getActionFrom( "ROITool" );
-    m_roiToolButton->setDefaultAction( m_roiAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool( QString ) ) , m_selectedViewer->getViewer() , SLOT( setTool( QString ) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_distanceAction );
-    m_toolsActionGroup->addAction( m_roiAction );
 }
 
 void Q2DViewerExtension::enablePresentationState(bool enable)
@@ -398,7 +379,6 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
     (newViewer->getViewer() )->setTool( (m_vectorViewers.value( 0 )->getViewer() )->getCurrentToolName() );
-    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ) , newViewer->getViewer(), SLOT( setTool(QString) ) );
     connect( newViewer, SIGNAL( selected( Q2DViewerWidget *) ), SLOT( setViewerSelected( Q2DViewerWidget *) ) );
 
     if( m_viewerInformationToolButton->isChecked() )
@@ -605,7 +585,6 @@ void Q2DViewerExtension::initializeTools()
     m_translateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
     m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
     m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction( "DistanceTool" ) );
@@ -620,9 +599,17 @@ void Q2DViewerExtension::initializeTools()
     slicingKeyboardTool->trigger();
 
     // definim els grups exclusius
-    QStringList exclusiveTools;
-    exclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool";
-    m_toolManager->addExclusiveToolsGroup("Group1", exclusiveTools);
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
+
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
+
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     m_slicingToolButton->defaultAction()->trigger();
@@ -641,7 +628,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool";
     m_toolManager->setViewerTools( viewer, toolsList );
     m_toolManager->refreshConnections();
 }

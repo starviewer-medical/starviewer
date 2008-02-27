@@ -5,22 +5,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>298</width>
+    <width>197</width>
     <height>65</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QHBoxLayout" >
    <property name="margin" >
     <number>0</number>
    </property>
    <property name="spacing" >
-    <number>3</number>
+    <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QVBoxLayout" >
      <property name="margin" >
       <number>0</number>
      </property>
@@ -29,18 +29,38 @@
      </property>
      <item>
       <widget class="QLabel" name="label" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text" >
         <string>Mode: </string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="m_projectionModeComboBox" />
+      <widget class="QLabel" name="m_slabThicknessLabel" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>5</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>2</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QVBoxLayout" >
      <property name="margin" >
       <number>0</number>
      </property>
@@ -48,14 +68,27 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="QLabel" name="m_slabThicknessLabel" >
-       <property name="text" >
-        <string>2</string>
+      <widget class="QComboBox" name="m_projectionModeComboBox" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QSlider" name="m_slabThicknessSlider" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>1</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum" >
         <number>2</number>
        </property>

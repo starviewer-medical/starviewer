@@ -114,13 +114,13 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     toolAction->setCheckable( true );
     if( toolName == "SlicingTool" )
     {
-        toolAction->setText( tr("Slicer") );
-        toolAction->setStatusTip( tr("Enable/Disable slicing tool") );
+        toolAction->setText( tr("Scroll") );
+        toolAction->setStatusTip( tr("Enable/Disable scroll tool") );
         toolAction->setIcon( QIcon(":/images/slicing.png") );
     }
     else if( toolName == "WindowLevelTool" )
     {
-        toolAction->setText( tr("Window Level") );
+        toolAction->setText( tr("WW/WL") );
         toolAction->setStatusTip( tr("Enable/Disable Window Level tool") );
         toolAction->setIcon( QIcon(":/images/windowLevel.png") );
     }
@@ -132,7 +132,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "TranslateTool" )
     {
-        toolAction->setText( tr("Move") );
+        toolAction->setText( tr("Pan") );
         toolAction->setStatusTip( tr("Enable/Disable Move tool") );
         toolAction->setIcon( QIcon(":/images/move.png") );
     }
@@ -156,7 +156,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "DistanceTool" )
     {
-        toolAction->setText( tr("Distances") );
+        toolAction->setText( tr("Distance") );
         toolAction->setStatusTip( tr("Enable/Disable Distances tool") );
         toolAction->setIcon( QIcon(":/images/distance.png") );
     }
@@ -191,7 +191,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "PolylineROITool" )
     {
-        toolAction->setText( tr("Polyline ROI tool") );
+        toolAction->setText( tr("ROI") );
         toolAction->setStatusTip( tr("Enable/Disable Polyline ROI tool") );
         toolAction->setIcon( QIcon(":/images/polyline.png") );
     }
@@ -202,7 +202,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "EraserTool" )
     {
-        toolAction->setText( tr("Eraser tool") );
+        toolAction->setText( tr("Rubber") );
         toolAction->setStatusTip( tr("Enable/Disable eraser tool") );
         toolAction->setIcon( QIcon(":/images/eraser2.png") );
     }
