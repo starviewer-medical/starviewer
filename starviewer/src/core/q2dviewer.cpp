@@ -1226,6 +1226,12 @@ void Q2DViewer::resetCamera()
                     camera->SetRoll( -m_rotateFactor*90. -90. );
                     renderer->ResetCamera();
                     scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4], 0.1 );
+
+                    // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+                    QString position = m_mainVolume->getSeries()->getPatientPosition();
+                    if( position == "FFP" || position == "HFP" )
+                        m_rotateFactor = (m_rotateFactor+2) % 4 ;
+
                     updateCamera();
                 }
                 emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
@@ -1250,6 +1256,12 @@ void Q2DViewer::resetCamera()
                     camera->SetRoll( -m_rotateFactor*90. );
                     renderer->ResetCamera();
                     scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5], 0.1 );
+
+                    // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+                    QString position = m_mainVolume->getSeries()->getPatientPosition();
+                    if( position == "FFP" || position == "HFP" )
+                        m_rotateFactor = (m_rotateFactor+2) % 4 ;
+
                     updateCamera();
                 }
                 emit rotationDegreesChanged( -m_rotateFactor*90. );
