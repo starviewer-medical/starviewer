@@ -75,20 +75,33 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
     gridLayout->addLayout(gridLayoutWidgets);
 
     QList<Series*> seriesToAdd = study->getSeries();
-    
-    int maxColumns = 2;
-    
-    if ( seriesToAdd.count() >= 20 )
-        maxColumns = 3;
-    
-    int row = 0;
 
+    //comptem el nombre de series que seran visibles
+    int numberOfViewableSeries = 0;
+    QString modality;
+    foreach(Series *series,seriesToAdd)
+    {
+        modality = series->getModality();
+        if( !(modality == "PR" || modality == "KO" || modality == "SR") )
+            numberOfViewableSeries++;
+    }
+
+    int maxColumns = 2;
+    if ( numberOfViewableSeries >= 20 )
+        maxColumns = 3;
+
+    int row = 0;
     while (!seriesToAdd.isEmpty())
     {
         int column = 0;
         while ( column < maxColumns && !seriesToAdd.isEmpty())
         {
-            gridLayoutWidgets->addWidget( createSerieWidget(seriesToAdd.takeFirst(), studyWidget), row, column );
+            modality = seriesToAdd.first()->getModality(); // si no es una modalitat no suportada no la mostrem
+            if( modality == "PR" || modality == "KO" || modality == "SR" )
+                seriesToAdd.removeFirst();
+            else
+                gridLayoutWidgets->addWidget( createSerieWidget(seriesToAdd.takeFirst(), studyWidget), row, column );
+
             ++column;
         }
         ++row;
