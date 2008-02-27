@@ -11,8 +11,8 @@ FORMS += qlogviewerbase.ui \
 	 qdicomdumpctlocalizerwidgetbase.ui \
 	 qdicomdumpmrwidgetbase.ui \
 	 qdicomdumpctwidgetbase.ui \
-     qtransferfunctioneditorbyvaluesbase.ui \
-     qtransferfunctionintervaleditorbase.ui \
+         qtransferfunctioneditorbyvaluesbase.ui \
+         qtransferfunctionintervaleditorbase.ui \
 	 qcinecontrollerbase.ui  \
          qthickslabwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
@@ -157,7 +157,7 @@ HEADERS += extensionfactory.h \
            qdicomdumpmrwidget.h \
            qdicomdumpctwidget.h \
            philipstagsfillerstep.h \
-	       qcinecontroller.h \
+	   qcinecontroller.h \
            hoverpoints.h \
            qcolorspinbox.h \
            qtransferfunctioneditorbyvalues.h \
@@ -174,6 +174,8 @@ HEADERS += extensionfactory.h \
            vtkProjectionImageFilter.h \
            slicingkeyboardtool.h \
            qthickslabwidget.h \
+           patientitem.h \
+           patientitemmodel.h \
            erasertool.h
 
 SOURCES += extensionmediator.cpp \
@@ -303,7 +305,7 @@ SOURCES += extensionmediator.cpp \
            qdicomdumpmrwidget.cpp \
            qdicomdumpctwidget.cpp \
            philipstagsfillerstep.cpp \
-	       qcinecontroller.cpp \
+	   qcinecontroller.cpp \
            hoverpoints.cpp \
            qcolorspinbox.cpp \
            qtransferfunctioneditorbyvalues.cpp \
@@ -317,6 +319,8 @@ SOURCES += extensionmediator.cpp \
            vtkProjectionImageFilter.cxx \
            slicingkeyboardtool.cpp \
            qthickslabwidget.cpp \
+           patientitem.cpp \
+           patientitemmodel.cpp \
            erasertool.cpp
 
 TEMPLATE = lib
