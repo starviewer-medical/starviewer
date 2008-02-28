@@ -67,18 +67,16 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
     connect( m_currentViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( reset() ) );
     connect( m_currentViewer, SIGNAL( viewChanged(int) ), SLOT( updateMaximumThickness() ) );
     connect( m_currentViewer, SIGNAL( slabThicknessChanged(int) ), m_slabThicknessSlider, SLOT( setValue(int) ) );
-    // TODO es podria fer l'actualització de l'slab quan es deixa d'interactuar ( sliderReleased() )si és que fer-ho
-    // "en viu" afecta molt al temps de resposta amb l'interacció. De moment ens atrevim a fer-ho "en viu"
-    connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
 }
 
 void QThickSlabWidget::applyProjectionMode( int comboItem )
 {
+    emit projectionModeChanged( comboItem );
     QString projectionType = m_projectionModeComboBox->itemText( comboItem );
     if( projectionType == tr("Inactive") )
     {
+        disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
         m_currentViewer->enableThickSlab(false);
-        m_currentViewer->setSlabThickness( 1 );
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
         // TODO això s'hauria de fer automàticament quan tenim slab thickness d'1. Cal repassar bé tot el pipeline del Q2DViewer
@@ -89,6 +87,10 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         m_currentViewer->enableThickSlab(true);
         m_slabThicknessSlider->setEnabled(true);
         m_slabThicknessLabel->setEnabled(true);
+        // TODO es podria fer l'actualització de l'slab quan es deixa d'interactuar ( sliderReleased() )si és que fer-ho
+        // "en viu" afecta molt al temps de resposta amb l'interacció. De moment ens atrevim a fer-ho "en viu"
+        connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
+
         // TODO ara fem la conversió a id d'enter, però en un futur anirà tot amb Strings
         int projectionModeID = -1;
         if( projectionType == tr("Maximum Intensity Projection (MIP)") )

@@ -2775,13 +2775,13 @@ void Q2DViewer::setSlabThickness( int thickness )
 {
     computeRangeAndSlice( thickness );
     // TODO comprovar aquest pipeline si és millor calcular ara o més tard
-    if ( m_slabThickness == 1 && isThickSlabActive() )
+    if( m_slabThickness == 1 )
     {
         DEBUG_LOG( "desconnectar" );
         setupDefaultPipeline();
         m_thickSlabActive = false;
     }
-    if ( m_slabThickness > 1 && !m_thickSlabActive )
+    if ( m_slabThickness > 1 && !isThickSlabActive() ) // la comprovacio es per constuir el pipeline nomes el primer cop
     {
         DEBUG_LOG( "connectar" );
         setupThickSlabPipeline();
@@ -2808,8 +2808,7 @@ int Q2DViewer::getSlabThickness() const
 
 void Q2DViewer::enableThickSlab( bool enable )
 {
-    m_thickSlabActive = enable;
-    if( !m_thickSlabActive )
+    if(!enable)
         setSlabThickness(1);
     else
         setSlabThickness( m_slabThickness );
