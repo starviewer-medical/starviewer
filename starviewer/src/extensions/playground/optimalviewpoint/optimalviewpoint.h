@@ -153,7 +153,7 @@ public:
 public slots:
 
     void newMethod2( int step, bool normalized );
-    void computeObscurances( int directions, double maximumDistance, int obscuranceFunction );
+    void computeObscurances( int directions, double maximumDistance, int obscuranceFunction, int obscuranceVariant );
     void computeSaliency();
     void computeViewpointEntropies();
 

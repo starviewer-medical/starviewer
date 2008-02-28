@@ -36,7 +36,7 @@ public:
 
     void setNormals( vtkDirectionEncoder * directionEncoder, const unsigned short * encodedNormals );
     void setData( const unsigned char * data, int dataSize, const int dimensions[3], const int increments[3] );
-    void setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction );
+    void setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant );
 
     double * getObscurance() const;
 
@@ -66,6 +66,7 @@ private:
     const int * m_increments;
     double m_obscuranceMaximumDistance;
     OptimalViewpointVolume::ObscuranceFunction m_obscuranceFunction;
+    OptimalViewpointVolume::ObscuranceVariant m_obscuranceVariant;
     double * m_obscurance;
 
 };
