@@ -1061,6 +1061,30 @@
            </item>
           </widget>
          </item>
+         <item>
+          <widget class="QComboBox" name="m_obscuranceVariantComboBox" >
+           <item>
+            <property name="text" >
+             <string>Density</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Density smooth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Opacity</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Opacity smooth</string>
+            </property>
+           </item>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

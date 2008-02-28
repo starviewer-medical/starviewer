@@ -367,7 +367,8 @@ void QOptimalViewpointExtension::computeObscurances()
 {
     m_method->computeObscurances( m_obscuranceDirectionsSpinBox->value(),
                                   m_obscuranceMaximumDistanceDoubleSpinBox->value(),
-                                  m_obscuranceFunctionComboBox->currentIndex() );
+                                  m_obscuranceFunctionComboBox->currentIndex(),
+                                  m_obscuranceVariantComboBox->currentIndex() );
 }
 
 

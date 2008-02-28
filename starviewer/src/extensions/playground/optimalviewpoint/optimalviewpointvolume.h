@@ -54,6 +54,7 @@ class OptimalViewpointVolume : public QObject {
 public:
 
     enum ObscuranceFunction { Constant0, SquareRoot, Exponential };
+    enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth };
 
     /// Construeix el volum a partir de la imatge \a image.
     OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
@@ -144,6 +145,7 @@ public:
     void setObscuranceDirections( int obscuranceDirections );
     void setObscuranceMaximumDistance( double obscuranceMaximumDistance );
     void setObscuranceFunction( ObscuranceFunction obscuranceFunction );
+    void setObscuranceVariant( ObscuranceVariant obscuranceVariant );
 
     void setRenderWithObscurances( bool renderWithObscurances );
 
@@ -177,6 +179,10 @@ private:
     void labelize( const QVector< unsigned char > & limits );
     /// Genera una funció de transferència ajustada a la segmentació a partir dels límits donats.
     void generateAdjustedTransferFunction( const QVector< unsigned char > & limits );
+
+
+    void reduceToHalf();
+
 
     /// Model de vòxels original.
     vtkImageData * m_image;
@@ -237,6 +243,7 @@ private:
     int m_obscuranceDirections;
     double m_obscuranceMaximumDistance;
     ObscuranceFunction m_obscuranceFunction;
+    ObscuranceVariant m_obscuranceVariant;
 
     bool m_renderWithObscurances;
 

@@ -868,11 +868,12 @@ void OptimalViewpoint::doRegularSegmentation( unsigned char numberOfBins )
 }
 
 
-void OptimalViewpoint::computeObscurances( int directions, double maximumDistance, int obscuranceFunction )
+void OptimalViewpoint::computeObscurances( int directions, double maximumDistance, int obscuranceFunction, int obscuranceVariant )
 {
     m_volume->setObscuranceDirections( directions );
     m_volume->setObscuranceMaximumDistance( maximumDistance );
     m_volume->setObscuranceFunction( static_cast<OptimalViewpointVolume::ObscuranceFunction>( obscuranceFunction ) );
+    m_volume->setObscuranceVariant( static_cast<OptimalViewpointVolume::ObscuranceVariant>( obscuranceVariant ) );
 
     QTime t;
     t.start();

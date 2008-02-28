@@ -246,6 +246,14 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_renderWithObscurances = false;
 
 
+
+
+
+//     reduceToHalf();
+
+
+
+
     DEBUG_LOG( "end constructor" );
 }
 
@@ -955,7 +963,7 @@ void OptimalViewpointVolume::computeObscurances()
         ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, directions, m_transferFunction, this );
         thread->setNormals( directionEncoder, encodedNormals );
         thread->setData( m_data, m_dataSize, dimensions, increments );
-        thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction );
+        thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant );
         thread->start();
         threads[i] = thread;
     }
@@ -984,6 +992,7 @@ void OptimalViewpointVolume::computeObscurances()
     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] /= maximumObscurance;
 
     {
+        bool density = m_obscuranceVariant <= DensitySmooth;
         // obscurances to file
         QFile outFile( QDir::tempPath().append( QString( "/obscurance.raw" ) ) );
         if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
@@ -991,7 +1000,7 @@ void OptimalViewpointVolume::computeObscurances()
             QDataStream out( &outFile );
             for ( int i = 0; i < m_dataSize; ++i )
             {
-                uchar value = m_data[i] > 0 && m_transferFunction.getOpacity( m_data[i] ) > 0 ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
+                uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
                 out << value;
 //                 out << gradientMagnitudes[i];
 //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
@@ -1340,6 +1349,12 @@ void OptimalViewpointVolume::setObscuranceFunction( ObscuranceFunction obscuranc
 }
 
 
+void OptimalViewpointVolume::setObscuranceVariant( ObscuranceVariant obscuranceVariant )
+{
+    m_obscuranceVariant = obscuranceVariant;
+}
+
+
 // inline double OptimalViewpointVolume::obscurance( double distance ) const
 // {
 //     if ( distance > m_obscuranceMaximumDistance ) return 1.0;
@@ -1392,6 +1407,7 @@ void OptimalViewpointVolume::computeSaliency()
     unsigned char * gradientMagnitudes = gradientEstimator->GetGradientMagnitudes();
 
     {
+        bool density = m_obscuranceVariant <= DensitySmooth;
         // saliency to file
         QFile outFile( QDir::tempPath().append( QString( "/saliency.raw" ) ) );
         if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
@@ -1399,7 +1415,7 @@ void OptimalViewpointVolume::computeSaliency()
             QDataStream out( &outFile );
             for ( int i = 0; i < m_dataSize; ++i )
             {
-                uchar value = m_data[i] > 0 ? gradientMagnitudes[i] : 0;
+                uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? gradientMagnitudes[i] : 0;
                 out << value;
             }
             outFile.close();
@@ -1424,6 +1440,79 @@ void OptimalViewpointVolume::computeSaliency()
     obscuranceArray->Delete();
     obscuranceData->Delete();
     gradientEstimator->Delete();
+}
+
+
+void OptimalViewpointVolume::reduceToHalf()
+{
+    int dimensions[3];
+    m_image->GetDimensions( dimensions );
+    int increments[3];
+    m_image->GetIncrements( increments );
+
+    int dimX = dimensions[0], dimY = dimensions[1], dimZ = dimensions[2];
+    int incX = increments[0], incY = increments[1], incZ = increments[2];
+    int newDimX = dimX / 2 + dimX % 2, newDimY = dimY / 2 + dimY % 2, newDimZ = dimZ / 2 + dimZ % 2;
+    int newIncX = 1, newIncY = newDimX, newIncZ = newDimX * newDimY;
+    int newDataSize = newDimX * newDimY * newDimZ;
+
+    unsigned char * newData = new unsigned char[newDataSize];
+
+    for (int ix = 0, nx = 0; ix < dimX; ix += 2, nx++)
+    {
+        for (int iy = 0, ny = 0; iy < dimY; iy += 2, ny++)
+        {
+            for (int iz = 0, nz = 0; iz < dimZ; iz += 2, nz++)
+            {
+                float value = 0.0;
+                unsigned char n = 0;
+
+                for (int i = 0, x = ix; i < 2 && x < dimX; i++, x++)
+                {
+                    for (int j = 0, y = iy; j < 2 && y < dimY; j++, y++)
+                    {
+                        for (int k = 0, z = iz; k < 2 && z < dimZ; k++, z++)
+                        {
+                            int offset = x * incX + y * incY + z * incZ;
+                            Q_ASSERT( offset < m_dataSize );
+                            value += m_data[offset];
+                            n++;
+                        }
+                    }
+                }
+
+                unsigned char newValue = qRound( value / n );
+                int newOffset = nx * newIncX + ny * newIncY + nz * newIncZ;
+                Q_ASSERT( newOffset < newDataSize );
+                newData[newOffset] = newValue;
+            }
+        }
+    }
+
+    // new data to file
+    QFile outFile( QDir::tempPath().append( QString( "/newdata.raw" ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QDataStream out( &outFile );
+        for ( int i = 0; i < newDataSize; i++ )
+        {
+            out << newData[i];
+        }
+        outFile.close();
+    }
+    QFile outFileMhd( QDir::tempPath().append( QString( "/newdata.mhd" ) ) );
+    if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFileMhd );
+        out << "NDims = 3\n";
+        out << "DimSize = " << newDimX << " " << newDimY << " " << newDimZ << "\n";
+        double spacing[3];
+        m_image->GetSpacing( spacing );
+        out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
+        out << "ElementType = MET_UCHAR\n";
+        out << "ElementDataFile = newdata.raw";
+        outFileMhd.close();
+    }
 }
 
 

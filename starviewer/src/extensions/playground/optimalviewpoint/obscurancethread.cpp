@@ -47,10 +47,11 @@ void ObscuranceThread::setData( const unsigned char * data, int dataSize, const 
 }
 
 
-void ObscuranceThread::setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction )
+void ObscuranceThread::setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant )
 {
     m_obscuranceMaximumDistance = obscuranceMaximumDistance;
     m_obscuranceFunction = obscuranceFunction;
+    m_obscuranceVariant = obscuranceVariant;
 }
 
 
@@ -62,7 +63,13 @@ double * ObscuranceThread::getObscurance() const
 
 void ObscuranceThread::run()
 {
-    runDensity();
+    switch ( m_obscuranceVariant )
+    {
+        case OptimalViewpointVolume::Density: runDensity(); break;
+        case OptimalViewpointVolume::DensitySmooth: runDensitySmooth(); break;
+        case OptimalViewpointVolume::Opacity: runOpacity(); break;
+        case OptimalViewpointVolume::OpacitySmooth: runOpacitySmooth(); break;
+    }
 }
 
 
