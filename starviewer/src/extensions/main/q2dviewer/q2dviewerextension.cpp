@@ -111,7 +111,7 @@ void Q2DViewerExtension::createActions()
     m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
 
     m_rotateClockWiseAction = new QAction( 0 );
-    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
+    m_rotateClockWiseAction->setText( tr("Rotate") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
     m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
     m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
