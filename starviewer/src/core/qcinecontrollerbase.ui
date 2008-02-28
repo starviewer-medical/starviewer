@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>110</height>
+    <width>156</width>
+    <height>99</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -14,10 +14,10 @@
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>1</number>
+    <number>0</number>
    </property>
    <item>
     <layout class="QHBoxLayout" >
@@ -25,10 +25,16 @@
       <number>0</number>
      </property>
      <property name="spacing" >
-      <number>6</number>
+      <number>0</number>
      </property>
      <item>
       <widget class="QToolButton" name="m_playToolButton" >
+       <property name="minimumSize" >
+        <size>
+         <width>46</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text" >
         <string>Play</string>
        </property>
@@ -42,7 +48,7 @@
         </size>
        </property>
        <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
+        <enum>Qt::ToolButtonIconOnly</enum>
        </property>
        <property name="autoRaise" >
         <bool>true</bool>
@@ -55,7 +61,7 @@
         <number>0</number>
        </property>
        <property name="spacing" >
-        <number>6</number>
+        <number>2</number>
        </property>
        <item>
         <widget class="QCheckBox" name="m_loopCheckBox" >

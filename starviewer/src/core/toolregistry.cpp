@@ -168,9 +168,9 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "ReferenceLinesTool" )
     {
-        toolAction->setText( tr("Reference Lines") );
+        toolAction->setText( tr("Ref.Lines") );
         toolAction->setStatusTip( tr("Enable/Disable Reference Lines tool") );
-//         toolAction->setIcon( QIcon(":/images/roi.png") ); TODO icona per determinar
+        toolAction->setIcon( QIcon(":/images/referenceLines.png") );
     }
     else if( toolName == "VoxelInformationTool" )
     {
@@ -202,7 +202,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "EraserTool" )
     {
-        toolAction->setText( tr("Rubber") );
+        toolAction->setText( tr("Erase") );
         toolAction->setStatusTip( tr("Enable/Disable eraser tool") );
         toolAction->setIcon( QIcon(":/images/eraser2.png") );
     }

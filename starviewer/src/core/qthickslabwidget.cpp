@@ -18,7 +18,7 @@ QThickSlabWidget::QThickSlabWidget(QWidget *parent)
     // omplim el combo amb els valors que volem
     m_projectionModeComboBox->clear();
     QStringList items;
-    items << tr("Inactive") << tr("Maximum Intensity Projection (MIP)") << tr("Minimum Intensity Projection (MinIP)") << tr("Average");
+    items << tr("Disabled") << tr("MIP") << tr("MinIP") << tr("Average");
     m_projectionModeComboBox->addItems( items );
 }
 
@@ -73,7 +73,7 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
 {
     emit projectionModeChanged( comboItem );
     QString projectionType = m_projectionModeComboBox->itemText( comboItem );
-    if( projectionType == tr("Inactive") )
+    if( projectionType == tr("Disabled") )
     {
         disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
         m_currentViewer->enableThickSlab(false);
@@ -93,11 +93,11 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
 
         // TODO ara fem la conversió a id d'enter, però en un futur anirà tot amb Strings
         int projectionModeID = -1;
-        if( projectionType == tr("Maximum Intensity Projection (MIP)") )
+        if( projectionType == tr("MIP") )
         {
             projectionModeID = 0;
         }
-        else if( projectionType == tr("Minimum Intensity Projection (MinIP)") )
+        else if( projectionType == tr("MinIP") )
         {
             projectionModeID = 1;
         }
