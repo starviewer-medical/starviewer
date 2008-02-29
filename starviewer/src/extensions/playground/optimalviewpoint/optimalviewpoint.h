@@ -149,6 +149,7 @@ public:
     void setParameters( OptimalViewpointParameters * parameters );
 
     void setObscurances( bool obscurances );
+    void setObscurancesFactor( double obscurancesFactor );
 
 public slots:
 

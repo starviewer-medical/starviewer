@@ -307,6 +307,10 @@ void QOptimalViewpointExtension::readParameter( int index )
                 m_obscurancesCheckBox->setChecked( m_parameters->getObscurances() );
                 break;
 
+            case OptimalViewpointParameters::ObscurancesFactor:
+                m_obscurancesFactorDoubleSpinBox->setValue( m_parameters->getObscurancesFactor() );
+                break;
+
             case OptimalViewpointParameters::NumberOfPlanes:
                 m_comboNumberOfPlanes->setCurrentIndex( m_comboNumberOfPlanes->findText( QString::number( m_parameters->getNumberOfPlanes() ) ) );
                 break;
@@ -351,6 +355,7 @@ void QOptimalViewpointExtension::doVisualization()
     m_parameters->setSpecular( m_specularCheckBox->isChecked() );
     m_parameters->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
     m_parameters->setObscurances( m_obscurancesCheckBox->isChecked() );
+    m_parameters->setObscurancesFactor( m_obscurancesFactorDoubleSpinBox->value() );
 
     m_viewerWidget->render();
 }

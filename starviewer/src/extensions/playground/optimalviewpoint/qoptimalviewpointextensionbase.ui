@@ -614,11 +614,37 @@
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="m_obscurancesCheckBox">
-            <property name="text" >
-             <string>Obscurances</string>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
             </property>
-           </widget>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="m_obscurancesCheckBox">
+              <property name="text" >
+               <string>Obscurances</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_obscurancesFactorDoubleSpinBox">
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="maximum">
+               <double>2</double>
+              </property>
+              <property name="singleStep">
+               <double>0.01</double>
+              </property>
+              <property name="value">
+               <double>1.272</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="Line" name="m_visualizationLine" >
