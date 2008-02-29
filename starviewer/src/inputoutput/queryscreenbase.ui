@@ -1126,12 +1126,12 @@
         <string>Advanced Search >></string>
        </property>
        <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/advancedSearch.png</iconset>
+        <iconset resource="../main/main.qrc" >:/images/search.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
-         <width>32</width>
-         <height>32</height>
+         <width>22</width>
+         <height>22</height>
         </size>
        </property>
        <property name="checkable" >
@@ -1168,8 +1168,8 @@
        </property>
        <property name="iconSize" >
         <size>
-         <width>32</width>
-         <height>32</height>
+         <width>22</width>
+         <height>22</height>
         </size>
        </property>
        <property name="toolButtonStyle" >
@@ -1186,7 +1186,7 @@
         <string>Search</string>
        </property>
        <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/search.png</iconset>
+        <iconset resource="../main/main.qrc" >:/images/advancedSearch.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -1610,6 +1610,11 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
+   <class>udg::QPacsList</class>
+   <extends>QWidget</extends>
+   <header>qpacslist.h</header>
+  </customwidget>
+  <customwidget>
    <class>udg::QSeriesListWidget</class>
    <extends>QWidget</extends>
    <header>qserieslistwidget.h</header>
@@ -1618,11 +1623,6 @@
    <class>udg::QStudyTreeWidget</class>
    <extends>QWidget</extends>
    <header>qstudytreewidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>udg::QPacsList</class>
-   <extends>QWidget</extends>
-   <header>qpacslist.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
