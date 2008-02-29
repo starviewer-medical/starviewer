@@ -51,7 +51,7 @@ Qt::ItemFlags PatientItemModel::flags(const QModelIndex &index) const
 
 QVariant PatientItemModel::headerData(int section, Qt::Orientation orientation, int role ) const
 {
-    return ( QStringList() << tr("Tipus") << tr("Data") << tr("Modalitat") << tr("Descripcio") );
+    return ( QStringList() << tr("Type") << tr("Data") << tr("Modality") << tr("Description") );
 }
 
 QModelIndex PatientItemModel::index(int row, int column, const QModelIndex &parent ) const
@@ -186,7 +186,7 @@ QStandardItemModel * PatientItemModel::createModel( Patient * patient )
         }
     }
 
-    modelPatient->setHorizontalHeaderLabels( QStringList() << tr("Tipus") << tr("Data") << tr("Modalitat") << tr("Descripcio"));
+    modelPatient->setHorizontalHeaderLabels( QStringList() << tr("Type") << tr("Data") << tr("Modality") << tr("Description"));
 
     return modelPatient;
 }
