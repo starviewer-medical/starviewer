@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QEdemaSegmentationExtensionBase</name>
     <message>
@@ -125,7 +126,7 @@
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="609"/>
         <source>0.3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qedemasegmentationextensionbase.ui" line="626"/>
