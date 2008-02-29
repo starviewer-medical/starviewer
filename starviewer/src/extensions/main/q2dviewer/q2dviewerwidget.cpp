@@ -27,7 +27,8 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_buttonSynchronizeAction->setIcon( QIcon(":/images/synchronize.png") );
     m_buttonSynchronizeAction->setCheckable( true );
     m_synchronizeButton->setDefaultAction( m_buttonSynchronizeAction );
-
+    m_synchronizeButton->setEnabled( false );
+            
     createConnections();
 }
 
@@ -50,12 +51,14 @@ void Q2DViewerWidget::setInput( Volume *input )
     m_mainVolume = input;
     m_2DView->setInput( input );
     resetViewToAxial();
+    m_synchronizeButton->setEnabled( true );
 }
 
 void Q2DViewerWidget::updateInput( Volume *input )
 {
     m_mainVolume = input;
     resetViewToAxial();
+    m_synchronizeButton->setEnabled( true );
 }
 
 void Q2DViewerWidget::mousePressEvent( QMouseEvent * event )
