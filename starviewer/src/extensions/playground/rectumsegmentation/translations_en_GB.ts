@@ -1,135 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1">
 <context>
-    <name>QRectumSegmentationExtensionBase</name>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="13"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="33"/>
-        <source>Rectum Method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="73"/>
-        <source>Lower value:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="107"/>
-        <source>Upper value:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="157"/>
-        <source>View thresholds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="190"/>
-        <source>Seed:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="309"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="327"/>
-        <source>Volume (in mm3):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="369"/>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="396"/>
-        <source>Save Mask</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="704"/>
-        <source>...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="454"/>
-        <source>window level</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="476"/>
-        <source>zoom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="498"/>
-        <source>move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="564"/>
-        <source>voxel information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="624"/>
-        <source>Filter Main Image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="714"/>
-        <source>Size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="781"/>
-        <source>Opacity:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="847"/>
-        <source>Slice:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="53"/>
-        <source>Recte</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="279"/>
-        <source>Amplada</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="286"/>
-        <source>10.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="403"/>
-        <source>Save 3D Visualization</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="592"/>
-        <source>ROI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="766"/>
-        <source>View ROI</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::QObject</name>
+    <name>QObject</name>
     <message>
         <location filename="rectumSegmentationMethod.cpp" line="109"/>
         <source>Starviewer</source>
@@ -137,7 +9,135 @@
     </message>
     <message>
         <location filename="rectumSegmentationMethod.cpp" line="109"/>
-        <source>No hi ha ROI definida</source>
+        <source>No definite ROI</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QRectumSegmentationExtensionBase</name>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="13"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="42"/>
+        <source>Rectum Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="118"/>
+        <source>Lower value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="161"/>
+        <source>Upper value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="220"/>
+        <source>View thresholds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="262"/>
+        <source>Seed:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="382"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="409"/>
+        <source>Volume (in mm3):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="447"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="474"/>
+        <source>Save Mask</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="818"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="550"/>
+        <source>window level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="572"/>
+        <source>zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="594"/>
+        <source>move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="660"/>
+        <source>voxel information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="720"/>
+        <source>Filter Main Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="828"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="913"/>
+        <source>Opacity:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="995"/>
+        <source>Slice:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="361"/>
+        <source>10.0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="481"/>
+        <source>Save 3D Visualization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="688"/>
+        <source>ROI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="889"/>
+        <source>View ROI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="80"/>
+        <source>Rectum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qrectumsegmentationextensionbase.ui" line="354"/>
+        <source>Width</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
