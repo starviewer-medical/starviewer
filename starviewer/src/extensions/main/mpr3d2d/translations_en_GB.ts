@@ -64,12 +64,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QMPR3D2DExtension</name>
     <message>
-        <location filename="qmpr3d2dextension.cpp" line="119"/>
+        <location filename="qmpr3d2dextension.cpp" line="124"/>
         <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmpr3d2dextension.cpp" line="125"/>
+        <location filename="qmpr3d2dextension.cpp" line="130"/>
         <source>Change views layout</source>
         <translation type="unfinished"></translation>
     </message>
