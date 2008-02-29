@@ -33,7 +33,7 @@
    <string>DICOM Data</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../main/main.qrc" >:/images/info.png</iconset>
+   <iconset resource="../main/main.qrc" >:/images/dicomDump.png</iconset>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >

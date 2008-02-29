@@ -562,7 +562,7 @@
           <string>...</string>
          </property>
          <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/dicomDump.png</iconset>
+          <iconset resource="../../../main/main.qrc" >:/images/viewerInfo.png</iconset>
          </property>
          <property name="iconSize" >
           <size>
@@ -661,7 +661,7 @@
           <string>Info</string>
          </property>
          <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/info.png</iconset>
+          <iconset resource="../../../main/main.qrc" >:/images/dicomDump.png</iconset>
          </property>
          <property name="iconSize" >
           <size>
