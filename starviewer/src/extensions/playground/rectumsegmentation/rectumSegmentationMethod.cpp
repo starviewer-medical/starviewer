@@ -106,7 +106,7 @@ double rectumSegmentationMethod::applyMethod()
 
     if(m_minROI[0]==-1)
     {
-        QMessageBox::warning( 0 , QObject::tr( "Starviewer" ) , QObject::tr( "No hi ha ROI definida" ) );
+        QMessageBox::warning( 0 , QObject::tr( "Starviewer" ) , QObject::tr( "No definite ROI" ) );
         return -1.0;
     }
 

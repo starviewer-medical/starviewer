@@ -394,7 +394,7 @@ void QRectumSegmentationExtension::ApplyMethod( )
     }
     if(!m_isRegionSet)
     {
-        QMessageBox::warning( this , QObject::tr( "Starviewer" ) , QObject::tr( "No hi ha ROI definida" ) );
+        QMessageBox::warning( this , QObject::tr( "Starviewer" ) , QObject::tr( "No definite ROI" ) );
         return;
     }
 
