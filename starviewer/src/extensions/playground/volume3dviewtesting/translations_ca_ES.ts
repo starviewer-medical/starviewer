@@ -183,8 +183,8 @@
     <name>udg::Volume3DViewTestingExtensionMediator</name>
     <message>
         <location filename="volume3dviewtestingextensionmediator.cpp" line="27"/>
-        <source>Volume 3D View Testing</source>
-        <translation>Test del visualitzador de volums 3D</translation>
+        <source>3D Viewer</source>
+        <translation>Visualitzador 3D</translation>
     </message>
     <message>
         <location filename="volume3dviewtestingextensionmediator.cpp" line="41"/>
