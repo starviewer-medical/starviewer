@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QConfigurationDialogBase</name>
     <message>
@@ -49,22 +50,22 @@
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
-        <location filename="extensionhandler.cpp" line="144"/>
+        <location filename="extensionhandler.cpp" line="146"/>
         <source>Loading, please wait...</source>
         <translation>Carregant, si us plau espereu...</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="143"/>
+        <location filename="extensionhandler.cpp" line="145"/>
         <source>Patient loading</source>
         <translation>Carregant el pacient</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="226"/>
+        <location filename="extensionhandler.cpp" line="229"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="226"/>
+        <location filename="extensionhandler.cpp" line="229"/>
         <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
         <translation>Ho sentim, hi ha hagut algun error mentres es carregaven les dades dels pacients:&lt;br&gt; %1</translation>
     </message>
@@ -88,7 +89,7 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="84"/>
-        <source>&amp;Open...</source>
+        <source>&amp;Open file...</source>
         <translation>&amp;Obrir...</translation>
     </message>
     <message>
@@ -248,13 +249,13 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="92"/>
-        <source>Open Files from a Directory</source>
-        <translation>Obrir un arxiu d&apos;un directori</translation>
+        <source>Open files from a directory...</source>
+        <translation>Obrir un arxiu d&apos;un directori...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="108"/>
-        <source>Open DICOMDIR</source>
-        <translation>Obrir DICOMDIR</translation>
+        <source>Open DICOMDIR...</source>
+        <translation>Obrir DICOMDIR...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="110"/>
