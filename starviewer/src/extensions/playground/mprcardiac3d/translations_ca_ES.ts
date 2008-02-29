@@ -1,89 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QMPRCardiac3DExtensionBase</name>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="16"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="13"/>
         <source>Form1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="254"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="429"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="110"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="107"/>
         <source>Enable axial plane</source>
         <translation>Activar el pla axial</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="113"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="110"/>
         <source>Axial</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="123"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="120"/>
         <source>Enable sagital plane</source>
         <translation>Activar el pla sagital</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="126"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="123"/>
         <source>Sagital</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="136"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="133"/>
         <source>Enable coronal plane</source>
         <translation>Activar el pla coronal</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="139"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="136"/>
         <source>Coronal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="167"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="164"/>
         <source>Switch to axial view</source>
         <translation>Canviar a vista axial</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="170"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="167"/>
         <source>Axial view</source>
         <translation>Vista axial</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="197"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="194"/>
         <source>Switch to sagital view</source>
         <translation>Canviar a vista sagital</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="200"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="197"/>
         <source>Sagital view</source>
         <translation>Vista sagital</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="219"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="216"/>
         <source>Switch to coronal view</source>
         <translation>Canviar a vista coronal</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="222"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="219"/>
         <source>Coronal view</source>
         <translation>Vista coronal</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="299"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="296"/>
         <source>WW/WL:</source>
         <translation>WW/WL:</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="666"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="566"/>
         <source>Velocity</source>
         <translation>Velocitat</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextensionbase.ui" line="673"/>
+        <location filename="qmprcardiac3dextensionbase.ui" line="573"/>
         <source>frames/sec</source>
         <translation>frames/seg</translation>
     </message>
@@ -109,24 +110,74 @@
 <context>
     <name>udg::QMPRCardiac3DExtension</name>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="175"/>
+        <location filename="qmprcardiac3dextension.cpp" line="230"/>
         <source>Save video file as...</source>
         <translation>Desar el fitxer de vídeo com...</translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="194"/>
+        <location filename="qmprcardiac3dextension.cpp" line="249"/>
         <source>MPEG (*.mpg)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="199"/>
+        <location filename="qmprcardiac3dextension.cpp" line="254"/>
         <source>AVI (*.avi)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qmprcardiac3dextension.cpp" line="216"/>
+        <location filename="qmprcardiac3dextension.cpp" line="271"/>
         <source>Making video</source>
         <translation>Produïnt vídeo</translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="92"/>
+        <source>&amp;Axial View</source>
+        <translation type="unfinished">Vista Axial</translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="93"/>
+        <source>Ctrl+A</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="94"/>
+        <source>Change Current View To Axial</source>
+        <translation>Canviar la Vista Actual a Axial</translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="99"/>
+        <source>&amp;Sagital View</source>
+        <translation type="unfinished">Vista Sagital</translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="100"/>
+        <source>Ctrl+S</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="101"/>
+        <source>Change Current View To Saggital</source>
+        <translation>Canviar la Vista Actual a Sagital</translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="107"/>
+        <source>&amp;Coronal View</source>
+        <translation type="unfinished">Vista Coronal</translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="108"/>
+        <source>Ctrl+C</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="109"/>
+        <source>Change Current View To Coronal</source>
+        <translation>Canviar la Vista Actual a Coronal</translation>
+    </message>
+    <message>
+        <location filename="qmprcardiac3dextension.cpp" line="115"/>
+        <source>Space</source>
+        <translation type="unfinished">Espai</translation>
     </message>
 </context>
 </TS>
