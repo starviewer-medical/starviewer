@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
+<defaultcodec></defaultcodec>
 <context>
     <name>udg::MenuGridWidget</name>
     <message>
@@ -16,207 +17,212 @@
 <context>
     <name>udg::Q2DViewerExtension</name>
     <message>
-        <location filename="q2dviewerextension.cpp" line="80"/>
-        <source>&amp;Axial View</source>
-        <translation>Vista &amp;Axial</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="81"/>
-        <source>Ctrl+A</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="82"/>
+        <location filename="q2dviewerextension.cpp" line="88"/>
         <source>Change Current View To Axial</source>
         <translation>Cambiar vista actual a Axial</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="87"/>
-        <source>&amp;Sagital View</source>
-        <translation>Vista &amp;Sagital</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="88"/>
-        <source>Ctrl+S</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="89"/>
+        <location filename="q2dviewerextension.cpp" line="94"/>
         <source>Change Current View To Saggital</source>
         <translation>Cambiar vista actual a Sagital</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="94"/>
-        <source>&amp;Coronal View</source>
-        <translation>Vista &amp;Coronal</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="95"/>
-        <source>Ctrl+C</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="96"/>
+        <location filename="q2dviewerextension.cpp" line="100"/>
         <source>Change Current View To Coronal</source>
         <translation>Cambiar Vista Actual a Coronal</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="110"/>
-        <source>Rotate Clockwise</source>
-        <translation>Rotar en sentido horario</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="112"/>
+        <location filename="q2dviewerextension.cpp" line="116"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rota la imagen en sentido horario</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="119"/>
+        <location filename="q2dviewerextension.cpp" line="123"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rotar en sentido anti-horario</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="121"/>
+        <location filename="q2dviewerextension.cpp" line="125"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rota la imagen en sentido anti-horario</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="102"/>
+        <location filename="q2dviewerextension.cpp" line="106"/>
         <source>PS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="103"/>
+        <location filename="q2dviewerextension.cpp" line="107"/>
         <source>Enable/Disable the current attached</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="128"/>
+        <location filename="q2dviewerextension.cpp" line="132"/>
         <source>Flip Horizontal</source>
         <translation>Voltear horizontalmente</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="129"/>
+        <location filename="q2dviewerextension.cpp" line="133"/>
         <source>Flip the image horizontally</source>
         <translation>Voltea la imagen horizontalmente</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="136"/>
+        <location filename="q2dviewerextension.cpp" line="140"/>
         <source>Flip Vertical</source>
         <translation>Voltear verticalmente</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="137"/>
+        <location filename="q2dviewerextension.cpp" line="141"/>
         <source>Flip the image vertically</source>
         <translation>Voltea la imagen verticalmente</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="605"/>
+        <location filename="q2dviewerextension.cpp" line="573"/>
         <source>Loading</source>
         <translation>Cargando</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="606"/>
+        <location filename="q2dviewerextension.cpp" line="574"/>
         <source>Loading data, please wait...</source>
         <translation>Cargando los datos, por favor espere...</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="87"/>
+        <source>Axial</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="93"/>
+        <source>Sagital</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="99"/>
+        <source>Coronal</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="114"/>
+        <source>Rotate</source>
+        <translation>Rotar</translation>
     </message>
 </context>
 <context>
     <name>udg::Q2DViewerExtensionBase</name>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="580"/>
+        <location filename="q2dviewerextensionbase.ui" line="771"/>
         <source>WW/WL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="535"/>
+        <location filename="q2dviewerextensionbase.ui" line="562"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="63"/>
-        <source>window level</source>
-        <translation>Brillo/Contraste</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="151"/>
-        <source>zoom</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="85"/>
-        <source>move</source>
-        <translation>Mover</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="494"/>
-        <source>voxel information</source>
-        <translation>Información de voxel</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="562"/>
+        <location filename="q2dviewerextensionbase.ui" line="851"/>
         <source>PS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="395"/>
+        <location filename="q2dviewerextensionbase.ui" line="96"/>
         <source>Series layout</source>
         <translation>Distribución de series</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="444"/>
+        <location filename="q2dviewerextensionbase.ui" line="189"/>
         <source>Image layout</source>
         <translation>Distribución de imágenes</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="38"/>
-        <source>Slicing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="173"/>
-        <source>distance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="195"/>
+        <location filename="q2dviewerextensionbase.ui" line="359"/>
         <source>ROI</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="452"/>
+        <source>Axial</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="474"/>
+        <source>Sagital</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="496"/>
+        <source>Coronal</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="791"/>
+        <source>-90</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="810"/>
+        <source>FlipH</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="829"/>
+        <source>FlipV</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="131"/>
+        <source>Layout</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="224"/>
-        <source>Axial</source>
-        <translation type="unfinished"></translation>
+        <source>Scroll</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="243"/>
-        <source>Sagital</source>
-        <translation type="unfinished"></translation>
+        <location filename="q2dviewerextensionbase.ui" line="277"/>
+        <source>Pan</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="262"/>
-        <source>Coronal</source>
-        <translation type="unfinished"></translation>
+        <location filename="q2dviewerextensionbase.ui" line="302"/>
+        <source>Zoom</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="281"/>
-        <source>+90</source>
-        <translation type="unfinished"></translation>
+        <location filename="q2dviewerextensionbase.ui" line="327"/>
+        <source>Rotate</source>
+        <translation>Rotar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="300"/>
-        <source>-90</source>
-        <translation type="unfinished"></translation>
+        <location filename="q2dviewerextensionbase.ui" line="384"/>
+        <source>Distance</source>
+        <translation>Distancia</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="319"/>
-        <source>FlipH</source>
-        <translation type="unfinished"></translation>
+        <location filename="q2dviewerextensionbase.ui" line="409"/>
+        <source>Erase</source>
+        <translation>Borrar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="338"/>
-        <source>FlipV</source>
-        <translation type="unfinished"></translation>
+        <location filename="q2dviewerextensionbase.ui" line="520"/>
+        <source>Orientation</source>
+        <translation>Orientación</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="641"/>
+        <source>Thick Slab</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="661"/>
+        <source>Info</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextensionbase.ui" line="683"/>
+        <source>Ref.Lines</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -240,34 +246,29 @@
 <context>
     <name>udg::Q2DViewerWidget</name>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="84"/>
+        <location filename="q2dviewerwidget.cpp" line="89"/>
         <source>XY : Axial</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="101"/>
+        <location filename="q2dviewerwidget.cpp" line="108"/>
         <source>XY : Sagital</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="118"/>
+        <location filename="q2dviewerwidget.cpp" line="127"/>
         <source>XY : Coronal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="161"/>
-        <source>Phases: %1</source>
-        <translation>Fases: %1</translation>
-    </message>
-    <message>
         <location filename="q2dviewerwidget.cpp" line="25"/>
         <source>Synchronize tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Herramienta de sincronizar</translation>
     </message>
     <message>
         <location filename="q2dviewerwidget.cpp" line="26"/>
         <source>Enable/Disable Synchronize tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Activar/Desactivar la herramienta de sincronizar</translation>
     </message>
 </context>
 <context>
@@ -285,7 +286,7 @@
     <message>
         <location filename="q2dviewerwidgetbase.ui" line="72"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
 </context>
 <context>
