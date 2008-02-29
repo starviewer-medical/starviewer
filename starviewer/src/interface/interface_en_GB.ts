@@ -49,22 +49,22 @@
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
-        <location filename="extensionhandler.cpp" line="144"/>
+        <location filename="extensionhandler.cpp" line="146"/>
         <source>Loading, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="143"/>
+        <location filename="extensionhandler.cpp" line="145"/>
         <source>Patient loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="226"/>
+        <location filename="extensionhandler.cpp" line="229"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="226"/>
+        <location filename="extensionhandler.cpp" line="229"/>
         <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -98,7 +98,7 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="84"/>
-        <source>&amp;Open...</source>
+        <source>&amp;Open file...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -248,12 +248,12 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="92"/>
-        <source>Open Files from a Directory</source>
+        <source>Open files from a directory...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="108"/>
-        <source>Open DICOMDIR</source>
+        <source>Open DICOMDIR...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
