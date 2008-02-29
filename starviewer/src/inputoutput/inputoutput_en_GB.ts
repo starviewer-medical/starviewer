@@ -335,7 +335,7 @@ You would have to choose only one.</source>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1201"/>
+        <location filename="queryscreen.cpp" line="1205"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -973,50 +973,44 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>udg::QFileDialog</name>
-</context>
-<context>
-    <name>udg::QObject</name>
-</context>
-<context>
     <name>udg::QOperationStateScreen</name>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="76"/>
+        <location filename="qoperationstatescreen.cpp" line="75"/>
         <source>PENDING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="80"/>
+        <location filename="qoperationstatescreen.cpp" line="79"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="82"/>
+        <location filename="qoperationstatescreen.cpp" line="81"/>
         <source>Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="171"/>
+        <location filename="qoperationstatescreen.cpp" line="170"/>
         <source>RETRIEVING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="173"/>
+        <location filename="qoperationstatescreen.cpp" line="172"/>
         <source>STORING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="241"/>
+        <location filename="qoperationstatescreen.cpp" line="240"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="241"/>
+        <location filename="qoperationstatescreen.cpp" line="240"/>
         <source>RETRIEVED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="241"/>
+        <location filename="qoperationstatescreen.cpp" line="240"/>
         <source>STORED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1137,67 +1131,67 @@ Error Number: %1</source>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="81"/>
+        <location filename="qstudytreewidget.cpp" line="80"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="92"/>
+        <location filename="qstudytreewidget.cpp" line="91"/>
         <source>&amp;Retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="104"/>
+        <location filename="qstudytreewidget.cpp" line="103"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="531"/>
+        <location filename="qstudytreewidget.cpp" line="530"/>
         <source>Series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="82"/>
+        <location filename="qstudytreewidget.cpp" line="81"/>
         <source>Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="93"/>
+        <location filename="qstudytreewidget.cpp" line="92"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="112"/>
+        <location filename="qstudytreewidget.cpp" line="111"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="117"/>
+        <location filename="qstudytreewidget.cpp" line="116"/>
         <source>Store to PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="118"/>
+        <location filename="qstudytreewidget.cpp" line="117"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="111"/>
+        <location filename="qstudytreewidget.cpp" line="110"/>
         <source>Send to DICOMDIR List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="234"/>
+        <location filename="qstudytreewidget.cpp" line="233"/>
         <source>Series %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="182"/>
+        <location filename="qstudytreewidget.cpp" line="181"/>
         <source>Study %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="295"/>
+        <location filename="qstudytreewidget.cpp" line="294"/>
         <source>Image %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1308,153 +1302,153 @@ Error Number: %1</source>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1549"/>
+        <location filename="queryscreen.cpp" line="1553"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="356"/>
+        <location filename="queryscreen.cpp" line="355"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="447"/>
+        <location filename="queryscreen.cpp" line="446"/>
         <source>Please select a PACS to query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="461"/>
+        <location filename="queryscreen.cpp" line="460"/>
         <source>ERROR QUERING!.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="548"/>
+        <location filename="queryscreen.cpp" line="547"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="697"/>
+        <location filename="queryscreen.cpp" line="696"/>
         <source>No series match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="851"/>
+        <location filename="queryscreen.cpp" line="850"/>
         <source>Select a study to download </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="875"/>
+        <location filename="queryscreen.cpp" line="874"/>
         <source>Internal Error : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1025"/>
+        <location filename="queryscreen.cpp" line="1024"/>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="116"/>
+        <location filename="queryscreen.cpp" line="115"/>
         <source>Error deleting old studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1123"/>
+        <location filename="queryscreen.cpp" line="1122"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1123"/>
+        <location filename="queryscreen.cpp" line="1122"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1307"/>
+        <location filename="queryscreen.cpp" line="1311"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="513"/>
+        <location filename="queryscreen.cpp" line="512"/>
         <source>Error, not opened Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="518"/>
+        <location filename="queryscreen.cpp" line="517"/>
         <source>Error quering in dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1201"/>
+        <location filename="queryscreen.cpp" line="1205"/>
         <source>Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1216"/>
+        <location filename="queryscreen.cpp" line="1220"/>
         <source>Error openning dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="782"/>
+        <location filename="queryscreen.cpp" line="781"/>
         <source>No images match for this series.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="831"/>
+        <location filename="queryscreen.cpp" line="830"/>
         <source>No images match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="644"/>
+        <location filename="queryscreen.cpp" line="643"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="771"/>
+        <location filename="queryscreen.cpp" line="770"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1322"/>
+        <location filename="queryscreen.cpp" line="1326"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1549"/>
+        <location filename="queryscreen.cpp" line="1553"/>
         <source>
 Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1059"/>
+        <location filename="queryscreen.cpp" line="1058"/>
         <source>Select at least one study to view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1117"/>
+        <location filename="queryscreen.cpp" line="1116"/>
         <source>Please select at least one study to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1122"/>
+        <location filename="queryscreen.cpp" line="1121"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1247"/>
+        <location filename="queryscreen.cpp" line="1251"/>
         <source>You have to select a PACS to store the study in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1291"/>
+        <location filename="queryscreen.cpp" line="1295"/>
         <source>The studies can only be stored to one PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1135"/>
+        <location filename="queryscreen.cpp" line="1137"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation type="unfinished"></translation>
     </message>
