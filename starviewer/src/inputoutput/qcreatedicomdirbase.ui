@@ -1,0 +1,647 @@
+<ui version="4.0" >
+ <class>udg::QCreateDicomdirBase</class>
+ <widget class="QDialog" name="udg::QCreateDicomdirBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>753</width>
+    <height>815</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Create DICOMDIR</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../main/main.qrc" >:/images/createDICOMDIR.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>7</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title" >
+      <string>DICOMDIR List</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QTreeWidget" name="m_dicomdirStudiesList" >
+        <property name="minimumSize" >
+         <size>
+          <width>403</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="horizontalScrollBarPolicy" >
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="selectionMode" >
+         <enum>QAbstractItemView::ExtendedSelection</enum>
+        </property>
+        <property name="sortingEnabled" >
+         <bool>true</bool>
+        </property>
+        <column>
+         <property name="text" >
+          <string>Patient Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Patient ID</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Age</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Description</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Modality</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Study Date</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>Study Time</string>
+         </property>
+        </column>
+        <column>
+         <property name="text" >
+          <string>studyUID</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_buttonRemove" >
+          <property name="toolTip" >
+           <string>Remove selected study of the list</string>
+          </property>
+          <property name="text" >
+           <string>Remove</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>31</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_buttonRemoveAll" >
+          <property name="toolTip" >
+           <string>Remove all the studies of the list</string>
+          </property>
+          <property name="text" >
+           <string>Remove All</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title" >
+      <string>Create DICOMDIR on...</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="0" >
+       <widget class="QStackedWidget" name="m_stackedWidget" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>5</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="currentIndex" >
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="page" >
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="m_DICOMDIRUsedSpaceLabel" >
+              <property name="font" >
+               <font>
+                <family>Sans Serif</family>
+                <pointsize>9</pointsize>
+                <weight>75</weight>
+                <italic>false</italic>
+                <bold>true</bold>
+                <underline>false</underline>
+                <strikeout>false</strikeout>
+               </font>
+              </property>
+              <property name="text" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:600; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:400;">Used Space&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="m_progressBarOcupat" >
+              <property name="maximum" >
+               <number>100</number>
+              </property>
+              <property name="value" >
+               <number>0</number>
+              </property>
+              <property name="textVisible" >
+               <bool>true</bool>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="textDirection" >
+               <enum>QProgressBar::TopToBottom</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_labelMbCdDvdOcupat" >
+              <property name="autoFillBackground" >
+               <bool>false</bool>
+              </property>
+              <property name="text" >
+               <string>650 Mb</string>
+              </property>
+              <property name="alignment" >
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_2" >
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="2" column="0" colspan="2" >
+           <widget class="QLabel" name="m_dicomdirSizeOnDiskLabel" >
+            <property name="text" >
+             <string>The size of the DICOMDIR is XX Mb</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="m_DICOMDIRLocationLabel" >
+              <property name="font" >
+               <font>
+                <family>Sans Serif</family>
+                <pointsize>9</pointsize>
+                <weight>75</weight>
+                <italic>false</italic>
+                <bold>true</bold>
+                <underline>false</underline>
+                <strikeout>false</strikeout>
+               </font>
+              </property>
+              <property name="text" >
+               <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:600; font-style:normal; text-decoration:none;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:400;">Location:&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="m_lineEditDicomdirPath" />
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_buttonExamineDisk" >
+              <property name="text" >
+               <string/>
+              </property>
+              <property name="icon" >
+               <iconset resource="../main/main.qrc" >:/images/open.png</iconset>
+              </property>
+              <property name="iconSize" >
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType" >
+               <enum>QSizePolicy::Maximum</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>100</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_buttonCreateDicomdir" >
+          <property name="toolTip" >
+           <string>Creates the Dicomdir with the selected studies</string>
+          </property>
+          <property name="text" >
+           <string>Create</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_buttonCancelDicomdir" >
+          <property name="text" >
+           <string>Cancel</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0" >
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="m_cdromDeviceToolButton" >
+            <property name="text" >
+             <string>...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../main/main.qrc" >:/images/cdrom.png</iconset>
+            </property>
+            <property name="iconSize" >
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="checkable" >
+             <bool>true</bool>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label" >
+            <property name="text" >
+             <string>CD-ROM</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="m_dvdromDeviceToolButton" >
+            <property name="text" >
+             <string>...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../main/main.qrc" >:/images/dvd.png</iconset>
+            </property>
+            <property name="iconSize" >
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="checkable" >
+             <bool>true</bool>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2" >
+            <property name="text" >
+             <string>DVD-ROM</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="m_hardDiskDeviceToolButton" >
+            <property name="text" >
+             <string>disk</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../main/main.qrc" >:/images/harddrive.png</iconset>
+            </property>
+            <property name="iconSize" >
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="checkable" >
+             <bool>true</bool>
+            </property>
+            <property name="checked" >
+             <bool>false</bool>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_3" >
+            <property name="text" >
+             <string>Hard Disk</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="m_pendriveDeviceToolButton" >
+            <property name="text" >
+             <string>...</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../main/main.qrc" >:/images/usbpendrive.png</iconset>
+            </property>
+            <property name="iconSize" >
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="checkable" >
+             <bool>true</bool>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4" >
+            <property name="text" >
+             <string>Pen Drive</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../main/main.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>m_buttonCancelDicomdir</sender>
+   <signal>clicked()</signal>
+   <receiver>udg::QCreateDicomdirBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>799</x>
+     <y>782</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>849</x>
+     <y>491</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
