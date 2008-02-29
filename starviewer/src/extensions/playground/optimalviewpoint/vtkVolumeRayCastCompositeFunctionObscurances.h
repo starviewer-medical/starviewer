@@ -59,6 +59,9 @@ public:
   vtkSetMacro( Obscurance, double * );
   vtkGetMacro( Obscurance, double * );
 
+  vtkSetMacro( ObscuranceFactor, double );
+  vtkGetMacro( ObscuranceFactor, double );
+
 protected:
   vtkVolumeRayCastCompositeFunctionObscurances();
   ~vtkVolumeRayCastCompositeFunctionObscurances();
@@ -76,6 +79,7 @@ private:
   void operator=(const vtkVolumeRayCastCompositeFunctionObscurances&);  // Not implemented.
 
   double * Obscurance;
+  double ObscuranceFactor;
 };
 
 

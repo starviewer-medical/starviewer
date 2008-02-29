@@ -309,4 +309,19 @@ void OptimalViewpointParameters::setObscurances( bool obscurances )
 }
 
 
+double OptimalViewpointParameters::getObscurancesFactor() const
+{
+    return m_obscurancesFactor;
+}
+
+
+void OptimalViewpointParameters::setObscurancesFactor( double obscurancesFactor )
+{
+    if ( m_obscurancesFactor != obscurancesFactor )
+    {
+        m_obscurancesFactor = obscurancesFactor; emit changed( ObscurancesFactor );
+    }
+}
+
+
 }

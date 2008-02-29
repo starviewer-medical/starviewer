@@ -148,6 +148,7 @@ public:
     void setObscuranceVariant( ObscuranceVariant obscuranceVariant );
 
     void setRenderWithObscurances( bool renderWithObscurances );
+    void setObscurancesFactor( double obscurancesFactor );
 
     void computeSaliency();
 

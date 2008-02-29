@@ -1023,7 +1023,7 @@ void OptimalViewpointVolume::computeObscurances()
         }
     }
 
-    for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
+//     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
     m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
 }
@@ -1384,6 +1384,12 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
         m_mainMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
     }
     DEBUG_LOG( "srwo:e" );
+}
+
+
+void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
+{
+    m_volumeRayCastFunctionObscurances->SetObscuranceFactor( obscurancesFactor );
 }
 
 

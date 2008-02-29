@@ -53,7 +53,7 @@ public:
 
         GroupingMethod,
 
-        Obscurances
+        Obscurances, ObscurancesFactor
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -126,6 +126,9 @@ public:
     bool getObscurances() const;
     void setObscurances( bool obscurances );
 
+    double getObscurancesFactor() const;
+    void setObscurancesFactor( double obscurancesFactor );
+
 public slots:
 
     void setInterpolation( int interpolation );
@@ -168,6 +171,7 @@ private:
     int m_groupingMethod;
 
     bool m_obscurances;
+    double m_obscurancesFactor;
 
 
 };

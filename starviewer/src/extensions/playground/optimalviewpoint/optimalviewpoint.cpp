@@ -779,6 +779,9 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::Obscurances:
             setObscurances( m_parameters->getObscurances() );
             break;
+        case OptimalViewpointParameters::ObscurancesFactor:
+            setObscurancesFactor( m_parameters->getObscurancesFactor() );
+            break;
         case OptimalViewpointParameters::NumberOfPlanes:
             setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             break;
@@ -887,6 +890,12 @@ void OptimalViewpoint::computeObscurances( int directions, double maximumDistanc
 void OptimalViewpoint::setObscurances( bool obscurances )
 {
     m_volume->setRenderWithObscurances( obscurances );
+}
+
+
+void OptimalViewpoint::setObscurancesFactor( double obscurancesFactor )
+{
+    m_volume->setObscurancesFactor( obscurancesFactor );
 }
 
 
