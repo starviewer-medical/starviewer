@@ -1,9 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1">
 <context>
+    <name>QTransferFunctionEditorByValuesBase</name>
+    <message>
+        <location filename="qtransferfunctioneditorbyvaluesbase.ui" line="30"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qtransferfunctioneditorbyvaluesbase.ui" line="50"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qtransferfunctioneditorbyvaluesbase.ui" line="57"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QTransferFunctionIntervalEditorBase</name>
+    <message>
+        <location filename="qtransferfunctionintervaleditorbase.ui" line="22"/>
+        <source>Interval</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qtransferfunctionintervaleditorbase.ui" line="55"/>
+        <source>Select color...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="106"/>
+        <location filename="distancetool.cpp" line="105"/>
         <source>%1 mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11,7 +42,7 @@
 <context>
     <name>udg::Image</name>
     <message>
-        <location filename="image.cpp" line="560"/>
+        <location filename="image.cpp" line="850"/>
         <source>No Image Available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -72,9 +103,32 @@
     </message>
 </context>
 <context>
+    <name>udg::PatientItemModel</name>
+    <message>
+        <location filename="patientitemmodel.cpp" line="189"/>
+        <source>Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="patientitemmodel.cpp" line="189"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="patientitemmodel.cpp" line="189"/>
+        <source>Modality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="patientitemmodel.cpp" line="189"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::PolylineROITool</name>
     <message>
-        <location filename="polylineroitool.cpp" line="176"/>
+        <location filename="polylineroitool.cpp" line="587"/>
         <source>Area: %1 mm2
 Mean: %2</source>
         <translation type="unfinished"></translation>
@@ -83,12 +137,12 @@ Mean: %2</source>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2177"/>
+        <location filename="q2dviewer.cpp" line="2242"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2170"/>
+        <location filename="q2dviewer.cpp" line="2235"/>
         <source>
 %1
 %2
@@ -99,35 +153,35 @@ Acc:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2080"/>
+        <location filename="q2dviewer.cpp" line="2145"/>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="596"/>
+        <location filename="q2dviewer.cpp" line="621"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="604"/>
+        <location filename="q2dviewer.cpp" line="639"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="622"/>
-        <source> Slice Thickness: %1</source>
+        <location filename="q2dviewer.cpp" line="612"/>
+        <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="885"/>
-        <source>Default %1</source>
+        <location filename="q2dviewer.cpp" line="632"/>
+        <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="893"/>
-        <source>Default</source>
+        <location filename="q2dviewer.cpp" line="644"/>
+        <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -146,6 +200,42 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="q3dorientationmarker.cpp" line="83"/>
         <source>s</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QCINEController</name>
+    <message>
+        <location filename="qcinecontroller.cpp" line="47"/>
+        <source>%1 img/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QCINEControllerBase</name>
+    <message>
+        <location filename="qcinecontrollerbase.ui" line="13"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcinecontrollerbase.ui" line="39"/>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcinecontrollerbase.ui" line="69"/>
+        <source>Loop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcinecontrollerbase.ui" line="82"/>
+        <source>Go-back</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcinecontrollerbase.ui" line="142"/>
+        <source>10 img/sec</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -174,6 +264,583 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="13"/>
         <source>Custom Window Level Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpBase</name>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="33"/>
+        <source>DICOM Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="92"/>
+        <source>Patient Name :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="225"/>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="112"/>
+        <source>Patient ID :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="132"/>
+        <source>Gender :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="155"/>
+        <source>Age :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="178"/>
+        <source>Image Date :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="198"/>
+        <source>Image Time :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="218"/>
+        <source>Image Number :</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpbase.ui" line="310"/>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpCTHelixWidget</name>
+    <message>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="139"/>
+        <source> mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="104"/>
+        <source> s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="89"/>
+        <source> </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="99"/>
+        <source> mm/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="129"/>
+        <source> KV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="135"/>
+        <source> mA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="140"/>
+        <source> x </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpCTHelixWidgetBase</name>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="13"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="55"/>
+        <source>Protocol Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="485"/>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="78"/>
+        <source>Image Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="98"/>
+        <source>Slice Thickness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="118"/>
+        <source>Spacing Between Slices:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="141"/>
+        <source>Voltage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="164"/>
+        <source>Exposure:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="184"/>
+        <source>Patient Position:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="204"/>
+        <source>Filter Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="224"/>
+        <source>Table Height:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="247"/>
+        <source>Slice Location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="267"/>
+        <source>Reconstruction Diameter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="290"/>
+        <source>Image Matrix:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="343"/>
+        <source>Table Speed:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="372"/>
+        <source>Scan Length:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="395"/>
+        <source>View Convention:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="418"/>
+        <source>Collimation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="438"/>
+        <source>Scan Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="458"/>
+        <source>Rotation Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpcthelixwidgetbase.ui" line="478"/>
+        <source>Pitch:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpCTLocalizerWidget</name>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="78"/>
+        <source> mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="73"/>
+        <source> ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="96"/>
+        <source> x </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="100"/>
+        <source> KV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="106"/>
+        <source> mA</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpCTLocalizerWidgetBase</name>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="19"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="61"/>
+        <source>Protocol Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="359"/>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="84"/>
+        <source>Image Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="107"/>
+        <source>Voltage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="130"/>
+        <source>Exposure:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="150"/>
+        <source>Patient Position:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="170"/>
+        <source>Table Height:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="190"/>
+        <source>Reconstruction Diameter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="213"/>
+        <source>Slice Location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="233"/>
+        <source>Filter Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="256"/>
+        <source>Image Matrix:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="276"/>
+        <source>Exposure Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="329"/>
+        <source>Scan Length:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="352"/>
+        <source>View Convention:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpCTWidget</name>
+    <message>
+        <location filename="qdicomdumpctwidget.cpp" line="144"/>
+        <source> mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidget.cpp" line="79"/>
+        <source> ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidget.cpp" line="114"/>
+        <source> s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidget.cpp" line="119"/>
+        <source> degrees</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidget.cpp" line="134"/>
+        <source> KV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidget.cpp" line="140"/>
+        <source> mA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidget.cpp" line="145"/>
+        <source> x </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpCTWidgetBase</name>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="13"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="55"/>
+        <source>Protocol Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="511"/>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="78"/>
+        <source>Image Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="98"/>
+        <source>Slice Thickness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="121"/>
+        <source>Tilt:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="144"/>
+        <source>Voltage:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="167"/>
+        <source>Exposure:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="187"/>
+        <source>Patient Position:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="207"/>
+        <source>Scan Arc:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="227"/>
+        <source>Table Height:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="250"/>
+        <source>Slice Location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="270"/>
+        <source>Filter Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="293"/>
+        <source>Image Matrix:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="319"/>
+        <source>Exposure Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="339"/>
+        <source>Reconstruction Diameter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="386"/>
+        <source>Table Increment:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="415"/>
+        <source>Scan Length:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="438"/>
+        <source>View Convention:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="461"/>
+        <source>Collimation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="484"/>
+        <source>Cycle Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpctwidgetbase.ui" line="504"/>
+        <source>Rotation Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpMRWidget</name>
+    <message>
+        <location filename="qdicomdumpmrwidget.cpp" line="116"/>
+        <source> mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidget.cpp" line="63"/>
+        <source> %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidget.cpp" line="78"/>
+        <source> ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidget.cpp" line="83"/>
+        <source> degrees</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QDicomDumpMRWidgetBase</name>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="13"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="58"/>
+        <source>Protocol Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="439"/>
+        <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="78"/>
+        <source>Field Of View:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="101"/>
+        <source>Slice thickness:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="124"/>
+        <source>Ratio Field Of View:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="144"/>
+        <source>Repetition Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="164"/>
+        <source>Echo Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="187"/>
+        <source>Inversion Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="207"/>
+        <source>Flip Angle:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="227"/>
+        <source>Receive Coil:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="247"/>
+        <source>Number Of Averages:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="300"/>
+        <source>Scanning Technique:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="320"/>
+        <source>Spacial plane: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="343"/>
+        <source>Turbo Factor:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="363"/>
+        <source>EPI Factor:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="386"/>
+        <source>Number Of Stacks:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="409"/>
+        <source>B Factor:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdumpmrwidgetbase.ui" line="432"/>
+        <source>Dynamic Scans:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -219,22 +886,89 @@ WW: %5 WL: %6 </source>
     </message>
 </context>
 <context>
+    <name>udg::QThickSlabWidget</name>
+    <message>
+        <location filename="qthickslabwidget.cpp" line="76"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidget.cpp" line="96"/>
+        <source>MIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidget.cpp" line="100"/>
+        <source>MinIP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidget.cpp" line="104"/>
+        <source>Average</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QThickSlabWidgetBase</name>
+    <message>
+        <location filename="qthickslabwidgetbase.ui" line="13"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidgetbase.ui" line="93"/>
+        <source>2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QTransferFunctionEditorByGradient</name>
+    <message>
+        <location filename="qtransferfunctioneditorbygradient.cpp" line="57"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="400"/>
+        <location filename="qviewer.cpp" line="448"/>
         <source>Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="400"/>
+        <location filename="qviewer.cpp" line="448"/>
         <source>The selected item is not a valid image format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="520"/>
+        <source>Default %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="532"/>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QViewerCINEController</name>
+    <message>
+        <location filename="qviewercinecontroller.cpp" line="134"/>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qviewercinecontroller.cpp" line="119"/>
+        <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::QWindowLevelComboBox</name>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="115"/>
+        <location filename="qwindowlevelcombobox.cpp" line="114"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -265,143 +999,163 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::ToolRegistry</name>
     <message>
-        <location filename="toolregistry.cpp" line="107"/>
-        <source>Slicer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="108"/>
-        <source>Enable/Disable slicing tool</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="113"/>
-        <source>Window Level</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="114"/>
+        <location filename="toolregistry.cpp" line="124"/>
         <source>Enable/Disable Window Level tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="119"/>
+        <location filename="toolregistry.cpp" line="129"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="120"/>
+        <location filename="toolregistry.cpp" line="130"/>
         <source>Enable/Disable Zoom tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="125"/>
-        <source>Move</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="126"/>
+        <location filename="toolregistry.cpp" line="136"/>
         <source>Enable/Disable Move tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="131"/>
+        <location filename="toolregistry.cpp" line="141"/>
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="132"/>
+        <location filename="toolregistry.cpp" line="142"/>
         <source>Put Seed tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="137"/>
+        <location filename="toolregistry.cpp" line="147"/>
         <source>Screen Shot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="138"/>
+        <location filename="toolregistry.cpp" line="148"/>
         <source>Enable/Disable Screen shot tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="143"/>
+        <location filename="toolregistry.cpp" line="153"/>
         <source>3D Rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="144"/>
+        <location filename="toolregistry.cpp" line="154"/>
         <source>Enable/Disable 3D Rotation tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="149"/>
-        <source>Distances</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="150"/>
+        <location filename="toolregistry.cpp" line="160"/>
         <source>Enable/Disable Distances tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="155"/>
+        <location filename="toolregistry.cpp" line="165"/>
         <source>ROI&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="156"/>
+        <location filename="toolregistry.cpp" line="166"/>
         <source>Enable/Disable ROI tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="161"/>
-        <source>Reference Lines</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="162"/>
+        <location filename="toolregistry.cpp" line="172"/>
         <source>Enable/Disable Reference Lines tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="167"/>
+        <location filename="toolregistry.cpp" line="177"/>
         <source>Voxel Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="168"/>
+        <location filename="toolregistry.cpp" line="178"/>
         <source>Enable voxel information over cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="173"/>
+        <location filename="toolregistry.cpp" line="183"/>
         <source>Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="174"/>
+        <location filename="toolregistry.cpp" line="184"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="179"/>
+        <location filename="toolregistry.cpp" line="189"/>
         <source>Window Level Presets tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="180"/>
+        <location filename="toolregistry.cpp" line="190"/>
         <source>Enable/Disable Window Level Presets tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="184"/>
-        <source>Polyline ROI tool</source>
+        <location filename="toolregistry.cpp" line="195"/>
+        <source>Enable/Disable Polyline ROI tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="185"/>
-        <source>Enable/Disable Polyline ROI tool</source>
+        <location filename="toolregistry.cpp" line="117"/>
+        <source>Scroll</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="118"/>
+        <source>Enable/Disable scroll tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="123"/>
+        <source>WW/WL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="135"/>
+        <source>Pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="159"/>
+        <source>Distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="171"/>
+        <source>Ref.Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="194"/>
+        <source>ROI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="200"/>
+        <source>Keyboard slicing tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="201"/>
+        <source>Enable/Disable keyboard slicing tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="205"/>
+        <source>Erase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="206"/>
+        <source>Enable/Disable eraser tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -507,6 +1261,16 @@ WW: %5 WL: %6 </source>
         <source>Enable voxel information over cursor</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="toolsactionfactory.cpp" line="99"/>
+        <source>Eraser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolsactionfactory.cpp" line="100"/>
+        <source>Enable/Disable Eraser tool</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::WindowLevelPresetsToolData</name>
@@ -566,7 +1330,7 @@ WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="123"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="129"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
