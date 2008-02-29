@@ -78,9 +78,11 @@ void Q2DViewerWidget::resetViewToAxial()
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
+    disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_spinBox->setMinimum( extent[4] );
     m_spinBox->setMaximum( extent[5] / phases );
     m_slider->setMaximum( extent[5] / phases);
+    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_viewText->setText( tr("XY : Axial") );
     m_2DView->resetViewToAxial();
 
@@ -95,9 +97,11 @@ void Q2DViewerWidget::resetViewToSagital()
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
+    disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_spinBox->setMinimum( extent[0] );
     m_spinBox->setMaximum( extent[1] );
     m_slider->setMaximum( extent[1] );
+    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_viewText->setText( tr( "XY : Sagital" ) );
     m_2DView->resetViewToSagital();
 
@@ -112,9 +116,11 @@ void Q2DViewerWidget::resetViewToCoronal()
     int extent[6];
     m_mainVolume->getWholeExtent( extent );
 
+    disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_spinBox->setMinimum( extent[2] );
     m_spinBox->setMaximum( extent[3] );
     m_slider->setMaximum( extent[3] );
+    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_viewText->setText( tr( "XY : Coronal" ) );
     m_2DView->resetViewToCoronal();
 
