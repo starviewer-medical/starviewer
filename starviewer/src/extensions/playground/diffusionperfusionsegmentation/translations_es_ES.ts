@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
+<defaultcodec></defaultcodec>
 <context>
     <name>QDifuPerfuExtensionBase</name>
     <message>
@@ -165,7 +166,7 @@
     <message>
         <location filename="qdifuperfuextensionbase.ui" line="172"/>
         <source>Threshold: </source>
-        <translation type="unfinished"></translation>
+        <translation>Umbral: </translation>
     </message>
 </context>
 <context>
