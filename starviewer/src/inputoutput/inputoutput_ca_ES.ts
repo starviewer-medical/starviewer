@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<defaultcodec></defaultcodec>
 <context>
     <name>QChooseOneObjectDialogBase</name>
     <message>
@@ -337,7 +336,7 @@ N&apos;hauries de triar només un.</translation>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1201"/>
+        <location filename="queryscreen.cpp" line="1205"/>
         <source>Open</source>
         <translation>Obrir</translation>
     </message>
@@ -977,90 +976,44 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>udg::QFileDialog</name>
-    <message>
-        <location filename="queryscreen.cpp" line="1201"/>
-        <source>Open</source>
-        <translation type="obsolete">Obrir</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QObject</name>
-    <message>
-        <location filename="databaseconnection.cpp" line="76"/>
-        <source>Normal</source>
-        <translation type="obsolete">Normal</translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="78"/>
-        <source>Database is corrupted or SQL error syntax</source>
-        <translation type="obsolete">La base de dades està corrupta o bé error de sintaxi SQL</translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="80"/>
-        <source>Database is locked</source>
-        <translation type="obsolete">La base de dades està bloquejada</translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="82"/>
-        <source>Database corrupted</source>
-        <translation type="obsolete">La base de dades està corrupta</translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="84"/>
-        <source>The new register is duplicated</source>
-        <translation type="obsolete">El nou registre està duplicat</translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="86"/>
-        <source>Not connected to database</source>
-        <translation type="obsolete">Sense connexió a la base de dades</translation>
-    </message>
-    <message>
-        <location filename="databaseconnection.cpp" line="91"/>
-        <source>Internal Database error (SQLITE)</source>
-        <translation type="obsolete">Error intern de la base de dades (SQLITE)</translation>
-    </message>
-</context>
-<context>
     <name>udg::QOperationStateScreen</name>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="76"/>
+        <location filename="qoperationstatescreen.cpp" line="75"/>
         <source>PENDING</source>
         <translation>PENDENT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="80"/>
+        <location filename="qoperationstatescreen.cpp" line="79"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="82"/>
+        <location filename="qoperationstatescreen.cpp" line="81"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="171"/>
+        <location filename="qoperationstatescreen.cpp" line="170"/>
         <source>RETRIEVING</source>
         <translation>DESCARREGANT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="241"/>
+        <location filename="qoperationstatescreen.cpp" line="240"/>
         <source>ERROR</source>
         <translation>ERROR</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="241"/>
+        <location filename="qoperationstatescreen.cpp" line="240"/>
         <source>RETRIEVED</source>
         <translation>DESCARREGAT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="241"/>
+        <location filename="qoperationstatescreen.cpp" line="240"/>
         <source>STORED</source>
         <translation>ENVIAT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="173"/>
+        <location filename="qoperationstatescreen.cpp" line="172"/>
         <source>STORING</source>
         <translation>ENVIANT</translation>
     </message>
@@ -1182,67 +1135,67 @@ Codi d&apos;error: %1</translation>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="81"/>
+        <location filename="qstudytreewidget.cpp" line="80"/>
         <source>&amp;View</source>
         <translation>&amp;Visualitzar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="92"/>
+        <location filename="qstudytreewidget.cpp" line="91"/>
         <source>&amp;Retrieve</source>
         <translation>&amp;Descarregar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="104"/>
+        <location filename="qstudytreewidget.cpp" line="103"/>
         <source>&amp;Delete</source>
         <translation>&amp;Esborrar</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="531"/>
+        <location filename="qstudytreewidget.cpp" line="530"/>
         <source>Series</source>
         <translation>Sèrie</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="82"/>
+        <location filename="qstudytreewidget.cpp" line="81"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="93"/>
+        <location filename="qstudytreewidget.cpp" line="92"/>
         <source>Ctrl+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="112"/>
+        <location filename="qstudytreewidget.cpp" line="111"/>
         <source>Ctrl+M</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="117"/>
+        <location filename="qstudytreewidget.cpp" line="116"/>
         <source>Store to PACS</source>
         <translation>Emmagatzemar al PACS</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="118"/>
+        <location filename="qstudytreewidget.cpp" line="117"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="111"/>
+        <location filename="qstudytreewidget.cpp" line="110"/>
         <source>Send to DICOMDIR List</source>
         <translation>Enviar a la llista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="234"/>
+        <location filename="qstudytreewidget.cpp" line="233"/>
         <source>Series %1</source>
         <translation>Sèrie %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="182"/>
+        <location filename="qstudytreewidget.cpp" line="181"/>
         <source>Study %1</source>
         <translation>Estudi %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="295"/>
+        <location filename="qstudytreewidget.cpp" line="294"/>
         <source>Image %1</source>
         <translation>Imatge %1</translation>
     </message>
@@ -1353,158 +1306,158 @@ Codi d&apos;error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1549"/>
+        <location filename="queryscreen.cpp" line="1553"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="356"/>
+        <location filename="queryscreen.cpp" line="355"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation>No s&apos;ha especificat cap filtre per la cerca. Aquesta cerca pot necessitar bastanta estona. Esteu segurs que voleu continuar ?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="447"/>
+        <location filename="queryscreen.cpp" line="446"/>
         <source>Please select a PACS to query</source>
         <translation>Selecciona un Pacs a consultar
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="461"/>
+        <location filename="queryscreen.cpp" line="460"/>
         <source>ERROR QUERING!.</source>
         <translation>ERROR DESCARREGANT!.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="548"/>
+        <location filename="queryscreen.cpp" line="547"/>
         <source>No study match found.</source>
         <translation>No s&apos;han trobat coincidències.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="697"/>
+        <location filename="queryscreen.cpp" line="696"/>
         <source>No series match for this study.
 </source>
         <translation>No s&apos;han trobat sèries per aquest estudi.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="851"/>
+        <location filename="queryscreen.cpp" line="850"/>
         <source>Select a study to download </source>
         <translation>Selecciona un estudi a descarregar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="875"/>
+        <location filename="queryscreen.cpp" line="874"/>
         <source>Internal Error : </source>
         <translation>Error intern :</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1025"/>
+        <location filename="queryscreen.cpp" line="1024"/>
         <source>Select a study to view </source>
         <translation>Seleccioneu un estudi per visualitzar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="116"/>
+        <location filename="queryscreen.cpp" line="115"/>
         <source>Error deleting old studies</source>
         <translation>Error esborrant els estudis vells</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1123"/>
+        <location filename="queryscreen.cpp" line="1122"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1123"/>
+        <location filename="queryscreen.cpp" line="1122"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1307"/>
+        <location filename="queryscreen.cpp" line="1311"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Noes pot connectar al PACS %1 de %2
 Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="513"/>
+        <location filename="queryscreen.cpp" line="512"/>
         <source>Error, not opened Dicomdir</source>
         <translation>Error, no s&apos;ha obert cap DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="518"/>
+        <location filename="queryscreen.cpp" line="517"/>
         <source>Error quering in dicomdir</source>
         <translation>Error consultant el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1201"/>
+        <location filename="queryscreen.cpp" line="1205"/>
         <source>Dicomdir</source>
         <translation>DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1216"/>
+        <location filename="queryscreen.cpp" line="1220"/>
         <source>Error openning dicomdir</source>
         <translation>Error obrint el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="782"/>
+        <location filename="queryscreen.cpp" line="781"/>
         <source>No images match for this series.
 </source>
         <translation>No s&apos;han trobat imatges per aquesta sèrie.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="831"/>
+        <location filename="queryscreen.cpp" line="830"/>
         <source>No images match for this study.
 </source>
         <translation>No s&apos;han trobat imatges per aquest estudi.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="644"/>
+        <location filename="queryscreen.cpp" line="643"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation>Error! No es poden consultar les sèries al PACS anomenat %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="771"/>
+        <location filename="queryscreen.cpp" line="770"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation>Error! No es poden consultar les sèries al PACS anomenat %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1322"/>
+        <location filename="queryscreen.cpp" line="1326"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Noes pot connectar al PACS %1 de %2Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1549"/>
+        <location filename="queryscreen.cpp" line="1553"/>
         <source>
 Error Number: %1</source>
         <translation>
 Codi d&apos;error: %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1059"/>
+        <location filename="queryscreen.cpp" line="1058"/>
         <source>Select at least one study to view</source>
         <translation>Seleccioni almenys un estudi a visualitzar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1117"/>
+        <location filename="queryscreen.cpp" line="1116"/>
         <source>Please select at least one study to delete</source>
         <translation>SI us plau seleccioni almenys un estudi a esborrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1122"/>
+        <location filename="queryscreen.cpp" line="1121"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation>Està segur que vol esborrar els estudis seleccionats?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1247"/>
+        <location filename="queryscreen.cpp" line="1251"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Ha de seleccionar un PACS on emmagatzemar l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1291"/>
+        <location filename="queryscreen.cpp" line="1295"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Els estudis només es poden emmagatzemar en un PACS alhora</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1135"/>
+        <location filename="queryscreen.cpp" line="1137"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>L&apos;estudi amb UID: %1 està en ús per la Llista de DICOMDIR. Si desitja esborrar aquest estudi hauri d&apos;esborrar-lo primer de la Llista de DICOMDIR.</translation>
     </message>
