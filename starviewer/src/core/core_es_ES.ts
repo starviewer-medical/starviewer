@@ -135,7 +135,7 @@
         <location filename="polylineroitool.cpp" line="587"/>
         <source>Area: %1 mm2
 Mean: %2</source>
-        <translation>Área: %1 mm2
+        <translation>Area: %1 mm2
 Media: %2</translation>
     </message>
 </context>
