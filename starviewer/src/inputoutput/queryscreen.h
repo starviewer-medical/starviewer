@@ -273,6 +273,9 @@ private:
     ///Crear el menú contextual del QStudyTreeWidgetDicomdir
     void CreateContextMenuQStudyTreeWidgetDicomdir();
 
+    ///Estableix la mida de les columnes de QStudyTreeWidget
+    void setQStudyTreeWidgetColumnsWidth();
+
     /** Construeix un string amb els parametres de cerca, per debug/logs
      * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis
      */
@@ -295,6 +298,9 @@ private:
      * Llegeix i aplica dades de configuració
      */
     void readSettings();
+
+    ///Guarda la mida de les columnes del QStudyTreeView Pacs, dicomdir i cache
+    void saveQStudyTreeWidgetColumnsWidth();
 
 private:
 

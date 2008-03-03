@@ -117,13 +117,26 @@ public:
      */
     QString getSelectedImageUID();
 
-    /// guarda de la mida de les columnes
-    void saveColumnsWidth();
-
     ///ordena descendentment per la columna seleccionada
     void sort();
 
+    ///Estableix el menú contextual del Widget
     void setContextMenu( QMenu *contextMenu );
+
+    ///Retorna el número de columnes del tree view
+    int getNumberOfColumns();
+
+    /** Assigna l'amplada a les columnes segons el paràmetre passat
+     * @param columnNumber número de columna 
+     * @param columnWidth amplada de la columna
+     */
+    void setColumnWidth( int columnNumber , int columnWidth );
+
+    /** Retorna l'amplada de la columna
+     * @param columnNumber número de columna
+     * @return amplada de la columna 
+     */
+    int getColumnWidth( int columnNumber );
 
     /// Destructor de la classe
     ~QStudyTreeWidget();
@@ -170,9 +183,6 @@ public slots:
 private:
     /// crea les connexions dels signals i slots
     void createConnections( );
-
-    /// Assigna l'ampla a les columnes segons els paràmetres guardats a StarviewerSettings
-    void setWidthColumns( );
 
     /// Creem el menu contextual, en funcio de a quin tab pertany activa unes o altres opcions del menu
     void createContextMenu( );
