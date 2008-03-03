@@ -110,16 +110,15 @@ public slots:
     /** Afegeix els estudis a la llista d'estudis per convertir a Dicomdir
      * @param studiesUIDList UID dels estudis a covnertir a Dicomdir
      */
-    void convertToDicomdir( QStringList studiesUIDList );
+    void convertToDicomdir();
 
     /** Obre un dicomdir
      */
     void openDicomdir();
 
-    /** guarda els estudis seleccionats en el PACS
-     * @param studiesUIDList llista d'uid's dels estudis a guardar
+    /** guarda els estudis seleccionats a m_studyTreeWidgetCache al PACS
      */
-    void storeStudiesToPacs( QStringList studiesUIDList );
+    void storeStudiesToPacs();
 
     /** Cerca les imatges d'una sèrie al PACS
      * @param StudyUID uid de l'estudi
@@ -265,6 +264,15 @@ private:
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();
 
+    ///Crear el menú contextual del QStudyTreeWidgetCache 
+    void CreateContextMenuQStudyTreeWidgetCache();
+
+    ///Crear el menú contextual del QStudyTreeWidgetPacs
+    void CreateContextMenuQStudyTreeWidgetPacs();
+
+    ///Crear el menú contextual del QStudyTreeWidgetDicomdir
+    void CreateContextMenuQStudyTreeWidgetDicomdir();
+
     /** Construeix un string amb els parametres de cerca, per debug/logs
      * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis
      */
@@ -328,6 +336,7 @@ struct retrieveParameters
     /// quin és l'últim pacs consultat per saber si hem de descarregar l'estudi, consultar, sèrie etc a quin PACS atacar.
     QString m_lastQueriedPacs;
 
+    QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs, m_contextMenuQStudyTreeWidgetDicomdir;
 };
 
 };

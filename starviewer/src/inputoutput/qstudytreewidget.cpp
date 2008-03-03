@@ -38,7 +38,7 @@
 namespace udg {
 
 QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
- : QWidget( parent ), m_viewAction(NULL), m_retrieveAction(NULL), m_deleteStudyAction(NULL), m_sendToDICOMDIRListAction(NULL), m_storeStudyAction(NULL)
+ : QWidget( parent )
 {
     setupUi( this );
 
@@ -57,7 +57,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     m_iconSeries = QIcon( ":/images/series.png" );
 
     m_parentName = parent->objectName();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
-    createContextMenu(); //creem el menu contextual
     createConnections();
 
     setWidthColumns();//s'assigna a les columnes l'amplada definida per l'usuari
@@ -72,55 +71,6 @@ void QStudyTreeWidget::createConnections()
 {
     connect( m_studyTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int ) ), SLOT( clicked ( QTreeWidgetItem * , int ) ) );
     connect( m_studyTreeView , SIGNAL( itemDoubleClicked ( QTreeWidgetItem * , int ) ), SLOT( doubleClicked( QTreeWidgetItem * , int ) ) );
-}
-
-void QStudyTreeWidget::createContextMenu()
-{
-    //acció veure
-    m_viewAction = m_contextMenu.addAction( tr("&View") );
-    m_viewAction->setShortcut( tr("Ctrl+V") );
-    m_viewAction->setIcon( QIcon(":/images/view.png") );
-    connect( m_viewAction , SIGNAL( triggered() ) , SIGNAL( view() ) );
-    // TODO per alguna raó desconeguda, QT ignora els shortCut especificats a través de QAction, i fem aquest workaround perquè funcionin. Mirar com solucionar-ho
-    (void) new QShortcut( m_viewAction->shortcut() , this , SIGNAL( view() ) );
-
-    // només hi ha RETRIEVE en el PACS i DICOMDIR TODO a DICOMDIR s'hauria de dir IMPORT to DATABASE... per ser mes correctes
-    // TODO AL TANTO AMB AIXÒ!!!!!!! SI MAI CANVIA EL PARENT QUÈ PASSA???????????? FER SISTEMA PER DETERMINAR EL TIPUS DE TAB QUE ÉS O ALGO
-    if( m_parentName == "m_tabPacs" || m_parentName == "m_tabDicomdir" )
-    {
-        m_retrieveAction = m_contextMenu.addAction( tr("&Retrieve") );
-        m_retrieveAction->setShortcut( tr("Ctrl+R") );
-        m_retrieveAction->setIcon( QIcon(":/images/retrieve.png") );
-        connect( m_retrieveAction , SIGNAL( triggered() ) , SIGNAL( retrieve() ) );
-        // TODO per alguna raó desconeguda, QT ignora els shortCut especificats a través de QAction, i fem aquest workaround perquè funcionin. Mirar com solucionar-ho
-        (void) new QShortcut( m_retrieveAction->shortcut() , this , SIGNAL( retrieve() ) );
-    }
-
-    // Al haver un QSplitter el nom del Pare del TabCache és l'splitter TODO molt al tanto amb aquesta guarrada -_-¡
-    if( m_parentName == "m_StudyTreeSeriesListQSplitter" )
-    {
-        // només es pot esborrar a local
-        m_deleteStudyAction = m_contextMenu.addAction( tr("&Delete")) ;
-        m_deleteStudyAction->setShortcut( Qt::Key_Delete );
-        m_deleteStudyAction->setIcon( QIcon(":/images/databaseRemove.png") );
-        connect( m_deleteStudyAction , SIGNAL( triggered() ), SIGNAL( deleteSelectedStudies() ) );
-        (void) new QShortcut( m_deleteStudyAction->shortcut() , this , SIGNAL( deleteSelectedStudies() ) );
-
-        //nomes es pot afegir element a la llista de DICOMDIR desde local
-        m_sendToDICOMDIRListAction = m_contextMenu.addAction( tr( "Send to DICOMDIR List" ) );
-        m_sendToDICOMDIRListAction->setShortcut( tr( "Ctrl+M" ) );
-        connect( m_sendToDICOMDIRListAction , SIGNAL ( triggered() ) , this , SLOT ( createDicomDir() ) );
-        (void) new QShortcut( m_sendToDICOMDIRListAction->shortcut() , this , SLOT( createDicomDir() ) );
-
-        // només es pot fer store des de local
-        m_storeStudyAction = m_contextMenu.addAction( tr( "Store to PACS" ) );
-        m_storeStudyAction->setShortcut( tr( "Ctrl+S" ) );
-        m_storeStudyAction->setIcon( QIcon(":/images/store.png") );
-        connect( m_storeStudyAction , SIGNAL ( triggered() ) , this , SLOT ( storeStudies() ) );
-        (void) new QShortcut( m_storeStudyAction->shortcut() , this , SLOT( storeStudies() ) );
-
-        // TODO per alguna raó desconeguda, QT ignora els shortCut especificats a través de QAction, i fem aquest workaround perquè funcionin. Mirar com solucionar-ho
-    }
 }
 
 void QStudyTreeWidget::setWidthColumns()
@@ -590,10 +540,15 @@ void QStudyTreeWidget::sort()
     m_studyTreeView->sortItems( m_studyTreeView->sortColumn() , Qt::AscendingOrder );
 }
 
+void QStudyTreeWidget::setContextMenu(QMenu * contextMenu)
+{
+    m_contextMenu = contextMenu;
+}
+
 void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
 {
     if ( !m_studyTreeView->selectedItems().isEmpty() )
-        m_contextMenu.exec( event->globalPos() );
+        m_contextMenu->exec( event->globalPos() );
 }
 
 void QStudyTreeWidget::clicked( QTreeWidgetItem *item , int )
@@ -642,16 +597,6 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
             emit( clearSeriesListWidget() );
         }
     }
-}
-
-void QStudyTreeWidget::createDicomDir()
-{
-    emit ( convertToDicomDir( getSelectedStudiesUID() ) );
-}
-
-void QStudyTreeWidget::storeStudies()
-{
-    emit ( storeStudiesToPacs( getSelectedStudiesUID() ) );
 }
 
 void QStudyTreeWidget::saveColumnsWidth()
