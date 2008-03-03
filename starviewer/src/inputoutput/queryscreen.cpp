@@ -107,6 +107,8 @@ void QueryScreen::initialize()
     CreateContextMenuQStudyTreeWidgetCache();
     CreateContextMenuQStudyTreeWidgetPacs();
     CreateContextMenuQStudyTreeWidgetDicomdir();
+
+    setQStudyTreeWidgetColumnsWidth();
 }
 
 void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
@@ -152,6 +154,26 @@ void QueryScreen::CreateContextMenuQStudyTreeWidgetDicomdir()
     (void) new QShortcut( action->shortcut() , this , SLOT( retrieve() ) );
 
     m_studyTreeWidgetDicomdir->setContextMenu( & m_contextMenuQStudyTreeWidgetDicomdir ); //Especifiquem que es el menu del dicomdir
+}
+
+void QueryScreen::setQStudyTreeWidgetColumnsWidth()
+{
+    StarviewerSettings settings;
+
+    for ( int column = 0; column < m_studyTreeWidgetCache->getNumberOfColumns(); column++)
+    {
+        m_studyTreeWidgetCache->setColumnWidth( column , settings.getStudyCacheListColumnWidth(column) );
+    }
+
+    for ( int column = 0; column < m_studyTreeWidgetPacs->getNumberOfColumns(); column++)
+    {
+        m_studyTreeWidgetPacs->setColumnWidth( column , settings.getStudyPacsListColumnWidth(column) );
+    }
+
+    for ( int column = 0; column < m_studyTreeWidgetDicomdir->getNumberOfColumns(); column++)
+    {
+        m_studyTreeWidgetDicomdir->setColumnWidth( column , settings.getStudyDicomdirListColumnWidth(column) );
+    }
 }
 
 void QueryScreen::deleteOldStudies()
@@ -1212,12 +1234,30 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
 
 void QueryScreen::closeEvent( QCloseEvent* event )
 {
-    m_studyTreeWidgetPacs->saveColumnsWidth();
-    m_studyTreeWidgetCache->saveColumnsWidth();
-    m_studyTreeWidgetDicomdir->saveColumnsWidth();
+    saveQStudyTreeWidgetColumnsWidth();
 
     event->accept();
     m_qcreateDicomdir->clearTemporaryDir();
+}
+
+void QueryScreen::saveQStudyTreeWidgetColumnsWidth()
+{
+    StarviewerSettings settings;
+
+    for ( int column = 0; column < m_studyTreeWidgetPacs->getNumberOfColumns(); column++ )
+    {
+        settings.setStudyPacsListColumnWidth( column , m_studyTreeWidgetPacs->getColumnWidth( column ) );
+    }
+
+    for ( int column = 0; column < m_studyTreeWidgetCache->getNumberOfColumns(); column++ )
+    {
+        settings.setStudyCacheListColumnWidth( column , m_studyTreeWidgetCache->getColumnWidth( column ) );
+    }
+
+    for ( int column = 0; column < m_studyTreeWidgetDicomdir->getNumberOfColumns(); column++ )
+    {
+        settings.setStudyDicomdirListColumnWidth( column , m_studyTreeWidgetDicomdir->getColumnWidth( column ) );
+    }
 }
 
 void QueryScreen::convertToDicomdir()

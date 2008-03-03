@@ -59,7 +59,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     m_parentName = parent->objectName();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
     createConnections();
 
-    setWidthColumns();//s'assigna a les columnes l'amplada definida per l'usuari
     m_studyTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 }
 
@@ -73,29 +72,14 @@ void QStudyTreeWidget::createConnections()
     connect( m_studyTreeView , SIGNAL( itemDoubleClicked ( QTreeWidgetItem * , int ) ), SLOT( doubleClicked( QTreeWidgetItem * , int ) ) );
 }
 
-void QStudyTreeWidget::setWidthColumns()
+void QStudyTreeWidget::setColumnWidth( int columnNumber , int columnWidth )
 {
-    StarviewerSettings settings;
+    m_studyTreeView->header()->resizeSection( columnNumber , columnWidth );
+}
 
-    for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
-    {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
-        if (m_parentName == "m_StudyTreeSeriesListQSplitter")
-        {
-            m_studyTreeView->header()->resizeSection( i ,settings.getStudyCacheListColumnWidth(i) );
-        }
-
-        //Renombrem segons quin objecte es tracti, si es el que mostra la llista d'estudis del PACS o de la cache
-        if (m_parentName == "m_tabPacs")
-        {
-            m_studyTreeView->header()->resizeSection( i , settings.getStudyPacsListColumnWidth( i ) );
-        }
-
-        if (m_parentName == "m_tabDicomdir")
-        {
-            m_studyTreeView->header()->resizeSection( i , settings.getStudyDicomdirListColumnWidth( i ) );
-        }
-
-    }
+int QStudyTreeWidget::getColumnWidth( int columnNumber )
+{
+    return m_studyTreeView->columnWidth( columnNumber );
 }
 
 void QStudyTreeWidget::insertStudyList( StudyList *studyList )
@@ -545,6 +529,11 @@ void QStudyTreeWidget::setContextMenu(QMenu * contextMenu)
     m_contextMenu = contextMenu;
 }
 
+int QStudyTreeWidget::getNumberOfColumns()
+{
+    return m_studyTreeView->columnCount();
+}
+
 void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
 {
     if ( !m_studyTreeView->selectedItems().isEmpty() )
@@ -595,32 +584,6 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
         {
             item->setIcon(ObjectName, m_closeFolder);
             emit( clearSeriesListWidget() );
-        }
-    }
-}
-
-void QStudyTreeWidget::saveColumnsWidth()
-{
-    StarviewerSettings settings;
-
-
-    for ( int i = 0; i < m_studyTreeView->columnCount(); i++ )
-    {
-
-        if ( m_parentName == "m_tabPacs" )
-        {
-            settings.setStudyPacsListColumnWidth( i , m_studyTreeView->columnWidth( i ) );
-        }
-
-        //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
-        if ( m_parentName == "m_StudyTreeSeriesListQSplitter" )
-        {
-            settings.setStudyCacheListColumnWidth( i , m_studyTreeView->columnWidth( i ) );
-        }
-
-        if ( m_parentName == "m_tabDicomdir" )
-        {
-            settings.setStudyDicomdirListColumnWidth( i , m_studyTreeView->columnWidth( i ) );
         }
     }
 }
