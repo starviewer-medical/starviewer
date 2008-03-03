@@ -1104,7 +1104,9 @@ void QueryScreen::importDicomdir()
     {
         importDicom.import( m_readDicomdir.getDicomdirPath(), studyUID, QString(), QString() );
     }
-
+    
+    queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
+    
     QApplication::restoreOverrideCursor();
 }
 
