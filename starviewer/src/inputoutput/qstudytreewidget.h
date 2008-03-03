@@ -123,6 +123,7 @@ public:
     ///ordena descendentment per la columna seleccionada
     void sort();
 
+    void setContextMenu( QMenu *contextMenu );
 
     /// Destructor de la classe
     ~QStudyTreeWidget();
@@ -139,26 +140,11 @@ signals :
 
     void expandSeries( QString AETitlePACS, QString StudyUID, QString SeriesUID );
 
-    ///signal que s'emet quan es vol descarregar l'estudi seleccionat a la QStudyTreeView
-    void retrieve();
-
-    ///signal que s'emet quan es vol esborrar un estudi seleccionat a la QStudyTreeView
-    void deleteSelectedStudies();
-
-    ///signal que s'emet quan es vol veure un estudi seleccionat a la QStudyTreeView
-    void view();
-
     ///signal que s'emet quan es vol afegir una serie al QSeriesListWidget
     void addSeries(DICOMSeries *serie);
 
     ///signal que s'emet per netejar el QSeriesListWidget
     void clearSeriesListWidget();
-
-    /// signal que s'emet quan es vol convertir els estudis seleccionats al format DicomDir
-    void convertToDicomDir( QStringList studiesUIDList );
-
-    ///signal que s'emet quan es vol guardar els estudis seleccionats al PACS
-    void storeStudiesToPacs( QStringList studiesUIDList );
 
 public slots:
     /** Si es selecciona una serie del QSeriesListWidget s'ha seleccionar la mateixa en el QStudyTreeWidget, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
@@ -180,12 +166,6 @@ public slots:
 
     /// Neteja el TreeView
     void clear();
-
-    ///Slot que converteix un estudi
-    void createDicomDir();
-
-    ///Slot que guardar els estudis seleccionats al PACS
-    void storeStudies();
 
 private:
     /// crea les connexions dels signals i slots
@@ -226,16 +206,12 @@ private:
 
 private:
     /// Menu contextual
-    QMenu m_contextMenu;
+    QMenu *m_contextMenu;
 
     /// strings per guardar valors de l'anterior element
     QString m_parentName , m_oldPacsAETitle , m_OldInstitution;
 
     QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
-
-    /// Accions del menú de contexte
-    QAction *m_viewAction, *m_retrieveAction, *m_deleteStudyAction, *m_sendToDICOMDIRListAction, *m_storeStudyAction;
-
 };
 
 }; // end namespace

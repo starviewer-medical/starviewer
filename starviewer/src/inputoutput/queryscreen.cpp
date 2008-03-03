@@ -10,6 +10,8 @@
 #include <QCloseEvent>
 #include <QFileDialog>
 #include <QMovie>
+#include <QContextMenuEvent>
+#include <QShortcut>
 
 #include "processimagesingleton.h"
 #include "serieslistsingleton.h"
@@ -101,6 +103,55 @@ void QueryScreen::initialize()
     m_operationAnimation->hide();
     m_labelOperation->hide();
     refreshTab( LocalDataBaseTab );
+
+    CreateContextMenuQStudyTreeWidgetCache();
+    CreateContextMenuQStudyTreeWidgetPacs();
+    CreateContextMenuQStudyTreeWidgetDicomdir();
+}
+
+void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
+{
+    QAction *action;
+
+    action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
+    (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
+    
+    action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/databaseRemove.png") , tr( "&Delete" ) , this , SLOT( deleteSelectedStudiesInCache() ) , Qt::Key_Delete );
+    (void) new QShortcut( action->shortcut() , this , SLOT( deleteSelectedStudiesInCache() ) );
+    
+    action = m_contextMenuQStudyTreeWidgetCache.addAction( tr( "Send to DICOMDIR List" ) , this , SLOT( convertToDicomdir() ) , tr( "Ctrl+M" ) );
+    (void) new QShortcut( action->shortcut() , this , SLOT( convertToDicomdir() ) );
+
+    action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/store.png") , tr( "Store to PACS" ) , this , SLOT( storeStudiesToPacs() ) , tr( "Ctrl+S" ) );
+    (void) new QShortcut( action->shortcut() , this , SLOT( storeStudiesToPacs() ) );
+    
+    m_studyTreeWidgetCache->setContextMenu( & m_contextMenuQStudyTreeWidgetCache );//Especifiquem que és el menú per la cache
+}
+
+void QueryScreen::CreateContextMenuQStudyTreeWidgetPacs()
+{
+    QAction *action;
+
+    action = m_contextMenuQStudyTreeWidgetPacs.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
+    (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
+    
+    action = m_contextMenuQStudyTreeWidgetPacs.addAction( QIcon(":/images/retrieve.png") , tr("&Retrieve") , this , SLOT( retrieve() ) , tr("Ctrl+R") );
+    (void) new QShortcut( action->shortcut() , this , SLOT( retrieve() ) );
+
+    m_studyTreeWidgetPacs->setContextMenu( & m_contextMenuQStudyTreeWidgetPacs ); //Especifiquem que és el menú del PACS
+}
+
+void QueryScreen::CreateContextMenuQStudyTreeWidgetDicomdir()
+{
+    QAction *action;
+
+    action = m_contextMenuQStudyTreeWidgetDicomdir.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
+    (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
+    
+    action = m_contextMenuQStudyTreeWidgetDicomdir.addAction( QIcon(":/images/retrieve.png") , tr("&Retrieve") , this , SLOT( importDicomdir() ) , tr("Ctrl+R") );
+    (void) new QShortcut( action->shortcut() , this , SLOT( retrieve() ) );
+
+    m_studyTreeWidgetDicomdir->setContextMenu( & m_contextMenuQStudyTreeWidgetDicomdir ); //Especifiquem que es el menu del dicomdir
 }
 
 void QueryScreen::deleteOldStudies()
@@ -157,28 +208,13 @@ void QueryScreen::createConnections()
     //es canvia de pestanya del TAB
     connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
 
-    //conectem els signals dels TreeView
-    connect( m_studyTreeWidgetCache, SIGNAL( deleteSelectedStudies() ), SLOT( deleteSelectedStudiesInCache() ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( view() ), SLOT( view() ) );
-
-    //quan fem doble click sobre un estudi o sèrie de la llista d'estudis
-    connect( m_studyTreeWidgetDicomdir, SIGNAL( view() ), SLOT( view() ));
-
     //connectem els signes del SeriesIconView StudyListView
     connect( m_studyTreeWidgetCache, SIGNAL( addSeries(DICOMSeries * ) ), m_seriesListWidgetCache, SLOT( insertSeries(DICOMSeries *) ) );
     connect( m_studyTreeWidgetCache, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
     connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( selectedSeriesIcon(QString) ) );
-    connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), m_studyTreeWidgetCache, SIGNAL( view() ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( storeStudiesToPacs( QStringList ) ), SLOT( storeStudiesToPacs( QStringList ) ) );
+    connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), this, SLOT( view() ) );
     //per netejar la QSeriesIconView quant s'esborrar un estudi
     connect(this, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
-
-    //per poder descarregar i veure un estudi amb el menu contextual dels del QStudyList del PACS
-    connect( m_studyTreeWidgetPacs, SIGNAL( view() ), SLOT( view() ) );
-    connect( m_studyTreeWidgetPacs, SIGNAL( retrieve() ), SLOT( retrieve() ) );
-
-    //slot per importar objecte del dicomdir
-    connect( m_studyTreeWidgetDicomdir, SIGNAL( retrieve() ), SLOT( importDicomdir() ) );
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect( &m_qexecuteOperationThread, SIGNAL( viewStudy( QString , QString , QString ) ), SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
@@ -204,9 +240,6 @@ void QueryScreen::createConnections()
     //connect tracta els errors de connexió al PACS, al descarregar imatges
     connect ( &m_qexecuteOperationThread, SIGNAL( errorConnectingPacs( int ) ), SLOT( errorConnectingPacs( int ) ) );
     connect( &m_qexecuteOperationThread, SIGNAL( setRetrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
-
-    //connecta l'acció per afegir un estudi a la llista d'estudis a convertir a dicomdir
-    connect( m_studyTreeWidgetCache, SIGNAL( convertToDicomDir( QStringList ) ), SLOT( convertToDicomdir( QStringList ) ) );
 
     //Amaga o ensenya la cerca avançada
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
@@ -1187,10 +1220,11 @@ void QueryScreen::closeEvent( QCloseEvent* event )
     m_qcreateDicomdir->clearTemporaryDir();
 }
 
-void QueryScreen::convertToDicomdir( QStringList studiesUIDList )
+void QueryScreen::convertToDicomdir()
 {
     CacheStudyDAL cacheStudyDAL;
     DICOMStudy study;
+    QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
 
     foreach(QString studyUID, studiesUIDList )
     {
@@ -1237,10 +1271,10 @@ void QueryScreen::openDicomdir()
     delete dlg;
 }
 
-void QueryScreen::storeStudiesToPacs( QStringList studiesUIDList )
+void QueryScreen::storeStudiesToPacs()
 {
     PacsList pacsList;
-
+    QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     pacsList.clear(); //netejem el pacsLIST
