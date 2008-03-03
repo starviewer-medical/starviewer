@@ -129,11 +129,9 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
             }
             m_oldPacsAETitle = study->getPacsAETitle();
         }
-        else
-            item->setText( Institution , m_OldInstitution );
+        else item->setText( Institution , m_OldInstitution );
     }
-    else
-        item->setText( Institution , study->getInstitutionName() );
+    else item->setText( Institution , study->getInstitutionName() );
 
     item->setText( AccNumber , study->getAccessionNumber() );
     item->setText( PACSAETitle , study->getPacsAETitle() );
@@ -170,15 +168,9 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
     item->setText( Description , serie->getSeriesDescription().simplified() );//treiem els espaics en blanc del davant i darrera
 
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
-    if ( !serie->getSeriesDate().isEmpty() )
-    {
-        item->setText( Date , formatDate(serie->getSeriesDate() ) );
-    }
+    if ( !serie->getSeriesDate().isEmpty() ) item->setText( Date , formatDate(serie->getSeriesDate() ) );
 
-    if ( !serie->getSeriesTime().isEmpty() )
-    {
-        item->setText( Time , formatHour(serie->getSeriesTime() ) );
-    }
+    if ( !serie->getSeriesTime().isEmpty() ) item->setText( Time , formatHour(serie->getSeriesTime() ) );
 
     item->setText( PACSAETitle, serie->getPacsAETitle() );
     item->setText( UID , serie->getSeriesUID() );
@@ -298,11 +290,9 @@ QString QStudyTreeWidget::getSelectedStudyUID()
         {
             return m_studyTreeView->currentItem()->parent()->parent()->text( UID );
         }
-        else
-            return "";
+        else return "";
     }
-    else
-        return "";
+    else return "";
 }
 
 QStringList QStudyTreeWidget::getSelectedStudiesUID()
