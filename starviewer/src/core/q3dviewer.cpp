@@ -271,6 +271,7 @@ void Q3DViewer::renderRayCasting()
 
         // el mapper (funcio de ray cast) sabrà com visualitzar les dades
         vtkVolumeRayCastCompositeFunction* compositeFunction = vtkVolumeRayCastCompositeFunction::New();
+        compositeFunction->SetCompositeMethodToClassifyFirst();
         vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
 
         volumeMapper->SetVolumeRayCastFunction( compositeFunction );
