@@ -71,6 +71,9 @@ private slots:
 
     /// Quan s'activa el boto de sincronitzar
     void emitSynchronize();
+    
+    /// actualitza correctament els valors de l'slider i l'spinbox quan hi ha thick slab
+    void updateSliderAndSpinBox();
 
 private:
     /// El volum principal
