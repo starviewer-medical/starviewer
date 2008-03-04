@@ -28,12 +28,6 @@ Vector3 Vector3::operator +() const
 }
 
 
-Vector3 Vector3::operator -() const
-{
-    return Vector3( -x, -y, -z );
-}
-
-
 Vector3 Vector3::operator +( const Vector3 & v ) const
 {
     return Vector3( x + v.x, y + v.y, z + v.z );
@@ -63,12 +57,6 @@ Vector3 Vector3::operator ^( const Vector3 & v ) const  // producte vectorial
 QString Vector3::toString() const
 {
     return QString( "(%1, %2, %3)" ).arg( x ).arg( y ).arg( z );
-}
-
-
-Vector3 operator *( double a, const Vector3 & v )
-{
-    return Vector3( a * v.x, a * v.y, a * v.z );
 }
 
 

@@ -54,7 +54,7 @@ class OptimalViewpointVolume : public QObject {
 public:
 
     enum ObscuranceFunction { Constant0, SquareRoot, Exponential };
-    enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth };
+    enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacitySmoothColorBleeding };
 
     /// Construeix el volum a partir de la imatge \a image.
     OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
@@ -241,6 +241,7 @@ private:
 
 
     double * m_obscurance;
+    Vector3 * m_colorBleeding;
     int m_obscuranceDirections;
     double m_obscuranceMaximumDistance;
     ObscuranceFunction m_obscuranceFunction;
