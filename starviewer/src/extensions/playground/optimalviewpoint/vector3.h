@@ -88,6 +88,12 @@ inline double Vector3::length() const
 }
 
 
+inline Vector3 Vector3::operator -() const
+{
+    return Vector3( -x, -y, -z );
+}
+
+
 inline Vector3 Vector3::operator -( const Vector3 & v ) const
 {
     return Vector3( x - v.x, y - v.y, z - v.z );
@@ -97,6 +103,12 @@ inline Vector3 Vector3::operator -( const Vector3 & v ) const
 inline double Vector3::operator *( const Vector3 & v ) const    // producte escalar
 {
     return x * v.x + y * v.y + z * v.z;
+}
+
+
+inline Vector3 operator *( double a, const Vector3 & v )
+{
+    return Vector3( a * v.x, a * v.y, a * v.z );
 }
 
 

@@ -20,7 +20,7 @@ ObscuranceThread::ObscuranceThread( unsigned char id, unsigned char numberOfThre
       m_id( id ), m_numberOfThreads( numberOfThreads ),
       m_directions( directions ),
       m_transferFunction( transferFunction ),
-      m_obscurance( 0 )
+      m_obscurance( 0 ), m_colorBleeding( 0 )
 {
 }
 
@@ -28,6 +28,7 @@ ObscuranceThread::ObscuranceThread( unsigned char id, unsigned char numberOfThre
 ObscuranceThread::~ObscuranceThread()
 {
     delete [] m_obscurance;
+    delete [] m_colorBleeding;
 }
 
 
@@ -61,6 +62,12 @@ double * ObscuranceThread::getObscurance() const
 }
 
 
+Vector3 * ObscuranceThread::getColorBleeding() const
+{
+    return m_colorBleeding;
+}
+
+
 void ObscuranceThread::run()
 {
     switch ( m_obscuranceVariant )
@@ -69,6 +76,7 @@ void ObscuranceThread::run()
         case OptimalViewpointVolume::DensitySmooth: runDensitySmooth(); break;
         case OptimalViewpointVolume::Opacity: runOpacity(); break;
         case OptimalViewpointVolume::OpacitySmooth: runOpacitySmooth(); break;
+        case OptimalViewpointVolume::OpacitySmoothColorBleeding: runOpacitySmoothColorBleeding(); break;
     }
 }
 
@@ -742,6 +750,217 @@ void ObscuranceThread::runOpacitySmooth()
                 if ( uNormal * direction < 0.0 )
                 {
                     m_obscurance[uIndex]++;
+                }
+            }
+        }
+    }
+}
+
+
+void ObscuranceThread::runOpacitySmoothColorBleeding()
+{
+    const Vector3 AMBIENT_COLOR( 1.0, 1.0, 1.0 );
+
+    delete [] m_colorBleeding;
+    m_colorBleeding = new Vector3[m_dataSize];
+//     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] = 0.0;
+
+    // preparem alguns objectes i variables que reutilitzarem per eficiència
+    int nDirections = m_directions.size();
+    QVector<Vector3> lineStarts;
+    QStack< QPair<double,Vector3> > unresolvedVoxels;
+    QLinkedList< QPair<double,Vector3> > postponedVoxels;
+
+    // iterem per les direccions
+    for ( unsigned short i = m_id; i < nDirections; i += m_numberOfThreads )
+    {
+        const Vector3 & direction = m_directions.at( i );
+
+        DEBUG_LOG( QString( "Direcció " ) + direction.toString() );
+
+        // direcció dominant (0 = x, 1 = y, 2 = z)
+        int dominant;
+        Vector3 absDirection( qAbs( direction.x ), qAbs( direction.y ), qAbs( direction.z ) );
+        if ( absDirection.x >= absDirection.y )
+        {
+            if ( absDirection.x >= absDirection.z ) dominant = 0;
+            else dominant = 2;
+        }
+        else
+        {
+            if ( absDirection.y >= absDirection.z ) dominant = 1;
+            else dominant = 2;
+        }
+
+        // vector per avançar
+        Vector3 forward;
+        switch ( dominant )
+        {
+            case 0: forward = Vector3( direction.x, direction.y, direction.z ); break;
+            case 1: forward = Vector3( direction.y, direction.z, direction.x ); break;
+            case 2: forward = Vector3( direction.z, direction.x, direction.y ); break;
+        }
+        forward /= qAbs( forward.x );   // la direcció x passa a ser 1 o -1
+        DEBUG_LOG( QString( "forward = " ) + forward.toString() );
+
+        // dimensions i increments segons la direcció dominant
+        int dimX = m_dimensions[dominant], dimY = m_dimensions[(dominant+1)%3], dimZ = m_dimensions[(dominant+2)%3];
+        int incX = m_increments[dominant], incY = m_increments[(dominant+1)%3], incZ = m_increments[(dominant+2)%3];
+        qptrdiff startDelta = 0;
+        if ( forward.x < 0.0 )
+        {
+            startDelta += incX * ( dimX - 1 );
+            incX = -incX;
+            forward.x = -forward.x;
+        }
+        if ( forward.y < 0.0 )
+        {
+            startDelta += incY * ( dimY - 1 );
+            incY = -incY;
+            forward.y = -forward.y;
+        }
+        if ( forward.z < 0.0 )
+        {
+            startDelta += incZ * ( dimZ - 1 );
+            incZ = -incZ;
+            forward.z = -forward.z;
+        }
+        DEBUG_LOG( QString( "forward = " ) + forward.toString() );
+        // ara els 3 components són positius
+
+        // llista dels vòxels que són començament de línia
+        getLineStarts( lineStarts, dimX, dimY, dimZ, forward );
+
+        const unsigned char * dataPtr = m_data + startDelta;
+        int nLineStarts = lineStarts.size();
+
+        // iterar per cada línia
+        for ( int j = 0; j < nLineStarts; ++j )
+        {
+            Vector3 rv = lineStarts.at( j );
+            Voxel v = { qRound( rv.x ), qRound( rv.y ), qRound( rv.z ) };
+            Q_ASSERT( unresolvedVoxels.isEmpty() );
+            Q_ASSERT( postponedVoxels.isEmpty() );
+
+            // iterar per la línia
+            while ( v.x < dimX && v.y < dimY && v.z < dimZ )
+            {
+                // tractar el vòxel
+                unsigned char value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+                double opacity = m_transferFunction.getOpacity( value );
+                QColor vColor = m_transferFunction.getColor( value );
+                Vector3 vColorVector( vColor.redF(), vColor.greenF(), vColor.blueF() );
+
+                QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
+                QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxelsEnd = postponedVoxels.end();
+
+                while ( itPostponedVoxels != itPostponedVoxelsEnd )
+                {
+                    if ( itPostponedVoxels->first <= opacity )
+                    {
+                        Vector3 ru = itPostponedVoxels->second;
+                        Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+
+                        int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                        float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+                        Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+
+                        double distance = ( rv - ru ).length();
+
+                        if ( distance <= 3.0 )
+                        {
+                            // tangent plane at u
+                            double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                            // distance from v to tangent plane at u
+                            double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
+
+                            if ( D <= 1.5 ) // not blocking -> advance to the next
+                            {
+                                ++itPostponedVoxels;
+                                continue;
+                            }
+                        }
+
+                        // blocking
+                        if ( uNormal * direction < 0.0 )
+                        {
+//                             Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
+//                             double distance = ( dv - du ).length();
+                            m_colorBleeding[uIndex] += obscurance( distance ) * vColorVector;
+                        }
+
+                        itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
+                    }
+                    else ++itPostponedVoxels;
+                }
+
+                while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= opacity )
+                {
+                    QPair<double,Vector3> uPair = unresolvedVoxels.pop();
+                    Vector3 ru = uPair.second;
+                    Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+
+                    int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                    float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+                    Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+
+                    double distance = ( rv - ru ).length();
+
+                    if ( distance <= 3.0 )
+                    {
+                        // tangent plane at u
+                        double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                        // distance from v to tangent plane at u
+                        double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
+
+                        if ( D <= 1.5 ) // add u to postponed list
+                        {
+                            postponedVoxels.append( uPair );
+                        }
+                    }
+
+                    if ( uNormal * direction < 0.0 )
+                    {
+//                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
+//                         double distance = ( dv - du ).length();
+                        m_colorBleeding[uIndex] += obscurance( distance ) * vColorVector;
+                    }
+                }
+
+                unresolvedVoxels.push( qMakePair( opacity, rv ) );
+
+                // avançar el vòxel
+                rv += forward;
+                v.x = qRound( rv.x ); v.y = qRound( rv.y ); v.z = qRound( rv.z );
+            }
+
+            while ( !postponedVoxels.isEmpty() )
+            {
+                Vector3 ru = postponedVoxels.takeFirst().second;
+                Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+
+                int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+                Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+
+                if ( uNormal * direction < 0.0 )
+                {
+                    m_colorBleeding[uIndex] += AMBIENT_COLOR;
+                }
+            }
+
+            while ( !unresolvedVoxels.isEmpty() )
+            {
+                Vector3 ru = unresolvedVoxels.pop().second;
+                Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+
+                int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+                Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+
+                if ( uNormal * direction < 0.0 )
+                {
+                    m_colorBleeding[uIndex] += AMBIENT_COLOR;
                 }
             }
         }

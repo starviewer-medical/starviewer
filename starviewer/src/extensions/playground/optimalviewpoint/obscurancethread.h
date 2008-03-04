@@ -39,6 +39,7 @@ public:
     void setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant );
 
     double * getObscurance() const;
+    Vector3 * getColorBleeding() const;
 
 protected:
 
@@ -52,6 +53,7 @@ private:
     void runDensitySmooth();
     void runOpacity();
     void runOpacitySmooth();
+    void runOpacitySmoothColorBleeding();
     void getLineStarts( QVector<Vector3> & lineStarts, int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
     double obscurance( double distance ) const;
 
@@ -68,6 +70,7 @@ private:
     OptimalViewpointVolume::ObscuranceFunction m_obscuranceFunction;
     OptimalViewpointVolume::ObscuranceVariant m_obscuranceVariant;
     double * m_obscurance;
+    Vector3 * m_colorBleeding;
 
 };
 

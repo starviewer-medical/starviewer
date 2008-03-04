@@ -1109,6 +1109,11 @@
              <string>Opacity smooth</string>
             </property>
            </item>
+           <item>
+            <property name="text" >
+             <string>Opacity smooth color bleeding</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
