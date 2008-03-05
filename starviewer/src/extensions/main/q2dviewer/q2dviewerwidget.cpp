@@ -181,7 +181,6 @@ void Q2DViewerWidget::emitSynchronize()
 
 void Q2DViewerWidget::updateSliderAndSpinBox()
 {
-    DEBUG_LOG("si que entro........................");
     disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_spinBox->setValue( m_2DView->getCurrentSlice() );
     m_slider->setValue( m_2DView->getCurrentSlice() );
