@@ -366,6 +366,7 @@ void ObscuranceThread::runDensitySmooth()
                         if ( D <= 1.5 ) // add u to postponed list
                         {
                             postponedVoxels.append( uPair );
+                            continue;
                         }
                     }
 
@@ -705,6 +706,7 @@ void ObscuranceThread::runOpacitySmooth()
                         if ( D <= 1.5 ) // add u to postponed list
                         {
                             postponedVoxels.append( uPair );
+                            continue;
                         }
                     }
 
@@ -916,6 +918,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                         if ( D <= 1.5 ) // add u to postponed list
                         {
                             postponedVoxels.append( uPair );
+                            continue;
                         }
                     }
 
