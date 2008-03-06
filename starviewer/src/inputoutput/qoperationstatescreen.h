@@ -8,7 +8,6 @@
 #define UDGQOPERATIONSTATESCREEN_H
 
 #include <QString>
-#include <semaphore.h>
 
 #include "dicomstudy.h"
 #include "ui_qoperationstatescreenbase.h"
