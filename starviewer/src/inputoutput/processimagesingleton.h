@@ -12,7 +12,7 @@
 #define HAVE_CONFIG_H 1
 #include <cond.h>
 #include <list>
-#include <semaphore.h>
+#include <QSemaphore>
 
 namespace udg {
 
@@ -79,7 +79,7 @@ private:
     list<SingletonProcess>m_listProcess;
     list<SingletonProcess>::iterator i;
 
-    sem_t *m_semafor;
+    QSemaphore *m_semaphore;
     QString m_imagePath;
 
     /// Constructor de la classe

@@ -85,6 +85,8 @@ private :
     StudyListSingleton* m_studyListSingleton;
     PacsList m_pacsList;
     int m_maxThreads;//Nombre màxim de threads que es poden executar a la vegada
+    // Per raons d'optimització nomes es podran tenir un límit threads alhora executant la query, per aconseguir això utilitzem un semàfor
+    QSemaphore *m_semaphoreActiveThreads;
 
 };
 

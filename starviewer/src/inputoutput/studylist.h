@@ -5,7 +5,7 @@
 #include <cond.h>
 #include "dicomstudy.h"
 #include <list>
-#include <semaphore.h>
+#include <QSemaphore>
 
 /** This is a singleton class. This class implements a list of studies. Gives us the needed functions to insert studies in the list and read the studies in the list
 */
@@ -61,7 +61,7 @@ class StudyList{
 
 private :
 
-    sem_t *m_semafor;
+    QSemaphore *m_semaphore;
 
     list< DICOMStudy > m_listStudy;
     list< DICOMStudy >::iterator m_iterator;

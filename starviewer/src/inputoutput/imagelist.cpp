@@ -12,19 +12,16 @@ namespace udg {
 
 ImageList::ImageList()
 {
-    int init_value = 1;//Només un thread alhora pot gravar a la llista
-
-    m_semafor = (sem_t*) malloc( sizeof( sem_t ) );
-    sem_init( m_semafor , 0 , init_value );
+    m_semaphore = new QSemaphore( 1 );//Només un thread alhora pot gravar a la llista
 
     m_iterator = m_imageList.begin();
 }
 
 void ImageList::insert( DICOMImage image )
 {
-    sem_wait( m_semafor );
+    m_semaphore->acquire();
     m_imageList.push_back( image );
-    sem_post( m_semafor );
+    m_semaphore->release();
 }
 
 void ImageList::firstImage()

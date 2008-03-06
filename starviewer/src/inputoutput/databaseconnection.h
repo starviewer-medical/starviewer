@@ -9,7 +9,7 @@
 
 #include <QString>
 #include <sqlite3.h>
-#include <semaphore.h>
+#include <QSemaphore>
 
 namespace udg {
 
@@ -59,7 +59,7 @@ private :
     DatabaseConnection();
 
     sqlite3 *m_databaseConnection;
-    sem_t *m_databaseLock;
+    QSemaphore *m_databaseLock;
 
     QString m_databasePath;
 
