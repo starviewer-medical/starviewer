@@ -94,6 +94,13 @@ inline Vector3 Vector3::operator -() const
 }
 
 
+inline Vector3 & Vector3::operator +=( const Vector3 & v )
+{
+    x += v.x; y += v.y; z += v.z;
+    return *this;
+}
+
+
 inline Vector3 Vector3::operator -( const Vector3 & v ) const
 {
     return Vector3( x - v.x, y - v.y, z - v.z );
@@ -109,6 +116,13 @@ inline double Vector3::operator *( const Vector3 & v ) const    // producte esca
 inline Vector3 operator *( double a, const Vector3 & v )
 {
     return Vector3( a * v.x, a * v.y, a * v.z );
+}
+
+
+inline Vector3 & operator /=( Vector3 & v, double a )
+{
+    v.x /= a; v.y /= a; v.z /= a;
+    return v;
 }
 
 
