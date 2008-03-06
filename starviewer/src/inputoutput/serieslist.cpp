@@ -13,10 +13,7 @@ namespace udg
  */
 SeriesList::SeriesList()
 {
-    int init_value = 1;//Només un thread alhora pot gravar a la llista
-
-    m_semafor = (sem_t*) malloc( sizeof( sem_t ) );
-    sem_init( m_semafor , 0 , init_value );
+    m_semaphore = new QSemaphore( 1 );//Només un thread alhora pot gravar a la llista
 
     buit = true;
     m_iterator = m_seriesList.begin();
@@ -24,10 +21,10 @@ SeriesList::SeriesList()
 
 void SeriesList::insert(DICOMSeries series)
 {
-    sem_wait( m_semafor );
+    m_semaphore->acquire();;
     m_seriesList.push_back( series );
     buit = false;
-    sem_post( m_semafor );
+    m_semaphore->release();
 }
 
 void SeriesList::firstSeries()
@@ -66,7 +63,7 @@ void SeriesList::clear()
 
 bool SeriesList::exists( QString studyUID , QString seriesUID , QString AETitlePacs )
 {
-    sem_wait( m_semafor );
+    m_semaphore->acquire();
     m_iterator = m_seriesList.begin();
 
     while ( m_iterator != m_seriesList.end() )
@@ -75,7 +72,7 @@ bool SeriesList::exists( QString studyUID , QString seriesUID , QString AETitleP
         else m_iterator++;
     }
 
-    sem_post( m_semafor );
+    m_semaphore->release();
     return ( m_iterator != m_seriesList.end() );
 }
 

@@ -11,19 +11,15 @@ namespace udg
 
 StudyList::StudyList()
 {
-    int init_value = 1;//Només un thread alhora pot gravar a la llista
-
-    m_semafor = (sem_t*) malloc( sizeof( sem_t ) );
-    sem_init( m_semafor , 0 , init_value );
-
+    m_semaphore = new QSemaphore( 1 );
     m_iterator = m_listStudy.begin();
 }
 
 void StudyList::insert( DICOMStudy study )
 {
-    sem_wait( m_semafor );
+    m_semaphore->acquire();
     m_listStudy.push_back( study );
-    sem_post( m_semafor );
+    m_semaphore->release();
 }
 
 void StudyList::firstStudy()
@@ -48,7 +44,7 @@ bool StudyList::end()
 
 bool StudyList::exists( QString UID , QString AETitlePacs )
 {
-    sem_wait( m_semafor );
+    m_semaphore->acquire();
     m_iterator = m_listStudy.begin();
 
     if ( AETitlePacs.isEmpty() ) // si no ens passen un AETitle, al hora de mirar si un estudi existeix un estudi a la llista, no discriminem per AETitle, només per UID
@@ -70,7 +66,7 @@ bool StudyList::exists( QString UID , QString AETitlePacs )
         }
     }
 
-    sem_post( m_semafor );
+    m_semaphore->release();
     return ( m_iterator != m_listStudy.end() );
 }
 
@@ -86,9 +82,9 @@ int StudyList::count()
 
 void StudyList::clear()
 {
-    sem_wait( m_semafor );
+    m_semaphore->acquire();
     m_listStudy.clear();
-    sem_post( m_semafor );
+    m_semaphore->release();
 }
 
 }

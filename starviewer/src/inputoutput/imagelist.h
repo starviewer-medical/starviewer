@@ -12,7 +12,7 @@
 #include <list>
 
 #include "dicomimage.h"
-#include <semaphore.h>
+#include <QSemaphore>
 
 /* AQUESTA CLASSE NOMES SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'HAN IMPLEMENTAT SEMAFORS
   */
@@ -61,7 +61,7 @@ public:
 
  private :
 
-    sem_t *m_semafor;
+    QSemaphore *m_semaphore;
 
     list<DICOMImage> m_imageList;
     list<DICOMImage>::iterator m_iterator;

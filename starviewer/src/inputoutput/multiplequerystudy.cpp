@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <semaphore.h>
+#include <QSemaphore>
 
 #include "status.h"
 #include "multiplequerystudy.h"
@@ -15,15 +15,12 @@
 
 namespace udg {
 
-// Per raons d'optimització nomes es podran tenir un límit threads alhora executant la query, per aconseguir això utilitzem un semàfor
-sem_t *activeThreads;
-
 MultipleQueryStudy::MultipleQueryStudy( QObject *parent )
  : QObject( parent )
 {
     StarviewerSettings settings;
-    activeThreads = ( sem_t* )malloc( sizeof( sem_t ) );
-    sem_init( activeThreads , 0 , settings.getMaxConnections().toInt( NULL , 10 ) );
+
+    m_semaphoreActiveThreads = new QSemaphore( settings.getMaxConnections().toInt( NULL , 10 ) );
     m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
 }
 
@@ -39,7 +36,7 @@ void MultipleQueryStudy::setPacsList( PacsList list )
 
 void MultipleQueryStudy::threadFinished()
 {
-    sem_post( activeThreads );
+    m_semaphoreActiveThreads->release();
 }
 
 void MultipleQueryStudy::slotErrorConnectingPacs( int pacsID )
@@ -72,7 +69,7 @@ Status MultipleQueryStudy::StartQueries()
         connect( &m_thread[i] , SIGNAL( finished() ) , this , SLOT( threadFinished() ) , Qt::DirectConnection );
         connect( &m_thread[i] , SIGNAL( errorConnectingPacs( int ) ) , this , SLOT ( slotErrorConnectingPacs( int  ) ) );
         connect( &m_thread[i] , SIGNAL( errorQueringStudiesPacs( int ) ) , this , SLOT ( slotErrorQueringStudiesPacs( int  ) ) );
-        sem_wait(activeThreads);//Demanem recurs, hi ha un maxim de threads limitat
+        m_semaphoreActiveThreads->acquire();//Demanem recurs, hi ha un maxim de threads limitat
         pacsParameters = m_pacsList.getPacs();
 
         m_thread[i].queryStudy( m_pacsList.getPacs() , m_searchMask );

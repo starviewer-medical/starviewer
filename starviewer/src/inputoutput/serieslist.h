@@ -5,7 +5,7 @@
 #include <list>
 
 #include "dicomseries.h"
-#include <semaphore.h>
+#include <QSemaphore>
 
 /* ATENCIO AQUESTA CLASSE NO SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'IMPLEMENTEN SEMAFORS
  */
@@ -63,7 +63,7 @@ class SeriesList
  private :
 
     bool buit;
-    sem_t *m_semafor;
+    QSemaphore *m_semaphore;
 
     std::list<DICOMSeries> m_seriesList;
     std::list<DICOMSeries>::iterator m_iterator;

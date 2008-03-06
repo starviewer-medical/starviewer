@@ -13,9 +13,7 @@ namespace udg {
 
 ProcessImageSingleton::ProcessImageSingleton()
 {
-    int init_value = 1;//Només un thread alhora pot gravar a la llista
-    m_semafor = ( sem_t* ) malloc( sizeof( sem_t ) );
-    sem_init( m_semafor , 0 , init_value );
+    m_semaphore = new QSemaphore( 1 );
 }
 
 ProcessImageSingleton* ProcessImageSingleton::pInstance = 0;
@@ -37,9 +35,9 @@ void ProcessImageSingleton::addNewProcessImage( QString UID , ProcessImage *pi )
     sp.studyUID = UID;
     sp.imgProcess = pi;
 
-    sem_wait( m_semafor );
+    m_semaphore->acquire();
     m_listProcess.push_back( sp );
-    sem_post( m_semafor );
+    m_semaphore->release();
 }
 
 void ProcessImageSingleton::process( QString UID , DICOMImage* img )
@@ -101,9 +99,9 @@ bool ProcessImageSingleton::delProcessImage( QString UID )
 
     if ( j != m_listProcess.end() )
     {
-        sem_wait( m_semafor );
+        m_semaphore->acquire();
         m_listProcess.erase( j );
-        sem_post( m_semafor );
+        m_semaphore->release();
         return true;
     }
     else return false;

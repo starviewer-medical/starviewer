@@ -19,8 +19,7 @@ DatabaseConnection::DatabaseConnection()
    StarviewerSettings settings;
 
    m_databasePath = settings.getDatabasePath();
-   m_databaseLock = ( sem_t* ) malloc( sizeof( sem_t ) );
-   sem_init( m_databaseLock , 0 , 1 );//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
+   m_databaseLock = new QSemaphore( 1 );//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
    connectDB();
 
 }
@@ -49,12 +48,12 @@ bool DatabaseConnection::connected()
 
 void DatabaseConnection::getLock()
 {
-    sem_wait( m_databaseLock );
+    m_databaseLock->acquire();
 }
 
 void DatabaseConnection::releaseLock()
 {
-    sem_post( m_databaseLock );
+    m_databaseLock->release();
 }
 
 void DatabaseConnection::closeDB()
