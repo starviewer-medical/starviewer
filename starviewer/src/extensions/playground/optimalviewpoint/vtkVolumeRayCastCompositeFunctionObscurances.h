@@ -31,6 +31,10 @@
 #define VTK_COMPOSITE_CLASSIFY_FIRST 0
 #define VTK_COMPOSITE_INTERPOLATE_FIRST 1
 
+namespace udg {
+class Vector3;
+}
+
 class VTK_VOLUMERENDERING_EXPORT vtkVolumeRayCastCompositeFunctionObscurances : public vtkVolumeRayCastFunction
 {
 public:
@@ -59,6 +63,12 @@ public:
   vtkSetMacro( Obscurance, double * );
   vtkGetMacro( Obscurance, double * );
 
+  vtkSetMacro( ColorBleeding, udg::Vector3 * );
+  vtkGetMacro( ColorBleeding, udg::Vector3 * );
+
+  vtkSetMacro( Color, bool );
+  vtkGetMacro( Color, bool );
+
   vtkSetMacro( ObscuranceFactor, double );
   vtkGetMacro( ObscuranceFactor, double );
 
@@ -79,6 +89,8 @@ private:
   void operator=(const vtkVolumeRayCastCompositeFunctionObscurances&);  // Not implemented.
 
   double * Obscurance;
+  udg::Vector3 * ColorBleeding;
+  bool Color;
   double ObscuranceFactor;
 };
 

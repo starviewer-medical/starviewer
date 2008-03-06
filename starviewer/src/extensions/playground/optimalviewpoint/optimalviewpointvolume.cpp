@@ -1029,6 +1029,7 @@ void OptimalViewpointVolume::computeObscurances()
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
         m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionObscurances->SetColor( false );
     }
     else    // color bleeding
     {
@@ -1111,7 +1112,8 @@ void OptimalViewpointVolume::computeObscurances()
 
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
-//         m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionObscurances->SetColor( true );
     }
 }
 
