@@ -277,6 +277,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     if ( m_clusterImage ) m_clusterImage->Delete();
 
     delete [] m_obscurance;
+    delete [] m_colorBleeding;
 }
 
 void OptimalViewpointVolume::setShade( bool on )
