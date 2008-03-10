@@ -52,8 +52,7 @@ void MultipleQueryStudy::slotErrorQueringStudiesPacs( int pacsID )
 
 Status MultipleQueryStudy::StartQueries()
 {
-    QQueryStudyThread m_thread[ 20 ];
-    int i = 0,j = 0;
+    QList<QQueryStudyThread *> llistaThreads;
     bool error = false;
     Status state;
     PacsParameters pacsParameters;
@@ -65,25 +64,26 @@ Status MultipleQueryStudy::StartQueries()
 
     while ( !m_pacsList.end() ) //Anem creant threads per cercar
     {
+        QQueryStudyThread *thread = new QQueryStudyThread;
+
         //aquest signal ha de ser QDirectConnection, pq sera el propi thread qui executara l'slot d'alliberar un recurs del semafor, si fos queued, hauria de ser el pare qui respongues al signal, pero com estaria fent el sem_wait no respondria mai! i tindríem deadlock
-        connect( &m_thread[i] , SIGNAL( finished() ) , this , SLOT( threadFinished() ) , Qt::DirectConnection );
-        connect( &m_thread[i] , SIGNAL( errorConnectingPacs( int ) ) , this , SLOT ( slotErrorConnectingPacs( int  ) ) );
-        connect( &m_thread[i] , SIGNAL( errorQueringStudiesPacs( int ) ) , this , SLOT ( slotErrorQueringStudiesPacs( int  ) ) );
+        
+        connect( thread , SIGNAL( finished() ) , this , SLOT( threadFinished() ) , Qt::DirectConnection );
+        connect( thread , SIGNAL( errorConnectingPacs( int ) ) , this , SLOT ( slotErrorConnectingPacs( int  ) ) );
+        connect( thread , SIGNAL( errorQueringStudiesPacs( int ) ) , this , SLOT ( slotErrorQueringStudiesPacs( int  ) ) );
         m_semaphoreActiveThreads->acquire();//Demanem recurs, hi ha un maxim de threads limitat
         pacsParameters = m_pacsList.getPacs();
 
-        m_thread[i].queryStudy( m_pacsList.getPacs() , m_searchMask );
+        thread->queryStudy( m_pacsList.getPacs() , m_searchMask );
 
+        llistaThreads.append( thread );
         m_pacsList.nextPacs();
-        i++;
     }
 
-    m_pacsList.firstPacs();
-    for (j = 0;j < m_pacsList.size();j++)
-    {//Esperem que tots els threads estiguin
-        m_thread[j].wait();
-        //m_thread[j]->delete();
-        m_pacsList.nextPacs();
+    foreach ( QQueryStudyThread *thread , llistaThreads )
+    {
+        thread->wait();
+        delete thread;
     }
 
     //si no hi ha error retornem l'status ok
