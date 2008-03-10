@@ -178,12 +178,6 @@ public slots:
      */
     void setCurrentSeries( QString seriesUID );
 
-    /**  Al fer doble click sobre un objecte de la llista l'expandeix o retreu en funcio de si esta
-     * expandit o retre
-     * @param item sobre el que s'ha fet click
-     */
-    void doubleClicked( QTreeWidgetItem * , int );
-
     /// Neteja el TreeView
     void clear();
 
@@ -197,6 +191,9 @@ private slots :
 
     ///Emet signal quan es col·lapsa un item, i no té items fills
     void itemCollapsed( QTreeWidgetItem *itemCollapsed );
+
+    ///Emet signal qua es fa doble click sobre un item
+    void doubleClicked( QTreeWidgetItem * , int );
 
 private:
     /// crea les connexions dels signals i slots
