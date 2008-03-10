@@ -528,6 +528,7 @@ void QStudyTreeWidget::itemCollapsed( QTreeWidgetItem *itemCollapsed )
     //Si és una estudi està collapsed, canviem la icona per la carpeta tancada
     if ( isItemStudy( itemCollapsed ) ) itemCollapsed->setIcon( ObjectName, m_closeFolder );
 }
+
 void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
 {
     //al fer doblec click al QTreeWidget ja expandeix o amaga automàticament l'objecte
