@@ -33,6 +33,9 @@ public:
     /// Destructor de la classe
     ~QSeriesListWidget();
 
+    ///Estableix quina és la série seleccionada
+    void setCurrentSeries( QString seriesUID );
+
 public slots:
 
     ///Neteja el ListWidget de sèries

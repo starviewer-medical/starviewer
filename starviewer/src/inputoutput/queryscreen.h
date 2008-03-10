@@ -54,14 +54,14 @@ public slots:
      * @param studyUID UID de l'estidi
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void searchSeries( QString , QString );
+    void expandStudy( QString studyUID , QString pacsAETitle );
 
     /** Busca la informació d'una sèrie
      * @param studyUID UID de l'estidi
      * @param seriesUID
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void searchImages( QString , QString , QString );
+    void expandSeries( QString , QString , QString );
 
     /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
      * @param index del tab al que s'ha canviat
@@ -183,6 +183,9 @@ private slots:
     void setAdvancedSearchVisible(bool visible);
 
     void updateAdvancedSearchModifiedStatus();
+
+    ///S'activa quan seleccionem un estudi del m_qstudyTreeWidgetCache i envia al QSeriesListWidget la informació de les sèries de l'estudi
+    void setSeriesToSeriesListWidgetCache();
 
 private:
     ///Connecta els signals i slots pertinents

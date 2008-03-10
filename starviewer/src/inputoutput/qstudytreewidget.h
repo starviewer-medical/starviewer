@@ -44,7 +44,7 @@ public:
     //Object Name s'utilitza per guardar El NomPacient, Serie + Identificador Sèrie i Imatge + Identificador Image
     enum ColumnIndex{ ObjectName = 0, PatientID = 1, PatientAge = 2, Description = 3, Modality = 4, Date = 5, Time = 6,
     PACSAETitle = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
-    ImageNumber = 14, RefPhysName = 15, PPStartDate = 16, PPStartTime = 17, ReqProcID = 18, SchedProcStep = 19
+    RefPhysName = 14, PPStartDate = 15, PPStartTime = 16, ReqProcID = 17, SchedProcStep = 18
     };
 
     /// Constructor de la classe
@@ -100,7 +100,7 @@ public:
     /** Retorna el UID Study de l'estudi seleccionat
      * @return UID de l'estudi seleccionat
      */
-    QString getSelectedStudyUID();
+    QString getCurrentStudyUID();
 
     QStringList getSelectedStudiesUID();
 
@@ -110,12 +110,12 @@ public:
     /** Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
      *  @return UID de la sèrie seleccionat
      */
-    QString getSelectedSeriesUID();
+    QString getCurrentSeriesUID();
 
         /** Retorna el UID de la imatge seleccionada, si en aquell moment no hi ha cap imatge seleccionada, retorna un QString buit
      *  @return UID de la imatge seleccionada
      */
-    QString getSelectedImageUID();
+    QString getCurrentImageUID();
 
     ///ordena descendentment per la columna seleccionada
     void sort();
@@ -148,28 +148,35 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event);
 
 signals :
-    ///que s'activa al fer click sobre un estudi, demanem a la queryScreen que busqui la informacio de les series d'aquell estudi
-    void expandStudy( QString , QString );
+    ///signal cada vegada que seleccionem un estudi diferent
+    void currentStudyChanged();
 
-    void expandSeries( QString AETitlePACS, QString StudyUID, QString SeriesUID );
+    ///signal que s'emete quan canviem de sèrie seleccionada
+    void currentSeriesChanged();
 
-    ///signal que s'emet quan es vol afegir una serie al QSeriesListWidget
-    void addSeries(DICOMSeries *serie);
+    ///signal que s'emet quan canviem d'imatge seleccionada
+    void currentImageChanged();
 
-    ///signal que s'emet per netejar el QSeriesListWidget
-    void clearSeriesListWidget();
+    ///signal que s'emet quan es fa expandir un estudi
+    void studyExpanded( QString studyUID , QString pacsAETitle );
+
+    ///signal que s'emet qua es fa expandir una series
+    void seriesExpanded(QString studyUID , QString seriesUID , QString pacsAETitle );
+
+    ///signal que s'emet quan s'ha fet un doble click a un estudi
+    void studyDoubleClicked();
+
+    ///signal que s'emet quan s'ha fet un doble click a una sèrie
+    void seriesDoubleClicked();
+
+    ///signal que s'emet quan s'ha fet un doble click a una imatge
+    void imageDoubleClicked();
 
 public slots:
-    /** Si es selecciona una serie del QSeriesListWidget s'ha seleccionar la mateixa en el QStudyTreeWidget, al seleccionar una serie del SeriesIconView, salta aquest slot i selecciona la serie de l'estudi seleccionada al SeriesIconView
+    /** Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
      * @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
      */
-    void selectedSeriesIcon( QString );
-
-    /** Quant seleccionem una objecte de la llista, emet un signal cap SeriesListWidget, perque visualitzi
-     * totes les series de l'objecte
-     * @param item sobre el que s'ha fet click
-     */
-    void clicked( QTreeWidgetItem * , int );
+    void setCurrentSeries( QString seriesUID );
 
     /**  Al fer doble click sobre un objecte de la llista l'expandeix o retreu en funcio de si esta
      * expandit o retre
@@ -179,6 +186,17 @@ public slots:
 
     /// Neteja el TreeView
     void clear();
+
+private slots :
+
+    ///Emet signal quan es selecciona un estudi o serie diferent a l'anterior
+    void currentItemChanged( QTreeWidgetItem * current, QTreeWidgetItem * previous );
+
+    ///Emet signal quan s'expandeix un item, i no té items fills
+    void itemExpanded( QTreeWidgetItem *itemExpanded );
+
+    ///Emet signal quan es col·lapsa un item, i no té items fills
+    void itemCollapsed( QTreeWidgetItem *itemCollapsed );
 
 private:
     /// crea les connexions dels signals i slots
@@ -219,9 +237,18 @@ private:
     QMenu *m_contextMenu;
 
     /// strings per guardar valors de l'anterior element
-    QString m_parentName , m_oldPacsAETitle , m_OldInstitution;
+    QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_oldPacsAETitle , m_OldInstitution;
 
     QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
+
+    ///Ens indica si l'item passat és un estudi
+    bool isItemStudy( QTreeWidgetItem * );
+
+    ///Ens indica si l'item passat és una sèrie
+    bool isItemSeries( QTreeWidgetItem * );
+
+    ///Ens indica si l'item passat és una imatge
+    bool isItemImage( QTreeWidgetItem * );
 };
 
 }; // end namespace
