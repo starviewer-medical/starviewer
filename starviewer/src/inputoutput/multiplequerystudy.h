@@ -8,7 +8,6 @@
 #define UDGMULTQUERYSTUDY_H
 
 #include <QObject>
-
 #include "pacslist.h"
 #include "studylistsingleton.h"
 #include "dicommask.h"
