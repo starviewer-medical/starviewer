@@ -71,6 +71,24 @@ void QSeriesListWidget::insertSeries( DICOMSeries *serie )
     item->setStatusTip(serie->getSeriesUID());
 }
 
+void QSeriesListWidget::setCurrentSeries( QString seriesUID )
+{
+    int index = 0;
+    bool stop = false;
+    QList<QListWidgetItem *> llistaSeries =  m_seriesListWidget->findItems ( "" , Qt::MatchContains );
+
+
+    while ( !stop && index < llistaSeries.count() )
+    {
+        if ( llistaSeries.at( index )->statusTip() == seriesUID )
+        { 
+            stop = true;
+        }
+        else index++;
+    }
+    if ( stop ) m_seriesListWidget->setCurrentItem( llistaSeries.at( index ) ); 
+}
+
 void QSeriesListWidget::clicked( QListWidgetItem *item )
 {
      if ( item != NULL ) emit( selectedSeriesIcon( item->statusTip() ) );

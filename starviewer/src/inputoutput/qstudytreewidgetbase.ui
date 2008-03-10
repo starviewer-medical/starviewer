@@ -122,11 +122,6 @@
      </column>
      <column>
       <property name="text" >
-       <string>Img Num</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
        <string>Ref Physician Name</string>
       </property>
      </column>

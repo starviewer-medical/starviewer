@@ -176,6 +176,47 @@ void QueryScreen::setQStudyTreeWidgetColumnsWidth()
     }
 }
 
+void QueryScreen::setSeriesToSeriesListWidgetCache()
+{
+    DICOMSeries serie;
+    SeriesList seriesList;
+    CacheSeriesDAL cacheSeriesDAL;
+    CacheImageDAL cacheImageDAL;
+    int imagesNumber;
+    Status state;
+    DicomMask mask;
+
+    INFO_LOG( "Cerca de sèries a la cache de l'estudi " + m_studyTreeWidgetCache->getCurrentStudyUID() );
+
+    //preparem la mascara i cerquem les series a la cache
+    mask.setStudyUID( m_studyTreeWidgetCache->getCurrentStudyUID() );
+    state = cacheSeriesDAL.querySeries( mask , seriesList );
+    if ( !state.good() )
+    {
+        showDatabaseErrorMessage( state );
+        return;
+    }
+
+    m_seriesListWidgetCache->clear();
+
+    seriesList.firstSeries();
+    while ( !seriesList.end() )
+    {
+        serie = seriesList.getSeries();
+        //preparem per fer la cerca d'imatges
+        mask.setSeriesUID( serie.getSeriesUID() );
+        state = cacheImageDAL.countImageNumber( mask , imagesNumber );
+        serie.setImageNumber( imagesNumber );
+        if ( !state.good() )
+        {
+            showDatabaseErrorMessage( state );
+            return;
+        }
+        m_seriesListWidgetCache->insertSeries( &serie );
+        seriesList.nextSeries();
+    }
+}
+
 void QueryScreen::deleteOldStudies()
 {
     Status state;
@@ -220,24 +261,32 @@ void QueryScreen::createConnections()
     connect( m_createDICOMDIRToolButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
 
     //connectem Slots dels StudyTreeWidget amb la interficie
-    connect( m_studyTreeWidgetPacs, SIGNAL( expandStudy( QString , QString ) ), SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( expandStudy( QString , QString ) ), SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetDicomdir, SIGNAL( expandStudy( QString , QString ) ), SLOT( searchSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetPacs, SIGNAL( expandSeries( QString , QString , QString ) ), SLOT( searchImages( QString , QString , QString ) ) );
-    connect( m_studyTreeWidgetDicomdir, SIGNAL( expandSeries( QString , QString , QString ) ), SLOT( searchImages( QString , QString , QString ) ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( expandSeries( QString , QString , QString ) ), SLOT( searchImages( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( studyDoubleClicked() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( seriesDoubleClicked() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( imageDoubleClicked() ), SLOT( view() ) );
+
+    connect( m_studyTreeWidgetCache, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( studyDoubleClicked() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( seriesDoubleClicked() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( imageDoubleClicked() ), SLOT( view() ) );
+
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( studyDoubleClicked() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( seriesDoubleClicked() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( imageDoubleClicked() ), SLOT( view() ) );
 
     //es canvia de pestanya del TAB
     connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
 
     //connectem els signes del SeriesIconView StudyListView
-    connect( m_studyTreeWidgetCache, SIGNAL( addSeries(DICOMSeries * ) ), m_seriesListWidgetCache, SLOT( insertSeries(DICOMSeries *) ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
-    connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( selectedSeriesIcon(QString) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( currentStudyChanged() ) , this , SLOT( setSeriesToSeriesListWidgetCache() ) );
+    connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( setCurrentSeries(QString) ) );
     connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), this, SLOT( view() ) );
-    //per netejar la QSeriesIconView quant s'esborrar un estudi
-    connect(this, SIGNAL( clearSeriesListWidget() ), m_seriesListWidgetCache, SLOT( clear() ) );
-
+    
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect( &m_qexecuteOperationThread, SIGNAL( viewStudy( QString , QString , QString ) ), SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
 
@@ -618,8 +667,7 @@ void QueryScreen::queryStudy( QString source )
     QApplication::restoreOverrideCursor();
 }
 
-/* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
-void QueryScreen::searchSeries( QString studyUID , QString pacsAETitle )
+void QueryScreen::expandStudy( QString studyUID , QString pacsAETitle )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -640,7 +688,7 @@ void QueryScreen::searchSeries( QString studyUID , QString pacsAETitle )
 }
 
 /* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
-void QueryScreen::searchImages( QString studyUID , QString seriesUID , QString pacsAETitle )
+void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString pacsAETitle )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -712,11 +760,8 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 
 void QueryScreen::querySeries( QString studyUID, QString source )
 {
-    DICOMSeries serie;
     SeriesList seriesList;
     CacheSeriesDAL cacheSeriesDAL;
-    CacheImageDAL cacheImageDAL;
-    int imagesNumber;
     Status state;
     DicomMask mask;
 
@@ -754,23 +799,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
 
     if( source == "Cache" )
     {
-        m_seriesListWidgetCache->clear();
-
-        while ( !seriesList.end() )
-        {
-            serie= seriesList.getSeries();
-            //preparem per fer la cerca d'imatges
-            mask.setSeriesUID( serie.getSeriesUID() );
-            state = cacheImageDAL.countImageNumber( mask , imagesNumber );
-            serie.setImageNumber( imagesNumber );
-            if ( !state.good() )
-            {
-                showDatabaseErrorMessage( state );
-                return;
-            }
-            m_studyTreeWidgetCache->insertSeries( &serie );//inserim la informació de les imatges al formulari
-            seriesList.nextSeries();
-        }
+        m_studyTreeWidgetCache->insertSeriesList( &seriesList );//inserim la informació de les sèries al llist
     }
     else if( source == "DICOMDIR" )
         m_studyTreeWidgetDicomdir->insertSeriesList( &seriesList );//inserim la informació de la sèrie al llistat
@@ -960,11 +989,11 @@ void QueryScreen::retrievePacs( bool view )
             if( ok )
             {
                 mask.setStudyUID( currentStudyUID );//definim la màscara per descarregar l'estudi
-                if ( !m_studyTreeWidgetPacs->getSelectedSeriesUID().isEmpty() )
-                    mask.setSeriesUID( m_studyTreeWidgetPacs->getSelectedSeriesUID() );
+                if ( !m_studyTreeWidgetPacs->getCurrentSeriesUID().isEmpty() )
+                    mask.setSeriesUID( m_studyTreeWidgetPacs->getCurrentSeriesUID() );
 
-                if ( !m_studyTreeWidgetPacs->getSelectedImageUID().isEmpty() )
-                    mask.setSOPInstanceUID( m_studyTreeWidgetPacs->getSelectedImageUID() );
+                if ( !m_studyTreeWidgetPacs->getCurrentImageUID().isEmpty() )
+                    mask.setSOPInstanceUID( m_studyTreeWidgetPacs->getCurrentImageUID() );
 
                 //busquem els paràmetres del pacs del qual volem descarregar l'estudi
                 state = pacsListDB.queryPacs( &pacs , pacsAETitle );
@@ -1057,13 +1086,13 @@ void QueryScreen::view()
     switch ( m_tab->currentIndex() )
     {
         case 0 :
-            loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getSelectedSeriesUID(), m_studyTreeWidgetCache->getSelectedImageUID(), "Cache" );
+            loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getCurrentSeriesUID(), m_studyTreeWidgetCache->getCurrentImageUID(), "Cache" );
             break;
         case 1 :
             retrievePacs( true );
            break;
         case 2 :
-            loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), m_studyTreeWidgetDicomdir->getSelectedSeriesUID(), m_studyTreeWidgetDicomdir->getSelectedImageUID(), "DICOMDIR" );
+            loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), m_studyTreeWidgetDicomdir->getCurrentSeriesUID(), m_studyTreeWidgetDicomdir->getCurrentImageUID(), "DICOMDIR" );
             break;
         default :
             break;
@@ -1200,7 +1229,7 @@ void QueryScreen::deleteSelectedStudiesInCache()
                         {
                             INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
                             m_studyTreeWidgetCache->removeStudy( studyUID );
-                            emit( clearSeriesListWidget() );//Aquest signal es recollit per qSeriesIconView
+                            m_seriesListWidgetCache->clear();
                         }
                         else
                         {

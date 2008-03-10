@@ -48,7 +48,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     // m_studyTreeView->setColumnHidden( UID, true );
 
     m_studyTreeView->setColumnHidden( Type, true );
-    m_studyTreeView->setColumnHidden( ImageNumber, true );
 //     m_studyTreeView->setColumnHidden( ProtocolName , true );
 
     //carreguem les imatges que es mostren el QStudyTreeWidget
@@ -56,7 +55,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     m_closeFolder = QIcon( ":/images/folderclose.png" );
     m_iconSeries = QIcon( ":/images/series.png" );
 
-    m_parentName = parent->objectName();//el guardem per saber si es tracta de la llista d'estudis del Pacs o la Cache
     createConnections();
 
     m_studyTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -68,8 +66,10 @@ QStudyTreeWidget::~QStudyTreeWidget()
 
 void QStudyTreeWidget::createConnections()
 {
-    connect( m_studyTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int ) ), SLOT( clicked ( QTreeWidgetItem * , int ) ) );
-    connect( m_studyTreeView , SIGNAL( itemDoubleClicked ( QTreeWidgetItem * , int ) ), SLOT( doubleClicked( QTreeWidgetItem * , int ) ) );
+    connect( m_studyTreeView , SIGNAL( itemDoubleClicked( QTreeWidgetItem * , int ) ), SLOT( doubleClicked( QTreeWidgetItem * , int ) ) );
+    connect( m_studyTreeView , SIGNAL( currentItemChanged( QTreeWidgetItem * , QTreeWidgetItem * ) ) , SLOT ( currentItemChanged ( QTreeWidgetItem * , QTreeWidgetItem * ) ) );
+    connect( m_studyTreeView, SIGNAL( itemExpanded( QTreeWidgetItem * ) ) , SLOT ( itemExpanded( QTreeWidgetItem * ) ) );
+    connect( m_studyTreeView, SIGNAL( itemCollapsed( QTreeWidgetItem * ) ) , SLOT ( itemCollapsed( QTreeWidgetItem * ) ) );
 }
 
 void QStudyTreeWidget::setColumnWidth( int columnNumber , int columnWidth )
@@ -98,11 +98,11 @@ void QStudyTreeWidget::insertStudyList( StudyList *studyList )
 void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
     Status state;
+    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
+    QTreeWidgetItem* expandableItem = new QTreeWidgetItem( item );
 
     if ( getStudyItem( study->getStudyUID() , study->getPacsAETitle() ) != NULL )
         removeStudy( study->getStudyUID() ); //si l'estudi ja hi existeix a StudyTreeView l'esborrem
-
-    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
 
     item->setIcon( ObjectName, m_closeFolder );
     item->setText( ObjectName , study->getPatientName() );
@@ -137,8 +137,13 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
     item->setText( PACSAETitle , study->getPacsAETitle() );
     item->setText( UID , study->getStudyUID() );
     item->setText( Type , "STUDY" );//indiquem de que es tracta d'un estudi
-    item->setText( ImageNumber , "" );
     item->setText( RefPhysName , study->getReferringPhysiciansName() );
+
+    /* degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és 
+       una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui 
+       consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
+     */
+    expandableItem->setText( Type , "EXPANDABLE_ITEM" );
 
     m_studyTreeView->clearSelection();
 }
@@ -156,10 +161,11 @@ void QStudyTreeWidget::insertSeriesList( SeriesList *seriesList )
 
 void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
 {
-    QTreeWidgetItem *item, *studyItem;
+    QTreeWidgetItem *item, *studyItem , *expandableItem;
 
     studyItem = getStudyItem( serie->getStudyUID() , serie->getPacsAETitle() );
     item = new QTreeWidgetItem( studyItem );
+    expandableItem = new QTreeWidgetItem( item );
 
     item->setIcon(ObjectName, m_iconSeries);
     item->setText(ObjectName, tr( "Series %1" ).arg(serie->getSeriesNumber()) );
@@ -176,14 +182,17 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
     item->setText( UID , serie->getSeriesUID() );
     item->setText( Type , "SERIES" ); //indiquem que es tracta d'una sèrie
 
-    item->setText( ImageNumber , QString::number(serie->getImageNumber()) );
     item->setText( ProtocolName , serie->getProtocolName() );
     item->setText( PPStartDate , serie->getPPSStartDate() );
     item->setText( PPStartTime , serie->getPPStartTime() );
     item->setText( ReqProcID , serie->getRequestedProcedureID() );
     item->setText( SchedProcStep , serie->getScheduledProcedureStepID() );
 
-    emit( addSeries(serie) );//afegim serie al SeriesIconView
+    /* degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és 
+       una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui 
+       consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
+     */
+    expandableItem->setText( Type , "EXPANDABLE_ITEM" );
 }
 
 void QStudyTreeWidget::insertImageList( ImageList *imageList )
@@ -205,7 +214,7 @@ void QStudyTreeWidget::insertImage( DICOMImage * image )
 
     studyItem = getStudyItem( image->getStudyUID() , image->getPacsAETitle() );
 
-    while ( !stop && index < studyItem->childCount() )
+    while ( !stop && index < studyItem->childCount() )//cerquem la sèrie de la que depen la imatge
     {
         if ( studyItem->child( index )->text( UID ) == image->getSeriesUID() )
         {
@@ -274,19 +283,19 @@ void QStudyTreeWidget::setSortColumn( int col )
     m_studyTreeView->clearSelection();
 }
 
-QString QStudyTreeWidget::getSelectedStudyUID()
+QString QStudyTreeWidget::getCurrentStudyUID()
 {
     if ( m_studyTreeView->currentItem() != NULL )
     {
-        if ( m_studyTreeView->currentItem()->text( Type ) == "STUDY" ) //es un estudi
+        if ( isItemStudy( m_studyTreeView->currentItem() ) ) //es un estudi
         {
             return m_studyTreeView->currentItem()->text( UID );
         }
-        else if ( m_studyTreeView->currentItem()->text( Type ) == "SERIES" )
+        else if ( isItemSeries( m_studyTreeView->currentItem() ) )
         {
             return m_studyTreeView->currentItem()->parent()->text( UID );
         }
-        else if ( m_studyTreeView->currentItem()->text( Type ) == "IMAGE" )
+        else if ( isItemImage( m_studyTreeView->currentItem() ) )
         {
             return m_studyTreeView->currentItem()->parent()->parent()->text( UID );
         }
@@ -301,17 +310,17 @@ QStringList QStudyTreeWidget::getSelectedStudiesUID()
     QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
     foreach( QTreeWidgetItem *item, selectedItems )
     {
-        if( item->text(Type) == "STUDY" ) //es un estudi
+        if( isItemStudy( item ) ) //es un estudi
         {
             if( !result.contains( item->text(UID) ) )
                 result << item->text(UID);
         }
-        else if( item->text(Type) == "SERIES" )
+        else if( isItemSeries( item ) )
         {
             if( !result.contains( item->parent()->text(UID) ) )
                 result << item->parent()->text(UID);
         }
-        else if( item->text(Type) == "IMAGE" )
+        else if( isItemImage( item ) )
         {
             if( !result.contains( item->parent()->parent()->text(UID) ) )
                 result << item->parent()->parent()->text(UID);
@@ -331,7 +340,7 @@ QStringList QStudyTreeWidget::getStudySelectedSeriesUIDFromSelectedStudies( QStr
     foreach( QTreeWidgetItem *item, selectedItems )
     {
         // només mirem les series
-        if( item->text( Type ) == "SERIES" )
+        if( isItemSeries( item ) )
         {
             // si aquesta serie seleccionada pertany a l'estudi que demanem
             if( item->parent()->text( UID ) == studyUID )
@@ -350,7 +359,7 @@ QStringList QStudyTreeWidget::getStudySelectedImagesUIDFromSelectedStudies( QStr
     foreach( QTreeWidgetItem *item, selectedItems )
     {
         // només mirem les series
-        if( item->text( Type ) == "IMAGE" )
+        if( isItemImage( item ) )
         {
             // si aquesta imatge seleccionada pertany a l'estudi que demanem
             if( item->parent()->parent()->text( UID ) == studyUID )
@@ -363,15 +372,15 @@ QStringList QStudyTreeWidget::getStudySelectedImagesUIDFromSelectedStudies( QStr
     return result;
 }
 
-QString QStudyTreeWidget::getSelectedSeriesUID()
+QString QStudyTreeWidget::getCurrentSeriesUID()
 {
     if ( m_studyTreeView->currentItem() != NULL )
     {
-        if ( m_studyTreeView->currentItem()->text( Type ) == "SERIES" )
+        if ( isItemSeries( m_studyTreeView->currentItem() ) )
         {
             return m_studyTreeView->currentItem()->text( UID );
         }
-        else if ( m_studyTreeView->currentItem()->text( Type ) == "IMAGE" )
+        else if ( isItemImage( m_studyTreeView->currentItem() ) )
         {
             return m_studyTreeView->currentItem()->parent()->text( UID );
         }
@@ -403,13 +412,13 @@ QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( QString studyUID , QString AET
     else return NULL;
 }
 
-QString QStudyTreeWidget::getSelectedImageUID()
+QString QStudyTreeWidget::getCurrentImageUID()
 {
     QString result;
 
     if ( m_studyTreeView->currentItem() != NULL )
     {
-        if ( m_studyTreeView->currentItem()->text( Type ) == "IMAGE" )
+        if ( isItemImage( m_studyTreeView->currentItem()  ) )
         {
             result = m_studyTreeView->currentItem()->text( UID );
         }
@@ -433,39 +442,10 @@ QString QStudyTreeWidget::getStudyPACSAETitleFromSelectedStudies( QString studyU
     return result;
 }
 
-void QStudyTreeWidget::setSeriesToSeriesListWidget( QTreeWidgetItem *item )
-{
-    QTreeWidgetItem *child;
-
-    if(item == NULL)
-        return;
-
-    emit( clearSeriesListWidget() ); //es neteja el QSeriesListWidget
-
-    for ( int i = 0; i < item->childCount(); i++ )
-    {
-        child = item->child( i );
-        if ( item != NULL )
-        {
-            DICOMSeries serie;
-            serie.setSeriesUID( child->text( UID ) );
-            serie.setImageNumber( child->text( ImageNumber ).toInt( NULL , 10 ) );
-            serie.setSeriesModality( child->text( Modality ) );
-            serie.setSeriesNumber( child->text( ObjectName ).remove( tr("Series") ) );//El numero de serie està dins l'ObjectName
-            serie.setStudyUID( getSelectedStudyUID() );
-            serie.setProtocolName( child->text( ProtocolName ) );
-            emit( addSeries( &serie ) );
-        }
-    }
-}
-
 void QStudyTreeWidget::removeStudy( QString studyUID )
 {
     QList<QTreeWidgetItem *> qStudyList( m_studyTreeView->findItems( studyUID , Qt::MatchExactly, UID ) );
     QTreeWidgetItem *item;
-
-    //Si l'estudi que anem a esborrar és el que està seleccionat el treiem del SeriesListWidget
-    if ( studyUID == getSelectedStudyUID() ) emit( clearSeriesListWidget() ); //es neteja el QSeriesListWidget
 
     for ( int i = 0; i < qStudyList.count(); i++ )
     {
@@ -474,38 +454,13 @@ void QStudyTreeWidget::removeStudy( QString studyUID )
     }
 }
 
-void QStudyTreeWidget::selectedSeriesIcon( QString seriesUID )
+void QStudyTreeWidget::setCurrentSeries( QString seriesUID )
 {
-    QTreeWidgetItem *item , *current;
+    //busquem l'estudi a la que pertany la sèrie
+    QList<QTreeWidgetItem*> qStudyList( m_studyTreeView->findItems( seriesUID , Qt::MatchRecursive , UID) );
 
-    /*busquem el pare (l'estudi principal), per saber quina sèrie hem d'assenyalar, en funcio
-     *de quin element està actualment seleccionat haurem de pujar diferents nivells per trobar l'estudi pare*/
-    if ( m_studyTreeView->currentItem()->text( Type ) == "STUDY" )
-    {//ja tenim seleccionat l'estudi pare que conté les séries
-            current = m_studyTreeView->currentItem();
-    }
-    else if ( m_studyTreeView->currentItem()->text( Type ) == "SERIES" )
-    {//es tracta d'una sèrie la que està seleccionada en aquests moments, pujem un nivell per trobar l'estudi pare
-        current = m_studyTreeView->currentItem()->parent();
-    } //es tracta d'una imatge la que està seleccionada en aquests moments, pujem dos nivells per trobar l'estudi pare
-    else current = m_studyTreeView->currentItem()->parent()->parent();
-
-    /*Quan tenim l'estudi pare podem començar a recorre'l per assenyar la sèrie que ha estat seleccionada
-     *en el QSeriesListWidget
-     */
-    for ( int i = 0; i < current->childCount(); i++ )
-    {
-        item = current->child( i );
-        if ( item != NULL )
-        {
-            if (item->text( UID ) == seriesUID )
-            {
-                m_studyTreeView->setItemSelected( item , true );
-                m_studyTreeView->setCurrentItem( item );
-            }
-            else m_studyTreeView->setItemSelected( item , false );
-        }
-    }
+    //Només hauria de trobar una sèrie amb el mateix UID, sinó tindrem una inconsistència de DICOM, el series UID ha de ser únic
+    if ( qStudyList.count() > 0) m_studyTreeView->setCurrentItem ( qStudyList.at( 0 ) ); 
 }
 
 void QStudyTreeWidget::sort()
@@ -530,52 +485,72 @@ void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
         m_contextMenu->exec( event->globalPos() );
 }
 
-void QStudyTreeWidget::clicked( QTreeWidgetItem *item , int )
+void QStudyTreeWidget::currentItemChanged( QTreeWidgetItem * current, QTreeWidgetItem * )
 {
-    if ( item != NULL )
+    if ( current != NULL )
     {
-        if ( item->text( Type ) == "STUDY")
+        if ( getCurrentStudyUID() != m_oldCurrentStudyUID )
         {
-            setSeriesToSeriesListWidget( item );
+            emit( currentStudyChanged( ) );
+            m_oldCurrentStudyUID = getCurrentStudyUID();
         }
-        else if ( item->text( Type ) == "SERIES" )
+
+        if ( getCurrentSeriesUID() != m_oldCurrentSeriesUID )
         {
-            setSeriesToSeriesListWidget( item->parent() );
+            emit( currentSeriesChanged( ) );
+            m_oldCurrentSeriesUID = getCurrentSeriesUID();
         }
-        else if ( item->text( Type ) == "IMAGE" )
-        {
-            setSeriesToSeriesListWidget( item->parent()->parent() );
-        }
+
+        emit( currentImageChanged() ); //sempre que canviem d'element segur que canviem d'imatge
     }
 }
 
+void QStudyTreeWidget::itemExpanded( QTreeWidgetItem *itemExpanded )
+{
+    /* Com que inserim un item en blanc per simular fills dels estudis i de les sèries cada vegada que ens fan un expand hem d'eliminar l'item en blanc i 
+     * emetem un signal per a que qui el reculli s'encarregui de fer els passos corresponents per expandir l'estudi o imatge amb el seus fills pertinents
+     */
+    foreach( QTreeWidgetItem * childItem , itemExpanded->takeChildren() )
+    {
+        delete childItem;
+    }
+
+    if ( isItemStudy( itemExpanded ) )
+    {
+        emit ( studyExpanded( itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
+        itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
+    }
+    else if ( isItemSeries( itemExpanded ) ) emit( seriesExpanded( itemExpanded->parent()->text( UID ) , itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
+}
+
+void QStudyTreeWidget::itemCollapsed( QTreeWidgetItem *itemCollapsed )
+{
+    //Si és una estudi està collapsed, canviem la icona per la carpeta tancada
+    if ( isItemStudy( itemCollapsed ) ) itemCollapsed->setIcon( ObjectName, m_closeFolder );
+}
 void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
 {
     //al fer doblec click al QTreeWidget ja expandeix o amaga automàticament l'objecte
     if ( item == NULL ) return;
 
-    if ( !m_studyTreeView->isItemExpanded( item ) )
-    {
-        if ( item->childCount() == 0 )
-        {
-            if ( item->text( Type ) == "STUDY" ) //volem expandir les series d'un estudi
-            {
-                item->setIcon( ObjectName , m_openFolder );
-                emit( expandStudy( item->text(UID) , item->text(PACSAETitle) ) );
-                setSeriesToSeriesListWidget( item ); //en el cas que ja tinguem la informació de la sèrie, per passar la informació al QSeriesListWidget amb la informació de la sèrie cridarem aquest mètode
-            }
-            else if ( item->text( Type ) == "SERIES" )
-                emit( expandSeries( getSelectedStudyUID() , item->text(UID) , item->text(PACSAETitle) ) );
-        }
-    }
-    else
-    {
-        if ( item->text(Type)== "STUDY")
-        {
-            item->setIcon(ObjectName, m_closeFolder);
-            emit( clearSeriesListWidget() );
-        }
-    }
+    if ( isItemStudy( item ) ) emit( studyDoubleClicked() );
+    else if ( isItemSeries( item ) ) emit( seriesDoubleClicked() );
+    else if ( isItemImage( item) ) emit( imageDoubleClicked() );
+}
+
+bool QStudyTreeWidget::isItemStudy( QTreeWidgetItem *item )
+{
+    return item->text( Type ) == "STUDY";
+}
+
+bool QStudyTreeWidget::isItemSeries( QTreeWidgetItem *item )
+{
+    return item->text( Type ) == "SERIES";
+}
+
+bool QStudyTreeWidget::isItemImage( QTreeWidgetItem *item )
+{
+    return item->text( Type ) == "IMAGE";
 }
 
 };
