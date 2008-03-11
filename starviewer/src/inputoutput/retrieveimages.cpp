@@ -1,13 +1,11 @@
+#include <QDir>
+
 #include "retrieveimages.h"
 #include "const.h"
 #include "struct.h"
 #include "processimagesingleton.h"
 #include "status.h"
 #include "logging.h"
-
-//includes per comprovar si un directori existeix
-#include <sys/types.h> // \TODO aquest include no és únic de UNIX????
-#include <dirent.h>
 
 namespace udg{
 
@@ -195,30 +193,17 @@ OFCondition echoSCP(
             QString studyPath, seriesPath, imagePath;
             int imageSize;
             DICOMImage retrievedImage( * imageDataSet );
-            DIR *pdir;
 
-            studyPath = piSingleton->getPath() ;//agafem el path del directori on es guarden les imatges
-            studyPath += retrievedImage.getStudyUID();
-
+            studyPath = piSingleton->getPath() + retrievedImage.getStudyUID() ;//agafem el path del directori on es guarden les imatges
+            QDir directory;
+        
             //comprovem, si el directori de l'estudi ja està creat
-            pdir = opendir( qPrintable(studyPath) );
-            if ( !pdir )
-            {
-                mkdir( qPrintable(studyPath) , S_IRWXU | S_IRWXG | S_IRWXO );
-            }
-            else closedir( pdir );
+            if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
 
-            seriesPath = studyPath;
-            seriesPath += "/"; //conc
-            seriesPath += retrievedImage.getSeriesUID();
+            seriesPath = studyPath + "/" + retrievedImage.getSeriesUID();
 
             //comprovem, si el directori de la sèrie ja està creat, sinó el creem
-            pdir = opendir( qPrintable( seriesPath ) ) ;
-            if ( !pdir )
-            {
-                mkdir( qPrintable( seriesPath ), S_IRWXU | S_IRWXG | S_IRWXO );
-            }
-            else closedir( pdir );
+            if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
 
             //acabem de concatenar el nom del fitxer
             imagePath = seriesPath;
