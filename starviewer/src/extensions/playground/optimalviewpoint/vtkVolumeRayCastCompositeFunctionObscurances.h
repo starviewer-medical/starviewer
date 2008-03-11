@@ -35,7 +35,7 @@ namespace udg {
 class Vector3;
 }
 
-class VTK_VOLUMERENDERING_EXPORT vtkVolumeRayCastCompositeFunctionObscurances : public vtkVolumeRayCastFunction
+class /*VTK_VOLUMERENDERING_EXPORT*/ vtkVolumeRayCastCompositeFunctionObscurances : public vtkVolumeRayCastFunction
 {
 public:
   static vtkVolumeRayCastCompositeFunctionObscurances *New();

@@ -56,7 +56,7 @@
 
 class vtkPropPicker;
 
-class VTK_RENDERING_EXPORT vtkInteractorStyleTrackballActorGgg : public vtkInteractorStyle
+class /*VTK_RENDERING_EXPORT*/ vtkInteractorStyleTrackballActorGgg : public vtkInteractorStyle
 {
 public:
   static vtkInteractorStyleTrackballActorGgg *New();
