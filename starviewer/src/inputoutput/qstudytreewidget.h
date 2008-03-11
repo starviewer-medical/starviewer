@@ -102,9 +102,13 @@ public:
      */
     QString getCurrentStudyUID();
 
+    ///Retorna una llista amb l'UID del estudis seleccionats
     QStringList getSelectedStudiesUID();
 
+    ///Retorna una llista amb l'UID de les sèries dels estudis seleccionats
     QStringList getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID );
+
+    ///Retorna una llista amb l'UID de les imatges dels estudis seleccionats
     QStringList getStudySelectedImagesUIDFromSelectedStudies( QString studyUID );
 
     /** Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
