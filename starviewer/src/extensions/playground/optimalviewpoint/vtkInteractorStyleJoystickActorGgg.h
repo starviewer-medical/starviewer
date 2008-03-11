@@ -55,7 +55,7 @@ class vtkPropPicker;
 
 // motion flags
 
-class VTK_RENDERING_EXPORT vtkInteractorStyleJoystickActorGgg : public vtkInteractorStyle
+class /*VTK_RENDERING_EXPORT*/ vtkInteractorStyleJoystickActorGgg : public vtkInteractorStyle
 {
 public:
   static vtkInteractorStyleJoystickActorGgg *New();
