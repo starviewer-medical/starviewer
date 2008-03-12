@@ -71,6 +71,7 @@
 // displayed area
 #include <vtkImageChangeInformation.h>
 #include <vtkImageResample.h>
+#include <vtkExtractVOI.h>
 
 // grayscale pipeline
 #include <vtkImageMapToWindowLevelColors.h>
@@ -3071,6 +3072,11 @@ double *Q2DViewer::pointInModel( int screen_x, int screen_y )
             break;
     }
     return lastPointInModel;
+}
+
+vtkImageData* Q2DViewer::getCurrentSlabProjection()
+{
+    return m_thickSlabProjectionFilter->GetOutput();
 }
 
 };  // end namespace udg

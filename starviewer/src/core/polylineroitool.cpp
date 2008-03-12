@@ -14,6 +14,8 @@
 #include "drawerpolyline.h"
 #include "drawertext.h"
 //vtk
+#include <vtkPNGWriter.h>
+#include <vtkImageActor.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 #include <vtkProp.h>
@@ -404,7 +406,7 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
 {
     double *origin = m_2DViewer->getInput()->getOrigin();
     int index[3];
-
+    
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
@@ -425,7 +427,11 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
             index[2] = (int)((coords[2] - origin[2])/spacing2);
             break;
     }
-    return *((int*)m_2DViewer->getInput()->getVtkData()->GetScalarPointer(index));
+    
+    if ( m_2DViewer->isThickSlabActive() )
+        return *((int*)m_2DViewer->getCurrentSlabProjection()->GetScalarPointer(index));
+    else
+        return *((int*)m_2DViewer->getInput()->getVtkData()->GetScalarPointer(index));
 }
 
 double PolylineROITool::computeGrayMeanCoronal()

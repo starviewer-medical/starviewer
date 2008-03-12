@@ -53,7 +53,7 @@ private:
     
     /// calcula el voxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
     int getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 );
-
+    
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
