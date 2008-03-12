@@ -1314,6 +1314,8 @@ void Q2DViewer::setSlice( int value )
         {
             m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice );
             m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
+            //si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
+            this->getDrawer()->removeAllPrimitives();
         }
         // fi thick slab
 
@@ -2774,6 +2776,9 @@ int Q2DViewer::getSlabProjectionMode() const
 
 void Q2DViewer::setSlabThickness( int thickness )
 {
+    //primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
+    this->getDrawer()->removeAllPrimitives();
+    
     computeRangeAndSlice( thickness );
     // TODO comprovar aquest pipeline si és millor calcular ara o més tard
     if( m_slabThickness == 1  && isThickSlabActive() )
