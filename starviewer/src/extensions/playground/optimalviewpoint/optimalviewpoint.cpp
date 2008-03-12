@@ -935,4 +935,22 @@ void OptimalViewpoint::computeViewpointEntropies()
 }
 
 
+void OptimalViewpoint::getCameraParameters( Vector3 & position, Vector3 & focus, Vector3 & up )
+{
+    m_camera->GetPosition( position.x, position.y, position.z );
+    m_camera->GetFocalPoint( focus.x, focus.y, focus.z );
+    m_camera->GetViewUp( up.x, up.y, up.z );
+}
+
+
+void OptimalViewpoint::setCameraParameters( const Vector3 & position, const Vector3 & focus, const Vector3 & up )
+{
+    m_camera->SetPosition( position.x, position.y, position.z );
+    m_camera->SetFocalPoint( focus.x, focus.y, focus.z );
+    m_camera->SetViewUp( up.x, up.y, up.z );
+    m_renderer->ResetCameraClippingRange();
+    m_renderer->Render();
+}
+
+
 }; // end namespace udg
