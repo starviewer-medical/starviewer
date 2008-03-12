@@ -59,7 +59,7 @@ void Slicer::setInput( vtkImageData * input )
     DEBUG_LOG( "m_input->GetScalarRange" );
     m_input->GetScalarRange( range );
     DEBUG_LOG( QString( "scalar range = %1 %2" ).arg( range[0] ).arg( range[1] ) );
-    m_nLabels = static_cast< unsigned short >( round( range[1] ) ) + 1;
+    m_nLabels = static_cast< unsigned short >( qRound( range[1] ) ) + 1;
     m_newBackground = m_nLabels < 256 ? 255 : 0;
 }
 
@@ -721,7 +721,7 @@ double Slicer::newMethod2( int step, bool normalized )
 // llesques fusionades
 void Slicer::groupingMethodC( double threshold )    /// \todo Fer-ho més eficient!!!
 {
-    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
+    const unsigned short N_GROUPS = static_cast<unsigned short>( qRound( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
     // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
@@ -1204,7 +1204,7 @@ double Slicer::jensenShannonDivergence( const Group & groupX, const Group & grou
 // llesques fusionades (Jensen-Shannon)
 void Slicer::groupingMethodC_JS( double threshold )    /// \todo Fer-ho més eficient!!!
 {
-    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
+    const unsigned short N_GROUPS = static_cast<unsigned short>( qRound( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     /// \warning Agafem adreces d'elements d'un vector de qt que podrien canviar. S'hauria de fer d'una manera mes neta.
     // Create the vector directly with m_sliceCount elements to ensure addresses of individual elements will not change.
@@ -1354,7 +1354,7 @@ void Slicer::groupingMethodC_JS( double threshold )    /// \todo Fer-ho més efi
 // llesques fusionades
 void Slicer::splittingMethodC( double threshold )   /// \todo Fer-ho més eficient!!!
 {
-    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
+    const unsigned short N_GROUPS = static_cast<unsigned short>( qRound( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     QList<Group> groups;    // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
     Group firstGroup;
@@ -1762,7 +1762,7 @@ double Slicer::jensenShannonDivergence( const Partition & partition ) const
 // llesques fusionades
 void Slicer::splittingMethodC_JS( double threshold )   /// \todo Fer-ho més eficient!!!
 {
-    const unsigned short N_GROUPS = static_cast<unsigned short>( round( threshold * 100 ) ); /// \todo Fer-ho bé
+    const unsigned short N_GROUPS = static_cast<unsigned short>( qRound( threshold * 100 ) ); /// \todo Fer-ho bé
     // Start of the algorithm
     QList<Group> groups;    // l'accés de lectura a un qvector o qlist pot ser més ràpid amb at(i) que [i] (mirar doc de qt)
     Group firstGroup;

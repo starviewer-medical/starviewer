@@ -25,7 +25,7 @@ public:
     inline virtual void initialize() { m_average = 0.0; }
     inline virtual void accumulate( T input ) { m_average += input / m_size; }
     /// \todo si T és float o double no s'hauria de fer el round
-    inline virtual T getValue() const { return static_cast<T>( round( m_average ) ); }
+    inline virtual T getValue() const { return static_cast<T>( qRound( m_average ) ); }
 
 private:
     double m_size;

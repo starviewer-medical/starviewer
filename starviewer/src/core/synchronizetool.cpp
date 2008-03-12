@@ -9,10 +9,6 @@
 #include "synchronizetooldata.h"
 #include "toolconfiguration.h"
 #include "logging.h"
-#include <math.h>
-
-//TODO treure aixoooooooo
-#include <vtkMath.h>
 
 namespace udg {
 
@@ -132,7 +128,7 @@ void SynchronizeTool::applySliceChanges()
     if( configuration && configuration->getValue( "Slicing" ).toBool() )
     {
         double sliceIncrement = (this->m_toolData->getIncrement()/m_q2dviewer->getThickness()) + m_roundLostThickness;
-        int slices = round( sliceIncrement );
+        int slices = qRound( sliceIncrement );
         m_roundLostThickness = sliceIncrement - slices;
         disconnect( m_viewer, SIGNAL(sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
         m_q2dviewer->setSlice( m_lastSlice+slices );

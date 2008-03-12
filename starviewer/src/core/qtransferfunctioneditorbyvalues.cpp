@@ -126,14 +126,14 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
                 if ( i < points.size() - 1 ) next = addIntervalAndReturnIt();   // si és l'últim no en creem cap més
             }
 
-            current->setStart( static_cast< int >( round( x ) ) );
+            current->setStart( static_cast< int >( qRound( x ) ) );
             current->setColor( transferFunction.get( x ) );
             lastIsInterval = false;
         }
         else
         {
             current->setIsInterval( true );
-            current->setEnd( static_cast< int >( round( x ) ) );
+            current->setEnd( static_cast< int >( qRound( x ) ) );
             lastIsInterval = true;
         }
     }

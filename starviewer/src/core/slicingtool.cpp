@@ -115,7 +115,7 @@ void SlicingTool::doSlicing()
             {
                 /*value = dy/abs(dy);*/
                 /// Canviem un nombre de llesques segons una acceleracio
-                value = (int)round(acceleracio);
+                value = (int)qRound(acceleracio);
                 if( value == 0 )
                 {
                     if( dy >= 0 ) value = 1;
