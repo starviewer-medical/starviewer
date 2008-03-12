@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "polylineroitool.h"
-#include "polylineroitooldata.h"
 #include "q2dviewer.h"
 #include "logging.h"
 #include "volume.h"
@@ -30,8 +29,6 @@ PolylineROITool::PolylineROITool( QViewer *viewer, QObject *parent )
 {
     m_toolName = "PolylineROITool";
     m_hasSharedData = false;
-
-//     m_toolData = new PolylineROIToolData;
 
     m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
     if( !m_2DViewer )
