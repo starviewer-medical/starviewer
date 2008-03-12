@@ -590,7 +590,7 @@ void PolylineROITool::closeForm()
         intersection[2] = (bounds[5]+bounds[4])/2.0;
 
         DrawerText * text = new DrawerText;
-        text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean() ) );
+        text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
         text->setAttatchmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
