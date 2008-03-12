@@ -7,7 +7,6 @@
 
 #include "qoperationstatescreen.h"
 #include <QString>
-#include <iostream.h>
 #include <qdatetime.h>
 #include <QCloseEvent>
 #include <QHeaderView>
