@@ -52,6 +52,7 @@ namespace udg {
 class OptimalViewpointVolume;
 class OptimalViewpointPlane;
 class OptimalViewpointParameters;
+class Vector3;
 
 /**
  * Aquesta classe encapsula el mètode de visualització del Punt de Vista Òptim
@@ -150,6 +151,9 @@ public:
 
     void setObscurances( bool obscurances );
     void setObscurancesFactor( double obscurancesFactor );
+
+    void getCameraParameters( Vector3 & position, Vector3 & focus, Vector3 & up );
+    void setCameraParameters( const Vector3 & position, const Vector3 & focus, const Vector3 & up );
 
 public slots:
 

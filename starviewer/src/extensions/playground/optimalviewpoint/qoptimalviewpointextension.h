@@ -91,6 +91,10 @@ private slots:
     void computeSaliency();
     void renderPlane();
     void setNumberOfPlanes( const QString & numberOfPlanes );
+    void getCameraParameters();
+    void setCameraParameters();
+    void loadCameraParameters();
+    void saveCameraParameters();
 
 private:
 
