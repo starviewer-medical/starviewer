@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "starviewerprocessimagestored.h"
-#include <iostream.h>
 
 namespace udg {
 

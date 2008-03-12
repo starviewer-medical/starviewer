@@ -1,9 +1,4 @@
 
-#include <list>
-#include <unistd.h>
-#include <stdio.h>
-#include <iostream>
-
 #include "serieslist.h"
 
 namespace udg
