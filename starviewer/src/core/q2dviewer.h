@@ -29,6 +29,7 @@ class vtkScalarBarActor;
 class vtkInteractorStyle;
 class vtkImageBlend;
 class vtkImageActor;
+class vtkImageData;
 // tractament múltiples vistes
 class vtkPropCollection;
 class vtkRendererCollection;
@@ -269,6 +270,9 @@ public:
 
     /// Donada les coordenades x,y d'on s'ha clicat de la pantalla, retorna el punt més proper i que caigui dins del model.
     double * pointInModel( int screen_x, int screen_y );
+    
+    ///Retorna la informació de la llesca actual del visualitzador
+    vtkImageData* getCurrentSlabProjection();
     
 public slots:
     virtual void render();
