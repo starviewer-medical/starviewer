@@ -42,20 +42,6 @@ void Histogram::setSize( int size )
 }
 
 
-void Histogram::add( int value )
-{
-    m_histogram[value]++;
-    m_count++;
-}
-
-
-void Histogram::substract( int value )
-{
-    m_histogram[value]--;
-    m_count--;
-}
-
-
 QVectorIterator<quint64 > * Histogram::getIterator() const
 {
     return new QVectorIterator<quint64>( m_histogram );
@@ -77,11 +63,13 @@ void Histogram::reset()
 
 void Histogram::combineWith( const Histogram & histogram )
 {
-    if ( this->size() < histogram.size() )
-        this->setSize( histogram.size() );
+    int otherSize = histogram.size();
 
-    for ( int i = 0; i < histogram.size(); i++ )
-        m_histogram[i] += histogram.m_histogram[i];
+    if ( this->size() < otherSize )
+        this->setSize( otherSize );
+
+    for ( int i = 0; i < otherSize; i++ )
+        m_histogram[i] += histogram.m_histogram.at(i);
 
     m_count += histogram.m_count;
 }
@@ -92,7 +80,7 @@ void Histogram::substract( const Histogram & histogram )
     int size = qMin( this->size(), histogram.size() );
 
     for ( int i = 0; i < size; i++ )
-        m_histogram[i] -= histogram.m_histogram[i];
+        m_histogram[i] -= histogram.m_histogram.at(i);
 
     m_count -= histogram.m_count;
 }

@@ -80,6 +80,20 @@ private:
 };
 
 
+inline void Histogram::add( int value )
+{
+    m_histogram[value]++;
+    m_count++;
+}
+
+
+inline void Histogram::substract( int value )
+{
+    m_histogram[value]--;
+    m_count--;
+}
+
+
 }
 
 
