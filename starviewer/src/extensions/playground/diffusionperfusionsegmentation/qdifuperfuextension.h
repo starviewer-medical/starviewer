@@ -95,14 +95,14 @@ private:
 
 
     /// Registration parameters
-    static const double REGISTRATION_FIXED_STANDARD_DEVIATION = 0.4;
-    static const double REGISTRATION_MOVING_STANDARD_DEVIATION = 0.4;
-    static const int REGISTRATION_NUMBER_OF_SPACIAL_SAMPLES = 200;
-    static const int REGISTRATION_FIXED_VARIANCE = 2;
-    static const int REGISTRATION_MOVING_VARIANCE = 2;
-    static const int REGISTRATION_MAXIMUM_STEP = 1;
-    static const double REGISTRATION_MINIMUM_STEP = 0.001;
-    static const int REGISTRATION_NUMBER_OF_ITERATIONS = 300;
+    static const double REGISTRATION_FIXED_STANDARD_DEVIATION;
+    static const double REGISTRATION_MOVING_STANDARD_DEVIATION;
+    static const int REGISTRATION_NUMBER_OF_SPACIAL_SAMPLES;
+    static const int REGISTRATION_FIXED_VARIANCE;
+    static const int REGISTRATION_MOVING_VARIANCE;
+    static const int REGISTRATION_MAXIMUM_STEP;
+    static const double REGISTRATION_MINIMUM_STEP;
+    static const int REGISTRATION_NUMBER_OF_ITERATIONS;
 
 
     /// Volum d'entrada de difusió
