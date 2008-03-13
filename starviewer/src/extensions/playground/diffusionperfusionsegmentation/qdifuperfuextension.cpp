@@ -40,6 +40,15 @@
 
 namespace udg {
 
+const double QDifuPerfuSegmentationExtension::REGISTRATION_FIXED_STANDARD_DEVIATION = 0.4;
+const double QDifuPerfuSegmentationExtension::REGISTRATION_MOVING_STANDARD_DEVIATION = 0.4;
+const int QDifuPerfuSegmentationExtension::REGISTRATION_NUMBER_OF_SPACIAL_SAMPLES = 200;
+const int QDifuPerfuSegmentationExtension::REGISTRATION_FIXED_VARIANCE = 2;
+const int QDifuPerfuSegmentationExtension::REGISTRATION_MOVING_VARIANCE = 2;
+const int QDifuPerfuSegmentationExtension::REGISTRATION_MAXIMUM_STEP = 1;
+const double QDifuPerfuSegmentationExtension::REGISTRATION_MINIMUM_STEP = 0.001;
+const int QDifuPerfuSegmentationExtension::REGISTRATION_NUMBER_OF_ITERATIONS = 300;
+
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * parent )
  : QWidget( parent )
 {
