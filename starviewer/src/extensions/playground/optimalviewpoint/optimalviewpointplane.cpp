@@ -202,11 +202,11 @@ void OptimalViewpointPlane::startEntropyComputing()
     if ( m_compute )
     {
         DEBUG_LOG( QString( "H L-1 size; m_N = %1, m_L = %2" ).arg( m_N ).arg( m_L ) );
-        m_histogramL_1Size = static_cast< unsigned short >( pow( m_N, m_L - 1 ) );
+        m_histogramL_1Size = static_cast< unsigned short >( pow( (double)m_N, m_L - 1 ) );
 //         m_histogramL_1 = new std::vector<unsigned long>( m_histogramL_1Size );
 //         m_countL_1 = 0;
         DEBUG_LOG( QString( "H L size" ) );
-        m_histogramLSize = static_cast< unsigned short >( pow( m_N, m_L ) );
+        m_histogramLSize = static_cast< unsigned short >( pow( (double)m_N, m_L ) );
 //         m_histogramL = new std::vector<unsigned long>( m_histogramLSize );
 //         m_countL = 0;
 //         m_lastLValues = new std::deque<unsigned char>();
@@ -268,7 +268,7 @@ void OptimalViewpointPlane::endEntropyComputing()
             double p_XL_1_ = itHistogramL_1->next() / countL_1;
             if ( p_XL_1_ > 0.0 ) H_XL_1_ -= p_XL_1_ * log( p_XL_1_ );
         }
-        H_XL_1_ /= log( 2 );
+        H_XL_1_ /= log( 2.0 );
         delete itHistogramL_1;
 
         Histogram histogramL;
@@ -286,7 +286,7 @@ void OptimalViewpointPlane::endEntropyComputing()
             double p_XL_ = itHistogramL->next() / countL;
             if ( p_XL_ > 0.0 ) H_XL_ -= p_XL_ * log( p_XL_ );
         }
-        H_XL_ /= log( 2 );
+        H_XL_ /= log( 2.0 );
         delete itHistogramL;
 
         m_hx = H_XL_ - H_XL_1_;

@@ -23,7 +23,7 @@
 #include "vtkUnsignedLongArray.h"
 #include "vtkUnsignedShortArray.h"
 
-#include <math.h>
+#include <cmath>
 
 vtkCxxRevisionMacro(vtk4DLinearRegressionGradientEstimator, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtk4DLinearRegressionGradientEstimator);
@@ -180,7 +180,7 @@ void vtkComputeGradients(
                     int zPiz = z + iz;
                     if ( zPiz < 0 || zPiz >= size[2] ) continue;    // v = 0
                     // distància euclidiana
-                    float w = sqrt( ix2Piy2 + iz * iz );
+                    float w = sqrt( (double)(ix2Piy2 + iz * iz) );
                     // valor del vòxel (no pot ser 0 perquê ja hem fet les comprovacions abans)
                     float v = *( dptrPixxstepPiyystep + iz * zstep );
                     v *= w;
