@@ -1294,6 +1294,11 @@
            </item>
            <item>
             <property name="text" >
+             <string>Opacity color bleeding</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
              <string>Opacity smooth color bleeding</string>
             </property>
            </item>
