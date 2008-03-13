@@ -42,13 +42,6 @@ void DoubleHistogram::setSize( int size )
 }
 
 
-void DoubleHistogram::add( int value, double amount )
-{
-    m_histogram[value] += amount;
-    m_count += amount;
-}
-
-
 QVectorIterator< double > * DoubleHistogram::getIterator() const
 {
     return new QVectorIterator< double >( m_histogram );
@@ -70,11 +63,13 @@ void DoubleHistogram::reset()
 
 void DoubleHistogram::combineWith( const DoubleHistogram & histogram )
 {
-    if ( this->size() < histogram.size() )
-        this->setSize( histogram.size() );
+    int otherSize = histogram.size();
 
-    for ( int i = 0; i < histogram.size(); i++ )
-        m_histogram[i] += histogram.m_histogram[i];
+    if ( this->size() < otherSize )
+        this->setSize( otherSize );
+
+    for ( int i = 0; i < otherSize; i++ )
+        m_histogram[i] += histogram.m_histogram.at(i);
 
     m_count += histogram.m_count;
 }

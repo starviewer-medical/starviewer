@@ -73,6 +73,13 @@ private:
 };
 
 
+inline void DoubleHistogram::add( int value, double amount )
+{
+    m_histogram[value] += amount;
+    m_count += amount;
+}
+
+
 }
 
 
