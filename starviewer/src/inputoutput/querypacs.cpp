@@ -1,10 +1,22 @@
 #include "querypacs.h"
-#include <dcdeftag.h> //provide the information for the tags
-#include "studylist.h"
-#include "pacsconnection.h"
-#include "dicomstudy.h"
-#include "status.h"
 
+#include <assoc.h>
+#include <dimse.h>
+#include <dcdeftag.h> //provide the information for the tags
+#include <ofcond.h>
+#include <diutil.h>
+
+#include "pacsconnection.h"
+#include "status.h"
+#include "starviewersettings.h"
+#include "studylistsingleton.h"
+#include "serieslistsingleton.h"
+#include "imagelistsingleton.h"
+#include "pacsserver.h"
+#include "dicommask.h"
+#include "dicomstudy.h"
+#include "dicomseries.h"
+#include "dicomimage.h"
 
 #ifndef CONST
 #include "const.h"

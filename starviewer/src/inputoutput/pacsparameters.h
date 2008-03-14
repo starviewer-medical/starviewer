@@ -1,11 +1,11 @@
 #ifndef PACSPARAMETERS
 #define PACSPARAMETERS
 
-#include <QString>
-
 #define HAVE_CONFIG_H 1
 #include <cond.h>
 #include <list>
+
+#include <QString>//No es pot treure perquè PacsList l'inclou en un llista stl a PacsParameters
 
 /** Aquesta classe ens permet configurar els paràmetres necessaris que l'usuari ens ha d'entrar per connectar-nos en el pacs. A més d'altres dades d'interés
  * Aquests paràmetres són :
@@ -18,9 +18,9 @@
  *            - Localitzacio del Pacs
  *            - Default, estableix si aquest PACS és el predeterminat per realitzar les cerques
  */
+
 namespace udg{
 
-class DICOMStudy;
 class PacsParameters
 {
 

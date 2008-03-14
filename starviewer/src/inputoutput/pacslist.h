@@ -7,15 +7,18 @@
 #ifndef UDGPACSLIST_H
 #define UDGPACSLIST_H
 
-#include "pacsparameters.h"
 #include <list>
 
+#include "pacsparameters.h"
+
+class QString;
 
 namespace udg {
 
 /** Aquesta classe implementa una llistat d'objectes PacsParameters.
 @author marc
 */
+
 class PacsList
 {
 public:

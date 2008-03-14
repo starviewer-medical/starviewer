@@ -4,7 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
 #include "qquerystudythread.h"
+
+#include "pacsconnection.h"
 #include "pacsserver.h"
 #include "querypacs.h"
 #include "status.h"

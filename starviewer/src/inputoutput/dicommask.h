@@ -21,14 +21,8 @@
 #ifndef DICOMMASK
 #define DICOMMASK
 
-#include <QString>
-
-#define HAVE_CONFIG_H 1
-
-#include "const.h"
-#include <dimse.h> // provide the structure DcmDataSet
-#include <dcdeftag.h> //provide the information for the tags
-#include <ofcond.h> //provide the OFcondition structure and his members
+class QString;
+class DcmDataset;
 
 /** Aquesta classe construeix una màscara per la cerca d'estudis.
    *Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar, cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.

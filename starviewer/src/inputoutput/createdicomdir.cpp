@@ -4,23 +4,24 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#define HAVE_CONFIG_H 1
+
+#include "createdicomdir.h"
+
+#include <QString>
+#include <osconfig.h>     /* make sure OS specific configuration is included first */
+#include <dctk.h>
+#include <dcddirif.h>     /* for class DicomDirInterface */
+#include <ofstd.h>        /* for class OFStandard */
+#include <ofcond.h>       /* for class OFCondition */
 
 #include "status.h"
 #include "logging.h"
-
-#include "createdicomdir.h"
-#include "osconfig.h"     /* make sure OS specific configuration is included first */
-#include "dctk.h"
-#include "dcddirif.h"     /* for class DicomDirInterface */
-#include "ofstd.h"        /* for class OFStandard */
-#include "ofcond.h"       /* for class OFCondition */
-
+#include "dicomtagreader.h"
 
 #if defined (HAVE_WINDOWS_H) || defined(HAVE_FNMATCH_H)
 #define PATTERN_MATCHING_AVAILABLE
 #endif
-
-#include "dicomtagreader.h"
 
 namespace udg {
 

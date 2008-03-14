@@ -4,6 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
 #include "status.h"
 
 namespace udg{

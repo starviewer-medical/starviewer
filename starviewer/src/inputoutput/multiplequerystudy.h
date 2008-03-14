@@ -8,14 +8,16 @@
 #define UDGMULTQUERYSTUDY_H
 
 #include <QObject>
-#include "pacslist.h"
+
 #include "studylistsingleton.h"
+#include "pacslist.h"
 #include "dicommask.h"
 
 namespace udg {
 
 class Status;
 class PacsParameters;
+
 /** Classe que permet fer diverses cerques simultànies, a diversos pacs a la vegada mitjançant la utilitzacio de threads
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */

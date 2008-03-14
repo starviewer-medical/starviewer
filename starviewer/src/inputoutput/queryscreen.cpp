@@ -18,7 +18,6 @@
 #include "imagelistsingleton.h"
 #include "pacsparameters.h"
 #include "pacsconnection.h"
-#include "multiplequerystudy.h"
 #include "studylist.h"
 #include "qstudytreewidget.h"
 #include "dicomseries.h"
@@ -42,6 +41,9 @@
 #include "dicomdirimporter.h"
 #include "patientfillerinput.h"
 #include "qcreatedicomdir.h"
+#include "dicommask.h"
+#include "pacslist.h"
+#include "multiplequerystudy.h"
 
 namespace udg {
 

@@ -10,7 +10,6 @@
 #include <QString>
 
 #define HAVE_CONFIG_H 1
-#include "dcdicdir.h" //llegeix el dicom dir
 
 class DcmDicomDir;
 

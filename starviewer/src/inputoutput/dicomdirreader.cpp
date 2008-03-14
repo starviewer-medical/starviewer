@@ -7,9 +7,12 @@
 
 #include "dicomdirreader.h"
 
-#include "ofstring.h"
-#include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
-#include "dcdeftag.h" //provide the information for the tags
+#include <dcdicdir.h> //llegeix el dicom dir
+#include <ofstring.h>
+#include <osconfig.h> /* make sure OS specific configuration is included first */
+#include <dcdeftag.h> //provide the information for the tags
+#include <QStringList>
+
 #include "status.h"
 #include "dicomstudy.h"
 #include "studylist.h"
@@ -18,9 +21,7 @@
 #include "dicommask.h"
 #include "dicomimage.h"
 #include "imagelist.h"
-
 #include "logging.h"
-#include <QStringList>
 
 namespace udg {
 

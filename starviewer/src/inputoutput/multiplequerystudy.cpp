@@ -7,11 +7,13 @@
 
 #include <QSemaphore>
 
-#include "status.h"
 #include "multiplequerystudy.h"
+#include "status.h"
 #include "starviewersettings.h"
 #include "pacsparameters.h"
 #include "qquerystudythread.h"
+
+#include "const.h"
 
 namespace udg {
 

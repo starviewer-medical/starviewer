@@ -1,5 +1,8 @@
 #include "dicomstudy.h"
 
+#include <dimse.h> // provide the structure DcmDataSet
+#include <dcdeftag.h> //provide the information for the tags
+
 namespace udg{
 
 DICOMStudy::DICOMStudy()

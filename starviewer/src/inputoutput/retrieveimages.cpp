@@ -1,11 +1,12 @@
+#include "retrieveimages.h"
+
 #include <QDir>
 
-#include "retrieveimages.h"
-#include "const.h"
 #include "struct.h"
 #include "processimagesingleton.h"
 #include "status.h"
 #include "logging.h"
+#include "const.h"
 
 namespace udg{
 
