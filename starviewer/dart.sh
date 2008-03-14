@@ -120,7 +120,7 @@ case "$1" in
         shift
         if [ -z "$1" ]
         then
-            # Fem check complet
+        	# Fem check complet
             $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -D kwsFiles.txt
         else
             # Fem check dels fitxers indicats com a paràmetres
@@ -135,7 +135,7 @@ case "$1" in
         ;;
     Nightly)
         # Nightly Test
-        SetBuildFromSVN
+        SetBuildFromOS
         CreateCTestConfig
         $CTEST -VV -S CTest.cmake,Nightly
         ;;
@@ -148,7 +148,7 @@ case "$1" in
         ;;
     config)
         # Generar configuració
-        SetBuildFromOS
+        SetBuildFromSVN
         CreateCTestConfig
         ;;
     Experimental)
