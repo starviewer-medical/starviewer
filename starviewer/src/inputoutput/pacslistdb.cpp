@@ -6,6 +6,10 @@
  ***************************************************************************/
 
 #include "pacslistdb.h"
+
+#include <QString>
+
+#include "databaseconnection.h"
 #include "status.h"
 #include "pacsparameters.h"
 #include "logging.h"

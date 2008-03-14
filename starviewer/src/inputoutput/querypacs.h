@@ -18,28 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef QUERYSTUDY
-#define QUERYSUTY
+#ifndef QUERYPACS
+#define QUERYPACS
 #define HAVE_CONFIG_H 1
 
-#include <assoc.h>
-#include <dimse.h>
-
-class PacsConnection;
-#include <ofcond.h>
-#include <diutil.h>
-#include "studylistsingleton.h"
-#include "serieslistsingleton.h"
-#include "imagelistsingleton.h"
-#include "pacsserver.h"
-#include "starviewersettings.h"
-#include "dicommask.h"
-
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
+
+class T_ASC_Association;
+class DcmDataset;
+
 namespace udg{
 
-class DICOMStudy;
+class PacsConnection;
 class Status;
+class DicomMask;
 
 class QueryPacs
 {

@@ -1,8 +1,19 @@
-#include "const.h"
 #include "pacsserver.h"
+
+#include <dimse.h>
+#include <ofstring.h>
+#include <ofcond.h>
+#include <oflist.h>
+#include <assoc.h>
+
+#include <QString>
+
+#include "pacsparameters.h"
 #include "status.h"
-#include "pacsconnection.h"
 #include "starviewersettings.h"
+#include "pacsconnection.h"
+#include "pacsnetwork.h"
+#include "const.h"
 
 namespace udg{
 
@@ -165,7 +176,7 @@ OFCondition PacsServer::configureMove( levelConnection level )
    return status;
 }
 
-OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , T_ASC_PresentationContextID pid , const char* abstractSyntax )
+OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , int pid , const char* abstractSyntax )
 {
     /*
     ** We prefer to use Explicitly encoded transfer syntaxes.
@@ -180,6 +191,7 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , 
     ** C-FIND and C-MOVE, so there is no need to support compressed
     ** transmission.
     */
+    T_ASC_PresentationContextID presentationContextID = pid;
 
     const char* transferSyntaxes[] = { NULL , NULL , NULL };
     int numTransferSyntaxes = 0;
@@ -201,7 +213,7 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , 
     transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
     numTransferSyntaxes = 3;
 
-    return ASC_addPresentationContext( m_params , pid , abstractSyntax , transferSyntaxes , numTransferSyntaxes );
+    return ASC_addPresentationContext( m_params , presentationContextID , abstractSyntax , transferSyntaxes , numTransferSyntaxes );
 }
 
 OFCondition PacsServer::configureStore()

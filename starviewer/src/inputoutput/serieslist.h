@@ -1,19 +1,18 @@
 #ifndef SERIESLIST
 #define SERIESLIST
 
-#include <QString>
 #include <list>
-
 #include "dicomseries.h"
-#include <QSemaphore>
 
-/* ATENCIO AQUESTA CLASSE NO SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'IMPLEMENTEN SEMAFORS
- */
+class QString;
+class QSemaphore;
+
 /** This class implements a list of series. Gives us the needed functions to read the information
   * of the series that match the queries and to insert series in the list
 */
 
 namespace udg{
+
 class SeriesList
 {
 

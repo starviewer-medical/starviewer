@@ -8,10 +8,9 @@
 #define UDGPACSLISTDB_H
 
 #include <sqlite3.h>
-#include "databaseconnection.h"
 #include "pacslist.h"
 
-class PacsParameters;
+class QString;
 
 namespace udg {
 
@@ -20,6 +19,8 @@ namespace udg {
 */
 
 class Status;
+class PacsParameters;
+class DatabaseConnection;
 
 class PacsListDB{
 

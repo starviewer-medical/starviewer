@@ -5,11 +5,42 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+#include "starviewersettings.h"
+
 #include <QDir>
 #include <QApplication>
+#include <QString>
 
-#include "starviewersettings.h"
 #include "logging.h"
+
+
+const QString databaseRootKey("/cache/sdatabasePath" ); //indica on es troba la bd
+const QString poolSizeKey("/cache/poolSize" );
+const QString cacheImagePathKey("/cache/imagePath" );
+const QString AETitleMachineKey("/pacsparam/AETitle" );
+const QString localPortKey("/pacsparam/localPort" );
+const QString timeoutPacsKey("/pacsparam/timeout" );
+const QString maxConnectionsKey("/pacsparam/MaxConnects" );
+const QString pacsColumnWidthKey("/interface/studyPacsList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString cacheColumnWidthKey("/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString dicomdirColumnWidthKey("/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString MaximumDaysNotViewedStudy("/cache/MaximumDaysNotViewedStudy" );
+const QString InstitutionName("/institution/name");
+const QString InstitutionAddress("/institution/address");
+const QString InstitutionTown("/institution/town");
+const QString InstitutionZipCode("/institution/zipCode");
+const QString InstitutionCountry("/institution/country");
+const QString InstitutionEmail("/institution/Email");
+const QString InstitutionPhoneNumber("/institution/phoneNumber");
+const QString queryScreenWindowPositionX("/interface/queryscreen/windowPositionX");
+const QString queryScreenWindowPositionY("/interface/queryscreen/windowPositionY");
+const QString queryScreenWindowWidth("/interface/queryscreen/windowWidth");
+const QString queryScreenWindowHeight("/interface/queryscreen/windowHeigth");
+const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
+const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
+const QString qOperationStateColumnWidthKey("/interface/qOperationState/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString qCreateDicomdirColumnWidthKey("/interface/qCreateDicomdir/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString qConfigurationPacsDeviceColumnWidthKey("/interface/qConfigurationPacsDevice/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 
 namespace udg {
 

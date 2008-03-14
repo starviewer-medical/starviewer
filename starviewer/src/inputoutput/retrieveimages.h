@@ -25,9 +25,7 @@
 
 #include "diutil.h"
 #include "dcfilefo.h"
-#include "dcdict.h"
-#include "ofconapp.h"
-#include "dcuid.h"
+#include "ofconapp.h"//necessari per fer les sortides per pantalla de les dcmtk
 #include "dicommask.h"
 
 #include "pacsconnection.h"

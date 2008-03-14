@@ -5,7 +5,13 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "pacsnetwork.h"
+
+#include <QString>
+
+#include <assoc.h>
 #include "status.h"
+#include "const.h"
+
 
 namespace udg {
 

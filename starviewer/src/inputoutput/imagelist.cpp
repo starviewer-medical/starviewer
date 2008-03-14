@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "imagelist.h"
 
+#include <QSemaphore>
+
 namespace udg {
 /* AQUESTA CLASSE NOMES SERA ACCEDIDA PER MES D'UN THREAD A LA VEGADA PER AIXO NO S'HAN IMPLEMENTAT SEMAFORS
   */

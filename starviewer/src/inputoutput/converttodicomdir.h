@@ -6,12 +6,14 @@
  ***************************************************************************/
 #ifndef UDGCONVERTTODICOMDIR_H
 #define UDGCONVERTTODICOMDIR_H
-#include <QProgressDialog>
+
+#include <QStringList>
 #include <QObject>
+
 #include "const.h"
 
 class QString;
-class QStringList;
+class QProgressDialog;
 
 namespace udg {
 

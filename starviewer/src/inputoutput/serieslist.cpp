@@ -1,5 +1,9 @@
-
 #include "serieslist.h"
+
+#include <QSemaphore>
+#include <QString>
+
+#include "dicomseries.h"
 
 namespace udg
 {

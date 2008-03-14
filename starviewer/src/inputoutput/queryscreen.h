@@ -8,11 +8,12 @@
 #define UDGQUERYSCREEN_H
 
 #include "ui_queryscreenbase.h"
-#include "multiplequerystudy.h"
 #include "qexecuteoperationthread.h"
 #include "qoperationstatescreen.h"
 #include "dicomdirreader.h"
-#include "dicommask.h"
+#include "pacsparameters.h"
+#include "studylistsingleton.h"
+#include "multiplequerystudy.h"
 
 namespace udg {
 
@@ -24,6 +25,8 @@ class QCreateDicomdir;
 class ProcessImageSingleton;
 class SeriesListSingleton;
 class ImageListSingleton;
+class DicomMask;
+class PacsList;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc

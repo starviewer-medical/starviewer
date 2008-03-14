@@ -1,9 +1,14 @@
-
 #include "dicommask.h"
-#include "status.h"
 
 #define HAVE_CONFIG_H 1
-#include "dcsequen.h"
+#include <dcsequen.h>
+#include <dimse.h> // provide the structure DcmDataSet
+#include <dcdeftag.h> //provide the information for the tags
+#include <ofcond.h> //provide the OFcondition structure and his members
+#include <QString>
+
+#include "const.h"
+#include "status.h"
 
 namespace udg{
 

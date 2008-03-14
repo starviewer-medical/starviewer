@@ -4,7 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
 #include "pacslist.h"
+
+#include <QString>
 
 namespace udg {
 

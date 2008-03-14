@@ -8,22 +8,17 @@
 #define UDGSTOREIMAGES_H
 
 #define HAVE_CONFIG_H 1
-#include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
 
-#include "diutil.h"
-#include "dcfilefo.h"
-#include "dcdict.h"
-#include "ofconapp.h"
-#include "dcuid.h"    /* for dcmtk version name */
-
-#include "pacsconnection.h"
 #include <list>
-#include "starviewersettings.h"
+
+class T_ASC_Association;
+class T_ASC_Network;
 
 namespace udg {
 
 class Status;
 class ImageList;
+class PacsConnection;
 
 //codi d'error que retorna l'store a part del OFCondition, aquest status code també s'ha de comprovar
 static int m_lastStatusCode;

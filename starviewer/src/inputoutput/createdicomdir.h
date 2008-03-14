@@ -8,8 +8,9 @@
 #define UDGCREATEDICOMDIR_H
 
 #include "dcddirif.h"     /* for class DicomDirInterface */
+#include "const.h"
 
-#include <QString>
+class QString;
 
 namespace udg {
 

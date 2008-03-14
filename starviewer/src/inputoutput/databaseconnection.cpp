@@ -6,11 +6,14 @@
  ***************************************************************************/
 
 #include "databaseconnection.h"
+
+#include <QObject> // per les traduccions: tr()
+#include <QSemaphore>
+
 #include "starviewersettings.h"
 #include "status.h"
 #include "logging.h"
 
-#include <QObject> // per les traduccions: tr()
 
 namespace udg {
 

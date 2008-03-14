@@ -1,20 +1,28 @@
-#ifndef PACS
-#define PACS
+#ifndef PACSSERVER
+#define PACSSERVER
 
 #define HAVE_CONFIG_H 1
 
-#include <assoc.h>
-#include "pacsparameters.h"
-#include "pacsnetwork.h"
-#include "pacsconnection.h"
 #include "dcmtk/dcmdata/dcdebug.h"
+#include <oflist.h>
 
-class Status;
+#include "pacsparameters.h"
+
+class T_ASC_Network;
+class T_ASC_Parameters;
+class T_ASC_Association;
+class OFString;
+class OFCondition;
+class QString;
 
 /** Aquest classe és la que ens ajuda interectuar amb el pacs.
  * La classe conté les principals funcions i accions per connectar-nos en el pacs amb l'objectiu, de fer un echo, buscar informació o descarregar imatges. Alhora de connectar-nos al constructor passem els paràmetres mínim per connectar-nos. És molt important llegir molt bé la documentació d'aquesta classe per saber quins paràmetres utiltizar, si no voleu tenir problemes alhora de buscar informació,descarrega imatges
  */
 namespace udg{
+
+class PacsConnection;
+class PacsNetwork;
+class Status;
 
 class PacsServer
 {
@@ -91,7 +99,7 @@ private:
 
     /** Aquesta funció privada permet configurar la connexió per a descarregar imatges al ordinador local. IMPORTANT!!! Abans de connectar s'ha d'invocar la funció setLocalhostPort
      * @param Especifiquem a quin nivell volem descarregar les imatges, de pacient, d'estudi o de sèrie
-     * @return retorna l'estat de la configuració
+     * @return retorna l'estat de la configuracióDUL_PRESENTATIONCONTEXTID
      */
    OFCondition configureMove( levelConnection );
 
@@ -106,7 +114,7 @@ private:
      * @param Objectiu de la funcio
      * @return retorna l'estat de la funció
      */
-   OFCondition addPresentationContextMove( T_ASC_Parameters * , T_ASC_PresentationContextID , const char* );
+   OFCondition addPresentationContextMove( T_ASC_Parameters * , int, const char* );
 
     /** Construeix l'adreça del servidor en format ip:port, per connectar-se al PACS
      * @param adreça del servidor

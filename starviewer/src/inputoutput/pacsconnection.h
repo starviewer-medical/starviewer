@@ -9,15 +9,11 @@
 #define PACSCONNECTION
 #define HAVE_CONFIG_H 1
 
-#include <dimse.h> // provide the structure DcmDataSet
-#include <dcdeftag.h> //provide the information for the tags
-#include <ofcond.h> //provide the OFcondition structure and his members
-#ifndef CONST
-#include "const.h"
-#endif
-
 /** Aquesta classe encapusa el objecte connexió, que hauran d'utilitzar les classes per fer les seves crides al PACS. Aquesta classe segueix el patró Abstract   *Factory. Aïllem l'objecte connexió de les dctmk, d'aquesta manera si mai canvia l'objecte de connexió de les dcmtk, només haurem de tocar aquesta classe
  */
+
+class T_ASC_Association;
+
 namespace udg{
 class PacsConnection{
 
