@@ -6,7 +6,6 @@
  ***************************************************************************/
 #ifndef UDGIMAGELIST_H
 #define UDGIMAGELIST_H
-#define HAVE_CONFIG_H 1
 
 #include <cond.h>
 #include <list>

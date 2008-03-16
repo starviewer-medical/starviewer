@@ -33,8 +33,6 @@
 #include <vtkImageShiftScale.h>
 
 // dcmtk: presentation state
-//\TODO hem de fer aquest define perquè sinó no compila. Caldria descobrir perquè passa això i si cal fer un altre include previ
-#define HAVE_CONFIG_H 1
 #include <dvpstat.h> // DVPresentationState
 #include <dcmtk/dcmpstat/dvpstx.h>  /* for DVPSTextObject */
 #include "dcmtk/dcmpstat/dvpsgr.h"  /* for DVPSGraphicObject */

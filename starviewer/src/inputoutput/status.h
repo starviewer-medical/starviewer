@@ -6,7 +6,6 @@
  ***************************************************************************/
 #ifndef STATUS
 #define STATUS
-#define HAVE_CONFIG_H 1
 
 #include <ofcond.h> //provide the OFcondition structure and his members
 #include <QString>

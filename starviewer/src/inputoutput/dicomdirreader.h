@@ -9,8 +9,6 @@
 
 #include <QString>
 
-#define HAVE_CONFIG_H 1
-
 class DcmDicomDir;
 
 namespace udg {

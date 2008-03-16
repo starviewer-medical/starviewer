@@ -1,7 +1,6 @@
 #ifndef STUDYLIST
 #define STUDYLIST
 
-#define HAVE_CONFIG_H 1
 #include <cond.h>
 #include "dicomstudy.h"
 #include <list>

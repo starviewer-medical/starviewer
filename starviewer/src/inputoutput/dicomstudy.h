@@ -1,8 +1,6 @@
 #ifndef DICOMSTUDY_H
 #define DICOMSTUDY_H
 
-#define HAVE_CONFIG_H 1
-
 /** This class sets and gets study's fields
  */
 

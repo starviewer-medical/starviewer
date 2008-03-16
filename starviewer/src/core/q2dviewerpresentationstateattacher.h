@@ -10,8 +10,6 @@
 #include <QObject>
 #include <QColor>
 
-//\TODO hem de fer aquest define perquè sinó no compila. Caldria descobrir perquè passa això i si cal fer un altre include previ
-#define HAVE_CONFIG_H 1
 // Per la llista de datasets per fer els attachments necessaris segons la fase del pipeline
 #include "dcmtk/dcmdata/dcfilefo.h"
 

@@ -31,3 +31,7 @@ LIBS += -L$${DCMTKLIBDIR} \
     -lijg8 \ 
     -lijg12 \ 
     -lijg16 
+
+unix {
+    DEFINES += HAVE_CONFIG_H
+}

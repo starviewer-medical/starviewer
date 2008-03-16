@@ -11,8 +11,6 @@
 #include <QApplication> // pel "processEvents()"
 #include <cmath> // pel floor
 
-//\TODO trobar perquè això és necessari amb les dcmtk
-#define HAVE_CONFIG_H 1
 #include "dcmtk/dcmimgle/dcmimage.h"
 
 namespace udg {

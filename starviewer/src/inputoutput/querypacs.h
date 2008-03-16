@@ -20,7 +20,6 @@
 
 #ifndef QUERYPACS
 #define QUERYPACS
-#define HAVE_CONFIG_H 1
 
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 
