@@ -7,8 +7,6 @@
 #ifndef UDGSTOREIMAGES_H
 #define UDGSTOREIMAGES_H
 
-#define HAVE_CONFIG_H 1
-
 #include <list>
 
 class T_ASC_Association;

@@ -17,10 +17,7 @@
 #include "dicomstudy.h"
 #include "dicomseries.h"
 #include "dicomimage.h"
-
-#ifndef CONST
 #include "const.h"
-#endif
 
 namespace udg{
 

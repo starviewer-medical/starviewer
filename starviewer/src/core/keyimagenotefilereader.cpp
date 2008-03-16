@@ -9,7 +9,6 @@
 #include "keyimagenote.h"
 #include "logging.h"
 
-#define HAVE_CONFIG_H 1
 #include <dcfilefo.h> // per carregar arxius dicom
 #include <dcdatset.h>
 #include <dsrdoc.h>

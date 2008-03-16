@@ -1,6 +1,5 @@
 #include "dicommask.h"
 
-#define HAVE_CONFIG_H 1
 #include <dcsequen.h>
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags

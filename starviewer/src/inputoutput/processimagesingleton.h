@@ -9,7 +9,6 @@
 
 #include <QString>
 
-#define HAVE_CONFIG_H 1
 #include <cond.h>
 #include <list>
 #include <QSemaphore>

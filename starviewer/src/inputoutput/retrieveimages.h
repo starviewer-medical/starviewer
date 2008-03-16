@@ -20,7 +20,6 @@
 #ifndef RETRIEVEIMAGES
 #define RETRIEVEIMAGES
 
-#define HAVE_CONFIG_H 1
 #include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
 
 #include "diutil.h"

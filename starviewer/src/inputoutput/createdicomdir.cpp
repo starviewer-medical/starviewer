@@ -4,8 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#define HAVE_CONFIG_H 1
-
 #include "createdicomdir.h"
 
 #include <QString>

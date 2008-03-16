@@ -16,8 +16,6 @@
 #include <vtkMath.h> // pel ::Cross()
 
 // fem servir dcmtk per l'escalat de les imatges dicom
-//\TODO trobar perquè això és necessari amb les dcmtk
-#define HAVE_CONFIG_H 1
 #include "dcmtk/dcmimgle/dcmimage.h"
 #include "dcmtk/ofstd/ofbmanip.h"
 

@@ -21,8 +21,6 @@
 #include "logging.h"
 
 // dcmtk: presentation state
-//\TODO hem de fer aquest define perquè sinó no compila. Caldria descobrir perquè passa això i si cal fer un altre include previ
-#define HAVE_CONFIG_H 1
 #include <dvpstat.h> // DVPresentationState
 #include <dcfilefo.h> // per carregar arxius dicom
 #include "dcmtk/dcmdata/dcdatset.h"

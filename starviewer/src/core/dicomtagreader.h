@@ -10,8 +10,6 @@
 #include <QString>
 #include <QList>
 
-//\TODO trobar perquè això és necessari amb les dcmtk
-#define HAVE_CONFIG_H 1
 #include "dcmtk/dcmdata/dctagkey.h"
 #include "dcmtk/dcmdata/dcdeftag.h"
 

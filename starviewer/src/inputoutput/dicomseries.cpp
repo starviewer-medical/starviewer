@@ -1,7 +1,5 @@
 #include "dicomseries.h"
 
-//\TODO hem de fer aquest define perquè sinó no compila. Caldria descobrir perquè passa això i si cal fer un altre include previ
-#define HAVE_CONFIG_H 1
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 #include <dcsequen.h>

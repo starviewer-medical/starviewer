@@ -1,9 +1,8 @@
-#ifndef CONST
-#define CONST
+#ifndef UDG_PACS_CONST
+#define UDG_PACS_CONST
 
 #include <QString>
 
-#define HAVE_CONFIG_H 1
 #include <ofcond.h>
 
 

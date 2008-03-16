@@ -7,7 +7,6 @@
 
 #ifndef PACSCONNECTION
 #define PACSCONNECTION
-#define HAVE_CONFIG_H 1
 
 /** Aquesta classe encapusa el objecte connexió, que hauran d'utilitzar les classes per fer les seves crides al PACS. Aquesta classe segueix el patró Abstract   *Factory. Aïllem l'objecte connexió de les dctmk, d'aquesta manera si mai canvia l'objecte de connexió de les dcmtk, només haurem de tocar aquesta classe
  */

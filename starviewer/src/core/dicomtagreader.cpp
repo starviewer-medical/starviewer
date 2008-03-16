@@ -9,8 +9,6 @@
 
 #include <QStringList>
 
-//\TODO trobar perquè això és necessari amb les dcmtk
-#define HAVE_CONFIG_H 1
 #include "dcmtk/dcmdata/dcfilefo.h"
 #include "dcmtk/dcmdata/dcsequen.h"
 

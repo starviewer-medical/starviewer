@@ -1,8 +1,6 @@
 #ifndef PACSSERVER
 #define PACSSERVER
 
-#define HAVE_CONFIG_H 1
-
 #include "dcmtk/dcmdata/dcdebug.h"
 #include <oflist.h>
 
