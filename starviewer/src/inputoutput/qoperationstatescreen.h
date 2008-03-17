@@ -7,10 +7,9 @@
 #ifndef UDGQOPERATIONSTATESCREEN_H
 #define UDGQOPERATIONSTATESCREEN_H
 
-#include <QString>
-
-#include "dicomstudy.h"
 #include "ui_qoperationstatescreenbase.h"
+
+class QString;
 
 /// Interfície que implementa la llista d'operacions realitzades cap a un PACS
 namespace udg {

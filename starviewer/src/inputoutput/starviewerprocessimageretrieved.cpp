@@ -6,6 +6,9 @@
  ***************************************************************************/
 
 #include "starviewerprocessimageretrieved.h"
+
+#include <QString>
+
 #include "dicomtagreader.h"
 #include "dicomseries.h"
 #include "starviewersettings.h"

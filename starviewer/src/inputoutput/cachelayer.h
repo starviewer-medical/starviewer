@@ -8,10 +8,12 @@
 #define UDGCACHELAYER_H
 
 #include <QObject>
-#include "status.h"
+
+class QString;
 
 namespace udg {
 
+class Status;
 class StudyList;
 
 /** Aquesta classe afegeix un nivell d'abstracio sobre la classe CachePacs, permetent realitzar operacions sobre la cache, i utilitzar elements de la interfcie

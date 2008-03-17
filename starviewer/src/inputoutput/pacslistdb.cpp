@@ -8,7 +8,9 @@
 #include "pacslistdb.h"
 
 #include <QString>
+#include <sqlite3.h>
 
+#include "pacslist.h"
 #include "databaseconnection.h"
 #include "status.h"
 #include "pacsparameters.h"

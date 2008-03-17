@@ -5,7 +5,11 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "operation.h"
+
+#include <QString>
+
 #include "const.h"
+
 
 namespace udg {
 

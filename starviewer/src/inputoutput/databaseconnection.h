@@ -7,10 +7,10 @@
 #ifndef UDGDATABASECONNECTION_H
 #define UDGDATABASECONNECTION_H
 
-#include <sqlite3.h>
 #include <QString>
 
 class QSemaphore;
+class sqlite3;
 
 namespace udg {
 

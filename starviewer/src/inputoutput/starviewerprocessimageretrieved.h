@@ -8,9 +8,10 @@
 #define UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
 
 #include <QWidget>
-#include <QString>
 
 #include "processimage.h"
+
+class QString;
 
 namespace udg {
 

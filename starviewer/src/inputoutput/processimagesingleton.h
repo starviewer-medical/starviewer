@@ -11,7 +11,8 @@
 
 #include <cond.h>
 #include <list>
-#include <QSemaphore>
+
+class QSemaphore;
 
 namespace udg {
 

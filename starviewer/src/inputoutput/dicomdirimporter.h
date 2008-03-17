@@ -9,6 +9,8 @@
 
 #include "dicomdirreader.h"
 
+class QString;
+
 namespace udg {
 
 class Status;

@@ -8,10 +8,8 @@
 
 #include <QString>
 #include <QProgressDialog>
-#include <QStringList>
 #include <QDir>
 #include <QChar>
-#include <QApplication>
 #include <QFile>
 #include <QTextStream>
 
@@ -30,7 +28,6 @@
 #include "starviewersettings.h"
 #include "createdicomdir.h"
 #include "deletedirectory.h"
-#include "starviewersettings.h"
 
 namespace udg {
 

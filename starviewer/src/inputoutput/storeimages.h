@@ -7,8 +7,6 @@
 #ifndef UDGSTOREIMAGES_H
 #define UDGSTOREIMAGES_H
 
-#include <list>
-
 class T_ASC_Association;
 class T_ASC_Network;
 

@@ -34,6 +34,7 @@
 #include "dicomimage.h"
 #include "status.h"
 #include "logging.h"
+#include "pacsparameters.h"
 
 namespace udg {
 

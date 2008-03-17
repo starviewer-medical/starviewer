@@ -7,8 +7,9 @@
 #ifndef STATUS
 #define STATUS
 
-#include <ofcond.h> //provide the OFcondition structure and his members
 #include <QString>
+
+class OFCondition;
 
 /** Aquesta classe proporciona el control d'errors, dels mètodes invocats.
  *Aquesta classe, està basada seguin el patró Abstract Factory, el que es tracta és de separar el control d'errors del dctmk, de control

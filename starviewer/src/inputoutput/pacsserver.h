@@ -1,7 +1,7 @@
 #ifndef PACSSERVER
 #define PACSSERVER
 
-#include "dcmtk/dcmdata/dcdebug.h"
+
 #include <oflist.h>
 
 #include "pacsparameters.h"
