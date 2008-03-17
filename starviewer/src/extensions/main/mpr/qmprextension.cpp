@@ -699,7 +699,7 @@ void QMPRExtension::pushSagitalViewAxisActor()
     double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
-    m_axial2DView->setSlice( static_cast<int>( toWorld[1] / m_axialSpacing[2] ) );
+    m_axial2DView->setSlice( m_axial2DView->getMaximumSlice() - static_cast<int>( toWorld[1] / m_axialSpacing[2] ) );
     updatePlanes();
     updateControls();
 
