@@ -98,11 +98,13 @@ Identifier *Repository< ItemType >::getIdentifierList()
 template< typename ItemType >
 void Repository< ItemType >::cleanUp()
 {
-    int items = this->getNumberOfItems();
-    Identifier idList[ items ];
-
-    for( int i = 0; i < items; i++ )
-        this->removeItem( idList[i] );
+    //TODO Cal arreglar aquest codi, ja que elimina els items d'una llista buida.
+    
+//     int items = this->getNumberOfItems();
+//     Identifier idList[ items ];
+// 
+//     for( int i = 0; i < items; i++ )
+//         this->removeItem( idList[i] );
 }
 
 };  // end namespace udg {

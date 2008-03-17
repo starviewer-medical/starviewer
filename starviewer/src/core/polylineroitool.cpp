@@ -155,20 +155,22 @@ double PolylineROITool::computeGrayMeanAxial()
     int numberOfSegments = m_mainPolyline->getNumberOfPoints()-1;
 
     //taula de punters a vtkLine per a representar cadascun dels segments del polígon
-    vtkLine* segments[ numberOfSegments ];
+    QVector<vtkLine*> segments;
 
     //creem els diferents segments
     for ( index = 0; index < numberOfSegments; index++ )
     {
-        segments[index] = vtkLine::New();
-        segments[index]->GetPointIds()->SetNumberOfIds(2);
-        segments[index]->GetPoints()->SetNumberOfPoints(2);
+        vtkLine *line = vtkLine::New();
+        line->GetPointIds()->SetNumberOfIds(2);
+        line->GetPoints()->SetNumberOfPoints(2);
 
         double *p1 = m_mainPolyline->getPoint( index );
         double *p2 = m_mainPolyline->getPoint( index+1 );
 
-        segments[index]->GetPoints()->InsertPoint( 0, p1 );
-        segments[index]->GetPoints()->InsertPoint( 1, p2 );
+        line->GetPoints()->InsertPoint( 0, p1 );
+        line->GetPoints()->InsertPoint( 1, p2 );
+
+        segments << line;
     }
 
     double *bounds = m_mainPolyline->getPolylineBounds();
@@ -291,20 +293,22 @@ double PolylineROITool::computeGrayMeanSagittal()
     int numberOfSegments = m_mainPolyline->getNumberOfPoints()-1;
 
     //taula de punters a vtkLine per a representar cadascun dels segments del polígon
-    vtkLine* segments[ numberOfSegments ];
-
+    QVector<vtkLine*> segments;
+    
     //creem els diferents segments
     for ( index = 0; index < numberOfSegments; index++ )
     {
-        segments[index] = vtkLine::New();
-        segments[index]->GetPointIds()->SetNumberOfIds(2);
-        segments[index]->GetPoints()->SetNumberOfPoints(2);
+        vtkLine *line = vtkLine::New();
+        line->GetPointIds()->SetNumberOfIds(2);
+        line->GetPoints()->SetNumberOfPoints(2);
 
         double *p1 = m_mainPolyline->getPoint( index );
         double *p2 = m_mainPolyline->getPoint( index+1 );
 
-        segments[index]->GetPoints()->InsertPoint( 0, p1 );
-        segments[index]->GetPoints()->InsertPoint( 1, p2 );
+        line->GetPoints()->InsertPoint( 0, p1 );
+        line->GetPoints()->InsertPoint( 1, p2 );
+
+        segments << line;
     }
 
     double *bounds = m_mainPolyline->getPolylineBounds();
@@ -460,20 +464,22 @@ double PolylineROITool::computeGrayMeanCoronal()
     int numberOfSegments = m_mainPolyline->getNumberOfPoints()-1;
 
     //taula de punters a vtkLine per a representar cadascun dels segments del polígon
-    vtkLine* segments[ numberOfSegments ];
+    QVector<vtkLine*> segments;
 
     //creem els diferents segments
     for ( index = 0; index < numberOfSegments; index++ )
     {
-        segments[index] = vtkLine::New();
-        segments[index]->GetPointIds()->SetNumberOfIds(2);
-        segments[index]->GetPoints()->SetNumberOfPoints(2);
+        vtkLine *line = vtkLine::New();
+        line->GetPointIds()->SetNumberOfIds(2);
+        line->GetPoints()->SetNumberOfPoints(2);
 
         double *p1 = m_mainPolyline->getPoint( index );
         double *p2 = m_mainPolyline->getPoint( index+1 );
 
-        segments[index]->GetPoints()->InsertPoint( 0, p1 );
-        segments[index]->GetPoints()->InsertPoint( 1, p2 );
+        line->GetPoints()->InsertPoint( 0, p1 );
+        line->GetPoints()->InsertPoint( 1, p2 );
+
+        segments << line;
     }
 
     double *bounds = m_mainPolyline->getPolylineBounds();
