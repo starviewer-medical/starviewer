@@ -5,12 +5,15 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "cacheinstallation.h"
-#include "starviewersettings.h"
-#include "databaseconnection.h"
-#include "logging.h"
 
 #include <QDir>
 #include <QFile>
+#include <QString>
+#include <sqlite3.h>
+
+#include "starviewersettings.h"
+#include "databaseconnection.h"
+#include "logging.h"
 
 namespace udg {
 

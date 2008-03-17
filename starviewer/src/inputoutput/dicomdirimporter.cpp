@@ -5,8 +5,13 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "status.h"
 #include "dicomdirimporter.h"
+
+#include <QDir>
+#include <QFile>
+#include <QString>
+
+#include "status.h"
 #include "imagelist.h"
 #include "starviewersettings.h"
 #include "cachestudydal.h"
@@ -19,8 +24,6 @@
 #include "dicomseries.h"
 #include "dicomimage.h"
 #include "dicommask.h"
-#include <QDir>
-#include <QFile>
 #include "logging.h"
 #include "scalestudy.h"
 

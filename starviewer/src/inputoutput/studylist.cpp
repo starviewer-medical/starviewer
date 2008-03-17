@@ -1,6 +1,7 @@
-#include <list>
 
 #include "studylist.h"
+
+#include <QSemaphore>
 
 namespace udg
 {

@@ -5,13 +5,17 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+#include "cacheimagedal.h"
+
+#include <QString>
 #include <sqlite3.h>
+
 #include "dicomimage.h"
 #include "status.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "logging.h"
-#include "cacheimagedal.h"
+#include "imagelist.h"
 
 namespace udg {
 

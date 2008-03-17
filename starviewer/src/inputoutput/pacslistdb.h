@@ -7,9 +7,6 @@
 #ifndef UDGPACSLISTDB_H
 #define UDGPACSLISTDB_H
 
-#include <sqlite3.h>
-#include "pacslist.h"
-
 class QString;
 
 namespace udg {
@@ -21,6 +18,7 @@ namespace udg {
 class Status;
 class PacsParameters;
 class DatabaseConnection;
+class PacsList;
 
 class PacsListDB{
 

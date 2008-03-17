@@ -4,9 +4,14 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include <QDir>
 
 #include "cachepool.h"
+
+#include <sqlite3.h>
+#include <QString>
+#include <QDir>
+
+#include "databaseconnection.h"
 #include "status.h"
 #include "logging.h"
 #include "deletedirectory.h"

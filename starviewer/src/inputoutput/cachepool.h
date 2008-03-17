@@ -7,11 +7,12 @@
 #ifndef UDGCACHEPOOL_H
 #define UDGCACHEPOOL_H
 
-#include "databaseconnection.h"
+class QString;
 
 namespace udg {
 
 class Status;
+class DatabaseConnection;
 
 /** Classe que s'encarrega de gestionar l'spool de la caché
 @author Grup de Gràfics de Girona  ( GGG )

@@ -5,13 +5,15 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+#include "multiplequerystudy.h"
+
 #include <QSemaphore>
 
-#include "multiplequerystudy.h"
 #include "status.h"
 #include "starviewersettings.h"
 #include "pacsparameters.h"
 #include "qquerystudythread.h"
+#include "studylistsingleton.h"
 
 #include "const.h"
 

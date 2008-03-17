@@ -9,14 +9,16 @@
 
 #include <QObject>
 
-#include "studylistsingleton.h"
 #include "pacslist.h"
 #include "dicommask.h"
+
+class QSemaphore;
 
 namespace udg {
 
 class Status;
 class PacsParameters;
+class StudyListSingleton;
 
 /** Classe que permet fer diverses cerques simultànies, a diversos pacs a la vegada mitjançant la utilitzacio de threads
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>

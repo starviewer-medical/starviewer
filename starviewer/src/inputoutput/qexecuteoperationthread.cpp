@@ -30,6 +30,7 @@
 #include "serieslist.h"
 #include "imagelist.h"
 #include "querypacs.h"
+#include "pacsconnection.h"
 
 namespace udg {
 

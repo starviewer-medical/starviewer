@@ -3,9 +3,8 @@
 #include <dimse.h>
 #include <ofstring.h>
 #include <ofcond.h>
-#include <oflist.h>
 #include <assoc.h>
-
+#include "dcmtk/dcmdata/dcdebug.h"
 #include <QString>
 
 #include "pacsparameters.h"

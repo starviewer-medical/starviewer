@@ -7,7 +7,7 @@
 #ifndef UDGCONVERTDICOMTOLITTLEENDIAN_H
 #define UDGCONVERTDICOMTOLITTLEENDIAN_H
 
-#include <QString>
+class QString;
 
 namespace udg {
 

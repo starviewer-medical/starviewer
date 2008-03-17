@@ -20,21 +20,18 @@
 #ifndef RETRIEVEIMAGES
 #define RETRIEVEIMAGES
 
-#include "dcmtk/config/osconfig.h" /* make sure OS specific configuration is included first */
-
-#include "diutil.h"
-#include "dcfilefo.h"
-#include "ofconapp.h"//necessari per fer les sortides per pantalla de les dcmtk
-#include "dicommask.h"
-
-#include "pacsconnection.h"
-#include "imagelistsingleton.h"
-#include "starviewersettings.h"
+class T_ASC_Network;
+class T_ASC_Association;
+class DcmDataset;
 
 /** This class helps to interactive with the pacs, retrieve images that match with the mask
  */
-class status;
+
 namespace udg{
+
+class Status;
+class PacsConnection;
+class DicomMask;
 
 class RetrieveImages
 {

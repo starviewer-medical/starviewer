@@ -6,26 +6,23 @@
 
  ***************************************************************************/
 
-#include "status.h"
-
 #include "convertdicomtolittleendian.h"
 
-//includes de les dcmtk
-#include "osconfig.h"    /* make sure OS specific configuration is included first */
-
-#include "ofstdinc.h"
+#include <QString>
+#include <osconfig.h>    /* make sure OS specific configuration is included first */
+#include <ofstdinc.h>
+#include <dctk.h>
+#include <ofconapp.h>
 
 #ifdef HAVE_GUSI_H
 #include <GUSI.h>
 #endif
 
-#include "dctk.h"
-#include "ofconapp.h"
-
 #ifdef WITH_ZLIB
 #include <zlib.h>        /* for zlibVersion() */
 #endif
 
+#include "status.h"
 
 namespace udg {
 

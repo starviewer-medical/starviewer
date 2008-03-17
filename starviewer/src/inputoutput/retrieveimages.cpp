@@ -1,5 +1,10 @@
 #include "retrieveimages.h"
 
+#include <osconfig.h> /* make sure OS specific configuration is included first */
+#include <diutil.h>
+#include <dcfilefo.h>
+#include <assoc.h>
+#include <ofconapp.h>//necessari per fer les sortides per pantalla de les dcmtkz
 #include <QDir>
 
 #include "struct.h"
@@ -7,6 +12,10 @@
 #include "status.h"
 #include "logging.h"
 #include "const.h"
+#include "pacsconnection.h"
+#include "starviewersettings.h"
+#include "imagelistsingleton.h"
+#include "dicommask.h"
 
 namespace udg{
 

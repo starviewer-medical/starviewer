@@ -7,13 +7,16 @@
 #ifndef UDGCACHEIMAGEDAL_H
 #define UDGCACHEIMAGEDAL_H
 
-#include "imagelist.h"
+#include <QtGlobal>//necessària per el quint64, del qual no es pot fer class forwarding
+
+class QString;
 
 namespace udg {
 
 class DicomMask;
 class Status;
 class DICOMImage;
+class ImageList;
 
 /** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>

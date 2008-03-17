@@ -7,6 +7,8 @@
 
 #include "status.h"
 
+#include <ofcond.h> //provide the OFcondition structure and his members
+
 namespace udg{
 
 Status::Status()

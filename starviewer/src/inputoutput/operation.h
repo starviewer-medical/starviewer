@@ -9,9 +9,12 @@
 
 #include "dicommask.h"
 #include "pacsparameters.h"
-#include <QString>
+
+class QString;
 
 namespace udg {
+
+class PacsParameters;
 
 /** Defineix les possibles operacions que es poden dur a terme amb el PACS, descarregar imatges i visualitzar images (la cerca es tracta en d'altres classes )
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>

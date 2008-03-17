@@ -4,7 +4,8 @@
 #include <cond.h>
 #include "dicomstudy.h"
 #include <list>
-#include <QSemaphore>
+
+class QSemaphore;
 
 /** This is a singleton class. This class implements a list of studies. Gives us the needed functions to insert studies in the list and read the studies in the list
 */

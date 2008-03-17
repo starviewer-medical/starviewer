@@ -13,7 +13,6 @@ class DICOMStudy;
 class Status;
 class StudyList;
 class DicomMask;
-
 class Study;
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.

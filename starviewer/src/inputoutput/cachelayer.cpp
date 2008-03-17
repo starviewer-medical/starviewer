@@ -4,11 +4,12 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#include "cachelayer.h"
 
 #include <QProgressDialog>
 #include <QDate>
+#include <QString>
 
-#include "cachelayer.h"
 #include "status.h"
 #include "cachepool.h"
 #include "starviewersettings.h"

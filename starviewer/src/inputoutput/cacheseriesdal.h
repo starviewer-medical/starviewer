@@ -7,14 +7,13 @@
 #ifndef UDGCACHESERIESDAL_H
 #define UDGCACHESERIESDAL_H
 
-
-class Status;
-
 namespace udg {
 
 class DicomMask;
 class DICOMSeries;
 class SeriesList;
+class Status;
+
 /** Classe que conté els mètodes d'accés a la Taula series
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */

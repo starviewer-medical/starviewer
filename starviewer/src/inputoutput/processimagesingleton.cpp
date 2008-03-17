@@ -6,6 +6,9 @@
  ***************************************************************************/
 
 #include "processimagesingleton.h"
+
+#include <QSemaphore>
+
 #include "processimage.h"
 #include "dicomimage.h"
 
