@@ -335,12 +335,20 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
-        detectSagitalViewAxisActor();
+        if ( m_sagital2DView->getInteractor()->GetControlKey() )
+            detectPushSagitalViewAxisActor();
+        else
+            detectSagitalViewAxisActor();
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        if( m_state != NONE )
-            releaseSagitalViewAxisActor();
+        if ( m_state == PUSHING )
+            releasePushSagitalViewAxisActor();
+        else
+        {
+            if( m_state != NONE )
+                releaseSagitalViewAxisActor();
+        }
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -348,15 +356,6 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
             rotateSagitalViewAxisActor();
         else if( m_state == PUSHING )
             pushSagitalViewAxisActor();
-    break;
-
-    case vtkCommand::RightButtonPressEvent:
-        detectPushSagitalViewAxisActor();
-    break;
-
-    case vtkCommand::RightButtonReleaseEvent:
-        if( m_state != NONE )
-            releasePushSagitalViewAxisActor();
     break;
 
     default:
