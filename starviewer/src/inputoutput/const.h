@@ -119,15 +119,6 @@ namespace udg
     const OFConditionConst error_DNoFind(          0, 1300, OF_error,      "There are problems with the find operation");
     const OFConditionConst error_NoFind (error_DNoConnect);
 
-    const int errorDictionaryNoLoaded = 1000;
-    const int errorOpeningDicomFile = 1001;
-    const int errorOutofMemory = 1002;
-    const int errorDicomFileNotFound = 1003;
-    const int errorOpeningNewImage = 1004;
-    const int errorScalingImage = 1005;
-    const int errorWritingNewImage = 1006;
-
-
     //Prioritats pers les operacions de la classe Operation
     const int operationPriorityLow = 99;
     const int operationPriorityMedium = 50;
