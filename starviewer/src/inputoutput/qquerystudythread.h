@@ -11,6 +11,8 @@
 #include "dicommask.h"
 #include "pacsparameters.h"
 
+class QString;
+
 namespace udg {
 
 class PacsConnection;

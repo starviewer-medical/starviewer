@@ -8,6 +8,7 @@
 #include "multiplequerystudy.h"
 
 #include <QSemaphore>
+#include <QString>
 
 #include "status.h"
 #include "starviewersettings.h"

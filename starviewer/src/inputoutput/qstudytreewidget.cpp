@@ -22,6 +22,7 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 #include <QShortcut>
+#include <QString>
 
 #include "qstudytreewidget.h"
 #include "pacslistdb.h"

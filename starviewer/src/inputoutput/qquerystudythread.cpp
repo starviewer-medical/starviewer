@@ -7,11 +7,14 @@
 
 #include "qquerystudythread.h"
 
+#include <QString>
+
 #include "pacsconnection.h"
 #include "pacsserver.h"
 #include "querypacs.h"
 #include "status.h"
 #include "logging.h"
+#include "pacsparameters.h"
 
 namespace udg {
 
