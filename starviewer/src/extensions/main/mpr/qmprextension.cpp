@@ -517,12 +517,12 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     double axis[3];
     double direction[3];
 
-    vec1[1] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
-    vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
+    vec1[1] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[1];
+    vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[2];
     vec1[0] = 0.0;
 
-    vec2[1] = toWorld[0] - m_pickedActorPlaneSource->GetCenter()[0];
-    vec2[2] = toWorld[1] - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[1] = toWorld[0] - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[2] = toWorld[1] - m_pickedActorPlaneSource->GetCenter()[2];
     vec2[0] = 0.0;
 
     double degrees = MathTools::angleInDegrees( vec1 , vec2 );
