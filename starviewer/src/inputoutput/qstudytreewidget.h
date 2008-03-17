@@ -23,6 +23,8 @@
 #include "ui_qstudytreewidgetbase.h"
 #include <QMenu>
 
+class QString;
+
 namespace udg {
 
 /** Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.

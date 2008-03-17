@@ -9,10 +9,7 @@
 
 #include "ui_queryscreenbase.h"
 #include "qexecuteoperationthread.h"
-#include "qoperationstatescreen.h"
 #include "dicomdirreader.h"
-#include "pacsparameters.h"
-#include "studylistsingleton.h"
 #include "multiplequerystudy.h"
 
 namespace udg {
@@ -27,6 +24,9 @@ class SeriesListSingleton;
 class ImageListSingleton;
 class DicomMask;
 class PacsList;
+class PacsParameters;
+class QOperationStateScreen;
+class StudyListSingleton;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc

@@ -16,7 +16,6 @@
 #include "processimagesingleton.h"
 #include "serieslistsingleton.h"
 #include "imagelistsingleton.h"
-#include "pacsparameters.h"
 #include "pacsconnection.h"
 #include "studylist.h"
 #include "qstudytreewidget.h"
@@ -43,7 +42,8 @@
 #include "qcreatedicomdir.h"
 #include "dicommask.h"
 #include "pacslist.h"
-#include "multiplequerystudy.h"
+#include "qoperationstatescreen.h"
+#include "studylistsingleton.h"
 
 namespace udg {
 
