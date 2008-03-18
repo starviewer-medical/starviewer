@@ -658,7 +658,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget" >
+     <widget class="QWidget" name="" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>0</number>
@@ -1014,7 +1014,7 @@
               <string/>
              </property>
              <property name="icon" >
-              <iconset resource="../../../main/main.qrc" >:/images/player_back32.png</iconset>
+              <iconset resource="../../../main/main.qrc" >:/images/back.png</iconset>
              </property>
             </widget>
            </item>
@@ -1034,7 +1034,7 @@
               <string/>
              </property>
              <property name="icon" >
-              <iconset resource="../../../main/main.qrc" >:/images/player_play32.png</iconset>
+              <iconset resource="../../../main/main.qrc" >:/images/play.png</iconset>
              </property>
             </widget>
            </item>
@@ -1054,7 +1054,7 @@
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QWidget" name="layoutWidget" >
+         <widget class="QWidget" name="" >
           <layout class="QVBoxLayout" >
            <property name="margin" >
             <number>0</number>
@@ -1145,7 +1145,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="layoutWidget" >
+         <widget class="QWidget" name="" >
           <layout class="QVBoxLayout" >
            <property name="margin" >
             <number>0</number>
