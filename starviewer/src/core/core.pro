@@ -61,8 +61,6 @@ HEADERS += extensionfactory.h \
            zoomtool.h \
            oldtranslatetool.h \
            qlogviewer.h \
-           roitool.h \
-           olddistancetool.h \
            strokesegmentationmethod.h \
            itkErfcLevelSetFunction.h \
            itkErfcLevelSetImageFilter.h \
@@ -128,7 +126,6 @@ HEADERS += extensionfactory.h \
            translatetool.h \
            oldwindowleveltool.h \
            oldvoxelinformationtool.h \
-           oldscreenshottool.h \
            oldrotate3dtool.h \
            oldseedtool.h \
            voxelinformationtool.h \
@@ -208,8 +205,6 @@ SOURCES += extensionmediator.cpp \
            zoomtool.cpp \
            oldtranslatetool.cpp \
            qlogviewer.cpp \
-           roitool.cpp \
-           olddistancetool.cpp \
            strokesegmentationmethod.cpp \
            itkErfcLevelSetFunction.cpp \
            itkErfcLevelSetImageFilter.cpp \
@@ -275,7 +270,6 @@ SOURCES += extensionmediator.cpp \
            slicingtool.cpp \
            oldwindowleveltool.cpp \
            oldvoxelinformationtool.cpp \
-           oldscreenshottool.cpp \
            oldrotate3dtool.cpp \
            oldseedtool.cpp \
            voxelinformationtool.cpp \
