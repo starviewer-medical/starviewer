@@ -10,8 +10,8 @@
 #include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
-//#include "qhistogram2d.h"
 #include "q2dviewer.h"
+#include "toolmanager.h"
 
 //Qt
 #include <QString>
@@ -35,9 +35,6 @@
 #include <vtkContourGrid.h>
 #include <vtkCommand.h>
 #include <vtkMetaImageWriter.h>
-/*#include <vtkDataSetMapper.h>
-#include <vtkThreshold.h>
-*/
 
 // ITK
 #include <itkBinaryThresholdImageFilter.h>
@@ -53,51 +50,35 @@
 
 #include "itkImageFileWriter.h"
 
-
 namespace udg {
 
 QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
- : QWidget( parent )
+ : QWidget( parent ), m_mainVolume(0), m_lesionMaskVolume(0), m_imageThreshold(0), m_filteredVolume(0), m_isSeed(false), m_isMask(false),   m_isLeftButtonPressed(false), m_cont(0), m_volume(0.0), m_editorTool(QRectumSegmentationExtension::NoEditor), m_isRegionSet(false), m_isRegionSetting(false)
 {
     setupUi( this );
-    m_mainVolume     = 0;
-    m_lesionMaskVolume = 0;
-    m_filteredVolume   = 0;
-
-    m_imageThreshold = 0;
-    //m_fusionVolume   = 0;
-    //m_vtkFusionImage = 0;
-
-    m_volume = 0.0;
 
     m_segMethod = new rectumSegmentationMethod();
-
-    m_isSeed  = false;
-    m_isMask  = false;
-    m_editorTool = QRectumSegmentationExtension::NoEditor;
-    m_isLeftButtonPressed = false;
-    m_cont = 0;
-    m_isRegionSet = false;
-    m_isRegionSetting = false;
-
-    //pointActor = vtkActor::New();
     squareActor = vtkActor::New();
     squareRegionActor = vtkActor::New();
 
     createActions();
-    createToolBars();
     createConnections();
-
     readSettings();
+
+    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
+    m_toolManager = new ToolManager(this);
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    QStringList toolsList;
+    toolsList << "VoxelInformationTool";
+    m_toolManager->setViewerTools( m_2DView, toolsList );
 }
 
 QRectumSegmentationExtension::~QRectumSegmentationExtension()
 {
     writeSettings();
     delete m_segMethod;
-    //pointActor  -> Delete();
-    squareActor -> Delete();
-    squareRegionActor -> Delete();
+    squareActor->Delete();
+    squareRegionActor->Delete();
     if(m_filteredVolume != 0)
     {
         delete m_filteredVolume;
@@ -110,22 +91,10 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
     {
         m_imageThreshold->Delete();
     }
-
 }
 
 void QRectumSegmentationExtension::createActions()
 {
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
-
-    //connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
@@ -167,7 +136,6 @@ void QRectumSegmentationExtension::createActions()
     m_regionAction->setCheckable( true );
     m_regionAction->setEnabled( true );
     m_regionToolButton->setDefaultAction( m_regionAction );
-
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
 
@@ -221,53 +189,29 @@ void QRectumSegmentationExtension::createActions()
     m_editorToolActionGroup->addAction( m_eraseEditorAction );
     m_editorToolActionGroup->addAction( m_eraseSliceEditorAction );
     m_editorToolActionGroup->addAction( m_eraseRegionEditorAction );
-
-
-}
-
-void QRectumSegmentationExtension::createToolBars()
-{
 }
 
 void QRectumSegmentationExtension::createConnections()
 {
-  connect( m_filterPushButton , SIGNAL( clicked() ) , this , SLOT( ApplyFilterMainImage() ) );
-
-  connect( m_applyMethodButton , SIGNAL( clicked() ) , this , SLOT( ApplyMethod() ) );
-
-  connect( m_eraseButton , SIGNAL( clicked() ) , this , SLOT( setErase() ) );
-
-  connect( m_eraseSliceButton , SIGNAL( clicked() ) , this , SLOT( setEraseSlice() ) );
-
-  connect( m_eraseRegionButton , SIGNAL( clicked() ) , this , SLOT( setEraseRegion() ) );
-
-  connect( m_paintButton , SIGNAL( clicked() ) , this , SLOT( setPaint() ) );
-
-  connect( m_updateVolumeButton , SIGNAL( clicked() ) , this , SLOT( updateVolume() ) );
-
-  connect( m_viewThresholdButton , SIGNAL( clicked() ) , this , SLOT( viewThresholds() ) );
-
-  connect( m_2DView , SIGNAL( eventReceived( unsigned long ) ) , this , SLOT( strokeEventHandler(unsigned long) ) );
-
+  connect( m_filterPushButton, SIGNAL( clicked() ), SLOT( ApplyFilterMainImage() ) );
+  connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( ApplyMethod() ) );
+  connect( m_eraseButton, SIGNAL( clicked() ), SLOT( setErase() ) );
+  connect( m_eraseSliceButton, SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
+  connect( m_eraseRegionButton, SIGNAL( clicked() ), SLOT( setEraseRegion() ) );
+  connect( m_paintButton, SIGNAL( clicked() ), SLOT( setPaint() ) );
+  connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
+  connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
   connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-
-  connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ) , this , SLOT( setLowerValue(int) ) );
-
-  connect( m_upperValueSlider, SIGNAL( valueChanged(int) ) , this , SLOT( setUpperValue(int) ) );
-
-  connect( m_opacitySlider, SIGNAL( valueChanged(int) ) , this , SLOT( setOpacity(int) ) );
-
-  connect( m_2DView, SIGNAL( seedChanged() ) , this , SLOT( setSeedPosition() ) );
-
-  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
-
-  connect( m_saveMaskPushButton, SIGNAL( clicked() ) , this , SLOT( saveActivedMaskVolume() ) );
-
-  connect( m_save3DPushButton, SIGNAL( clicked() ) , this , SLOT( saveSegmentation3DVolume() ) );
-
-  connect( m_viewROICheckBox, SIGNAL( stateChanged(int) ) , this , SLOT( viewRegionState(int) ) );
-
-  connect( m_toolsActionGroup, SIGNAL( triggered(QAction*) ) , this , SLOT( toolChanged(QAction*) ) );
+  connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
+  connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
+  connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
+  connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
+  connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
+  connect( m_save3DPushButton, SIGNAL( clicked() ), SLOT( saveSegmentation3DVolume() ) );
+  connect( m_viewROICheckBox, SIGNAL( stateChanged(int) ), SLOT( viewRegionState(int) ) );
+  connect( m_toolsActionGroup, SIGNAL( triggered(QAction*) ), SLOT( toolChanged(QAction*) ) );
 }
 
 void QRectumSegmentationExtension::setInput( Volume *input )

@@ -114,13 +114,6 @@
                  <property name="spacing" >
                   <number>6</number>
                  </property>
-                 <item>
-                  <widget class="QPushButton" name="m_openPerfusionImagePushButton" >
-                   <property name="text" >
-                    <string>Open...</string>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
                <widget class="QWidget" name="m_selectPerfusionImagePage" >

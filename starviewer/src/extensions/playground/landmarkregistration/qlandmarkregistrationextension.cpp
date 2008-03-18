@@ -13,6 +13,7 @@
 #include "reglandmark.h"
 #include "series.h"
 #include "image.h"
+#include "toolmanager.h"
 
 //QT
 #include <QString>
@@ -41,29 +42,25 @@
 namespace udg {
 
 QLandmarkRegistrationExtension::QLandmarkRegistrationExtension(QWidget *parent)
- : QWidget(parent)
+ : QWidget(parent), m_firstVolume(0), m_secondVolume(0), m_registeredVolume(0), m_seedLastActor1(-1), m_seedLastActor2(-1), m_seedLastActorReg(-1), m_movingSeed(false)
 {
     setupUi( this );
-    m_firstVolume      = 0;
-    m_secondVolume     = 0;
-    m_registeredVolume = 0;
 
     m_seedList1.resize(0);
-
     m_seedSet1 = itk::VectorContainer<int, PointType>::New();
     m_seedSet2 = itk::VectorContainer<int, PointType>::New();
 
-    m_seedLastActor1   = -1;
-    m_seedLastActor2   = -1;
-    m_seedLastActorReg = -1;
-
-    m_movingSeed = false;
-
     createActions();
-    createToolBars();
     createConnections();
-
     readSettings();
+
+    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
+    m_toolManager = new ToolManager(this);
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    QStringList toolsList;
+    toolsList << "VoxelInformationTool";
+    m_toolManager->setViewerTools( m_2DView, toolsList );
+    m_toolManager->setViewerTools( m_2DView_2, toolsList );
 }
 
 QLandmarkRegistrationExtension::~QLandmarkRegistrationExtension()
@@ -73,18 +70,6 @@ QLandmarkRegistrationExtension::~QLandmarkRegistrationExtension()
 
 void QLandmarkRegistrationExtension::createActions()
 {
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
-
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView_2 , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
@@ -139,10 +124,6 @@ void QLandmarkRegistrationExtension::createActions()
     m_toolsActionGroup->addAction( m_seedAction );
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_seedAction->trigger();
-}
-
-void QLandmarkRegistrationExtension::createToolBars()
-{
 }
 
 void QLandmarkRegistrationExtension::createConnections()

@@ -10,8 +10,8 @@
 #include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
-//#include "qhistogram2d.h"
 #include "q2dviewer.h"
+#include "toolmanager.h"
 
 //Qt
 #include <QString>
@@ -35,9 +35,6 @@
 #include <vtkContourGrid.h>
 #include <vtkCommand.h>
 #include <vtkMetaImageWriter.h>
-/*#include <vtkDataSetMapper.h>
-#include <vtkThreshold.h>
-*/
 
 // ITK
 #include <itkBinaryThresholdImageFilter.h>
@@ -51,45 +48,26 @@
 #include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 #include "itkExtractImageFilter.h"
 
-
 namespace udg {
 
 QEdemaSegmentationExtension::QEdemaSegmentationExtension( QWidget *parent )
- : QWidget( parent )
+ : QWidget( parent ), m_mainVolume(0), m_lesionMaskVolume(0), m_edemaMaskVolume(0), m_ventriclesMaskVolume(0), m_activedMaskVolume(0), m_imageThreshold(0), m_filteredVolume(0), m_isSeed(false), m_isMask(false), m_isLeftButtonPressed(false), m_cont(0), m_edemaCont(0), m_ventriclesCont(0), m_volume(0.0), m_edemaVolume(0.0), m_editorTool(QEdemaSegmentationExtension::NoEditor)
 {
     setupUi( this );
-    m_mainVolume     = 0;
-    m_lesionMaskVolume = 0;
-    m_edemaMaskVolume  = 0;
-    m_ventriclesMaskVolume = 0;
-    m_activedMaskVolume = 0;
-    m_filteredVolume   = 0;
-
-    m_imageThreshold = 0;
-    //m_fusionVolume   = 0;
-    //m_vtkFusionImage = 0;
-
-    m_volume = 0.0;
-    m_edemaVolume = 0.0;
 
     m_segMethod = new StrokeSegmentationMethod();
-
-    m_isSeed  = false;
-    m_isMask  = false;
-    m_editorTool = QEdemaSegmentationExtension::NoEditor;
-    m_isLeftButtonPressed = false;
-    m_cont = 0;
-    m_edemaCont = 0;
-    m_ventriclesCont = 0;
-
-    //pointActor = vtkActor::New();
     squareActor = vtkActor::New();
 
     createActions();
-    createToolBars();
     createConnections();
-
     readSettings();
+
+    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
+    m_toolManager = new ToolManager(this);
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    QStringList toolsList;
+    toolsList << "VoxelInformationTool";
+    m_toolManager->setViewerTools( m_2DView, toolsList );
 }
 
 QEdemaSegmentationExtension::~QEdemaSegmentationExtension()
@@ -124,17 +102,6 @@ QEdemaSegmentationExtension::~QEdemaSegmentationExtension()
 
 void QEdemaSegmentationExtension::createActions()
 {
-    // Pseudo-tool \TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( 0 );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon(":/images/voxelInformation.png") );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
-
-    connect( m_voxelInformationAction , SIGNAL( triggered(bool) ) , m_2DView , SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
@@ -250,59 +217,32 @@ void QEdemaSegmentationExtension::createActions()
     m_editorToolActionGroup->addAction( m_eraseEditorAction );
     m_editorToolActionGroup->addAction( m_eraseSliceEditorAction );
     m_editorToolActionGroup->addAction( m_eraseRegionEditorAction );
-
-
-}
-
-void QEdemaSegmentationExtension::createToolBars()
-{
 }
 
 void QEdemaSegmentationExtension::createConnections()
 {
-  connect( m_filterPushButton , SIGNAL( clicked() ) , this , SLOT( ApplyFilterMainImage() ) );
-
-  connect( m_applyMethodButton , SIGNAL( clicked() ) , this , SLOT( ApplyMethod() ) );
-
-  connect( m_applyCleanSkullButton , SIGNAL( clicked() ) , this , SLOT( ApplyCleanSkullMethod() ) );
-
-  connect( m_applyVentriclesMethodButton , SIGNAL( clicked() ) , this , SLOT( ApplyVentriclesMethod() ) );
-
-  connect( m_applyEdemaMethodButton , SIGNAL( clicked() ) , this , SLOT( ApplyEdemaMethod() ) );
-
-  connect( m_lesionViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewLesionOverlay() ) );
-
-  connect( m_edemaViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewEdemaOverlay() ) );
-
-  connect( m_ventriclesViewToolButton , SIGNAL( clicked() ) , this , SLOT( viewVentriclesOverlay() ) );
-
-  connect( m_eraseButton , SIGNAL( clicked() ) , this , SLOT( setErase() ) );
-
-  connect( m_eraseSliceButton , SIGNAL( clicked() ) , this , SLOT( setEraseSlice() ) );
-
-  connect( m_eraseRegionButton , SIGNAL( clicked() ) , this , SLOT( setEraseRegion() ) );
-
-  connect( m_paintButton , SIGNAL( clicked() ) , this , SLOT( setPaint() ) );
-
-  connect( m_updateVolumeButton , SIGNAL( clicked() ) , this , SLOT( updateVolume() ) );
-
-  connect( m_viewThresholdButton , SIGNAL( clicked() ) , this , SLOT( viewThresholds() ) );
-
-  connect( m_2DView , SIGNAL( eventReceived( unsigned long ) ) , this , SLOT( strokeEventHandler(unsigned long) ) );
-
+  connect( m_filterPushButton, SIGNAL( clicked() ), SLOT( applyFilterMainImage() ) );
+  connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( applyMethod() ) );
+  connect( m_applyCleanSkullButton, SIGNAL( clicked() ), SLOT( applyCleanSkullMethod() ) );
+  connect( m_applyVentriclesMethodButton, SIGNAL( clicked() ), SLOT( applyVentriclesMethod() ) );
+  connect( m_applyEdemaMethodButton, SIGNAL( clicked() ), SLOT( applyEdemaMethod() ) );
+  connect( m_lesionViewToolButton, SIGNAL( clicked() ), SLOT( viewLesionOverlay() ) );
+  connect( m_edemaViewToolButton, SIGNAL( clicked() ), SLOT( viewEdemaOverlay() ) );
+  connect( m_ventriclesViewToolButton, SIGNAL( clicked() ), SLOT( viewVentriclesOverlay() ) );
+  connect( m_eraseButton, SIGNAL( clicked() ), SLOT( setErase() ) );
+  connect( m_eraseSliceButton, SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
+  connect( m_eraseRegionButton, SIGNAL( clicked() ), SLOT( setEraseRegion() ) );
+  connect( m_paintButton, SIGNAL( clicked() ), SLOT( setPaint() ) );
+  connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
+  connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
   connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-
-  connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ) , this , SLOT( setLowerValue(int) ) );
-
-  connect( m_upperValueSlider, SIGNAL( valueChanged(int) ) , this , SLOT( setUpperValue(int) ) );
-
-  connect( m_opacitySlider, SIGNAL( valueChanged(int) ) , this , SLOT( setOpacity(int) ) );
-
-  connect( m_2DView, SIGNAL( seedChanged() ) , this , SLOT( setSeedPosition() ) );
-
-  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ) , this , SLOT( setInput( Volume * ) ) );
-
-  connect( m_saveMaskPushButton, SIGNAL( clicked() ) , this , SLOT( saveActivedMaskVolume() ) );
+  connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
+  connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
+  connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
+  connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
+  connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
 }
 
 void QEdemaSegmentationExtension::setInput( Volume *input )
@@ -353,8 +293,8 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
 
     int* dim;
     dim = m_mainVolume->getDimensions();
-    std::cout<<"dims Vol: "<<dim[0]<<", "<<dim[1]<<", "<<dim[2]<<std::endl;
-    std::cout<<"**********************************************************************************************"<<std::endl;
+    DEBUG_LOG( QString("dims Vol: %1, %2, %3").arg(dim[0]).arg(dim[1]).arg(dim[2]) );
+    DEBUG_LOG("**********************************************************************************************");
     m_sliceViewSlider->setMinimum(0);
     m_sliceViewSlider->setMaximum(dim[2]-1);
     m_sliceSpinBox->setMinimum(0);
@@ -444,7 +384,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
 
 }
 
-void QEdemaSegmentationExtension::ApplyFilterMainImage( )
+void QEdemaSegmentationExtension::applyFilterMainImage( )
 {
     if(m_filteredVolume == 0)
     {
@@ -461,7 +401,7 @@ void QEdemaSegmentationExtension::ApplyFilterMainImage( )
 
 }
 
-void QEdemaSegmentationExtension::ApplyCleanSkullMethod( )
+void QEdemaSegmentationExtension::applyCleanSkullMethod( )
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_volume = m_segMethod->applyCleanSkullMethod();
@@ -475,7 +415,7 @@ void QEdemaSegmentationExtension::ApplyCleanSkullMethod( )
     QApplication::restoreOverrideCursor();
 }
 
-void QEdemaSegmentationExtension::ApplyMethod( )
+void QEdemaSegmentationExtension::applyMethod( )
 {
     if(!m_isSeed || !m_isMask){
         QMessageBox::critical( this , tr( "StarViewer" ) , tr( "ERROR: Seed or mask undefined" ) );
@@ -495,7 +435,7 @@ void QEdemaSegmentationExtension::ApplyMethod( )
         m_lesionMaskVolume = new Volume();
     }
     m_segMethod->setMask(m_lesionMaskVolume);
-    std::cout<<"Inici Apply method!!"<<std::endl;
+    DEBUG_LOG("Inici apply method!!");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_segMethod->setInsideMaskValue ( m_insideValue );
     m_segMethod->setOutsideMaskValue( m_outsideValue );
@@ -506,7 +446,7 @@ void QEdemaSegmentationExtension::ApplyMethod( )
     //m_volume = m_segMethod->applyMethodVTK();//No funciona!!
     m_cont = m_segMethod->getNumberOfVoxels();
 
-     std::cout<<"FI Apply filter!!"<<std::endl;
+    DEBUG_LOG("FI apply filter!!");
 
     m_2DView->setOverlayToBlend();
     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
@@ -540,10 +480,10 @@ void QEdemaSegmentationExtension::ApplyMethod( )
     this->viewLesionOverlay();
     //m_2DView->refresh();
     QApplication::restoreOverrideCursor();
-    std::cout<<"Fi Apply method!!"<<std::endl;
+    DEBUG_LOG("Fi apply method!!");
  }
 
-void QEdemaSegmentationExtension::ApplyVentriclesMethod( )
+void QEdemaSegmentationExtension::applyVentriclesMethod( )
 {
     if(m_ventriclesMaskVolume == 0)
     {
@@ -571,9 +511,9 @@ void QEdemaSegmentationExtension::ApplyVentriclesMethod( )
  }
 
 
-void QEdemaSegmentationExtension::ApplyEdemaMethod( )
+void QEdemaSegmentationExtension::applyEdemaMethod( )
 {
-    //std::cout<<"Init Apply filter Edema!!"<<std::endl;
+    //std::cout<<"Init apply filter Edema!!"<<std::endl;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     if(m_edemaMaskVolume == 0)
     {
@@ -598,19 +538,19 @@ void QEdemaSegmentationExtension::ApplyEdemaMethod( )
     m_segMethod->setAlpha(m_alphaEdit->text().toDouble());
     m_segMethod->setLowerVentriclesThreshold(m_lowerVentriclesValue);
     m_segMethod->setUpperVentriclesThreshold(m_upperVentriclesValue);
-    //std::cout<<" Init Apply filter Edema!!"<<std::endl;
+    //std::cout<<" Init apply filter Edema!!"<<std::endl;
     m_edemaVolume = m_segMethod->applyMethodEdema(m_edemaMaskVolume);
     m_edemaCont = m_segMethod->getEdemaNumberOfVoxels();
     m_edemaVolumeLineEdit->clear();
     m_edemaVolumeLineEdit->insert(QString("%1").arg(m_edemaVolume, 0, 'f', 2));
     m_edemaViewAction->setEnabled( true );
     m_edemaViewAction->trigger( );
-    //std::cout<<"FI Apply filter Edema, Init view!!"<<std::endl;
+    //std::cout<<"FI apply filter Edema, Init view!!"<<std::endl;
     this->viewEdemaOverlay();
     QApplication::restoreOverrideCursor();
     //std::cout<<"Edema cont: "<<m_edemaCont<<", "<<(*m_activedCont)<<std::endl;
     //std::cout<<"Edema vol: "<<m_edemaVolume<<", "<<(*m_activedVolume)<<std::endl;
-    //std::cout<<"FI Apply filter Edema!!"<<std::endl;
+    //std::cout<<"FI apply filter Edema!!"<<std::endl;
 }
 
 
@@ -1020,29 +960,27 @@ void QEdemaSegmentationExtension::viewThresholds()
     if(m_lesionMaskVolume == 0)
     {
         m_lesionMaskVolume = new Volume();
-        std::cout<<"*"<<std::endl;
+        DEBUG_LOG("*");
     }
-            std::cout<<"Extent Vol:"<<m_mainVolume->getWholeExtent()[0]<<" "<<m_mainVolume->getWholeExtent()[1]<<" "<<m_mainVolume->getWholeExtent()[2]<<" "<<m_mainVolume->getWholeExtent()[3]<<" "<<m_mainVolume->getWholeExtent()[4]<<" "<<m_mainVolume->getWholeExtent()[5]<<std::endl;
+    DEBUG_LOG( QString("Extent Vol: %1 %2 %3 %4 %5 %6").arg( m_mainVolume->getWholeExtent()[0] ).arg( m_mainVolume->getWholeExtent()[1] ).arg( m_mainVolume->getWholeExtent()[2] ).arg( m_mainVolume->getWholeExtent()[3] ).arg( m_mainVolume->getWholeExtent()[4] ).arg( m_mainVolume->getWholeExtent()[5] ) );
 
-            std::cout<<"Extent Vol Lesion:"<<m_lesionMaskVolume->getWholeExtent()[0]<<" "<<m_lesionMaskVolume->getWholeExtent()[1]<<" "<<m_lesionMaskVolume->getWholeExtent()[2]<<" "<<m_lesionMaskVolume->getWholeExtent()[3]<<" "<<m_lesionMaskVolume->getWholeExtent()[4]<<" "<<m_lesionMaskVolume->getWholeExtent()[5]<<std::endl;
+    DEBUG_LOG( QString("Extent Vol Lesion: %1 %2 %3 %4 %5 %6").arg( m_lesionMaskVolume->getWholeExtent()[0] ).arg( m_lesionMaskVolume->getWholeExtent()[1] ).arg( m_lesionMaskVolume->getWholeExtent()[2] ).arg( m_lesionMaskVolume->getWholeExtent()[3] ).arg( m_lesionMaskVolume->getWholeExtent()[4] ).arg( m_lesionMaskVolume->getWholeExtent()[5] ) );
 
     vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
     imageThreshold->SetInput( m_mainVolume->getVtkData() );
     imageThreshold->ThresholdBetween( m_lowerValueSlider->value(),  m_upperValueSlider->value());
     imageThreshold->SetInValue( m_insideValue );
     imageThreshold->SetOutValue( m_outsideValue );
-    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
+    DEBUG_LOG( QString("min: %1, mout %2").arg(m_insideValue).arg(m_outsideValue) );
     imageThreshold->Update();
-    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
-
+    DEBUG_LOG( QString("min: %1, mout %2").arg(m_insideValue).arg(m_outsideValue) );
 
     m_lesionMaskVolume->setData(imageThreshold->GetOutput() );
-    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
+    DEBUG_LOG( QString("min: %1, mout %2").arg(m_insideValue).arg(m_outsideValue) );
 
     this->viewLesionOverlay();
-    std::cout<<"min: "<<m_insideValue<<", mout: "<<m_outsideValue<<std::endl;
+    DEBUG_LOG( QString("min: %1, mout %2").arg(m_insideValue).arg(m_outsideValue) );
     imageThreshold->Delete();
-
 }
 
 void QEdemaSegmentationExtension::viewEdemaOverlay()
@@ -1069,9 +1007,8 @@ void QEdemaSegmentationExtension::viewLesionOverlay()
         m_2DView->setOverlayToBlend();
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
-        std::cout<<"Extent les:"<<m_lesionMaskVolume->getWholeExtent()[0]<<" "<<m_lesionMaskVolume->getWholeExtent()[1]<<" "<<m_lesionMaskVolume->getWholeExtent()[2]<<" "<<m_lesionMaskVolume->getWholeExtent()[3]<<" "<<m_lesionMaskVolume->getWholeExtent()[4]<<" "<<m_lesionMaskVolume->getWholeExtent()[5]<<std::endl;
-        std::cout<<"Extent les:"<<m_mainVolume->getWholeExtent()[0]<<" "<<m_mainVolume->getWholeExtent()[1]<<" "<<m_mainVolume->getWholeExtent()[2]<<" "<<m_mainVolume->getWholeExtent()[3]<<" "<<m_mainVolume->getWholeExtent()[4]<<" "<<m_mainVolume->getWholeExtent()[5]<<std::endl;
-        m_2DView->refresh();
+        DEBUG_LOG( QString("Extent les: %1 %2 %3 %4 %5 %6").arg( m_lesionMaskVolume->getWholeExtent()[0] ).arg( m_lesionMaskVolume->getWholeExtent()[1] ).arg( m_lesionMaskVolume->getWholeExtent()[2] ).arg( m_lesionMaskVolume->getWholeExtent()[3] ).arg( m_lesionMaskVolume->getWholeExtent()[4] ).arg( m_lesionMaskVolume->getWholeExtent()[5] ) );
+        DEBUG_LOG( QString("Extent Vol: %1 %2 %3 %4 %5 %6").arg( m_mainVolume->getWholeExtent()[0] ).arg( m_mainVolume->getWholeExtent()[1] ).arg( m_mainVolume->getWholeExtent()[2] ).arg( m_mainVolume->getWholeExtent()[3] ).arg( m_mainVolume->getWholeExtent()[4] ).arg( m_mainVolume->getWholeExtent()[5] ) );
     }
 }
 
@@ -1110,7 +1047,7 @@ double QEdemaSegmentationExtension::calculateMaskVolume()
 
     if(m_lesionMaskVolume->getVtkData()->GetScalarType()!=6)
     {
-        std::cout<<"Compte!!! Mask Vtk Data Type != INT ("<<m_lesionMaskVolume->getVtkData()->GetScalarTypeAsString()<<")"<<std::endl;
+        DEBUG_LOG( QString("Compte!!! Mask Vtk Data Type != INT (%1)").arg( m_lesionMaskVolume->getVtkData()->GetScalarTypeAsString() ) );
     }
 
     int* value;
