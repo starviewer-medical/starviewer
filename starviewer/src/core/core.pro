@@ -74,31 +74,21 @@ HEADERS += extensionfactory.h \
            q2dviewerpresentationstateattacher.h \
            image.h \
            dicomtagreader.h \
-           line.h \
-           drawingprimitive.h \
-           text.h \
            patientfiller.h \
            patientfillerstep.h \
            patientfillerinput.h \
            dicomfileclassifierfillerstep.h \
-           polygon.h \
-           point.h \
-           ellipse.h \
            ctfillerstep.h \
            imagefillerstep.h \
            presentationstatefillerstep.h \
-           representation.h \
-           oldtooldata.h \
            extensioncontext.h \
            keyimagenotefillerstep.h \
            dcmdatasetcache.h \
-           distancerepresentation.h \
            temporaldimensionfillerstep.h \
            dicomimagereader.h \
            itkgdcmdicomimagereader.h \
            vtkdicomimagereader.h \
            dcmtkdicomimagereader.h \
-           olddistancetooldata.h \
            volumegeneratorstep.h \
            patientbrowsermenu.h \
            patientbrowsermenubasicitem.h \
@@ -110,8 +100,6 @@ HEADERS += extensionfactory.h \
            qwindowlevelcombobox.h \
            mhdfileclassifierstep.h \
            orderimagesfillerstep.h \
-           roitooldata.h \
-           ellipserepresentation.h \
            toolregistry.h \
            toolmanager.h \
            toolconfiguration.h \
@@ -124,8 +112,6 @@ HEADERS += extensionfactory.h \
            slicingtool.h \
            translatetool.h \
            oldwindowleveltool.h \
-           oldvoxelinformationtool.h \
-           oldrotate3dtool.h \
            oldseedtool.h \
            voxelinformationtool.h \
            windowleveltool.h \
@@ -217,31 +203,21 @@ SOURCES += extensionmediator.cpp \
            q2dviewerpresentationstateattacher.cpp \
            image.cpp \
            dicomtagreader.cpp \
-           line.cpp \
-           drawingprimitive.cpp \
-           text.cpp \
            patientfiller.cpp \
            patientfillerstep.cpp \
            patientfillerinput.cpp \
            dicomfileclassifierfillerstep.cpp \
-           polygon.cpp \
-           point.cpp \
-           ellipse.cpp \
            ctfillerstep.cpp \
            imagefillerstep.cpp \
            presentationstatefillerstep.cpp \
-           representation.cpp \
-           oldtooldata.cpp \
            extensioncontext.cpp \
            keyimagenotefillerstep.cpp \
            dcmdatasetcache.cpp \
-           distancerepresentation.cpp \
            temporaldimensionfillerstep.cpp \
            dicomimagereader.cpp \
            itkgdcmdicomimagereader.cpp \
            vtkdicomimagereader.cpp \
            dcmtkdicomimagereader.cpp \
-           olddistancetooldata.cpp \
            volumegeneratorstep.cpp \
            patientbrowsermenu.cpp \
            patientbrowsermenubasicitem.cpp \
@@ -253,8 +229,6 @@ SOURCES += extensionmediator.cpp \
            qwindowlevelcombobox.cpp \
            mhdfileclassifierstep.cpp \
            orderimagesfillerstep.cpp \
-           roitooldata.cpp \
-           ellipserepresentation.cpp \
            toolregistry.cpp \
            toolmanager.cpp \
            toolconfiguration.cpp \
@@ -267,8 +241,6 @@ SOURCES += extensionmediator.cpp \
            translatetool.cpp \
            slicingtool.cpp \
            oldwindowleveltool.cpp \
-           oldvoxelinformationtool.cpp \
-           oldrotate3dtool.cpp \
            oldseedtool.cpp \
            voxelinformationtool.cpp \
            windowleveltool.cpp \
