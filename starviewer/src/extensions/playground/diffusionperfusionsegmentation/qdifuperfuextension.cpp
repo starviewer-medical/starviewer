@@ -400,8 +400,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
     m_applyRegistrationPushButton->setEnabled( true );
 
     m_perfusionSliceSlider->setValue( m_perfusion2DView->getCurrentSlice() );
-
-    this->moveViewerSplitterToCenter();
 }
 
 void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
