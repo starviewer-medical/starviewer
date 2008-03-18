@@ -216,7 +216,7 @@ void QCreateDicomdir::createDicomdir()
                  state = createDicomdirOnCdOrDvd();
                  //error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
                  if ( state.good() || ( !state.good() && state.code() == 4001 ) )
-                    burnDicomdir( CreateDicomdir::CdRom );
+                    burnDicomdir( m_currentDevice );
                  break;
     }
 }
