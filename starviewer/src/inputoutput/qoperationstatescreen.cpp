@@ -73,7 +73,7 @@ void QOperationStateScreen::insertNewOperation( Operation *operation )
 
     item->setText( 0 , tr( "PENDING" ) );
 
-    if ( operation->getOperation() == operationRetrieve || operation->getOperation() == operationView )
+    if ( operation->getOperation() == Operation::Retrieve || operation->getOperation() == Operation::View )
     {
         item->setText( 1 , tr( "Local" ) );
     }
@@ -164,11 +164,11 @@ void QOperationStateScreen::setOperating( QString studyUID )
     if ( !qRetrieveList.isEmpty() )
     {
         item = qRetrieveList.at( 0 );
-        if ( item->text( 10 ).toInt( NULL , 10 ) == operationView || item->text( 10 ).toInt( NULL , 10 ) == operationRetrieve )
+        if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::View || item->text( 10 ).toInt( NULL , 10 ) == Operation::Retrieve )
         {
             item->setText( 0 , tr( "RETRIEVING" ) );
         }
-        else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr( "STORING" ) );
+        else if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::Move ) item->setText( 0 , tr( "STORING" ) );
     }
 }
 
@@ -186,11 +186,11 @@ void QOperationStateScreen::setOperationFinished( QString studyUID )
         }
         else
         {
-            if ( item->text( 10 ).toInt( NULL , 10 ) == operationView || item->text( 10 ).toInt( NULL , 10 ) == operationRetrieve )
+            if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::View || item->text( 10 ).toInt( NULL , 10 ) == Operation::Retrieve )
             {
                 item->setText( 0 , tr( "RETRIEVED" ) );
             }
-            else if ( item->text( 10 ).toInt( NULL , 10 ) == operationMove ) item->setText( 0 , tr( "STORED" ) );
+            else if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::Move ) item->setText( 0 , tr( "STORED" ) );
         }
     }
 

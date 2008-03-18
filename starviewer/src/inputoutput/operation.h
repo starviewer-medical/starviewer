@@ -21,6 +21,10 @@ namespace udg {
 class Operation{
 
 public:
+
+    enum OperationPriority { Low = 99, Medium = 50, High = 0 };
+    enum OperationAction { Retrieve, Print , Move, View };
+
     Operation();
 
     /** Especifica la màscara de l'estudi per aquella operacio,
@@ -30,19 +34,13 @@ public:
 
     /** Estableix la prioritat de l'aplicació si no s'especifica, el setOperation automaticament l'assigna en funció del tipus d'operacio
      * @param prioritat
-     * High = 0
-     * Normal = 50
-     * Low = 100
      */
-    void setPriority( int priority );
+    void setPriority( OperationPriority priority );
 
     /** Especifica quina operacio es portara a terma en aquesta operacio, si no s'ha assignat prioritat, aquest mètode l'assigna en funció de l'operació
      * @param operacio a realitzar
-     * Retrieve = 1
-     * Print = 2
-     * Move = 3
      */
-    void setOperation( int operation );
+    void setOperation( OperationAction operation );
 
     /** Estableix a quin PACS es dura a terme la operacio
      * @param Pacs al qual es dura a terme l'operacio
@@ -57,12 +55,12 @@ public:
     /** Retorna la prioritat de l'operació
      * @return prioritat de l'operació
      */
-    int getPriority();
+    OperationPriority getPriority();
 
     /** Retorna la operacio a realitzar
      * @return operacio a realitzar
      */
-    int getOperation();
+    OperationAction getOperation();
 
     /** Retorna el pacsParameters de l'objecte operation
      * @return PacsParameters de l'objecte operation
@@ -121,8 +119,8 @@ public:
 private :
 
     DicomMask m_mask;
-    int m_priority;
-    int m_operation;
+    OperationPriority m_priority;
+    OperationAction m_operation;
     PacsParameters m_pacsParameters;
 
     // AQUESTA INFORMACIO ES NECESSARIA, JA QUE ES LA QUE PASSA A LA QRETRIEVESCREEN, pantalla que mostra l'estat de les operacions

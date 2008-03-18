@@ -15,8 +15,7 @@ namespace udg {
 
 Operation::Operation()
 {
-    m_priority = 9999999;
-    m_operation = operationUnknow;
+    m_priority = Low;
 }
 
 Operation::~Operation()
@@ -55,35 +54,14 @@ void Operation::setDicomMask( DicomMask mask )
     m_mask = mask;
 }
 
-void Operation::setPriority( int priority )
+void Operation::setPriority( OperationPriority priority )
 {
-     if ( priority != operationPriorityHigh &&
-          priority != operationPriorityMedium &&
-          priority != operationPriorityLow )
-     {
-         m_priority = operationPriorityLow;
-     }
-     else m_priority = priority;
+    m_priority = priority;
 }
 
-void Operation::setOperation( int operation )
+void Operation::setOperation( OperationAction operation )
 {
-
-    if ( operation > operationView )
-    {
-        m_operation = operationUnknow;
-    }
-    else m_operation = operation;
-
-    // si no s'especifica la prioritat, el setOperation automaticament l'assigna en funció del tipus d'operacio
-    if  ( m_priority > operationPriorityLow )
-    {
-        if ( operation == operationView )
-        {
-            m_priority = operationPriorityHigh;
-        }
-        else m_priority = operationPriorityMedium;
-    }
+    m_operation = operation;
 }
 
 void Operation::setPacsParameters( PacsParameters parameters )
@@ -96,12 +74,12 @@ DicomMask Operation::getDicomMask()
     return m_mask;
 }
 
-int Operation::getPriority()
+Operation::OperationPriority Operation::getPriority()
 {
     return m_priority;
 }
 
-int Operation::getOperation()
+Operation::OperationAction Operation::getOperation()
 {
     return m_operation;
 }
