@@ -9,7 +9,6 @@
 
 #include "ui_qrectumsegmentationextensionbase.h"
 
-
 #include <QString>
 
 // FWD declarations
@@ -25,54 +24,31 @@ namespace udg {
 class Volume;
 class rectumSegmentationMethod;
 class ToolsActionFactory;
+class ToolManager;
 
 /**
-Extensi?que s'executar?per defecte a l'obrir un model
-
-    @author Grup de Gr?ics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-
 class QRectumSegmentationExtension : public QWidget , private ::Ui::QRectumSegmentationExtensionBase {
 Q_OBJECT
 public:
     QRectumSegmentationExtension( QWidget *parent = 0 );
-
     ~QRectumSegmentationExtension();
 
-    /// Obtenim la ToolBar d'eines de l'extensi?\TODO 'pujar' al pare com a m?ode com a Extensions?
-    QToolBar *getToolsToolBar() const { return m_toolsToolBar; };
-
-    /// Omple la ToolBar amb les eines de l'extensi?\TODO 'pujar' al pare com a m?ode com a Extensions?
-    //void populateToolBar( QToolBar *toolbar );
-
 public slots:
-
     /// Li assigna el volum principal
     void setInput( Volume *input );
 
-    /// Executa l'algorisme de segmetnaci�
+    /// Executa l'algorisme de segmetnació
     void ApplyMethod();
     void ApplyFilterMainImage( );
 
-/*  void changeViewToSagital();
-    void changeViewToCoronal();
-
-    /// Canvia el layout de visor singular/doble
-    void changeViewToSingle();
-    void changeViewToDouble();
-
-    /// Li assigna el volum secundari. Aquest m�ode nom? ? de conveni?cia i ? temporal
-    void setSecondInput( Volume *input );
-    */
 private:
     /// tipus d'edició dels models
     enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
 
     /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
     void createActions();
-
-    /// Crea la ToolBar d'eines i altres si n'hi ha \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
-    void createToolBars();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -90,8 +66,7 @@ private slots:
     void onMouseMoveEventHandler( );
     void leftButtonReleaseHandler( );
 
-
-    /// visualitza la informaci�de la llavor del m�ode de segmentaci�
+    /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition( );
 
     void setRegionOfInterest( );
@@ -99,10 +74,10 @@ private slots:
     void setReleaseRegionOfInterest( );
     void viewRegionState(int st);
 
-     /// determina la llavor del m�ode de segmentaci�
+     /// determina la llavor del mètode de segmentació
     void setEditorPoint( );
 
-    /// desactiva el boole�que ens diu si est�el bot�esquerra apretat
+    /// desactiva el booleà que ens diu si està el botó esquerra apretat
     void setLeftButtonOff( );
 
     /// actualitza el valor llindar baix
@@ -111,19 +86,19 @@ private slots:
      /// actualitza el valor llindar alt
     void setUpperValue( int x );
 
-    /// Canvia la opacitat de la m�cara
+    /// Canvia la opacitat de la màscara
     void setOpacity(int op);
 
-    /// Canvia a la opci�esborrar
+    /// Canvia a la opció esborrar
     void setErase();
 
-    /// Canvia a la opci�pintar
+    /// Canvia a la opció pintar
     void setPaint();
 
-    /// Canvia a la opci�esborrar llesca
+    /// Canvia a la opció esborrar llesca
     void setEraseSlice();
 
-    /// Canvia a la opci�esborrar regió
+    /// Canvia a la opció esborrar regió
     void setEraseRegion();
 
     /// Dibuixa el cursor en la forma del pinzell
@@ -135,16 +110,16 @@ private slots:
     void eraseRegionMask();
     void eraseRegionMaskRecursive(int a, int b, int c);
 
-    /// Calcula el volum de la m�cara
+    /// Calcula el volum de la màscara
     double calculateMaskVolume();
 
-    /// Calcula el volum de la m�cara suposant que la variable m_cont cont�el nombre de v�els != 0 de la m�cara
+    /// Calcula el volum de la màscara suposant que la variable m_cont conté el nombre de vòxels != 0 de la màscara
     double updateMaskVolume();
 
     /// Refresca el resultat del volum
     void updateVolume();
 
-    /// Visualitza la m�cara donats uns thresholds
+    /// Visualitza la màscara donats uns thresholds
     void viewThresholds();
 
     /// Visualitza els diferents overlays
@@ -159,37 +134,20 @@ private slots:
     /// Desactiva les tools en cas que s'activi una tool "externa"
     void toolChanged( QAction* ac);
 
-/*    /// sincronitza les llesques de les s?ies que es visualitzen
-    void synchronizeSlices( bool ok );
-
-    /// ens permet escollir una nova s?ie per a comparar
-    void chooseNewSerie();
-
-  signals:
-    /// Aquest senyal s'emetr?quan es vulgui canviar de s?ie per comparar
-    void newSerie();
-*/
-
 private:
     /// El volum principal
     Volume *m_mainVolume;
 
-    /// El volum on hi guardem el resultat de la segmentaci�
+    /// El volum on hi guardem el resultat de la segmentació
     Volume *m_lesionMaskVolume;
     vtkImageThreshold *m_imageThreshold;
 
     /// El volum on hi guardem la imatge principal filtrada
     Volume *m_filteredVolume;
 
-    /// El volum on hi guardem la fusio de la imatge i la m�cara
-    //Volume *m_fusionVolume;
-    //vtkImageMask *m_vtkFusionImage;
-
-    ///Per pintar la llavor
-    //vtkActor *pointActor;
     int m_seedSlice;
 
-    /// M�ode de la segmentaci�
+    /// Mètode de la segmentació
     rectumSegmentationMethod *m_segMethod;
 
     /// Membres de classe
@@ -208,17 +166,10 @@ private:
     double m_finalRegionPoint[2];
     bool m_isRegionSet;
     bool m_isRegionSetting;
-/*    bool m_isErase;
-    bool m_isPaint;
-    bool m_isEraseSlice;*/
-
 
     int m_minValue, m_maxValue;
     int m_insideValue, m_outsideValue;
     int m_lowerVentriclesValue, m_upperVentriclesValue;
-
-    /// La ToolBar de les eines de l'extensi?\TODO 'pujar' al pare com a membre com a Extensions? [hauria de ser protected]
-    QToolBar *m_toolsToolBar;
 
     /// Accions
     QAction *m_slicingAction;
@@ -228,7 +179,6 @@ private:
     QAction *m_seedAction;
     QAction *m_editorAction;
     QAction *m_regionAction;
-    QAction *m_voxelInformationAction;
     QAction *m_rotateClockWiseAction;
     ToolsActionFactory *m_actionFactory;
 
@@ -249,6 +199,8 @@ private:
     QActionGroup *m_viewOverlayActionGroup;
     QActionGroup* m_editorToolActionGroup;
 
+    /// Tool Manager
+    ToolManager *m_toolManager;
 };
 
 } // end namespace udg

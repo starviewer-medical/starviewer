@@ -10,6 +10,7 @@
 #include "volumecalculator.h"
 #include "series.h"
 #include "logging.h"
+#include "toolmanager.h"
 // Qt
 #include <QMessageBox>
 #include <QSettings>
@@ -50,47 +51,24 @@ const double QDifuPerfuSegmentationExtension::REGISTRATION_MINIMUM_STEP = 0.001;
 const int QDifuPerfuSegmentationExtension::REGISTRATION_NUMBER_OF_ITERATIONS = 300;
 
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * parent )
- : QWidget( parent )
+ : QWidget( parent ), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0), m_isLeftButtonPressed(false), m_actionFactory(0)
 {
     setupUi( this );
 
-    m_diffusionInputVolume = 0;
-    m_perfusionInputVolume = 0;
-    m_diffusionMainVolume = 0;
-    m_perfusionMainVolume = 0;
-    m_diffusionRescaledVolume = 0;
-    m_perfusionRescaledVolume = 0;
-
-    m_activedMaskVolume = 0;
-    m_strokeMaskVolume = 0;
-    m_ventriclesMaskVolume = 0;
-
-    m_blackpointEstimatedVolume = 0;
-    m_penombraMaskVolume = 0;
-
-    m_perfusionOverlay = 0;
-
-    m_strokeSegmentationMethod = 0;
-    m_strokeVolume = 0.0;
-
-    m_registerTransform = 0;
-
-    m_penombraVolume = 0.0;
-
-    m_penombraMaskMaxValue = 254;
-    m_penombraMaskMinValue = 0;
-
-    m_isLeftButtonPressed = false;
-
     m_squareActor = vtkActor::New();
-
     m_perfusionHueLut = vtkLookupTable::New();
-
-    m_actionFactory = 0;
 
     createActions();
     createConnections();
     readSettings();
+
+    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
+    m_toolManager = new ToolManager(this);
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    QStringList toolsList;
+    toolsList << "VoxelInformationTool";
+    m_toolManager->setViewerTools( m_diffusion2DView, toolsList );
+    m_toolManager->setViewerTools( m_perfusion2DView, toolsList );
 }
 
 QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
@@ -141,19 +119,6 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_editorAction->setCheckable( true );
     m_editorAction->setEnabled( false );
     m_editorToolButton->setDefaultAction( m_editorAction );
-
-    // Pseudo-tool
-    // TODO ara mateix no ho integrem dins del framework de tools, però potser que més endavant sí
-    m_voxelInformationAction = new QAction( this );
-    m_voxelInformationAction->setText( tr("Voxel Information") );
-    m_voxelInformationAction->setShortcut( tr("Ctrl+I") );
-    m_voxelInformationAction->setStatusTip( tr("Enable voxel information over cursor") );
-    m_voxelInformationAction->setIcon( QIcon( ":/images/voxelInformation.png" ) );
-    m_voxelInformationAction->setCheckable( true );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
-
-    connect( m_voxelInformationAction, SIGNAL( triggered(bool) ), m_diffusion2DView, SLOT( setVoxelInformationCaptionEnabled(bool) ) );
-    connect( m_voxelInformationAction, SIGNAL( triggered(bool) ), m_perfusion2DView, SLOT( setVoxelInformationCaptionEnabled(bool) ) );
 
     // Tools
     m_actionFactory = new ToolsActionFactory();
@@ -256,7 +221,6 @@ void QDifuPerfuSegmentationExtension::createConnections()
              m_selectedDiffusionImageSpinBox, SLOT( setValue(int) ) );
     connect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ), SLOT( setDiffusionImage(int) ) );
 
-    connect( m_openPerfusionImagePushButton, SIGNAL( clicked() ), SIGNAL( openPerfusionImage() ) );
     connect( m_perfusion2DView, SIGNAL( phaseChanged(int) ), m_selectedPerfusionImageSpinBox, SLOT( setValue(int) ) );
     connect( m_selectedPerfusionImageSpinBox, SIGNAL( valueChanged(int) ), SLOT( setPerfusionImage(int) ) );
     connect( m_perfusionThresholdViewerSlider, SIGNAL( valueChanged(int) ), SLOT( setPerfusionLut(int) ) );
