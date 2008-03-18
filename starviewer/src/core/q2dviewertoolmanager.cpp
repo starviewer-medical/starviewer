@@ -9,9 +9,6 @@
 #include "oldwindowleveltool.h"
 #include "oldzoomtool.h"
 #include "oldtranslatetool.h"
-#include "oldscreenshottool.h"
-#include "olddistancetool.h"
-#include "roitool.h"
 #include "logging.h"
 #include "oldseedtool.h"
 
@@ -54,10 +51,7 @@ void Q2DViewerToolManager::initToolRegistration()
     m_toolList["WindowLevelTool"] = new OldWindowLevelTool( m_viewer );
     m_toolList["ZoomTool"] = new OldZoomTool( m_viewer );
     m_toolList["TranslateTool"] = new OldTranslateTool( m_viewer );
-    m_toolList["ScreenShotTool"] = new OldScreenShotTool( m_viewer );
     m_toolList["SeedTool"] = new OldSeedTool( m_viewer );
-    m_toolList["DistanceTool"] = new OldDistanceTool( m_viewer );
-    m_toolList["ROITool"] = new ROITool( m_viewer );
 }
 
 }
