@@ -49,7 +49,6 @@ class Image;
 class Drawer;
 class Q2DViewerToolManager;
 class OldTool;
-class OldDrawer;
 class ImagePlane;
 
 /**
@@ -177,9 +176,6 @@ public:
     void setModalityRescale( vtkImageShiftScale *rescale );
     vtkImageActor *getImageActor();
 
-    ///ens retorna l'objecte Drawer, expert en dibuixar primitives gràfiques
-    OldDrawer* getOldDrawer() const;
-
     /**
      * Ens retorna el drawer per poder pintar-hi primitives
      * @return Objecte drawer del viewer
@@ -270,10 +266,10 @@ public:
 
     /// Donada les coordenades x,y d'on s'ha clicat de la pantalla, retorna el punt més proper i que caigui dins del model.
     double * pointInModel( int screen_x, int screen_y );
-    
+
     ///Retorna la informació de la llesca actual del visualitzador
     vtkImageData* getCurrentSlabProjection();
-    
+
 public slots:
     virtual void render();
     void reset();
@@ -639,9 +635,6 @@ private:
 
     /// Rangs de dades que ens seran força útils a l'hora de controlar el pipeline de grayscale
     double m_modalityRange[2];
-
-    ///Punter a l'objecte especialista de dibuixat de primitives
-    OldDrawer *m_oldDrawer;
 
     /// Especialista en dibuixar primitives
     Drawer *m_drawer;
