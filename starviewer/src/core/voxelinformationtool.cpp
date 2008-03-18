@@ -33,6 +33,8 @@ VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
 
 VoxelInformationTool::~VoxelInformationTool()
 {
+    m_2DViewer->getRenderer()->RemoveActor( m_voxelInformationCaption );
+    m_voxelInformationCaption->Delete();
 }
 
 void VoxelInformationTool::handleEvent( unsigned long eventID )
