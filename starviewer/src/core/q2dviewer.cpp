@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "olddrawer.h"
 #include "q2dviewer.h"
 #include "drawer.h"
 #include "volume.h"
@@ -135,7 +134,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_rulerActorCollection->AddItem( m_sideRuler );
 
     //creem el drawer, passant-li com a visor l'objecte this
-    m_oldDrawer = new OldDrawer( this );
     m_drawer = new Drawer( this );
 
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
@@ -154,7 +152,6 @@ Q2DViewer::~Q2DViewer()
     m_picker->Delete();
     m_viewer->Delete();
     m_vtkQtConnections->Delete();
-    delete m_oldDrawer;
 }
 
 vtkRenderer *Q2DViewer::getRenderer()
@@ -1640,11 +1637,6 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
     return imagePlane;
 }
 
-OldDrawer *Q2DViewer::getOldDrawer() const
-{
-    return m_oldDrawer;
-}
-
 Drawer *Q2DViewer::getDrawer() const
 {
     return m_drawer;
@@ -2778,7 +2770,7 @@ void Q2DViewer::setSlabThickness( int thickness )
 {
     //primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
     this->getDrawer()->removeAllPrimitives();
-    
+
     computeRangeAndSlice( thickness );
     // TODO comprovar aquest pipeline si és millor calcular ara o més tard
     if( m_slabThickness == 1  && isThickSlabActive() )
