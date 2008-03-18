@@ -10,6 +10,7 @@
 #include <QMenu>
 #include <ui_qcreatedicomdirbase.h>
 #include "const.h"
+#include "createdicomdir.h"
 
 class QSignalMapper;
 class QProcess;
@@ -118,7 +119,7 @@ private:
     /** genera una imatge iso i crida el k3b per gravar la imatge
      * @param device dispositiu al que es grava, pot ser cd o dvd
      */
-    void burnDicomdir( recordDeviceDicomDir device );
+    void burnDicomdir( CreateDicomdir::recordDeviceDicomDir device );
 
     /**
      * Mostra un msgbox amb el corresponent missatge d'error segons l'estat del procés
@@ -147,9 +148,6 @@ private:
     quint64 m_DiskSpace;
     QMenu m_contextMenu;///<Menu contextual
 
-    /// Dispositius on es pot gravar el DICOMDIR
-    enum DICOMDIRDevices{ CDROM = 0, DVDROM = 1, HardDisk = 2, PenDrive = 3 };
-
     ///Agrupa les accions dels dispositius on gravarem el DICOMDIR
     QActionGroup *m_devicesActionGroup;
 
@@ -163,7 +161,7 @@ private:
     QAction *m_pendriveAction;
 
     /// Variable que ens diu quin és el dispositiu seleccionat en aquell moment
-    int m_currentDevice;
+    CreateDicomdir::recordDeviceDicomDir m_currentDevice;
 };
 
 }
