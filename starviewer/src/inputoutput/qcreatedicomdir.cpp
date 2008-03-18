@@ -51,9 +51,6 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     createActions();
     createConnections();
 
-    //per defecte gravem al disc dur per tant, l'espai és il·limitat
-    m_DiskSpace = ( quint64 ) 9999999 * ( quint64 ) ( 1024 * 1024 );
-
     setWidthColumns();
 }
 
@@ -111,6 +108,7 @@ void QCreateDicomdir::createActions()
 
     // primer activem el CD com a dispositiu per defecte
     m_cdromAction->trigger();
+    m_DiskSpace = ( quint64 ) 700 * ( quint64 ) ( 1024 * 1024 );//per defecte a disk space li donem la mida del cd, pq és l'opció activada per defecte
 }
 
 void QCreateDicomdir::createConnections()
