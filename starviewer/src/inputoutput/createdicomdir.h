@@ -23,6 +23,8 @@ class CreateDicomdir
 {
 public:
 
+    enum recordDeviceDicomDir { HardDisk , CdRom , DvdRom  , UsbPen };
+
     CreateDicomdir();
     ~CreateDicomdir();
 

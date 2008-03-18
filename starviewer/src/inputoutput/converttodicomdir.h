@@ -11,6 +11,7 @@
 #include <QObject>
 
 #include "const.h"
+#include "createdicomdir.h"
 
 class QString;
 class QProgressDialog;
@@ -45,7 +46,7 @@ public:
      * @param dicomdirPath directori on es guardarà el dicomdir
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convert( QString dicomdirPath, recordDeviceDicomDir selectedDevice );
+    Status convert( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice );
 
     /** Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
       * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
@@ -85,7 +86,7 @@ private :
      * @param selectedDevice dispositiu on es crearà el dicomdir
      * @return  estat del mètode
      */
-    Status createDicomdir( QString dicomdirPath, recordDeviceDicomDir selectedDevice );
+    Status createDicomdir( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice );
 
     /// Copia els estudis seleccionats per passar a dicomdir, al directori desti
     Status copyStudiesToDicomdirPath();

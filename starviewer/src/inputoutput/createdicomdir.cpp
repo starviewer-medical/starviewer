@@ -37,17 +37,21 @@ void CreateDicomdir::setDevice( recordDeviceDicomDir deviceToCreateDicomdir )
     //indiquem que el propòsit d'aquest dicomdir
     switch ( deviceToCreateDicomdir )
     {
-        case recordDeviceDicomDir(harddisk) :
+        case recordDeviceDicomDir(HardDisk) :
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
+            DEBUG_LOG("disc dur");
             break;
-        case recordDeviceDicomDir(cd) :
+        case recordDeviceDicomDir(CdRom) :
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;
+            DEBUG_LOG("cdrom");
             break;
-        case recordDeviceDicomDir(dvd) :
+        case recordDeviceDicomDir(DvdRom) :
             m_optProfile = DicomDirInterface::AP_GeneralPurposeDVD;
+            DEBUG_LOG("dvd");
             break;
-        case recordDeviceDicomDir(usb) :
+        case recordDeviceDicomDir(UsbPen) :
             m_optProfile = DicomDirInterface::AP_USBandFlash;
+            DEBUG_LOG("UsbPen");
             break;
         default :
             m_optProfile = DicomDirInterface::AP_GeneralPurpose;

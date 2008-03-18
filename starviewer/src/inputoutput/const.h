@@ -118,8 +118,6 @@ namespace udg
 
     const OFConditionConst error_DNoFind(          0, 1300, OF_error,      "There are problems with the find operation");
     const OFConditionConst error_NoFind (error_DNoConnect);
-
-    enum recordDeviceDicomDir { harddisk , cd , dvd , usb };
 }
 
 
