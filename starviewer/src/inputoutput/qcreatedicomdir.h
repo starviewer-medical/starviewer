@@ -144,8 +144,17 @@ private slots:
     void deviceChanged( int value );
 
 private:
-    quint64 m_dicomdirSize;
-    quint64 m_DiskSpace;
+
+    static const int m_cdRomSizeMb = 700;
+    static const int m_dvdRomSizeMb = 4800;
+    static const int m_hardDiskSizeMb = 9999999;
+
+    static const quint64 m_cdRomSizeBytes = ( quint64 ) m_cdRomSizeMb * ( quint64 ) ( 1024 * 1024 );
+    static const quint64 m_dvdRomSizeBytes = ( quint64 ) m_dvdRomSizeMb * ( quint64 ) ( 1024 * 1024 );
+    static const quint64 m_hardDiskSizeBytes = ( quint64 ) m_hardDiskSizeMb * ( quint64 ) ( 1024 * 1024 );
+
+    quint64 m_dicomdirSizeBytes;
+    quint64 m_DiskSpaceBytes;
     QMenu m_contextMenu;///<Menu contextual
 
     ///Agrupa les accions dels dispositius on gravarem el DICOMDIR

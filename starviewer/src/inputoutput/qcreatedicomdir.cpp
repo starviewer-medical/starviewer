@@ -44,7 +44,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
 
-    m_dicomdirSize = 0;
+    m_dicomdirSizeBytes = 0;
     setDicomdirSize();
 
     // crear les accions
@@ -108,7 +108,7 @@ void QCreateDicomdir::createActions()
 
     // primer activem el CD com a dispositiu per defecte
     m_cdromAction->trigger();
-    m_DiskSpace = ( quint64 ) 700 * ( quint64 ) ( 1024 * 1024 );//per defecte a disk space li donem la mida del cd, pq és l'opció activada per defecte
+    m_DiskSpaceBytes = m_cdRomSizeBytes;//per defecte a disk space li donem la mida del cd, pq és l'opció activada per defecte
 }
 
 void QCreateDicomdir::createConnections()
@@ -134,7 +134,7 @@ void QCreateDicomdir::setDicomdirSize()
     QString sizeOfDicomdirText, sizeText;
     double sizeInMb;
 
-    sizeInMb = m_dicomdirSize / ( 1024 * 1024 );//passem a Mb
+    sizeInMb = m_dicomdirSizeBytes / ( 1024 * 1024 );//passem a Mb
     sizeText.setNum( sizeInMb , 'f' , 2 );
 
     sizeOfDicomdirText = tr("DICOMDIR size: %1 Mb").arg(sizeText);
@@ -155,7 +155,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
 {
     CacheImageDAL cacheImageDAL;
     DicomMask imageMask;
-    quint64 studySize;
+    quint64 studySizeBytes;
     Status state;
 
     if ( !studyExists( study.getStudyUID() ) )
@@ -163,7 +163,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
         //consultem la mida de l'estudi
         imageMask.setStudyUID( study.getStudyUID() );
 
-        state = cacheImageDAL.imageSize( imageMask , studySize );
+        state = cacheImageDAL.imageSize( imageMask , studySizeBytes );
 
         if ( !state.good() )
         {
@@ -172,14 +172,14 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
         }
         
         //només comprovem l'espai si gravem a un cd o dvd
-        if ( ( (studySize + m_dicomdirSize)  > m_DiskSpace) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
+        if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
         {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
         }
         else
         {   //afegim la informació de l'estudi a la llista
             QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
-            m_dicomdirSize = m_dicomdirSize + studySize;
+            m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
             setDicomdirSize();
 
             item->setText( 0 , study.getPatientName() );
@@ -201,13 +201,14 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
 void QCreateDicomdir::createDicomdir()
 {
     Status state;
+
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
     switch( m_currentDevice )
     {
         case CreateDicomdir::UsbPen:
         case CreateDicomdir::HardDisk:
-                QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
                 createDicomdirOnHardDiskOrFlashMemories();
-                QApplication::restoreOverrideCursor();
                 break;
         case CreateDicomdir::DvdRom:
         case CreateDicomdir::CdRom: //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
@@ -217,6 +218,7 @@ void QCreateDicomdir::createDicomdir()
                     burnDicomdir( m_currentDevice );
                  break;
     }
+    QApplication::restoreOverrideCursor();
 }
 
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
@@ -382,7 +384,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
     m_dicomdirStudiesList->clear();
     m_lineEditDicomdirPath->clear();
 
-    m_dicomdirSize = 0;
+    m_dicomdirSizeBytes = 0;
     setDicomdirSize();//Reiniciem la barra de progrés
 }
 
@@ -403,7 +405,7 @@ void QCreateDicomdir::examineDicomdirPath()
 
 void QCreateDicomdir::removeAllStudies()
 {
-    m_dicomdirSize = 0;
+    m_dicomdirSizeBytes = 0;
     setDicomdirSize();
     m_dicomdirStudiesList->clear();
     // TODO perquè es fa un segon setDicomdirSize?
@@ -415,7 +417,7 @@ void QCreateDicomdir::removeSelectedStudy()
     DicomMask imageMask;
     CacheImageDAL cacheImageDAL;
     Status state;
-    quint64 studySize;
+    quint64 studySizeBytes;
     QList<QTreeWidgetItem *> selectedStudies;
 
     selectedStudies = m_dicomdirStudiesList->selectedItems();
@@ -431,7 +433,7 @@ void QCreateDicomdir::removeSelectedStudy()
             //consultem la mida de l'estudi
             imageMask.setStudyUID( selectedStudies.at( i )->text( 7 ) );
 
-            state = cacheImageDAL.imageSize( imageMask , studySize );
+            state = cacheImageDAL.imageSize( imageMask , studySizeBytes );
 
             if ( !state.good() )
             {
@@ -439,7 +441,7 @@ void QCreateDicomdir::removeSelectedStudy()
                 return;
             }
 
-            m_dicomdirSize = m_dicomdirSize - studySize;
+            m_dicomdirSizeBytes = m_dicomdirSizeBytes - studySizeBytes;
             setDicomdirSize();
 
             delete selectedStudies.at( i );
@@ -556,7 +558,7 @@ bool QCreateDicomdir::enoughFreeSpace( QString path )
 {
     HardDiskInformation hardDisk;
 
-    if ( hardDisk.getNumberOfFreeMBytes( path ) < static_cast<quint64> (m_dicomdirSize / ( 1024 * 1204 ) ) )
+    if ( hardDisk.getNumberOfFreeMBytes( path ) < static_cast<quint64> (m_dicomdirSizeBytes / ( 1024 * 1204 ) ) )
     {
         return false;
     }
@@ -624,7 +626,7 @@ void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 
 void QCreateDicomdir::deviceChanged( int index )
 {
-    float sizeInMB = (m_dicomdirSize / ( 1024 * 1024 ) );
+    float sizeInMB = (m_dicomdirSizeBytes / ( 1024 * 1024 ) );
     
     m_currentDevice = (CreateDicomdir::recordDeviceDicomDir) index;
     switch( m_currentDevice )
@@ -633,14 +635,14 @@ void QCreateDicomdir::deviceChanged( int index )
         case CreateDicomdir::HardDisk:
             m_stackedWidget->setCurrentIndex(1);
             // per gravar al disc no hi ha màxim TODO això no es del tot cert, caldria comprovar l'espai de disc
-            m_DiskSpace = ( quint64 ) 9999999 * ( quint64 ) ( 1024 * 1024 );
+            m_DiskSpaceBytes = m_hardDiskSizeBytes;
             break;
         case CreateDicomdir::CdRom:
                 m_stackedWidget->setCurrentIndex(0);
-                if( sizeInMB < 700 )
+                if( sizeInMB < m_cdRomSizeMb )
                 {
-                    m_progressBarOcupat->setMaximum( 700 );
-                    m_DiskSpace = ( quint64 ) 700 * ( quint64 ) ( 1024 * 1024 ); // convertim a bytes capacaticat cd
+                    m_progressBarOcupat->setMaximum( m_cdRomSizeMb );
+                    m_DiskSpaceBytes = m_cdRomSizeBytes; // convertim a bytes capacaticat cd
                     m_progressBarOcupat->repaint();
                 }
                 else
@@ -650,10 +652,10 @@ void QCreateDicomdir::deviceChanged( int index )
                 break;
         case CreateDicomdir::DvdRom:
                 m_stackedWidget->setCurrentIndex(0);
-                if( sizeInMB < 4800 )
+                if( sizeInMB < m_dvdRomSizeMb )
                 {
-                    m_progressBarOcupat->setMaximum( 4800 );
-                    m_DiskSpace = ( quint64 ) 4800 * ( quint64 ) ( 1024 * 1024 ); //convertim a bytes capacitat dvd
+                    m_progressBarOcupat->setMaximum( m_dvdRomSizeMb );
+                    m_DiskSpaceBytes = m_dvdRomSizeBytes; //convertim a bytes capacitat dvd
                     m_progressBarOcupat->repaint();
                 }
                 else
