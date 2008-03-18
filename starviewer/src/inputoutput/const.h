@@ -119,18 +119,6 @@ namespace udg
     const OFConditionConst error_DNoFind(          0, 1300, OF_error,      "There are problems with the find operation");
     const OFConditionConst error_NoFind (error_DNoConnect);
 
-    //Prioritats pers les operacions de la classe Operation
-    const int operationPriorityLow = 99;
-    const int operationPriorityMedium = 50;
-    const int operationPriorityHigh = 0;
-
-    //Defininim les operacions possibles de la classe Operation
-    const int operationUnknow = 0;
-    const int operationRetrieve = 1;
-    const int operationPrint = 2;
-    const int operationMove = 3;
-    const int operationView = 4;
-
     enum recordDeviceDicomDir { harddisk , cd , dvd , usb };
 }
 

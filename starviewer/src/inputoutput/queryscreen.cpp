@@ -1021,10 +1021,15 @@ void QueryScreen::retrievePacs( bool view )
                     operation.setPacsParameters( pacs );
                     operation.setDicomMask( mask );
                     if ( view )
-                        operation.setOperation( operationView );
+                    {
+                        operation.setOperation( Operation::View );
+                        operation.setPriority( Operation::Medium );//Té priorita mitjà per passar al davant de les operacions de Retrieve
+                    }
                     else
-                        operation.setOperation( operationRetrieve );
-
+                    {
+                        operation.setOperation( Operation::Retrieve );
+                        operation.setPriority( Operation::Low );
+                    }
                     //emplenem les dades de l'operació
                     operation.setPatientName( m_studyListSingleton->getStudy().getPatientName() );
                     operation.setPatientID( m_studyListSingleton->getStudy().getPatientId() );
@@ -1374,7 +1379,8 @@ void QueryScreen::storeStudiesToPacs()
                 dicomMask.setStudyUID( studyUID );
                 storeStudyOperation.setPatientName( study.getPatientName() );
                 storeStudyOperation.setStudyUID( study.getStudyUID() );
-                storeStudyOperation.setOperation( operationMove );
+                storeStudyOperation.setPriority( Operation::Low );
+                storeStudyOperation.setOperation( Operation::Move );
                 storeStudyOperation.setDicomMask( dicomMask );
                 storeStudyOperation.setPatientID( study.getPatientId() );
                 storeStudyOperation.setStudyID( study.getStudyId() );

@@ -84,15 +84,15 @@ void QExecuteOperationThread::run()
 
         switch (operation.getOperation())
         {
-            case operationRetrieve :
+            case Operation::Retrieve :
                  m_view = false;
                  retrieveStudy(operation);
                  break;
-            case operationView :
+            case Operation::View :
                  m_view = true;
                  retrieveStudy(operation);
                  break;
-            case operationMove:
+            case Operation::Move :
                  moveStudy( operation );
                  break;
         }
