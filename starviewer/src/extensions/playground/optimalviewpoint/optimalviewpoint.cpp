@@ -18,7 +18,7 @@
 #include "logging.h"
 #include "optimalviewpointvolume.h"
 #include "optimalviewpointplane.h"
-#include <cmath>
+#include "mathtools.h"
 //vtk
 #include <vtkCamera.h>
 #include <vtkRenderer.h>
@@ -290,20 +290,20 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
                 double b = ( sqrt( 5.0 ) + 1.0 ) / 2.0;
                 double psi = acos( sqrt( b * b * b / ( 3.0 * sqrt( 5.0 ) ) ) ); // colatitud (rad)
                 double phi = psi + 2 * acos( b / sqrt( 3.0 ) );                 // colatitud (rad)
-                double phi1 = M_PIl - phi;                                      // colatitud (rad)
-                double psi1 = M_PIl - psi;                                      // colatitud (rad)
-                double sigma = M_PIl / 5.0;                                     // longitud (rad)
+                double phi1 = MathTools::PI_LONG - phi;                                      // colatitud (rad)
+                double psi1 = MathTools::PI_LONG - psi;                                      // colatitud (rad)
+                double sigma = MathTools::PI_LONG / 5.0;                                     // longitud (rad)
                 // conversió a latitud
-                psi = M_PI_2l - psi;
-                phi = M_PI_2l - phi;
-                phi1 = M_PI_2l - phi1;
-                psi1 = M_PI_2l - psi1;
+                psi = MathTools::PI_DIV_2_LONG - psi;
+                phi = MathTools::PI_DIV_2_LONG - phi;
+                phi1 = MathTools::PI_DIV_2_LONG - phi1;
+                psi1 = MathTools::PI_DIV_2_LONG - psi1;
                 // conversió a graus
-                psi *= 180.0 * M_1_PIl;
-                phi *= 180.0 * M_1_PIl;
-                phi1 *= 180.0 * M_1_PIl;
-                psi1 *= 180.0 * M_1_PIl;
-                sigma *= 180.0 * M_1_PIl;
+                psi *= 180.0 * MathTools::REVERS_PI_LONG;
+                phi *= 180.0 * MathTools::REVERS_PI_LONG;
+                phi1 *= 180.0 * MathTools::REVERS_PI_LONG;
+                psi1 *= 180.0 * MathTools::REVERS_PI_LONG;
+                sigma *= 180.0 * MathTools::REVERS_PI_LONG;
                 /*(*m_planes)[1]->setLatitude( psi ); (*m_planes)[1]->setLongitude( 0.0 );
                 (*m_planes)[2]->setLatitude( psi ); (*m_planes)[2]->setLongitude( 2.0 * sigma );
                 (*m_planes)[3]->setLatitude( psi ); (*m_planes)[3]->setLongitude( 4.0 * sigma );

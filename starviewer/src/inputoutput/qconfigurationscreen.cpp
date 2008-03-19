@@ -6,8 +6,6 @@
  ***************************************************************************/
 #include "qconfigurationscreen.h"
 
-#include <math.h>
-
 #include <QString>
 #include <QLineEdit>
 #include <QCheckBox>

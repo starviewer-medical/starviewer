@@ -11,13 +11,20 @@
 /**
     Aquest arxiu recull tot tipus de funcions matemàtiques útils
 */
-#include <cmath>
  
 namespace udg{
 
 class MathTools{ 
-
+    
 public:
+
+/// Declaració de constants
+static const double LOGARITHM_BASE2_E;
+static const long double REVERS_PI_LONG;
+static const double PI;
+static const long double PI_LONG;
+static const long double PI_DIV_2_LONG;
+    
 
 /// Epsilon, nombre extremadament petit
 static double Epsilon() { return 1E-9; };

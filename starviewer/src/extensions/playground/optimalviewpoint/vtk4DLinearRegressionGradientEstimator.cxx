@@ -23,8 +23,6 @@
 #include "vtkUnsignedLongArray.h"
 #include "vtkUnsignedShortArray.h"
 
-#include <cmath>
-
 vtkCxxRevisionMacro(vtk4DLinearRegressionGradientEstimator, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtk4DLinearRegressionGradientEstimator);
 

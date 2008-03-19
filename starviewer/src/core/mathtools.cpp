@@ -12,6 +12,18 @@
 namespace udg{
 
 
+/**
+* DEFINICIÓ DE CONSTANTS
+**/
+
+
+const double MathTools::LOGARITHM_BASE2_E = 1.4426950408889634074;          /* log_2 e */
+const long double MathTools::REVERS_PI_LONG = 0.3183098861837906715377675267450287L;  /* 1/pi */
+const double MathTools::PI = 3.14159265358979323846;  /* pi */
+const long double MathTools::PI_LONG = 3.14159265358979323846;  /* pi */
+const long double MathTools::PI_DIV_2_LONG = 1.5707963267948966192313216916397514L;  /* pi/2 */
+
+
  ///logaritme en base 2
 double MathTools::logTwo(const double x, const bool zero)
 {
@@ -20,14 +32,14 @@ double MathTools::logTwo(const double x, const bool zero)
 
     if (zero)
     {
-        return (x == 0) ? 0 : double( log(double(x)) ) * M_LOG2E;
+        return (x == 0) ? 0 : double( log(double(x)) ) * LOGARITHM_BASE2_E;
     }
     else
     {
         if (x == 0)
             WARN_LOG( "MathTools::logTwo >> Log of zero" );
 
-        return double( log(double(x)) ) * M_LOG2E;
+        return double( log(double(x)) ) * LOGARITHM_BASE2_E;
     }
 }
 

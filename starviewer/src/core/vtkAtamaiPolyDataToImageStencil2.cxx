@@ -53,7 +53,6 @@ POSSIBILITY OF SUCH DAMAGES.
 #include "vtkStreamingDemandDrivenPipeline.h"
 #endif
 
-#include <math.h>
 #include <iostream>
 
 #if ((VTK_MAJOR_VERSION == 4)&&(VTK_MINOR_VERSION <= 2))

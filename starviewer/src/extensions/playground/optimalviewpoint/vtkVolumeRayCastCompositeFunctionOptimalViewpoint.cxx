@@ -20,8 +20,6 @@
 #include "vtkVolumeProperty.h"
 #include "vtkVolumeRayCastMapper.h"
 
-#include <math.h>
-
 #include "optimalviewpointvolume.h"
 #include <vtkMultiThreader.h>
 
