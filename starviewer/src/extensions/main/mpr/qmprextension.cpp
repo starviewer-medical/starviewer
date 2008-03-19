@@ -335,12 +335,20 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
-        detectSagitalViewAxisActor();
+        if ( m_sagital2DView->getInteractor()->GetControlKey() )
+            detectPushSagitalViewAxisActor();
+        else
+            detectSagitalViewAxisActor();
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        if( m_state != NONE )
-            releaseSagitalViewAxisActor();
+        if ( m_state == PUSHING )
+            releasePushSagitalViewAxisActor();
+        else
+        {
+            if( m_state != NONE )
+                releaseSagitalViewAxisActor();
+        }
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -348,15 +356,6 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
             rotateSagitalViewAxisActor();
         else if( m_state == PUSHING )
             pushSagitalViewAxisActor();
-    break;
-
-    case vtkCommand::RightButtonPressEvent:
-        detectPushSagitalViewAxisActor();
-    break;
-
-    case vtkCommand::RightButtonReleaseEvent:
-        if( m_state != NONE )
-            releasePushSagitalViewAxisActor();
     break;
 
     default:
@@ -517,12 +516,12 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     double axis[3];
     double direction[3];
 
-    vec1[1] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
-    vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
+    vec1[1] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[1];
+    vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[2];
     vec1[0] = 0.0;
 
-    vec2[1] = toWorld[0] - m_pickedActorPlaneSource->GetCenter()[0];
-    vec2[2] = toWorld[1] - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[1] = toWorld[0] - m_pickedActorPlaneSource->GetCenter()[1];
+    vec2[2] = toWorld[1] - m_pickedActorPlaneSource->GetCenter()[2];
     vec2[0] = 0.0;
 
     double degrees = MathTools::angleInDegrees( vec1 , vec2 );
@@ -699,7 +698,7 @@ void QMPRExtension::pushSagitalViewAxisActor()
     double toWorld[4];
     m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
 
-    m_axial2DView->setSlice( static_cast<int>( toWorld[1] / m_axialSpacing[2] ) );
+    m_axial2DView->setSlice( m_axial2DView->getMaximumSlice() - static_cast<int>( toWorld[1] / m_axialSpacing[2] ) );
     updatePlanes();
     updateControls();
 

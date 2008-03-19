@@ -75,7 +75,7 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     else m_studiesToConvert.push_back( studyToConvert );//en aquest cas val al final
 }
 
-Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir selectedDevice )
+Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     CacheImageDAL cacheImageDAL;
@@ -131,7 +131,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, recordDeviceDicomDir se
     return state;
 }
 
-Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, recordDeviceDicomDir selectedDevice )
+Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
 {
     CreateDicomdir createDicomdir;
     Status state, stateNotDicomConformance;

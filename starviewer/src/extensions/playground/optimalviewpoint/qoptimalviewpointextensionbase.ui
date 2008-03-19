@@ -690,6 +690,189 @@
         </widget>
        </item>
        <item>
+        <widget class="udg::QShowHideWidget" native="1" name="m_cameraWidget">
+         <property name="title">
+          <string>Camera</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout">
+          <property name="margin">
+           <number>9</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QGridLayout">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QDoubleSpinBox" name="m_cameraPositionXDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Position X</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="m_cameraPositionYDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Position Y</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QDoubleSpinBox" name="m_cameraPositionZDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Position Z</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QDoubleSpinBox" name="m_cameraFocusXDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Focus X</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QDoubleSpinBox" name="m_cameraFocusYDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Focus Y</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QDoubleSpinBox" name="m_cameraFocusZDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Focus Z</string>
+              </property>
+            </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QDoubleSpinBox" name="m_cameraUpXDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Up X</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="m_cameraUpYDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Up Y</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QDoubleSpinBox" name="m_cameraUpZDoubleSpinBox">
+              <property name="minimum">
+               <double>-65536</double>
+              </property>
+              <property name="maximum">
+               <double>65536</double>
+              </property>
+              <property name="toolTip">
+               <string>Up Z</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="m_cameraGetPushButton" >
+              <property name="text" >
+               <string>Get</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_cameraSetPushButton" >
+              <property name="text" >
+               <string>Set</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_cameraLoadPushButton" >
+              <property name="text" >
+               <string>Load...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_cameraSavePushButton" >
+              <property name="text" >
+               <string>Save...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="udg::QShowHideWidget" native="1" name="m_viewpointSelectionWidget">
          <property name="title">
           <string>Viewpoint selection</string>
@@ -1107,6 +1290,16 @@
            <item>
             <property name="text" >
              <string>Opacity smooth</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Opacity color bleeding</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Opacity smooth color bleeding</string>
             </property>
            </item>
           </widget>

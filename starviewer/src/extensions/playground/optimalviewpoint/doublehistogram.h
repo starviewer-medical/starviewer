@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2007-2008 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -71,6 +71,13 @@ private:
     double m_count;
 
 };
+
+
+inline void DoubleHistogram::add( int value, double amount )
+{
+    m_histogram[value] += amount;
+    m_count += amount;
+}
 
 
 }

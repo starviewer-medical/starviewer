@@ -22,6 +22,8 @@
 
 #include <math.h>
 
+#include "vector3.h"
+
 vtkCxxRevisionMacro(vtkVolumeRayCastCompositeFunctionObscurances, "$Revision: 1.1 $");
 vtkStandardNewMacro(vtkVolumeRayCastCompositeFunctionObscurances);
 
@@ -217,6 +219,241 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
                                  CTF[(value)*3 + 1] ) * aObscuranceFactor * aObscurance[offset];
       accum_blue_intensity  += ( opacity * remaining_opacity * 
                                  CTF[(value)*3 + 2] ) * aObscuranceFactor * aObscurance[offset];
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      remaining_opacity *= (1.0 - opacity);
+      
+      // Increment our position and compute our voxel location
+      ray_position[0] += ray_increment[0];
+      ray_position[1] += ray_increment[1];
+      ray_position[2] += ray_increment[2];
+      voxel[0] = vtkRoundFuncMacro( ray_position[0] );
+      voxel[1] = vtkRoundFuncMacro( ray_position[1] );
+      voxel[2] = vtkRoundFuncMacro( ray_position[2] );
+      }
+    }
+
+  // Cap the intensity value at 1.0
+  if ( accum_red_intensity > 1.0 )
+    {
+    accum_red_intensity = 1.0;
+    }
+  if ( accum_green_intensity > 1.0 )
+    {
+    accum_green_intensity = 1.0;
+    }
+  if ( accum_blue_intensity > 1.0 )
+    {
+    accum_blue_intensity = 1.0;
+    }
+  
+  if( remaining_opacity < VTK_REMAINING_OPACITY )
+    {
+    remaining_opacity = 0.0;
+    }
+
+  // Set the return pixel value.  The depth value is the distance to the
+  // center of the volume.
+  dynamicInfo->Color[0] = accum_red_intensity;
+  dynamicInfo->Color[1] = accum_green_intensity;
+  dynamicInfo->Color[2] = accum_blue_intensity;
+  dynamicInfo->Color[3] = 1.0 - remaining_opacity;
+  dynamicInfo->NumberOfStepsTaken = steps_this_ray;
+  
+}
+
+
+// This is the templated function that actually casts a ray and computes
+// The composite value. This version uses nearest neighbor interpolation
+// and does not perform shading.
+template <class T>
+void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
+                          vtkVolumeRayCastStaticInfo *staticInfo, udg::Vector3 * aColorBleeding, double aObscuranceFactor )
+{
+  int             value=0;
+  unsigned char   *grad_mag_ptr = NULL;
+  float           accum_red_intensity;
+  float           accum_green_intensity;
+  float           accum_blue_intensity;
+  float           remaining_opacity;
+  float           opacity=0.0;
+  float           gradient_opacity;
+  int             loop;
+  int             xinc, yinc, zinc;
+  int             voxel[3];
+  float           ray_position[3];
+  int             prev_voxel[3];
+  float           *SOTF;
+  float           *CTF;
+  float           *GTF;
+  float           *GOTF;
+  int             offset;
+  int             steps_this_ray = 0;
+  int             grad_op_is_constant;
+  float           gradient_opacity_constant;
+  int             num_steps;
+  float           *ray_start, *ray_increment;
+
+  num_steps = dynamicInfo->NumberOfStepsToTake;
+  ray_start = dynamicInfo->TransformedStart;
+  ray_increment = dynamicInfo->TransformedIncrement;
+ 
+  SOTF =  staticInfo->Volume->GetCorrectedScalarOpacityArray();
+  CTF  =  staticInfo->Volume->GetRGBArray();
+  GTF  =  staticInfo->Volume->GetGrayArray();
+  GOTF =  staticInfo->Volume->GetGradientOpacityArray();
+
+  // Get the gradient opacity constant. If this number is greater than
+  // or equal to 0.0, then the gradient opacity transfer function is
+  // a constant at that value, otherwise it is not a constant function
+  gradient_opacity_constant = staticInfo->Volume->GetGradientOpacityConstant();
+  grad_op_is_constant = ( gradient_opacity_constant >= 0.0 );
+
+  // Move the increments into local variables
+  xinc = staticInfo->DataIncrement[0];
+  yinc = staticInfo->DataIncrement[1];
+  zinc = staticInfo->DataIncrement[2];
+
+  // Initialize the ray position and voxel location
+  ray_position[0] = ray_start[0];
+  ray_position[1] = ray_start[1];
+  ray_position[2] = ray_start[2];
+  voxel[0] = vtkRoundFuncMacro( ray_position[0] );
+  voxel[1] = vtkRoundFuncMacro( ray_position[1] );
+  voxel[2] = vtkRoundFuncMacro( ray_position[2] );
+
+  // So far we haven't accumulated anything
+  accum_red_intensity     = 0.0;
+  accum_green_intensity   = 0.0;
+  accum_blue_intensity    = 0.0;
+  remaining_opacity       = 1.0;
+
+  // Get a pointer to the gradient magnitudes for this volume
+  if ( !grad_op_is_constant )
+    {
+    grad_mag_ptr = staticInfo->GradientMagnitudes;
+    }
+
+  
+  // Keep track of previous voxel to know when we step into a new one
+  // set it to something invalid to start with so that everything is
+  // computed first time through
+  prev_voxel[0] = voxel[0]-1;
+  prev_voxel[1] = voxel[1]-1;
+  prev_voxel[2] = voxel[2]-1;
+  
+  // Two cases - we are working with a gray or RGB transfer
+  // function - break them up to make it more efficient
+  if ( staticInfo->ColorChannels == 1 ) 
+    {
+    // For each step along the ray
+    for ( loop = 0; 
+          loop < num_steps && remaining_opacity > VTK_REMAINING_OPACITY; 
+          loop++ )
+      {     
+      // We've taken another step
+      steps_this_ray++;
+      
+      // Access the value at this voxel location
+      if ( prev_voxel[0] != voxel[0] ||
+           prev_voxel[1] != voxel[1] ||
+           prev_voxel[2] != voxel[2] )
+        {
+        offset = voxel[2] * zinc + voxel[1] * yinc + voxel[0] * xinc;
+        value = *(data_ptr + offset);
+        opacity = SOTF[value];
+
+        if ( opacity )
+          {
+          if ( grad_op_is_constant )
+            {
+            gradient_opacity = gradient_opacity_constant;
+            }
+          else 
+            {
+            gradient_opacity = GOTF[*(grad_mag_ptr + offset)];
+            }
+          opacity *= gradient_opacity;
+          }
+
+        prev_voxel[0] = voxel[0];
+        prev_voxel[1] = voxel[1];
+        prev_voxel[2] = voxel[2];
+        }
+        
+      // Accumulate some light intensity and opacity
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity   += ( opacity * remaining_opacity * 
+//                                  GTF[(value)] );
+      udg::Vector3 vColor = aColorBleeding[offset];
+      accum_red_intensity   += ( opacity * remaining_opacity * 
+                                 GTF[(value)] ) * aObscuranceFactor * ( vColor.x + vColor.y + vColor.z ) / 3.0;
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      remaining_opacity *= (1.0 - opacity);
+      
+      // Increment our position and compute our voxel location
+      ray_position[0] += ray_increment[0];
+      ray_position[1] += ray_increment[1];
+      ray_position[2] += ray_increment[2];
+      voxel[0] = vtkRoundFuncMacro( ray_position[0] );
+      voxel[1] = vtkRoundFuncMacro( ray_position[1] );
+      voxel[2] = vtkRoundFuncMacro( ray_position[2] );
+      }
+    accum_green_intensity = accum_red_intensity;
+    accum_blue_intensity = accum_red_intensity;
+    }
+  else if ( staticInfo->ColorChannels == 3 )
+    {
+    // For each step along the ray
+    for ( loop = 0; 
+          loop < num_steps && remaining_opacity > VTK_REMAINING_OPACITY; 
+          loop++ )
+      {     
+      // We've taken another step
+      steps_this_ray++;
+      
+      // Access the value at this voxel location
+      if ( prev_voxel[0] != voxel[0] ||
+           prev_voxel[1] != voxel[1] ||
+           prev_voxel[2] != voxel[2] )
+        {
+        offset = voxel[2] * zinc + voxel[1] * yinc + voxel[0] * xinc;
+        value = *(data_ptr + offset);
+        opacity = SOTF[value];
+
+        if ( opacity )
+          {
+          if ( grad_op_is_constant )
+            {
+            gradient_opacity = gradient_opacity_constant;
+            }
+          else 
+            {
+            gradient_opacity = GOTF[*(grad_mag_ptr + offset)];  
+            }
+          opacity *= gradient_opacity;
+          }
+
+        prev_voxel[0] = voxel[0];
+        prev_voxel[1] = voxel[1];
+        prev_voxel[2] = voxel[2];
+        }
+
+
+      // Accumulate some light intensity and opacity
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity   += ( opacity * remaining_opacity * 
+//                                  CTF[(value)*3] );
+//       accum_green_intensity += ( opacity * remaining_opacity * 
+//                                  CTF[(value)*3 + 1] );
+//       accum_blue_intensity  += ( opacity * remaining_opacity * 
+//                                  CTF[(value)*3 + 2] );
+      udg::Vector3 vColor = aColorBleeding[offset];
+      accum_red_intensity   += ( opacity * remaining_opacity * 
+                                 CTF[(value)*3] ) * aObscuranceFactor * vColor.x;
+      accum_green_intensity += ( opacity * remaining_opacity * 
+                                 CTF[(value)*3 + 1] ) * aObscuranceFactor * vColor.y;
+      accum_blue_intensity  += ( opacity * remaining_opacity * 
+                                 CTF[(value)*3 + 2] ) * aObscuranceFactor * vColor.z;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
@@ -555,6 +792,306 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
   dynamicInfo->NumberOfStepsTaken = steps_this_ray;
   
 }
+
+
+// This is the templated function that actually casts a ray and computes
+// the composite value. This version uses nearest neighbor and does
+// perform shading.
+template <class T>
+void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
+                           vtkVolumeRayCastStaticInfo *staticInfo, udg::Vector3 * aColorBleeding, double aObscuranceFactor )
+{
+  int             value;
+  unsigned char   *grad_mag_ptr = NULL;
+  float           accum_red_intensity;
+  float           accum_green_intensity;
+  float           accum_blue_intensity;
+  float           remaining_opacity;
+  float           opacity = 0.0;
+  float           gradient_opacity;
+  int             loop;
+  int             xinc, yinc, zinc;
+  int             voxel[3];
+  float           ray_position[3];
+  int             prev_voxel[3];
+  float           *SOTF;
+  float           *CTF;
+  float           *GTF;
+  float           *GOTF;
+  float           *red_d_shade, *green_d_shade, *blue_d_shade;
+  float           *red_s_shade, *green_s_shade, *blue_s_shade;
+  unsigned short  *encoded_normals;
+  float           red_shaded_value   = 0.0;
+  float           green_shaded_value = 0.0;
+  float           blue_shaded_value  = 0.0;
+  int             offset;
+  int             steps_this_ray = 0;
+  int             grad_op_is_constant;
+  float           gradient_opacity_constant;
+  int             num_steps;
+  float           *ray_start, *ray_increment;
+
+  num_steps = dynamicInfo->NumberOfStepsToTake;
+  ray_start = dynamicInfo->TransformedStart;
+  ray_increment = dynamicInfo->TransformedIncrement;
+ 
+  // Get diffuse shading table pointers
+  red_d_shade = staticInfo->RedDiffuseShadingTable;
+  green_d_shade = staticInfo->GreenDiffuseShadingTable;
+  blue_d_shade = staticInfo->BlueDiffuseShadingTable;
+
+  // Get specular shading table pointers
+  red_s_shade = staticInfo->RedSpecularShadingTable;
+  green_s_shade = staticInfo->GreenSpecularShadingTable;
+  blue_s_shade = staticInfo->BlueSpecularShadingTable;
+
+  // Get a pointer to the encoded normals for this volume
+  encoded_normals = staticInfo->EncodedNormals;
+
+  // Get the scalar opacity transfer function for this volume (which maps
+  // scalar input values to opacities)
+  SOTF =  staticInfo->Volume->GetCorrectedScalarOpacityArray();
+
+  // Get the color transfer function for this volume (which maps
+  // scalar input values to RGB values)
+  CTF =  staticInfo->Volume->GetRGBArray();
+  GTF =  staticInfo->Volume->GetGrayArray();
+
+  // Get the gradient opacity transfer function for this volume (which maps
+  // gradient magnitudes to opacities)
+  GOTF =  staticInfo->Volume->GetGradientOpacityArray();
+
+  // Get the gradient opacity constant. If this number is greater than
+  // or equal to 0.0, then the gradient opacity transfer function is
+  // a constant at that value, otherwise it is not a constant function
+  gradient_opacity_constant = staticInfo->Volume->GetGradientOpacityConstant();
+  grad_op_is_constant = ( gradient_opacity_constant >= 0.0 );
+
+  // Get a pointer to the gradient magnitudes for this volume
+  if ( !grad_op_is_constant )
+    {
+    grad_mag_ptr = staticInfo->GradientMagnitudes;
+    }
+
+  // Move the increments into local variables
+  xinc = staticInfo->DataIncrement[0];
+  yinc = staticInfo->DataIncrement[1];
+  zinc = staticInfo->DataIncrement[2];
+
+  // Initialize the ray position and voxel location
+  ray_position[0] = ray_start[0];
+  ray_position[1] = ray_start[1];
+  ray_position[2] = ray_start[2];
+
+  voxel[0] = vtkRoundFuncMacro( ray_position[0] );
+  voxel[1] = vtkRoundFuncMacro( ray_position[1] );
+  voxel[2] = vtkRoundFuncMacro( ray_position[2] );
+
+  // So far we haven't accumulated anything
+  accum_red_intensity     = 0.0;
+  accum_green_intensity   = 0.0;
+  accum_blue_intensity    = 0.0;
+  remaining_opacity       = 1.0;
+
+  // Keep track of previous voxel to know when we step into a new one  
+  prev_voxel[0] = voxel[0]-1;
+  prev_voxel[1] = voxel[1]-1;
+  prev_voxel[2] = voxel[2]-1;
+  
+  // Two cases - we are working with a gray or RGB transfer
+  // function - break them up to make it more efficient
+  if ( staticInfo->ColorChannels == 1 ) 
+    {
+    // For each step along the ray
+    for ( loop = 0; 
+          loop < num_steps && remaining_opacity > VTK_REMAINING_OPACITY; 
+          loop++ )
+      {     
+      // We've taken another step
+      steps_this_ray++;
+      
+      // Access the value at this voxel location and compute
+      // opacity and shaded value
+      if ( prev_voxel[0] != voxel[0] ||
+           prev_voxel[1] != voxel[1] ||
+           prev_voxel[2] != voxel[2] )
+        {
+        offset = voxel[2] * zinc + voxel[1] * yinc + voxel[0] * xinc;
+        value = *(data_ptr + offset);
+      
+        // Get the opacity contributed by the scalar opacity transfer function
+        opacity = SOTF[value];
+
+        // Multiply by the opacity contributed by the gradient magnitude
+        // transfer function (don't both if opacity is already 0)
+        if ( opacity )
+          {
+          if ( grad_op_is_constant )
+            {
+            gradient_opacity = gradient_opacity_constant;
+            }
+          else 
+            {
+            gradient_opacity = GOTF[*(grad_mag_ptr + offset)];
+            }
+          
+          opacity *= gradient_opacity;
+          
+          }
+
+        // Compute the red shaded value (only if there is some opacity)
+        // This is grey-scale so green and blue are the same as red
+        if ( opacity )
+          {
+          red_shaded_value = opacity * remaining_opacity *
+            ( red_d_shade[*(encoded_normals + offset)] * GTF[value] +
+              red_s_shade[*(encoded_normals + offset)] );
+          }
+        else
+          {
+          red_shaded_value = 0.0;
+          }
+
+        prev_voxel[0] = voxel[0];
+        prev_voxel[1] = voxel[1];
+        prev_voxel[2] = voxel[2];
+        }
+    
+    
+      // Accumulate the shaded intensity and opacity of this sample
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity += red_shaded_value;
+      udg::Vector3 vColor = aColorBleeding[offset];
+      accum_red_intensity += red_shaded_value * aObscuranceFactor * ( vColor.x + vColor.y + vColor.z ) / 3.0;
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      remaining_opacity *= (1.0 - opacity);
+    
+      // Increment our position and compute our voxel location
+      ray_position[0] += ray_increment[0];
+      ray_position[1] += ray_increment[1];
+      ray_position[2] += ray_increment[2];
+      voxel[0] = vtkRoundFuncMacro( ray_position[0] );
+      voxel[1] = vtkRoundFuncMacro( ray_position[1] );
+      voxel[2] = vtkRoundFuncMacro( ray_position[2] );
+      }
+    accum_green_intensity = accum_red_intensity;
+    accum_blue_intensity = accum_red_intensity;
+    }
+  else if ( staticInfo->ColorChannels == 3 )
+    {
+    // For each step along the ray
+    for ( loop = 0; 
+          loop < num_steps && remaining_opacity > VTK_REMAINING_OPACITY; loop++ )
+      {     
+      // We've taken another step
+      steps_this_ray++;
+      
+      // Access the value at this voxel location and compute
+      // opacity and shaded value
+      if ( prev_voxel[0] != voxel[0] ||
+           prev_voxel[1] != voxel[1] ||
+           prev_voxel[2] != voxel[2] )
+        {
+        offset = voxel[2] * zinc + voxel[1] * yinc + voxel[0] * xinc;
+        value = *(data_ptr + offset);
+      
+        // Get the opacity contributed by the scalar opacity transfer function
+        opacity = SOTF[value];
+
+        // Multiply by the opacity contributed by the gradient magnitude
+        // transfer function (don't both if opacity is already 0)
+        if ( opacity )
+          {
+          if ( grad_op_is_constant )
+            {
+            gradient_opacity = gradient_opacity_constant;
+            }
+          else 
+            {
+            gradient_opacity = GOTF[*(grad_mag_ptr + offset)];
+            }
+          
+          opacity *= gradient_opacity;    
+          }     
+
+        // Compute the red, green, and blue shaded value (only if there
+        // is some opacity)
+        if ( opacity )
+          {
+          red_shaded_value = opacity *  remaining_opacity *
+            ( red_d_shade[*(encoded_normals + offset)] * CTF[value*3] +
+              red_s_shade[*(encoded_normals + offset)] );
+          green_shaded_value = opacity *  remaining_opacity *
+            ( green_d_shade[*(encoded_normals + offset)] * CTF[value*3 + 1] +
+              green_s_shade[*(encoded_normals + offset)] );
+          blue_shaded_value = opacity *  remaining_opacity *
+            ( blue_d_shade[*(encoded_normals + offset)] * CTF[value*3 + 2] +
+              blue_s_shade[*(encoded_normals + offset)] );
+          }
+        else
+          {
+          red_shaded_value = 0.0;
+          green_shaded_value = 0.0;
+          blue_shaded_value = 0.0;
+          }
+
+        prev_voxel[0] = voxel[0];
+        prev_voxel[1] = voxel[1];
+        prev_voxel[2] = voxel[2];
+        }
+    
+    
+      // Accumulate the shaded intensity and opacity of this sample
+      //////////////////////////////////////////////////////////////////////////////////////////////
+//       accum_red_intensity += red_shaded_value;
+//       accum_green_intensity += green_shaded_value;
+//       accum_blue_intensity += blue_shaded_value;
+      udg::Vector3 vColor = aColorBleeding[offset];
+      accum_red_intensity += red_shaded_value * aObscuranceFactor * vColor.x;
+      accum_green_intensity += green_shaded_value * aObscuranceFactor * vColor.y;
+      accum_blue_intensity += blue_shaded_value * aObscuranceFactor * vColor.z;
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      remaining_opacity *= (1.0 - opacity);
+    
+      // Increment our position and compute our voxel location
+      ray_position[0] += ray_increment[0];
+      ray_position[1] += ray_increment[1];
+      ray_position[2] += ray_increment[2];
+      voxel[0] = vtkRoundFuncMacro( ray_position[0] );
+      voxel[1] = vtkRoundFuncMacro( ray_position[1] );
+      voxel[2] = vtkRoundFuncMacro( ray_position[2] );
+      }
+    }
+  
+  // Cap the intensities at 1.0
+  if ( accum_red_intensity > 1.0 )
+    {
+    accum_red_intensity = 1.0;
+    }
+  if ( accum_green_intensity > 1.0 )
+    {
+    accum_green_intensity = 1.0;
+    }
+  if ( accum_blue_intensity > 1.0 )
+    {
+    accum_blue_intensity = 1.0;
+    }
+  
+  if( remaining_opacity < VTK_REMAINING_OPACITY )
+    {
+    remaining_opacity = 0.0;
+    }
+  
+  // Set the return pixel value.  The depth value is the distance to the
+  // center of the volume.
+  dynamicInfo->Color[0] = accum_red_intensity;
+  dynamicInfo->Color[1] = accum_green_intensity;
+  dynamicInfo->Color[2] = accum_blue_intensity;
+  dynamicInfo->Color[3] = 1.0 - remaining_opacity;
+  dynamicInfo->NumberOfStepsTaken = steps_this_ray;
+  
+}
+
 
 // This is the templated function that actually casts a ray and computes
 // the composite value.  This version uses trilinear interpolation and
@@ -2429,12 +2966,20 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
       switch ( staticInfo->ScalarDataType )
         {
         case VTK_UNSIGNED_CHAR:
-          vtkCastRay_NN_Unshaded( (unsigned char *)data_ptr, dynamicInfo,
-                                  staticInfo, Obscurance, ObscuranceFactor );
+          if ( Color )
+            vtkCastRay_NN_Unshaded( (unsigned char *)data_ptr, dynamicInfo,
+                                    staticInfo, ColorBleeding, ObscuranceFactor );
+          else
+            vtkCastRay_NN_Unshaded( (unsigned char *)data_ptr, dynamicInfo,
+                                    staticInfo, Obscurance, ObscuranceFactor );
           break;
         case VTK_UNSIGNED_SHORT:
-          vtkCastRay_NN_Unshaded( (unsigned short *)data_ptr, dynamicInfo,
-                                  staticInfo, Obscurance, ObscuranceFactor );
+          if ( Color )
+            vtkCastRay_NN_Unshaded( (unsigned short *)data_ptr, dynamicInfo,
+                                    staticInfo, ColorBleeding, ObscuranceFactor );
+          else
+            vtkCastRay_NN_Unshaded( (unsigned short *)data_ptr, dynamicInfo,
+                                    staticInfo, Obscurance, ObscuranceFactor );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -2447,10 +2992,16 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
       switch ( staticInfo->ScalarDataType )
         {
         case VTK_UNSIGNED_CHAR:
-          vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+          if ( Color )
+            vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
+          else
+            vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
           break;
         case VTK_UNSIGNED_SHORT:
-          vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+          if ( Color )
+            vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
+          else
+            vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );

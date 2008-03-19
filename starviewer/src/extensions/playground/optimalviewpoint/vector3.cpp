@@ -28,22 +28,9 @@ Vector3 Vector3::operator +() const
 }
 
 
-Vector3 Vector3::operator -() const
-{
-    return Vector3( -x, -y, -z );
-}
-
-
 Vector3 Vector3::operator +( const Vector3 & v ) const
 {
     return Vector3( x + v.x, y + v.y, z + v.z );
-}
-
-
-Vector3 & Vector3::operator +=( const Vector3 & v )
-{
-    x += v.x; y += v.y; z += v.z;
-    return *this;
 }
 
 
@@ -66,12 +53,6 @@ QString Vector3::toString() const
 }
 
 
-Vector3 operator *( double a, const Vector3 & v )
-{
-    return Vector3( a * v.x, a * v.y, a * v.z );
-}
-
-
 Vector3 operator *( const Vector3 & v, double a )
 {
     return Vector3( v.x * a, v.y * a, v.z * a );
@@ -88,13 +69,6 @@ Vector3 & operator *=( Vector3 & v, double a )
 Vector3 operator /( const Vector3 & v, double a )
 {
     return Vector3(v.x / a, v.y / a, v.z / a);
-}
-
-
-Vector3 & operator /=( Vector3 & v, double a )
-{
-    v.x /= a; v.y /= a; v.z /= a;
-    return v;
 }
 
 

@@ -239,6 +239,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
     m_obscurance = 0;
+    m_colorBleeding = 0;
     m_obscuranceDirections = 2;
     m_obscuranceMaximumDistance = 64.0;
     m_obscuranceFunction = Constant0;
@@ -276,6 +277,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     if ( m_clusterImage ) m_clusterImage->Delete();
 
     delete [] m_obscurance;
+    delete [] m_colorBleeding;
 }
 
 void OptimalViewpointVolume::setShade( bool on )
@@ -968,64 +970,152 @@ void OptimalViewpointVolume::computeObscurances()
         threads[i] = thread;
     }
 
-    delete [] m_obscurance;
-    m_obscurance = new double[m_dataSize];
-    for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] = 0.0;
-
-    double maximumObscurance = 0.0;
-
-    for ( unsigned char i = 0; i < numberOfThreads; ++i )
+    if ( m_obscuranceVariant <= OpacitySmooth ) // obscurances
     {
-        ObscuranceThread * thread = threads[i];
-        thread->wait();
+        delete [] m_obscurance;
+        m_obscurance = new double[m_dataSize];
+        for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] = 0.0;
 
-        double * threadObscurance = thread->getObscurance();
-        for ( int j = 0; j < m_dataSize; ++j )
+        double maximumObscurance = 0.0;
+
+        for ( unsigned char i = 0; i < numberOfThreads; ++i )
         {
-            m_obscurance[j] += threadObscurance[j];
-            if ( m_obscurance[j] > maximumObscurance ) maximumObscurance = m_obscurance[j];
-        }
+            ObscuranceThread * thread = threads[i];
+            thread->wait();
 
-        delete thread;
-    }
-
-    for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] /= maximumObscurance;
-
-    {
-        bool density = m_obscuranceVariant <= DensitySmooth;
-        // obscurances to file
-        QFile outFile( QDir::tempPath().append( QString( "/obscurance.raw" ) ) );
-        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-        {
-            QDataStream out( &outFile );
-            for ( int i = 0; i < m_dataSize; ++i )
+            double * threadObscurance = thread->getObscurance();
+            for ( int j = 0; j < m_dataSize; ++j )
             {
-                uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
-                out << value;
-//                 out << gradientMagnitudes[i];
-//                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
-//                 out << static_cast<uchar>( round( ( uGradient[selection] + 1.0 ) * 127.5 ) );
+                m_obscurance[j] += threadObscurance[j];
+                if ( m_obscurance[j] > maximumObscurance ) maximumObscurance = m_obscurance[j];
             }
-            outFile.close();
+
+            delete thread;
         }
-        QFile outFileMhd( QDir::tempPath().append( QString( "/obscurance.mhd" ) ) );
-        if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+
+        for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] /= maximumObscurance;
+
         {
-            QTextStream out( &outFileMhd );
-            out << "NDims = 3\n";
-            out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
-            double spacing[3];
-            m_image->GetSpacing( spacing );
-            out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
-            out << "ElementType = MET_UCHAR\n";
-            out << "ElementDataFile = obscurance.raw";
-            outFileMhd.close();
+            bool density = m_obscuranceVariant <= DensitySmooth;
+            // obscurances to file
+            QFile outFile( QDir::tempPath().append( QString( "/obscurance.raw" ) ) );
+            if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QDataStream out( &outFile );
+                for ( int i = 0; i < m_dataSize; ++i )
+                {
+                    uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
+                    out << value;
+    //                 out << gradientMagnitudes[i];
+    //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
+    //                 out << static_cast<uchar>( round( ( uGradient[selection] + 1.0 ) * 127.5 ) );
+                }
+                outFile.close();
+            }
+            QFile outFileMhd( QDir::tempPath().append( QString( "/obscurance.mhd" ) ) );
+            if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QTextStream out( &outFileMhd );
+                out << "NDims = 3\n";
+                out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+                double spacing[3];
+                m_image->GetSpacing( spacing );
+                out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
+                out << "ElementType = MET_UCHAR\n";
+                out << "ElementDataFile = obscurance.raw";
+                outFileMhd.close();
+            }
         }
+
+    //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
+
+        m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionObscurances->SetColor( false );
     }
+    else    // color bleeding
+    {
+        delete [] m_colorBleeding;
+        m_colorBleeding = new Vector3[m_dataSize];
+//         for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] = 0.0;
 
-//     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
+        double maximumObscurance = 0.0;
 
-    m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
+        for ( unsigned char i = 0; i < numberOfThreads; ++i )
+        {
+            ObscuranceThread * thread = threads[i];
+            thread->wait();
+
+            Vector3 * threadColorBleeding = thread->getColorBleeding();
+            for ( int j = 0; j < m_dataSize; ++j )
+            {
+                m_colorBleeding[j] += threadColorBleeding[j];
+                if ( m_colorBleeding[j].x > maximumObscurance ) maximumObscurance = m_colorBleeding[j].x;
+                if ( m_colorBleeding[j].y > maximumObscurance ) maximumObscurance = m_colorBleeding[j].y;
+                if ( m_colorBleeding[j].z > maximumObscurance ) maximumObscurance = m_colorBleeding[j].z;
+            }
+
+            delete thread;
+        }
+
+        for ( int i = 0; i < m_dataSize; ++i ) m_colorBleeding[i] /= maximumObscurance;
+
+        {
+            bool density = m_obscuranceVariant <= DensitySmooth/*ColorBleeding*/;
+            // obscurances to file
+            QFile outFile( QDir::tempPath().append( QString( "/colorbleeding.raw" ) ) );
+            if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QDataStream out( &outFile );
+                for ( int i = 0; i < m_dataSize; ++i )
+                {
+//                     uchar value0 = 0, valueR = 0, valueG = 0, valueB = 0;
+//                     if ( m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) )
+//                     {
+//                         Vector3 color = 255.0 * m_colorBleeding[i];
+//                         valueR = static_cast<uchar>( qRound( color.x ) );
+//                         valueG = static_cast<uchar>( qRound( color.y ) );
+//                         valueB = static_cast<uchar>( qRound( color.z ) );
+//                     }
+//                     out << value0 << valueR << valueG << valueB;
+
+                    uchar value = 0;
+                    if ( m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) )
+                    {
+                        Vector3 color = 3.0 * m_colorBleeding[i];
+                        value += static_cast<uchar>( qRound( color.x ) ) << 4;
+                        value += static_cast<uchar>( qRound( color.y ) ) << 2;
+                        value += static_cast<uchar>( qRound( color.z ) );
+                    }   // value = 00RRGGBB (base 2)
+                    out << value;
+
+    //                 out << gradientMagnitudes[i];
+    //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
+    //                 out << static_cast<uchar>( round( ( uGradient[selection] + 1.0 ) * 127.5 ) );
+                }
+                outFile.close();
+            }
+            QFile outFileMhd( QDir::tempPath().append( QString( "/colorbleeding.mhd" ) ) );
+            if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QTextStream out( &outFileMhd );
+                out << "NDims = 3\n";
+                out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+                double spacing[3];
+                m_image->GetSpacing( spacing );
+                out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
+//                 out << "ElementType = MET_UINT\n";
+                out << "ElementType = MET_UCHAR\n";
+                out << "ElementByteOrderMSB = True\n";
+                out << "ElementDataFile = colorbleeding.raw";
+                outFileMhd.close();
+            }
+        }
+
+    //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
+
+        m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionObscurances->SetColor( true );
+    }
 }
 
 

@@ -145,7 +145,6 @@ HEADERS += extensionfactory.h \
            drawerline.h \
            drawertext.h \
            drawerpolyline.h \
-           polylineroitooldata.h \
            polylineroitool.h \
            distancetool.h  \
            windowlevelpresetstooldata.h \
@@ -294,7 +293,6 @@ SOURCES += extensionmediator.cpp \
            drawertext.cpp \
            drawerpolyline.cpp \
            polylineroitool.cpp \
-           polylineroitooldata.cpp \
            distancetool.cpp  \
            windowlevelpresetstooldata.cpp \
            qviewercinecontroller.cpp \
