@@ -90,7 +90,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="84"/>
         <source>&amp;Open file...</source>
-        <translation>&amp;Abri archivo...</translation>
+        <translation>&amp;Abrir archivo...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="85"/>
