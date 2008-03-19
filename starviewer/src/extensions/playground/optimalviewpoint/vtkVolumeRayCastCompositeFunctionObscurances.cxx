@@ -20,8 +20,6 @@
 #include "vtkVolumeProperty.h"
 #include "vtkVolumeRayCastMapper.h"
 
-#include <math.h>
-
 #include "vector3.h"
 
 vtkCxxRevisionMacro(vtkVolumeRayCastCompositeFunctionObscurances, "$Revision: 1.1 $");

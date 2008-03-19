@@ -15,7 +15,6 @@
 #include <vtkProperty2D.h>
 #include <vtkLine.h>
 #include "drawerline.h"
-#include <math.h>
 // qt
 #include <QVector>
 

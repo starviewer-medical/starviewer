@@ -5,11 +5,8 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-
 #include "povspherecloud.h"
-
-#include <math.h>
-
+#include "mathtools.h"
 #include "vector3.h"
 
 
@@ -250,13 +247,13 @@ void POVSphereCloud::createGeographicVertices()
         Vector3 gv;
         gv.x = v.length();
         // latitud
-        gv.y = 90.0 - acos( v.z / gv.x ) * 180.0 / M_PI;
+        gv.y = 90.0 - acos( v.z / gv.x ) * 180.0 / MathTools::PI;
         // longitud
         if ( v.x == 0.0 && v.y == 0.0 )
             gv.z = 0.0;
         else
         {
-            gv.z = acos( v.x / sqrt( v.x * v.x + v.y * v.y ) ) * 180.0 / M_PI;
+            gv.z = acos( v.x / sqrt( v.x * v.x + v.y * v.y ) ) * 180.0 / MathTools::PI;
             if ( v.y < 0.0 ) gv.z = -gv.z;
         }
         m_geographicVertices[i] = gv;
