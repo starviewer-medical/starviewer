@@ -17,7 +17,7 @@
 #include "cachestudydal.h"
 #include "studylist.h"
 #include "dicommask.h"
-#include "const.h"
+#include "errordcmtk.h"
 
 namespace udg {
 

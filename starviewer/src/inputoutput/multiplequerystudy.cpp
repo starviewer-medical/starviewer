@@ -16,7 +16,7 @@
 #include "qquerystudythread.h"
 #include "studylistsingleton.h"
 
-#include "const.h"
+#include "errordcmtk.h"
 
 namespace udg {
 

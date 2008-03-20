@@ -8,9 +8,6 @@
 
 #include <QString>
 
-#include "const.h"
-
-
 namespace udg {
 
 Operation::Operation()

@@ -12,7 +12,7 @@
 #include "starviewersettings.h"
 #include "pacsconnection.h"
 #include "pacsnetwork.h"
-#include "const.h"
+#include "errordcmtk.h"
 
 namespace udg{
 
