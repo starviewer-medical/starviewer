@@ -17,7 +17,7 @@
 #include "dicomstudy.h"
 #include "dicomseries.h"
 #include "dicomimage.h"
-#include "const.h"
+#include "errordcmtk.h"
 
 namespace udg{
 

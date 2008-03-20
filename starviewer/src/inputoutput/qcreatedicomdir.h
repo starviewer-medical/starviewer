@@ -9,7 +9,6 @@
 
 #include <QMenu>
 #include <ui_qcreatedicomdirbase.h>
-#include "const.h"
 #include "createdicomdir.h"
 
 class QSignalMapper;

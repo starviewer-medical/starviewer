@@ -19,7 +19,7 @@
 #include "scalestudy.h"
 #include "cachepool.h"
 #include "starviewersettings.h"
-#include "const.h"
+#include "errordcmtk.h"
 #include "cachelayer.h"
 #include "logging.h"
 #include "status.h"

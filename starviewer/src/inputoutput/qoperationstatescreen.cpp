@@ -11,7 +11,6 @@
 #include <QCloseEvent>
 #include <QHeaderView>
 #include "operation.h"
-#include "const.h"
 #include "starviewersettings.h"
 
 namespace udg {

@@ -10,7 +10,6 @@
 #include <QStringList>
 #include <QObject>
 
-#include "const.h"
 #include "createdicomdir.h"
 
 class QString;

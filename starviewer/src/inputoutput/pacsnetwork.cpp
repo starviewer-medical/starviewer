@@ -10,8 +10,7 @@
 
 #include <assoc.h>
 #include "status.h"
-#include "const.h"
-
+#include "errordcmtk.h"
 
 namespace udg {
 

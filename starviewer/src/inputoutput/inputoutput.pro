@@ -14,8 +14,7 @@ FORMS += qconfigurationscreenbase.ui \
          qoperationstatescreenbase.ui \
          qchooseoneobjectdialogbase.ui \
          queryscreenbase.ui
-HEADERS += const.h \
-           databaseconnection.h \
+HEADERS += databaseconnection.h \
            dicomimage.h \
            imagelist.h \
            pacsconnection.h \
@@ -67,7 +66,8 @@ HEADERS += const.h \
            qcreatedicomdir.h \
            qoperationstatescreen.h \
            qchooseoneobjectdialog.h \
-           queryscreen.h
+           queryscreen.h \
+ 	   errordcmtk.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            imagelist.cpp \

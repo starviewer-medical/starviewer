@@ -11,7 +11,7 @@
 #include "processimagesingleton.h"
 #include "status.h"
 #include "logging.h"
-#include "const.h"
+#include "errordcmtk.h"
 #include "pacsconnection.h"
 #include "starviewersettings.h"
 #include "imagelistsingleton.h"
