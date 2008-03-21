@@ -22,7 +22,7 @@ namespace udg{
     const OFConditionConst correct(correctDeclared );
 
     const OFConditionConst ERROR_DECLARED( 0 , 1000 , OF_error , "Unknow Error" );
-    const OFConditionConst ERROR(ERROR_DECLARED );
+    const OFConditionConst DCMTK_ERROR(ERROR_DECLARED );
 
     const OFConditionConst errorDMaskPatienId( 0 , 1100 , OF_error , "Error in Patient's Id Mask " );
     const OFConditionConst errorMaskPatientId(errorDMaskPatienId );
@@ -43,7 +43,7 @@ namespace udg{
     const OFConditionConst errorMaskStudyDate(errorDMaskStudyDate );
 
     const OFConditionConst errorDMaskStudyDescription( 0 , 1106 , OF_error , "Error in Study's Description Mask " );
-    const OFConditionConst errorMaskStudyDescription(errorMaskStudyDescription );
+    const OFConditionConst errorMaskStudyDescription(errorDMaskStudyDescription );
 
     const OFConditionConst error_DMaskStudyModality( 0 , 1107 , OF_error , "Error in Study's Modalities Mask " );
     const OFConditionConst error_MaskStudyModality(error_DMaskStudyModality );
@@ -76,7 +76,7 @@ namespace udg{
     const OFConditionConst errorMaskSeriesDate(errorDMaskSeriesDate );
 
     const OFConditionConst errorDMaskSeriesDescription( 0 , 1117 , OF_error , "Error in Series Description Mask " );
-    const OFConditionConst errorMaskSeriesDescription(errorMaskSeriesDescription );
+    const OFConditionConst errorMaskSeriesDescription(errorDMaskSeriesDescription );
 
     const OFConditionConst error_DMaskSeriesModality( 0 , 1118 , OF_error , "Error in Series Modalities Mask " );
     const OFConditionConst error_MaskSeriesModality(error_DMaskSeriesModality );
