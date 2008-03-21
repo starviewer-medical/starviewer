@@ -8,6 +8,8 @@
 
 #include "optimalviewpointvolume.h"
 
+#include <ctime> //inicialització srand()
+
 #include <QFile>
 #include <QTextStream>
 
@@ -958,7 +960,7 @@ void OptimalViewpointVolume::computeObscurances()
     m_image->GetIncrements( increments );
 
     unsigned char numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
-    ObscuranceThread * threads[numberOfThreads];
+    ObscuranceThread* threads[2];
 
     for ( unsigned char i = 0; i < numberOfThreads; ++i )
     {
