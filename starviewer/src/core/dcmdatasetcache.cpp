@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "dcmdatasetcache.h"
 
-#include "dcmtk/dcmdata/dcdatset.h"
+#include <dcmtk/dcmdata/dcdatset.h>
 
 #include <QReadLocker>
 #include <QWriteLocker>
