@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "strokesegmentationmethod.h"
 
+#include <ctime> // Per la utilització de clock()
+
 #include "itkImage.h"
 #include "itkImageRegionIterator.h"
 #include "itkBinaryThresholdImageFilter.h"
