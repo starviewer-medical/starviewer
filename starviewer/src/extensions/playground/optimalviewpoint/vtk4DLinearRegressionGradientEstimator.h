@@ -22,7 +22,7 @@
 
 #include "vtkEncodedGradientEstimator.h"
 
-class /*VTK_VOLUMERENDERING_EXPORT*/ vtk4DLinearRegressionGradientEstimator : public vtkEncodedGradientEstimator
+class vtk4DLinearRegressionGradientEstimator : public vtkEncodedGradientEstimator
 {
 public:
   vtkTypeRevisionMacro(vtk4DLinearRegressionGradientEstimator,vtkEncodedGradientEstimator);

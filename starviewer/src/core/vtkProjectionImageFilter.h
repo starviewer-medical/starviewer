@@ -51,7 +51,7 @@
 
 
 // template <template <class T> class TAccumulator >
-class VTK_IMAGING_EXPORT vtkProjectionImageFilter : public vtkThreadedImageAlgorithm
+class vtkProjectionImageFilter : public vtkThreadedImageAlgorithm
 {
 public:
     static vtkProjectionImageFilter *New();
