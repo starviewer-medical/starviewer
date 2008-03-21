@@ -108,7 +108,7 @@ void QExecuteOperationThread::run()
 //descarrega un estudi
 void QExecuteOperationThread::retrieveStudy(Operation operation)
 {
-    StarviewerProcessImageRetrieved *sProcessImg = new StarviewerProcessImageRetrieved::StarviewerProcessImageRetrieved();
+    StarviewerProcessImageRetrieved *sProcessImg = new StarviewerProcessImageRetrieved();
     QString studyUID = operation.getStudyUID();
     Status state,retState;
     CacheStudyDAL cacheStudyDAL;
@@ -232,7 +232,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     if ( freeSystemSpace == 0 )
     {
         enoughSpace = false;
-        return state.setStatus( ERROR );
+        return state.setStatus( DCMTK_ERROR );
     }
     pool.getPoolFreeSpace( freePoolSpace );
 
@@ -251,7 +251,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
         }
 
         freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
-        if ( freeSystemSpace == 0 ) return state.setStatus( ERROR );
+        if ( freeSystemSpace == 0 ) return state.setStatus( DCMTK_ERROR );
 
         pool.getPoolFreeSpace( freePoolSpace );
 
@@ -279,7 +279,7 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     PacsParameters pacs;
     StarviewerSettings settings;
     StoreImages storeImages;
-    StarviewerProcessImageStored *storedProcessImage = new StarviewerProcessImageStored::StarviewerProcessImageStored();
+    StarviewerProcessImageStored *storedProcessImage = new StarviewerProcessImageStored();
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
     INFO_LOG( "Preparant les dades per moure estudi " + operation.getStudyUID() + " al PACS " + operation.getPacsParameters().getAEPacs() );
