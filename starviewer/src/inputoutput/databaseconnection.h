@@ -10,7 +10,7 @@
 #include <QString>
 
 class QSemaphore;
-class sqlite3;
+struct sqlite3;
 
 namespace udg {
 

@@ -7,8 +7,8 @@
 #ifndef UDGSTOREIMAGES_H
 #define UDGSTOREIMAGES_H
 
-class T_ASC_Association;
-class T_ASC_Network;
+struct T_ASC_Association;
+struct T_ASC_Network;
 
 namespace udg {
 
