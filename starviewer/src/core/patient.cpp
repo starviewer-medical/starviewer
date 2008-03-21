@@ -243,18 +243,6 @@ Patient Patient::operator +=( const Patient &patient )
     return this;
 }
 
-Patient Patient::operator -( const Patient &patient )
-{
-    // TODO implementa'm!
-    DEBUG_LOG("Mètode per implementar");
-}
-
-Patient Patient::operator -=( const Patient &patient )
-{
-    // TODO implementa'm!
-    DEBUG_LOG("Mètode per implementar");
-}
-
 QString Patient::clearStrangeSymbols( QString patientName )
 {
     return patientName.toUpper().replace(QRegExp("[^A-Z ^\\d]"), " ").trimmed();

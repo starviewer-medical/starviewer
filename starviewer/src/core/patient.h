@@ -90,12 +90,6 @@ public:
     Patient operator+( const Patient &patient );
     Patient operator+=( const Patient &patient );
 
-    /// Operador de "resta" de pacient. Amb aquest operador podrem treure d'un objecte Patient la informació comuna entre dos Patient
-    /// sempre que siguin identificats com a el mateix pacient. Per exemple els estudis comuns en ambdòs parts quedarien fora en el resultat,
-    /// per tant el que s'esborraria seria la "intersecció" del seu conjunt d'estudis i/o sèries, imatges, etc
-    Patient operator-( const Patient &patient );
-    Patient operator-=( const Patient &patient );
-
     /// Retorna si es considera que es pot identificar com al mateix pacient ( a partir de l'ID i el nom ).
     /// No compara ni els estudis ni les sèries que conté, únicament la identificació de pacient.
     PatientsSimilarity compareTo( const Patient *patient );
