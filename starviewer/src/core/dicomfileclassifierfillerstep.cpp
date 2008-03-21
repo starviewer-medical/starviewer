@@ -56,7 +56,7 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
 {
     // comprovem primer que l'arxiu no estigui ja dins de l'estructura, el qual vol dir que ja l'han classificat
     bool found = false;
-    int i = 0;
+    unsigned int i = 0;
     while( i < m_input->getNumberOfPatients() && !found )
     {
         found = m_input->getPatient( i )->hasFile( file );
