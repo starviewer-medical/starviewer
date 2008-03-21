@@ -8,6 +8,8 @@
 
 #include "optimalviewpointvolume.h"
 
+#include <ctime> //Per l'inicialització amb time() de srand()
+
 #include <QFile>
 #include <QTextStream>
 
