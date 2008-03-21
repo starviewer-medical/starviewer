@@ -9,8 +9,8 @@
 
 #include <QStringList>
 
-#include "dcmtk/dcmdata/dcfilefo.h"
-#include "dcmtk/dcmdata/dcsequen.h"
+#include <dcmtk/dcmdata/dcfilefo.h>
+#include <dcmtk/dcmdata/dcsequen.h>
 
 namespace udg {
 

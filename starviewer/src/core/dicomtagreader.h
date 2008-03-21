@@ -10,8 +10,8 @@
 #include <QString>
 #include <QList>
 
-#include "dcmtk/dcmdata/dctagkey.h"
-#include "dcmtk/dcmdata/dcdeftag.h"
+#include <dcmtk/dcmdata/dctagkey.h>
+#include <dcmtk/dcmdata/dcdeftag.h>
 
 #include "dcmdatasetcache.h"
 

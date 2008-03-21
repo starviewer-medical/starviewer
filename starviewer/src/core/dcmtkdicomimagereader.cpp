@@ -11,7 +11,7 @@
 #include <QApplication> // pel "processEvents()"
 #include <cmath> // pel floor
 
-#include "dcmtk/dcmimgle/dcmimage.h"
+#include <dcmtk/dcmimgle/dcmimage.h>
 
 namespace udg {
 
