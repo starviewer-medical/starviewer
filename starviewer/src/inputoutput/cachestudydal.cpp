@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include <sqlite3.h>
 #include <QString>
+#include <ctime>
 
 #include "cachestudydal.h"
 #include "status.h"
