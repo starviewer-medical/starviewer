@@ -35,7 +35,7 @@ namespace udg {
     class OptimalViewpointVolume;
 };
 
-class /*VTK_VOLUMERENDERING_EXPORT*/ vtkVolumeRayCastCompositeFunctionOptimalViewpoint : public vtkVolumeRayCastFunction
+class vtkVolumeRayCastCompositeFunctionOptimalViewpoint : public vtkVolumeRayCastFunction
 {
 public:
   static vtkVolumeRayCastCompositeFunctionOptimalViewpoint *New();

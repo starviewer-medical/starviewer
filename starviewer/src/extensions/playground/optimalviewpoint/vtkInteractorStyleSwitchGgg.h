@@ -59,7 +59,7 @@ class vtkInteractorStyleJoystickCamera;
 class vtkInteractorStyleTrackballActorGgg;
 class vtkInteractorStyleTrackballCamera;
 
-class /*VTK_RENDERING_EXPORT*/ vtkInteractorStyleSwitchGgg : public vtkInteractorStyle
+class vtkInteractorStyleSwitchGgg : public vtkInteractorStyle
 {
 public:
   static vtkInteractorStyleSwitchGgg *New();
