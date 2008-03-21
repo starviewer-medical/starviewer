@@ -38,9 +38,6 @@ public:
     /// Retorna la prioritat que té assignada
     PriorityFlags getPriority() const { return m_priority; }
 
-    /// Ens diu si és un bon candidat per processar l'input \TODO cal passar paràmetres adicionals?
-    bool isCandidate();
-
     /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
     /// que li toca retorna fals, true altrament
     virtual bool fill() = 0;
