@@ -99,7 +99,7 @@ KeyImageNote* KeyImageNoteFileReader::read(const QString &filename)
     DEBUG_LOG( "KeyImageNoteFileReader::read: observableContext = " + observableContext );
 
     QString documentTitleExplanation = "";
-    if (documentTitle == "Rejected for Quality Reasons" or documentTitle == "Quality Issue")
+    if (documentTitle == "Rejected for Quality Reasons" || documentTitle == "Quality Issue")
     {
         documentTitleExplanation = this->searchQualityExplanationDocumentTitle(tree);
         DEBUG_LOG( "KeyImageNoteFileReader::read: documentTitleExplanation = " + documentTitleExplanation );
