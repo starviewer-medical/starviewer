@@ -6,9 +6,9 @@
 
 #include "pacsparameters.h"
 
-class T_ASC_Network;
-class T_ASC_Parameters;
-class T_ASC_Association;
+struct T_ASC_Network;
+struct T_ASC_Parameters;
+struct T_ASC_Association;
 class OFString;
 class OFCondition;
 class QString;

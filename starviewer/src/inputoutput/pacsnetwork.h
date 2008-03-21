@@ -12,7 +12,7 @@
  * Aquesta classe es un siglenton, ja que totes les connexions sempre ha d'utitlitzar el mateix network, no podem tenir diferents networks per al mateix  propòsit
  */
 
-class T_ASC_Network;
+struct T_ASC_Network;
 
 namespace udg {
 

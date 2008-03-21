@@ -20,8 +20,8 @@
 #ifndef RETRIEVEIMAGES
 #define RETRIEVEIMAGES
 
-class T_ASC_Network;
-class T_ASC_Association;
+struct T_ASC_Network;
+struct T_ASC_Association;
 class DcmDataset;
 
 /** This class helps to interactive with the pacs, retrieve images that match with the mask
