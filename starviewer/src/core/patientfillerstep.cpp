@@ -23,11 +23,6 @@ void PatientFillerStep::setInput( PatientFillerInput *input )
     m_input = input;
 }
 
-bool PatientFillerStep::isCandidate()
-{
-    // Comprovar si donats els flags de l'input i les pròpies flags és un candidat vàlid TODO per implementar
-}
-
 bool PatientFillerStep::operator<(const PatientFillerStep &patientFillerStep) const
 {
     return m_priority < patientFillerStep.getPriority();
