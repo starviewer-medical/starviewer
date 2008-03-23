@@ -54,7 +54,8 @@ CheckRequired() {
 
 # Configura el Buildname amb la release de la distribució i compilador
 SetBuildFromOS() {
-    DISTRO=`cat /etc/issue | grep -v "^$" | sed 's%\\\\.%%g'`
+    #DISTRO=`cat /etc/issue | grep -v "^$" | sed 's%\\\\.%%g'`
+    DISTRO=`cat /etc/*release* | head -1`
     GCCRELEASE=`gcc -dumpversion`
     BUILDNAME="$DISTRO gcc $GCCRELEASE"
     SetBuildFromUserArg 
@@ -120,7 +121,7 @@ case "$1" in
         shift
         if [ -z "$1" ]
         then
-        	# Fem check complet
+            # Fem check complet
             $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -D kwsFiles.txt
         else
             # Fem check dels fitxers indicats com a paràmetres
