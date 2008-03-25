@@ -19,15 +19,13 @@ namespace udg{
 
     const OFConditionConst DcmtkUnknowError( 0 , 1000 , OF_error , "Unknow Error" );
 
-    const OFConditionConst DcmtkNoConnectionError( 0 , 1120 , OF_error , "Not connection has been set" );
+    const OFConditionConst DcmtkNoConnectionError( 0 , 1120 , OF_error , "No connection has been set" );
 
-    const OFConditionConst DcmtkNoMaskError( 0 , 1121 , OF_error , "Not Mask has been set" );
+    const OFConditionConst DcmtkNoMaskError( 0 , 1121 , OF_error , "No Mask has been set" );
 
     const OFConditionConst DcmtkMaskInsertTagError( 0 , 1127 , OF_error , "Error inserting tag in Mask" );
 
     const OFConditionConst DcmtkCanNotConnectError( 0 , 1200 , OF_error , "Can't connect" );
-
-    const OFConditionConst DcmtkNoLocalAdrError( 0 , 1201 , OF_error , "I can't get the local adress" );
 
 }; //end namespace
 #endif
