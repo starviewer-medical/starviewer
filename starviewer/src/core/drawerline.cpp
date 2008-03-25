@@ -35,16 +35,28 @@ DrawerLine::~DrawerLine()
 
 void DrawerLine::setFirstPoint( double point[3] )
 {
-    for( int i = 0; i<3; i++ )
-        m_firstPoint[i] = point[i];
+    this->setFirstPoint( point[0], point[1], point[2] );
+}
+
+void DrawerLine::setFirstPoint( double x, double y, double z )
+{
+    m_firstPoint[0] = x;
+    m_firstPoint[1] = y;
+    m_firstPoint[2] = z;
 
     emit changed();
 }
 
 void DrawerLine::setSecondPoint( double point[3] )
 {
-    for( int i = 0; i<3; i++ )
-        m_secondPoint[i] = point[i];
+    this->setSecondPoint( point[0], point[1], point[2] );
+}
+
+void DrawerLine::setSecondPoint( double x, double y, double z )
+{
+    m_secondPoint[0] = x;
+    m_secondPoint[1] = y;
+    m_secondPoint[2] = z;
 
     emit changed();
 }
@@ -151,7 +163,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
 {
     double minX, maxX, minY, maxY;
     bool inside;
-  
+
     //determinem x i y màximes i mínimes segons la vista
     switch( view )
     {
@@ -166,7 +178,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxX = p1[0];
                 minX = p2[0];
             }
-            
+
             if ( p1[1] < p2[1] )
             {
                 minY = p1[1];
@@ -190,7 +202,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxX = p1[2];
                 minX = p2[2];
             }
-        
+
             if ( p1[1] < p2[1] )
             {
                 minY = p1[1];
@@ -214,7 +226,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxX = p1[0];
                 minX = p2[0];
             }
-        
+
             if ( p1[2] < p2[2] )
             {
                 minY = p1[2];
@@ -226,7 +238,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
                 minY = p2[2];
             }
             inside = ( m_firstPoint[0] <= maxX && m_firstPoint[0] >= minX && m_firstPoint[2] <= maxY && m_firstPoint[2] >= minY && m_secondPoint[0] <= maxX && m_secondPoint[0] >= minX && m_secondPoint[2] <= maxY && m_secondPoint[2] >= minY );
-            break; 
+            break;
     }
     return ( inside );
 }
