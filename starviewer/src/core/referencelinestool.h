@@ -9,12 +9,16 @@
 
 #include "tool.h"
 
+// fwd declarations
+class vtkMatrix4x4;
+
 namespace udg {
 
 class ReferenceLinesToolData;
 class Q2DViewer;
 class ImagePlane;
 class DrawerPolygon;
+class DrawerLine;
 
 /**
 Tool per aplicar reference lines
@@ -72,8 +76,14 @@ private:
     /// Ens guardem el frame of reference del nostre viewer, per no haver de "preguntar cada cop"
     QString m_myFrameOfReferenceUID;
 
-    /// Polígon que projectem
+    /// Polígon que projectem. De moment mantenim aquest poligon per questions de debug, tot i que no es mostrara per pantalla
+    /// TODO quan tinguem la tool prou madura podrem prescindir d'aquest poligon
     DrawerPolygon *m_projectedReferencePlane;
+    /// Intersecció que projectem
+    DrawerLine *m_projectedIntersection, *m_backgroundProjectedIntersection;
+
+    /// Matriu de projeccio per projectar els punts d'un pla sobre l'altre
+    vtkMatrix4x4 *m_projectionMatrix;
 };
 
 }
