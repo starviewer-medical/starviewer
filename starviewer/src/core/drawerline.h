@@ -30,9 +30,11 @@ public:
 
     ///Afegim el primer punt de la línia
     void setFirstPoint( double point[3] );
+    void setFirstPoint( double x, double y, double z );
 
     ///Afegim el segon punt de la línia
     void setSecondPoint( double point[3] );
+    void setSecondPoint( double x, double y, double z );
 
     vtkProp *getAsVtkProp();
 
@@ -41,15 +43,15 @@ public:
 
     /// Calcula la distancia entre punt i punt
     double computeDistance();
-    
+
     ///calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
-    
+
     ///mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
-    
+
 public slots:
-    
+
     void update( int representation );
 
 protected slots:
