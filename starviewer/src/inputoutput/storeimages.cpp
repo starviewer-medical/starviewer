@@ -18,6 +18,7 @@
 #include "logging.h"
 #include "pacsconnection.h"
 #include "starviewersettings.h"
+#include "errordcmtk.h"
 
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
@@ -208,6 +209,12 @@ Status StoreImages::store( ImageList imageList )
     Status state;
     ProcessImageSingleton* piSingleton;
     QString statusMessage;
+
+    //If not connection has been setted, return error because we need a PACS connection
+    if ( m_assoc == NULL )
+    {
+        return state.setStatus( DcmtkNoConnectionError );
+    }
 
     //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
     piSingleton=ProcessImageSingleton::getProcessImageSingleton();
