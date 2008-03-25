@@ -35,6 +35,7 @@ public:
      * @param point[] Punt que defineix el vèrtex del polígon
      */
     void addVertix( double point[3] );
+    void addVertix( double x, double y, double z );
 
     /**
      * Assigna el valor del vèrtex i-éssim del polígon. En aquest cas equival a
@@ -44,12 +45,13 @@ public:
      * @param point[] coordenades del vèrtex
      */
     void setVertix( int i, double point[3] );
+    void setVertix( int i, double x, double y, double z );
 
     vtkProp *getAsVtkProp();
-    
+
     ///calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
-    
+
     ///mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
@@ -65,7 +67,7 @@ private:
 
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
-    
+
     ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment del polígon
     bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
 
