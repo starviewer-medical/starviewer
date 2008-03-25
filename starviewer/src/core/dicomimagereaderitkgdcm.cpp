@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "itkgdcmdicomimagereader.h"
+#include "dicomimagereaderitkgdcm.h"
 
 #include "logging.h"
 #include "image.h"
@@ -15,16 +15,16 @@
 
 namespace udg {
 
-itkGdcmDICOMImageReader::itkGdcmDICOMImageReader(QObject *parent)
+DICOMImageReaderITKGdcm::DICOMImageReaderITKGdcm(QObject *parent)
  : DICOMImageReader(parent)
 {
 }
 
-itkGdcmDICOMImageReader::~itkGdcmDICOMImageReader()
+DICOMImageReaderITKGdcm::~DICOMImageReaderITKGdcm()
 {
 }
 
-bool itkGdcmDICOMImageReader::load()
+bool DICOMImageReaderITKGdcm::load()
 {
     bool ok = readyToLoad();
 

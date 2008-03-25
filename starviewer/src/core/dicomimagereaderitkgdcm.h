@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGITKGDCMDICOMIMAGEREADER_H
-#define UDGITKGDCMDICOMIMAGEREADER_H
+#ifndef UDGDICOMIMAGEREADERITKGDCM_H
+#define UDGDICOMIMAGEREADERITKGDCM_H
 
 #include "dicomimagereader.h"
 
@@ -16,13 +16,13 @@ Lector d'imatges DICOM que fa servir la interfície d'itk sobre Gdcm
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class itkGdcmDICOMImageReader : public DICOMImageReader
+class DICOMImageReaderITKGdcm : public DICOMImageReader
 {
 Q_OBJECT
 public:
-    itkGdcmDICOMImageReader(QObject *parent = 0);
+    DICOMImageReaderITKGdcm(QObject *parent = 0);
 
-    ~itkGdcmDICOMImageReader();
+    ~DICOMImageReaderITKGdcm();
 
     virtual bool load();
 };
