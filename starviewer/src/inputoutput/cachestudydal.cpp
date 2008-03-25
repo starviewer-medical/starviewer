@@ -6,7 +6,8 @@
  ***************************************************************************/
 #include <sqlite3.h>
 #include <QString>
-#include <ctime>
+#include <QDate>
+#include <QTime>
 
 #include "cachestudydal.h"
 #include "status.h"
@@ -864,30 +865,12 @@ QString CacheStudyDAL::replaceAsterisk( QString original )
 
 int CacheStudyDAL::getTime()
 {
-    //\TODO cad pot ser un QString i retornar l'enter amb el mètode ::toInt()
-    time_t hora;
-    char cad[5];
-    struct tm *tmPtr;
-
-    hora = time( NULL );
-    tmPtr = localtime( &hora );
-    strftime( cad , 5 , "%H%M" , tmPtr );
-
-    return atoi( cad );
+    return QTime::currentTime().toString("hhmm").toInt();
 }
 
 int CacheStudyDAL::getDate()
 {
-    //\TODO cad pot ser un QString i retornar l'enter amb el mètode ::toInt()
-    time_t hora;
-    char cad[9];
-    struct tm *tmPtr;
-
-    hora = time( NULL );
-    tmPtr = localtime( &hora );
-    strftime( cad , 9 , "%Y%m%d" , tmPtr );
-
-    return atoi( cad );
+    return QDate::currentDate().toString("yyyyMMdd").toInt();
 }
 
 
