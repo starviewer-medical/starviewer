@@ -489,7 +489,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     {
         if ( ASC_countAcceptedPresentationContexts(m_params)  ==  0 )
         {
-            return state.setStatus( error_NoConnect );
+            return state.setStatus( DcmtkCanNotConnectError );
         }
     }
     else return state.setStatus( cond );
@@ -501,7 +501,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     }
 #endif
 
-   return state.setStatus( Correct );
+   return state.setStatus( DcmtkNoError );
 }
 
 void PacsServer::disconnect()

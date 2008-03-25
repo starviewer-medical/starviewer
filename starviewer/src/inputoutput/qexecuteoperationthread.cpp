@@ -232,7 +232,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     if ( freeSystemSpace == 0 )
     {
         enoughSpace = false;
-        return state.setStatus( DCMTK_ERROR );
+        return state.setStatus( DcmtkUnknowError );
     }
     pool.getPoolFreeSpace( freePoolSpace );
 
@@ -251,7 +251,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
         }
 
         freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
-        if ( freeSystemSpace == 0 ) return state.setStatus( DCMTK_ERROR );
+        if ( freeSystemSpace == 0 ) return state.setStatus( DcmtkUnknowError );
 
         pool.getPoolFreeSpace( freePoolSpace );
 
@@ -269,7 +269,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     else
         enoughSpace = true;
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status QExecuteOperationThread::moveStudy( Operation operation )

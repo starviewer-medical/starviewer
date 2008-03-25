@@ -115,13 +115,13 @@ Status QueryPacs::query()
     //If not connection has been setted, return error because we need a PACS connection
     if ( m_assoc == NULL )
     {
-        return state.setStatus( error_NoConnection );
+        return state.setStatus( DcmtkNoConnectionError );
     }
 
     //If not mask has been setted, return error, we need a search mask
     if ( m_mask == NULL )
     {
-        return state.setStatus( error_NoMask );
+        return state.setStatus( DcmtkNoMaskError );
     }
 
     /* figure out which of the accepted presentation contexts should be used */

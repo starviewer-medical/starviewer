@@ -75,17 +75,17 @@ Status DicomMask::setPatientId( QString patientID )
     elem->putString( qPrintable(patientID) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag PATIENT ID in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setPatientName( QString patientName )
@@ -98,15 +98,15 @@ Status DicomMask::setPatientName( QString patientName )
     elem->putString( qPrintable(patientName) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setPatientBirth( QString date )
@@ -116,21 +116,21 @@ Status DicomMask::setPatientBirth( QString date )
 
     retrieveLevel( StudyMask );
 
-    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( error_MaskInsertTag );
+    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( DcmtkMaskInsertTagError );
 
     elem->putString( qPrintable(date) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setPatientSex( QString patientSex )
@@ -143,16 +143,16 @@ Status DicomMask::setPatientSex( QString patientSex )
     elem->putString( qPrintable(patientSex) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setPatientAge( QString patientAge )
@@ -166,16 +166,16 @@ Status DicomMask::setPatientAge( QString patientAge )
 
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 
@@ -264,16 +264,16 @@ Status DicomMask:: setStudyId( QString studyID )
 
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag StudyMask DATE in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setStudyDate( QString date )
@@ -284,13 +284,13 @@ Status DicomMask:: setStudyDate( QString date )
     retrieveLevel( StudyMask );
 
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
-    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( error_MaskInsertTag );
+    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( DcmtkMaskInsertTagError );
 
     elem->putString( qPrintable(date) );
 
     if ( elem->error() != EC_Normal )
     {
-       return state.setStatus( error_MaskInsertTag );
+       return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag StudyMask DATE in the search mask
@@ -298,10 +298,10 @@ Status DicomMask:: setStudyDate( QString date )
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setStudyDescription( QString desc )
@@ -314,7 +314,7 @@ Status DicomMask:: setStudyDescription( QString desc )
     elem->putString( qPrintable(desc) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag StudyMask DESCRIPTION in the search mask
@@ -322,10 +322,10 @@ Status DicomMask:: setStudyDescription( QString desc )
 
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setStudyModality( QString modality )
@@ -338,17 +338,17 @@ Status DicomMask:: setStudyModality( QString modality )
     elem->putString( qPrintable(modality) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag STUDY Modality in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setStudyTime( QString time )
@@ -361,17 +361,17 @@ Status DicomMask:: setStudyTime( QString time )
     elem->putString( qPrintable(time) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag STUDY TIME in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setStudyUID( QString studyUID )
@@ -384,17 +384,17 @@ Status DicomMask:: setStudyUID( QString studyUID )
     elem->putString( qPrintable(studyUID) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag STUDY UID in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setInstitutionName( QString institution )
@@ -407,16 +407,16 @@ Status DicomMask:: setInstitutionName( QString institution )
     elem->putString( qPrintable(institution) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag Institution name in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setAccessionNumber( QString accession )
@@ -433,16 +433,16 @@ Status DicomMask:: setAccessionNumber( QString accession )
 
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag Accession Number in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setReferringPhysiciansName( QString physiciansName )
@@ -457,15 +457,15 @@ Status DicomMask::setReferringPhysiciansName( QString physiciansName )
 
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 /***************************************************************   GET **********************************************/
@@ -608,17 +608,17 @@ Status DicomMask:: setSeriesNumber( QString seriesNumber )
     elem->putString( qPrintable(seriesNumber) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag series Number in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesDate( QString date )
@@ -629,20 +629,20 @@ Status DicomMask:: setSeriesDate( QString date )
     retrieveLevel( SeriesMask );
 
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
-    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() !=  0 )return state.setStatus( error_MaskInsertTag );
+    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() !=  0 )return state.setStatus( DcmtkMaskInsertTagError );
 
     elem->putString( qPrintable(date) );
     if ( elem->error() != EC_Normal )
     {
-       return state.setStatus( error_MaskInsertTag );
+       return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesDescription( QString desc )
@@ -655,16 +655,16 @@ Status DicomMask:: setSeriesDescription( QString desc )
     elem->putString( qPrintable(desc) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesModality( QString modality )
@@ -677,16 +677,16 @@ Status DicomMask:: setSeriesModality( QString modality )
     elem->putString( qPrintable(modality) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesTime( QString time )
@@ -697,21 +697,21 @@ Status DicomMask:: setSeriesTime( QString time )
     retrieveLevel( SeriesMask );
 
     //la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
-    if ( time.length() != 4 && time.length() != 5 && time.length() != 9 && time.length() !=0 ) return state.setStatus( error_MaskInsertTag );
+    if ( time.length() != 4 && time.length() != 5 && time.length() != 9 && time.length() !=0 ) return state.setStatus( DcmtkMaskInsertTagError );
 
     elem->putString( qPrintable(time) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesUID( QString seriesUID )
@@ -724,16 +724,16 @@ Status DicomMask:: setSeriesUID( QString seriesUID )
     elem->putString( qPrintable(seriesUID) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesOperator( QString name )
@@ -746,16 +746,16 @@ Status DicomMask:: setSeriesOperator( QString name )
     elem->putString( qPrintable(name) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesBodyPartExaminated( QString part )
@@ -768,16 +768,16 @@ Status DicomMask:: setSeriesBodyPartExaminated( QString part )
     elem->putString( qPrintable(part) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSeriesProtocolName( QString name )
@@ -790,16 +790,16 @@ Status DicomMask:: setSeriesProtocolName( QString name )
     elem->putString( qPrintable(name) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setRequestAttributeSequence( QString requestedProcedureID, QString scheduledProcedureStepID )
@@ -821,10 +821,10 @@ Status DicomMask::setRequestAttributeSequence( QString requestedProcedureID, QSt
 
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setPPSStartDate( QString startDate )
@@ -838,16 +838,16 @@ Status DicomMask::setPPSStartDate( QString startDate )
     elem->putString( qPrintable(startDate) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag);
+        return state.setStatus( DcmtkMaskInsertTagError);
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask::setPPStartTime( QString startTime )
@@ -861,16 +861,16 @@ Status DicomMask::setPPStartTime( QString startTime )
     elem->putString( qPrintable(startTime) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag);
+        return state.setStatus( DcmtkMaskInsertTagError);
     }
 
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 /************************************************ GET **************************************************************/
@@ -1079,15 +1079,15 @@ Status DicomMask:: setImageNumber( QString imgNum )
     elem->putString( qPrintable(imgNum) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 Status DicomMask:: setSOPInstanceUID( QString SOPInstanceUID )
@@ -1100,16 +1100,16 @@ Status DicomMask:: setSOPInstanceUID( QString SOPInstanceUID )
     elem->putString( qPrintable(SOPInstanceUID) );
     if ( elem->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
 
     //insert the tag SOPInstanceUID in the search mask
     m_mask->insert( elem , OFTrue );
     if ( m_mask->error() != EC_Normal )
     {
-        return state.setStatus( error_MaskInsertTag );
+        return state.setStatus( DcmtkMaskInsertTagError );
     }
-    return state.setStatus( Correct );
+    return state.setStatus( DcmtkNoError );
 }
 
 QString DicomMask::getImageNumber() const
