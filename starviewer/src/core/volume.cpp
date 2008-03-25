@@ -8,9 +8,9 @@
 #define UDGVOLUME_CPP
 
 #include "dicomimagereader.h"
-#include "vtkdicomimagereader.h"
-#include "dcmtkdicomimagereader.h"
-#include "itkgdcmdicomimagereader.h"
+#include "dicomimagereadervtk.h"
+#include "dicomimagereaderdcmtk.h"
+#include "dicomimagereaderitkgdcm.h"
 
 // VTK
 #include <vtkImageData.h>
@@ -425,15 +425,15 @@ void Volume::loadSlicesWithReaders( int method )
     switch( method )
     {
     case 0: // vtk
-        reader = new vtkDICOMImageReader;
+        reader = new DICOMImageReaderVTK;
         break;
 
     case 1: // dcmtk
-        reader = new dcmtkDICOMImageReader;
+        reader = new DICOMImageReaderDCMTK;
         break;
 
     case 2: // itkGDCM
-        reader = new itkGdcmDICOMImageReader;
+        reader = new DICOMImageReaderITKGdcm;
         break;
 
     default:

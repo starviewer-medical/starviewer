@@ -4,25 +4,25 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGVTKDICOMIMAGEREADER_H
-#define UDGVTKDICOMIMAGEREADER_H
+#ifndef UDGDICOMIMAGEREADERDCMTK_H
+#define UDGDICOMIMAGEREADERDCMTK_H
 
 #include "dicomimagereader.h"
 
 namespace udg {
 
 /**
-Lector d'imatges DICOM que fa servir els lectors DICOM de vtk
+Lector d'imatges DICOM que fa servir les llibreries dcmtk per llegir
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class vtkDICOMImageReader : public DICOMImageReader
+class DICOMImageReaderDCMTK : public DICOMImageReader
 {
 Q_OBJECT
 public:
-    vtkDICOMImageReader(QObject *parent = 0);
+    DICOMImageReaderDCMTK(QObject *parent = 0);
 
-    ~vtkDICOMImageReader();
+    ~DICOMImageReaderDCMTK();
 
     virtual bool load();
 };

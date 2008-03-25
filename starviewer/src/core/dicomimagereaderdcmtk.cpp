@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "dcmtkdicomimagereader.h"
+#include "dicomimagereaderdcmtk.h"
 
 #include "logging.h"
 #include "image.h"
@@ -15,16 +15,16 @@
 
 namespace udg {
 
-dcmtkDICOMImageReader::dcmtkDICOMImageReader(QObject *parent)
+DICOMImageReaderDCMTK::DICOMImageReaderDCMTK(QObject *parent)
  : DICOMImageReader(parent)
 {
 }
 
-dcmtkDICOMImageReader::~dcmtkDICOMImageReader()
+DICOMImageReaderDCMTK::~DICOMImageReaderDCMTK()
 {
 }
 
-bool dcmtkDICOMImageReader::load()
+bool DICOMImageReaderDCMTK::load()
 {
     bool ok = readyToLoad();
 

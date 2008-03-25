@@ -86,9 +86,9 @@ HEADERS += extensionfactory.h \
            dcmdatasetcache.h \
            temporaldimensionfillerstep.h \
            dicomimagereader.h \
-           itkgdcmdicomimagereader.h \
-           vtkdicomimagereader.h \
-           dcmtkdicomimagereader.h \
+           dicomimagereaderitkgdcm.h \
+           dicomimagereadervtk.h \
+           dicomimagereaderdcmtk.h \
            volumegeneratorstep.h \
            patientbrowsermenu.h \
            patientbrowsermenubasicitem.h \
@@ -215,9 +215,9 @@ SOURCES += extensionmediator.cpp \
            dcmdatasetcache.cpp \
            temporaldimensionfillerstep.cpp \
            dicomimagereader.cpp \
-           itkgdcmdicomimagereader.cpp \
-           vtkdicomimagereader.cpp \
-           dcmtkdicomimagereader.cpp \
+           dicomimagereaderitkgdcm.cpp \
+           dicomimagereadervtk.cpp \
+           dicomimagereaderdcmtk.cpp \
            volumegeneratorstep.cpp \
            patientbrowsermenu.cpp \
            patientbrowsermenubasicitem.cpp \

@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "vtkdicomimagereader.h"
+#include "dicomimagereadervtk.h"
 
 #include "image.h"
 #include <QApplication> // pel "processEvents()"
@@ -14,16 +14,16 @@
 
 namespace udg {
 
-vtkDICOMImageReader::vtkDICOMImageReader(QObject *parent)
+DICOMImageReaderVTK::DICOMImageReaderVTK(QObject *parent)
  : DICOMImageReader(parent)
 {
 }
 
-vtkDICOMImageReader::~vtkDICOMImageReader()
+DICOMImageReaderVTK::~DICOMImageReaderVTK()
 {
 }
 
-bool vtkDICOMImageReader::load()
+bool DICOMImageReaderVTK::load()
 {
     bool ok = readyToLoad();
 
@@ -38,7 +38,7 @@ bool vtkDICOMImageReader::load()
         // Per cada imatge
         foreach( Image *image, m_inputImageList )
         {
-            ::vtkDICOMImageReader *reader = ::vtkDICOMImageReader::New();
+            vtkDICOMImageReader *reader = vtkDICOMImageReader::New();
             reader->SetFileName( qPrintable( image->getPath() ) );
             reader->Update();
             dicomBuffer = (unsigned char *)reader->GetOutput()->GetScalarPointer();
