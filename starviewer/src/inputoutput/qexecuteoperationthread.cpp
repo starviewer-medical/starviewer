@@ -269,7 +269,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     else
         enoughSpace = true;
 
-    return state.setStatus( CORRECT );
+    return state.setStatus( Correct );
 }
 
 Status QExecuteOperationThread::moveStudy( Operation operation )
