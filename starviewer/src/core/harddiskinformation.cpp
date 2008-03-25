@@ -49,16 +49,13 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
     bool existsError = true;
 
 #ifdef _WIN32
-#error Mètode no comprovat en win32. Cal descomentar i comprovar-ho.
-    /*
     ULARGE_INTEGER totalBytes;
 
-    if ( GetDiskFreeSpaceExA(path.toAscii(), null, &totalBytes, null) )
+    if ( GetDiskFreeSpaceExA(path.toAscii(), NULL, &totalBytes, NULL) )
     {
         total = static_cast<quint64>(totalBytes.QuadPart);
         existsError = false;
     }
-    */
 #else
     struct statvfs fsd;
 
@@ -84,16 +81,13 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
     bool existsError = true;
 
 #ifdef _WIN32
-#error Mètode no comprovat en win32. Cal descomentar i comprovar-ho.
-    /*
     ULARGE_INTEGER freeBytes;
 
-    if ( GetDiskFreeSpaceExA(path.toAscii(), &freeBytes, null, null) )
+    if ( GetDiskFreeSpaceExA(path.toAscii(), &freeBytes, NULL, NULL) )
     {
         total = static_cast<quint64>(freeBytes.QuadPart);
         existsError = false;
     }
-    */
 #else
     struct statvfs fsd;
 
