@@ -94,7 +94,7 @@ Status MultipleQueryStudy::StartQueries()
     //si no hi ha error retornem l'status ok
     if ( !error )
     {
-        state.setStatus( Correct );
+        state.setStatus( DcmtkNoError );
     }
 
     return state;
