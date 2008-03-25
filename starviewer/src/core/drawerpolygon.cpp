@@ -49,18 +49,6 @@ void DrawerPolygon::addVertix( double x, double y, double z )
 
 void DrawerPolygon::setVertix( int i, double point[3] )
 {
-//     if( i >= m_pointsList.count() || i < 0 )
-//         addVertix( point );
-//     else
-//     {
-//         QVector<double> array(3);
-//         array = m_pointsList.takeAt(i);
-//         for( int j=0; j < 3; j++ )
-//             array[j] = point[j];
-//
-//         m_pointsList.insert(i,array);
-//         emit changed();
-//     }
     this->setVertix( i , point[0], point[1], point[2] );
 }
 
