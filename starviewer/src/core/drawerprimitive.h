@@ -65,7 +65,7 @@ public:
     void setFilled( bool fill );
     bool isFilled() const;
 
-    enum LinePatternType{ ContinuousLinePattern = 0xFFFF, DiscontinuousLinePattern = 2000 };
+    enum LinePatternType{ ContinuousLinePattern = 0xFFFF, DiscontinuousLinePattern = 0xFF00 };
     /**
      * Mètodes per configurar el patró de la línia
      */
@@ -99,12 +99,12 @@ public:
      * @return Cert si s'ha modificat alguna propietat des de l'últim "update". Fals altrament
      */
     bool isModified() const;
-    
+
     /**
     * Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
     */
     virtual double getDistanceToPoint( double *point3D )=0;
-    
+
     /**
      * Aquest mètode diu si la primitiva està dins dels límits especificats per paràmetre.
      * Ens permetrà saber si una determinada primitiva està dins de la zona d'esborrat.
