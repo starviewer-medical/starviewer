@@ -65,7 +65,7 @@ Status CacheLayer::clearCache()
     }
     else
     {
-        return state.setStatus( CORRECT );
+        return state.setStatus( Correct );
     }
 }
 
@@ -112,7 +112,7 @@ Status CacheLayer::deleteOldStudies()
     {
         return state;
     }
-    else return state.setStatus( CORRECT );
+    else return state.setStatus( Correct );
 }
 
 Status CacheLayer::deleteOldStudies( int MbytesToErase )
@@ -153,7 +153,7 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
     {
         return state;
     }
-    else return state.setStatus( CORRECT );
+    else return state.setStatus( Correct );
 }
 
 CacheLayer::~CacheLayer()

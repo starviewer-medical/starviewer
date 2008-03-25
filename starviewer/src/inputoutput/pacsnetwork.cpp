@@ -47,7 +47,7 @@ Status PacsNetwork::createNetworkRetrieve( int port , int timeout )
         }
     }
 
-    return state.setStatus( CORRECT );
+    return state.setStatus( Correct );
 }
 
 Status PacsNetwork::createNetworkQuery( int timeout )
@@ -65,7 +65,7 @@ Status PacsNetwork::createNetworkQuery( int timeout )
         }
     }
 
-    return state.setStatus( CORRECT );
+    return state.setStatus( Correct );
 }
 
 T_ASC_Network * PacsNetwork::getNetworkQuery()

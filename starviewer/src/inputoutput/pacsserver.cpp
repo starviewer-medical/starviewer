@@ -501,7 +501,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     }
 #endif
 
-   return state.setStatus( CORRECT );
+   return state.setStatus( Correct );
 }
 
 void PacsServer::disconnect()
