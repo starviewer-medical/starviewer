@@ -82,8 +82,6 @@ private:
     /// Intersecció que projectem
     DrawerLine *m_projectedIntersection, *m_backgroundProjectedIntersection;
 
-    /// Matriu de projeccio per projectar els punts d'un pla sobre l'altre
-    vtkMatrix4x4 *m_projectionMatrix;
 };
 
 }

@@ -16,7 +16,6 @@
 #include "drawerline.h"
 #include "mathtools.h"
 // vtk
-#include <vtkMatrix4x4.h> // per les transformacions amb matrius del pla
 #include <vtkPlane.h>
 
 namespace udg {
@@ -34,8 +33,6 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
     m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
-    // creem la matriu de projeccio
-    m_projectionMatrix = vtkMatrix4x4::New();
 
     resurrectPolygon();
     refreshReferenceViewerData();
@@ -130,91 +127,65 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         // implementem primer el sistema simple d'en clunie. A partir dels plans
         // fem una projecció del pla de referència sobre el pla del localitzador
 
-        // Primer de tot obtenim les dades dels plans de referencia i localitzador per fer els calculs
+        // Primer de tot obtenim les dades del pla de referencia
         double referenceOrigin[3], referenceRowVector[3], referenceColumnVector[3];
         referencePlane->getOrigin( referenceOrigin );
         referencePlane->getRowDirectionVector( referenceRowVector );
         referencePlane->getColumnDirectionVector( referenceColumnVector );
 
-        // recollim les dades del pla del localitzador sobre el qual volem projectar el de referència
-        double localizerRowVector[3], localizerColumnVector[3], localizerNormalVector[3], localizerOrigin[3];
-        localizerPlane->getRowDirectionVector( localizerRowVector );
-        localizerPlane->getColumnDirectionVector( localizerColumnVector );
-        localizerPlane->getNormalVector( localizerNormalVector );
-        localizerPlane->getOrigin( localizerOrigin );
-
-        // a partir d'aquestes dades creem la matriu de projeccio, que projectara els punts
-        // del pla de referencia sobre el pla del localitzador
-        m_projectionMatrix->Identity();
-        for( int column = 0; column < 3; column++ )
+        // cal calcular els els 4 punts del pla de referencia
+        // aquests mateixos punts serviran tant per la projeccio total del pla com per
+        // calcular els punts de tall dels plans per la solucio 2 ( la que s'aplica en realitat )
+        double referencePlaneVertix1[3],referencePlaneVertix2[3],referencePlaneVertix3[3],referencePlaneVertix4[3];
+        for( int i = 0; i < 3; i++ )
         {
-            m_projectionMatrix->SetElement(0,column,localizerRowVector[ column ]);
-            m_projectionMatrix->SetElement(1,column,localizerColumnVector[ column ]);
-            m_projectionMatrix->SetElement(2,column,localizerNormalVector[ column ]);
-            // aquí apliquem el desplaçament després de la rotació per reubicar
-            m_projectionMatrix->SetElement(column,3,localizerOrigin[column]);
+            referencePlaneVertix1[i] = referenceOrigin[i];
+            referencePlaneVertix2[i] = referenceOrigin[i] + referenceRowVector[i]*referencePlane->getRowLength();
+            referencePlaneVertix3[i] = referenceOrigin[i] + referenceRowVector[i]*referencePlane->getRowLength() + referenceColumnVector[i]*referencePlane->getColumnLength();
+            referencePlaneVertix4[i] = referenceOrigin[i] + referenceColumnVector[i]*referencePlane->getColumnLength();
         }
 
         //
         // Solucio 1: projeccio de plans
         //
 
-        // cal calcular els els 4 punts del pla a projectar
-        // necessitem que aquestes coordenades siguin homogènies pels càlculs de matriu que fem amb la vtkMatrix4x4
-        double tlhc[4], trhc[4], brhc[4], blhc[4];
-        tlhc[3] = 1.0;
-        trhc[3] = 1.0;
-        brhc[3] = 1.0;
-        blhc[3] = 1.0;
-
-        // aprofitem aquest pas per calcular els punts del pla per la solucio 2 ( la que s'aplica en realitat )
-        double referencePlaneVertix1[3],referencePlaneVertix2[3],referencePlaneVertix3[3],referencePlaneVertix4[3];
-
-        for( int i = 0; i < 3; i++ )
-        {
-            referencePlaneVertix1[i] = tlhc[i] = referenceOrigin[i];
-            referencePlaneVertix2[i] = trhc[i] = referenceOrigin[i] + referenceRowVector[i]*referencePlane->getRowLength();
-            referencePlaneVertix3[i] = brhc[i] = referenceOrigin[i] + referenceRowVector[i]*referencePlane->getRowLength() + referenceColumnVector[i]*referencePlane->getColumnLength();
-            referencePlaneVertix4[i] = blhc[i] = referenceOrigin[i] + referenceColumnVector[i]*referencePlane->getColumnLength();
-        }
         // !!! ATENCIO !!!!
         // si volem estalviar calculs quan no es mostra el poligon projectat podem comentar aquest bloc fins arribar a l'inici
         // de la "Solucio 2"
 
         // ara calculem les projeccions de cada punt del pla de referencia
-        // primer traslladem tots els punts
-/*
-        for( int i = 0; i < 3; i++ )
-        {
-            tlhc[i] -= localizerOrigin[i];
-            trhc[i] -= localizerOrigin[i];
-            brhc[i] -= localizerOrigin[i];
-            blhc[i] -= localizerOrigin[i];
-        }
-        // apliquem la projecció a cada punt del pla que volem projectar
-        m_projectionMatrix->MultiplyPoint( tlhc, tlhc );
-        m_projectionMatrix->MultiplyPoint( trhc, trhc );
-        m_projectionMatrix->MultiplyPoint( brhc, brhc );
-        m_projectionMatrix->MultiplyPoint( blhc, blhc );
-        // definim el pla projectat
-        m_projectedReferencePlane->setVertix( 0, tlhc[0], tlhc[1], tlhc[2] );
-        m_projectedReferencePlane->setVertix( 1, trhc[0], trhc[1], trhc[2] );
-        m_projectedReferencePlane->setVertix( 2, brhc[0], brhc[1], brhc[2] );
-        m_projectedReferencePlane->setVertix( 3, blhc[0], blhc[1], blhc[2] );
-*/
+//         double projectedVertix1[3],projectedVertix2[3],projectedVertix3[3],projectedVertix4[3];
+//
+//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix1, projectedVertix1 );
+//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix2, projectedVertix2 );
+//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix3, projectedVertix3 );
+//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix4, projectedVertix4 );
+//
+//         // donem els punts al poligon a dibuixar
+//         m_projectedReferencePlane->setVertix( 0, projectedVertix1 );
+//         m_projectedReferencePlane->setVertix( 1, projectedVertix2 );
+//         m_projectedReferencePlane->setVertix( 2, projectedVertix3 );
+//         m_projectedReferencePlane->setVertix( 3, projectedVertix4 );
+//         m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+
         //
         // Solucio 2: projeccio de la interseccio dels plans
         //
-
         /// llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 
-        // primer calculem totes les possibles interseccions
+        // recollim les dades del pla del localitzador sobre el qual volem projectar el de referència
+        double localizerNormalVector[3], localizerOrigin[3];
+        localizerPlane->getNormalVector( localizerNormalVector );
+        localizerPlane->getOrigin( localizerOrigin );
+
+        // calculem totes les possibles interseccions
         int numberOfIntersections = 0;
         double t, firstIntersectionPoint[3], secondIntersectionPoint[3];
         if( vtkPlane::IntersectWithLine( referencePlaneVertix1, referencePlaneVertix2, localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
         {
             DEBUG_LOG( QString("Segment P1-P2 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
             numberOfIntersections = 1;
+
             if( vtkPlane::IntersectWithLine( referencePlaneVertix3, referencePlaneVertix4, localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
             {
                 DEBUG_LOG( QString("Segment P3-P4 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
@@ -225,36 +196,26 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         {
             DEBUG_LOG( QString("Segment P2-P3 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
             numberOfIntersections = 1;
+
             if( vtkPlane::IntersectWithLine( referencePlaneVertix4, referencePlaneVertix1, localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
             {
                 DEBUG_LOG( QString("Segment P4-P1 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
                 numberOfIntersections = 2;
             }
         }
-
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
         DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
         if( numberOfIntersections == 2 )
         {
-            double firstHomogeneousIntersectionPoint[4], secondHomogeneousIntersectionPoint[4];
+            m_2DViewer->projectPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
+            m_2DViewer->projectPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
 
-            firstHomogeneousIntersectionPoint[3] = secondHomogeneousIntersectionPoint[3] = 1.0;
-            // traslladem a l'origen del localitzador
-            for( int i = 0; i<3; i++ )
-            {
-                firstHomogeneousIntersectionPoint[i] = firstIntersectionPoint[i] - localizerOrigin[i];
-                secondHomogeneousIntersectionPoint[i] = secondIntersectionPoint[i] - localizerOrigin[i];
-            }
-            // projectem els punts amb la matriu
-            m_projectionMatrix->MultiplyPoint( firstHomogeneousIntersectionPoint, firstHomogeneousIntersectionPoint );
-            m_projectionMatrix->MultiplyPoint( secondHomogeneousIntersectionPoint, secondHomogeneousIntersectionPoint );
-
-            m_projectedIntersection->setFirstPoint( firstHomogeneousIntersectionPoint[0], firstHomogeneousIntersectionPoint[1], firstHomogeneousIntersectionPoint[2] );
-            m_projectedIntersection->setSecondPoint( secondHomogeneousIntersectionPoint[0], secondHomogeneousIntersectionPoint[1], secondHomogeneousIntersectionPoint[2] );
-
+            // linia discontinua
+            m_projectedIntersection->setFirstPoint( firstIntersectionPoint );
+            m_projectedIntersection->setSecondPoint( secondIntersectionPoint );
             // linia de background
-            m_backgroundProjectedIntersection->setFirstPoint( firstHomogeneousIntersectionPoint[0], firstHomogeneousIntersectionPoint[1], firstHomogeneousIntersectionPoint[2] );
-            m_backgroundProjectedIntersection->setSecondPoint( secondHomogeneousIntersectionPoint[0], secondHomogeneousIntersectionPoint[1], secondHomogeneousIntersectionPoint[2] );
+            m_backgroundProjectedIntersection->setFirstPoint( firstIntersectionPoint );
+            m_backgroundProjectedIntersection->setSecondPoint( secondIntersectionPoint );
 
             m_2DViewer->getDrawer()->showGroup("ReferenceLines");
         }
@@ -262,6 +223,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         {
             m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
         }
+
     }
 }
 
