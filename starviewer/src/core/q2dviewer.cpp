@@ -77,6 +77,9 @@
 #include <vtkImageShiftScale.h>
 #include <vtkWindowLevelLookupTable.h>
 
+// projeccio de punts
+#include <vtkMatrix4x4.h>
+
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
@@ -1691,6 +1694,50 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
         }
     }
     return imagePlane;
+}
+
+void Q2DViewer::projectPointToCurrentDisplayedImage( double pointToProject[3], double projectedPoint[3] )
+{
+    ImagePlane *currentPlane = this->getCurrentImagePlane();
+    if( currentPlane )
+    {
+
+        // recollim les dades del pla actual sobre el qual volem projectar el punt de l'altre pla
+        double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneNormalVector[3], currentPlaneOrigin[3];
+        currentPlane->getRowDirectionVector( currentPlaneRowVector );
+        currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
+        currentPlane->getNormalVector( currentPlaneNormalVector );
+        currentPlane->getOrigin( currentPlaneOrigin );
+
+        // a partir d'aquestes dades creem la matriu de projeccio, que projectara els punts
+        // del pla de referencia sobre el pla del localitzador
+        vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
+        projectionMatrix->Identity();
+        for( int column = 0; column < 3; column++ )
+        {
+            projectionMatrix->SetElement(0,column,currentPlaneRowVector[ column ]);
+            projectionMatrix->SetElement(1,column,currentPlaneColumnVector[ column ]);
+            projectionMatrix->SetElement(2,column,currentPlaneNormalVector[ column ]);
+            // aquí apliquem el desplaçament després de la rotació per reubicar
+            projectionMatrix->SetElement(column,3,currentPlaneOrigin[column]);
+        }
+
+        // un cop tenim la matriu podem fer la projeccio
+        // necessitem el punt en coordenades homogenies
+        double homogeneousPoint[4] = { pointToProject[0] - currentPlaneOrigin[0],
+            pointToProject[1] - currentPlaneOrigin[1],
+            pointToProject[2] - currentPlaneOrigin[2],
+            1.0 };
+
+            // projectem els punts amb la matriu
+        projectionMatrix->MultiplyPoint( homogeneousPoint, homogeneousPoint );
+
+        for( int i = 0; i<3; i++ )
+            projectedPoint[i] = homogeneousPoint[i];
+    }
+    else
+        DEBUG_LOG("No hi ha cap pla actual valid");
+
 }
 
 Drawer *Q2DViewer::getDrawer() const

@@ -224,6 +224,14 @@ public:
      */
     ImagePlane *getCurrentImagePlane();
 
+    /**
+     * donat un punt  ens dona la projeccio d'aquest punt sobre el pla actual
+     * @param pointToProject[]
+     * @param pointPlane
+     * @param projectedPoint[]
+     */
+    void projectPointToCurrentDisplayedImage( double pointToProject[3], double projectedPoint[3] );
+
     /// Retorna el thickness
     double getThickness();
 
