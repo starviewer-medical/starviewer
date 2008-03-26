@@ -17,8 +17,6 @@
 #include "mathtools.h"
 // vtk
 #include <vtkMatrix4x4.h> // per les transformacions amb matrius del pla
-#include <vtkMath.h>
-#include <vtkLine.h>
 #include <vtkPlane.h>
 
 namespace udg {
