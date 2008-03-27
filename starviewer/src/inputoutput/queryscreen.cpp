@@ -254,7 +254,7 @@ void QueryScreen::createConnections()
     connect( m_clearToolButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
     connect( m_retrieveButtonPACS, SIGNAL( clicked() ), SLOT( retrieve() ) );
     connect( m_retrieveButtonDICOMDIR, SIGNAL( clicked() ), SLOT( importDicomdir() ) );
-    connect( m_operationListToolButton, SIGNAL( clicked() ), m_operationStateScreen, SLOT( show() ) );
+    connect( m_operationListToolButton, SIGNAL( clicked() ) , SLOT( showOperationStateScreen() ) );
     connect( m_showPACSNodesToolButton, SIGNAL( toggled(bool) ), m_PACSNodes, SLOT( setVisible(bool) ) );
 
     connect( m_viewButtonLocal, SIGNAL( clicked() ), SLOT( view() ) );
@@ -1293,6 +1293,19 @@ void QueryScreen::saveQStudyTreeWidgetColumnsWidth()
     for ( int column = 0; column < m_studyTreeWidgetDicomdir->getNumberOfColumns(); column++ )
     {
         settings.setStudyDicomdirListColumnWidth( column , m_studyTreeWidgetDicomdir->getColumnWidth( column ) );
+    }
+}
+
+void QueryScreen::showOperationStateScreen()
+{
+    if ( !m_operationStateScreen->isVisible() )
+    {
+        m_operationStateScreen->setVisible( true );
+    }
+    else 
+    {
+        m_operationStateScreen->raise(); 
+        m_operationStateScreen->activateWindow();
     }
 }
 

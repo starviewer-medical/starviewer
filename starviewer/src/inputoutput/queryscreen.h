@@ -190,6 +190,9 @@ private slots:
     ///S'activa quan seleccionem un estudi del m_qstudyTreeWidgetCache i envia al QSeriesListWidget la informació de les sèries de l'estudi
     void setSeriesToSeriesListWidgetCache();
 
+    ///Mostra la pantalla QOperationStateScreen
+    void showOperationStateScreen();
+
 private:
     ///Connecta els signals i slots pertinents
     void createConnections();
