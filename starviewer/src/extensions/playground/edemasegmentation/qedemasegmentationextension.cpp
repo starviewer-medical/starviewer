@@ -981,6 +981,8 @@ void QEdemaSegmentationExtension::viewThresholds()
     this->viewLesionOverlay();
     DEBUG_LOG( QString("min: %1, mout %2").arg(m_insideValue).arg(m_outsideValue) );
     imageThreshold->Delete();
+
+    m_2DView->refresh();
 }
 
 void QEdemaSegmentationExtension::viewEdemaOverlay()
