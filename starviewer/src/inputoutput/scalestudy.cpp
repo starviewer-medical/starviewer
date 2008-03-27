@@ -30,9 +30,8 @@ void ScaleStudy::scale( QString studyUID )
     Status state;
     SeriesList seriesList;
     DicomMask mask;
-    int number;
-    char imgNumX[6];
-    QString absPath , relPath, absPathScal;
+    int imageNumber;
+    QString absPath , relPath, absPathScal, imageNumberString;
     StarviewerSettings settings;
     state = getSeriesOfStudy( studyUID,seriesList ); //busquem les sèries de l'estudi
 
@@ -43,10 +42,9 @@ void ScaleStudy::scale( QString studyUID )
         //preparem la màscara per buscar la imatge del mig de l'estudi
         mask.setSeriesUID( seriesList.getSeries().getSeriesUID() );
         mask.setStudyUID( studyUID );
-        state = countImageNumber( mask , number );//comptem el número d'imatges, per saber quina és la imatge del mig
+        state = countImageNumber( mask , imageNumber );//comptem el número d'imatges, per saber quina és la imatge del mig
 
-        sprintf( imgNumX , "%i" , number / 2 + 1 );
-        mask.setImageNumber( imgNumX );//indiquem per quin número d' imatge hem de buscar el path
+        mask.setImageNumber( imageNumberString.setNum( imageNumber , 10 ) );//indiquem per quin número d' imatge hem de buscar el path
 
         relPath.clear();
         imageRelativePath( mask ,relPath );//busquem el path de la imatge del mig
