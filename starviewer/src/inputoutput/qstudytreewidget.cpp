@@ -509,26 +509,57 @@ void QStudyTreeWidget::currentItemChanged( QTreeWidgetItem * current, QTreeWidge
 
 void QStudyTreeWidget::itemExpanded( QTreeWidgetItem *itemExpanded )
 {
-    /* Com que inserim un item en blanc per simular fills dels estudis i de les sèries cada vegada que ens fan un expand hem d'eliminar l'item en blanc i 
-     * emetem un signal per a que qui el reculli s'encarregui de fer els passos corresponents per expandir l'estudi o imatge amb el seus fills pertinents
+    /* El QTreeWidget després de fer doble click expandeix o col·lapsa l'item en funció del seu estat, a nosaltres no ens interessa
+     * que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba 
+     *de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
      */
-    foreach( QTreeWidgetItem * childItem , itemExpanded->takeChildren() )
+ 
+    if ( m_doubleClickedItemUID != itemExpanded->text( UID ) )
     {
-        delete childItem;
+        /* Com que inserim un item en blanc per simular fills dels estudis i de les sèries cada vegada que ens fan un expand hem d'eliminar l'item en blanc i 
+        * emetem un signal per a que qui el reculli s'encarregui de fer els passos corresponents per expandir l'estudi o imatge amb el seus fills pertinents
+        */
+        foreach( QTreeWidgetItem * childItem , itemExpanded->takeChildren() )
+        {
+            delete childItem;
+        }
+    
+        if ( isItemStudy( itemExpanded ) )
+        {
+            emit ( studyExpanded( itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
+            itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
+        }
+        else if ( isItemSeries( itemExpanded ) ) emit( seriesExpanded( itemExpanded->parent()->text( UID ) , itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
+
+        m_doubleClickedItemUID = "";
+    }
+    else
+    {//si s'ha fet un doble click a l'item hem d'anul·lar l'acció que ha fet qt de col·lapsar l'item per tan nosaltres el tornem a expandir
+        m_doubleClickedItemUID = "";//Molt important fer-lo abans de fer collapseItem, sinó entrariem en bucle pq s'emetria signal de collapseItem
+        m_studyTreeView->collapseItem( itemExpanded );
     }
 
-    if ( isItemStudy( itemExpanded ) )
-    {
-        emit ( studyExpanded( itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
-        itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
-    }
-    else if ( isItemSeries( itemExpanded ) ) emit( seriesExpanded( itemExpanded->parent()->text( UID ) , itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
 }
 
 void QStudyTreeWidget::itemCollapsed( QTreeWidgetItem *itemCollapsed )
 {
-    //Si és una estudi està collapsed, canviem la icona per la carpeta tancada
-    if ( isItemStudy( itemCollapsed ) ) itemCollapsed->setIcon( ObjectName, m_closeFolder );
+    /* El QTreeWidget després de fer doble click expandeix o col·lapsa l'item en funció del seu estat, a nosaltres no ens interessa
+     * que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba 
+     *de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
+     */
+    if ( m_doubleClickedItemUID != itemCollapsed->text( UID ) ) // si l'item col·lapsat no se li acaba de fer un doble click
+    {
+        //Si és una estudi està collapsed, canviem la icona per la carpeta tancada
+        if ( isItemStudy( itemCollapsed ) ) itemCollapsed->setIcon( ObjectName, m_closeFolder );
+
+        m_doubleClickedItemUID = "";
+    }
+    else 
+    {//si s'ha fet un doble click a l'item hem d'anul·lar l'acció que ha fet qt de col·lapsar l'item per tan nosaltres el tornem a expandir
+        m_doubleClickedItemUID = "";//Molt important fer-lo abans de fer expandItem, sinó entrariem en bucle, pq s'emetria signal d'expandItem
+        m_studyTreeView->expandItem ( itemCollapsed );
+    }
+    
 }
 
 void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
@@ -539,6 +570,11 @@ void QStudyTreeWidget::doubleClicked( QTreeWidgetItem *item , int )
     if ( isItemStudy( item ) ) emit( studyDoubleClicked() );
     else if ( isItemSeries( item ) ) emit( seriesDoubleClicked() );
     else if ( isItemImage( item) ) emit( imageDoubleClicked() );
+
+    /*Pel comportament del tree widget quan es fa un un doble click es col·lapsa o expandeix l'item en funció del seu estat, com que 
+     *nosaltres pel doble click no volem que s'expendeixi o es col·lapsi, guardem per quin element s'ha fet el doble click, per anul·laro quan es detecti un signal d'expand o collapse item
+     */
+    m_doubleClickedItemUID = item->text( UID );
 }
 
 bool QStudyTreeWidget::isItemStudy( QTreeWidgetItem *item )

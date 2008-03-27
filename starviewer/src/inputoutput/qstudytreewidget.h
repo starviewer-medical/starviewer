@@ -234,6 +234,8 @@ private:
     /// strings per guardar valors de l'anterior element
     QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_oldPacsAETitle , m_OldInstitution;
 
+    QString m_doubleClickedItemUID;
+
     QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
 
     ///Ens indica si l'item passat és un estudi
