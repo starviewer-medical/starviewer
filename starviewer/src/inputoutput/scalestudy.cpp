@@ -42,9 +42,9 @@ void ScaleStudy::scale( QString studyUID )
         //preparem la màscara per buscar la imatge del mig de l'estudi
         mask.setSeriesUID( seriesList.getSeries().getSeriesUID() );
         mask.setStudyUID( studyUID );
-        state = countImageNumber( mask , imageNumber );//comptem el número d'imatges, per saber quina és la imatge del mig
+        state = countImageNumber(mask, imageNumber);//comptem el número d'imatges, per saber quina és la imatge del mig
 
-        mask.setImageNumber( imageNumberString.setNum( imageNumber , 10 ) );//indiquem per quin número d' imatge hem de buscar el path
+        mask.setImageNumber( imageNumberString.setNum(imageNumber / 2 + 1) );//indiquem per quin número d' imatge hem de buscar el path
 
         relPath.clear();
         imageRelativePath( mask ,relPath );//busquem el path de la imatge del mig
