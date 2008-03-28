@@ -193,6 +193,9 @@ private slots:
     ///Mostra la pantalla QOperationStateScreen
     void showOperationStateScreen();
 
+    ///Visualitza la sèrie sobre la que s'ha fet un view des del QSeriesListWidget
+    void viewFromQSeriesListWidget();
+
 private:
     ///Connecta els signals i slots pertinents
     void createConnections();
