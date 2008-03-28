@@ -99,7 +99,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     /* In detail, it will be available through calls to DcmFileFormat::getMetaInfo() (for */
     /* meta header information) and DcmFileFormat::getDataset() (for data set information). */
     DcmFileFormat dcmff;
-    OFCondition cond = dcmff.loadFile( QPrintable( QDir::toNativeSepartors( fname ) );
+    OFCondition cond = dcmff.loadFile( qPrintable( QDir::toNativeSeparators( fname ) ) );
 
 #ifndef QT_NO_DEBUG
     if ( settings.getLogCommunicationPacsVerboseMode() )
