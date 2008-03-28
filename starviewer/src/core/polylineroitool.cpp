@@ -47,14 +47,16 @@ void PolylineROITool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-            this->annotateNewPoint();
-            m_2DViewer->getDrawer()->refresh();
-
-            if ( m_2DViewer->getInteractor()->GetRepeatCount() == 1 )
+            if( m_2DViewer->getInput() )
             {
-                closeForm();
+                this->annotateNewPoint();
+                m_2DViewer->getDrawer()->refresh();
+
+                if ( m_2DViewer->getInteractor()->GetRepeatCount() == 1 )
+                {
+                    closeForm();
+                }
             }
-            
         break;
 
         case vtkCommand::MouseMoveEvent:

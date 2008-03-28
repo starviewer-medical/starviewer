@@ -185,6 +185,9 @@ private slots:
 
     void updateAdvancedSearchModifiedStatus();
 
+    ///Mostra la pantalla QOperationStateScreen
+    void showOperationStateScreen();
+
 private:
     ///Connecta els signals i slots pertinents
     void createConnections();

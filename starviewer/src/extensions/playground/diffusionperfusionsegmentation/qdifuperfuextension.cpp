@@ -88,9 +88,6 @@ QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
 {
     writeSettings();
 
-
-    delete m_diffusionInputVolume;  // potser no s'ha d'esborrar
-    delete m_perfusionInputVolume;  // potser no s'ha d'esborrar
     delete m_diffusionMainVolume;
     delete m_perfusionMainVolume;
     delete m_diffusionRescaledVolume;
