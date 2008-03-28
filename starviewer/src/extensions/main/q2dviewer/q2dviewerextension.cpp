@@ -44,6 +44,8 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_flipHorizontalToolButton->setVisible( false );
     // TODO deshabilitem els presentation states fins la release en què es tornin a habilitar
     m_presentationStateSwitchToolButton->setVisible(false);
+    // Deshabilitem el ref. lines.
+    m_referenceLinesToolButton->setVisible(false);
 
     m_mainVolume = 0;
     m_keyImageNoteAttacher = NULL;
