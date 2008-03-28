@@ -481,7 +481,7 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
 
     processParameters <<  "-V STARVIEWER DICOMDIR";//indiquem que el label de la imatge és STARVIEWER DICOMDIR
     processParameters << "-o" + isoPath;; //nom i directori on guardarem la imatge
-    processParameters << dicomdirPath;//path a convertir en iso
+    processParameters << QDir::toNativeSeparators( dicomdirPath );//path a convertir en iso
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     process.start( "mkisofs" , processParameters );

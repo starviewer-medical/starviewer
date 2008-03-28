@@ -13,6 +13,7 @@
 #include <ofstdinc.h>
 #include <dctk.h>
 #include <ofconapp.h>
+#include <QDir>
 
 #ifdef HAVE_GUSI_H
 #include <GUSI.h>
@@ -51,7 +52,7 @@ Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFi
     OFCmdUnsignedInt opt_itempad = 0;
     OFBool opt_oDataset = OFFalse;
 
-    error = fileformat.loadFile( qPrintable( inputFile ) , opt_ixfer, EGL_noChange , DCM_MaxReadLength , opt_readMode );
+    error = fileformat.loadFile( qPrintable( QDir::toNativeSeparators( inputFile ) ) , opt_ixfer, EGL_noChange , DCM_MaxReadLength , opt_readMode );
 
     if ( error.bad() ) return state.setStatus( error );
 
@@ -71,7 +72,7 @@ Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFi
         return state;
     }
 
-    error = fileformat.saveFile( qPrintable( outputFile ) , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc , OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
+    error = fileformat.saveFile( qPrintable( QDir::toNativeSeparators( outputFile ) ) , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc , OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
 
     return state.setStatus( error );
 }

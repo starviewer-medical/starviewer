@@ -12,6 +12,7 @@
 #include <osconfig.h> /* make sure OS specific configuration is included first */
 #include <dcdeftag.h> //provide the information for the tags
 #include <QStringList>
+#include <QDir>
 
 #include "status.h"
 #include "dicomstudy.h"
@@ -47,7 +48,7 @@ Status DICOMDIRReader::open( QString dicomdirPath )
     //per defecte la informació dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
     dicomdirFilePath = dicomdirPath;
     dicomdirFilePath.append( "/DICOMDIR" );
-    m_dicomdir = new DcmDicomDir( qPrintable(dicomdirFilePath) );
+    m_dicomdir = new DcmDicomDir( qPrintable( QDir::toNativeSeparators( dicomdirFilePath ) ) );
 
     return state.setStatus( m_dicomdir->error() );
 }
