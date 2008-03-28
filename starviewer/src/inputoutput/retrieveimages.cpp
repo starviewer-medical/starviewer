@@ -224,7 +224,7 @@ OFCondition echoSCP(
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
-            OFCondition cond = cbdata->dcmff->saveFile( qPrintable( imagePath ) , xfer , opt_sequenceType , opt_groupLength ,
+            OFCondition cond = cbdata->dcmff->saveFile( qPrintable( QDir::toNativeSeparators( imagePath ) ) , xfer , opt_sequenceType , opt_groupLength ,
             opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
 
             if ( cond.bad() )

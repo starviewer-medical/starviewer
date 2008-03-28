@@ -11,6 +11,7 @@
 #include <dcfilefo.h>
 #include <ofconapp.h>
 #include <assoc.h>
+#include <QDir>
 
 #include "status.h"
 #include "imagelist.h"
@@ -98,7 +99,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     /* In detail, it will be available through calls to DcmFileFormat::getMetaInfo() (for */
     /* meta header information) and DcmFileFormat::getDataset() (for data set information). */
     DcmFileFormat dcmff;
-    OFCondition cond = dcmff.loadFile( fname );
+    OFCondition cond = dcmff.loadFile( QPrintable( QDir::toNativeSepartors( fname ) );
 
 #ifndef QT_NO_DEBUG
     if ( settings.getLogCommunicationPacsVerboseMode() )

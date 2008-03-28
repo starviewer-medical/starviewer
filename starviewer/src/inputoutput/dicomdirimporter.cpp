@@ -36,7 +36,7 @@ Status DICOMDIRImporter::import( QString dicomdirPath , QString studyUID , QStri
     ImageList imageList;
     QString studyPath;
 
-    state = m_readDicomdir.open( dicomdirPath );
+    state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
     if ( !state.good() ) return state;
 

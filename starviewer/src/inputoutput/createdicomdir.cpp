@@ -7,6 +7,7 @@
 #include "createdicomdir.h"
 
 #include <QString>
+#include <QDir>
 #include <osconfig.h>     /* make sure OS specific configuration is included first */
 #include <dctk.h>
 #include <dcddirif.h>     /* for class DicomDirInterface */
@@ -92,7 +93,7 @@ Status CreateDicomdir::create( QString dicomdirPath )
     Status state;
 
     //busquem el fitxers al dicomdir. Anteriorment a la classe ConvertoToDicomdir s'han d'haver copiat els fitxers dels estudis seleccionats, al directori dicomdir destí
-    OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , qPrintable(dicomdirPath) );
+    OFStandard::searchDirectoryRecursively( "" , fileNames, opt_pattern , qPrintable( QDir::toNativeSeparators( dicomdirPath ) ) );
 
     //comprovem que el directori no estigui buit
     if ( fileNames.empty() )
@@ -103,7 +104,7 @@ Status CreateDicomdir::create( QString dicomdirPath )
     }
 
     //creem el dicomdir
-    result = m_ddir.createNewDicomDir( m_optProfile , qPrintable(outputDirectory) , opt_fileset );
+    result = m_ddir.createNewDicomDir( m_optProfile , qPrintable( QDir::toNativeSeparators( outputDirectory ) ) , opt_fileset );
 
     if ( !result.good() )
     {
@@ -124,7 +125,7 @@ Status CreateDicomdir::create( QString dicomdirPath )
         while ( ( iter != last ) && result.good() )
         {
             //afegim els fitxers al dicomdir
-            result = m_ddir.addDicomFile( qPrintable(QString((*iter).c_str()).toUpper()) , qPrintable(dicomdirPath) );
+            result = m_ddir.addDicomFile( qPrintable(QString((*iter).c_str()).toUpper()) , qPrintable( QDir::toNativeSeparators ( dicomdirPath ) ) );
             if ( result.good() )
                 iter++;
         }

@@ -10,6 +10,7 @@
 #include <sqlite3.h>
 #include <QObject> // per les traduccions: tr()
 #include <QSemaphore>
+#include <QDir>
 
 #include "starviewersettings.h"
 #include "status.h"
@@ -35,7 +36,7 @@ void DatabaseConnection::setDatabasePath( QString path )
 
 void DatabaseConnection::connectDB()
 {
-    sqlite3_open( qPrintable(m_databasePath) , &m_databaseConnection );
+    sqlite3_open( qPrintable( QDir::toNativeSeparators( m_databasePath ) ) , &m_databaseConnection );
 }
 
 sqlite3* DatabaseConnection::getConnection()
