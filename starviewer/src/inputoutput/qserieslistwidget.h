@@ -36,6 +36,8 @@ public:
     ///Estableix quina és la série seleccionada
     void setCurrentSeries( QString seriesUID );
 
+    QString getCurrentSeriesUID();
+
 public slots:
 
     ///Neteja el ListWidget de sèries

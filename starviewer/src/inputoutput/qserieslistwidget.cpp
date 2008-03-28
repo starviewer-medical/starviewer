@@ -99,6 +99,11 @@ void QSeriesListWidget::view( QListWidgetItem *item )
     if ( item != NULL ) emit( viewSeriesIcon() );
 }
 
+QString QSeriesListWidget::getCurrentSeriesUID()
+{
+    return m_seriesListWidget->currentItem()->statusTip();
+}
+
 void QSeriesListWidget::clear()
 {
     m_seriesListWidget->clear();
