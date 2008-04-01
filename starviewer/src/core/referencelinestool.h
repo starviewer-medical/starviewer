@@ -66,6 +66,19 @@ private:
     /// Projecta el pla de referència sobre el pla de localitzador
     void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane);
 
+    /**
+     * Donats quatre punts d'un pla (referència) i el pla localitzador, ens dóna els punts d'intersecció
+     * @param tlhc top left hand corner ( origen )
+     * @param trhc top right hand corner
+     * @param brhc bottom right hand corner
+     * @param blhc bottom left hand corner
+     * @param localizerPlane pla localitzador que volem fer intersectar
+     * @param firstIntersectionPoint[] primer punt d'intersecció trobat ( si n'hi ha )
+     * @param secondIntersectionPoint[] segon punt d'intersecció trobat ( si n'hi ha )
+     * @return el nombre d'interseccions trobades
+     */
+    int getIntersections( QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3] );
+
 private:
     /// Dades específiques de la tool
     ReferenceLinesToolData *m_myData;
@@ -80,8 +93,7 @@ private:
     /// TODO quan tinguem la tool prou madura podrem prescindir d'aquest poligon
     DrawerPolygon *m_projectedReferencePlane;
     /// Intersecció que projectem
-    DrawerLine *m_projectedIntersection, *m_backgroundProjectedIntersection;
-
+    DrawerLine *m_projectedIntersection, *m_backgroundProjectedIntersection, *m_lowerProjectedIntersection, *m_backgroundLowerProjectedIntersection, *m_upperProjectedIntersection, *m_backgroundUpperProjectedIntersection;
 };
 
 }

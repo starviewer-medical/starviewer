@@ -48,12 +48,18 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
 ReferenceLinesTool::~ReferenceLinesTool()
 {
     disconnect( m_projectedReferencePlane, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
-    disconnect( m_projectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
-    disconnect( m_backgroundProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
+
+    disconnect( m_upperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
+    disconnect( m_backgroundUpperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
+    disconnect( m_lowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
+    disconnect( m_backgroundLowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
 
     delete m_projectedReferencePlane;
-    delete m_projectedIntersection;
-    delete m_backgroundProjectedIntersection;
+    delete m_upperProjectedIntersection;
+    delete m_backgroundUpperProjectedIntersection;
+    delete m_lowerProjectedIntersection;
+    delete m_backgroundLowerProjectedIntersection;
+
 }
 
 void ReferenceLinesTool::setToolData(ToolData * data)
@@ -87,23 +93,45 @@ void ReferenceLinesTool::resurrectPolygon()
 //     m_2DViewer->getDrawer()->addToGroup( m_projectedReferencePlane, "ReferenceLines" );
 //     connect( m_projectedReferencePlane, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
 
-    // linia de background, igual a l'anterior, per fer-la ressaltar a la imatge TODO es podria estalviar aquesta linia de mes si el propi drawer
+    //
+    // linia superior projectada de tall entre els plans localitzador i referencia
+    //
+
+    // linia de background, igual a la següent, per fer-la ressaltar a la imatge TODO es podria estalviar aquesta linia de mes si el propi drawer
     // admetes "background" en una linia amb "stiple" discontinu
-    m_backgroundProjectedIntersection = new DrawerLine;
-    m_backgroundProjectedIntersection->setColor( QColor(0,0,0) );
+    m_backgroundUpperProjectedIntersection = new DrawerLine;
+    m_backgroundUpperProjectedIntersection->setColor( QColor(0,0,0) );
 
-    m_2DViewer->getDrawer()->draw( m_backgroundProjectedIntersection, QViewer::Top2DPlane );
-    m_2DViewer->getDrawer()->addToGroup( m_backgroundProjectedIntersection, "ReferenceLines" );
-    connect( m_backgroundProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
+    m_2DViewer->getDrawer()->draw( m_backgroundUpperProjectedIntersection, QViewer::Top2DPlane );
+    m_2DViewer->getDrawer()->addToGroup( m_backgroundUpperProjectedIntersection, "ReferenceLines" );
+    connect( m_backgroundUpperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
 
-    // linia projectada de tall entre els plans localitzador i referencia
-    m_projectedIntersection = new DrawerLine;
-    m_projectedIntersection->setColor( QColor(255,160,0) );
-    m_projectedIntersection->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+    // linia "de punts"
+    m_upperProjectedIntersection = new DrawerLine;
+    m_upperProjectedIntersection->setColor( QColor(255,160,0) );
+    m_upperProjectedIntersection->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
 
-    m_2DViewer->getDrawer()->draw( m_projectedIntersection, QViewer::Top2DPlane );
-    m_2DViewer->getDrawer()->addToGroup( m_projectedIntersection, "ReferenceLines" );
-    connect( m_projectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
+    m_2DViewer->getDrawer()->draw( m_upperProjectedIntersection, QViewer::Top2DPlane );
+    m_2DViewer->getDrawer()->addToGroup( m_upperProjectedIntersection, "ReferenceLines" );
+    connect( m_upperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
+
+    //
+    // linia inferior projectada de tall entre els plans localitzador i referencia
+    //
+    m_backgroundLowerProjectedIntersection = new DrawerLine;
+    m_backgroundLowerProjectedIntersection->setColor( QColor(0,0,0) );
+
+    m_2DViewer->getDrawer()->draw( m_backgroundLowerProjectedIntersection, QViewer::Top2DPlane );
+    m_2DViewer->getDrawer()->addToGroup( m_backgroundLowerProjectedIntersection, "ReferenceLines" );
+    connect( m_backgroundLowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
+
+    m_lowerProjectedIntersection = new DrawerLine;
+    m_lowerProjectedIntersection->setColor( QColor(255,160,0) );
+    m_lowerProjectedIntersection->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+
+    m_2DViewer->getDrawer()->draw( m_lowerProjectedIntersection, QViewer::Top2DPlane );
+    m_2DViewer->getDrawer()->addToGroup( m_lowerProjectedIntersection, "ReferenceLines" );
+    connect( m_lowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
 
     // TODO mirar si ens podem estalviar de cridar aquest metode aqui
     m_2DViewer->getDrawer()->showGroup("ReferenceLines");
@@ -127,39 +155,19 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         // implementem primer el sistema simple d'en clunie. A partir dels plans
         // fem una projecció del pla de referència sobre el pla del localitzador
 
-        // Primer de tot obtenim les dades del pla de referencia
-        double referenceOrigin[3], referenceRowVector[3], referenceColumnVector[3];
-        referencePlane->getOrigin( referenceOrigin );
-        referencePlane->getRowDirectionVector( referenceRowVector );
-        referencePlane->getColumnDirectionVector( referenceColumnVector );
-
-        // cal calcular els els 4 punts del pla de referencia
-        // aquests mateixos punts serviran tant per la projeccio total del pla com per
-        // calcular els punts de tall dels plans per la solucio 2 ( la que s'aplica en realitat )
-        double referencePlaneVertix1[3],referencePlaneVertix2[3],referencePlaneVertix3[3],referencePlaneVertix4[3];
-        for( int i = 0; i < 3; i++ )
-        {
-            referencePlaneVertix1[i] = referenceOrigin[i];
-            referencePlaneVertix2[i] = referenceOrigin[i] + referenceRowVector[i]*referencePlane->getRowLength();
-            referencePlaneVertix3[i] = referenceOrigin[i] + referenceRowVector[i]*referencePlane->getRowLength() + referenceColumnVector[i]*referencePlane->getColumnLength();
-            referencePlaneVertix4[i] = referenceOrigin[i] + referenceColumnVector[i]*referencePlane->getColumnLength();
-        }
-
         //
         // Solucio 1: projeccio de plans
         //
 
-        // !!! ATENCIO !!!!
-        // si volem estalviar calculs quan no es mostra el poligon projectat podem comentar aquest bloc fins arribar a l'inici
-        // de la "Solucio 2"
-
         // ara calculem les projeccions de cada punt del pla de referencia
+        // obtenim els els 4 punts del pla de referencia (central)
+//         QList< QVector<double> > referencePlaneBounds = referencePlane->getCentralBounds();
 //         double projectedVertix1[3],projectedVertix2[3],projectedVertix3[3],projectedVertix4[3];
 //
-//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix1, projectedVertix1 );
-//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix2, projectedVertix2 );
-//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix3, projectedVertix3 );
-//         m_2DViewer->projectPointToCurrentDisplayedImage( referencePlaneVertix4, projectedVertix4 );
+//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(0).data(), projectedVertix1 );
+//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(1).data(), projectedVertix2 );
+//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(2).data(), projectedVertix3 );
+//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(3).data(), projectedVertix4 );
 //
 //         // donem els punts al poligon a dibuixar
 //         m_projectedReferencePlane->setVertix( 0, projectedVertix1 );
@@ -169,7 +177,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 //         m_2DViewer->getDrawer()->showGroup("ReferenceLines");
 
         //
-        // Solucio 2: projeccio de la interseccio dels plans
+        // Solucio 2: projeccio de la intersecció dels plans
         //
         /// llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 
@@ -179,30 +187,10 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         localizerPlane->getOrigin( localizerOrigin );
 
         // calculem totes les possibles interseccions
-        int numberOfIntersections = 0;
+        QList< QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
         double t, firstIntersectionPoint[3], secondIntersectionPoint[3];
-        if( vtkPlane::IntersectWithLine( referencePlaneVertix1, referencePlaneVertix2, localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
-        {
-            DEBUG_LOG( QString("Segment P1-P2 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
-            numberOfIntersections = 1;
+        int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
 
-            if( vtkPlane::IntersectWithLine( referencePlaneVertix3, referencePlaneVertix4, localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
-            {
-                DEBUG_LOG( QString("Segment P3-P4 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
-                numberOfIntersections = 2;
-            }
-        }
-        else if( vtkPlane::IntersectWithLine( referencePlaneVertix2, referencePlaneVertix3, localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
-        {
-            DEBUG_LOG( QString("Segment P2-P3 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
-            numberOfIntersections = 1;
-
-            if( vtkPlane::IntersectWithLine( referencePlaneVertix4, referencePlaneVertix1, localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
-            {
-                DEBUG_LOG( QString("Segment P4-P1 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
-                numberOfIntersections = 2;
-            }
-        }
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
         DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
         if( numberOfIntersections == 2 )
@@ -211,11 +199,11 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             m_2DViewer->projectPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
 
             // linia discontinua
-            m_projectedIntersection->setFirstPoint( firstIntersectionPoint );
-            m_projectedIntersection->setSecondPoint( secondIntersectionPoint );
+            m_upperProjectedIntersection->setFirstPoint( firstIntersectionPoint );
+            m_upperProjectedIntersection->setSecondPoint( secondIntersectionPoint );
             // linia de background
-            m_backgroundProjectedIntersection->setFirstPoint( firstIntersectionPoint );
-            m_backgroundProjectedIntersection->setSecondPoint( secondIntersectionPoint );
+            m_backgroundUpperProjectedIntersection->setFirstPoint( firstIntersectionPoint );
+            m_backgroundUpperProjectedIntersection->setSecondPoint( secondIntersectionPoint );
 
             m_2DViewer->getDrawer()->showGroup("ReferenceLines");
         }
@@ -224,7 +212,58 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
         }
 
+        QList< QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
+        numberOfIntersections = this->getIntersections( lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
+
+        // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
+        DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
+        if( numberOfIntersections == 2 )
+        {
+            m_2DViewer->projectPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
+            m_2DViewer->projectPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
+
+            // linia discontinua
+            m_lowerProjectedIntersection->setFirstPoint( firstIntersectionPoint );
+            m_lowerProjectedIntersection->setSecondPoint( secondIntersectionPoint );
+            // linia de background
+            m_backgroundLowerProjectedIntersection->setFirstPoint( firstIntersectionPoint );
+            m_backgroundLowerProjectedIntersection->setSecondPoint( secondIntersectionPoint );
+
+            m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+        }
     }
+}
+
+int ReferenceLinesTool::getIntersections( QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3] )
+{
+    double t;
+    int numberOfIntersections = 0;
+    double localizerNormalVector[3], localizerOrigin[3];
+    localizerPlane->getNormalVector( localizerNormalVector );
+    localizerPlane->getOrigin( localizerOrigin );
+    if( vtkPlane::IntersectWithLine( (double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
+    {
+        DEBUG_LOG( QString("Segment P1-P2 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
+        numberOfIntersections = 1;
+
+        if( vtkPlane::IntersectWithLine( (double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
+        {
+            DEBUG_LOG( QString("Segment P3-P4 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
+            numberOfIntersections = 2;
+        }
+    }
+    else if( vtkPlane::IntersectWithLine( (double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
+    {
+        DEBUG_LOG( QString("Segment P2-P3 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
+        numberOfIntersections = 1;
+
+        if( vtkPlane::IntersectWithLine( (double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
+        {
+            DEBUG_LOG( QString("Segment P4-P1 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
+            numberOfIntersections = 2;
+        }
+    }
+    return numberOfIntersections;
 }
 
 void ReferenceLinesTool::updateFrameOfReference()

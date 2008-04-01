@@ -1620,10 +1620,11 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                     imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
                     imagePlane->setColumnDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
 
-                    DEBUG_LOG( QString("AXIAL ROW Vector: %1,%2,%3").arg(dirCosines[0]).arg(dirCosines[1]).arg(dirCosines[2]) );
-                    DEBUG_LOG( QString("AXIAL COL Vector: %1,%2,%3").arg(dirCosines[3]).arg(dirCosines[4]).arg(dirCosines[5]) );
+//                     DEBUG_LOG( QString("AXIAL ROW Vector: %1,%2,%3").arg(dirCosines[0]).arg(dirCosines[1]).arg(dirCosines[2]) );
+//                     DEBUG_LOG( QString("AXIAL COL Vector: %1,%2,%3").arg(dirCosines[3]).arg(dirCosines[4]).arg(dirCosines[5]) );
 
                     imagePlane->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
+                    imagePlane->setThickness( spacing[2] );
                     imagePlane->setRows( image->getRows() );
                     imagePlane->setColumns( image->getColumns() );
 
@@ -1643,10 +1644,11 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                     imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
                     imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
 
-                    DEBUG_LOG( QString("SAGITAL ROW Vector: %1,%2,%3").arg(dirCosines[3]).arg(dirCosines[4]).arg(dirCosines[5]) );
-                    DEBUG_LOG( QString("SAGITAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
+//                     DEBUG_LOG( QString("SAGITAL ROW Vector: %1,%2,%3").arg(dirCosines[3]).arg(dirCosines[4]).arg(dirCosines[5]) );
+//                     DEBUG_LOG( QString("SAGITAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
 
                     imagePlane->setSpacing( spacing[0], spacing[2] );
+                    imagePlane->setThickness( spacing[1] );
                     imagePlane->setRows( dimensions[0] );
                     imagePlane->setColumns( dimensions[2] );
                     // TODO falta esbrinar si l'origen que estem donant es bo o no
@@ -1668,10 +1670,11 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                     imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
                     imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
 
-                    DEBUG_LOG( QString("CORONAL ROW Vector: %1,%2,%3").arg(dirCosines[0]).arg(dirCosines[1]).arg(dirCosines[2]) );
-                    DEBUG_LOG( QString("CORONAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
+//                     DEBUG_LOG( QString("CORONAL ROW Vector: %1,%2,%3").arg(dirCosines[0]).arg(dirCosines[1]).arg(dirCosines[2]) );
+//                     DEBUG_LOG( QString("CORONAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
 
                     imagePlane->setSpacing( spacing[1], spacing[2] );
+                    imagePlane->setThickness( spacing[0] );
                     imagePlane->setRows( dimensions[1] );
                     imagePlane->setColumns( dimensions[2] );
 
@@ -1685,13 +1688,13 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
             break;
         }
 
-        DEBUG_LOG( QString("View: %1 :: image actor bounds: %2,%3 :: %4,%5 :: %6,%7").arg(m_lastView).arg(bounds[0]).arg(bounds[1]).arg(bounds[2]).arg(bounds[3]).arg(bounds[4]).arg(bounds[5]) );
-        if( imagePlane )
-        {
-            double ori[3];
-            imagePlane->getOrigin(ori);
-            DEBUG_LOG( QString("Computed ORIGIN: %1,%2,%3").arg(ori[0]).arg(ori[1]).arg(ori[2]) );
-        }
+//         DEBUG_LOG( QString("View: %1 :: image actor bounds: %2,%3 :: %4,%5 :: %6,%7").arg(m_lastView).arg(bounds[0]).arg(bounds[1]).arg(bounds[2]).arg(bounds[3]).arg(bounds[4]).arg(bounds[5]) );
+//         if( imagePlane )
+//         {
+//             double ori[3];
+//             imagePlane->getOrigin(ori);
+//             DEBUG_LOG( QString("Computed ORIGIN: %1,%2,%3").arg(ori[0]).arg(ori[1]).arg(ori[2]) );
+//         }
     }
     return imagePlane;
 }
@@ -1701,7 +1704,6 @@ void Q2DViewer::projectPointToCurrentDisplayedImage( double pointToProject[3], d
     ImagePlane *currentPlane = this->getCurrentImagePlane();
     if( currentPlane )
     {
-
         // recollim les dades del pla actual sobre el qual volem projectar el punt de l'altre pla
         double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneNormalVector[3], currentPlaneOrigin[3];
         currentPlane->getRowDirectionVector( currentPlaneRowVector );

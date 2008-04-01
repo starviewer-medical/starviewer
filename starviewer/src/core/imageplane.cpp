@@ -10,7 +10,7 @@
 namespace udg {
 
 ImagePlane::ImagePlane()
- : m_rows(1), m_columns(1)
+ : m_rows(1), m_columns(1), m_thickness(1.0)
 {
     setRowDirectionVector( 1., 0., 0. );
     setColumnDirectionVector( 0., 1., 0. );
@@ -103,6 +103,16 @@ void ImagePlane::getSpacing( double spacing[2] )
     spacing[1] = m_spacing[1];
 }
 
+void ImagePlane::setThickness( double thickness )
+{
+    m_thickness = thickness;
+}
+
+double ImagePlane::getThickness() const
+{
+    return m_thickness;
+}
+
 void ImagePlane::setRows( int rows )
 {
     m_rows = rows;
@@ -140,7 +150,8 @@ bool ImagePlane::operator ==(const ImagePlane &imagePlane)
         m_spacing[0] == imagePlane.m_spacing[0] &&
         m_spacing[1] == imagePlane.m_spacing[1] &&
         m_rows == imagePlane.m_rows &&
-        m_columns == imagePlane.m_columns
+        m_columns == imagePlane.m_columns &&
+        m_thickness == imagePlane.m_thickness
     )
         return true;
     else
@@ -150,6 +161,52 @@ bool ImagePlane::operator ==(const ImagePlane &imagePlane)
 bool ImagePlane::operator !=(const ImagePlane &imagePlane)
 {
     return !(*this == imagePlane);
+}
+
+QList< QVector<double> > ImagePlane::getBounds( int location )
+{
+    double factor = 0.0;
+    switch( location )
+    {
+    case 0: // central
+        factor = 0.0;
+    break;
+
+    case 1: // upper
+        factor = m_thickness*0.5;
+    break;
+
+    case 2: // lower
+        factor = -m_thickness*0.5;
+    break;
+    }
+
+    QList< QVector<double> > boundsList;
+    QVector<double> tlhc, trhc, brhc, blhc;
+    for( int i = 0; i<3; i++ )
+    {
+        tlhc << m_origin[i] + m_normal[i] * factor;
+        trhc << m_origin[i] + m_rowDirectionVector[i]*this->getRowLength() + m_normal[i] * factor;
+        brhc << m_origin[i] + m_rowDirectionVector[i]*this->getRowLength() + m_columnDirectionVector[i]*this->getColumnLength() + m_normal[i] * factor;
+        blhc << m_origin[i] + m_columnDirectionVector[i]*this->getColumnLength() + m_normal[i] * factor;
+    }
+    boundsList << tlhc << trhc << brhc << blhc;
+    return boundsList;
+}
+
+QList< QVector<double> > ImagePlane::getCentralBounds()
+{
+    return getBounds( 0 );
+}
+
+QList< QVector<double> > ImagePlane::getUpperBounds()
+{
+    return getBounds( 1 );
+}
+
+QList< QVector<double> > ImagePlane::getLowerBounds()
+{
+    return getBounds( 2 );
 }
 
 }
