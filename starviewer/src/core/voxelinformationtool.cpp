@@ -24,7 +24,9 @@ VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if( !m_2DViewer )
+    {
         DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
+    }
 
     createCaptionActor();
     connect( m_2DViewer, SIGNAL( sliceChanged(int) ), SLOT( updateVoxelInformation() ) );
