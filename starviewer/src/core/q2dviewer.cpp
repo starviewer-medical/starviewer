@@ -642,7 +642,7 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
             }
         }
         //afegim el thickness de la llesca
-        lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness()*m_slabThickness, 0, 'g', 2 );
+        lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness(), 0, 'g', 2 );
 
         sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
     }
@@ -654,19 +654,18 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
 
 double Q2DViewer::getThickness()
 {
-    // TODO falta tenir en compte el thickSlab que estem aplicant
     double thickness;
     switch( m_lastView )
     {
     case Axial:
         // TODO no seria més correcte demanar la informació de la imatge actual?
-        thickness = m_mainVolume->getSpacing()[2];
+        thickness = m_mainVolume->getSpacing()[2] * m_slabThickness;
     break;
     case Sagital:
-        thickness = m_mainVolume->getSpacing()[0];
+        thickness = m_mainVolume->getSpacing()[0] * m_slabThickness;
     break;
     case Coronal:
-        thickness = m_mainVolume->getSpacing()[1];
+        thickness = m_mainVolume->getSpacing()[1] * m_slabThickness;
     break;
     }
     return thickness;
@@ -1624,7 +1623,8 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
 //                     DEBUG_LOG( QString("AXIAL COL Vector: %1,%2,%3").arg(dirCosines[3]).arg(dirCosines[4]).arg(dirCosines[5]) );
 
                     imagePlane->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
-                    imagePlane->setThickness( spacing[2] );
+                    // TODO no estem
+                    imagePlane->setThickness( this->getThickness() );
                     imagePlane->setRows( image->getRows() );
                     imagePlane->setColumns( image->getColumns() );
 
@@ -1648,7 +1648,7 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
 //                     DEBUG_LOG( QString("SAGITAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
 
                     imagePlane->setSpacing( spacing[0], spacing[2] );
-                    imagePlane->setThickness( spacing[1] );
+                    imagePlane->setThickness( this->getThickness() );
                     imagePlane->setRows( dimensions[0] );
                     imagePlane->setColumns( dimensions[2] );
                     // TODO falta esbrinar si l'origen que estem donant es bo o no
@@ -1674,7 +1674,7 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
 //                     DEBUG_LOG( QString("CORONAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
 
                     imagePlane->setSpacing( spacing[1], spacing[2] );
-                    imagePlane->setThickness( spacing[0] );
+                    imagePlane->setThickness( this->getThickness() );
                     imagePlane->setRows( dimensions[1] );
                     imagePlane->setColumns( dimensions[2] );
 
