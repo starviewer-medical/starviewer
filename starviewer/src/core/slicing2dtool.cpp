@@ -29,7 +29,9 @@ Slicing2DTool::Slicing2DTool( Q2DViewer *viewer, QObject *parent )
     m_latestTime = 0;
     m_2DViewer = viewer;
     if( !m_2DViewer )
+    {
         DEBUG_LOG( "El 2DViewer és nul!" );
+    }
 }
 
 Slicing2DTool::~Slicing2DTool()

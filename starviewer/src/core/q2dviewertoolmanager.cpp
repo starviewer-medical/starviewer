@@ -44,7 +44,9 @@ void Q2DViewerToolManager::setViewer( Q2DViewer *viewer )
 void Q2DViewerToolManager::initToolRegistration()
 {
     if( !m_viewer )
+    {
         DEBUG_LOG("ERROR:Inicialitzant tools amb un viewer NUL");
+    }
 
     m_toolList.clear();
     m_toolList["SlicingTool"] = new Slicing2DTool( m_viewer );

@@ -32,7 +32,9 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
 
     m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
     if( !m_2DViewer )
+    {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
+    }
 
     resurrectPolygon();
     refreshReferenceViewerData();

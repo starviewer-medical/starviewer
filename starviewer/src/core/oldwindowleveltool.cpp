@@ -21,7 +21,9 @@ OldWindowLevelTool::OldWindowLevelTool( Q2DViewer *viewer, QObject *parent )
     m_state = NONE;
     m_2DViewer = viewer;
     if( !m_2DViewer )
+    {
         DEBUG_LOG( "El 2DViewer és nul!" );
+    }
 }
 
 OldWindowLevelTool::~OldWindowLevelTool()
