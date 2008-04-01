@@ -7,6 +7,9 @@
 #ifndef UDGIMAGEPLANE_H
 #define UDGIMAGEPLANE_H
 
+#include <QList>
+#include <QVector>
+
 namespace udg {
 
 /**
@@ -37,6 +40,9 @@ public:
     void setSpacing( double x, double y );
     void getSpacing( double spacing[2] );
 
+    void setThickness( double thickness );
+    double getThickness() const;
+
     void setRows( int rows );
     void setColumns( int columns );
 
@@ -45,6 +51,24 @@ public:
 
     bool operator ==(const ImagePlane &imagePlane);
     bool operator !=(const ImagePlane &imagePlane);
+
+    /**
+     * Ens retorna una llista amb 4 punts que defineix els bounds del pla.
+     * Tenint en compte que la coordenada d'origen s'assumeix que és al centre de la llesca ( és a dir, enmig +/- thickness )
+     * Podem obtenir els bounds respecte el centre, thickness per amunt o thickness per avall
+     * L'ordre dels punts retornats és el següent:
+     * TLHC, TRHC, BRHC, BLHC,
+     * On:
+     * TLHC == TopLeftHandCorner == Origen
+     * TRHC == TopRightHandCorner
+     * BRHC == BottomRightHandCorner
+     * BLHC == BottomLeftHandCorner
+     * @param location defineix quins bounds volem, 0: Central, 1: Upper (+thickness/2), 2: Lower (-thickness/2)
+     */
+    QList< QVector<double> > getBounds( int location );
+    QList< QVector<double> > getCentralBounds();
+    QList< QVector<double> > getUpperBounds();
+    QList< QVector<double> > getLowerBounds();
 
 private:
     /// Vectors que defineixen el pla
@@ -59,6 +83,8 @@ private:
     /// Files i columnes
     int m_rows, m_columns;
 
+    /// Gruix del pla
+    double m_thickness;
 };
 
 }
