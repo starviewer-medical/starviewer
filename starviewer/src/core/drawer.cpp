@@ -285,7 +285,7 @@ void Drawer::hideGroup(const QString &groupName)
 void Drawer::showGroup(const QString &groupName)
 {
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values( groupName );
-   foreach( DrawerPrimitive *primitive, primitiveList )
+    foreach( DrawerPrimitive *primitive, primitiveList )
     {
         if( primitive->isModified() || !primitive->isVisible() )
         {
