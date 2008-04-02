@@ -185,9 +185,7 @@ double* MathTools::directorVector( double point1[3], double point2[3] )
 double* MathTools::vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] )
 {
     double *vp = new double[3];
-    vp[0] = (vectorDirector1[1] * vectorDirector2[2]) - (vectorDirector1[2] * vectorDirector2[1]);
-    vp[1] = -1.0 * ((vectorDirector1[0] * vectorDirector2[2]) - (vectorDirector1[2] * vectorDirector2[0]));
-    vp[2] = (vectorDirector1[0] * vectorDirector2[1]) - (vectorDirector1[1] * vectorDirector2[0]);
+    vtkMath::Cross( vectorDirector1, vectorDirector2, vp );
     
     return vp;
 }
