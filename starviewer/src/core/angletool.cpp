@@ -62,6 +62,7 @@ void AngleTool::handleEvent( long unsigned eventID )
                 //voldrem enregistrar l'últim punt, pertant posem l'estat a none
                 m_state = NONE;
                 computeAngle();
+                delete m_circumferencePolyline;
             }    
             m_2DViewer->getDrawer()->refresh();
         break;
@@ -176,11 +177,6 @@ void AngleTool::drawCircumference()
     
     double angle = MathTools::angleInDegrees( vd1, vd2 );
     
-    double *middlePoint = new double[3];
-    middlePoint[0] = (p1[0] + p2[0]) / 2.0;
-    middlePoint[1] = (p1[1] + p2[1]) / 2.0;
-    middlePoint[2] = (p1[2] + p2[2]) / 2.0;
-    
     switch( view )
     {
         case QViewer::AxialPlane:
@@ -195,6 +191,7 @@ void AngleTool::drawCircumference()
 
             yAxis2[0] = p2[0];
             yAxis2[1] = p1[1];
+            
             viewCoord = 2;
             break;
 
@@ -210,6 +207,7 @@ void AngleTool::drawCircumference()
 
             yAxis2[0] = p2[2];
             yAxis2[1] = p1[1];
+            
             viewCoord = 0;
             break;
 
@@ -225,13 +223,14 @@ void AngleTool::drawCircumference()
 
             yAxis2[0] = p2[0];
             yAxis2[1] = p1[2];
+            
             viewCoord = 1;
             break;
     }
+    
+    Distance d( p1, p2 );
 
-    Distance d( middlePoint, p1 );
-
-    xRadius = d.getDistance3D();
+    xRadius =  d.getDistance3D() / 6.0;
     m_radius = xRadius;
     yRadius = xRadius;
 
@@ -311,7 +310,6 @@ void AngleTool::drawCircumference()
         }
     }
     m_circumferencePolyline->update( DrawerPrimitive::VTKRepresentation );
-    delete middlePoint;
 }
 
 void AngleTool::simulateFirstSegmentOfAngle()
