@@ -13,6 +13,7 @@
         <file>images/addViewRight.png</file>
         <file>images/advancedSearch.png</file>
         <file>images/airbrush.png</file>
+        <file>images/angle.png</file>
         <file>images/apply.png</file>
         <file>images/axial.png</file>
         <file>images/back.png</file>
@@ -32,6 +33,7 @@
         <file>images/down.png</file>
         <file>images/dvd.png</file>
         <file>images/eraser.png</file>
+        <file>images/eraser2.png</file>
         <file>images/exit.png</file>
         <file>images/fileclose.png</file>
         <file>images/flipHorizontal.png</file>
@@ -100,6 +102,5 @@
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
-        <file>images/eraser2.png</file>
     </qresource>
 </RCC>

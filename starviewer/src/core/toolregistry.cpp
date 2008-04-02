@@ -24,6 +24,7 @@
 #include "polylineroitool.h"
 #include "distancetool.h"
 #include "erasertool.h"
+#include "angletool.h"
 
 #include <QAction>
 
@@ -100,6 +101,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "EraserTool" )
     {
         tool = new EraserTool( viewer );
+    }
+    else if( toolName == "AngleTool" )
+    {
+        tool = new AngleTool( viewer );
     }
     else
     {
@@ -205,6 +210,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Erase") );
         toolAction->setStatusTip( tr("Enable/Disable eraser tool") );
         toolAction->setIcon( QIcon(":/images/eraser2.png") );
+    }
+    else if( toolName == "AngleTool" )
+    {
+        toolAction->setText( tr("Angle") );
+        toolAction->setStatusTip( tr("Enable/Disable angle tool") );
+        toolAction->setIcon( QIcon(":/images/angle.png") );
     }
     else
     {
