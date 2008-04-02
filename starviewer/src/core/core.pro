@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop.
 # -------------------------------------------
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu ÃÂÃÂ©s una biblioteca:
+# L'objectiu ÃÂÃÂÃÂÃÂ©s una biblioteca:
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui  \
@@ -154,10 +154,10 @@ HEADERS += extensionfactory.h \
            vtkProjectionImageFilter.h \
            slicingkeyboardtool.h \
            qthickslabwidget.h \
-           patientitem.h \
+           erasertool.h \
+	   patientitem.h \
            patientitemmodel.h \
-           erasertool.h
-
+           angletool.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -280,10 +280,10 @@ SOURCES += extensionmediator.cpp \
            vtkProjectionImageFilter.cxx \
            slicingkeyboardtool.cpp \
            qthickslabwidget.cpp \
+           erasertool.cpp \
            patientitem.cpp \
            patientitemmodel.cpp \
-           erasertool.cpp
-
+           angletool.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \

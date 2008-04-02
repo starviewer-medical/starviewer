@@ -268,6 +268,11 @@ void Drawer::show( int plane, int slice )
     m_2DViewer->refresh();
 }
 
+int Drawer::getNumberOfDrawnPrimitives()
+{
+    return ( m_axialPrimitives.size() + m_sagitalPrimitives.size() + m_coronalPrimitives.size() );
+}
+
 void Drawer::hideGroup(const QString &groupName)
 {
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values( groupName );

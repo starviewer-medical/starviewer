@@ -172,4 +172,41 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     return 1;
 }
 
+double* MathTools::directorVector( double point1[3], double point2[3] )
+{
+    double *vd = new double[3];
+    
+    for (int i = 0; i < 3; i++)
+        vd[i] = point2[i] - point1[i];
+    
+    return vd;
+}
+
+double* MathTools::vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] )
+{
+    double *vp = new double[3];
+    vp[0] = (vectorDirector1[1] * vectorDirector2[2]) - (vectorDirector1[2] * vectorDirector2[1]);
+    vp[1] = -1.0 * ((vectorDirector1[0] * vectorDirector2[2]) - (vectorDirector1[2] * vectorDirector2[0]));
+    vp[2] = (vectorDirector1[0] * vectorDirector2[1]) - (vectorDirector1[1] * vectorDirector2[0]);
+    
+    return vp;
+}
+
+int MathTools::getSign( double number )
+{
+    int sign;
+    
+    if (number < 0. )
+        sign = NEGATIVE;
+    else
+        sign = POSITIVE;
+        
+    return sign;       
+}
+
+bool MathTools::haveSameSign( double numberA, double numberB )
+{
+    return ( getSign( numberA ) == getSign( numberB ) );
+}
+
 }; // end namespace udg

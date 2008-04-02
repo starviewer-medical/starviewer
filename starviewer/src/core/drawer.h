@@ -58,6 +58,9 @@ public:
     
     ///ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
     void erasePrimitivesInsideBounds( double p1[3], double p2[3], int view, int slice );
+    
+    ///ens diu el total de primitives dibuixades en totes les vistes
+    int getNumberOfDrawnPrimitives();
 
 public slots:
     /**

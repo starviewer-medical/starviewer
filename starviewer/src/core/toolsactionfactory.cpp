@@ -102,6 +102,14 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_eraserAction->setCheckable( true );
     m_signalMapper->setMapping( m_eraserAction , "EraserTool" );
     connect( m_eraserAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    
+    m_angleAction = new QAction( 0 );
+    m_angleAction->setText( tr("Angle") );
+    m_angleAction->setStatusTip( tr("Enable/Disable Angle tool") );
+    m_angleAction->setIcon( QIcon(":/images/angle.png") );
+    m_angleAction->setCheckable( true );
+    m_signalMapper->setMapping( m_angleAction , "AngleTool" );
+    connect( m_angleAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     connect( m_signalMapper, SIGNAL( mapped(QString) ), this , SIGNAL( triggeredTool(QString) ) );
 
@@ -117,6 +125,7 @@ ToolsActionFactory::ToolsActionFactory( QWidget *parent )
     m_availableToolActions["ROITool"] = m_roiAction;
     m_availableToolActions["VoxelInformationTool"] = m_voxelInformationAction;
     m_availableToolActions["EraserTool"] = m_eraserAction;
+    m_availableToolActions["AngleTool"] = m_angleAction;
 }
 
 ToolsActionFactory::~ToolsActionFactory()

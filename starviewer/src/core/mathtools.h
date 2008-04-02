@@ -18,6 +18,8 @@ class MathTools{
     
 public:
 
+    enum Sign{ POSITIVE, NEGATIVE };
+    
 /// Declaració de constants
 static const double LOGARITHM_BASE2_E;
 static const long double REVERS_PI_LONG;
@@ -44,6 +46,12 @@ inline static double zero(const double x)
   return (- MathTools::Epsilon() < x && x < + MathTools::Epsilon() ) ? 0 : x;
 }
 
+///retorna el signe del número passat per paràmetre
+static int getSign( double number );
+
+///ens diu si els dos nombres passats per paràmetre tenen el mateix signe.
+static bool haveSameSign( double numberA, double numberB );
+
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians
 static double angleInRadians( double vec1[3] , double vec2[3] );
 /// Calcula l'angle entre dos vectors. Retorna el valor en graus
@@ -55,7 +63,13 @@ static int planeIntersection( double p[3] , double n[3], double q[3] , double m[
 
 /// Calcula la intersecció de tres plans definits per un punt i una normal (p,n) , (q,m) , (r,t) respectivament
 /// Retorna 0 si ... -1 si ... perquè són paral·lels , altrament >0
-static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] );    
+static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] );   
+ 
+///a partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
+static double* directorVector( double point1[3], double point2[3] );
+
+///producte vectorial dels dos vectors directors passats per paràmetre.
+static double* vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] );
 };
 
 } // end namespace udg
