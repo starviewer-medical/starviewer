@@ -1587,9 +1587,9 @@ Image *Q2DViewer::getCurrentDisplayedImage() const
     {
         if( m_mainVolume->getSeries() )
         {
-            if( (m_currentPhase*m_maxSliceValue + m_currentSlice) < m_mainVolume->getSeries()->getImages().count() )
+            if( ( m_currentSlice*m_numberOfPhases + m_currentPhase ) < m_mainVolume->getSeries()->getImages().count() )
             {
-                image = m_mainVolume->getSeries()->getImages().at( m_currentPhase*m_maxSliceValue + m_currentSlice );
+                image = m_mainVolume->getSeries()->getImages().at( m_currentSlice*m_numberOfPhases + m_currentPhase );
             }
         }
     }
