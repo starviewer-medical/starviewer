@@ -960,7 +960,7 @@ void OptimalViewpointVolume::computeObscurances()
     m_image->GetIncrements( increments );
 
     unsigned char numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
-    ObscuranceThread * threads[numberOfThreads];
+    QVector<ObscuranceThread *> threads(numberOfThreads);
 
     for ( unsigned char i = 0; i < numberOfThreads; ++i )
     {
@@ -1125,31 +1125,31 @@ void OptimalViewpointVolume::computeObscurances()
 // void OptimalViewpointVolume::computeObscurances()
 // {
 //     synchronize();
-// 
+//
 //     vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
 //     unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
 //     unsigned char * gradientMagnitudes = m_mainMapper->GetGradientEstimator()->GetGradientMagnitudes();
-// 
+//
 //     // càlcul de direccions
 //     POVSphereCloud cloud( 1.0, m_obscuranceDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
 //     cloud.createPOVCloud();
 //     const QVector<Vector3> & vertices = cloud.getVertices();
-// 
+//
 //     // variables necessàries
 //     int dimensions[3];
 //     m_image->GetDimensions( dimensions );
 //     int increments[3];
 //     m_image->GetIncrements( increments );
-// 
+//
 //     delete [] m_obscurance;
 //     m_obscurance = new double[m_dataSize];
 //     for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] = 0.0;
-// 
+//
 //     unsigned int progress = 0, total = vertices.count();
-// 
+//
 //     int selection = static_cast<int>( round( m_obscuranceMaximumDistance * 100.0 ) ) % 100;
 //     double maximumObscurance = 0.0;
-// 
+//
 //     // iterem per les direccions
 //     foreach ( Vector3 direction, vertices )
 //     {
@@ -1158,9 +1158,9 @@ void OptimalViewpointVolume::computeObscurances()
 // //             progress++;
 // //             continue;
 // //         }
-// 
+//
 //         DEBUG_LOG( QString( "Direcció " ) + direction.toString() );
-// 
+//
 //         // direcció dominant (0 = x, 1 = y, 2 = z)
 //         int dominant;
 //         Vector3 absDirection( qAbs( direction.x ), qAbs( direction.y ), qAbs( direction.z ) );
@@ -1174,7 +1174,7 @@ void OptimalViewpointVolume::computeObscurances()
 //             if ( absDirection.y >= absDirection.z ) dominant = 1;
 //             else dominant = 2;
 //         }
-// 
+//
 //         // vector per avançar
 //         Vector3 forward;
 //         switch ( dominant )
@@ -1185,7 +1185,7 @@ void OptimalViewpointVolume::computeObscurances()
 //         }
 //         forward /= qAbs( forward.x );   // la direcció x passa a ser 1 o -1
 //         DEBUG_LOG( QString( "forward = " ) + forward.toString() );
-// 
+//
 //         // dimensions i increments segons la direcció dominant
 //         int dimX = dimensions[dominant], dimY = dimensions[(dominant+1)%3], dimZ = dimensions[(dominant+2)%3];
 //         int incX = increments[dominant], incY = increments[(dominant+1)%3], incZ = increments[(dominant+2)%3];
@@ -1210,22 +1210,22 @@ void OptimalViewpointVolume::computeObscurances()
 //         }
 //         DEBUG_LOG( QString( "forward = " ) + forward.toString() );
 //         // ara els 3 components són positius
-// 
+//
 //         // llista dels vòxels que són començament de línia
 //         QList<Vector3> lineStarts = getLineStarts( dimX, dimY, dimZ, forward );
-// 
+//
 // //         uint i = 0;
 // //         uint c = 0;
-// 
+//
 // //         // prova
 // //         int length = dimX * dimY * dimZ;
 // //         unsigned char array[length];
 // //         for (int k = 0; k < length; k++) array[k] = 0;
 // //         unsigned char * ptr = array;
 // //         ptr += startDelta;
-// 
+//
 //         unsigned char * dataPtr = m_data + startDelta;
-// 
+//
 //         // iterar per cada línia
 //         while ( !lineStarts.isEmpty() )
 //         {
@@ -1234,21 +1234,21 @@ void OptimalViewpointVolume::computeObscurances()
 //             Voxel v = { round( rv.x ), round( rv.y ), round( rv.z ) };
 //             Voxel pv = v;
 //             QStack< QPair<uchar,Vector3> > unresolvedVoxels;
-// 
+//
 //             // iterar per la línia
 //             while ( v.x < dimX && v.y < dimY && v.z < dimZ )
 //             {
 // //                 // prova
 // //                 ptr[v.x * incX + v.y * incY + v.z * incZ]++;
-// 
+//
 //                 // tractar el vòxel
 //                 uchar value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
-// 
+//
 //                 while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= value )
 //                 {
 //                     Vector3 ru = unresolvedVoxels.pop().second;
 //                     Voxel u = { round( ru.x ), round( ru.y ), round( ru.z ) };
-// 
+//
 //                     int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
 //                     float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
 //                     Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
@@ -1266,7 +1266,7 @@ void OptimalViewpointVolume::computeObscurances()
 // //                         DEBUG_LOG( QString( "normal: " ) + uNormal.toString() + QString( " | length = %1" ).arg( uNormal.length() ) );
 // //                         uNormal.normalize();
 // //                     }
-// 
+//
 //                     if ( uNormal * direction < 0.0 )
 //                     {
 // //                         DEBUG_LOG( QString( "entro: " ) + ru.toString() );
@@ -1278,16 +1278,16 @@ void OptimalViewpointVolume::computeObscurances()
 //                             maximumObscurance = m_obscurance[uIndex];
 //                     }
 //                 }
-// 
+//
 //                 unresolvedVoxels.push( qMakePair( value, rv ) );
-// 
+//
 //                 // avançar el vòxel
 //                 rv += forward;
 //                 pv = v;
 //                 v.x = round( rv.x ); v.y = round( rv.y ); v.z = round( rv.z );
 // //                 c++;
 //             }
-// 
+//
 //             while ( !unresolvedVoxels.isEmpty() )
 //             {
 //                 Vector3 ru = unresolvedVoxels.pop().second;
@@ -1295,7 +1295,7 @@ void OptimalViewpointVolume::computeObscurances()
 //                 int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
 //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
 //                 Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
-// 
+//
 // //                 DEBUG_LOG( "-------------" );
 // //                 DEBUG_LOG( QString( "voxel: " ) + ru.toString() );
 // //                 DEBUG_LOG( QString( "value: %1" ).arg( it.key() ) );
@@ -1304,7 +1304,7 @@ void OptimalViewpointVolume::computeObscurances()
 // //                 DEBUG_LOG( QString( "direction: " ) + direction.toString() );
 // //                 DEBUG_LOG( QString( "normal · direction = %1" ).arg( uNormal * direction ) );
 // //                 DEBUG_LOG( "-------------" );
-// 
+//
 //                 if ( uNormal * direction < 0.0 )
 //                 {
 //                     m_obscurance[uIndex]++;
@@ -1313,7 +1313,7 @@ void OptimalViewpointVolume::computeObscurances()
 //                 }
 //             }
 //         }
-// 
+//
 // //         DEBUG_LOG( QString( "i = %1" ).arg( i ) );
 // //         DEBUG_LOG( QString( "c = %1" ).arg( c ) );
 // //         for ( int k = 0; k < length; k++ )
@@ -1321,19 +1321,19 @@ void OptimalViewpointVolume::computeObscurances()
 // //             if ( array[k] != 1 )
 // //                 DEBUG_LOG( QString( "malament!!!! a[%1] = %2" ).arg( k ).arg( array[k] ) );
 // //         }
-// 
+//
 //         DEBUG_LOG( QString( "progress: %1/%2" ).arg( ++progress ).arg( total ) );
 //     }
-// 
+//
 //     unsigned int count = vertices.count();
 //     for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] /= maximumObscurance;
-// 
+//
 //     for ( int i = 0; i < m_dataSize; i++ )
 //     {
 //         if ( m_obscurance[i] > 1.0 )
 //             DEBUG_LOG( QString( "bad obscurance: o[%1] = %2" ).arg( i ).arg( m_obscurance[i] ) );
 //     }
-// 
+//
 //     {
 //         // obscurances to file
 //         QFile outFile( QDir::tempPath().append( QString( "/obscurance.raw" ) ) );
@@ -1371,7 +1371,7 @@ void OptimalViewpointVolume::computeObscurances()
 // {
 //     // llista dels vòxels que són començament de línia
 //     QList<Vector3> lineStarts;
-// 
+//
 //     // tots els (0,y,z) són començament de línia
 //     Vector3 lineStart( 0, 0, 0 );
 //     for ( int iy = 0; iy < dimY; iy++ )
@@ -1385,11 +1385,11 @@ void OptimalViewpointVolume::computeObscurances()
 //         }
 //     }
 //     DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.count() ) );
-// 
+//
 //     // més començaments de línia
 //     Vector3 rv;
 //     Voxel v = { 0, 0, 0 }, pv = v;
-// 
+//
 //     // iterar per la línia que comença a (0,0,0)
 //     while ( v.x < dimX )
 //     {
@@ -1411,14 +1411,14 @@ void OptimalViewpointVolume::computeObscurances()
 //                 lineStarts << lineStart;
 //             }
 //         }
-// 
+//
 //         // avançar el vòxel
 //         rv += forward;
 //         pv = v;
 //         v.x = round( rv.x ); v.y = round( rv.y ); v.z = round( rv.z );
 //     }
 //     DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.count() ) );
-// 
+//
 //     return lineStarts;
 // }
 
@@ -1450,7 +1450,7 @@ void OptimalViewpointVolume::setObscuranceVariant( ObscuranceVariant obscuranceV
 // inline double OptimalViewpointVolume::obscurance( double distance ) const
 // {
 //     if ( distance > m_obscuranceMaximumDistance ) return 1.0;
-// 
+//
 //     switch ( m_obscuranceFunction )
 //     {
 //         case Constant0: return 0.0;
