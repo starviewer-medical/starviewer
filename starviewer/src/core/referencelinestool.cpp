@@ -190,7 +190,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 
         // calculem totes les possibles interseccions
         QList< QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
-        double t, firstIntersectionPoint[3], secondIntersectionPoint[3];
+        double firstIntersectionPoint[3], secondIntersectionPoint[3];
         int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
 
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
