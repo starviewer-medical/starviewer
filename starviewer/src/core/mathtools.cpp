@@ -207,4 +207,38 @@ bool MathTools::haveSameSign( double numberA, double numberB )
     return ( getSign( numberA ) == getSign( numberB ) );
 }
 
+///ens retorna el mínim dels dos valors
+double MathTools::minimum( double a, double b)
+{
+    double min;
+    
+    if ( a < b )
+    {
+        min = a;
+    }
+    else
+    {
+        min = b;
+    }
+    
+    return min;
+}
+
+///ens retorna el màxim dels dos valors
+double MathTools::maximum( double a, double b)
+{
+    double max;
+    
+    if ( a > b )
+    {
+        max = a;
+    }
+    else
+    {
+        max = b;
+    }
+    
+    return max;
+}
+
 }; // end namespace udg

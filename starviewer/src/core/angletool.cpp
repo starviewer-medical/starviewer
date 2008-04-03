@@ -228,9 +228,13 @@ void AngleTool::drawCircumference()
             break;
     }
     
-    Distance d( p1, p2 );
-
-    xRadius =  d.getDistance3D() / 6.0;
+    Distance d1( p1, p2 );
+    Distance d2( p2, p3 );
+    
+    double distance1 = d1.getDistance3D();
+    double distance2 = d2.getDistance3D();
+    
+    xRadius =  MathTools::minimum( distance1, distance2 ) / 4.0;
     m_radius = xRadius;
     yRadius = xRadius;
 
