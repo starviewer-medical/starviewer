@@ -400,6 +400,11 @@
         <widget class="QComboBox" name="m_renderingMethodComboBox" >
          <item>
           <property name="text" >
+           <string>Contouring</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
            <string>Ray Casting</string>
           </property>
          </item>
