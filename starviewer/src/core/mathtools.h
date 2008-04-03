@@ -70,6 +70,12 @@ static double* directorVector( double point1[3], double point2[3] );
 
 ///producte vectorial dels dos vectors directors passats per paràmetre.
 static double* vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] );
+
+///ens retorna el mínim dels dos valors
+static double minimum( double a, double b);
+
+///ens retorna el màxim dels dos valors
+static double maximum( double a, double b);
 };
 
 } // end namespace udg
