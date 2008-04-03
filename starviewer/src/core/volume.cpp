@@ -379,6 +379,38 @@ Patient *Volume::getPatient()
         return NULL;
 }
 
+QString Volume::toString( bool verbose )
+{
+    QString result;
+
+    if( m_dataLoaded )
+    {
+        int dims[3];
+        double origin[3];
+        double spacing[3];
+        int extent[6];
+        double bounds[6];
+
+        this->getDimensions( dims );
+        this->getOrigin( origin );
+        this->getSpacing( spacing );
+        this->getWholeExtent( extent );
+        this->getVtkData()->GetBounds( bounds );
+
+        result += QString("Dimensions: %1, %2, %3").arg(dims[0]).arg(dims[1]).arg(dims[2]);
+        result += QString("\nOrigin: %1, %2, %3").arg(origin[0]).arg(origin[1]).arg(origin[2]);
+        result += QString("\nSpacing: %1, %2, %3").arg(spacing[0]).arg(spacing[1]).arg(spacing[2]);
+        result += QString("\nExtent: %1..%2, %3..%4, %5..%6").arg(extent[0]).arg(extent[1]).arg(extent[2]).arg(extent[3]).arg(extent[4]).arg(extent[5]);
+        result += QString("\nBounds: %1..%2, %3..%4, %5..%6").arg(bounds[0]).arg(bounds[1]).arg(bounds[2]).arg(bounds[3]).arg(bounds[4]).arg(bounds[5]);
+    }
+    else
+    {
+        result = "The data is not loaded";
+    }
+
+    return result;
+}
+
 void Volume::allocateImageData()
 {
     //\TODO si les dades estan allotjades per defecte, fer un delete primer i després fer un new? o amb un ReleaseData n'hi ha prou?

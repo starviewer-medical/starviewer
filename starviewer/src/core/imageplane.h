@@ -70,6 +70,11 @@ public:
     QList< QVector<double> > getUpperBounds();
     QList< QVector<double> > getLowerBounds();
 
+    /**
+     * Retorna un volcat d'informació de l'objecte en format d'string
+     */
+    QString toString( bool verbose = false );
+
 private:
     /// Vectors que defineixen el pla
     double m_rowDirectionVector[3], m_columnDirectionVector[3], m_normal[3];

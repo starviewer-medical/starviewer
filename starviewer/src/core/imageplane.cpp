@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "imageplane.h"
+#include <QString>
 #include <vtkMath.h>
 
 namespace udg {
@@ -207,6 +208,30 @@ QList< QVector<double> > ImagePlane::getUpperBounds()
 QList< QVector<double> > ImagePlane::getLowerBounds()
 {
     return getBounds( 2 );
+}
+
+QString ImagePlane::toString( bool verbose )
+{
+    QString result;
+
+    result = QString("Origin: %1, %2, %3").arg(m_origin[0]).arg(m_origin[1]).arg(m_origin[2]);
+    result += QString("\nRows: %1  Columns: %2").arg( m_rows ).arg( m_columns );
+    result += QString("\nRow Vector: %1, %2, %3").arg(m_rowDirectionVector[0]).arg(m_rowDirectionVector[1]).arg(m_rowDirectionVector[2]);
+    result += QString("\nColumn Vector: %1, %2, %3").arg(m_columnDirectionVector[0]).arg(m_columnDirectionVector[1]).arg(m_columnDirectionVector[2]);
+    result += QString("\nNormal Vector: %1, %2, %3").arg(m_normal[0]).arg(m_normal[1]).arg(m_normal[2]);
+    result += QString("\nSpacing: %1, %2").arg( m_spacing[0] ).arg( m_spacing[1] );
+    result += QString("\nThickness: %1").arg(m_thickness);
+
+    if( verbose )
+    {
+        QList< QVector<double> > bounds = this->getCentralBounds();
+        result += QString( "\nTLHC: %1, %2, %3" ).arg( bounds.at(0)[0] ).arg( bounds.at(0)[1] ).arg( bounds.at(0)[2] );
+        result += QString( "\nTRHC: %1, %2, %3" ).arg( bounds.at(1)[0] ).arg( bounds.at(1)[1] ).arg( bounds.at(1)[2] );
+        result += QString( "\nBRHC: %1, %2, %3" ).arg( bounds.at(2)[0] ).arg( bounds.at(2)[1] ).arg( bounds.at(2)[2] );
+        result += QString( "\nBLHC: %1, %2, %3" ).arg( bounds.at(3)[0] ).arg( bounds.at(3)[1] ).arg( bounds.at(3)[2] );
+    }
+
+    return result;
 }
 
 }
