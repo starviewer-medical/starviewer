@@ -170,7 +170,7 @@ void QCardiac2DViewerExtension::setInput( Volume *input )
 
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
-    INFO_LOG("QCardiac2DViewerExtension: Donem l'input principal")
+    INFO_LOG("QCardiac2DViewerExtension: Donem l'input principal");
     changeViewToAxial();
 }
 
@@ -183,7 +183,7 @@ void QCardiac2DViewerExtension::changeViewToAxial()
     m_slider->setMaximum( m_mainVolume->getSeries()->getNumberOfPhases() - 1 );
 //    m_viewText->setText( tr("XY : Axial") );
     m_2DView->resetViewToAxial();
-    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)")
+    INFO_LOG("Visor per defecte: Canviem a vista axial (Vista 1)");
     m_2DView->render();
     m_slider->setValue( m_firstSliceInterval );
 }
@@ -199,7 +199,7 @@ void QCardiac2DViewerExtension::changeViewToSagital()
     m_slider->setMaximum( extent[1] );
 //     m_viewText->setText( tr("YZ : Sagital") );
     m_2DView->resetViewToSagital();
-    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)")
+    INFO_LOG("Visor per defecte: Canviem a vista sagital (Vista 1)");
     m_2DView->render();
 }
 
@@ -214,7 +214,7 @@ void QCardiac2DViewerExtension::changeViewToCoronal()
     m_slider->setMaximum( extent[3] );
 //     m_viewText->setText( tr("XZ : Coronal") );
     m_2DView->resetViewToCoronal();
-    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)")
+    INFO_LOG("Visor per defecte: Canviem a vista coronal (Vista 1)");
     m_2DView->render();
 
 }

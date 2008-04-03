@@ -21,36 +21,62 @@
 
 /// Macro per a inicialitzar els logger
 #define LOGGER_INIT( file ) \
-{ \
-    log4cxx::PropertyConfigurator::configure( file ); \
-    INFO_LOG("__________________________________") \
-    INFO_LOG("::::::::::::::::::::::::::::::::::") \
-    INFO_LOG("* Inicialització de l'aplicació *") \
-    INFO_LOG("::::::::::::::::::::::::::::::::::") \
-    INFO_LOG("") \
-}
+    if (true) \
+    { \
+        log4cxx::PropertyConfigurator::configure( file ); \
+        INFO_LOG("__________________________________"); \
+        INFO_LOG("::::::::::::::::::::::::::::::::::"); \
+        INFO_LOG("* Inicialització de l'aplicació *"); \
+        INFO_LOG("::::::::::::::::::::::::::::::::::"); \
+        INFO_LOG(""); \
+    } else (void)0
 
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir una variable pròpia, com per exemple DEBUG
 #ifdef QT_NO_DEBUG
-#define DEBUG_LOG( msg );
+#define DEBUG_LOG( msg ) (void)0
 #else
-#define DEBUG_LOG( msg ){ LOG4CXX_DEBUG( log4cxx::Logger::getLogger("development") , qPrintable( QString(msg) ) ) }
+#define DEBUG_LOG( msg ) \
+    if (true) \
+    { \
+        LOG4CXX_DEBUG( log4cxx::Logger::getLogger("development"), qPrintable( QString(msg) )) \
+    } else (void)0
+
 
 #endif
 
 /// Macro per a missatges d'informació general
-#define INFO_LOG( msg ){ LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release") , qPrintable( QString(msg) ) ) }
+#define INFO_LOG( msg ) \
+    if (true) \
+    { \
+        LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release"), qPrintable( QString(msg) )) \
+    } else (void)0
 
 /// Macro per a missatges de warning
-#define WARN_LOG( msg ){ LOG4CXX_WARN( log4cxx::Logger::getLogger("info.release") , qPrintable( QString(msg) ) ) }
+#define WARN_LOG( msg ) \
+    if (true) \
+    { \
+        LOG4CXX_WARN( log4cxx::Logger::getLogger("info.release"), qPrintable( QString(msg) )) \
+    } else (void)0
 
 /// Macro per a missatges d'error
-#define ERROR_LOG( msg ){ LOG4CXX_ERROR( log4cxx::Logger::getLogger("errors.release") , qPrintable( QString(msg) ) ) }
+#define ERROR_LOG( msg ) \
+    if (true) \
+    { \
+        LOG4CXX_ERROR( log4cxx::Logger::getLogger("errors.release"), qPrintable( QString(msg) )) \
+    } else (void)0
 
 /// Macro per a missatges d'error fatals/crítics
-#define FATAL_LOG( msg ){ LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release") , qPrintable( QString(msg) ) ) }
+#define FATAL_LOG( msg ) \
+    if (true) \
+    { \
+        LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release"), qPrintable( QString(msg) )) \
+    } else (void)0
 
 /// Macro per a missatges d'estadístiques
-#define STAT_LOG( msg ){ LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release") , qPrintable( QString("STAT: ") + QString(msg) ) ) }
+#define STAT_LOG( msg ) \
+    if (true) \
+    { \
+        LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release"), qPrintable( QString("STAT: ") + QString(msg) )) \
+    } else (void)0
 
 #endif

@@ -108,7 +108,7 @@ void ImageFillerStep::processImage( Image *image )
         if( list.size() == 2 )
             image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
         else
-            DEBUG_LOG("Error a l'obtenir el pixel spacing. Es pot tractar d'una imatge US.")
+            DEBUG_LOG("Error a l'obtenir el pixel spacing. Es pot tractar d'una imatge US.");
 
         value = dicomReader.getAttributeByName( DCM_SliceThickness );
         if( !value.isEmpty() )

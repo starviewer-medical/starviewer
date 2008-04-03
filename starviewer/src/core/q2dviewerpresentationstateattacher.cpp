@@ -442,7 +442,7 @@ void Q2DViewerPresentationStateAttacher::applyVOILUT()
 
                     c = m_presentationStateHandler->getCurrentVOIDescription();
                     if( c )
-                        DEBUG_LOG( QString("Window/Level Description: ") + QString(c) )
+                        DEBUG_LOG( QString("Window/Level Description: ") + QString(c) );
                     else
                         DEBUG_LOG( "Window/Level has no Description" );
                 }
@@ -451,7 +451,7 @@ void Q2DViewerPresentationStateAttacher::applyVOILUT()
                 {
                     c = m_presentationStateHandler->getCurrentVOIDescription();
                     if( c )
-                        DEBUG_LOG( QString("Window/Level LUT Description: %1 ").arg( c ) )
+                        DEBUG_LOG( QString("Window/Level LUT Description: %1 ").arg( c ) );
                     else
                         DEBUG_LOG( "Window/Level LUT has no Description" );
                     // crear la LUT i assignar-li al filtre
@@ -518,7 +518,7 @@ void Q2DViewerPresentationStateAttacher::applyPresentationLUT()
         m_presentationLut = parseLookupTable( 2 );
         c = m_presentationStateHandler->getPresentationLUTExplanation();
         if( c )
-            DEBUG_LOG( QString( "Presentation LUT Explanation: %1" ).arg( c ) )
+            DEBUG_LOG( QString( "Presentation LUT Explanation: %1" ).arg( c ) );
         else
             DEBUG_LOG( "Presentation LUT has no Explanation." );
         m_2DViewer->setPresentationLUT( m_presentationLut );

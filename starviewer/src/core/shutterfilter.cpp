@@ -166,7 +166,7 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                             DEBUG_LOG( QString("L'overlay %1 és bo com a bitmap shutter i es pinta al layer #%2").arg( overlayIndex ).arg( layer ) );
 
                             if( presentationStateHandler->overlayInPresentationStateIsROI( overlayIndex ) )
-                                DEBUG_LOG("L'overlay és un ROI!!!!!!!!!!")
+                                DEBUG_LOG("L'overlay és un ROI!!!!!!!!!!");
                             else
                                 DEBUG_LOG("L'overlay és un BITMAP SHUTTER :D !!!!");
 
