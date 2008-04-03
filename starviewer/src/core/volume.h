@@ -139,6 +139,9 @@ public:
     Study *getStudy();
     Patient *getPatient();
 
+    /// Volcat d'informació en un string per poder-ho printar on interessi
+    QString toString( bool verbose = false );
+
 signals:
     /**
      * Emet l'estat del progrés en el que es troba la càrrega de dades del volum
