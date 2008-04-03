@@ -32,7 +32,7 @@ Classe base per als visualitzadors 3D
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
-    enum RenderFunction{ RayCasting , MIP3D, IsoSurface , Texture2D , Texture3D };
+    enum RenderFunction{ RayCasting , MIP3D, IsoSurface , Texture2D , Texture3D, Contouring };
 
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
@@ -55,7 +55,8 @@ public slots:
     void setRenderFunctionToIsoSurface();
     void setRenderFunctionToTexture2D();
     void setRenderFunctionToTexture3D();
-
+    void setRenderFunctionToContouring();
+    
     void resetViewToAxial();
     void resetViewToSagital();
     void resetViewToCoronal();
@@ -74,6 +75,9 @@ public slots:
 private:
     /// fa la visualització per raycasting
     void renderRayCasting();
+    
+    /// fa la visualització per contouring
+    void renderContouring();
 
     /// fa la visualització per MIP3D
     void renderMIP3D();
