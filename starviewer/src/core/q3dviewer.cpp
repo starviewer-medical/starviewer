@@ -29,6 +29,14 @@
 // MIP
 #include <vtkVolumeRayCastMIPFunction.h>
 #include <vtkFiniteDifferenceGradientEstimator.h>
+//Contouring
+#include <vtkPolyDataMapper.h>
+#include <vtkContourFilter.h>
+#include <vtkReverseSense.h>
+#include <vtkImageShrink3D.h>
+#include <vtkImageGaussianSmooth.h>
+#include <vtkProperty.h>
+#include <vtkDecimatePro.h>
 // IsoSurface
 #include <vtkVolumeRayCastIsosurfaceFunction.h>
 // Texture2D i Texture3D
@@ -58,7 +66,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
-    m_renderFunction = RayCasting; // per defecte
+    m_renderFunction = Contouring; // per defecte
 
     m_imageCaster = vtkImageCast::New();
     m_currentOrientation = Axial;
@@ -122,6 +130,11 @@ void Q3DViewer::setRenderFunctionToRayCasting()
     m_renderFunction = RayCasting;
 }
 
+void Q3DViewer::setRenderFunctionToContouring()
+{
+    m_renderFunction = Contouring;
+}
+
 void Q3DViewer::setRenderFunctionToMIP3D()
 {
     m_renderFunction = MIP3D;
@@ -162,6 +175,9 @@ QString Q3DViewer::getRenderFunctionAsString()
     case Texture3D:
         result = "Texture3D";
     break;
+    case Contouring:
+        result = "Contouring";
+    break;
     }
     return result;
 }
@@ -177,6 +193,9 @@ void Q3DViewer::render()
     {
         switch( m_renderFunction )
         {
+        case Contouring:   
+            renderContouring();
+        break;            
         case RayCasting:
             renderRayCasting();
         break;
@@ -326,6 +345,58 @@ void Q3DViewer::renderMIP3D()
     }
     else
         DEBUG_LOG( "No es pot fer render per MIP, no s'ha proporcionat cap volum d'entrada" );
+}
+
+void Q3DViewer::renderContouring()
+{
+    if ( m_mainVolume != 0 )
+    {
+        vtkImageShrink3D *m_shrink = vtkImageShrink3D::New();
+        m_shrink->SetInput( m_mainVolume->getVtkData() );
+        vtkImageGaussianSmooth *m_smooth = vtkImageGaussianSmooth::New();
+        m_smooth->SetDimensionality( 3 );
+        m_smooth->SetRadiusFactor( 2 );
+        m_smooth->SetInput( m_shrink->GetOutput() );
+        
+        vtkContourFilter *contour = vtkContourFilter::New();
+        contour->SetInputConnection( m_smooth->GetOutputPort());
+        contour->GenerateValues( 1, 30, 30);
+        contour->ComputeScalarsOff();
+        contour->ComputeGradientsOff();
+        
+        vtkDecimatePro *decimator = vtkDecimatePro::New();
+        decimator->SetInputConnection( contour->GetOutputPort() );
+        decimator->SetTargetReduction( 0.9 );
+        decimator->PreserveTopologyOn();
+        
+        vtkReverseSense *reverse = vtkReverseSense::New();
+        reverse->SetInputConnection(decimator->GetOutputPort());
+        reverse->ReverseCellsOn();
+        reverse->ReverseNormalsOn();
+    
+        vtkPolyDataMapper *m_polyDataMapper = vtkPolyDataMapper::New();
+        
+        m_polyDataMapper->SetInputConnection( reverse->GetOutputPort() );
+        m_polyDataMapper->ScalarVisibilityOn();
+        m_polyDataMapper->ImmediateModeRenderingOn();
+    
+        vtkActor *m_3DActor = vtkActor::New();
+        m_3DActor->SetMapper( m_polyDataMapper );
+        m_3DActor->GetProperty()->SetColor(1,0.8,0.81);
+        
+        m_renderer->AddActor( m_3DActor );
+        m_renderer->Render();
+        
+        decimator->Delete();
+        m_3DActor->Delete();
+        m_polyDataMapper->Delete();
+        contour->Delete();
+        m_smooth->Delete();
+        m_shrink->Delete();
+        reverse->Delete();
+    }
+    else
+        DEBUG_LOG( "No s'ha proporcionat cap volum d'entrada" );
 }
 
 void Q3DViewer::renderIsoSurface()
