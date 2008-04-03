@@ -1191,6 +1191,7 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
 void QueryScreen::importDicomdir()
 {
     DICOMDIRImporter importDicom;
+    Status state;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1198,12 +1199,43 @@ void QueryScreen::importDicomdir()
     // TODO ara només permetrem importar estudis sencers
     foreach( QString studyUID, m_studyTreeWidgetDicomdir->getSelectedStudiesUID() )
     {
-        importDicom.import( m_readDicomdir.getDicomdirPath(), studyUID, QString(), QString() );
+        state = importDicom.import( m_readDicomdir.getDicomdirPath(), studyUID, QString(), QString() );
+
+        if (!state.good()) showErrorImportingDicomdir( state , studyUID );
     }
-    
+
     queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
-    
+
     QApplication::restoreOverrideCursor();
+}
+
+void QueryScreen::showErrorImportingDicomdir( Status state , QString studyUID )
+{
+    if (!state.good())
+    {
+        DicomMask studyMask;
+        StudyList studyList;
+        DICOMStudy study;
+
+        QApplication::restoreOverrideCursor();
+
+        studyMask.setStudyUID ( studyUID );
+        m_readDicomdir.readStudies( studyList , studyMask );
+        studyList.firstStudy();
+
+        study = studyList.getStudy();
+
+        if ( state.code() == 1303 )
+        {//Alguna de les imatges de l'estudi no s'han trobat
+            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Dicomdir is inconsistent. Can't import images from study of " ) +  qPrintable( study.getPatientName() + tr (", study description: ") + study.getStudyDescription() ) );
+        }
+        else 
+        {//Error desconegut
+            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error. Can't import images from study of " ) +  +  qPrintable(  study.getPatientName() + tr (", study description: ") + study.getStudyDescription() ) );
+        }
+
+        QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    }
 }
 
 void QueryScreen::deleteSelectedStudiesInCache()

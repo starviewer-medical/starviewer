@@ -26,6 +26,7 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "scalestudy.h"
+#include "errordcmtk.h"
 
 namespace udg
 {
@@ -40,7 +41,7 @@ Status DICOMDIRImporter::import( QString dicomdirPath , QString studyUID , QStri
 
     if ( !state.good() ) return state;
 
-    importStudy( studyUID , seriesUID , sopInstanceUID );
+    state = importStudy( studyUID , seriesUID , sopInstanceUID );
 
     return state;
 }
@@ -93,14 +94,21 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
     {
         serie = seriesList.getSeries();
         cacheSeriesDAL.insertSeries( &serie );
-        importSeries( studyUID , serie.getSeriesUID() , sopInstanceUID );
+        state = importSeries( studyUID , serie.getSeriesUID() , sopInstanceUID );
 
-        seriesList.nextSeries();
+        if ( !state.good() ) 
+        {
+            break;
+        }
+        else seriesList.nextSeries();
     }
 
-    scaleDicomStudy.scale( studyList.getStudy().getStudyUID() );
+    if ( state.good() )
+    {
+        scaleDicomStudy.scale( studyList.getStudy().getStudyUID() );
 
-    cacheStudyDAL.setStudyRetrieved( studyList.getStudy().getStudyUID() );
+        state = cacheStudyDAL.setStudyRetrieved( studyList.getStudy().getStudyUID() );
+    }
 
     return state;
 }
@@ -124,8 +132,12 @@ Status DICOMDIRImporter::importSeries( QString studyUID , QString seriesUID , QS
 
     while ( !imageList.end() )
     {
-        importImage( imageList.getImage() );
-        imageList.nextImage();
+        state = importImage( imageList.getImage() );
+        if ( !state.good() ) 
+        {
+            break;
+        }
+        else imageList.nextImage();
     }
 
     return state;
@@ -138,29 +150,43 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
     CacheImageDAL cacheImage;
     Status state;
 
-    imagePath = starviewerSettings.getCacheImagePath() + "/" + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
+    imagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
 
-    if( QFile::copy( image.getImagePath() , imagePath ) )
+    if ( QFile::exists( image.getImagePath() ) )//comprovem si la imatge a importar existeix
     {
-        image.setImageName ( image.getSOPInstanceUID() );
-        QFileInfo imageInfo( imagePath );
-        if( imageInfo.exists() )
+        if( QFile::copy( image.getImagePath() , imagePath ) )
         {
-            image.setImageSize( imageInfo.size() );
-            state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
+            image.setImageName ( image.getSOPInstanceUID() );
+            QFileInfo imageInfo( imagePath );
+            if( imageInfo.exists() )
+            {
+                image.setImageSize( imageInfo.size() );
+                state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
+                //la imatge ja existeix a la base de dades, en aquest cas l'ignorem l'error ja pot ser que alguna part de les imatges que s'importen les tinguessim en la la base de dades local
+                if (state.code() == 2019) state.setStatus( DcmtkNoError );
+            }
+            else
+            {//No s'hauria de produir mai aquest error
+                DEBUG_LOG("La imatge [" + imagePath + "] no s'ha copiat a [" + image.getImagePath()  + "] " );
+                state.setStatus( DcmtkUnknowError );
+            }
         }
         else
         {
-            ERROR_LOG("La imatge [" + imagePath + "] que s'ha volgut copiar de [" + image.getImagePath()  + "] no existeix" );
+            // TODO s'hauria de forçar la sobreescriptura, ara de moment no ho tractem, però la imatge bona hauria de ser la del dicomdir no la de la cache
+            //ERROR_LOG("El fitxer: <" + image.getImagePath() + "> no s'ha pogut copiar a <" + imagePath + ">, podria ser que ja existeix amb aquest mateix nom, o que no tinguis permisos en el directori destí");
+            //state.setStatus( DcmtkUnknowError );
         }
     }
-    else
+    else 
     {
-        // TODO no s'hauria de forçar la sobre-escriptura????
-        DEBUG_LOG("El fitxer: <" + image.getImagePath() + "> no s'ha pogut copiar a <" + imagePath + ">, ja que ja existeix amb aquest mateix nom");
+        state.setStatus( "Inconsistent dicomdir, some files don't exist" , false , 1303 );
+        ERROR_LOG("La imatge [" + imagePath + "] no existeix" );
     }
 
     return state;
 }
+
+
 
 }
