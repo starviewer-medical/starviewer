@@ -13,9 +13,7 @@ namespace udg{
 
 Status::Status()
 {
-    m_numberError=0;
-    m_success = true;
-    m_descText = "";
+    m_numberError=-1;
 }
 
 bool Status::good() const
