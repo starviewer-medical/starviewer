@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
+<defaultcodec></defaultcodec>
 <context>
     <name>QChooseOneObjectDialogBase</name>
     <message>
@@ -336,7 +337,7 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1317"/>
+        <location filename="queryscreen.cpp" line="1363"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
@@ -344,37 +345,37 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="databaseconnection.cpp" line="79"/>
+        <location filename="databaseconnection.cpp" line="80"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="81"/>
+        <location filename="databaseconnection.cpp" line="82"/>
         <source>Database is corrupted or SQL error syntax</source>
         <translation>La base de datos está corrupta o error de sintaxis SQL</translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="83"/>
+        <location filename="databaseconnection.cpp" line="84"/>
         <source>Database is locked</source>
         <translation>La base de datos está bloqueada</translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="85"/>
+        <location filename="databaseconnection.cpp" line="86"/>
         <source>Database corrupted</source>
         <translation>La base de datos está corrupta</translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="87"/>
+        <location filename="databaseconnection.cpp" line="88"/>
         <source>The new register is duplicated</source>
         <translation>El nuevo registro está duplicado</translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="89"/>
+        <location filename="databaseconnection.cpp" line="90"/>
         <source>Not connected to database</source>
         <translation>Sin conexión a la base de datos</translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="94"/>
+        <location filename="databaseconnection.cpp" line="95"/>
         <source>Internal Database error (SQLITE)</source>
         <translation>Error interno de la base de datos (SQLITE)</translation>
     </message>
@@ -431,179 +432,179 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="890"/>
+        <location filename="qconfigurationscreen.cpp" line="888"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="311"/>
+        <location filename="qconfigurationscreen.cpp" line="309"/>
         <source>Select a Pacs for update</source>
         <translation>Seleccione un Pacs para actualizar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="358"/>
+        <location filename="qconfigurationscreen.cpp" line="356"/>
         <source>Select a Pacs for delete</source>
         <translation>Seleccione un Pacs para borrar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="501"/>
+        <location filename="qconfigurationscreen.cpp" line="499"/>
         <source>AETitle field can&apos;t be empty</source>
         <translation>El AETitle no puede estar vacio</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="509"/>
+        <location filename="qconfigurationscreen.cpp" line="507"/>
         <source>Incorrect address server</source>
         <translation>Dirección del servidor incorrecta</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="517"/>
+        <location filename="qconfigurationscreen.cpp" line="515"/>
         <source>PACS Port has to be between 0 and 65535</source>
         <translation>El puerto del Pacs tiene que ser entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="525"/>
+        <location filename="qconfigurationscreen.cpp" line="523"/>
         <source>Institution field can&apos;t be empty</source>
         <translation>Institución no puede estar vacio</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="542"/>
+        <location filename="qconfigurationscreen.cpp" line="540"/>
         <source>Local Port has to be between 0 and 65535</source>
         <translation>El puerto local tiene que estar entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="551"/>
+        <location filename="qconfigurationscreen.cpp" line="549"/>
         <source>Maximum simultaenious connections has to be between 1 and 15</source>
         <translation>El número máximo de conexiones simultáneas tiene que ser entre 1 i 15</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="560"/>
+        <location filename="qconfigurationscreen.cpp" line="558"/>
         <source>Invalid database path</source>
         <translation>Ruta a la base de datos inválida</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="768"/>
+        <location filename="qconfigurationscreen.cpp" line="766"/>
         <source>Are you sure you want to delete all Studies of the cache ?</source>
         <translation>¿ Está seguro que desea borrar todos los estudios de la caché ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="251"/>
+        <location filename="qconfigurationscreen.cpp" line="249"/>
         <source>AETitle </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="251"/>
+        <location filename="qconfigurationscreen.cpp" line="249"/>
         <source> exists</source>
         <translation>existe</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="570"/>
+        <location filename="qconfigurationscreen.cpp" line="568"/>
         <source>Create directory ?</source>
         <translation>¿ Crear directorio ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="571"/>
+        <location filename="qconfigurationscreen.cpp" line="569"/>
         <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directorio de la caché de imagenes no existe. ¿ Desea crearlo ?</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="769"/>
+        <location filename="qconfigurationscreen.cpp" line="767"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="769"/>
+        <location filename="qconfigurationscreen.cpp" line="767"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="706"/>
+        <location filename="qconfigurationscreen.cpp" line="704"/>
         <source>Cache Directory</source>
         <translation>Directorio de la caché</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="864"/>
+        <location filename="qconfigurationscreen.cpp" line="862"/>
         <source>The application has to be restart to apply the changes</source>
         <translation>Se debe reiniciar la aplicación, para que los cambios tengan efecto</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="596"/>
+        <location filename="qconfigurationscreen.cpp" line="594"/>
         <source>Pool space can&apos;t be less than used space</source>
         <translation>El espacio de la pool no puede ser menor que el espacio utilitzado actualmente</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="473"/>
+        <location filename="qconfigurationscreen.cpp" line="471"/>
         <source> Pacs </source>
         <translation>Pacs</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="444"/>
+        <location filename="qconfigurationscreen.cpp" line="442"/>
         <source> doesn&apos;t responds </source>
         <translation>no responde</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="477"/>
+        <location filename="qconfigurationscreen.cpp" line="475"/>
         <source> Be sure that the IP and AETitle of the PACS is correct </source>
         <translation>Asegurese que la IP i el AETitle del Pacs són correctos</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="461"/>
+        <location filename="qconfigurationscreen.cpp" line="459"/>
         <source> Test of Pacs </source>
         <translation>El Teste del Pacs</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="463"/>
+        <location filename="qconfigurationscreen.cpp" line="461"/>
         <source> is correct </source>
         <translation>es correcto</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="475"/>
+        <location filename="qconfigurationscreen.cpp" line="473"/>
         <source> doesn&apos;t responds correctly</source>
         <translation>no responde correctamente</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="577"/>
+        <location filename="qconfigurationscreen.cpp" line="575"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation>No se puede crear el directorio. Revise sus permisos de usuario</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="853"/>
+        <location filename="qconfigurationscreen.cpp" line="851"/>
         <source>The extension of the database has to be &apos;.sdb&apos;</source>
         <translation>La extensión de la base de datos debe ser &apos;.sdb&apos;</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="859"/>
+        <location filename="qconfigurationscreen.cpp" line="857"/>
         <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
         <translation>Starviewer no puede crear la base de datos, porqué existe otra base de datos en el directorio con el mismo nombre</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="890"/>
+        <location filename="qconfigurationscreen.cpp" line="888"/>
         <source>
 Error Number: %1</source>
         <translation>
 Código de error: %1</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="173"/>
+        <location filename="qconfigurationscreen.cpp" line="171"/>
         <source>&lt;i&gt;(Used: %1Gb, %2%;  Free: %3Gb, %4%)&lt;/i&gt;</source>
         <translation>&lt;i&gt;(Usado: %1Gb, %2%;  Libre: %3Gb, %4%)&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="489"/>
+        <location filename="qconfigurationscreen.cpp" line="487"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="489"/>
+        <location filename="qconfigurationscreen.cpp" line="487"/>
         <source>To do a test of a pacs it is necessary to select an item of the list.</source>
         <translation>Para realizar un test de un PACS es necesario seleccionar un ítem de la lista.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="410"/>
+        <location filename="qconfigurationscreen.cpp" line="408"/>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="412"/>
+        <location filename="qconfigurationscreen.cpp" line="410"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -972,42 +973,42 @@ Código de error: %1</translation>
 <context>
     <name>udg::QOperationStateScreen</name>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="74"/>
+        <location filename="qoperationstatescreen.cpp" line="73"/>
         <source>PENDING</source>
         <translation>PENDIENTE</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="78"/>
+        <location filename="qoperationstatescreen.cpp" line="77"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="80"/>
+        <location filename="qoperationstatescreen.cpp" line="79"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="169"/>
+        <location filename="qoperationstatescreen.cpp" line="168"/>
         <source>RETRIEVING</source>
         <translation>DESCARGANDO</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="239"/>
+        <location filename="qoperationstatescreen.cpp" line="238"/>
         <source>ERROR</source>
         <translation>ERROR</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="239"/>
+        <location filename="qoperationstatescreen.cpp" line="238"/>
         <source>RETRIEVED</source>
         <translation>DESCARGADO</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="239"/>
+        <location filename="qoperationstatescreen.cpp" line="238"/>
         <source>STORED</source>
         <translation>ENVIADO</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="171"/>
+        <location filename="qoperationstatescreen.cpp" line="170"/>
         <source>STORING</source>
         <translation>ENVIANDO</translation>
     </message>
@@ -1245,7 +1246,7 @@ Código de error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1666"/>
+        <location filename="queryscreen.cpp" line="1712"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
@@ -1286,7 +1287,7 @@ Código de error: %1</translation>
         <translation>Error interno :</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1115"/>
+        <location filename="queryscreen.cpp" line="1120"/>
         <source>Select a study to view </source>
         <translation>Seleccione un estudio para visualizar</translation>
     </message>
@@ -1296,17 +1297,17 @@ Código de error: %1</translation>
         <translation>Error borrando antiguos estudios</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1215"/>
+        <location filename="queryscreen.cpp" line="1248"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1215"/>
+        <location filename="queryscreen.cpp" line="1248"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1424"/>
+        <location filename="queryscreen.cpp" line="1470"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>No se puede conectar al PACS %1 de %2Asegúrese que la IP y el AETitle de este PACS sean correctos</translation>
@@ -1322,12 +1323,12 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Error consultando el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1317"/>
+        <location filename="queryscreen.cpp" line="1363"/>
         <source>Dicomdir</source>
         <translation>Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1332"/>
+        <location filename="queryscreen.cpp" line="1378"/>
         <source>Error openning dicomdir</source>
         <translation>Error abriendo el Dicomdir</translation>
     </message>
@@ -1356,46 +1357,46 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Error! No se pueden consultar las Series al PACS llamado %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1439"/>
+        <location filename="queryscreen.cpp" line="1485"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>No se puede consultar el PACS %1 de %2
 Asegúrese que la IP y el AETitle sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1666"/>
+        <location filename="queryscreen.cpp" line="1712"/>
         <source>
 Error Number: %1</source>
         <translation>
 Código de error: %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1149"/>
+        <location filename="queryscreen.cpp" line="1154"/>
         <source>Select at least one study to view</source>
         <translation>Seleccione almenos un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1209"/>
+        <location filename="queryscreen.cpp" line="1242"/>
         <source>Please select at least one study to delete</source>
         <translation>Seleccione almenos un estudio a borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1214"/>
+        <location filename="queryscreen.cpp" line="1247"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation>¿Está seguro que quiere borrar los estudios seleccionados?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1363"/>
+        <location filename="queryscreen.cpp" line="1409"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Debe seleccionar un PACS donde almacenar el estudio</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1408"/>
+        <location filename="queryscreen.cpp" line="1454"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Los estudios solo se pueden almacenar en un PACS a la vez</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1230"/>
+        <location filename="queryscreen.cpp" line="1263"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>El estudio con UID: %1 está en uso por la Lista de DICOMDIR. Si desea borrar este estudio debería borrarlo primero de la Lista de DICOMDIR.</translation>
     </message>
@@ -1443,6 +1444,21 @@ Código de error: %1</translation>
         <location filename="queryscreen.cpp" line="155"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1228"/>
+        <source>Dicomdir is inconsistent. Can&apos;t import images from study of </source>
+        <translation>Dicomdir inconsistente. No se pueden importar imágenes del estudio de </translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1232"/>
+        <source>, study description: </source>
+        <translation>, descripción estudio: </translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1232"/>
+        <source>Error. Can&apos;t import images from study of </source>
+        <translation>Error. No se pueden importar imágenes del estudio de </translation>
     </message>
 </context>
 <context>
