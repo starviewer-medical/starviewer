@@ -945,6 +945,10 @@ void OptimalViewpointVolume::computeObscurances()
 {
     synchronize();
 
+    // Alliberem memòria, per començar
+    delete [] m_obscurance; m_obscurance = 0;
+    delete [] m_colorBleeding; m_colorBleeding = 0;
+
     vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
     unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
 
@@ -959,10 +963,10 @@ void OptimalViewpointVolume::computeObscurances()
     int increments[3];
     m_image->GetIncrements( increments );
 
-    unsigned char numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
+    int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
     QVector<ObscuranceThread *> threads(numberOfThreads);
 
-    for ( unsigned char i = 0; i < numberOfThreads; ++i )
+    for ( int i = 0; i < numberOfThreads; i++ )
     {
         ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, directions, m_transferFunction, this );
         thread->setNormals( directionEncoder, encodedNormals );
@@ -974,28 +978,32 @@ void OptimalViewpointVolume::computeObscurances()
 
     if ( m_obscuranceVariant <= OpacitySmooth ) // obscurances
     {
-        delete [] m_obscurance;
-        m_obscurance = new double[m_dataSize];
-        for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] = 0.0;
-
         double maximumObscurance = 0.0;
 
-        for ( unsigned char i = 0; i < numberOfThreads; ++i )
+        for ( int i = 0; i < numberOfThreads; i++ )
         {
             ObscuranceThread * thread = threads[i];
             thread->wait();
 
             double * threadObscurance = thread->getObscurance();
-            for ( int j = 0; j < m_dataSize; ++j )
+
+            if ( i == 0 )
             {
-                m_obscurance[j] += threadObscurance[j];
-                if ( m_obscurance[j] > maximumObscurance ) maximumObscurance = m_obscurance[j];
+                m_obscurance = threadObscurance;
+            }
+            else
+            {
+                for ( int j = 0; j < m_dataSize; j++ )
+                {
+                    m_obscurance[j] += threadObscurance[j];
+                    if ( m_obscurance[j] > maximumObscurance ) maximumObscurance = m_obscurance[j];
+                }
             }
 
             delete thread;
         }
 
-        for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] /= maximumObscurance;
+        for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] /= maximumObscurance;
 
         {
             bool density = m_obscuranceVariant <= DensitySmooth;
@@ -1036,30 +1044,34 @@ void OptimalViewpointVolume::computeObscurances()
     }
     else    // color bleeding
     {
-        delete [] m_colorBleeding;
-        m_colorBleeding = new Vector3[m_dataSize];
-//         for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] = 0.0;
-
         double maximumObscurance = 0.0;
 
-        for ( unsigned char i = 0; i < numberOfThreads; ++i )
+        for ( int i = 0; i < numberOfThreads; i++ )
         {
             ObscuranceThread * thread = threads[i];
             thread->wait();
 
             Vector3 * threadColorBleeding = thread->getColorBleeding();
-            for ( int j = 0; j < m_dataSize; ++j )
+
+            if ( i == 0 )
             {
-                m_colorBleeding[j] += threadColorBleeding[j];
-                if ( m_colorBleeding[j].x > maximumObscurance ) maximumObscurance = m_colorBleeding[j].x;
-                if ( m_colorBleeding[j].y > maximumObscurance ) maximumObscurance = m_colorBleeding[j].y;
-                if ( m_colorBleeding[j].z > maximumObscurance ) maximumObscurance = m_colorBleeding[j].z;
+                m_colorBleeding = threadColorBleeding;
+            }
+            else
+            {
+                for ( int j = 0; j < m_dataSize; j++ )
+                {
+                    m_colorBleeding[j] += threadColorBleeding[j];
+                    if ( m_colorBleeding[j].x > maximumObscurance ) maximumObscurance = m_colorBleeding[j].x;
+                    if ( m_colorBleeding[j].y > maximumObscurance ) maximumObscurance = m_colorBleeding[j].y;
+                    if ( m_colorBleeding[j].z > maximumObscurance ) maximumObscurance = m_colorBleeding[j].z;
+                }
             }
 
             delete thread;
         }
 
-        for ( int i = 0; i < m_dataSize; ++i ) m_colorBleeding[i] /= maximumObscurance;
+        for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] /= maximumObscurance;
 
         {
             bool density = m_obscuranceVariant <= DensitySmooth/*ColorBleeding*/;

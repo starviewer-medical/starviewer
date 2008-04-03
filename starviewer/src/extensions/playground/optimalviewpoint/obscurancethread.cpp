@@ -33,8 +33,11 @@ ObscuranceThread::ObscuranceThread( int id, int numberOfThreads, const QVector<V
 
 ObscuranceThread::~ObscuranceThread()
 {
-    delete [] m_obscurance;
-    delete [] m_colorBleeding;
+    if ( m_id != 0 )    // si m_id és 0 llavors el vector serà aprofitat per OptimalViewpointVolume
+    {
+        delete [] m_obscurance;
+        delete [] m_colorBleeding;
+    }
 }
 
 
