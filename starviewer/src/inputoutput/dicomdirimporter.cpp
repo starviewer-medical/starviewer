@@ -43,6 +43,8 @@ Status DICOMDIRImporter::import( QString dicomdirPath , QString studyUID , QStri
 
     state = importStudy( studyUID , seriesUID , sopInstanceUID );
 
+    INFO_LOG( "Estudi " + studyUID + " importat" );
+
     return state;
 }
 
@@ -145,48 +147,58 @@ Status DICOMDIRImporter::importSeries( QString studyUID , QString seriesUID , QS
 
 Status DICOMDIRImporter::importImage(DICOMImage image)
 {
-    QString imagePath, imageFile;
+    QString cacheImagePath, dicomdirImagePath;
     StarviewerSettings starviewerSettings;
     CacheImageDAL cacheImage;
     Status state;
 
-    imagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
+    cacheImagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
 
     if ( QFile::exists( image.getImagePath() ) )//comprovem si la imatge a importar existeix
     {
-        if( QFile::copy( image.getImagePath() , imagePath ) )
-        {
-            image.setImageName ( image.getSOPInstanceUID() );
-            QFileInfo imageInfo( imagePath );
-            if( imageInfo.exists() )
-            {
-                image.setImageSize( imageInfo.size() );
-                state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
-                //la imatge ja existeix a la base de dades, en aquest cas l'ignorem l'error ja pot ser que alguna part de les imatges que s'importen les tinguessim en la la base de dades local
-                if (state.code() == 2019) state.setStatus( DcmtkNoError );
-            }
-            else
-            {//No s'hauria de produir mai aquest error
-                DEBUG_LOG("La imatge [" + imagePath + "] no s'ha copiat a [" + image.getImagePath()  + "] " );
-                state.setStatus( DcmtkUnknowError );
-            }
-        }
-        else
-        {
-            // TODO s'hauria de forçar la sobreescriptura, ara de moment no ho tractem, però la imatge bona hauria de ser la del dicomdir no la de la cache
-            //ERROR_LOG("El fitxer: <" + image.getImagePath() + "> no s'ha pogut copiar a <" + imagePath + ">, podria ser que ja existeix amb aquest mateix nom, o que no tinguis permisos en el directori destí");
-            //state.setStatus( DcmtkUnknowError );
-        }
+        dicomdirImagePath = image.getImagePath();
+    }
+    else if ( QFile::exists( image.getImagePath().toLower() ) )
+    {
+        /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules
+           com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre 
+           unitats vfat falla, per això el que fem es convertir el nom del fitxer a minúscules
+         */
+        dicomdirImagePath = image.getImagePath().toLower();
     }
     else 
     {
         state.setStatus( "Inconsistent dicomdir, some files don't exist" , false , 1303 );
-        ERROR_LOG("La imatge [" + imagePath + "] no existeix" );
+        ERROR_LOG("Dicomdir inconsistent: La imatge [" + image.getImagePath() + "] no existeix" );
+        return state;
+    }
+
+    if( QFile::copy( dicomdirImagePath , cacheImagePath ) )
+    {
+        image.setImageName ( image.getSOPInstanceUID() );
+        QFileInfo imageInfo( cacheImagePath );
+        if( imageInfo.exists() )
+        {
+            image.setImageSize( imageInfo.size() );
+            state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
+
+            //la imatge ja existeix a la base de dades, en aquest cas l'ignorem l'error ja pot ser que alguna part de les imatges que s'importen les tinguessim en la la base de dades local
+            if (state.code() == 2019) state.setStatus( DcmtkNoError );
+        }
+        else
+        {//No s'hauria de produir mai aquest error
+            ERROR_LOG("Error no s'ha copiat la imatge [" + dicomdirImagePath + "] no s'ha copiat a [" + cacheImagePath + "] " );
+            state.setStatus( DcmtkUnknowError );
+        }
+    }
+    else
+    {
+        // TODO s'hauria de forçar la sobreescriptura, ara de moment no ho tractem, però la imatge bona hauria de ser la del dicomdir no la de la cache
+        //ERROR_LOG("El fitxer: <" + image.getImagePath() + "> no s'ha pogut copiar a <" + imagePath + ">, podria ser que ja existeix amb aquest mateix nom, o que no tinguis permisos en el directori destí");
+        //state.setStatus( DcmtkUnknowError );
     }
 
     return state;
 }
-
-
 
 }
