@@ -74,6 +74,7 @@ private :
 
     DcmDicomDir *m_dicomdir;
     QString m_dicomdirAbsolutePath;
+    bool m_dicomFilesInLowerCase;
 
     /** Comprova si un estudi compleix la màscara, pels camps PatientId, StudyID, StudyDate, PatientName i AccessionNumber
      * @param study dades de l'estudi
