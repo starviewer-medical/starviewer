@@ -41,6 +41,7 @@
 #include <QPair>
 #include <QThread>
 #include "obscurancethread.h"
+#include "obscurancethread2.h"
 #include <vtkMultiThreader.h>
 
 #include "vtkVolumeRayCastCompositeFunctionObscurances.h"
@@ -1623,6 +1624,319 @@ void OptimalViewpointVolume::reduceToHalf()
         out << "ElementDataFile = newdata.raw";
         outFileMhd.close();
     }
+}
+
+
+// nova versió amb threads
+void OptimalViewpointVolume::computeObscurances2()
+{
+    synchronize();
+
+    // Guardem en un booleà si treballem amb color o sense
+    bool color = m_obscuranceVariant >= OpacityColorBleeding;
+
+    // Preparem el vector que farem servir, reaprofitant memòria si podem
+    if ( !color )   // obscurances
+    {
+        delete m_colorBleeding; m_colorBleeding = 0;
+        if ( !m_obscurance ) m_obscurance = new double[m_dataSize];
+        for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] = 0.0;
+    }
+    else    // color bleeding
+    {
+        delete m_obscurance; m_obscurance = 0;
+        if ( !m_colorBleeding ) m_colorBleeding = new Vector3[m_dataSize];
+        else for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] = Vector3();
+    }
+
+    vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
+    unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
+
+    // càlcul de direccions
+    POVSphereCloud cloud( 1.0, m_obscuranceDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    cloud.createPOVCloud();
+    const QVector<Vector3> & directions = cloud.getVertices();
+    int nDirections = directions.size();
+
+    // variables necessàries
+    int dimensions[3];
+    m_image->GetDimensions( dimensions );
+    int increments[3];
+    m_image->GetIncrements( increments );
+
+    // Creem els threads
+    int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
+    QVector<ObscuranceThread2 *> threads(numberOfThreads);
+
+    for ( int i = 0; i < numberOfThreads; i++ )
+    {
+        ObscuranceThread2 * thread = new ObscuranceThread2( i, numberOfThreads, m_transferFunction, this );
+        thread->setNormals( directionEncoder, encodedNormals );
+        thread->setData( m_data, m_dataSize );
+        thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant, m_obscurance, m_colorBleeding );
+        threads[i] = thread;
+    }
+
+    // estructures de dades reaprofitables
+    QVector<Vector3> lineStarts;
+
+    // iterem per les direccions
+    for ( int i = 0; i < nDirections; i++ )
+    {
+        const Vector3 & direction = directions.at( i );
+
+        DEBUG_LOG( QString( "Direcció %1: %2" ).arg( i ).arg( direction.toString() ) );
+
+        // direcció dominant (0 = x, 1 = y, 2 = z)
+        int dominant;
+        Vector3 absDirection( qAbs( direction.x ), qAbs( direction.y ), qAbs( direction.z ) );
+        if ( absDirection.x >= absDirection.y )
+        {
+            if ( absDirection.x >= absDirection.z ) dominant = 0;
+            else dominant = 2;
+        }
+        else
+        {
+            if ( absDirection.y >= absDirection.z ) dominant = 1;
+            else dominant = 2;
+        }
+
+        // vector per avançar
+        Vector3 forward;
+        switch ( dominant )
+        {
+            case 0: forward = Vector3( direction.x, direction.y, direction.z ); break;
+            case 1: forward = Vector3( direction.y, direction.z, direction.x ); break;
+            case 2: forward = Vector3( direction.z, direction.x, direction.y ); break;
+        }
+        forward /= qAbs( forward.x );   // la direcció x passa a ser 1 o -1
+        DEBUG_LOG( QString( "forward = " ) + forward.toString() );
+
+        // dimensions i increments segons la direcció dominant
+        int x = dominant, y = ( dominant + 1 ) % 3, z = ( dominant + 2 ) % 3;
+        int dimX = dimensions[x], dimY = dimensions[y], dimZ = dimensions[z];
+        int incX = increments[x], incY = increments[y], incZ = increments[z];
+        qptrdiff startDelta = 0;
+        if ( forward.x < 0.0 )
+        {
+            startDelta += incX * ( dimX - 1 );
+            incX = -incX;
+            forward.x = -forward.x;
+        }
+        if ( forward.y < 0.0 )
+        {
+            startDelta += incY * ( dimY - 1 );
+            incY = -incY;
+            forward.y = -forward.y;
+        }
+        if ( forward.z < 0.0 )
+        {
+            startDelta += incZ * ( dimZ - 1 );
+            incZ = -incZ;
+            forward.z = -forward.z;
+        }
+        DEBUG_LOG( QString( "forward = " ) + forward.toString() );
+        // ara els 3 components són positius
+
+        // llista dels vòxels que són començament de línia
+        getLineStarts( lineStarts, dimX, dimY, dimZ, forward );
+
+        const uchar * dataPtr = m_data + startDelta;
+        int dimXYZ[3] = { dimX, dimY, dimZ };
+        int incXYZ[3] = { incX, incY, incZ };
+
+        // iniciem els threads
+        for ( int j = 0; j < numberOfThreads; j++ )
+        {
+            ObscuranceThread2 * thread = threads[j];
+            thread->setPerDirectionParameters( direction, forward, dimXYZ, incXYZ, lineStarts, startDelta );
+            thread->start();
+        }
+
+        // esperem que acabin els threads
+        for ( int j = 0; j < numberOfThreads; j++ )
+        {
+            threads[j]->wait();
+        }
+    }
+
+    // destruïm els threads
+    for ( int j = 0; j < numberOfThreads; j++ )
+    {
+        delete threads[j];
+    }
+
+    if ( !color ) // obscurances
+    {
+        double maximumObscurance = 0.0;
+
+        for ( int i = 0; i < m_dataSize; i++ )
+        {
+            if ( m_obscurance[i] > maximumObscurance ) maximumObscurance = m_obscurance[i];
+        }
+
+        for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] /= maximumObscurance;
+
+        {
+            bool density = m_obscuranceVariant <= DensitySmooth;
+            // obscurances to file
+            QFile outFile( QDir::tempPath().append( QString( "/obscurance.raw" ) ) );
+            if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QDataStream out( &outFile );
+                for ( int i = 0; i < m_dataSize; ++i )
+                {
+                    uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
+                    out << value;
+    //                 out << gradientMagnitudes[i];
+    //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
+    //                 out << static_cast<uchar>( round( ( uGradient[selection] + 1.0 ) * 127.5 ) );
+                }
+                outFile.close();
+            }
+            QFile outFileMhd( QDir::tempPath().append( QString( "/obscurance.mhd" ) ) );
+            if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QTextStream out( &outFileMhd );
+                out << "NDims = 3\n";
+                out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+                double spacing[3];
+                m_image->GetSpacing( spacing );
+                out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
+                out << "ElementType = MET_UCHAR\n";
+                out << "ElementDataFile = obscurance.raw";
+                outFileMhd.close();
+            }
+        }
+
+    //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
+
+        m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionObscurances->SetColor( false );
+    }
+    else    // color bleeding
+    {
+        double maximumObscurance = 0.0;
+
+        for ( int i = 0; i < m_dataSize; i++ )
+        {
+            if ( m_colorBleeding[i].x > maximumObscurance ) maximumObscurance = m_colorBleeding[i].x;
+            if ( m_colorBleeding[i].y > maximumObscurance ) maximumObscurance = m_colorBleeding[i].y;
+            if ( m_colorBleeding[i].z > maximumObscurance ) maximumObscurance = m_colorBleeding[i].z;
+        }
+
+        for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] /= maximumObscurance;
+
+        {
+            bool density = m_obscuranceVariant <= DensitySmooth/*ColorBleeding*/;
+            // obscurances to file
+            QFile outFile( QDir::tempPath().append( QString( "/colorbleeding.raw" ) ) );
+            if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QDataStream out( &outFile );
+                for ( int i = 0; i < m_dataSize; ++i )
+                {
+//                     uchar value0 = 0, valueR = 0, valueG = 0, valueB = 0;
+//                     if ( m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) )
+//                     {
+//                         Vector3 color = 255.0 * m_colorBleeding[i];
+//                         valueR = static_cast<uchar>( qRound( color.x ) );
+//                         valueG = static_cast<uchar>( qRound( color.y ) );
+//                         valueB = static_cast<uchar>( qRound( color.z ) );
+//                     }
+//                     out << value0 << valueR << valueG << valueB;
+
+                    uchar value = 0;
+                    if ( m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) )
+                    {
+                        Vector3 color = 3.0 * m_colorBleeding[i];
+                        value += static_cast<uchar>( qRound( color.x ) ) << 4;
+                        value += static_cast<uchar>( qRound( color.y ) ) << 2;
+                        value += static_cast<uchar>( qRound( color.z ) );
+                    }   // value = 00RRGGBB (base 2)
+                    out << value;
+
+    //                 out << gradientMagnitudes[i];
+    //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
+    //                 out << static_cast<uchar>( round( ( uGradient[selection] + 1.0 ) * 127.5 ) );
+                }
+                outFile.close();
+            }
+            QFile outFileMhd( QDir::tempPath().append( QString( "/colorbleeding.mhd" ) ) );
+            if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QTextStream out( &outFileMhd );
+                out << "NDims = 3\n";
+                out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+                double spacing[3];
+                m_image->GetSpacing( spacing );
+                out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
+//                 out << "ElementType = MET_UINT\n";
+                out << "ElementType = MET_UCHAR\n";
+                out << "ElementByteOrderMSB = True\n";
+                out << "ElementDataFile = colorbleeding.raw";
+                outFileMhd.close();
+            }
+        }
+
+    //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
+
+        m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionObscurances->SetColor( true );
+    }
+}
+
+
+void OptimalViewpointVolume::getLineStarts( QVector<Vector3> & lineStarts, int dimX, int dimY, int dimZ, const Vector3 & forward )
+{
+    lineStarts.resize( 0 );
+
+    // tots els (0,y,z) són començament de línia
+    Vector3 lineStart;  // (0,0,0)
+    for ( int iy = 0; iy < dimY; ++iy )
+    {
+        lineStart.y = iy;
+        for ( int iz = 0; iz < dimZ; ++iz )
+        {
+            lineStart.z = iz;
+            lineStarts << lineStart;
+//             DEBUG_LOG( QString( "line start: (%1,%2,%3)" ).arg( lineStart.x ).arg( lineStart.y ).arg( lineStart.z ) );
+        }
+    }
+    DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.size() ) );
+
+    // més començaments de línia
+    Vector3 rv; // (0,0,0)
+    Voxel v = { 0, 0, 0 }, pv = v;
+
+    // iterar per la línia que comença a (0,0,0)
+    while ( v.x < dimX )
+    {
+        if ( v.y != pv.y )
+        {
+            lineStart.x = rv.x; lineStart.y = rv.y - v.y;   // [y] = 0
+            for ( double iz = rv.z - v.z; iz < dimZ; iz++ )
+            {
+                lineStart.z = iz;
+                lineStarts << lineStart;
+            }
+        }
+        if ( v.z != pv.z )
+        {
+            lineStart.x = rv.x; lineStart.z = rv.z - v.z;   // [z] = 0
+            for ( double iy = rv.y - v.y; iy < dimY; iy++ )
+            {
+                lineStart.y = iy;
+                lineStarts << lineStart;
+            }
+        }
+
+        // avançar el vòxel
+        rv += forward;
+        pv = v;
+        v.x = qRound( rv.x ); v.y = qRound( rv.y ); v.z = qRound( rv.z );
+    }
+    DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.size() ) );
 }
 
 
