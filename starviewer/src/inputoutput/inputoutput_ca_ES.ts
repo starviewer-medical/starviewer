@@ -337,7 +337,7 @@ N&apos;hauries de triar només un.</translation>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1363"/>
+        <location filename="queryscreen.cpp" line="1348"/>
         <source>Open</source>
         <translation>Obrir</translation>
     </message>
@@ -1246,7 +1246,7 @@ Codi d&apos;error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1712"/>
+        <location filename="queryscreen.cpp" line="1697"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
@@ -1298,17 +1298,17 @@ Codi d&apos;error: %1</translation>
         <translation>Error esborrant els estudis vells</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1248"/>
+        <location filename="queryscreen.cpp" line="1233"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1248"/>
+        <location filename="queryscreen.cpp" line="1233"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1470"/>
+        <location filename="queryscreen.cpp" line="1455"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Noes pot connectar al PACS %1 de %2
@@ -1325,12 +1325,12 @@ Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</transl
         <translation>Error consultant el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1363"/>
+        <location filename="queryscreen.cpp" line="1348"/>
         <source>Dicomdir</source>
         <translation>DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1378"/>
+        <location filename="queryscreen.cpp" line="1363"/>
         <source>Error openning dicomdir</source>
         <translation>Error obrint el Dicomdir</translation>
     </message>
@@ -1359,13 +1359,13 @@ Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</transl
         <translation>Error! No es poden consultar les sèries al PACS anomenat %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1485"/>
+        <location filename="queryscreen.cpp" line="1470"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Noes pot connectar al PACS %1 de %2Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1712"/>
+        <location filename="queryscreen.cpp" line="1697"/>
         <source>
 Error Number: %1</source>
         <translation>
@@ -1377,27 +1377,27 @@ Codi d&apos;error: %1</translation>
         <translation>Seleccioni almenys un estudi a visualitzar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1242"/>
+        <location filename="queryscreen.cpp" line="1227"/>
         <source>Please select at least one study to delete</source>
         <translation>SI us plau seleccioni almenys un estudi a esborrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1247"/>
+        <location filename="queryscreen.cpp" line="1232"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation>Està segur que vol esborrar els estudis seleccionats?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1409"/>
+        <location filename="queryscreen.cpp" line="1394"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Ha de seleccionar un PACS on emmagatzemar l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1454"/>
+        <location filename="queryscreen.cpp" line="1439"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Els estudis només es poden emmagatzemar en un PACS alhora</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1263"/>
+        <location filename="queryscreen.cpp" line="1248"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>L&apos;estudi amb UID: %1 està en ús per la Llista de DICOMDIR. Si desitja esborrar aquest estudi hauri d&apos;esborrar-lo primer de la Llista de DICOMDIR.</translation>
     </message>
@@ -1447,19 +1447,14 @@ Codi d&apos;error: %1</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1228"/>
-        <source>Dicomdir is inconsistent. Can&apos;t import images from study of </source>
-        <translation>Dicomdir inconsistent. No es poden importar imatges de l&apos;estudi de </translation>
+        <location filename="queryscreen.cpp" line="1216"/>
+        <source>Error: Can&apos;t import selected studies</source>
+        <translation>Error: No es poden importar els estudis seleccionats</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1232"/>
-        <source>, study description: </source>
-        <translation>, descripció de l&apos;estudi: </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1232"/>
-        <source>Error. Can&apos;t import images from study of </source>
-        <translation>Error. No es poden importar imatges de l&apos;estudi de</translation>
+        <location filename="queryscreen.cpp" line="1218"/>
+        <source>Error: Some studies can&apos;t be imported</source>
+        <translation>Error: No s&apos;han pogut importar alguns dels estudis</translation>
     </message>
 </context>
 <context>

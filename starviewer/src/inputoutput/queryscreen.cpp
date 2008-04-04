@@ -1192,6 +1192,7 @@ void QueryScreen::importDicomdir()
 {
     DICOMDIRImporter importDicom;
     Status state;
+    int failedStudies = 0;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1201,40 +1202,20 @@ void QueryScreen::importDicomdir()
     {
         state = importDicom.import( m_readDicomdir.getDicomdirPath(), studyUID, QString(), QString() );
 
-        if (!state.good()) showErrorImportingDicomdir( state , studyUID );
+        if (!state.good()) failedStudies++;
     }
 
     queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
 
     QApplication::restoreOverrideCursor();
-}
 
-void QueryScreen::showErrorImportingDicomdir( Status state , QString studyUID )
-{
-    if (!state.good())
+    if ( failedStudies > 0 ) //si ha fallat algun estudi
     {
-        DicomMask studyMask;
-        StudyList studyList;
-        DICOMStudy study;
-
-        QApplication::restoreOverrideCursor();
-
-        studyMask.setStudyUID ( studyUID );
-        m_readDicomdir.readStudies( studyList , studyMask );
-        studyList.firstStudy();
-
-        study = studyList.getStudy();
-
-        if ( state.code() == 1303 )
-        {//Alguna de les imatges de l'estudi no s'han trobat
-            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Dicomdir is inconsistent. Can't import images from study of " ) +  qPrintable( study.getPatientName() + tr (", study description: ") + study.getStudyDescription() ) );
+        if ( failedStudies == m_studyTreeWidgetDicomdir->getSelectedStudiesUID().count() ) //si han fallat tots els estudis
+        {
+            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error: Can't import selected studies" ) );
         }
-        else 
-        {//Error desconegut
-            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error. Can't import images from study of " ) +  +  qPrintable(  study.getPatientName() + tr (", study description: ") + study.getStudyDescription() ) );
-        }
-
-        QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+        else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error: Some studies can't be imported" ) );
     }
 }
 
