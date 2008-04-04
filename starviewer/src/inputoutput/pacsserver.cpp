@@ -296,7 +296,7 @@ OFCondition PacsServer::addStoragePresentationContexts()
 
     while ( s_cur != s_end && cond.good() )
     {
-        // No poden haver m� de 255 presentation context
+        // No poden haver més de 255 presentation context
         if ( pid > 255 ) return ASC_BADPRESENTATIONCONTEXTID;
 
         // sop class with preferred transfer syntax
