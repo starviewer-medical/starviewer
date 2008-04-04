@@ -144,16 +144,10 @@ public:
      */
     QString getStudyDate();
 
-    ///This action returns study date correctly formated dd/MM/yyyy
-    QString getStudyDateFormatted();
-
     /** This function get the DICOMStudy Time.
      *              @return  DICOMStudy's Time
      */
     QString getStudyTime();
-
-    ///This action returns study date correctly formated hh:mm
-    QString getStudyTimeFormatted();
 
     /** This function get the DICOMStudy Description
      *              @return  DICOMStudy's Description

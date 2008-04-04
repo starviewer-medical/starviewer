@@ -2,8 +2,6 @@
 
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
-#include <QDate>
-#include <QTime>
 
 namespace udg{
 
@@ -206,24 +204,9 @@ QString DICOMStudy::getStudyDate()
     return m_studyDate;
 }
 
-QString DICOMStudy::getStudyDateFormatted()
-{
-    QDate studyDate = QDate::fromString( getStudyDate() , "yyyyMMdd");
-
-    return studyDate.toString( Qt::LocaleDate );
-}
-
-
 QString DICOMStudy::getStudyTime()
 {
     return m_studyTime;
-}
-
-QString DICOMStudy::getStudyTimeFormatted()
-{
-    QTime studyTime = QTime::fromString( getStudyTime() , "hhmmss.zzzz");
-
-    return studyTime.toString( Qt::LocaleDate );
 }
 
 QString DICOMStudy::getStudyDescription()
