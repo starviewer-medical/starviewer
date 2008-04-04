@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
-<defaultcodec></defaultcodec>
 <context>
     <name>QChooseOneObjectDialogBase</name>
     <message>
@@ -337,7 +336,7 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1363"/>
+        <location filename="queryscreen.cpp" line="1348"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
@@ -1246,7 +1245,7 @@ Código de error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1712"/>
+        <location filename="queryscreen.cpp" line="1697"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
@@ -1297,17 +1296,17 @@ Código de error: %1</translation>
         <translation>Error borrando antiguos estudios</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1248"/>
+        <location filename="queryscreen.cpp" line="1233"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1248"/>
+        <location filename="queryscreen.cpp" line="1233"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1470"/>
+        <location filename="queryscreen.cpp" line="1455"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>No se puede conectar al PACS %1 de %2Asegúrese que la IP y el AETitle de este PACS sean correctos</translation>
@@ -1323,12 +1322,12 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Error consultando el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1363"/>
+        <location filename="queryscreen.cpp" line="1348"/>
         <source>Dicomdir</source>
         <translation>Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1378"/>
+        <location filename="queryscreen.cpp" line="1363"/>
         <source>Error openning dicomdir</source>
         <translation>Error abriendo el Dicomdir</translation>
     </message>
@@ -1357,14 +1356,14 @@ Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>Error! No se pueden consultar las Series al PACS llamado %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1485"/>
+        <location filename="queryscreen.cpp" line="1470"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>No se puede consultar el PACS %1 de %2
 Asegúrese que la IP y el AETitle sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1712"/>
+        <location filename="queryscreen.cpp" line="1697"/>
         <source>
 Error Number: %1</source>
         <translation>
@@ -1376,27 +1375,27 @@ Código de error: %1</translation>
         <translation>Seleccione almenos un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1242"/>
+        <location filename="queryscreen.cpp" line="1227"/>
         <source>Please select at least one study to delete</source>
         <translation>Seleccione almenos un estudio a borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1247"/>
+        <location filename="queryscreen.cpp" line="1232"/>
         <source>Are you sure you want to delete the selected Studies?</source>
-        <translation>¿Está seguro que quiere borrar los estudios seleccionados?</translation>
+        <translation type="unfinished">Error. No se pueden importar imágenes del estudio de </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1409"/>
+        <location filename="queryscreen.cpp" line="1394"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Debe seleccionar un PACS donde almacenar el estudio</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1454"/>
+        <location filename="queryscreen.cpp" line="1439"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Los estudios solo se pueden almacenar en un PACS a la vez</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1263"/>
+        <location filename="queryscreen.cpp" line="1248"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>El estudio con UID: %1 está en uso por la Lista de DICOMDIR. Si desea borrar este estudio debería borrarlo primero de la Lista de DICOMDIR.</translation>
     </message>
@@ -1446,19 +1445,14 @@ Código de error: %1</translation>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1228"/>
-        <source>Dicomdir is inconsistent. Can&apos;t import images from study of </source>
-        <translation>Dicomdir inconsistente. No se pueden importar imágenes del estudio de </translation>
+        <location filename="queryscreen.cpp" line="1216"/>
+        <source>Error: Can&apos;t import selected studies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1232"/>
-        <source>, study description: </source>
-        <translation>, descripción estudio: </translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1232"/>
-        <source>Error. Can&apos;t import images from study of </source>
-        <translation>Error. No se pueden importar imágenes del estudio de </translation>
+        <location filename="queryscreen.cpp" line="1218"/>
+        <source>Error: Some studies can&apos;t be imported</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
