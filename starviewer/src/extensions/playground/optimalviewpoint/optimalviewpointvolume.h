@@ -53,6 +53,8 @@ class OptimalViewpointVolume : public QObject {
 
 public:
 
+    struct Voxel { int x, y, z; };
+
     enum ObscuranceFunction { Constant0, SquareRoot, Exponential };
     enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacityColorBleeding, OpacitySmoothColorBleeding };
 
@@ -142,6 +144,7 @@ public:
     void endRayObscurances( int rayId );
 
     void computeObscurances();
+    void computeObscurances2();
     void setObscuranceDirections( int obscuranceDirections );
     void setObscuranceMaximumDistance( double obscuranceMaximumDistance );
     void setObscuranceFunction( ObscuranceFunction obscuranceFunction );
@@ -175,6 +178,7 @@ private:
 
 //     QList<Vector3> getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
 //     double obscurance( double distance ) const;
+    static void getLineStarts( QVector<Vector3> & lineStarts, int dimX, int dimY, int dimZ, const Vector3 & forward );
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
     void labelize( const QVector< unsigned char > & limits );
