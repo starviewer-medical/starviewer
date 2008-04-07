@@ -9,6 +9,7 @@
 
 #include "ui_qserieslistwidgetbase.h"
 #include <QWidget>
+#include <QHash>
 
 namespace udg {
 
@@ -37,6 +38,9 @@ public:
     void setCurrentSeries( QString seriesUID );
 
     QString getCurrentSeriesUID();
+
+    ///Retorna l'estudi uid de la sèrie seeleccionada
+    QString getCurrentStudyUID();
 
 public slots:
 
@@ -69,9 +73,11 @@ signals :
 private :
 
     QString m_className;///<Nom de la classe
+    QHash<QString, QString> m_HashSeriesStudy;///Guardem per cada sèrie a quin estudi pertany
 
     /// crea les connexions dels signals i slots
     void createConnections();
+
 };
 
 };

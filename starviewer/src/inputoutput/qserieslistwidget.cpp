@@ -8,6 +8,7 @@
 
 #include <QString>
 #include <QIcon>
+#include <QHash>
 
 #include "dicomseries.h"
 #include "scalestudy.h"
@@ -69,6 +70,8 @@ void QSeriesListWidget::insertSeries( DICOMSeries *serie )
     /* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
    enlloc per amagar-lo, ho utilitzo per identificar la sèrie */
     item->setStatusTip(serie->getSeriesUID());
+
+    m_HashSeriesStudy[serie->getSeriesUID()] = serie->getStudyUID();//Guardem per la sèrie a quin estudi pertany
 }
 
 void QSeriesListWidget::setCurrentSeries( QString seriesUID )
@@ -104,9 +107,15 @@ QString QSeriesListWidget::getCurrentSeriesUID()
     return m_seriesListWidget->currentItem()->statusTip();
 }
 
+QString QSeriesListWidget::getCurrentStudyUID()
+{
+    return m_HashSeriesStudy[getCurrentSeriesUID()];
+}
+
 void QSeriesListWidget::clear()
 {
     m_seriesListWidget->clear();
+    m_HashSeriesStudy.clear();
 }
 
 QSeriesListWidget::~QSeriesListWidget()

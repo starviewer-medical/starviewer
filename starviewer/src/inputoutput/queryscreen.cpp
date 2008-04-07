@@ -1108,7 +1108,10 @@ void QueryScreen::view()
 
 void QueryScreen::viewFromQSeriesListWidget()
 {
-    loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
+    QStringList studyUIDList;
+
+    studyUIDList << m_seriesListWidgetCache->getCurrentStudyUID();//Agafem l'estudi uid de la sèrie seleccionada
+    loadStudies( studyUIDList, m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
 }
 
 void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopInstanceUID, QString source )
