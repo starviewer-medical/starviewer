@@ -306,11 +306,9 @@ OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_Pr
     }
 #endif
 
-    sprintf( imageFileName , "%s.%s" , dcmSOPClassUIDToModality( req->AffectedSOPClassUID ), req->AffectedSOPInstanceUID );
-
     StoreCallbackData callbackData;
     callbackData.assoc = assoc;
-    callbackData.imageFileName = imageFileName;
+    callbackData.imageFileName = req->AffectedSOPInstanceUID;
     DcmFileFormat dcmff;
     callbackData.dcmff = &dcmff;
 
