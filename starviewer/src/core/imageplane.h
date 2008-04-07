@@ -12,6 +12,7 @@
 
 namespace udg {
 
+class Image;
 /**
 Classe que defineix un pla d'imatge. El pla consta de vectors de direcció de X i Y, normal, origen, espaiat i nombre de files i columnes per definir un pla tancat i finit com és el de la imatge. Està definit en coordenades de món.
 
@@ -48,6 +49,15 @@ public:
 
     double getRowLength() const;
     double getColumnLength() const;
+
+    void setSliceLocation( double location );
+    double getSliceLocation() const;
+    /**
+     * Omple les dades del pla a partir d'un objecte Image
+     * @param image objecte Image
+     * @return Cert si l'objecte Image és vàlid per omplir les dades, fals altrament
+     */
+    bool fillFromImage( const Image *image );
 
     bool operator ==(const ImagePlane &imagePlane);
     bool operator !=(const ImagePlane &imagePlane);
@@ -90,6 +100,9 @@ private:
 
     /// Gruix del pla
     double m_thickness;
+
+    /// Posició relativa del pla
+    double m_sliceLocation;
 };
 
 }
