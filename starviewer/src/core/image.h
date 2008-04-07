@@ -140,143 +140,143 @@ public:
     /// assigna/retorna el path absolut de la imatge
     void setPath( QString path );
     QString getPath() const;
-    
+
     ///assigna / retorna el KiloVoltatge de la imatge
     void setKiloVoltagePeak( double kvp );
-    double getKiloVoltagePeak();
-    
+    double getKiloVoltagePeak() const;
+
     ///assigna / retorna el microAmperatge de la imatge
     void setMicroAmpersSecond( double uas );
-    double getMicroAmpersSecond();
-    
+    double getMicroAmpersSecond() const;
+
     ///assigna / retorna el miliAperatge de la imatge
     void setMilliAmpersSecond( double mas );
-    double getMilliAmpersSecond();
-    
+    double getMilliAmpersSecond() const;
+
     /// assigna / retorna el RepetitionTime de la imatge
     void setRepetitionTime( QString repetitionTime );
-    QString getRepetitionTime();
+    QString getRepetitionTime() const;
 
     ///assigna / retorna el EchoTime de la imatge
     void setEchoTime( QString echoTime );
-    QString getEchoTime();
+    QString getEchoTime() const;
 
     ///assigna / retorna el InversionTime de la imatge
     void setInversionTime( QString inversionTime );
-    QString getInversionTime();
+    QString getInversionTime() const;
 
     ///assigna / retorna l'espai entre llesques de la imatge
     void setSpacingBetweenSlices( QString spacingBetweenSlices );
-    QString getSpacingBetweenSlices();
+    QString getSpacingBetweenSlices() const;
 
     ///assigna / retorna el flip angle de la imatge
     void setFlipAngle( QString philipsFlipAngle );
-    QString getFlipAngle();
+    QString getFlipAngle() const;
 
     ///assigna / retorna el factor turbo de la imatge
     void setPhilipsTurboFactor( QString philipsTurboFactor );
-    QString getPhilipsTurboFactor();
-    
+    QString getPhilipsTurboFactor() const;
+
     ///assigna / retorna el factor Epi de la imatge
     void setPhilipsEPIFactor( QString philipsEPIFactor );
-    QString getPhilipsEPIFactor();
+    QString getPhilipsEPIFactor() const;
 
     ///assigna / retorna la posició del pla de la imatge a l'espai
     void setPhilipsSpacialPlane( QString philipsSpacialPlane );
-    QString getPhilipsSpacialPlane();
+    QString getPhilipsSpacialPlane() const;
 
     ///assigna / retorna el Number Of Averages de la imatge
     void setNumberOfAverages( QString numberOfAverages );
-    QString getNumberOfAverages();
+    QString getNumberOfAverages() const;
 
     ///assigna / retorna ratio del field of view de la imatge
     void setPercentPhaseFieldOfView( QString percentPhaseFieldOfView );
-    QString getPercentPhaseFieldOfView();
+    QString getPercentPhaseFieldOfView() const;
 
     ///assigna / retorna el nom de la bobina utiltizada per la imatge
     void setReceiveCoilName( QString receiveCoilName );
-    QString getReceiveCoilName();
+    QString getReceiveCoilName() const;
 
     ///assigna / retorna el factor b de la imatge
     void setPhilipsBFactor( QString philipsBFactor );
-    QString getPhilipsBFactor();
+    QString getPhilipsBFactor() const;
 
     ///assigna / retorna el reconstruction diameter de la imatge
     void setReconstructionDiameter( QString reconstructionDiameter );
-    QString getReconstructionDiameter();
+    QString getReconstructionDiameter() const;
 
     ///assigna / retorna el exposure time de la imatge
     void setExposureTime( QString exposureTime );
-    QString getExposureTime();
+    QString getExposureTime() const;
 
     ///assigna / retorna el scan length de la imatge
     void setPhilipsScanLength( QString philipsScanLength );
-    QString getPhilipsScanLength();
+    QString getPhilipsScanLength() const;
 
     ///assigna / retorna el table height de la imatge
     void setTableHeight( QString tableHeight );
-    QString getTableHeight();
+    QString getTableHeight() const;
 
     ///assigna / retorna el slice location de la imatge
     void setSliceLocation( QString sliceLocation );
-    QString getSliceLocation();
+    QString getSliceLocation() const;
 
     ///assigna / retorna el reconstruction diameter de la imatge
     void setPhilipsViewConvention( QString philipsViewConvention );
-    QString getPhilipsViewConvention();
+    QString getPhilipsViewConvention() const;
 
     ///assigna / retorna el filter type de la imatge
     void setFilterType( QString filterType );
-    QString getFilterType();
+    QString getFilterType() const;
 
     ///assigna / retorna el image type de la imatge
     void setImageType( QString ImageType );
-    QString getImageType();
+    QString getImageType() const;
 
     ///assigna / retorna el table speed de la imatge
     void setPhilipsTableSpeed( QString philipsTableSpeed );
-    QString getPhilipsTableSpeed();
+    QString getPhilipsTableSpeed() const;
 
     ///assigna / retorna el collimation de la imatge
     void setPhilipsCollimation( QString philipsCollimation );
-    QString getPhilipsCollimation();
+    QString getPhilipsCollimation() const;
 
     ///assigna / retorna scan arc de la imatge
     void setScanArc( QString scanArc );
-    QString getScanArc();
+    QString getScanArc() const;
 
     ///assigna / retorna el tilt de la imatge
     void setTilt( QString tilt );
-    QString getTilt();
+    QString getTilt() const;
 
     ///assigna / retorna el cycle time de la imatge
     void setPhilipsCycleTime( QString philipsXycleTime );
-    QString getPhilipsCycleTime();
+    QString getPhilipsCycleTime() const;
 
     ///assigna / retorna el pitch de la imatge
     void setPhilipsPitch( QString philipsPitch );
-    QString getPhilipsPitch();
+    QString getPhilipsPitch() const;
 
     ///assigna / retorna el rotation time de la imatge
     void setPhilipsRotationTime( QString philipsRotationTime );
-    QString getPhilipsRotationTime();
+    QString getPhilipsRotationTime() const;
 
     ///assigna / retorna el table increment de la imatge
     void setPhilipsTableIncrement( QString tableIncrement );
-    QString getPhilipsTableIncrement();
+    QString getPhilipsTableIncrement() const;
 
     ///assigna / retorna el scan time de la imatge
     void setPhilipsScanTime( QString philipsScanTime );
-    QString getPhilipsScanTime();
+    QString getPhilipsScanTime() const;
 
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );
 
     /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
-    Image *getReferencedImage( QString SOPInstanceUID );
+    Image *getReferencedImage( QString SOPInstanceUID ) const;
 
     /// Retorna una llista de totes les imatges relacionades amb la imatge
-    QList<Image *> getReferencedImages();
+    QList<Image *> getReferencedImages() const;
 
     /// Indica si una imatge té imatges relacionades
     bool hasReferencedImages() const;
@@ -370,10 +370,10 @@ private:
 
     /// Nombre de frames de la imatge. (0028,0008) Tipus 1
     int m_numberOfFrames;
-    
-    /** Kilo voltatge de sortida del generador de raigs-X. (0018,0060) 
+
+    /** Kilo voltatge de sortida del generador de raigs-X. (0018,0060)
         El tipus depèn de la modalitat:
-        
+
         CR IMAGE->tipus 3
         CT IMAGE->tipus 2
         X-RAY->   tipus 2
@@ -382,10 +382,10 @@ private:
         XA/XRF->tipus 1.
     */
     double m_KiloVoltagePeak;
-    
-    /** Exposició als raigs-X expressada en micro ampers per segon. (0018,1153) 
+
+    /** Exposició als raigs-X expressada en micro ampers per segon. (0018,1153)
         El tipus depèn de la modalitat:
-        
+
         CR IMAGE->tipus 3
         CT IMAGE->tipus 2
         X-RAY->   tipus 3
@@ -393,15 +393,15 @@ private:
         X-RAY FRAME->no en té.
     */
     double m_microAmpersSecond;
-    
-     /** Exposició als raigs-X expressada en mi·liampers per segon. (0018,1153) 
+
+     /** Exposició als raigs-X expressada en mi·liampers per segon. (0018,1153)
         El tipus depèn de la modalitat:
-        
+
         XA/XRF->tipus 1C: condició: requerit si el temps d'exposició en ms (0018,9328) o el corrent del tub de raigs-X en mA no estan presents.
                                     Altrament també pot ser-hi.
     */
     double m_milliAmpersSecond;
-    
+
     /** Temps en ms entre cada puls en MR (0018,0080) Tipus 2
      */
     QString m_repetitionTime;
@@ -417,14 +417,14 @@ private:
 
     /** Espai en mm entre les llesques (0018,0088)
         MR IMAGE-> tipus 3
-        NM IMAGE-> tipus 2 
+        NM IMAGE-> tipus 2
     */
     QString m_spacingBetweenSlices;
 
-    /** diferencia de graus entre el vector magnètic i el vector magnètic del camp primari per MR (0018,1314). Tipus 3 
+    /** diferencia de graus entre el vector magnètic i el vector magnètic del camp primari per MR (0018,1314). Tipus 3
      */
     QString m_flipAngle;
-    
+
     //TODO Esbrinar significat camp
     /** Per MR  (0018,0083)
      */
@@ -437,14 +437,14 @@ private:
     /** Nom de bobina utilitzada en MR (0018,1250). Tipus 3
       */
     QString m_receiveCoilName;
-    
+
     /** Diametre en mm de la regió de la qual s'han utilitzat dades per crear la reconstrucció del a imatge (0018,1100)
         CT Image->tipus 3
         MR Image->tipus 3
         PET Imate->tipus 3
      */
     QString m_reconstructionDiameter;
-    
+
     /** Temps d'exposició als raigs X en ms. (0018,1150)
         CT-> tipus 3
         NM-> tipus 3
@@ -475,10 +475,10 @@ private:
        X-Ray->tipus 3
       */
     QString m_filterType;
-  
+
     /** Indentificador de les característiques de la imatge. (0008,0008)
      * Obligatoria per la majoria de modalitats en tipus 1 (CT,MR,DX,VL,US,...)
-     */  
+     */
     QString m_imageType;
 
     /** Angle d'escaneig de les dades. (0018,1143)
@@ -522,7 +522,7 @@ private:
     /** Tag de Philips per CT helicoïdal. (01f1,1026)
      */
     QString m_philipsPitch;
- 
+
     //TODO buscar significat tag
     /** Tag de Philips per CT helicoïdal i no helicoïdal. (01f1,1027)
      */

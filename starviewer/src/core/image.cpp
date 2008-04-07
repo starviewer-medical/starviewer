@@ -22,7 +22,7 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent), m_sliceThickness(1.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_KiloVoltagePeak(0), m_microAmpersSecond(0), m_milliAmpersSecond(0), m_CTLocalizer(false),  m_parentSeries(NULL)
+ : QObject(parent), m_sliceThickness(1.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_KiloVoltagePeak(0), m_microAmpersSecond(0), m_milliAmpersSecond(0), m_parentSeries(NULL), m_CTLocalizer(false)
 {
     m_pixelSpacing[0] = 1.;
     m_pixelSpacing[0] = 2.;
@@ -308,7 +308,7 @@ void Image::setKiloVoltagePeak( double kvp )
  m_KiloVoltagePeak = kvp;
 }
 
-double Image::getKiloVoltagePeak()
+double Image::getKiloVoltagePeak() const
 {
  return m_KiloVoltagePeak;
 }
@@ -318,7 +318,7 @@ void Image::setMicroAmpersSecond( double uas )
      m_microAmpersSecond = uas;
 }
 
-double Image::getMicroAmpersSecond()
+double Image::getMicroAmpersSecond() const
 {
      return m_microAmpersSecond;
 }
@@ -328,7 +328,7 @@ void Image::setMilliAmpersSecond( double mas )
     m_milliAmpersSecond = mas;
 }
 
-double Image::getMilliAmpersSecond()
+double Image::getMilliAmpersSecond() const
 {
     return m_milliAmpersSecond;
 }
@@ -338,7 +338,7 @@ void Image::setRepetitionTime( QString repetitionTime )
     m_repetitionTime = repetitionTime;
 }
 
-QString Image::getRepetitionTime()
+QString Image::getRepetitionTime() const
 {
     return m_repetitionTime;
 }
@@ -348,7 +348,7 @@ void Image::setEchoTime( QString echoTime )
     m_echoTime = echoTime;
 }
 
-QString Image::getEchoTime()
+QString Image::getEchoTime() const
 {
     return m_echoTime;
 }
@@ -358,7 +358,7 @@ void Image::setInversionTime( QString inversionTime )
     m_inversionTime = inversionTime;
 }
 
-QString Image::getInversionTime()
+QString Image::getInversionTime() const
 {
     return m_inversionTime;
 }
@@ -368,7 +368,7 @@ void Image::setSpacingBetweenSlices( QString spacingBetweenSlices )
     m_spacingBetweenSlices = spacingBetweenSlices;
 }
 
-QString Image::getSpacingBetweenSlices()
+QString Image::getSpacingBetweenSlices()  const
 {
     return m_spacingBetweenSlices;
 }
@@ -378,7 +378,7 @@ void Image::setFlipAngle( QString flipAngle )
     m_flipAngle = flipAngle;
 }
 
-QString Image::getFlipAngle()
+QString Image::getFlipAngle() const
 {
     return m_flipAngle;
 }
@@ -388,7 +388,7 @@ void Image::setPhilipsTurboFactor( QString philipsTurboFactor )
     m_philipsTurboFactor = philipsTurboFactor ;
 }
 
-QString Image::getPhilipsTurboFactor()
+QString Image::getPhilipsTurboFactor() const
 {
     return m_philipsTurboFactor;
 }
@@ -398,7 +398,7 @@ void Image::setPhilipsEPIFactor( QString philipsEPIFactor )
     m_philipsEPIFactor = philipsEPIFactor;
 }
 
-QString Image::getPhilipsEPIFactor()
+QString Image::getPhilipsEPIFactor() const
 {
     return m_philipsEPIFactor;
 }
@@ -408,7 +408,7 @@ void Image::setPhilipsSpacialPlane( QString philipsSpacialPlane )
     m_philipsSpacialPlane = philipsSpacialPlane;
 }
 
-QString Image::getPhilipsSpacialPlane()
+QString Image::getPhilipsSpacialPlane() const
 {
     return m_philipsSpacialPlane;
 }
@@ -418,7 +418,7 @@ void Image::setNumberOfAverages( QString numberOfAverages )
     m_numberOfAverages = numberOfAverages;
 }
 
-QString Image::getNumberOfAverages()
+QString Image::getNumberOfAverages() const
 {
     return m_numberOfAverages;
 }
@@ -428,7 +428,7 @@ void Image::setPercentPhaseFieldOfView( QString PercentPhaseFieldOfView )
     m_percentPhaseFieldOfView = PercentPhaseFieldOfView;
 }
 
-QString Image::getPercentPhaseFieldOfView()
+QString Image::getPercentPhaseFieldOfView() const
 {
     return m_percentPhaseFieldOfView;
 }
@@ -438,7 +438,7 @@ void Image::setReceiveCoilName( QString ReceiveCoilName )
     m_receiveCoilName = ReceiveCoilName;
 }
 
-QString Image::getReceiveCoilName()
+QString Image::getReceiveCoilName() const
 {
     return m_receiveCoilName;
 }
@@ -448,7 +448,7 @@ void Image::setPhilipsBFactor( QString philipsBFactor )
     m_philipsBFactor = philipsBFactor;
 }
 
-QString Image::getPhilipsBFactor()
+QString Image::getPhilipsBFactor() const
 {
     return m_philipsBFactor;
 }
@@ -458,7 +458,7 @@ void Image::setReconstructionDiameter( QString reconstructionDiameter )
     m_reconstructionDiameter = reconstructionDiameter;
 }
 
-QString Image::getReconstructionDiameter()
+QString Image::getReconstructionDiameter() const
 {
     return m_reconstructionDiameter;
 }
@@ -468,7 +468,7 @@ void Image::setExposureTime( QString exposureTime )
     m_exposureTime = exposureTime;
 }
 
-QString Image::getExposureTime()
+QString Image::getExposureTime() const
 {
     return m_exposureTime;
 }
@@ -478,7 +478,7 @@ void Image::setPhilipsScanLength( QString philipsScanLength )
     m_philipsScanLength = philipsScanLength;
 }
 
-QString Image::getPhilipsScanLength()
+QString Image::getPhilipsScanLength() const
 {
     return m_philipsScanLength;
 }
@@ -488,7 +488,7 @@ void Image::setTableHeight( QString tableHeight )
     m_tableHeight = tableHeight;
 }
 
-QString Image::getTableHeight()
+QString Image::getTableHeight() const
 {
     return m_tableHeight;
 }
@@ -498,7 +498,7 @@ void Image::setSliceLocation( QString sliceLocation )
     m_sliceLocation = sliceLocation;
 }
 
-QString Image::getSliceLocation()
+QString Image::getSliceLocation() const
 {
     return m_sliceLocation;
 }
@@ -508,7 +508,7 @@ void Image::setPhilipsViewConvention( QString philipsViewConvention )
     m_philipsViewConvention = philipsViewConvention;
 }
 
-QString Image::getPhilipsViewConvention()
+QString Image::getPhilipsViewConvention() const
 {
     return m_philipsViewConvention;
 }
@@ -518,7 +518,7 @@ void Image::setFilterType( QString filterType )
     m_filterType = filterType;
 }
 
-QString Image::getFilterType()
+QString Image::getFilterType() const
 {
     return m_filterType;
 }
@@ -528,7 +528,7 @@ void Image::setImageType( QString imageType )
     m_imageType = imageType;
 }
 
-QString Image::getImageType()
+QString Image::getImageType() const
 {
     return m_imageType;
 }
@@ -538,7 +538,7 @@ void Image::setPhilipsTableSpeed( QString philipsTableSpeed )
     m_philipsTableSpeed = philipsTableSpeed;
 }
 
-QString Image::getPhilipsTableSpeed()
+QString Image::getPhilipsTableSpeed() const
 {
     return m_philipsTableSpeed;
 }
@@ -548,7 +548,7 @@ void Image::setPhilipsCollimation( QString philipsCollimation )
     m_philipsCollimation = philipsCollimation;
 }
 
-QString  Image::getPhilipsCollimation()
+QString  Image::getPhilipsCollimation() const
 {
     return m_philipsCollimation;
 }
@@ -558,7 +558,7 @@ void Image::setScanArc( QString scanArc )
     m_scanArc = scanArc;
 }
 
-QString Image::getScanArc()
+QString Image::getScanArc() const
 {
     return m_scanArc;
 }
@@ -568,7 +568,7 @@ void Image::setTilt( QString tilt )
     m_tilt = tilt;
 }
 
-QString Image::getTilt()
+QString Image::getTilt() const
 {
     return m_tilt;
 }
@@ -578,7 +578,7 @@ void Image::setPhilipsCycleTime( QString philipsCycleTime )
     m_philipsCycleTime = philipsCycleTime;
 }
 
-QString Image::getPhilipsCycleTime()
+QString Image::getPhilipsCycleTime() const
 {
     return m_philipsCycleTime;
 }
@@ -588,7 +588,7 @@ void Image::setPhilipsPitch( QString philipsPitch )
     m_philipsPitch = philipsPitch;
 }
 
-QString Image::getPhilipsPitch()
+QString Image::getPhilipsPitch() const
 {
     return m_philipsPitch;
 }
@@ -598,7 +598,7 @@ void Image::setPhilipsRotationTime( QString philipsRotationTime )
     m_philipsRotationTime = philipsRotationTime;
 }
 
-QString Image::getPhilipsRotationTime()
+QString Image::getPhilipsRotationTime() const
 {
     return m_philipsRotationTime;
 }
@@ -608,7 +608,7 @@ void Image::setPhilipsTableIncrement( QString philipsTableIncrement )
     m_philipsTableIncrement = philipsTableIncrement;
 }
 
-QString Image::getPhilipsTableIncrement()
+QString Image::getPhilipsTableIncrement() const
 {
     return m_philipsTableIncrement;
 }
@@ -618,7 +618,7 @@ void Image::setPhilipsScanTime( QString philipsScanTime )
     m_philipsScanTime = philipsScanTime;
 }
 
-QString Image::getPhilipsScanTime()
+QString Image::getPhilipsScanTime() const
 {
     return m_philipsScanTime;
 }
@@ -710,7 +710,7 @@ void Image::addReferencedImage( Image *image )
 
 }
 
-Image *Image::getReferencedImage( QString SOPInstanceUID )
+Image *Image::getReferencedImage( QString SOPInstanceUID ) const
 {
     int i = 0;
     bool found = false;
@@ -727,7 +727,7 @@ Image *Image::getReferencedImage( QString SOPInstanceUID )
         return m_referencedImageSequence.at(i);
 }
 
-QList<Image *> Image::getReferencedImages()
+QList<Image *> Image::getReferencedImages() const
 {
     return m_referencedImageSequence;
 }
