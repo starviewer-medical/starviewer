@@ -125,6 +125,16 @@ void ImagePlane::setColumns( int columns )
     m_columns = columns;
 }
 
+int ImagePlane::getRows() const
+{
+    return m_rows;
+}
+
+int ImagePlane::getColumns() const
+{
+    return m_columns;
+}
+
 double ImagePlane::getRowLength() const
 {
     return m_rows * m_spacing[0];
