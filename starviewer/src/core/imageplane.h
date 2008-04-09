@@ -47,6 +47,9 @@ public:
     void setRows( int rows );
     void setColumns( int columns );
 
+    int getRows() const;
+    int getColumns() const;
+
     double getRowLength() const;
     double getColumnLength() const;
 
