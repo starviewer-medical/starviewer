@@ -24,6 +24,7 @@
 #include "polylineroitool.h"
 #include "distancetool.h"
 #include "erasertool.h"
+#include "cursor3dtool.h"
 #include "angletool.h"
 
 #include <QAction>
@@ -101,6 +102,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "EraserTool" )
     {
         tool = new EraserTool( viewer );
+    }
+    else if( toolName == "Cursor3DTool" )
+    {
+        tool = new Cursor3DTool( viewer );
     }
     else if( toolName == "AngleTool" )
     {
@@ -210,6 +215,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Erase") );
         toolAction->setStatusTip( tr("Enable/Disable eraser tool") );
         toolAction->setIcon( QIcon(":/images/eraser2.png") );
+    }
+    else if( toolName == "Cursor3DTool" )
+    {
+        toolAction->setText( tr("Cursor 3D") );
+        toolAction->setStatusTip( tr("Enable/Disable Cursor 3D tool") );
+        toolAction->setIcon( QIcon(":/images/mouse.png") );
     }
     else if( toolName == "AngleTool" )
     {

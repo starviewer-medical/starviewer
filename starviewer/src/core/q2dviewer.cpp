@@ -79,6 +79,7 @@
 
 // projeccio de punts
 #include <vtkMatrix4x4.h>
+#include <vtkPlane.h>
 
 namespace udg {
 
@@ -1598,6 +1599,22 @@ Image *Q2DViewer::getCurrentDisplayedImage() const
     return image;
 }
 
+Image *Q2DViewer::getImage( int sliceNumber, int phaseNumber ) const
+{
+    Image *image = NULL;
+    if( m_mainVolume )
+    {
+        if( m_mainVolume->getSeries() )
+        {
+            if( ( sliceNumber*m_numberOfPhases + phaseNumber ) < m_mainVolume->getSeries()->getImages().count() )
+            {
+                image = m_mainVolume->getSeries()->getImages().at( sliceNumber*m_numberOfPhases + phaseNumber );
+            }
+        }
+    }
+    return image;
+}
+
 ImagePlane *Q2DViewer::getCurrentImagePlane()
 {
     ImagePlane *imagePlane = 0;
@@ -1679,6 +1696,82 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                     // TODO comprovar que això sigui correcte
                     imagePlane->getOrigin( origin );
                     imagePlane->setSliceLocation( origin[1] );
+                }
+            }
+            break;
+        }
+    }
+    return imagePlane;
+}
+
+ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
+{
+    ImagePlane *imagePlane = 0;
+    if( m_mainVolume )
+    {
+        int *dimensions = m_mainVolume->getDimensions();
+        double *spacing = m_mainVolume->getSpacing();
+        double *origin  = m_mainVolume->getOrigin();
+        double *bounds = this->getImageActor()->GetBounds();
+
+        switch( m_lastView )
+        {
+            case Axial: // XY
+            {
+                Image *image = this->getImage( sliceNumber, phaseNumber );
+                if( image )
+                {
+                    imagePlane = new ImagePlane();
+                    const double *dirCosines = image->getImageOrientationPatient();
+
+                    imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+                    imagePlane->setColumnDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+                    imagePlane->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
+                    // TODO no estem
+                    imagePlane->setThickness( this->getThickness() );
+                    imagePlane->setRows( image->getRows() );
+                    imagePlane->setColumns( image->getColumns() );
+                    imagePlane->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
+                }
+            }
+            break;
+
+            case Sagital: // YZ TODO encara no esta comprovat que aquest pla sigui correcte
+            {
+                Image *image = m_mainVolume->getSeries()->getImages().at(0);
+                if( image )
+                {
+                    imagePlane = new ImagePlane();
+                    const double *dirCosines = image->getImageOrientationPatient();
+
+                    imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+                    imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+                    imagePlane->setSpacing( spacing[0], spacing[2] );
+                    imagePlane->setThickness( this->getThickness() );
+                    imagePlane->setRows( dimensions[1] );
+                    imagePlane->setColumns( dimensions[2] );
+                    // TODO falta esbrinar si l'origen que estem donant es bo o no
+                    imagePlane->setOrigin( origin[0] + dirCosines[0]*sliceNumber*spacing[0], origin[1] + dirCosines[1]*sliceNumber*spacing[0], origin[2] + dirCosines[2]*sliceNumber*spacing[0]);
+                }
+            }
+            break;
+
+            case Coronal: // XZ TODO encara no esta comprovat que aquest pla sigui correcte
+            {
+                Image *image = m_mainVolume->getSeries()->getImages().at(0);
+                if( image )
+                {
+                    imagePlane = new ImagePlane();
+                    const double *dirCosines = image->getImageOrientationPatient();
+
+                    imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+                    imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+                    imagePlane->setSpacing( spacing[1], spacing[2] );
+                    imagePlane->setThickness( this->getThickness() );
+                    imagePlane->setRows( dimensions[2] );
+                    imagePlane->setColumns( dimensions[0] );
+                    // TODO falta esbrinar si l'origen que estem donant es bo o no
+                    imagePlane->setOrigin( origin[0] + dirCosines[3]*sliceNumber*spacing[1], origin[1] + dirCosines[4]*sliceNumber*spacing[1], origin[2] + dirCosines[5]*sliceNumber*spacing[1]);
                 }
             }
             break;
@@ -3187,6 +3280,45 @@ double *Q2DViewer::pointInModel( int screen_x, int screen_y )
 vtkImageData* Q2DViewer::getCurrentSlabProjection()
 {
     return m_thickSlabProjectionFilter->GetOutput();
+}
+
+int Q2DViewer::getNearestSlice( double projectedPosition[3], double * distance )
+{
+    int i;
+    double actualDistance;
+    double minimumDistance = -1.0;
+    int minimumSlice = -1;
+    double aux;
+    double mod;
+    double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneOrigin[3], currentPerpendicularVector[3], currentNormalVector[3];
+    ImagePlane *currentPlane;
+    int maxSlice = this->getMaximumSlice();
+    
+    for( i = 0; i < maxSlice ; i++ )
+    {
+        currentPlane = this->getImagePlane( i, m_currentPhase );
+        if( currentPlane )
+        {
+            currentPlane->getOrigin( currentPlaneOrigin );
+            currentPlane->getNormalVector( currentNormalVector );
+
+//             DEBUG_LOG( tr("Origen: [%1,%2,%3]").arg( currentPlaneOrigin[0] ).arg( currentPlaneOrigin[1] ).arg( currentPlaneOrigin[2] ) );
+            
+            actualDistance = vtkPlane::DistanceToPlane ( projectedPosition, currentNormalVector, currentPlaneOrigin );
+
+//             DEBUG_LOG( tr("Distància a la llesca %1: %2 amb Origen: [%3,%4,%5] al punt: [%6,%7,%8] vector:[%9,%10,%11]").arg( i ).arg( actualDistance ).arg(currentPlaneOrigin[0]).arg(currentPlaneOrigin[1]).arg(currentPlaneOrigin[2]).arg(projectedPosition[0]).arg(projectedPosition[1]).arg(projectedPosition[2]).arg(currentNormalVector[0]).arg(currentNormalVector[1]).arg(currentNormalVector[2]) );
+            
+            if( ( actualDistance < minimumDistance ) || ( minimumDistance == -1.0 ))
+            {
+                minimumDistance = actualDistance;
+                minimumSlice = i;
+            }
+        }
+    }
+    
+    
+//     DEBUG_LOG( tr("Em quedo amb la llesca: %1").arg( minimumSlice ) );
+    return minimumSlice;
 }
 
 };  // end namespace udg

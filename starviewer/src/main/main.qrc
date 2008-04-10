@@ -26,6 +26,7 @@
         <file>images/clutEdit.png</file>
         <file>images/coronal.png</file>
         <file>images/createDICOMDIR.png</file>
+        <file>images/cross.png</file>
         <file>images/database.png</file>
         <file>images/databaseRemove.png</file>
 	<file>images/dicomDump.png</file>
@@ -49,6 +50,7 @@
         <file>images/loader.gif</file>
         <file>images/logs.png</file>
         <file>images/mip.png</file>
+        <file>images/mouse.png</file>
         <file>images/move.png</file>
         <file>images/mpr3D.png</file>
         <file>images/new.png</file>

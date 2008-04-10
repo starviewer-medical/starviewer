@@ -589,6 +589,7 @@ void Q2DViewerExtension::initializeTools()
     m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
     m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction( "DistanceTool" ) );
     m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction( "EraserTool" ) );
+    m_cursor3DToolButton->setDefaultAction( m_toolManager->getToolAction("Cursor3DTool") );
     m_angleToolButton->setDefaultAction( m_toolManager->getToolAction( "AngleTool" ) );
 
     // activem l'eina de valors predefinits de window level
@@ -601,7 +602,7 @@ void Q2DViewerExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "ScreenShotTool"<< "AngleTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "ScreenShotTool"<< "AngleTool" << "Cursor3DTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -629,7 +630,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool" << "Cursor3DTool";
 
     m_toolManager->setViewerTools( viewer, toolsList );
 }

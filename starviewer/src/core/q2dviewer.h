@@ -219,11 +219,23 @@ public:
     Image *getCurrentDisplayedImage() const;
 
     /**
+     * Ens retorna la imatge referent a la llesca sliceNumber
+     * @return Objecte Image corresponent a la llesca.
+     */
+    Image *getImage( int sliceNumber, int phaseNumber ) const;
+    
+    /**
      * Ens dóna el pla d'imatge actual que estem visualitzant
      * @return El pla imatge actual
      */
     ImagePlane *getCurrentImagePlane();
 
+    /**
+     * Ens dóna el pla d'imatge de la llesca
+     * @return El pla imatge de la llesca
+     */
+    ImagePlane *getImagePlane( int sliceNumber, int phaseNumber );
+    
     /**
      * donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
      * el pla actual, transformat a coordenades de món VTK
@@ -279,6 +291,9 @@ public:
     ///Retorna la informació de la llesca actual del visualitzador
     vtkImageData* getCurrentSlabProjection();
 
+    /// Busca la llesca que es troba més a prop del punt i retorna la distancia
+    int getNearestSlice( double point[3], double * distance );
+    
 public slots:
     virtual void render();
     void reset();
