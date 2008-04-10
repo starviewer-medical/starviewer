@@ -9,9 +9,9 @@
 
 #include <QWidget>
 #include <QFrame>
-#include <series.h>
 #include <QLabel>
 
+#include "series.h"
 
 namespace udg {
 
