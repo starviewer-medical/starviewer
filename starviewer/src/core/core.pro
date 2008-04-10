@@ -157,6 +157,8 @@ HEADERS += extensionfactory.h \
            erasertool.h \
 	   patientitem.h \
            patientitemmodel.h \
+           cursor3dtool.h \
+           cursor3dtooldata.h \
            angletool.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -283,6 +285,8 @@ SOURCES += extensionmediator.cpp \
            erasertool.cpp \
            patientitem.cpp \
            patientitemmodel.cpp \
+           cursor3dtool.cpp \
+           cursor3dtooldata.cpp \
            angletool.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
