@@ -47,6 +47,8 @@ QVariant PatientItemModel::data(const QModelIndex &index, int role) const
 
 Qt::ItemFlags PatientItemModel::flags(const QModelIndex &index) const
 {
+    //TODO: S'ha posat un item flag qualsevol, caldria repassar-ho i finalitzar correctament el model.
+    return Qt::ItemIsSelectable;
 }
 
 QVariant PatientItemModel::headerData(int section, Qt::Orientation orientation, int role ) const
