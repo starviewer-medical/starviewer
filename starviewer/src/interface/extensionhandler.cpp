@@ -262,6 +262,10 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
     {
         *(m_mainApp->getCurrentPatient()) += *patient;
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
+        
+        //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
+        if ( m_mainApp->getExtensionWorkspace()->count() == 0 )
+            openDefaultExtension();
     }
     else //Són diferents o no sabem diferenciar
     {
@@ -286,7 +290,9 @@ void ExtensionHandler::openDefaultExtension()
         request("Q2DViewerExtension");
     }
     else
+    {
         DEBUG_LOG("No hi ha dades de pacient!");
+    }
 }
 
 };  // end namespace udg
