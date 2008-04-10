@@ -225,12 +225,13 @@ public:
     ImagePlane *getCurrentImagePlane();
 
     /**
-     * donat un punt  ens dona la projeccio d'aquest punt sobre el pla actual
+     * donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
+     * el pla actual, transformat a coordenades de món VTK
      * @param pointToProject[]
      * @param pointPlane
      * @param projectedPoint[]
      */
-    void projectPointToCurrentDisplayedImage( double pointToProject[3], double projectedPoint[3] );
+    void projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3] );
 
     /// Retorna el thickness
     double getThickness();

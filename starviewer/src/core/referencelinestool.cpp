@@ -147,6 +147,13 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     // primer mirem que siguin plans diferents
     if( *localizerPlane != *referencePlane )
     {
+//         DEBUG_LOG( "== Localizer PLANE info == " );
+//         DEBUG_LOG( "\n" + localizerPlane->toString(true) );
+//         DEBUG_LOG( "== Reference PLANE info == " );
+//         DEBUG_LOG( referencePlane->toString() );
+//         DEBUG_LOG("\n -- Localizer Volume Information -- ");
+//         DEBUG_LOG( "\n" + m_2DViewer->getInput()->toString() );
+//
         // Farem dues projeccions:
         // Una sera la projeccio directa del pla de referencia sobre el localitzador
         // que es el metode proposat per en David Clunie ( http://www.dclunie.com/medical-image-faq/html/part2.html, ap. 2.2.1 )
@@ -166,10 +173,10 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 //         QList< QVector<double> > referencePlaneBounds = referencePlane->getCentralBounds();
 //         double projectedVertix1[3],projectedVertix2[3],projectedVertix3[3],projectedVertix4[3];
 //
-//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(0).data(), projectedVertix1 );
-//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(1).data(), projectedVertix2 );
-//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(2).data(), projectedVertix3 );
-//         m_2DViewer->projectPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(3).data(), projectedVertix4 );
+//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(0).data(), projectedVertix1 );
+//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(1).data(), projectedVertix2 );
+//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(2).data(), projectedVertix3 );
+//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(3).data(), projectedVertix4 );
 //
 //         // donem els punts al poligon a dibuixar
 //         m_projectedReferencePlane->setVertix( 0, projectedVertix1 );
@@ -191,14 +198,17 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         // calculem totes les possibles interseccions
         QList< QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
         double firstIntersectionPoint[3], secondIntersectionPoint[3];
+
         int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
 
+        //
+        // TODO mirar exactament quan cal amagar les línies i quan no depenent de les interseccions trobades
+        //
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
-        DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
         if( numberOfIntersections == 2 )
         {
-            m_2DViewer->projectPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
-            m_2DViewer->projectPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
+            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
+            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
 
             // linia discontinua
             m_upperProjectedIntersection->setFirstPoint( firstIntersectionPoint );
@@ -221,8 +231,8 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
         if( numberOfIntersections == 2 )
         {
-            m_2DViewer->projectPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
-            m_2DViewer->projectPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
+            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
+            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
 
             // linia discontinua
             m_lowerProjectedIntersection->setFirstPoint( firstIntersectionPoint );
@@ -245,23 +255,19 @@ int ReferenceLinesTool::getIntersections( QVector<double> tlhc, QVector<double> 
     localizerPlane->getOrigin( localizerOrigin );
     if( vtkPlane::IntersectWithLine( (double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
     {
-        DEBUG_LOG( QString("Segment P1-P2 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
         numberOfIntersections = 1;
 
         if( vtkPlane::IntersectWithLine( (double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
         {
-            DEBUG_LOG( QString("Segment P3-P4 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
             numberOfIntersections = 2;
         }
     }
     else if( vtkPlane::IntersectWithLine( (double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
     {
-        DEBUG_LOG( QString("Segment P2-P3 intersecciona en el punt: %1,%2,%3").arg( firstIntersectionPoint[0] ).arg( firstIntersectionPoint[1] ).arg( firstIntersectionPoint[2] ) );
         numberOfIntersections = 1;
 
         if( vtkPlane::IntersectWithLine( (double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
         {
-            DEBUG_LOG( QString("Segment P4-P1 intersecciona en el punt: %1,%2,%3").arg( secondIntersectionPoint[0] ).arg( secondIntersectionPoint[1] ).arg( secondIntersectionPoint[2] ) );
             numberOfIntersections = 2;
         }
     }

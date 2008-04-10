@@ -1299,6 +1299,8 @@ void Q2DViewer::setSlice( int value )
 {
     if( this->m_mainVolume && this->m_currentSlice != value )
     {
+//         this->projectCurrentDICOMPlaneToVTK();
+
         // thick slab
         if( value < 0 )
             m_currentSlice = 0;
@@ -1614,21 +1616,7 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                 if( image )
                 {
                     imagePlane = new ImagePlane();
-                    const double *dirCosines = image->getImageOrientationPatient();
-
-                    imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
-                    imagePlane->setColumnDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
-
-//                     DEBUG_LOG( QString("AXIAL ROW Vector: %1,%2,%3").arg(dirCosines[0]).arg(dirCosines[1]).arg(dirCosines[2]) );
-//                     DEBUG_LOG( QString("AXIAL COL Vector: %1,%2,%3").arg(dirCosines[3]).arg(dirCosines[4]).arg(dirCosines[5]) );
-
-                    imagePlane->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
-                    // TODO no estem
-                    imagePlane->setThickness( this->getThickness() );
-                    imagePlane->setRows( image->getRows() );
-                    imagePlane->setColumns( image->getColumns() );
-
-                    imagePlane->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
+                    imagePlane->fillFromImage( image );
                 }
             }
             break;
@@ -1644,8 +1632,7 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                     imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
                     imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
 
-//                     DEBUG_LOG( QString("SAGITAL ROW Vector: %1,%2,%3").arg(dirCosines[3]).arg(dirCosines[4]).arg(dirCosines[5]) );
-//                     DEBUG_LOG( QString("SAGITAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
+
 
                     imagePlane->setSpacing( spacing[0], spacing[2] );
                     imagePlane->setThickness( this->getThickness() );
@@ -1655,6 +1642,15 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
     //                 imagePlane->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
     //                 imagePlane->setOrigin( bounds[0], bounds[2], bounds[4] );
                     imagePlane->setOrigin( origin[0] + spacing[0]*m_currentSlice, origin[1] /*+ spacing[1]*dimensions[1]*/, origin[2] /*+ spacing[2]*dimensions[2]*/ );
+
+
+                    imagePlane->setOrigin( origin[0] + spacing[0]*m_currentSlice * dirCosines[3] +
+                                                       spacing[0]*m_currentSlice * dirCosines[4] +
+                                                       spacing[0]*m_currentSlice * dirCosines[5]
+                        , origin[1] /*+ spacing[1]*dimensions[1]*/, origin[2] /*+ spacing[2]*dimensions[2]*/ );
+                    // TODO comprovar que això sigui correcte
+                    imagePlane->getOrigin( origin );
+                    imagePlane->setSliceLocation( origin[0] );
                 }
             }
             break;
@@ -1670,9 +1666,6 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
                     imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
                     imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
 
-//                     DEBUG_LOG( QString("CORONAL ROW Vector: %1,%2,%3").arg(dirCosines[0]).arg(dirCosines[1]).arg(dirCosines[2]) );
-//                     DEBUG_LOG( QString("CORONAL COL Vector: %1,%2,%3").arg(dirCosines[6]).arg(dirCosines[7]).arg(dirCosines[8]) );
-
                     imagePlane->setSpacing( spacing[1], spacing[2] );
                     imagePlane->setThickness( this->getThickness() );
                     imagePlane->setRows( dimensions[1] );
@@ -1683,24 +1676,29 @@ ImagePlane *Q2DViewer::getCurrentImagePlane()
     //                 imagePlane->setOrigin( bounds[0], bounds[2], bounds[4] );
     //                 imagePlane->setOrigin( bounds[0], bounds[3], bounds[5] );
                     imagePlane->setOrigin( origin[0], origin[1] + /*spacing[1]*/image->getPixelSpacing()[1]*m_currentSlice, origin[2] /*+ spacing[2]*dimensions[2]*/ );
+                    // TODO comprovar que això sigui correcte
+                    imagePlane->getOrigin( origin );
+                    imagePlane->setSliceLocation( origin[1] );
                 }
             }
             break;
         }
-
-//         DEBUG_LOG( QString("View: %1 :: image actor bounds: %2,%3 :: %4,%5 :: %6,%7").arg(m_lastView).arg(bounds[0]).arg(bounds[1]).arg(bounds[2]).arg(bounds[3]).arg(bounds[4]).arg(bounds[5]) );
-//         if( imagePlane )
-//         {
-//             double ori[3];
-//             imagePlane->getOrigin(ori);
-//             DEBUG_LOG( QString("Computed ORIGIN: %1,%2,%3").arg(ori[0]).arg(ori[1]).arg(ori[2]) );
-//         }
     }
     return imagePlane;
 }
 
-void Q2DViewer::projectPointToCurrentDisplayedImage( double pointToProject[3], double projectedPoint[3] )
+void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3] )
 {
+    //
+    // AQUÍ SUMEM L'origen TAL CUAL + L'ERROR DE DESPLAÇAMENT VTK
+    //
+    // La projecció es fa de la següent manera:
+    // Primer es fa una  una projecció convencional del punt sobre el pla actual (DICOM)
+    // Com que el mapeig de coordenades VTK va a la seva bola, necessitem corretgir el desplaçament
+    // introduit per VTK respecte a les coordenades "reals" de DICOM
+    // aquest desplaçament consistirà en tornar a sumar l'origen del primer pla del volum
+    // en principi, fer-ho amb l'origen de m_mainVolume també seria correcte
+    //
     ImagePlane *currentPlane = this->getCurrentImagePlane();
     if( currentPlane )
     {
@@ -1711,8 +1709,8 @@ void Q2DViewer::projectPointToCurrentDisplayedImage( double pointToProject[3], d
         currentPlane->getNormalVector( currentPlaneNormalVector );
         currentPlane->getOrigin( currentPlaneOrigin );
 
-        // a partir d'aquestes dades creem la matriu de projeccio, que projectara els punts
-        // del pla de referencia sobre el pla del localitzador
+        // a partir d'aquestes dades creem la matriu de projecció,
+        // que projectarà el punt donat sobre el pla actual
         vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
         projectionMatrix->Identity();
         for( int column = 0; column < 3; column++ )
@@ -1720,26 +1718,35 @@ void Q2DViewer::projectPointToCurrentDisplayedImage( double pointToProject[3], d
             projectionMatrix->SetElement(0,column,currentPlaneRowVector[ column ]);
             projectionMatrix->SetElement(1,column,currentPlaneColumnVector[ column ]);
             projectionMatrix->SetElement(2,column,currentPlaneNormalVector[ column ]);
-            // aquí apliquem el desplaçament després de la rotació per reubicar
-            projectionMatrix->SetElement(column,3,currentPlaneOrigin[column]);
         }
 
         // un cop tenim la matriu podem fer la projeccio
         // necessitem el punt en coordenades homogenies
-        double homogeneousPoint[4] = { pointToProject[0] - currentPlaneOrigin[0],
-            pointToProject[1] - currentPlaneOrigin[1],
-            pointToProject[2] - currentPlaneOrigin[2],
-            1.0 };
+        double homogeneousPointToProject[4], homogeneousProjectedPoint[4];
+        for( int i=0; i<3; i++ )
+            homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i]; // desplacem el punt a l'origen del pla
+        homogeneousPointToProject[3] = 1.0;
 
-            // projectem els punts amb la matriu
-        projectionMatrix->MultiplyPoint( homogeneousPoint, homogeneousPoint );
+        // projectem el punt amb la matriu
+        projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
+
+        //
+        // CORRECIÓ VTK!
+        //
+        // a partir d'aquí cal corretgir l'error introduit pel mapeig que fan les vtk
+        // cal sumar l'origen de la primera imatge, o el que seria el mateix, l'origen de m_mainVolume
+        //
+
+        // TODO provar si amb l'origen de m_mainVolume també funciona bé
+        Image *firstImage = m_mainVolume->getImages().at(0);
+        const double *ori = firstImage->getImagePositionPatient();
 
         for( int i = 0; i<3; i++ )
-            projectedPoint[i] = homogeneousPoint[i];
+            projectedPoint[i] = homogeneousProjectedPoint[i] + ori[i];
+
     }
     else
         DEBUG_LOG("No hi ha cap pla actual valid");
-
 }
 
 Drawer *Q2DViewer::getDrawer() const
