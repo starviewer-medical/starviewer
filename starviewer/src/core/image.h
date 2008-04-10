@@ -54,6 +54,13 @@ public:
     void setPatientOrientation( QString orientation );
     QString getPatientOrientation() const;
 
+     /**
+     * A partir dels eixos de la imatge, ens diu en un string quina és
+     * la orientació de la imatge
+     * @return Els valors podran ser AXIAL, SAGITAL, CORONAL o OBLIQUE
+     */
+    QString getOrientationLabel();
+
     /// Assignar/Obtenir la data i hora d'adquisició de la imatge. El format de la data serà YYYYMMDD i el del
     /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
     ///  Retorna fals si hi ha algun error en el format
