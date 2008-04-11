@@ -147,13 +147,6 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     // primer mirem que siguin plans diferents
     if( *localizerPlane != *referencePlane )
     {
-//         DEBUG_LOG( "== Localizer PLANE info == " );
-//         DEBUG_LOG( "\n" + localizerPlane->toString(true) );
-//         DEBUG_LOG( "== Reference PLANE info == " );
-//         DEBUG_LOG( referencePlane->toString() );
-//         DEBUG_LOG("\n -- Localizer Volume Information -- ");
-//         DEBUG_LOG( "\n" + m_2DViewer->getInput()->toString() );
-//
         // Farem dues projeccions:
         // Una sera la projeccio directa del pla de referencia sobre el localitzador
         // que es el metode proposat per en David Clunie ( http://www.dclunie.com/medical-image-faq/html/part2.html, ap. 2.2.1 )
@@ -228,7 +221,6 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         numberOfIntersections = this->getIntersections( lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
 
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
-        DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
         if( numberOfIntersections == 2 )
         {
             m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
