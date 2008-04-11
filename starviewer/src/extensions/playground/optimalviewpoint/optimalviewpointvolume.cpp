@@ -1672,7 +1672,7 @@ void OptimalViewpointVolume::computeObscurances2()
     {
         ObscuranceThread2 * thread = new ObscuranceThread2( i, numberOfThreads, m_transferFunction, this );
         thread->setNormals( directionEncoder, encodedNormals );
-        thread->setData( m_data, m_dataSize );
+        thread->setData( m_data, m_dataSize, dimensions, increments );
         thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant, m_obscurance, m_colorBleeding );
         threads[i] = thread;
     }
@@ -1716,24 +1716,28 @@ void OptimalViewpointVolume::computeObscurances2()
         int x = dominant, y = ( dominant + 1 ) % 3, z = ( dominant + 2 ) % 3;
         int dimX = dimensions[x], dimY = dimensions[y], dimZ = dimensions[z];
         int incX = increments[x], incY = increments[y], incZ = increments[z];
+        int sX = 1, sY = 1, sZ = 1;
         qptrdiff startDelta = 0;
         if ( forward.x < 0.0 )
         {
             startDelta += incX * ( dimX - 1 );
-            incX = -incX;
+//             incX = -incX;
             forward.x = -forward.x;
+            sX = -1;
         }
         if ( forward.y < 0.0 )
         {
             startDelta += incY * ( dimY - 1 );
-            incY = -incY;
+//             incY = -incY;
             forward.y = -forward.y;
+            sY = -1;
         }
         if ( forward.z < 0.0 )
         {
             startDelta += incZ * ( dimZ - 1 );
-            incZ = -incZ;
+//             incZ = -incZ;
             forward.z = -forward.z;
+            sZ = -1;
         }
         DEBUG_LOG( QString( "forward = " ) + forward.toString() );
         // ara els 3 components són positius
@@ -1741,15 +1745,15 @@ void OptimalViewpointVolume::computeObscurances2()
         // llista dels vòxels que són començament de línia
         getLineStarts( lineStarts, dimX, dimY, dimZ, forward );
 
-        const uchar * dataPtr = m_data + startDelta;
-        int dimXYZ[3] = { dimX, dimY, dimZ };
-        int incXYZ[3] = { incX, incY, incZ };
+//         int incXYZ[3] = { incX, incY, incZ };
+        int xyz[3] = { x, y, z };
+        int sXYZ[3] = { sX, sY, sZ };
 
         // iniciem els threads
         for ( int j = 0; j < numberOfThreads; j++ )
         {
             ObscuranceThread2 * thread = threads[j];
-            thread->setPerDirectionParameters( direction, forward, dimXYZ, incXYZ, lineStarts, startDelta );
+            thread->setPerDirectionParameters( direction, forward, xyz, sXYZ, lineStarts, startDelta );
             thread->start();
         }
 

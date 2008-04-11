@@ -40,9 +40,9 @@ public:
     virtual ~ObscuranceThread2();
 
     void setNormals( vtkDirectionEncoder * directionEncoder, const ushort * encodedNormals );
-    void setData( const uchar * data, int dataSize );
+    void setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] );
     void setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant, double * obscurance, Vector3 * colorBleeding );
-    void setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int dimXYZ[3], const int incXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta );
+    void setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta );
 
 protected:
 
@@ -66,6 +66,8 @@ private:
     const ushort * m_encodedNormals;
     const uchar * m_data;
     int m_dataSize;
+    const int * m_dimensions;
+    const int * m_increments;
     double m_obscuranceMaximumDistance;
     OptimalViewpointVolume::ObscuranceFunction m_obscuranceFunction;
     OptimalViewpointVolume::ObscuranceVariant m_obscuranceVariant;
@@ -73,8 +75,8 @@ private:
     Vector3 * m_colorBleeding;
 
     Vector3 m_direction, m_forward;
-    const int * m_dimXYZ;
-    const int * m_incXYZ;
+    const int * m_xyz;
+    const int * m_sXYZ;
     QVector<Vector3> m_lineStarts;
     qptrdiff m_startDelta;
 

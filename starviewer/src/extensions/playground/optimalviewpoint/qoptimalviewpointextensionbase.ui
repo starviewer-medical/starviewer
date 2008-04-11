@@ -1260,6 +1260,11 @@
            </item>
            <item>
             <property name="text" >
+             <string>Distance</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
              <string>Square root</string>
             </property>
            </item>
