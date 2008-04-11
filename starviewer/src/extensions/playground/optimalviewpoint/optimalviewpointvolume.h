@@ -55,7 +55,7 @@ public:
 
     struct Voxel { int x, y, z; };
 
-    enum ObscuranceFunction { Constant0, SquareRoot, Exponential };
+    enum ObscuranceFunction { Constant0, Distance, SquareRoot, Exponential };
     enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacityColorBleeding, OpacitySmoothColorBleeding };
 
     /// Construeix el volum a partir de la imatge \a image.

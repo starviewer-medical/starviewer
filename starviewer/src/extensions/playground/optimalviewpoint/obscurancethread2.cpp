@@ -41,10 +41,12 @@ void ObscuranceThread2::setNormals( vtkDirectionEncoder * directionEncoder, cons
 }
 
 
-void ObscuranceThread2::setData( const uchar * data, int dataSize )
+void ObscuranceThread2::setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] )
 {
     m_data = data;
     m_dataSize = dataSize;
+    m_dimensions = dimensions;
+    m_increments = increments;
 }
 
 
@@ -58,12 +60,12 @@ void ObscuranceThread2::setObscuranceParameters( double obscuranceMaximumDistanc
 }
 
 
-void ObscuranceThread2::setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int dimXYZ[3], const int incXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta )
+void ObscuranceThread2::setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta )
 {
     m_direction = direction;
     m_forward = forward;
-    m_dimXYZ = dimXYZ;
-    m_incXYZ = incXYZ;
+    m_xyz = xyz;
+    m_sXYZ = sXYZ;
     m_lineStarts = lineStarts;
     m_startDelta = startDelta;
 }
@@ -87,8 +89,10 @@ void ObscuranceThread2::run()
 
 void ObscuranceThread2::runDensity() // optimitzat
 {
-    int dimX = m_dimXYZ[0], dimY = m_dimXYZ[1], dimZ = m_dimXYZ[2];
-    int incX = m_incXYZ[0], incY = m_incXYZ[1], incZ = m_incXYZ[2];
+    int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
+    int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
+    int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
+    int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<uchar,Vector3> > unresolvedVoxels;
 
@@ -150,8 +154,10 @@ void ObscuranceThread2::runDensity() // optimitzat
 
 void ObscuranceThread2::runDensitySmooth()
 {
-    int dimX = m_dimXYZ[0], dimY = m_dimXYZ[1], dimZ = m_dimXYZ[2];
-    int incX = m_incXYZ[0], incY = m_incXYZ[1], incZ = m_incXYZ[2];
+    int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
+    int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
+    int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
+    int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<uchar,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<uchar,Vector3> > postponedVoxels;
@@ -192,7 +198,8 @@ void ObscuranceThread2::runDensitySmooth()
                     if ( distance <= 3.0 )
                     {
                         // tangent plane at u
-                        double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                        Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                        double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                         // distance from v to tangent plane at u
                         double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -231,7 +238,8 @@ void ObscuranceThread2::runDensitySmooth()
                 if ( distance <= 3.0 )
                 {
                     // tangent plane at u
-                    double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                    Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                    double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                     // distance from v to tangent plane at u
                     double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -292,8 +300,10 @@ void ObscuranceThread2::runDensitySmooth()
 
 void ObscuranceThread2::runOpacity()
 {
-    int dimX = m_dimXYZ[0], dimY = m_dimXYZ[1], dimZ = m_dimXYZ[2];
-    int incX = m_incXYZ[0], incY = m_incXYZ[1], incZ = m_incXYZ[2];
+    int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
+    int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
+    int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
+    int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
 
@@ -359,8 +369,10 @@ void ObscuranceThread2::runOpacity()
 
 void ObscuranceThread2::runOpacitySmooth()
 {
-    int dimX = m_dimXYZ[0], dimY = m_dimXYZ[1], dimZ = m_dimXYZ[2];
-    int incX = m_incXYZ[0], incY = m_incXYZ[1], incZ = m_incXYZ[2];
+    int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
+    int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
+    int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
+    int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
@@ -402,7 +414,8 @@ void ObscuranceThread2::runOpacitySmooth()
                     if ( distance <= 3.0 )
                     {
                         // tangent plane at u
-                        double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                        Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                        double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                         // distance from v to tangent plane at u
                         double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -441,7 +454,8 @@ void ObscuranceThread2::runOpacitySmooth()
                 if ( distance <= 3.0 )
                 {
                     // tangent plane at u
-                    double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                    Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                    double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                     // distance from v to tangent plane at u
                     double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -504,8 +518,10 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
 {
     const Vector3 AMBIENT_COLOR( 1.0, 1.0, 1.0 );
 
-    int dimX = m_dimXYZ[0], dimY = m_dimXYZ[1], dimZ = m_dimXYZ[2];
-    int incX = m_incXYZ[0], incY = m_incXYZ[1], incZ = m_incXYZ[2];
+    int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
+    int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
+    int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
+    int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
@@ -549,7 +565,8 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
                     if ( distance <= 3.0 )
                     {
                         // tangent plane at u
-                        double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                        Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                        double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                         // distance from v to tangent plane at u
                         double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -588,7 +605,8 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
                 if ( distance <= 3.0 )
                 {
                     // tangent plane at u
-                    double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                    Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                    double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                     // distance from v to tangent plane at u
                     double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -651,8 +669,10 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
 {
     const Vector3 AMBIENT_COLOR( 1.0, 1.0, 1.0 );
 
-    int dimX = m_dimXYZ[0], dimY = m_dimXYZ[1], dimZ = m_dimXYZ[2];
-    int incX = m_incXYZ[0], incY = m_incXYZ[1], incZ = m_incXYZ[2];
+    int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
+    int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
+    int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
+    int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
@@ -696,7 +716,8 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
                     if ( distance <= 3.0 )
                     {
                         // tangent plane at u
-                        double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                        Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                        double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                         // distance from v to tangent plane at u
                         double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -735,7 +756,8 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
                 if ( distance <= 3.0 )
                 {
                     // tangent plane at u
-                    double a = uNormal.x, b = uNormal.y, c = uNormal.z, d = -uNormal * ru;
+                    Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
+                    double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
                     // distance from v to tangent plane at u
                     double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
 
@@ -801,6 +823,7 @@ inline double ObscuranceThread2::obscurance( double distance ) const
     switch ( m_obscuranceFunction )
     {
         case OptimalViewpointVolume::Constant0: return 0.0;
+        case OptimalViewpointVolume::Distance: return distance / m_obscuranceMaximumDistance;
         case OptimalViewpointVolume::SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
         case OptimalViewpointVolume::Exponential: return 1.0 - exp( distance / m_obscuranceMaximumDistance );
     }
