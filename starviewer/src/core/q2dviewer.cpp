@@ -1635,8 +1635,6 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
                     imagePlane->setRows( dimensions[1] );
                     imagePlane->setColumns( dimensions[2] );
 
-                    DEBUG_LOG( imagePlane->toString() );
-
                     // TODO falta esbrinar si l'origen que estem donant es bo o no
                     imagePlane->setOrigin( origin[0] + sliceNumber*dirCosines[0]*spacing[0],
                                            origin[1] + sliceNumber*dirCosines[1]*spacing[0],
@@ -3214,13 +3212,13 @@ vtkImageData* Q2DViewer::getCurrentSlabProjection()
 
 int Q2DViewer::getNearestSlice( double projectedPosition[3], double * distance )
 {
+    //TODO distance no es fa servir per res ni se li dona cap valor. A mes a mes, seria mes correcte declarar-lo
+    // "double &distance" si el que es tracta es d'un parametre d'e/s i no pas "double *distance" com esta ara mateix
     int i;
     double actualDistance;
     double minimumDistance = -1.0;
     int minimumSlice = -1;
-    double aux;
-    double mod;
-    double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneOrigin[3], currentPerpendicularVector[3], currentNormalVector[3];
+    double currentPlaneOrigin[3], currentNormalVector[3];
     ImagePlane *currentPlane;
     int maxSlice = this->getMaximumSlice();
 
