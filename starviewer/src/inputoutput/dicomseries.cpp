@@ -3,6 +3,7 @@
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 #include <dcsequen.h>
+#include <QDir>
 
 namespace udg{
 
@@ -153,7 +154,7 @@ void DICOMSeries::setOperatorName( QString name )
 
 void DICOMSeries::setSeriesPath( QString path )
 {
-    m_seriesPath = path;
+    m_seriesPath = QDir::toNativeSeparators( path );
 }
 
 void DICOMSeries::setImageNumber( int iNumber )

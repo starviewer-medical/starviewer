@@ -19,6 +19,8 @@
 #include "dicomseries.h"
 #include "logging.h"
 
+#include <QDir>
+
 namespace udg {
 
 ScaleStudy::ScaleStudy()
@@ -85,7 +87,7 @@ void ScaleStudy::scale( QString studyUID )
 QString ScaleStudy::getScaledImagePath(DICOMSeries* series)
 {
     StarviewerSettings settings;
-    return settings.getCacheImagePath() + series->getStudyUID() + "/" + series->getSeriesUID() + "/scaled.png";
+    return QDir::toNativeSeparators( settings.getCacheImagePath() + series->getStudyUID() + "/" + series->getSeriesUID() + "/scaled.png" );
 }
 
 Status ScaleStudy::getSeriesOfStudy( QString studyUID , SeriesList &seriesList )
@@ -120,10 +122,10 @@ Status ScaleStudy::imageRelativePath( DicomMask mask , QString &relPath )
     {
         image = imageList.getImage();
 
-        relPath = QString("%1/%2/%3")
+        relPath =  QDir::toNativeSeparators( QString("%1/%2/%3")
             .arg( image.getStudyUID() )
             .arg( image.getSeriesUID() )
-            .arg( image.getImageName() );
+            .arg( image.getImageName() ) );
     }
     return state;
 }

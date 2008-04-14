@@ -8,6 +8,7 @@
 #include "starviewerprocessimageretrieved.h"
 
 #include <QString>
+#include <QDir>
 
 #include "dicomtagreader.h"
 #include "dicomseries.h"
@@ -138,7 +139,7 @@ bool StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath, D
         serie.setSeriesDate( dicomFile.getAttributeByName(DCM_SeriesDate) );
 
         //calculem el path de la serie que es crea a partir de l'StudyInstanceUID+SeriesInstanceUID
-        serie.setSeriesPath( dicomFile.getAttributeByName(DCM_StudyInstanceUID) + "/" + dicomFile.getAttributeByName(DCM_SeriesInstanceUID) + "/" );
+        serie.setSeriesPath( QDir::toNativeSeparators( dicomFile.getAttributeByName(DCM_StudyInstanceUID) + "/" + dicomFile.getAttributeByName(DCM_SeriesInstanceUID) + "/" ) );
 
         return true;
     }
@@ -161,7 +162,7 @@ QString StarviewerProcessImageRetrieved::createImagePath( DICOMImage *image )
     imagePath.append("/");
     imagePath.append( image->getImageName() );
 
-    return imagePath;
+    return QDir::toNativeSeparators( imagePath );
 }
 
 StarviewerProcessImageRetrieved::~StarviewerProcessImageRetrieved()

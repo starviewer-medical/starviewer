@@ -36,7 +36,7 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
         directoryPath = directoryPath.remove ( directoryPath.length() - 1 , 1 );
     }
 
-    directory.setPath( directoryPath );
+    directory.setPath( QDir::toNativeSeparators( directoryPath ) );
    
     filesList =  directory.entryList( QDir::Files );//llista de fitxers del directori
     for ( QStringList::Iterator it = filesList.begin(); it != filesList.end(); ++it )//per cada fitxer
@@ -47,7 +47,7 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
             absoluteFilePath.append( directoryPath );       
             absoluteFilePath.append( "/" );
             absoluteFilePath.append( *it );
-            if ( !fileToDelete.remove (absoluteFilePath ) )  //esborrem el fitxer
+            if ( !fileToDelete.remove ( QDir::toNativeSeparators( absoluteFilePath ) ) )  //esborrem el fitxer
             {
                 return false;
             }
@@ -63,13 +63,13 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
             absoluteDirectoryPath.append( directoryPath );          
             absoluteDirectoryPath.append( "/" );
             absoluteDirectoryPath.append( *it );
-            if ( !deleteDirectory( absoluteDirectoryPath , true ) ) return false; //invoquem el mateix mètode per a que esborri el subdirectori ( recursivitat )
+            if ( !deleteDirectory( QDir::toNativeSeparators( absoluteDirectoryPath ), true ) ) return false; //invoquem el mateix mètode per a que esborri el subdirectori ( recursivitat )
         }
     }
 
     if ( deleteRootDirectory )
     {
-        if ( !directoryToDelete.rmdir( directoryPath ) ) //esborra el directori arrel
+        if ( !directoryToDelete.rmdir( QDir::toNativeSeparators( directoryPath ) ) ) //esborra el directori arrel
         {
             return false;
         }

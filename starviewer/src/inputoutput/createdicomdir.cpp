@@ -80,7 +80,7 @@ void CreateDicomdir::setStrictMode(bool enabled)
 
 Status CreateDicomdir::create( QString dicomdirPath )
 {
-    QString outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
+    QString outputDirectory = QDir::toNativeSeparators ( dicomdirPath + "/DICOMDIR" );//Nom del fitxer dicomDir
     OFList<OFString> fileNames;/* create list of input files */
     const char *opt_pattern = NULL;
     const char *opt_fileset = DEFAULT_FILESETID;
