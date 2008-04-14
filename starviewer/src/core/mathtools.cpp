@@ -172,13 +172,13 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     return 1;
 }
 
-double* MathTools::directorVector( double point1[3], double point2[3] )
+double* MathTools::directorVector( const double point1[3], const double point2[3] )
 {
     double *vd = new double[3];
-    
+
     for (int i = 0; i < 3; i++)
         vd[i] = point2[i] - point1[i];
-    
+
     return vd;
 }
 
@@ -186,20 +186,20 @@ double* MathTools::vectorialProduct( double vectorDirector1[3], double vectorDir
 {
     double *vp = new double[3];
     vtkMath::Cross( vectorDirector1, vectorDirector2, vp );
-    
+
     return vp;
 }
 
 int MathTools::getSign( double number )
 {
     int sign;
-    
+
     if (number < 0. )
         sign = NEGATIVE;
     else
         sign = POSITIVE;
-        
-    return sign;       
+
+    return sign;
 }
 
 bool MathTools::haveSameSign( double numberA, double numberB )
@@ -211,7 +211,7 @@ bool MathTools::haveSameSign( double numberA, double numberB )
 double MathTools::minimum( double a, double b)
 {
     double min;
-    
+
     if ( a < b )
     {
         min = a;
@@ -220,7 +220,7 @@ double MathTools::minimum( double a, double b)
     {
         min = b;
     }
-    
+
     return min;
 }
 
@@ -228,7 +228,7 @@ double MathTools::minimum( double a, double b)
 double MathTools::maximum( double a, double b)
 {
     double max;
-    
+
     if ( a > b )
     {
         max = a;
@@ -237,7 +237,7 @@ double MathTools::maximum( double a, double b)
     {
         max = b;
     }
-    
+
     return max;
 }
 
