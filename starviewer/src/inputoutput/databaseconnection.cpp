@@ -23,7 +23,7 @@ DatabaseConnection::DatabaseConnection()
 {
    StarviewerSettings settings;
 
-   m_databasePath = settings.getDatabasePath();
+   m_databasePath = QDir::toNativeSeparators( settings.getDatabasePath() );
    m_databaseLock = new QSemaphore( 1 );//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
    connectDB();
 
@@ -31,7 +31,7 @@ DatabaseConnection::DatabaseConnection()
 
 void DatabaseConnection::setDatabasePath( QString path )
 {
-    m_databasePath = path;
+    m_databasePath = QDir::toNativeSeparators( path );
 }
 
 void DatabaseConnection::connectDB()

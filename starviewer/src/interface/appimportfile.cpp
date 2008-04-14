@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QFileInfo>
+#include <QDir>
 // itk
 #include <itkGDCMSeriesFileNames.h> // per generar els noms dels arxius DICOM d'un directori
 // recursos
@@ -65,7 +66,7 @@ bool AppImportFile::open()
         {
             ERROR_LOG("Cas no tractat al obrir un fitxer");
         }
-        m_workingDirectory = QFileInfo( fileName ).dir().path();
+        m_workingDirectory = QDir::toNativeSeparators( QFileInfo( fileName ).dir().path() );
         writeSettings();
     }
 
@@ -80,7 +81,7 @@ bool AppImportFile::openDirectory()
     if ( !directoryName.isEmpty() )
     {
         emit selectedFiles( this->generateFilenames( directoryName ) );
-        m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
+        m_workingDicomDirectory = QDir::toNativeSeparators( QFileInfo( directoryName ).dir().path() );
         writeSettings();
         INFO_LOG( "S'obre el directori: " + directoryName );
     }
@@ -94,7 +95,7 @@ QStringList AppImportFile::generateFilenames( QString dirPath )
 {
     //generador dels noms dels fitxers DICOM d'un directori
     itk::GDCMSeriesFileNames::Pointer namesGenerator = itk::GDCMSeriesFileNames::New();
-    namesGenerator->SetInputDirectory( qPrintable(dirPath) );
+    namesGenerator->SetInputDirectory( qPrintable( QDir::toNativeSeparators( dirPath ) ) );
     const std::vector< std::string > &filenames = namesGenerator->GetInputFileNames();
     // convertim el vector en QStringList
     QStringList list;

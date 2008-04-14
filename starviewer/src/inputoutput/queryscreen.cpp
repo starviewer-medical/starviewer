@@ -1053,7 +1053,7 @@ Status QueryScreen::insertStudyCache( DICOMStudy stu )
     CacheStudyDAL cacheStudyDAL;
 
     //creem el path absolut de l'estudi
-    absPath = settings.getCacheImagePath() + study.getStudyUID() + "/";
+    absPath = QDir::toNativeSeparators( settings.getCacheImagePath() + study.getStudyUID() + "/" );
     //inserim l'estudi a la caché
     study.setAbsPath(absPath);
     state = cacheStudyDAL.insertStudy( &study );
@@ -1203,7 +1203,7 @@ void QueryScreen::importDicomdir()
     // TODO ara només permetrem importar estudis sencers
     foreach( QString studyUID, m_studyTreeWidgetDicomdir->getSelectedStudiesUID() )
     {
-        state = importDicom.import( m_readDicomdir.getDicomdirPath(), studyUID, QString(), QString() );
+        state = importDicom.import( QDir::toNativeSeparators( m_readDicomdir.getDicomdirPath() ), studyUID, QString(), QString() );
 
         if (!state.good()) failedStudies++;
     }
@@ -1357,7 +1357,7 @@ void QueryScreen::openDicomdir()
     if ( dlg->exec() == QDialog::Accepted )
     {
         if ( !dlg->selectedFiles().empty() )
-            dicomdirPath = dlg->selectedFiles().takeFirst();
+            dicomdirPath = QDir::toNativeSeparators( dlg->selectedFiles().takeFirst() );
 
         state = m_readDicomdir.open ( dicomdirPath );//Obrim el dicomdir
 

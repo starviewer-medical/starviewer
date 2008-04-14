@@ -32,7 +32,7 @@ void QChooseOneObjectDialog::setObjectsList(const QStringList &list)
     foreach(QString filename, list)
     {
         QFileInfo fileInfo(filename);
-        filename.remove( fileInfo.dir().path() );
+        filename.remove( QDir::toNativeSeparators( fileInfo.dir().path() ) );
         newList << filename;
         DEBUG_LOG( "filename=" + filename );
     }

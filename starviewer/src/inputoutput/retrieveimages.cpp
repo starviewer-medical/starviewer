@@ -204,11 +204,9 @@ OFCondition echoSCP(
             int imageSize;
             DICOMImage retrievedImage( * imageDataSet );
 
-            studyPath = piSingleton->getPath() + retrievedImage.getStudyUID() ;//agafem el path del directori on es guarden les imatges
+            studyPath = QDir::toNativeSeparators( piSingleton->getPath() + retrievedImage.getStudyUID() );//agafem el path del directori on es guarden les imatges
             QDir directory;
         
-            studyPath = QDir::toNativeSeparators( studyPath );
-            
             //comprovem, si el directori de l'estudi ja està creat
             if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
 

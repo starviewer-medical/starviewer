@@ -8,6 +8,7 @@
 #include "processimagesingleton.h"
 
 #include <QSemaphore>
+#include <QDir>
 
 #include "processimage.h"
 #include "dicomimage.h"
@@ -112,7 +113,7 @@ bool ProcessImageSingleton::delProcessImage( QString UID )
 
 void ProcessImageSingleton::setPath( QString path )
 {
-    m_imagePath = path;
+    m_imagePath = QDir::toNativeSeparators( path );
 }
 
 QString ProcessImageSingleton::getPath()
