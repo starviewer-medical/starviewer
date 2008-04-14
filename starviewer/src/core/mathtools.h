@@ -7,26 +7,26 @@
 
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
- 
+
 /**
     Aquest arxiu recull tot tipus de funcions matemàtiques útils
 */
- 
+
 namespace udg{
 
-class MathTools{ 
-    
+class MathTools{
+
 public:
 
     enum Sign{ POSITIVE, NEGATIVE };
-    
+
 /// Declaració de constants
 static const double LOGARITHM_BASE2_E;
 static const long double REVERS_PI_LONG;
 static const double PI;
 static const long double PI_LONG;
 static const long double PI_DIV_2_LONG;
-    
+
 
 /// Epsilon, nombre extremadament petit
 static double Epsilon() { return 1E-9; };
@@ -56,17 +56,17 @@ static bool haveSameSign( double numberA, double numberB );
 static double angleInRadians( double vec1[3] , double vec2[3] );
 /// Calcula l'angle entre dos vectors. Retorna el valor en graus
 static double angleInDegrees( double vec1[3] , double vec2[3] );
-   
+
 /// Calcula la intersecció de dos plans definits per un punt i una normal (p,n) i (q,m) respectivament
 /// Retorna 0 si els plans no intersecten perquè són paral·lels , altrament >0
-static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] ); 
+static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] );
 
 /// Calcula la intersecció de tres plans definits per un punt i una normal (p,n) , (q,m) , (r,t) respectivament
 /// Retorna 0 si ... -1 si ... perquè són paral·lels , altrament >0
-static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] );   
- 
+static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] );
+
 ///a partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
-static double* directorVector( double point1[3], double point2[3] );
+static double* directorVector( const double point1[3], const double point2[3] );
 
 ///producte vectorial dels dos vectors directors passats per paràmetre.
 static double* vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] );
@@ -80,7 +80,7 @@ static double maximum( double a, double b);
 
 } // end namespace udg
 
- 
+
 #endif
 
 
