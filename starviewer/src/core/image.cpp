@@ -5,13 +5,13 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "image.h"
-
 #include "logging.h"
 
 #include <QStringList>
 #include <QPainter>
 #include <QBuffer>
 #include <QPixmap>
+#include <QDir>
 
 #include <vtkMath.h> // pel ::Cross()
 
@@ -720,7 +720,7 @@ Series *Image::getParentSeries() const
 
 void Image::setPath( QString path )
 {
-    m_path = path;
+    m_path = QDir::toNativeSeparators( path );
 }
 
 QString Image::getPath() const

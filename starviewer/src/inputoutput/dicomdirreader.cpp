@@ -44,10 +44,10 @@ Status DICOMDIRReader::open( QString dicomdirPath )
     //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
     if ( m_dicomdir != NULL) delete m_dicomdir;
 
-    m_dicomdirAbsolutePath = dicomdirPath;
+    m_dicomdirAbsolutePath = QDir::toNativeSeparators( dicomdirPath );
 
     //per defecte la informació dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
-    dicomdirFilePath = dicomdirPath;
+    dicomdirFilePath = QDir::toNativeSeparators( dicomdirPath );
 
     /* L'estàndard del dicom indica que l'estructura del dicomdir ha d'estar guardada en un fitxer anomeant "DICOMDIR". En linux per 
        defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules, per tant 

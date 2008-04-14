@@ -229,7 +229,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     ConvertToDicomdir convertToDicomdir;
 
     // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
-    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
+    dicomdirPath = QDir::toNativeSeparators( temporaryDirPath.tempPath() + "/DICOMDIR" );
     //si el directori dicomdir ja existeix al temporal l'esborrem
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
@@ -253,7 +253,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
 void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 {
-    QString dicomdirPath = m_lineEditDicomdirPath->text();
+    QString dicomdirPath = QDir::toNativeSeparators( m_lineEditDicomdirPath->text() );
     DeleteDirectory delDirectory;
     QDir directoryDicomdirPath( dicomdirPath );
 
@@ -474,14 +474,14 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     progressBar->setCancelButton( 0 );
     progressBar->setValue( 7 );
 
-    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR/";
+    dicomdirPath = QDir::toNativeSeparators( temporaryDirPath.tempPath() + "/DICOMDIR/" );
 
     //indiquem al directori i nom de la imatge a crear
-    isoPath = dicomdirPath + "dicomdir.iso";
+    isoPath = QDir::toNativeSeparators( dicomdirPath + "dicomdir.iso" );
 
     processParameters <<  "-V STARVIEWER DICOMDIR";//indiquem que el label de la imatge és STARVIEWER DICOMDIR
     processParameters << "-o" + isoPath;; //nom i directori on guardarem la imatge
-    processParameters << QDir::toNativeSeparators( dicomdirPath );//path a convertir en iso
+    processParameters << dicomdirPath;//path a convertir en iso
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     process.start( "mkisofs" , processParameters );
@@ -584,7 +584,7 @@ void QCreateDicomdir::clearTemporaryDir()
     QString dicomdirPath, logMessage;
     QDir temporaryDirPath;
 
-    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
+    dicomdirPath = QDir::toNativeSeparators( temporaryDirPath.tempPath() + "/DICOMDIR" );
 
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
@@ -605,7 +605,7 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir( QString dicomdirPath )
 {
     QFile dicomdirFile;
 
-    return dicomdirFile.exists( dicomdirPath + "/DICOMDIR" );
+    return dicomdirFile.exists( QDir::toNativeSeparators( dicomdirPath + "/DICOMDIR" ) );
 }
 
 void QCreateDicomdir::saveColumnsWidth()

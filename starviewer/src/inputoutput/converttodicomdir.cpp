@@ -82,7 +82,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordD
 
     QString studyUID;
 
-    m_dicomDirPath = dicomdirPath;
+    m_dicomDirPath = QDir::toNativeSeparators( dicomdirPath );
 
     //comptem el numero d'imatges pel progress de la barra
     while ( i < m_studiesToConvert.count() )
@@ -134,11 +134,11 @@ Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, CreateDicomdir::
     Status state, stateNotDicomConformance;
 
     createDicomdir.setDevice( selectedDevice );
-    state = createDicomdir.create( dicomdirPath );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
+    state = createDicomdir.create( QDir::toNativeSeparators( dicomdirPath ) );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     if ( !state.good() )//ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte
     {
         createDicomdir.setStrictMode( false );
-        state = createDicomdir.create( dicomdirPath );
+        state = createDicomdir.create( QDir::toNativeSeparators( dicomdirPath ) );
 
         if ( state.good() )
         {
@@ -169,7 +169,7 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath()
         if ( m_OldPatientId != studyToConvert.patientId )
         {
             patientNameDir = QDir::toNativeSeparators( QString( "/PAT%1" ).arg( m_patient , 5 , 10 , fillChar ) );
-            m_dicomdirPatientPath = m_dicomDirPath + "/DICOM/" + patientNameDir;
+            m_dicomdirPatientPath = QDir::toNativeSeparators( m_dicomDirPath + "/DICOM/" + patientNameDir );
             patientDir.mkpath( QDir::toNativeSeparators( m_dicomdirPatientPath ) );
             m_patient++;
             m_study = 0;
@@ -201,7 +201,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
     m_series = 0;
 
     //Creem el directori on es guardar l'estudi en format DicomDir
-    m_dicomDirStudyPath = m_dicomdirPatientPath + studyName;
+    m_dicomDirStudyPath = QDir::toNativeSeparators( m_dicomdirPatientPath + studyName );
     studyDir.mkdir( m_dicomDirStudyPath );
 
     seriesMask.setStudyUID( studyUID );
@@ -241,7 +241,7 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
     m_series++;
     m_image = 0;
     //Creem el directori on es guardarà la sèrie en format DicomDir
-    m_dicomDirSeriesPath = m_dicomDirStudyPath + seriesName;
+    m_dicomDirSeriesPath = QDir::toNativeSeparators( m_dicomDirStudyPath + seriesName );
     seriesDir.mkdir( m_dicomDirSeriesPath );
 
     imageMask.setSeriesUID( series.getSeriesUID() );

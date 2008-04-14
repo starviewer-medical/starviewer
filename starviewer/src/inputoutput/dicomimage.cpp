@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "dicomimage.h"
 
+#include <QDir>
+
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 
@@ -53,7 +55,7 @@ void DICOMImage::setSOPInstanceUID( QString UID )
 
 void DICOMImage::setImagePath( QString path )
 {
-    m_imagePath =  path;
+    m_imagePath =  QDir::toNativeSeparators( path );
 }
 
 void DICOMImage::setSeriesUID( QString UID )

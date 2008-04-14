@@ -58,7 +58,7 @@ void ScaleStudy::scale( QString studyUID )
             mask.setImageNumber( "" );
             imageRelativePath( mask ,relPath );
         }
-        absPath = settings.getCacheImagePath() + relPath; //creem el path absolut a la imatge a la imatge
+        absPath = QDir::toNativeSeparators( settings.getCacheImagePath() + relPath ); //creem el path absolut a la imatge a la imatge
 
         QImage thumbnail;
         QString modality = seriesList.getSeries().getSeriesModality();
@@ -71,7 +71,7 @@ void ScaleStudy::scale( QString studyUID )
         else
         {
             Image image;
-            image.setPath(absPath);
+            image.setPath( absPath );
             thumbnail = image.createThumbnail();
         }
 
