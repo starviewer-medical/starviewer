@@ -55,12 +55,12 @@ Status DICOMDIRReader::open( QString dicomdirPath )
        dicomdir es dirà "dicomdir" en minúscules, per aquest motiu busquem el fitxer dicomdir tan en majúscules com minúscules
     
     */
-    if ( QFile::exists( dicomdirPath + "/DICOMDIR") ) 
+    if ( QFile::exists( QDir::toNativeSeparators ( dicomdirPath + "/DICOMDIR" ) ) ) 
     {
         dicomdirFilePath.append( "/DICOMDIR" );
         m_dicomFilesInLowerCase = false;
     }
-    else if ( QFile::exists( dicomdirPath + "/dicomdir") )
+    else if ( QFile::exists( QDir::toNativeSeparators ( dicomdirPath + "/dicomdir" ) ) )
     {
         dicomdirFilePath.append( "/dicomdir" );
         m_dicomFilesInLowerCase = true;//indiquem que els fitxers estan en minúscules
@@ -209,6 +209,8 @@ Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , Series
                 seriesPath.insert( 0 , text.c_str() );//Afegim la ruta de la primera imatge dins el dicomdir
                 seriesPath = backSlashToSlash( seriesPath );
                 seriesPath = seriesPath.mid( 0 , seriesPath.toStdString().rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
+                
+                seriesPath = QDir::toNativeSeparators ( seriesPath );
                 series.setSeriesPath( seriesPath );
 
                 seriesList.insert( series );//inserim a la llista de sèrie
@@ -288,6 +290,7 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
                 imagePath.insert( 0 , m_dicomdirAbsolutePath );
                 imagePath.append( "/" ),
                 imagePath.append( backSlashToSlash ( text.c_str() ) );
+                imagePath = QDir::toNativeSeparators ( imagePath );
                 image.setImagePath( imagePath );
 
                 imageList.insert( image );//inserim a la llista la imatge*/
@@ -369,7 +372,7 @@ QStringList DICOMDIRReader::getFiles( QString studyUID )
                 }
                 else imageRelativePath = backSlashToSlash( text.c_str() );
 
-                files << m_dicomdirAbsolutePath + "/" + imageRelativePath;
+                files << QDir::toNativeSeparators ( m_dicomdirAbsolutePath + "/" + imageRelativePath );
                 imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
             }
             seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi

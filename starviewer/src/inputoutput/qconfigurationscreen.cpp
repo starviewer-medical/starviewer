@@ -817,7 +817,7 @@ void QConfigurationScreen::cacheImagePathEditingFinish()
     {
         path = m_textCacheImagePath->text();
         path.append( "/" );
-        m_textCacheImagePath->setText( path );
+        m_textCacheImagePath->setText( QDir::toNativeSeparators( path ) );
     }
 }
 

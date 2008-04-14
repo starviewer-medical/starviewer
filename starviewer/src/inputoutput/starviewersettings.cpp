@@ -14,33 +14,33 @@
 #include "logging.h"
 
 
-const QString databaseRootKey("/cache/sdatabasePath" ); //indica on es troba la bd
-const QString poolSizeKey("/cache/poolSize" );
-const QString cacheImagePathKey("/cache/imagePath" );
-const QString AETitleMachineKey("/pacsparam/AETitle" );
-const QString localPortKey("/pacsparam/localPort" );
-const QString timeoutPacsKey("/pacsparam/timeout" );
-const QString maxConnectionsKey("/pacsparam/MaxConnects" );
-const QString pacsColumnWidthKey("/interface/studyPacsList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString cacheColumnWidthKey("/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString dicomdirColumnWidthKey("/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString MaximumDaysNotViewedStudy("/cache/MaximumDaysNotViewedStudy" );
-const QString InstitutionName("/institution/name");
-const QString InstitutionAddress("/institution/address");
-const QString InstitutionTown("/institution/town");
-const QString InstitutionZipCode("/institution/zipCode");
-const QString InstitutionCountry("/institution/country");
-const QString InstitutionEmail("/institution/Email");
-const QString InstitutionPhoneNumber("/institution/phoneNumber");
-const QString queryScreenWindowPositionX("/interface/queryscreen/windowPositionX");
-const QString queryScreenWindowPositionY("/interface/queryscreen/windowPositionY");
-const QString queryScreenWindowWidth("/interface/queryscreen/windowWidth");
-const QString queryScreenWindowHeight("/interface/queryscreen/windowHeigth");
-const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
-const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
-const QString qOperationStateColumnWidthKey("/interface/qOperationState/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString qCreateDicomdirColumnWidthKey("/interface/qCreateDicomdir/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString qConfigurationPacsDeviceColumnWidthKey("/interface/qConfigurationPacsDevice/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString databaseRootKey( QDir::toNativeSeparators ( "/cache/sdatabasePath" ) ); //indica on es troba la bd
+const QString poolSizeKey( QDir::toNativeSeparators ( "/cache/poolSize" ) );
+const QString cacheImagePathKey(QDir::toNativeSeparators ( "/cache/imagePath" ) );
+const QString AETitleMachineKey(QDir::toNativeSeparators ( "/pacsparam/AETitle" ) );
+const QString localPortKey(QDir::toNativeSeparators ( "/pacsparam/localPort" ) );
+const QString timeoutPacsKey(QDir::toNativeSeparators ( "/pacsparam/timeout" ) );
+const QString maxConnectionsKey(QDir::toNativeSeparators ( "/pacsparam/MaxConnects" ) );
+const QString pacsColumnWidthKey(QDir::toNativeSeparators ( "/interface/studyPacsList/columnWidth" ) );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString cacheColumnWidthKey(QDir::toNativeSeparators ( "/interface/studyCacheList/columnWidth" ) );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString dicomdirColumnWidthKey(QDir::toNativeSeparators ( "/interface/studyDicomdirList/columnWidth" ) );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString MaximumDaysNotViewedStudy(QDir::toNativeSeparators ( "/cache/MaximumDaysNotViewedStudy" ) );
+const QString InstitutionName(QDir::toNativeSeparators ( "/institution/name" ) );
+const QString InstitutionAddress(QDir::toNativeSeparators ( "/institution/address" ) );
+const QString InstitutionTown(QDir::toNativeSeparators ( "/institution/town" ) );
+const QString InstitutionZipCode(QDir::toNativeSeparators ( "/institution/zipCode" ) );
+const QString InstitutionCountry(QDir::toNativeSeparators ( "/institution/country" ) );
+const QString InstitutionEmail(QDir::toNativeSeparators ( "/institution/Email" ) );
+const QString InstitutionPhoneNumber(QDir::toNativeSeparators ( "/institution/phoneNumber" ) );
+const QString queryScreenWindowPositionX(QDir::toNativeSeparators ( "/interface/queryscreen/windowPositionX" ) );
+const QString queryScreenWindowPositionY(QDir::toNativeSeparators ( "/interface/queryscreen/windowPositionY" ) );
+const QString queryScreenWindowWidth(QDir::toNativeSeparators ( "/interface/queryscreen/windowWidth" ) );
+const QString queryScreenWindowHeight(QDir::toNativeSeparators ( "/interface/queryscreen/windowHeigth" ) );
+const QString queryScreenStudyTreeSeriesListQSplitterState(QDir::toNativeSeparators ( "/interface/queryscreen/StudyTreeSeriesListQSplitterState" ) );
+const QString logsPacsCommunicationModeVerbose(QDir::toNativeSeparators ( "/logs/pacsCommunicationmodeVerbose" ) );
+const QString qOperationStateColumnWidthKey(QDir::toNativeSeparators ( "/interface/qOperationState/columnWidth" ) );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString qCreateDicomdirColumnWidthKey(QDir::toNativeSeparators ( "/interface/qCreateDicomdir/columnWidth" ) );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString qConfigurationPacsDeviceColumnWidthKey(QDir::toNativeSeparators ( "/interface/qConfigurationPacsDevice/columnWidth" ) );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 
 namespace udg {
 
@@ -51,12 +51,12 @@ StarviewerSettings::StarviewerSettings()
 
 void StarviewerSettings::setDatabasePath( QString path )
 {
-    m_starviewerSettings.setValue( GroupSettingsName + databaseRootKey , path );
+    m_starviewerSettings.setValue( GroupSettingsName + databaseRootKey , QDir::toNativeSeparators ( path ) );
 }
 
 void StarviewerSettings::setCacheImagePath( QString path )
 {
-    m_starviewerSettings.setValue( GroupSettingsName + cacheImagePathKey , path );
+    m_starviewerSettings.setValue( GroupSettingsName + cacheImagePathKey , QDir::toNativeSeparators ( path ) );
 }
 
 void StarviewerSettings::setPoolSize(QString size )
@@ -77,6 +77,8 @@ QString StarviewerSettings::getDatabasePath()
     //construim directori per defecte
     defaultDir.append( dir.homePath() + "/.starviewer/pacs/database/dicom.sdb" );
 
+    defaultDir = QDir::toNativeSeparators ( defaultDir );
+    
     return m_starviewerSettings.value( GroupSettingsName + databaseRootKey , defaultDir ).toString();
 }
 
@@ -93,6 +95,8 @@ QString StarviewerSettings::getCacheImagePath()
     //construim directori per defecte
     defaultDir.append( dir.homePath() + "/.starviewer/pacs/dicom/" );
 
+    defaultDir = QDir::toNativeSeparators ( defaultDir );
+    
     return m_starviewerSettings.value( GroupSettingsName + cacheImagePathKey , defaultDir ).toString();
 }
 
