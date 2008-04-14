@@ -11,12 +11,14 @@
 #include "dicomimagereadervtk.h"
 #include "dicomimagereaderdcmtk.h"
 #include "dicomimagereaderitkgdcm.h"
+#include "mathtools.h"
 
 // VTK
 #include <vtkImageData.h>
 #include <vtkExtractVOI.h>
 #include <vtkImageChangeInformation.h>
 #include <vtkDICOMImageReader.h>
+#include <vtkMath.h>
 
 // ITK
 #include <itkExtractImageFilter.h>
@@ -409,6 +411,52 @@ QString Volume::toString( bool verbose )
     }
 
     return result;
+}
+
+Image *Volume::getImage( int sliceNumber, int phaseNumber ) const
+{
+    Image *image = NULL;
+
+    if( !m_imageSet.isEmpty() )
+    {
+        if( ( sliceNumber*m_numberOfPhases + phaseNumber ) < m_imageSet.count() )
+        {
+            image = m_imageSet.at( sliceNumber*m_numberOfPhases + phaseNumber );
+        }
+    }
+
+    return image;
+}
+
+void Volume::getStackDirection( double direction[3], int stack )
+{
+    // TODO encara no suportem múltiples stacks!!!!
+    // fem el tractament com si només hi hagués un sol
+    Image *firstImage = this->getImage(0,0);
+    Image *secondImage = this->getImage(1,0);
+    if( !firstImage )
+    {
+        DEBUG_LOG("Error gravísim. No hi ha 'primera' imatge!" );
+        return;
+    }
+
+    if( !secondImage )
+    {
+        DEBUG_LOG("Només hi ha una imatge per stack! Retornem la normal del pla");
+        const double *directionCosines = firstImage->getImageOrientationPatient();
+        for( int i=0; i<3; i++ )
+            direction[i] = directionCosines[i + 6];
+    }
+    else
+    {
+        const double *firstOrigin = firstImage->getImagePositionPatient();
+        const double *secondOrigin = secondImage->getImagePositionPatient();
+        // calculem la direcció real de com estan apilades
+        double *zDirection = MathTools::directorVector( firstOrigin, secondOrigin );
+        vtkMath::Normalize( zDirection );
+        for( int i=0; i<3; i++ )
+            direction[i] = zDirection[i];
+    }
 }
 
 void Volume::allocateImageData()
