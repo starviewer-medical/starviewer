@@ -12,7 +12,7 @@
 namespace udg {
 
 ImagePlane::ImagePlane()
- : m_rows(1), m_columns(1), m_thickness(1.0), m_sliceLocation(0.0)
+ : m_rows(1), m_columns(1), m_thickness(1.0)
 {
     setRowDirectionVector( 1., 0., 0. );
     setColumnDirectionVector( 0., 1., 0. );
@@ -145,16 +145,6 @@ double ImagePlane::getColumnLength() const
     return m_columns * m_spacing[1];
 }
 
-void ImagePlane::setSliceLocation( double location )
-{
-    m_sliceLocation = location;
-}
-
-double ImagePlane::getSliceLocation() const
-{
-    return m_sliceLocation;
-}
-
 bool ImagePlane::fillFromImage( const Image *image )
 {
     if( image )
@@ -169,7 +159,6 @@ bool ImagePlane::fillFromImage( const Image *image )
         this->setColumns( image->getColumns() );
         this->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
         QString location = image->getSliceLocation();
-        this->setSliceLocation( location.toDouble() );
 
         return true;
     }
@@ -195,8 +184,7 @@ bool ImagePlane::operator ==(const ImagePlane &imagePlane)
         m_spacing[1] == imagePlane.m_spacing[1] &&
         m_rows == imagePlane.m_rows &&
         m_columns == imagePlane.m_columns &&
-        m_thickness == imagePlane.m_thickness &&
-        m_sliceLocation == imagePlane.m_sliceLocation
+        m_thickness == imagePlane.m_thickness
     )
         return true;
     else
@@ -265,7 +253,6 @@ QString ImagePlane::toString( bool verbose )
     result += QString("\nNormal Vector: %1, %2, %3").arg(m_normal[0]).arg(m_normal[1]).arg(m_normal[2]);
     result += QString("\nSpacing: %1, %2").arg( m_spacing[0] ).arg( m_spacing[1] );
     result += QString("\nThickness: %1").arg(m_thickness);
-    result += QString("\nSlice Location: %1").arg(m_sliceLocation);
 
     if( verbose )
     {

@@ -103,9 +103,6 @@ private:
 
     /// Gruix del pla
     double m_thickness;
-
-    /// Posició relativa del pla
-    double m_sliceLocation;
 };
 
 }
