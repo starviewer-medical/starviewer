@@ -55,14 +55,11 @@ private slots:
     /// Es cridarà quan el viewer sigui actiu o quan el viewer actiu canvïi d'input
     void refreshReferenceViewerData();
 
-    /// Resucita el polígon que estàvem pintant. Aquest slot queda connectat
-    /// al signal dying(). Si ens fan un delete de la nostra primitiva, ens assebentem
-    /// i en creem una de nou i fora problemes :)
-    /// Aquesta és una solució temporal, el que hauríem de tenir realment
-    /// és alguna mena d'smart pointers per fer una gestió com cal
-    void resurrectPolygon();
-
 private:
+    /// Crea les primitives que es faran servir per
+    /// mostrar les interseccions projectades
+    void createPrimitives();
+
     /// Projecta la intersecció del pla de referència amb el localitzador, sobre el pla de localitzador
     void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane);
 
@@ -96,8 +93,9 @@ private:
     /// Polígon que projectem. De moment mantenim aquest poligon per questions de debug, tot i que no es mostrara per pantalla
     /// TODO quan tinguem la tool prou madura podrem prescindir d'aquest poligon
     DrawerPolygon *m_projectedReferencePlane;
+
     /// Intersecció que projectem
-    DrawerLine *m_projectedIntersection, *m_backgroundProjectedIntersection, *m_lowerProjectedIntersection, *m_backgroundLowerProjectedIntersection, *m_upperProjectedIntersection, *m_backgroundUpperProjectedIntersection;
+    DrawerLine *m_lowerProjectedIntersection, *m_backgroundLowerProjectedIntersection, *m_upperProjectedIntersection, *m_backgroundUpperProjectedIntersection;
 };
 
 }

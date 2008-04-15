@@ -21,7 +21,7 @@
 namespace udg {
 
 ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent), m_projectedReferencePlane(0)
+ : Tool(viewer, parent), m_projectedReferencePlane(0), m_lowerProjectedIntersection(0), m_backgroundLowerProjectedIntersection(0), m_upperProjectedIntersection(0), m_backgroundUpperProjectedIntersection(0)
 {
     m_toolName = "ReferenceLinesTool";
     m_hasSharedData = true;
@@ -36,7 +36,7 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
     }
 
-    resurrectPolygon();
+    createPrimitives();
     refreshReferenceViewerData();
 
     // cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
@@ -49,19 +49,19 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
 
 ReferenceLinesTool::~ReferenceLinesTool()
 {
-    disconnect( m_projectedReferencePlane, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
+    // ja no som propietaris de les línies creades
+    m_projectedReferencePlane->decreaseReferenceCount();
+    m_upperProjectedIntersection->decreaseReferenceCount();
+    m_backgroundUpperProjectedIntersection->decreaseReferenceCount();
+    m_lowerProjectedIntersection->decreaseReferenceCount();
+    m_backgroundLowerProjectedIntersection->decreaseReferenceCount();
 
-    disconnect( m_upperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
-    disconnect( m_backgroundUpperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
-    disconnect( m_lowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
-    disconnect( m_backgroundLowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), this, SLOT( resurrectPolygon() ) );
-
+    // ara al fer delete, s'esborraran automàticament del drawer, ja que nosaltres érem els únics propietaris
     delete m_projectedReferencePlane;
     delete m_upperProjectedIntersection;
     delete m_backgroundUpperProjectedIntersection;
     delete m_lowerProjectedIntersection;
     delete m_backgroundLowerProjectedIntersection;
-
 }
 
 void ReferenceLinesTool::setToolData(ToolData * data)
@@ -87,13 +87,14 @@ void ReferenceLinesTool::updateProjectionLines()
     }
 }
 
-void ReferenceLinesTool::resurrectPolygon()
+void ReferenceLinesTool::createPrimitives()
 {
     m_projectedReferencePlane = new DrawerPolygon;
-// descomentar aquestes 3 linies si es vol mostrar el poligon del pla projectat
+    // TODO sucedani d'smart pointer(TM)
+    m_projectedReferencePlane->increaseReferenceCount();
+// descomentar aquestes 2 linies si es vol mostrar el poligon del pla projectat
 //     m_2DViewer->getDrawer()->draw( m_projectedReferencePlane, QViewer::Top2DPlane );
 //     m_2DViewer->getDrawer()->addToGroup( m_projectedReferencePlane, "ReferenceLines" );
-//     connect( m_projectedReferencePlane, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
 
     //
     // linia superior projectada de tall entre els plans localitzador i referencia
@@ -101,39 +102,47 @@ void ReferenceLinesTool::resurrectPolygon()
 
     // linia de background, igual a la següent, per fer-la ressaltar a la imatge TODO es podria estalviar aquesta linia de mes si el propi drawer
     // admetes "background" en una linia amb "stiple" discontinu
-    m_backgroundUpperProjectedIntersection = new DrawerLine;
-    m_backgroundUpperProjectedIntersection->setColor( QColor(0,0,0) );
 
+    m_backgroundUpperProjectedIntersection = new DrawerLine;
+    // TODO sucedani d'smart pointer(TM)
+    m_backgroundUpperProjectedIntersection->increaseReferenceCount();
+
+    m_backgroundUpperProjectedIntersection->setColor( QColor(0,0,0) );
     m_2DViewer->getDrawer()->draw( m_backgroundUpperProjectedIntersection, QViewer::Top2DPlane );
     m_2DViewer->getDrawer()->addToGroup( m_backgroundUpperProjectedIntersection, "ReferenceLines" );
-    connect( m_backgroundUpperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
+
 
     // linia "de punts"
     m_upperProjectedIntersection = new DrawerLine;
+    // TODO sucedani d'smart pointer(TM)
+    m_upperProjectedIntersection->increaseReferenceCount();
+
     m_upperProjectedIntersection->setColor( QColor(255,160,0) );
     m_upperProjectedIntersection->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-
     m_2DViewer->getDrawer()->draw( m_upperProjectedIntersection, QViewer::Top2DPlane );
     m_2DViewer->getDrawer()->addToGroup( m_upperProjectedIntersection, "ReferenceLines" );
-    connect( m_upperProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
 
     //
     // linia inferior projectada de tall entre els plans localitzador i referencia
     //
-    m_backgroundLowerProjectedIntersection = new DrawerLine;
-    m_backgroundLowerProjectedIntersection->setColor( QColor(0,0,0) );
 
+    // línia de background
+    m_backgroundLowerProjectedIntersection = new DrawerLine;
+    // TODO sucedani d'smart pointer(TM)
+    m_backgroundLowerProjectedIntersection->increaseReferenceCount();
+
+    m_backgroundLowerProjectedIntersection->setColor( QColor(0,0,0) );
     m_2DViewer->getDrawer()->draw( m_backgroundLowerProjectedIntersection, QViewer::Top2DPlane );
     m_2DViewer->getDrawer()->addToGroup( m_backgroundLowerProjectedIntersection, "ReferenceLines" );
-    connect( m_backgroundLowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
 
     m_lowerProjectedIntersection = new DrawerLine;
+    // TODO sucedani d'smart pointer(TM)
+    m_lowerProjectedIntersection->increaseReferenceCount();
+
     m_lowerProjectedIntersection->setColor( QColor(255,160,0) );
     m_lowerProjectedIntersection->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-
     m_2DViewer->getDrawer()->draw( m_lowerProjectedIntersection, QViewer::Top2DPlane );
     m_2DViewer->getDrawer()->addToGroup( m_lowerProjectedIntersection, "ReferenceLines" );
-    connect( m_lowerProjectedIntersection, SIGNAL( dying(DrawerPrimitive*) ), SLOT( resurrectPolygon() ) );
 
     // TODO mirar si ens podem estalviar de cridar aquest metode aqui
     m_2DViewer->getDrawer()->showGroup("ReferenceLines");
