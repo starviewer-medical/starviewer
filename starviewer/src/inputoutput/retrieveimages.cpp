@@ -204,13 +204,13 @@ OFCondition echoSCP(
             int imageSize;
             DICOMImage retrievedImage( * imageDataSet );
 
-            studyPath = QDir::toNativeSeparators( piSingleton->getPath() + retrievedImage.getStudyUID() );//agafem el path del directori on es guarden les imatges
+            studyPath = piSingleton->getPath() + retrievedImage.getStudyUID() ;//agafem el path del directori on es guarden les imatges
             QDir directory;
         
             //comprovem, si el directori de l'estudi ja està creat
             if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
 
-            seriesPath = QDir::toNativeSeparators( studyPath + "/" + retrievedImage.getSeriesUID() );
+            seriesPath = studyPath + "/" + retrievedImage.getSeriesUID();
 
             //comprovem, si el directori de la sèrie ja està creat, sinó el creem
             if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
@@ -219,14 +219,12 @@ OFCondition echoSCP(
             imagePath = seriesPath;
             imagePath.append("/");
             imagePath.append( cbdata->imageFileName );
-            
-            imagePath = QDir::toNativeSeparators( imagePath );
 
             E_TransferSyntax xfer = opt_writeTransferSyntax;
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
-            OFCondition cond = cbdata->dcmff->saveFile( qPrintable( imagePath ) , xfer , opt_sequenceType , opt_groupLength ,
+            OFCondition cond = cbdata->dcmff->saveFile( qPrintable( QDir::toNativeSeparators( imagePath ) ) , xfer , opt_sequenceType , opt_groupLength ,
             opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
 
             if ( cond.bad() )

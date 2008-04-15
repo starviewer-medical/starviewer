@@ -30,7 +30,7 @@ QLogViewer::~QLogViewer()
 void QLogViewer::updateData()
 {
     // \TODO aquest directori s'hauria de guardar en alguna mena de qsettings o similar
-    QFile logFile( QDir::toNativeSeparators( QDir::homePath() + "/.starviewer/log/starviewer.log" ) );
+    QFile logFile( QDir::homePath() + "/.starviewer/log/starviewer.log" );
     if ( !logFile.open( QFile::ReadOnly | QFile::Text) )
     {
         ERROR_LOG( "No s'ha pogut obrir l'arxiu de logs" );
@@ -52,7 +52,7 @@ void QLogViewer::createConnections()
 
 void QLogViewer::saveLogFileAs()
 {
-    QString fileName = QFileDialog::getSaveFileName( this, tr("Save as..."), QString(), tr("Log Files (*.log)") );
+    QString fileName = QFileDialog::getSaveFileName( this, tr("Save as..."),                                             QString(), tr("Log Files (*.log)") );
 
     if ( fileName.isEmpty() )
         return;
