@@ -40,7 +40,7 @@ Cursor3DTool::Cursor3DTool( QViewer *viewer, QObject *parent )
     m_myData = new Cursor3DToolData;
     m_toolData = m_myData;
     connect( m_toolData, SIGNAL(changed()), SLOT(updateProjectionLines()) );
-    
+
     m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
@@ -64,7 +64,7 @@ Cursor3DTool::Cursor3DTool( QViewer *viewer, QObject *parent )
 
     m_sphereActor->VisibilityOff();
     m_2DViewer->getRenderer()->AddActor( m_sphereActor );
-    
+
 }
 
 Cursor3DTool::~Cursor3DTool()
@@ -108,14 +108,12 @@ void Cursor3DTool::initializePosition()
     m_state = CALCULATING;
 
     double position[4];
-    int dicomWorldPosition[3];
-    double coordinates[3];
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY(), 0, position );
 
 //     DEBUG_LOG( tr("POSICIO: [%1,%2,%3]").arg(position[0]).arg(position[1]).arg(position[2]) );
-            
+
     // TODO Quan sapiga calcular bé la posició, també s'haurà de fer aqui!!!
-            
+
     int slice = m_2DViewer->getCurrentSlice();
     double *spacing = m_2DViewer->getInput()->getSpacing();
     double *origin = m_2DViewer->getInput()->getOrigin();
@@ -148,11 +146,8 @@ void Cursor3DTool::updatePosition()
     if( m_2DViewer->isActive() )
     {
         double position[4];
-        int index[3];
-        double * dicomWorldPosition = new double[3];
-        double coordinates[3];
         m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY(), 0, position );
-        
+
         int slice = m_2DViewer->getCurrentSlice();
         double *spacing = m_2DViewer->getInput()->getSpacing();
         double *origin = m_2DViewer->getInput()->getOrigin();
@@ -177,31 +172,31 @@ void Cursor3DTool::updatePosition()
         *   2.- Trobar l'índex del vòxel en el DICOM
         *   3.- Passar aquest punt al món REAL (DICOM) amb la matriu
         *   4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin
-        */  
-        
+        */
+
 //         double xyz[3];
 //         m_2DViewer->getCurrentCursorPosition( xyz );
-// 
+//
 //         ImagePlane * currentPlane = m_2DViewer->getCurrentImagePlane();
 //         double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneNormalVector[3], currentPlaneOrigin[3];
 //         currentPlane->getRowDirectionVector( currentPlaneRowVector );
 //         currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
 //         currentPlane->getNormalVector( currentPlaneNormalVector );
 //         currentPlane->getOrigin( currentPlaneOrigin );
-// 
+//
 //         m_2DViewer->getInput()->getVtkData()->ComputeStructuredCoordinates(currentPlaneOrigin, index, coordinates);
-// 
+//
 //         m_2DViewer->getInput()->getVtkData()->ComputeStructuredCoordinates(position, index, coordinates);
-// 
+//
 //         m_2DViewer->getInput()->getVtkData()->ComputeStructuredCoordinates(xyz, index, coordinates);
-// 
+//
 //         double * origen = m_2DViewer->getInput()->getVtkData()->GetOrigin();
-// 
+//
 //         dicomWorldPosition[0]=(double)index[0];
 //         dicomWorldPosition[1]=(double)index[1];
 //         dicomWorldPosition[2]=(double)index[2];
-//         
-// 
+//
+//
 //         // a partir d'aquestes dades creem la matriu de projeccio, que projectara els punts
 //         // del pla de referencia sobre el pla del localitzador
 //         vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
@@ -213,17 +208,17 @@ void Cursor3DTool::updatePosition()
 //             projectionMatrix->SetElement(2,column,(currentPlaneNormalVector[ column ])*currentPlane->getThickness());
 //             projectionMatrix->SetElement(column,3,currentPlaneOrigin[column]);
 //         }
-// 
+//
 //         projectionMatrix->MultiplyPoint( dicomWorldPosition, dicomWorldPosition );
-// 
+//
 //         DEBUG_LOG( tr("Punt DICOM: [%1,%2,%3]").arg(dicomWorldPosition[0]).arg(dicomWorldPosition[1]).arg(dicomWorldPosition[2]) );
-        
+
         m_sphere->SetCenter( position );
         m_myData->setOriginPointPosition( position );
         m_sphereActor->VisibilityOn();
         m_2DViewer->refresh();
     }
-    
+
 }
 
 void Cursor3DTool::removePosition()
@@ -241,7 +236,7 @@ void Cursor3DTool::updateProjectionLines()
     {
         // intentarem projectar el pla que hi ha a m_myData
         // primer cal que comparteixin el mateix FrameOfReference
-        
+
         if( m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() )
         {
             // aquí ja ho deixem en mans de la projecció
@@ -269,7 +264,7 @@ void Cursor3DTool::projectIntersection(ImagePlane *referencePlane, ImagePlane *l
 
 //             DEBUG_LOG( tr("La posició NO ha estat calculada") );
         }
-        
+
 //         DEBUG_LOG( tr("Projected point: [%1,%2,%3]").arg(position[0]).arg(position[1]).arg(position[2]) );
 
         if( position )
@@ -285,7 +280,7 @@ void Cursor3DTool::projectIntersection(ImagePlane *referencePlane, ImagePlane *l
             }
 
 //             DEBUG_LOG( tr("Nearest slice: %1").arg(nearestSlice) );
-        }        
+        }
 }
 
 void Cursor3DTool::updateFrameOfReference()
