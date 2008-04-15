@@ -1611,6 +1611,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
                 {
                     imagePlane = new ImagePlane();
                     imagePlane->fillFromImage( image );
+                    imagePlane->setThickness( this->getThickness() );
                 }
             }
             break;
@@ -1631,7 +1632,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
                     imagePlane->setColumnDirectionVector( columnVector[0], columnVector[1], columnVector[2] );
 
                     imagePlane->setSpacing( spacing[1], spacing[2] );
-                    imagePlane->setThickness( spacing[0] );
+                    imagePlane->setThickness( this->getThickness() );
                     imagePlane->setRows( dimensions[1] );
                     imagePlane->setColumns( dimensions[2] );
 
@@ -1658,7 +1659,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
                     imagePlane->setColumnDirectionVector( columnVector[0], columnVector[1], columnVector[2] );
 
                     imagePlane->setSpacing( spacing[0], spacing[2] );
-                    imagePlane->setThickness( spacing[1] );
+                    imagePlane->setThickness( this->getThickness() );
                     imagePlane->setRows( dimensions[0] );
                     imagePlane->setColumns( dimensions[2] );
                     // TODO falta esbrinar si l'origen que estem donant es bo o no
