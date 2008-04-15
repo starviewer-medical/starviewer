@@ -519,7 +519,17 @@ void QViewer::updateWindowLevelData()
             {
                 description = tr("Default %1").arg(i);
             }
-            m_windowLevelData->addPreset( description, windowLevel.first, windowLevel.second, WindowLevelPresetsToolData::FileDefined );
+            if( windowLevel.first == 0.0 && windowLevel.second == 0.0 )
+            {
+                double *range = m_mainVolume->getVtkData()->GetScalarRange();
+                double window = range[1] - range[0];
+                double level = (m_defaultWindow / 2.) + range[0];
+                m_windowLevelData->addPreset( description, window, level, WindowLevelPresetsToolData::FileDefined );
+            }
+            else
+            {
+                m_windowLevelData->addPreset( description, windowLevel.first, windowLevel.second, WindowLevelPresetsToolData::FileDefined );
+            }
             if( i == 0 )
                 m_windowLevelData->activatePreset( description );
         }
