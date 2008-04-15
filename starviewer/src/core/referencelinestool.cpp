@@ -147,39 +147,8 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     // primer mirem que siguin plans diferents
     if( *localizerPlane != *referencePlane )
     {
-        // Farem dues projeccions:
-        // Una sera la projeccio directa del pla de referencia sobre el localitzador
-        // que es el metode proposat per en David Clunie ( http://www.dclunie.com/medical-image-faq/html/part2.html, ap. 2.2.1 )
-        // La segona sera la projeccio de la linia de tall entre els dos plans, derivat de la idea d'en Clunie
-        // La primera aproximacio, nomes es fara servir per motius de debug i la que es representara per pantalla sera
-        // la segona, que de cares al diagnostic es la mes correcta.
-
-        // implementem primer el sistema simple d'en clunie. A partir dels plans
-        // fem una projecció del pla de referència sobre el pla del localitzador
-
         //
-        // Solucio 1: projeccio de plans
-        //
-
-        // ara calculem les projeccions de cada punt del pla de referencia
-        // obtenim els els 4 punts del pla de referencia (central)
-//         QList< QVector<double> > referencePlaneBounds = referencePlane->getCentralBounds();
-//         double projectedVertix1[3],projectedVertix2[3],projectedVertix3[3],projectedVertix4[3];
-//
-//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(0).data(), projectedVertix1 );
-//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(1).data(), projectedVertix2 );
-//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(2).data(), projectedVertix3 );
-//         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)referencePlaneBounds.at(3).data(), projectedVertix4 );
-//
-//         // donem els punts al poligon a dibuixar
-//         m_projectedReferencePlane->setVertix( 0, projectedVertix1 );
-//         m_projectedReferencePlane->setVertix( 1, projectedVertix2 );
-//         m_projectedReferencePlane->setVertix( 2, projectedVertix3 );
-//         m_projectedReferencePlane->setVertix( 3, projectedVertix4 );
-//         m_2DViewer->getDrawer()->showGroup("ReferenceLines");
-
-        //
-        // Solucio 2: projeccio de la intersecció dels plans
+        // projecció de la intersecció dels plans
         //
         /// llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 
@@ -195,9 +164,10 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
 
         //
-        // TODO mirar exactament quan cal amagar les línies i quan no depenent de les interseccions trobades
+        // TODO mirar exactament quan cal amagar les línies i quan no, depenent de les interseccions trobades
         //
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
+        DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
         if( numberOfIntersections == 2 )
         {
             m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
@@ -221,6 +191,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         numberOfIntersections = this->getIntersections( lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
 
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
+        DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
         if( numberOfIntersections == 2 )
         {
             m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
@@ -235,7 +206,32 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 
             m_2DViewer->getDrawer()->showGroup("ReferenceLines");
         }
+        else
+        {
+            m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+            // si no hi ha cap intersecció apliquem el pla directament, "a veure què"
+            //TODO això és per debug ONLY!!
+//             projectPlane( referencePlane );
+        }
     }
+}
+
+void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
+{
+    QList< QVector<double> > planeBounds = planeToProject->getCentralBounds();
+    double projectedVertix1[3],projectedVertix2[3],projectedVertix3[3],projectedVertix4[3];
+
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)planeBounds.at(0).data(), projectedVertix1 );
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)planeBounds.at(1).data(), projectedVertix2 );
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)planeBounds.at(2).data(), projectedVertix3 );
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage( (double *)planeBounds.at(3).data(), projectedVertix4 );
+
+    // donem els punts al poligon a dibuixar
+    m_projectedReferencePlane->setVertix( 0, projectedVertix1 );
+    m_projectedReferencePlane->setVertix( 1, projectedVertix2 );
+    m_projectedReferencePlane->setVertix( 2, projectedVertix3 );
+    m_projectedReferencePlane->setVertix( 3, projectedVertix4 );
+    m_2DViewer->getDrawer()->showGroup("ReferenceLines");
 }
 
 int ReferenceLinesTool::getIntersections( QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3] )
