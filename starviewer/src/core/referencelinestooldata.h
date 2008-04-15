@@ -33,10 +33,10 @@ public:
     QString getFrameOfReferenceUID() const;
 
     /**
-     * Retorna el pla d'imatge
+     * Retorna els plans a projectar
      * @return
      */
-    ImagePlane *getImagePlane() const;
+    QList<ImagePlane *> getPlanesToProject() const;
 
 public slots:
     /**
@@ -48,19 +48,18 @@ public slots:
     void setFrameOfReferenceUID( const QString &frameOfReference );
 
     /**
-     * Assigna el pla de la imatge de referencia
-     * Aquest pla pot canviar cada cop que es canvia de llesca en el viewer
-     * Quan canvïi aquest valor, s'emetrà el senyal changed()
+     * Assigna els plans de la serie de referencia
      * @param imagePlane
      */
-    void setImagePlane( ImagePlane *imagePlane );
+    void setPlanesToProject( QList<ImagePlane *> planes );
+    void setPlanesToProject( ImagePlane *plane );
 
 private:
     /// El frame of reference UID del pla de referència
     QString m_frameOfReferenceUID;
 
-    /// Pla d'imatge del pla de referència
-    ImagePlane *m_referenceImagePlane;
+    /// Llista de plans a projectar
+    QList<ImagePlane *> m_planesToProject;
 };
 
 }

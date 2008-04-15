@@ -10,7 +10,7 @@
 namespace udg {
 
 ReferenceLinesToolData::ReferenceLinesToolData(QObject *parent)
- : ToolData(parent), m_referenceImagePlane(0)
+ : ToolData(parent)
 {
 }
 
@@ -23,9 +23,9 @@ QString ReferenceLinesToolData::getFrameOfReferenceUID() const
     return m_frameOfReferenceUID;
 }
 
-ImagePlane *ReferenceLinesToolData::getImagePlane() const
+QList<ImagePlane *> ReferenceLinesToolData::getPlanesToProject() const
 {
-    return m_referenceImagePlane;
+    return m_planesToProject;
 }
 
 void ReferenceLinesToolData::setFrameOfReferenceUID( const QString &frameOfReference )
@@ -33,9 +33,18 @@ void ReferenceLinesToolData::setFrameOfReferenceUID( const QString &frameOfRefer
     m_frameOfReferenceUID = frameOfReference;
 }
 
-void ReferenceLinesToolData::setImagePlane( ImagePlane *imagePlane )
+void ReferenceLinesToolData::setPlanesToProject( QList<ImagePlane *> planes )
 {
-    m_referenceImagePlane = imagePlane;
+    m_planesToProject.clear();
+    m_planesToProject = planes;
+    emit changed();
+}
+
+void ReferenceLinesToolData::setPlanesToProject( ImagePlane *plane )
+{
+    m_planesToProject.clear();
+    if( plane )
+        m_planesToProject << plane;
     emit changed();
 }
 
