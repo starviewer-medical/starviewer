@@ -242,23 +242,23 @@ void DrawerPolyline::swap()
 double DrawerPolyline::getDistanceToPoint( double *point3D )
 {
     double minDistanceLine = VTK_DOUBLE_MAX;
-    double *p1, *p2, distance, *auxPoint;
+    double distance, *auxPoint;
     bool found = false;
     int j;
-    
+
     if ( !m_pointsList.isEmpty() )
     {
         //mirem si el polígon conté com a últim punt el primer punt, és a dir, si està tancat o no.
         //ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
         QList< double* > auxList;
         auxList += m_pointsList;
-                
+
         if ( auxList.first()[0] != auxList.last()[0] || auxList.first()[1] != auxList.last()[1] || auxList.first()[2] != auxList.last()[2] )
         {
             //si el primer i últim punt no són iguals, dupliquem el primer punt.
             auxList << auxList.first();
         }
-    
+
         for ( int i = 0; ( i < auxList.count() - 1 ) && !found ; i++ )
         {
             if ( isPointIncludedInLineBounds( point3D, auxList[i], auxList[i+1] ) )
@@ -269,10 +269,10 @@ double DrawerPolyline::getDistanceToPoint( double *point3D )
             else
             {
                 distance = vtkLine::DistanceToLine( point3D , auxList[i] , auxList[i+1] );
-                
+
                 if ( minDistanceLine == VTK_DOUBLE_MAX )
                     minDistanceLine = distance;
-                else if ( distance < minDistanceLine ) 
+                else if ( distance < minDistanceLine )
                         minDistanceLine = distance;
             }
         }
@@ -283,20 +283,20 @@ double DrawerPolyline::getDistanceToPoint( double *point3D )
 bool DrawerPolyline::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
 {
     double range = 10.0;
-    
+
     Distance d1(point, lineP1);
     Distance d2(point, lineP2);
-    
+
     return ( d1.getDistance3D() <= range || d2.getDistance3D() <= range );
 }
 
 bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
 {
     double minX, maxX, minY, maxY;
-    
+
     int numberOfPoints = m_pointsList.count();
     bool allPointsAreInside = true;
-    
+
     //determinem x i y màximes i mínimes segons la vista
     switch( view )
     {
@@ -311,7 +311,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxX = p1[0];
                 minX = p2[0];
             }
-            
+
             if ( p1[1] < p2[1] )
             {
                 minY = p1[1];
@@ -322,7 +322,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxY = p1[1];
                 minY = p2[1];
             }
-            
+
             for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
             {
                 double *currentPoint = m_pointsList.at( i );
@@ -341,7 +341,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxX = p1[2];
                 minX = p2[2];
             }
-        
+
             if ( p1[1] < p2[1] )
             {
                 minY = p1[1];
@@ -352,7 +352,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxY = p1[1];
                 minY = p2[1];
             }
-            
+
             for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
             {
                 double *currentPoint = m_pointsList.at( i );
@@ -371,7 +371,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxX = p1[0];
                 minX = p2[0];
             }
-        
+
             if ( p1[2] < p2[2] )
             {
                 minY = p1[2];
@@ -388,10 +388,10 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
                 if ( currentPoint[0] >= maxX || currentPoint[0] <= minX || currentPoint[2] >= maxY || currentPoint[2] <= minY )
                     allPointsAreInside = false;
             }
-            break; 
+            break;
     }
-    
-    return ( allPointsAreInside ); 
+
+    return ( allPointsAreInside );
 }
 
 }

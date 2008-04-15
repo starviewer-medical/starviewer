@@ -190,7 +190,7 @@ void DrawerPolygon::updateVtkActorProperties()
 double DrawerPolygon::getDistanceToPoint( double *point3D )
 {
     double minDistanceLine = VTK_DOUBLE_MAX;
-    double *p1, *p2, distance, *auxPoint;
+    double distance, *auxPoint;
     bool found = false;
     int j;
 
