@@ -181,7 +181,7 @@ public slots:
     virtual void disableTools(){};
 
     /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui. Reimplementat en cada viewer
-    /// \deprecated quan s'integri el nou model de tools
+    /// \deprecated quan s'integri el nou model de tools per complet
     virtual void setTool( QString ){};
 
     /// Crida que re-inicia a l'estat incial el visor
@@ -192,10 +192,12 @@ public slots:
     /// Obté el window/level per defecte
     void getDefaultWindowLevel( double wl[2] );
 
+    // TODO convertir en mètode virtual pur?
     /// Obté el window level actual de la imatge
     virtual void getCurrentWindowLevel( double wl[2] ){};
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
+    // TODO convertir en mètode virtual pur
     virtual void resetView( CameraOrientationType view ){};
     virtual void resetViewToAxial(){};
     virtual void resetViewToSagital(){};
@@ -213,9 +215,11 @@ public slots:
     void setDefaultWindowLevel( double window, double level );
 
     /// Ajusta el window/level
+    // TODO convertir en mètode virtual pur?
     virtual void setWindowLevel( double window , double level ){};
 
     /// Reseteja el window level al que tingui per defecte el volum
+    // TODO convertir en mètode virtual pur?
     virtual void resetWindowLevelToDefault(){};
 
 signals:
