@@ -29,6 +29,8 @@ class ReferenceLinesTool : public Tool
 {
 Q_OBJECT
 public:
+    enum { SingleImage, AllImages };
+
     ReferenceLinesTool( QViewer *viewer, QObject *parent = 0 );
 
     ~ReferenceLinesTool();
@@ -61,7 +63,8 @@ private:
     void createPrimitives();
 
     /// Projecta la intersecció del pla de referència amb el localitzador, sobre el pla de localitzador
-    void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane);
+    /// tambe li indiquem quina es la linia a modificar
+    void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane, int drawerLineOffset = 0);
 
     /// Projecta directament el pla donat, sobre el pla actual que s'està visualitzant al viewer
     /// Aquest mètode es fa servir per "debug"
@@ -80,6 +83,18 @@ private:
      */
     int getIntersections( QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3] );
 
+    /**
+     * Ens crea una DrawerLine, ja sigui de les principals
+     * o de background
+     */
+    DrawerLine *createNewLine( bool isBackgroundLine = false );
+
+    /**
+     * Comprova que el nombre de DrawerLines a les corresponents llistes
+     * sigui l'adequat i actua en consequencia
+     */
+    void checkAvailableLines();
+
 private:
     /// Dades específiques de la tool
     ReferenceLinesToolData *m_myData;
@@ -94,8 +109,19 @@ private:
     /// TODO quan tinguem la tool prou madura podrem prescindir d'aquest poligon
     DrawerPolygon *m_projectedReferencePlane;
 
-    /// Intersecció que projectem
-    DrawerLine *m_lowerProjectedIntersection, *m_backgroundLowerProjectedIntersection, *m_upperProjectedIntersection, *m_backgroundUpperProjectedIntersection;
+    /// En aquestes llistes mantindrem totes les linies a projectar
+    QList<DrawerLine *> m_projectedIntersectionLines;
+    QList<DrawerLine *> m_backgroundProjectedIntersectionLines;
+
+    /// Aquesta variable serveix per controlar si volem mostrar el gruix de la llesca o si pel contrari
+    /// amb la llesca tal qual ens conformem
+    /// aquesta podria ser una variable usada en un ToolConfiguration
+    bool m_showPlaneThickness;
+
+    /// Ens indica quins plans volem projectar. Tindra els valors enumerats definits per....
+    /// aquesta podria ser una variable usada en un ToolConfiguration
+    int m_planesToProject;
+
 };
 
 }

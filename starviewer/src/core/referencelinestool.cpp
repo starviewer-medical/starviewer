@@ -21,7 +21,7 @@
 namespace udg {
 
 ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent), m_projectedReferencePlane(0), m_lowerProjectedIntersection(0), m_backgroundLowerProjectedIntersection(0), m_upperProjectedIntersection(0), m_backgroundUpperProjectedIntersection(0)
+ : Tool(viewer, parent), m_projectedReferencePlane(0), m_showPlaneThickness(true), m_planesToProject(SingleImage)
 {
     m_toolName = "ReferenceLinesTool";
     m_hasSharedData = true;
@@ -36,32 +36,32 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
     }
 
-    createPrimitives();
+// descomentar aquestes 4 linies si es vol mostrar el poligon del pla projectat
+//      m_projectedReferencePlane = new DrawerPolygon;
+//     // TODO sucedani d'smart pointer(TM)
+//     m_projectedReferencePlane->increaseReferenceCount();
+//     m_2DViewer->getDrawer()->draw( m_projectedReferencePlane, QViewer::Top2DPlane );
+//     m_2DViewer->getDrawer()->addToGroup( m_projectedReferencePlane, "ReferenceLines" );
+
     refreshReferenceViewerData();
 
     // cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( refreshReferenceViewerData() ) );
     // cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateImagePlane()) );
+    // cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
+    connect( m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateImagePlane()) );
 
     connect( m_2DViewer, SIGNAL(selected()),SLOT(refreshReferenceViewerData()) );
 }
 
 ReferenceLinesTool::~ReferenceLinesTool()
 {
-    // ja no som propietaris de les línies creades
-    m_projectedReferencePlane->decreaseReferenceCount();
-    m_upperProjectedIntersection->decreaseReferenceCount();
-    m_backgroundUpperProjectedIntersection->decreaseReferenceCount();
-    m_lowerProjectedIntersection->decreaseReferenceCount();
-    m_backgroundLowerProjectedIntersection->decreaseReferenceCount();
-
-    // ara al fer delete, s'esborraran automàticament del drawer, ja que nosaltres érem els únics propietaris
-    delete m_projectedReferencePlane;
-    delete m_upperProjectedIntersection;
-    delete m_backgroundUpperProjectedIntersection;
-    delete m_lowerProjectedIntersection;
-    delete m_backgroundLowerProjectedIntersection;
+// descomentar aquestes 4 linies si es vol mostrar el poligon del pla projectat(nomes debug)
+//     // ja no som propietaris de les línies creades
+//     m_projectedReferencePlane->decreaseReferenceCount();
+//     // ara al fer delete, s'esborraran automàticament del drawer, ja que nosaltres érem els únics propietaris
+//     delete m_projectedReferencePlane;
 }
 
 void ReferenceLinesTool::setToolData(ToolData * data)
@@ -81,74 +81,21 @@ void ReferenceLinesTool::updateProjectionLines()
         // primer cal que comparteixin el mateix FrameOfReference
         if( m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() )
         {
-            // aquí ja ho deixem en mans de la projecció
-            projectIntersection( m_myData->getImagePlane(), m_2DViewer->getCurrentImagePlane() );
+            QList<ImagePlane *> planesToProject = m_myData->getPlanesToProject();
+            // primer comprovar si tenim el nombre adequat de linies creades, donat el nombre de plans a projectar
+            checkAvailableLines();
+            int drawerLineOffset = 0;
+            foreach( ImagePlane *referencePlane, planesToProject )
+            {
+                // aquí ja ho deixem en mans de la projecció
+                projectIntersection( referencePlane, m_2DViewer->getCurrentImagePlane(), drawerLineOffset );
+                drawerLineOffset += m_showPlaneThickness ? 2 : 1;
+            }
         }
     }
 }
 
-void ReferenceLinesTool::createPrimitives()
-{
-    m_projectedReferencePlane = new DrawerPolygon;
-    // TODO sucedani d'smart pointer(TM)
-    m_projectedReferencePlane->increaseReferenceCount();
-// descomentar aquestes 2 linies si es vol mostrar el poligon del pla projectat
-//     m_2DViewer->getDrawer()->draw( m_projectedReferencePlane, QViewer::Top2DPlane );
-//     m_2DViewer->getDrawer()->addToGroup( m_projectedReferencePlane, "ReferenceLines" );
-
-    //
-    // linia superior projectada de tall entre els plans localitzador i referencia
-    //
-
-    // linia de background, igual a la següent, per fer-la ressaltar a la imatge TODO es podria estalviar aquesta linia de mes si el propi drawer
-    // admetes "background" en una linia amb "stiple" discontinu
-
-    m_backgroundUpperProjectedIntersection = new DrawerLine;
-    // TODO sucedani d'smart pointer(TM)
-    m_backgroundUpperProjectedIntersection->increaseReferenceCount();
-
-    m_backgroundUpperProjectedIntersection->setColor( QColor(0,0,0) );
-    m_2DViewer->getDrawer()->draw( m_backgroundUpperProjectedIntersection, QViewer::Top2DPlane );
-    m_2DViewer->getDrawer()->addToGroup( m_backgroundUpperProjectedIntersection, "ReferenceLines" );
-
-
-    // linia "de punts"
-    m_upperProjectedIntersection = new DrawerLine;
-    // TODO sucedani d'smart pointer(TM)
-    m_upperProjectedIntersection->increaseReferenceCount();
-
-    m_upperProjectedIntersection->setColor( QColor(255,160,0) );
-    m_upperProjectedIntersection->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-    m_2DViewer->getDrawer()->draw( m_upperProjectedIntersection, QViewer::Top2DPlane );
-    m_2DViewer->getDrawer()->addToGroup( m_upperProjectedIntersection, "ReferenceLines" );
-
-    //
-    // linia inferior projectada de tall entre els plans localitzador i referencia
-    //
-
-    // línia de background
-    m_backgroundLowerProjectedIntersection = new DrawerLine;
-    // TODO sucedani d'smart pointer(TM)
-    m_backgroundLowerProjectedIntersection->increaseReferenceCount();
-
-    m_backgroundLowerProjectedIntersection->setColor( QColor(0,0,0) );
-    m_2DViewer->getDrawer()->draw( m_backgroundLowerProjectedIntersection, QViewer::Top2DPlane );
-    m_2DViewer->getDrawer()->addToGroup( m_backgroundLowerProjectedIntersection, "ReferenceLines" );
-
-    m_lowerProjectedIntersection = new DrawerLine;
-    // TODO sucedani d'smart pointer(TM)
-    m_lowerProjectedIntersection->increaseReferenceCount();
-
-    m_lowerProjectedIntersection->setColor( QColor(255,160,0) );
-    m_lowerProjectedIntersection->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-    m_2DViewer->getDrawer()->draw( m_lowerProjectedIntersection, QViewer::Top2DPlane );
-    m_2DViewer->getDrawer()->addToGroup( m_lowerProjectedIntersection, "ReferenceLines" );
-
-    // TODO mirar si ens podem estalviar de cridar aquest metode aqui
-    m_2DViewer->getDrawer()->showGroup("ReferenceLines");
-}
-
-void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane)
+void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane, int drawerLineOffset)
 {
     if( !(referencePlane && localizerPlane) )
         return;
@@ -166,62 +113,94 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         localizerPlane->getNormalVector( localizerNormalVector );
         localizerPlane->getOrigin( localizerOrigin );
 
-        // calculem totes les possibles interseccions
-        QList< QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
-        double firstIntersectionPoint[3], secondIntersectionPoint[3];
-
-        int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
-
         //
         // TODO mirar exactament quan cal amagar les línies i quan no, depenent de les interseccions trobades
         //
         // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
-        DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
-        if( numberOfIntersections == 2 )
+
+        if( m_showPlaneThickness )
         {
-            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
-            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
+            // calculem totes les possibles interseccions
+            QList< QVector<double> > upperPlaneBounds = referencePlane->getUpperBounds();
+            double firstIntersectionPoint[3], secondIntersectionPoint[3];
 
-            // linia discontinua
-            m_upperProjectedIntersection->setFirstPoint( firstIntersectionPoint );
-            m_upperProjectedIntersection->setSecondPoint( secondIntersectionPoint );
-            // linia de background
-            m_backgroundUpperProjectedIntersection->setFirstPoint( firstIntersectionPoint );
-            m_backgroundUpperProjectedIntersection->setSecondPoint( secondIntersectionPoint );
+            int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
+            DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
+            if( numberOfIntersections == 2 )
+            {
+                m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
+                m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
 
-            m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+                // linia discontinua
+                m_projectedIntersectionLines[ drawerLineOffset ]->setFirstPoint( firstIntersectionPoint );
+                m_projectedIntersectionLines[ drawerLineOffset ]->setSecondPoint( secondIntersectionPoint );
+                // linia de background
+                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setFirstPoint( firstIntersectionPoint );
+                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setSecondPoint( secondIntersectionPoint );
+
+                m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+            }
+            else
+            {
+                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+            }
+
+            QList< QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
+            numberOfIntersections = this->getIntersections( lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
+
+            // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
+            DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
+            if( numberOfIntersections == 2 )
+            {
+                m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
+                m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
+
+                // linia discontinua
+                m_projectedIntersectionLines[ drawerLineOffset+1 ]->setFirstPoint( firstIntersectionPoint );
+                m_projectedIntersectionLines[ drawerLineOffset+1 ]->setSecondPoint( secondIntersectionPoint );
+                // linia de background
+                m_backgroundProjectedIntersectionLines[ drawerLineOffset+1 ]->setFirstPoint( firstIntersectionPoint );
+                m_backgroundProjectedIntersectionLines[ drawerLineOffset+1 ]->setSecondPoint( secondIntersectionPoint );
+
+                m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+            }
+            else
+            {
+                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+                // si no hi ha cap intersecció apliquem el pla directament, "a veure què"
+                //TODO això és per debug ONLY!!
+    //             projectPlane( referencePlane );
+            }
         }
-        else
+        else // nomes agafem el pla "central"
         {
-            m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+            QList< QVector<double> > planeBounds = referencePlane->getCentralBounds();
+            double firstIntersectionPoint[3], secondIntersectionPoint[3];
+
+            int numberOfIntersections = this->getIntersections( planeBounds.at(0), planeBounds.at(1), planeBounds.at(2), planeBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
+            DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
+            if( numberOfIntersections == 2 )
+            {
+                m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
+                m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
+
+                // linia discontinua
+                m_projectedIntersectionLines[ drawerLineOffset ]->setFirstPoint( firstIntersectionPoint );
+                m_projectedIntersectionLines[ drawerLineOffset ]->setSecondPoint( secondIntersectionPoint );
+                // linia de background
+                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setFirstPoint( firstIntersectionPoint );
+                m_backgroundProjectedIntersectionLines[ drawerLineOffset ]->setSecondPoint( secondIntersectionPoint );
+
+                m_2DViewer->getDrawer()->showGroup("ReferenceLines");
+            }
+            else
+            {
+                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada
+                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+            }
+
         }
 
-        QList< QVector<double> > lowerPlaneBounds = referencePlane->getLowerBounds();
-        numberOfIntersections = this->getIntersections( lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
-
-        // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
-        DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
-        if( numberOfIntersections == 2 )
-        {
-            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
-            m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
-
-            // linia discontinua
-            m_lowerProjectedIntersection->setFirstPoint( firstIntersectionPoint );
-            m_lowerProjectedIntersection->setSecondPoint( secondIntersectionPoint );
-            // linia de background
-            m_backgroundLowerProjectedIntersection->setFirstPoint( firstIntersectionPoint );
-            m_backgroundLowerProjectedIntersection->setSecondPoint( secondIntersectionPoint );
-
-            m_2DViewer->getDrawer()->showGroup("ReferenceLines");
-        }
-        else
-        {
-            m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
-            // si no hi ha cap intersecció apliquem el pla directament, "a veure què"
-            //TODO això és per debug ONLY!!
-//             projectPlane( referencePlane );
-        }
     }
 }
 
@@ -290,18 +269,124 @@ void ReferenceLinesTool::updateFrameOfReference()
 
 void ReferenceLinesTool::updateImagePlane()
 {
-    m_myData->setImagePlane( m_2DViewer->getCurrentImagePlane() );
+    switch( m_planesToProject )
+    {
+    case SingleImage:
+        if( m_2DViewer->isThickSlabActive() )
+        {
+            QList<ImagePlane *> planes;
+            planes << m_2DViewer->getCurrentImagePlane();
+            planes << m_2DViewer->getImagePlane( m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getCurrentPhase() );
+
+            m_myData->setPlanesToProject( planes );
+        }
+        else
+        {
+            m_myData->setPlanesToProject( m_2DViewer->getCurrentImagePlane() );
+        }
+    break;
+
+    case AllImages:
+        // TODO implementar
+    break;
+    }
+
 }
 
 void ReferenceLinesTool::refreshReferenceViewerData()
 {
-    // si es projectaven plans sobre el nostre drawer, les amaguem
+    // si es projectaven plans sobre el nostre drawer, els amaguem
     m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
     if( m_2DViewer->getInput() )
     {
         updateFrameOfReference();
         updateImagePlane();
     }
+}
+
+DrawerLine *ReferenceLinesTool::createNewLine( bool isBackgroundLine )
+{
+    DrawerLine *line = new DrawerLine;
+    // TODO sucedani d'smart pointer(TM)
+    line->increaseReferenceCount();
+
+    if( isBackgroundLine )
+        line->setColor( QColor(0,0,0) );
+    else
+    {
+        line->setColor( QColor(255,160,0) );
+        line->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+    }
+
+    return line;
+}
+
+void ReferenceLinesTool::checkAvailableLines()
+{
+    int planesToProject = m_myData->getPlanesToProject().count();
+    int neededLines = planesToProject;
+    if( m_showPlaneThickness )
+        neededLines *= 2;
+
+    // llistat de linies de background
+    int numberOfLines = m_backgroundProjectedIntersectionLines.count();
+
+    // ara comprovem pels dos llistats que estiguin be
+    if( neededLines > numberOfLines )
+    {
+        int linesToCreate = neededLines - numberOfLines;
+        // cal crear linies noves
+        for( int i=0; i<linesToCreate; i++ )
+        {
+            DrawerLine *line = createNewLine( true );
+            m_2DViewer->getDrawer()->draw( line, QViewer::Top2DPlane );
+            m_2DViewer->getDrawer()->addToGroup( line, "ReferenceLines" );
+            m_backgroundProjectedIntersectionLines << line;
+        }
+    }
+    else if( neededLines < numberOfLines )
+    {
+        int linesToRemove = numberOfLines - neededLines;
+        // tenim mes linies de les necessaries, cal esborrar
+        for( int i=0; i<linesToRemove; i++ )
+        {
+            DrawerLine *line = m_backgroundProjectedIntersectionLines.takeLast();
+            // ja no som propietaris de les línies creades, TODO sucedani d'smart pointer(TM)
+            line->decreaseReferenceCount();
+            delete line;
+        }
+    }
+
+    // llistat de linies "principals"
+    numberOfLines = m_projectedIntersectionLines.count();
+
+    // ara comprovem pels dos llistats que estiguin be
+    if( neededLines > numberOfLines )
+    {
+        int linesToCreate = neededLines - numberOfLines;
+        // cal crear linies noves
+        for( int i=0; i<linesToCreate; i++ )
+        {
+            DrawerLine *line = createNewLine();
+            m_2DViewer->getDrawer()->draw( line, QViewer::Top2DPlane );
+            m_2DViewer->getDrawer()->addToGroup( line, "ReferenceLines" );
+            m_projectedIntersectionLines << line;
+        }
+    }
+    else if( neededLines < numberOfLines )
+    {
+        int linesToRemove = numberOfLines - neededLines;
+        // tenim mes linies de les necessaries, cal esborrar
+        for( int i=0; i<linesToRemove; i++ )
+        {
+            DrawerLine *line = m_projectedIntersectionLines.takeLast();
+            // ja no som propietaris de les línies creades, TODO sucedani d'smart pointer(TM)
+            line->decreaseReferenceCount();
+            delete line;
+        }
+    }
+
+
 }
 
 }
