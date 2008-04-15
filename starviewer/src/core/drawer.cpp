@@ -130,13 +130,26 @@ void Drawer::removeAllPrimitives()
 
     foreach(DrawerPrimitive *primitive, list)
     {
-        m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
-        delete primitive;
+        // TODO atenció amb aquest tractament pel sucedani d'smart pointer.
+        // només esborrarem si ningú és propietari
+        if( !primitive->hasOwners() )
+        {
+            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+            delete primitive;
+        }
     }
 }
 
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 {
+    // TODO atenció amb aquest tractament pel sucedani d'smart pointer.
+    // només esborrarem si ningú és propietari
+    if( primitive->hasOwners() )
+    {
+        DEBUG_LOG("No esborrem la primitiva. Tenim propietaris");
+        return;
+    }
+
     // mirem si està en algun grup
     QMutableMapIterator<QString, DrawerPrimitive *> groupsIterator( m_primitiveGroups );
     while( groupsIterator.hasNext() )

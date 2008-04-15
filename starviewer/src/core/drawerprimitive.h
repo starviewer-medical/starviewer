@@ -112,13 +112,43 @@ public:
      */
     virtual bool isInsideOfBounds( double p1[3], double p2[3], int view ) = 0;
 
+    /**
+     * TODO això és una solució temporal, minimitzar el seu ús a casos molt concrets!
+     * Mètodes per emular els smart pointers.
+     * En molts casos necessitem que una primitiva creada per una classe
+     * no es pugui esborrar (ni de memòria ni del drawer) ja que aquella classe
+     * volem que sigui propietària de la primitiva i que si se'ns fa un "RemovePrimitives"
+     * no ens afecti.
+     * Mentres no tinguem alguna classe smart pointer, el més aproximat és fer-ho a través d'aquests
+     * mètodes de forma manual (at your own risk!!)
+     * De moment, si no cridem cap d'aquests mètodes, tindrem un punter com sempre, per tant
+     * quan es faci servir aquest sucedani d'smart pointer n'haurem de ser completament conscients
+     * fins que trobem una solució sòlida
+     */
+
+    /// Augmenta en 1 la referència a la primitiva. Es farà servir quan volem
+    /// ser "propietaris" d'una primitiva
+    void increaseReferenceCount();
+
+    /// Decrementa en 1 la referència a la primitiva. Després d'això donem a entendre
+    /// que ja no volem ser propietaris de la primitiva
+    void decreaseReferenceCount();
+
+    /// Ens retorna el comptatge de referències
+    /// (hauria d'equivaldre al nombre de "propietaris")
+    int getReferenceCount() const;
+
+    /// Ens diu si la primitiva té "propietaris" o no.
+    /// Retorna fals si getReferenceCount() == 0, true, altrament
+    bool hasOwners() const;
+
 public slots:
     /**
      * Mètode virtual que implementarà cada primitiva i que actualitzarà les representacions
      * com cal, segons s'indiqui. Ara mateix, el 100% dels casos serà VTK.
      * @param representation Tipus de representació a actualitzar (VTK, OpenGL, etc)
      */
-    virtual void update( int representation ){};
+    virtual void update( int representation ) = 0;
 
 signals:
     /// s'emet quan alguna de les propietats ha canviat
@@ -173,6 +203,10 @@ protected:
 
     /// Indica si alguna de les propietats s'han modificat
     bool m_modified;
+
+private:
+    /// portarà el control de reference count ( sucedani d'smart pointer(TM) )
+    int m_referenceCount;
 };
 
 }
