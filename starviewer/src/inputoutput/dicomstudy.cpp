@@ -1,7 +1,5 @@
 #include "dicomstudy.h"
 
-#include <QDir>
-
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
 
@@ -159,7 +157,7 @@ void DICOMStudy::setPacsAETitle( QString title )
 
 void DICOMStudy::setAbsPath( QString path )
 {
-    m_absPath = QDir::toNativeSeparators( path );
+    m_absPath = path;
 }
 
 void DICOMStudy::setReferringPhysiciansName( QString referringPhysiciansName )

@@ -19,8 +19,6 @@
 #include "dicomseries.h"
 #include "logging.h"
 
-#include <QDir>
-
 namespace udg {
 
 ScaleStudy::ScaleStudy()
@@ -58,7 +56,7 @@ void ScaleStudy::scale( QString studyUID )
             mask.setImageNumber( "" );
             imageRelativePath( mask ,relPath );
         }
-        absPath = QDir::toNativeSeparators( settings.getCacheImagePath() + relPath ); //creem el path absolut a la imatge a la imatge
+        absPath = settings.getCacheImagePath() + relPath; //creem el path absolut a la imatge a la imatge
 
         QImage thumbnail;
         QString modality = seriesList.getSeries().getSeriesModality();
@@ -71,7 +69,7 @@ void ScaleStudy::scale( QString studyUID )
         else
         {
             Image image;
-            image.setPath( absPath );
+            image.setPath(absPath);
             thumbnail = image.createThumbnail();
         }
 
@@ -87,7 +85,7 @@ void ScaleStudy::scale( QString studyUID )
 QString ScaleStudy::getScaledImagePath(DICOMSeries* series)
 {
     StarviewerSettings settings;
-    return QDir::toNativeSeparators( settings.getCacheImagePath() + series->getStudyUID() + "/" + series->getSeriesUID() + "/scaled.png" );
+    return settings.getCacheImagePath() + series->getStudyUID() + "/" + series->getSeriesUID() + "/scaled.png";
 }
 
 Status ScaleStudy::getSeriesOfStudy( QString studyUID , SeriesList &seriesList )
@@ -122,10 +120,10 @@ Status ScaleStudy::imageRelativePath( DicomMask mask , QString &relPath )
     {
         image = imageList.getImage();
 
-        relPath =  QDir::toNativeSeparators( QString("%1/%2/%3")
+        relPath = QString("%1/%2/%3")
             .arg( image.getStudyUID() )
             .arg( image.getSeriesUID() )
-            .arg( image.getImageName() ) );
+            .arg( image.getImageName() );
     }
     return state;
 }

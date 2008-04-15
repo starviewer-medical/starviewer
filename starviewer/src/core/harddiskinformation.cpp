@@ -5,7 +5,6 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "harddiskinformation.h"
-#include <QDir>
 
 #ifdef _WIN32
     #include <windows.h>
@@ -49,8 +48,6 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
     quint64 total;
     bool existsError = true;
 
-    path = QDir::toNativeSeparators( path );
-    
 #ifdef _WIN32
     ULARGE_INTEGER totalBytes;
 
@@ -83,8 +80,6 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
     quint64 total;
     bool existsError = true;
 
-    path = QDir::toNativeSeparators( path );
-    
 #ifdef _WIN32
     ULARGE_INTEGER freeBytes;
 

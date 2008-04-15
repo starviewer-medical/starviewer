@@ -44,10 +44,10 @@ Status DICOMDIRReader::open( QString dicomdirPath )
     //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
     if ( m_dicomdir != NULL) delete m_dicomdir;
 
-    m_dicomdirAbsolutePath = QDir::toNativeSeparators( dicomdirPath );
+    m_dicomdirAbsolutePath = dicomdirPath;
 
     //per defecte la informació dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
-    dicomdirFilePath = QDir::toNativeSeparators( dicomdirPath );
+    dicomdirFilePath = dicomdirPath;
 
     /* L'estàndard del dicom indica que l'estructura del dicomdir ha d'estar guardada en un fitxer anomeant "DICOMDIR". En linux per 
        defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules, per tant 
@@ -55,12 +55,12 @@ Status DICOMDIRReader::open( QString dicomdirPath )
        dicomdir es dirà "dicomdir" en minúscules, per aquest motiu busquem el fitxer dicomdir tan en majúscules com minúscules
     
     */
-    if ( QFile::exists( QDir::toNativeSeparators ( dicomdirPath + "/DICOMDIR" ) ) ) 
+    if ( QFile::exists( dicomdirPath + "/DICOMDIR") ) 
     {
         dicomdirFilePath.append( "/DICOMDIR" );
         m_dicomFilesInLowerCase = false;
     }
-    else if ( QFile::exists( QDir::toNativeSeparators ( dicomdirPath + "/dicomdir" ) ) )
+    else if ( QFile::exists( dicomdirPath + "/dicomdir") )
     {
         dicomdirFilePath.append( "/dicomdir" );
         m_dicomFilesInLowerCase = true;//indiquem que els fitxers estan en minúscules
@@ -209,8 +209,6 @@ Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , Series
                 seriesPath.insert( 0 , text.c_str() );//Afegim la ruta de la primera imatge dins el dicomdir
                 seriesPath = backSlashToSlash( seriesPath );
                 seriesPath = seriesPath.mid( 0 , seriesPath.toStdString().rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
-                
-                seriesPath = QDir::toNativeSeparators ( seriesPath );
                 series.setSeriesPath( seriesPath );
 
                 seriesList.insert( series );//inserim a la llista de sèrie
@@ -290,7 +288,6 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
                 imagePath.insert( 0 , m_dicomdirAbsolutePath );
                 imagePath.append( "/" ),
                 imagePath.append( backSlashToSlash ( text.c_str() ) );
-                imagePath = QDir::toNativeSeparators ( imagePath );
                 image.setImagePath( imagePath );
 
                 imageList.insert( image );//inserim a la llista la imatge*/
@@ -372,7 +369,7 @@ QStringList DICOMDIRReader::getFiles( QString studyUID )
                 }
                 else imageRelativePath = backSlashToSlash( text.c_str() );
 
-                files << QDir::toNativeSeparators ( m_dicomdirAbsolutePath + "/" + imageRelativePath );
+                files << m_dicomdirAbsolutePath + "/" + imageRelativePath;
                 imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
             }
             seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi

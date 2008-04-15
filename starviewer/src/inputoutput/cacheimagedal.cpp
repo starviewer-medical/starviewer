@@ -9,7 +9,6 @@
 
 #include <QString>
 #include <sqlite3.h>
-#include <QDir>
 
 #include "dicomimage.h"
 #include "status.h"
@@ -148,10 +147,10 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
         image.setImageNumber(atoi( reply [ 0 + i * columns ] ) );
 
         //creem el path absolut
-        absPath = QDir::toNativeSeparators( QString("%1%2/%3")
+        absPath = QString("%1%2/%3")
             .arg( reply[1 + i * columns ] )
             .arg( reply [ 3 + i * columns ]  ) //incloem el directori de la serie
-            .arg( reply [ 5 + i * columns ] ) ); //incloem el nom de la imatge
+            .arg( reply [ 5 + i * columns ] ); //incloem el nom de la imatge
 
         image.setImagePath( absPath );
 

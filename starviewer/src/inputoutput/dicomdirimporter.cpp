@@ -62,7 +62,7 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
     DICOMSeries serie;
     ScaleStudy scaleDicomStudy;
 
-    studyPath = QDir::toNativeSeparators( starviewerSettings.getCacheImagePath() + studyUID + "/" );
+    studyPath = starviewerSettings.getCacheImagePath() + studyUID + "/";
     QDir directoryCreator;
     directoryCreator.mkdir( studyPath );
 
@@ -122,7 +122,7 @@ Status DICOMDIRImporter::importSeries( QString studyUID , QString seriesUID , QS
     QString seriesPath;
     StarviewerSettings starviewerSettings;
 
-    seriesPath = QDir::toNativeSeparators( starviewerSettings.getCacheImagePath() + "/" + studyUID + "/" + seriesUID );
+    seriesPath = starviewerSettings.getCacheImagePath() + "/" + studyUID + "/" + seriesUID;
     QDir directoryCreator;
     directoryCreator.mkdir( seriesPath );
 
@@ -152,19 +152,19 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
     CacheImageDAL cacheImage;
     Status state;
 
-    cacheImagePath =QDir::toNativeSeparators( starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID() );
+    cacheImagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
 
-    if ( QFile::exists( QDir::toNativeSeparators( image.getImagePath() ) ) )//comprovem si la imatge a importar existeix
+    if ( QFile::exists( image.getImagePath() ) )//comprovem si la imatge a importar existeix
     {
-        dicomdirImagePath = QDir::toNativeSeparators( image.getImagePath() );
+        dicomdirImagePath = image.getImagePath();
     }
-    else if ( QFile::exists( QDir::toNativeSeparators( image.getImagePath().toLower() ) ) )
+    else if ( QFile::exists( image.getImagePath().toLower() ) )
     {
         /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules
            com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre 
            unitats vfat falla, per això el que fem es convertir el nom del fitxer a minúscules
          */
-        dicomdirImagePath = QDir::toNativeSeparators( image.getImagePath().toLower() );
+        dicomdirImagePath = image.getImagePath().toLower();
     }
     else 
     {

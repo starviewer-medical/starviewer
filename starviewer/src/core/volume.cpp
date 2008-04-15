@@ -345,7 +345,7 @@ QStringList Volume::getInputFiles() const
     QStringList filepaths;
     foreach (Image *image, this->getImages())
     {
-        filepaths << QDir::toNativeSeparators( image->getPath() );
+        filepaths << image->getPath();
     }
 
     return filepaths;

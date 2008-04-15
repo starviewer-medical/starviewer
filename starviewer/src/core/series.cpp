@@ -11,7 +11,7 @@
 #include "volumerepository.h"
 
 #include <QStringList>
-#include <QDir>
+
 #include <QDebug>
 
 namespace udg {
@@ -184,7 +184,7 @@ QString Series::getProtocolName() const
 
 void Series::setImagesPath( QString imagesPath )
 {
-    m_imagesPath = QDir::toNativeSeparators( imagesPath );
+    m_imagesPath = imagesPath;
 }
 
 QString Series::getImagesPath() const
@@ -355,13 +355,13 @@ void Series::addFilePath(QString filePath)
 {
     if (!m_filesPathList.contains(filePath))
     {
-        m_filesPathList.append( QDir::toNativeSeparators( filePath ) );
+        m_filesPathList.append(filePath);
     }
 }
 
 void Series::removeFilePath(QString filePath)
 {
-    int i = m_filesPathList.indexOf( QDir::toNativeSeparators( filePath ) );
+    int i = m_filesPathList.indexOf(filePath);
     if (i != -1)
     {
         m_filesPathList.removeAt(i);
@@ -378,7 +378,7 @@ QStringList Series::getImagesPathList()
     QStringList pathList;
     foreach( Image *image, m_imageSet )
     {
-        pathList << QDir::toNativeSeparators( image->getPath() );
+        pathList << image->getPath();
     }
 
     return pathList;
@@ -404,7 +404,7 @@ QString Series::toString(bool verbose)
     {
         foreach (Image *image, getImages())
         {
-            result += "            - Image " + QDir::toNativeSeparators( image->getPath() ) + "\n";
+            result += "            - Image " + image->getPath() + "\n";
         }
     }
     // TODO Idem per PS, KIN....

@@ -20,11 +20,11 @@
 void configureLogging()
 {
     // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
-    QDir logDir = QDir::toNativeSeparators( QDir::homePath() + "/.starviewer/log/" );
+    QDir logDir = QDir::homePath() + "/.starviewer/log/";
     if( !logDir.exists() )
     {
         // creem el directori
-        logDir.mkpath( QDir::toNativeSeparators( QDir::homePath() + "/.starviewer/log/" ) );
+        logDir.mkpath( QDir::homePath() + "/.starviewer/log/" );
     }
     // \TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
     // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
