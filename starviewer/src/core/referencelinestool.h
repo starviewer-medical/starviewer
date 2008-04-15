@@ -63,8 +63,12 @@ private slots:
     void resurrectPolygon();
 
 private:
-    /// Projecta el pla de referència sobre el pla de localitzador
+    /// Projecta la intersecció del pla de referència amb el localitzador, sobre el pla de localitzador
     void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane);
+
+    /// Projecta directament el pla donat, sobre el pla actual que s'està visualitzant al viewer
+    /// Aquest mètode es fa servir per "debug"
+    void projectPlane(ImagePlane *planeToProject);
 
     /**
      * Donats quatre punts d'un pla (referència) i el pla localitzador, ens dóna els punts d'intersecció
