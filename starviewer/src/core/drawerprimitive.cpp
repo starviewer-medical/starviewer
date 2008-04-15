@@ -11,7 +11,7 @@
 namespace udg {
 
 DrawerPrimitive::DrawerPrimitive(QObject *parent)
- : QObject(parent), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(Qt::green), m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0), m_modified(false)
+ : QObject(parent), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(Qt::green), m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0), m_modified(false), m_referenceCount(0)
 {
     connect( this, SIGNAL(changed()), SLOT(setModified()) );
 }
@@ -116,6 +116,30 @@ bool DrawerPrimitive::isModified() const
 {
     return m_modified;
 }
+
+// TODO mètodes de sucedani d'smart pointer
+void DrawerPrimitive::increaseReferenceCount()
+{
+    m_referenceCount++;
+}
+
+void DrawerPrimitive::decreaseReferenceCount()
+{
+    if( m_referenceCount > 0 )
+        m_referenceCount--;
+}
+
+int DrawerPrimitive::getReferenceCount() const
+{
+    return m_referenceCount;
+}
+
+bool DrawerPrimitive::hasOwners() const
+{
+    return m_referenceCount > 0;
+}
+
+// FI mètodes de sucedani d'smart pointer
 
 void DrawerPrimitive::setModified( bool modified )
 {
