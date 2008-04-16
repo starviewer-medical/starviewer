@@ -160,7 +160,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 
             int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
             DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
-            if( numberOfIntersections == 2 )
+            if( numberOfIntersections > 0 )
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
@@ -176,6 +176,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             }
             else
             {
+                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
                 m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
             }
 
@@ -184,7 +185,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 
             // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
             DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
-            if( numberOfIntersections == 2 )
+            if( numberOfIntersections > 0 )
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
@@ -200,6 +201,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             }
             else
             {
+                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
                 m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
                 // si no hi ha cap intersecció apliquem el pla directament, "a veure què"
                 //TODO això és per debug ONLY!!
@@ -213,7 +215,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
 
             int numberOfIntersections = this->getIntersections( planeBounds.at(0), planeBounds.at(1), planeBounds.at(2), planeBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
             DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
-            if( numberOfIntersections == 2 )
+            if( numberOfIntersections > 0 )
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( secondIntersectionPoint, secondIntersectionPoint );
@@ -229,7 +231,7 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             }
             else
             {
-                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada
+                // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
                 m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
             }
 
@@ -263,24 +265,22 @@ int ReferenceLinesTool::getIntersections( QVector<double> tlhc, QVector<double> 
     double localizerNormalVector[3], localizerOrigin[3];
     localizerPlane->getNormalVector( localizerNormalVector );
     localizerPlane->getOrigin( localizerOrigin );
-    if( vtkPlane::IntersectWithLine( (double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
-    {
-        numberOfIntersections = 1;
 
-        if( vtkPlane::IntersectWithLine( (double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
-        {
-            numberOfIntersections = 2;
-        }
-    }
-    else if( vtkPlane::IntersectWithLine( (double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
+    // Primera "paral·lela"
+    if( vtkPlane::IntersectWithLine( (double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
+        numberOfIntersections++;
+    if( vtkPlane::IntersectWithLine( (double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
+        numberOfIntersections++;
+
+    if( numberOfIntersections == 0 ) // provar amb la segona "paral·lela"
     {
-        numberOfIntersections = 1;
+        if( vtkPlane::IntersectWithLine( (double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
+            numberOfIntersections++;
 
         if( vtkPlane::IntersectWithLine( (double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
-        {
-            numberOfIntersections = 2;
-        }
+            numberOfIntersections++;
     }
+
     return numberOfIntersections;
 }
 
