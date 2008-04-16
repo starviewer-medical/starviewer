@@ -8,6 +8,7 @@
 #define UDGDISTANCETOOL_H
 
 #include "tool.h"
+#include <QPointer>
 
 namespace udg {
 
@@ -42,7 +43,7 @@ private:
     Q2DViewer *m_2DViewer;
 
     /// Línia que es dibuixa
-    DrawerLine *m_line;
+    QPointer<DrawerLine> m_line;
 
     /// Primer punt
     bool m_hasFirstPoint;
@@ -51,8 +52,6 @@ private:
     bool m_hasSecondPoint;
 
 };
-
-
 }
 
 #endif

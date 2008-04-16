@@ -8,6 +8,7 @@
 #define UDGANGLETOOL_H
 
 #include "tool.h"
+#include <QPointer>
 
 namespace udg {
 
@@ -62,11 +63,11 @@ private:
     Q2DViewer *m_2DViewer;
 
     ///polilinia principal: es la polilinia que ens marca la forma que hem anat editant.
-    DrawerPolyline *m_mainPolyline;
+    QPointer<DrawerPolyline> m_mainPolyline;
 
     ///polilinia de la circumferencia de l'angle.
-    DrawerPolyline *m_circumferencePolyline;
-    
+    QPointer<DrawerPolyline> m_circumferencePolyline;
+        
     ///estat de la tool
     int m_state;
     
