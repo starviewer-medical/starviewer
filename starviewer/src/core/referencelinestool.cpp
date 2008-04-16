@@ -62,6 +62,17 @@ ReferenceLinesTool::~ReferenceLinesTool()
 //     m_projectedReferencePlane->decreaseReferenceCount();
 //     // ara al fer delete, s'esborraran automàticament del drawer, ja que nosaltres érem els únics propietaris
 //     delete m_projectedReferencePlane;
+    // Cal esborrar les línies que hàgim creat
+    foreach( DrawerLine *line, m_projectedIntersectionLines )
+    {
+        line->decreaseReferenceCount();
+        delete line;
+    }
+    foreach( DrawerLine *backgroundLine, m_backgroundProjectedIntersectionLines )
+    {
+        backgroundLine->decreaseReferenceCount();
+        delete backgroundLine;
+    }
 }
 
 void ReferenceLinesTool::setToolData(ToolData * data)
