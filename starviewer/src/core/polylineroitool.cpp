@@ -42,6 +42,13 @@ PolylineROITool::PolylineROITool( QViewer *viewer, QObject *parent )
 
 PolylineROITool::~PolylineROITool()
 {
+    if ( m_mainPolyline )
+        delete m_mainPolyline;
+    
+    if ( m_closingPolyline )
+        delete m_closingPolyline;
+    
+    m_2DViewer->getDrawer()->refresh();
 }
 
 void PolylineROITool::handleEvent( long unsigned eventID )
@@ -603,7 +610,7 @@ void PolylineROITool::closeForm()
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
     delete m_closingPolyline;
-    //\TODO cal aquesta assignació de NULLs??
+    
     m_closingPolyline=NULL;
     m_mainPolyline=NULL;
     m_2DViewer->getDrawer()->refresh();
