@@ -11,6 +11,7 @@
 
 class vtkWindowToImageFilter;
 class vtkRenderWindow;
+class QString;
 
 namespace udg {
 
@@ -35,6 +36,18 @@ public:
 private slots:
     /// Captura la imatge actual
     void screenShot();
+    
+    ///llegeix les configuracions que han estat guardades
+    void readSettings();
+
+    ///guarda les configuracions
+    void writeSettings();
+    
+    ///decodifica el nom del fitxer a partir de tot el path
+    void decodeFileName( QString fileName );
+    
+    ///composa un nom de fitxer per defecte
+    QString compoundSelectedName();
 
 private:
     /// El filtre per obtenir la imatge
@@ -42,6 +55,15 @@ private:
 
     ///El render window, necessari per al filtre per desar la imatge
     vtkRenderWindow *m_renderWindow;
+    
+    ///path de l'última imatge guardada
+    QString m_lastScreenShotPath;
+    
+    ///extensió de l'última imatge guardada
+    QString m_lastScreenShotExtension;
+    
+    ///nom de l'última imatge guardada
+    QString m_lastScreenShotName;
 };
 
 }
