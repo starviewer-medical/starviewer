@@ -85,8 +85,8 @@ void ReferenceLinesTool::setToolData(ToolData * data)
 
 void ReferenceLinesTool::updateProjectionLines()
 {
-    // en cas que no sigui el viewer que estem modificant
-    if( !m_2DViewer->isActive() )
+    // en cas que no sigui el viewer que estem modificant i que tingui input
+    if( !m_2DViewer->isActive() && m_2DViewer->getInput() )
     {
         // intentarem projectar el pla que hi ha a m_myData
         // primer cal que comparteixin el mateix FrameOfReference
@@ -95,14 +95,29 @@ void ReferenceLinesTool::updateProjectionLines()
             QList<ImagePlane *> planesToProject = m_myData->getPlanesToProject();
             // primer comprovar si tenim el nombre adequat de linies creades, donat el nombre de plans a projectar
             checkAvailableLines();
-            int drawerLineOffset = 0;
-            foreach( ImagePlane *referencePlane, planesToProject )
+            if( planesToProject.count() == 0 )
             {
-                // aquí ja ho deixem en mans de la projecció
-                projectIntersection( referencePlane, m_2DViewer->getCurrentImagePlane(), drawerLineOffset );
-                drawerLineOffset += m_showPlaneThickness ? 2 : 1;
+                m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+            }
+            else
+            {
+                int drawerLineOffset = 0;
+                foreach( ImagePlane *referencePlane, planesToProject )
+                {
+                    // aquí ja ho deixem en mans de la projecció
+                    projectIntersection( referencePlane, m_2DViewer->getCurrentImagePlane(), drawerLineOffset );
+                    drawerLineOffset += m_showPlaneThickness ? 2 : 1;
+                }
             }
         }
+        else
+        {
+            m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
+        }
+    }
+    else
+    {
+        m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
     }
 }
 
