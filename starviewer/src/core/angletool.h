@@ -44,6 +44,7 @@ private:
     ///ens simula el primer segment de l'angle respecte el punt on està el mouse.
     void simulateFirstSegmentOfAngle();
     
+    ///ens simula el segon segment de l'angle respecte el punt on està el mouse.
     void simulateSecondSegmentOfAngle();
     
     void computeSecondSegmentLimit( double point1[3], double point2[3] );

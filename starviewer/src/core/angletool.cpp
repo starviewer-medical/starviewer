@@ -42,7 +42,17 @@ AngleTool::AngleTool( QViewer *viewer, QObject *parent )
 }
 
 AngleTool::~AngleTool()
-{}
+{
+    if ( m_state != NONE )
+    {
+        if ( m_mainPolyline )
+            delete m_mainPolyline;
+        if (m_circumferencePolyline )
+            delete m_circumferencePolyline;
+        
+        m_2DViewer->getDrawer()->refresh();
+    }
+}
 
 void AngleTool::handleEvent( long unsigned eventID )
 {
