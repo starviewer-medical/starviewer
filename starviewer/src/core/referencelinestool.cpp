@@ -81,6 +81,14 @@ void ReferenceLinesTool::setToolData(ToolData * data)
     m_myData = qobject_cast<ReferenceLinesToolData *>(data);
     // quan canvïn les dades (ImagePlane), actualitzem les línies de projecció
     connect( m_toolData, SIGNAL(changed()), SLOT(updateProjectionLines()) );
+
+    // això serveix perquè s'apliqui tot just quan es creïi la tool
+    // amb múltiples viewers
+    if( m_2DViewer->isActive() )
+    {
+        refreshReferenceViewerData();
+    }
+    updateProjectionLines();
 }
 
 void ReferenceLinesTool::updateProjectionLines()
