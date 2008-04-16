@@ -86,6 +86,18 @@ void AngleTool::handleEvent( long unsigned eventID )
                 
             m_2DViewer->getDrawer()->refresh();
         break;
+        
+        case vtkCommand::LeaveEvent:
+            //en aquest cas considerem que l'usuari no vol anotar, per tant ens carreguem les primitives.
+            if ( !m_mainPolyline.isNull() )
+                delete m_mainPolyline;
+            
+            if ( !m_circumferencePolyline.isNull() )
+                delete m_circumferencePolyline;
+        
+            m_state = NONE;            
+            m_2DViewer->getDrawer()->refresh();
+        break;
     }
 }
 

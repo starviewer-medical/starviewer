@@ -60,6 +60,13 @@ void DistanceTool::handleEvent( long unsigned eventID )
                 m_2DViewer->getDrawer()->refresh();
             }
             break;
+        case vtkCommand::LeaveEvent:
+            //en aquest cas considerem que l'usuari no vol anotar, per tant ens carreguem les primitives.
+            if ( !m_line.isNull() )
+                delete m_line;
+        
+            m_2DViewer->getDrawer()->refresh();
+            break;
     }
 }
 

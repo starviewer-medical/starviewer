@@ -8,6 +8,7 @@
 #define UDGPOLYLINEROITOOL_H
 
 #include "tool.h"
+#include <QPointer>
 
 namespace udg {
 
@@ -59,10 +60,10 @@ private:
     Q2DViewer *m_2DViewer;
 
     ///polilinia principal: es la polilinia que ens marca la forma que hem anat editant.
-    DrawerPolyline *m_mainPolyline;
-
+    QPointer<DrawerPolyline> m_mainPolyline;
+    
     ///polilinia de tancament: es la polilinia que ens simula com quedaria la polilinia principal si es tanques, es a dir, uneix l'ultim punt anotat i el primer punt de la polilinia.
-    DrawerPolyline *m_closingPolyline;
+    QPointer<DrawerPolyline> m_closingPolyline;
 };
 
 }
