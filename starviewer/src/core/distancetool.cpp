@@ -33,11 +33,16 @@ DistanceTool::DistanceTool( QViewer *viewer, QObject *parent )
     m_hasFirstPoint = false;
     m_hasSecondPoint = false;
 
-    DEBUG_LOG("DISTANCE TOOL CREADA ");
+    //DEBUG_LOG("DISTANCE TOOL CREADA ");
 }
 
 DistanceTool::~DistanceTool()
 {
+    if ( m_line )
+    {
+        delete m_line;
+        m_2DViewer->getDrawer()->refresh();
+    }
 }
 
 void DistanceTool::handleEvent( long unsigned eventID )
@@ -106,7 +111,6 @@ void DistanceTool::annotateNewPoint()
         text->setAttatchmentPoint( middlePoint );
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-
 
         m_line = NULL;//Acabem la linia. Encara no sabem com s'obtindran per modificar
     }
