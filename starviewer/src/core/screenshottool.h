@@ -43,9 +43,6 @@ private slots:
     ///guarda les configuracions
     void writeSettings();
     
-    ///decodifica el nom del fitxer a partir de tot el path
-    void decodeFileName( QString fileName );
-    
     ///composa un nom de fitxer per defecte
     QString compoundSelectedName();
 
