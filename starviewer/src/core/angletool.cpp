@@ -89,10 +89,10 @@ void AngleTool::handleEvent( long unsigned eventID )
         
         case vtkCommand::LeaveEvent:
             //en aquest cas considerem que l'usuari no vol anotar, per tant ens carreguem les primitives.
-            if ( !m_mainPolyline.isNull() )
+            if ( !m_mainPolyline.isNull() && m_state != NONE )
                 delete m_mainPolyline;
             
-            if ( !m_circumferencePolyline.isNull() )
+            if ( !m_circumferencePolyline.isNull() &&  m_state != NONE )
                 delete m_circumferencePolyline;
         
             m_state = NONE;            
