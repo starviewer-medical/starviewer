@@ -17,6 +17,7 @@
 #include <vtkJPEGWriter.h>
 #include <vtkBMPWriter.h>
 
+#include <QFileInfo>
 #include <QFileDialog>
 #include <QSettings>
 
@@ -57,21 +58,21 @@ void ScreenShotTool::handleEvent( unsigned long eventID )
 
 void ScreenShotTool::screenShot()
 {
-    QFileDialog saveAsDialog(0);
-    saveAsDialog.setWindowTitle( tr("Save screenshot as...") );
-    saveAsDialog.setDirectory( m_lastScreenShotPath );
+    QFileDialog *saveAsDialog = new QFileDialog(0);
+    saveAsDialog->setWindowTitle( tr("Save screenshot as...") );
+    saveAsDialog->setDirectory( m_lastScreenShotPath );
     QStringList filters;
     filters << tr("PNG (*.png)") << tr("Jpeg (*.jpg)") << tr("BMP (*.bmp)");
-    saveAsDialog.setFilters( filters );
-    saveAsDialog.selectFilter ( m_lastScreenShotExtension );
-    saveAsDialog.setFileMode( QFileDialog::AnyFile );
-    saveAsDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveAsDialog.selectFile( compoundSelectedName() );    
-    saveAsDialog.setConfirmOverwrite( true );
+    saveAsDialog->setFilters( filters );
+    saveAsDialog->selectFilter ( m_lastScreenShotExtension );
+    saveAsDialog->setFileMode( QFileDialog::AnyFile );
+    saveAsDialog->setAcceptMode( QFileDialog::AcceptSave );
+    saveAsDialog->selectFile( compoundSelectedName() );    
+    saveAsDialog->setConfirmOverwrite( true );
 
     QStringList fileNames;
-    if( saveAsDialog.exec() )
-        fileNames = saveAsDialog.selectedFiles();
+    if( saveAsDialog->exec() )
+        fileNames = saveAsDialog->selectedFiles();
 
     if( fileNames.isEmpty() )
         return;
@@ -80,19 +81,19 @@ void ScreenShotTool::screenShot()
 
     vtkImageWriter *imageWriter;
     QString pattern( ("%s.") );
-    if( saveAsDialog.selectedFilter() == tr("PNG (*.png)") )
+    if( saveAsDialog->selectedFilter() == tr("PNG (*.png)") )
     {
         imageWriter = vtkPNGWriter::New();
         pattern += "png";
         m_lastScreenShotExtension = tr("PNG (*.png)");
     }
-    else if( saveAsDialog.selectedFilter() == tr("Jpeg (*.jpg)") )
+    else if( saveAsDialog->selectedFilter() == tr("Jpeg (*.jpg)") )
     {
         imageWriter = vtkJPEGWriter::New();
         pattern += "jpg";
         m_lastScreenShotExtension = tr("Jpeg (*.jpg)");
     }
-    else if( saveAsDialog.selectedFilter() == tr("BMP (*.bmp)") )
+    else if( saveAsDialog->selectedFilter() == tr("BMP (*.bmp)") )
     {
         imageWriter = vtkBMPWriter::New();
         pattern += "bmp";
@@ -103,6 +104,12 @@ void ScreenShotTool::screenShot()
         DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
         return;
     }
+    
+    //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
+    m_lastScreenShotPath = saveAsDialog->directory().path();
+    
+    delete saveAsDialog;
+    
     m_windowToImageFilter->Update();
     m_windowToImageFilter->Modified();
     vtkImageData *image = m_windowToImageFilter->GetOutput();
@@ -111,28 +118,9 @@ void ScreenShotTool::screenShot()
     imageWriter->SetFilePrefix( qPrintable( fileName ) );
     imageWriter->SetFilePattern( qPrintable( pattern ) );
     imageWriter->Write();
-    // \TODO en alguns casos,a la imatge resultant s'hi pinta el diàleg. Mirar de solventar-ho. Una solució seria fer un close del diàleg just abans d'executar el filtre o inclús podríem fer que fos un punter i fer-ne un delete per estar més segurs.
     
-    //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
-    m_lastScreenShotPath = saveAsDialog.directory().path();
-    
-    decodeFileName( fileName );
-}
-
-void ScreenShotTool::decodeFileName( QString fileName )
-{
-    QStringList listUnix = fileName.split("/");
-    QStringList listWindows = fileName.split("\\");
-    
-    if ( !listUnix.isEmpty() )
-        m_lastScreenShotName = listUnix.last();
-    else if ( !listWindows.isEmpty() )
-        m_lastScreenShotName = listWindows.last();
-    else
-    {
-        //en aquesta branca no hauria d'entrar mai
-        m_lastScreenShotName = "image";
-    }
+    //guardem el nom de l'ultim fitxer
+    m_lastScreenShotName = QFileInfo(fileName).fileName(); 
 }
 
 QString ScreenShotTool::compoundSelectedName()
