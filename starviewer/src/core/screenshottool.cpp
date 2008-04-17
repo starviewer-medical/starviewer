@@ -20,13 +20,13 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QSettings>
+#include <QMessageBox>
 
 namespace udg {
 
 ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer,parent)
 {
     m_toolName = "ScreenShotTool";
-    
     readSettings();
     
     m_windowToImageFilter = vtkWindowToImageFilter::New();
@@ -39,6 +39,7 @@ ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer
     }
     else
         DEBUG_LOG( "El viewer proporcionat és NUL!" );
+    
 }
 
 ScreenShotTool::~ScreenShotTool()
@@ -71,56 +72,83 @@ void ScreenShotTool::screenShot()
     saveAsDialog->setConfirmOverwrite( true );
 
     QStringList fileNames;
-    if( saveAsDialog->exec() )
-        fileNames = saveAsDialog->selectedFiles();
-
-    if( fileNames.isEmpty() )
-        return;
+    QString selectedFilter;
+    int overWrite = 0;
+    QString fileName;
     
-    QString fileName = fileNames.first();
-
-    vtkImageWriter *imageWriter;
-    QString pattern( ("%s.") );
-    if( saveAsDialog->selectedFilter() == tr("PNG (*.png)") )
-    {
-        imageWriter = vtkPNGWriter::New();
-        pattern += "png";
-        m_lastScreenShotExtension = tr("PNG (*.png)");
-    }
-    else if( saveAsDialog->selectedFilter() == tr("Jpeg (*.jpg)") )
-    {
-        imageWriter = vtkJPEGWriter::New();
-        pattern += "jpg";
-        m_lastScreenShotExtension = tr("Jpeg (*.jpg)");
-    }
-    else if( saveAsDialog->selectedFilter() == tr("BMP (*.bmp)") )
-    {
-        imageWriter = vtkBMPWriter::New();
-        pattern += "bmp";
-        m_lastScreenShotExtension = tr("BMP (*.bmp)");
-    }
-    else
-    {
-        DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
-        return;
-    }
+    connect( saveAsDialog, SIGNAL( rejected() ),this, SLOT( userCancellation() ) );
     
-    //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
-    m_lastScreenShotPath = saveAsDialog->directory().path();
+    do
+    {
+        m_userCancellation = false;
+        
+        if( saveAsDialog->exec() )
+        {
+            fileNames = saveAsDialog->selectedFiles();
+            selectedFilter = saveAsDialog->selectedFilter();
+        }
+        
+        if( fileNames.isEmpty() )
+        {
+            delete saveAsDialog;
+            return;
+        }
+        
+        fileName = fileNames.first();
     
+        //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
+        m_lastScreenShotPath = saveAsDialog->directory().path();
+    
+        if ( QFileInfo( fileName + selectedFilter.mid(selectedFilter.length() - 5, 4) ).exists() && !m_userCancellation )
+        {
+            //0 -> Yes; 1->No
+            overWrite = QMessageBox::information( 0, tr( "existing file" ), tr( "This file is already created. Do you want to replace it?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
+        }
+        
+    }while( overWrite != 0 && !m_userCancellation );
+        
     delete saveAsDialog;
     
-    m_windowToImageFilter->Update();
-    m_windowToImageFilter->Modified();
-    vtkImageData *image = m_windowToImageFilter->GetOutput();
-
-    imageWriter->SetInput( image );
-    imageWriter->SetFilePrefix( qPrintable( fileName ) );
-    imageWriter->SetFilePattern( qPrintable( pattern ) );
-    imageWriter->Write();
+    if ( overWrite == 0 && !m_userCancellation )
+    {
+        vtkImageWriter *imageWriter;
+        QString pattern( ("%s.") );
+        if( selectedFilter == tr("PNG (*.png)") )
+        {
+            imageWriter = vtkPNGWriter::New();
+            pattern += "png";
+            m_lastScreenShotExtension = tr("PNG (*.png)");
+        }
+        else if( selectedFilter == tr("Jpeg (*.jpg)") )
+        {
+            imageWriter = vtkJPEGWriter::New();
+            pattern += "jpg";
+            m_lastScreenShotExtension = tr("Jpeg (*.jpg)");
+        }
+        else if( selectedFilter == tr("BMP (*.bmp)") )
+        {
+            imageWriter = vtkBMPWriter::New();
+            pattern += "bmp";
+            m_lastScreenShotExtension = tr("BMP (*.bmp)");
+        }
+        else
+        {
+            DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
+            return;
+        }
+        
+        m_windowToImageFilter->Update();
+        m_windowToImageFilter->Modified();
+        vtkImageData *image = m_windowToImageFilter->GetOutput();
     
-    //guardem el nom de l'ultim fitxer
-    m_lastScreenShotName = QFileInfo(fileName).fileName(); 
+        imageWriter->SetInput( image );
+        imageWriter->SetFilePrefix( qPrintable( fileName ) );
+        imageWriter->SetFilePattern( qPrintable( pattern ) );
+        imageWriter->Write();
+        
+        //guardem el nom de l'ultim fitxer
+        m_lastScreenShotName = QFileInfo(fileName).fileName(); 
+    }
 }
 
 QString ScreenShotTool::compoundSelectedName()
@@ -173,6 +201,11 @@ void ScreenShotTool::writeSettings()
     settings.setValue("defaultSaveExtension", m_lastScreenShotExtension );
     settings.setValue("defaultSaveName", m_lastScreenShotName );
     settings.endGroup();
+}
+
+void ScreenShotTool:: userCancellation()
+{
+    m_userCancellation = true; 
 }
 
 }
