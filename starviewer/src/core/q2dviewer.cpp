@@ -1661,6 +1661,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
                     imagePlane->setThickness( spacing[1] );
                     imagePlane->setRows( dimensions[0] );
                     imagePlane->setColumns( dimensions[2] );
+
                     // TODO falta esbrinar si l'origen que estem donant es bo o no
                     imagePlane->setOrigin( origin[0] + dirCosines[3]*sliceNumber*spacing[1],
                                            origin[1] + dirCosines[4]*sliceNumber*spacing[1],
@@ -1728,42 +1729,26 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
         Image *firstImage = m_mainVolume->getImages().at(0);
         const double *ori = firstImage->getImagePositionPatient();
 
-//         for( int i = 0; i<3; i++ )
-//             projectedPoint[i] = homogeneousProjectedPoint[i] + ori[i];
+        // segons si hem fet una reconstrucció ortogonal haurem de fer
+        // alguns canvis sobre la projecció
         switch( m_lastView )
         {
             case Axial:
-            {
                 for( int i = 0; i<3; i++ )
                     projectedPoint[i] = homogeneousProjectedPoint[i] + ori[i];
-
             break;
-            }
 
-            case Coronal:
-            {
-//                 for( int i = 0; i<3; i++ )
-//                     projectedPoint[i] = pointToProject[i];
-
-                projectedPoint[0] = homogeneousProjectedPoint[0] + ori[0];
-                projectedPoint[2] = homogeneousProjectedPoint[1] + ori[2];
-                projectedPoint[1] = homogeneousProjectedPoint[2] + ori[1];
-            break;
-            }
             case Sagital:
-            {
-//                 for( int i = 0; i<3; i++ )
-//                     projectedPoint[i] = homogeneousProjectedPoint[i] + ori[i];
-//                 for( int i = 0; i<3; i++ )
-//                     projectedPoint[i] = pointToProject[i];
-
-
                 projectedPoint[1] = homogeneousProjectedPoint[0] + ori[1];
                 projectedPoint[2] = homogeneousProjectedPoint[1] + ori[2];
                 projectedPoint[0] = homogeneousProjectedPoint[2] + ori[0];
             break;
-            }
 
+            case Coronal:
+                projectedPoint[0] = homogeneousProjectedPoint[0] + ori[0];
+                projectedPoint[2] = homogeneousProjectedPoint[1] + ori[2];
+                projectedPoint[1] = homogeneousProjectedPoint[2] + ori[1];
+            break;
         }
     }
     else
