@@ -46,6 +46,9 @@ private slots:
     ///composa un nom de fitxer per defecte
     QString compoundSelectedName();
 
+    ///slot per tractar el cas que es produeix quan l'usuari cancel·la el procés de guardar amb el botó Cancel o la creueta de la finestra.
+    void userCancellation();
+    
 private:
     /// El filtre per obtenir la imatge
     vtkWindowToImageFilter *m_windowToImageFilter;
@@ -61,6 +64,9 @@ private:
     
     ///nom de l'última imatge guardada
     QString m_lastScreenShotName;
+    
+    ///per saber si l'usuari ha cancel·lat l'operació de guardat
+    bool m_userCancellation;
 };
 
 }
