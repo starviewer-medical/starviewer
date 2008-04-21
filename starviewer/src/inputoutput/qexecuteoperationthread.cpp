@@ -45,6 +45,11 @@ QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
 
 QExecuteOperationThread::~QExecuteOperationThread()
 {
+    if ( isRunning() )//Si s'està executan el thread el matem, perquè estem tancant l'aplicació, sinó el thread queda per sota obert
+    {
+        terminate();
+        wait();//Hem d'esperar que es mati el thread per poder continuar
+    }
 }
 
 void QExecuteOperationThread::queueOperation(Operation operation)
