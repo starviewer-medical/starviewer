@@ -91,7 +91,11 @@ void QueryScreen::initialize()
     m_fromStudyDate->setDate( QDate::currentDate() );
     m_toStudyDate->setDate( QDate::currentDate() );
 
-    m_operationStateScreen = new udg::QOperationStateScreen;
+    /* Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
+     * el QOperationStateScreen també es tancarà
+     */
+    m_operationStateScreen = new udg::QOperationStateScreen( this->parentWidget() );
+
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
