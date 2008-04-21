@@ -65,6 +65,11 @@ QueryScreen::~QueryScreen()
 {
     StarviewerSettings settings;
 
+    /*sinó fem un this.close i tenim la finestra queryscreen oberta al tancar l'starviewer, l'starviewer no finalitza
+     *desapareixen les finestres, però el procés continua viu
+     */
+    this->close();
+
     //guardem la posició en que es troba la pantalla
     settings.setQueryScreenWindowPositionX( x() );
     settings.setQueryScreenWindowPositionY( y() );
