@@ -355,7 +355,12 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
         if( m_state == ROTATING )
             rotateSagitalViewAxisActor();
         else if( m_state == PUSHING )
-            pushSagitalViewAxisActor();
+        {
+            if ( m_pickedActorPlaneSource == m_coronalPlaneSource )
+                pushSagitalViewCoronalAxisActor();
+            else
+                pushSagitalViewAxialAxisActor();        
+        }
     break;
 
     default:
@@ -614,6 +619,31 @@ void QMPRExtension::detectPushAxialViewAxisActor()
     }
 }
 
+void QMPRExtension::pushSagitalViewCoronalAxisActor()
+{
+    this->setCursor( QCursor( Qt::ClosedHandCursor ) );
+    // obtenim el punt que s'ha clicat
+    int x, y;
+    x = m_sagital2DView->getEventPositionX();
+    y = m_sagital2DView->getEventPositionY();
+    double toWorld[4];
+    m_axial2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x, y , 0 , toWorld );
+
+    // Get the motion vector
+    //
+    double v[3];
+    v[1] = toWorld[0] - m_initialPickX;
+    v[2] = toWorld[1] - m_initialPickY;
+    v[0] = 0.0;
+
+    m_pickedActorPlaneSource->Push( vtkMath::Dot( v, m_pickedActorPlaneSource->GetNormal() ) );
+    updatePlanes();
+    updateControls();
+
+    m_initialPickX = toWorld[0];
+    m_initialPickY = toWorld[1];
+}
+
 void QMPRExtension::pushAxialViewAxisActor()
 {
     this->setCursor( QCursor( Qt::ClosedHandCursor ) );
@@ -673,23 +703,39 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     // únicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
     double *r1 , *r2;
-    double distanceToAxial;
+    double distanceToAxial, distanceToCoronal;
 
     r1 = m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
     distanceToAxial = vtkLine::DistanceToLine( point , r1 , r2 );
 
+    r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
+    r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
+    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+
     // donem una "tolerància" mínima
-    if(  distanceToAxial < 50.0 )
+    if( distanceToCoronal < 50.0 || distanceToAxial < 50.0 )
     {
-        m_pickedActorPlaneSource = m_axialPlaneSource;
+        this->setCursor( QCursor( Qt::OpenHandCursor ) );
+        //desactivem les tools perquè no facin interferència
+        m_toolManager->disableAllToolsTemporarily();
+        if( distanceToCoronal < distanceToAxial )
+        {
+            m_pickedActorPlaneSource = m_coronalPlaneSource;
+            m_pickedActorReslice = m_coronalReslice;
+        }
+        else
+        {
+            m_pickedActorPlaneSource = m_axialPlaneSource;
+            m_pickedActorReslice = m_sagitalReslice;
+        }
+        m_state = PUSHING;
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
-        m_state = PUSHING;
     }
 }
 
-void QMPRExtension::pushSagitalViewAxisActor()
+void QMPRExtension::pushSagitalViewAxialAxisActor()
 {
     // obtenim el punt que s'ha clicat
     int x, y;
@@ -711,6 +757,8 @@ void QMPRExtension::releasePushSagitalViewAxisActor()
     m_coronal2DView->refresh();
     m_pickedActorPlaneSource = 0;
     m_pickedActorReslice = 0;
+    this->setCursor( QCursor( Qt::ArrowCursor ) );
+    m_toolManager->undoDisableAllToolsTemporarily();
     m_state = NONE;
 }
 
