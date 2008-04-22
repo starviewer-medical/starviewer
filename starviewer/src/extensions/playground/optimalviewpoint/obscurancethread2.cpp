@@ -825,7 +825,7 @@ inline double ObscuranceThread2::obscurance( double distance ) const
         case OptimalViewpointVolume::Constant0: return 0.0;
         case OptimalViewpointVolume::Distance: return distance / m_obscuranceMaximumDistance;
         case OptimalViewpointVolume::SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
-        case OptimalViewpointVolume::Exponential: return 1.0 - exp( distance / m_obscuranceMaximumDistance );
+        case OptimalViewpointVolume::Exponential: return 1.0 - exp( -distance / m_obscuranceMaximumDistance );
     }
 }
 
