@@ -9,7 +9,8 @@ SUBDIRS = diffusionperfusionsegmentation \
           rectumsegmentation \
           volume3dviewtesting \
           mprcardiac3d \
-          cardiac2dviewer
+          cardiac2dviewer \
+	  volumecontourdelimiter
 
 include(../../extensions.inc)
 
