@@ -319,6 +319,14 @@ void QOptimalViewpointExtension::readParameter( int index )
                 m_obscurancesFactorDoubleSpinBox->setValue( m_parameters->getObscurancesFactor() );
                 break;
 
+            case OptimalViewpointParameters::ObscurancesFilterLow:
+                m_obscurancesFilterLowDoubleSpinBox->setValue( m_parameters->getObscurancesFilterLow() );
+                break;
+
+            case OptimalViewpointParameters::ObscurancesFilterHigh:
+                m_obscurancesFilterHighDoubleSpinBox->setValue( m_parameters->getObscurancesFilterHigh() );
+                break;
+
             case OptimalViewpointParameters::NumberOfPlanes:
                 m_comboNumberOfPlanes->setCurrentIndex( m_comboNumberOfPlanes->findText( QString::number( m_parameters->getNumberOfPlanes() ) ) );
                 break;
@@ -364,6 +372,8 @@ void QOptimalViewpointExtension::doVisualization()
     m_parameters->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
     m_parameters->setObscurances( m_obscurancesCheckBox->isChecked() );
     m_parameters->setObscurancesFactor( m_obscurancesFactorDoubleSpinBox->value() );
+    m_parameters->setObscurancesFilterLow( m_obscurancesFilterLowDoubleSpinBox->value() );
+    m_parameters->setObscurancesFilterHigh( m_obscurancesFilterHighDoubleSpinBox->value() );
 
     m_viewerWidget->render();
 }

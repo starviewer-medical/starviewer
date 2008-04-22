@@ -32,7 +32,8 @@ vtkStandardNewMacro(vtkVolumeRayCastCompositeFunctionObscurances);
 // and does not perform shading.
 template <class T>
 void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                          vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance, double aObscuranceFactor )
+                          vtkVolumeRayCastStaticInfo *staticInfo,
+                          double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
 {
   int             value=0;
   unsigned char   *grad_mag_ptr = NULL;
@@ -149,8 +150,11 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
       //////////////////////////////////////////////////////////////////////////////////////////////
 //       accum_red_intensity   += ( opacity * remaining_opacity * 
 //                                  GTF[(value)] );
+      double obscurance = aObscurance[offset];
+      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
       accum_red_intensity   += ( opacity * remaining_opacity * 
-                                 GTF[(value)] ) * aObscuranceFactor * aObscurance[offset];
+                                 GTF[(value)] ) * aObscuranceFactor * obscurance;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
@@ -211,12 +215,15 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //                                  CTF[(value)*3 + 1] );
 //       accum_blue_intensity  += ( opacity * remaining_opacity * 
 //                                  CTF[(value)*3 + 2] );
+      double obscurance = aObscurance[offset];
+      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
       accum_red_intensity   += ( opacity * remaining_opacity * 
-                                 CTF[(value)*3] ) * aObscuranceFactor * aObscurance[offset];
+                                 CTF[(value)*3] ) * aObscuranceFactor * obscurance;
       accum_green_intensity += ( opacity * remaining_opacity * 
-                                 CTF[(value)*3 + 1] ) * aObscuranceFactor * aObscurance[offset];
+                                 CTF[(value)*3 + 1] ) * aObscuranceFactor * obscurance;
       accum_blue_intensity  += ( opacity * remaining_opacity * 
-                                 CTF[(value)*3 + 2] ) * aObscuranceFactor * aObscurance[offset];
+                                 CTF[(value)*3 + 2] ) * aObscuranceFactor * obscurance;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
@@ -500,7 +507,8 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 // perform shading.
 template <class T>
 void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                           vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance, double aObscuranceFactor )
+                           vtkVolumeRayCastStaticInfo *staticInfo,
+                           double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
 {
   int             value;
   unsigned char   *grad_mag_ptr = NULL;
@@ -662,7 +670,10 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
       // Accumulate the shaded intensity and opacity of this sample
       //////////////////////////////////////////////////////////////////////////////////////////////
 //       accum_red_intensity += red_shaded_value;
-      accum_red_intensity += red_shaded_value * aObscuranceFactor * aObscurance[offset];
+      double obscurance = aObscurance[offset];
+      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+      accum_red_intensity += red_shaded_value * aObscuranceFactor * obscurance;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
     
@@ -746,9 +757,12 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
 //       accum_red_intensity += red_shaded_value;
 //       accum_green_intensity += green_shaded_value;
 //       accum_blue_intensity += blue_shaded_value;
-      accum_red_intensity += red_shaded_value * aObscuranceFactor * aObscurance[offset];
-      accum_green_intensity += green_shaded_value * aObscuranceFactor * aObscurance[offset];
-      accum_blue_intensity += blue_shaded_value * aObscuranceFactor * aObscurance[offset];
+      double obscurance = aObscurance[offset];
+      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+      accum_red_intensity += red_shaded_value * aObscuranceFactor * obscurance;
+      accum_green_intensity += green_shaded_value * aObscuranceFactor * obscurance;
+      accum_blue_intensity += blue_shaded_value * aObscuranceFactor * obscurance;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
     
@@ -1096,7 +1110,8 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
 // does not compute shading
 template <class T>
 void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                       vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance, double aObscuranceFactor )
+                                       vtkVolumeRayCastStaticInfo *staticInfo,
+                                       double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -1295,6 +1310,8 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         // Accumulate intensity and opacity for this sample location
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         accum_red_intensity   += remaining_opacity * red_value;
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         accum_red_intensity   += remaining_opacity * red_value * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         remaining_opacity *= (1.0 - opacity);
@@ -1425,6 +1442,8 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         accum_red_intensity   += remaining_opacity * red_value;
 //         accum_green_intensity += remaining_opacity * green_value;
 //         accum_blue_intensity  += remaining_opacity * blue_value;
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         accum_red_intensity   += remaining_opacity * red_value * aObscuranceFactor * obscurance;
         accum_green_intensity += remaining_opacity * green_value * aObscuranceFactor * obscurance;
         accum_blue_intensity  += remaining_opacity * blue_value * aObscuranceFactor * obscurance;
@@ -1860,7 +1879,8 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 // does perform shading.
 template <class T>
 void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                     vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance, double aObscuranceFactor )
+                                     vtkVolumeRayCastStaticInfo *staticInfo,
+                                     double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -2112,6 +2132,8 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
         // Accumulate intensity and opacity for this sample location
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         accum_red_intensity   += red_shaded_value * remaining_opacity;
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         accum_red_intensity   += red_shaded_value * remaining_opacity * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         remaining_opacity *= (1.0 - opacity);
@@ -2294,6 +2316,8 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
 //         accum_red_intensity   += red_shaded_value   * remaining_opacity;
 //         accum_green_intensity += green_shaded_value * remaining_opacity;
 //         accum_blue_intensity  += blue_shaded_value  * remaining_opacity;
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         accum_red_intensity   += red_shaded_value   * remaining_opacity * aObscuranceFactor * obscurance;
         accum_green_intensity += green_shaded_value * remaining_opacity * aObscuranceFactor * obscurance;
         accum_blue_intensity  += blue_shaded_value  * remaining_opacity * aObscuranceFactor * obscurance;
@@ -2835,7 +2859,8 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
 // does not compute shading
 template <class T>
 void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                         vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance, double aObscuranceFactor )
+                                         vtkVolumeRayCastStaticInfo *staticInfo,
+                                         double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -3033,7 +3058,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*dptr))];
-        red_value += weight * GTF[((*dptr))] * aObscuranceFactor * aObscurance[offset];
+        double obscurance = aObscurance[offset];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*dptr))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3043,7 +3071,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Binc)))];
-        red_value += weight * GTF[((*(dptr + Binc)))] * aObscuranceFactor * aObscurance[offset + Binc];
+        double obscurance = aObscurance[offset + Binc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*(dptr + Binc)))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3053,7 +3084,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Cinc)))];
-        red_value += weight * GTF[((*(dptr + Cinc)))] * aObscuranceFactor * aObscurance[offset + Cinc];
+        double obscurance = aObscurance[offset + Cinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*(dptr + Cinc)))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3063,7 +3097,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Dinc)))];
-        red_value += weight * GTF[((*(dptr + Dinc)))] * aObscuranceFactor * aObscurance[offset + Dinc];
+        double obscurance = aObscurance[offset + Dinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*(dptr + Dinc)))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3073,7 +3110,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Einc)))];
-        red_value += weight * GTF[((*(dptr + Einc)))] * aObscuranceFactor * aObscurance[offset + Einc];
+        double obscurance = aObscurance[offset + Einc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*(dptr + Einc)))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3083,7 +3123,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Finc)))];
-        red_value += weight * GTF[((*(dptr + Finc)))] * aObscuranceFactor * aObscurance[offset + Finc];
+        double obscurance = aObscurance[offset + Finc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*(dptr + Finc)))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3093,7 +3136,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Ginc)))];
-        red_value += weight * GTF[((*(dptr + Ginc)))] * aObscuranceFactor * aObscurance[offset + Ginc];
+        double obscurance = aObscurance[offset + Ginc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*(dptr + Ginc)))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         } 
       
@@ -3103,7 +3149,10 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Hinc)))];
-        red_value += weight * GTF[((*(dptr + Hinc)))] * aObscuranceFactor * aObscurance[offset + Hinc];
+        double obscurance = aObscurance[offset + Hinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value += weight * GTF[((*(dptr + Hinc)))] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3198,9 +3247,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     += weight * CTF[((*dptr)) * 3    ];
 //         green_value   += weight * CTF[((*dptr)) * 3 + 1];
 //         blue_value    += weight * CTF[((*dptr)) * 3 + 2];
-        red_value     += weight * CTF[((*dptr)) * 3    ] * aObscuranceFactor * aObscurance[offset];
-        green_value   += weight * CTF[((*dptr)) * 3 + 1] * aObscuranceFactor * aObscurance[offset];
-        blue_value    += weight * CTF[((*dptr)) * 3 + 2] * aObscuranceFactor * aObscurance[offset];
+        double obscurance = aObscurance[offset];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     += weight * CTF[((*dptr)) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   += weight * CTF[((*dptr)) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    += weight * CTF[((*dptr)) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3212,9 +3264,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     += weight * CTF[((*(dptr + Binc))) * 3    ];
 //         green_value   += weight * CTF[((*(dptr + Binc))) * 3 + 1];
 //         blue_value    += weight * CTF[((*(dptr + Binc))) * 3 + 2];
-        red_value     += weight * CTF[((*(dptr + Binc))) * 3    ] * aObscuranceFactor * aObscurance[offset + Binc];
-        green_value   += weight * CTF[((*(dptr + Binc))) * 3 + 1] * aObscuranceFactor * aObscurance[offset + Binc];
-        blue_value    += weight * CTF[((*(dptr + Binc))) * 3 + 2] * aObscuranceFactor * aObscurance[offset + Binc];
+        double obscurance = aObscurance[offset + Binc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     += weight * CTF[((*(dptr + Binc))) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   += weight * CTF[((*(dptr + Binc))) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    += weight * CTF[((*(dptr + Binc))) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3226,9 +3281,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     += weight * CTF[((*(dptr + Cinc))) * 3    ];
 //         green_value   += weight * CTF[((*(dptr + Cinc))) * 3 + 1];
 //         blue_value    += weight * CTF[((*(dptr + Cinc))) * 3 + 2];
-        red_value     += weight * CTF[((*(dptr + Cinc))) * 3    ] * aObscuranceFactor * aObscurance[offset + Cinc];
-        green_value   += weight * CTF[((*(dptr + Cinc))) * 3 + 1] * aObscuranceFactor * aObscurance[offset + Cinc];
-        blue_value    += weight * CTF[((*(dptr + Cinc))) * 3 + 2] * aObscuranceFactor * aObscurance[offset + Cinc];
+        double obscurance = aObscurance[offset + Cinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     += weight * CTF[((*(dptr + Cinc))) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   += weight * CTF[((*(dptr + Cinc))) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    += weight * CTF[((*(dptr + Cinc))) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3240,9 +3298,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     += weight * CTF[((*(dptr + Dinc))) * 3    ];
 //         green_value   += weight * CTF[((*(dptr + Dinc))) * 3 + 1];
 //         blue_value    += weight * CTF[((*(dptr + Dinc))) * 3 + 2];
-        red_value     += weight * CTF[((*(dptr + Dinc))) * 3    ] * aObscuranceFactor * aObscurance[offset + Dinc];
-        green_value   += weight * CTF[((*(dptr + Dinc))) * 3 + 1] * aObscuranceFactor * aObscurance[offset + Dinc];
-        blue_value    += weight * CTF[((*(dptr + Dinc))) * 3 + 2] * aObscuranceFactor * aObscurance[offset + Dinc];
+        double obscurance = aObscurance[offset + Dinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     += weight * CTF[((*(dptr + Dinc))) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   += weight * CTF[((*(dptr + Dinc))) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    += weight * CTF[((*(dptr + Dinc))) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3254,9 +3315,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     += weight * CTF[((*(dptr + Einc))) * 3    ];
 //         green_value   += weight * CTF[((*(dptr + Einc))) * 3 + 1];
 //         blue_value    += weight * CTF[((*(dptr + Einc))) * 3 + 2];
-        red_value     += weight * CTF[((*(dptr + Einc))) * 3    ] * aObscuranceFactor * aObscurance[offset + Einc];
-        green_value   += weight * CTF[((*(dptr + Einc))) * 3 + 1] * aObscuranceFactor * aObscurance[offset + Einc];
-        blue_value    += weight * CTF[((*(dptr + Einc))) * 3 + 2] * aObscuranceFactor * aObscurance[offset + Einc];
+        double obscurance = aObscurance[offset + Einc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     += weight * CTF[((*(dptr + Einc))) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   += weight * CTF[((*(dptr + Einc))) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    += weight * CTF[((*(dptr + Einc))) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3268,9 +3332,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     += weight * CTF[((*(dptr + Finc))) * 3    ];
 //         green_value   += weight * CTF[((*(dptr + Finc))) * 3 + 1];
 //         blue_value    += weight * CTF[((*(dptr + Finc))) * 3 + 2];
-        red_value     += weight * CTF[((*(dptr + Finc))) * 3    ] * aObscuranceFactor * aObscurance[offset + Finc];
-        green_value   += weight * CTF[((*(dptr + Finc))) * 3 + 1] * aObscuranceFactor * aObscurance[offset + Finc];
-        blue_value    += weight * CTF[((*(dptr + Finc))) * 3 + 2] * aObscuranceFactor * aObscurance[offset + Finc];
+        double obscurance = aObscurance[offset + Finc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     += weight * CTF[((*(dptr + Finc))) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   += weight * CTF[((*(dptr + Finc))) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    += weight * CTF[((*(dptr + Finc))) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3282,9 +3349,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     +=  weight * CTF[((*(dptr + Ginc))) * 3    ];
 //         green_value   +=  weight * CTF[((*(dptr + Ginc))) * 3 + 1];
 //         blue_value    +=  weight * CTF[((*(dptr + Ginc))) * 3 + 2];
-        red_value     +=  weight * CTF[((*(dptr + Ginc))) * 3    ] * aObscuranceFactor * aObscurance[offset + Ginc];
-        green_value   +=  weight * CTF[((*(dptr + Ginc))) * 3 + 1] * aObscuranceFactor * aObscurance[offset + Ginc];
-        blue_value    +=  weight * CTF[((*(dptr + Ginc))) * 3 + 2] * aObscuranceFactor * aObscurance[offset + Ginc];
+        double obscurance = aObscurance[offset + Ginc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     +=  weight * CTF[((*(dptr + Ginc))) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   +=  weight * CTF[((*(dptr + Ginc))) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    +=  weight * CTF[((*(dptr + Ginc))) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         } 
       
@@ -3296,9 +3366,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 //         red_value     += weight * CTF[((*(dptr + Hinc))) * 3    ];
 //         green_value   += weight * CTF[((*(dptr + Hinc))) * 3 + 1];
 //         blue_value    += weight * CTF[((*(dptr + Hinc))) * 3 + 2];
-        red_value     += weight * CTF[((*(dptr + Hinc))) * 3    ] * aObscuranceFactor * aObscurance[offset + Hinc];
-        green_value   += weight * CTF[((*(dptr + Hinc))) * 3 + 1] * aObscuranceFactor * aObscurance[offset + Hinc];
-        blue_value    += weight * CTF[((*(dptr + Hinc))) * 3 + 2] * aObscuranceFactor * aObscurance[offset + Hinc];
+        double obscurance = aObscurance[offset + Hinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+        red_value     += weight * CTF[((*(dptr + Hinc))) * 3    ] * aObscuranceFactor * obscurance;
+        green_value   += weight * CTF[((*(dptr + Hinc))) * 3 + 1] * aObscuranceFactor * obscurance;
+        blue_value    += weight * CTF[((*(dptr + Hinc))) * 3 + 2] * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -3891,7 +3964,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
 // does perform shading.
 template <class T>
 void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                                       vtkVolumeRayCastStaticInfo *staticInfo, double * aObscurance, double aObscuranceFactor )
+                                       vtkVolumeRayCastStaticInfo *staticInfo,
+                                       double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -4114,9 +4188,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr) ] * 
 //                                      GTF[*(dptr)] + 
 //                                      red_s_shade[ *(nptr) ] );
+        double obscurance = aObscurance[offset];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr) ] * 
                                      GTF[*(dptr)] + 
-                                     red_s_shade[ *(nptr) ] ) * aObscuranceFactor * aObscurance[offset];
+                                     red_s_shade[ *(nptr) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4128,9 +4205,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Binc) ] * 
 //                                      GTF[*(dptr+Binc)] + 
 //                                      red_s_shade[ *(nptr + Binc) ] );
+        double obscurance = aObscurance[offset + Binc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Binc) ] * 
                                      GTF[*(dptr+Binc)] + 
-                                     red_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * aObscurance[offset + Binc];
+                                     red_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4142,9 +4222,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Cinc) ] *
 //                                      GTF[*(dptr+Cinc)] + 
 //                                      red_s_shade[ *(nptr + Cinc) ] );
+        double obscurance = aObscurance[offset + Cinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Cinc) ] *
                                      GTF[*(dptr+Cinc)] + 
-                                     red_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * aObscurance[offset + Cinc];
+                                     red_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
 
@@ -4156,9 +4239,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Dinc) ] *
 //                                      GTF[*(dptr+Dinc)] + 
 //                                      red_s_shade[ *(nptr + Dinc) ] );
+        double obscurance = aObscurance[offset + Dinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Dinc) ] *
                                      GTF[*(dptr+Dinc)] + 
-                                     red_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * aObscurance[offset + Dinc];
+                                     red_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4170,9 +4256,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Einc) ] *
 //                                      GTF[*(dptr+Einc)] + 
 //                                      red_s_shade[ *(nptr + Einc) ] );
+        double obscurance = aObscurance[offset + Einc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Einc) ] *
                                      GTF[*(dptr+Einc)] + 
-                                     red_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * aObscurance[offset + Einc];
+                                     red_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4184,9 +4273,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Finc) ] *
 //                                      GTF[*(dptr+Finc)] + 
 //                                      red_s_shade[ *(nptr + Finc) ] );
+        double obscurance = aObscurance[offset + Finc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Finc) ] *
                                      GTF[*(dptr+Finc)] + 
-                                     red_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * aObscurance[offset + Finc];
+                                     red_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4198,9 +4290,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Ginc) ] *
 //                                      GTF[*(dptr+Ginc)] + 
 //                                      red_s_shade[ *(nptr + Ginc) ] );
+        double obscurance = aObscurance[offset + Ginc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Ginc) ] *
                                      GTF[*(dptr+Ginc)] + 
-                                     red_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * aObscurance[offset + Ginc];
+                                     red_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
       } 
       
@@ -4212,9 +4307,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Hinc) ] *
 //                                      GTF[*(dptr+Hinc)] + 
 //                                      red_s_shade[ *(nptr + Hinc) ] );
+        double obscurance = aObscurance[offset + Hinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Hinc) ] *
                                      GTF[*(dptr+Hinc)] + 
-                                     red_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * aObscurance[offset + Hinc];
+                                     red_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4317,15 +4415,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr) ] * 
 //                                      CTF[*(dptr) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr) ]  );
+        double obscurance = aObscurance[offset];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr) ] * 
                                      CTF[*(dptr) * 3] + 
-                                     red_s_shade[ *(nptr) ] ) * aObscuranceFactor * aObscurance[offset];
+                                     red_s_shade[ *(nptr) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr) ] * 
                                      CTF[*(dptr) * 3 + 1] + + 
-                                     green_s_shade[ *(nptr) ] ) * aObscuranceFactor * aObscurance[offset];
+                                     green_s_shade[ *(nptr) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr) ] * 
                                      CTF[*(dptr) * 3 + 2] +
-                                     blue_s_shade[ *(nptr) ]  ) * aObscuranceFactor * aObscurance[offset];
+                                     blue_s_shade[ *(nptr) ]  ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4343,15 +4444,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Binc) ] *
 //                                      CTF[*(dptr+Binc) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr + Binc) ] );
+        double obscurance = aObscurance[offset + Binc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Binc) ] * 
                                      CTF[*(dptr+Binc) * 3] + 
-                                     red_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * aObscurance[offset + Binc];
+                                     red_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr + Binc) ] *
                                      CTF[*(dptr+Binc) * 3 + 1] + 
-                                     green_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * aObscurance[offset + Binc];
+                                     green_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Binc) ] *
                                      CTF[*(dptr+Binc) * 3 + 2] +
-                                     blue_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * aObscurance[offset + Binc];
+                                     blue_s_shade[ *(nptr + Binc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4369,15 +4473,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Cinc) ] *
 //                                      CTF[*(dptr+Cinc) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr + Cinc) ] );
+        double obscurance = aObscurance[offset + Cinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Cinc) ] *
                                      CTF[*(dptr+Cinc) * 3] + 
-                                     red_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * aObscurance[offset + Cinc];
+                                     red_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr + Cinc) ] *
                                      CTF[*(dptr+Cinc) * 3 + 1] + 
-                                     green_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * aObscurance[offset + Cinc];
+                                     green_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Cinc) ] *
                                      CTF[*(dptr+Cinc) * 3 + 2] +
-                                     blue_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * aObscurance[offset + Cinc];
+                                     blue_s_shade[ *(nptr + Cinc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
 
@@ -4395,15 +4502,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Dinc) ] *
 //                                      CTF[*(dptr+Dinc) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr + Dinc) ] );
+        double obscurance = aObscurance[offset + Dinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Dinc) ] *
                                      CTF[*(dptr+Dinc) * 3] + 
-                                     red_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * aObscurance[offset + Dinc];
+                                     red_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr + Dinc) ] *
                                      CTF[*(dptr+Dinc) * 3 + 1] + 
-                                     green_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * aObscurance[offset + Dinc];
+                                     green_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Dinc) ] *
                                      CTF[*(dptr+Dinc) * 3 + 2] +
-                                     blue_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * aObscurance[offset + Dinc];
+                                     blue_s_shade[ *(nptr + Dinc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4421,15 +4531,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Einc) ] *
 //                                      CTF[*(dptr+Einc) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr + Einc) ] );
+        double obscurance = aObscurance[offset + Einc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Einc) ] *
                                      CTF[*(dptr+Einc) * 3] + 
-                                     red_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * aObscurance[offset + Einc];
+                                     red_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr + Einc) ] *
                                      CTF[*(dptr+Einc) * 3 + 1] + 
-                                     green_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * aObscurance[offset + Einc];
+                                     green_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Einc) ] *
                                      CTF[*(dptr+Einc) * 3 + 2] +
-                                     blue_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * aObscurance[offset + Einc];
+                                     blue_s_shade[ *(nptr + Einc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4447,15 +4560,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Finc) ] *
 //                                      CTF[*(dptr+Finc) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr + Finc) ] );
+        double obscurance = aObscurance[offset + Finc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Finc) ] *
                                      CTF[*(dptr+Finc) * 3] + 
-                                     red_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * aObscurance[offset + Finc];
+                                     red_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr + Finc) ] *
                                      CTF[*(dptr+Finc) * 3 + 1] + 
-                                     green_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * aObscurance[offset + Finc];
+                                     green_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Finc) ] *
                                      CTF[*(dptr+Finc) * 3 + 2] +
-                                     blue_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * aObscurance[offset + Finc];
+                                     blue_s_shade[ *(nptr + Finc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -4473,15 +4589,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Ginc) ] *
 //                                      CTF[*(dptr+Ginc) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr + Ginc) ] );
+        double obscurance = aObscurance[offset + Ginc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Ginc) ] *
                                      CTF[*(dptr+Ginc) * 3] + 
-                                     red_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * aObscurance[offset + Ginc];
+                                     red_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr + Ginc) ] *
                                      CTF[*(dptr+Ginc) * 3 + 1] + 
-                                     green_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * aObscurance[offset + Ginc];
+                                     green_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Ginc) ] *
                                      CTF[*(dptr+Ginc) * 3 + 2] +
-                                     blue_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * aObscurance[offset + Ginc];
+                                     blue_s_shade[ *(nptr + Ginc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
       } 
       
@@ -4499,15 +4618,18 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
 //         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Hinc) ] *
 //                                      CTF[*(dptr+Hinc) * 3 + 2] +
 //                                      blue_s_shade[ *(nptr + Hinc) ] );
+        double obscurance = aObscurance[offset + Hinc];
+        if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
+        else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Hinc) ] *
                                      CTF[*(dptr+Hinc) * 3] + 
-                                     red_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * aObscurance[offset + Hinc];
+                                     red_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * obscurance;
         green_shaded_value += weight * ( green_d_shade[ *(nptr + Hinc) ] *
                                      CTF[*(dptr+Hinc) * 3 + 1] + 
-                                     green_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * aObscurance[offset + Hinc];
+                                     green_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * obscurance;
         blue_shaded_value  += weight * ( blue_d_shade[ *(nptr + Hinc) ] *
                                      CTF[*(dptr+Hinc) * 3 + 2] +
-                                     blue_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * aObscurance[offset + Hinc];
+                                     blue_s_shade[ *(nptr + Hinc) ] ) * aObscuranceFactor * obscurance;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
       
@@ -5286,7 +5408,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                     staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Unshaded( (unsigned char *)data_ptr, dynamicInfo,
-                                    staticInfo, Obscurance, ObscuranceFactor );
+                                    staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
@@ -5294,7 +5416,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                     staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Unshaded( (unsigned short *)data_ptr, dynamicInfo,
-                                    staticInfo, Obscurance, ObscuranceFactor );
+                                    staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -5310,13 +5432,13 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
           if ( Color )
             vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
-            vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+            vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
             vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
-            vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+            vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -5339,7 +5461,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                                 dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinSample_Unshaded( (unsigned char *)data_ptr,
-                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -5347,7 +5469,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                                 dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinSample_Unshaded( (unsigned short *)data_ptr,
-                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -5364,7 +5486,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                                   dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinVertices_Unshaded( (unsigned char *)data_ptr,
-                                                  dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                                  dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -5372,7 +5494,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                                   dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinVertices_Unshaded( (unsigned short *)data_ptr,
-                                                  dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                                  dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -5393,7 +5515,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                               dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinSample_Shaded( (unsigned char *)data_ptr, 
-                                              dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                              dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -5401,7 +5523,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                               dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinSample_Shaded( (unsigned short *)data_ptr, 
-                                              dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                              dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -5418,7 +5540,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                                 dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinVertices_Shaded( (unsigned char *)data_ptr, 
-                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -5426,7 +5548,7 @@ void vtkVolumeRayCastCompositeFunctionObscurances::CastRay( vtkVolumeRayCastDyna
                                                 dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
             else
               vtkCastRay_TrilinVertices_Shaded( (unsigned short *)data_ptr, 
-                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor );
+                                                dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );

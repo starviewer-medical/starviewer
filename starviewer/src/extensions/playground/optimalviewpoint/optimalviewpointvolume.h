@@ -152,8 +152,13 @@ public:
 
     void setRenderWithObscurances( bool renderWithObscurances );
     void setObscurancesFactor( double obscurancesFactor );
+    void setObscurancesFilterLow( double obscurancesFilterLow );
+    void setObscurancesFilterHigh( double obscurancesFilterHigh );
 
     void computeSaliency();
+
+
+    void accumulateViewpointSaliency( int threadId, double saliency );
 
 
 

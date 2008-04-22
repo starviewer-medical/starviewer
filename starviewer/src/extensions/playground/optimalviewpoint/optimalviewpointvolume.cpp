@@ -1498,6 +1498,18 @@ void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
 }
 
 
+void OptimalViewpointVolume::setObscurancesFilterLow( double obscurancesFilterLow )
+{
+    m_volumeRayCastFunctionObscurances->SetObscuranceFilterLow( obscurancesFilterLow );
+}
+
+
+void OptimalViewpointVolume::setObscurancesFilterHigh( double obscurancesFilterHigh )
+{
+    m_volumeRayCastFunctionObscurances->SetObscuranceFilterHigh( obscurancesFilterHigh );
+}
+
+
 void OptimalViewpointVolume::computeSaliency()
 {
     if ( !m_obscurance ) return;
