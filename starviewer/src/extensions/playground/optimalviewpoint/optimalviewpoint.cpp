@@ -782,6 +782,12 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::ObscurancesFactor:
             setObscurancesFactor( m_parameters->getObscurancesFactor() );
             break;
+        case OptimalViewpointParameters::ObscurancesFilterLow:
+            setObscurancesFilterLow( m_parameters->getObscurancesFilterLow() );
+            break;
+        case OptimalViewpointParameters::ObscurancesFilterHigh:
+            setObscurancesFilterHigh( m_parameters->getObscurancesFilterHigh() );
+            break;
         case OptimalViewpointParameters::NumberOfPlanes:
             setNumberOfPlanes( m_parameters->getNumberOfPlanes() );
             break;
@@ -896,6 +902,18 @@ void OptimalViewpoint::setObscurances( bool obscurances )
 void OptimalViewpoint::setObscurancesFactor( double obscurancesFactor )
 {
     m_volume->setObscurancesFactor( obscurancesFactor );
+}
+
+
+void OptimalViewpoint::setObscurancesFilterLow( double obscurancesFilterLow )
+{
+    m_volume->setObscurancesFilterLow( obscurancesFilterLow );
+}
+
+
+void OptimalViewpoint::setObscurancesFilterHigh( double obscurancesFilterHigh )
+{
+    m_volume->setObscurancesFilterHigh( obscurancesFilterHigh );
 }
 
 

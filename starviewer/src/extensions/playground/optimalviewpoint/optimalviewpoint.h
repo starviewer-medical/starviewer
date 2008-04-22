@@ -151,6 +151,8 @@ public:
 
     void setObscurances( bool obscurances );
     void setObscurancesFactor( double obscurancesFactor );
+    void setObscurancesFilterLow( double obscurancesFilterLow );
+    void setObscurancesFilterHigh( double obscurancesFilterHigh );
 
     void getCameraParameters( Vector3 & position, Vector3 & focus, Vector3 & up );
     void setCameraParameters( const Vector3 & position, const Vector3 & focus, const Vector3 & up );

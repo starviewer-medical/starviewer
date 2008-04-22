@@ -324,4 +324,34 @@ void OptimalViewpointParameters::setObscurancesFactor( double obscurancesFactor 
 }
 
 
+double OptimalViewpointParameters::getObscurancesFilterLow() const
+{
+    return m_obscurancesFilterLow;
+}
+
+
+void OptimalViewpointParameters::setObscurancesFilterLow( double obscurancesFilterLow )
+{
+    if ( m_obscurancesFilterLow != obscurancesFilterLow )
+    {
+        m_obscurancesFilterLow = obscurancesFilterLow; emit changed( ObscurancesFilterLow );
+    }
+}
+
+
+double OptimalViewpointParameters::getObscurancesFilterHigh() const
+{
+    return m_obscurancesFilterHigh;
+}
+
+
+void OptimalViewpointParameters::setObscurancesFilterHigh( double obscurancesFilterHigh )
+{
+    if ( m_obscurancesFilterHigh != obscurancesFilterHigh )
+    {
+        m_obscurancesFilterHigh = obscurancesFilterHigh; emit changed( ObscurancesFilterHigh );
+    }
+}
+
+
 }

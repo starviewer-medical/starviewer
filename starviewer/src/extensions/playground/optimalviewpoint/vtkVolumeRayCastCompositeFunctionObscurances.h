@@ -72,6 +72,12 @@ public:
   vtkSetMacro( ObscuranceFactor, double );
   vtkGetMacro( ObscuranceFactor, double );
 
+  vtkSetMacro( ObscuranceFilterLow, double );
+  vtkGetMacro( ObscuranceFilterLow, double );
+
+  vtkSetMacro( ObscuranceFilterHigh, double );
+  vtkGetMacro( ObscuranceFilterHigh, double );
+
 protected:
   vtkVolumeRayCastCompositeFunctionObscurances();
   ~vtkVolumeRayCastCompositeFunctionObscurances();
@@ -92,6 +98,8 @@ private:
   udg::Vector3 * ColorBleeding;
   bool Color;
   double ObscuranceFactor;
+  double ObscuranceFilterLow;
+  double ObscuranceFilterHigh;
 };
 
 
