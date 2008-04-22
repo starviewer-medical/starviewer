@@ -94,7 +94,7 @@ void QueryScreen::initialize()
     /* Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
      * el QOperationStateScreen també es tancarà
      */
-    m_operationStateScreen = new udg::QOperationStateScreen( this->parentWidget() );
+    m_operationStateScreen = new udg::QOperationStateScreen( this );
 
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
