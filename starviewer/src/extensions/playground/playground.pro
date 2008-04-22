@@ -2,6 +2,7 @@
 # Cal afegir el directori de l'extensió a la variable SUBDIRS tant si es compila com si no.
 
 SUBDIRS = diffusionperfusionsegmentation \
+          mpr2d \
           edemasegmentation \
           landmarkregistration \
           strokesegmentation \
@@ -10,7 +11,7 @@ SUBDIRS = diffusionperfusionsegmentation \
           volume3dviewtesting \
           mprcardiac3d \
           cardiac2dviewer \
-	  volumecontourdelimiter
+	      volumecontourdelimiter
 
 include(../../extensions.inc)
 
