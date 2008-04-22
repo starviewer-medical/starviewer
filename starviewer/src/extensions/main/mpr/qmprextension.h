@@ -154,7 +154,8 @@ private slots:
     void releasePushSagitalViewAxisActor();
 
     void pushAxialViewAxisActor(); // void pushAxisActor( double x , double y );
-    void pushSagitalViewAxisActor(); // void pushAxialActor( double x , double y );
+    void pushSagitalViewAxialAxisActor(); // void pushAxialActor( double x , double y );
+    void pushSagitalViewCoronalAxisActor();
 
     /// Fa les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
