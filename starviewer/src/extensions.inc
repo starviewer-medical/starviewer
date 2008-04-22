@@ -2,6 +2,7 @@
 #
 
 PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
+             mpr2d \
              edemasegmentation \
              landmarkregistration \
              strokesegmentation \
