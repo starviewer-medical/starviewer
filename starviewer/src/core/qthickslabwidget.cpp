@@ -75,7 +75,11 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
     QString projectionType = m_projectionModeComboBox->itemText( comboItem );
     if( projectionType == tr("Disabled") )
     {
-        disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
+        //desconnexió nova pel ticket #486
+        disconnect( m_slabThicknessSlider, SIGNAL( sliderReleased () ), this, SLOT( applyThickSlab() ) );
+        
+        //desconnexió antiga
+        //disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
         m_currentViewer->enableThickSlab(false);
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
@@ -89,8 +93,13 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         m_slabThicknessLabel->setEnabled(true);
         // TODO es podria fer l'actualització de l'slab quan es deixa d'interactuar ( sliderReleased() )si és que fer-ho
         // "en viu" afecta molt al temps de resposta amb l'interacció. De moment ens atrevim a fer-ho "en viu"
-        connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
 
+        //connexió antiga
+        //connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
+        
+        //connexió nova pel ticket #486
+        connect( m_slabThicknessSlider, SIGNAL( sliderReleased () ),this,  SLOT( applyThickSlab() ) );
+        
         // TODO ara fem la conversió a id d'enter, però en un futur anirà tot amb Strings
         int projectionModeID = -1;
         if( projectionType == tr("MIP") )
@@ -108,6 +117,14 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         m_currentViewer->setSlabProjectionMode( projectionModeID );
         m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
     }
+}
+
+void QThickSlabWidget::applyThickSlab()
+{
+    ///\TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada lloc on s'apliqui thickslab.
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
+    QApplication::restoreOverrideCursor();
 }
 
 void QThickSlabWidget::updateMaximumThickness()

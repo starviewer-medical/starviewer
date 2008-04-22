@@ -66,6 +66,9 @@ protected slots:
      * Reseteja el viewer associat. Útil per quan ens canvien l'input, per exemple
      */
     void reset();
+    
+    ///aplica el thick slab segons el valor de l'slider.
+    void applyThickSlab();
 
 private:
     void populateProjectionModeCombo();
