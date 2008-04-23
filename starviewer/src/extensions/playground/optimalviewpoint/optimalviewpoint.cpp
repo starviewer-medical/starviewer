@@ -971,4 +971,10 @@ void OptimalViewpoint::setCameraParameters( const Vector3 & position, const Vect
 }
 
 
+void OptimalViewpoint::computeViewpointSaliency( int directions )
+{
+    m_volume->computeViewpointSaliency( directions, m_renderer );
+}
+
+
 }; // end namespace udg

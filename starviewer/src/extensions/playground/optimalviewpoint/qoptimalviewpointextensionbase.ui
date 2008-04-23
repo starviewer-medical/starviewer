@@ -1362,6 +1362,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="m_viewpointSaliencyPushButton" >
+           <property name="text" >
+            <string>Viewpoint saliency</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

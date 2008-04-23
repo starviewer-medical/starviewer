@@ -82,6 +82,9 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     connect( m_cameraSetPushButton, SIGNAL( clicked() ), SLOT( setCameraParameters() ) );
     connect( m_cameraLoadPushButton, SIGNAL( clicked() ), SLOT( loadCameraParameters() ) );
     connect( m_cameraSavePushButton, SIGNAL( clicked() ), SLOT( saveCameraParameters() ) );
+
+
+    connect( m_viewpointSaliencyPushButton, SIGNAL( clicked() ), this, SLOT( computeViewpointSaliency() ) );
 }
 
 
@@ -594,6 +597,12 @@ void QOptimalViewpointExtension::saveCameraParameters()
     }
 
     settings.endGroup();
+}
+
+
+void QOptimalViewpointExtension::computeViewpointSaliency()
+{
+    m_method->computeViewpointSaliency( m_obscuranceDirectionsSpinBox->value() );
 }
 
 

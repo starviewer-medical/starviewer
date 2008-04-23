@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2006-2008 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -14,6 +14,8 @@
 
 #include <QVector>
 #include <QList>
+#include <QHash>
+#include <QMutex>
 
 #include "transferfunction.h"
 
@@ -24,7 +26,9 @@ class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastCompositeFunctionObscurances;
 class vtkVolumeRayCastCompositeFunctionOptimalViewpoint;
+class vtkVolumeRayCastCompositeFunctionViewpointSaliency;
 class vtkVolumeRayCastMapper;
+class vtkRenderer;
 
 
 namespace udg {
@@ -158,6 +162,7 @@ public:
     void computeSaliency();
 
 
+    void computeViewpointSaliency( int directions, vtkRenderer * renderer );
     void accumulateViewpointSaliency( int threadId, double saliency );
 
 
@@ -211,6 +216,7 @@ private:
     vtkVolumeRayCastCompositeFunction * m_mainVolumeRayCastFunction;
     vtkVolumeRayCastCompositeFunctionOptimalViewpoint * m_planeVolumeRayCastFunction;
     vtkVolumeRayCastCompositeFunctionObscurances * m_volumeRayCastFunctionObscurances;
+    vtkVolumeRayCastCompositeFunctionViewpointSaliency * m_volumeRayCastFunctionViewpointSaliency;
 
     /// Vector de funcions de transferència d'opacitat.
 //     vtkPiecewiseFunction * m_opacityTransferFunction;
@@ -259,6 +265,13 @@ private:
     bool m_renderWithObscurances;
 
     TransferFunction m_transferFunction;
+
+
+
+    // viewpoint saliency
+    double * m_saliency;
+    QHash<int, double> m_accumulatedViewpointSaliencyPerThread;
+    QMutex m_mutex;
 
 };
 
