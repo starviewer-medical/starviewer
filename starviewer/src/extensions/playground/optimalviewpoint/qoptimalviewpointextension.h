@@ -96,6 +96,9 @@ private slots:
     void loadCameraParameters();
     void saveCameraParameters();
 
+
+    void computeViewpointSaliency();
+
 private:
 
     void createConnections();

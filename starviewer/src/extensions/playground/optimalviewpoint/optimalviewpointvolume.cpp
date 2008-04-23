@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
+ *   Copyright (C) 2006-2008 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.edu/GGG/index.html                                    *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -46,6 +46,11 @@
 
 #include "vtkVolumeRayCastCompositeFunctionObscurances.h"
 #include <vtkDoubleArray.h>
+#include "vtkVolumeRayCastCompositeFunctionViewpointSaliency.h"
+#include <vtkVolumeRayCastFunction.h>
+#include <vtkRenderer.h>
+#include <vtkCamera.h>
+#include <QTime>
 
 namespace udg {
 
@@ -131,6 +136,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New(); //m_mainVolumeRayCastFunction->Register( 0 );
     m_planeVolumeRayCastFunction = vtkVolumeRayCastCompositeFunctionOptimalViewpoint::New(); //m_planeVolumeRayCastFunction->Register( 0 );
     m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New(); //m_volumeRayCastFunctionObscurances->Register( 0 );
+    m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New(); //m_volumeRayCastFunctionViewpointSaliency->Register( 0 );
+    m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
 
 
 
@@ -256,7 +263,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 //     reduceToHalf();
 
 
-
+    m_saliency = 0;
 
     DEBUG_LOG( "end constructor" );
 }
@@ -281,6 +288,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
 
     delete [] m_obscurance;
     delete [] m_colorBleeding;
+    delete [] m_saliency;
 }
 
 void OptimalViewpointVolume::setShade( bool on )
@@ -837,12 +845,14 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
             m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_planeVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
             break;
         case INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE:
             m_volumeProperty->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
             break;
     }
 }
@@ -1134,252 +1144,6 @@ void OptimalViewpointVolume::computeObscurances()
 }
 
 
-// versió sense threads
-// void OptimalViewpointVolume::computeObscurances()
-// {
-//     synchronize();
-//
-//     vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
-//     unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
-//     unsigned char * gradientMagnitudes = m_mainMapper->GetGradientEstimator()->GetGradientMagnitudes();
-//
-//     // càlcul de direccions
-//     POVSphereCloud cloud( 1.0, m_obscuranceDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
-//     cloud.createPOVCloud();
-//     const QVector<Vector3> & vertices = cloud.getVertices();
-//
-//     // variables necessàries
-//     int dimensions[3];
-//     m_image->GetDimensions( dimensions );
-//     int increments[3];
-//     m_image->GetIncrements( increments );
-//
-//     delete [] m_obscurance;
-//     m_obscurance = new double[m_dataSize];
-//     for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] = 0.0;
-//
-//     unsigned int progress = 0, total = vertices.count();
-//
-//     int selection = static_cast<int>( round( m_obscuranceMaximumDistance * 100.0 ) ) % 100;
-//     double maximumObscurance = 0.0;
-//
-//     // iterem per les direccions
-//     foreach ( Vector3 direction, vertices )
-//     {
-// //         if ( progress != selection )
-// //         {
-// //             progress++;
-// //             continue;
-// //         }
-//
-//         DEBUG_LOG( QString( "Direcció " ) + direction.toString() );
-//
-//         // direcció dominant (0 = x, 1 = y, 2 = z)
-//         int dominant;
-//         Vector3 absDirection( qAbs( direction.x ), qAbs( direction.y ), qAbs( direction.z ) );
-//         if ( absDirection.x >= absDirection.y )
-//         {
-//             if ( absDirection.x >= absDirection.z ) dominant = 0;
-//             else dominant = 2;
-//         }
-//         else
-//         {
-//             if ( absDirection.y >= absDirection.z ) dominant = 1;
-//             else dominant = 2;
-//         }
-//
-//         // vector per avançar
-//         Vector3 forward;
-//         switch ( dominant )
-//         {
-//             case 0: forward = Vector3( direction.x, direction.y, direction.z ); break;
-//             case 1: forward = Vector3( direction.y, direction.z, direction.x ); break;
-//             case 2: forward = Vector3( direction.z, direction.x, direction.y ); break;
-//         }
-//         forward /= qAbs( forward.x );   // la direcció x passa a ser 1 o -1
-//         DEBUG_LOG( QString( "forward = " ) + forward.toString() );
-//
-//         // dimensions i increments segons la direcció dominant
-//         int dimX = dimensions[dominant], dimY = dimensions[(dominant+1)%3], dimZ = dimensions[(dominant+2)%3];
-//         int incX = increments[dominant], incY = increments[(dominant+1)%3], incZ = increments[(dominant+2)%3];
-//         qptrdiff startDelta = 0;
-//         if ( forward.x < 0.0 )
-//         {
-//             startDelta += incX * ( dimX - 1 );
-//             incX = -incX;
-//             forward.x = -forward.x;
-//         }
-//         if ( forward.y < 0.0 )
-//         {
-//             startDelta += incY * ( dimY - 1 );
-//             incY = -incY;
-//             forward.y = -forward.y;
-//         }
-//         if ( forward.z < 0.0 )
-//         {
-//             startDelta += incZ * ( dimZ - 1 );
-//             incZ = -incZ;
-//             forward.z = -forward.z;
-//         }
-//         DEBUG_LOG( QString( "forward = " ) + forward.toString() );
-//         // ara els 3 components són positius
-//
-//         // llista dels vòxels que són començament de línia
-//         QList<Vector3> lineStarts = getLineStarts( dimX, dimY, dimZ, forward );
-//
-// //         uint i = 0;
-// //         uint c = 0;
-//
-// //         // prova
-// //         int length = dimX * dimY * dimZ;
-// //         unsigned char array[length];
-// //         for (int k = 0; k < length; k++) array[k] = 0;
-// //         unsigned char * ptr = array;
-// //         ptr += startDelta;
-//
-//         unsigned char * dataPtr = m_data + startDelta;
-//
-//         // iterar per cada línia
-//         while ( !lineStarts.isEmpty() )
-//         {
-// //             i++;
-//             Vector3 rv = lineStarts.takeFirst();
-//             Voxel v = { round( rv.x ), round( rv.y ), round( rv.z ) };
-//             Voxel pv = v;
-//             QStack< QPair<uchar,Vector3> > unresolvedVoxels;
-//
-//             // iterar per la línia
-//             while ( v.x < dimX && v.y < dimY && v.z < dimZ )
-//             {
-// //                 // prova
-// //                 ptr[v.x * incX + v.y * incY + v.z * incZ]++;
-//
-//                 // tractar el vòxel
-//                 uchar value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
-//
-//                 while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= value )
-//                 {
-//                     Vector3 ru = unresolvedVoxels.pop().second;
-//                     Voxel u = { round( ru.x ), round( ru.y ), round( ru.z ) };
-//
-//                     int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
-//                     float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
-//                     Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
-// //                     DEBUG_LOG( "-------------" );
-// //                     DEBUG_LOG( QString( "voxel: " ) + ru.toString() );
-// //                     DEBUG_LOG( QString( "value: %1" ).arg( it.key() ) );
-// //                     DEBUG_LOG( QString( "gradient: %1" ).arg( gradientMagnitudes[uIndex] ) );
-// //                     DEBUG_LOG( QString( "normal: " ) + uNormal.toString() );
-// //                     DEBUG_LOG( QString( "direction: " ) + direction.toString() );
-// //                     DEBUG_LOG( QString( "normal · direction = %1" ).arg( uNormal * direction ) );
-// //                     DEBUG_LOG( "-------------" );
-//                     // sembla que ja venen normalitzades
-// //                     if ( uNormal.length() != 0.0 && uNormal.length() != 1.0 )
-// //                     {
-// //                         DEBUG_LOG( QString( "normal: " ) + uNormal.toString() + QString( " | length = %1" ).arg( uNormal.length() ) );
-// //                         uNormal.normalize();
-// //                     }
-//
-//                     if ( uNormal * direction < 0.0 )
-//                     {
-// //                         DEBUG_LOG( QString( "entro: " ) + ru.toString() );
-//                         double distance = ( rv - ru ).length();
-// //                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-// //                         double distance = ( dv - du ).length();
-//                         m_obscurance[uIndex] += obscurance( distance );
-//                         if ( m_obscurance[uIndex] > maximumObscurance )
-//                             maximumObscurance = m_obscurance[uIndex];
-//                     }
-//                 }
-//
-//                 unresolvedVoxels.push( qMakePair( value, rv ) );
-//
-//                 // avançar el vòxel
-//                 rv += forward;
-//                 pv = v;
-//                 v.x = round( rv.x ); v.y = round( rv.y ); v.z = round( rv.z );
-// //                 c++;
-//             }
-//
-//             while ( !unresolvedVoxels.isEmpty() )
-//             {
-//                 Vector3 ru = unresolvedVoxels.pop().second;
-//                 Voxel u = { round( ru.x ), round( ru.y ), round( ru.z ) };
-//                 int uIndex = startDelta + u.x * incX + u.y * incY + u.z * incZ;
-//                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[uIndex] );
-//                 Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
-//
-// //                 DEBUG_LOG( "-------------" );
-// //                 DEBUG_LOG( QString( "voxel: " ) + ru.toString() );
-// //                 DEBUG_LOG( QString( "value: %1" ).arg( it.key() ) );
-// //                 DEBUG_LOG( QString( "gradient: %1" ).arg( gradientMagnitudes[uIndex] ) );
-// //                 DEBUG_LOG( QString( "normal: " ) + uNormal.toString() );
-// //                 DEBUG_LOG( QString( "direction: " ) + direction.toString() );
-// //                 DEBUG_LOG( QString( "normal · direction = %1" ).arg( uNormal * direction ) );
-// //                 DEBUG_LOG( "-------------" );
-//
-//                 if ( uNormal * direction < 0.0 )
-//                 {
-//                     m_obscurance[uIndex]++;
-//                     if ( m_obscurance[uIndex] > maximumObscurance )
-//                             maximumObscurance = m_obscurance[uIndex];
-//                 }
-//             }
-//         }
-//
-// //         DEBUG_LOG( QString( "i = %1" ).arg( i ) );
-// //         DEBUG_LOG( QString( "c = %1" ).arg( c ) );
-// //         for ( int k = 0; k < length; k++ )
-// //         {
-// //             if ( array[k] != 1 )
-// //                 DEBUG_LOG( QString( "malament!!!! a[%1] = %2" ).arg( k ).arg( array[k] ) );
-// //         }
-//
-//         DEBUG_LOG( QString( "progress: %1/%2" ).arg( ++progress ).arg( total ) );
-//     }
-//
-//     unsigned int count = vertices.count();
-//     for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] /= maximumObscurance;
-//
-//     for ( int i = 0; i < m_dataSize; i++ )
-//     {
-//         if ( m_obscurance[i] > 1.0 )
-//             DEBUG_LOG( QString( "bad obscurance: o[%1] = %2" ).arg( i ).arg( m_obscurance[i] ) );
-//     }
-//
-//     {
-//         // obscurances to file
-//         QFile outFile( QDir::tempPath().append( QString( "/obscurance.raw" ) ) );
-//         if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-//         {
-//             QDataStream out( &outFile );
-//             for ( int i = 0; i < m_dataSize; i++ )
-//             {
-//                 uchar value = m_data[i] > 0 ? static_cast<uchar>( round( m_obscurance[i] * 255.0 ) ) : 0;
-//                 out << value;
-// //                 out << gradientMagnitudes[i];
-// //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
-// //                 out << static_cast<uchar>( round( ( uGradient[selection] + 1.0 ) * 127.5 ) );
-//             }
-//             outFile.close();
-//         }
-//         QFile outFileMhd( QDir::tempPath().append( QString( "/obscurance.mhd" ) ) );
-//         if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
-//         {
-//             QTextStream out( &outFileMhd );
-//             out << "NDims = 3\n";
-//             out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
-//             double spacing[3];
-//             m_image->GetSpacing( spacing );
-//             out << "ElementSpacing = " << spacing[0] << " " << spacing[1] << " " << spacing[2] << "\n";
-//             out << "ElementType = MET_UCHAR\n";
-//             out << "ElementDataFile = obscurance.raw";
-//             outFileMhd.close();
-//         }
-//     }
-// }
-
-
 // QList<Vector3> OptimalViewpointVolume::getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const
 // {
 //     // llista dels vòxels que són començament de línia
@@ -1528,6 +1292,14 @@ void OptimalViewpointVolume::computeSaliency()
     gradientEstimator->SetInput( obscuranceData );
 
     unsigned char * gradientMagnitudes = gradientEstimator->GetGradientMagnitudes();
+    delete [] m_saliency;
+    m_saliency = new double[m_dataSize];
+    double maxSaliency = 0.0;
+    for (int i = 0; i < m_dataSize; i++) {
+        if (gradientMagnitudes[i] > maxSaliency) maxSaliency = gradientMagnitudes[i];
+    }
+
+    for (int i = 0; i < m_dataSize; i++) m_saliency[i] = gradientMagnitudes[i] / maxSaliency;
 
     {
         bool density = m_obscuranceVariant <= DensitySmooth;
@@ -1538,7 +1310,7 @@ void OptimalViewpointVolume::computeSaliency()
             QDataStream out( &outFile );
             for ( int i = 0; i < m_dataSize; ++i )
             {
-                uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? gradientMagnitudes[i] : 0;
+                uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( 255.0 * gradientMagnitudes[i] ) ) : 0;
                 out << value;
             }
             outFile.close();
@@ -1953,6 +1725,85 @@ void OptimalViewpointVolume::getLineStarts( QVector<Vector3> & lineStarts, int d
         v.x = qRound( rv.x ); v.y = qRound( rv.y ); v.z = qRound( rv.z );
     }
     DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.size() ) );
+}
+
+
+void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, vtkRenderer * renderer )
+{
+    if ( !m_saliency ) return;
+
+    synchronize();
+
+    m_volumeRayCastFunctionViewpointSaliency->SetSaliency( m_saliency );
+
+    vtkVolumeRayCastFunction * current = m_mainMapper->GetVolumeRayCastFunction();
+    m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionViewpointSaliency );
+
+    vtkCamera * camera = renderer->GetActiveCamera();
+
+    // càlcul de direccions
+    POVSphereCloud cloud( 2.0 * m_mainVolume->GetLength(), numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    cloud.createPOVCloud();
+    const QVector<Vector3> & directions = cloud.getVertices();
+    int nDirections = directions.size();
+    camera->SetFocalPoint( 0.0, 0.0, 0.0 );
+    camera->SetViewUp( 0.0, 1.0, 0.0 );
+
+    double * viewpointSaliency = new double[nDirections];
+
+    for (int i = 0; i < nDirections; i++ )
+    {
+        Vector3 direction = directions[i];
+        camera->SetPosition( direction.x, direction.y, direction.z );
+        camera->OrthogonalizeViewUp();
+        renderer->ResetCameraClippingRange();
+
+        // inicialitzar viewpoint saliency
+        m_accumulatedViewpointSaliencyPerThread.clear();
+
+        QTime t;
+        t.start();
+        renderer->Render();
+        int elapsed = t.elapsed();
+        DEBUG_LOG( QString( "Time elapsed: %1 s" ).arg( elapsed / 1000.0 ) );
+
+        // finalitzar viewpoint saliency
+        viewpointSaliency[i] = 0.0;
+        QHashIterator<int, double> it( m_accumulatedViewpointSaliencyPerThread );
+        while ( it.hasNext() ) viewpointSaliency[i] += it.next().value();
+    }
+
+    int maxView = 0;
+    double maxSaliency = 0.0;
+    for (int i = 0; i < nDirections; i++) {
+        DEBUG_LOG( QString( "view %1 %2: saliency = %3" ).arg( i ).arg( directions[i].toString() ).arg( viewpointSaliency[i] ) );
+        if ( viewpointSaliency[i] > maxSaliency ) {
+            maxView = i;
+            maxSaliency = viewpointSaliency[i];
+        }
+    }
+
+    m_mainMapper->SetVolumeRayCastFunction( current );
+
+    DEBUG_LOG( QString( "most salient view: %1 (%2)" ).arg( maxView ).arg( maxSaliency ) );
+    camera->SetPosition( directions[maxView].x, directions[maxView].y, directions[maxView].z );
+    renderer->ResetCameraClippingRange();
+    renderer->Render();
+
+    delete [] viewpointSaliency;
+}
+
+
+void OptimalViewpointVolume::accumulateViewpointSaliency( int threadId, double saliency )
+{
+    if ( !m_accumulatedViewpointSaliencyPerThread.contains( threadId ) )
+    {
+        m_mutex.lock();
+        m_accumulatedViewpointSaliencyPerThread[threadId] = 0.0;  // crear l'entrada
+        m_mutex.unlock();
+    }
+
+    m_accumulatedViewpointSaliencyPerThread[threadId] += saliency;
 }
 
 

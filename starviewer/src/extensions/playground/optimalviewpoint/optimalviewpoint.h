@@ -163,6 +163,7 @@ public slots:
     void computeObscurances( int directions, double maximumDistance, int obscuranceFunction, int obscuranceVariant );
     void computeSaliency();
     void computeViewpointEntropies();
+    void computeViewpointSaliency( int directions );
 
 signals:
 
