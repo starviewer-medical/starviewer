@@ -162,8 +162,10 @@ public:
     void computeSaliency();
 
 
-    void computeViewpointSaliency( int directions, vtkRenderer * renderer );
+    void computeViewpointSaliency( int directions, vtkRenderer * renderer, bool divArea );
     void accumulateViewpointSaliency( int threadId, double saliency );
+
+    bool loadObscurances( const QString & obscurancesFileName, bool color);
 
 
 
@@ -271,6 +273,7 @@ private:
     // viewpoint saliency
     double * m_saliency;
     QHash<int, double> m_accumulatedViewpointSaliencyPerThread;
+    QHash<int, uint> m_pixelsPerThread;
     QMutex m_mutex;
 
 };

@@ -893,6 +893,12 @@ void OptimalViewpoint::computeObscurances( int directions, double maximumDistanc
 }
 
 
+bool OptimalViewpoint::loadObscurances( const QString & obscurancesFileName, bool color )
+{
+    return m_volume->loadObscurances( obscurancesFileName, color );
+}
+
+
 void OptimalViewpoint::setObscurances( bool obscurances )
 {
     m_volume->setRenderWithObscurances( obscurances );
@@ -971,9 +977,9 @@ void OptimalViewpoint::setCameraParameters( const Vector3 & position, const Vect
 }
 
 
-void OptimalViewpoint::computeViewpointSaliency( int directions )
+void OptimalViewpoint::computeViewpointSaliency( int directions, bool divArea )
 {
-    m_volume->computeViewpointSaliency( directions, m_renderer );
+    m_volume->computeViewpointSaliency( directions, m_renderer, divArea );
 }
 
 
