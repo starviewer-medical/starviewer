@@ -30,13 +30,13 @@ DrawerPolyline::~DrawerPolyline()
 {
     emit dying(this);
 
-    if ( !m_vtkPolydata )
+    if ( m_vtkPolydata )
         m_vtkPolydata->Delete();
 
-    if ( !m_vtkPoints )
+    if ( m_vtkPoints )
         m_vtkPoints->Delete();
 
-    if ( !m_vtkCellArray )
+    if ( m_vtkCellArray )
         m_vtkCellArray->Delete();
 }
 
