@@ -157,13 +157,15 @@ public:
     void getCameraParameters( Vector3 & position, Vector3 & focus, Vector3 & up );
     void setCameraParameters( const Vector3 & position, const Vector3 & focus, const Vector3 & up );
 
+    bool loadObscurances( const QString & obscurancesFileName, bool color );
+
 public slots:
 
     void newMethod2( int step, bool normalized );
     void computeObscurances( int directions, double maximumDistance, int obscuranceFunction, int obscuranceVariant );
     void computeSaliency();
     void computeViewpointEntropies();
-    void computeViewpointSaliency( int directions );
+    void computeViewpointSaliency( int directions, bool divArea );
 
 signals:
 

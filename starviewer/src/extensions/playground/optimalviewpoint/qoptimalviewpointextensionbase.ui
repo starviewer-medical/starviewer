@@ -1353,6 +1353,9 @@
            <property name="text" >
             <string>Obscurances</string>
            </property>
+           <property name="contextMenuPolicy">
+            <enum>Qt::ActionsContextMenu</enum>
+           </property>
           </widget>
          </item>
          <item>
@@ -1366,6 +1369,13 @@
           <widget class="QPushButton" name="m_viewpointSaliencyPushButton" >
            <property name="text" >
             <string>Viewpoint saliency</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="m_viewpointSaliencyDivAreaCheckBox" >
+           <property name="text" >
+            <string>/area</string>
            </property>
           </widget>
          </item>

@@ -22,6 +22,7 @@
 
 #include "vector3.h"
 #include <QTextStream>
+#include "optimalviewpointvolume.h"
 
 
 namespace udg {
@@ -66,6 +67,10 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
     connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
 
     createConnections();
+
+    QAction * obscurancesAction0 = new QAction( tr("Load from file..."), m_obscurancesPushButton );
+    m_obscurancesPushButton->addAction( obscurancesAction0 );
+    connect( obscurancesAction0, SIGNAL( triggered() ), this, SLOT( loadObscurances() ) );
 
     connect( m_obscurancesPushButton, SIGNAL( clicked() ), this, SLOT( computeObscurances() ) );
     connect( m_saliencyPushButton, SIGNAL( clicked() ), this, SLOT( computeSaliency() ) );
@@ -398,6 +403,37 @@ void QOptimalViewpointExtension::computeObscurances()
 }
 
 
+void QOptimalViewpointExtension::loadObscurances()
+{
+    QSettings settings;
+
+    settings.beginGroup( "OptimalViewpoint" );
+
+    QString obscurancesDir = settings.value( "obscurancesDir", QString() ).toString();
+
+    QString obscurancesFileName =
+            QFileDialog::getOpenFileName( this, tr("Load obscurances from file"),
+                                          obscurancesDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !obscurancesFileName.isNull() )
+    {
+        bool color = m_obscuranceVariantComboBox->currentIndex() >= OptimalViewpointVolume::OpacityColorBleeding;
+
+        if ( !m_method->loadObscurances( obscurancesFileName, color ) )
+        {
+            ERROR_LOG( QString( "No es pot llegir el fitxer " ) + obscurancesFileName );
+            QMessageBox::warning( this, tr("Can't load"), QString( tr("Can't load from file ") ) + obscurancesFileName );
+            return;
+        }
+
+        QFileInfo obscurancesFileInfo( obscurancesFileName );
+        settings.setValue( "obscurancesDir", obscurancesFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
 void QOptimalViewpointExtension::doViewpointSelection()
 {
     m_parameters->setNumberOfPlanes( m_comboNumberOfPlanes->currentText().toUShort() );
@@ -602,7 +638,7 @@ void QOptimalViewpointExtension::saveCameraParameters()
 
 void QOptimalViewpointExtension::computeViewpointSaliency()
 {
-    m_method->computeViewpointSaliency( m_obscuranceDirectionsSpinBox->value() );
+    m_method->computeViewpointSaliency( m_obscuranceDirectionsSpinBox->value(), m_viewpointSaliencyDivAreaCheckBox->isChecked() );
 }
 
 

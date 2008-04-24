@@ -88,6 +88,7 @@ private slots:
     void openSegmentationFile();
     void toggleSegmentationParameters();
     void computeObscurances();
+    void loadObscurances();
     void computeSaliency();
     void renderPlane();
     void setNumberOfPlanes( const QString & numberOfPlanes );

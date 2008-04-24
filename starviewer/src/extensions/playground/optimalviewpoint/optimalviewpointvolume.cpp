@@ -1310,7 +1310,7 @@ void OptimalViewpointVolume::computeSaliency()
             QDataStream out( &outFile );
             for ( int i = 0; i < m_dataSize; ++i )
             {
-                uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( 255.0 * gradientMagnitudes[i] ) ) : 0;
+                uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( 255.0 * m_saliency[i] ) ) : 0;
                 out << value;
             }
             outFile.close();
@@ -1595,6 +1595,17 @@ void OptimalViewpointVolume::computeObscurances2()
                 out << "ElementDataFile = obscurance.raw";
                 outFileMhd.close();
             }
+
+            QFile obscurancesFile( QDir::tempPath().append( QString( "/obscurance.dat" ) ) );
+            if ( obscurancesFile.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QDataStream out( &obscurancesFile );
+                for ( int i = 0; i < m_dataSize; ++i )
+                {
+                    out << m_obscurance[i];
+                }
+                obscurancesFile.close();
+            }
         }
 
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
@@ -1665,6 +1676,17 @@ void OptimalViewpointVolume::computeObscurances2()
                 out << "ElementDataFile = colorbleeding.raw";
                 outFileMhd.close();
             }
+
+            QFile colorBleedingFile( QDir::tempPath().append( QString( "/colorbleeding.dat" ) ) );
+            if ( colorBleedingFile.open( QFile::WriteOnly | QFile::Truncate ) )
+            {
+                QDataStream out( &colorBleedingFile );
+                for ( int i = 0; i < m_dataSize; ++i )
+                {
+                    out << m_colorBleeding[i].x << m_colorBleeding[i].y << m_colorBleeding[i].z;
+                }
+                colorBleedingFile.close();
+            }
         }
 
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
@@ -1672,6 +1694,69 @@ void OptimalViewpointVolume::computeObscurances2()
         m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
         m_volumeRayCastFunctionObscurances->SetColor( true );
     }
+}
+
+
+bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileName, bool color )
+{
+    QFile obscurancesFile( obscurancesFileName );
+
+    if ( !obscurancesFile.open( QFile::ReadOnly ) ) return false;
+
+    QDataStream in( &obscurancesFile );
+
+    if ( !color )   // obscurances
+    {
+        delete m_colorBleeding; m_colorBleeding = 0;
+        if ( !m_obscurance ) m_obscurance = new double[m_dataSize];
+        for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] = 0.0;
+
+        for ( int i = 0; i < m_dataSize; i++ )
+        {
+            if ( in.atEnd() ) {
+                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
+                return false;
+            }
+            else in >> m_obscurance[i];
+        }
+
+        m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionObscurances->SetColor( false );
+    }
+    else    // color bleeding
+    {
+        delete m_obscurance; m_obscurance = 0;
+        if ( !m_colorBleeding ) m_colorBleeding = new Vector3[m_dataSize];
+        else for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] = Vector3();
+
+        for ( int i = 0; i < m_dataSize; i++ )
+        {
+            Vector3 colorBleeding;
+            if ( in.atEnd() ) {
+                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
+                return false;
+            }
+            else in >> colorBleeding.x;
+            if ( in.atEnd() ) {
+                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
+                return false;
+            }
+            else in >> colorBleeding.y;
+            if ( in.atEnd() ) {
+                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
+                return false;
+            }
+            else in >> colorBleeding.z;
+            m_colorBleeding[i] = colorBleeding;
+        }
+
+        m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionObscurances->SetColor( true );
+    }
+
+    obscurancesFile.close();
+
+    return true;
 }
 
 
@@ -1728,7 +1813,7 @@ void OptimalViewpointVolume::getLineStarts( QVector<Vector3> & lineStarts, int d
 }
 
 
-void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, vtkRenderer * renderer )
+void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, vtkRenderer * renderer, bool divArea )
 {
     if ( !m_saliency ) return;
 
@@ -1760,6 +1845,7 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
 
         // inicialitzar viewpoint saliency
         m_accumulatedViewpointSaliencyPerThread.clear();
+        m_pixelsPerThread.clear();
 
         QTime t;
         t.start();
@@ -1770,13 +1856,20 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
         // finalitzar viewpoint saliency
         viewpointSaliency[i] = 0.0;
         QHashIterator<int, double> it( m_accumulatedViewpointSaliencyPerThread );
-        while ( it.hasNext() ) viewpointSaliency[i] += it.next().value();
+        QHashIterator<int, uint> it2( m_pixelsPerThread );
+        uint area = 0;
+        while ( it.hasNext() )
+        {
+            viewpointSaliency[i] += it.next().value();
+            area += it2.next().value();
+        }
+        if ( divArea ) viewpointSaliency[i] /= area;
     }
 
     int maxView = 0;
     double maxSaliency = 0.0;
     for (int i = 0; i < nDirections; i++) {
-        DEBUG_LOG( QString( "view %1 %2: saliency = %3" ).arg( i ).arg( directions[i].toString() ).arg( viewpointSaliency[i] ) );
+        DEBUG_LOG( QString( "view %1 %2: saliency = %3" ).arg( i+1 ).arg( directions[i].toString() ).arg( viewpointSaliency[i] ) );
         if ( viewpointSaliency[i] > maxSaliency ) {
             maxView = i;
             maxSaliency = viewpointSaliency[i];
@@ -1785,10 +1878,25 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
 
     m_mainMapper->SetVolumeRayCastFunction( current );
 
-    DEBUG_LOG( QString( "most salient view: %1 (%2)" ).arg( maxView ).arg( maxSaliency ) );
+    DEBUG_LOG( QString( "most salient view: %1 (%2)" ).arg( maxView+1 ).arg( maxSaliency ) );
     camera->SetPosition( directions[maxView].x, directions[maxView].y, directions[maxView].z );
+    camera->OrthogonalizeViewUp();
     renderer->ResetCameraClippingRange();
     renderer->Render();
+
+    {
+        // Guardar resultats en un fitxer
+        QFile outFile( QDir::tempPath().append( "/viewpointsaliency.txt" ) );
+        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFile );
+            for ( int i = 0; i < nDirections; i++ )
+            {
+                out << i+1 << " " << directions[i].toString() << " -> " << viewpointSaliency[i] << "\n";
+            }
+            outFile.close();
+        }
+    }
 
     delete [] viewpointSaliency;
 }
@@ -1800,10 +1908,12 @@ void OptimalViewpointVolume::accumulateViewpointSaliency( int threadId, double s
     {
         m_mutex.lock();
         m_accumulatedViewpointSaliencyPerThread[threadId] = 0.0;  // crear l'entrada
+        m_pixelsPerThread[threadId] = 0;  // crear l'entrada
         m_mutex.unlock();
     }
 
     m_accumulatedViewpointSaliencyPerThread[threadId] += saliency;
+    m_pixelsPerThread[threadId]++;
 }
 
 
