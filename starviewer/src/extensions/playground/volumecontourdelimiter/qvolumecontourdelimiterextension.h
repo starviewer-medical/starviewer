@@ -73,6 +73,15 @@ private slots:
     void addNewSpline();
     
     void myEventHandler( unsigned long id );
+        
+    ///calcula l'àrea de la llesca passada per paràmetre
+    void computeCurrentArea( int slice );
+    
+    ///calcula el volum total dels splines
+    void computeTotalVolume();
+    
+    ///executa els dos càlculas anteriors per quan és necessari actualitzar
+    void computeAreaAndVolume();
     
 private:
     ///Factory de Tools
@@ -102,10 +111,10 @@ private:
     ///per guardar la llesca de treball;
     int m_currentSlice;
 
-/// El volum principal
+    /// El volum principal
     Volume *m_volume;
     
-       ///atribut per guardar la sortida de l'stencil
+    ///atribut per guardar la sortida de l'stencil
     vtkImageData *m_stencilOutputDataImage;
     
     ///directori on deixarem les dades temporals. Al finalitzar aquest procés, aquestes dades seran esborrades.
@@ -144,6 +153,9 @@ private:
     
     ///Acció d'slicing
     QAction *m_slicingAction;
+    
+    ///per a calcular el volum total
+    double m_totalVolume;
    };
 }
 

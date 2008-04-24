@@ -6,6 +6,7 @@
 #include "deletedirectory.h"
 #include "point.h"
 #include "toolmanager.h"
+#include "drawerpolyline.h"
 
 // VTK
 #include <vtkRenderer.h>
@@ -84,6 +85,8 @@ QVolumeContourDelimiterExtension::QVolumeContourDelimiterExtension(QWidget *pare
         QDir directory( m_tempDirectory );
         directory.mkdir( "dadesTemporalsStencil" );
     }
+    
+    m_totalVolume = 0.;
     
     m_splineClosed = false;
     m_firstSplineIsFixed = false;
@@ -196,12 +199,16 @@ void QVolumeContourDelimiterExtension::createActions()
     connect( m_slicingAction, SIGNAL( triggered() ), m_2DView, SLOT( enableTools() ) );
     connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
     connect( m_2DView, SIGNAL( sliceChanged( int ) ), m_spinBox, SLOT( setValue( int ) ) );
+    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( computeCurrentArea( int ) ) );
+    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( computeTotalVolume() ) );
+    connect( m_refreshButton, SIGNAL( clicked() ), this, SLOT( computeAreaAndVolume() ) );
     connect( m_spinBox, SIGNAL( valueChanged(int) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
     connect( m_spinBox, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setSlice( int ) ) );
     connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), this, SLOT( myEventHandler( unsigned long )) );
     connect( m_actionFactory, SIGNAL( triggeredTool( QString ) )  , m_2DView, SLOT( setTool( QString ) ) );
     
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
+    m_2DView->enableAnnotation( Q2DViewer::SliceAnnotation );
 }
 
 void QVolumeContourDelimiterExtension::setSplineAtributes( vtkSplineWidget *spline )
@@ -242,27 +249,18 @@ void QVolumeContourDelimiterExtension::setAttributes()
     switch ( m_view )
     {
         case Q2DViewer::Axial:
-/*            m_spinBox->setMinimum( extent[4] );
-            m_spinBox->setMaximum( extent[5] );
-            m_slider->setMaximum( extent[5] );*/
             m_firstSlice = extent[4];
             m_lastSlice = extent[5];
             m_extrude->SetVector( 0, 0, 1 );
             break;
 
         case Q2DViewer::Coronal:
-/*            m_spinBox->setMinimum( extent[2] );
-            m_spinBox->setMaximum( extent[3] );
-            m_slider->setMaximum( extent[3] );*/
             m_firstSlice = extent[2];
             m_lastSlice = extent[3];
             m_extrude->SetVector( 0, 1, 0 );
             break;
 
         case Q2DViewer::Sagital:
-/*            m_spinBox->setMinimum( extent[0] );
-            m_spinBox->setMaximum( extent[1] );
-            m_slider->setMaximum( extent[1] );*/
             m_firstSlice = extent[0];
             m_lastSlice = extent[1];
             m_extrude->SetVector( 1, 0, 0 );
@@ -294,12 +292,17 @@ void QVolumeContourDelimiterExtension::myEventHandler( unsigned long id )
         case vtkCommand::KeyPressEvent:    
             if ( m_2DView->getInteractor()->GetKeyCode() == 'c' && m_pointList.size() > 2 )
             {
+                
                 m_splineWidget->SetClosed( true );
                 m_splineClosed = true;
+                m_splinesMap.insert( m_sliceOfCurrentSpline, m_splineWidget );
                 showSplines();
 
                 //ja podem afegir un altre spline, perquè hem tancat l'actual
                 m_addSpline->setEnabled( true );
+                
+                computeCurrentArea( m_2DView->getCurrentSlice() );
+                computeTotalVolume();
             }
             break;
     }
@@ -354,7 +357,7 @@ void QVolumeContourDelimiterExtension::addNewSpline()
 
     //el nou spline està obert
     m_splineClosed = false;
-    m_splinesMap.insert( m_sliceOfCurrentSpline, m_splineWidget );
+//     m_splinesMap.insert( m_sliceOfCurrentSpline, m_splineWidget );
 
     //esborrem tots els punts acumulats
     m_pointList.clear();
@@ -417,7 +420,7 @@ void QVolumeContourDelimiterExtension::createModelOfVoxelsWithObtainedMasks()
 
     QDir saveDir( "./" );
     QString fileName = QFileDialog::getSaveFileName( this, tr("Save Volume as..."), saveDir.home().path(), tr("MHD Files (*.mhd)") );
-    m_splinesMap.insert( m_sliceOfCurrentSpline, m_splineWidget );
+//     m_splinesMap.insert( m_sliceOfCurrentSpline, m_splineWidget );
 
     m_currentSlice = m_2DView->getCurrentSlice();
     
@@ -518,6 +521,118 @@ void QVolumeContourDelimiterExtension::createModelOfVoxelsWithObtainedMasks()
     dataToStencil->Delete();
     stencil->Delete();
     splinePoly->Delete();
+}
+
+void QVolumeContourDelimiterExtension::computeCurrentArea( int slice )
+{
+    double *currentPoint;
+    double *followPoint;
+    double *aux;
+    vtkPolyData *pd  = vtkPolyData::New();
+    vtkPoints *points;
+    int i,j;
+    double currentArea = 0.;
+    DrawerPolyline polyline;
+    
+    QList<vtkSplineWidget*> m_splinesList = m_splinesMap.values( slice );    
+    QList<double*> m_pointsList;    
+    
+    foreach( vtkSplineWidget *spline, m_splinesList )
+    {
+        spline->GetPolyData( pd );
+        points = pd->GetPoints();
+        
+        //en el següent loop reduïm el nombre de punts per tal de facilitar el càlcul i perquè tants punts no són necessaris. 
+        for ( j = 0; j < points->GetNumberOfPoints(); j = j + 4 )
+        {
+            currentPoint = points->GetPoint( j );
+            aux = new double[3];
+            
+            for ( i = 0; i < 3; i++) 
+            aux[i] = currentPoint[i];
+            
+            polyline.addPoint( aux );
+        }
+         
+        currentPoint = points->GetPoint( points->GetNumberOfPoints() - 1 );
+        aux = new double[3];
+             
+        for ( i = 0; i < 3; i++) 
+            aux[i] = currentPoint[i];
+         
+        polyline.addPoint( aux );
+         
+        currentPoint = points->GetPoint( 0 );
+        aux = new double[3];
+             
+        for ( i = 0; i < 3; i++) 
+            aux[i] = currentPoint[i];
+         
+        polyline.addPoint( aux );
+         
+        currentArea += polyline.computeArea( m_view );
+        polyline.deleteAllPoints();
+    }
+    m_areaLabel->setText( QString("%1 mm2").arg( currentArea, 0, 'f', 2 ) );
+}
+               
+void QVolumeContourDelimiterExtension::computeTotalVolume()
+{
+    double *currentPoint, *followPoint, *aux;
+    vtkPolyData *pd  = vtkPolyData::New();
+    vtkPoints *points;
+    int i,j;
+    double currentVolume = 0.;
+    DrawerPolyline polyline;
+    
+    QList<vtkSplineWidget*> m_splinesList = m_splinesMap.values();    
+    QList<double*> m_pointsList;    
+    
+    foreach( vtkSplineWidget *spline, m_splinesList )
+    {
+        spline->GetPolyData( pd );
+        points = pd->GetPoints();
+        
+        //en el següent loop reduïm el nombre de punts per tal de facilitar el càlcul i perquè tants punts no són necessaris. 
+        for ( j = 0; j < points->GetNumberOfPoints(); j = j + 4 )
+        {
+            currentPoint = points->GetPoint( j );
+            aux = new double[3];
+            
+            for ( i = 0; i < 3; i++) 
+                aux[i] = currentPoint[i];
+            
+            polyline.addPoint( aux );
+        }
+         
+        currentPoint = points->GetPoint( points->GetNumberOfPoints() - 1 );
+        aux = new double[3];
+             
+        for ( i = 0; i < 3; i++) 
+            aux[i] = currentPoint[i];
+         
+        polyline.addPoint( aux );
+         
+        currentPoint = points->GetPoint( 0 );
+        aux = new double[3];
+             
+        for ( i = 0; i < 3; i++) 
+            aux[i] = currentPoint[i];
+         
+        polyline.addPoint( aux );
+         
+        currentVolume += polyline.computeArea( m_view );
+        polyline.deleteAllPoints();
+    }
+    //per saber el volum, multipliquem l'àrea per l'espaiat de profunditat, en aquest cas pel de z.
+    currentVolume *= m_2DView->getInput()->getSpacing()[2];
+    m_volumeLabel->setText( QString("%1 mm3").arg( currentVolume, 0, 'f', 2 ) );
+}
+
+void QVolumeContourDelimiterExtension::computeAreaAndVolume()
+{
+    computeCurrentArea( m_2DView->getCurrentSlice() );
+    computeTotalVolume();
 }
 };
 
