@@ -154,7 +154,7 @@ bool ImagePlane::fillFromImage( const Image *image )
         this->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
         this->setColumnDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
         this->setSpacing( image->getPixelSpacing()[0], image->getPixelSpacing()[1] );
-        this->setThickness( this->getThickness() );
+        this->setThickness( image->getSliceThickness() );
         this->setRows( image->getRows() );
         this->setColumns( image->getColumns() );
         this->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
