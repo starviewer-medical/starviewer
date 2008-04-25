@@ -20,8 +20,6 @@ namespace udg {
 class Cursor3DToolData;
 class Q2DViewer;
 class ImagePlane;
-class DrawerPolygon;
-class DrawerLine;
 
 /**
 Implementació de la tool del cursor 3D.
@@ -49,13 +47,10 @@ public:
 
 private slots:
     /// Actualitza les línies a projectar sobre la imatge segons les dades de la tool
-    void updateProjectionLines();
+    void updateProjectedPoint();
 
     /// Actualitza el frame of reference de les dades a partir del volum donat
     void updateFrameOfReference();
-
-    /// Actualitza el pla d'imatge a projectar. Es crida cada cop que al viewer es canvia de llesca
-    void updateImagePlane();
 
     /// Aquest slot es crida per actualitzar les dades que marquen quin és el pla de referència
     /// Es cridarà quan el viewer sigui actiu o quan el viewer actiu canvïi d'input
@@ -66,7 +61,7 @@ private slots:
 
 private:
     /// Projecta el pla de referència sobre el pla de localitzador
-    void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane);
+    void projectPoint();
 
     /// Inicialitza la posició de la tool 
     void initializePosition();

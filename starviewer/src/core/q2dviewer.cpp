@@ -3195,10 +3195,8 @@ vtkImageData* Q2DViewer::getCurrentSlabProjection()
     return m_thickSlabProjectionFilter->GetOutput();
 }
 
-int Q2DViewer::getNearestSlice( double projectedPosition[3], double * distance )
+int Q2DViewer::getNearestSlice( double projectedPosition[3], double &distance )
 {
-    //TODO distance no es fa servir per res ni se li dona cap valor. A mes a mes, seria mes correcte declarar-lo
-    // "double &distance" si el que es tracta es d'un parametre d'e/s i no pas "double *distance" com esta ara mateix
     int i;
     double actualDistance;
     double minimumDistance = -1.0;
@@ -3207,19 +3205,18 @@ int Q2DViewer::getNearestSlice( double projectedPosition[3], double * distance )
     ImagePlane *currentPlane;
     int maxSlice = this->getMaximumSlice();
 
+    ImagePlane *imagePlane = 0;
+    
     for( i = 0; i < maxSlice ; i++ )
     {
         currentPlane = this->getImagePlane( i, m_currentPhase );
+
         if( currentPlane )
         {
             currentPlane->getOrigin( currentPlaneOrigin );
             currentPlane->getNormalVector( currentNormalVector );
 
-//             DEBUG_LOG( tr("Origen: [%1,%2,%3]").arg( currentPlaneOrigin[0] ).arg( currentPlaneOrigin[1] ).arg( currentPlaneOrigin[2] ) );
-
             actualDistance = vtkPlane::DistanceToPlane ( projectedPosition, currentNormalVector, currentPlaneOrigin );
-
-//             DEBUG_LOG( tr("Distància a la llesca %1: %2 amb Origen: [%3,%4,%5] al punt: [%6,%7,%8] vector:[%9,%10,%11]").arg( i ).arg( actualDistance ).arg(currentPlaneOrigin[0]).arg(currentPlaneOrigin[1]).arg(currentPlaneOrigin[2]).arg(projectedPosition[0]).arg(projectedPosition[1]).arg(projectedPosition[2]).arg(currentNormalVector[0]).arg(currentNormalVector[1]).arg(currentNormalVector[2]) );
 
             if( ( actualDistance < minimumDistance ) || ( minimumDistance == -1.0 ))
             {
@@ -3228,9 +3225,8 @@ int Q2DViewer::getNearestSlice( double projectedPosition[3], double * distance )
             }
         }
     }
-
-
-//     DEBUG_LOG( tr("Em quedo amb la llesca: %1").arg( minimumSlice ) );
+    distance = minimumDistance;
+    
     return minimumSlice;
 }
 
