@@ -286,7 +286,7 @@ public:
     vtkImageData* getCurrentSlabProjection();
 
     /// Busca la llesca que es troba més a prop del punt i retorna la distancia
-    int getNearestSlice( double point[3], double * distance );
+    int getNearestSlice( double point[3], double &distance );
 
 public slots:
     virtual void render();
