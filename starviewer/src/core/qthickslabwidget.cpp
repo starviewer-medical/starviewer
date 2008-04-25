@@ -75,11 +75,11 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
     QString projectionType = m_projectionModeComboBox->itemText( comboItem );
     if( projectionType == tr("Disabled") )
     {
-        //desconnexió nova pel ticket #486
-        disconnect( m_slabThicknessSlider, SIGNAL( sliderReleased () ), this, SLOT( applyThickSlab() ) );
-        
-        //desconnexió antiga
-        //disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
+        // desconnectem qualsevol possible connexió
+        disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), this, SLOT( applyThickSlab() ) );
+        disconnect( m_slabThicknessSlider, SIGNAL( sliderPressed () ), this, SLOT( turnOnDelayedUpdate() ) );
+        disconnect( m_slabThicknessSlider, SIGNAL( sliderReleased () ), this, SLOT( onSliderReleased() ) );
+
         m_currentViewer->enableThickSlab(false);
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
@@ -91,15 +91,18 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         m_currentViewer->enableThickSlab(true);
         m_slabThicknessSlider->setEnabled(true);
         m_slabThicknessLabel->setEnabled(true);
-        // TODO es podria fer l'actualització de l'slab quan es deixa d'interactuar ( sliderReleased() )si és que fer-ho
-        // "en viu" afecta molt al temps de resposta amb l'interacció. De moment ens atrevim a fer-ho "en viu"
 
-        //connexió antiga
-        //connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), m_currentViewer, SLOT( setSlabThickness(int) ) );
-        
-        //connexió nova pel ticket #486
-        connect( m_slabThicknessSlider, SIGNAL( sliderReleased () ),this,  SLOT( applyThickSlab() ) );
-        
+        // fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
+        // s'actualitzi amb el signal valueChanged()
+        // si el valor es canvia arrossegant l'slider, canviem el comportament i no apliquem el nou
+        // valor de thickness fins que no fem el release
+        // Ho fem així, ja que al arrossegar es van enviant senyals de valueChanged i això feia que
+        // la resposta de l'interfície fos una mica lenta, ja que calcular el nou slab és costós
+        // TODO si el procés de l'slab anés amb threads no tindríem aquest problema
+        turnOffDelayedUpdate();
+        connect( m_slabThicknessSlider, SIGNAL( sliderPressed () ), SLOT( turnOnDelayedUpdate() ) );
+
+
         // TODO ara fem la conversió a id d'enter, però en un futur anirà tot amb Strings
         int projectionModeID = -1;
         if( projectionType == tr("MIP") )
@@ -125,6 +128,24 @@ void QThickSlabWidget::applyThickSlab()
     QApplication::setOverrideCursor( Qt::WaitCursor );
     m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
     QApplication::restoreOverrideCursor();
+}
+
+void QThickSlabWidget::turnOnDelayedUpdate()
+{
+    disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), this, SLOT( applyThickSlab() ) );
+    connect( m_slabThicknessSlider, SIGNAL( sliderReleased () ), SLOT( onSliderReleased() ) );
+}
+
+void QThickSlabWidget::turnOffDelayedUpdate()
+{
+    disconnect( m_slabThicknessSlider, SIGNAL( sliderReleased () ), this, SLOT( onSliderReleased() ) );
+    connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), SLOT( applyThickSlab() ) );
+}
+
+void QThickSlabWidget::onSliderReleased()
+{
+    applyThickSlab();
+    turnOffDelayedUpdate();
 }
 
 void QThickSlabWidget::updateMaximumThickness()
