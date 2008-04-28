@@ -30,45 +30,64 @@ AppImportFile::~AppImportFile()
 bool AppImportFile::open()
 {
     bool openedImage = false;
-
+    QStringList filters;
+    
     const QString PresentationStateFilter("Presentation State (*)"), KeyImageNoteFilter("Key Image Note (*)");
     const QString ResultFileFilter("Result (*.res)");
     const QString MetaIOImageFilter("MetaIO Image (*.mhd)"), DICOMImageFilter("DICOM Images (*.dcm)"), AllFilesFilter("All Files (*)");
     QStringList imagesFilter;
     imagesFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
+    filters << PresentationStateFilter << KeyImageNoteFilter << ResultFileFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
 
     QString fileFilter = MetaIOImageFilter + ";;" + DICOMImageFilter + ";;";
     fileFilter += PresentationStateFilter + ";;" + KeyImageNoteFilter + ";;" + ResultFileFilter + ";;" + AllFilesFilter;
 
-    QString selectedFilter, fileName;
-    fileName = QFileDialog::getOpenFileName( NULL, tr("Choose a file to open..."), m_workingDirectory, fileFilter , &selectedFilter );
+    QString selectedFilter;
+    QString fileName;
+    QStringList fileNames;
+    
+    QFileDialog *openDialog = new QFileDialog(0);
+    openDialog->setWindowTitle( tr("Choose a file to open...") );
+    openDialog->setDirectory( m_workingDirectory );
+    openDialog->setFilters( filters );
+    openDialog->selectFilter ( m_lastExtension );
+    openDialog->setFileMode( QFileDialog::ExistingFile );
+    openDialog->setAcceptMode( QFileDialog::AcceptOpen );
 
-    if ( !fileName.isEmpty() )
+    if( openDialog->exec() )
     {
-        INFO_LOG( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter );
-        if (imagesFilter.contains(selectedFilter))
-        {
-            QStringList files;
-            files << fileName;
-            emit selectedFiles( files );
-            openedImage = true;
-        }
-        else if (selectedFilter == KeyImageNoteFilter) // TODO aquest dos els mantenim temporalment,però el que cal és implementar el KINFillerStep i el PresentationStateFiller
-        {
-            emit openKeyImageNote(fileName);
-        }
-        else if (selectedFilter == PresentationStateFilter)
-        {
-            emit openPresentationState(fileName);
-        }
-        else
-        {
-            ERROR_LOG("Cas no tractat al obrir un fitxer");
-        }
-        m_workingDirectory = QFileInfo( fileName ).dir().path();
-        writeSettings();
+        fileNames = openDialog->selectedFiles();
+        selectedFilter = openDialog->selectedFilter();
     }
-
+        
+    fileName = fileNames.first();
+    
+    INFO_LOG( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter );
+    if (imagesFilter.contains(selectedFilter))
+    {
+        QStringList files;
+        files << fileName;
+        emit selectedFiles( files );
+        openedImage = true;
+    }
+    else if (selectedFilter == KeyImageNoteFilter) // TODO aquest dos els mantenim temporalment,però el que cal és implementar el KINFillerStep i el PresentationStateFiller
+    {
+        emit openKeyImageNote(fileName);
+    }
+    else if (selectedFilter == PresentationStateFilter)
+    {
+        emit openPresentationState(fileName);
+    }
+    else
+    {
+        ERROR_LOG("Cas no tractat al obrir un fitxer");
+    }
+    m_workingDirectory = QFileInfo( fileName ).dir().path();
+    m_lastExtension = selectedFilter;
+    
+    writeSettings();
+    delete openDialog;
+    
     return openedImage;
 }
 
@@ -111,6 +130,7 @@ void AppImportFile::readSettings()
     settings.beginGroup("Starviewer-App-ImportFile");
     m_workingDirectory = settings.value("workingDirectory", ".").toString();
     m_workingDicomDirectory = settings.value("workingDicomDirectory", ".").toString();
+    m_lastExtension = settings.value( "defaultExtension", "MetaIO Image (*.mhd)" ).toString();
     settings.endGroup();
 }
 
@@ -120,6 +140,7 @@ void AppImportFile::writeSettings()
     settings.beginGroup("Starviewer-App-ImportFile");
     settings.setValue("workingDirectory", m_workingDirectory );
     settings.setValue("workingDicomDirectory", m_workingDicomDirectory );
+    settings.setValue("defaultExtension", m_lastExtension );
     settings.endGroup();
 }
 

@@ -61,6 +61,9 @@ private:
 
     /// Directori de treball per directoris dicom
     QString m_workingDicomDirectory;
+    
+    /// Última Extenció seleccionada per l'usuari
+    QString m_lastExtension;
 };
 
 };  //  end  namespace udg
