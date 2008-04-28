@@ -806,6 +806,9 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::TransferFunctionObject:
             setTransferFunction( m_parameters->getTransferFunctionObject() );
             break;
+        case OptimalViewpointParameters::Fx:
+            setFx( m_parameters->getFx() );
+            break;
     }
 }
 
@@ -980,6 +983,12 @@ void OptimalViewpoint::setCameraParameters( const Vector3 & position, const Vect
 void OptimalViewpoint::computeViewpointSaliency( int directions, bool divArea )
 {
     m_volume->computeViewpointSaliency( directions, m_renderer, divArea );
+}
+
+
+void OptimalViewpoint::setFx( bool fx )
+{
+    m_volume->setFx( fx );
 }
 
 

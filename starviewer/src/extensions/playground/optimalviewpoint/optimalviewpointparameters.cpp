@@ -354,4 +354,19 @@ void OptimalViewpointParameters::setObscurancesFilterHigh( double obscurancesFil
 }
 
 
+bool OptimalViewpointParameters::getFx() const
+{
+    return m_fx;
+}
+
+
+void OptimalViewpointParameters::setFx( bool fx )
+{
+    if ( m_fx != fx )
+    {
+        m_fx = fx; emit changed( Fx );
+    }
+}
+
+
 }

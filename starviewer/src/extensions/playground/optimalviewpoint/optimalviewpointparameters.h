@@ -53,7 +53,9 @@ public:
 
         GroupingMethod,
 
-        Obscurances, ObscurancesFactor, ObscurancesFilterLow, ObscurancesFilterHigh
+        Obscurances, ObscurancesFactor, ObscurancesFilterLow, ObscurancesFilterHigh,
+
+        Fx
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -135,6 +137,9 @@ public:
     double getObscurancesFilterHigh() const;
     void setObscurancesFilterHigh( double obscurancesFilterHigh );
 
+    bool getFx() const;
+    void setFx( bool fx );
+
 public slots:
 
     void setInterpolation( int interpolation );
@@ -180,6 +185,8 @@ private:
     double m_obscurancesFactor;
     double m_obscurancesFilterLow;
     double m_obscurancesFilterHigh;
+
+    bool m_fx;
 
 
 };

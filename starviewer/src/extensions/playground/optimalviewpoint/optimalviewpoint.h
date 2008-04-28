@@ -159,6 +159,8 @@ public:
 
     bool loadObscurances( const QString & obscurancesFileName, bool color );
 
+    void setFx( bool fx );
+
 public slots:
 
     void newMethod2( int step, bool normalized );

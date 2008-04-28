@@ -27,6 +27,7 @@ class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastCompositeFunctionObscurances;
 class vtkVolumeRayCastCompositeFunctionOptimalViewpoint;
 class vtkVolumeRayCastCompositeFunctionViewpointSaliency;
+class vtkVolumeRayCastCompositeFunctionFx;
 class vtkVolumeRayCastMapper;
 class vtkRenderer;
 
@@ -167,6 +168,8 @@ public:
 
     bool loadObscurances( const QString & obscurancesFileName, bool color);
 
+    void setFx( bool fx );
+
 
 
 
@@ -219,6 +222,7 @@ private:
     vtkVolumeRayCastCompositeFunctionOptimalViewpoint * m_planeVolumeRayCastFunction;
     vtkVolumeRayCastCompositeFunctionObscurances * m_volumeRayCastFunctionObscurances;
     vtkVolumeRayCastCompositeFunctionViewpointSaliency * m_volumeRayCastFunctionViewpointSaliency;
+    vtkVolumeRayCastCompositeFunctionFx * m_volumeRayCastFunctionFx;
 
     /// Vector de funcions de transferència d'opacitat.
 //     vtkPiecewiseFunction * m_opacityTransferFunction;
@@ -275,6 +279,9 @@ private:
     QHash<int, double> m_accumulatedViewpointSaliencyPerThread;
     QHash<int, uint> m_pixelsPerThread;
     QMutex m_mutex;
+
+
+    bool m_fx;
 
 };
 
