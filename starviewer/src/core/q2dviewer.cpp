@@ -654,14 +654,14 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
     }
 }
 
+// TODO potser hauria de ser getCurrentSliceThickness ?
 double Q2DViewer::getThickness()
 {
     double thickness;
     switch( m_lastView )
     {
     case Axial:
-        // TODO no seria més correcte demanar la informació de la imatge actual?
-        thickness = m_mainVolume->getSpacing()[2] * m_slabThickness;
+        thickness = getCurrentDisplayedImage()->getSliceThickness() * m_slabThickness;
     break;
     case Sagital:
         thickness = m_mainVolume->getSpacing()[0] * m_slabThickness;
