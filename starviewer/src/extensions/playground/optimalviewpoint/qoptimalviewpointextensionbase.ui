@@ -676,6 +676,23 @@
            </layout>
           </item>
           <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="m_fxCheckBox">
+              <property name="text" >
+               <string>FX</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="Line" name="m_visualizationLine" >
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>

@@ -354,6 +354,10 @@ void QOptimalViewpointExtension::readParameter( int index )
             case OptimalViewpointParameters::VisualizationBlockLength:
                 m_spinBoxVisualizationBlockLength->setValue( m_parameters->getVisualizationBlockLength() );
                 break;
+
+            case OptimalViewpointParameters::Fx:
+                m_fxCheckBox->setChecked( m_parameters->getFx() );
+                break;
         }
     }
 }
@@ -382,6 +386,7 @@ void QOptimalViewpointExtension::doVisualization()
     m_parameters->setObscurancesFactor( m_obscurancesFactorDoubleSpinBox->value() );
     m_parameters->setObscurancesFilterLow( m_obscurancesFilterLowDoubleSpinBox->value() );
     m_parameters->setObscurancesFilterHigh( m_obscurancesFilterHighDoubleSpinBox->value() );
+    m_parameters->setFx( m_fxCheckBox->isChecked() );
 
     m_viewerWidget->render();
 }

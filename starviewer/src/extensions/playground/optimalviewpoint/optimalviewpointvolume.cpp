@@ -51,6 +51,7 @@
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
 #include <QTime>
+#include "vtkVolumeRayCastCompositeFunctionFx.h"
 
 namespace udg {
 
@@ -138,6 +139,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New(); //m_volumeRayCastFunctionObscurances->Register( 0 );
     m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New(); //m_volumeRayCastFunctionViewpointSaliency->Register( 0 );
     m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
+    m_volumeRayCastFunctionFx = vtkVolumeRayCastCompositeFunctionFx::New();
 
 
 
@@ -276,6 +278,8 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_mainVolumeRayCastFunction->Delete();
     m_planeVolumeRayCastFunction->Delete();
     m_volumeRayCastFunctionObscurances->Delete();
+    m_volumeRayCastFunctionViewpointSaliency->Delete();
+    m_volumeRayCastFunctionFx->Delete();
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -846,6 +850,7 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
             m_planeVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
             break;
         case INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE:
             m_volumeProperty->SetInterpolationTypeToLinear();
@@ -853,6 +858,7 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
             m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();
             break;
     }
 }
@@ -951,7 +957,7 @@ void OptimalViewpointVolume::endRayObscurances( int rayId )
 }
 
 
-// versió amb threads
+// versió amb threads (deprecated)
 void OptimalViewpointVolume::computeObscurances()
 {
     synchronize();
@@ -1259,18 +1265,21 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
 void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
 {
     m_volumeRayCastFunctionObscurances->SetObscuranceFactor( obscurancesFactor );
+    m_volumeRayCastFunctionFx->SetObscuranceFactor( obscurancesFactor );
 }
 
 
 void OptimalViewpointVolume::setObscurancesFilterLow( double obscurancesFilterLow )
 {
     m_volumeRayCastFunctionObscurances->SetObscuranceFilterLow( obscurancesFilterLow );
+    m_volumeRayCastFunctionFx->SetObscuranceFilterLow( obscurancesFilterLow );
 }
 
 
 void OptimalViewpointVolume::setObscurancesFilterHigh( double obscurancesFilterHigh )
 {
     m_volumeRayCastFunctionObscurances->SetObscuranceFilterHigh( obscurancesFilterHigh );
+    m_volumeRayCastFunctionFx->SetObscuranceFilterHigh( obscurancesFilterHigh );
 }
 
 
@@ -1612,6 +1621,9 @@ void OptimalViewpointVolume::computeObscurances2()
 
         m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
         m_volumeRayCastFunctionObscurances->SetColor( false );
+
+        m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionFx->SetColor( false );
     }
     else    // color bleeding
     {
@@ -1693,6 +1705,9 @@ void OptimalViewpointVolume::computeObscurances2()
 
         m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
         m_volumeRayCastFunctionObscurances->SetColor( true );
+
+        m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionFx->SetColor( true );
     }
 }
 
@@ -1722,6 +1737,9 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
 
         m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
         m_volumeRayCastFunctionObscurances->SetColor( false );
+
+        m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionFx->SetColor( false );
     }
     else    // color bleeding
     {
@@ -1752,6 +1770,9 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
 
         m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
         m_volumeRayCastFunctionObscurances->SetColor( true );
+
+        m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionFx->SetColor( true );
     }
 
     obscurancesFile.close();
@@ -1914,6 +1935,27 @@ void OptimalViewpointVolume::accumulateViewpointSaliency( int threadId, double s
 
     m_accumulatedViewpointSaliencyPerThread[threadId] += saliency;
     m_pixelsPerThread[threadId]++;
+}
+
+
+void OptimalViewpointVolume::setFx( bool fx )
+{
+    DEBUG_LOG( QString( "sfx:b (%1,%2)" ).arg( m_fx ).arg( fx ) );
+    if ( m_fx == fx ) return;
+
+    m_fx = fx;
+
+    if ( m_fx )
+    {
+        m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionFx );
+    }
+    else
+    {
+        // truc lleig perquè agafi la correcta
+        m_renderWithObscurances = !m_renderWithObscurances;
+        setRenderWithObscurances( !m_renderWithObscurances );
+    }
+    DEBUG_LOG( "sfx:e" );
 }
 
 
