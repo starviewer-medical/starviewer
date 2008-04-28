@@ -34,7 +34,7 @@ public:
      * @param dicomdirPath directori on es troba el dicomdir
      * @return estat del mètode
      */
-    Status open( QString dicomdirPath );
+    Status open( QString dicomdirFilePath );
 
     /** Retorna la llista d'estudis que conté el dicomdir
       * @param studyList llista amb els estudis que conté el dicomdir
@@ -60,7 +60,7 @@ public:
     /** Retorna el path del dicomdir
      * @return path del dicomdir
      */
-    QString getDicomdirPath();
+    QString getDicomdirFilePath();
 
     /**
      * Ens retorna tots els arxius que formen aquell estudi
@@ -73,7 +73,7 @@ public:
 private :
 
     DcmDicomDir *m_dicomdir;
-    QString m_dicomdirAbsolutePath;
+    QString m_dicomdirAbsolutePath, m_dicomdirFileName;
     bool m_dicomFilesInLowerCase;
 
     /** Comprova si un estudi compleix la màscara, pels camps PatientId, StudyID, StudyDate, PatientName i AccessionNumber
