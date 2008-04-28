@@ -1589,12 +1589,12 @@ Image *Q2DViewer::getCurrentDisplayedImage() const
     return m_mainVolume->getImage( m_currentSlice, m_currentPhase );
 }
 
-ImagePlane *Q2DViewer::getCurrentImagePlane()
+ImagePlane *Q2DViewer::getCurrentImagePlane( bool vtkReconstructionHack )
 {
-    return this->getImagePlane( m_currentSlice, m_currentPhase );
+    return this->getImagePlane( m_currentSlice, m_currentPhase, vtkReconstructionHack );
 }
 
-ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
+ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vtkReconstructionHack )
 {
     ImagePlane *imagePlane = 0;
     if( m_mainVolume )
@@ -1624,13 +1624,23 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
 
                     const double *dirCosines = image->getImageOrientationPatient();
 
-                    double columnVector[3];
-                    m_mainVolume->getStackDirection( columnVector, 0 );
+                    if( vtkReconstructionHack )
+                    {
+                        // retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
+                        imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+                        imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+                    }
+                    else
+                    {
+                        // això serà lo normal, retornar la autèntica direcció del pla
+                        double columnVector[3];
+                        m_mainVolume->getStackDirection( columnVector, 0 );
 
-                    imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
-                    imagePlane->setColumnDirectionVector( columnVector[0], columnVector[1], columnVector[2] );
+                        imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
+                        imagePlane->setColumnDirectionVector( columnVector[0], columnVector[1], columnVector[2] );
+                    }
 
-                    imagePlane->setSpacing( spacing[1], spacing[2] );
+                    imagePlane->setSpacing( spacing[1], image->getSliceThickness() );
                     imagePlane->setThickness( spacing[0] );
                     imagePlane->setRows( dimensions[1] );
                     imagePlane->setColumns( dimensions[2] );
@@ -1651,13 +1661,23 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber )
                     imagePlane = new ImagePlane();
                     const double *dirCosines = image->getImageOrientationPatient();
 
-                    double columnVector[3];
-                    m_mainVolume->getStackDirection( columnVector, 0 );
+                    if( vtkReconstructionHack )
+                    {
+                        // retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
+                        imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+                        imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
+                    }
+                    else
+                    {
+                        double columnVector[3];
+                        m_mainVolume->getStackDirection( columnVector, 0 );
 
-                    imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
-                    imagePlane->setColumnDirectionVector( columnVector[0], columnVector[1], columnVector[2] );
+                        imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
+                        imagePlane->setColumnDirectionVector( columnVector[0], columnVector[1], columnVector[2] );
+                    }
 
-                    imagePlane->setSpacing( spacing[0], spacing[2] );
+
+                    imagePlane->setSpacing( spacing[0], image->getSliceThickness() );
                     imagePlane->setThickness( spacing[1] );
                     imagePlane->setRows( dimensions[0] );
                     imagePlane->setColumns( dimensions[2] );
@@ -1687,7 +1707,7 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
     // aquest desplaçament consistirà en tornar a sumar l'origen del primer pla del volum
     // en principi, fer-ho amb l'origen de m_mainVolume també seria correcte
     //
-    ImagePlane *currentPlane = this->getCurrentImagePlane();
+    ImagePlane *currentPlane = this->getCurrentImagePlane(true);
     if( currentPlane )
     {
         // recollim les dades del pla actual sobre el qual volem projectar el punt de l'altre pla
@@ -1715,16 +1735,12 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
             homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i]; // desplacem el punt a l'origen del pla
         homogeneousPointToProject[3] = 1.0;
 
-        // projectem el punt amb la matriu
-        projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
-
         //
         // CORRECIÓ VTK!
         //
         // a partir d'aquí cal corretgir l'error introduit pel mapeig que fan les vtk
         // cal sumar l'origen de la primera imatge, o el que seria el mateix, l'origen de m_mainVolume
         //
-
         // TODO provar si amb l'origen de m_mainVolume també funciona bé
         Image *firstImage = m_mainVolume->getImages().at(0);
         const double *ori = firstImage->getImagePositionPatient();
@@ -1734,14 +1750,25 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
         switch( m_lastView )
         {
             case Axial:
+                // projectem el punt amb la matriu
+                projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
                 for( int i = 0; i<3; i++ )
                     projectedPoint[i] = homogeneousProjectedPoint[i] + ori[i];
             break;
 
             case Sagital:
+            {
+                // HACK que serveix de parxe pels casos de crani que no van be. TODO encara està per acabar, és una primera aproximació
+                projectionMatrix->SetElement(0,0,0);
+                projectionMatrix->SetElement(0,1,1);
+                projectionMatrix->SetElement(0,2,0);
+                // projectem el punt amb la matriu
+                projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
+
                 projectedPoint[1] = homogeneousProjectedPoint[0] + ori[1];
                 projectedPoint[2] = homogeneousProjectedPoint[1] + ori[2];
                 projectedPoint[0] = homogeneousProjectedPoint[2] + ori[0];
+            }
             break;
 
             case Coronal:
@@ -3206,7 +3233,7 @@ int Q2DViewer::getNearestSlice( double projectedPosition[3], double &distance )
     int maxSlice = this->getMaximumSlice();
 
     ImagePlane *imagePlane = 0;
-    
+
     for( i = 0; i < maxSlice ; i++ )
     {
         currentPlane = this->getImagePlane( i, m_currentPhase );
@@ -3226,7 +3253,7 @@ int Q2DViewer::getNearestSlice( double projectedPosition[3], double &distance )
         }
     }
     distance = minimumDistance;
-    
+
     return minimumSlice;
 }
 
