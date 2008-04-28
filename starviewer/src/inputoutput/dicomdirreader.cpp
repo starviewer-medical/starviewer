@@ -36,33 +36,31 @@ DICOMDIRReader::~DICOMDIRReader()
 {
 }
 
-Status DICOMDIRReader::open( QString dicomdirPath )
+Status DICOMDIRReader::open( QString dicomdirFilePath )
 {
     Status state;
-    QString dicomdirFilePath;
 
     //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
     if ( m_dicomdir != NULL) delete m_dicomdir;
 
-    m_dicomdirAbsolutePath = dicomdirPath;
-
-    //per defecte la informació dels dicomdir es guarda en unfitxer, per obrir el dicomdir hem d'obrir aquest fitxer, que per defecte es diu DICOMDIR, per tant l'hem de concatenar amb el path del dicomdir, per poder accedir al fitxer
-    dicomdirFilePath = dicomdirPath;
+    //Guardem el directori on es troba el dicomdir, el path que ens passen és amb el fitxer, per això tallem fins a la última ocurrència '/'
+    m_dicomdirAbsolutePath =  dicomdirFilePath.left( dicomdirFilePath.lastIndexOf('/') );
 
     /* L'estàndard del dicom indica que l'estructura del dicomdir ha d'estar guardada en un fitxer anomeant "DICOMDIR". En linux per 
        defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules, per tant 
        quan el dicomdir estigui guardat en unitats vfat i el volguem obrir trobarem que el fitxer ones guarda la informació del 
        dicomdir es dirà "dicomdir" en minúscules, per aquest motiu busquem el fitxer dicomdir tan en majúscules com minúscules
-    
     */
-    if ( QFile::exists( dicomdirPath + "/DICOMDIR") ) 
+    //busquem el nom del fitxer que conté les dades del dicomdir
+    m_dicomdirFileName = dicomdirFilePath.right( dicomdirFilePath.length() - dicomdirFilePath.lastIndexOf( '/' ) - 1);
+
+    //Comprovem si el sistema de fitxers treballa amb nom en minúscules o majúscules
+    if ( m_dicomdirFileName == m_dicomdirFileName.toUpper() )
     {
-        dicomdirFilePath.append( "/DICOMDIR" );
         m_dicomFilesInLowerCase = false;
-    }
-    else if ( QFile::exists( dicomdirPath + "/dicomdir") )
+    }//està montat en una vfat
+    else
     {
-        dicomdirFilePath.append( "/dicomdir" );
         m_dicomFilesInLowerCase = true;//indiquem que els fitxers estan en minúscules
     }
 
@@ -300,9 +298,9 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
     return state.setStatus( m_dicomdir->error() );
 }
 
-QString DICOMDIRReader::getDicomdirPath()
+QString DICOMDIRReader::getDicomdirFilePath()
 {
-    return m_dicomdirAbsolutePath;
+    return m_dicomdirAbsolutePath + "/" + m_dicomdirFileName;
 }
 
 QStringList DICOMDIRReader::getFiles( QString studyUID )

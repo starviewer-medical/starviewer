@@ -1212,7 +1212,7 @@ void QueryScreen::importDicomdir()
     // TODO ara només permetrem importar estudis sencers
     foreach( QString studyUID, m_studyTreeWidgetDicomdir->getSelectedStudiesUID() )
     {
-        state = importDicom.import( m_readDicomdir.getDicomdirPath(), studyUID, QString(), QString() );
+        state = importDicom.import( m_readDicomdir.getDicomdirFilePath(), studyUID, QString(), QString() );
 
         if (!state.good()) failedStudies++;
     }
@@ -1357,10 +1357,10 @@ void QueryScreen::convertToDicomdir()
 
 void QueryScreen::openDicomdir()
 {
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Dicomdir" ) );
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , "DICOMDIR" );
     QString path, dicomdirPath;
 
-    dlg->setFileMode( QFileDialog::DirectoryOnly );
+    dlg->setFileMode( QFileDialog::ExistingFile );
     Status state;
 
     if ( dlg->exec() == QDialog::Accepted )
