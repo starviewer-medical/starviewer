@@ -1246,9 +1246,13 @@ void OptimalViewpointVolume::setObscuranceVariant( ObscuranceVariant obscuranceV
 void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurances )
 {
     DEBUG_LOG( QString( "srwo:b (%1,%2)" ).arg( m_renderWithObscurances ).arg( renderWithObscurances ) );
-    if ( m_renderWithObscurances == renderWithObscurances ) return;
+    //if ( m_renderWithObscurances == renderWithObscurances ) return; // això no passarà mai mentre fem servir OVParameters
 
     m_renderWithObscurances = renderWithObscurances;
+
+    m_volumeRayCastFunctionFx->SetFxObscurance( renderWithObscurances );
+
+    if ( m_fx ) return;
 
     if ( m_renderWithObscurances )
     {
@@ -1941,7 +1945,7 @@ void OptimalViewpointVolume::accumulateViewpointSaliency( int threadId, double s
 void OptimalViewpointVolume::setFx( bool fx )
 {
     DEBUG_LOG( QString( "sfx:b (%1,%2)" ).arg( m_fx ).arg( fx ) );
-    if ( m_fx == fx ) return;
+    //if ( m_fx == fx ) return; // això no passarà mai mentre fem servir OVParameters
 
     m_fx = fx;
 
@@ -1956,6 +1960,12 @@ void OptimalViewpointVolume::setFx( bool fx )
         setRenderWithObscurances( !m_renderWithObscurances );
     }
     DEBUG_LOG( "sfx:e" );
+}
+
+
+void OptimalViewpointVolume::setFxContour( double fxContour )
+{
+    m_volumeRayCastFunctionFx->SetFxContour( fxContour );
 }
 
 
