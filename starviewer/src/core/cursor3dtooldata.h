@@ -50,6 +50,18 @@ public:
      */
     double *getOriginPointPosition() const;
 
+    /**
+    * Visibilitat del cursor
+    *
+    */
+    void setVisible( bool visibility );
+
+    /**
+    * Retorna cert si és visible, fals altrament.
+    * @return
+    */
+    bool isVisible();
+
 public slots:
     /**
      * Li assignem el frameOfReference del pla de referencia
@@ -92,6 +104,9 @@ private:
 
     /// Punt a on es troba el cursor 3D
     double * m_originPointPosition;
+
+    /// Visibilitat del cursor
+    bool m_isVisible;
 };
 
 }

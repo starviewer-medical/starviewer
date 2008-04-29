@@ -62,4 +62,15 @@ void Cursor3DToolData::setInstanceUID( const QString &instanceUID )
     m_instanceUID = instanceUID;
 }
 
+void Cursor3DToolData::setVisible( bool visibility )
+{
+    m_isVisible = visibility;
+    emit changed();
+}
+
+bool Cursor3DToolData::isVisible()
+{
+    return m_isVisible;
+}
+
 }

@@ -159,7 +159,8 @@ HEADERS += extensionfactory.h \
            patientitemmodel.h \
            cursor3dtool.h \
            cursor3dtooldata.h \
-           angletool.h
+           angletool.h \
+ drawercrosshair.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -287,7 +288,8 @@ SOURCES += extensionmediator.cpp \
            patientitemmodel.cpp \
            cursor3dtool.cpp \
            cursor3dtooldata.cpp \
-           angletool.cpp
+           angletool.cpp \
+ drawercrosshair.cpp
 TEMPLATE = lib
 CONFIG += warn_on \
 thread \
