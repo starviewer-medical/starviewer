@@ -97,7 +97,11 @@ Volume::VtkImageTypePointer Volume::getVtkData()
         QStringList fileList = getInputFiles();
         if( !fileList.isEmpty() )
         {
-            this->readFiles( fileList );
+            // TODO falta control dels errors que pot retornar ( p. exemple size mismatch! )
+            if( this->readFiles( fileList ) == SizeMismatch )
+            {
+                // TODO què fem?
+            }
         }
         /* TODO Descomentar per llegir amb classes DICOMImageReader
         if( !m_imageSet.isEmpty() )
@@ -532,6 +536,63 @@ void Volume::loadSlicesWithReaders( int method )
     reader->load();
 }
 
+void Volume::readDifferentSizeImagesIntoOneVolume( QStringList filenames )
+{
+    int errorCode = NoError;
+    // declarem el filtre de tiling
+    typedef itk::TileImageFilter< ItkImageType, ItkImageType  > TileFilterType;
+    TileFilterType::Pointer tileFilter = TileFilterType::New();
+    // inicialitzem les seves variables
+    // El layout ens serveix per indicar cap on creix la cua. En aquest cas volem fer creixer la coordenada Z
+    TileFilterType::LayoutArrayType layout;
+    layout[0] = 1;
+    layout[1] = 1;
+    layout[2] = 0;
+    tileFilter->SetLayout( layout );
+
+    int progressCount = 0;
+    int progressIncrement = static_cast<int>( (1.0/(double)filenames.count()) * 100 );
+
+    m_reader->SetImageIO( m_gdcmIO );
+    foreach( QString file, filenames )
+    {
+        emit progress( progressCount );
+        // declarem la imatge que volem carregar
+        ItkImageType::Pointer itkImage;
+        m_reader->SetFileName( qPrintable(file) );
+        try
+        {
+            m_reader->Update();
+        }
+        catch ( itk::ExceptionObject & e )
+        {
+            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+                    .arg( QFileInfo( filenames.at(0) ).dir().path() )
+                    .arg( e.GetDescription() )
+                    );
+            // llegim el missatge d'error per esbrinar de quin error es tracta
+            QString errorMessage( e.GetDescription() );
+            if( errorMessage.contains("Size mismatch") )
+            {
+                // aquest error no s'hauria de donar, estem llegint imatges una a una
+                errorCode = SizeMismatch;
+            }
+        }
+        if ( errorCode == NoError )
+        {
+            itkImage = m_reader->GetOutput();
+            m_reader->GetOutput()->DisconnectPipeline();
+
+        }
+        // Un cop llegit el block, fem el tiling
+        tileFilter->PushBackInput( itkImage );
+        progressCount += progressIncrement;
+    }
+    tileFilter->Update();
+    this->setData( tileFilter->GetOutput() );
+    emit progress(100);
+}
+
 //
 //
 //
@@ -589,9 +650,10 @@ int Volume::openFile( QString fileName )
         QString errorMessage( e.GetDescription() );
         if( errorMessage.contains("Size mismatch") )
         {
+            // aquest error no es pot donar, és un sol fitxer!
             errorCode = SizeMismatch;
         }
-        emit progress( -1 ); // això podria indicar excepció
+        emit progress( 100 );
     }
     if ( errorCode == NoError )
     {
@@ -626,7 +688,6 @@ int Volume::readFiles( QStringList filenames )
         m_seriesReader->SetFileNames( stlFilenames );
 
         emit progress( 0 );
-
         try
         {
             m_seriesReader->Update();
@@ -637,12 +698,20 @@ int Volume::readFiles( QStringList filenames )
                 .arg( QFileInfo( filenames.at(0) ).dir().path() )
                 .arg( e.GetDescription() )
                 );
-            errorCode = SizeMismatch;
-            emit progress( -1 ); // això podria indicar excepció
+            // llegim el missatge d'error per esbrinar de quin error es tracta
+            QString errorMessage( e.GetDescription() );
+            if( errorMessage.contains("Size mismatch") )
+                errorCode = SizeMismatch;
         }
         if ( errorCode == NoError )
         {
             this->setData( m_seriesReader->GetOutput() );
+            emit progress( 100 );
+        }
+        else if( errorCode == SizeMismatch )
+        {
+            errorCode = NoError;
+            readDifferentSizeImagesIntoOneVolume( filenames );
             emit progress( 100 );
         }
     }

@@ -184,6 +184,11 @@ private:
     /// reserva l'espai per la imatge vtk segons l'input d'imatges que tenim
     void allocateImageData();
 
+    /// Donades unes imatges que tenen diferents mides, les llegim en un sol
+    /// volum adaptant la mida als valors maxims de row i column. S'executarà quan volguem llegir
+    /// una sèrie que conté imatges amb diferents mides
+    void readDifferentSizeImagesIntoOneVolume( QStringList filenames );
+
 private:
     /// Filtres per importar/exportar
     typedef itk::ImageToVTKImageFilter< ItkImageType > ItkToVtkFilterType;
