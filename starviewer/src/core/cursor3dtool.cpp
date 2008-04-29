@@ -13,16 +13,11 @@
 #include "volume.h"
 #include "series.h"
 #include "imageplane.h"
-// #include "mathtools.h"
+#include "drawercrosshair.h"
+#include "drawer.h"
 // vtk
 #include <vtkPlane.h>
 #include <vtkCommand.h>
-#include <vtkSphereSource.h>
-#include <vtkActor.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkProperty.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkImageData.h>
 #include <vtkMatrix4x4.h>
 
@@ -47,21 +42,8 @@ Cursor3DTool::Cursor3DTool( QViewer *viewer, QObject *parent )
     connect( m_2DViewer, SIGNAL(selected()),SLOT(refreshReferenceViewerData()) );
 
     refreshReferenceViewerData();
-    
-    //Esfera per veure quin punt origen s'està calculant
-    // TODO S'ha de canviar per un objecte VTK amb forma de creu que tingui en compte la mida del voxel
-    m_sphereActor = vtkActor::New();
-    m_sphere = vtkSphereSource::New();
-    m_sphere->SetRadius( 8 );
-    m_sphereActor->GetProperty()->SetColor( 1.0, 0.13, 0.26 );
 
-    m_sphereMapper = vtkPolyDataMapper::New();
-    m_sphereMapper->SetInputConnection( m_sphere->GetOutputPort() );
-    m_sphereActor->SetMapper( m_sphereMapper );
-
-    m_sphereActor->VisibilityOff();
-    m_2DViewer->getRenderer()->AddActor( m_sphereActor );
-
+    m_crossHair = NULL;
 }
 
 Cursor3DTool::~Cursor3DTool()
@@ -106,15 +88,22 @@ void Cursor3DTool::handleEvent( long unsigned eventID )
 
 void Cursor3DTool::initializePosition()
 {
-    m_viewer->setCursor( QCursor(QPixmap(":/images/cross.png")) );
+    m_viewer->setCursor( QCursor( Qt::BlankCursor ) );
     m_state = CALCULATING;
 
+    if ( !m_crossHair )
+    {
+        m_crossHair = new DrawerCrossHair;
+        m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
+        m_crossHair->setVisibility( false );
+    }
+    
     updatePosition();
+    m_myData->setVisible( true );
 }
 
 void Cursor3DTool::updatePosition()
 {
-
     // en cas que no sigui el viewer que estem modificant
     if( m_2DViewer->isActive() )
     {
@@ -188,10 +177,11 @@ void Cursor3DTool::updatePosition()
             projectionMatrix->MultiplyPoint( dicomWorldPosition, dicomWorldPosition );// Matriu * punt
 
             // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
-            m_sphere->SetCenter( xyz ); //Posició al món VTK
-            m_myData->setOriginPointPosition( dicomWorldPosition ); // Punt al món real (DICOM)
-            m_sphereActor->VisibilityOn();
+            m_crossHair->setCentrePoint( xyz[0], xyz[1], xyz[2] );
+            m_crossHair->setVisibility( true );
+            m_crossHair->update( DrawerPrimitive::VTKRepresentation );
             m_2DViewer->refresh();
+            m_myData->setOriginPointPosition( dicomWorldPosition ); // Punt al món real (DICOM)
         }
     }
 }
@@ -200,8 +190,10 @@ void Cursor3DTool::removePosition()
 {
     m_state = NONE;
     m_viewer->setCursor( Qt::ArrowCursor );
-//     m_sphereActor->VisibilityOff();
+    m_crossHair->setVisibility( false );
+    m_crossHair->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->refresh();
+    m_myData->setVisible( false );
 }
 
 void Cursor3DTool::updateProjectedPoint()
@@ -209,10 +201,25 @@ void Cursor3DTool::updateProjectedPoint()
     // en cas que no sigui el viewer que estem modificant
     if( !m_2DViewer->isActive() )
     {
-        //Només podem projectar si tenen el mateix frame of reference UID
-        if( m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() )
+        if ( !m_crossHair && m_2DViewer->getInput() )
         {
-            projectPoint();
+            m_crossHair = new DrawerCrossHair;
+            m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
+        }
+        
+        if( !m_myData->isVisible() )
+        {
+            m_crossHair->setVisibility( false );
+            m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+            m_2DViewer->refresh();
+        }
+        else
+        {
+            //Només podem projectar si tenen el mateix frame of reference UID
+            if( m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() )
+            {
+                projectPoint();
+            }
         }
     }
 }
@@ -225,15 +232,21 @@ void Cursor3DTool::projectPoint()
 
         if( position )
         {
-            m_sphere->SetCenter( position );
-            m_sphereActor->VisibilityOn();
-            m_2DViewer->refresh();
-
             double distance;
             int nearestSlice = m_2DViewer->getNearestSlice( m_myData->getOriginPointPosition(), distance );
-            if ( nearestSlice != -1 ){
+            
+            if ( nearestSlice != -1 && distance < ( m_2DViewer->getThickness()*1.5 ) ){
                 m_2DViewer->setSlice( nearestSlice );
+                m_crossHair->setCentrePoint( position[0], position[1], position[2] );
+                m_crossHair->setVisibility( true );
             }
+            else //L'amaguem perquè sinó estariem mostrant un punt incorrecte
+            {
+                m_crossHair->setVisibility( false );
+            }
+
+            m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+            m_2DViewer->refresh();
         }
 }
 

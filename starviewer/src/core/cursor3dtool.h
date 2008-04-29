@@ -19,7 +19,7 @@ namespace udg {
 
 class Cursor3DToolData;
 class Q2DViewer;
-class ImagePlane;
+class DrawerCrossHair;
 
 /**
 Implementació de la tool del cursor 3D.
@@ -44,6 +44,8 @@ public:
     void setToolData(ToolData * data);
 
     void handleEvent( long unsigned eventID );
+
+    void setVisibility( bool visible );
 
 private slots:
     /// Actualitza les línies a projectar sobre la imatge segons les dades de la tool
@@ -82,17 +84,11 @@ private:
     /// Ens guardem el l'instance UID del nostre viewer, per no haver de "preguntar cada cop"
     QString m_myInstanceUID;
 
-    /// Esfera a dibuixar per representar el punt
-    vtkSphereSource * m_sphere;
-
-    ///Actor que dibuixa el punt
-    vtkActor *m_sphereActor;
-
-    ///Mapejador del punt
-    vtkPolyDataMapper *m_sphereMapper;
-
     /// Controlar l'estat de la tool
     int m_state;
+
+    /// Objecte crosshair per representar el punt
+    DrawerCrossHair * m_crossHair;
 };
 
 }

@@ -39,7 +39,7 @@ public:
     /**
      * Mètodes per configurar la visibilitat de la primitiva
      */
-    void setVisibility( bool visible );
+    virtual void setVisibility( bool visible );
     void visibilityOn();
     void visibilityOff();
     bool isVisible() const;
