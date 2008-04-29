@@ -14,23 +14,9 @@
 namespace udg {
 
 
-Vector3 & Vector3::normalize()
-{
-    double length = this->length();
-    x /= length; y /= length; z /= length;
-    return *this;
-}
-
-
 Vector3 Vector3::operator +() const
 {
     return *this;
-}
-
-
-Vector3 Vector3::operator +( const Vector3 & v ) const
-{
-    return Vector3( x + v.x, y + v.y, z + v.z );
 }
 
 
@@ -50,12 +36,6 @@ Vector3 Vector3::operator ^( const Vector3 & v ) const  // producte vectorial
 QString Vector3::toString() const
 {
     return QString( "(%1, %2, %3)" ).arg( x ).arg( y ).arg( z );
-}
-
-
-Vector3 operator *( const Vector3 & v, double a )
-{
-    return Vector3( v.x * a, v.y * a, v.z * a );
 }
 
 
