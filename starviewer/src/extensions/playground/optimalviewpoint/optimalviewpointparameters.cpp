@@ -369,4 +369,19 @@ void OptimalViewpointParameters::setFx( bool fx )
 }
 
 
+double OptimalViewpointParameters::getFxContour() const
+{
+    return m_fxContour;
+}
+
+
+void OptimalViewpointParameters::setFxContour( double fxContour )
+{
+    if ( m_fxContour != fxContour )
+    {
+        m_fxContour = fxContour; emit changed( FxContour );
+    }
+}
+
+
 }

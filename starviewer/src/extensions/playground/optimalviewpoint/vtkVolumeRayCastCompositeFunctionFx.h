@@ -78,6 +78,12 @@ public:
   vtkSetMacro( ObscuranceFilterHigh, double );
   vtkGetMacro( ObscuranceFilterHigh, double );
 
+  vtkSetMacro( FxObscurance, bool );
+  vtkGetMacro( FxObscurance, bool );
+
+  vtkSetMacro( FxContour, double );
+  vtkGetMacro( FxContour, double );
+
 protected:
   vtkVolumeRayCastCompositeFunctionFx();
   ~vtkVolumeRayCastCompositeFunctionFx();
@@ -100,6 +106,8 @@ private:
   double ObscuranceFactor;
   double ObscuranceFilterLow;
   double ObscuranceFilterHigh;
+  bool FxObscurance;
+  double FxContour;
 };
 
 

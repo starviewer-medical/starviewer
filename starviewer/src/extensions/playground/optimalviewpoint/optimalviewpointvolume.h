@@ -169,6 +169,7 @@ public:
     bool loadObscurances( const QString & obscurancesFileName, bool color);
 
     void setFx( bool fx );
+    void setFxContour( double fxContour );
 
 
 

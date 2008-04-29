@@ -35,7 +35,8 @@ vtkStandardNewMacro(vtkVolumeRayCastCompositeFunctionFx);
 template <class T>
 void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                           vtkVolumeRayCastStaticInfo *staticInfo,
-                          double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
+                          double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
+                          bool aFxObscurance, double aFxContour )
 {
   int             value=0;
   unsigned char   *grad_mag_ptr = NULL;
@@ -108,7 +109,16 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
   prev_voxel[0] = voxel[0]-1;
   prev_voxel[1] = voxel[1]-1;
   prev_voxel[2] = voxel[2]-1;
-  
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  udg::Vector3 fxDirection( dynamicInfo->TransformedDirection[0], dynamicInfo->TransformedDirection[1], dynamicInfo->TransformedDirection[2] );
+  fxDirection.normalize();
+  vtkVolumeRayCastMapper * fxMapper = vtkVolumeRayCastMapper::SafeDownCast( staticInfo->Volume->GetMapper() );
+  vtkEncodedGradientEstimator * fxGradientEstimator = fxMapper->GetGradientEstimator();
+  unsigned short * fxEncodedNormals = fxGradientEstimator->GetEncodedNormals();
+  vtkDirectionEncoder * fxDirectionEncoder = fxGradientEstimator->GetDirectionEncoder();
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   // Two cases - we are working with a gray or RGB transfer
   // function - break them up to make it more efficient
   if ( staticInfo->ColorChannels == 1 ) 
@@ -152,11 +162,30 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
       //////////////////////////////////////////////////////////////////////////////////////////////
 //       accum_red_intensity   += ( opacity * remaining_opacity * 
 //                                  GTF[(value)] );
-      double obscurance = aObscurance[offset];
-      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
-      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+
+      double fx = 1.0;
+
+      // contour
+      if ( aFxContour > 0.0 )
+      {
+        float * fxGradient = fxDirectionEncoder->GetDecodedGradient( fxEncodedNormals[offset] );
+        udg::Vector3 fxNormal( fxGradient[0], fxGradient[1], fxGradient[2] );
+        double fxDotProduct = fxDirection * fxNormal;
+        if ( fxDotProduct < 0.0 ) fxDotProduct = -fxDotProduct;
+        fx *= fxDotProduct < aFxContour ? 0.0 : 1.0;
+      }
+
+      // obscurance
+      if ( aFxObscurance && fx > 0.0 )
+      {
+        double fxObscurance = aObscurance[offset];
+        if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
+        else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
+        fx *= aObscuranceFactor * fxObscurance;
+      }
+
       accum_red_intensity   += ( opacity * remaining_opacity * 
-                                 GTF[(value)] ) * aObscuranceFactor * obscurance;
+                                 GTF[(value)] ) * fx;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
@@ -217,15 +246,34 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //                                  CTF[(value)*3 + 1] );
 //       accum_blue_intensity  += ( opacity * remaining_opacity * 
 //                                  CTF[(value)*3 + 2] );
-      double obscurance = aObscurance[offset];
-      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
-      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
+
+      double fx = 1.0;
+
+      // contour
+      if ( aFxContour > 0.0 )
+      {
+        float * fxGradient = fxDirectionEncoder->GetDecodedGradient( fxEncodedNormals[offset] );
+        udg::Vector3 fxNormal( fxGradient[0], fxGradient[1], fxGradient[2] );
+        double fxDotProduct = fxDirection * fxNormal;
+        if ( fxDotProduct < 0.0 ) fxDotProduct = -fxDotProduct;
+        fx *= fxDotProduct < aFxContour ? 0.0 : 1.0;
+      }
+
+      // obscurance
+      if ( aFxObscurance && fx > 0.0 )
+      {
+        double fxObscurance = aObscurance[offset];
+        if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
+        else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
+        fx *= aObscuranceFactor * fxObscurance;
+      }
+
       accum_red_intensity   += ( opacity * remaining_opacity * 
-                                 CTF[(value)*3] ) * aObscuranceFactor * obscurance;
+                                 CTF[(value)*3] ) * fx;
       accum_green_intensity += ( opacity * remaining_opacity * 
-                                 CTF[(value)*3 + 1] ) * aObscuranceFactor * obscurance;
+                                 CTF[(value)*3 + 1] ) * fx;
       accum_blue_intensity  += ( opacity * remaining_opacity * 
-                                 CTF[(value)*3 + 2] ) * aObscuranceFactor * obscurance;
+                                 CTF[(value)*3 + 2] ) * fx;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
@@ -510,7 +558,8 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 template <class T>
 void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                            vtkVolumeRayCastStaticInfo *staticInfo,
-                           double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh )
+                           double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
+                           bool aFxObscurance, double aFxContour )
 {
   int             value;
   unsigned char   *grad_mag_ptr = NULL;
@@ -608,7 +657,16 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
   prev_voxel[0] = voxel[0]-1;
   prev_voxel[1] = voxel[1]-1;
   prev_voxel[2] = voxel[2]-1;
-  
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  udg::Vector3 fxDirection( dynamicInfo->TransformedDirection[0], dynamicInfo->TransformedDirection[1], dynamicInfo->TransformedDirection[2] );
+  fxDirection.normalize();
+  vtkVolumeRayCastMapper * fxMapper = vtkVolumeRayCastMapper::SafeDownCast( staticInfo->Volume->GetMapper() );
+  vtkEncodedGradientEstimator * fxGradientEstimator = fxMapper->GetGradientEstimator();
+  unsigned short * fxEncodedNormals = fxGradientEstimator->GetEncodedNormals();
+  vtkDirectionEncoder * fxDirectionEncoder = fxGradientEstimator->GetDirectionEncoder();
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
   // Two cases - we are working with a gray or RGB transfer
   // function - break them up to make it more efficient
   if ( staticInfo->ColorChannels == 1 ) 
@@ -672,10 +730,29 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
       // Accumulate the shaded intensity and opacity of this sample
       //////////////////////////////////////////////////////////////////////////////////////////////
 //       accum_red_intensity += red_shaded_value;
-      double obscurance = aObscurance[offset];
-      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
-      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
-      accum_red_intensity += red_shaded_value * aObscuranceFactor * obscurance;
+
+      double fx = 1.0;
+
+      // contour
+      if ( aFxContour > 0.0 )
+      {
+        float * fxGradient = fxDirectionEncoder->GetDecodedGradient( fxEncodedNormals[offset] );
+        udg::Vector3 fxNormal( fxGradient[0], fxGradient[1], fxGradient[2] );
+        double fxDotProduct = fxDirection * fxNormal;
+        if ( fxDotProduct < 0.0 ) fxDotProduct = -fxDotProduct;
+        fx *= fxDotProduct < aFxContour ? 0.0 : 1.0;
+      }
+
+      // obscurance
+      if ( aFxObscurance && fx > 0.0 )
+      {
+        double fxObscurance = aObscurance[offset];
+        if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
+        else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
+        fx *= aObscuranceFactor * fxObscurance;
+      }
+
+      accum_red_intensity += red_shaded_value * fx;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
     
@@ -759,49 +836,33 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
 //       accum_red_intensity += red_shaded_value;
 //       accum_green_intensity += green_shaded_value;
 //       accum_blue_intensity += blue_shaded_value;
-      double obscurance = aObscurance[offset];
-      if (obscurance < aObscuranceFilterLow) obscurance = 0.0;
-      else if (obscurance > aObscuranceFilterHigh) obscurance = 1.0;
 
+      double fx = 1.0;
 
+      // contour
+      if ( aFxContour > 0.0 )
+      {
+        float * fxGradient = fxDirectionEncoder->GetDecodedGradient( fxEncodedNormals[offset] );
+        udg::Vector3 fxNormal( fxGradient[0], fxGradient[1], fxGradient[2] );
+        double fxDotProduct = fxDirection * fxNormal;
+        if ( fxDotProduct < 0.0 ) fxDotProduct = -fxDotProduct;
+        fx *= fxDotProduct < aFxContour ? 0.0 : 1.0;
+      }
 
+      // obscurance
+      if ( aFxObscurance && fx > 0.0 )
+      {
+        double fxObscurance = aObscurance[offset];
+        if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
+        else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
+        fx *= aObscuranceFactor * fxObscurance;
+      }
 
+      accum_red_intensity += red_shaded_value * fx;
+      accum_green_intensity += green_shaded_value * fx;
+      accum_blue_intensity += blue_shaded_value * fx;
 
-
-      //udg::Vector3 direction( ray_increment[0] / xinc, ray_increment[1] / yinc, ray_increment[2] / zinc );
-      udg::Vector3 direction( dynamicInfo->TransformedDirection[0], dynamicInfo->TransformedDirection[1], dynamicInfo->TransformedDirection[2] );
-      direction.normalize();
-
-      vtkVolumeRayCastMapper * mapper = vtkVolumeRayCastMapper::SafeDownCast( staticInfo->Volume->GetMapper() );
-      float * gradient = mapper->GetGradientEstimator()->GetDirectionEncoder()->GetDecodedGradient( encoded_normals[offset]);
-      udg::Vector3 normal( gradient[0], gradient[1], gradient[2] );
-
-      double dotProduct = direction * normal;
-
-      if ( dotProduct < 0.0 ) dotProduct = -dotProduct;
-
-      double factor = dotProduct < 0.2 ? 0.0 : 1.0;
-
-
-
-
-
-
-
-
-
-//       accum_red_intensity += red_shaded_value * aObscuranceFactor * obscurance * factor;
-//       accum_green_intensity += green_shaded_value * aObscuranceFactor * obscurance * factor;
-//       accum_blue_intensity += blue_shaded_value * aObscuranceFactor * obscurance * factor;
-
-
-
-
-
-//       accum_red_intensity += opacity * remaining_opacity * factor;
-//       accum_green_intensity += opacity * remaining_opacity * factor;
-//       accum_blue_intensity += opacity * remaining_opacity * factor;
-
+      /*
       double shade;
       if (dotProduct < 0.5) shade = 0.5;
       else shade = 1.0;
@@ -809,8 +870,7 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
       accum_red_intensity += opacity * remaining_opacity * (CTF[value*3] < 0.3 ? 0.0 : (CTF[value*3] < 0.7 ? 0.5 : 1.0)) * shade * factor;
       accum_green_intensity += opacity * remaining_opacity * (CTF[value*3+1] < 0.3 ? 0.0 : (CTF[value*3+1] < 0.7 ? 0.5 : 1.0)) * shade * factor;
       accum_blue_intensity += opacity * remaining_opacity * (CTF[value*3+2] < 0.3 ? 0.0 : (CTF[value*3+2] < 0.7 ? 0.5 : 1.0)) * shade * factor;
-
-
+      */
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
     
@@ -821,36 +881,6 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
       voxel[0] = vtkRoundFuncMacro( ray_position[0] );
       voxel[1] = vtkRoundFuncMacro( ray_position[1] );
       voxel[2] = vtkRoundFuncMacro( ray_position[2] );
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-      // trampa !!!!
-      accum_red_intensity = dotProduct;
-      accum_green_intensity = dotProduct;
-      accum_blue_intensity = dotProduct;
-      remaining_opacity = 0.0;
-
-
-
-
-*/
-
-
-
-
-
-
-
       }
     }
   
@@ -5486,7 +5516,8 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
                                     staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Unshaded( (unsigned char *)data_ptr, dynamicInfo,
-                                    staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
+                                    staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
+                                    FxObscurance, FxContour );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
@@ -5494,7 +5525,8 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
                                     staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Unshaded( (unsigned short *)data_ptr, dynamicInfo,
-                                    staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
+                                    staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
+                                    FxObscurance, FxContour );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -5510,13 +5542,15 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
           if ( Color )
             vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
-            vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
+            vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
+                                  FxObscurance, FxContour );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
             vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
-            vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh );
+            vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
+                                  FxObscurance, FxContour );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
