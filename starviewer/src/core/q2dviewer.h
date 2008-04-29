@@ -240,10 +240,11 @@ public:
      * donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
      * el pla actual, transformat a coordenades de món VTK
      * @param pointToProject[]
-     * @param pointPlane
      * @param projectedPoint[]
+     * @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
+     * per casos en que el pla "real" no és el que volem i necessitem una petita modificació
      */
-    void projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3] );
+    void projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false );
 
     /// Retorna el thickness
     double getThickness();

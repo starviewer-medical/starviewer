@@ -1695,7 +1695,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
     return imagePlane;
 }
 
-void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3] )
+void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack )
 {
     //
     // AQUÍ SUMEM L'origen TAL CUAL + L'ERROR DE DESPLAÇAMENT VTK
@@ -1707,7 +1707,7 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
     // aquest desplaçament consistirà en tornar a sumar l'origen del primer pla del volum
     // en principi, fer-ho amb l'origen de m_mainVolume també seria correcte
     //
-    ImagePlane *currentPlane = this->getCurrentImagePlane(true);
+    ImagePlane *currentPlane = this->getCurrentImagePlane(vtkReconstructionHack);
     if( currentPlane )
     {
         // recollim les dades del pla actual sobre el qual volem projectar el punt de l'altre pla
@@ -1735,6 +1735,9 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
             homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i]; // desplacem el punt a l'origen del pla
         homogeneousPointToProject[3] = 1.0;
 
+        // projectem el punt amb la matriu
+        projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
+
         //
         // CORRECIÓ VTK!
         //
@@ -1750,20 +1753,21 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
         switch( m_lastView )
         {
             case Axial:
-                // projectem el punt amb la matriu
-                projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
                 for( int i = 0; i<3; i++ )
                     projectedPoint[i] = homogeneousProjectedPoint[i] + ori[i];
             break;
 
             case Sagital:
             {
-                // HACK que serveix de parxe pels casos de crani que no van be. TODO encara està per acabar, és una primera aproximació
-                projectionMatrix->SetElement(0,0,0);
-                projectionMatrix->SetElement(0,1,1);
-                projectionMatrix->SetElement(0,2,0);
-                // projectem el punt amb la matriu
-                projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
+                if( vtkReconstructionHack )
+                {
+                    // HACK que serveix de parxe pels casos de crani que no van be. TODO encara està per acabar, és una primera aproximació
+                    projectionMatrix->SetElement(0,0,0);
+                    projectionMatrix->SetElement(0,1,1);
+                    projectionMatrix->SetElement(0,2,0);
+                    // projectem el punt amb la matriu
+                    projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
+                }
 
                 projectedPoint[1] = homogeneousProjectedPoint[0] + ori[1];
                 projectedPoint[2] = homogeneousProjectedPoint[1] + ori[2];
