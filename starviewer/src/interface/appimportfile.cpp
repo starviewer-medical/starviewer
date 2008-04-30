@@ -32,6 +32,8 @@ bool AppImportFile::open()
     bool openedImage = false;
     QStringList filters;
     
+    m_userCancellation = false;
+    
     const QString PresentationStateFilter("Presentation State (*)"), KeyImageNoteFilter("Key Image Note (*)");
     const QString ResultFileFilter("Result (*.res)");
     const QString MetaIOImageFilter("MetaIO Image (*.mhd)"), DICOMImageFilter("DICOM Images (*.dcm)"), AllFilesFilter("All Files (*)");
@@ -54,38 +56,43 @@ bool AppImportFile::open()
     openDialog->setFileMode( QFileDialog::ExistingFile );
     openDialog->setAcceptMode( QFileDialog::AcceptOpen );
 
+    connect( openDialog, SIGNAL( rejected() ),this, SLOT( userCancellation() ) );
+    
     if( openDialog->exec() )
     {
         fileNames = openDialog->selectedFiles();
         selectedFilter = openDialog->selectedFilter();
     }
         
-    fileName = fileNames.first();
-    
-    INFO_LOG( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter );
-    if (imagesFilter.contains(selectedFilter))
+    if ( !m_userCancellation )
     {
-        QStringList files;
-        files << fileName;
-        emit selectedFiles( files );
-        openedImage = true;
+        fileName = fileNames.first();
+        
+        INFO_LOG( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter );
+        if (imagesFilter.contains(selectedFilter))
+        {
+            QStringList files;
+            files << fileName;
+            emit selectedFiles( files );
+            openedImage = true;
+        }
+        else if (selectedFilter == KeyImageNoteFilter) // TODO aquest dos els mantenim temporalment,però el que cal és implementar el KINFillerStep i el PresentationStateFiller
+        {
+            emit openKeyImageNote(fileName);
+        }
+        else if (selectedFilter == PresentationStateFilter)
+        {
+            emit openPresentationState(fileName);
+        }
+        else
+        {
+            ERROR_LOG("Cas no tractat al obrir un fitxer");
+        }
+        m_workingDirectory = QFileInfo( fileName ).dir().path();
+        m_lastExtension = selectedFilter;
+        
+        writeSettings();
     }
-    else if (selectedFilter == KeyImageNoteFilter) // TODO aquest dos els mantenim temporalment,però el que cal és implementar el KINFillerStep i el PresentationStateFiller
-    {
-        emit openKeyImageNote(fileName);
-    }
-    else if (selectedFilter == PresentationStateFilter)
-    {
-        emit openPresentationState(fileName);
-    }
-    else
-    {
-        ERROR_LOG("Cas no tractat al obrir un fitxer");
-    }
-    m_workingDirectory = QFileInfo( fileName ).dir().path();
-    m_lastExtension = selectedFilter;
-    
-    writeSettings();
     delete openDialog;
     
     return openedImage;
@@ -142,6 +149,11 @@ void AppImportFile::writeSettings()
     settings.setValue("workingDicomDirectory", m_workingDicomDirectory );
     settings.setValue("defaultExtension", m_lastExtension );
     settings.endGroup();
+}
+
+void AppImportFile::userCancellation()
+{
+    m_userCancellation = true; 
 }
 
 };  // end namespace udg
