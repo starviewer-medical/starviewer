@@ -137,12 +137,12 @@ int ImagePlane::getColumns() const
 
 double ImagePlane::getRowLength() const
 {
-    return m_rows * m_spacing[0];
+    return m_columns * m_spacing[0];
 }
 
 double ImagePlane::getColumnLength() const
 {
-    return m_columns * m_spacing[1];
+    return m_rows * m_spacing[1];
 }
 
 bool ImagePlane::fillFromImage( const Image *image )
