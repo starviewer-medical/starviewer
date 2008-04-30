@@ -305,6 +305,9 @@ void ReferenceLinesTool::updateFrameOfReference()
 
 void ReferenceLinesTool::updateImagePlane()
 {
+    if( !m_2DViewer->isActive() )
+        return;
+
     switch( m_planesToProject )
     {
     case SingleImage:
