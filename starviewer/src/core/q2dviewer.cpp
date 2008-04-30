@@ -661,11 +661,20 @@ double Q2DViewer::getThickness()
     switch( m_lastView )
     {
     case Axial:
-        thickness = getCurrentDisplayedImage()->getSliceThickness() * m_slabThickness;
+    {
+        // HACK fins que se solucioni de forma consistent el ticket #492
+        Image *image = getCurrentDisplayedImage();
+        if(image)
+            thickness = image->getSliceThickness() * m_slabThickness;
+        else
+            thickness = m_mainVolume->getSpacing()[2] * m_slabThickness;
+    }
     break;
+
     case Sagital:
         thickness = m_mainVolume->getSpacing()[0] * m_slabThickness;
     break;
+
     case Coronal:
         thickness = m_mainVolume->getSpacing()[1] * m_slabThickness;
     break;
