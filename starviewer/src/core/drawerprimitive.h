@@ -113,7 +113,7 @@ public:
     virtual bool isInsideOfBounds( double p1[3], double p2[3], int view ) = 0;
 
     /**
-     * TODO això és una solució temporal, minimitzar el seu ús a casos molt concrets!
+     * HACK això és una solució temporal, minimitzar el seu ús a casos molt concrets!
      * Mètodes per emular els smart pointers.
      * En molts casos necessitem que una primitiva creada per una classe
      * no es pugui esborrar (ni de memòria ni del drawer) ja que aquella classe
