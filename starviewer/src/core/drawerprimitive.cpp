@@ -117,7 +117,7 @@ bool DrawerPrimitive::isModified() const
     return m_modified;
 }
 
-// TODO mètodes de sucedani d'smart pointer
+// HACK mètodes de sucedani d'smart pointer
 void DrawerPrimitive::increaseReferenceCount()
 {
     m_referenceCount++;

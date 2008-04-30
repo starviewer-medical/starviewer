@@ -38,7 +38,7 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
 
 // descomentar aquestes 4 linies si es vol mostrar el poligon del pla projectat
 //      m_projectedReferencePlane = new DrawerPolygon;
-//     // TODO sucedani d'smart pointer(TM)
+//     // HACK sucedani d'smart pointer(TM)
 //     m_projectedReferencePlane->increaseReferenceCount();
 //     m_2DViewer->getDrawer()->draw( m_projectedReferencePlane, QViewer::Top2DPlane );
 //     m_2DViewer->getDrawer()->addToGroup( m_projectedReferencePlane, "ReferenceLines" );
@@ -65,11 +65,13 @@ ReferenceLinesTool::~ReferenceLinesTool()
     // Cal esborrar les línies que hàgim creat
     foreach( DrawerLine *line, m_projectedIntersectionLines )
     {
+        // HACK sucedani d'smart pointer(TM)
         line->decreaseReferenceCount();
         delete line;
     }
     foreach( DrawerLine *backgroundLine, m_backgroundProjectedIntersectionLines )
     {
+        // HACK sucedani d'smart pointer(TM)
         backgroundLine->decreaseReferenceCount();
         delete backgroundLine;
     }
@@ -341,7 +343,7 @@ void ReferenceLinesTool::refreshReferenceViewerData()
 DrawerLine *ReferenceLinesTool::createNewLine( bool isBackgroundLine )
 {
     DrawerLine *line = new DrawerLine;
-    // TODO sucedani d'smart pointer(TM)
+    // HACK sucedani d'smart pointer(TM)
     line->increaseReferenceCount();
 
     if( isBackgroundLine )
@@ -385,7 +387,7 @@ void ReferenceLinesTool::checkAvailableLines()
         for( int i=0; i<linesToRemove; i++ )
         {
             DrawerLine *line = m_backgroundProjectedIntersectionLines.takeLast();
-            // ja no som propietaris de les línies creades, TODO sucedani d'smart pointer(TM)
+            // ja no som propietaris de les línies creades, HACK sucedani d'smart pointer(TM)
             line->decreaseReferenceCount();
             delete line;
         }
@@ -414,7 +416,7 @@ void ReferenceLinesTool::checkAvailableLines()
         for( int i=0; i<linesToRemove; i++ )
         {
             DrawerLine *line = m_projectedIntersectionLines.takeLast();
-            // ja no som propietaris de les línies creades, TODO sucedani d'smart pointer(TM)
+            // ja no som propietaris de les línies creades, HACK sucedani d'smart pointer(TM)
             line->decreaseReferenceCount();
             delete line;
         }
