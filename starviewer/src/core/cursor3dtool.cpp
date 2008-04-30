@@ -194,12 +194,13 @@ void Cursor3DTool::removePosition()
     m_crossHair->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->refresh();
     m_myData->setVisible( false );
+    
 }
 
 void Cursor3DTool::updateProjectedPoint()
 {
     // en cas que no sigui el viewer que estem modificant
-    if( !m_2DViewer->isActive() )
+    if( !m_2DViewer->isActive() && m_2DViewer->getInput() )
     {
         if ( !m_crossHair && m_2DViewer->getInput() )
         {
@@ -244,7 +245,7 @@ void Cursor3DTool::projectPoint()
             {
                 m_crossHair->setVisibility( false );
             }
-
+            
             m_crossHair->update( DrawerPrimitive::VTKRepresentation );
             m_2DViewer->refresh();
         }
