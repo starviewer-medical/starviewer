@@ -32,7 +32,7 @@ public:
 
     /// Obre el diàleg per poder obrir arxius d'un directori DICOM
     bool openDirectory();
-
+    
 signals:
     /// Signal que s'emet quan s'escull obrir un Key Image Note. Es passa el path d'aquest
     void openKeyImageNote( const QString & path);
@@ -43,6 +43,9 @@ signals:
     /// Senyal que s'emet quan s'han escollit un o més arxius que seran processats externament
     void selectedFiles( QStringList );
 
+private slots:
+    void userCancellation();
+    
 private:
     /**
      * Ens retorna la llista d'arxius DICOM agrupables en series d'un directori
@@ -64,6 +67,9 @@ private:
     
     /// Última Extenció seleccionada per l'usuari
     QString m_lastExtension;
+    
+    ///per controlar si l'usuari cancel·la l'acció d'obrir un fitxer.
+    bool m_userCancellation;
 };
 
 };  //  end  namespace udg
