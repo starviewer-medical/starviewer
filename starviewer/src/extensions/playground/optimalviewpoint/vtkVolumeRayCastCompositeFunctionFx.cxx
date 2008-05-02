@@ -1244,7 +1244,7 @@ template <class T>
 void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                        vtkVolumeRayCastStaticInfo *staticInfo,
                                        double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                       bool aFxObscurance, double aFxContour )
+                                       bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -1497,6 +1497,12 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
           {
           opacity *= gradient_opacity_constant;
           }
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          opacity *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         red_value   = opacity * GTF[(int)(scalar_value)];
         
         // Accumulate intensity and opacity for this sample location
@@ -1672,7 +1678,12 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
           {
           opacity *= gradient_opacity_constant;
           }
-
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          opacity *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         red_value   = opacity * CTF[(int)(scalar_value) * 3    ];
         green_value = opacity * CTF[(int)(scalar_value) * 3 + 1];
         blue_value  = opacity * CTF[(int)(scalar_value) * 3 + 2];
@@ -2119,7 +2130,7 @@ template <class T>
 void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                      vtkVolumeRayCastStaticInfo *staticInfo,
                                      double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                     bool aFxObscurance, double aFxContour )
+                                     bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -2388,6 +2399,13 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
           }
         }
 
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      if ( aFxSaliency )
+      {
+        opacity *= aSaliency[offset];
+      }
+      //////////////////////////////////////////////////////////////////////////////////////////////
+
       // If we have a combined opacity value, then compute the shading
       if ( opacity )
         {
@@ -2580,6 +2598,13 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
             opacity *= gradient_opacity_constant;
             }
         }
+
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      if ( aFxSaliency )
+      {
+        opacity *= aSaliency[offset];
+      }
+      //////////////////////////////////////////////////////////////////////////////////////////////
 
       // If we have a combined opacity value, then compute the shading
       if ( opacity )
@@ -3187,7 +3212,7 @@ template <class T>
 void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                          vtkVolumeRayCastStaticInfo *staticInfo,
                                          double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                         bool aFxObscurance, double aFxContour )
+                                         bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -3391,6 +3416,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( A && Ago )
         {
         weight     = t1*t2*t3 * A * Ago;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*dptr))];
@@ -3423,6 +3454,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( B && Bgo )
         {
         weight     = x*t2*t3 * B * Bgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Binc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Binc)))];
@@ -3455,6 +3492,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( C && Cgo )
         {
         weight     = t1*y*t3 * C * Cgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Cinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Cinc)))];
@@ -3487,6 +3530,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( D && Dgo )
         {
         weight     = x*y*t3 * D * Dgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Dinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Dinc)))];
@@ -3518,7 +3567,13 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       
       if ( E && Ego )
         {
-        weight     = t1*t2*z * E * Ego; 
+        weight     = t1*t2*z * E * Ego;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Einc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Einc)))];
@@ -3551,6 +3606,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( F && Fgo )
         {
         weight     = x*t2*z * F * Fgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Finc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Finc)))];
@@ -3583,6 +3644,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( G && Ggo )
         {
         weight     = t1*y*z * G * Ggo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Ginc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Ginc)))];
@@ -3615,6 +3682,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( H && Hgo )
         {
         weight     = x*z*y * H * Hgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Hinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value += weight * GTF[((*(dptr + Hinc)))];
@@ -3730,6 +3803,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( A && Ago )
         {
         weight         = t1*t2*t3 * A * Ago;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     += weight * CTF[((*dptr)) * 3    ];
@@ -3766,6 +3845,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( B && Bgo )
         {
         weight         = x*t2*t3 * B * Bgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Binc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     += weight * CTF[((*(dptr + Binc))) * 3    ];
@@ -3802,6 +3887,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( C && Cgo )
         {
         weight         = t1*y*t3 * C * Cgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Cinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     += weight * CTF[((*(dptr + Cinc))) * 3    ];
@@ -3838,6 +3929,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( D && Dgo )
         {
         weight         = x*y*t3 * D * Dgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Dinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     += weight * CTF[((*(dptr + Dinc))) * 3    ];
@@ -3874,6 +3971,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( E && Ego )
         {
         weight         = t1*t2*z * E * Ego;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Einc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     += weight * CTF[((*(dptr + Einc))) * 3    ];
@@ -3910,6 +4013,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( F && Fgo )
         {
         weight         = x*t2*z * F * Fgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Finc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     += weight * CTF[((*(dptr + Finc))) * 3    ];
@@ -3946,6 +4055,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( G && Ggo )
         {
         weight         = t1*y*z * G * Ggo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Ginc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     +=  weight * CTF[((*(dptr + Ginc))) * 3    ];
@@ -3982,6 +4097,12 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
       if ( H && Hgo )
         {
         weight         = x*z*y * H * Hgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Hinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_value     += weight * CTF[((*(dptr + Hinc))) * 3    ];
@@ -4606,7 +4727,7 @@ template <class T>
 void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                        vtkVolumeRayCastStaticInfo *staticInfo,
                                        double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                       bool aFxObscurance, double aFxContour )
+                                       bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -4833,6 +4954,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( A && Ago )
         {
         weight = t1*t2*t3 * A * Ago;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr) ] * 
@@ -4869,6 +4996,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( B && Bgo )
         {
         weight = x*t2*t3 * B * Bgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Binc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Binc) ] * 
@@ -4905,6 +5038,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( C && Cgo )
         {
         weight = t1*y*t3 * C * Cgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Cinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Cinc) ] *
@@ -4941,6 +5080,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( D && Dgo )
         {
         weight = x*y*t3 * D * Dgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Dinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Dinc) ] *
@@ -4977,6 +5122,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( E && Ego )
         {
         weight = t1*t2*z * E * Ego;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Einc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Einc) ] *
@@ -5013,6 +5164,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( F && Fgo )
         {
         weight = x*z*t2 * F * Fgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Finc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Finc) ] *
@@ -5049,6 +5206,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( G && Ggo )
         {
         weight = t1*y*z * G * Ggo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Ginc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Ginc) ] *
@@ -5085,6 +5248,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( H && Hgo )
         {
         weight = x*z*y * H * Hgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Hinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Hinc) ] *
@@ -5206,6 +5375,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( A )
         {
         weight = t1*t2*t3 * A * Ago;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr) ] * 
@@ -5254,6 +5429,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( B )
         {
         weight = x*t2*t3 * B * Bgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Binc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Binc) ] * 
@@ -5302,6 +5483,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( C )
         {
         weight = t1*y*t3 * C * Cgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Cinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Cinc) ] *
@@ -5350,6 +5537,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( D )
         {
         weight = x*y*t3 * D * Dgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Dinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Dinc) ] *
@@ -5398,6 +5591,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( E )
         {
         weight = t1*t2*z * E * Ego;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Einc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Einc) ] *
@@ -5446,6 +5645,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( F )
         {
         weight = x*z*t2 * F * Fgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Finc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Finc) ] *
@@ -5494,6 +5699,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( G )
         {
         weight = t1*y*z * G * Ggo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Ginc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Ginc) ] *
@@ -5542,6 +5753,12 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
       if ( H )
         {
         weight = x*z*y * H * Hgo;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          weight *= aSaliency[offset + Hinc];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
         ////////////////////////////////////////////////////////////////////////////////////////////
 //         red_shaded_value   += weight * ( red_d_shade[ *(nptr + Hinc) ] *
@@ -6421,7 +6638,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Unshaded( (unsigned char *)data_ptr,
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour );
+                                                FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6430,7 +6647,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Unshaded( (unsigned short *)data_ptr,
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour );
+                                                FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -6448,7 +6665,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Unshaded( (unsigned char *)data_ptr,
                                                   dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                  FxObscurance, FxContour );
+                                                  FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6457,7 +6674,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Unshaded( (unsigned short *)data_ptr,
                                                   dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                  FxObscurance, FxContour );
+                                                  FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -6479,7 +6696,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Shaded( (unsigned char *)data_ptr, 
                                               dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                              FxObscurance, FxContour );
+                                              FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6488,7 +6705,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Shaded( (unsigned short *)data_ptr, 
                                               dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                              FxObscurance, FxContour );
+                                              FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -6506,7 +6723,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Shaded( (unsigned char *)data_ptr, 
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour );
+                                                FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6515,7 +6732,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Shaded( (unsigned short *)data_ptr, 
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour );
+                                                FxObscurance, FxContour, FxSaliency, Saliency );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
