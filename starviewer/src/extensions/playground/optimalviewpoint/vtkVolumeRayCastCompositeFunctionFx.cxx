@@ -569,7 +569,7 @@ template <class T>
 void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                            vtkVolumeRayCastStaticInfo *staticInfo,
                            double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                           bool aFxObscurance, double aFxContour )
+                           bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
 {
   int             value;
   unsigned char   *grad_mag_ptr = NULL;
@@ -718,6 +718,13 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
           
           }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+          opacity *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
         // Compute the red shaded value (only if there is some opacity)
         // This is grey-scale so green and blue are the same as red
         if ( opacity )
@@ -812,7 +819,14 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
             }
           
           opacity *= gradient_opacity;    
-          }     
+          }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if ( aFxSaliency )
+        {
+            opacity *= aSaliency[offset];
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         // Compute the red, green, and blue shaded value (only if there
         // is some opacity)
@@ -6376,14 +6390,14 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                  FxObscurance, FxContour );
+                                  FxObscurance, FxContour, FxSaliency, Saliency );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
             vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                  FxObscurance, FxContour );
+                                  FxObscurance, FxContour, FxSaliency, Saliency );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
