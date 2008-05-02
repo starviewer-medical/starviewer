@@ -703,6 +703,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QCheckBox" name="m_fxSaliencyCheckBox">
+              <property name="text" >
+               <string>Saliency</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>

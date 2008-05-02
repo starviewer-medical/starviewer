@@ -1314,6 +1314,8 @@ void OptimalViewpointVolume::computeSaliency()
 
     for (int i = 0; i < m_dataSize; i++) m_saliency[i] = gradientMagnitudes[i] / maxSaliency;
 
+    m_volumeRayCastFunctionFx->SetSaliency( m_saliency );
+
     {
         bool density = m_obscuranceVariant <= DensitySmooth;
         // saliency to file
@@ -1966,6 +1968,12 @@ void OptimalViewpointVolume::setFx( bool fx )
 void OptimalViewpointVolume::setFxContour( double fxContour )
 {
     m_volumeRayCastFunctionFx->SetFxContour( fxContour );
+}
+
+
+void OptimalViewpointVolume::setFxSaliency( bool fxSaliency )
+{
+    m_volumeRayCastFunctionFx->SetFxSaliency( fxSaliency );
 }
 
 
