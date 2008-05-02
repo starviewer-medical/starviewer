@@ -384,4 +384,19 @@ void OptimalViewpointParameters::setFxContour( double fxContour )
 }
 
 
+bool OptimalViewpointParameters::getFxSaliency() const
+{
+    return m_fxSaliency;
+}
+
+
+void OptimalViewpointParameters::setFxSaliency( bool fxSaliency )
+{
+    if ( m_fxSaliency != fxSaliency )
+    {
+        m_fxSaliency = fxSaliency; emit changed( FxSaliency );
+    }
+}
+
+
 }

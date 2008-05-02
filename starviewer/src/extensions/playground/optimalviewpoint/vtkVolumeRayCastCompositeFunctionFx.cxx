@@ -36,7 +36,7 @@ template <class T>
 void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                           vtkVolumeRayCastStaticInfo *staticInfo,
                           double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                          bool aFxObscurance, double aFxContour )
+                          bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
 {
   int             value=0;
   unsigned char   *grad_mag_ptr = NULL;
@@ -163,6 +163,11 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //       accum_red_intensity   += ( opacity * remaining_opacity * 
 //                                  GTF[(value)] );
 
+      if ( aFxSaliency )
+      {
+        opacity *= aSaliency[offset];
+      }
+
       double fx = 1.0;
 
       // contour
@@ -246,6 +251,11 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //                                  CTF[(value)*3 + 1] );
 //       accum_blue_intensity  += ( opacity * remaining_opacity * 
 //                                  CTF[(value)*3 + 2] );
+
+      if ( aFxSaliency )
+      {
+        opacity *= aSaliency[offset];
+      }
 
       double fx = 1.0;
 
@@ -6304,6 +6314,7 @@ vtkVolumeRayCastCompositeFunctionFx::vtkVolumeRayCastCompositeFunctionFx()
 {
   this->CompositeMethod = VTK_COMPOSITE_INTERPOLATE_FIRST;
   this->Obscurance = 0;
+  this->Saliency = 0;
 }
 
 // Destruct the vtkVolumeRayCastCompositeFunctionFx
@@ -6339,7 +6350,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
           else
             vtkCastRay_NN_Unshaded( (unsigned char *)data_ptr, dynamicInfo,
                                     staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                    FxObscurance, FxContour );
+                                    FxObscurance, FxContour, FxSaliency, Saliency );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
@@ -6348,7 +6359,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
           else
             vtkCastRay_NN_Unshaded( (unsigned short *)data_ptr, dynamicInfo,
                                     staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                    FxObscurance, FxContour );
+                                    FxObscurance, FxContour, FxSaliency, Saliency );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );

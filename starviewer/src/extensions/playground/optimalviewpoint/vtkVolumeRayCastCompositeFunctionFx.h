@@ -84,6 +84,12 @@ public:
   vtkSetMacro( FxContour, double );
   vtkGetMacro( FxContour, double );
 
+  vtkSetMacro( Saliency, double * );
+  vtkGetMacro( Saliency, double * );
+
+  vtkSetMacro( FxSaliency, bool );
+  vtkGetMacro( FxSaliency, bool );
+
 protected:
   vtkVolumeRayCastCompositeFunctionFx();
   ~vtkVolumeRayCastCompositeFunctionFx();
@@ -108,6 +114,8 @@ private:
   double ObscuranceFilterHigh;
   bool FxObscurance;
   double FxContour;
+  double * Saliency;
+  bool FxSaliency;
 };
 
 
