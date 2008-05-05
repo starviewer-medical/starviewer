@@ -164,10 +164,12 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //       accum_red_intensity   += ( opacity * remaining_opacity * 
 //                                  GTF[(value)] );
 
-//       if ( aFxSaliency )
-//       {
-//         opacity *= aSaliency[offset];
-//       }
+      if ( aFxSaliency )
+      {
+        //opacity *= aSaliency[offset];
+        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        opacity *= ( 1.0 + fxSaliency );
+      }
 
       double fx = 1.0;
 
@@ -191,11 +193,11 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
       }
 
       // saliency
-      if ( aFxSaliency )
-      {
-        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-        fx *= ( 1.0 + fxSaliency );
-      }
+//       if ( aFxSaliency )
+//       {
+//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+//         fx *= ( 1.0 + fxSaliency );
+//       }
 
       accum_red_intensity   += ( opacity * remaining_opacity * 
                                  GTF[(value)] ) * fx;
@@ -260,10 +262,12 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //       accum_blue_intensity  += ( opacity * remaining_opacity * 
 //                                  CTF[(value)*3 + 2] );
 
-//       if ( aFxSaliency )
-//       {
-//         opacity *= aSaliency[offset];
-//       }
+      if ( aFxSaliency )
+      {
+        //opacity *= aSaliency[offset];
+        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        opacity *= ( 1.0 + fxSaliency );
+      }
 
       double fx = 1.0;
 
@@ -287,11 +291,11 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
       }
 
       // saliency
-      if ( aFxSaliency )
-      {
-        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-        fx *= ( 1.0 + fxSaliency );
-      }
+//       if ( aFxSaliency )
+//       {
+//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+//         fx *= ( 1.0 + fxSaliency );
+//       }
 
       accum_red_intensity   += ( opacity * remaining_opacity * 
                                  CTF[(value)*3] ) * fx;
@@ -735,10 +739,12 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
           }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-//         if ( aFxSaliency )
-//         {
-//           opacity *= aSaliency[offset];
-//         }
+        if ( aFxSaliency )
+        {
+          //opacity *= aSaliency[offset];
+          double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          opacity *= ( 1.0 + fxSaliency );
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         // Compute the red shaded value (only if there is some opacity)
@@ -786,11 +792,11 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
       }
 
       // saliency
-      if ( aFxSaliency )
-      {
-        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-        fx *= ( 1.0 + fxSaliency );
-      }
+//       if ( aFxSaliency )
+//       {
+//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+//         fx *= ( 1.0 + fxSaliency );
+//       }
 
       accum_red_intensity += red_shaded_value * fx;
       //////////////////////////////////////////////////////////////////////////////////////////////
@@ -845,10 +851,12 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
           }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-//         if ( aFxSaliency )
-//         {
-//             opacity *= aSaliency[offset];
-//         }
+        if ( aFxSaliency )
+        {
+            //opacity *= aSaliency[offset];
+            double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+            opacity *= ( 1.0 + fxSaliency );
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         // Compute the red, green, and blue shaded value (only if there
@@ -906,11 +914,11 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
       }
 
       // saliency
-      if ( aFxSaliency )
-      {
-        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-        fx *= ( 1.0 + fxSaliency );
-      }
+//       if ( aFxSaliency )
+//       {
+//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+//         fx *= ( 1.0 + fxSaliency );
+//       }
 
       accum_red_intensity += red_shaded_value * fx;
       accum_green_intensity += green_shaded_value * fx;
