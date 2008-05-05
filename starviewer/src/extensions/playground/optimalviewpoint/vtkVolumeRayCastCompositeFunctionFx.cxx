@@ -166,7 +166,6 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 
       if ( aFxSaliency )
       {
-        //opacity *= aSaliency[offset];
         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
         opacity *= ( 1.0 + fxSaliency );
       }
@@ -191,13 +190,6 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
         else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
         fx *= aObscuranceFactor * fxObscurance;
       }
-
-      // saliency
-//       if ( aFxSaliency )
-//       {
-//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-//         fx *= ( 1.0 + fxSaliency );
-//       }
 
       accum_red_intensity   += ( opacity * remaining_opacity * 
                                  GTF[(value)] ) * fx;
@@ -264,7 +256,6 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 
       if ( aFxSaliency )
       {
-        //opacity *= aSaliency[offset];
         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
         opacity *= ( 1.0 + fxSaliency );
       }
@@ -289,13 +280,6 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
         else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
         fx *= aObscuranceFactor * fxObscurance;
       }
-
-      // saliency
-//       if ( aFxSaliency )
-//       {
-//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-//         fx *= ( 1.0 + fxSaliency );
-//       }
 
       accum_red_intensity   += ( opacity * remaining_opacity * 
                                  CTF[(value)*3] ) * fx;
@@ -741,7 +725,6 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          //opacity *= aSaliency[offset];
           double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
           opacity *= ( 1.0 + fxSaliency );
         }
@@ -790,13 +773,6 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
         fx *= aObscuranceFactor * fxObscurance;
       }
-
-      // saliency
-//       if ( aFxSaliency )
-//       {
-//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-//         fx *= ( 1.0 + fxSaliency );
-//       }
 
       accum_red_intensity += red_shaded_value * fx;
       //////////////////////////////////////////////////////////////////////////////////////////////
@@ -853,7 +829,6 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-            //opacity *= aSaliency[offset];
             double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
             opacity *= ( 1.0 + fxSaliency );
         }
@@ -913,26 +888,9 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         fx *= aObscuranceFactor * fxObscurance;
       }
 
-      // saliency
-//       if ( aFxSaliency )
-//       {
-//         double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
-//         fx *= ( 1.0 + fxSaliency );
-//       }
-
       accum_red_intensity += red_shaded_value * fx;
       accum_green_intensity += green_shaded_value * fx;
       accum_blue_intensity += blue_shaded_value * fx;
-
-      /*
-      double shade;
-      if (dotProduct < 0.5) shade = 0.5;
-      else shade = 1.0;
-
-      accum_red_intensity += opacity * remaining_opacity * (CTF[value*3] < 0.3 ? 0.0 : (CTF[value*3] < 0.7 ? 0.5 : 1.0)) * shade * factor;
-      accum_green_intensity += opacity * remaining_opacity * (CTF[value*3+1] < 0.3 ? 0.0 : (CTF[value*3+1] < 0.7 ? 0.5 : 1.0)) * shade * factor;
-      accum_blue_intensity += opacity * remaining_opacity * (CTF[value*3+2] < 0.3 ? 0.0 : (CTF[value*3+2] < 0.7 ? 0.5 : 1.0)) * shade * factor;
-      */
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
     
@@ -1282,7 +1240,8 @@ template <class T>
 void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                        vtkVolumeRayCastStaticInfo *staticInfo,
                                        double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                       bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
+                                       bool aFxObscurance, double aFxContour,
+                                       bool aFxSaliency, double * aSaliency, double aFxSaliencyA, double aFxSaliencyB )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -1538,7 +1497,16 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          opacity *= aSaliency[offset];
+          double fxSaliency = aSaliency[offset       ] * tA
+                            + aSaliency[offset + Binc] * tB
+                            + aSaliency[offset + Cinc] * tC
+                            + aSaliency[offset + Dinc] * tD
+                            + aSaliency[offset + Einc] * tE
+                            + aSaliency[offset + Finc] * tF
+                            + aSaliency[offset + Ginc] * tG
+                            + aSaliency[offset + Hinc] * tH;
+          fxSaliency = fxSaliency * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          opacity *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         red_value   = opacity * GTF[(int)(scalar_value)];
@@ -1719,7 +1687,16 @@ void vtkCastRay_TrilinSample_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          opacity *= aSaliency[offset];
+          double fxSaliency = aSaliency[offset       ] * tA
+                            + aSaliency[offset + Binc] * tB
+                            + aSaliency[offset + Cinc] * tC
+                            + aSaliency[offset + Dinc] * tD
+                            + aSaliency[offset + Einc] * tE
+                            + aSaliency[offset + Finc] * tF
+                            + aSaliency[offset + Ginc] * tG
+                            + aSaliency[offset + Hinc] * tH;
+          fxSaliency = fxSaliency * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          opacity *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         red_value   = opacity * CTF[(int)(scalar_value) * 3    ];
@@ -2168,7 +2145,8 @@ template <class T>
 void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                      vtkVolumeRayCastStaticInfo *staticInfo,
                                      double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                     bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
+                                     bool aFxObscurance, double aFxContour,
+                                     bool aFxSaliency, double * aSaliency, double aFxSaliencyA, double aFxSaliencyB )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *gmptr;
@@ -2440,7 +2418,16 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
       //////////////////////////////////////////////////////////////////////////////////////////////
       if ( aFxSaliency )
       {
-        opacity *= aSaliency[offset];
+        double fxSaliency = aSaliency[offset       ] * tA
+                          + aSaliency[offset + Binc] * tB
+                          + aSaliency[offset + Cinc] * tC
+                          + aSaliency[offset + Dinc] * tD
+                          + aSaliency[offset + Einc] * tE
+                          + aSaliency[offset + Finc] * tF
+                          + aSaliency[offset + Ginc] * tG
+                          + aSaliency[offset + Hinc] * tH;
+        fxSaliency = fxSaliency * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        opacity *= ( 1.0 + fxSaliency );
       }
       //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2640,7 +2627,16 @@ void vtkCastRay_TrilinSample_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *d
       //////////////////////////////////////////////////////////////////////////////////////////////
       if ( aFxSaliency )
       {
-        opacity *= aSaliency[offset];
+        double fxSaliency = aSaliency[offset       ] * tA
+                          + aSaliency[offset + Binc] * tB
+                          + aSaliency[offset + Cinc] * tC
+                          + aSaliency[offset + Dinc] * tD
+                          + aSaliency[offset + Einc] * tE
+                          + aSaliency[offset + Finc] * tF
+                          + aSaliency[offset + Ginc] * tG
+                          + aSaliency[offset + Hinc] * tH;
+        fxSaliency = fxSaliency * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        opacity *= ( 1.0 + fxSaliency );
       }
       //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -3250,7 +3246,8 @@ template <class T>
 void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                          vtkVolumeRayCastStaticInfo *staticInfo,
                                          double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                         bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
+                                         bool aFxObscurance, double aFxContour,
+                                         bool aFxSaliency, double * aSaliency, double aFxSaliencyA, double aFxSaliencyB )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -3457,7 +3454,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset];
+          double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3495,7 +3493,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Binc];
+          double fxSaliency = aSaliency[offset + Binc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3533,7 +3532,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Cinc];
+          double fxSaliency = aSaliency[offset + Cinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3571,7 +3571,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Dinc];
+          double fxSaliency = aSaliency[offset + Dinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3609,7 +3610,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Einc];
+          double fxSaliency = aSaliency[offset + Einc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3647,7 +3649,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Finc];
+          double fxSaliency = aSaliency[offset + Finc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3685,7 +3688,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Ginc];
+          double fxSaliency = aSaliency[offset + Ginc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3723,7 +3727,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Hinc];
+          double fxSaliency = aSaliency[offset + Hinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity   += weight;
@@ -3844,7 +3849,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset];
+          double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -3886,7 +3892,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Binc];
+          double fxSaliency = aSaliency[offset + Binc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -3928,7 +3935,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Cinc];
+          double fxSaliency = aSaliency[offset + Cinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -3970,7 +3978,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Dinc];
+          double fxSaliency = aSaliency[offset + Dinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -4012,7 +4021,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Einc];
+          double fxSaliency = aSaliency[offset + Einc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -4054,7 +4064,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Finc];
+          double fxSaliency = aSaliency[offset + Finc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -4096,7 +4107,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Ginc];
+          double fxSaliency = aSaliency[offset + Ginc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -4138,7 +4150,8 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Hinc];
+          double fxSaliency = aSaliency[offset + Hinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity       += weight;
@@ -4765,7 +4778,8 @@ template <class T>
 void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                        vtkVolumeRayCastStaticInfo *staticInfo,
                                        double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                                       bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
+                                       bool aFxObscurance, double aFxContour,
+                                       bool aFxSaliency, double * aSaliency, double aFxSaliencyA, double aFxSaliencyB )
 {
   unsigned char   *grad_mag_ptr = NULL;
   unsigned char   *goptr;
@@ -4995,7 +5009,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset];
+          double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5037,7 +5052,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Binc];
+          double fxSaliency = aSaliency[offset + Binc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5079,7 +5095,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Cinc];
+          double fxSaliency = aSaliency[offset + Cinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5121,7 +5138,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Dinc];
+          double fxSaliency = aSaliency[offset + Dinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5163,7 +5181,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Einc];
+          double fxSaliency = aSaliency[offset + Einc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5205,7 +5224,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Finc];
+          double fxSaliency = aSaliency[offset + Finc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5247,7 +5267,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Ginc];
+          double fxSaliency = aSaliency[offset + Ginc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5289,7 +5310,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Hinc];
+          double fxSaliency = aSaliency[offset + Hinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5416,7 +5438,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset];
+          double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5470,7 +5493,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Binc];
+          double fxSaliency = aSaliency[offset + Binc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5524,7 +5548,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Cinc];
+          double fxSaliency = aSaliency[offset + Cinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5578,7 +5603,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Dinc];
+          double fxSaliency = aSaliency[offset + Dinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5632,7 +5658,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Einc];
+          double fxSaliency = aSaliency[offset + Einc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5686,7 +5713,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Finc];
+          double fxSaliency = aSaliency[offset + Finc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5740,7 +5768,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Ginc];
+          double fxSaliency = aSaliency[offset + Ginc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -5794,7 +5823,8 @@ void vtkCastRay_TrilinVertices_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo 
         ////////////////////////////////////////////////////////////////////////////////////////////
         if ( aFxSaliency )
         {
-          weight *= aSaliency[offset + Hinc];
+          double fxSaliency = aSaliency[offset + Hinc] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+          weight *= ( 1.0 + fxSaliency );
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
         opacity += weight;
@@ -6676,7 +6706,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Unshaded( (unsigned char *)data_ptr,
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour, FxSaliency, Saliency );
+                                                FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6685,7 +6715,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Unshaded( (unsigned short *)data_ptr,
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour, FxSaliency, Saliency );
+                                                FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -6703,7 +6733,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Unshaded( (unsigned char *)data_ptr,
                                                   dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                  FxObscurance, FxContour, FxSaliency, Saliency );
+                                                  FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6712,7 +6742,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Unshaded( (unsigned short *)data_ptr,
                                                   dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                  FxObscurance, FxContour, FxSaliency, Saliency );
+                                                  FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -6734,7 +6764,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Shaded( (unsigned char *)data_ptr, 
                                               dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                              FxObscurance, FxContour, FxSaliency, Saliency );
+                                              FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6743,7 +6773,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinSample_Shaded( (unsigned short *)data_ptr, 
                                               dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                              FxObscurance, FxContour, FxSaliency, Saliency );
+                                              FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -6761,7 +6791,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Shaded( (unsigned char *)data_ptr, 
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour, FxSaliency, Saliency );
+                                                FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           case VTK_UNSIGNED_SHORT:
             if ( Color )
@@ -6770,7 +6800,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             else
               vtkCastRay_TrilinVertices_Shaded( (unsigned short *)data_ptr, 
                                                 dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                                FxObscurance, FxContour, FxSaliency, Saliency );
+                                                FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
             break;
           default:
             vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
