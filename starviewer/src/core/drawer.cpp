@@ -142,8 +142,10 @@ void Drawer::removeAllPrimitives()
 
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 {
+    if( !primitive )
+        return;
     // TODO atenció amb aquest tractament pel sucedani d'smart pointer.
-    // només esborrarem si ningú és propietari
+    // HACK només esborrarem si ningú és propietari
     if( primitive->hasOwners() )
     {
         DEBUG_LOG("No esborrem la primitiva. Tenim propietaris");
