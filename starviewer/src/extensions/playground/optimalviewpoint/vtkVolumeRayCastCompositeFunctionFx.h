@@ -90,6 +90,12 @@ public:
   vtkSetMacro( FxSaliency, bool );
   vtkGetMacro( FxSaliency, bool );
 
+  vtkSetMacro( FxSaliencyA, double );
+  vtkGetMacro( FxSaliencyA, double );
+
+  vtkSetMacro( FxSaliencyB, double );
+  vtkGetMacro( FxSaliencyB, double );
+
 protected:
   vtkVolumeRayCastCompositeFunctionFx();
   ~vtkVolumeRayCastCompositeFunctionFx();
@@ -116,6 +122,8 @@ private:
   double FxContour;
   double * Saliency;
   bool FxSaliency;
+  double FxSaliencyA;
+  double FxSaliencyB;
 };
 
 

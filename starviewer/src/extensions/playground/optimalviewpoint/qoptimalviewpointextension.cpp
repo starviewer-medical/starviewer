@@ -366,6 +366,14 @@ void QOptimalViewpointExtension::readParameter( int index )
             case OptimalViewpointParameters::FxSaliency:
                 m_fxSaliencyCheckBox->setChecked( m_parameters->getFxSaliency() );
                 break;
+
+            case OptimalViewpointParameters::FxSaliencyA:
+                m_fxSaliencyADoubleSpinBox->setValue( m_parameters->getFxSaliencyA() );
+                break;
+
+            case OptimalViewpointParameters::FxSaliencyB:
+                m_fxSaliencyBDoubleSpinBox->setValue( m_parameters->getFxSaliencyB() );
+                break;
         }
     }
 }
@@ -397,6 +405,8 @@ void QOptimalViewpointExtension::doVisualization()
     m_parameters->setFx( m_fxCheckBox->isChecked() );
     m_parameters->setFxContour( m_fxContourDoubleSpinBox->value() );
     m_parameters->setFxSaliency( m_fxSaliencyCheckBox->isChecked() );
+    m_parameters->setFxSaliencyA( m_fxSaliencyADoubleSpinBox->value() );
+    m_parameters->setFxSaliencyB( m_fxSaliencyBDoubleSpinBox->value() );
 
     m_viewerWidget->render();
 }

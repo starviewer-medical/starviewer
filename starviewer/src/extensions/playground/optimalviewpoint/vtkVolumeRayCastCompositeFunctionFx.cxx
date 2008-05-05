@@ -36,7 +36,8 @@ template <class T>
 void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                           vtkVolumeRayCastStaticInfo *staticInfo,
                           double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                          bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
+                          bool aFxObscurance, double aFxContour,
+                          bool aFxSaliency, double * aSaliency, double aFxSaliencyA, double aFxSaliencyB )
 {
   int             value=0;
   unsigned char   *grad_mag_ptr = NULL;
@@ -163,10 +164,10 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //       accum_red_intensity   += ( opacity * remaining_opacity * 
 //                                  GTF[(value)] );
 
-      if ( aFxSaliency )
-      {
-        opacity *= aSaliency[offset];
-      }
+//       if ( aFxSaliency )
+//       {
+//         opacity *= aSaliency[offset];
+//       }
 
       double fx = 1.0;
 
@@ -187,6 +188,13 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
         if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
         else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
         fx *= aObscuranceFactor * fxObscurance;
+      }
+
+      // saliency
+      if ( aFxSaliency )
+      {
+        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        fx *= ( 1.0 + fxSaliency );
       }
 
       accum_red_intensity   += ( opacity * remaining_opacity * 
@@ -252,10 +260,10 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
 //       accum_blue_intensity  += ( opacity * remaining_opacity * 
 //                                  CTF[(value)*3 + 2] );
 
-      if ( aFxSaliency )
-      {
-        opacity *= aSaliency[offset];
-      }
+//       if ( aFxSaliency )
+//       {
+//         opacity *= aSaliency[offset];
+//       }
 
       double fx = 1.0;
 
@@ -276,6 +284,13 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
         if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
         else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
         fx *= aObscuranceFactor * fxObscurance;
+      }
+
+      // saliency
+      if ( aFxSaliency )
+      {
+        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        fx *= ( 1.0 + fxSaliency );
       }
 
       accum_red_intensity   += ( opacity * remaining_opacity * 
@@ -569,7 +584,8 @@ template <class T>
 void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo,
                            vtkVolumeRayCastStaticInfo *staticInfo,
                            double * aObscurance, double aObscuranceFactor, double aObscuranceFilterLow, double aObscuranceFilterHigh,
-                           bool aFxObscurance, double aFxContour, bool aFxSaliency, double * aSaliency )
+                           bool aFxObscurance, double aFxContour,
+                           bool aFxSaliency, double * aSaliency, double aFxSaliencyA, double aFxSaliencyB )
 {
   int             value;
   unsigned char   *grad_mag_ptr = NULL;
@@ -719,10 +735,10 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
           }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        if ( aFxSaliency )
-        {
-          opacity *= aSaliency[offset];
-        }
+//         if ( aFxSaliency )
+//         {
+//           opacity *= aSaliency[offset];
+//         }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         // Compute the red shaded value (only if there is some opacity)
@@ -767,6 +783,13 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
         else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
         fx *= aObscuranceFactor * fxObscurance;
+      }
+
+      // saliency
+      if ( aFxSaliency )
+      {
+        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        fx *= ( 1.0 + fxSaliency );
       }
 
       accum_red_intensity += red_shaded_value * fx;
@@ -822,10 +845,10 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
           }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        if ( aFxSaliency )
-        {
-            opacity *= aSaliency[offset];
-        }
+//         if ( aFxSaliency )
+//         {
+//             opacity *= aSaliency[offset];
+//         }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         // Compute the red, green, and blue shaded value (only if there
@@ -880,6 +903,13 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
         if ( fxObscurance < aObscuranceFilterLow ) fxObscurance = 0.0;
         else if ( fxObscurance > aObscuranceFilterHigh ) fxObscurance = 1.0;
         fx *= aObscuranceFactor * fxObscurance;
+      }
+
+      // saliency
+      if ( aFxSaliency )
+      {
+        double fxSaliency = aSaliency[offset] * ( aFxSaliencyA + aFxSaliencyB) - aFxSaliencyA;
+        fx *= ( 1.0 + fxSaliency );
       }
 
       accum_red_intensity += red_shaded_value * fx;
@@ -6581,7 +6611,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
           else
             vtkCastRay_NN_Unshaded( (unsigned char *)data_ptr, dynamicInfo,
                                     staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                    FxObscurance, FxContour, FxSaliency, Saliency );
+                                    FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
@@ -6590,7 +6620,7 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
           else
             vtkCastRay_NN_Unshaded( (unsigned short *)data_ptr, dynamicInfo,
                                     staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                    FxObscurance, FxContour, FxSaliency, Saliency );
+                                    FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );
@@ -6607,14 +6637,14 @@ void vtkVolumeRayCastCompositeFunctionFx::CastRay( vtkVolumeRayCastDynamicInfo *
             vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Shaded( (unsigned char *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                  FxObscurance, FxContour, FxSaliency, Saliency );
+                                  FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
           break;
         case VTK_UNSIGNED_SHORT:
           if ( Color )
             vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, ColorBleeding, ObscuranceFactor );
           else
             vtkCastRay_NN_Shaded( (unsigned short *)data_ptr, dynamicInfo, staticInfo, Obscurance, ObscuranceFactor, ObscuranceFilterLow, ObscuranceFilterHigh,
-                                  FxObscurance, FxContour, FxSaliency, Saliency );
+                                  FxObscurance, FxContour, FxSaliency, Saliency, FxSaliencyA, FxSaliencyB );
           break;
         default:
           vtkWarningMacro ( << "Unsigned char and unsigned short are the only supported datatypes for rendering" );

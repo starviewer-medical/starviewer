@@ -162,6 +162,8 @@ public:
     void setFx( bool fx );
     void setFxContour( double fxContour );
     void setFxSaliency( bool fxSaliency );
+    void setFxSaliencyA( double fxSaliencyA );
+    void setFxSaliencyB( double fxSaliencyB );
 
 public slots:
 
