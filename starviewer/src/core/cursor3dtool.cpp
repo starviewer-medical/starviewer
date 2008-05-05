@@ -48,6 +48,8 @@ Cursor3DTool::Cursor3DTool( QViewer *viewer, QObject *parent )
 
 Cursor3DTool::~Cursor3DTool()
 {
+    //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
+    m_crossHair->decreaseReferenceCount();
 }
 
 void Cursor3DTool::setToolData(ToolData * data)
@@ -93,13 +95,20 @@ void Cursor3DTool::initializePosition()
 
     if ( !m_crossHair )
     {
+        double xyz[3];
+        m_2DViewer->getCurrentCursorPosition( xyz );
         m_crossHair = new DrawerCrossHair;
+        
+        //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
+        m_crossHair->increaseReferenceCount();
+        
+        m_crossHair->setCentrePoint( xyz[0], xyz[1],xyz[2] );
         m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
-        m_crossHair->setVisibility( false );
     }
     
-    updatePosition();
     m_myData->setVisible( true );
+    updatePosition();
+
 }
 
 void Cursor3DTool::updatePosition()
@@ -205,6 +214,10 @@ void Cursor3DTool::updateProjectedPoint()
         if ( !m_crossHair && m_2DViewer->getInput() )
         {
             m_crossHair = new DrawerCrossHair;
+
+            //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
+            m_crossHair->increaseReferenceCount();
+            
             m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
         }
         
