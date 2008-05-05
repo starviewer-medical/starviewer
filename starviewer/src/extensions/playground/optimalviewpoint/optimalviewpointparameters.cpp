@@ -399,4 +399,34 @@ void OptimalViewpointParameters::setFxSaliency( bool fxSaliency )
 }
 
 
+double OptimalViewpointParameters::getFxSaliencyA() const
+{
+    return m_fxSaliencyA;
+}
+
+
+void OptimalViewpointParameters::setFxSaliencyA( double fxSaliencyA )
+{
+    if ( m_fxSaliencyA != fxSaliencyA )
+    {
+        m_fxSaliencyA = fxSaliencyA; emit changed( FxSaliencyA );
+    }
+}
+
+
+double OptimalViewpointParameters::getFxSaliencyB() const
+{
+    return m_fxSaliencyB;
+}
+
+
+void OptimalViewpointParameters::setFxSaliencyB( double fxSaliencyB )
+{
+    if ( m_fxSaliencyB != fxSaliencyB )
+    {
+        m_fxSaliencyB = fxSaliencyB; emit changed( FxSaliencyB );
+    }
+}
+
+
 }

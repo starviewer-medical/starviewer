@@ -1977,4 +1977,16 @@ void OptimalViewpointVolume::setFxSaliency( bool fxSaliency )
 }
 
 
+void OptimalViewpointVolume::setFxSaliencyA( double fxSaliencyA )
+{
+    m_volumeRayCastFunctionFx->SetFxSaliencyA( fxSaliencyA );
+}
+
+
+void OptimalViewpointVolume::setFxSaliencyB( double fxSaliencyB )
+{
+    m_volumeRayCastFunctionFx->SetFxSaliencyB( fxSaliencyB );
+}
+
+
 }

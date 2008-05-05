@@ -815,6 +815,12 @@ void OptimalViewpoint::readParameter( int parameter )
         case OptimalViewpointParameters::FxSaliency:
             setFxSaliency( m_parameters->getFxSaliency() );
             break;
+        case OptimalViewpointParameters::FxSaliencyA:
+            setFxSaliencyA( m_parameters->getFxSaliencyA() );
+            break;
+        case OptimalViewpointParameters::FxSaliencyB:
+            setFxSaliencyB( m_parameters->getFxSaliencyB() );
+            break;
     }
 }
 
@@ -1007,6 +1013,18 @@ void OptimalViewpoint::setFxContour( double fxContour )
 void OptimalViewpoint::setFxSaliency( bool fxSaliency )
 {
     m_volume->setFxSaliency( fxSaliency );
+}
+
+
+void OptimalViewpoint::setFxSaliencyA( double fxSaliencyA )
+{
+    m_volume->setFxSaliencyA( fxSaliencyA );
+}
+
+
+void OptimalViewpoint::setFxSaliencyB( double fxSaliencyB )
+{
+    m_volume->setFxSaliencyB( fxSaliencyB );
 }
 
 
