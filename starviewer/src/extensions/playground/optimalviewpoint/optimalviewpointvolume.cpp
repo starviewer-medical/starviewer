@@ -1919,7 +1919,7 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
             QTextStream out( &outFile );
             for ( int i = 0; i < nDirections; i++ )
             {
-                out << i+1 << " " << directions[i].toString() << " -> " << viewpointSaliency[i] << "\n";
+                out << i+1 << "\t" << directions[i].toString() << "\t" << viewpointSaliency[i] << "\n";
             }
             outFile.close();
         }

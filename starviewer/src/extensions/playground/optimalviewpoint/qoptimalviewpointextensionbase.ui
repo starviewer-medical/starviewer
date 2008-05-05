@@ -1368,6 +1368,11 @@
              <string>Exponential</string>
             </property>
            </item>
+           <item>
+            <property name="text" >
+             <string>Exponential (norm)</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>

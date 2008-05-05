@@ -818,6 +818,8 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
 
 inline double ObscuranceThread2::obscurance( double distance ) const
 {
+    const double EXP_NORM = 1.0 - exp( -1.0 );
+
     if ( distance > m_obscuranceMaximumDistance ) return 1.0;
 
     switch ( m_obscuranceFunction )
@@ -826,6 +828,7 @@ inline double ObscuranceThread2::obscurance( double distance ) const
         case OptimalViewpointVolume::Distance: return distance / m_obscuranceMaximumDistance;
         case OptimalViewpointVolume::SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
         case OptimalViewpointVolume::Exponential: return 1.0 - exp( -distance / m_obscuranceMaximumDistance );
+        case OptimalViewpointVolume::ExponentialNorm: return ( 1.0 - exp( -distance / m_obscuranceMaximumDistance ) ) / EXP_NORM;
     }
 }
 
