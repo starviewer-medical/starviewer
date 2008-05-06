@@ -120,10 +120,11 @@ void ObscuranceThread2::runDensity() // optimitzat
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
                 float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
                 Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+                double cos = uNormal * m_direction;
 
-                if ( uNormal * m_direction < 0.0 )
+                if ( cos < 0.0 )
                 {
-                    m_obscurance[uIndex] += obscurance( ( rv - ru ).length() );
+                    m_obscurance[uIndex] += -cos * obscurance( ( rv - ru ).length() );
                 }
             }
 
@@ -211,11 +212,10 @@ void ObscuranceThread2::runDensitySmooth()
                     }
 
                     // blocking
-                    if ( uNormal * m_direction < 0.0 )
+                    double cos = uNormal * m_direction;
+                    if ( cos < 0.0 )
                     {
-//                             Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                             double distance = ( dv - du ).length();
-                        m_obscurance[uIndex] += obscurance( distance );
+                        m_obscurance[uIndex] += -cos * obscurance( distance );
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -250,11 +250,10 @@ void ObscuranceThread2::runDensitySmooth()
                     }
                 }
 
-                if ( uNormal * m_direction < 0.0 )
+                double cos = uNormal * m_direction;
+                if ( cos < 0.0 )
                 {
-//                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                         double distance = ( dv - du ).length();
-                    m_obscurance[uIndex] += obscurance( distance );
+                    m_obscurance[uIndex] += -cos * obscurance( distance );
                 }
             }
 
@@ -332,13 +331,12 @@ void ObscuranceThread2::runOpacity()
                 int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
                 float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
                 Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+                double cos = uNormal * m_direction;
 
-                if ( uNormal * m_direction < 0.0 )
+                if ( cos < 0.0 )
                 {
                     double distance = ( rv - ru ).length();
-//                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                         double distance = ( dv - du ).length();
-                    m_obscurance[uIndex] += obscurance( distance );
+                    m_obscurance[uIndex] += -cos * obscurance( distance );
                 }
             }
 
@@ -427,11 +425,10 @@ void ObscuranceThread2::runOpacitySmooth()
                     }
 
                     // blocking
-                    if ( uNormal * m_direction < 0.0 )
+                    double cos = uNormal * m_direction;
+                    if ( cos < 0.0 )
                     {
-//                             Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                             double distance = ( dv - du ).length();
-                        m_obscurance[uIndex] += obscurance( distance );
+                        m_obscurance[uIndex] += -cos * obscurance( distance );
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -466,11 +463,10 @@ void ObscuranceThread2::runOpacitySmooth()
                     }
                 }
 
-                if ( uNormal * m_direction < 0.0 )
+                double cos = uNormal * m_direction;
+                if ( cos < 0.0 )
                 {
-//                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                         double distance = ( dv - du ).length();
-                    m_obscurance[uIndex] += obscurance( distance );
+                    m_obscurance[uIndex] += -cos * obscurance( distance );
                 }
             }
 
@@ -578,11 +574,10 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
                     }
 
                     // blocking
-                    if ( uNormal * m_direction < 0.0 )
+                    double cos = uNormal * m_direction;
+                    if ( cos < 0.0 )
                     {
-//                             Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                             double distance = ( dv - du ).length();
-                        m_colorBleeding[uIndex] += obscurance( distance ) * vColorVector;
+                        m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -617,11 +612,10 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
                     }
                 }
 
-                if ( uNormal * m_direction < 0.0 )
+                double cos = uNormal * m_direction;
+                if ( cos < 0.0 )
                 {
-//                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                         double distance = ( dv - du ).length();
-                    m_colorBleeding[uIndex] += obscurance( distance ) * vColorVector;
+                    m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
                 }
             }
 
@@ -729,11 +723,10 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
                     }
 
                     // blocking
-                    if ( uNormal * m_direction < 0.0 )
+                    double cos = uNormal * m_direction;
+                    if ( cos < 0.0 )
                     {
-//                             Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                             double distance = ( dv - du ).length();
-                        m_colorBleeding[uIndex] += obscurance( distance ) * vColorVector;
+                        m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -768,11 +761,10 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
                     }
                 }
 
-                if ( uNormal * m_direction < 0.0 )
+                double cos = uNormal * m_direction;
+                if ( cos < 0.0 )
                 {
-//                         Vector3 du( u.x, u.y, u.z), dv( v.x, v.y, v.z );
-//                         double distance = ( dv - du ).length();
-                    m_colorBleeding[uIndex] += obscurance( distance ) * vColorVector;
+                    m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
                 }
             }
 
