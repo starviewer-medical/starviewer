@@ -6,27 +6,27 @@
 
 include(extensions.inc)
 
-for(dir, PLAYGROUND_EXTENSIONS) {
-    exists(extensions/playground/$$dir) {
-        I18NPROJECTS += ../extensions/playground/$$dir
-        I18NPROJECTS_TSFILES += ../extensions/playground/$$dir/*.ts
-        I18NPROJECTS_QMFILES += ../extensions/playground/$$dir/*.qm
+for(directory, PLAYGROUND_EXTENSIONS) {
+    exists(extensions/playground/$$directory) {
+        I18NPROJECTS += ../extensions/playground/$$directory
+        I18NPROJECTS_TSFILES += ../extensions/playground/$$directory/*.ts
+        I18NPROJECTS_QMFILES += ../extensions/playground/$$directory/*.qm
 }
 }
 
-for(dir, CONTRIB_EXTENSIONS) {
-    exists(extensions/contrib/$$dir) {
+for(directory, CONTRIB_EXTENSIONS) {
+    exists(extensions/contrib/$$directory) {
         I18NPROJECTS += ../extensions/contrib/$$dir
-        I18NPROJECTS_TSFILES += ../extensions/contrib/$$dir/*.ts
-        I18NPROJECTS_QMFILES += ../extensions/contrib/$$dir/*.qm
+        I18NPROJECTS_TSFILES += ../extensions/contrib/$$directory/*.ts
+        I18NPROJECTS_QMFILES += ../extensions/contrib/$$directory/*.qm
 }
 }
 
-for(dir, MAIN_EXTENSIONS) {
-    exists(extensions/main/$$dir) {
-        I18NPROJECTS += ../extensions/main/$$dir
-        I18NPROJECTS_TSFILES += ../extensions/main/$$dir/*.ts
-        I18NPROJECTS_QMFILES += ../extensions/main/$$dir/*.qm
+for(directory, MAIN_EXTENSIONS) {
+    exists(extensions/main/$$directory) {
+        I18NPROJECTS += ../extensions/main/$$directory
+        I18NPROJECTS_TSFILES += ../extensions/main/$$directory/*.ts
+        I18NPROJECTS_QMFILES += ../extensions/main/$$directory/*.qm
 }
 }
 
@@ -34,22 +34,39 @@ I18NPROJECTS += ../core ../interface ../inputoutput
 I18NPROJECTS_TSFILES += ../core/*.ts ../interface/*.ts ../inputoutput/*.ts
 I18NPROJECTS_QMFILES += ../core/*.qm ../interface/*.qm ../inputoutput/*.qm
 
-
-i18n_update.commands = @for dir in $$I18NPROJECTS; do \
-                             cd \$$dir; \
+unix {
+i18n_update.commands = @for directory in $$I18NPROJECTS; do \
+                             cd \$$directory; \
                              $$[QT_INSTALL_PREFIX]/bin/lupdate -noobsolete *.pro; \
                              cd -; \
                          done
-
+}
+win32 {
+i18n_update.commands = for %d in ($$I18NPROJECTS) do \
+                             pushd . &\
+                             cd %d & \
+                             $$[QT_INSTALL_PREFIX]\bin\lupdate -noobsolete %~nxd.pro & \
+                             popd
+}
 i18n_release.target = i18n_release
 i18n_release.depends = $$I18NPROJECTS_TSFILES
-i18n_release.commands = @for dir in $$I18NPROJECTS; do \
-                             cd \$$dir; \
+
+unix {
+i18n_release.commands = @for directory in $$I18NPROJECTS; do \
+                             cd \$$directory; \
                              $$[QT_INSTALL_PREFIX]/bin/lrelease *.pro; \
                              cd -; \
                          done \
                          && touch $$i18n_release.target
-
+}
+win32 {
+i18n_release.commands = for %d in ($$I18NPROJECTS) do \
+                             pushd . &\
+                             cd %d & \
+                             $$[QT_INSTALL_PREFIX]\bin\lrelease %~nxd.pro & \
+                             popd &\
+                             echo touch > $$i18n_release.target
+}
 QMAKE_EXTRA_TARGETS += i18n_update i18n_release
 PRE_TARGETDEPS += i18n_release
-QMAKE_CLEAN += $$I18NPROJECTS_QMFILES i18n_release
+QMAKE_CLEAN += $$I18NPROJECTS_QMFILES $$i18n_release.target
