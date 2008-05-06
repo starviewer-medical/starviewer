@@ -1473,6 +1473,7 @@ void OptimalViewpointVolume::computeObscurances2()
         thread->setNormals( directionEncoder, encodedNormals );
         thread->setData( m_data, m_dataSize, dimensions, increments );
         thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant, m_obscurance, m_colorBleeding );
+        thread->setSaliency( m_saliency );
         threads[i] = thread;
     }
 
