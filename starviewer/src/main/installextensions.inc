@@ -14,8 +14,9 @@ unix:sharp = $$system(cat sharp.txt)    # SuperXapussillaHack(tm)
 defineReplace(addExtensionInclude) {
     directoryName = $$1
     extensionName = $$2
-    exists($$directoryName/$$extensionName) {		
-		system(echo $${sharp}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\">>$$extensionsFileName)
+    exists($$directoryName/$$extensionName) {
+      win32:system(echo $${sharp}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\">>$$extensionsFileName)
+      unix:system(echo \'$${sharp}include "$$directoryName/$$extensionName/$${extensionName}extensionmediator.h"\'>>$$extensionsFileName)
     }
 
     return(0)
@@ -25,14 +26,17 @@ defineReplace(addExtensionResourcesInit) {
     directoryName = $$1
     extensionName = $$2
     exists($$directoryName/$$extensionName) {
-		system(echo "Q_INIT_RESOURCE($$extensionName);">>$$extensionsFileName)
+      win32:system(echo "Q_INIT_RESOURCE($$extensionName);">>$$extensionsFileName)
+      unix:system(echo '"Q_INIT_RESOURCE($$extensionName);"'>>$$extensionsFileName)
     }
 
     return(0)
 }
 
-system(echo "$${sharp}ifndef EXTENSIONS_H" > $$extensionsFileName)
-system(echo "$${sharp}define EXTENSIONS_H" >> $$extensionsFileName)
+win32:system(echo "$${sharp}ifndef EXTENSIONS_H"> $$extensionsFileName)
+win32:system(echo "$${sharp}define EXTENSIONS_H">> $$extensionsFileName)
+unix:system(echo '"$${sharp}ifndef EXTENSIONS_H"'> $$extensionsFileName)
+unix:system(echo '"$${sharp}define EXTENSIONS_H"'>> $$extensionsFileName)
 
 
 # Afegim els include's
@@ -48,7 +52,8 @@ for(extensionName, PLAYGROUND_EXTENSIONS) {
 
 # Afegim les inicialitzacions de resources
 
-system(echo "void initExtensionsResources()">> $$extensionsFileName)
+win32:system(echo "void initExtensionsResources()">> $$extensionsFileName)
+unix:system(echo '"void initExtensionsResources()"'>> $$extensionsFileName)
 system(echo "{">> $$extensionsFileName)
 
 for(extensionName, MAIN_EXTENSIONS) {
@@ -63,4 +68,5 @@ for(extensionName, PLAYGROUND_EXTENSIONS) {
 
 system(echo "}">> $$extensionsFileName)
 
-system(echo "$${sharp}endif" >> $$extensionsFileName)
+win32:system(echo "$${sharp}endif" >> $$extensionsFileName)
+unix:system(echo '"$${sharp}endif"' >> $$extensionsFileName)
