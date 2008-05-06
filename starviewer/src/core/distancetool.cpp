@@ -50,8 +50,11 @@ void DistanceTool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-            this->annotateNewPoint();
-            m_2DViewer->getDrawer()->refresh();
+            if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
+            {
+                this->annotateNewPoint();
+                m_2DViewer->getDrawer()->refresh();
+            }
             break;
         case vtkCommand::MouseMoveEvent:
             if( m_line )
