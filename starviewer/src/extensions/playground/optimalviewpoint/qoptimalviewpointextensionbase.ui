@@ -718,6 +718,9 @@
               <property name="singleStep">
                <double>0.1</double>
               </property>
+              <property name="value">
+               <double>1</double>
+              </property>
               <property name="toolTip">
                <string>a</string>
               </property>
@@ -730,9 +733,6 @@
               </property>
               <property name="singleStep">
                <double>0.1</double>
-              </property>
-              <property name="value">
-               <double>1</double>
               </property>
               <property name="toolTip">
                <string>b</string>
