@@ -281,12 +281,21 @@ void vtkCastRay_NN_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicIn
         fx *= aObscuranceFactor * fxObscurance;
       }
 
-      accum_red_intensity   += ( opacity * remaining_opacity * 
+      accum_red_intensity   += ( opacity * remaining_opacity *
                                  CTF[(value)*3] ) * fx;
-      accum_green_intensity += ( opacity * remaining_opacity * 
+      accum_green_intensity += ( opacity * remaining_opacity *
                                  CTF[(value)*3 + 1] ) * fx;
-      accum_blue_intensity  += ( opacity * remaining_opacity * 
+      accum_blue_intensity  += ( opacity * remaining_opacity *
                                  CTF[(value)*3 + 2] ) * fx;
+
+//       const double C_1_3 = 1.0 / 3.0, C_2_3 = 2.0 / 3.0;
+//       double saliency = aSaliency[offset];
+//       accum_red_intensity   += ( opacity * remaining_opacity * 
+//                                  (saliency < C_1_3 ? (C_1_3-saliency)*0.5 : saliency-C_1_3) ) * fx;
+//       accum_green_intensity += ( opacity * remaining_opacity * 
+//                                  (saliency < C_1_3 ? saliency-C_1_3 : (saliency < C_2_3 ? 1.0 : 1.0-saliency)) ) * fx;
+//       accum_blue_intensity  += ( opacity * remaining_opacity * 
+//                                  (saliency < C_1_3 ? 1.0 : (saliency < C_2_3 ? C_2_3-saliency : 0.0)) ) * fx;
       //////////////////////////////////////////////////////////////////////////////////////////////
       remaining_opacity *= (1.0 - opacity);
       
@@ -847,6 +856,18 @@ void vtkCastRay_NN_Shaded( T *data_ptr, vtkVolumeRayCastDynamicInfo *dynamicInfo
           blue_shaded_value = opacity *  remaining_opacity *
             ( blue_d_shade[*(encoded_normals + offset)] * CTF[value*3 + 2] +
               blue_s_shade[*(encoded_normals + offset)] );
+
+//           const double C_1_3 = 1.0 / 3.0, C_2_3 = 2.0 / 3.0;
+//           double saliency = aSaliency[offset];
+//           red_shaded_value = opacity *  remaining_opacity *
+//             ( red_d_shade[*(encoded_normals + offset)] * (saliency < C_1_3 ? (C_1_3-saliency)*0.5 : saliency-C_1_3) +
+//               red_s_shade[*(encoded_normals + offset)] );
+//           green_shaded_value = opacity *  remaining_opacity *
+//             ( green_d_shade[*(encoded_normals + offset)] * (saliency < C_1_3 ? saliency-C_1_3 : (saliency < C_2_3 ? 1.0 : 1.0-saliency)) +
+//               green_s_shade[*(encoded_normals + offset)] );
+//           blue_shaded_value = opacity *  remaining_opacity *
+//             ( blue_d_shade[*(encoded_normals + offset)] * (saliency < C_1_3 ? 1.0 : (saliency < C_2_3 ? C_2_3-saliency : 0.0)) +
+//               blue_s_shade[*(encoded_normals + offset)] );
           }
         else
           {
