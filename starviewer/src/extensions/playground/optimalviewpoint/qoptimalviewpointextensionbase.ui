@@ -1399,6 +1399,16 @@
            </item>
            <item>
             <property name="text" >
+             <string>Opacity saliency</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Opacity smooth saliency</string>
+            </property>
+           </item>
+           <item>
+            <property name="text" >
              <string>Opacity color bleeding</string>
             </property>
            </item>
