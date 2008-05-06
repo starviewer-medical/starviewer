@@ -27,7 +27,7 @@ defineTest(addSubdirs) {
 
 # Fake subdirs per KDevelop
 SUBDIRS = core inputoutput interface extensions main
-foreach(DIR, SUBDIRS){
+for(DIR, SUBDIRS){
  SUBDIRS -= $$DIR
 }
 
