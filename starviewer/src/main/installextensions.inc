@@ -16,7 +16,7 @@ defineReplace(addExtensionInclude) {
     extensionName = $$2
     exists($$directoryName/$$extensionName) {
       win32:system(echo $${sharp}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\">>$$extensionsFileName)
-      unix:system(echo \'$${sharp}include "$$directoryName/$$extensionName/$${extensionName}extensionmediator.h"\'>>$$extensionsFileName)
+      unix:system(echo \'$${sharp}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\"\'>>$$extensionsFileName)
     }
 
     return(0)
