@@ -1,65 +1,62 @@
 # Afegim dependències de les extensions
 
+TARGET = starviewer
+DESTDIR = ../../bin
+TEMPLATE = app
+
+SOURCES += main.cpp
+RESOURCES = main.qrc
+
 include(../extensions.inc)
 
-for(dir, PLAYGROUND_EXTENSIONS) {
-    exists(../extensions/playground/$$dir) {
-        TARGETDEPS += ../extensions/playground/$$dir/lib$${dir}.a
-        LIBS += ../extensions/playground/$$dir/lib$${dir}.a
-        INCLUDEPATH += ../extensions/playground/$$dir
-        DEPENDPATH += ../extensions/playground/$$dir
+# Funció per afegir una llibreria estàtica com a dependència
+defineReplace(addLibraryDependency) {
+    directoryName = $$1
+    libraryName = $$2
+    exists($$directoryName/$$libraryName) {
+        unix:PRE_TARGETDEPS += $$directoryName/$$libraryName/lib$${libraryName}.a
+        win32:PRE_TARGETDEPS += $$directoryName/$$libraryName/$${libraryName}.lib
+        LIBS += -L$$directoryName/$$libraryName -l$${libraryName}
+        INCLUDEPATH += $$directoryName/$$libraryName
+        DEPENDPATH += $$directoryName/$$libraryName
     }
+    # Propaguem els canvis a fora de la funció
+    export(PRE_TARGETDEPS)
+    export(LIBS)
+    export(INCLUDEPATH)
+    export(DEPENDPATH)
+
+    return(0)
+}
+
+for(dir, PLAYGROUND_EXTENSIONS) {
+    DUMMY = $$addLibraryDependency(../extensions/playground, $$dir)
 }
 
 for(dir, CONTRIB_EXTENSIONS) {
-    exists(../extensions/contrib/$$dir) {
-        TARGETDEPS += ../extensions/contrib/$$dir/lib$${dir}.a
-        LIBS += ../extensions/contrib/$$dir/lib$${dir}.a
-        INCLUDEPATH += ../extensions/contrib/$$dir
-        DEPENDPATH += ../extensions/contrib/$$dir
-    }
+    DUMMY = $$addLibraryDependency(../extensions/contrib, $$dir)
 }
 
 for(dir, MAIN_EXTENSIONS) {
-    exists(../extensions/main/$$dir) {
-        TARGETDEPS += ../extensions/main/$$dir/lib$${dir}.a
-        LIBS += ../extensions/main/$$dir/lib$${dir}.a
-        INCLUDEPATH += ../extensions/main/$$dir
-        DEPENDPATH += ../extensions/main/$$dir
-    }
+    DUMMY = $$addLibraryDependency(../extensions/main, $$dir)
 }
 
-RESOURCES = main.qrc
-TARGETDEPS += ../interface/libinterface.a \
-              ../core/libcore.a \
-              ../inputoutput/libinputoutput.a
-LIBS += -llog4cxx \
-        ../interface/libinterface.a \
-        ../inputoutput/libinputoutput.a \
-        ../core/libcore.a
-INCLUDEPATH += ../interface \
-               ../core \
-               ../inputoutput
-DEPENDPATH += images \
-              ../interface \
-              ../core \
-              ../inputoutput
+# Dependències de llibreries core
+DUMMY = $$addLibraryDependency(.., interface)
+DUMMY = $$addLibraryDependency(.., inputoutput)
+DUMMY = $$addLibraryDependency(.., core)
 
-MOC_DIR = ../../tmp/moc
-UI_DIR = ../../tmp/ui
-OBJECTS_DIR = ../../tmp/obj
-RCC_DIR = ../../tmp/rcc
-TARGET = ../../bin/starviewer
-CONFIG += warn_on
-TEMPLATE = app
-SOURCES += main.cpp
+win32{
+  LIBS += -ladvapi32 
+}
+
+include(../corelibsconfiguration.inc)
+include(../dcmtk.inc)
 include(../vtk.inc)
 include(../itk.inc)
-include(../dcmtk.inc)
+include(../log4cxx.inc)
 include(../compilationtype.inc)
 
-# Instalem les extensions
+CONFIG -= staticlib
 
-unix {
-    !system(sh installextensions.sh):error(ERROR FATAL! Falta el fitxer installextension.sh. No es pot compilar!!!)
-}
+include(installextensions.inc)

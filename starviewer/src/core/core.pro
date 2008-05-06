@@ -1,18 +1,18 @@
 # Fitxer generat pel gestor de qmake de kdevelop.
 # -------------------------------------------
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu ÃÂÃÂÃÂÃÂ©s una biblioteca:
+# L'objectiu és una biblioteca:
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui  \
- 	 qdicomdumpbase.ui \
-	 qdicomdumpcthelixwidgetbase.ui \
-	 qdicomdumpctlocalizerwidgetbase.ui \
-	 qdicomdumpmrwidgetbase.ui \
-	 qdicomdumpctwidgetbase.ui \
+         qdicomdumpbase.ui \
+         qdicomdumpcthelixwidgetbase.ui \
+         qdicomdumpctlocalizerwidgetbase.ui \
+         qdicomdumpmrwidgetbase.ui \
+         qdicomdumpctwidgetbase.ui \
          qtransferfunctioneditorbyvaluesbase.ui \
          qtransferfunctionintervaleditorbase.ui \
-	 qcinecontrollerbase.ui  \
+         qcinecontrollerbase.ui  \
          qthickslabwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
@@ -137,7 +137,7 @@ HEADERS += extensionfactory.h \
            qdicomdumpmrwidget.h \
            qdicomdumpctwidget.h \
            philipstagsfillerstep.h \
-	   qcinecontroller.h \
+           qcinecontroller.h \
            hoverpoints.h \
            qcolorspinbox.h \
            qtransferfunctioneditorbyvalues.h \
@@ -155,7 +155,7 @@ HEADERS += extensionfactory.h \
            slicingkeyboardtool.h \
            qthickslabwidget.h \
            erasertool.h \
-	   patientitem.h \
+           patientitem.h \
            patientitemmodel.h \
            cursor3dtool.h \
            cursor3dtooldata.h \
@@ -269,7 +269,7 @@ SOURCES += extensionmediator.cpp \
            qdicomdumpmrwidget.cpp \
            qdicomdumpctwidget.cpp \
            philipstagsfillerstep.cpp \
-	   qcinecontroller.cpp \
+           qcinecontroller.cpp \
            hoverpoints.cpp \
            qcolorspinbox.cpp \
            qtransferfunctioneditorbyvalues.cpp \
@@ -291,20 +291,13 @@ SOURCES += extensionmediator.cpp \
            angletool.cpp \
  drawercrosshair.cpp
 TEMPLATE = lib
-CONFIG += warn_on \
-thread \
-staticlib \
-qt \
-stl
-OBJECTS_DIR = ../../tmp/obj
-UI_DIR = ../../tmp/ui
-MOC_DIR = ../../tmp/moc
-QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
-QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
-LIBS += -llog4cxx
-INCLUDEPATH += /usr/include/log4cxx/
+
+DESTDIR = ./
+
+include(../corelibsconfiguration.inc)
 include(../itk.inc)
 include(../vtk.inc)
 include(../dcmtk.inc)
+include(../log4cxx.inc)
 include(../compilationtype.inc)
 include(../translations.inc)

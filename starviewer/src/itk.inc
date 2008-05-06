@@ -38,4 +38,13 @@ LIBS += -L$${ITKLIBDIR} \
         -litkvcl \
         -litkvnl \
         -litkvnl_algo \
-        -litkvnl_inst
+        -litkvnl_inst \
+        -lITKniftiio \
+        -litkopenjpeg \
+        -lITKznz
+
+win32 {
+ LIBS += -litktiff \
+         -litkpng \
+         -litkzlib
+}

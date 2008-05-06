@@ -12,25 +12,31 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
     $${DCMTKINCLUDEDIR}/dcmsr \
     $${DCMTKINCLUDEDIR}/dcmjpeg
 
+win32 {
+INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
+LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
+
+INCLUDEPATH += C:\sqlite3
+LIBS += -LC:\sqlite3
+}
 
 LIBS += -L$${DCMTKLIBDIR} \
     -lsqlite3 \
-    -lwrap \
     -ldcmnet \
     -ldcmdata \
-    -ldcmimage \
-    -ldcmimgle \
     -lofstd \
+    -ldcmimgle \
+    -ldcmimage \
     -ldcmsr \
-    -lssl \
     -ldcmqrdb \
     -ldcmtls \
     -ldcmdsig \
     -ldcmpstat \
-    -ldcmjpeg \
     -lijg8 \ 
     -lijg12 \ 
-    -lijg16 
+    -lijg16 \
+    -ldcmjpeg
+unix:LIBS += -lssl
 
 unix {
     DEFINES += HAVE_CONFIG_H

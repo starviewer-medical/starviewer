@@ -12,5 +12,7 @@ LIBS += -L$${VTKLIBDIR} \
         -lvtkVolumeRendering \
         -lvtksys \
         -lQVTK \
-        -lvtkWidgets
+        -lvtkWidgets \
+        -lvtkFiltering \
+        -lvtkIO
  

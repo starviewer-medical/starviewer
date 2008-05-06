@@ -120,20 +120,17 @@ SOURCES += databaseconnection.cpp \
            qoperationstatescreen.cpp \
            qchooseoneobjectdialog.cpp \
            queryscreen.cpp
-TARGETDEPS += ../core/libcore.a
-LIBS += ../core/libcore.a
+
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
-MOC_DIR = ../../tmp/moc
-UI_DIR = ../../tmp/ui
-OBJECTS_DIR = ../../tmp/obj
-QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
-QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
-CONFIG += warn_on \
-          staticlib \
-          qt
+
 TEMPLATE = lib
+
+DESTDIR = ./
+
+include(../corelibsconfiguration.inc)
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
+include(../log4cxx.inc)
 include(../compilationtype.inc)

@@ -5,11 +5,13 @@
 
 DCMTKLIBDIR = $$(DCMTKLIBDIR)
 isEmpty(DCMTKLIBDIR){
-    DCMTKLIBDIR = /usr/lib/dcmtk
+    unix:DCMTKLIBDIR = /usr/lib/dcmtk
+    win32:DCMTKLIBDIR = C:\dcmtk-3.5.4\lib
 }
 DCMTKINCLUDEDIR = $$(DCMTKINCLUDEDIR)
 isEmpty(DCMTKINCLUDEDIR){
-    DCMTKINCLUDEDIR = /usr/include/dcmtk
+    unix:DCMTKINCLUDEDIR = /usr/include/dcmtk
+    win32:DCMTKINCLUDEDIR = C:\dcmtk-3.5.4\include\dcmtk
 }
 
 
@@ -17,11 +19,13 @@ isEmpty(DCMTKINCLUDEDIR){
 
 VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
-    VTKLIBDIR = /usr/lib
+    unix:VTKLIBDIR = /usr/lib
+    win32:VTKLIBDIR = C:\vtk\vtk5.0\lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
-    VTKINCLUDEDIR = /usr/include/vtk-5.0
+    unix:VTKINCLUDEDIR = /usr/include/vtk-5.0
+    win32:VTKINCLUDEDIR = C:\vtk\vtk5.0\include\vtk-5.0
 }
 
 
@@ -29,9 +33,24 @@ isEmpty(VTKINCLUDEDIR){
 
 ITKLIBDIR = $$(ITKLIBDIR)
 isEmpty(ITKLIBDIR){
-    ITKLIBDIR = /usr/lib/InsightToolkit
+    unix:ITKLIBDIR = /usr/lib/InsightToolkit
+    win32:ITKLIBDIR = C:\InsightToolkit\lib\InsightToolkit
 }
 ITKINCLUDEDIR = $$(ITKINCLUDEDIR)
 isEmpty(ITKINCLUDEDIR){
-    ITKINCLUDEDIR = /usr/include/InsightToolkit
+    unix:ITKINCLUDEDIR = /usr/include/InsightToolkit
+    win32:ITKINCLUDEDIR = C:\InsightToolkit\include\InsightToolkit
+}
+
+# Log4cxx Libraries
+
+LOG4CXXLIBDIR = $$(LOG4CXXLIBDIR)
+isEmpty(LOG4CXXLIBDIR){
+    unix:LOG4CXXLIBDIR = /usr/lib
+    win32:LOG4CXXLIBDIR = C:\log4cxx
+}
+LOG4CXXINCLUDEDIR = $$(LOG4CXXINCLUDEDIR)
+isEmpty(LOG4CXXINCLUDEDIR){
+    unix:LOG4CXXINCLUDEDIR = /usr/include/log4cxx
+    win32:LOG4CXXINCLUDEDIR = C:\log4cxx\include
 }

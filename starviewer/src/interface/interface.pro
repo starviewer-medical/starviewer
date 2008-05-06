@@ -17,29 +17,18 @@ SOURCES += qapplicationmainwindow.cpp \
            extensionhandler.cpp \
            extensionworkspace.cpp \
            qconfigurationdialog.cpp
-TARGETDEPS += ../core/libcore.a \
-../../src/inputoutput/libinputoutput.a
-LIBS += ../inputoutput/libinputoutput.a \
-        ../core/libcore.a
+
 INCLUDEPATH += ../inputoutput \
                ../core
 DEPENDPATH += ../inputoutput \
-               ../core
-MOC_DIR = ../../tmp/moc
-UI_DIR = ../../tmp/ui
-OBJECTS_DIR = ../../tmp/obj
-QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
-QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
-CONFIG += warn_on \
-qt \
-opengl \
-thread \
-x11 \
-staticlib \
-exceptions \
-stl
+              ../core
 TEMPLATE = lib
+
+DESTDIR = ./
+
+include(../corelibsconfiguration.inc)
 include(../vtk.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
+include(../log4cxx.inc)
 include(../compilationtype.inc)
