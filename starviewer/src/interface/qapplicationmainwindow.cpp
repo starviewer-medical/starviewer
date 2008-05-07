@@ -52,7 +52,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio,etc
     readSettings();
     // icona de l'aplicació
-    this->setWindowIcon( QPixmap(":/images/starviewer.png") );
+    this->setWindowIcon( QIcon(":/images/starviewer.png") );
     this->setWindowTitle( tr("Starviewer") );
 
 #ifdef BETA_VERSION

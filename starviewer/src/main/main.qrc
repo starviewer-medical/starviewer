@@ -29,7 +29,7 @@
         <file>images/cross.png</file>
         <file>images/database.png</file>
         <file>images/databaseRemove.png</file>
-	<file>images/dicomDump.png</file>
+        <file>images/dicomDump.png</file>
         <file>images/distance.png</file>
         <file>images/down.png</file>
         <file>images/dvd.png</file>
@@ -68,7 +68,7 @@
         <file>images/preferences.png</file>
         <file>images/presentationStateThumbnail.png</file>
         <file>images/record.png</file>
-	<file>images/referenceLines.png</file>
+        <file>images/referenceLines.png</file>
         <file>images/reload.png</file>
         <file>images/repeat.png</file>
         <file>images/retractFullscreen.png</file>
@@ -87,6 +87,7 @@
         <file>images/slicing.png</file>
         <file>images/small-warning.png</file>
         <file>images/splash.png</file>
+        <file>images/starviewer.png</file>
         <file>images/stop.png</file>
         <file>images/store.png</file>
         <file>images/structuredReportThumbnail.png</file>
