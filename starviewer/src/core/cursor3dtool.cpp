@@ -65,7 +65,6 @@ void Cursor3DTool::setToolData(ToolData * data)
     {
         refreshReferenceViewerData();
     }
-    updateProjectedPoint();
 }
 
 void Cursor3DTool::handleEvent( long unsigned eventID )
