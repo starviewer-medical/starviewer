@@ -285,6 +285,7 @@ private:
 
 
     bool m_fx;
+    double m_fxSaliencyA, m_fxSaliencyB;
 
 };
 
