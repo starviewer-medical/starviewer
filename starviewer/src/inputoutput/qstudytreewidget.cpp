@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QShortcut>
 #include <QString>
+#include <QDate>
 
 #include "qstudytreewidget.h"
 #include "pacslistdb.h"
@@ -250,28 +251,14 @@ QString QStudyTreeWidget::formatAge( const QString age )
     return text;
 }
 
-QString QStudyTreeWidget::formatDate( const QString date )
-{
-    QString formateDate , originalDate ( date );
-
-    formateDate.insert( 0 , originalDate.mid( 6 , 2 ) ); //dd
-    formateDate.append( "/" );
-    formateDate.append( originalDate.mid( 4 , 2 ) );
-    formateDate.append( "/" );
-    formateDate.append( originalDate.mid( 0 , 4 ) );
-
-    return formateDate;
+QString QStudyTreeWidget::formatDate(const QString &date)
+{   
+    return QDate::fromString(date, "yyyyMMdd").toString(Qt::ISODate);
 }
 
-QString QStudyTreeWidget::formatHour( const QString hour )
+QString QStudyTreeWidget::formatHour(const QString &hour)
 {
-    QString formatedHour,originalHour( hour );
-
-    formatedHour.insert( 0 , originalHour.mid( 0 , 2 ) );
-    formatedHour.append( ":" );
-    formatedHour.append( originalHour.mid( 2 , 2 ) );
-
-    return formatedHour;
+    return QTime::fromString(hour, "hhmmss").toString(Qt::ISODate);
 }
 
 void QStudyTreeWidget::clear()
