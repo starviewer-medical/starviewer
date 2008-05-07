@@ -86,7 +86,10 @@ void Cursor3DTool::handleEvent( long unsigned eventID )
             }
             break;
         case vtkCommand::LeftButtonReleaseEvent:
+            if( m_state == CALCULATING )
+            {
                 removePosition();
+            }
             break;
     }
 }
@@ -206,7 +209,6 @@ void Cursor3DTool::removePosition()
     m_crossHair->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->refresh();
     m_myData->setVisible( false );
-
 }
 
 void Cursor3DTool::updateProjectedPoint()
@@ -244,7 +246,6 @@ void Cursor3DTool::updateProjectedPoint()
 void Cursor3DTool::projectPoint()
 {
         double *position = new double[3];
-
         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( m_myData->getOriginPointPosition(), position );
 
         if( position )
