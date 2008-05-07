@@ -86,7 +86,7 @@ void DcmDatasetCache::stopAutoclear()
 void DcmDatasetCache::timerEvent(QTimerEvent *)
 {
     stopAutoclearTimer();
-    QString thread; DEBUG_LOG(thread.sprintf("Buidem la cache DcmDataset perquè ha transcorregut el temps d'autoclear. Thread %p, Current Thread %p", this->thread(), QThread::currentThread()));
+    DEBUG_LOG(QString("Buidem la cache DcmDataset perquè ha transcorregut el temps d'autoclear. Thread %p, Current Thread %p").arg(this->thread()).arg(QThread::currentThread()));
     this->clear();
 }
 
