@@ -7,6 +7,10 @@ TEMPLATE = app
 SOURCES += main.cpp
 RESOURCES = main.qrc
 
+win32{
+RC_FILE = starviewer.rc
+}
+
 include(../extensions.inc)
 
 # Funció per afegir una llibreria estàtica com a dependència
