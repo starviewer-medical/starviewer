@@ -48,8 +48,11 @@ Cursor3DTool::Cursor3DTool( QViewer *viewer, QObject *parent )
 
 Cursor3DTool::~Cursor3DTool()
 {
-    //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
-    m_crossHair->decreaseReferenceCount();
+    if( m_crossHair )
+    {
+        //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
+        m_crossHair->decreaseReferenceCount();
+    }
 }
 
 void Cursor3DTool::setToolData(ToolData * data)
@@ -98,14 +101,14 @@ void Cursor3DTool::initializePosition()
         double xyz[3];
         m_2DViewer->getCurrentCursorPosition( xyz );
         m_crossHair = new DrawerCrossHair;
-        
+
         //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
         m_crossHair->increaseReferenceCount();
-        
+
         m_crossHair->setCentrePoint( xyz[0], xyz[1],xyz[2] );
         m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
     }
-    
+
     m_myData->setVisible( true );
     updatePosition();
 
@@ -122,7 +125,7 @@ void Cursor3DTool::updatePosition()
         double xyz[3];
         ImagePlane * currentPlane;
         Image *image;
-         
+
         //Cal fer els càlculs per passar del món VTK al mon que té el DICOM per guardar el punt en dicom a les dades compartides de la tool.
         // 1.- Trobar el punt correcte en el món VTK
         m_2DViewer->getCurrentCursorPosition( xyz );
@@ -137,7 +140,7 @@ void Cursor3DTool::updatePosition()
             int slice = m_2DViewer->getCurrentSlice();
             double *spacing = m_2DViewer->getInput()->getSpacing();
             double *origin = m_2DViewer->getInput()->getOrigin();
-                    
+
             switch( m_2DViewer->getView() )
             {
                 case Q2DViewer::Axial:
@@ -177,7 +180,7 @@ void Cursor3DTool::updatePosition()
                 projectionMatrix->SetElement(row,2, 0.0);
                 projectionMatrix->SetElement(row,3, currentPlaneOrigin[row]);
             }
-            
+
             // 3.- Mappeig de l'índex del píxel al món real
             dicomWorldPosition[0] = (double)index[0];
             dicomWorldPosition[1] = (double)index[1];
@@ -203,7 +206,7 @@ void Cursor3DTool::removePosition()
     m_crossHair->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->refresh();
     m_myData->setVisible( false );
-    
+
 }
 
 void Cursor3DTool::updateProjectedPoint()
@@ -217,10 +220,10 @@ void Cursor3DTool::updateProjectedPoint()
 
             //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
             m_crossHair->increaseReferenceCount();
-            
+
             m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
         }
-        
+
         if( !m_myData->isVisible() )
         {
             m_crossHair->setVisibility( false );
@@ -241,14 +244,14 @@ void Cursor3DTool::updateProjectedPoint()
 void Cursor3DTool::projectPoint()
 {
         double *position = new double[3];
-            
+
         m_2DViewer->projectDICOMPointToCurrentDisplayedImage( m_myData->getOriginPointPosition(), position );
 
         if( position )
         {
             double distance;
             int nearestSlice = m_2DViewer->getNearestSlice( m_myData->getOriginPointPosition(), distance );
-            
+
             if ( nearestSlice != -1 && distance < ( m_2DViewer->getThickness()*1.5 ) ){
                 m_2DViewer->setSlice( nearestSlice );
                 m_crossHair->setCentrePoint( position[0], position[1], position[2] );
@@ -258,7 +261,7 @@ void Cursor3DTool::projectPoint()
             {
                 m_crossHair->setVisibility( false );
             }
-            
+
             m_crossHair->update( DrawerPrimitive::VTKRepresentation );
             m_2DViewer->refresh();
         }
