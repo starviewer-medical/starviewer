@@ -42,7 +42,7 @@ public:
     void setNormals( vtkDirectionEncoder * directionEncoder, const ushort * encodedNormals );
     void setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] );
     void setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant, double * obscurance, Vector3 * colorBleeding );
-    void setSaliency( const double * saliency );
+    void setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB );
     void setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta );
 
 protected:
@@ -77,6 +77,7 @@ private:
     double * m_obscurance;
     Vector3 * m_colorBleeding;
     const double * m_saliency;
+    double m_fxSaliencyA, m_fxSaliencyB;
 
     Vector3 m_direction, m_forward;
     const int * m_xyz;

@@ -1473,7 +1473,7 @@ void OptimalViewpointVolume::computeObscurances2()
         thread->setNormals( directionEncoder, encodedNormals );
         thread->setData( m_data, m_dataSize, dimensions, increments );
         thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant, m_obscurance, m_colorBleeding );
-        thread->setSaliency( m_saliency );
+        thread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB );
         threads[i] = thread;
     }
 
@@ -1981,12 +1981,14 @@ void OptimalViewpointVolume::setFxSaliency( bool fxSaliency )
 void OptimalViewpointVolume::setFxSaliencyA( double fxSaliencyA )
 {
     m_volumeRayCastFunctionFx->SetFxSaliencyA( fxSaliencyA );
+    m_fxSaliencyA = fxSaliencyA;
 }
 
 
 void OptimalViewpointVolume::setFxSaliencyB( double fxSaliencyB )
 {
     m_volumeRayCastFunctionFx->SetFxSaliencyB( fxSaliencyB );
+    m_fxSaliencyB = fxSaliencyB;
 }
 
 
