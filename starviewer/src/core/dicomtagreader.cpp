@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "dicomtagreader.h"
 #include "logging.h"
+#include "dcmdatasetcache.h"
+#include "singleton.h"
 
 #include <QStringList>
 
@@ -14,11 +16,13 @@
 
 namespace udg {
 
-// Inicialitzem l'autoclear a 300 segons.
-DcmDatasetCache DICOMTagReader::m_cache(300);
+/// Fem servir la cache com a singleton
+typedef SingletonPointer<DcmDatasetCache> DcmDatasetCacheSingleton;
 
 DICOMTagReader::DICOMTagReader() : m_dicomData(0)
 {
+    // Inicialitzem l'autoclear a 300 segons.
+    DcmDatasetCacheSingleton::instance()->startAutoclear(300);
 }
 
 DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0)
@@ -34,7 +38,7 @@ DICOMTagReader::~DICOMTagReader()
 bool DICOMTagReader::setFile( QString filename )
 {
     DcmFileFormat dicomFile;
-    DcmDataset *dataset = m_cache.find(filename);
+    DcmDataset *dataset = DcmDatasetCacheSingleton::instance()->find(filename);
     if (! dataset)
     {
         OFCondition status = dicomFile.loadFile( qPrintable(filename) );
@@ -48,7 +52,7 @@ bool DICOMTagReader::setFile( QString filename )
             }
 
             dataset =  dicomFile.getAndRemoveDataset();
-            m_cache.insert( filename, dynamic_cast<DcmDataset*>(dataset->clone()) );
+            DcmDatasetCacheSingleton::instance()->insert( filename, dynamic_cast<DcmDataset*>(dataset->clone()) );
         }
         else
         {

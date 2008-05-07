@@ -7,6 +7,10 @@
 #ifndef UDGSINGLETON_H
 #define UDGSINGLETON_H
 
+#include <QReadWriteLock>
+#include <QThread>
+#include <QWriteLocker>
+
 namespace udg {
 
 /**
@@ -53,9 +57,45 @@ protected:
     Singleton(){}; // No s'implementa
     Singleton(const Singleton&){}; // No s'implementa
     Singleton &operator=(const Singleton&){}; // No s'implementa
-    
 };
 
+/**
+    Classe que implementa el patró Singleton però a nivell de punter. Es fa servir de la mateixa manera que Singleton però amb 
+    la particularitat de que el singleton es fa a nivell de punter en comptes d'objecte.
+    Aquest singleton només s'hauria de fer servir quan hi ha problemes que impedeixen fer servir l'anterior. Alguns d'aquests problemes
+    serien problemes en l'ordre de destrucció d'objectes estàtics (com el cas de la DcmDatasetCache per culpa de dcmtk).
+    El problema que té aquesta implementació és que el destructor no es cridarà mai.
+    Aquesta implementació sí que és thread-safe.
+*/
+template<typename T>
+class SingletonPointer{
+
+public:
+    static T* instance()
+    {
+        if (m_theSinglePointer == NULL)
+        {
+            QWriteLocker locker(&m_pointerLock);
+            if (m_theSinglePointer == NULL)   //Fem double checking per evitar bloquejos innecessaris
+            {
+                m_theSinglePointer = new T();
+            }
+        }
+        return m_theSinglePointer;
+    }
+
+protected:
+    SingletonPointer(){}; // No s'implementa
+    SingletonPointer(const SingletonPointer&){}; // No s'implementa
+    SingletonPointer &operator=(const SingletonPointer&){}; // No s'implementa
+
+private:
+    static QReadWriteLock m_pointerLock;
+    static T* m_theSinglePointer;
+};
+
+template<typename T> T* SingletonPointer<T>::m_theSinglePointer = NULL;
+template<typename T> QReadWriteLock SingletonPointer<T>::m_pointerLock;
 }
 
 #endif
