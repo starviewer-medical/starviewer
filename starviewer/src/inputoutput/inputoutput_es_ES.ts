@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
+<defaultcodec></defaultcodec>
 <context>
     <name>QChooseOneObjectDialogBase</name>
     <message>
@@ -50,7 +51,7 @@ Tendría que escoger solo uno.</translation>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="185"/>
         <source>Test</source>
-        <translation>Compobar</translation>
+        <translation>Comprobar</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="182"/>
@@ -130,7 +131,7 @@ Tendría que escoger solo uno.</translation>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="1271"/>
         <source>Compact Database</source>
-        <translation>Caompactar base de Datos</translation>
+        <translation>Compactar base de Datos</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="1152"/>
@@ -336,7 +337,7 @@ Tendría que escoger solo uno.</translation>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1348"/>
+        <location filename="queryscreen.cpp" line="1360"/>
         <source>Open</source>
         <translation>Abrir</translation>
     </message>
@@ -533,12 +534,12 @@ Tendría que escoger solo uno.</translation>
     <message>
         <location filename="qconfigurationscreen.cpp" line="471"/>
         <source> Pacs </source>
-        <translation>Pacs</translation>
+        <translation>Pacs </translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="442"/>
         <source> doesn&apos;t responds </source>
-        <translation>no responde</translation>
+        <translation> no responde </translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="475"/>
@@ -548,17 +549,17 @@ Tendría que escoger solo uno.</translation>
     <message>
         <location filename="qconfigurationscreen.cpp" line="459"/>
         <source> Test of Pacs </source>
-        <translation>El Teste del Pacs</translation>
+        <translation>La comprobación del Pacs </translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="461"/>
         <source> is correct </source>
-        <translation>es correcto</translation>
+        <translation> es correcta</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="473"/>
         <source> doesn&apos;t responds correctly</source>
-        <translation>no responde correctamente</translation>
+        <translation> no responde correctamente</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="575"/>
@@ -954,17 +955,17 @@ Código de error: %1</translation>
 <context>
     <name>udg::QExecuteOperationThread</name>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="142"/>
+        <location filename="qexecuteoperationthread.cpp" line="147"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="137"/>
+        <location filename="qexecuteoperationthread.cpp" line="142"/>
         <source>Not enough space to retrieve studies. Please free space</source>
         <translation>No hay suficiente espacio libre para descargar nuevos estudios. Por favor libere espacio</translation>
     </message>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="142"/>
+        <location filename="qexecuteoperationthread.cpp" line="147"/>
         <source>Error freeing space. The study couldn&apos;t be retrieved</source>
         <translation>Error liberando espacio. El estudio no se pudo descargar</translation>
     </message>
@@ -1093,27 +1094,27 @@ Código de error: %1</translation>
 <context>
     <name>udg::QSeriesListWidget</name>
     <message>
-        <location filename="qserieslistwidget.cpp" line="43"/>
+        <location filename="qserieslistwidget.cpp" line="44"/>
         <source> Series </source>
         <translation> Serie </translation>
     </message>
     <message>
-        <location filename="qserieslistwidget.cpp" line="55"/>
+        <location filename="qserieslistwidget.cpp" line="56"/>
         <source> Key Object Note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qserieslistwidget.cpp" line="57"/>
+        <location filename="qserieslistwidget.cpp" line="58"/>
         <source> Presentation State</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qserieslistwidget.cpp" line="59"/>
+        <location filename="qserieslistwidget.cpp" line="60"/>
         <source> Structured Report</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qserieslistwidget.cpp" line="61"/>
+        <location filename="qserieslistwidget.cpp" line="62"/>
         <source> Images</source>
         <translation> Imágenes</translation>
     </message>
@@ -1129,17 +1130,17 @@ Código de error: %1</translation>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="173"/>
+        <location filename="qstudytreewidget.cpp" line="174"/>
         <source>Series %1</source>
         <translation>Serie %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="117"/>
+        <location filename="qstudytreewidget.cpp" line="118"/>
         <source>Study %1</source>
         <translation>Estudio %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="231"/>
+        <location filename="qstudytreewidget.cpp" line="232"/>
         <source>Image %1</source>
         <translation>Imagen %1</translation>
     </message>
@@ -1245,214 +1246,209 @@ Código de error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1697"/>
+        <location filename="queryscreen.cpp" line="1709"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="461"/>
+        <location filename="queryscreen.cpp" line="470"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation>No ha especificado ningún filtro. Está consulta puede tardar bastantes minutos. ¿Está seguro que desea continuar?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="552"/>
+        <location filename="queryscreen.cpp" line="561"/>
         <source>Please select a PACS to query</source>
         <translation>Seleccione un Pacs a consultar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="566"/>
+        <location filename="queryscreen.cpp" line="575"/>
         <source>ERROR QUERING!.</source>
         <translation>Error consultando!.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="653"/>
+        <location filename="queryscreen.cpp" line="662"/>
         <source>No study match found.</source>
         <translation>No se han encontrado estudios.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="798"/>
+        <location filename="queryscreen.cpp" line="807"/>
         <source>No series match for this study.
 </source>
         <translation>No se han encontrado series para este estudio.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="936"/>
+        <location filename="queryscreen.cpp" line="945"/>
         <source>Select a study to download </source>
         <translation>Seleccione un estudio para descargar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="960"/>
+        <location filename="queryscreen.cpp" line="969"/>
         <source>Internal Error : </source>
         <translation>Error interno :</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1120"/>
+        <location filename="queryscreen.cpp" line="1132"/>
         <source>Select a study to view </source>
         <translation>Seleccione un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="231"/>
+        <location filename="queryscreen.cpp" line="240"/>
         <source>Error deleting old studies</source>
         <translation>Error borrando antiguos estudios</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1233"/>
+        <location filename="queryscreen.cpp" line="1245"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1233"/>
+        <location filename="queryscreen.cpp" line="1245"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1455"/>
+        <location filename="queryscreen.cpp" line="1467"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS is correct</source>
         <translation>No se puede conectar al PACS %1 de %2Asegúrese que la IP y el AETitle de este PACS sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="618"/>
+        <location filename="queryscreen.cpp" line="627"/>
         <source>Error, not opened Dicomdir</source>
         <translation>Error, no se abierto un directorio Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="623"/>
+        <location filename="queryscreen.cpp" line="632"/>
         <source>Error quering in dicomdir</source>
         <translation>Error consultando el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1348"/>
-        <source>Dicomdir</source>
-        <translation>Dicomdir</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1363"/>
+        <location filename="queryscreen.cpp" line="1375"/>
         <source>Error openning dicomdir</source>
         <translation>Error abriendo el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="867"/>
+        <location filename="queryscreen.cpp" line="876"/>
         <source>No images match for this series.
 </source>
         <translation>No se han encontrado imagenes para esta serie.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="916"/>
+        <location filename="queryscreen.cpp" line="925"/>
         <source>No images match for this study.
 </source>
         <translation>No se han encontrado imagenes para este estudio.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="748"/>
+        <location filename="queryscreen.cpp" line="757"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation>Error! No se pueden consultar las Series al PACS llamado %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="856"/>
+        <location filename="queryscreen.cpp" line="865"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation>Error! No se pueden consultar las Series al PACS llamado %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1470"/>
+        <location filename="queryscreen.cpp" line="1482"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>No se puede consultar el PACS %1 de %2
 Asegúrese que la IP y el AETitle sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1697"/>
+        <location filename="queryscreen.cpp" line="1709"/>
         <source>
 Error Number: %1</source>
         <translation>
 Código de error: %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1154"/>
+        <location filename="queryscreen.cpp" line="1166"/>
         <source>Select at least one study to view</source>
         <translation>Seleccione almenos un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1227"/>
+        <location filename="queryscreen.cpp" line="1239"/>
         <source>Please select at least one study to delete</source>
         <translation>Seleccione almenos un estudio a borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1232"/>
+        <location filename="queryscreen.cpp" line="1244"/>
         <source>Are you sure you want to delete the selected Studies?</source>
-        <translation type="unfinished">Error. No se pueden importar imágenes del estudio de </translation>
+        <translation>¿Está seguro que desear borrar el estudio seleccionado?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1394"/>
+        <location filename="queryscreen.cpp" line="1406"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Debe seleccionar un PACS donde almacenar el estudio</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1439"/>
+        <location filename="queryscreen.cpp" line="1451"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Los estudios solo se pueden almacenar en un PACS a la vez</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1248"/>
+        <location filename="queryscreen.cpp" line="1260"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>El estudio con UID: %1 está en uso por la Lista de DICOMDIR. Si desea borrar este estudio debería borrarlo primero de la Lista de DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="152"/>
+        <location filename="queryscreen.cpp" line="161"/>
         <source>&amp;View</source>
         <translation>&amp;Visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="152"/>
+        <location filename="queryscreen.cpp" line="161"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="123"/>
+        <location filename="queryscreen.cpp" line="132"/>
         <source>&amp;Delete</source>
         <translation>&amp;Borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="126"/>
+        <location filename="queryscreen.cpp" line="135"/>
         <source>Send to DICOMDIR List</source>
         <translation>Enviar a la lista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="126"/>
+        <location filename="queryscreen.cpp" line="135"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="129"/>
+        <location filename="queryscreen.cpp" line="138"/>
         <source>Store to PACS</source>
         <translation>Almacenar en PACS</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="129"/>
+        <location filename="queryscreen.cpp" line="138"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="155"/>
+        <location filename="queryscreen.cpp" line="164"/>
         <source>&amp;Retrieve</source>
         <translation>&amp;Descargar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="155"/>
+        <location filename="queryscreen.cpp" line="164"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1216"/>
+        <location filename="queryscreen.cpp" line="1228"/>
         <source>Error: Can&apos;t import selected studies</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: No se pueden importar los estudios seleccionados</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1218"/>
+        <location filename="queryscreen.cpp" line="1230"/>
         <source>Error: Some studies can&apos;t be imported</source>
-        <translation type="unfinished"></translation>
+        <translation>Error: No se han podido importar algunos de los estudios</translation>
     </message>
 </context>
 <context>
