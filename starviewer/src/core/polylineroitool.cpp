@@ -77,16 +77,16 @@ void PolylineROITool::handleEvent( long unsigned eventID )
             }
         break;
         
-        case vtkCommand::LeaveEvent:
-            //en aquest cas considerem que l'usuari no vol anotar, per tant ens carreguem les primitives.
-            if ( !m_mainPolyline.isNull() )
-                delete m_mainPolyline;
-    
-            if ( !m_closingPolyline.isNull() )
-                delete m_closingPolyline;
-    
-            m_2DViewer->getDrawer()->refresh();
-        break;
+//         case vtkCommand::LeaveEvent:
+//             //en aquest cas considerem que l'usuari no vol anotar, per tant ens carreguem les primitives.
+//             if ( !m_mainPolyline.isNull() )
+//                 delete m_mainPolyline;
+//     
+//             if ( !m_closingPolyline.isNull() )
+//                 delete m_closingPolyline;
+//     
+//             m_2DViewer->getDrawer()->refresh();
+//         break;
     }
 }
 
