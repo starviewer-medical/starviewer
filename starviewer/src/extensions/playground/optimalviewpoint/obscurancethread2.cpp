@@ -154,9 +154,10 @@ void ObscuranceThread2::runDensity() // optimitzat
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
     }
@@ -283,9 +284,10 @@ void ObscuranceThread2::runDensitySmooth()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
 
@@ -298,9 +300,10 @@ void ObscuranceThread2::runDensitySmooth()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
     }
@@ -366,9 +369,10 @@ void ObscuranceThread2::runOpacity()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
     }
@@ -496,9 +500,10 @@ void ObscuranceThread2::runOpacitySmooth()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
 
@@ -511,9 +516,10 @@ void ObscuranceThread2::runOpacitySmooth()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
     }
@@ -579,9 +585,10 @@ void ObscuranceThread2::runOpacitySaliency()    // = runOpacity() (de moment)
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
     }
@@ -712,9 +719,10 @@ void ObscuranceThread2::runOpacitySmoothSaliency()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
 
@@ -727,9 +735,10 @@ void ObscuranceThread2::runOpacitySmoothSaliency()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_obscurance[uIndex]++;
+                m_obscurance[uIndex] -= cos;
             }
         }
     }
@@ -861,9 +870,10 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_colorBleeding[uIndex] += AMBIENT_COLOR;
+                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
             }
         }
 
@@ -876,9 +886,10 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_colorBleeding[uIndex] += AMBIENT_COLOR;
+                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
             }
         }
     }
@@ -1010,9 +1021,10 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_colorBleeding[uIndex] += AMBIENT_COLOR;
+                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
             }
         }
 
@@ -1025,9 +1037,10 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
             float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
             Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
 
-            if ( uNormal * m_direction < 0.0 )
+            double cos = uNormal * m_direction;
+            if ( cos < 0.0 )
             {
-                m_colorBleeding[uIndex] += AMBIENT_COLOR;
+                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
             }
         }
     }
