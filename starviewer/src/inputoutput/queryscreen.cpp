@@ -356,7 +356,6 @@ void QueryScreen::checkNewToDate( QDate date )
 void QueryScreen::setAdvancedSearchVisible(bool visible)
 {
     m_qwidgetAdvancedSearch->setVisible(visible);
-    m_qwidgetAdvancedSearch->setEnabled( m_advancedSearchToolButton->isChecked() );
 
     if (visible)
     {
@@ -1087,7 +1086,7 @@ void QueryScreen::refreshTab( int index )
         case PACSQueryTab:
                 m_buttonGroupModality->setEnabled(true);
                 clearCheckedModality();
-                m_qwidgetAdvancedSearch->setEnabled( m_advancedSearchToolButton->isChecked() );
+                m_qwidgetAdvancedSearch->setEnabled( true );
                 break;
         case DICOMDIRTab:
                 m_buttonGroupModality->setEnabled(false);
