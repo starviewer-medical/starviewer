@@ -1373,6 +1373,11 @@
              <string>Exponential (norm)</string>
             </property>
            </item>
+           <item>
+            <property name="text" >
+             <string>Cube root</string>
+            </property>
+           </item>
           </widget>
          </item>
          <item>
