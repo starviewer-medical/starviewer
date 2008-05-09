@@ -439,21 +439,13 @@ bool DICOMDIRReader::matchStudyMaskStudyUID( QString studyMaskStudyUID , QString
 
 bool DICOMDIRReader::matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId )
 {
-    if ( studyMaskPatientId.length() > 0 )
-    { //si hi ha màscara Patient Id
-      //el id del pacient, des de la classe query screen el guardem a la màscara es amb format '*PatientID*'. Els '*' s'han de treure
+    //Si la màscara és buida rebem  * , si té valor és *ID_PACIENT*
+    if ( studyMaskPatientId.length() > 1 )
+    { //si hi ha màscara Patient Id 
 
-        studyMaskPatientId = studyMaskPatientId.toUpper();
-        studyPatientId = studyPatientId.toUpper();
+        studyMaskPatientId = studyMaskPatientId.replace( "*", "" );//treiem els "*"
 
-        if ( studyPatientId.contains( studyMaskPatientId ) )
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        if ( !studyPatientId.contains( studyMaskPatientId , Qt::CaseInsensitive  ) ) return false;
     }
 
     return true;
@@ -514,26 +506,15 @@ bool DICOMDIRReader::matchStudyMaskDate( QString studyMaskDate , QString studyDa
 
 bool DICOMDIRReader::matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName )
 {
-    QString lastPatientName , firstPatientName;
+    //Si la màscara és buida rebem  * , si té valor és *NOM_A_CERCAR*
+    if ( studyMaskPatientName.length() > 1 )
+    {//si hi ha màscara Patient Name
+        studyMaskPatientName = studyMaskPatientName.replace( "*" , "" ); //treiem els "*"
 
-    if ( studyMaskPatientName.length() > 0 )
-    {
-      //Seguint els criteris del PACS la cerca es fa en wildcard, és a dir no cal que els dos string sigui igual mentre que la màscara del nom del pacient estigui continguda dins studyPatientName n'hi ha suficient
-        studyMaskPatientName = studyMaskPatientName.toUpper();
-        studyPatientName = studyPatientName.toUpper();
-
-        if ( studyPatientName.contains( studyMaskPatientName ) )
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        if ( !studyPatientName.contains( studyMaskPatientName , Qt::CaseInsensitive ) ) return false;
     }
 
     return true;
-
 }
 
 bool DICOMDIRReader::matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber )
