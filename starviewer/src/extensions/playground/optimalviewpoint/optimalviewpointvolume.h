@@ -173,7 +173,8 @@ public:
     void setFxSaliency( bool fxSaliency );
     void setFxSaliencyA( double fxSaliencyA );
     void setFxSaliencyB( double fxSaliencyB );
-
+    void setFxSaliencyLow( double fxSaliencyLow );
+    void setFxSaliencyHigh( double fxSaliencyHigh );
 
 
 public slots:
@@ -286,6 +287,7 @@ private:
 
     bool m_fx;
     double m_fxSaliencyA, m_fxSaliencyB;
+    double m_fxSaliencyLow, m_fxSaliencyHigh;
 
 };
 

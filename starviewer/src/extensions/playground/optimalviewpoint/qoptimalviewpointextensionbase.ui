@@ -739,6 +739,35 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_fxSaliencyLowDoubleSpinBox">
+              <property name="maximum">
+               <double>2</double>
+              </property>
+              <property name="singleStep">
+               <double>0.1</double>
+              </property>
+              <property name="toolTip">
+               <string>low</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_fxSaliencyHighDoubleSpinBox">
+              <property name="maximum">
+               <double>2</double>
+              </property>
+              <property name="singleStep">
+               <double>0.1</double>
+              </property>
+              <property name="value">
+               <double>2</double>
+              </property>
+              <property name="toolTip">
+               <string>high</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>

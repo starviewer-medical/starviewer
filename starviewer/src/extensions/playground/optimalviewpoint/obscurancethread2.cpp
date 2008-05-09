@@ -60,11 +60,13 @@ void ObscuranceThread2::setObscuranceParameters( double obscuranceMaximumDistanc
 }
 
 
-void ObscuranceThread2::setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB )
+void ObscuranceThread2::setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh )
 {
     m_saliency = saliency;
     m_fxSaliencyA = fxSaliencyA;
     m_fxSaliencyB = fxSaliencyB;
+    m_fxSaliencyLow = fxSaliencyLow;
+    m_fxSaliencyHigh = fxSaliencyHigh;
 }
 
 
@@ -601,6 +603,7 @@ void ObscuranceThread2::runOpacitySmoothSaliency()
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
     int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
     int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
+    double minFxSaliency = 1.0 - m_fxSaliencyA, maxFxSaliency = 1.0 + m_fxSaliencyB;
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
@@ -623,8 +626,10 @@ void ObscuranceThread2::runOpacitySmoothSaliency()
             int vIndex = v.x * incX + v.y * incY + v.z * incZ;  // índex de v (sense el delta)
             unsigned char value = dataPtr[vIndex];
             double opacity = m_transferFunction.getOpacity( value );
-            double fxSaliency = m_saliency[m_startDelta + vIndex] * ( m_fxSaliencyA + m_fxSaliencyB) - m_fxSaliencyA;
-            opacity *= ( 1.0 + fxSaliency );
+            double fxSaliency = 1.0 + m_saliency[m_startDelta + vIndex] * ( m_fxSaliencyA + m_fxSaliencyB ) - m_fxSaliencyA;
+            if ( fxSaliency < m_fxSaliencyLow ) fxSaliency = minFxSaliency;
+            else if ( fxSaliency > m_fxSaliencyHigh ) fxSaliency = maxFxSaliency;
+            opacity *= fxSaliency;
 
             QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
             QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxelsEnd = postponedVoxels.end();

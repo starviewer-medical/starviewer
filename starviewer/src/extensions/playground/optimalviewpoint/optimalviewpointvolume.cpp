@@ -1347,6 +1347,15 @@ void OptimalViewpointVolume::computeSaliency()
         }
     }
 
+
+
+//     // phong amb saliency
+//     ushort * gradientNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
+//     ushort * saliencyNormals = gradientEstimator->GetEncodedNormals();
+//     for (int i = 0; i < m_dataSize; i++) gradientNormals[i] = saliencyNormals[i];
+
+
+
     obscuranceArray->Delete();
     obscuranceData->Delete();
     gradientEstimator->Delete();
@@ -1473,7 +1482,7 @@ void OptimalViewpointVolume::computeObscurances2()
         thread->setNormals( directionEncoder, encodedNormals );
         thread->setData( m_data, m_dataSize, dimensions, increments );
         thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant, m_obscurance, m_colorBleeding );
-        thread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB );
+        thread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
         threads[i] = thread;
     }
 
@@ -1989,6 +1998,20 @@ void OptimalViewpointVolume::setFxSaliencyB( double fxSaliencyB )
 {
     m_volumeRayCastFunctionFx->SetFxSaliencyB( fxSaliencyB );
     m_fxSaliencyB = fxSaliencyB;
+}
+
+
+void OptimalViewpointVolume::setFxSaliencyLow( double fxSaliencyLow )
+{
+    m_volumeRayCastFunctionFx->SetFxSaliencyLow( fxSaliencyLow );
+    m_fxSaliencyLow = fxSaliencyLow;
+}
+
+
+void OptimalViewpointVolume::setFxSaliencyHigh( double fxSaliencyHigh )
+{
+    m_volumeRayCastFunctionFx->SetFxSaliencyHigh( fxSaliencyHigh );
+    m_fxSaliencyHigh = fxSaliencyHigh;
 }
 
 
