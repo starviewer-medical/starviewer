@@ -320,7 +320,7 @@ WW: %5 WL: %6 </translation>
     <message>
         <location filename="qdicomdumpbase.ui" line="198"/>
         <source>Image Time :</source>
-        <translation>Tiempo de la imagen :</translation>
+        <translation>Hora de la imagen :</translation>
     </message>
     <message>
         <location filename="qdicomdumpbase.ui" line="218"/>
