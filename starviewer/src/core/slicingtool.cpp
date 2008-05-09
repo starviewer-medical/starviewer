@@ -109,11 +109,11 @@ void SlicingTool::doSlicing()
             int dy = m_currentPosition[1] - m_startPosition[1];
 
             double timeElapsed = ( m_time->elapsed() - m_latestTime )/1000.0; // Es passa a segons
-            double acceleracio = (dy*( 1/2300.0 ) )/( timeElapsed*timeElapsed );// 1m = 2300 px aprox.
+            double acceleracio = (dy*( 1/5000.0 ) )/( timeElapsed*timeElapsed );// 1m = 5000 px aprox. Com + gran + lent anirà.
             m_latestTime = m_time->elapsed();
             m_startPosition[1] = m_currentPosition[1];
             int value = 0;
-            if( dy )
+            if( dy && timeElapsed > 0.002 && timeElapsed != 0 ) // Control de casos extrems
             {
                 /*value = dy/abs(dy);*/
                 /// Canviem un nombre de llesques segons una acceleracio
