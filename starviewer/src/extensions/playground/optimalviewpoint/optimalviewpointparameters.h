@@ -55,7 +55,7 @@ public:
 
         Obscurances, ObscurancesFactor, ObscurancesFilterLow, ObscurancesFilterHigh,
 
-        Fx, FxContour, FxSaliency, FxSaliencyA, FxSaliencyB
+        Fx, FxContour, FxSaliency, FxSaliencyA, FxSaliencyB, FxSaliencyLow, FxSaliencyHigh
     };
 
     OptimalViewpointParameters( QObject * parent = 0 );
@@ -152,6 +152,12 @@ public:
     double getFxSaliencyB() const;
     void setFxSaliencyB( double fxSaliencyB );
 
+    double getFxSaliencyLow() const;
+    void setFxSaliencyLow( double fxSaliencyLow );
+
+    double getFxSaliencyHigh() const;
+    void setFxSaliencyHigh( double fxSaliencyHigh );
+
 public slots:
 
     void setInterpolation( int interpolation );
@@ -203,7 +209,8 @@ private:
     bool m_fxSaliency;
     double m_fxSaliencyA;
     double m_fxSaliencyB;
-
+    double m_fxSaliencyLow;
+    double m_fxSaliencyHigh;
 
 };
 
