@@ -202,16 +202,28 @@ void Q2DViewerExtension::setInput( Volume *input )
 
 void Q2DViewerExtension::resetViewToAxial()
 {
+    if( !( m_selectedViewer->getViewer()->getView() == Q2DViewer::Axial ) )
+    {
+        m_thickSlabWidget->setProjectionMode( 0 );
+    }
     m_selectedViewer->resetViewToAxial();
 }
 
 void Q2DViewerExtension::resetViewToSagital()
 {
+    if( !( m_selectedViewer->getViewer()->getView() == Q2DViewer::Sagital ) )
+    {
+        m_thickSlabWidget->setProjectionMode( 0 );
+    }
     m_selectedViewer->resetViewToSagital();
 }
 
 void Q2DViewerExtension::resetViewToCoronal()
 {
+    if( !( m_selectedViewer->getViewer()->getView() == Q2DViewer::Coronal ) )
+    {
+        m_thickSlabWidget->setProjectionMode( 0 );
+    }
     m_selectedViewer->resetViewToCoronal();
 }
 
