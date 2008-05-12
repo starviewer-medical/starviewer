@@ -28,7 +28,7 @@ ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer
 {
     m_toolName = "ScreenShotTool";
     readSettings();
-    
+
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     if( viewer )
     {
@@ -39,11 +39,11 @@ ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer
     }
     else
         DEBUG_LOG( "El viewer proporcionat és NUL!" );
-    
+
 }
 
 ScreenShotTool::~ScreenShotTool()
-{ 
+{
     writeSettings();
 }
 
@@ -68,47 +68,47 @@ void ScreenShotTool::screenShot()
     saveAsDialog->selectFilter ( m_lastScreenShotExtension );
     saveAsDialog->setFileMode( QFileDialog::AnyFile );
     saveAsDialog->setAcceptMode( QFileDialog::AcceptSave );
-    saveAsDialog->selectFile( compoundSelectedName() );    
+    saveAsDialog->selectFile( compoundSelectedName() );
     saveAsDialog->setConfirmOverwrite( true );
 
     QStringList fileNames;
     QString selectedFilter;
     int overWrite = 0;
     QString fileName;
-    
+
     connect( saveAsDialog, SIGNAL( rejected() ),this, SLOT( userCancellation() ) );
-    
+
     do
     {
         m_userCancellation = false;
-        
+
         if( saveAsDialog->exec() )
         {
             fileNames = saveAsDialog->selectedFiles();
             selectedFilter = saveAsDialog->selectedFilter();
         }
-        
+
         if( fileNames.isEmpty() )
         {
             delete saveAsDialog;
             return;
         }
-        
+
         fileName = fileNames.first();
-    
+
         //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
         m_lastScreenShotPath = saveAsDialog->directory().path();
-    
+
         if ( QFileInfo( fileName + selectedFilter.mid(selectedFilter.length() - 5, 4) ).exists() && !m_userCancellation )
         {
             //0 -> Yes; 1->No
             overWrite = QMessageBox::information( 0, tr( "existing file" ), tr( "This file is already created. Do you want to replace it?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
         }
-        
+
     }while( overWrite != 0 && !m_userCancellation );
-        
+
     delete saveAsDialog;
-    
+
     if ( overWrite == 0 && !m_userCancellation )
     {
         vtkImageWriter *imageWriter;
@@ -136,42 +136,45 @@ void ScreenShotTool::screenShot()
             DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
             return;
         }
-        
+
         m_windowToImageFilter->Update();
         m_windowToImageFilter->Modified();
         vtkImageData *image = m_windowToImageFilter->GetOutput();
-    
+
         imageWriter->SetInput( image );
         imageWriter->SetFilePrefix( qPrintable( fileName ) );
         imageWriter->SetFilePattern( qPrintable( pattern ) );
         imageWriter->Write();
-        
+
         //guardem el nom de l'ultim fitxer
-        m_lastScreenShotName = QFileInfo(fileName).fileName(); 
+        m_lastScreenShotName = QFileInfo(fileName).fileName();
+
+        //Guardem els settings per la proxima imatge
+        writeSettings();
     }
 }
 
 QString ScreenShotTool::compoundSelectedName()
 {
     QString compoundFile = "";
-    
+
     if ( !m_lastScreenShotName.isEmpty() )
     {
         QChar lastChar = m_lastScreenShotName[m_lastScreenShotName.length()-1];
-        
+
         if ( lastChar.isNumber() )
         {
             int i = m_lastScreenShotName.length()-1;
-        
+
             do
             {
                 i--;
-                lastChar = m_lastScreenShotName[i]; 
+                lastChar = m_lastScreenShotName[i];
             }while ( i > 0 && lastChar.isNumber() );
-            
+
             bool ok;
             int sufix = m_lastScreenShotName.right(m_lastScreenShotName.length()-(i+1)).toInt( &ok, 10 );
-            
+
             if ( ok )
                 compoundFile = m_lastScreenShotName.mid(0, i+1) + QString::number(sufix+1, 10);
             else
@@ -205,7 +208,7 @@ void ScreenShotTool::writeSettings()
 
 void ScreenShotTool:: userCancellation()
 {
-    m_userCancellation = true; 
+    m_userCancellation = true;
 }
 
 }
