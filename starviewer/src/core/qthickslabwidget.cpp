@@ -69,6 +69,11 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
     connect( m_currentViewer, SIGNAL( slabThicknessChanged(int) ), m_slabThicknessSlider, SLOT( setValue(int) ) );
 }
 
+void QThickSlabWidget::setProjectionMode( int mode )
+{
+    m_projectionModeComboBox->setCurrentIndex( mode );
+}
+
 void QThickSlabWidget::applyProjectionMode( int comboItem )
 {
     emit projectionModeChanged( comboItem );
