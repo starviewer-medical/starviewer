@@ -85,6 +85,14 @@ void initializeTranslations(QApplication &app)
     }
 }
 
+/// Afegeix els directoris on s'han de buscar els plugins de Qt. Útil a windows.
+void initQtPluginsDirectory()
+{
+#ifdef Q_OS_WIN32
+    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath() + "/plugins");
+#endif
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -98,6 +106,7 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
 
     configureLogging();
+    initQtPluginsDirectory();
     initializeTranslations(app);
 
     QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
