@@ -15,6 +15,7 @@
 #include <vtkDirectionEncoder.h>
 
 #include "logging.h"
+#include "mathtools.h"
 
 
 namespace udg {
@@ -1065,7 +1066,7 @@ inline double ObscuranceThread2::obscurance( double distance ) const
         case OptimalViewpointVolume::SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
         case OptimalViewpointVolume::Exponential: return 1.0 - exp( -distance / m_obscuranceMaximumDistance );
         case OptimalViewpointVolume::ExponentialNorm: return ( 1.0 - exp( -distance / m_obscuranceMaximumDistance ) ) / EXP_NORM;
-        case OptimalViewpointVolume::CubeRoot: return cbrt( distance / m_obscuranceMaximumDistance );
+        case OptimalViewpointVolume::CubeRoot: return MathTools::cbrt( distance / m_obscuranceMaximumDistance );
     }
 }
 
