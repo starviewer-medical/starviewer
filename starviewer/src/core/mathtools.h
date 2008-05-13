@@ -8,6 +8,8 @@
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
+#include <cmath>
+
 /**
     Aquest arxiu recull tot tipus de funcions matemàtiques útils
 */
@@ -76,6 +78,13 @@ static double minimum( double a, double b);
 
 ///ens retorna el màxim dels dos valors
 static double maximum( double a, double b);
+
+/// Arrel cúbica.
+inline static double cbrt( double x )
+{
+    return std::pow( x, 1.0 / 3.0 );
+}
+
 };
 
 } // end namespace udg
