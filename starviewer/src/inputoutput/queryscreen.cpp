@@ -274,9 +274,9 @@ void QueryScreen::createConnections()
     //connectem Slots dels StudyTreeWidget amb la interficie
     connect( m_studyTreeWidgetPacs, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
     connect( m_studyTreeWidgetPacs, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
-    connect( m_studyTreeWidgetPacs, SIGNAL( studyDoubleClicked() ), SLOT( view() ) );
-    connect( m_studyTreeWidgetPacs, SIGNAL( seriesDoubleClicked() ), SLOT( view() ) );
-    connect( m_studyTreeWidgetPacs, SIGNAL( imageDoubleClicked() ), SLOT( view() ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( studyDoubleClicked() ), SLOT( retrieve() ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( seriesDoubleClicked() ), SLOT( retrieve() ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( imageDoubleClicked() ), SLOT( retrieve() ) );
 
     connect( m_studyTreeWidgetCache, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
     connect( m_studyTreeWidgetCache, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
