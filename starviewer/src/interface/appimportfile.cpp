@@ -19,6 +19,12 @@ namespace udg {
 AppImportFile::AppImportFile(QObject *parent, QString name)
  : QObject( parent )
 {
+    //TODO: De moment es desactiven els warnings en release perquè no apareixi la finestra vtkOutputWindow 
+ 	//      però la solució bona passa per evitar els warnings o bé redirigir-los a un fitxer. 
+#ifdef QT_NO_DEBUG 
+    itk::Object::GlobalWarningDisplayOff(); 
+#endif 
+
     this->setObjectName( name );
     readSettings();
 }
