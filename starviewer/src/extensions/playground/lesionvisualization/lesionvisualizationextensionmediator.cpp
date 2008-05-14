@@ -4,8 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "rectumlesionvisualizationextensionmediator.h"
-
+#include "lesionvisualizationextensionmediator.h"
 #include "extensioncontext.h"
 
 // QT
@@ -13,25 +12,25 @@
 
 namespace udg {
 
-RectumLesionVisualizationExtensionMediator::RectumLesionVisualizationExtensionMediator(QObject *parent)
+LesionVisualizationExtensionMediator::LesionVisualizationExtensionMediator(QObject *parent)
  : ExtensionMediator(parent)
 {
 }
 
-RectumLesionVisualizationExtensionMediator::~RectumLesionVisualizationExtensionMediator()
+LesionVisualizationExtensionMediator::~LesionVisualizationExtensionMediator()
 {
 }
 
-DisplayableID RectumLesionVisualizationExtensionMediator::getExtensionID() const
+DisplayableID LesionVisualizationExtensionMediator::getExtensionID() const
 {
-    return DisplayableID("RectumLesionVisualizationExtension",tr("Rectum Lesion Visualization"));
+    return DisplayableID("LesionVisualizationExtension",tr("Lesion Visualization"));
 }
 
-bool RectumLesionVisualizationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
+bool LesionVisualizationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
-    QRectumLesionVisualizationExtension *rectumLesionVisualizationExtension;
+    QLesionVisualizationExtension *lesionVisualizationExtension;
 
-    if ( !(rectumLesionVisualizationExtension = qobject_cast<QRectumLesionVisualizationExtension*>(extension)) )
+    if ( !(lesionVisualizationExtension = qobject_cast<QLesionVisualizationExtension*>(extension)) )
     {
         return false;
     }
@@ -40,7 +39,7 @@ bool RectumLesionVisualizationExtensionMediator::initializeExtension(QWidget* ex
     if( !input )
         QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
     else
-        rectumLesionVisualizationExtension->setInput( input );
+        lesionVisualizationExtension->setInput( input );
 
     return true;
 }

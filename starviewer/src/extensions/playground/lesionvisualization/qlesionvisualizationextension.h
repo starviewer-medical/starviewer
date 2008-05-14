@@ -4,10 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGQRECTUMLESIONVISUALIZATION_H
-#define UDGQRECTUMLESIONVISUALIZATION_H
+#ifndef UDGQLESIONVISUALIZATION_H
+#define UDGQLESIONVISUALIZATION_H
 
-#include "ui_qrectumlesionvisualizationextensionbase.h"
+#include "ui_qlesionvisualizationextensionbase.h"
 
 #include <QString>
 
@@ -31,11 +31,11 @@ class ToolManager;
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QRectumLesionVisualizationExtension : public QWidget , private ::Ui::QRectumLesionVisualizationExtensionBase {
+class QLesionVisualizationExtension : public QWidget , private ::Ui::QLesionVisualizationExtensionBase {
 Q_OBJECT
 public:
-    QRectumLesionVisualizationExtension( QWidget *parent = 0 );
-    ~QRectumLesionVisualizationExtension();
+    QLesionVisualizationExtension( QWidget *parent = 0 );
+    ~QLesionVisualizationExtension();
 
 public slots:
     /// Li assigna el volum principal

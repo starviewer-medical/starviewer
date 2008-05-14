@@ -4,33 +4,33 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGRECTUMLESIONVISUALIZATIONEXTENSIONMEDIATOR_H
-#define UDGRECTUMLESIONVISUALIZATIONEXTENSIONMEDIATOR_H
+#ifndef UDGLESIONVISUALIZATIONEXTENSIONMEDIATOR_H
+#define UDGLESIONVISUALIZATIONEXTENSIONMEDIATOR_H
 
 #include "extensionmediator.h"
 
 #include "installextension.h"
-#include "qrectumlesionvisualizationextension.h"
+#include "qlesionvisualizationextension.h"
 
 namespace udg {
 
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class RectumLesionVisualizationExtensionMediator : public ExtensionMediator
+class LesionVisualizationExtensionMediator : public ExtensionMediator
 {
     Q_OBJECT
 public:
-    RectumLesionVisualizationExtensionMediator(QObject *parent = 0);
+    LesionVisualizationExtensionMediator(QObject *parent = 0);
 
-    ~RectumLesionVisualizationExtensionMediator();
+    ~LesionVisualizationExtensionMediator();
 
     virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext);
 
     virtual DisplayableID getExtensionID() const;
 };
 
-static InstallExtension<QRectumLesionVisualizationExtension, RectumLesionVisualizationExtensionMediator> registerRectumLesionVisualizationExtension;
+static InstallExtension<QLesionVisualizationExtension, LesionVisualizationExtensionMediator> registerLesionVisualizationExtension;
 
 }
 

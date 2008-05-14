@@ -1,15 +1,15 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
-# Subdirectori relatiu al directori principal del projecte: ./src/extensions/rectumlesionvisualization
+# Subdirectori relatiu al directori principal del projecte: ./src/extensions/lesionvisualization
 # L'objectiu � una biblioteca:  
 
-FORMS += qrectumlesionvisualizationextensionbase.ui 
-HEADERS += qrectumlesionvisualizationextension.h \
-           rectumlesionvisualizationextensionmediator.h 
+FORMS += qlesionvisualizationextensionbase.ui 
+HEADERS += qlesionvisualizationextension.h \
+           lesionvisualizationextensionmediator.h 
 
-SOURCES += qrectumlesionvisualizationextension.cpp \
-           rectumlesionvisualizationextensionmediator.cpp 
+SOURCES += qlesionvisualizationextension.cpp \
+           lesionvisualizationextensionmediator.cpp 
 
-RESOURCES += rectumlesionvisualization.qrc
+RESOURCES += lesionvisualization.qrc
 
 include(../../basicconfextensions.inc)

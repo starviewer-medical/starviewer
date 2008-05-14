@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "qrectumlesionvisualizationextension.h"
+#include "qlesionvisualizationextension.h"
 #include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
@@ -34,7 +34,7 @@
 
 namespace udg {
 
-QRectumLesionVisualizationExtension::QRectumLesionVisualizationExtension( QWidget *parent )
+QLesionVisualizationExtension::QLesionVisualizationExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_lesionMaskVolume(0), m_inside3Dviewer(false), m_maxLesion(-1)
 {
     setupUi( this );
@@ -55,7 +55,7 @@ QRectumLesionVisualizationExtension::QRectumLesionVisualizationExtension( QWidge
 //     m_toolManager->setViewerTools( m_2DView, toolsList );
 }
 
-QRectumLesionVisualizationExtension::~QRectumLesionVisualizationExtension()
+QLesionVisualizationExtension::~QLesionVisualizationExtension()
 {
     writeSettings();
     
@@ -71,7 +71,7 @@ QRectumLesionVisualizationExtension::~QRectumLesionVisualizationExtension()
     picker->Delete();
 }
 
-void QRectumLesionVisualizationExtension::createActions()
+void QLesionVisualizationExtension::createActions()
 {
     // Tools
     m_actionFactory = new ToolsActionFactory( 0 );
@@ -97,7 +97,7 @@ void QRectumLesionVisualizationExtension::createActions()
     m_toolsActionGroup->addAction( m_moveAction );
 }
 
-void QRectumLesionVisualizationExtension::createConnections()
+void QLesionVisualizationExtension::createConnections()
 {
   connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
   connect( m_lesion3Dviewer, SIGNAL( eventReceived( unsigned long ) ), SLOT( eventHandler(unsigned long) ) );
@@ -109,7 +109,7 @@ void QRectumLesionVisualizationExtension::createConnections()
   connect( m_toolsActionGroup, SIGNAL( triggered(QAction*) ), SLOT( toolChanged(QAction*) ) );
 }
 
-void QRectumLesionVisualizationExtension::setInput( Volume *input )
+void QLesionVisualizationExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
 
@@ -132,7 +132,7 @@ void QRectumLesionVisualizationExtension::setInput( Volume *input )
     m_2DView->render();
 }
 
-void QRectumLesionVisualizationExtension::eventHandler( unsigned long id )
+void QLesionVisualizationExtension::eventHandler( unsigned long id )
 {
     switch( id )
     {
@@ -157,7 +157,7 @@ void QRectumLesionVisualizationExtension::eventHandler( unsigned long id )
     }
 }
 
-void QRectumLesionVisualizationExtension::setSlice()
+void QLesionVisualizationExtension::setSlice()
 {
     int *eventPosition = m_lesion3Dviewer->getInteractor()->GetEventPosition();
     if ( picker->PickProp ( eventPosition[0], eventPosition[1], m_lesion3Dviewer->getRenderer() ) )
@@ -181,7 +181,7 @@ void QRectumLesionVisualizationExtension::setSlice()
     }
 }
 
-void QRectumLesionVisualizationExtension::mouseEvent()
+void QLesionVisualizationExtension::mouseEvent()
 {
     if ( m_inside3Dviewer && m_cylindersCollection )
     {
@@ -213,7 +213,7 @@ void QRectumLesionVisualizationExtension::mouseEvent()
     }
 }
 
-void QRectumLesionVisualizationExtension::markCurrentCylinder( int slice )
+void QLesionVisualizationExtension::markCurrentCylinder( int slice )
 {
     if ( m_cylindersCollection )
     {
@@ -235,7 +235,7 @@ void QRectumLesionVisualizationExtension::markCurrentCylinder( int slice )
     }
 }
 
-void QRectumLesionVisualizationExtension::setOpacity( int op )
+void QLesionVisualizationExtension::setOpacity( int op )
 {
     if(m_lesionMaskVolume)
     {
@@ -245,7 +245,7 @@ void QRectumLesionVisualizationExtension::setOpacity( int op )
     }
 }
 
-void QRectumLesionVisualizationExtension::openMaskVolume()
+void QLesionVisualizationExtension::openMaskVolume()
 {
     bool ok;
     
@@ -294,12 +294,13 @@ void QRectumLesionVisualizationExtension::openMaskVolume()
         m_opacitiyLabel->setEnabled( true );
         reader->Delete();
     }
-    QApplication::restoreOverrideCursor();
+    
     extractLesionMaskArea();
     createCylinder();
+    QApplication::restoreOverrideCursor();
 }
 
-void QRectumLesionVisualizationExtension::extractLesionMaskArea()
+void QLesionVisualizationExtension::extractLesionMaskArea()
 {
     m_maskLesionSlicesArea = new int[m_numberOfSlices];
     double lesionVolume = 0.;
@@ -336,17 +337,17 @@ void QRectumLesionVisualizationExtension::extractLesionMaskArea()
     m_volumeLabel->setText(QString("Lesion Volume (in mm3): %1").arg(lesionVolume, 0, 'f', 2));
 }
 
-void QRectumLesionVisualizationExtension::createCylinder()
+void QLesionVisualizationExtension::createCylinder()
 {
-    double position = 0;
     int i; 
-    
     double white[3] = { 1., 1., 1. };
     double selectedColor[3] = { 0., 0., 1.};
     double redLevel;
     
     m_cylindersCollection = vtkActorCollection::New();
+    vtkCamera *camera = m_lesion3Dviewer->getRenderer()->GetActiveCamera();
     
+    double position = -0.32 * (m_numberOfSlices/2);
     
     for ( i = 0; i < m_numberOfSlices; i++ )
     {        
@@ -393,31 +394,31 @@ void QRectumLesionVisualizationExtension::createCylinder()
         actor->Delete();
     }
     
-    vtkCamera *camera = m_lesion3Dviewer->getRenderer()->GetActiveCamera();
-    
-    camera->SetEyeAngle( 2. );
-    camera->SetDistance( 10.7081 );
-    camera->SetFocalPoint( 7.16328, -0.00117, 0. );
-    camera->SetPosition( 7.16328, -0.00117, 10.708 );
-    camera->SetViewUp( 0, 1, 0 );
+//     camera->SetPosition( bounds[0]+bounds[1] / 2, bounds[2]+bounds[2] / 2, bounds[5] + bounds[5] );
+//     camera->SetEyeAngle( 2. );
+//     camera->SetDistance( 10.7081 );
+//     camera->SetFocalPoint( 7.16328, -0.00117, 0. );
+    camera->SetPosition( camera->GetPosition()[0], camera->GetPosition()[1], (double)m_numberOfSlices/3.8 );
+//     camera->SetViewAngle(90);
+//     camera->SetViewUp( 0, 1, 0 );
     
     m_lesion3Dviewer->render();
 }
 
-void QRectumLesionVisualizationExtension::readSettings()
+void QLesionVisualizationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-RectumLesionVisualization");
-    settings.beginGroup("StarViewer-App-RectumLesionVisualization");
+    QSettings settings("GGG", "StarViewer-App-LesionVisualization");
+    settings.beginGroup("StarViewer-App-LesionVisualization");
 
     m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
     m_defaultOpenDirectory = settings.value( "openDirectory", "." ).toString();
     settings.endGroup();
 }
 
-void QRectumLesionVisualizationExtension::writeSettings()
+void QLesionVisualizationExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-RectumLesionVisualization");
-    settings.beginGroup("StarViewer-App-RectumLesionVisualization");
+    QSettings settings("GGG", "StarViewer-App-LesionVisualization");
+    settings.beginGroup("StarViewer-App-LesionVisualization");
 
     settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
     settings.setValue("openDirectory", m_defaultOpenDirectory );
