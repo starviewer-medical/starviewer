@@ -11,7 +11,9 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
              volume3dviewtesting \
              mprcardiac3d \
              cardiac2dviewer \
-             volumecontourdelimiter
+             rectum3dexplorer \
+             volumecontourdelimiter \
+	     lesionvisualization
 
 #CONTRIB_EXTENSIONS =
 
