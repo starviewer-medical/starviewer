@@ -11,8 +11,8 @@ SUBDIRS = diffusionperfusionsegmentation \
           volume3dviewtesting \
           mprcardiac3d \
           cardiac2dviewer\
-	  volumecontourdelimiter \
-	  rectumlesionvisualization
+	  volumecontourdelimiter \
+	  lesionvisualization
 
 include(../../extensions.inc)
 
