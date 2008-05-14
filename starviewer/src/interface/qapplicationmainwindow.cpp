@@ -65,6 +65,7 @@ QApplicationMainWindow::~QApplicationMainWindow()
 {
     m_extensionHandler->killBill();
     delete m_extensionWorkspace;
+    delete m_extensionHandler;
 }
 
 void QApplicationMainWindow::createActions()
@@ -348,16 +349,15 @@ Patient *QApplicationMainWindow::getCurrentPatient()
 
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 {
-    QWidgetList list( QApplication::topLevelWidgets() );
     unsigned int count = 0;
-    for ( int i = 0; i < list.size(); ++i )
+    foreach(QWidget *widget, QApplication::topLevelWidgets())
     {
-        if ( QWidget *mainWin = qobject_cast<QWidget *>( list.at(i) ) )
+        if (QApplicationMainWindow *mainWindow = qobject_cast<QApplicationMainWindow *>(widget))
         {
-            if( mainWin->metaObject()->className() == "udg::QApplicationMainWindow" )
-                count++;
+            ++count;
         }
     }
+
     return count;
 }
 
