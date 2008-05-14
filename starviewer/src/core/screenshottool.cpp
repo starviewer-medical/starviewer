@@ -148,9 +148,6 @@ void ScreenShotTool::screenShot()
 
         //guardem el nom de l'ultim fitxer
         m_lastScreenShotName = QFileInfo(fileName).fileName();
-
-        //Guardem els settings per la proxima imatge
-        writeSettings();
     }
 }
 
