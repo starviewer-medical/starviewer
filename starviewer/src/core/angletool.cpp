@@ -89,21 +89,6 @@ void AngleTool::handleEvent( long unsigned eventID )
 
             m_2DViewer->getDrawer()->refresh();
         break;
-
-// TODO aquest codi comentat, si es torna a fer servir, s'hauria d'unificar per totes les
-// tools d'anotació en un mètode virtual anomenat per exemple "interactionInterrupt()" o "reset()"
-//
-//         case vtkCommand::LeaveEvent:
-//             //en aquest cas considerem que l'usuari no vol anotar, per tant ens carreguem les primitives.
-//             if ( !m_mainPolyline.isNull() && m_state != NONE )
-//                 delete m_mainPolyline;
-//
-//             if ( !m_circumferencePolyline.isNull() &&  m_state != NONE )
-//                 delete m_circumferencePolyline;
-//
-//             m_state = NONE;
-//             m_2DViewer->getDrawer()->refresh();
-//         break;
     }
 }
 
