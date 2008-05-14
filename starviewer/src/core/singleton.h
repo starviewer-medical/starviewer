@@ -10,6 +10,7 @@
 #include <QReadWriteLock>
 #include <QThread>
 #include <QWriteLocker>
+#include <QCoreApplication>
 
 namespace udg {
 
@@ -64,7 +65,9 @@ protected:
     la particularitat de que el singleton es fa a nivell de punter en comptes d'objecte.
     Aquest singleton només s'hauria de fer servir quan hi ha problemes que impedeixen fer servir l'anterior. Alguns d'aquests problemes
     serien problemes en l'ordre de destrucció d'objectes estàtics (com el cas de la DcmDatasetCache per culpa de dcmtk).
-    El problema que té aquesta implementació és que el destructor no es cridarà mai.
+    El problema que té aquesta implementació és que el la classe T ha de ser una classe de Qt i derivi de QObject.
+    El singleton es destruirà quan l'aplicació principal es destrueixi, és a dir, quan el signal QCoreApplication::aboutToQuit sigui
+    llançat.
     Aquesta implementació sí que és thread-safe.
 */
 template<typename T>
@@ -79,6 +82,7 @@ public:
             if (m_theSinglePointer == NULL)   //Fem double checking per evitar bloquejos innecessaris
             {
                 m_theSinglePointer = new T();
+                m_theSinglePointer->connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), SLOT(deleteLater()));
             }
         }
         return m_theSinglePointer;
