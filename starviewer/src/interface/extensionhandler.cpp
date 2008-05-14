@@ -19,6 +19,7 @@
 #include "extensionmediatorfactory.h"
 #include "extensionfactory.h"
 #include "extensioncontext.h"
+#include "singleton.h"
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
@@ -32,6 +33,8 @@
 
 namespace udg {
 
+typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
+
 ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent, QString name)
  : QObject(parent )
 {
@@ -40,13 +43,17 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
 
     // Aquí en principi només farem l'inicialització
     m_importFileApp = new AppImportFile;
-    m_queryScreen = new QueryScreen( m_mainApp );
 
     createConnections();
 }
 
 ExtensionHandler::~ExtensionHandler()
 {
+    // Si és la última finestra oberta, hem de tancar la queryscreen
+    if (m_mainApp->getCountQApplicationMainWindow() == 1)
+    {
+        QueryScreenSingleton::instance()->close();
+    }
 }
 
 void ExtensionHandler::request( int who )
@@ -65,11 +72,11 @@ void ExtensionHandler::request( int who )
             break;
 
         case 7:
-            m_queryScreen->show();
+            QueryScreenSingleton::instance()->bringToFront();
             break;
 
         case 8:
-            m_queryScreen->openDicomdir();
+            QueryScreenSingleton::instance()->openDicomdir();
             break;
     }
 }
@@ -124,12 +131,12 @@ ExtensionContext &ExtensionHandler::getContext()
 
 void ExtensionHandler::updateConfiguration(const QString &configuration)
 {
-    m_queryScreen->updateConfiguration(configuration);
+    QueryScreenSingleton::instance()->updateConfiguration(configuration);
 }
 
 void ExtensionHandler::createConnections()
 {
-    connect( m_queryScreen, SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
+    connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
     connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
 }
 
