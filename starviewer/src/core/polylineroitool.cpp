@@ -44,10 +44,10 @@ PolylineROITool::~PolylineROITool()
 {
     if ( !m_mainPolyline.isNull() )
         delete m_mainPolyline;
-    
+
     if ( !m_closingPolyline.isNull() )
         delete m_closingPolyline;
-    
+
     m_2DViewer->getDrawer()->refresh();
 }
 
@@ -76,15 +76,16 @@ void PolylineROITool::handleEvent( long unsigned eventID )
                 m_2DViewer->getDrawer()->refresh();
             }
         break;
-        
+// TODO aquest codi comentat, si es torna a fer servir, s'hauria d'unificar per totes les
+// tools d'anotació en un mètode virtual anomenat per exemple "interactionInterrupt()" o "reset()"
 //         case vtkCommand::LeaveEvent:
 //             //en aquest cas considerem que l'usuari no vol anotar, per tant ens carreguem les primitives.
 //             if ( !m_mainPolyline.isNull() )
 //                 delete m_mainPolyline;
-//     
+//
 //             if ( !m_closingPolyline.isNull() )
 //                 delete m_closingPolyline;
-//     
+//
 //             m_2DViewer->getDrawer()->refresh();
 //         break;
     }
@@ -99,7 +100,7 @@ void PolylineROITool::annotateNewPoint()
     }
 
     double *lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
-    
+
     //afegim el punt
     m_mainPolyline->addPoint( lastPointInModel );
 
@@ -316,7 +317,7 @@ double PolylineROITool::computeGrayMeanSagittal()
 
     //taula de punters a vtkLine per a representar cadascun dels segments del polígon
     QVector<vtkLine*> segments;
-    
+
     //creem els diferents segments
     for ( index = 0; index < numberOfSegments; index++ )
     {
@@ -429,7 +430,7 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
 {
     double *origin = m_2DViewer->getInput()->getOrigin();
     int index[3];
-    
+
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
@@ -450,7 +451,7 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
             index[2] = (int)((coords[2] - origin[2])/spacing2);
             break;
     }
-    
+
     if ( m_2DViewer->isThickSlabActive() )
         return *((int*)m_2DViewer->getCurrentSlabProjection()->GetScalarPointer(index));
     else
@@ -621,7 +622,7 @@ void PolylineROITool::closeForm()
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
     delete m_closingPolyline;
-    
+
     m_closingPolyline=NULL;
     m_mainPolyline=NULL;
     m_2DViewer->getDrawer()->refresh();
