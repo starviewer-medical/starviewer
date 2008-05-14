@@ -211,6 +211,8 @@ void Q2DViewerExtension::setInput( Volume *input )
 
 void Q2DViewerExtension::resetViewToAxial()
 {
+    // TODO solucionat de forma temporal. L'extensió no té perquè saber que el visor
+    // està en axial
     if( !( m_selectedViewer->getViewer()->getView() == Q2DViewer::Axial ) )
     {
         m_thickSlabWidget->setProjectionMode( 0 );
@@ -220,6 +222,8 @@ void Q2DViewerExtension::resetViewToAxial()
 
 void Q2DViewerExtension::resetViewToSagital()
 {
+    // TODO solucionat de forma temporal. L'extensió no té perquè saber que el visor
+    // està en sagital
     if( !( m_selectedViewer->getViewer()->getView() == Q2DViewer::Sagital ) )
     {
         m_thickSlabWidget->setProjectionMode( 0 );
@@ -229,6 +233,8 @@ void Q2DViewerExtension::resetViewToSagital()
 
 void Q2DViewerExtension::resetViewToCoronal()
 {
+    // TODO solucionat de forma temporal. L'extensió no té perquè saber que el visor
+    // està en coronal
     if( !( m_selectedViewer->getViewer()->getView() == Q2DViewer::Coronal ) )
     {
         m_thickSlabWidget->setProjectionMode( 0 );
