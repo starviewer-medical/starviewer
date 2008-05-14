@@ -219,7 +219,6 @@ void QConfigurationScreen::addPacs()
     PacsParameters pacs;
     Status state;
     PacsListDB pacsList;
-	QString logMessage;
 
     if (validatePacsParameters())
     {
@@ -235,20 +234,16 @@ void QConfigurationScreen::addPacs()
         }
         else pacs.setDefault( "N" );
 
-		logMessage = "Afegir pacs ";
-		logMessage.append( m_textAETitle->text() );
-		INFO_LOG( logMessage );
+		INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
 
         state =  pacsList.insertPacs( &pacs );
 
         if ( !state.good() )
         {
             if ( state.code() == 2019 )
-            {
-
-                QMessageBox::warning( this , tr("Starviewer") , tr("AETitle ") + pacs.getAEPacs() + tr(" exists") + "\n" );
-            }else showDatabaseErrorMessage( state );
-
+                QMessageBox::warning( this , tr("Starviewer") , tr("AETitle %1 exists").arg( pacs.getAEPacs() ) );
+            else
+                showDatabaseErrorMessage( state );
         }
         else
         {
@@ -302,11 +297,10 @@ void QConfigurationScreen::updatePacs()
     PacsParameters pacs;
     Status state;
     PacsListDB pacsList;
-	QString logMessage;
 
     if ( m_PacsID == 0 )
     {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a Pacs for update" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a PACS to update" ) );
         return;
     }
 
@@ -325,9 +319,8 @@ void QConfigurationScreen::updatePacs()
         }
         else pacs.setDefault( "N" );
 
-        logMessage = "Actualitzant dades del pacs ";
-        logMessage.append( m_textAETitle->text() );
-        INFO_LOG( logMessage );
+
+        INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
 
         state = pacsList.updatePacs( &pacs );
 
@@ -349,19 +342,16 @@ void QConfigurationScreen::deletePacs()
     Status state;
     PacsParameters pacs;
     PacsListDB pacsList;
-    QString logMessage;
 
     if ( m_PacsID == 0 )
     {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a Pacs for delete" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a PACS to delete" ) );
         return;
     }
 
     pacs.setPacsID( m_PacsID );//per donar de baixa n'hi prou amb el camp clau
 
-    logMessage = "Esborrant el pacs ";
-    logMessage.append( m_textAETitle->text() );
-    INFO_LOG( logMessage );
+    INFO_LOG( "Esborrant el PACS: " + m_textAETitle->text() );
 
     state = pacsList.deletePacs( &pacs );
 
@@ -420,9 +410,9 @@ void QConfigurationScreen::test()
     PacsParameters pacs;
     PacsListDB pacsList;
     PacsServer pacsServer;
-    QString message , logMessage;
+    QString message;
     StarviewerSettings settings;
-    
+
     //mirem que hi hagi algun element (pacs) seleccionat per a poder testejar, altrament informem de que cal seleccionar un node
     if ( m_PacsTreeView->selectedItems().count() > 0 )
     {
@@ -432,60 +422,37 @@ void QConfigurationScreen::test()
         pacs.setPacsAdr( m_textAddress->text() );
         pacs.setAELocal( settings.getAETitleMachine() );
         pacsServer.setPacs( pacs );
-    
+
         state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );
-    
+
         if ( !state.good() )
         {
-            message.insert( 0 , tr( " Pacs " ) );
-            message.append( pacs.getAEPacs() );
-            message.append( tr ( " doesn't responds " ) );
-            message.append( '\n' );
-            message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
+            message = tr( "PACS \"%1\" doesn't responds\nBe sure that the IP and AETitle of the PACS is correct" ).arg( pacs.getAEPacs() );
             QMessageBox::warning( this , tr("Starviewer") , message );
-    
-            logMessage.insert( 0 , "Doing echo pacs " );
-            logMessage.append( pacs.getAEPacs() );
-            logMessage.append( " doesn't responds. PACS ERROR : " );
-            logMessage.append( state.text() );
-            INFO_LOG( logMessage );
+            INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds. PACS ERROR : " + state.text() );
         }
         else
         {
             state = pacsServer.echo();
-    
+
             if ( state.good() )
             {
-                message.insert( 0 , tr( " Test of Pacs " ) );
-                message.append( pacs.getAEPacs() );
-                message.append( tr ( " is correct " ) );
+                message = tr( "Test of PACS \"%1\" is correct").arg( pacs.getAEPacs() );
                 QMessageBox::information( this , tr("Starviewer") , message );
-    
-                logMessage.insert( 0 , "Test of Pacs " );
-                logMessage.append( pacs.getAEPacs() );
-                logMessage.append( " is correct " );
-                INFO_LOG( logMessage );
+                // TODO realment cal fer un INFO LOG d'això?
+                INFO_LOG( "Test of PACS " + pacs.getAEPacs() + "is correct" );
             }
             else
             {
-                message.insert( 0 , tr( " Pacs " ) );
-                message.append( pacs.getAEPacs() );
-                message.append( tr ( " doesn't responds correctly" ) );
-                message.append( '\n' );
-                message.append( tr( " Be sure that the IP and AETitle of the PACS is correct " ) );
+                message = tr( "PACS \"%1\" doesn't responds correctly\nBe sure that the IP and AETitle of the PACS is correct" ).arg( pacs.getAEPacs() );
                 QMessageBox::warning( this , tr("Starviewer") , message );
-    
-                logMessage.insert( 0 , "Doing echo pacs " );
-                logMessage.append( pacs.getAEPacs() );
-                logMessage.append( " doesn't responds correctly. PACS ERROR : " );
-                logMessage.append( state.text() );
-                INFO_LOG( logMessage );
+                INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds correctly. PACS ERROR : " + state.text() );
             }
         }
     }
     else
-        QMessageBox::information( this , tr("Information") , tr("To do a test of a pacs it is necessary to select an item of the list.") );
-        
+        QMessageBox::information( this , tr("Information") , tr("To test a PACS it is necessary to select an item of the list.") );
+
 }
 
 bool QConfigurationScreen::validatePacsParameters()
@@ -504,7 +471,7 @@ bool QConfigurationScreen::validatePacsParameters()
     text = m_textAddress->text();
     if ( text.length() == 0 )
     {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr ( "Incorrect address server" ) );
+        QMessageBox::warning( this , tr( "Starviewer" ) , tr ( "Incorrect server address" ) );
         return false;
     }
 
@@ -611,7 +578,7 @@ bool QConfigurationScreen::applyChanges()
 
         if ( m_textDatabaseRoot->isModified() && m_createDatabase == false ) // només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
         {
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The application has to be restart to apply the changes" ) );
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The application has to be restarted to apply the changes" ) );
         }
 
         m_configurationChanged = false;
@@ -623,42 +590,30 @@ bool QConfigurationScreen::applyChanges()
 
 void QConfigurationScreen::applyChangesPacs()
 {
+    // TODO realment cal fer INFO LOGS d'això?
     StarviewerSettings settings;
-    QString logMessage;
 
     if ( m_textAETitleMachine->isModified() )
     {
-        logMessage = "Modificació del AETitle de la màquina ";
-        logMessage.append( m_textAETitleMachine->text() );
-        INFO_LOG( logMessage );
-
+        INFO_LOG( "Modificació del AETitle de la màquina: " + m_textAETitleMachine->text() );
         settings.setAETitleMachine(m_textAETitleMachine->text());
     }
 
     if ( m_textTimeout->isModified() )
     {
-        logMessage = "Modificació del valor del timeout ";
-        logMessage.append( m_textTimeout->text() );
-        INFO_LOG( logMessage );
-
+        INFO_LOG( "Modificació del valor del timeout " + m_textTimeout->text() );
         settings.setTimeout(m_textTimeout->text());
     }
 
     if ( m_textLocalPort->isModified() )
     {
-        logMessage = "Modificació del Port d'entrada dels estudis";
-        logMessage.append( m_textLocalPort->text() );
-        INFO_LOG( logMessage );
-
+        INFO_LOG( "Modificació del Port d'entrada dels estudis" + m_textLocalPort->text() );
         settings.setLocalPort( m_textLocalPort->text() );
     }
 
     if ( m_textMaxConnections->isModified() )
     {
-        logMessage = "Modificació del nombre màxim de connexions ";
-        logMessage.append( m_textMaxConnections->text() );
-        INFO_LOG( logMessage );
-
+        INFO_LOG( "Modificació del nombre màxim de connexions " + m_textMaxConnections->text() );
         settings.setMaxConnections( m_textMaxConnections->text() );
     }
 
@@ -720,7 +675,6 @@ void QConfigurationScreen::applyChangesCache()
     StarviewerSettings settings;
     CachePool pool;
     Status state;
-    QString logMessage;
 
     //Aquest els guardem sempre
     settings.setCacheImagePath( m_textCacheImagePath->text() );
@@ -728,29 +682,20 @@ void QConfigurationScreen::applyChangesCache()
 
     if ( m_textPoolSize->isModified() )
     {
-        logMessage = "Es modificarà la mida de la cache ";
-        logMessage.append( m_textPoolSize->text() );
-        INFO_LOG( logMessage );
-
+        INFO_LOG( "Es modificarà la mida de la cache " + m_textPoolSize->text() );
         state = pool.updatePoolTotalSize( m_textPoolSize->text().toInt( NULL , 10 )* 1024 );//Passem l'espai a Mb
         showDatabaseErrorMessage( state );
     }
 
     if ( m_textCacheImagePath->isModified() )
     {
-        logMessage = "Es modificarà el directori de la cache d'imatges ";
-        logMessage.append( m_textCacheImagePath->text() );
-        INFO_LOG( logMessage );
-
+        INFO_LOG( "Es modificarà el directori de la cache d'imatges " + m_textCacheImagePath->text() );
         settings.setCacheImagePath( m_textCacheImagePath->text() );
     }
 
     if ( m_textMaximumDaysNotViewed->isModified() )
     {
-        logMessage = "Es modificarà el nombre maxim de dies d'un estudi a la cache";
-        logMessage.append( m_textMaximumDaysNotViewed->text() );
-        INFO_LOG( logMessage );
-
+        INFO_LOG( "Es modificarà el nombre maxim de dies d'un estudi a la cache" + m_textMaximumDaysNotViewed->text() );
         settings.setMaximumDaysNotViewedStudy( m_textMaximumDaysNotViewed->text() );
     }
 
@@ -811,13 +756,9 @@ void QConfigurationScreen::compactCache()
 
 void QConfigurationScreen::cacheImagePathEditingFinish()
 {
-    QString path;
-
     if ( !m_textCacheImagePath->text().endsWith( '/' , Qt::CaseInsensitive ) )
     {
-        path = m_textCacheImagePath->text();
-        path.append( "/" );
-        m_textCacheImagePath->setText( path );
+        m_textCacheImagePath->setText( m_textCacheImagePath->text() + "/" );
     }
 }
 
@@ -859,7 +800,7 @@ void QConfigurationScreen::createDatabase()
         else
         {
             settings.setDatabasePath( m_textDatabaseRoot->text() );
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The application has to be restart to apply the changes"  ));
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The application has to be restarted to apply the changes"  ));
             m_createDatabase = true;
         }
     }
