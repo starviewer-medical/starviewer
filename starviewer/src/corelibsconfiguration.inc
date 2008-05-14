@@ -1,13 +1,10 @@
-# Configuració genèrica de core, interfaces, inputoutput i main
+# Configuraciï¿½ genï¿½rica de core, interfaces, inputoutput i main
 
 CONFIG += warn_on \
           thread \
           staticlib \
           qt \
           stl
-#CONFIG += opengl \
-#          x11 \
-#          exceptions
           
 OBJECTS_DIR = ../../tmp/obj
 UI_DIR = ../../tmp/ui
