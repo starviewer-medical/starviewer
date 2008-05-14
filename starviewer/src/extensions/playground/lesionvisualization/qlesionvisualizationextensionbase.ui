@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>QRectumLesionVisualizationExtensionBase</class>
- <widget class="QWidget" name="QRectumLesionVisualizationExtensionBase" >
+ <class>QLesionVisualizationExtensionBase</class>
+ <widget class="QWidget" name="QLesionVisualizationExtensionBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
