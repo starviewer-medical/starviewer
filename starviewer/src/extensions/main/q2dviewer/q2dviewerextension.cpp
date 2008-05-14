@@ -80,6 +80,15 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 Q2DViewerExtension::~Q2DViewerExtension()
 {
     writeSettings();
+    delete m_viewersLayout;
+    delete m_gridLayout;
+
+    delete m_predefinedSeriesGrid;
+    delete m_seriesTableGrid;
+    delete m_predefinedSlicesGrid;
+    delete m_sliceTableGrid;
+    delete m_dicomDumpCurrentDisplayedImage;
+
 }
 
 void Q2DViewerExtension::createActions()

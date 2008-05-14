@@ -17,6 +17,7 @@ ToolProxy::ToolProxy(QObject *parent)
 
 ToolProxy::~ToolProxy()
 {
+    removeAllTools();
 }
 
 void ToolProxy::addTool( Tool *tool )

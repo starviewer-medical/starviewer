@@ -157,6 +157,7 @@ Q2DViewer::~Q2DViewer()
     m_picker->Delete();
     m_viewer->Delete();
     m_vtkQtConnections->Delete();
+    delete m_toolManager;
 }
 
 vtkRenderer *Q2DViewer::getRenderer()

@@ -79,6 +79,7 @@ QViewer::~QViewer()
 {
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
+    delete m_toolProxy;
 }
 
 vtkRenderWindowInteractor *QViewer::getInteractor()
