@@ -36,8 +36,11 @@ LIBS += -L$${DCMTKLIBDIR} \
     -lijg12 \ 
     -lijg16 \
     -ldcmjpeg
-unix:LIBS += -lssl
+
+
 
 unix {
     DEFINES += HAVE_CONFIG_H
+    LIBS += -lssl \
+	    -lwrap
 }
