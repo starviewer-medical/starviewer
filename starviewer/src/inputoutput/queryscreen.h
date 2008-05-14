@@ -144,6 +144,9 @@ public slots:
     /// Actualitza la configuració que l'usuari hagi pogut canviar des del diàleg de configuració
     void updateConfiguration(const QString &configuration);
 
+    /// Si la finestra no és visible o està radera d'una altra, la fa visible i la porta al davant de les finestres.
+    void bringToFront();
+
 signals:
     /// Signal similar a viewStudy(), però en aquest cas enviem tota la estructura PatientFillerInput que es continuarà processant per la classe que reculli aquest signal
     void viewPatient( PatientFillerInput *input, QString studyUID, QString seriesUID );

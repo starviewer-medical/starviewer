@@ -455,6 +455,13 @@ void QueryScreen::updateConfiguration(const QString &configuration)
     }
 }
 
+void QueryScreen::bringToFront()
+{
+    this->show();
+    this->raise(); 
+    this->activateWindow();
+}
+
 void QueryScreen::searchStudy()
 {
     switch ( m_tab->currentIndex() )
@@ -1377,7 +1384,7 @@ void QueryScreen::openDicomdir()
         else
         {
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
-            this->show();
+            this->bringToFront();
             m_tab->setCurrentIndex( 2 ); // mostre el tab del dicomdir
         }
 
