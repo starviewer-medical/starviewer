@@ -19,12 +19,8 @@ namespace udg {
 // Fordward Declarations
 class QApplicationMainWindow;
 class PatientFillerInput;
-
-// Espai reservat pels fwd decl de les mini-apps
 class AppImportFile;
 
-// Fi de l'Espai reservat pels fwd decl de les mini-apps
-class QueryScreen;
 /**
 Gestor de mini-aplicacions i serveis de l'aplicació principal
 
@@ -94,9 +90,6 @@ private:
 
     /// Importar models del sistema de fitxers al repositori de volums
     AppImportFile *m_importFileApp;
-
-    /// La pantalla d'accés al pacs
-    QueryScreen *m_queryScreen;
 
     /// Contexte de l'extensió
     ExtensionContext m_extensionContext;
