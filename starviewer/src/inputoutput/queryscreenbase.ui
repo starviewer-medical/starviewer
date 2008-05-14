@@ -98,17 +98,6 @@
               <height>0</height>
              </size>
             </property>
-            <property name="font" >
-             <font>
-              <family>Sans Serif</family>
-              <pointsize>9</pointsize>
-              <weight>50</weight>
-              <italic>false</italic>
-              <bold>false</bold>
-              <underline>false</underline>
-              <strikeout>false</strikeout>
-             </font>
-            </property>
             <property name="text" >
              <string>Patient ID</string>
             </property>
@@ -407,17 +396,6 @@
               </property>
               <item row="2" column="3" >
                <widget class="QCheckBox" name="m_checkSC" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="text" >
                  <string>SC</string>
                 </property>
@@ -428,17 +406,6 @@
               </item>
               <item row="1" column="0" >
                <widget class="QCheckBox" name="m_checkCR" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Computerized Radiography</string>
                 </property>
@@ -452,17 +419,6 @@
               </item>
               <item row="3" column="0" >
                <widget class="QCheckBox" name="m_checkDX" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Direct Radiography</string>
                 </property>
@@ -476,17 +432,6 @@
               </item>
               <item row="1" column="3" >
                <widget class="QCheckBox" name="m_checkRF" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Radiography Fluoroscopy</string>
                 </property>
@@ -500,17 +445,6 @@
               </item>
               <item row="0" column="0" >
                <widget class="QCheckBox" name="m_checkAll" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="text" >
                  <string>All</string>
                 </property>
@@ -527,17 +461,6 @@
               </item>
               <item row="3" column="2" >
                <widget class="QCheckBox" name="m_checkPT" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Penetrant Test</string>
                 </property>
@@ -551,17 +474,6 @@
               </item>
               <item row="2" column="1" >
                <widget class="QCheckBox" name="m_checkMG" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="text" >
                  <string>MG</string>
                 </property>
@@ -572,17 +484,6 @@
               </item>
               <item row="3" column="3" >
                <widget class="QCheckBox" name="m_checkUS" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Ultrasounds</string>
                 </property>
@@ -596,17 +497,6 @@
               </item>
               <item row="2" column="2" >
                <widget class="QCheckBox" name="m_checkDT" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string> Dental Technician</string>
                 </property>
@@ -620,17 +510,6 @@
               </item>
               <item row="2" column="0" >
                <widget class="QCheckBox" name="m_checkCT" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Computerized Tomography</string>
                 </property>
@@ -647,17 +526,6 @@
               </item>
               <item row="3" column="1" >
                <widget class="QCheckBox" name="m_checkMR" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Magnetic Resonance</string>
                 </property>
@@ -671,17 +539,6 @@
               </item>
               <item row="1" column="2" >
                <widget class="QCheckBox" name="m_checkNM" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="toolTip" >
                  <string>Nuclear Medicine</string>
                 </property>
@@ -695,17 +552,6 @@
               </item>
               <item row="1" column="1" >
                <widget class="QCheckBox" name="m_checkES" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="text" >
                  <string>ES</string>
                 </property>
@@ -716,17 +562,6 @@
               </item>
               <item row="1" column="4" >
                <widget class="QCheckBox" name="m_checkXA" >
-                <property name="font" >
-                 <font>
-                  <family>Sans Serif</family>
-                  <pointsize>9</pointsize>
-                  <weight>50</weight>
-                  <italic>false</italic>
-                  <bold>false</bold>
-                  <underline>false</underline>
-                  <strikeout>false</strikeout>
-                 </font>
-                </property>
                 <property name="text" >
                  <string>XA</string>
                 </property>
