@@ -359,7 +359,7 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
             if ( m_pickedActorPlaneSource == m_coronalPlaneSource )
                 pushSagitalViewCoronalAxisActor();
             else
-                pushSagitalViewAxialAxisActor();        
+                pushSagitalViewAxialAxisActor();
         }
     break;
 
@@ -885,11 +885,11 @@ void QMPRExtension::initOrientation()
     double diffXBound = maxXBound - xbounds[1];
     double diffZBound = maxZBound - zbounds[1];
 
-    m_coronalPlaneSource->SetOrigin( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
-    m_coronalPlaneSource->SetPoint1( xbounds[1] + diffXBound*0.5 , ybounds[0] , zbounds[1] + diffZBound*0.5 );
-    m_coronalPlaneSource->SetPoint2( xbounds[0] - diffXBound*0.5 , ybounds[0] , zbounds[0] - diffZBound*0.5 );
+    m_coronalPlaneSource->SetOrigin( xbounds[0] - diffXBound*0.5 , ybounds[1] , zbounds[1] + diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint1( xbounds[1] + diffXBound*0.5 , ybounds[1] , zbounds[1] + diffZBound*0.5 );
+    m_coronalPlaneSource->SetPoint2( xbounds[0] - diffXBound*0.5 , ybounds[1] , zbounds[0] - diffZBound*0.5 );
     // posem en la llesca central
-    m_coronalPlaneSource->Push( 0.5 * ( ybounds[1] - ybounds[0] ) );
+    m_coronalPlaneSource->Push( -0.5 * ( ybounds[1] - ybounds[0] ) );
 
     updatePlanes();
     updateControls();
