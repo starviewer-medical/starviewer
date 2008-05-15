@@ -167,6 +167,13 @@ private slots:
     void updateThickSlab( double value );
     void updateThickSlab( int value );
 
+    /**
+     * decideix si veiem o no la informació d'anotacions
+     * del pacient
+     * @param show
+     */
+    void showViewerInformation( bool show );
+
 private:
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;

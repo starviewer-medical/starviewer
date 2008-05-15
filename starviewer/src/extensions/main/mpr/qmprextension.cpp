@@ -125,8 +125,9 @@ void QMPRExtension::init()
 
     // configurem les annotacions que volem veure
     m_axial2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
-    m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation );
-    m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation );
+    m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation  );
+    m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation );
+    showViewerInformation( m_viewerInformationToolButton->isChecked() );
 
     m_sagital2DView->disableContextMenu();
     m_coronal2DView->disableContextMenu();
@@ -179,6 +180,7 @@ void QMPRExtension::initializeTools()
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction("DistanceTool") );
     m_polylineROIToolButton->setDefaultAction( m_toolManager->getToolAction("PolylineROITool") );
+    m_angleToolButton->setDefaultAction( m_toolManager->getToolAction( "AngleTool" ) );
     m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction("EraserTool") );
 
     // activem l'eina de valors predefinits de window level
@@ -187,7 +189,7 @@ void QMPRExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList middleButtonExclusiveTools;
@@ -210,8 +212,8 @@ void QMPRExtension::initializeTools()
 void QMPRExtension::initializeDefaultTools()
 {
     QStringList toolsList1, toolsList2;
-    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
-    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
+    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool";
+    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool";
     m_toolManager->setViewerTools( m_axial2DView, toolsList1 );
     m_toolManager->setViewerTools( m_sagital2DView, toolsList2 );
     m_toolManager->setViewerTools( m_coronal2DView, toolsList2 );
@@ -241,6 +243,28 @@ void QMPRExtension::createConnections()
 
     // quan canvia l'input de l'axial view hem de fer un altre cop el set input TODO millora de rendiment, s'hauria de fer primer l'input de l'extensió i no pas el del viewer per evitar que al 2D viewer se li doni dos cops l'input
     connect( m_axial2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput(Volume *) ) );
+
+    // mostrar o no la informacio del volum a cada visualitzador
+    connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
+}
+
+void QMPRExtension::showViewerInformation( bool show )
+{
+    m_axial2DView->enableAnnotation(
+        Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation
+        , show );
+
+    m_sagital2DView->enableAnnotation(
+        Q2DViewer::WindowInformationAnnotation | Q2DViewer::RulersAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation
+        , show );
+
+    m_coronal2DView->enableAnnotation(
+        Q2DViewer::WindowInformationAnnotation | Q2DViewer::RulersAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation
+        , show );
 }
 
 void QMPRExtension::switchHorizontalLayout()
