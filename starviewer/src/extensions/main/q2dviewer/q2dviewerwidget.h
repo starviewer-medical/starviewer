@@ -43,6 +43,10 @@ public:
 
     void setInput( Volume *input );
 
+    ///Desactiva la sincronització del viewer
+    //TODO solució temporal a la desactivacio de la sincronitzacio
+    void desactivaSincronitzacio();
+
 public slots:
     void resetViewToAxial();
     void resetViewToSagital();
@@ -71,7 +75,7 @@ private slots:
 
     /// Quan s'activa el boto de sincronitzar
     void emitSynchronize();
-    
+
     /// actualitza correctament els valors de l'slider i l'spinbox quan hi ha thick slab
     void updateSliderAndSpinBox();
 
