@@ -740,21 +740,9 @@ void Q2DViewerExtension::hideColumns( int columns )
 
 void Q2DViewerExtension::showViewerInformation( bool show )
 {
-    int numViewer;
-
-    if( show )
+    for( int numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
     {
-        for( numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
-        {
-            m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
-        }
-    }
-    else
-    {
-        for( numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
-        {
-            m_vectorViewers.value( numViewer )->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
-        }
+        m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, show );
     }
 }
 
