@@ -100,6 +100,11 @@ public slots:
     ///Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
     void showDicomDumpCurrentDisplayedImage();
 
+    //TODO mètode per solucionar problemes perquè la sincronització encara no està adaptada
+    // a la resta de les tools
+    /// Desactiva l'eina de sincronització.
+    void desactivaSincronitzacio();
+
 private:
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();

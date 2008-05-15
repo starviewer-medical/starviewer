@@ -28,7 +28,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_buttonSynchronizeAction->setCheckable( true );
     m_synchronizeButton->setDefaultAction( m_buttonSynchronizeAction );
     m_synchronizeButton->setEnabled( false );
-            
+
     createConnections();
 }
 
@@ -43,9 +43,9 @@ void Q2DViewerWidget::createConnections()
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL ( selected() ), SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateInput( Volume *) ) );
-    
+
     connect( m_2DView, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateSliderAndSpinBox() ) );
-    
+
     connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), SLOT( emitSynchronize() ) );
 }
 
@@ -186,4 +186,11 @@ void Q2DViewerWidget::updateSliderAndSpinBox()
     m_slider->setValue( m_2DView->getCurrentSlice() );
     connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
 }
+
+void Q2DViewerWidget::desactivaSincronitzacio()
+{
+    //TODO solució temporal per desactivar la tool de sincronitzacio
+     m_synchronizeButton->defaultAction()->setChecked( false );
+}
+
 }
