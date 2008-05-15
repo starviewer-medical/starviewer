@@ -877,7 +877,7 @@ QImage Image::createThumbnail(int resolution)
 
         QPainter painter( &thumbnail );
         painter.setPen(Qt::white);
-        painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, tr("No Image Available"));
+        painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, tr("Preview image not available"));
     }
     m_thumbnail = thumbnail;
     return thumbnail;
