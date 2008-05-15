@@ -46,13 +46,6 @@ QLesionVisualizationExtension::QLesionVisualizationExtension( QWidget *parent )
     picker = vtkPropPicker::New();
     m_cylindersCollection = 0;
     m_lesion3Dviewer->getRenderer()->SetBackground( 0.5, 0.5, 0.5 );
-    
-    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
-//     m_toolManager = new ToolManager(this);
-//     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-//     QStringList toolsList;
-//     toolsList << "VoxelInformationTool";
-//     m_toolManager->setViewerTools( m_2DView, toolsList );
 }
 
 QLesionVisualizationExtension::~QLesionVisualizationExtension()
@@ -248,7 +241,6 @@ void QLesionVisualizationExtension::setOpacity( int op )
 void QLesionVisualizationExtension::openMaskVolume()
 {
     bool ok;
-    
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open lesion  mask file"), m_defaultOpenDirectory, tr("MetaImage Files (*.mhd)"));
     QApplication::setOverrideCursor( QCursor ( Qt::WaitCursor ) );
     if ( !fileName.isEmpty() )
@@ -265,21 +257,11 @@ void QLesionVisualizationExtension::openMaskVolume()
         {
             case 0: // no és un arxiu mhd :(
                 ok = false;
-//                 DEBUG_LOG( fileName + " no es pot llegir com arxiu mhd vàlid amb vtkMetaImageReader");
                 break;
 
             case 1: // I think I can read the file but I cannot prove it
-//                 DEBUG_LOG( "vtkMetaImageReader creu que pot llegir l'arxiu " + fileName + " però no pot provar-ho de totes totes" );
-                ok = true;
-                break;
-
             case 2: // I definitely can read the file
-//                 DEBUG_LOG( "vtkMetaImageReader assegura que pot llegir l'arxiu " + fileName );
-                ok = true;
-                break;
-
             case 3: // I can read the file and I have validated that I am the correct reader for this file
-//                 DEBUG_LOG( "vtkMetaImageReader assegura que pot llegir l'arxiu " + fileName + " i que a més ha validat ser el reader adequat per llegir l'arxiu" );
                 ok = true;
                 break;
         }
