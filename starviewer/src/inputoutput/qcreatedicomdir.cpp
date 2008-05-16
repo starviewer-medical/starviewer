@@ -170,7 +170,7 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
             showDatabaseErrorMessage( state );
             return;
         }
-        
+
         //només comprovem l'espai si gravem a un cd o dvd
         if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
         {
@@ -390,7 +390,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
 
 void QCreateDicomdir::examineDicomdirPath()
 {
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "DICOMDIR Directory" ) );
+    QFileDialog *dlg = new QFileDialog( this , QFileDialog::tr( "Open" ) , "./" , tr( "DICOMDIR Directory" ) );
     QString path;
 
     dlg->setFileMode( QFileDialog::DirectoryOnly );
@@ -627,7 +627,7 @@ void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 void QCreateDicomdir::deviceChanged( int index )
 {
     float sizeInMB = (m_dicomdirSizeBytes / ( 1024 * 1024 ) );
-    
+
     m_currentDevice = (CreateDicomdir::recordDeviceDicomDir) index;
     switch( m_currentDevice )
     {
