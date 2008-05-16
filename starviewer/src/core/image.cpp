@@ -800,7 +800,7 @@ QImage Image::createThumbnail(int resolution)
     if( dicomImage == NULL )
     {
         ok = false;
-        DEBUG_LOG("Memòria insuficient");
+        DEBUG_LOG("Memòria insuficient per carregar l'imatge DICOM al fer el thumbnail");
     }
     else if( dicomImage->getStatus() == EIS_Normal )
     {
