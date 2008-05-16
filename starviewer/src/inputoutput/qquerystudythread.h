@@ -41,7 +41,6 @@ public:
     ~QQueryStudyThread();
 
 signals:
-
     /** signal que s'envia per indicar que hi hagut un error connectant al PACS
      * @param ID del pacs que ha produit l'error
      */
@@ -52,15 +51,7 @@ signals:
      */
     void errorQueringStudiesPacs( int pacsID );
 
-protected :
-
 private :
-
-    /** Crea un string pel log, indicat que el thread s'ha creat, i a quin pacs atacara aquest thread
-     * @return missatge de log
-     */
-    QString infoLogInitialitzedThread();
-
     PacsParameters m_param;
     DicomMask m_mask;
 };

@@ -4,10 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "qquerystudythread.h"
-
-#include <QString>
 
 #include "pacsconnection.h"
 #include "pacsserver.h"
@@ -16,12 +13,13 @@
 #include "logging.h"
 #include "pacsparameters.h"
 
+#include <QString>
+
 namespace udg {
 
 QQueryStudyThread::QQueryStudyThread(QObject *parent)
-        : QThread(parent)
+ : QThread(parent)
 {
-
 }
 
 void QQueryStudyThread::queryStudy( PacsParameters param , DicomMask mask )
@@ -39,7 +37,7 @@ void QQueryStudyThread::run()
     //creem la connexió
     PacsServer serverSCP(m_param);
 
-    INFO_LOG( infoLogInitialitzedThread() );
+    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + m_param.getAELocal() + "; AEPACS= " + m_param.getAEPacs() + "; PACS Adr= " + m_param.getPacsAdr() + "; PACS Port= " + m_param.getPacsPort() + ";" );
 
     state = serverSCP.connect( PacsServer::query,PacsServer::studyLevel );
 
@@ -70,26 +68,6 @@ void QQueryStudyThread::run()
         serverSCP.disconnect();
         exit( 0 );
     }
-}
-
-QString QQueryStudyThread::infoLogInitialitzedThread()
-{
-    QString missatgeLog, pacsLog;
-
-    missatgeLog = "thread iniciat per cercar al PACS ";
-
-    pacsLog.insert( 0 , m_param.getAELocal() );
-    pacsLog.append( ";" );
-    pacsLog.append( m_param.getAEPacs() );
-    pacsLog.append( ";" );
-    pacsLog.append( m_param.getPacsAdr() );
-    pacsLog.append( ";" );
-    pacsLog.append( m_param.getPacsPort() );
-    pacsLog.append( ";" );
-
-    missatgeLog += pacsLog;
-
-    return missatgeLog;
 }
 
 QQueryStudyThread::~QQueryStudyThread()
