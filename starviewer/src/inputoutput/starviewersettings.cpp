@@ -51,12 +51,12 @@ StarviewerSettings::StarviewerSettings()
 
 void StarviewerSettings::setDatabasePath( QString path )
 {
-    m_starviewerSettings.setValue( GroupSettingsName + databaseRootKey , path );
+    m_starviewerSettings.setValue( GroupSettingsName + databaseRootKey , QDir::fromNativeSeparators( path ) );
 }
 
 void StarviewerSettings::setCacheImagePath( QString path )
 {
-    m_starviewerSettings.setValue( GroupSettingsName + cacheImagePathKey , path );
+    m_starviewerSettings.setValue( GroupSettingsName + cacheImagePathKey , QDir::fromNativeSeparators( path ) );
 }
 
 void StarviewerSettings::setPoolSize(QString size )
@@ -77,7 +77,7 @@ QString StarviewerSettings::getDatabasePath()
     //construim directori per defecte
     defaultDir.append( dir.homePath() + "/.starviewer/pacs/database/dicom.sdb" );
 
-    return m_starviewerSettings.value( GroupSettingsName + databaseRootKey , defaultDir ).toString();
+    return QDir::toNativeSeparators( m_starviewerSettings.value( GroupSettingsName + databaseRootKey , defaultDir ).toString() );
 }
 
 QString StarviewerSettings::getPoolSize()
@@ -93,7 +93,7 @@ QString StarviewerSettings::getCacheImagePath()
     //construim directori per defecte
     defaultDir.append( dir.homePath() + "/.starviewer/pacs/dicom/" );
 
-    return m_starviewerSettings.value( GroupSettingsName + cacheImagePathKey , defaultDir ).toString();
+    return QDir::toNativeSeparators( m_starviewerSettings.value( GroupSettingsName + cacheImagePathKey , defaultDir ).toString() );
 }
 
 QString StarviewerSettings::getMaximumDaysNotViewedStudy()

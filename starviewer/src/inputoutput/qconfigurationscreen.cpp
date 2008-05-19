@@ -756,9 +756,9 @@ void QConfigurationScreen::compactCache()
 
 void QConfigurationScreen::cacheImagePathEditingFinish()
 {
-    if ( !m_textCacheImagePath->text().endsWith( '/' , Qt::CaseInsensitive ) )
+    if ( !m_textCacheImagePath->text().endsWith( QDir::toNativeSeparators( "/" ) , Qt::CaseInsensitive ) )
     {
-        m_textCacheImagePath->setText( m_textCacheImagePath->text() + "/" );
+        m_textCacheImagePath->setText( m_textCacheImagePath->text() + QDir::toNativeSeparators( "/" ) );
     }
 }
 
