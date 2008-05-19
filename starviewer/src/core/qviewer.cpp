@@ -584,9 +584,16 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
 {
     if (m_contextMenuActive)
     {
+        // és possible que en alguns moments ( quan es carrega el pacient i surten altres diàlegs )
+        // no hi hagi window activa o que aquesta ni sigui una QApplicationMainWindow i ho sigui un diàleg,
+        // per tant, ens pot tornar NULL i en algunes ocasions ens feia petar l'aplicació. Així ens curem en salut
+        QApplicationMainWindow *mainWindow = QApplicationMainWindow::getActiveApplicationMainWindow();
+        if( !mainWindow )
+            return;
+
         PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
         patientMenu->setAttribute(Qt::WA_DeleteOnClose);
-        patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
+        patientMenu->setPatient( mainWindow->getCurrentPatient() );
 
         connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
 
