@@ -157,13 +157,21 @@ Q2DViewer::~Q2DViewer()
     m_picker->Delete();
     m_viewer->Delete();
     m_vtkQtConnections->Delete();
+    // TODO hem hagut de fer eliminar primer el drawer per davant d'altres objectes
+    // per solucionar el ticket #539, però això denota que hi ha algun problema de
+    // disseny que fa que no sigui prou robust. L'ordre en que s'esborren els objectes
+    // no ens hauria d'afectar
+    // HACK imposem que s'esborri primer el drawer
+    delete m_drawer;
     delete m_toolManager;
 }
 
 vtkRenderer *Q2DViewer::getRenderer()
 {
     if( m_viewer )
+    {
         return m_viewer->GetRenderer();
+    }
     else
         return NULL;
 }
@@ -1311,8 +1319,6 @@ void Q2DViewer::setSlice( int value )
 {
     if( this->m_mainVolume && this->m_currentSlice != value )
     {
-//         this->projectCurrentDICOMPlaneToVTK();
-
         // thick slab
         if( value < 0 )
             m_currentSlice = 0;
