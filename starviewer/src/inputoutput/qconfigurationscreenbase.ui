@@ -59,7 +59,7 @@
       <string/>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3" >
       <attribute name="title" >
@@ -820,17 +820,6 @@
            </item>
            <item row="0" column="0" >
             <widget class="QLabel" name="label_3" >
-             <property name="font" >
-              <font>
-               <family>Sans Serif</family>
-               <pointsize>9</pointsize>
-               <weight>50</weight>
-               <italic>false</italic>
-               <bold>false</bold>
-               <underline>false</underline>
-               <strikeout>false</strikeout>
-              </font>
-             </property>
              <property name="text" >
               <string>Institution:</string>
              </property>
