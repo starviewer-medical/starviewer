@@ -1469,7 +1469,7 @@ void QueryScreen::errorConnectingPacs( int IDPacs )
 
     pacsListDB.queryPacs( &errorPacs, IDPacs );
 
-    errorMessage = tr( "Can't connect to PACS %1 from %2\nBe sure that the IP and AETitle of the PACS is correct" )
+    errorMessage = tr( "Can't connect to PACS %1 from %2\nBe sure that the IP and AETitle of the PACS are correct" )
         .arg( errorPacs.getAEPacs() )
         .arg( errorPacs.getInstitution()
     );
