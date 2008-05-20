@@ -40,9 +40,12 @@ private:
     /// ens permet anotar el seguent punt de la polilinia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
     void annotateNewPoint();
 
-    ///ns simula com quedaria la polilinia que estem editant si la tanquessim. ens serveix per a veure dinamicament l'evolucio de la polilinia.
+    ///ens simula com quedaria la polilinia que estem editant si la tanquessim. ens serveix per a veure dinamicament l'evolucio de la polilinia.
     void simulateClosingPolyline();
 
+    ///treu els punts repetits que s'hagin pogut emmagatzemar degut a una anotació errònia amb doble clic
+    void deleteRepeatedPoints();
+    
     /// metode que tanca la forma de la polilinia que s'ha dibuixat
     void closeForm();
 
