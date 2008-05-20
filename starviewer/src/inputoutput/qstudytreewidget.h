@@ -246,6 +246,9 @@ private:
 
     ///Ens indica si l'item passat és una imatge
     bool isItemImage( QTreeWidgetItem * );
+
+    ///Afegeix espais a l'esquerre del text fins arribar l'allargada passada per paràmetre
+    QString paddingLeft( QString text , int length );
 };
 
 }; // end namespace
