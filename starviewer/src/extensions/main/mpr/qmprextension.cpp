@@ -14,6 +14,8 @@
 #include "logging.h"
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
+#include  "drawer.h"
+
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
@@ -347,6 +349,10 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
             rotateAxialViewAxisActor();
         else if( m_state == PUSHING )
             pushAxialViewAxisActor();
+        
+        if ( m_pickedActorPlaneSource == m_coronalPlaneSource && m_coronal2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
+            m_coronal2DView->getDrawer()->removeAllPrimitives();
+            
     break;
 
     default:
@@ -385,6 +391,10 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
             else
                 pushSagitalViewAxialAxisActor();
         }
+        
+        if ( m_pickedActorPlaneSource == m_coronalPlaneSource && m_coronal2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
+            m_coronal2DView->getDrawer()->removeAllPrimitives();
+        
     break;
 
     default:
