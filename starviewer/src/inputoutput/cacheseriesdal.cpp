@@ -157,7 +157,7 @@ QString CacheSeriesDAL::buildSqlQuerySeries( DicomMask *seriesMask )
     QString sql;
 
     sql = QString("select SerInsUID , SerNum , StuInsUID , SerMod , SerDes , ProNam, SerPath , BodParExa, SerDat , SerTim "
-            " from series where StuInsUID = '%1' order by SerDat , SerTim , SerNum" ).arg( seriesMask->getStudyUID() );
+            " from series where StuInsUID = '%1' order by SerNum" ).arg( seriesMask->getStudyUID() );
 
     return sql;
 }
