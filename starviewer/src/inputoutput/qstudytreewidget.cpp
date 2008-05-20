@@ -171,7 +171,8 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
     expandableItem = new QTreeWidgetItem( item );
 
     item->setIcon(ObjectName, m_iconSeries);
-    item->setText(ObjectName, tr( "Series %1" ).arg(serie->getSeriesNumber()) );
+    //Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+    item->setText(ObjectName, tr( "Series %1" ).arg( paddingLeft( serie->getSeriesNumber() , 4 ) ) );
     item->setText(Modality, serie->getSeriesModality() );
 
     item->setText( Description , serie->getSeriesDescription().simplified() );//treiem els espaics en blanc del davant i darrera
@@ -214,6 +215,7 @@ void QStudyTreeWidget::insertImage( DICOMImage * image )
     QTreeWidgetItem* studyItem, *item;
     bool stop = false;
     int index = 0;
+    QString imageNumber;
 
     studyItem = getStudyItem( image->getStudyUID() , image->getPacsAETitle() );
 
@@ -229,7 +231,9 @@ void QStudyTreeWidget::insertImage( DICOMImage * image )
     item = new QTreeWidgetItem( studyItem->child( index ) );
 
     item->setIcon( ObjectName, m_iconSeries );
-    item->setText( ObjectName , tr( "Image %1" ).arg(image->getImageNumber()) );
+
+    imageNumber.setNum( image->getImageNumber() , 10 );
+    item->setText( ObjectName , tr( "Image %1" ).arg( paddingLeft( imageNumber , 4 ) ) );//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
 
     item->setText( PACSAETitle , image->getPacsAETitle() );
     item->setText( UID , image->getSOPInstanceUID() );
@@ -579,4 +583,20 @@ bool QStudyTreeWidget::isItemImage( QTreeWidgetItem *item )
     return item->text( Type ) == "IMAGE";
 }
 
+QString QStudyTreeWidget::paddingLeft( QString text, int length )
+{
+    QString paddedText;
+
+    if (text.length() < length)
+    {
+        for (int index = text.length(); index < length; index++)
+        {
+            paddedText += " ";
+        }
+        paddedText += text;
+    }
+    else paddedText = text;
+
+    return paddedText;
+}
 };
