@@ -135,9 +135,9 @@ void PatientBrowserMenuList::setSelectedSerie( QString serieUID )
         if( m_seriesList->value( i )->getSerie()->getInstanceUID() == serieUID )
         {
             find = true;
-            QFont font = ( m_seriesList->value( i )->font() );
-            font.setBold( true );
-            m_seriesList->value( i )->setFont( font );
+//             QFont font = ( m_seriesList->value( i )->font() );
+//             font.setBold( true );
+            m_seriesList->value( i )->setFontBold();
         }
         i++;
     }

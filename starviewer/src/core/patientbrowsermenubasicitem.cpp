@@ -34,6 +34,8 @@ void PatientBrowserMenuBasicItem::setSerie( Series * serie )
         .arg( serie->getBodyPartExamined() )
         .arg( serie->getViewPosition() )
         );
+
+    setStyleSheet( "border: 1px solid gray; border-radius: 2;" );
 }
 
 Series *  PatientBrowserMenuBasicItem::getSerie()
@@ -47,11 +49,11 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     {
         if( this->font().bold() )
         {
-            setStyleSheet( "background-color: rgba(85, 160, 255, 128); font-weight: bold" );
+            setStyleSheet( "border: 1px solid gray; border-radius: 2; background-color: rgba(85, 160, 255, 128); font-weight: bold;" );
         }
         else
         {
-            setStyleSheet( "background-color: rgba(85, 160, 255, 128);" );
+            setStyleSheet( "border: 1px solid gray; border-radius: 2; background-color: rgba(85, 160, 255, 128);" );
         }
         emit isActive( m_serie );
     }
@@ -63,11 +65,11 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     {
         if( this->font().bold() )
         {
-            setStyleSheet( "font-weight: bold;" );
+            setStyleSheet( "border: 1px solid gray; border-radius: 2; font-weight: bold" );
         }
         else
         {
-            setStyleSheet("");
+            setStyleSheet( "border: 1px solid gray; border-radius: 2;" );
         }
     }
     else if ( event->type() == QEvent::Hide || event->type() == QEvent::Close )
@@ -77,4 +79,10 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
 
     return QLabel::event( event );
 }
+
+void PatientBrowserMenuBasicItem::setFontBold()
+{
+    setStyleSheet( "border: 1px solid gray; border-radius: 2;font-weight: bold" );
+}
+
 }
