@@ -33,6 +33,9 @@ public:
     /// Obtenim la serie que es representa
     Series *  getSerie();
 
+    /// La posem en negreta per marcar que es la que s'esta visualitzant
+    void setFontBold();
+
 signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void isActive(Series*);
