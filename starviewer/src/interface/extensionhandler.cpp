@@ -162,6 +162,12 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
     unsigned int numberOfPatients = fillerInput->getNumberOfPatients();
 
+    if (numberOfPatients == 0)
+    {
+        QMessageBox::critical(0, tr("Starviewer"), tr("Sorry, it seems that there is no patient data we can load."));
+        ERROR_LOG("Error fent el fill de patientFiller. Ha retornat 0 pacients.");
+    }
+
     DEBUG_LOG( "Labels: " + fillerInput->getLabels().join("; "));
     DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
 
