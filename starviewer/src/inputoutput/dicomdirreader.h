@@ -34,7 +34,7 @@ public:
      * @param dicomdirPath directori on es troba el dicomdir
      * @return estat del mètode
      */
-    Status open( QString dicomdirFilePath );
+    Status open(const QString &dicomdirFilePath);
 
     /** Retorna la llista d'estudis que conté el dicomdir
       * @param studyList llista amb els estudis que conté el dicomdir
