@@ -1589,7 +1589,7 @@ void QVSIReconstructionExtension::computeVSI( )
                     if(rSEMeanIter.Get()>0 && rGEMeanIter.Get()>0 )//&& rGEMeanIter.Get()<rSEMeanIter.Get())
                     {
                         //Compt multiplicat per mult per millor visulaització
-                        mapIter.Set(mult*1.736*sqrt((psiIter.Get()/mean)*ADC)*(rGEMeanIter.Get()/pow(rSEMeanIter.Get(),1.5)));
+                        mapIter.Set(mult*1.736*sqrt((psiIter.Get()/mean)*ADC)*(rGEMeanIter.Get()/pow(rSEMeanIter.Get(),1.5f)));
                         //std::cout<<"+"<<" ("<<mapIter.Get()<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)*(rGEMeanIter.Get()/pow(rSEMeanIter.Get(),1.5))<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)<<" , "<<rGEMeanIter.Get()<<","<<rSEMeanIter.Get()<<","<<pow(rSEMeanIter.Get(),1.5)<<")";
                         if(mapIter.Get()>500){
                             //std::cout<<std::endl<<"-"<<" ("<<mapIter.Get()<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)*(rGEMeanIter.Get()/pow(rSEMeanIter.Get(),1.5))<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)<<" , "<<rGEMeanIter.Get()<<","<<rSEMeanIter.Get()<<","<<pow(rSEMeanIter.Get(),1.5)<<")";
