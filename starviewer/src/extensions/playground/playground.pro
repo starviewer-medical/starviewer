@@ -6,6 +6,7 @@ SUBDIRS = diffusionperfusionsegmentation \
           edemasegmentation \
           landmarkregistration \
           strokesegmentation \
+          vsireconstruction \
           optimalviewpoint \
           rectumsegmentation \
           volume3dviewtesting \
