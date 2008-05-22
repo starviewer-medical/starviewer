@@ -166,6 +166,7 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     {
         QMessageBox::critical(0, tr("Starviewer"), tr("Sorry, it seems that there is no patient data we can load."));
         ERROR_LOG("Error fent el fill de patientFiller. Ha retornat 0 pacients.");
+        return;
     }
 
     DEBUG_LOG( "Labels: " + fillerInput->getLabels().join("; "));
