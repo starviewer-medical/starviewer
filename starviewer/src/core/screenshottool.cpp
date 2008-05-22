@@ -21,6 +21,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
+#include <QString>
 
 namespace udg {
 
@@ -93,9 +94,15 @@ void ScreenShotTool::screenShot()
             delete saveAsDialog;
             return;
         }
-
+        
         fileName = fileNames.first();
-
+                                
+        //mirem que el nom del fitxer no contingui coses com: nom.png, és a dir, que no es mostri l'extensió
+        QString selectedExtension = selectedFilter.mid(selectedFilter.length() - 5, 4);
+        
+        if ( fileName.endsWith( selectedExtension ) )
+            fileName.remove( fileName.lastIndexOf( selectedExtension ), 4 ); 
+        
         //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
         m_lastScreenShotPath = saveAsDialog->directory().path();
 
@@ -136,6 +143,8 @@ void ScreenShotTool::screenShot()
             DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
             return;
         }
+        
+        
 
         m_windowToImageFilter->Update();
         m_windowToImageFilter->Modified();
