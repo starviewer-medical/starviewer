@@ -36,15 +36,16 @@ DICOMDIRReader::~DICOMDIRReader()
 {
 }
 
-Status DICOMDIRReader::open( QString dicomdirFilePath )
+Status DICOMDIRReader::open(const QString &dicomdirFilePath)
 {
     Status state;
 
     //no existeix cap comanda per tancar un dicomdir, quan en volem obrir un de nou, l'única manera d'obrir un nou dicomdir, és a través del construtor de DcmDicomDir, passant el path per paràmetre, per això si ja existia un Dicomdir ober, fem un delete, per tancar-lo
     if ( m_dicomdir != NULL) delete m_dicomdir;
 
-    //Guardem el directori on es troba el dicomdir, el path que ens passen és amb el fitxer, per això tallem fins a la última ocurrència '/'
-    m_dicomdirAbsolutePath =  dicomdirFilePath.left( dicomdirFilePath.lastIndexOf('/') );
+    //Guardem el directori on es troba el dicomdir
+    QFileInfo dicomdirFileInfo(dicomdirFilePath);
+    m_dicomdirAbsolutePath =  dicomdirFileInfo.absolutePath();
 
     /* L'estàndard del dicom indica que l'estructura del dicomdir ha d'estar guardada en un fitxer anomeant "DICOMDIR". En linux per 
        defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules, per tant 
@@ -52,7 +53,7 @@ Status DICOMDIRReader::open( QString dicomdirFilePath )
        dicomdir es dirà "dicomdir" en minúscules, per aquest motiu busquem el fitxer dicomdir tan en majúscules com minúscules
     */
     //busquem el nom del fitxer que conté les dades del dicomdir
-    m_dicomdirFileName = dicomdirFilePath.right( dicomdirFilePath.length() - dicomdirFilePath.lastIndexOf( '/' ) - 1);
+    m_dicomdirFileName = dicomdirFileInfo.fileName();
 
     //Comprovem si el sistema de fitxers treballa amb nom en minúscules o majúscules
     if ( m_dicomdirFileName == m_dicomdirFileName.toUpper() )
