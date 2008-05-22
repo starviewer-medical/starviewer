@@ -160,6 +160,8 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
     patientFiller.fill( fillerInput );
 
+    progressDialog.close();
+
     unsigned int numberOfPatients = fillerInput->getNumberOfPatients();
 
     if (numberOfPatients == 0)
