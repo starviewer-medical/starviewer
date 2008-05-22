@@ -34,8 +34,6 @@ class StudyListSingleton;
 class QueryScreen : public QDialog , private Ui::QueryScreenBase{
 Q_OBJECT
 public:
-    enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
-
     /**Constuctor de la classe
     * @param parent
     * @return
@@ -46,6 +44,32 @@ public:
     ~QueryScreen();
 
 public slots:
+    /// Obre un dicomdir
+    void openDicomdir();
+
+    /// Actualitza la configuració que l'usuari hagi pogut canviar des del diàleg de configuració
+    void updateConfiguration(const QString &configuration);
+
+    /// Si la finestra no és visible o està radera d'una altra, la fa visible i la porta al davant de les finestres.
+    void bringToFront();
+
+signals:
+    /**
+     * Envia un senyal amb els fitxers que s'han de processar per a carregar les dades
+     * @param files Llista d'arxius a processar
+     * @param defaultStudyUID estudi que es voldrà veure per defecte
+     * @param defaultSeriesUID serie que es voldrà veure per defecte
+     * @param defaultImageInstance imatge que es voldrà veure per defecte
+     */
+    void processFiles( QStringList files, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance );
+
+protected :
+    /** Event que s'activa al tancar al rebren un event de tancament
+     * @param event de tancament
+     */
+    void closeEvent( QCloseEvent* event );
+
+private slots:
 
     /// Neteja els LineEdit del formulari
     void clearTexts();
@@ -115,10 +139,6 @@ public slots:
      */
     void convertToDicomdir();
 
-    /** Obre un dicomdir
-     */
-    void openDicomdir();
-
     /** guarda els estudis seleccionats a m_studyTreeWidgetCache al PACS
      */
     void storeStudiesToPacs();
@@ -141,41 +161,6 @@ public slots:
      */
     void textOtherModalityEdited();
 
-    /// Actualitza la configuració que l'usuari hagi pogut canviar des del diàleg de configuració
-    void updateConfiguration(const QString &configuration);
-
-    /// Si la finestra no és visible o està radera d'una altra, la fa visible i la porta al davant de les finestres.
-    void bringToFront();
-
-signals:
-    /// Signal similar a viewStudy(), però en aquest cas enviem tota la estructura PatientFillerInput que es continuarà processant per la classe que reculli aquest signal
-    void viewPatient( PatientFillerInput *input, QString studyUID, QString seriesUID );
-
-    /// Signal cap a QSeriesListWidget, que neteja la llista de sèries del Widget
-    void clearSeriesListWidget();
-
-    /// Signal que s'emet quan s'escull veure un Key Image Note. Es passa el path d'aquest
-    void viewKeyImageNote( const QString & path);
-
-    /// Signal que s'emet quan s'escull veure un Presentation State. Es passa el path d'aquest
-    void viewPresentationState( const QString & path);
-
-    /**
-     * Envia un senyal amb els fitxers que s'han de processar per a carregar les dades
-     * @param files Llista d'arxius a processar
-     * @param defaultStudyUID estudi que es voldrà veure per defecte
-     * @param defaultSeriesUID serie que es voldrà veure per defecte
-     * @param defaultImageInstance imatge que es voldrà veure per defecte
-     */
-    void processFiles( QStringList files, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance );
-
-protected :
-    /** Event que s'activa al tancar al rebren un event de tancament
-     * @param event de tancament
-     */
-    void closeEvent( QCloseEvent* event );
-
-private slots:
     void updateOperationsInProgressMessage();
 
     /**
@@ -200,6 +185,8 @@ private slots:
     void viewFromQSeriesListWidget();
 
 private:
+    enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
+
     ///Connecta els signals i slots pertinents
     void createConnections();
 
