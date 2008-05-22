@@ -71,6 +71,13 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
     m_readDicomdir.readStudies( studyList , mask );
     studyList.firstStudy();
 
+	if (studyList.end())//comprovem que s'hagin trobat estudis per importar
+	{
+		ERROR_LOG( "NO S'HAN TROBAT ESTUDIS PER IMPORTAR" );
+		state.setStatus( "No s'han trobat estudis per importar" , false , 1310 );
+		return state;
+	}
+
     study = studyList.getStudy();
     study.setAbsPath( studyPath );
 
