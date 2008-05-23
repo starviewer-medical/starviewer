@@ -19,6 +19,7 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
  : QDialog( parent )
 {
     setupUi( this );
+    setWindowFlags( (this->windowFlags() | Qt::WindowMaximizeButtonHint)  ^ Qt::WindowContextHelpButtonHint  );
     m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte l'UID de l'estudi
     m_treeRetrieveStudy->setColumnHidden( 10 , true );//Indica quin tipus d'operació és
 
