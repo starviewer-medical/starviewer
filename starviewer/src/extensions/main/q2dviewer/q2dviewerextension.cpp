@@ -768,10 +768,17 @@ void Q2DViewerExtension::validePhases()
 
 void Q2DViewerExtension::updateDICOMInformationButton( int view )
 {
-    if( view == Q2DViewer::Axial )
-        m_dicomDumpToolButton->setEnabled(true);
+    if( m_selectedViewer->getViewer()->getInput() )
+    {
+        if( view == Q2DViewer::Axial )
+            m_dicomDumpToolButton->setEnabled(true);
+        else
+            m_dicomDumpToolButton->setEnabled(false);
+    }
     else
+    {
         m_dicomDumpToolButton->setEnabled(false);
+    }
 }
 
 void Q2DViewerExtension::readSettings()
