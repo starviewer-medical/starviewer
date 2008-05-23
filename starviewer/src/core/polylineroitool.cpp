@@ -47,8 +47,6 @@ PolylineROITool::~PolylineROITool()
 
     if ( !m_closingPolyline.isNull() )
         delete m_closingPolyline;
-
-    m_2DViewer->getDrawer()->refresh();
 }
 
 void PolylineROITool::handleEvent( long unsigned eventID )
@@ -62,7 +60,7 @@ void PolylineROITool::handleEvent( long unsigned eventID )
                 m_2DViewer->getDrawer()->refresh();
 
                 deleteRepeatedPoints();
-                
+
                 if ( m_2DViewer->getInteractor()->GetRepeatCount() == 1 && m_mainPolyline->getNumberOfPoints() > 2 )
                 {
                     closeForm();
@@ -84,35 +82,35 @@ void PolylineROITool::handleEvent( long unsigned eventID )
 void PolylineROITool::deleteRepeatedPoints()
 {
     /*
-        si s'ha anotat el pirmer o el segon punt de la polilinia fent doble clic, aquest punt apareixerà repetit dins de la 
+        si s'ha anotat el pirmer o el segon punt de la polilinia fent doble clic, aquest punt apareixerà repetit dins de la
         llista de punts de la polilinia, pertant cal truere'ls per tal de tenir un bon funcionament de la tool.
     */
     int i;
     double equals = true;
     double *first = m_mainPolyline->getPoint(0);
     double *second = m_mainPolyline->getPoint(1);
-    
+
     for ( i = 0; i < 3 && equals; i++ )
     {
         equals = first[i] == second[i];
     }
-    
+
     if ( equals ) //el primer punt i el segon són el mateix, per tant n'esborrem un
         m_mainPolyline->removePoint(0);
-    
+
     // ara cal mirar el mateix pel punts segon i tercer
     equals = true;
     first = m_mainPolyline->getPoint(1);
     second = m_mainPolyline->getPoint(2);
-    
+
     for ( i = 0; i < 3 && equals; i++ )
     {
         equals = first[i] == second[i];
     }
-    
+
     if ( equals ) //el primer punt i el segon són el mateix, per tant n'esborrem un
         m_mainPolyline->removePoint(1);
-                    
+
 }
 
 void PolylineROITool::annotateNewPoint()
