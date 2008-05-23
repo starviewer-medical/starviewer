@@ -128,16 +128,16 @@ void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
 
     action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
     (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
-    
+
     action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/databaseRemove.png") , tr( "&Delete" ) , this , SLOT( deleteSelectedStudiesInCache() ) , Qt::Key_Delete );
     (void) new QShortcut( action->shortcut() , this , SLOT( deleteSelectedStudiesInCache() ) );
-    
+
     action = m_contextMenuQStudyTreeWidgetCache.addAction( tr( "Send to DICOMDIR List" ) , this , SLOT( convertToDicomdir() ) , tr( "Ctrl+M" ) );
     (void) new QShortcut( action->shortcut() , this , SLOT( convertToDicomdir() ) );
 
     action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/store.png") , tr( "Store to PACS" ) , this , SLOT( storeStudiesToPacs() ) , tr( "Ctrl+S" ) );
     (void) new QShortcut( action->shortcut() , this , SLOT( storeStudiesToPacs() ) );
-    
+
     m_studyTreeWidgetCache->setContextMenu( & m_contextMenuQStudyTreeWidgetCache );//Especifiquem que és el menú per la cache
 }
 
@@ -147,7 +147,7 @@ void QueryScreen::CreateContextMenuQStudyTreeWidgetPacs()
 
     action = m_contextMenuQStudyTreeWidgetPacs.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
     (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
-    
+
     action = m_contextMenuQStudyTreeWidgetPacs.addAction( QIcon(":/images/retrieve.png") , tr("&Retrieve") , this , SLOT( retrieve() ) , tr("Ctrl+R") );
     (void) new QShortcut( action->shortcut() , this , SLOT( retrieve() ) );
 
@@ -160,7 +160,7 @@ void QueryScreen::CreateContextMenuQStudyTreeWidgetDicomdir()
 
     action = m_contextMenuQStudyTreeWidgetDicomdir.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
     (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
-    
+
     action = m_contextMenuQStudyTreeWidgetDicomdir.addAction( QIcon(":/images/retrieve.png") , tr("&Retrieve") , this , SLOT( importDicomdir() ) , tr("Ctrl+R") );
     (void) new QShortcut( action->shortcut() , this , SLOT( retrieve() ) );
 
@@ -297,7 +297,7 @@ void QueryScreen::createConnections()
     connect( m_studyTreeWidgetCache, SIGNAL( currentStudyChanged() ) , this , SLOT( setSeriesToSeriesListWidgetCache() ) );
     connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( setCurrentSeries(QString) ) );
     connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), this, SLOT( viewFromQSeriesListWidget() ) );
-    
+
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect( &m_qexecuteOperationThread, SIGNAL( viewStudy( QString , QString , QString ) ), SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
 
@@ -458,7 +458,7 @@ void QueryScreen::updateConfiguration(const QString &configuration)
 void QueryScreen::bringToFront()
 {
     this->show();
-    this->raise(); 
+    this->raise();
     this->activateWindow();
 }
 
@@ -1338,9 +1338,9 @@ void QueryScreen::showOperationStateScreen()
     {
         m_operationStateScreen->setVisible( true );
     }
-    else 
+    else
     {
-        m_operationStateScreen->raise(); 
+        m_operationStateScreen->raise();
         m_operationStateScreen->activateWindow();
     }
 }
@@ -1714,6 +1714,17 @@ void QueryScreen::showDatabaseErrorMessage( const Status &state )
     {
         QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code() ) );
     }
+}
+
+
+bool QueryScreen::isDownloading()
+{
+    return m_qexecuteOperationThread.isRunning();
+}
+
+void QueryScreen::stopDownloading()
+{
+    m_qexecuteOperationThread.terminate();
 }
 
 };
