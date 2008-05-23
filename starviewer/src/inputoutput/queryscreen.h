@@ -43,6 +43,12 @@ public:
     ///Destructor de la classe
     ~QueryScreen();
 
+    /// Saber si està descarregant
+    bool isDownloading();
+
+    /// Aturar la operació de descarrega
+    void stopDownloading();
+
 public slots:
     /// Obre un dicomdir
     void openDicomdir();
@@ -266,7 +272,7 @@ private:
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();
 
-    ///Crear el menú contextual del QStudyTreeWidgetCache 
+    ///Crear el menú contextual del QStudyTreeWidgetCache
     void CreateContextMenuQStudyTreeWidgetCache();
 
     ///Crear el menú contextual del QStudyTreeWidgetPacs
