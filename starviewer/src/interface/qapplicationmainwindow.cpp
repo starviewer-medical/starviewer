@@ -357,7 +357,7 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
     unsigned int count = 0;
     foreach(QWidget *widget, QApplication::topLevelWidgets())
     {
-        if (QApplicationMainWindow *mainWindow = qobject_cast<QApplicationMainWindow *>(widget))
+        if( qobject_cast<QApplicationMainWindow *>(widget) )
         {
             ++count;
         }
