@@ -41,6 +41,8 @@ void Q2DViewerWidget::createConnections()
     connect( m_slider , SIGNAL( valueChanged( int ) ) , m_spinBox , SLOT( setValue( int ) ) );
     connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
+    // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider o l'spin box, el viewer es marqui com a seleccionat
+    connect( m_slider , SIGNAL( valueChanged( int ) ) , SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL ( selected() ), SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateInput( Volume *) ) );
 
