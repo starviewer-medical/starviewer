@@ -68,6 +68,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
 
 QApplicationMainWindow::~QApplicationMainWindow()
 {
+    writeSettings();
     m_extensionHandler->killBill();
     delete m_extensionWorkspace;
     delete m_extensionHandler;
@@ -378,6 +379,7 @@ ExtensionWorkspace* QApplicationMainWindow::getExtensionWorkspace()
 
 void QApplicationMainWindow::closeEvent(QCloseEvent *event)
 {
+    // \TODO aquí hauríem de controlar si l'aplicació està fent altres tasques pendents que s'haurien de finalitzar abans de tancar
     // Comprovem que no s'estigui baixant res del pacs
     if( QueryScreenSingleton::instance()->isDownloading() )
     {
@@ -386,8 +388,6 @@ void QApplicationMainWindow::closeEvent(QCloseEvent *event)
         if( response == 0 )
         {
             QueryScreenSingleton::instance()->stopDownloading();
-            writeSettings();
-            // \TODO aquí hauríem de controlar si l'aplicació està fent altres tasques pendents que s'haurien de finalitzar abans de tancar
             event->accept();
         }
         else
