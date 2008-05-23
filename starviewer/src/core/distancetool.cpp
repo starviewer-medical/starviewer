@@ -41,7 +41,6 @@ DistanceTool::~DistanceTool()
     if ( m_line )
     {
         delete m_line;
-        m_2DViewer->getDrawer()->refresh();
     }
 }
 
