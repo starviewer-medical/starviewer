@@ -120,6 +120,19 @@ vtkRenderer *Q3DViewer::getRenderer()
     return m_renderer;
 }
 
+void Q3DViewer::getCurrentWindowLevel( double wl[2] )
+{
+    // TODO estem obligats a implementar-lo. De moment retornem 0,0
+    wl[0] = wl[1] = 0.0;
+}
+
+void Q3DViewer::resetView( CameraOrientationType view )
+{
+    m_currentOrientation = view;
+    //TODO replantejar si necessitem aquest mètode i el substituïm per aquest mateix
+    resetOrientation();
+}
+
 void Q3DViewer::setRenderFunction(RenderFunction function)
 {
     m_renderFunction = function;
@@ -193,9 +206,9 @@ void Q3DViewer::render()
     {
         switch( m_renderFunction )
         {
-        case Contouring:   
+        case Contouring:
             renderContouring();
-        break;            
+        break;
         case RayCasting:
             renderRayCasting();
         break;
@@ -232,6 +245,11 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
     m_transferFunction = transferFunction;
     m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
     m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
+}
+
+void Q3DViewer::setWindowLevel( double, double )
+{
+    // TODO estem obligats a implementar-lo.
 }
 
 void Q3DViewer::resetOrientation()
@@ -357,36 +375,36 @@ void Q3DViewer::renderContouring()
         m_smooth->SetDimensionality( 3 );
         m_smooth->SetRadiusFactor( 2 );
         m_smooth->SetInput( m_shrink->GetOutput() );
-        
+
         vtkContourFilter *contour = vtkContourFilter::New();
         contour->SetInputConnection( m_smooth->GetOutputPort());
         contour->GenerateValues( 1, 30, 30);
         contour->ComputeScalarsOff();
         contour->ComputeGradientsOff();
-        
+
         vtkDecimatePro *decimator = vtkDecimatePro::New();
         decimator->SetInputConnection( contour->GetOutputPort() );
         decimator->SetTargetReduction( 0.9 );
         decimator->PreserveTopologyOn();
-        
+
         vtkReverseSense *reverse = vtkReverseSense::New();
         reverse->SetInputConnection(decimator->GetOutputPort());
         reverse->ReverseCellsOn();
         reverse->ReverseNormalsOn();
-    
+
         vtkPolyDataMapper *m_polyDataMapper = vtkPolyDataMapper::New();
-        
+
         m_polyDataMapper->SetInputConnection( reverse->GetOutputPort() );
         m_polyDataMapper->ScalarVisibilityOn();
         m_polyDataMapper->ImmediateModeRenderingOn();
-    
+
         vtkActor *m_3DActor = vtkActor::New();
         m_3DActor->SetMapper( m_polyDataMapper );
         m_3DActor->GetProperty()->SetColor(1,0.8,0.81);
-        
+
         m_renderer->AddActor( m_3DActor );
         m_renderer->Render();
-        
+
         decimator->Delete();
         m_3DActor->Delete();
         m_polyDataMapper->Delete();

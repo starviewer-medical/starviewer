@@ -69,6 +69,7 @@ public:
     vtkLookupTable *getVtkLUT();
 
     void getCurrentWindowLevel( double wl[2] );
+    void resetView( CameraOrientationType view );
 
 signals:
     /// senyal que indica que algun dels plans han canviat

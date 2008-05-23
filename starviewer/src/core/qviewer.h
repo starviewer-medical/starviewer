@@ -176,7 +176,7 @@ public slots:
 
     /// Activa o desactiva que el manager escolti els events per processar tools.
     /// \deprecated quan s'integri el nou model de tools
-    virtual void setEnableTools( bool enable ){};
+    virtual void setEnableTools( bool ){};
     virtual void enableTools(){};
     virtual void disableTools(){};
 
@@ -193,12 +193,14 @@ public slots:
     void getDefaultWindowLevel( double wl[2] );
 
     // TODO convertir en mètode virtual pur?
+    // TODO Si tenim un getDefaultWindowLevel = per tothom, el mateix hauria d'haver per aquest mètode
+    // Caldria reunificar en una mateixa base tot el tractament de window level
     /// Obté el window level actual de la imatge
-    virtual void getCurrentWindowLevel( double wl[2] ){};
+    virtual void getCurrentWindowLevel( double wl[2] ) = 0;
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
     // TODO convertir en mètode virtual pur
-    virtual void resetView( CameraOrientationType view ){};
+    virtual void resetView( CameraOrientationType view ) = 0;
     virtual void resetViewToAxial(){};
     virtual void resetViewToSagital(){};
     virtual void resetViewToCoronal(){};
@@ -216,7 +218,7 @@ public slots:
 
     /// Ajusta el window/level
     // TODO convertir en mètode virtual pur?
-    virtual void setWindowLevel( double window , double level ){};
+    virtual void setWindowLevel( double window , double level ) = 0;
 
     /// Reseteja el window level al que tingui per defecte el volum
     // TODO convertir en mètode virtual pur?

@@ -51,6 +51,18 @@ void OptimalViewpointViewer::setInput( Volume * volume )
     m_mainVolume = volume;
 }
 
+void OptimalViewpointViewer::getCurrentWindowLevel( double wl[2] )
+{
+    // TODO estem obligats a implementar-lo. De moment retornem 0,0
+    wl[0] = wl[1] = 0.0;
+}
+
+void OptimalViewpointViewer::resetView( CameraOrientationType view )
+{
+    // TODO estem obligats a implementar-lo. De moment només assignem variable
+    // però caldria aplicar la orientació que se'ns demana
+    view = view;
+}
 
 void OptimalViewpointViewer::render()
 {
@@ -87,5 +99,9 @@ void OptimalViewpointViewer::reset()
     // de moment res
 }
 
+void OptimalViewpointViewer::setWindowLevel( double, double )
+{
+    // TODO estem obligats a implementar-lo.
+}
 
 }

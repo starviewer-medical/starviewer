@@ -40,6 +40,9 @@ public:
     /// Indiquem les dades d'entrada.
     virtual void setInput( Volume * volume );
 
+    void getCurrentWindowLevel( double wl[2] );
+    void resetView( CameraOrientationType view );
+
 public slots:
 
     /// Força l'execució de la visualització.
@@ -58,6 +61,7 @@ public slots:
     /// Crida que reinicia a l'estat incial el visor.
     virtual void reset();
 
+    void setWindowLevel( double window, double level );
 private:
 
     vtkRenderer * m_renderer;
