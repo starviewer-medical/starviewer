@@ -58,23 +58,26 @@ void AngleTool::handleEvent( long unsigned eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
 
-            if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
+            if( m_2DViewer->getInput() )
             {
-                if ( m_state == NONE )
-                    this->annotateFirstPoint();
-                else if ( m_state == FIRST_POINT_FIXED )
+                if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
                 {
-                    this->fixFirstSegment();
-                    this->findInitialDegreeArc();
+                    if ( m_state == NONE )
+                        this->annotateFirstPoint();
+                    else if ( m_state == FIRST_POINT_FIXED )
+                    {
+                        this->fixFirstSegment();
+                        this->findInitialDegreeArc();
+                    }
+                    else
+                    {
+                        //voldrem enregistrar l'últim punt, pertant posem l'estat a none
+                        m_state = NONE;
+                        computeAngle();
+                        delete m_circumferencePolyline;
+                    }
+                    m_2DViewer->getDrawer()->refresh();
                 }
-                else
-                {
-                    //voldrem enregistrar l'últim punt, pertant posem l'estat a none
-                    m_state = NONE;
-                    computeAngle();
-                    delete m_circumferencePolyline;
-                }
-                m_2DViewer->getDrawer()->refresh();
             }
         break;
 
