@@ -587,6 +587,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
         // és possible que en alguns moments ( quan es carrega el pacient i surten altres diàlegs )
         // no hi hagi window activa o que aquesta ni sigui una QApplicationMainWindow i ho sigui un diàleg,
         // per tant, ens pot tornar NULL i en algunes ocasions ens feia petar l'aplicació. Així ens curem en salut
+        // TODO estaria bé comprovar
         QApplicationMainWindow *mainWindow = QApplicationMainWindow::getActiveApplicationMainWindow();
         if( !mainWindow )
             return;

@@ -47,6 +47,9 @@ public:
 
     virtual vtkRenderer *getRenderer();
 
+    void getCurrentWindowLevel( double wl[2] );
+    void resetView( CameraOrientationType view );
+
 public slots:
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function);
@@ -56,7 +59,7 @@ public slots:
     void setRenderFunctionToTexture2D();
     void setRenderFunctionToTexture3D();
     void setRenderFunctionToContouring();
-    
+
     void resetViewToAxial();
     void resetViewToSagital();
     void resetViewToCoronal();
@@ -71,11 +74,12 @@ public slots:
 
     /// Li assignem la funció de transferència que volem aplicar
     void setTransferFunction( TransferFunction *transferFunction );
+    void setWindowLevel( double window , double level );
 
 private:
     /// fa la visualització per raycasting
     void renderRayCasting();
-    
+
     /// fa la visualització per contouring
     void renderContouring();
 
