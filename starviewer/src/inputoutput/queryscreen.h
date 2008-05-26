@@ -43,12 +43,6 @@ public:
     ///Destructor de la classe
     ~QueryScreen();
 
-    /// Saber si està descarregant
-    bool isDownloading();
-
-    /// Aturar la operació de descarrega
-    void stopDownloading();
-
 public slots:
     /// Obre un dicomdir
     void openDicomdir();
