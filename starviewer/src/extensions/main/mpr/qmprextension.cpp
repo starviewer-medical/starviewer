@@ -14,7 +14,7 @@
 #include "logging.h"
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
-#include  "drawer.h"
+#include "drawer.h"
 
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
@@ -325,7 +325,6 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
 
 void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
 {
-    QString tool;
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
@@ -350,13 +349,13 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
             rotateAxialViewAxisActor();
         else if( m_state == PUSHING )
             pushAxialViewAxisActor();
-        
+
         if ( m_pickedActorPlaneSource == m_coronalPlaneSource && m_coronal2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
             m_coronal2DView->getDrawer()->removeAllPrimitives();
-        
+
         if ( m_pickedActorPlaneSource == m_sagitalPlaneSource && m_sagital2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
             m_sagital2DView->getDrawer()->removeAllPrimitives();
-            
+
     break;
 
     default:
@@ -395,10 +394,10 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
             else
                 pushSagitalViewAxialAxisActor();
         }
-        
+
         if ( m_pickedActorPlaneSource == m_coronalPlaneSource && m_coronal2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
             m_coronal2DView->getDrawer()->removeAllPrimitives();
-        
+
     break;
 
     default:
