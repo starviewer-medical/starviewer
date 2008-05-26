@@ -1656,7 +1656,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
                         imagePlane->setColumnDirectionVector( columnVector[0], columnVector[1], columnVector[2] );
                     }
 
-                    imagePlane->setSpacing( spacing[1], image->getSliceThickness() );
+                    imagePlane->setSpacing( spacing[1], spacing[2] );
                     imagePlane->setThickness( spacing[0] );
                     imagePlane->setRows( dimensions[2] );
                     imagePlane->setColumns( dimensions[1] );
@@ -1693,7 +1693,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
                     }
 
 
-                    imagePlane->setSpacing( spacing[0], image->getSliceThickness() );
+                    imagePlane->setSpacing( spacing[0], spacing[2] );
                     imagePlane->setThickness( spacing[1] );
                     imagePlane->setRows( dimensions[2] );
                     imagePlane->setColumns( dimensions[0] );
