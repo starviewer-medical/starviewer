@@ -69,10 +69,9 @@ Status CachePool::updatePoolTotalSize( int space )
 {
     int i;
     Status state;
-    char size[25];
     QString sql;
-    unsigned long long spaceBytes;
-
+    qulonglong spaceBytes;
+	
     //sqlite no permet en un update entre valors mes gran que un int, a través de la interfície c++ com guardem la mida en bytes fem un string i hi afegim multiplicar l'espai per 1024*1024, per passar a bytes
 
     if ( !m_DBConnect->connected() )
@@ -82,9 +81,7 @@ Status CachePool::updatePoolTotalSize( int space )
 
     spaceBytes = space;
     spaceBytes = spaceBytes * 1024 * 1024; //convertim els Mb en bytes, ja que es guarden en bytes les unitats a la base de dades
-
-    sprintf( size , "%Li" , spaceBytes ); //convertim l'espai en bytes a string %Li significa long integer
-    sql = QString("Update Pool Set Space = %1 where Param = 'POOLSIZE'").arg( size );
+    sql = QString("Update Pool Set Space = %1 where Param = 'POOLSIZE'").arg( spaceBytes );
 
     m_DBConnect->getLock();
     i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable( sql ), 0 , 0 , 0 );
