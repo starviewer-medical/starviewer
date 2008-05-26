@@ -34,9 +34,9 @@ public:
     /**
         Activa/desactiva l'emissió de la senyal "parameterChanged(int)"
     */
-    void disableIndividualSincronization();
-    void enableIndividualSincronization();
-    bool isIndividualSincronizationEnabled() const { return m_individualSincronization; };
+    void disableIndividualSynchronization();
+    void enableIndividualSynchronization();
+    bool isIndividualSynchronizationEnabled() const { return m_individualSynchronization; };
     
 public slots:
     /**
@@ -52,7 +52,7 @@ public slots:
 
 private:
     /// indicarà si els paràmetres s'actualitzen 'en viu' o d'una tacada
-    bool m_individualSincronization;
+    bool m_individualSynchronization;
 };
 
 };  

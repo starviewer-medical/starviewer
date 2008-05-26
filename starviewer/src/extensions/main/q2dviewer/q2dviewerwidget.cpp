@@ -199,7 +199,7 @@ void Q2DViewerWidget::sliderPressed()
 	}
 }
 
-void Q2DViewerWidget::desactivaSincronitzacio()
+void Q2DViewerWidget::disableSynchronization()
 {
     //TODO solució temporal per desactivar la tool de sincronitzacio
      m_synchronizeButton->defaultAction()->setChecked( false );
