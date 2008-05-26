@@ -45,7 +45,7 @@ public:
 
     ///Desactiva la sincronització del viewer
     //TODO solució temporal a la desactivacio de la sincronitzacio
-    void desactivaSincronitzacio();
+    void disableSynchronization();
 
 public slots:
     void resetViewToAxial();

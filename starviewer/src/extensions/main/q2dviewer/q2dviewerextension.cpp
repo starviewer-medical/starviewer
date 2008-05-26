@@ -655,7 +655,7 @@ void Q2DViewerExtension::initializeTools()
 
     //TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     //sincronització no té el model de totes les tools
-    connect( m_cursor3DToolButton->defaultAction() , SIGNAL( triggered() ) , SLOT( desactivaSincronitzacio() ) );
+    connect( m_cursor3DToolButton->defaultAction() , SIGNAL( triggered() ) , SLOT( disableSynchronization() ) );
 }
 
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
@@ -817,7 +817,7 @@ void Q2DViewerExtension::synchronization( Q2DViewerWidget * viewer, bool active 
     }
 }
 
-void Q2DViewerExtension::desactivaSincronitzacio()
+void Q2DViewerExtension::disableSynchronization()
 {
     //TODO Mètode per desactivar l'eina i el boto de sincronització dels visualitzadors quan
     // es selecciona l'eina de cursor3D, per solucionar-ho de forma xapussa perquè l'eina de
@@ -829,7 +829,7 @@ void Q2DViewerExtension::desactivaSincronitzacio()
     {
         viewer = m_vectorViewers.value( i );
         m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
-        viewer->desactivaSincronitzacio();
+        viewer->disableSynchronization();
     }
 }
 

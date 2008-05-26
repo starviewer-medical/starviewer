@@ -30,7 +30,7 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     m_transferFunction.addPoint( 255.0, QColor( 255, 255, 255, 255 ) );
     m_inited = false;
 
-    this->disableIndividualSincronization();
+    this->disableIndividualSynchronization();
 
 
 //     connect( m_gradientEditor, SIGNAL( gradientStopsChanged(const QGradientStops &) ),

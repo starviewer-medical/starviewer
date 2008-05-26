@@ -12,21 +12,21 @@ namespace udg {
 QInputParameters::QInputParameters( QWidget *parent )
  : QWidget( parent )
 {
-    m_individualSincronization = true;
+    m_individualSynchronization = true;
 }
 
 QInputParameters::~QInputParameters()
 {
 }
 
-void QInputParameters::disableIndividualSincronization()
+void QInputParameters::disableIndividualSynchronization()
 {
-    m_individualSincronization = false;
+    m_individualSynchronization = false;
 }
 
-void QInputParameters::enableIndividualSincronization()
+void QInputParameters::enableIndividualSynchronization()
 {
-    m_individualSincronization = true;
+    m_individualSynchronization = true;
 }
 
 }; //end namespace udg
