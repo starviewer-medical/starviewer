@@ -72,7 +72,12 @@ void ExtensionHandler::request( int who )
             break;
 
         case 7:
+            // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
+            // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
+            // Queda pendent resoldre-ho de la forma adequada
+            disconnect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString) ), 0,0 );
             QueryScreenSingleton::instance()->bringToFront();
+            connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
             break;
 
         case 8:
@@ -136,7 +141,6 @@ void ExtensionHandler::updateConfiguration(const QString &configuration)
 
 void ExtensionHandler::createConnections()
 {
-    connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
     connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
 }
 
@@ -278,7 +282,7 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
     {
         *(m_mainApp->getCurrentPatient()) += *patient;
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
-        
+
         //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
         if ( m_mainApp->getExtensionWorkspace()->count() == 0 )
             openDefaultExtension();
