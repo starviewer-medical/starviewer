@@ -236,9 +236,11 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
                 // TODO en comptes de fer un hide, posar valors 0,0 a cada coordenada perquè no afecti a altres línies que sí interecten?
                 m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
             }
-
         }
-
+    }
+    else
+    {
+        m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
     }
 }
 
