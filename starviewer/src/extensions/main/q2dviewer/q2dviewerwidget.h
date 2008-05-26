@@ -79,6 +79,10 @@ private slots:
     /// actualitza correctament els valors de l'slider i l'spinbox quan hi ha thick slab
     void updateSliderAndSpinBox();
 
+	/// TODO: Canviar si es fa refactoring del tema "actiu". Ara es posa en un mètode propi per no llençar un signal
+	/// cada vegada que es canvia de llesca
+	void sliderPressed();
+
 private:
     /// El volum principal
     Volume *m_mainVolume;
