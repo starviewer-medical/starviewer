@@ -23,7 +23,6 @@
 #include "qlogviewer.h"
 #include "patient.h"
 #include "qconfigurationdialog.h"
-#include "queryscreen.h"
 
 // Mini - aplicacions
 #include "cacheinstallation.h"
@@ -32,8 +31,6 @@
 #include "extensionmediatorfactory.h"
 
 namespace udg{
-
-typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
 QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     : QMainWindow( parent ), m_patient(0), m_isBetaVersion(false)
@@ -380,22 +377,9 @@ ExtensionWorkspace* QApplicationMainWindow::getExtensionWorkspace()
 void QApplicationMainWindow::closeEvent(QCloseEvent *event)
 {
     // \TODO aquí hauríem de controlar si l'aplicació està fent altres tasques pendents que s'haurien de finalitzar abans de tancar
-    // Comprovem que no s'estigui baixant res del pacs
-    if( QueryScreenSingleton::instance()->isDownloading() )
-    {
-        int response = QMessageBox::information( 0, tr( "Attention" ), tr( "There is an active operation. Pacs is downloading. Do you want stop it?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
-
-        if( response == 0 )
-        {
-            QueryScreenSingleton::instance()->stopDownloading();
-            event->accept();
-        }
-        else
-        {
-            event->ignore();
-            QueryScreenSingleton::instance()->show();
-        }
-    }
+    // l'aplicació com per exemple imatges en descàrrega del PACS o similar.
+    // Caldria fer-ho de manera centralitzada.
+    event->accept();
 }
 
 void QApplicationMainWindow::resizeEvent(QResizeEvent *event)

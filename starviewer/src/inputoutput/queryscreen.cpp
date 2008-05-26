@@ -1717,16 +1717,5 @@ void QueryScreen::showDatabaseErrorMessage( const Status &state )
     }
 }
 
-
-bool QueryScreen::isDownloading()
-{
-    return m_qexecuteOperationThread.isRunning();
-}
-
-void QueryScreen::stopDownloading()
-{
-    m_qexecuteOperationThread.terminate();
-}
-
 };
 
