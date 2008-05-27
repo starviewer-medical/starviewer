@@ -13,7 +13,6 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QLocale>
-#include <QDesktopWidget>
 
 // els nostres widgets/elements de la plataforma
 #include "qapplicationmainwindow.h"
@@ -416,8 +415,7 @@ void QApplicationMainWindow::writeSettings()
     QSettings settings;
     settings.beginGroup("Starviewer");
 
-    settings.setValue( "position", pos() );
-    settings.setValue( "size", size() );
+    settings.setValue("geometry", saveGeometry());
 
     settings.endGroup();
 }
@@ -464,15 +462,8 @@ void QApplicationMainWindow::readSettings()
     QSettings settings;
     settings.beginGroup("Starviewer");
 
-    move( settings.value( "position", QPoint(0, 0)).toPoint() );
-
-
-    if( settings.value("size").toSize().isEmpty() )
-    {
-        resize( settings.value("size", QApplication::desktop()->availableGeometry().size()).toSize() );
-    }
-    else
-        resize( settings.value("size").toSize() );
+    if (!settings.contains("geometry")) this->showMaximized();
+    this->restoreGeometry(settings.value("geometry").toByteArray());
 
     settings.endGroup();
 }
