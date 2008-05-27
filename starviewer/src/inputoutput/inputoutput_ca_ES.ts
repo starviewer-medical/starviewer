@@ -673,7 +673,7 @@ Asseguris que la IP i el AETitle del PACS siguin correctes</translation>
     <message>
         <location filename="qcreatedicomdir.cpp" line="140"/>
         <source>DICOMDIR size: %1 Mb</source>
-        <translation type="unfinished">Mida del DICOMDIR: %1 Mb</translation>
+        <translation>Mida del DICOMDIR: %1 Mb</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="150"/>
