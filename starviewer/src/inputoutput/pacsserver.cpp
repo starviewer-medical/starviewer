@@ -21,6 +21,9 @@ namespace udg{
 
 PacsServer::PacsServer( PacsParameters p )
 {
+    // Variable global de dcmtk per evitar el dnslookup, que dona problemes de lentitu a windows.
+    // TODO: Al fer refactoring aquesta inicialització hauria de quedar en un lloc central de configuracions per dcmtk.
+    dcmDisableGethostbyaddr.set(OFTrue);
 
     m_pacs = p;
     m_net = NULL;
