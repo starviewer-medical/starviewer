@@ -14,7 +14,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
  : QDialog(parent, f)
 {
     setupUi(this);
-
+    setWindowFlags( (this->windowFlags() | Qt::WindowMaximizeButtonHint)  ^ Qt::WindowContextHelpButtonHint  );
     QConfigurationScreen *screen = new QConfigurationScreen(this);
     this->addConfigurationWidget(screen, "PACS", AdvancedConfiguration);
 

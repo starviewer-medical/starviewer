@@ -39,7 +39,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
  : QDialog(parent)
 {
     setupUi( this );
-
+    setWindowFlags( this->windowFlags() ^ Qt::WindowContextHelpButtonHint );
     QString sizeOfDicomdirText;
 
     m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
