@@ -33,7 +33,6 @@ HEADERS += extensionfactory.h \
            mathtools.h \
            itkQtAdaptor.h \
            harddiskinformation.h \
-           distance.h \
            logging.h \
            deletedirectory.h \
            volume.h \
@@ -160,13 +159,12 @@ HEADERS += extensionfactory.h \
            cursor3dtool.h \
            cursor3dtooldata.h \
            angletool.h \
- drawercrosshair.h
+           drawercrosshair.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
            mathtools.cpp \
            harddiskinformation.cpp \
-           distance.cpp \
            deletedirectory.cpp \
            volume.cpp \
            volumerepository.cpp \

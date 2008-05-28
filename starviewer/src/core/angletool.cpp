@@ -11,7 +11,7 @@
 #include "drawer.h"
 #include "drawerpolyline.h"
 #include "drawertext.h"
-#include "distance.h"
+#include "mathtools.h"
 //vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
@@ -242,11 +242,8 @@ void AngleTool::drawCircumference()
             break;
     }
 
-    Distance d1( p1, p2 );
-    Distance d2( p2, p3 );
-
-    double distance1 = d1.getDistance3D();
-    double distance2 = d2.getDistance3D();
+    double distance1 = MathTools::getDistance3D( p1, p2 );
+    double distance2 = MathTools::getDistance3D( p2, p3 );
 
     xRadius =  MathTools::minimum( distance1, distance2 ) / 4.0;
     m_radius = xRadius;

@@ -241,4 +241,20 @@ double MathTools::maximum( double a, double b)
     return max;
 }
 
+double MathTools::getDistance2D( const double firstPoint[2], const double secondPoint[2] )
+{
+    double xx = firstPoint[0] - secondPoint[0];
+    double yy = firstPoint[1] - secondPoint[1];
+    double value = pow(xx, 2) + pow(yy, 2);
+    return (sqrt(value));
+}
+
+double MathTools::getDistance3D( const double firstPoint[3], const double secondPoint[3] )
+{
+    double xx = firstPoint[0] - secondPoint[0];
+    double yy = firstPoint[1] - secondPoint[1];
+    double zz = firstPoint[2] - secondPoint[2];
+    double value = pow(xx, 2) + pow(yy, 2) + pow(zz, 2);
+    return (sqrt(value));
+}
 }; // end namespace udg

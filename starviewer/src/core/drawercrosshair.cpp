@@ -9,7 +9,7 @@
 #include "q2dviewer.h"
 #include "logging.h"
 #include "drawerline.h"
-#include "distance.h"
+#include "mathtools.h"
 // vtk
 #include <vtkActor2D.h>
 #include <vtkPropAssembly.h>
@@ -31,7 +31,7 @@ DrawerCrossHair::DrawerCrossHair(QObject *parent)
 DrawerCrossHair::~DrawerCrossHair()
 {
     emit dying(this);
-    
+
     if ( m_vtkPropAssembly )
     {
         m_vtkPropAssembly->Delete();
@@ -47,7 +47,7 @@ void DrawerCrossHair::setCentrePoint( double x, double y, double z )
     //assignem els punts a la línia 1
     m_lineUp->setFirstPoint( m_centrePoint[0], m_centrePoint[1]-10, m_centrePoint[2] );
     m_lineUp->setSecondPoint( m_centrePoint[0], m_centrePoint[1]-1, m_centrePoint[2] );
-        
+
     //assignem els punts a la línia 2
     m_lineDown->setFirstPoint( m_centrePoint[0], m_centrePoint[1]+10, m_centrePoint[2] );
     m_lineDown->setSecondPoint( m_centrePoint[0], m_centrePoint[1]+1, m_centrePoint[2] );
@@ -76,7 +76,7 @@ vtkPropAssembly * DrawerCrossHair::getAsVtkPropAssembly()
     if( !m_vtkPropAssembly )
     {
         m_vtkPropAssembly = vtkPropAssembly::New();
-        
+
         // li donem els atributs
         updateVtkActorProperties();
 
@@ -116,7 +116,7 @@ void DrawerCrossHair::updateVtkProp()
         m_lineRight->update( VTKRepresentation );
         m_lineBack->update( VTKRepresentation );
         m_lineFront->update( VTKRepresentation );
-        
+
         this->setModified(false);
     }
     else
@@ -137,13 +137,12 @@ void DrawerCrossHair::updateVtkActorProperties()
 
 double DrawerCrossHair::getDistanceToPoint( double *point3D )
 {
-    Distance d( m_centrePoint, point3D );
-
-    return ( d.getDistance3D() );
+    return ( MathTools::getDistance3D( m_centrePoint, point3D ) );
 }
 
 bool DrawerCrossHair::isInsideOfBounds( double p1[3], double p2[3], int view )
 {
+    // TODO implementar!
     return false;
 }
 

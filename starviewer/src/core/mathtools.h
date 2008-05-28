@@ -85,6 +85,10 @@ inline static double cbrt( double x )
     return std::pow( x, 1.0 / 3.0 );
 }
 
+/// distància entre punts 2D i 3D
+static double getDistance2D( const double firstPoint[2], const double secondPoint[2] );
+static double getDistance3D( const double firstPoint[3], const double secondPoint[3] );
+
 };
 
 } // end namespace udg

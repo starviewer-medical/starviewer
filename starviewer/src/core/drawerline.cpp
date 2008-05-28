@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "drawerline.h"
 #include "logging.h"
-#include "distance.h"
+#include "mathtools.h"
 #include "q2dviewer.h"
 // vtk
 #include <vtkLineSource.h>
@@ -149,9 +149,7 @@ double *DrawerLine::getMiddlePoint()
 
 double DrawerLine::computeDistance()
 {
-    Distance d( m_firstPoint, m_secondPoint );
-
-    return ( d.getDistance3D() );
+    return ( MathTools::getDistance3D( m_firstPoint, m_secondPoint ) );
 }
 
 double DrawerLine::getDistanceToPoint( double *point3D )
