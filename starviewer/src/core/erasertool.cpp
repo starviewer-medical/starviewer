@@ -9,7 +9,7 @@
 #include "logging.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
-#include "distance.h"
+#include "mathtools.h"
 // vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -30,7 +30,7 @@ EraserTool::EraserTool( QViewer *viewer, QObject *parent )
 
     m_polyline=NULL;
     m_state = NONE;
-    
+
     DEBUG_LOG("ERASER TOOL CREADA ");
 }
 
@@ -45,17 +45,17 @@ void EraserTool::handleEvent( unsigned long eventID )
         case vtkCommand::LeftButtonPressEvent:
             startEraserAction();
         break;
-    
+
         case vtkCommand::MouseMoveEvent:
-                
+
             if ( m_polyline && m_state == START_CLICK )
                 drawAreaOfErasure();
         break;
-    
+
         case vtkCommand::LeftButtonReleaseEvent:
             erasePrimitive();
         break;
-    
+
         default:
         break;
     }
@@ -71,17 +71,17 @@ void EraserTool::startEraserAction()
 
     //guardem el primer punt de la zona d'esborrat i posem l'estat adequat a la tool
     double position[4];
-        
+
     //capturem l'event de clic esquerre
     int x = m_2DViewer->getEventPositionX();
     int y = m_2DViewer->getEventPositionY();
-        
+
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
     m_startPoint[0] = position[0];
     m_startPoint[1] = position[1];
     m_startPoint[2] = position[2];
-    
-    /*  
+
+    /*
         la següent inicialització de l'm_endPoint és per la distància que es calcula al mètode erasePrimitive(). El primer cop que es calcula,   aquest punt no tindrà valor i, per tant, ens donaria error
     */
     m_endPoint[0] = m_startPoint[0];
@@ -93,23 +93,23 @@ void EraserTool::startEraserAction()
 
     //actualitzem els atributs de la polilinia
     m_polyline->update( DrawerPrimitive::VTKRepresentation );
-  
+
     m_state = START_CLICK;
 }
 
 void EraserTool::drawAreaOfErasure()
 {
-    double position[4], p2[3], p3[3];   
-    
+    double position[4], p2[3], p3[3];
+
     //capturem l'event de clic esquerre
     int x = m_2DViewer->getEventPositionX();
     int y = m_2DViewer->getEventPositionY();
-            
+
     m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
     m_endPoint[0] = position[0];
     m_endPoint[1] = position[1];
     m_endPoint[2] = position[2];
-    
+
     if ( m_polyline->getNumberOfPoints() > 1 )
     {
         m_polyline->removePoint( 4 );
@@ -117,7 +117,7 @@ void EraserTool::drawAreaOfErasure()
         m_polyline->removePoint( 2 );
         m_polyline->removePoint( 1 );
     }
-    
+
     //calculem el segon punt i el tercer
     switch( m_2DViewer->getView() )
     {
@@ -125,7 +125,7 @@ void EraserTool::drawAreaOfErasure()
             p2[0] = m_endPoint[0];
             p2[1] = m_startPoint[1];
             p2[2] = m_2DViewer->getCurrentSlice();
-            
+
             p3[0] = m_startPoint[0];
             p3[1] = m_endPoint[1];
             p3[2] = m_2DViewer->getCurrentSlice();
@@ -134,7 +134,7 @@ void EraserTool::drawAreaOfErasure()
             p2[0] = m_2DViewer->getCurrentSlice();
             p2[1] = m_startPoint[1];
             p2[2] = m_endPoint[2];
-            
+
             p3[0] = m_2DViewer->getCurrentSlice();
             p3[1] = m_endPoint[1];
             p3[2] = m_startPoint[2];
@@ -143,37 +143,36 @@ void EraserTool::drawAreaOfErasure()
             p2[0] = m_startPoint[0];
             p2[1] = m_2DViewer->getCurrentSlice();
             p2[2] = m_endPoint[2];
-            
+
             p3[0] = m_endPoint[0];
             p3[1] = m_2DViewer->getCurrentSlice();
             p3[2] = m_startPoint[2];
-            break;   
+            break;
     }
     m_polyline->addPoint( p2 );
     m_polyline->addPoint( m_endPoint );
     m_polyline->addPoint( p3 );
     m_polyline->addPoint( m_startPoint );
-    
+
     //actualitzem els atributs de la polilinia
     m_polyline->update( DrawerPrimitive::VTKRepresentation );
-    
+
     m_2DViewer->refresh();
 }
 
 void EraserTool::erasePrimitive()
 {
-    Distance d( m_startPoint, m_endPoint );
-    if ( d.getDistance3D() <= 5.0 )
+    if ( MathTools::getDistance3D( m_startPoint, m_endPoint ) <= 5.0 )
     {
         m_2DViewer->getDrawer()->erasePrimitive( m_2DViewer->getDrawer()->getPrimitiveNearerToPoint( m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() ) );
     }
     else
         m_2DViewer->getDrawer()->erasePrimitivesInsideBounds( m_startPoint, m_endPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-    
+
     m_polyline->deleteAllPoints();
     m_polyline->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->refresh();
-    
+
     m_state = NONE;
 }
 }
