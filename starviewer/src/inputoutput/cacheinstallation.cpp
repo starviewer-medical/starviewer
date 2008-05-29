@@ -112,15 +112,13 @@ bool CacheInstallation::createDatabaseDir()
 {
     StarviewerSettings settings;
     QDir databaseDir;
-    QString databaseFile,databasePath;
 
-    //al path de la base de dades, hi ha inclos el nom del fitxer de la base de dades, per crear el directori hem de treure el fitxer de la cadena
-    databaseFile = settings.getDatabasePath();
-    databasePath = databaseFile.left( databaseFile.lastIndexOf( QDir::toNativeSeparators( "/" ) , -1 , Qt::CaseInsensitive ) );
+    QFileInfo databaseFilePath( settings.getDatabasePath() );
+    QString databasePath = databaseFilePath.path();
 
     if ( databaseDir.mkpath( databasePath ) )
     {
-	    INFO_LOG( "S'ha creat el directori de la base de dades " + databasePath );
+        INFO_LOG( "S'ha creat el directori de la base de dades " + databasePath );
         return true;
     }
     else
