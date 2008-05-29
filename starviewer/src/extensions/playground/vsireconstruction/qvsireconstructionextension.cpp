@@ -32,7 +32,10 @@
 
 
 // ITK
+#include <itkImage.h>
 #include <itkImageFileWriter.h>
+#include <itkCurvatureFlowImageFilter.h>
+#include <itkCastImageFilter.h>
 
 
 namespace udg {
@@ -55,15 +58,7 @@ QVSIReconstructionExtension::~QVSIReconstructionExtension()
 
 void QVSIReconstructionExtension::createActions()
 {
-    /*// creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
-    m_toolManager = new ToolManager(this);
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    QStringList toolsList;
-    toolsList << "VoxelInformationTool";
-    m_toolManager->setViewerTools( m_2DView, toolsList );
-    m_toolManager->setViewerTools( m_2DView_2, toolsList );
-    m_toolManager->setViewerTools( m_2DView_4, toolsList );
-*/
+
     m_rotateClockWiseAction = new QAction( 0 );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
@@ -72,39 +67,54 @@ void QVSIReconstructionExtension::createActions()
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
     connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_2 , SLOT( rotateClockWise() ) );
+    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_4 , SLOT( rotateClockWise() ) );
 
     // Tools
-    m_actionFactory = new ToolsActionFactory( 0 );
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_translateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
 
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
+    // Tool d'slicing per teclat
+    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
+    slicingKeyboardTool->trigger();
 
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
+    // definim els grups exclusius
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "ScreenShotTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
 
-    m_voxelInformationAction = m_actionFactory->getActionFrom( "VoxelInforamtionTool" );
-    m_voxelInformationToolButton->setDefaultAction( m_voxelInformationAction );
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2, SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_4, SLOT( setTool(QString) ) );
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_translateToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
 
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_slicingAction->trigger();
-    m_2DView->enableTools();
-    m_2DView_2->enableTools();
-    m_2DView_4->enableTools();
+    // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
+    //m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
+
+    // registrem al manager les tools que van amb el viewer principal
+    //initializeDefaultTools( m_selectedViewer->getViewer() );
+
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" <<  "SlicingKeyboardTool";
+
+    m_toolManager->setViewerTools( m_2DView, toolsList );
+    m_toolManager->setViewerTools( m_2DView_2, toolsList );
+    m_toolManager->setViewerTools( m_2DView_4, toolsList );
 
 }
 
@@ -122,6 +132,7 @@ void QVSIReconstructionExtension::createConnections()
   connect( m_chooseSEPrePushButton, SIGNAL( clicked() ), SLOT( contextMenuSEPreRelease() ) );
   connect( m_chooseSEPostPushButton, SIGNAL( clicked() ), SLOT( contextMenuSEPostRelease() ) );
   connect( m_computeVSIPushButton, SIGNAL( clicked() ), SLOT( computeVSI() ) );
+  connect( m_filterVSIPushButton, SIGNAL( clicked() ), SLOT( applyFilterMapImage() ) );
   //connect( m_2DView, SIGNAL( windowLevelChanged( double,double ) ), SLOT( createColorMap( double, double ) ) );
 }
 
@@ -933,6 +944,7 @@ void QVSIReconstructionExtension::computeVSI( )
         return;
     }
     std::cout<<"Init computeVSI"<<std::endl;
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     //Paràmetres que definim constants però que potser no ho són
     static const unsigned int Nbaseline = 20; //->Mostres pre-bolus
@@ -1213,6 +1225,7 @@ void QVSIReconstructionExtension::computeVSI( )
     m_mapMin=10000;
     m_maxValue=0;
     m_minValue=0;//Ja sabem que el minim serà 0
+    int contCBV2=0;
     for (k=0;k<kend;k++)
     {
         initialsbIter=sbIter;
@@ -1227,7 +1240,7 @@ void QVSIReconstructionExtension::computeVSI( )
                 for (i=0;i<size[0];i++)
                 {
                     //if(maxIter.Get()>(minIter.Get()+200))//Out of the brain-> empirical values!first crit.-> background
-                    if(maxIter.Get()<=700)//Out of the brain-> empirical values!first crit.-> background
+                    if(maxIter.Get()<=200)//Out of the brain-> empirical values!first crit.-> background
                     {
                         //std::cout<<"*";
                         rCBVIter.Set(0.0);
@@ -1241,6 +1254,12 @@ void QVSIReconstructionExtension::computeVSI( )
                             rCBVIter.Set(valuerCBV - log(DSCiter.Get()/sbIter.Get())/TEdyn);
                             mapIter2.Set((int)rCBVIter.Get());
                             if(mapIter2.Get()>m_maxValue) m_maxValue=mapIter2.Get();
+                            if(mapIter2.Get()<0)
+                            {
+                                mapIter2.Set(0);
+                                //std::cout<<valuerCBV - log(DSCiter.Get()/sbIter.Get())/TEdyn<<" ("<<DSCiter.Get()<<";"<<sbIter.Get()<<")"<< mapIter2.GetIndex()<<"/"<<maxIter.Get()<<std::endl;
+                                contCBV2++;
+                            }
 /*                            if((k==5)&&(p==pend-1))
                             {
                                 //std::cout<<valuerCBV - log(DSCiter.Get()/sbIter.Get())/TEdyn<<" ("<<sbIter.Get()<<")"<<std::endl;
@@ -1298,6 +1317,7 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
+    std::cout<<"ContCBV= "<<contCBV2<<std::endl;
 
 //     writerType::Pointer mapWriter5 = writerType::New();
 //     mapWriter5->SetFileName("rCBVImage.mhd");
@@ -1315,7 +1335,7 @@ void QVSIReconstructionExtension::computeVSI( )
         {
             for (i=0;i<size[0];i++)
             {
-                if(maxIter.Get()>700)//Out of the brain-> empirical values!first crit.-> background
+                if(maxIter.Get()>200)//Out of the brain-> empirical values!first crit.-> background
                 {
                     sum += rCBVIter.Get();
                     contCBV++;
@@ -1337,7 +1357,7 @@ void QVSIReconstructionExtension::computeVSI( )
         {
             for (i=0;i<size[0];i++)
             {
-                if(maxIter.Get()>700)//Out of the brain-> empirical values!first crit.-> background
+                if(maxIter.Get()>200)//Out of the brain-> empirical values!first crit.-> background
                 {
                     if(rCBVIter.Get()>0)
                     {
@@ -1586,8 +1606,8 @@ void QVSIReconstructionExtension::computeVSI( )
             {
                 if(psiIter.Get()!=0)
                 {
-                    if(rSEMeanIter.Get()>0 && rGEMeanIter.Get()>0 )//&& rGEMeanIter.Get()<rSEMeanIter.Get())
-                    {
+//                    if(rSEMeanIter.Get()>0 && rGEMeanIter.Get()>0 )//&& rGEMeanIter.Get()<rSEMeanIter.Get())
+//                    {
                         //Compt multiplicat per mult per millor visulaització
                         mapIter.Set(mult*1.736*sqrt((psiIter.Get()/mean)*ADC)*(rGEMeanIter.Get()/pow(rSEMeanIter.Get(),1.5f)));
                         //std::cout<<"+"<<" ("<<mapIter.Get()<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)*(rGEMeanIter.Get()/pow(rSEMeanIter.Get(),1.5))<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)<<" , "<<rGEMeanIter.Get()<<","<<rSEMeanIter.Get()<<","<<pow(rSEMeanIter.Get(),1.5)<<")";
@@ -1597,19 +1617,19 @@ void QVSIReconstructionExtension::computeVSI( )
                         }
                         if(mapIter.Get()<0){
                             //std::cout<<std::endl<<"-"<<" ("<<mapIter.Get()<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)*(rGEMeanIter.Get()/pow(rSEMeanIter.Get(),1.5))<<")"<<" ("<<1.736*sqrt(psiIter.Get()*ADC)<<" , "<<rGEMeanIter.Get()<<","<<rSEMeanIter.Get()<<","<<pow(rSEMeanIter.Get(),1.5)<<")";
-                            mapIter.Set(200);
+                            mapIter.Set(0);
                         }
                         vsicont++;
-                    }
-                    else
-                    {
-                        vsicont0++;
-                        //posem a petit, però que ho pinti de color
-                        mapIter.Set(0.0);
-                    }
+//                    }
+//                    else
+//                    {
+//                        //posem a petit, però que ho pinti de color
+//                        mapIter.Set(0.0);
+//                    }
                 }
                 else
                 {
+                        vsicont0++;
                     mapIter.Set(0.0);
                 }
 
@@ -1644,7 +1664,7 @@ void QVSIReconstructionExtension::computeVSI( )
         delete m_mapVolume;
     }
     m_mapVolume = new Volume();
-    m_mapVolume->setImages( m_mainVolume->getPhaseVolume(0)->getImages() );
+    m_mapVolume->setImages( m_DSCVolume->getPhaseVolume(0)->getImages() );
     m_mapVolume->setData(mapImage);
 
     if(m_mapVolume2!=0)
@@ -1652,7 +1672,7 @@ void QVSIReconstructionExtension::computeVSI( )
         delete m_mapVolume2;
     }
     m_mapVolume2 = new Volume();
-    m_mapVolume2->setImages( m_mainVolume->getPhaseVolume(0)->getImages() );
+    m_mapVolume2->setImages( m_DSCVolume->getPhaseVolume(0)->getImages() );
     m_mapVolume2->setData(mapImage2);
 
 /*    writerType::Pointer mapWriter = writerType::New();
@@ -1690,9 +1710,123 @@ void QVSIReconstructionExtension::computeVSI( )
     std::cout<<"["<<ext[0]<<","<<ext[1]<<";"<<ext[2]<<","<<ext[3]<<";"<<ext[4]<<","<<ext[5]<<"]"<<std::endl;
     std::cout<<"Number of voxels:"<<cont<<std::endl;
     std::cout<<"End computeVSI!!!"<<std::endl;
+    QApplication::restoreOverrideCursor();
 
 }
 
+void QVSIReconstructionExtension::applyFilterMapImage( )
+{
+    typedef   float           InternalPixelType;
+    typedef itk::Image< InternalPixelType, 3 >  InternalImageType;
+
+    typedef itk::CastImageFilter< Volume::ItkImageType, InternalImageType >                     InputCastingFilterType;
+    typedef itk::CastImageFilter< InternalImageType, Volume::ItkImageType >                      OutputCastingFilterType;
+
+    typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >      CurvatureFlowImageFilterType;
+
+    if(m_mapVolume != 0)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+
+        Volume::ItkImageType::RegionType region;
+        Volume::ItkImageType::IndexType start;
+        start[0]=0;
+        start[1]=0;
+        start[2]=0;
+        std::cout<<"Init Filter Volume"<<std::endl;
+        Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
+        size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+        region.SetSize(size);
+        region.SetIndex(start);
+        Volume::ItkImageType::Pointer auxImage = Volume::ItkImageType::New();
+        auxImage->SetRegions( region );
+        auxImage->Allocate();
+
+
+        InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
+        OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
+        CurvatureFlowImageFilterType::Pointer smoothing = CurvatureFlowImageFilterType::New();
+
+        incaster->SetInput( m_mapVolume->getItkData() );
+        smoothing->SetInput( incaster->GetOutput() );
+        outcaster->SetInput( smoothing->GetOutput() );
+
+        smoothing->SetNumberOfIterations( 5 );
+        smoothing->SetTimeStep( 0.0625 );
+
+        try
+        {
+            outcaster->Update();
+        }
+        catch( itk::ExceptionObject & excep )
+        {
+            std::cerr << "Exception caught !" << std::endl;
+            std::cerr << excep << std::endl;
+        }
+
+        typedef itk::ImageRegionIterator<Volume::ItkImageType> Iterator;
+        Iterator outIter( outcaster->GetOutput(), outcaster->GetOutput()->GetBufferedRegion() );
+        Iterator auxIter( auxImage, auxImage->GetBufferedRegion() );
+        outIter.GoToBegin();
+        auxIter.GoToBegin();
+        unsigned int i,j,k;
+        for (k=0;k<size[2];k++)
+        {
+            for (j=0;j<size[1];j++)
+            {
+                for (i=0;i<size[0];i++)
+                {
+                    auxIter.Set(outIter.Get());
+                    ++auxIter;
+                    ++outIter;
+                }
+            }
+        }
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        //output->setImages( m_Volume->getImages() );
+        std::cout<<"Init Saving Volume"<<std::endl;
+        typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
+        writerType::Pointer mapWriter3 = writerType::New();
+        mapWriter3->SetFileName("filteredImage.mhd");
+        mapWriter3->SetInput(outcaster->GetOutput() );
+        mapWriter3->Update();
+        writerType::Pointer mapWriter2 = writerType::New();
+        mapWriter2->SetFileName("originalImage.mhd");
+        mapWriter2->SetInput(m_mapVolume->getItkData() );
+        mapWriter2->Update();
+
+        //auxImage = outcaster->GetOutput();
+        if(m_mapVolume!=0)
+        {
+            delete m_mapVolume;
+        }
+        std::cout<<"Init SetData Volume"<<std::endl;
+        m_mapVolume = new Volume();
+        m_mapVolume->setImages( m_DSCVolume->getPhaseVolume(0)->getImages() );
+        std::cout<<"SetData Volume"<<std::endl;
+        try
+        {
+//           m_mapVolume->setData( outcaster->GetOutput() );
+           m_mapVolume->setData( auxImage );
+        }
+        catch( itk::ExceptionObject & excep )
+        {
+            std::cerr << "Exception caught !" << std::endl;
+            std::cerr << excep << std::endl;
+        }
+        std::cout<<"End SetData Volume"<<std::endl;
+        //m_mapVolume->getVtkData()->Update();
+        m_2DView->setInput( m_mapVolume );
+        //m_2DView->resetView( Q2DViewer::Axial );
+        //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
+        std::cout<<"Init Colormap"<<std::endl;
+        this->createColorMap( );
+        QApplication::restoreOverrideCursor();
+        std::cout<<"End Filter Volume"<<std::endl;
+
+    }
+
+}
 
 void QVSIReconstructionExtension::vsiEventHandler( unsigned long id )
 {
