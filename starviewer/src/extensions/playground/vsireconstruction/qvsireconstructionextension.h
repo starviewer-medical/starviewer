@@ -21,7 +21,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class StrokeSegmentationMethod;
 class ToolsActionFactory;
 class ToolManager;
 
@@ -64,6 +63,8 @@ private slots:
     ///connecta amb el canvi de window level
     void createColorMap( double window, double level );
 
+    ///aplica un filtre al mapa
+    void applyFilterMapImage( );
 
     /// gestiona els events del botó esquerre
     void leftButtonEventHandler();
