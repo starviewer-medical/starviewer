@@ -28,15 +28,9 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) : QWidget(parent)
 
     m_patientBrowserList->setWindowFlags( Qt::Popup );
 
-    if ( QT_VERSION < 0x040300 ) // Abans de 4.3
-    {
-        m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
-    }
-    else
-    {
-        m_patientAdditionalInfo->setWindowFlags( Qt::SplashScreen );
-    }
-    
+    m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
+    connect( m_patientBrowserList, SIGNAL( close() ), m_patientAdditionalInfo, SLOT( close() ) );
+
     //TODO Hack per fer desapareixer els 2 popups al clickar fora d'aquest: veure eventFilter
     //S'hauria de fer que el browser i additional info fossin, realment, fills d'aquest widget i tractar-ho com un de sol.
     m_patientAdditionalInfo->installEventFilter(this);
@@ -75,8 +69,12 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
         screen_y = qApp->desktop()->availableGeometry( point ).height();
     }
 
-    m_patientBrowserList->setSelectedSerie( serieUID );
+    if ( QT_VERSION >= 0x040300 ) // Amb qt 4.3
+    {
+        m_patientAdditionalInfo->show();
+    }
 
+    m_patientBrowserList->setSelectedSerie( serieUID );
     QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 
     if ( ( x + widgetIdealSize.width() ) > screen_x )
@@ -89,16 +87,17 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
         y = screen_y - widgetIdealSize.height() - 5;
     }
 
-    // moure la finestra del menu al punt que toca
+    //moure la finestra del menu al punt que toca
     m_patientBrowserList->move(x, y);
     m_patientBrowserList->show();
 
     QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
+    m_patientAdditionalInfo->resize( patientAdditionalInfoSize );
 
     // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
     if( (m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width() ) > screen_x )
     {
-        x = ( m_patientBrowserList->geometry().x() ) - ( patientAdditionalInfoSize.width() );
+        x = ( m_patientBrowserList->x() ) -( m_patientAdditionalInfo->frameGeometry().width() );
     }
     else
     {
@@ -106,13 +105,7 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
     }
     m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
     m_patientAdditionalInfo->show();
-
-    if ( QT_VERSION >= 0x040300 ) // Amb qt 4.3
-    {
-        m_patientBrowserList->show();
-        //TODO Es fa un updatePosition per tal de moure amb 4.3 el widget adicional al punt que toca, ja que dóna problemes.
-        updatePosition();
-    }
+    m_patientBrowserList->show();
 }
 
 bool PatientBrowserMenu::eventFilter(QObject *watched, QEvent *event)
@@ -165,6 +158,8 @@ void PatientBrowserMenu::updatePosition()
     }
     m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
     m_patientAdditionalInfo->show();
+    m_patientBrowserList->show();
+
 }
 
 }

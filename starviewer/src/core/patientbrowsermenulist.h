@@ -8,6 +8,7 @@
 #define UDGPATIENTBROWSERMENULIST_H
 
 #include <QWidget>
+#include <QKeyEvent>
 
 namespace udg {
 
@@ -36,6 +37,9 @@ public:
     /// Posem una serie com a seleccionada
     void setSelectedSerie( QString serieUID );
 
+    /// Tractament dels events
+    bool event( QEvent * event );
+
 private:
     /// Creem un widget amb la informació bàsica d'un estudi
     QWidget * createStudyWidget( Study * study, QWidget * parent );
@@ -56,6 +60,9 @@ signals:
 
     /// Aquest senyal s'emet quan s'escull una serie de l'item
     void selectedSerie( Series * );
+
+    /// Signal que s'emet quan es rep l'event de tancar el menu
+    void close();
 
 };
 
