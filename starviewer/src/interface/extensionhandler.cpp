@@ -81,12 +81,12 @@ void ExtensionHandler::request( int who )
             break;
 
         case 8:
-			// HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
+            // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
             disconnect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString) ), 0,0 );
             QueryScreenSingleton::instance()->openDicomdir();
-			connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
+            connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
             break;
     }
 }
