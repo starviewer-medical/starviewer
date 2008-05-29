@@ -6,8 +6,8 @@
  ***************************************************************************/
 #include "drawerpolyline.h"
 #include "logging.h"
-#include "distance.h"
 #include "q2dviewer.h"
+#include "mathtools.h"
 // vtk
 #include <vtkPolyData.h>
 #include <vtkCellArray.h>
@@ -284,10 +284,7 @@ bool DrawerPolyline::isPointIncludedInLineBounds( double point[3], double *lineP
 {
     double range = 10.0;
 
-    Distance d1(point, lineP1);
-    Distance d2(point, lineP2);
-
-    return ( d1.getDistance3D() <= range || d2.getDistance3D() <= range );
+    return ( MathTools::getDistance3D( point, lineP1 ) <= range || MathTools::getDistance3D( point, lineP2 ) <= range );
 }
 
 bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
