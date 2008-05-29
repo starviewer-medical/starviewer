@@ -116,16 +116,16 @@ bool CacheInstallation::createDatabaseDir()
 
     //al path de la base de dades, hi ha inclos el nom del fitxer de la base de dades, per crear el directori hem de treure el fitxer de la cadena
     databaseFile = settings.getDatabasePath();
-    databasePath.insert( 0 , databaseFile.left (databaseFile.lastIndexOf( "/" , -1 , Qt::CaseInsensitive ) ) );
+    databasePath = databaseFile.left( databaseFile.lastIndexOf( QDir::toNativeSeparators( "/" ) , -1 , Qt::CaseInsensitive ) );
 
     if ( databaseDir.mkpath( databasePath ) )
     {
-	    INFO_LOG( "S'ha creat el directori de la cache d'imatges " + databasePath );
+	    INFO_LOG( "S'ha creat el directori de la base de dades " + databasePath );
         return true;
     }
     else
     {
-        ERROR_LOG( "No s'ha pogut crear el directori de la cache d'imatges " + databasePath );
+        ERROR_LOG( "No s'ha pogut crear el directori de la base de dades " + databasePath );
         return false;
     }
 }
