@@ -147,7 +147,6 @@ bool PatientBrowserMenuList::event( QEvent * event )
 {
     if ( event->type() == QEvent::Close ) // s'ha pulsat l'escape
     {
-        DEBUG_LOG("EMETOOO");
         emit close();
     }
     return QWidget::event( event );
