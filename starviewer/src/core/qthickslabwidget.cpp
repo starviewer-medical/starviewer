@@ -45,23 +45,21 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
     {
         // primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
         disconnect( m_currentViewer, 0, this, 0 );
-        disconnect( m_currentViewer, 0, this, 0 );
-        disconnect( m_slabThicknessSlider, 0, m_currentViewer, 0 );
+        disconnect( m_currentViewer, 0, m_slabThicknessSlider, 0 );
+        disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), this, SLOT( applyThickSlab() ) );
     }
     // posem a punt el widget d'acord amb les dades del viewer
     m_currentViewer = viewer;
-    if( m_currentViewer->isThickSlabActive() )
+    // aquests seran els valors per defecte si el thickslab no està activat
+    int slabThickness = 2, projectionMode = 0;
+    if( m_currentViewer->isThickSlabActive() ) // llavors cal reflexar els valors adequats
     {
-        updateMaximumThickness();
-        m_slabThicknessSlider->setValue( m_currentViewer->getSlabThickness() );
-        m_projectionModeComboBox->setCurrentIndex( m_currentViewer->getSlabProjectionMode()+1 );
+        slabThickness = m_currentViewer->getSlabThickness();
+        projectionMode = m_currentViewer->getSlabProjectionMode()+1;
     }
-    else
-    {
-        m_slabThicknessSlider->setValue(2);
-        applyProjectionMode(0);
-        m_projectionModeComboBox->setCurrentIndex(0);
-    }
+    updateMaximumThickness();
+    m_slabThicknessSlider->setValue( slabThickness );
+    m_projectionModeComboBox->setCurrentIndex( projectionMode );
 
     // creem els vincles
     connect( m_currentViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( reset() ) );
@@ -88,13 +86,14 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         m_currentViewer->enableThickSlab(false);
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
+        // restaurem manualment els valors per defecte
+        m_slabThicknessSlider->setValue( 2 );
+        updateThicknessLabel(2);
         // TODO això s'hauria de fer automàticament quan tenim slab thickness d'1. Cal repassar bé tot el pipeline del Q2DViewer
         m_currentViewer->updateSliceAnnotationInformation();
     }
     else
     {
-        updateMaximumThickness();
-
         m_currentViewer->enableThickSlab(true);
         m_slabThicknessSlider->setEnabled(true);
         m_slabThicknessLabel->setEnabled(true);
@@ -124,14 +123,19 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         {
             projectionModeID = 2;
         }
+
+        // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada lloc on s'apliqui thickslab.
+        // al canviar de mode de projecció haurem de recalcular
+        QApplication::setOverrideCursor( Qt::WaitCursor );
         m_currentViewer->setSlabProjectionMode( projectionModeID );
         m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
+        QApplication::restoreOverrideCursor();
     }
 }
 
 void QThickSlabWidget::applyThickSlab()
 {
-    ///\TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada lloc on s'apliqui thickslab.
+    // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada lloc on s'apliqui thickslab.
     QApplication::setOverrideCursor( Qt::WaitCursor );
     m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
     QApplication::restoreOverrideCursor();
