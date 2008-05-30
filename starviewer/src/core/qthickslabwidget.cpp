@@ -63,7 +63,7 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
 
     // creem els vincles
     connect( m_currentViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( reset() ) );
-    connect( m_currentViewer, SIGNAL( viewChanged(int) ), SLOT( updateMaximumThickness() ) );
+    connect( m_currentViewer, SIGNAL( viewChanged(int) ), SLOT( disableProjection() ) );
     connect( m_currentViewer, SIGNAL( slabThicknessChanged(int) ), m_slabThicknessSlider, SLOT( setValue(int) ) );
 }
 
@@ -94,6 +94,7 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
     }
     else
     {
+        updateMaximumThickness();
         m_currentViewer->enableThickSlab(true);
         m_slabThicknessSlider->setEnabled(true);
         m_slabThicknessLabel->setEnabled(true);
@@ -107,7 +108,6 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         // TODO si el procés de l'slab anés amb threads no tindríem aquest problema
         turnOffDelayedUpdate();
         connect( m_slabThicknessSlider, SIGNAL( sliderPressed () ), SLOT( turnOnDelayedUpdate() ) );
-
 
         // TODO ara fem la conversió a id d'enter, però en un futur anirà tot amb Strings
         int projectionModeID = -1;
@@ -174,6 +174,11 @@ void QThickSlabWidget::reset()
     m_currentViewer->enableThickSlab(false);
     m_currentViewer->setSlabThickness( 1 );
     this->link( m_currentViewer );
+}
+
+void QThickSlabWidget::disableProjection()
+{
+    m_projectionModeComboBox->setCurrentIndex( 0 );
 }
 
 }
