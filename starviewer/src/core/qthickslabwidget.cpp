@@ -93,6 +93,8 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
     }
     else
     {
+        updateMaximumThickness();
+
         m_currentViewer->enableThickSlab(true);
         m_slabThicknessSlider->setEnabled(true);
         m_slabThicknessLabel->setEnabled(true);
