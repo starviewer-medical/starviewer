@@ -75,6 +75,13 @@ protected slots:
     void turnOffDelayedUpdate();
     void onSliderReleased();
 
+    /**
+     * Deshabilita la projecció, per tant es deixa
+     * d'aplicar qualsevol projecció. Es cridarà quan
+     * es fagi un reset de la vista
+     */
+    void disableProjection();
+
 protected:
     /// Visualitzador linkat al widget
     Q2DViewer *m_currentViewer;
