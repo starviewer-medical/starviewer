@@ -133,14 +133,14 @@ public:
     int getNumberOfColumns();
 
     /** Assigna l'amplada a les columnes segons el paràmetre passat
-     * @param columnNumber número de columna 
+     * @param columnNumber número de columna
      * @param columnWidth amplada de la columna
      */
     void setColumnWidth( int columnNumber , int columnWidth );
 
     /** Retorna l'amplada de la columna
      * @param columnNumber número de columna
-     * @return amplada de la columna 
+     * @return amplada de la columna
      */
     int getColumnWidth( int columnNumber );
 
@@ -158,7 +158,7 @@ signals :
     void currentStudyChanged();
 
     ///signal que s'emete quan canviem de sèrie seleccionada
-    void currentSeriesChanged();
+    void currentSeriesChanged( const QString &seriesUID );
 
     ///signal que s'emet quan canviem d'imatge seleccionada
     void currentImageChanged();

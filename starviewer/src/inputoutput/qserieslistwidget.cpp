@@ -74,7 +74,7 @@ void QSeriesListWidget::insertSeries( DICOMSeries *serie )
     m_HashSeriesStudy[serie->getSeriesUID()] = serie->getStudyUID();//Guardem per la sèrie a quin estudi pertany
 }
 
-void QSeriesListWidget::setCurrentSeries( QString seriesUID )
+void QSeriesListWidget::setCurrentSeries( const QString &seriesUID )
 {
     int index = 0;
     bool stop = false;
@@ -84,12 +84,12 @@ void QSeriesListWidget::setCurrentSeries( QString seriesUID )
     while ( !stop && index < llistaSeries.count() )
     {
         if ( llistaSeries.at( index )->statusTip() == seriesUID )
-        { 
+        {
             stop = true;
         }
         else index++;
     }
-    if ( stop ) m_seriesListWidget->setCurrentItem( llistaSeries.at( index ) ); 
+    if ( stop ) m_seriesListWidget->setCurrentItem( llistaSeries.at( index ) );
 }
 
 void QSeriesListWidget::clicked( QListWidgetItem *item )
