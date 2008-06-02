@@ -20,6 +20,7 @@
 #include <QCloseEvent>
 #include <QHeaderView>
 #include <QSignalMapper>
+#include <QDate>
 
 #include "dicomstudy.h"
 #include "converttodicomdir.h"
@@ -187,8 +188,8 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
             item->setText( 2 , study.getPatientAge() );
             item->setText( 3 , study.getStudyDescription() );
             item->setText( 4 , study.getStudyModality() );
-            item->setText( 5 , formatDate( study.getStudyDate() ) );
-            item->setText( 6 , formatHour( study.getStudyTime() ) );
+            item->setText( 5 , QDate::fromString( study.getStudyDate(), "yyyyMMdd" ).toString(Qt::ISODate) );
+            item->setText( 6 , QTime::fromString( study.getStudyTime(), "hhmmss" ).toString(Qt::ISODate) );
             item->setText( 7 , study.getStudyUID() );
         }
     }
@@ -563,20 +564,6 @@ bool QCreateDicomdir::enoughFreeSpace( QString path )
         return false;
     }
     else return true;
-}
-
-QString QCreateDicomdir::formatDate( const QString date )
-{
-    QString originalDate( date );
-
-    return originalDate.mid( 6 , 2 ) + "/" + originalDate.mid( 4 , 2 ) + "/" + originalDate.mid( 0 , 4 );
-}
-
-QString QCreateDicomdir::formatHour( const QString hour )
-{
-    QString originalHour( hour );
-
-    return originalHour.mid( 0 , 2 ) + ":" + originalHour.mid( 2 , 2 );
 }
 
 void QCreateDicomdir::clearTemporaryDir()

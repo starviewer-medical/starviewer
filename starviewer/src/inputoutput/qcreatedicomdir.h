@@ -73,16 +73,6 @@ private:
     ///crea el menu contextual
     void createContextMenu();
 
-    /**Formata la data
-     * @param data de l'estudi
-     */
-    QString formatDate( const QString );
-
-    /**Formata l'hora
-     * @param Hora de l'estudi
-     */
-    QString formatHour( const QString );
-
     ///Dona valor a l'etiqueta que indica l'espai que ocupa el Dicomdir
     void setDicomdirSize();
 
