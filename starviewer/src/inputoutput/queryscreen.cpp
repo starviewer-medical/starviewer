@@ -295,9 +295,10 @@ void QueryScreen::createConnections()
     connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
 
     //connectem els signes del SeriesIconView StudyListView
-    connect( m_studyTreeWidgetCache, SIGNAL( currentStudyChanged() ) , this , SLOT( setSeriesToSeriesListWidgetCache() ) );
     connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( setCurrentSeries(QString) ) );
-    connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), this, SLOT( viewFromQSeriesListWidget() ) );
+    connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), SLOT( viewFromQSeriesListWidget() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( currentStudyChanged() ), SLOT( setSeriesToSeriesListWidgetCache() ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( currentSeriesChanged(QString) ), m_seriesListWidgetCache, SLOT( setCurrentSeries(QString) ) );
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect( &m_qexecuteOperationThread, SIGNAL( viewStudy( QString , QString , QString ) ), SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );

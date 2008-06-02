@@ -22,20 +22,14 @@ class DICOMSeries;
 const int scaledSeriesSizeX = 100;///< Mida de la imatge escalada a l'eix x
 const int scaledSeriesSizeY = 100;///< Mida de la imatge escalada a l'eix y
 
-class QSeriesListWidget : public QWidget , private Ui::QSeriesListWidgetBase
-{
+class QSeriesListWidget : public QWidget , private Ui::QSeriesListWidgetBase{
 Q_OBJECT
-
 public:
-
     ///constructor de la classe
     QSeriesListWidget( QWidget *parent = 0 );
 
     /// Destructor de la classe
     ~QSeriesListWidget();
-
-    ///Estableix quina és la série seleccionada
-    void setCurrentSeries( QString seriesUID );
 
     QString getCurrentSeriesUID();
 
@@ -43,6 +37,8 @@ public:
     QString getCurrentStudyUID();
 
 public slots:
+    ///Estableix quina és la série seleccionada
+    void setCurrentSeries( const QString &seriesUID );
 
     ///Neteja el ListWidget de sèries
     void clear();
@@ -62,15 +58,14 @@ public slots:
      */
     void view( QListWidgetItem *item );
 
-signals :
-
+signals:
     ///quan seleccionem una sèrie emeiteix una signal per a que el QStudyTreeWidget, tingui seleccionada la mateixa sèrie
     void selectedSeriesIcon( QString );
 
     /// Quan es fa doble click emiteix un signal, perquè la sèrie sigui visualitzada
     void viewSeriesIcon();
 
-private :
+private:
 
     QString m_className;///<Nom de la classe
     QHash<QString, QString> m_HashSeriesStudy;///Guardem per cada sèrie a quin estudi pertany
