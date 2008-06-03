@@ -309,6 +309,9 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
     }
 
     startCreateDicomdir( dicomdirPath );
+
+    //Guardem la ruta de l'ultim directori on l'usuari ha creat el dicomdir
+    m_lastDicomdirDirectory = dicomdirPath;
 }
 
 Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
@@ -391,14 +394,42 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
 
 void QCreateDicomdir::examineDicomdirPath()
 {
-    QFileDialog *dlg = new QFileDialog( this , QFileDialog::tr( "Open" ) , "./" , tr( "DICOMDIR Directory" ) );
+    QString initialDirectory;
+    QDir dicomdirPath;
+
+    if ( !m_lineEditDicomdirPath->text().isEmpty() )//Si hi ha entrat un directori
+    {
+        if ( dicomdirPath.exists( m_lineEditDicomdirPath->text() ) )//si el directori existeix, serà el directori inicial al obrir
+        {
+            initialDirectory = m_lineEditDicomdirPath->text();
+        }//si no existeix directori entrat el directori inicial serà el home
+        else initialDirectory = QDir::homePath();
+    }
+    else
+    {
+        if ( m_lastDicomdirDirectory.isEmpty() )//si no tenim last directory anem al directori home
+        {
+            initialDirectory = QDir::homePath();
+        }
+        else 
+        {
+            dicomdirPath.setPath( m_lastDicomdirDirectory );
+            dicomdirPath.cdUp();
+            initialDirectory = dicomdirPath.path();
+        }
+    }
+
+    QFileDialog *dlg = new QFileDialog( this , QFileDialog::tr( "Open" ) , initialDirectory , tr( "DICOMDIR Directory" ) );
     QString path;
 
     dlg->setFileMode( QFileDialog::DirectoryOnly );
 
     if ( dlg->exec() == QDialog::Accepted )
     {
-        if ( !dlg->selectedFiles().empty() ) m_lineEditDicomdirPath->setText( dlg->selectedFiles().takeFirst() );
+        if ( !dlg->selectedFiles().empty() ) 
+        {
+            m_lineEditDicomdirPath->setText( dlg->selectedFiles().takeFirst() );
+        }
     }
 
     delete dlg;

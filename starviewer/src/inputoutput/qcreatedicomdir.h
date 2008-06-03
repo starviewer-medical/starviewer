@@ -158,6 +158,8 @@ private:
     QAction *m_hardDiskAction;
     QAction *m_pendriveAction;
 
+    QString m_lastDicomdirDirectory;//Guarda l'últim directori on s'ha creat el Dicomdir
+
     /// Variable que ens diu quin és el dispositiu seleccionat en aquell moment
     CreateDicomdir::recordDeviceDicomDir m_currentDevice;
 };
