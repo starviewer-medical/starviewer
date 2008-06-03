@@ -1314,6 +1314,13 @@ void QueryScreen::closeEvent( QCloseEvent* event )
     m_qcreateDicomdir->clearTemporaryDir();
 }
 
+//TODO:Aquest mètode s'hauria de treure quan s'hagi fet el refactoring i s'hagi fet una interfície comuna de tancament per totes les classes de l'starviewer
+void QueryScreen::closeChildren()
+{
+    m_operationStateScreen->close();
+    m_qcreateDicomdir->close();
+}
+
 void QueryScreen::saveQStudyTreeWidgetColumnsWidth()
 {
     StarviewerSettings settings;
