@@ -1008,6 +1008,10 @@ void QueryScreen::retrievePacs( bool view )
             if( ok )
             {
                 mask.setStudyUID( currentStudyUID );//definim la màscara per descarregar l'estudi
+
+                // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
+                // per tant si seleccionem més d'una sèrie/imatge només s'en baixarà una
+                // Caldria fer possible que es baixi tants com en seleccionem
                 if ( !m_studyTreeWidgetPacs->getCurrentSeriesUID().isEmpty() )
                     mask.setSeriesUID( m_studyTreeWidgetPacs->getCurrentSeriesUID() );
 
