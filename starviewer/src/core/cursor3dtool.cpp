@@ -52,12 +52,7 @@ Cursor3DTool::~Cursor3DTool()
     {
         //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
         m_crossHair->decreaseReferenceCount();
-
-        m_crossHair->setVisibility( false );
-        m_crossHair->update( DrawerPrimitive::VTKRepresentation );
-        m_2DViewer->refresh();
-        m_myData->setVisible( false );
-
+        delete m_crossHair;
     }
 }
 
