@@ -52,6 +52,12 @@ Cursor3DTool::~Cursor3DTool()
     {
         //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
         m_crossHair->decreaseReferenceCount();
+
+        m_crossHair->setVisibility( false );
+        m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+        m_2DViewer->refresh();
+        m_myData->setVisible( false );
+
     }
 }
 
@@ -204,10 +210,12 @@ void Cursor3DTool::removePosition()
 {
     m_state = NONE;
     m_viewer->setCursor( Qt::ArrowCursor );
-    m_crossHair->setVisibility( false );
-    m_crossHair->update( DrawerPrimitive::VTKRepresentation );
-    m_2DViewer->refresh();
-    m_myData->setVisible( false );
+
+    /// S'ha demanat que el cursor no desparegui al deixar de clicar.
+//     m_crossHair->setVisibility( false );
+//     m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+//     m_2DViewer->refresh();
+//     m_myData->setVisible( false );
 }
 
 void Cursor3DTool::updateProjectedPoint()

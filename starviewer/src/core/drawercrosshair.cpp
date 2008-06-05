@@ -45,27 +45,27 @@ void DrawerCrossHair::setCentrePoint( double x, double y, double z )
     m_centrePoint[2] = z;
 
     //assignem els punts a la línia 1
-    m_lineUp->setFirstPoint( m_centrePoint[0], m_centrePoint[1]-10, m_centrePoint[2] );
+    m_lineUp->setFirstPoint( m_centrePoint[0], m_centrePoint[1]-6, m_centrePoint[2] );
     m_lineUp->setSecondPoint( m_centrePoint[0], m_centrePoint[1]-1, m_centrePoint[2] );
 
     //assignem els punts a la línia 2
-    m_lineDown->setFirstPoint( m_centrePoint[0], m_centrePoint[1]+10, m_centrePoint[2] );
+    m_lineDown->setFirstPoint( m_centrePoint[0], m_centrePoint[1]+6, m_centrePoint[2] );
     m_lineDown->setSecondPoint( m_centrePoint[0], m_centrePoint[1]+1, m_centrePoint[2] );
 
     //assignem els punts a la línia 3
-    m_lineLeft->setFirstPoint( m_centrePoint[0]-10, m_centrePoint[1], m_centrePoint[2] );
+    m_lineLeft->setFirstPoint( m_centrePoint[0]-6, m_centrePoint[1], m_centrePoint[2] );
     m_lineLeft->setSecondPoint( m_centrePoint[0]-1, m_centrePoint[1], m_centrePoint[2] );
 
     //assignem els punts a la línia 4
-    m_lineRight->setFirstPoint( m_centrePoint[0]+10, m_centrePoint[1], m_centrePoint[2] );
+    m_lineRight->setFirstPoint( m_centrePoint[0]+6, m_centrePoint[1], m_centrePoint[2] );
     m_lineRight->setSecondPoint( m_centrePoint[0]+1, m_centrePoint[1], m_centrePoint[2] );
 
     //assignem els punts a la línia 5
-    m_lineBack->setFirstPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-10 );
+    m_lineBack->setFirstPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-6 );
     m_lineBack->setSecondPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-1 );
 
     //assignem els punts a la línia 6
-    m_lineFront->setFirstPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+10 );
+    m_lineFront->setFirstPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+6 );
     m_lineFront->setSecondPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+1 );
 
     emit changed();
