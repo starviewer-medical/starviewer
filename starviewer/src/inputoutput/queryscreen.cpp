@@ -667,6 +667,7 @@ void QueryScreen::queryStudy( QString source )
         else if( source == "DICOMDIR" )
             m_studyTreeWidgetDicomdir->clear();
 
+        QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
     }
     else
@@ -682,8 +683,8 @@ void QueryScreen::queryStudy( QString source )
             m_studyTreeWidgetDicomdir->insertStudyList( &studyList );
             m_studyTreeWidgetDicomdir->setSortColumn( QStudyTreeWidget::ObjectName );//ordenem pel nom
         }
+        QApplication::restoreOverrideCursor();
     }
-    QApplication::restoreOverrideCursor();
 }
 
 void QueryScreen::expandStudy( QString studyUID , QString pacsAETitle )
