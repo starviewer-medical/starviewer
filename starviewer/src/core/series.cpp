@@ -11,8 +11,7 @@
 #include "volumerepository.h"
 
 #include <QStringList>
-
-#include <QDebug>
+#include <QPainter>
 
 namespace udg {
 
@@ -438,7 +437,22 @@ QPixmap Series::getThumbnail() const
     else if( m_modality == "SR" )
         thumb.load(":/images/structuredReportThumbnail.png");
     else
-        thumb = getImages()[ getImages().size() / 2 ]->getThumbnail();
+    {
+        int images = getImages().size();
+        if( images > 0 )
+            thumb = getImages()[ images / 2 ]->getThumbnail();
+        else
+        {
+            // si la sèrie no conté imatges en el thumbnail ho indicarem
+            QPixmap pixmap(100,100);
+            pixmap.fill(Qt::black);
+
+            QPainter painter(&pixmap);
+            painter.setPen(Qt::white);
+            painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, tr("No Images Available"));
+            thumb = pixmap;
+        }
+    }
 
     return thumb;
 }

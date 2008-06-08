@@ -35,7 +35,7 @@ private:
     /// Mètodes per processar la informació específica de pacient,series i imatge
     void processPatient( Patient *patient );
     void processSeries( Series *series );
-    void processImage( Image *image );
+    bool processImage( Image *image );
 
     /// Helper method per obtenir l'string corresponent a un direction cosines. Donat un vector de direcció determina la seva etiqueta d'orientació R,L,A,P,S,I
     QString mapDirectionCosinesToOrientationString( double vector[3] );

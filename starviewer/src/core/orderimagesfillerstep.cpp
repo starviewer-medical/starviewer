@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "orderimagesfillerstep.h"
 #include "logging.h"
 #include "patientfillerinput.h"
@@ -13,7 +12,6 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
-
 
 namespace udg {
 
@@ -65,7 +63,6 @@ void OrderImagesFillerStep::processSeries( Series *series )
 
     if ( m_orderedImageSet.count() > 1 ) // Cal ordernar les agrupacions d'imatges
     {
-
         foreach (QString key, m_orderedImageSet.keys() )
         {
             imagePositionSet = m_orderedImageSet.take(key);
@@ -73,7 +70,6 @@ void OrderImagesFillerStep::processSeries( Series *series )
 
             lastOrderedImageSet.insertMulti(this->distance(image),imagePositionSet);
         }
-
     }
     else
     {
@@ -99,7 +95,6 @@ void OrderImagesFillerStep::processSeries( Series *series )
     }
     series->setImages( imageSet );
     m_input->addLabelToSeries("OrderImagesFillerStep", series );
-
 }
 
 void OrderImagesFillerStep::processImage( Image *image )
@@ -107,9 +102,7 @@ void OrderImagesFillerStep::processImage( Image *image )
     DICOMTagReader dicomReader;
     if( dicomReader.setFile(image->getPath()) )
     {
-
         QString imageOrientationString = dicomReader.getAttributeByName( DCM_ImageOrientationPatient );
-
 
         QMap< double , QMap< int , Image* > * > * imagePositionSet;
         QMap< int , Image* > * instanceNumberSet;
@@ -130,13 +123,11 @@ void OrderImagesFillerStep::processImage( Image *image )
             {
                 instanceNumberSet = new QMap< int , Image* >();
                 instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
-
                 imagePositionSet->insert( distance, instanceNumberSet );
             }
         }
         else
         {
-
             instanceNumberSet = new QMap< int , Image* >();
             instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
 

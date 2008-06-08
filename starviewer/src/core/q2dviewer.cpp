@@ -672,11 +672,21 @@ double Q2DViewer::getThickness()
     case Axial:
     {
         // HACK fins que se solucioni de forma consistent el ticket #492
-        Image *image = getCurrentDisplayedImage();
-        if(image)
-            thickness = image->getSliceThickness() * m_slabThickness;
-        else
+        if( isThickSlabActive() )
+        {
+            // si hi ha thickslab, llavors el thickness es basa a partir de la
+            // suma de l'espai entre llesques
+            // TODO repassar que això sigui del tot correcte
             thickness = m_mainVolume->getSpacing()[2] * m_slabThickness;
+        }
+        else
+        {
+            Image *image = getCurrentDisplayedImage();
+            if(image)
+                thickness = image->getSliceThickness();
+            else
+                thickness = m_mainVolume->getSpacing()[2];
+        }
     }
     break;
 
