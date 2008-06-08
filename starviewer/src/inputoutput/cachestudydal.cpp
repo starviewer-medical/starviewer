@@ -442,18 +442,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
 
     /* La part d'esborrar un estudi com que s'ha d'accedir a diverses taules, ho farem en un transaccio per si falla alguna sentencia sqlSentence fer un rollback, i així deixa la taula en estat estable, no deixem anar el candau fins al final */
     databaseConnection->getLock();
-    databaseState = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );
-     //comencem la transacció
-
-    state = databaseConnection->databaseStatus( databaseState );
-    if ( !state.good() )
-    {
-        databaseState = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
-        databaseConnection->releaseLock();
-
-        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
-        return state;
-    }
+    databaseConnection->beginTransaction();
 
     //sqlSentence per saber el directori on es guarda l'estudi
     sqlSentence = QString("select AbsPath from study where StuInsUID = '%1'").arg(studyUID);
@@ -609,15 +598,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
         return state;
     }
 
-    databaseState = sqlite3_exec( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
-     //fem commit
-    state = databaseConnection->databaseStatus( databaseState );
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg(state.code()) );
-        return state;
-    }
-
+    databaseConnection->endTransaction();
     databaseConnection->releaseLock();
 
     //una vegada hem esborrat les dades de la bd, podem esborrar les imatges, això s'ha de fer al final, perqué si hi ha un error i esborrem les
