@@ -68,17 +68,26 @@ void ImageFillerStep::processSeries( Series *series )
     // Podrem tenir o bé Images, o bé KINs o bé PresentationStates
     if( isImageSeries(series) )
     {
+        bool ok = false;
         foreach (QString file, series->getFilesPathList())
         {
             Image *image = new Image;
             image->setPath( file );
 
-            processImage( image );
-            series->addImage( image );
+            if( processImage( image ) )
+            {
+                ok = true;
+                series->addImage( image );
+            }
+            else
+                DEBUG_LOG( "L'arxiu [" + file + "] no es pot afegir com a imatge a la sèrie amb UID [" + series->getInstanceUID() + "]" );
 
             qApp->processEvents();
         }
-        m_input->addLabelToSeries("ImageFillerStep", series );
+        if( ok )
+            m_input->addLabelToSeries("ImageFillerStep", series );
+        else
+            DEBUG_LOG( "La sèrie amb UID [" + series->getInstanceUID() + "] no té cap arxiu que sigui una imatge. No s'etiquetarà amb l'ImageFillerStep." );
     }
     else
     {
@@ -86,10 +95,18 @@ void ImageFillerStep::processSeries( Series *series )
     }
 }
 
-void ImageFillerStep::processImage( Image *image )
+bool ImageFillerStep::processImage( Image *image )
 {
     DICOMTagReader dicomReader;
     bool ok = dicomReader.setFile( image->getPath() );
+    if( !ok )
+    {
+        DEBUG_LOG("No s'ha pogut obrir amb el tagReader l'arxiu: " + image->getPath() );
+        return false;
+    }
+
+    // comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData
+    ok = dicomReader.tagExists( DCM_PixelData );
     if( ok )
     {
         image->setSOPInstanceUID( dicomReader.getAttributeByName( DCM_SOPInstanceUID ) );
@@ -186,14 +203,14 @@ void ImageFillerStep::processImage( Image *image )
 
         int frames = dicomReader.getAttributeByName( DCM_NumberOfFrames ).toInt();
         image->setNumberOfFrames( frames ? frames : 1 );
-        
+
         image->setImageType( dicomReader.getAttributeByName( DCM_ImageType ) );
 
         if (dicomReader.tagExists( DCM_KVP ))
         {
             image->setKiloVoltagePeak( dicomReader.getAttributeByName( DCM_KVP ).toDouble() );
         }
-        
+
         if (dicomReader.tagExists( DCM_ExposureInMicroAs ))
         {
             image->setMicroAmpersSecond( dicomReader.getAttributeByName( DCM_ExposureInMicroAs ).toDouble() );
@@ -212,7 +229,7 @@ void ImageFillerStep::processImage( Image *image )
         {
             image->setRepetitionTime( QString::number( dicomReader.getAttributeByName( DCM_RepetitionTime ).toDouble() , 'f' , 0 ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_EchoTime ))
         {
             image->setEchoTime( QString::number( dicomReader.getAttributeByName( DCM_EchoTime ).toDouble() , 'f' , 1 ) );
@@ -232,47 +249,47 @@ void ImageFillerStep::processImage( Image *image )
         {
             image->setFlipAngle( QString::number( dicomReader.getAttributeByName( DCM_VariableFlipAngleFlag ).toDouble() , 'f' , 0 ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_NumberOfAverages ))
         {
             image->setNumberOfAverages( dicomReader.getAttributeByName( DCM_NumberOfAverages ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_PercentPhaseFieldOfView ))
         {
             image->setPercentPhaseFieldOfView( QString::number( dicomReader.getAttributeByName( DCM_PercentPhaseFieldOfView ).toDouble() , 'f' , 0 ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_ReceiveCoilName ))
         {
             image->setReceiveCoilName( dicomReader.getAttributeByName( DCM_ReceiveCoilName ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_ReconstructionDiameter ))
         {
             image->setReconstructionDiameter( QString::number( dicomReader.getAttributeByName( DCM_ReconstructionDiameter ).toDouble() , 'f' , 0 ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_ExposureTime ))
         {
             image->setExposureTime( QString::number( dicomReader.getAttributeByName( DCM_ExposureTime ).toDouble() , 'f' , 2 ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_TableHeight ))
         {
             image->setTableHeight( QString::number( dicomReader.getAttributeByName( DCM_TableHeight ).toDouble() , 'f' , 0 ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_SliceLocation ))
         {
             image->setSliceLocation( dicomReader.getAttributeByName( DCM_SliceLocation ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_FilterType ))
         {
             image->setFilterType( dicomReader.getAttributeByName( DCM_FilterType ) );
         }
-        
+
         if (dicomReader.tagExists( DCM_ImageType ))
         {
             image->setImageType( dicomReader.getAttributeByName( DCM_ImageType ) );
@@ -300,8 +317,10 @@ void ImageFillerStep::processImage( Image *image )
     }
     else
     {
-        DEBUG_LOG("No s'ha pogut obrir amb el tagReader l'arxiu: " + image->getPath() );
+        DEBUG_LOG( "L'arxiu [" + image->getPath() + "] no conté el tag PixelData" );
     }
+
+    return ok;
 }
 
 QString ImageFillerStep::mapDirectionCosinesToOrientationString( double vector[3] )

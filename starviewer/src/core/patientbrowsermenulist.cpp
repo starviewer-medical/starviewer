@@ -74,16 +74,20 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
     gridLayout->addWidget(studyText);
     gridLayout->addLayout(gridLayoutWidgets);
 
-    QList<Series*> seriesToAdd = study->getSeries();
-
     //comptem el nombre de series que seran visibles
     int numberOfViewableSeries = 0;
     QString modality;
-    foreach(Series *series,seriesToAdd)
+    QList<Series*> seriesList = study->getSeries();
+    QList<Series*> seriesToAdd; // les sèries que al final afegirem al llistat
+    foreach(Series *series,seriesList)
     {
         modality = series->getModality();
-        if( !(modality == "PR" || modality == "KO" || modality == "SR") )
+        if( !(modality == "PR" || modality == "KO" || modality == "SR") && series->getImages().count() > 0 )
+        {
+            // la sèrie és vàlida per ser mostrada
             numberOfViewableSeries++;
+            seriesToAdd << series;
+        }
     }
 
     int maxColumns = 2;
@@ -96,12 +100,7 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
         int column = 0;
         while ( column < maxColumns && !seriesToAdd.isEmpty())
         {
-            modality = seriesToAdd.first()->getModality(); // si no es una modalitat no suportada no la mostrem
-            if( modality == "PR" || modality == "KO" || modality == "SR" )
-                seriesToAdd.removeFirst();
-            else
-                gridLayoutWidgets->addWidget( createSerieWidget(seriesToAdd.takeFirst(), studyWidget), row, column );
-
+            gridLayoutWidgets->addWidget( createSerieWidget(seriesToAdd.takeFirst(), studyWidget), row, column );
             ++column;
         }
         ++row;
@@ -110,7 +109,7 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
     return studyWidget;
 }
 
-PatientBrowserMenuBasicItem* PatientBrowserMenuList::createSerieWidget( Series * serie, QWidget * parent )
+PatientBrowserMenuBasicItem *PatientBrowserMenuList::createSerieWidget( Series * serie, QWidget * parent )
 {
     PatientBrowserMenuBasicItem * seriebasicWidget = new PatientBrowserMenuBasicItem( parent );
     seriebasicWidget->setSerie( serie );
