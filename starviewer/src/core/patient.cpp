@@ -238,6 +238,18 @@ Patient Patient::operator +=( const Patient &patient )
         uid = study->getInstanceUID();
         if( !this->studyExists(uid) )
             this->addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
+        else
+        {
+            // és el mateix estudi, però podria ser que tingués sèries noves
+            // obtenim les series actuals
+            QList<Series *> seriesList = study->getSeries();
+            foreach( Series *series, seriesList )
+            {
+                // si la sèrie no existeix actualment, l'afegim
+                if( !this->getStudy(uid)->seriesExists( series->getInstanceUID() ) )
+                    this->getStudy(uid)->addSeries( series );
+            }
+        }
     }
 
     return this;
@@ -255,8 +267,8 @@ QString Patient::clearPatientName( QString patientName )
 
 bool Patient::containtsNumericalSymbols( QString patientName )
 {
-     QRegExp rx("\\d\\d?\\d?\\d?");     
-    return ( rx.indexIn( patientName ) != -1 ); 
+    QRegExp rx("\\d\\d?\\d?\\d?");
+    return ( rx.indexIn( patientName ) != -1 );
 }
 
 Patient::PatientsSimilarity Patient::compareTo( const Patient *patient )
@@ -266,8 +278,8 @@ Patient::PatientsSimilarity Patient::compareTo( const Patient *patient )
     {
         return SamePatients;
     }
-    
-    
+
+
     //Pre-tractament sobre el nom del pacient per treure caràcters extranys
     QString nameOfThis = clearStrangeSymbols( this->getFullName() );
     QString nameOfParameter = clearStrangeSymbols( patient->getFullName() );
@@ -284,7 +296,7 @@ Patient::PatientsSimilarity Patient::compareTo( const Patient *patient )
             return DifferentPatients;
         }
     }
-    
+
     //si passem del condicional anterior és que algun o cap dels noms tenia dades numèriques; pertant fem el tractament normal.
     //mirem si tractant els caràcters extranys i canviant-los per espais són iguals. En aquest cas ja no cal mirar res més.
     if ( nameOfThis == nameOfParameter )
