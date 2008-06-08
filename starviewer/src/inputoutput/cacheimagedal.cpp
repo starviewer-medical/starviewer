@@ -38,18 +38,6 @@ Status CacheImageDAL::insertImage( DICOMImage *image )
 
     databaseConnection->getLock();
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "BEGIN TRANSACTION ", 0 , 0 , 0 );//comencem la transacció
-
-    state = databaseConnection->databaseStatus( stateDatabase );
-
-    if ( !state.good() )
-    {
-        stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "ROLLBACK TRANSACTION " , 0 , 0 , 0 );
-        databaseConnection->releaseLock();
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        return state;
-    }
-
     sqlSentence = QString("Insert into Image (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) values ('%1','%2','%3',%4,'%5','%6',%7,'%8')" )
         .arg( image->getSOPInstanceUID() )
         .arg( image->getStudyUID() )
@@ -99,15 +87,7 @@ Status CacheImageDAL::insertImage( DICOMImage *image )
         return state;
     }
 
-    stateDatabase = sqlite3_exec( databaseConnection->getConnection() , "COMMIT TRANSACTION " , 0 , 0 , 0 );
-
     databaseConnection->releaseLock();
-
-    state = databaseConnection->databaseStatus( stateDatabase );
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-    }
 
     return state;
 }

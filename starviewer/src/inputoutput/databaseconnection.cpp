@@ -39,6 +39,16 @@ void DatabaseConnection::connectDB()
     sqlite3_open( qPrintable( QDir::toNativeSeparators( m_databasePath ) ) , &m_databaseConnection );
 }
 
+void DatabaseConnection::beginTransaction()
+{
+	sqlite3_exec(m_databaseConnection, "BEGIN TRANSACTION", 0 , 0 , 0);
+}
+
+void DatabaseConnection::endTransaction()
+{
+	sqlite3_exec(m_databaseConnection, "END TRANSACTION", 0 , 0 , 0);
+}
+
 sqlite3* DatabaseConnection::getConnection()
 {
     if ( !connected() ) connectDB();

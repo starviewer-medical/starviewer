@@ -31,6 +31,7 @@
 #include "imagelist.h"
 #include "querypacs.h"
 #include "pacsconnection.h"
+#include "databaseconnection.h"
 
 namespace udg {
 
@@ -175,7 +176,18 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageCommitSlot( QString , int ) ) );
     connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesCommitSlot( QString ) ) );
 
+    //TODO: Hack pels problemes de lentitud que tenim a windows. Això és molt fràgil perquè
+    // tenim que DatabaseConnection és singleton quan no ho hauria de ser. Un rollback des d'un lloc incontrolat
+    // faria quedar la bd inconsistent respecte el que esperem.
+    DatabaseConnection::getDatabaseConnection()->getLock();
+    DatabaseConnection::getDatabaseConnection()->beginTransaction();
+    DatabaseConnection::getDatabaseConnection()->releaseLock();
+
     retState = retrieveImages.retrieve();
+
+    DatabaseConnection::getDatabaseConnection()->getLock();
+    DatabaseConnection::getDatabaseConnection()->endTransaction();
+    DatabaseConnection::getDatabaseConnection()->releaseLock();
 
     pacsConnection.disconnect();
 
