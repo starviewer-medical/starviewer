@@ -255,11 +255,11 @@ void AngleTool::drawCircumference()
     double *pv = MathTools::vectorialProduct(vd1, vd2);
 
     initialI = 360 - m_initialDegreeArc;
-    finalI = (360 - ( angle+m_initialDegreeArc ) );
+    finalI = int(360 - ( angle+m_initialDegreeArc ) );
 
     if ( pv[viewCoord] > 0 )
     {
-        finalI = angle-m_initialDegreeArc;
+        finalI = int(angle-m_initialDegreeArc);
     }
 
     if ( (initialI-finalI) <= 180 )
@@ -295,7 +295,7 @@ void AngleTool::drawCircumference()
     else
     {
         initialI = -m_initialDegreeArc;
-        finalI = angle-m_initialDegreeArc ;
+        finalI = int( angle-m_initialDegreeArc );
         for ( int i = initialI; i < finalI; i++ )
         {
             degrees = i*1.0*vtkMath::DoubleDegreesToRadians();

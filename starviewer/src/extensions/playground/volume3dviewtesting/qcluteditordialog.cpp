@@ -123,7 +123,12 @@ void QClutEditorDialog::manageClick( QAbstractButton * button )
 
     switch ( m_buttonBox->buttonRole( button ) )
     {
-        case QDialogButtonBox::ApplyRole: emit clutApplied( currentEditor->getTransferFunction() ); break;
+        case 
+            QDialogButtonBox::ApplyRole: emit clutApplied( currentEditor->getTransferFunction() ); 
+        break;
+        
+        default: 
+        break;
     }
 }
 

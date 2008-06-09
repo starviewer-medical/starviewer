@@ -581,6 +581,9 @@ void QCreateDicomdir::showProcessErrorMessage( const QProcess &process, QString 
 //             case QProcess::UnknownError:
 //                 errorMessage = tr("An unknown error occurred with the process [ %1 ]").arg("mkisofs");
 //                 break;
+                
+            default: 
+                break;
     }
     QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the DICOMDIR") + "\n\n" + errorMessage + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
 
