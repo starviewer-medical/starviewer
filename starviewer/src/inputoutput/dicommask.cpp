@@ -1,5 +1,8 @@
 #include "dicommask.h"
 
+#include <QStringList>
+#include <QDateTime>
+#include <QDate>
 #include <dcsequen.h>
 #include <dimse.h> // provide the structure DcmDataSet
 #include <dcdeftag.h> //provide the information for the tags
@@ -628,6 +631,11 @@ Status DicomMask:: setSeriesDate( QString date )
 
     retrieveLevel( SeriesMask );
 
+    
+    
+    cout << "DATA: --------------> " << qPrintable(date) << endl;
+    
+    
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
     if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() !=  0 )return state.setStatus( DcmtkMaskInsertTagError );
 
@@ -1196,6 +1204,59 @@ bool DicomMask::operator ==(const DicomMask &mask)
         return true;
     else
         return false;
+}
+
+bool DicomMask::isAHeavyQuery()
+{
+    //en aquest QStringList hi posarem els noms. cognoms i strings que són potencialment candidats a donar cerques pesades
+    QStringList heavyWords;
+    
+    ///\TODO per fer-ho correctament aquest "diccionari" de paraules candidates a fer cerques pesades hauria d'estar en un fitxer, de manera que l'usuari no hagi de manipular codi per afegir un nou terme.
+    heavyWords << "joan" << "juan" << "josep" << "jose" << "ana" << "antoni" << "antonio" << "garcia" << "ez";
+    
+    bool longPeriod = false;
+    
+    QString studyDate = getStudyDate();
+    QString patientName = getPatientName();
+    
+    /// Condicions que determinen si una query és pesada:
+    /// SENSE DATA D'ESTUDI ESPECIFICADA (ANY DATE)
+    bool anyDate = studyDate.length() == 0;
+    
+    /// SENSE ESPECIFICAR NOM
+    bool noName = patientName.length() == 0;
+        
+    /// SENSE ID DE PACIENT
+    bool noID = getPatientId().length() == 0;
+    
+    /// PERÍODE RELATIVAMENT LLARG 
+    if ( studyDate.length() > 8 )
+    {
+        QDateTime begin( QDate( studyDate.mid(0, 4).toInt(), studyDate.mid(4, 2).toInt(), studyDate.mid(6, 2).toInt() ) );
+        QDateTime end( QDate( studyDate.mid(10, 4).toInt(), studyDate.mid(14, 2).toInt(), studyDate.mid(16, 2).toInt() ) );
+        
+        //consederem com a període llarg a partir d'una setmana
+        longPeriod = end.daysTo( begin ) > 7;
+    }
+    
+    ///NOM CURT
+    bool shortName = ( patientName.length() < 4 );
+    
+    ///NOMÉS S'HA INTRODUÏT UNA PARAULA COM A NOM (no és un nom complet: nom + cognom)
+    QStringList words = patientName.split(" ");
+    
+    bool singleWordAsName = words.size() == 1;
+    
+    ///EL NOM ÉS UN STRING DELS DETERMINATS COM A PESATS A L'INICI DEL MÈTODE
+    bool heavyName = singleWordAsName && heavyWords.contains ( words[0], Qt::CaseInsensitive ); 
+    
+    ///EL NÚMERO D'ESTUDI ÉS CURT
+    bool shortID = getPatientId().length() < 3;
+    
+    //Construïm les condicions que fan que una query pugui ser pesada
+    bool heavyMask =  ( anyDate || longPeriod ) && ( noName || noID || shortName || singleWordAsName || heavyName || shortID );
+    
+    return heavyMask;
 }
 
 };
