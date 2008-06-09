@@ -9,6 +9,8 @@
 
 #include <QSemaphore>
 #include <QString>
+#include <QMessageBox>
+#include <QApplication>
 
 #include "status.h"
 #include "starviewersettings.h"
@@ -57,6 +59,24 @@ void MultipleQueryStudy::slotErrorQueringStudiesPacs( int pacsID )
 
 Status MultipleQueryStudy::StartQueries()
 {
+    QApplication::restoreOverrideCursor();
+    
+    if ( m_searchMask.isAHeavyQuery() )
+    {
+        //0 -> Yes; 1->No
+        int option = QMessageBox::information( 0 , tr( "Warning" ) , tr( "This query can take a long time.\nDo you want continue?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
+        
+        if ( option == 1 )
+        {
+            Status state;
+            state.setStatus( DcmtkUserCancellation );
+            
+            return state;
+        }
+    }
+    
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    
     QList<QQueryStudyThread *> llistaThreads;
     bool error = false;
     Status state;

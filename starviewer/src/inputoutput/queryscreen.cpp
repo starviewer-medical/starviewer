@@ -576,11 +576,16 @@ void QueryScreen::queryStudyPacs()
     pacsList.firstPacs();
     m_lastQueriedPacs = pacsList.getPacs().getAEPacs();
 
-    if ( !multipleQueryStudy.StartQueries().good() )  //fem la query
+    Status queryStatus = multipleQueryStudy.StartQueries();
+    
+    if ( !queryStatus.good() )  //no fem la query
     {
-        m_studyTreeWidgetPacs->clear();
-        QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
+        if ( queryStatus.getCodeType() != Status::UserCancellation )
+        {
+            m_studyTreeWidgetPacs->clear();
+            QApplication::restoreOverrideCursor();
+            QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
+        }
         return;
     }
 
