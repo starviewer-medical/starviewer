@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMI xmlns:UML="http://schema.omg.org/spec/UML/1.3" verified="false" timestamp="2007-11-22T11:52:15" xmi.version="1.2" >
+ <XMI.header>
+  <XMI.documentation>
+   <XMI.exporter>umbrello uml modeller http://uml.sf.net</XMI.exporter>
+   <XMI.exporterVersion>1.5.4</XMI.exporterVersion>
+   <XMI.exporterEncoding>UnicodeUTF8</XMI.exporterEncoding>
+  </XMI.documentation>
+  <XMI.metamodel xmi.name="UML" href="UML.xml" xmi.version="1.3" />
+ </XMI.header>
+ <XMI.content>
+  <UML:Model isSpecification="false" isLeaf="false" isRoot="false" xmi.id="m1" isAbstract="false" name="Model UML" >
+   <UML:Namespace.ownedElement>
+    <UML:Stereotype isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="15" isRoot="false" isAbstract="false" name="datatype" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="14" isRoot="false" isAbstract="false" name="int" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="16" isRoot="false" isAbstract="false" name="char" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="17" isRoot="false" isAbstract="false" name="bool" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="18" isRoot="false" isAbstract="false" name="float" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="19" isRoot="false" isAbstract="false" name="double" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="20" isRoot="false" isAbstract="false" name="short" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="21" isRoot="false" isAbstract="false" name="long" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="22" isRoot="false" isAbstract="false" name="unsigned int" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="23" isRoot="false" isAbstract="false" name="unsigned short" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="24" isRoot="false" isAbstract="false" name="unsigned long" />
+    <UML:DataType stereotype="15" isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="25" isRoot="false" isAbstract="false" name="string" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="72" isRoot="false" isAbstract="false" name="Extension" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="73" isRoot="false" isAbstract="false" name="ToolManager" >
+     <UML:Classifier.feature>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="85" isRoot="false" isAbstract="false" isQuery="false" name="new" />
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="86" isRoot="false" isAbstract="false" isQuery="false" name="setTool" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="87" value="" type="74" name="viewer" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="88" value="" type="25" name="toolName" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="89" value="" type="75" name="toolConfiguration" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="90" isRoot="false" isAbstract="false" isQuery="false" name="getToolAction" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3637" type="92" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="91" value="" type="25" name="toolName" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="575" isRoot="false" isAbstract="false" isQuery="false" name="actionTriggered" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="576" value="" type="25" name="toolName" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="583" isRoot="false" isAbstract="false" isQuery="false" name="getViewers" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="590" value="" type="25" name="toolName" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="594" isRoot="false" isAbstract="false" isQuery="false" name="getConfiguration" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3638" type="75" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="595" value="" type="74" name="viewer" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="599" value="" type="25" name="toolName" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="1493" isRoot="false" isAbstract="false" isQuery="false" name="deactivate" />
+     </UML:Classifier.feature>
+    </UML:Class>
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="74" isRoot="false" isAbstract="false" name="QViewer" >
+     <UML:Classifier.feature>
+      <UML:Attribute isSpecification="false" visibility="private" xmi.id="2064" type="547" name="m_toolProxy" />
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="689" isRoot="false" isAbstract="false" isQuery="false" name="getToolProxy" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3639" type="547" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="698" isRoot="false" isAbstract="false" isQuery="false" name="adTool" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="699" value="" type="77" name="tool" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+     </UML:Classifier.feature>
+    </UML:Class>
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="75" isRoot="false" isAbstract="false" name="ToolConfiguration" >
+     <UML:Classifier.feature>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="94" isRoot="false" isAbstract="false" isQuery="false" name="new" />
+     </UML:Classifier.feature>
+    </UML:Class>
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="76" isRoot="false" isAbstract="false" name="ToolRegistry" >
+     <UML:Classifier.feature>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="97" isRoot="false" isAbstract="false" isQuery="false" name="getAction" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3640" type="92" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="99" value="" type="25" name="toolName" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="611" isRoot="false" isAbstract="false" isQuery="false" name="getTool" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3641" type="77" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="612" value="" type="74" name="viewer" />
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="617" value="" type="25" name="toolName" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+     </UML:Classifier.feature>
+    </UML:Class>
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="77" isRoot="false" isAbstract="false" name="Tool" >
+     <UML:Classifier.feature>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="105" isRoot="false" isAbstract="false" isQuery="false" name="geAction" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3642" type="92" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="643" isRoot="false" isAbstract="false" isQuery="false" name="new" />
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="667" isRoot="false" isAbstract="false" isQuery="false" name="hasSharedData" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3643" type="17" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="674" isRoot="false" isAbstract="false" isQuery="false" name="getData" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter kind="return" xmi.id="3644" type="537" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+     </UML:Classifier.feature>
+    </UML:Class>
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="92" isRoot="false" isAbstract="false" name="QAction" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="537" isRoot="false" isAbstract="false" name="ToolData" >
+     <UML:Classifier.feature>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="632" isRoot="false" isAbstract="false" isQuery="false" name="new" />
+     </UML:Classifier.feature>
+    </UML:Class>
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="547" isRoot="false" isAbstract="false" name="ToolProxy" >
+     <UML:Classifier.feature>
+      <UML:Attribute isSpecification="false" visibility="private" xmi.id="2192" type="2255" name="m_toolsMap" />
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="1026" isRoot="false" isAbstract="false" isQuery="false" name="addTool" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="1027" value="" type="77" name="tool" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+      <UML:Operation isSpecification="false" isLeaf="false" visibility="public" xmi.id="1631" isRoot="false" isAbstract="false" isQuery="false" name="unregister" >
+       <UML:BehavioralFeature.parameter>
+        <UML:Parameter isSpecification="false" visibility="private" xmi.id="1632" value="" type="25" name="toolName" />
+       </UML:BehavioralFeature.parameter>
+      </UML:Operation>
+     </UML:Classifier.feature>
+    </UML:Class>
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="2206" isRoot="false" isAbstract="false" name="m_toolsMap" />
+    <UML:Class isSpecification="false" isLeaf="false" visibility="public" namespace="m1" xmi.id="2255" isRoot="false" isAbstract="false" name="Tool[]" />
+    <UML:Association isSpecification="false" visibility="public" namespace="m1" xmi.id="2314" name="" >
+     <UML:Association.connection>
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2315" aggregation="none" type="77" name="" />
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2316" aggregation="none" type="75" name="" />
+     </UML:Association.connection>
+    </UML:Association>
+    <UML:Association isSpecification="false" visibility="public" namespace="m1" xmi.id="2333" name="" >
+     <UML:Association.connection>
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2334" aggregation="none" type="73" name="" />
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2335" aggregation="none" type="72" name="" />
+     </UML:Association.connection>
+    </UML:Association>
+    <UML:Association isSpecification="false" visibility="public" namespace="m1" xmi.id="2352" name="" >
+     <UML:Association.connection>
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2353" aggregation="none" type="73" name="" />
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2354" aggregation="none" type="74" name="" />
+     </UML:Association.connection>
+    </UML:Association>
+    <UML:Association isSpecification="false" visibility="public" namespace="m1" xmi.id="2376" name="" >
+     <UML:Association.connection>
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2377" aggregation="none" type="77" name="" />
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2378" aggregation="none" type="537" name="" />
+     </UML:Association.connection>
+    </UML:Association>
+    <UML:Association isSpecification="false" visibility="public" namespace="m1" xmi.id="2470" name="" >
+     <UML:Association.connection>
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2471" aggregation="none" type="74" name="" />
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2472" aggregation="none" type="547" name="" />
+     </UML:Association.connection>
+    </UML:Association>
+    <UML:Association isSpecification="false" visibility="public" namespace="m1" xmi.id="2526" name="" >
+     <UML:Association.connection>
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2527" aggregation="none" type="76" name="" />
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2528" aggregation="none" type="73" name="" />
+     </UML:Association.connection>
+    </UML:Association>
+    <UML:Association isSpecification="false" visibility="public" namespace="m1" xmi.id="2603" name="" >
+     <UML:Association.connection>
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2604" aggregation="none" type="547" name="" />
+      <UML:AssociationEnd isSpecification="false" visibility="public" changeability="changeable" isNavigable="true" xmi.id="2605" aggregation="none" type="77" name="" />
+     </UML:Association.connection>
+    </UML:Association>
+   </UML:Namespace.ownedElement>
+  </UML:Model>
+ </XMI.content>
+ <XMI.extensions xmi.extender="umbrello" >
+  <docsettings viewid="1855" documentation="" uniqueid="3644" />
+  <diagrams>
+   <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1012" snapy="10" showatts="1" xmi.id="13" documentation="" type="402" showops="1" showpackage="0" name="ENTITATS / CLASSES" localid="900000" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="604" >
+    <widgets>
+     <floatingtext usesdiagramfillcolour="1" width="90" usesdiagramusefillcolour="1" x="47" y="19" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="32" text="ToolRegistry" font="Sans Serif,10,-1,5,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="185" usesdiagramusefillcolour="1" x="51" y="45" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="33" text="-s'encarrega de crear Tools" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="297" usesdiagramusefillcolour="1" x="51" y="64" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="34" text="-s'encarrega d'obtenir les actions d'una Tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="303" usesdiagramusefillcolour="1" x="46" y="17" linewidth="none" fillcolour="none" height="73" usefillcolor="1" isinstance="0" xmi.id="35" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="92" usesdiagramusefillcolour="1" x="46" y="102" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="36" showstereotype="1" text="ToolManager" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="110" usesdiagramusefillcolour="1" x="49" y="125" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="37" showstereotype="1" text="-botiga de tools" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="381" usesdiagramusefillcolour="1" x="49" y="142" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="38" showstereotype="1" text="-pot definir per cada viewer quines tools suporta / escolta" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="379" usesdiagramusefillcolour="1" x="49" y="159" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="39" showstereotype="1" text="-pot definir per un viewer i una Tool quina configuració té" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="303" usesdiagramusefillcolour="1" x="49" y="176" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="40" text="-pot associar l'acció corresponent a cada tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="283" usesdiagramusefillcolour="1" x="49" y="193" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="41" text="-pot definir a quins grps pertany cada Tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="393" usesdiagramusefillcolour="1" x="45" y="99" linewidth="none" fillcolour="none" height="117" usefillcolor="1" isinstance="0" xmi.id="42" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="62" usesdiagramusefillcolour="1" x="48" y="229" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="45" text="QViewer" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="268" usesdiagramusefillcolour="1" x="46" y="247" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="46" showstereotype="1" text="-mostra per panatalla informació gràfica" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="111" usesdiagramusefillcolour="1" x="46" y="264" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="47" showstereotype="1" text="-conté 1 Drawer" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="115" usesdiagramusefillcolour="1" x="47" y="283" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="48" showstereotype="1" text="-té un ToolProxy" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="274" usesdiagramusefillcolour="1" x="45" y="227" linewidth="none" fillcolour="none" height="79" usefillcolor="1" isinstance="0" xmi.id="49" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="123" usesdiagramusefillcolour="1" x="46" y="321" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="52" text="ToolConfiguration" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="412" usesdiagramusefillcolour="1" x="51" y="337" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="53" text="-guarda de forma genèrica atributs que pot configurar una tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="421" usesdiagramusefillcolour="1" x="45" y="316" linewidth="none" fillcolour="none" height="49" usefillcolor="1" isinstance="0" xmi.id="54" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="36" usesdiagramusefillcolour="1" x="46" y="371" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="55" showstereotype="1" text="Tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="141" usesdiagramusefillcolour="1" x="47" y="386" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="56" showstereotype="1" text="-té una configuració." font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="352" usesdiagramusefillcolour="1" x="45" y="400" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="57" showstereotype="1" text="-defineix la interfície per rebre events i processar-los" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="119" usesdiagramusefillcolour="1" x="45" y="415" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="58" text="-classe abstracta" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="360" usesdiagramusefillcolour="1" x="46" y="431" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="59" showstereotype="1" text="-té unes dades associades que poden ser compartides" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="370" usesdiagramusefillcolour="1" x="44" y="372" linewidth="none" fillcolour="none" height="82" usefillcolor="1" isinstance="0" xmi.id="60" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="73" usesdiagramusefillcolour="1" x="41" y="463" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="61" text="ToolProxy" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="217" usesdiagramusefillcolour="1" x="41" y="479" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="62" showstereotype="1" text="-Rep tots els events d'un viewer" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="258" usesdiagramusefillcolour="1" x="41" y="494" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="63" showstereotype="1" text="-coneix les tools actives per un viewer" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="289" usesdiagramusefillcolour="1" x="41" y="510" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="64" showstereotype="1" text="-passa els events rebuts a les tools actives" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="178" usesdiagramusefillcolour="1" x="41" y="525" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="65" showstereotype="1" text="-està associat a un viewer" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="278" usesdiagramusefillcolour="1" x="41" y="539" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="66" showstereotype="1" text="-guarda el nom de cadascuna de les tools" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="288" usesdiagramusefillcolour="1" x="42" y="464" linewidth="none" fillcolour="none" height="97" usefillcolor="1" isinstance="0" xmi.id="67" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="67" usesdiagramusefillcolour="1" x="534" y="13" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="68" showstereotype="1" text="ToolData" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <floatingtext usesdiagramfillcolour="1" width="203" usesdiagramusefillcolour="1" x="532" y="30" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="69" showstereotype="1" text="-defineix les dades d'una Tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="213" usesdiagramusefillcolour="1" x="527" y="11" linewidth="none" fillcolour="none" height="43" usefillcolor="1" isinstance="0" xmi.id="70" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+    </widgets>
+    <messages/>
+    <associations/>
+   </diagram>
+   <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1012" snapy="10" showatts="1" xmi.id="71" documentation="" type="403" showops="1" showpackage="0" name="Inici" localid="899994" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="604" >
+    <widgets>
+     <objectwidget usesdiagramfillcolour="0" width="86" usesdiagramusefillcolour="1" x="36" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="72" decon="0" localid="899999" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="106" usesdiagramusefillcolour="1" x="209" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="73" decon="0" localid="899998" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="76" usesdiagramusefillcolour="1" x="338" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="74" decon="0" localid="899997" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="137" usesdiagramusefillcolour="1" x="439" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="75" decon="0" localid="899996" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="104" usesdiagramusefillcolour="1" x="610" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="76" decon="0" localid="899995" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="50" usesdiagramusefillcolour="1" x="847" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="77" decon="0" localid="899994" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <floatingtext usesdiagramfillcolour="1" width="129" usesdiagramusefillcolour="1" x="576" y="441" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="502" showstereotype="1" text="PER CADA VIEWER" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="838" usesdiagramusefillcolour="1" x="71" y="166" linewidth="none" fillcolour="none" height="138" usefillcolor="1" isinstance="0" xmi.id="2999" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="93" usesdiagramusefillcolour="1" x="275" y="166" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="3048" text="Per cada tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="465" usesdiagramusefillcolour="1" x="255" y="409" linewidth="none" fillcolour="none" height="63" usefillcolor="1" isinstance="0" xmi.id="3258" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <notewidget usesdiagramfillcolour="1" width="157" usesdiagramusefillcolour="1" x="757" y="344" linewidth="none" fillcolour="none" height="60" usefillcolor="1" isinstance="0" xmi.id="3428" showstereotype="1" text="segons la q2dviewerextension" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+    </widgets>
+    <messages>
+     <messagewidget usesdiagramfillcolour="1" width="191" usesdiagramusefillcolour="1" x="79" y="211" operation="90" linewidth="none" widgetbid="899998" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="222" widgetaid="899999" isinstance="0" xmi.id="221" sequencemessagetype="1000" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="291" usesdiagramusefillcolour="1" x="84" y="189" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="222" showstereotype="1" text=": getToolAction(toolName : string) : QAction" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="408" usesdiagramusefillcolour="1" x="262" y="212" operation="97" linewidth="none" widgetbid="899995" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="230" widgetaid="899998" isinstance="0" xmi.id="229" sequencemessagetype="1000" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="263" usesdiagramusefillcolour="1" x="394" y="190" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="230" showstereotype="1" text=": getAction(toolName : string) : QAction" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="218" usesdiagramusefillcolour="1" x="662" y="212" operation="105" linewidth="none" widgetbid="899994" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="238" widgetaid="899995" isinstance="0" xmi.id="237" sequencemessagetype="1000" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="146" usesdiagramusefillcolour="1" x="721" y="190" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="238" showstereotype="1" text=": geAction() : QAction" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="48" usesdiagramusefillcolour="1" x="80" y="264" operation="button.setDefaultAction(QAction)" linewidth="none" widgetbid="899999" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="482" widgetaid="899999" isinstance="0" xmi.id="481" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="231" usesdiagramusefillcolour="1" x="85" y="242" linewidth="none" posttext="" role="705" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="482" showstereotype="1" text=": button.setDefaultAction(QAction)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="181" usesdiagramusefillcolour="1" x="80" y="108" operation="85" linewidth="none" widgetbid="899998" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="3090" widgetaid="899999" isinstance="0" xmi.id="3089" sequencemessagetype="1001" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="52" usesdiagramusefillcolour="1" x="162" y="86" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="3090" showstereotype="1" text=": new()" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="48" usesdiagramusefillcolour="1" x="80" y="331" operation="create exclusive tools" linewidth="none" widgetbid="899999" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="3148" widgetaid="899999" isinstance="0" xmi.id="3147" sequencemessagetype="1001" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="159" usesdiagramusefillcolour="1" x="85" y="309" linewidth="none" posttext="" role="705" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="3148" showstereotype="1" text=": create exclusive tools" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="181" usesdiagramusefillcolour="1" x="80" y="396" operation="addExclusiveToolsGroup(string groupName, QStringList exclusiveTools)" linewidth="none" widgetbid="899998" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="3166" widgetaid="899999" isinstance="0" xmi.id="3165" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="482" usesdiagramusefillcolour="1" x="85" y="374" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="3166" showstereotype="1" text=": addExclusiveToolsGroup(string groupName, QStringList exclusiveTools)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="48" usesdiagramusefillcolour="1" x="263" y="436" operation="setViewerTools(QViewer viewer, QStringList toolsList)" linewidth="none" widgetbid="899998" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="3216" widgetaid="899998" isinstance="0" xmi.id="3215" sequencemessagetype="1001" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="364" usesdiagramusefillcolour="1" x="268" y="414" linewidth="none" posttext="" role="705" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="3216" showstereotype="1" text=": setViewerTools(QViewer viewer, QStringList toolsList)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+    </messages>
+    <associations/>
+   </diagram>
+   <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1012" snapy="10" showatts="1" xmi.id="521" documentation="" type="403" showops="1" showpackage="0" name="Activar Tool" localid="899993" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="604" >
+    <widgets>
+     <objectwidget usesdiagramfillcolour="0" width="73" usesdiagramusefillcolour="1" x="14" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="92" decon="0" localid="899999" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="106" usesdiagramusefillcolour="1" x="128" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="73" decon="0" localid="899998" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="104" usesdiagramusefillcolour="1" x="270" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="76" decon="0" localid="899997" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="50" usesdiagramusefillcolour="1" x="418" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="77" decon="0" localid="899996" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="81" usesdiagramusefillcolour="1" x="492" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="537" decon="0" localid="899995" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="76" usesdiagramusefillcolour="1" x="595" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="74" decon="0" localid="899994" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="87" usesdiagramusefillcolour="1" x="705" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="547" decon="0" localid="899993" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <floatingtext usesdiagramfillcolour="1" width="34" usesdiagramusefillcolour="1" x="282" y="271" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1150" showstereotype="1" text="true" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     <boxwidget usesdiagramfillcolour="1" width="615" usesdiagramusefillcolour="1" x="149" y="141" linewidth="none" fillcolour="none" height="306" usefillcolor="1" isinstance="0" xmi.id="1370" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="142" usesdiagramusefillcolour="1" x="6" y="281" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1419" showstereotype="1" text="PER A CADA VIEWER" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+    </widgets>
+    <messages>
+     <messagewidget usesdiagramfillcolour="1" width="129" usesdiagramusefillcolour="1" x="51" y="96" operation="575" linewidth="none" widgetbid="899998" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="766" widgetaid="899999" isinstance="0" xmi.id="765" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="240" usesdiagramusefillcolour="1" x="56" y="74" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="766" showstereotype="1" text=": actionTriggered(toolName : string)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="48" usesdiagramusefillcolour="1" x="182" y="110" operation="583" linewidth="none" widgetbid="899998" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="792" widgetaid="899998" isinstance="0" xmi.id="791" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="210" usesdiagramusefillcolour="1" x="187" y="88" linewidth="none" posttext="" role="705" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="792" showstereotype="1" text=": getViewers(toolName : string)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="48" usesdiagramusefillcolour="1" x="182" y="166" operation="594" linewidth="none" widgetbid="899998" fillcolour="none" height="21" usefillcolor="1" seqnum="" textid="810" widgetaid="899998" isinstance="0" xmi.id="809" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="490" usesdiagramusefillcolour="1" x="187" y="144" linewidth="none" posttext="" role="705" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="810" showstereotype="1" text=": getConfiguration(viewer : QViewer, toolName : string) : ToolConfiguration" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="149" usesdiagramusefillcolour="1" x="181" y="206" operation="611" linewidth="none" widgetbid="899997" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="836" widgetaid="899998" isinstance="0" xmi.id="835" sequencemessagetype="1000" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="344" usesdiagramusefillcolour="1" x="186" y="184" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="836" showstereotype="1" text=": getTool(viewer : QViewer, toolName : string) : Tool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="119" usesdiagramusefillcolour="1" x="323" y="216" operation="643" linewidth="none" widgetbid="899996" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="854" widgetaid="899997" isinstance="0" xmi.id="853" sequencemessagetype="1001" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="52" usesdiagramusefillcolour="1" x="328" y="194" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="854" showstereotype="1" text=": new()" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="87" usesdiagramusefillcolour="1" x="444" y="227" operation="632" linewidth="none" widgetbid="899995" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="872" widgetaid="899996" isinstance="0" xmi.id="871" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="52" usesdiagramusefillcolour="1" x="449" y="205" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="872" showstereotype="1" text=": new()" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="270" usesdiagramusefillcolour="1" x="181" y="260" operation="667" linewidth="none" widgetbid="899996" fillcolour="none" height="37" usefillcolor="1" seqnum="" textid="907" widgetaid="899998" isinstance="0" xmi.id="906" sequencemessagetype="1000" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="165" usesdiagramusefillcolour="1" x="186" y="238" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="907" showstereotype="1" text=": hasSharedData() : bool" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="270" usesdiagramusefillcolour="1" x="181" y="318" operation="674" linewidth="none" widgetbid="899996" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="933" widgetaid="899998" isinstance="0" xmi.id="932" sequencemessagetype="1000" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="149" usesdiagramusefillcolour="1" x="186" y="296" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="933" showstereotype="1" text=": getData() : ToolData" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="460" usesdiagramusefillcolour="1" x="181" y="375" operation="689" linewidth="none" widgetbid="899994" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="959" widgetaid="899998" isinstance="0" xmi.id="958" sequencemessagetype="1000" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="189" usesdiagramusefillcolour="1" x="188" y="353" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="959" showstereotype="1" text=": getToolProxy() : ToolProxy" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="565" usesdiagramusefillcolour="1" x="182" y="432" operation="1026" linewidth="none" widgetbid="899993" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="1069" widgetaid="899998" isinstance="0" xmi.id="1068" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="143" usesdiagramusefillcolour="1" x="189" y="410" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1069" showstereotype="1" text=": addTool(tool : Tool)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+    </messages>
+    <associations/>
+   </diagram>
+   <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1012" snapy="10" showatts="1" xmi.id="1452" documentation="" type="403" showops="1" showpackage="0" name="Desactivar Tool" localid="899996" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="604" >
+    <widgets>
+     <objectwidget usesdiagramfillcolour="0" width="73" usesdiagramusefillcolour="1" x="74" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="92" decon="0" localid="899999" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="106" usesdiagramusefillcolour="1" x="227" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="73" decon="0" localid="899998" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="76" usesdiagramusefillcolour="1" x="438" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="74" decon="0" localid="899997" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <objectwidget usesdiagramfillcolour="0" width="87" usesdiagramusefillcolour="1" x="622" y="48" instancename="" linewidth="none" fillcolour="#ffffc0" height="28" usefillcolor="1" isinstance="0" xmi.id="547" decon="0" localid="899996" multipleinstance="0" drawasactor="0" font="Sans Serif,10,-1,0,50,0,1,0,0,0" linecolor="#ff0000" />
+     <boxwidget usesdiagramfillcolour="1" width="536" usesdiagramusefillcolour="1" x="145" y="148" linewidth="none" fillcolour="none" height="111" usefillcolor="1" isinstance="0" xmi.id="1717" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#000000" />
+     <floatingtext usesdiagramfillcolour="1" width="129" usesdiagramusefillcolour="1" x="146" y="195" linewidth="none" posttext="" role="700" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1814" showstereotype="1" text="PER CADA VIEWER" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+    </widgets>
+    <messages>
+     <messagewidget usesdiagramfillcolour="1" width="168" usesdiagramusefillcolour="1" x="111" y="93" operation="1493" linewidth="none" widgetbid="899998" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="1586" widgetaid="899999" isinstance="0" xmi.id="1585" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="95" usesdiagramusefillcolour="1" x="116" y="71" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1586" showstereotype="1" text=": deactivate()" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="48" usesdiagramusefillcolour="1" x="281" y="111" operation="583" linewidth="none" widgetbid="899998" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="1604" widgetaid="899998" isinstance="0" xmi.id="1603" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="210" usesdiagramusefillcolour="1" x="286" y="89" linewidth="none" posttext="" role="705" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1604" showstereotype="1" text=": getViewers(toolName : string)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="204" usesdiagramusefillcolour="1" x="280" y="178" operation="689" linewidth="none" widgetbid="899997" fillcolour="none" height="32" usefillcolor="1" seqnum="" textid="1622" widgetaid="899998" isinstance="0" xmi.id="1621" sequencemessagetype="1000" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="189" usesdiagramusefillcolour="1" x="285" y="156" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1622" showstereotype="1" text=": getToolProxy() : ToolProxy" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+     <messagewidget usesdiagramfillcolour="1" width="383" usesdiagramusefillcolour="1" x="281" y="240" operation="1631" linewidth="none" widgetbid="899996" fillcolour="none" height="8" usefillcolor="1" seqnum="" textid="1708" widgetaid="899998" isinstance="0" xmi.id="1707" sequencemessagetype="1001" showstereotype="1" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" >
+      <floatingtext usesdiagramfillcolour="1" width="204" usesdiagramusefillcolour="1" x="287" y="218" linewidth="none" posttext="" role="704" fillcolour="none" height="22" usefillcolor="1" pretext="" isinstance="0" xmi.id="1708" showstereotype="1" text=": unregister(toolName : string)" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="none" />
+     </messagewidget>
+    </messages>
+    <associations/>
+   </diagram>
+   <diagram snapgrid="0" showattsig="1" fillcolor="#ffffc0" linewidth="0" zoom="100" showgrid="0" showopsig="1" usefillcolor="1" snapx="10" canvaswidth="1012" snapy="10" showatts="1" xmi.id="1855" documentation="" type="402" showops="1" showpackage="0" name="diagrama de classes" localid="900000" showstereotype="0" showscope="1" snapcsgrid="0" font="Sans Serif,10,-1,0,50,0,0,0,0,0" linecolor="#ff0000" canvasheight="604" >
+    <widgets>
+     <classwidget usesdiagramfillcolour="1" width="83" showattsigs="601" usesdiagramusefillcolour="1" x="3" y="66" showopsigs="601" linewidth="none" fillcolour="none" height="36" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="72" showoperations="1" showpackage="0" showscope="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+     <classwidget usesdiagramfillcolour="0" width="73" showattsigs="601" usesdiagramusefillcolour="0" x="258" y="152" showopsigs="601" linewidth="none" fillcolour="#ffffc0" height="46" usefillcolor="1" showpubliconly="0" showattributes="0" isinstance="0" xmi.id="74" showoperations="0" showpackage="0" showscope="1" font="Sans Serif,10,-1,5,75,0,0,0,0,0" linecolor="#ff0000" />
+     <classwidget usesdiagramfillcolour="1" width="83" showattsigs="601" usesdiagramusefillcolour="1" x="253" y="366" showopsigs="601" linewidth="none" fillcolour="none" height="46" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="77" showoperations="0" showpackage="0" showscope="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+     <classwidget usesdiagramfillcolour="1" width="141" showattsigs="601" usesdiagramusefillcolour="1" x="67" y="367" showopsigs="601" linewidth="none" fillcolour="none" height="45" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="75" showoperations="0" showpackage="0" showscope="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+     <classwidget usesdiagramfillcolour="1" width="78" showattsigs="601" usesdiagramusefillcolour="1" x="404" y="367" showopsigs="601" linewidth="none" fillcolour="none" height="45" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="537" showoperations="0" showpackage="0" showscope="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+     <classwidget usesdiagramfillcolour="1" width="123" showattsigs="601" usesdiagramusefillcolour="1" x="3" y="153" showopsigs="601" linewidth="none" fillcolour="none" height="45" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="73" showoperations="0" showpackage="0" showscope="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+     <classwidget usesdiagramfillcolour="0" width="83" showattsigs="601" usesdiagramusefillcolour="0" x="253" y="266" showopsigs="601" linewidth="none" fillcolour="#ffffc0" height="46" usefillcolor="1" showpubliconly="0" showattributes="0" isinstance="0" xmi.id="547" showoperations="0" showpackage="0" showscope="1" font="Sans Serif,10,-1,5,75,0,0,0,0,0" linecolor="#ff0000" />
+     <classwidget usesdiagramfillcolour="1" width="122" showattsigs="601" usesdiagramusefillcolour="1" x="188" y="55" showopsigs="601" linewidth="none" fillcolour="none" height="43" usefillcolor="1" showpubliconly="0" showattributes="1" isinstance="0" xmi.id="76" showoperations="0" showpackage="0" showscope="1" font="Sans Serif,10,-1,0,75,0,0,0,0,0" linecolor="none" />
+    </widgets>
+    <messages/>
+    <associations>
+     <assocwidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" linewidth="none" widgetbid="75" widgetaid="77" xmi.id="2314" linecolor="none" >
+      <linepath>
+       <startpoint startx="253" starty="389" />
+       <endpoint endx="208" endy="389" />
+      </linepath>
+     </assocwidget>
+     <assocwidget totalcounta="3" indexa="1" totalcountb="2" indexb="1" linewidth="none" widgetbid="72" widgetaid="73" xmi.id="2333" linecolor="none" >
+      <linepath>
+       <startpoint startx="44" starty="153" />
+       <endpoint endx="44" endy="102" />
+      </linepath>
+     </assocwidget>
+     <assocwidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" linewidth="none" widgetbid="74" widgetaid="73" xmi.id="2352" linecolor="none" >
+      <linepath>
+       <startpoint startx="126" starty="175" />
+       <endpoint endx="258" endy="175" />
+      </linepath>
+     </assocwidget>
+     <assocwidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" linewidth="none" widgetbid="537" widgetaid="77" xmi.id="2376" linecolor="none" >
+      <linepath>
+       <startpoint startx="336" starty="389" />
+       <endpoint endx="404" endy="389" />
+      </linepath>
+     </assocwidget>
+     <assocwidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" linewidth="none" widgetbid="547" widgetaid="74" xmi.id="2470" linecolor="none" >
+      <linepath>
+       <startpoint startx="294" starty="198" />
+       <endpoint endx="294" endy="266" />
+      </linepath>
+     </assocwidget>
+     <assocwidget totalcounta="2" indexa="1" totalcountb="3" indexb="2" linewidth="none" widgetbid="73" widgetaid="76" xmi.id="2526" linecolor="none" >
+      <linepath>
+       <startpoint startx="188" starty="76" />
+       <endpoint endx="85" endy="153" />
+       <point x="152" y="76" />
+      </linepath>
+     </assocwidget>
+     <assocwidget totalcounta="2" indexa="1" totalcountb="2" indexb="1" linewidth="none" widgetbid="77" widgetaid="547" xmi.id="2603" linecolor="none" >
+      <linepath>
+       <startpoint startx="294" starty="312" />
+       <endpoint endx="294" endy="366" />
+      </linepath>
+     </assocwidget>
+    </associations>
+   </diagram>
+  </diagrams>
+  <listview>
+   <listitem open="1" type="800" label="Vistes" >
+    <listitem open="1" type="801" label="Vista lògica" >
+     <listitem open="1" type="813" id="72" />
+     <listitem open="1" type="813" id="92" />
+     <listitem open="1" type="813" id="74" >
+      <listitem open="0" type="814" id="2064" />
+      <listitem open="0" type="815" id="689" />
+      <listitem open="0" type="815" id="698" />
+     </listitem>
+     <listitem open="1" type="813" id="77" >
+      <listitem open="0" type="815" id="105" />
+      <listitem open="0" type="815" id="643" />
+      <listitem open="0" type="815" id="667" />
+      <listitem open="0" type="815" id="674" />
+     </listitem>
+     <listitem open="1" type="813" id="75" >
+      <listitem open="0" type="815" id="94" />
+     </listitem>
+     <listitem open="1" type="813" id="537" >
+      <listitem open="0" type="815" id="632" />
+     </listitem>
+     <listitem open="1" type="813" id="73" >
+      <listitem open="0" type="815" id="85" />
+      <listitem open="0" type="815" id="86" />
+      <listitem open="0" type="815" id="90" />
+      <listitem open="0" type="815" id="575" />
+      <listitem open="0" type="815" id="583" />
+      <listitem open="0" type="815" id="594" />
+      <listitem open="0" type="815" id="1493" />
+     </listitem>
+     <listitem open="1" type="813" id="547" >
+      <listitem open="0" type="814" id="2192" />
+      <listitem open="0" type="815" id="1026" />
+      <listitem open="0" type="815" id="1631" />
+     </listitem>
+     <listitem open="1" type="813" id="76" >
+      <listitem open="0" type="815" id="97" />
+      <listitem open="0" type="815" id="611" />
+     </listitem>
+     <listitem open="1" type="813" id="2255" />
+     <listitem open="1" type="813" id="2206" />
+     <listitem open="0" type="830" label="Tipus de dades" >
+      <listitem open="1" type="829" id="17" />
+      <listitem open="1" type="829" id="16" />
+      <listitem open="1" type="829" id="19" />
+      <listitem open="1" type="829" id="18" />
+      <listitem open="1" type="829" id="14" />
+      <listitem open="1" type="829" id="21" />
+      <listitem open="1" type="829" id="20" />
+      <listitem open="1" type="829" id="25" />
+      <listitem open="1" type="829" id="22" />
+      <listitem open="1" type="829" id="24" />
+      <listitem open="1" type="829" id="23" />
+     </listitem>
+    </listitem>
+    <listitem open="1" type="802" label="Vista casos d'ús" />
+    <listitem open="1" type="821" label="Vista component" />
+    <listitem open="1" type="827" label="Vista desplegament" />
+    <listitem open="1" type="836" label="Model entitat relació" />
+   </listitem>
+  </listview>
+  <codegeneration>
+   <codegenerator language="C++" />
+  </codegeneration>
+ </XMI.extensions>
+</XMI>
