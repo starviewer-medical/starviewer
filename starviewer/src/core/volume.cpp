@@ -566,7 +566,7 @@ void Volume::readDifferentSizeImagesIntoOneVolume( QStringList filenames )
         }
         catch ( itk::ExceptionObject & e )
         {
-            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
                     .arg( QFileInfo( filenames.at(0) ).dir().path() )
                     .arg( e.GetDescription() )
                     );
@@ -642,7 +642,7 @@ int Volume::openFile( QString fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+        ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
                 .arg( QFileInfo( fileName ).dir().path() )
                 .arg( e.GetDescription() )
                 );
@@ -694,7 +694,7 @@ int Volume::readFiles( QStringList filenames )
         }
         catch ( itk::ExceptionObject & e )
         {
-            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1]\nDescripció: [%2]")
+            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
                 .arg( QFileInfo( filenames.at(0) ).dir().path() )
                 .arg( e.GetDescription() )
                 );

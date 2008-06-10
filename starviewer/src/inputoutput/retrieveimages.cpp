@@ -246,12 +246,9 @@ OFCondition echoSCP(
             DEBUG_LOG( QString("Image Size rebut: %1\n i 'stored' a la variable: %2 ").arg(cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType ) ).arg(imageSize) );
             if( imageSize < 0 )
             {
-                DEBUG_LOG( "La imatge amb: \nStudyUID:[" + retrievedImage.getStudyUID() +
-                "],\nSeriesUID:["+ retrievedImage.getSeriesUID() +
-                "] i\nImageUID:["+ retrievedImage.getSOPInstanceUID() +"]\n dóna mida negativa" );
-                ERROR_LOG( "La imatge amb: \nStudyUID:[" + retrievedImage.getStudyUID() +
-                "],\nSeriesUID:["+ retrievedImage.getSeriesUID() +
-                "] i\nImageUID:["+ retrievedImage.getSOPInstanceUID() +"]\n dóna mida negativa" );
+                ERROR_LOG( "La imatge amb: StudyUID:[" + retrievedImage.getStudyUID() +
+                "] SeriesUID:["+ retrievedImage.getSeriesUID() +
+                "] ImageUID:["+ retrievedImage.getSOPInstanceUID() +"] dóna mida negativa" );
             }
             /* should really check the image to make sure it is consistent,
             * that its sopClass and sopInstance correspond with those in

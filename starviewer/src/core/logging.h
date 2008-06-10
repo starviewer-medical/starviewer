@@ -24,11 +24,6 @@
     if (true) \
     { \
         log4cxx::PropertyConfigurator::configure( file ); \
-        INFO_LOG("__________________________________"); \
-        INFO_LOG("::::::::::::::::::::::::::::::::::"); \
-        INFO_LOG("* Inicialització de l'aplicació *"); \
-        INFO_LOG("::::::::::::::::::::::::::::::::::"); \
-        INFO_LOG(""); \
     } else (void)0
 
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir una variable pròpia, com per exemple DEBUG
