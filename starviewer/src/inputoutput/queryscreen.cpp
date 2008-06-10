@@ -64,23 +64,10 @@ QueryScreen::QueryScreen( QWidget *parent )
 
 QueryScreen::~QueryScreen()
 {
-    StarviewerSettings settings;
-
     /*sinó fem un this.close i tenim la finestra queryscreen oberta al tancar l'starviewer, l'starviewer no finalitza
      *desapareixen les finestres, però el procés continua viu
      */
     this->close();
-
-    //guardem la posició en que es troba la pantalla
-    settings.setQueryScreenWindowPositionX( x() );
-    settings.setQueryScreenWindowPositionY( y() );
-
-    //guardem les dimensions de la pantalla
-    settings.setQueryScreenWindowHeight( height() );
-    settings.setQueryScreenWindowWidth( width() );
-
-    //guardem l'estat del QSplitter que divideix el StudyTree del QSeries
-    settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
 }
 
 void QueryScreen::initialize()
@@ -1318,12 +1305,37 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
 
 void QueryScreen::closeEvent( QCloseEvent* event )
 {
-    saveQStudyTreeWidgetColumnsWidth();
+    saveSettings(); // guardem els settings
 
     m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
 
     event->accept();
     m_qcreateDicomdir->clearTemporaryDir();
+}
+
+void QueryScreen::saveSettings()
+{
+    /* Només guardem els settings quan la interfície ha estat visible, ja que hi ha settings com el QSplitter que si la primera vegada
+     * que executem l'starviewer no obrim la QueryScreen retorna un valors incorrecte per això, el que fem és comprova que la QueryScreen
+     * hagi estat visible per guardar el settings
+     */
+    if (this->isVisible())
+    {
+        StarviewerSettings settings;
+
+        saveQStudyTreeWidgetColumnsWidth();
+
+        //guardem l'estat del QSplitter que divideix el StudyTree del QSeries
+        settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
+
+        //guardem la posició en que es troba la pantalla
+        settings.setQueryScreenWindowPositionX( x() );
+        settings.setQueryScreenWindowPositionY( y() );
+
+        //guardem les dimensions de la pantalla
+        settings.setQueryScreenWindowHeight( height() );
+        settings.setQueryScreenWindowWidth( width() );
+    }    
 }
 
 void QueryScreen::saveQStudyTreeWidgetColumnsWidth()
