@@ -41,6 +41,7 @@ const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbo
 const QString qOperationStateColumnWidthKey("/interface/qOperationState/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString qCreateDicomdirColumnWidthKey("/interface/qCreateDicomdir/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString qConfigurationPacsDeviceColumnWidthKey("/interface/qConfigurationPacsDevice/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
+const QString lastOpenedDICOMDIRPath("/interface/lastOpenedDICOMDIRPath"); // últim path des del que hem obert un dicomdir
 
 namespace udg {
 
@@ -358,6 +359,15 @@ bool StarviewerSettings::getLogCommunicationPacsVerboseMode()
     return m_starviewerSettings.value( GroupSettingsName + logsPacsCommunicationModeVerbose , false ).toBool();
 }
 
+QString StarviewerSettings::getLastOpenedDICOMDIRPath() const
+{
+	return m_starviewerSettings.value( GroupSettingsName + lastOpenedDICOMDIRPath, QDir::homePath() ).toString();
+}
+
+void StarviewerSettings::setLastOpenedDICOMDIRPath( QString const & path )
+{
+	m_starviewerSettings.setValue( GroupSettingsName + lastOpenedDICOMDIRPath, path );
+}
 
 StarviewerSettings::~StarviewerSettings()
 {

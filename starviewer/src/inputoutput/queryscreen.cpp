@@ -1382,7 +1382,8 @@ void QueryScreen::convertToDicomdir()
 
 void QueryScreen::openDicomdir()
 {
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , "DICOMDIR" );
+	StarviewerSettings settings;
+    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , settings.getLastOpenedDICOMDIRPath(), "DICOMDIR" );
     QString path, dicomdirPath;
 
     dlg->setFileMode( QFileDialog::ExistingFile );
@@ -1403,6 +1404,7 @@ void QueryScreen::openDicomdir()
         else
         {
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
+			settings.setLastOpenedDICOMDIRPath( QFileInfo(dicomdirPath).dir().path() );
             this->bringToFront();
             m_tab->setCurrentIndex( 2 ); // mostre el tab del dicomdir
         }

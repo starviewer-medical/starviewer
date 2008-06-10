@@ -307,6 +307,9 @@ public:
       */
     bool getLogCommunicationPacsVerboseMode();
 
+	/// Path amb l'últim directori on hem obert un DICOMDIR
+	QString getLastOpenedDICOMDIRPath() const;
+	void setLastOpenedDICOMDIRPath( QString const & path );
 
 private :
     /// Nom del grup on es guarda la configuració d'aquesta classe
