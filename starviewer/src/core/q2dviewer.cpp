@@ -1838,6 +1838,13 @@ bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
         tolerance = m_mainVolume->getVtkData()->GetLength();
         tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
 
+        // HACK per solucionar el problema amb el metode FindAndGetCell que necessita
+        // més presició que la que obtenim amb el GetPickPosition
+        double *origin = m_mainVolume->getVtkData()->GetOrigin();
+        if( abs(xyz[0] - origin[0] ) < 0.00001 ) xyz[0] = origin[0];
+        if( abs(xyz[1] - origin[1] ) < 0.00001 ) xyz[1] = origin[1];
+        if( abs(xyz[2] - origin[2] ) < 0.00001 ) xyz[2] = origin[2];
+
         // Find the cell that contains q and get it
         vtkCell *cell = m_mainVolume->getVtkData()->FindAndGetCell( xyz , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
         if ( cell )
