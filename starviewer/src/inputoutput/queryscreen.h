@@ -43,9 +43,6 @@ public:
     ///Destructor de la classe
     ~QueryScreen();
 
-    ///Tanca els fills de la QueryScreen
-    void closeChildren();
-
 public slots:
     /// Obre un dicomdir
     void openDicomdir();

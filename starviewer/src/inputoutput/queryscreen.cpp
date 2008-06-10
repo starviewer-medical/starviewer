@@ -1320,15 +1320,10 @@ void QueryScreen::closeEvent( QCloseEvent* event )
 {
     saveQStudyTreeWidgetColumnsWidth();
 
+    m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
+
     event->accept();
     m_qcreateDicomdir->clearTemporaryDir();
-}
-
-//TODO:Aquest mètode s'hauria de treure quan s'hagi fet el refactoring i s'hagi fet una interfície comuna de tancament per totes les classes de l'starviewer
-void QueryScreen::closeChildren()
-{
-    m_operationStateScreen->close();
-    m_qcreateDicomdir->close();
 }
 
 void QueryScreen::saveQStudyTreeWidgetColumnsWidth()

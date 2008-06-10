@@ -53,7 +53,6 @@ ExtensionHandler::~ExtensionHandler()
     if (m_mainApp->getCountQApplicationMainWindow() == 1)
     {
         QueryScreenSingleton::instance()->close();
-        QueryScreenSingleton::instance()->closeChildren();
     }
 }
 
