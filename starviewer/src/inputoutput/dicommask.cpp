@@ -1254,13 +1254,6 @@ bool DicomMask::isAHeavyQuery()
     //Construïm les condicions que fan que una query pugui ser pesada
     bool noIDOrName = ( noName && noID ) || ( shortName && shortID );
     
-    cout << "noName: " << noName << endl;
-    cout << "noID: " << noID << endl;
-    cout << "shortName: " << shortName << endl;
-    cout << "shortID: " << shortID << endl;
-    cout << "anyDate: " << anyDate << endl;
-    cout << "longPeriod: " << longPeriod << endl;
-    
     bool heavyMask =  ( anyDate  && noIDOrName ) || ( longPeriod && noIDOrName );
     
     return heavyMask;
