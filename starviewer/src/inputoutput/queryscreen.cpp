@@ -1727,11 +1727,11 @@ QString QueryScreen::buildQueryParametersString()
 {
 	QString logMessage;
 
-    logMessage = "PATIENT_ID=[" + m_patientIDText->text() + "]\n"
-        + "PATIENT_NAME=[" + m_patientNameText->text() + "]\n"
-        + "STUDY_ID=[" + m_studyIDText->text() + "]\n"
-        + "DATES_MASK=[" + getStudyDatesStringMask() + "]\n"
-        + "ACCESSION_NUMBER=[" + m_accessionNumberText->text() + "]\n";
+    logMessage = "PATIENT_ID=[" + m_patientIDText->text() + "] "
+        + "PATIENT_NAME=[" + m_patientNameText->text() + "] "
+        + "STUDY_ID=[" + m_studyIDText->text() + "] "
+        + "DATES_MASK=[" + getStudyDatesStringMask() + "] "
+        + "ACCESSION_NUMBER=[" + m_accessionNumberText->text() + "]";
 
     return logMessage;
 }

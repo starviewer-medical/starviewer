@@ -190,13 +190,13 @@ void Patient::patientFusionLogMessage( const Patient &patient )
     switch( compareTo( &patient ) )
     {
         case SamePatients:
-            INFO_LOG("Fusionem dos pacients iguals:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+            INFO_LOG("Fusionem dos pacients iguals: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName );
             break;
         case IndeterminableSimilarity:
-            INFO_LOG("Fusionem dos pacients amb similitut indeterminable:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+            INFO_LOG("Fusionem dos pacients amb similitut indeterminable: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName );
             break;
         case DifferentPatients:
-            INFO_LOG("!!!!Fusionem dos pacients diferents!!!!:\n>>" + m_patientID + ":" + m_fullName + "\n>>" + patient.m_patientID + ":" + patient.m_fullName );
+            INFO_LOG("Fusionem dos pacients diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName );
             break;
     }
 }

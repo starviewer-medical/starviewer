@@ -106,6 +106,8 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
 
     configureLogging();
+    STAT_LOG("Inicialització de l'aplicació");
+
     initQtPluginsDirectory();
     initializeTranslations(app);
 
@@ -121,5 +123,9 @@ int main(int argc, char *argv[])
     splash->finish( mainWin );
     delete splash;
 
-    return app.exec();
+    int returnValue = app.exec();
+    
+    STAT_LOG("Es tanca l'aplicació");
+
+    return returnValue;
 }
