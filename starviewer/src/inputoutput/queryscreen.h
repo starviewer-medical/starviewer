@@ -301,6 +301,9 @@ private:
      */
     void readSettings();
 
+    ///Guarda els settings de la QueryScreen
+    void saveSettings();
+
     ///Guarda la mida de les columnes del QStudyTreeView Pacs, dicomdir i cache
     void saveQStudyTreeWidgetColumnsWidth();
 
