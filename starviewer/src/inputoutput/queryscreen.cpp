@@ -1738,10 +1738,18 @@ QString QueryScreen::buildQueryParametersString()
 
 void QueryScreen::showDatabaseErrorMessage( const Status &state )
 {
-    if( !state.good() )
+    QString message;
+    if (state.code() == 2006)
     {
-        QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code() ) );
+        message = tr("The Cache is blocked by another Starviewer window."
+                     "\nTry to close all the others Starviewer windows and try again."
+                     "\n\nIf you want to open different Starviewer's windows always choose the 'New' option from the File menu.");
     }
+    else
+    {
+        message = state.text() + tr("\nError Number: %1").arg(state.code());
+    }
+    QMessageBox::critical( this , tr( "Starviewer" ) , message );
 }
 
 };
