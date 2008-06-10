@@ -1211,8 +1211,8 @@ bool DicomMask::isAHeavyQuery()
     //en aquest QStringList hi posarem els noms. cognoms i strings que són potencialment candidats a donar cerques pesades
     QStringList heavyWords;
     
-    ///\TODO per fer-ho correctament aquest "diccionari" de paraules candidates a fer cerques pesades hauria d'estar en un fitxer, de manera que l'usuari no hagi de manipular codi per afegir un nou terme.
-    heavyWords << "joan" << "juan" << "josep" << "jose" << "ana" << "antoni" << "antonio" << "garcia" << "ez";
+    //\TODO per fer-ho correctament aquest "diccionari" de paraules candidates a fer cerques pesades hauria d'estar en un fitxer, de manera que l'usuari no hagi de manipular codi per afegir un nou terme.
+//     heavyWords << "joan" << "juan" << "josep" << "jose" << "ana" << "antoni" << "antonio" << "garcia" << "ez";
     
     bool longPeriod = false;
     
@@ -1224,10 +1224,10 @@ bool DicomMask::isAHeavyQuery()
     bool anyDate = studyDate.length() == 0;
     
     /// SENSE ESPECIFICAR NOM
-    bool noName = patientName.length() == 0;
+    bool noName = patientName == "*";
         
     /// SENSE ID DE PACIENT
-    bool noID = getPatientId().length() == 0;
+    bool noID = getPatientId() == "*";
     
     /// PERÍODE RELATIVAMENT LLARG 
     if ( studyDate.length() > 8 )
@@ -1238,23 +1238,30 @@ bool DicomMask::isAHeavyQuery()
         //consederem com a període llarg a partir d'una setmana
         longPeriod = end.daysTo( begin ) > 7;
     }
-    
+
     ///NOM CURT
-    bool shortName = ( patientName.length() < 4 );
+    QString nameWithoutAst =  patientName.remove(QChar('*'));
+    bool shortName = ( nameWithoutAst.length() < 4 );
     
-    ///NOMÉS S'HA INTRODUÏT UNA PARAULA COM A NOM (no és un nom complet: nom + cognom)
-    QStringList words = patientName.split(" ");
-    
-    bool singleWordAsName = words.size() == 1;
-    
-    ///EL NOM ÉS UN STRING DELS DETERMINATS COM A PESATS A L'INICI DEL MÈTODE
-    bool heavyName = singleWordAsName && heavyWords.contains ( words[0], Qt::CaseInsensitive ); 
+    //EL NOM ÉS UN STRING DELS DETERMINATS COM A PESATS A L'INICI DEL MÈTODE
+    //no ho tenim en compte perquè en un hospital seran uns noms i en un altre hospital seran uns altres
+    //bool heavyName = singleWordAsName && heavyWords.contains ( nameWithoutAst, Qt::CaseInsensitive ); 
     
     ///EL NÚMERO D'ESTUDI ÉS CURT
-    bool shortID = getPatientId().length() < 3;
+    QString idWithoutAst =  getPatientId().remove(QChar('*'));
+    bool shortID = idWithoutAst.length() < 3;
     
     //Construïm les condicions que fan que una query pugui ser pesada
-    bool heavyMask =  ( anyDate || longPeriod ) && ( noName || noID || shortName || singleWordAsName || heavyName || shortID );
+    bool noIDOrName = ( noName && noID ) || ( shortName && shortID );
+    
+    cout << "noName: " << noName << endl;
+    cout << "noID: " << noID << endl;
+    cout << "shortName: " << shortName << endl;
+    cout << "shortID: " << shortID << endl;
+    cout << "anyDate: " << anyDate << endl;
+    cout << "longPeriod: " << longPeriod << endl;
+    
+    bool heavyMask =  ( anyDate  && noIDOrName ) || ( longPeriod && noIDOrName );
     
     return heavyMask;
 }
