@@ -26,7 +26,7 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
 
     //set series description
     seriesDataset->findAndGetString( DCM_SeriesDescription , text , false );
-    if ( text != NULL ) setSeriesDescription( text );
+    if ( text != NULL ) setSeriesDescription( QString::fromLatin1( text ) );
 
     //set Study UID
     seriesDataset->findAndGetString( DCM_StudyInstanceUID , text , false );
@@ -57,10 +57,10 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
     if ( text != NULL ) setBodyPartExaminated( text );
 
     seriesDataset->findAndGetString(DCM_ProtocolName , text , false );
-    if ( text != NULL ) setProtocolName( text );
+    if ( text != NULL ) setProtocolName( QString::fromLatin1( text ) );
 
     seriesDataset->findAndGetString( DCM_OperatorsName , text , false );
-    if ( text != NULL ) setOperatorName( text );
+    if ( text != NULL ) setOperatorName( QString::fromLatin1( text ) );
 
     seriesDataset->findAndGetString( DCM_RetrieveAETitle , text , false );
     if ( text != NULL ) setPacsAETitle( text );
