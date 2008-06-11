@@ -87,7 +87,7 @@ Status DICOMDIRReader::readStudies( StudyList &studyList , DicomMask studyMask )
     {
         //Nom pacient
         patientRecord->findAndGetOFStringArray( DCM_PatientsName , text );
-        study.setPatientName( text.c_str() );
+        study.setPatientName( QString::fromLatin1( text.c_str() ) );
         //Id pacient
         patientRecord->findAndGetOFStringArray( DCM_PatientID , text );
         study.setPatientId( text.c_str() );
@@ -111,7 +111,7 @@ Status DICOMDIRReader::readStudies( StudyList &studyList , DicomMask studyMask )
 
             //Descripció estudi
             studyRecord->findAndGetOFStringArray( DCM_StudyDescription , text );
-            study.setStudyDescription( text.c_str() );
+            study.setStudyDescription( QString::fromLatin1( text.c_str() ) );
 
             //accession number
             studyRecord->findAndGetOFStringArray( DCM_AccessionNumber , text );
@@ -196,7 +196,7 @@ Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , Series
 
                 //Protocol Name
                 seriesRecord->findAndGetOFStringArray( DCM_ProtocolName , text );
-                series.setProtocolName( text.c_str() );
+                series.setProtocolName( QString::fromLatin1( text.c_str() ) );
 
                 //Per obtenir el directori de les series, no hi ha cap més manera que accedir. a la primera imatge de la serie i consultar-ne el directori
 
