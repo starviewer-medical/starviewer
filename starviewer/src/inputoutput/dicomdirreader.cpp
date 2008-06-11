@@ -285,8 +285,9 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
                 imagePath.clear();
                 //creem el path absolut
                 imagePath.insert( 0 , m_dicomdirAbsolutePath );
-                imagePath.append( "/" ),
-                imagePath.append( backSlashToSlash ( text.c_str() ) );
+                imagePath.append( "/" );
+                imagePath.append( buildImageRelativePath( text.c_str() ) );
+
                 image.setImagePath( imagePath );
 
                 imageList.insert( image );//inserim a la llista la imatge*/
@@ -304,6 +305,7 @@ QString DICOMDIRReader::getDicomdirFilePath()
     return m_dicomdirAbsolutePath + "/" + m_dicomdirFileName;
 }
 
+//TODO s'haurai de mirar si es pot fer servir les funcions de readimage, readseries i readstudy, perquè aquest mètode, són els tres anteriors mètodes en un
 QStringList DICOMDIRReader::getFiles( QString studyUID )
 {
     QStringList files;
@@ -353,22 +355,10 @@ QStringList DICOMDIRReader::getFiles( QString studyUID )
             while ( imageRecord != NULL )
             {
                 OFString text;
-                QString imageRelativePath;
                 //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '\' (format windows)
                 imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );//obtenim el path relatiu de la imatge
 
-                /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en 
-                   minúscules com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, m_dicomFilesInLowerCase
-                   és true si s'ha troba tel fitxer dicomdir en minúscules, si és consistent el dicomdir els noms de les imatges i 
-                   rutes també serà en minúscules
-                */
-                if (m_dicomFilesInLowerCase)
-                {
-                    imageRelativePath = backSlashToSlash( text.c_str() ).toLower();
-                }
-                else imageRelativePath = backSlashToSlash( text.c_str() );
-
-                files << m_dicomdirAbsolutePath + "/" + imageRelativePath;
+                files << m_dicomdirAbsolutePath + "/" + buildImageRelativePath( text.c_str() );
                 imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
             }
             seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi
@@ -546,6 +536,21 @@ QString DICOMDIRReader::backSlashToSlash( QString original )
         ret.replace( ret.indexOf("\\") , 1 , "/" );
 
     return ret;
+}
+
+QString DICOMDIRReader::buildImageRelativePath( QString imageRelativePath )
+{
+    /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en 
+        minúscules com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, m_dicomFilesInLowerCase
+        és true si s'ha troba tel fitxer dicomdir en minúscules, si és consistent el dicomdir els noms de les imatges i 
+        rutes també serà en minúscules
+    */
+
+    if (m_dicomFilesInLowerCase)
+    {
+        return backSlashToSlash( imageRelativePath ).toLower();
+    }
+    else return backSlashToSlash( imageRelativePath );
 }
 
 }

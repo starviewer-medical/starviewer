@@ -131,6 +131,9 @@ private :
      * @return path amb '/'
      */
     QString backSlashToSlash( QString original );
+
+    /**Ens construeix el Path relatiu d'una imatge, posa les '/' correctament i posa en minúscules o majúscules el nom del fitxer en funció de si el dicomdir conté els fitxers en minúscula o majúscula*/
+    QString buildImageRelativePath( QString relativePath );
 };
 
 }
