@@ -335,7 +335,7 @@ You would have to choose only one.</source>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1366"/>
+        <location filename="queryscreen.cpp" line="1406"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -343,37 +343,37 @@ You would have to choose only one.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="databaseconnection.cpp" line="80"/>
+        <location filename="databaseconnection.cpp" line="90"/>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="82"/>
+        <location filename="databaseconnection.cpp" line="92"/>
         <source>Database is corrupted or SQL error syntax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="84"/>
+        <location filename="databaseconnection.cpp" line="94"/>
         <source>Database is locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="86"/>
+        <location filename="databaseconnection.cpp" line="96"/>
         <source>Database corrupted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="88"/>
+        <location filename="databaseconnection.cpp" line="98"/>
         <source>The new register is duplicated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="90"/>
+        <location filename="databaseconnection.cpp" line="100"/>
         <source>Not connected to database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseconnection.cpp" line="95"/>
+        <location filename="databaseconnection.cpp" line="105"/>
         <source>Internal Database error (SQLITE)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -591,198 +591,198 @@ Be sure that the IP and AETitle of the PACS are correct</source>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="663"/>
+        <location filename="qcreatedicomdir.cpp" line="684"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="293"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="293"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="291"/>
+        <location filename="qcreatedicomdir.cpp" line="292"/>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="298"/>
+        <location filename="qcreatedicomdir.cpp" line="299"/>
         <source>Can&apos;t create the directory. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="650"/>
+        <location filename="qcreatedicomdir.cpp" line="671"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="427"/>
+        <location filename="qcreatedicomdir.cpp" line="459"/>
         <source>Please select a study to remove of the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="67"/>
+        <location filename="qcreatedicomdir.cpp" line="68"/>
         <source>CD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="68"/>
+        <location filename="qcreatedicomdir.cpp" line="69"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="76"/>
+        <location filename="qcreatedicomdir.cpp" line="77"/>
         <source>DVD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="77"/>
+        <location filename="qcreatedicomdir.cpp" line="78"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="85"/>
+        <location filename="qcreatedicomdir.cpp" line="86"/>
         <source>Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="86"/>
+        <location filename="qcreatedicomdir.cpp" line="87"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="94"/>
+        <location filename="qcreatedicomdir.cpp" line="95"/>
         <source>Pen Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="95"/>
+        <location filename="qcreatedicomdir.cpp" line="96"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="140"/>
+        <location filename="qcreatedicomdir.cpp" line="141"/>
         <source>DICOMDIR size: %1 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="150"/>
+        <location filename="qcreatedicomdir.cpp" line="151"/>
         <source>%1 Mb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="177"/>
+        <location filename="qcreatedicomdir.cpp" line="178"/>
         <source>With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="197"/>
+        <location filename="qcreatedicomdir.cpp" line="198"/>
         <source>The study already exists in the DICOMDIR list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="244"/>
+        <location filename="qcreatedicomdir.cpp" line="245"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="273"/>
+        <location filename="qcreatedicomdir.cpp" line="274"/>
         <source>Create DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="274"/>
+        <location filename="qcreatedicomdir.cpp" line="275"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="292"/>
+        <location filename="qcreatedicomdir.cpp" line="293"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="320"/>
+        <location filename="qcreatedicomdir.cpp" line="324"/>
         <source>Not enough free space to create DICOMDIR. Please free space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="393"/>
+        <location filename="qcreatedicomdir.cpp" line="422"/>
         <source>DICOMDIR Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="472"/>
+        <location filename="qcreatedicomdir.cpp" line="504"/>
         <source>Creating DICOMDIR Image...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="264"/>
+        <location filename="qcreatedicomdir.cpp" line="265"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="330"/>
+        <location filename="qcreatedicomdir.cpp" line="334"/>
         <source>Please, first select the studies you want to create a DICOMDIR with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="362"/>
+        <location filename="qcreatedicomdir.cpp" line="366"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="367"/>
+        <location filename="qcreatedicomdir.cpp" line="371"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="600"/>
+        <location filename="qcreatedicomdir.cpp" line="621"/>
         <source>
 Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="530"/>
+        <location filename="qcreatedicomdir.cpp" line="562"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="534"/>
+        <location filename="qcreatedicomdir.cpp" line="566"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="542"/>
+        <location filename="qcreatedicomdir.cpp" line="574"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="546"/>
+        <location filename="qcreatedicomdir.cpp" line="578"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="553"/>
+        <location filename="qcreatedicomdir.cpp" line="588"/>
         <source>DICOMDIR Creation Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="553"/>
+        <location filename="qcreatedicomdir.cpp" line="588"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="553"/>
+        <location filename="qcreatedicomdir.cpp" line="588"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="663"/>
+        <location filename="qcreatedicomdir.cpp" line="684"/>
         <source>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4800 Mb</source>
         <translation type="unfinished"></translation>
     </message>
@@ -933,17 +933,17 @@ Error Number: %1</source>
 <context>
     <name>udg::QExecuteOperationThread</name>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="147"/>
+        <location filename="qexecuteoperationthread.cpp" line="148"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="142"/>
+        <location filename="qexecuteoperationthread.cpp" line="143"/>
         <source>Not enough space to retrieve studies. Please free space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qexecuteoperationthread.cpp" line="147"/>
+        <location filename="qexecuteoperationthread.cpp" line="148"/>
         <source>Error freeing space. The study couldn&apos;t be retrieved</source>
         <translation type="unfinished"></translation>
     </message>
@@ -951,42 +951,42 @@ Error Number: %1</source>
 <context>
     <name>udg::QOperationStateScreen</name>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="73"/>
+        <location filename="qoperationstatescreen.cpp" line="74"/>
         <source>PENDING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="77"/>
+        <location filename="qoperationstatescreen.cpp" line="78"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="79"/>
+        <location filename="qoperationstatescreen.cpp" line="80"/>
         <source>Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="168"/>
+        <location filename="qoperationstatescreen.cpp" line="169"/>
         <source>RETRIEVING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="170"/>
+        <location filename="qoperationstatescreen.cpp" line="171"/>
         <source>STORING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="238"/>
+        <location filename="qoperationstatescreen.cpp" line="239"/>
         <source>ERROR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="238"/>
+        <location filename="qoperationstatescreen.cpp" line="239"/>
         <source>RETRIEVED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="238"/>
+        <location filename="qoperationstatescreen.cpp" line="239"/>
         <source>STORED</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1223,204 +1223,223 @@ Error Number: %1</source>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1715"/>
+        <location filename="queryscreen.cpp" line="1765"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="476"/>
+        <location filename="queryscreen.cpp" line="465"/>
         <source>You have not specified any filter. This query could take a long time. Do you want to continue ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="567"/>
+        <location filename="queryscreen.cpp" line="556"/>
         <source>Please select a PACS to query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="581"/>
+        <location filename="queryscreen.cpp" line="587"/>
         <source>ERROR QUERING!.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="668"/>
+        <location filename="queryscreen.cpp" line="676"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="813"/>
+        <location filename="queryscreen.cpp" line="821"/>
         <source>No series match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="951"/>
+        <location filename="queryscreen.cpp" line="959"/>
         <source>Select a study to download </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="975"/>
+        <location filename="queryscreen.cpp" line="983"/>
         <source>Internal Error : </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1138"/>
+        <location filename="queryscreen.cpp" line="1150"/>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="240"/>
+        <location filename="queryscreen.cpp" line="228"/>
         <source>Error deleting old studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1251"/>
+        <location filename="queryscreen.cpp" line="1263"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1251"/>
+        <location filename="queryscreen.cpp" line="1263"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1473"/>
+        <location filename="queryscreen.cpp" line="1514"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="633"/>
+        <location filename="queryscreen.cpp" line="640"/>
         <source>Error, not opened Dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="638"/>
+        <location filename="queryscreen.cpp" line="645"/>
         <source>Error quering in dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1381"/>
+        <location filename="queryscreen.cpp" line="1421"/>
         <source>Error openning dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="882"/>
+        <location filename="queryscreen.cpp" line="890"/>
         <source>No images match for this series.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="931"/>
+        <location filename="queryscreen.cpp" line="939"/>
         <source>No images match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="763"/>
+        <location filename="queryscreen.cpp" line="771"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="871"/>
+        <location filename="queryscreen.cpp" line="879"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1488"/>
+        <location filename="queryscreen.cpp" line="1529"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1715"/>
+        <location filename="queryscreen.cpp" line="1763"/>
         <source>
 Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1172"/>
+        <location filename="queryscreen.cpp" line="1184"/>
         <source>Select at least one study to view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1245"/>
+        <location filename="queryscreen.cpp" line="1257"/>
         <source>Please select at least one study to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1250"/>
+        <location filename="queryscreen.cpp" line="1262"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1412"/>
+        <location filename="queryscreen.cpp" line="1453"/>
         <source>You have to select a PACS to store the study in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1457"/>
+        <location filename="queryscreen.cpp" line="1498"/>
         <source>The studies can only be stored to one PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1266"/>
+        <location filename="queryscreen.cpp" line="1278"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="161"/>
+        <location filename="queryscreen.cpp" line="149"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="161"/>
+        <location filename="queryscreen.cpp" line="149"/>
         <source>Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="132"/>
+        <location filename="queryscreen.cpp" line="120"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="135"/>
+        <location filename="queryscreen.cpp" line="123"/>
         <source>Send to DICOMDIR List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="135"/>
+        <location filename="queryscreen.cpp" line="123"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="138"/>
+        <location filename="queryscreen.cpp" line="126"/>
         <source>Store to PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="138"/>
+        <location filename="queryscreen.cpp" line="126"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="164"/>
+        <location filename="queryscreen.cpp" line="152"/>
         <source>&amp;Retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="164"/>
+        <location filename="queryscreen.cpp" line="152"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1234"/>
+        <location filename="queryscreen.cpp" line="1246"/>
         <source>Error: Can&apos;t import selected studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1236"/>
+        <location filename="queryscreen.cpp" line="1248"/>
         <source>Error: Some studies can&apos;t be imported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="567"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="567"/>
+        <source>This query can take a long time.
+Do you want continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1759"/>
+        <source>The Cache is blocked by another Starviewer window.
+Try to close all the others Starviewer windows and try again.
+
+If you want to open different Starviewer&apos;s windows always choose the &apos;New&apos; option from the File menu.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
