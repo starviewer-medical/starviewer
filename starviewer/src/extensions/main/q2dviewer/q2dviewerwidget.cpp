@@ -66,8 +66,9 @@ void Q2DViewerWidget::updateInput( Volume *input )
     m_synchronizeButton->setEnabled( true );
 }
 
-void Q2DViewerWidget::mousePressEvent( QMouseEvent * event )
+void Q2DViewerWidget::mousePressEvent( QMouseEvent *event )
 {
+    Q_UNUSED(event);
     emit selected( this );
 }
 

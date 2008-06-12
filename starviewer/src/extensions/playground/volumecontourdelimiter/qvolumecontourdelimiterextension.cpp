@@ -21,7 +21,7 @@
 #include <vtkMetaImageWriter.h>
 #include <vtkSplineWidget.h>
 #include <vtkPolyDataAlgorithm.h>
-#include <vtkStripper.h> 
+#include <vtkStripper.h>
 #include <vtkPNGWriter.h>
 #include <vtkPNGReader.h>
 #include <vtkImageStencil.h>
@@ -72,22 +72,22 @@ QVolumeContourDelimiterExtension::QVolumeContourDelimiterExtension(QWidget *pare
 {
     setupUi( this );
     m_volume = 0;
-    
+
     m_tempDirectory="./";
-    
+
     QString s = m_tempDirectory;
-    s += "dadesTemporalsStencil"; 
-    
+    s += "dadesTemporalsStencil";
+
     QDir dir( s );
-    
+
     if ( !dir.exists() )
     {
         QDir directory( m_tempDirectory );
         directory.mkdir( "dadesTemporalsStencil" );
     }
-    
+
     m_totalVolume = 0.;
-    
+
     m_splineClosed = false;
     m_firstSplineIsFixed = false;
     m_points = vtkPoints::New();
@@ -102,7 +102,7 @@ QVolumeContourDelimiterExtension::~QVolumeContourDelimiterExtension()
     //esborrem el directori temporal de proves i el seu contigut
     DeleteDirectory deleteDirectory;
     deleteDirectory.deleteDirectory( ( m_tempDirectory + "dadesTemporalsStencil/" ) , true );
-    
+
     m_points->Delete();
     m_splineWidget->Delete();
     m_extrude->Delete();
@@ -111,14 +111,14 @@ QVolumeContourDelimiterExtension::~QVolumeContourDelimiterExtension()
 void QVolumeContourDelimiterExtension::setInput( Volume* volume )
 {
     m_volume = volume;
-    
+
     //Fem una transformació sobre el volum d'entrada: passem el tipus de dades de float a char per poder crear una imatge PNG que ens servirà per fer la màscara.
     vtkImageShiftScale* shifter = vtkImageShiftScale::New();
     shifter->SetInput( m_volume->getVtkData() );
     shifter->SetOutputScalarTypeToUnsignedChar();
     shifter->ReleaseDataFlagOff();
     shifter->Update();
-    
+
     //Pintem tota la imatge de negre, donant un threshold impossible.
     vtkImageThreshold *thresh = vtkImageThreshold::New();
     thresh->SetInputConnection( shifter->GetOutputPort() );
@@ -127,34 +127,34 @@ void QVolumeContourDelimiterExtension::setInput( Volume* volume )
     thresh->SetOutValue(0);
     thresh->ReleaseDataFlagOff();
     thresh->Update();
-    
+
     //guardem la imatge en format PNG
     vtkPNGWriter *writer = vtkPNGWriter::New();
     writer->SetInputConnection( thresh->GetOutputPort() );
-    
+
     writer->SetFileName( qPrintable( m_tempDirectory + "dadesTemporalsStencil/" + "blackImage.png" ) );
-    
+
     //Per solventar problemes a sobre la màscara resultant, cal fer un canvi de la informació,
-    //que es correspon amb fer un canvi d'origen al volum de treball, altrament la màscara 
+    //que es correspon amb fer un canvi d'origen al volum de treball, altrament la màscara
     //surt desplaçada, pertant deformada.
     vtkImageChangeInformation *information = vtkImageChangeInformation::New();
     information->SetInput ( m_volume->getVtkData() );
-    information->SetOutputOrigin ( 0,0,0 ); 
+    information->SetOutputOrigin ( 0,0,0 );
     information->Update();
     m_volume->setData( information->GetOutput() );
     m_2DView->setInput( m_volume );
-    
+
     //Determinem les propietats dels dos visors
     m_2DView->updateAnnotationsInformation(Q2DViewer::NoAnnotation);
-    
+
     m_view = m_2DView->getView();
-    
+
     //com a mínim necessitem un spline, pertant el creem i l'afegim a la llista
     m_splineWidget = vtkSplineWidget::New();
     setSplineAtributes( m_splineWidget );
     setAttributes();
     m_2DView->refresh();
-    
+
     writer->Write();
     thresh->Delete();
     shifter->Delete();
@@ -168,7 +168,7 @@ void QVolumeContourDelimiterExtension::createActions()
     m_toolsActionGroup->setExclusive( true );
 
     m_actionFactory = new ToolsActionFactory( 0 );
-    
+
     m_splineAction = new QAction( 0 );
     m_setSpline->setDefaultAction( m_splineAction );
     m_splineAction->setCheckable( true );
@@ -179,17 +179,17 @@ void QVolumeContourDelimiterExtension::createActions()
 
     m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
     m_zoomToolButton->setDefaultAction( m_zoomAction );
-    
+
     m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
     m_slicingToolButton->setDefaultAction( m_slicingAction );
-    
+
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
     m_toolsActionGroup->addAction( m_zoomAction );
     m_toolsActionGroup->addAction( m_windowLevelAction );
     m_toolsActionGroup->addAction( m_splineAction );
     m_toolsActionGroup->addAction( m_slicingAction );
-    
+
     connect( m_createMask, SIGNAL( clicked() )  , this, SLOT( createModelOfVoxelsWithObtainedMasks() ) );
     connect( m_setSpline, SIGNAL( clicked ( bool ) ), this, SLOT( buttonAddSplineEnabled( bool ) ) );
     connect( m_addSpline, SIGNAL( clicked() ), this, SLOT( addNewSpline() ) );
@@ -206,7 +206,7 @@ void QVolumeContourDelimiterExtension::createActions()
     connect( m_spinBox, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setSlice( int ) ) );
     connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), this, SLOT( myEventHandler( unsigned long )) );
     connect( m_actionFactory, SIGNAL( triggeredTool( QString ) )  , m_2DView, SLOT( setTool( QString ) ) );
-    
+
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     m_2DView->enableAnnotation( Q2DViewer::SliceAnnotation );
 }
@@ -275,7 +275,7 @@ void QVolumeContourDelimiterExtension::myEventHandler( unsigned long id )
 {
     switch( id )
     {
-        case vtkCommand::LeftButtonPressEvent:    
+        case vtkCommand::LeftButtonPressEvent:
             if ( m_setSpline->isChecked() )
             {
                 insertPoint();
@@ -289,10 +289,10 @@ void QVolumeContourDelimiterExtension::myEventHandler( unsigned long id )
             }
             break;
 
-        case vtkCommand::KeyPressEvent:    
+        case vtkCommand::KeyPressEvent:
             if ( m_2DView->getInteractor()->GetKeyCode() == 'c' && m_pointList.size() > 2 )
             {
-                
+
                 m_splineWidget->SetClosed( true );
                 m_splineClosed = true;
                 m_splinesMap.insert( m_sliceOfCurrentSpline, m_splineWidget );
@@ -300,7 +300,7 @@ void QVolumeContourDelimiterExtension::myEventHandler( unsigned long id )
 
                 //ja podem afegir un altre spline, perquè hem tancat l'actual
                 m_addSpline->setEnabled( true );
-                
+
                 computeCurrentArea( m_2DView->getCurrentSlice() );
                 computeTotalVolume();
             }
@@ -324,14 +324,14 @@ void QVolumeContourDelimiterExtension::saveCurrentSplineAndGetNeededSplines( int
 
     //desactivem tots els splines, per després només activar els que estan a la llesca actual
     QMultiMap<int, vtkSplineWidget*>::const_iterator iterator = m_splinesMap.constBegin();
-    while (iterator != m_splinesMap.constEnd()) 
+    while (iterator != m_splinesMap.constEnd())
     {
         iterator.value()->Off();
         ++iterator;
     }
 
     //comptem el nombre d'splines que hi han editats a la llesca actual
-    int splinesOnCurrentSlice = m_splinesMap.count( slice ); 
+    int splinesOnCurrentSlice = m_splinesMap.count( slice );
 
     if ( splinesOnCurrentSlice > 0 )
     {
@@ -370,8 +370,8 @@ void QVolumeContourDelimiterExtension::addNewSpline()
 
 void QVolumeContourDelimiterExtension::insertPoint()
 {
-    int xy[2]; 
-    double position[4];  
+    int xy[2];
+    double position[4];
 
     m_2DView->getInteractor()->GetEventPosition( xy );
     m_2DView->computeDisplayToWorld( m_2DView->getRenderer() , xy[0], xy[1], 0, position );
@@ -396,7 +396,7 @@ void QVolumeContourDelimiterExtension::showSplines()
 
     m_2DView->refresh();
     m_points->Reset();
-}  
+}
 
 void QVolumeContourDelimiterExtension::createModelOfVoxelsWithObtainedMasks()
 {
@@ -413,8 +413,8 @@ void QVolumeContourDelimiterExtension::createModelOfVoxelsWithObtainedMasks()
         {
             m_splineWidget->Delete();
         }
-    }   
-    
+    }
+
     QMessageBox::information( 0, "Information",
             "Resultant volume will be saved in a directory, not in PACS!!\nThe next step is select this directory." );
 
@@ -423,9 +423,9 @@ void QVolumeContourDelimiterExtension::createModelOfVoxelsWithObtainedMasks()
 //     m_splinesMap.insert( m_sliceOfCurrentSpline, m_splineWidget );
 
     m_currentSlice = m_2DView->getCurrentSlice();
-    
-    vtkImageData *m_volumeToImageData; 
-    vtkImageData *auxiliar = vtkImageData::New(); 
+
+    vtkImageData *m_volumeToImageData;
+    vtkImageData *auxiliar = vtkImageData::New();
 
     vtkPNGReader *reader = vtkPNGReader::New();
     reader->SetFileName( qPrintable( ( m_tempDirectory + "dadesTemporalsStencil/" ) + "blackImage.png" ) );
@@ -456,7 +456,7 @@ void QVolumeContourDelimiterExtension::createModelOfVoxelsWithObtainedMasks()
     {
         numOfSplines = m_splinesMap.count( i );
         if ( numOfSplines > 0 )
-        {    
+        {
             for ( int j = 0; j < numOfSplines; j++ )
             {
                 m_splineWidget = m_splinesMap.take( i );
@@ -526,101 +526,100 @@ void QVolumeContourDelimiterExtension::createModelOfVoxelsWithObtainedMasks()
 void QVolumeContourDelimiterExtension::computeCurrentArea( int slice )
 {
     double *currentPoint;
-    double *followPoint;
     double *aux;
     vtkPolyData *pd  = vtkPolyData::New();
     vtkPoints *points;
     int i,j;
     double currentArea = 0.;
     DrawerPolyline polyline;
-    
-    QList<vtkSplineWidget*> m_splinesList = m_splinesMap.values( slice );    
-    QList<double*> m_pointsList;    
-    
+
+    QList<vtkSplineWidget*> m_splinesList = m_splinesMap.values( slice );
+    QList<double*> m_pointsList;
+
     foreach( vtkSplineWidget *spline, m_splinesList )
     {
         spline->GetPolyData( pd );
         points = pd->GetPoints();
-        
-        //en el següent loop reduïm el nombre de punts per tal de facilitar el càlcul i perquè tants punts no són necessaris. 
+
+        //en el següent loop reduïm el nombre de punts per tal de facilitar el càlcul i perquè tants punts no són necessaris.
         for ( j = 0; j < points->GetNumberOfPoints(); j = j + 4 )
         {
             currentPoint = points->GetPoint( j );
             aux = new double[3];
-            
-            for ( i = 0; i < 3; i++) 
+
+            for ( i = 0; i < 3; i++)
             aux[i] = currentPoint[i];
-            
+
             polyline.addPoint( aux );
         }
-         
+
         currentPoint = points->GetPoint( points->GetNumberOfPoints() - 1 );
         aux = new double[3];
-             
-        for ( i = 0; i < 3; i++) 
+
+        for ( i = 0; i < 3; i++)
             aux[i] = currentPoint[i];
-         
+
         polyline.addPoint( aux );
-         
+
         currentPoint = points->GetPoint( 0 );
         aux = new double[3];
-             
-        for ( i = 0; i < 3; i++) 
+
+        for ( i = 0; i < 3; i++)
             aux[i] = currentPoint[i];
-         
+
         polyline.addPoint( aux );
-         
+
         currentArea += polyline.computeArea( m_view );
         polyline.deleteAllPoints();
     }
     m_areaLabel->setText( QString("%1 mm2").arg( currentArea, 0, 'f', 2 ) );
 }
-               
+
 void QVolumeContourDelimiterExtension::computeTotalVolume()
 {
-    double *currentPoint, *followPoint, *aux;
+    double *currentPoint, *aux;
     vtkPolyData *pd  = vtkPolyData::New();
     vtkPoints *points;
     int i,j;
     double currentVolume = 0.;
     DrawerPolyline polyline;
-    
-    QList<vtkSplineWidget*> m_splinesList = m_splinesMap.values();    
-    QList<double*> m_pointsList;    
-    
+
+    QList<vtkSplineWidget*> m_splinesList = m_splinesMap.values();
+    QList<double*> m_pointsList;
+
     foreach( vtkSplineWidget *spline, m_splinesList )
     {
         spline->GetPolyData( pd );
         points = pd->GetPoints();
-        
-        //en el següent loop reduïm el nombre de punts per tal de facilitar el càlcul i perquè tants punts no són necessaris. 
+
+        //en el següent loop reduïm el nombre de punts per tal de facilitar el càlcul i perquè tants punts no són necessaris.
         for ( j = 0; j < points->GetNumberOfPoints(); j = j + 4 )
         {
             currentPoint = points->GetPoint( j );
             aux = new double[3];
-            
-            for ( i = 0; i < 3; i++) 
+
+            for ( i = 0; i < 3; i++)
                 aux[i] = currentPoint[i];
-            
+
             polyline.addPoint( aux );
         }
-         
+
         currentPoint = points->GetPoint( points->GetNumberOfPoints() - 1 );
         aux = new double[3];
-             
-        for ( i = 0; i < 3; i++) 
+
+        for ( i = 0; i < 3; i++)
             aux[i] = currentPoint[i];
-         
+
         polyline.addPoint( aux );
-         
+
         currentPoint = points->GetPoint( 0 );
         aux = new double[3];
-             
-        for ( i = 0; i < 3; i++) 
+
+        for ( i = 0; i < 3; i++)
             aux[i] = currentPoint[i];
-         
+
         polyline.addPoint( aux );
-         
+
         currentVolume += polyline.computeArea( m_view );
         polyline.deleteAllPoints();
     }
