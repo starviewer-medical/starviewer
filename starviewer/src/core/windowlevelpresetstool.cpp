@@ -49,7 +49,6 @@ void WindowLevelPresetsTool::applyPreset(char key)
     if( m_standardPresets.isEmpty() )
         return;
 
-    double window, level;
     QString preset;
     switch(key)
     {

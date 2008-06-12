@@ -12,18 +12,21 @@ namespace udg {
 
 PatientItem::PatientItem( Patient *patient, PatientItem *parent )
 {
+    Q_UNUSED(patient);
     parentItem = parent;
     itemData << "patient";
 }
 
 PatientItem::PatientItem( Study *study, PatientItem *parent )
 {
+    Q_UNUSED(study);
     parentItem = parent;
     itemData << "study";
 }
 
 PatientItem::PatientItem( Series *series, PatientItem *parent )
 {
+    Q_UNUSED(series);
     parentItem = parent;
     itemData << "serie";
 }

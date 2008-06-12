@@ -248,7 +248,7 @@ void ShutterFilter::setRectangularShutter( double leftVertical, double rightVert
     extruder->Delete();
 }
 
-void ShutterFilter::setPolygonalShutter( std::vector< double[2] > vertexs )
+void ShutterFilter::setPolygonalShutter( std::vector< double[2] > vtkNotUsed(vertexs) )
 {
     //\TODO per implementar
     DEBUG_LOG("Mètode no implementat");
@@ -280,13 +280,13 @@ void ShutterFilter::setCircularShutter( double center[2], double radius )
     extruder->Delete();
 }
 
-void ShutterFilter::setBitmapShutter( vtkImageData *bitmap )
+void ShutterFilter::setBitmapShutter( vtkImageData *vtkNotUsed(bitmap) )
 {
     //\TODO per implementar
     DEBUG_LOG("Mètode no implementat");
 }
 
-void ShutterFilter::setBitmapShutter( unsigned char *data, unsigned int width, unsigned int height, unsigned int left, unsigned int top, unsigned int foreground )
+void ShutterFilter::setBitmapShutter( unsigned char *data, unsigned int vtkNotUsed(width), unsigned int vtkNotUsed(height), unsigned int vtkNotUsed(left), unsigned int vtkNotUsed(top), unsigned int vtkNotUsed(foreground) )
 {
     // creem la màscara que farà de bitmap shutter
     // coses a tenir en compte

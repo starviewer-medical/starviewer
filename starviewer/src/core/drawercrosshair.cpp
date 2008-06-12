@@ -142,6 +142,9 @@ double DrawerCrossHair::getDistanceToPoint( double *point3D )
 
 bool DrawerCrossHair::isInsideOfBounds( double p1[3], double p2[3], int view )
 {
+    Q_UNUSED(p1);
+    Q_UNUSED(p2);
+    Q_UNUSED(view);
     // TODO implementar!
     return false;
 }

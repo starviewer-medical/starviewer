@@ -231,7 +231,7 @@ void vtkAtamaiPolyDataToImageStencil2::DataSetCutter(
 //--------------------------------------------------------------------------------
 
 static void vtkFloatingEndPointLine2D(double pt1[2], double pt2[2],
-                              int z, int zInc, int ymin, int ymax,
+                              int z, int zInc, int vtkNotUsed(ymin), int vtkNotUsed(ymax),
                               vtkstd::vector< vtkstd::vector<int> >& zyBucket)
 {
  if (pt1[1] > pt2[1])
@@ -340,7 +340,7 @@ static double DistanceMeasure( float *point1, float *point2 )
 void vtkAtamaiPolyDataToImageStencil2::ThreadedExecute(
  vtkImageStencilData *data,
  int extent[6],
- int id)
+ int vtkNotUsed(id) )
 {
 #if (VTK_MAJOR_VERSION == 4) && (VTK_MINOR_VERSION <= 3)
  float *spacing = data->GetSpacing();

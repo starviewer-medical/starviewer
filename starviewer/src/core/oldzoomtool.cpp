@@ -16,7 +16,7 @@
 
 namespace udg {
 
-OldZoomTool::OldZoomTool( QViewer *viewer, QObject *parent )
+OldZoomTool::OldZoomTool( QViewer *viewer )
 {
     m_state = NONE;
     m_viewer = viewer;

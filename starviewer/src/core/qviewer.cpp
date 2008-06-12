@@ -127,7 +127,7 @@ ToolProxy *QViewer::getToolProxy() const
     return m_toolProxy;
 }
 
-void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
+void QViewer::eventHandler( vtkObject *vtkNotUsed(obj), unsigned long event, void *vtkNotUsed(client_data), void *vtkNotUsed(call_data), vtkCommand *vtkNotUsed(command) )
 {
     // quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. \TODO ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch( event )

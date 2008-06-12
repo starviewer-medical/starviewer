@@ -134,16 +134,18 @@ bool Study::setDate( QString date )
 
 bool Study::setDate( QDate date )
 {
+    bool ok = true;
     if( date.isValid() )
     {
         m_date = date;
-        return true;
+        ok = true;
     }
     else if( !date.isNull() )
     {
         DEBUG_LOG("La data està en un mal format" );
-        return false;
+        ok = false;
     }
+    return ok;
 }
 
 bool Study::setTime( int hour , int minute, int second )
@@ -170,16 +172,18 @@ bool Study::setTime( QString time )
 
 bool Study::setTime(QTime time)
 {
-    if (time.isValid())
+    bool ok = true;
+    if( time.isValid() )
     {
         m_time = time;
-        return true;
+        ok = true;
     }
     else if( !time.isNull() )
     {
         DEBUG_LOG( "El time està en un mal format" );
-        return false;
+        ok = false;
     }
+    return ok;
 }
 
 QDate Study::getDate()

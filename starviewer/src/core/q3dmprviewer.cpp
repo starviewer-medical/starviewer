@@ -41,7 +41,7 @@ class PlanesInteractionCallback : public vtkCommand
 public:
     static PlanesInteractionCallback *New(){ return new PlanesInteractionCallback; }
     Q3DMPRViewer *m_viewer;
-    virtual void Execute( vtkObject *caller, unsigned long event, void *vtkNotUsed(callData) )
+    virtual void Execute( vtkObject *vtkNotUsed(caller), unsigned long event, void *vtkNotUsed(callData) )
     {
         static double lastWindowLevel[2] = {0.,0.};
         if( m_viewer )

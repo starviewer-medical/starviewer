@@ -36,7 +36,7 @@ ErfcLevelSetImageFilter<TInputImage, TFeatureImage, TMaskImage, TOutputType>
 template <class TInputImage, class TFeatureImage, class TMaskImage, class TOutputType>
 void
 ErfcLevelSetImageFilter<TInputImage, TFeatureImage, TMaskImage, TOutputType>
-::PrintSelf(std::ostream &os, Indent indent) const
+::PrintSelf(std::ostream &os, Indent itkNotUsed(indent)) const
 {
   //Superclass::PrintSelf(os, indent);
   os << "ErfcFunction: " << m_ErfcFunction;

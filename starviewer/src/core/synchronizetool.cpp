@@ -12,7 +12,7 @@
 
 namespace udg {
 
-SynchronizeTool::SynchronizeTool( QViewer *viewer, QObject *parent)
+SynchronizeTool::SynchronizeTool( QViewer *viewer, QObject *parent )
 : Tool( viewer, parent )
 {
     m_toolData = 0;
@@ -175,6 +175,7 @@ void SynchronizeTool::applyPanChanges()
 
 void SynchronizeTool::handleEvent( unsigned long eventID )
 {
+    Q_UNUSED(eventID);
 }
 
 }

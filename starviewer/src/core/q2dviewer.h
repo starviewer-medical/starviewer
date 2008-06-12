@@ -119,9 +119,6 @@ public:
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int data[3] );
 
-    /// Desa totes les llesques que es veuen al visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
-    void saveAll( QString baseName , FileType extension );
-
     /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
     void saveCurrent( QString baseName , FileType extension );
 
