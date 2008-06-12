@@ -539,7 +539,7 @@ void QueryScreen::queryStudyPacs()
     QString result;
     StarviewerSettings settings;
 
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
 
     INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString() );
 
@@ -552,44 +552,42 @@ void QueryScreen::queryStudyPacs()
     m_imageListSingleton->clear();
     if ( pacsList.end() ) //es comprova que hi hagi pacs seleccionats
     {
-        QApplication::restoreOverrideCursor();
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Please select a PACS to query" ) );
         return;
     }
 
     multipleQueryStudy.setPacsList( pacsList ); //indiquem a quins Pacs Cercar
-    
+
     DicomMask searchMask = buildDicomMask();
-    
+
     if ( searchMask.isAHeavyQuery() )
     {
         //0 -> Yes; 1->No
         int option = QMessageBox::information( 0 , tr( "Warning" ) , tr( "This query can take a long time.\nDo you want continue?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
-        
+
         if ( option == 1 )
         {
-            QApplication::restoreOverrideCursor();
             return;
         }
     }
-    
+
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     multipleQueryStudy.setMask( searchMask ); //assignem la mascara
 
     pacsList.firstPacs();
     m_lastQueriedPacs = pacsList.getPacs().getAEPacs();
 
     Status queryStatus = multipleQueryStudy.StartQueries();
-    
-    if ( !queryStatus.good() )  //no fem la query
+
+    if( !queryStatus.good() )  //no fem la query
     {
         m_studyTreeWidgetPacs->clear();
         QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
         return;
     }
-    
-    m_studyListSingleton->firstStudy();
 
+    m_studyListSingleton->firstStudy();
     if ( m_studyListSingleton->end() )
     {
         m_studyTreeWidgetPacs->clear();
@@ -597,7 +595,7 @@ void QueryScreen::queryStudyPacs()
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
         return;
     }
-    
+
     m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
     m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
     m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
@@ -1348,7 +1346,7 @@ void QueryScreen::saveSettings()
         //guardem les dimensions de la pantalla
         settings.setQueryScreenWindowHeight( height() );
         settings.setQueryScreenWindowWidth( width() );
-    }    
+    }
 }
 
 void QueryScreen::saveQStudyTreeWidgetColumnsWidth()
