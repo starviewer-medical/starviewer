@@ -30,8 +30,6 @@ class Status
 
 public :
 
-    enum ErrorType{ NoError, UnknowError, NoConnectionError, NoMaskError, MaskInsertTagError, CanNotConnectError, UserCancellation };
-    
     Status();
 
 	/** Retorna un text descrivint l'error o l'exit del procés
@@ -63,16 +61,11 @@ public :
   	 */
     int code() const;
     
-    ///retorna el tipus d'error
-    ErrorType getCodeType()
-    { return m_errorType; }
-
 private :
 
     QString m_descText;
     bool m_success;
     int m_numberError;
-    ErrorType m_errorType;
 };
 }; // end namespace udg
 #endif

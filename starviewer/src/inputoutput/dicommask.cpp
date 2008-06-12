@@ -631,11 +631,6 @@ Status DicomMask:: setSeriesDate( QString date )
 
     retrieveLevel( SeriesMask );
 
-    
-    
-    cout << "DATA: --------------> " << qPrintable(date) << endl;
-    
-    
     //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
     if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() !=  0 )return state.setStatus( DcmtkMaskInsertTagError );
 
