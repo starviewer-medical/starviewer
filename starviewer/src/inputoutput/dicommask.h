@@ -386,7 +386,6 @@ public:
 
     bool operator ==(const DicomMask &mask);
     
-    
     ///ens determina si la consulta al PACS pot esdevenir pesada, segons els paràmetres de cerca que s'han especificat
     bool isAHeavyQuery();
 

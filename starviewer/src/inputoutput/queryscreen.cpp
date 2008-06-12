@@ -558,7 +558,22 @@ void QueryScreen::queryStudyPacs()
     }
 
     multipleQueryStudy.setPacsList( pacsList ); //indiquem a quins Pacs Cercar
-    multipleQueryStudy.setMask( buildDicomMask() ); //construim la mascara
+    
+    DicomMask searchMask = buildDicomMask();
+    
+    if ( searchMask.isAHeavyQuery() )
+    {
+        //0 -> Yes; 1->No
+        int option = QMessageBox::information( 0 , tr( "Warning" ) , tr( "This query can take a long time.\nDo you want continue?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
+        
+        if ( option == 1 )
+        {
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+    }
+    
+    multipleQueryStudy.setMask( searchMask ); //assignem la mascara
 
     pacsList.firstPacs();
     m_lastQueriedPacs = pacsList.getPacs().getAEPacs();
@@ -567,15 +582,12 @@ void QueryScreen::queryStudyPacs()
     
     if ( !queryStatus.good() )  //no fem la query
     {
-        if ( queryStatus.getCodeType() != Status::UserCancellation )
-        {
-            m_studyTreeWidgetPacs->clear();
-            QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
-        }
+        m_studyTreeWidgetPacs->clear();
+        QApplication::restoreOverrideCursor();
+        QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
         return;
     }
-
+    
     m_studyListSingleton->firstStudy();
 
     if ( m_studyListSingleton->end() )
@@ -585,6 +597,7 @@ void QueryScreen::queryStudyPacs()
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
         return;
     }
+    
     m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
     m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
     m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
