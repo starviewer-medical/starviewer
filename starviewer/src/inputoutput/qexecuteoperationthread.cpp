@@ -101,6 +101,8 @@ void QExecuteOperationThread::run()
             case Operation::Move :
                  moveStudy( operation );
                  break;
+            default:
+            break;
         }
 
         //comprovem si hem de parar
