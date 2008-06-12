@@ -1055,7 +1055,6 @@ double Slicer::jensenShannonDivergence( const Group & groupX, const Group & grou
     DoubleHistogram histogramX( m_nLabels ), histogramY( m_nLabels );   // individual histograms
     DoubleHistogram histogramXY( m_nLabels );                           // merge histogram
     unsigned short nx = groupX.slices.size(), ny = groupY.slices.size();
-    double amountX = 1.0 / nx, amountY = 1.0 / ny, amountXY = 1.0 / ( nx + ny );
 
     /*
     // amb background
