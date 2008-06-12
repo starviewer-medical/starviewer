@@ -1439,7 +1439,7 @@ void Q2DViewer::setOverlayToRectilinearWipe()
     setOverlay( Q2DViewer::RectilinearWipe );
 }
 
-void Q2DViewer::resizeEvent( QResizeEvent *resize )
+void Q2DViewer::resizeEvent( QResizeEvent *vtkNotUsed(resize) )
 {
     if( m_mainVolume )
     {
@@ -1965,33 +1965,6 @@ void Q2DViewer::getSeedPosition( double pos[3] )
     pos[0] = m_seedPosition[0];
     pos[1] = m_seedPosition[1];
     pos[2] = m_seedPosition[2];
-}
-
-void Q2DViewer::saveAll( QString baseName , FileType extension )
-{
-    switch( extension )
-    {
-    case PNG:
-    break;
-
-    case JPEG:
-    break;
-
-    case TIFF:
-    break;
-
-    case DICOM:
-    break;
-
-    case META:
-    break;
-
-    case PNM:
-    break;
-
-    case BMP:
-    break;
-    }
 }
 
 void Q2DViewer::saveCurrent( QString baseName , FileType extension )
@@ -3266,10 +3239,8 @@ int Q2DViewer::getNearestSlice( double projectedPosition[3], double &distance )
     double minimumDistance = -1.0;
     int minimumSlice = -1;
     double currentPlaneOrigin[3], currentNormalVector[3];
-    ImagePlane *currentPlane;
+    ImagePlane *currentPlane = 0;
     int maxSlice = this->getMaximumSlice();
-
-    ImagePlane *imagePlane = 0;
 
     for( i = 0; i < maxSlice ; i++ )
     {

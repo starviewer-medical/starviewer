@@ -173,6 +173,8 @@ QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> emb
 
 QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )
 {
+    Q_UNUSED(embeddedSequencesTags);
+    Q_UNUSED(attributeTag);
     QStringList result;
     DEBUG_LOG("DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )  == Crida a Mètode no implementat!");
 //\TODO per implementar. Aquesta part és una mica més fotuda.

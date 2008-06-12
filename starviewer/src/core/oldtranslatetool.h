@@ -19,7 +19,7 @@ class OldTranslateTool : public OldTool
 Q_OBJECT
 public:
     enum { NONE , TRANSLATING };
-    OldTranslateTool( QViewer *viewer, QObject *parent = 0 );
+    OldTranslateTool( QViewer *viewer );
     ~OldTranslateTool();
 
     void handleEvent( unsigned long eventID );

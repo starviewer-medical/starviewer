@@ -387,6 +387,7 @@ Patient *Volume::getPatient()
 
 QString Volume::toString( bool verbose )
 {
+    Q_UNUSED( verbose );
     QString result;
 
     if( m_dataLoaded )
@@ -436,6 +437,7 @@ void Volume::getStackDirection( double direction[3], int stack )
 {
     // TODO encara no suportem múltiples stacks!!!!
     // fem el tractament com si només hi hagués un sol
+    Q_UNUSED(stack);
     Image *firstImage = this->getImage(0,0);
     Image *secondImage = this->getImage(1,0);
     if( !firstImage )

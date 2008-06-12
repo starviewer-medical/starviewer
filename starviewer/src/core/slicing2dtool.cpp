@@ -5,21 +5,25 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "slicing2dtool.h"
-#include <QAction>
-#include <QVTKWidget.h>
-#include <vtkRenderWindowInteractor.h>
 
+// VTK
+#include <vtkRenderWindowInteractor.h>
+#include <vtkCommand.h>
+// Qt
 #include <QTime>
+
 #include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
-#include <vtkCommand.h>
 
 namespace udg {
 
 Slicing2DTool::Slicing2DTool( Q2DViewer *viewer, QObject *parent )
  : m_slicingMode(SliceMode)
 {
+    // TODO potser hauríem d'assignar el parent?
+    Q_UNUSED(parent);
+
     m_state = NONE;
     m_startPosition[0] = 0;
     m_startPosition[1] = 0;
