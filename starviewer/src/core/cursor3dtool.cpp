@@ -40,6 +40,7 @@ Cursor3DTool::Cursor3DTool( QViewer *viewer, QObject *parent )
     // cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( refreshReferenceViewerData() ) );
     connect( m_2DViewer, SIGNAL(selected()),SLOT(refreshReferenceViewerData()) );
+    connect( m_2DViewer, SIGNAL(sliceChanged( int ) ), SLOT( hideCrossHair() ) );
 
     refreshReferenceViewerData();
 
@@ -300,6 +301,17 @@ void Cursor3DTool::refreshReferenceViewerData()
     if( m_2DViewer->getInput() )
     {
         updateFrameOfReference();
+    }
+}
+
+void Cursor3DTool::hideCrossHair()
+{
+    if( m_2DViewer->isActive() && m_state == NONE )
+    {
+        m_crossHair->setVisibility( false );
+        m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+        m_2DViewer->refresh();
+        m_myData->setVisible( false );
     }
 }
 
