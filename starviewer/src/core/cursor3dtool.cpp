@@ -231,17 +231,22 @@ void Cursor3DTool::updateProjectedPoint()
         if( !m_myData->isVisible() )
         {
             m_crossHair->setVisibility( false );
-            m_crossHair->update( DrawerPrimitive::VTKRepresentation );
-            m_2DViewer->refresh();
         }
         else
         {
             //Només podem projectar si tenen el mateix frame of reference UID
             if( m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() )
             {
+                m_crossHair->setVisibility( true );
                 projectPoint();
             }
+            else
+            {
+                m_crossHair->setVisibility( false );
+            }
         }
+        m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+        m_2DViewer->refresh();
     }
 }
 
