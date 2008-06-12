@@ -650,7 +650,7 @@ void QEdemaSegmentationExtension::setEditorPoint(  )
                     break;
                 }
             }
-            double volume = this->updateMaskVolume();
+            this->updateMaskVolume();
             m_resultsLineEdit->clear();
             m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
             m_edemaVolumeLineEdit->clear();
