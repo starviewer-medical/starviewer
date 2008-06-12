@@ -394,7 +394,7 @@ void QApplicationMainWindow::about()
 {
     QMessageBox::about(this, tr("About Starviewer"),
             tr("<h2>Starviewer</h2>"
-               "<p>Copyright &copy; 2005-2007 Grup de Gràfics Girona"
+               "<p>Copyright &copy; 2005-2008 Graphics & Imaging Laboratory (GILab), Girona"
                "<p align='justify'>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI,"
                " CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is "
                "fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images "
@@ -404,9 +404,8 @@ void QApplicationMainWindow::about()
                " multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and"
                " Maximum Intensity Projection(MIP)."
                "<p align='justify'>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing"
-               " software for medical research (radiology and nuclear imaging), functional imaging, 3D imaging, confocal microscopy and"
-               " molecular imaging."
-               "<p>Version : %1 </p>").arg( "Vienna 0.5.0" )
+               " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging."
+               "<p>Version : %1 </p>").arg( "0.6.0" )
                );
 }
 
