@@ -973,8 +973,6 @@ void QVSIReconstructionExtension::computeVSI( )
     std::cout<<"Init computeVSI"<<std::endl;
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    unsigned int t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13;
-    t1 = clock();
     //Paràmetres que definim constants però que potser no ho són
     static const unsigned int Nbaseline = 20; //->Mostres pre-bolus
     static const double TEdyn = 0.025; //->valor extret del pwp d'en Gerard
@@ -1006,8 +1004,6 @@ void QVSIReconstructionExtension::computeVSI( )
     Volume::ItkImageType::Pointer mapImage2 = Volume::ItkImageType::New();
     mapImage2->SetRegions( region );
     mapImage2->Allocate();
-
-    t0 = clock();
 
     typedef itk::Image<float, 3> DoubleImageType;
     DoubleImageType::Pointer sbImage = DoubleImageType::New();
@@ -1080,8 +1076,6 @@ void QVSIReconstructionExtension::computeVSI( )
     DoubleIterator initialrGEMeanIter( RGeMeanImage, RGeMeanImage->GetBufferedRegion() );
     DoubleIterator psiIter( psiImage, psiImage->GetBufferedRegion() );
 
-    t2 = clock();
-
     typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
 
     Volume::ItkImageType::PixelType value;
@@ -1113,8 +1107,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-
-    t3 = clock();
 
     std::cout<<"End recorregut2: "<<std::endl;
     std::cout<<"Init recorregut: ["<<size[0]<<", "<<size[1]<<", "<<Nbaseline<<" ("<<pend<<"), "<<kend<<"]"<<std::endl;
@@ -1149,8 +1141,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-
-    t4 = clock();
 
     std::cout<<"Init recorregut max: "<<pend<<std::endl;
     DSCiter.GoToBegin();
@@ -1196,7 +1186,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-    t5 = clock();
 //     writerType::Pointer mapWriter5 = writerType::New();
 //     mapWriter5->SetFileName("maxImage.mhd");
 //     mapWriter5->SetInput(maxImage);
@@ -1330,7 +1319,6 @@ void QVSIReconstructionExtension::computeVSI( )
     }
     std::cout<<"ContCBV= "<<contCBV2<<std::endl;
     std::cout<<"max value:"<<m_maxValue<<std::endl;
-    t6 = clock();
 
 //     writerType::Pointer mapWriter5 = writerType::New();
 //     mapWriter5->SetFileName("rCBVImage.mhd");
@@ -1358,8 +1346,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-    t7 = clock();
-
     double mean=sum/(bloodvolfraction*(double)contCBV);
     std::cout<<"Mean: "<<mean<<std::endl;
     rCBVIter.GoToBegin();
@@ -1410,8 +1396,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-    t8 = clock();
-
 //     writerType::Pointer mapWriter4 = writerType::New();
 //     mapWriter4->SetFileName("psiImage.mhd");
 //     mapWriter4->SetInput(mapImage);
@@ -1463,8 +1447,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-    t9 = clock();
-
 //     writerType::Pointer mapWriter3 = writerType::New();
 //     mapWriter3->SetFileName("difsbImage.mhd");
 //     mapWriter3->SetInput(mapImage);
@@ -1543,8 +1525,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-    t10 = clock();
-
 //     writerType::Pointer mapWriter6 = writerType::New();
 //     mapWriter6->SetFileName("difGEImage.mhd");
 //     mapWriter6->SetInput(mapImage);
@@ -1601,8 +1581,6 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-    t11 = clock();
-
 //     writerType::Pointer mapWriter2 = writerType::New();
 //     mapWriter2->SetFileName("rGEMeanImage.mhd");
 //     mapWriter2->SetInput(mapImage);
@@ -1678,13 +1656,10 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-    t12 = clock();
-
     std::cout<<"End recorregut 8"<<std::endl;
     std::cout<<"Min:"<<m_mapMin<<" // Max:"<<m_mapMax<<std::endl;
     std::cout<<"Max Value: "<<m_maxValue<<", Min Value: "<<m_minValue<<std::endl;
     std::cout<<"cont: "<<vsicont<<" // cont0: "<<vsicont0<<std::endl;
-
 
     if(m_mapVolume!=0)
     {
@@ -1736,21 +1711,6 @@ void QVSIReconstructionExtension::computeVSI( )
     int* ext= m_mapVolume->getWholeExtent();
     std::cout<<"["<<ext[0]<<","<<ext[1]<<";"<<ext[2]<<","<<ext[3]<<";"<<ext[4]<<","<<ext[5]<<"]"<<std::endl;
     std::cout<<"Number of voxels:"<<cont<<std::endl;
-    t13 = clock();
-    std::cout<<"TIME:"<<CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T1: "<<(t0-t1)/(double)CLOCKS_PER_SEC<<"/"<<(t0-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T2: "<<(t2-t1)/(double)CLOCKS_PER_SEC<<"/"<<(t2-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T3: "<<(t3-t2)/(double)CLOCKS_PER_SEC<<"/"<<(t3-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T4: "<<(t4-t3)/(double)CLOCKS_PER_SEC<<"/"<<(t4-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T5: "<<(t5-t4)/(double)CLOCKS_PER_SEC<<"/"<<(t5-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T6: "<<(t6-t5)/(double)CLOCKS_PER_SEC<<"/"<<(t6-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T7: "<<(t7-t6)/(double)CLOCKS_PER_SEC<<"/"<<(t7-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T8: "<<(t8-t7)/(double)CLOCKS_PER_SEC<<"/"<<(t8-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T9: "<<(t9-t8)/(double)CLOCKS_PER_SEC<<"/"<<(t9-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T10: "<<(t10-t9)/(double)CLOCKS_PER_SEC<<"/"<<(t10-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T11: "<<(t11-t10)/(double)CLOCKS_PER_SEC<<"/"<<(t11-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T12: "<<(t12-t11)/(double)CLOCKS_PER_SEC<<"/"<<(t12-t1)/(double)CLOCKS_PER_SEC<<std::endl;
-    std::cout<<"T13: "<<(t13-t12)/(double)CLOCKS_PER_SEC<<"/"<<(t13-t1)/(double)CLOCKS_PER_SEC<<std::endl;
     std::cout<<"End computeVSI!!!"<<std::endl;
     QApplication::restoreOverrideCursor();
 
