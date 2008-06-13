@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
-<defaultcodec></defaultcodec>
 <context>
     <name>QClutEditorDialogBase</name>
     <message>
@@ -98,32 +97,32 @@
         <translation>Mover</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="447"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="452"/>
         <source>Rendering Method</source>
         <translation>Metodo de renderización</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="403"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="408"/>
         <source>Ray Casting</source>
         <translation>Ray Casting</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="408"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="413"/>
         <source>MIP</source>
         <translation>MIP</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="413"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="418"/>
         <source>Texture 3D</source>
         <translation>Textura 3D</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="418"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="423"/>
         <source>Texture 2D</source>
         <translation>Textura 3D</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="423"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="428"/>
         <source>Iso Surface</source>
         <translation>Iso superfície</translation>
     </message>

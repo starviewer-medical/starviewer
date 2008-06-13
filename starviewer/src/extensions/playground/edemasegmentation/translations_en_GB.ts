@@ -219,127 +219,112 @@
 <context>
     <name>udg::QEdemaSegmentationExtension</name>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="129"/>
-        <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qedemasegmentationextension.cpp" line="130"/>
-        <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qedemasegmentationextension.cpp" line="131"/>
-        <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qedemasegmentationextension.cpp" line="139"/>
+        <location filename="qedemasegmentationextension.cpp" line="106"/>
         <source>Rotate Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="141"/>
+        <location filename="qedemasegmentationextension.cpp" line="108"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="166"/>
+        <location filename="qedemasegmentationextension.cpp" line="133"/>
         <source>EditorTool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="167"/>
+        <location filename="qedemasegmentationextension.cpp" line="134"/>
         <source>Enable/Disable editor tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="188"/>
+        <location filename="qedemasegmentationextension.cpp" line="155"/>
         <source>Lesion Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="189"/>
+        <location filename="qedemasegmentationextension.cpp" line="156"/>
         <source>Enable/Disable lesion View Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="195"/>
+        <location filename="qedemasegmentationextension.cpp" line="162"/>
         <source>Edema Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="196"/>
+        <location filename="qedemasegmentationextension.cpp" line="163"/>
         <source>Enable/Disable edema View Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="202"/>
+        <location filename="qedemasegmentationextension.cpp" line="169"/>
         <source>Ventricles Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="203"/>
+        <location filename="qedemasegmentationextension.cpp" line="170"/>
         <source>Enable/Disable ventricles View Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="216"/>
+        <location filename="qedemasegmentationextension.cpp" line="183"/>
         <source>Paint Editor Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="217"/>
+        <location filename="qedemasegmentationextension.cpp" line="184"/>
         <source>Enable/Disable Paint Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="224"/>
+        <location filename="qedemasegmentationextension.cpp" line="191"/>
         <source>Erase Editor Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="225"/>
+        <location filename="qedemasegmentationextension.cpp" line="192"/>
         <source>Enable/Disable Erase Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="232"/>
+        <location filename="qedemasegmentationextension.cpp" line="199"/>
         <source>Erase Slice Editor Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="233"/>
+        <location filename="qedemasegmentationextension.cpp" line="200"/>
         <source>Enable/Disable Erase Slice Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="240"/>
+        <location filename="qedemasegmentationextension.cpp" line="207"/>
         <source>Erase Region Editor Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="241"/>
+        <location filename="qedemasegmentationextension.cpp" line="208"/>
         <source>Enable/Disable Erase Region Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="481"/>
+        <location filename="qedemasegmentationextension.cpp" line="421"/>
         <source>StarViewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="1165"/>
+        <location filename="qedemasegmentationextension.cpp" line="1104"/>
         <source>Save Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="1165"/>
+        <location filename="qedemasegmentationextension.cpp" line="1104"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="481"/>
+        <location filename="qedemasegmentationextension.cpp" line="421"/>
         <source>ERROR: Seed or mask undefined</source>
         <translation type="unfinished"></translation>
     </message>
