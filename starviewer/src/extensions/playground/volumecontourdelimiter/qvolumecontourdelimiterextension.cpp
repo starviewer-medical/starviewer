@@ -1,54 +1,25 @@
 #include "qvolumecontourdelimiterextension.h"
 #include "toolsactionfactory.h"
 #include "volume.h"
-#include "logging.h"
-#include "q2dviewer.h"
 #include "deletedirectory.h"
 #include "point.h"
-#include "toolmanager.h"
 #include "drawerpolyline.h"
-#include <iostream.h>
-
 // VTK
-#include <vtkRenderer.h>
-#include <vtkImageMask.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageThreshold.h>
-#include <vtkActor2D.h>
-#include <vtkActor.h>
-#include <vtkImageIterator.h>
 #include <vtkCommand.h>
 #include <vtkImageChangeInformation.h>
 #include <vtkMetaImageWriter.h>
-#include <vtkSplineWidget.h>
-#include <vtkPolyDataAlgorithm.h>
-#include <vtkStripper.h>
 #include <vtkPNGWriter.h>
 #include <vtkPNGReader.h>
 #include <vtkImageStencil.h>
-#include <vtkImageViewer2.h>
-#include <vtkInteractorStyleImage.h>
-#include <vtkPolyData.h>
 #include <vtkPoints.h>
 #include <vtkProperty.h>
-#include <vtkGlyphSource2D.h>
 #include <vtkImageShiftScale.h>
 #include <vtkPolyDataToImageStencil.h>
 #include <vtkLinearExtrusionFilter.h>
-#include <vtkImageTracerWidget.h>
-#include <vtkGlyphSource2D.h>
-#include <vtkSplineWidget.h>
-#include <vtkImageViewer2.h>
-#include <vtkKochanekSpline.h>
-#include <vtkParametricSpline.h>
-#include <vtkImageActor.h>
-#include <vtkCamera.h>
 /////
 #include <QDir>
-#include <QString>
-#include <QAction>
-#include <QToolBar>
-#include <QSettings>
 #include <QMessageBox>
 #include <QFileDialog>
 
@@ -630,7 +601,7 @@ void QVolumeContourDelimiterExtension::computeTotalVolume()
         currentVolume *= m_2DView->getInput()->getSpacing()[2];
     else
         currentVolume *= m_volume->getPhaseVolume( m_2DView->getCurrentPhase() )->getSpacing()[2];
-        
+
     m_volumeLabel->setText( QString("%1 mm3").arg( currentVolume, 0, 'f', 2 ) );
 }
 
