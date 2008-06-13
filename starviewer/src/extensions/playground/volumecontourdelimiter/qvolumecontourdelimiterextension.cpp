@@ -7,6 +7,7 @@
 #include "point.h"
 #include "toolmanager.h"
 #include "drawerpolyline.h"
+#include <iostream.h>
 
 // VTK
 #include <vtkRenderer.h>
@@ -287,6 +288,7 @@ void QVolumeContourDelimiterExtension::myEventHandler( unsigned long id )
                     m_createMask->setEnabled( true );
                 }
             }
+            m_2DView->render();
             break;
 
         case vtkCommand::KeyPressEvent:
@@ -624,7 +626,11 @@ void QVolumeContourDelimiterExtension::computeTotalVolume()
         polyline.deleteAllPoints();
     }
     //per saber el volum, multipliquem l'àrea per l'espaiat de profunditat, en aquest cas pel de z.
-    currentVolume *= m_2DView->getInput()->getSpacing()[2];
+    if ( m_volume->getNumberOfPhases() == 1 )
+        currentVolume *= m_2DView->getInput()->getSpacing()[2];
+    else
+        currentVolume *= m_volume->getPhaseVolume( m_2DView->getCurrentPhase() )->getSpacing()[2];
+        
     m_volumeLabel->setText( QString("%1 mm3").arg( currentVolume, 0, 'f', 2 ) );
 }
 
