@@ -21,92 +21,87 @@
 <context>
     <name>udg::QCardiac2DViewerExtension</name>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="58"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="51"/>
         <source>&amp;Axial View</source>
         <translation>Vista &amp;Axial</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="59"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="52"/>
         <source>Ctrl+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="60"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="53"/>
         <source>Change Current View To Axial</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="65"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="58"/>
         <source>&amp;Sagital View</source>
         <translation>Vista &amp;Sagital</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="66"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="59"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="67"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="60"/>
         <source>Change Current View To Saggital</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="73"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="66"/>
         <source>&amp;Coronal View</source>
         <translation>Vista &amp;Coronal</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="74"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="67"/>
         <source>Ctrl+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="75"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="68"/>
         <source>Change Current View To Coronal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="81"/>
-        <source>Space</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="114"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="98"/>
         <source>Rotate Clockwise</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="116"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="100"/>
         <source>Rotate the image in clockwise direction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="123"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="107"/>
         <source>Rotate Counter Clockwise</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="125"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="109"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="313"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="242"/>
         <source>Save video file as...</source>
         <translation>Desar fitxer de vídeo com...</translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="332"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="260"/>
         <source>MPEG (*.mpg)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="337"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="264"/>
         <source>AVI (*.avi)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcardiac2dviewerextension.cpp" line="355"/>
+        <location filename="qcardiac2dviewerextension.cpp" line="282"/>
         <source>Making video</source>
         <translation></translation>
     </message>
