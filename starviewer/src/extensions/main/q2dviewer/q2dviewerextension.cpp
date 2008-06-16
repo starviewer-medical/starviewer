@@ -42,6 +42,8 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_rotateCounterClockWiseToolButton->setVisible( false );
     m_flipVerticalToolButton->setVisible( false );
     m_flipHorizontalToolButton->setVisible( false );
+    m_windowLevelToolButton->setVisible(false);
+    m_translateToolButton->setVisible(false);
 
     // TODO deshabilitem els presentation states fins la release en què es tornin a habilitar
     m_presentationStateSwitchToolButton->setVisible(false);
