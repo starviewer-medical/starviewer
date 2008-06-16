@@ -10,7 +10,6 @@
 
 #include <QReadLocker>
 #include <QWriteLocker>
-#include <QThread>
 
 #include "logging.h"
 
