@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>156</width>
-    <height>99</height>
+    <width>84</width>
+    <height>77</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -66,7 +66,7 @@
        <item>
         <widget class="QCheckBox" name="m_loopCheckBox" >
          <property name="text" >
-          <string>Loop</string>
+          <string/>
          </property>
          <property name="icon" >
           <iconset resource="../main/main.qrc" >:/images/repeat.png</iconset>
@@ -79,7 +79,7 @@
           <bool>false</bool>
          </property>
          <property name="text" >
-          <string>Go-back</string>
+          <string/>
          </property>
          <property name="icon" >
           <iconset resource="../main/main.qrc" >:/images/boomerang.png</iconset>
@@ -91,62 +91,52 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
+    <widget class="QSlider" name="m_velocityControl" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>1</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="spacing" >
-      <number>0</number>
+     <property name="minimum" >
+      <number>1</number>
      </property>
-     <item>
-      <widget class="QSlider" name="m_velocityControl" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimum" >
-        <number>1</number>
-       </property>
-       <property name="maximum" >
-        <number>30</number>
-       </property>
-       <property name="pageStep" >
-        <number>1</number>
-       </property>
-       <property name="value" >
-        <number>10</number>
-       </property>
-       <property name="sliderPosition" >
-        <number>10</number>
-       </property>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="m_velocityLabel" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>1</hsizetype>
-         <vsizetype>5</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>10 img/sec</string>
-       </property>
-       <property name="alignment" >
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <property name="maximum" >
+      <number>30</number>
+     </property>
+     <property name="pageStep" >
+      <number>1</number>
+     </property>
+     <property name="value" >
+      <number>10</number>
+     </property>
+     <property name="sliderPosition" >
+      <number>10</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="m_velocityLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>1</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>10 img/sec</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -5,16 +5,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1574</width>
+    <width>1362</width>
     <height>431</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>4</number>
+    <number>0</number>
    </property>
    <item>
     <layout class="QHBoxLayout" >
@@ -22,7 +22,7 @@
       <number>0</number>
      </property>
      <property name="spacing" >
-      <number>6</number>
+      <number>0</number>
      </property>
      <item>
       <layout class="QVBoxLayout" >
@@ -216,7 +216,7 @@
         <number>0</number>
        </property>
        <property name="spacing" >
-        <number>6</number>
+        <number>2</number>
        </property>
        <item>
         <widget class="QToolButton" name="m_slicingToolButton" >
@@ -321,28 +321,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QToolButton" name="m_rotateClockWiseToolButton" >
-         <property name="text" >
-          <string>Rotate</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/rotateClockWise.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
@@ -351,7 +329,7 @@
         <number>0</number>
        </property>
        <property name="spacing" >
-        <number>6</number>
+        <number>2</number>
        </property>
        <item>
         <widget class="QToolButton" name="m_polylineButton" >
@@ -617,6 +595,54 @@
         <number>6</number>
        </property>
        <item>
+        <widget class="QToolButton" name="m_dicomDumpToolButton" >
+         <property name="text" >
+          <string>Info</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/dicomDump.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_rotateClockWiseToolButton" >
+         <property name="text" >
+          <string>Rotate</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -673,35 +699,13 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" >
+      <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>3</number>
        </property>
        <property name="spacing" >
-        <number>2</number>
+        <number>0</number>
        </property>
-       <item>
-        <widget class="QToolButton" name="m_dicomDumpToolButton" >
-         <property name="text" >
-          <string>Info</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/dicomDump.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QToolButton" name="m_referenceLinesToolButton" >
          <property name="text" >
@@ -718,9 +722,6 @@
          </property>
          <property name="checkable" >
           <bool>true</bool>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
          <property name="autoRaise" >
           <bool>true</bool>
@@ -744,9 +745,6 @@
          <property name="checkable" >
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
          <property name="autoRaise" >
           <bool>true</bool>
          </property>
@@ -769,28 +767,11 @@
      <item>
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <item>
-          <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox" >
-           <property name="sizeAdjustPolicy" >
-            <enum>QComboBox::AdjustToContents</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item>
         <spacer>
          <property name="orientation" >
@@ -808,11 +789,52 @@
         </spacer>
        </item>
        <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>2</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>5</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="sizeAdjustPolicy" >
+            <enum>QComboBox::AdjustToContents</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>1</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QLabel" name="label" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>5</hsizetype>
-           <vsizetype>1</vsizetype>
+           <vsizetype>0</vsizetype>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -912,10 +934,13 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
        <property name="sizeHint" >
         <size>
-         <width>121</width>
-         <height>95</height>
+         <width>10</width>
+         <height>0</height>
         </size>
        </property>
       </spacer>
