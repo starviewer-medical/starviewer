@@ -383,7 +383,7 @@ void QueryScreen::updateAdvancedSearchModifiedStatus()
 void QueryScreen::readSettings()
 {
     StarviewerSettings settings;
-    move( settings.getQueryScreenWindowPositionX() , settings.getQueryScreenWindowPositionX() );
+    move( settings.getQueryScreenWindowPositionX() , settings.getQueryScreenWindowPositionY() );
     resize( settings.getQueryScreenWindowWidth() , settings.getQueryScreenWindowHeight() );
     if ( !settings.getQueryScreenStudyTreeSeriesListQSplitterState().isEmpty() )
     {
