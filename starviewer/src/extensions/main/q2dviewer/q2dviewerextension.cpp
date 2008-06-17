@@ -387,11 +387,13 @@ Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
     connect( newViewer, SIGNAL( selected( Q2DViewerWidget *) ), SLOT( setViewerSelected( Q2DViewerWidget *) ) );
-
+    // per defecte no li posem cap annotació
+    newViewer->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
+    // i si cal, activem les annotacions
     if( m_viewerInformationToolButton->isChecked() )
-        newViewer->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, true );
-    else
-        newViewer->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
+        newViewer->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation, true );
 
     connect( newViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
@@ -731,7 +733,9 @@ void Q2DViewerExtension::showViewerInformation( bool show )
 {
     for( int numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
     {
-        m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::AllAnnotation, show );
+        m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation, show );
     }
 }
 
