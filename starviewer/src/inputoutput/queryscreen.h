@@ -192,11 +192,6 @@ private:
 
     DicomMask buildSeriesDicomMask(QString);
 
-    /** valida que la màscara de cerca no estigui buida, en el cas que ho sigui s'haurà d'avisar al usuari, perquè fer una cerca al Pacs sense filtrar potser molt lenta, al haver de mostrar totes les dades
-     * @return indica si el filtre de cerca està buit
-     */
-    bool validateNoEmptyMask();
-
     /** Construeix la màscara d'entrada pels dicom
      * @return retorna la màscara d'un objecte dicom
      */

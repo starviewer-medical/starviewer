@@ -458,56 +458,15 @@ void QueryScreen::searchStudy()
         case LocalDataBaseTab:
             queryStudy("Cache");
             break;
+
         case PACSQueryTab:
-            if ( !validateNoEmptyMask() )
-            {
-                switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-                                            tr( "You have not specified any filter. This query could take a long time. Do you want to continue ?" ) ,
-                                            tr( "&Yes" ) , tr( "&No" ) ,
-                                            0 , 1 ) )
-                {
-                    case 0:
-                            queryStudyPacs();
-                            QApplication::restoreOverrideCursor();
-                            break;
-                }
-            }
-            else
-            {
-                queryStudyPacs();
-            }
-            break;
+            queryStudyPacs();
+        break;
+
         case DICOMDIRTab:
             queryStudy("DICOMDIR");
             break;
     }
-
-}
-
-bool QueryScreen::validateNoEmptyMask()
-{
-    if ( m_patientIDText->text().length() == 0 &&
-         m_patientNameText->text().length() == 0 &&
-         m_studyIDText->text().length() == 0 &&
-         m_accessionNumberText->text().length() == 0 &&
-         !m_fromDateCheck->isChecked()  &&
-         !m_toDateCheck->isChecked() &&
-         m_checkAll->isChecked() &&
-         !m_referringPhysiciansNameText->text().length() == 0 &&
-         !m_seriesNumberText->text().length() == 0 &&
-         m_studyUIDText->text().length() == 0 &&
-         m_seriesUIDText->text().length() == 0 &&
-         m_requestedProcedureIDText->text().length() == 0 &&
-         m_scheduledProcedureStepIDText->text().length() == 0 &&
-         m_PPStartDateText->text().length() == 0 &&
-         m_PPStartTimeText->text().length() == 0 &&
-         m_SOPInstanceUIDText->text().length() == 0 &&
-         m_instanceNumberText->text().length() == 0 &&
-         m_studyModalityText->text().length() )
-    {
-        return false;
-    }
-    else return true;
 }
 
 Status QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer *pacsConnection )
