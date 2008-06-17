@@ -61,7 +61,7 @@ void QVolume3DViewTestingExtension::loadClutPresets()
 
     m_clutPresetsComboBox->clear();
 
-    QString path = QDir::homePath() + "/.starviewer/cluts";
+    QString path = QDir::toNativeSeparators( QDir::homePath() + "/.starviewer/cluts" );
     m_clutsDir.setPath( path );
 
     if ( !m_clutsDir.exists() ) m_clutsDir.mkpath( path );
@@ -144,7 +144,7 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
 void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
 {
     const QString & fileName = m_clutNameToFileName[clutName];
-    TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( fileName ) );
+    TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( QDir::toNativeSeparators( fileName ) ) );
     if ( transferFunction )
     {
         m_3DView->setTransferFunction( transferFunction );
