@@ -87,7 +87,7 @@ void DistanceTool::annotateNewPoint()
     computed[0] = position[0];
     computed[1] = position[1];
     computed[2] = position[2];
-
+    
     //afegim el punt
     if( !m_hasFirstPoint )
     {
@@ -108,18 +108,31 @@ void DistanceTool::annotateNewPoint()
             m_line->update( DrawerPrimitive::VTKRepresentation );
 
         //Posem el text
-
-        double *middlePoint = m_line->getMiddlePoint();
+        double *leftPoint = m_line->getLeftPoint( m_2DViewer->getView() );
+        
+        switch( m_2DViewer->getView() )
+        {
+            case Q2DViewer::Axial:
+                leftPoint[0] -= 12.; 
+                break;
+            
+            case Q2DViewer::Sagital:
+                leftPoint[1] -= 8.; 
+                break;
+        
+            case Q2DViewer::Coronal:
+                leftPoint[0] -= 8.; 
+                break;
+        }
 
         DrawerText * text = new DrawerText;
-        text->setText( tr("%1 mm").arg( m_line->computeDistance() ) );
-        text->setAttatchmentPoint( middlePoint );
+        text->setText( tr("%1 mm").arg( m_line->computeDistance(), 0, 'f', 2 ) );
+        text->setAttatchmentPoint( leftPoint );
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
         m_line = NULL;//Acabem la linia. Encara no sabem com s'obtindran per modificar
     }
-
 }
 
 void DistanceTool::simulateLine()

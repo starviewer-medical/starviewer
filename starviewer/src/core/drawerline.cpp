@@ -147,6 +147,45 @@ double *DrawerLine::getMiddlePoint()
     return middlePoint;
 }
 
+double *DrawerLine::getLeftPoint( int view )
+{
+    double * point = new double[3];
+    int i;
+
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+        case Q2DViewer::Coronal:
+            
+            if ( m_firstPoint[0] <= m_secondPoint[0] )
+            {
+                for (i = 0; i < 3; i++)
+                    point[i] = m_firstPoint[i]; 
+            }
+            else
+            {
+                for (i = 0; i < 3; i++)
+                    point[i] = m_secondPoint[i]; 
+            }
+            break;
+            
+        case Q2DViewer::Sagital:
+            if ( m_firstPoint[1] <= m_secondPoint[1] )
+            {
+                for (i = 0; i < 3; i++)
+                    point[i] = m_firstPoint[i]; 
+            }
+            else
+            {
+                for (i = 0; i < 3; i++)
+                    point[i] = m_secondPoint[i]; 
+            }
+            break;
+    }
+    
+    return point;
+}
+
 double DrawerLine::computeDistance()
 {
     return ( MathTools::getDistance3D( m_firstPoint, m_secondPoint ) );

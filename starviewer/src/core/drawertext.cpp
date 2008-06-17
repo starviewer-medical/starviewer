@@ -58,13 +58,12 @@ void DrawerText::update( int representation )
 {
     switch( representation )
     {
-    case VTKRepresentation:
-        updateVtkProp();
-    break;
-
-    case OpenGLRepresentation:
-    break;
-
+        case VTKRepresentation:
+            updateVtkProp();
+        break;
+    
+        case OpenGLRepresentation:
+        break;
     }
 }
 
