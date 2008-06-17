@@ -62,6 +62,8 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
     createConnections();
     readSettings();
 
+    m_perfusion2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
+    m_diffusion2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
     // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
     m_toolManager = new ToolManager(this);
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
