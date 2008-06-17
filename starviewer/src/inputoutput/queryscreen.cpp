@@ -498,8 +498,6 @@ void QueryScreen::queryStudyPacs()
     QString result;
     StarviewerSettings settings;
 
-
-
     INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString() );
 
     pacsList.clear(); //netejem el pacsLIST
@@ -518,49 +516,54 @@ void QueryScreen::queryStudyPacs()
     multipleQueryStudy.setPacsList( pacsList ); //indiquem a quins Pacs Cercar
 
     DicomMask searchMask = buildDicomMask();
-
+    bool stopQuery = false;
     if ( searchMask.isAHeavyQuery() )
     {
         //0 -> Yes; 1->No
-        int option = QMessageBox::information( 0 , tr( "Warning" ) , tr( "This query can take a long time.\nDo you want continue?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
-
-        if ( option == 1 )
+        switch( QMessageBox::information( 0 , tr( "Warning" ) , tr( "This query can take a long time.\nDo you want continue?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
         {
-            return;
+            case 1:
+                stopQuery = true;
+            break;
+
+            default:
+            break;
         }
     }
-
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-    multipleQueryStudy.setMask( searchMask ); //assignem la mascara
-
-    pacsList.firstPacs();
-    m_lastQueriedPacs = pacsList.getPacs().getAEPacs();
-
-    Status queryStatus = multipleQueryStudy.StartQueries();
-
-    if( !queryStatus.good() )  //no fem la query
+    if( !stopQuery )
     {
-        m_studyTreeWidgetPacs->clear();
+        QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+        multipleQueryStudy.setMask( searchMask ); //assignem la mascara
+
+        pacsList.firstPacs();
+        m_lastQueriedPacs = pacsList.getPacs().getAEPacs();
+
+        Status queryStatus = multipleQueryStudy.StartQueries();
+
+        if( !queryStatus.good() )  //no fem la query
+        {
+            m_studyTreeWidgetPacs->clear();
+            QApplication::restoreOverrideCursor();
+            QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
+            return;
+        }
+
+        m_studyListSingleton->firstStudy();
+        if ( m_studyListSingleton->end() )
+        {
+            m_studyTreeWidgetPacs->clear();
+            QApplication::restoreOverrideCursor();
+            QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
+            return;
+        }
+
+        m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
+        m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
+        m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
+        m_studyTreeWidgetPacs->setSortColumn( QStudyTreeWidget::ObjectName );
+
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
-        return;
     }
-
-    m_studyListSingleton->firstStudy();
-    if ( m_studyListSingleton->end() )
-    {
-        m_studyTreeWidgetPacs->clear();
-        QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
-        return;
-    }
-
-    m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
-    m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
-    m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
-    m_studyTreeWidgetPacs->setSortColumn( QStudyTreeWidget::ObjectName );
-
-    QApplication::restoreOverrideCursor();
 }
 
 void QueryScreen::queryStudy( QString source )
@@ -569,10 +572,8 @@ void QueryScreen::queryStudy( QString source )
     StudyList studyList;
     Status state;
 
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
     INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString() );
-
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     studyList.clear();
     if( source == "Cache" )
     {
@@ -679,9 +680,11 @@ void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString p
         case 0 : // si estem a la pestanya de la cache
             queryImage( studyUID , seriesUID, "Cache" );
             break;
+
         case 1 :  //si estem la pestanya del PACS fem query al Pacs
             queryImagePacs( studyUID , seriesUID , pacsAETitle );
             break;
+
         case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
             queryImage( studyUID , seriesUID, "DICOMDIR" );
             break;
@@ -689,7 +692,6 @@ void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString p
 
     QApplication::restoreOverrideCursor();
 }
-
 
 void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 {
@@ -703,15 +705,17 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 
     INFO_LOG( "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle );
 
-    if ( pacsAETitle.isEmpty() ) pacsAETitle = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
+    if ( pacsAETitle.isEmpty() )
+        pacsAETitle = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
 
-    if ( ! preparePacsServerConnection( pacsAETitle, &pacsConnection ).good() ) return;
+    if ( ! preparePacsServerConnection( pacsAETitle, &pacsConnection ).good() )
+        return;
 
     state = pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel);
     if ( !state.good() )
-    {//Error al connectar
+    {
+        //Error al connectar
         ERROR_LOG( "Error al connectar al pacs " + pacsAETitle + ". PACS ERROR : " + state.text() );
-
         errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
         return;
     }
@@ -748,9 +752,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
     DicomMask mask;
 
     INFO_LOG( "Cerca de sèries a la font " + source +" de l'estudi " + studyUID );
-
     seriesList.clear();//preparem la llista de series
-
     if( source == "Cache" )
     {
         //preparem la mascara i cerquem les series a la cache
@@ -771,8 +773,8 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         DEBUG_LOG( "Unrecognised source: " + source );
         return;
     }
-    seriesList.firstSeries();
 
+    seriesList.firstSeries();
     if ( seriesList.end() )
     {
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
@@ -789,14 +791,14 @@ void QueryScreen::querySeries( QString studyUID, QString source )
 
 void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString AETitlePACS )
 {
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
     DICOMSeries serie;
     Status state;
     QString text;
     PacsServer pacsConnection;
     QueryPacs queryImages;
     DicomMask dicomMask;
+
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     if ( AETitlePACS.isEmpty() )
         AETitlePACS = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
@@ -855,15 +857,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
 void QueryScreen::retrieve()
 {
-//     switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-// 				      tr( "Are you sure you want to retrieve this Study ?" ) ,
-// 				      tr( "&Yes" ) , tr( "&No" ) ,
-// 				      0, 1 ) )
-//     {
-//     case 0:
-        retrievePacs( false );
-//         break;
-//     }
+    retrievePacs( false );
 }
 
 void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source )
@@ -1059,11 +1053,13 @@ void QueryScreen::refreshTab( int index )
                 clearCheckedModality();
                 m_qwidgetAdvancedSearch->setEnabled(false);
                 break;
+
         case PACSQueryTab:
                 m_buttonGroupModality->setEnabled(true);
                 clearCheckedModality();
                 m_qwidgetAdvancedSearch->setEnabled( true );
                 break;
+
         case DICOMDIRTab:
                 m_buttonGroupModality->setEnabled(false);
                 clearCheckedModality();
@@ -1079,12 +1075,15 @@ void QueryScreen::view()
         case 0 :
             loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getCurrentSeriesUID(), m_studyTreeWidgetCache->getCurrentImageUID(), "Cache" );
             break;
+
         case 1 :
             retrievePacs( true );
            break;
+
         case 2 :
             loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), m_studyTreeWidgetDicomdir->getCurrentSeriesUID(), m_studyTreeWidgetDicomdir->getCurrentImageUID(), "DICOMDIR" );
             break;
+
         default :
             break;
     }
@@ -1199,10 +1198,9 @@ void QueryScreen::importDicomdir()
     if ( failedStudies > 0 ) //si ha fallat algun estudi
     {
         if ( failedStudies == m_studyTreeWidgetDicomdir->getSelectedStudiesUID().count() ) //si han fallat tots els estudis
-        {
             QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error: Can't import selected studies" ) );
-        }
-        else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error: Some studies can't be imported" ) );
+        else
+            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error: Some studies can't be imported" ) );
     }
 }
 
@@ -1269,13 +1267,13 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
         m_studyTreeWidgetCache->insertStudy( &study );
         m_studyTreeWidgetCache->sort();
     }
-    else showDatabaseErrorMessage( state );
-
+    else
+        showDatabaseErrorMessage( state );
 }
 
 void QueryScreen::closeEvent( QCloseEvent* event )
 {
-    saveSettings(); // guardem els settings
+    writeSettings(); // guardem els settings
 
     m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
 
@@ -1283,7 +1281,7 @@ void QueryScreen::closeEvent( QCloseEvent* event )
     m_qcreateDicomdir->clearTemporaryDir();
 }
 
-void QueryScreen::saveSettings()
+void QueryScreen::writeSettings()
 {
     /* Només guardem els settings quan la interfície ha estat visible, ja que hi ha settings com el QSplitter que si la primera vegada
      * que executem l'starviewer no obrim la QueryScreen retorna un valors incorrecte per això, el que fem és comprova que la QueryScreen
@@ -1409,6 +1407,7 @@ void QueryScreen::storeStudiesToPacs()
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "You have to select a PACS to store the study in" ));
             break;
+
         case 1 :
         {
             StarviewerSettings settings;
@@ -1450,6 +1449,7 @@ void QueryScreen::storeStudiesToPacs()
             }
             break;
         }
+
         default :
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The studies can only be stored to one PACS" ));
