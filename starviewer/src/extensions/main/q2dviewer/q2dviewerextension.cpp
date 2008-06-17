@@ -34,7 +34,7 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
- : QWidget( parent ), m_presentationStateAttacher(0)
+ : QWidget( parent ), m_presentationStateAttacher(0), m_selectedViewer(0)
 {
     setupUi( this );
 
@@ -54,14 +54,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     m_patient = NULL;
 
-    // TODO estem duplicant codi que es posa a setViewerSelected. Caldria fer algo per unificar-ho i que estigui més consistent
-    m_selectedViewer = new Q2DViewerWidget( m_workingArea );
-    m_thickSlabWidget->link( m_selectedViewer->getViewer() );
-    // activem les dades de ww/wl de la combo box
-    m_windowLevelComboBox->setPresetsData( m_selectedViewer->getViewer()->getWindowLevelData() );
-    m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
-    connect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
-
     m_predefinedSeriesGrid = new MenuGridWidget();
     m_seriesTableGrid = new TableMenu();
     m_predefinedSlicesGrid = new MenuGridWidget();
@@ -71,7 +63,11 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     createProgressDialog();
     readSettings();
     createActions();
+    // TODO aquesta crida ha d'anar forçosament aquí, despŕés de "createActiuons()" i abans de
+    // "createConnections()", sinó petarà. Mirar de fer que no sigui tant fràgil en aquest sentit
+    this->setViewerSelected( this->getNewQ2DViewerWidget() );
     createConnections();
+
     initLayouts();
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
@@ -458,16 +454,25 @@ void Q2DViewerExtension::setGrid( int rows, int columns )
 
 void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
 {
+    if( !viewer )
+    {
+        DEBUG_LOG("El Viewer donat és NUL!");
+        return;
+    }
+
     if ( viewer != m_selectedViewer )
     {
         ///TODO canviar aquestes connexions i desconnexions per dos mètodes el qual
         /// enviin el senyal al visualitzador que toca.
-        disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        disconnect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
-        disconnect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
+        if( m_selectedViewer )
+        {
+            disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+            disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
+            disconnect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
+            disconnect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
 
-        m_selectedViewer->setSelected( false );
+            m_selectedViewer->setSelected( false );
+        }
         m_selectedViewer = viewer;
         m_selectedViewer->setSelected( true );
         validePhases();
