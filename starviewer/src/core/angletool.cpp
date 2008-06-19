@@ -388,15 +388,11 @@ void AngleTool::computeAngle()
     double *p2 = m_mainPolyline->getPoint(1);
     double *p3 = m_mainPolyline->getPoint(2);
 
-    double textSituation[3];
-
     double *vd1 = MathTools::directorVector( p1, p2 );
     double *vd2 = MathTools::directorVector( p3, p2 );
 
     for (int i = 0; i < 3; i++)
     {
-        textSituation[i] = (p1[i] + p3[i])/2;
-
         if ( fabs( vd1[i] ) < 0.0001 )
             vd1[i] = 0.0;
 
@@ -408,9 +404,84 @@ void AngleTool::computeAngle()
 
     DrawerText * text = new DrawerText;
     text->setText( tr("%1 degrees").arg( angle,0,'f',1) );
-    text->setAttatchmentPoint( textSituation );
+    textPosition( p1, p2, p3, text );
+    
     text->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     m_2DViewer->getDrawer()->refresh();
+}
+
+void AngleTool::textPosition( double *p1, double *p2, double *p3, DrawerText *angleText )
+{
+    double position[3];
+    int i, horizontalCoord, verticalCoord;
+    
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            horizontalCoord = 0;
+            verticalCoord = 1;
+            break;
+                
+        case Q2DViewer::Sagital:
+            horizontalCoord = 1;
+            verticalCoord = 2;
+            break;
+            
+        case Q2DViewer::Coronal:
+            horizontalCoord = 0;
+            verticalCoord = 2;
+            break;
+    }
+          
+        //mirem on estan horitzontalment els punts p1 i p3 respecte del p2
+    if ( p1[0] <= p2[0] )
+    {
+        angleText->setHorizontalJustification( "Left" );
+            
+        if ( p3[horizontalCoord] <= p2[horizontalCoord] )
+        {
+            angleText->setAttatchmentPoint( p2 );
+        }
+        else
+        {
+            for ( i = 0; i < 3; i++ )
+                position[i] = p2[i];
+                    
+            if ( p2[verticalCoord] <= p3[verticalCoord] )
+            {
+                position[verticalCoord] -= 2.;  
+            }
+            else
+            {
+                position[verticalCoord] += 2.;
+            }
+            angleText->setAttatchmentPoint( position );
+        }
+    }
+    else
+    {
+        angleText->setHorizontalJustification( "Right" );
+            
+        if ( p3[horizontalCoord] <= p2[horizontalCoord] )
+        {
+            angleText->setAttatchmentPoint( p2 );
+        }
+        else
+        {
+            for ( i = 0; i < 3; i++ )
+                position[i] = p2[i];
+                    
+            if ( p2[verticalCoord] <= p3[verticalCoord] )
+            {
+                position[verticalCoord] += 2.;  
+            }
+            else
+            {
+                position[verticalCoord] -= 2.;
+            }
+            angleText->setAttatchmentPoint( position );
+        }
+    }
 }
 }

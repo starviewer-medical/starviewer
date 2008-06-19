@@ -16,6 +16,7 @@ class Q2DViewer;
 class Volume;
 class ImagePlane;
 class DrawerPolyline;
+class DrawerText;
 
 /**
 Tool per calcular angles
@@ -57,6 +58,9 @@ private:
     void computeAngle();
     
     void findInitialDegreeArc();
+    
+    ///calcula la correcta posició del caption de l'angle segons els punts de l'angle
+    void textPosition( double *p1, double *p2, double *p3, DrawerText *angleText );
 
 private:
     /// Viewer 2D sobre el qual treballem
