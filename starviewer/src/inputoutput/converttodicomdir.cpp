@@ -28,6 +28,7 @@
 #include "starviewersettings.h"
 #include "createdicomdir.h"
 #include "deletedirectory.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
