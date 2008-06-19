@@ -159,7 +159,8 @@ HEADERS += extensionfactory.h \
            cursor3dtool.h \
            cursor3dtooldata.h \
            angletool.h \
-           drawercrosshair.h
+           drawercrosshair.h \
+ starviewerapplication.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
