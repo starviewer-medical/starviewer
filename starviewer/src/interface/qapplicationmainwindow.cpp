@@ -28,6 +28,7 @@
 
 #include "extensionfactory.h"
 #include "extensionmediatorfactory.h"
+#include "starviewerapplication.h"
 
 namespace udg{
 
@@ -405,7 +406,7 @@ void QApplicationMainWindow::about()
                " Maximum Intensity Projection(MIP)."
                "<p align='justify'>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing"
                " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging."
-               "<p>Version : %1 </p>").arg( "0.6.0" )
+               "<p>Version: %1 </p>").arg( StarviewerVersionString )
                );
 }
 
