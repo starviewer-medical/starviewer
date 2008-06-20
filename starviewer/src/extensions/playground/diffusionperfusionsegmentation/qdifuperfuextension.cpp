@@ -62,8 +62,6 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
     createConnections();
     readSettings();
 
-    m_perfusion2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
-    m_diffusion2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
     // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
     m_toolManager = new ToolManager(this);
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
@@ -77,8 +75,6 @@ QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
 {
     writeSettings();
 
-    delete m_diffusionMainVolume;
-    delete m_perfusionMainVolume;
     delete m_diffusionRescaledVolume;
     delete m_perfusionRescaledVolume;
 
@@ -226,10 +222,11 @@ void QDifuPerfuSegmentationExtension::createConnections()
 
     connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setStrokeLowerValue(int) ) );
     connect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setStrokeUpperValue(int) ) );
-    connect( m_strokeViewThresholdsPushButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+/*    connect( m_strokeViewThresholdsPushButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+    connect( m_penombraViewThresholdsPushButton, SIGNAL( clicked() ), SLOT( viewThresholds2() ) );*/
     connect( m_diffusion2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
     connect( m_strokeApplyPushButton, SIGNAL( clicked() ), SLOT( applyStrokeSegmentation() ) );
-    connect( m_strokeVolumeUpdatePushButton, SIGNAL( clicked() ), SLOT( updateStrokeVolume() ) );
+//     connect( m_strokeVolumeUpdatePushButton, SIGNAL( clicked() ), SLOT( updateStrokeVolume() ) );
 
     connect( m_ventriclesApplyPushButton, SIGNAL( clicked() ), SLOT( applyVentriclesMethod() ) );
 
@@ -277,6 +274,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
 
     connect( m_diffusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setDiffusionInput( Volume * ) ) );
     connect( m_perfusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setPerfusionInput( Volume * ) ) );
+    connect( m_penombraVolumeLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( computePenombraVolume(const QString&) ) );
 }
 
 void QDifuPerfuSegmentationExtension::readSettings()
@@ -297,7 +295,7 @@ void QDifuPerfuSegmentationExtension::writeSettings()
 
     settings.setValue( "horizontalSplitter", m_horizontalSplitter->saveState() );
     ///Movem l'splitter a la dreta pq quan es torni obrir només es vegi la difu
-    this->moveViewerSplitterToRight();
+    //this->moveViewerSplitterToRight();
     settings.setValue( "viewerSplitter", m_viewerSplitter->saveState() );
 
     settings.endGroup();
@@ -371,6 +369,8 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     m_diffusion2DView->resetView( Q2DViewer::Axial );
     m_diffusion2DView->resetWindowLevelToDefault();
     m_diffusion2DView->render();
+
+    connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
 }
 
 void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
@@ -577,6 +577,41 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     m_diffusion2DView->refresh();
 }
 
+void QDifuPerfuSegmentationExtension::viewThresholds(int i)
+{
+    this->viewThresholds();
+}
+
+void QDifuPerfuSegmentationExtension::viewThresholds2(int i)
+{
+    this->viewThresholds2();
+}
+
+void QDifuPerfuSegmentationExtension::viewThresholds2()
+{
+    if ( !m_penombraMaskVolume ) m_penombraMaskVolume = new Volume();
+
+    vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
+    imageThreshold->SetInput( m_blackpointEstimatedVolume->getVtkData() );
+    //imageThreshold->SetInput( m_diffusionInputVolume->getVtkData() );
+    imageThreshold->ThresholdBetween( m_penombraLowerValueSlider->value(), 1000000 );
+    imageThreshold->SetInValue( m_penombraMaskMaxValue );
+    imageThreshold->SetOutValue( m_penombraMaskMinValue );
+    imageThreshold->Update();
+
+    m_penombraMaskVolume->setImages( m_diffusionMainVolume->getImages() );
+    m_penombraMaskVolume->setData( imageThreshold->GetOutput() );
+
+    vtkImageCast * imageCast = vtkImageCast::New();
+    imageCast->SetInput( m_penombraMaskVolume->getVtkData() );
+    imageCast->SetOutputScalarTypeToUnsignedChar();
+    m_perfusionOverlay->SetInput( imageCast->GetOutput() );
+    imageCast->Delete();
+
+
+    m_perfusion2DView->refresh();
+}
+
 void QDifuPerfuSegmentationExtension::setSeedPosition()
 {
     m_diffusion2DView->getSeedPosition( m_seedPosition );
@@ -618,7 +653,6 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_strokeVolumeLineEdit->setText( QString::number( m_strokeVolume, 'f', 2 ) );
     m_strokeVolumeLabel->setEnabled( true );
     m_strokeVolumeLineEdit->setEnabled( true );
-    m_strokeVolumeUpdatePushButton->setEnabled( true );
 
     m_editorAction->trigger();
     m_diffusion2DView->disableTools();
@@ -683,6 +717,9 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
     ItkImageType::Pointer fixedImage = m_diffusionMainVolume->getItkData();
     ItkImageType::Pointer movingImage = m_perfusionMainVolume->getItkData();
+
+//     std::cout<<"Spacing difu= "<<m_diffusionMainVolume->getItkData()->GetSpacing()<<std::endl;
+//     std::cout<<"Spacing perfu= "<<m_perfusionMainVolume->getItkData()->GetSpacing()<<std::endl;
 
 //     ItkImageType::SpacingType fixedSpacing = fixedImage->GetSpacing();
 //     DEBUG_LOG( "fixed spacing = " << fixedSpacing );
@@ -809,6 +846,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         //m_perfusion2DView->setWindowLevel( m_diffusion2DView->getCurrentColorWindow(), m_diffusion2DView->getCurrentColorLevel() );
         m_perfusion2DView->setWindowLevel( 255.0, 0.0);
 
+        m_perfusionSliceSlider->setValue(m_diffusionSliceSlider->value());
+        m_perfusion2DView->setSlice( m_perfusionSliceSlider->value());
         m_perfusion2DView->render();
 
         m_computeBlackpointEstimationPushButton->setEnabled( true );
@@ -878,6 +917,8 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 
     m_blackpointEstimatedVolume->setData( perfuEstimatorImageResult );
 
+    connect( m_penombraLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds2(int) ) );
+
 
 
 //     vtkImageCast * imageCast = vtkImageCast::New();
@@ -912,9 +953,11 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     ItkImageType::PointType seedPoint( m_seedPosition );
     ItkImageType::IndexType seedIndex;
     m_blackpointEstimatedVolume->getItkData()->TransformPhysicalPointToIndex( seedPoint, seedIndex );
-    DEBUG_LOG( QString("seedPosition: [%1,%2,%3]").arg(m_seedPosition[0]).arg(m_seedPosition[1]).arg(m_seedPosition[2]) );
-    std::cout << "seedPoint: " << seedPoint << std::endl;
-    std::cout << "seedIndex: " << seedIndex << std::endl;
+//     DEBUG_LOG( QString("seedPosition: [%1,%2,%3]").arg(m_seedPosition[0]).arg(m_seedPosition[1]).arg(m_seedPosition[2]) );
+//     std::cout << "seedPoint: " << seedPoint << std::endl;
+//     std::cout << "seedIndex: " << seedIndex << std::endl;
+//     std::cout<<"BPImage sp="<<m_blackpointEstimatedVolume->getItkData()->GetSpacing()<<std::endl;
+//     std::cout<<"BPImage size="<<m_blackpointEstimatedVolume->getItkData()->GetLargestPossibleRegion().GetSize()<<std::endl;
 
     udgBinaryMaker< ItkImageType, ItkImageType > binaritzador;
     ItkImageType::Pointer penombraMask = ItkImageType::New();
@@ -926,6 +969,7 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
 
     delete m_penombraMaskVolume;
     m_penombraMaskVolume = new Volume();
+    m_penombraMaskVolume->setImages( m_perfusionInputVolume->getImages() );
     m_penombraMaskVolume->setData( penombraMask );
 
 
@@ -935,18 +979,26 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     m_perfusionOverlay->SetInput( imageCast->GetOutput() );
     imageCast->Delete();
 
-
+    m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
+    m_perfusion2DView->setSlice( m_perfusionSliceSlider->value());
+    //Posem els 2 viewers a la mateixa llesca i els sincronitzem
+    m_diffusion2DView->setSlice( m_perfusionSliceSlider->value());
     m_perfusion2DView->render();
-
+    m_synchroCheckBox->setChecked(true);
+    m_lesionViewToolButton->click();
 
     VolumeCalculator volumeCalculator;
     volumeCalculator.setInput( m_penombraMaskVolume );
     volumeCalculator.setInsideValue( m_penombraMaskMaxValue );
     m_penombraVolumeLabel->setEnabled( true );
+    m_penombraLineEdit->setEnabled( true );
+    m_penombraLabel->setEnabled( true );
     m_penombraVolumeLineEdit->setEnabled( true );
     m_penombraVolume = volumeCalculator.getVolume();
     m_penombraVolumeLineEdit->setText( QString::number( m_penombraVolume, 'f', 2 ) );
     m_penombraCont = volumeCalculator.getVoxels();
+    //std::cout<<"penombra cont= "<<m_penombraCont<<" // voxel size= "<<m_penombraMaskVolume->getItkData()->GetSpacing()<<std::endl;
+    //std::cout<<"penombra vol= "<<m_penombraVolume<<std::endl;
 
     QApplication::restoreOverrideCursor();
 }
@@ -1572,4 +1624,12 @@ void QDifuPerfuSegmentationExtension::setPerfusionSlice( int slice )
     if ( m_perfusionOverlay ) m_perfusionOverlay->SetZSlice( slice );
 }
 
+void QDifuPerfuSegmentationExtension::computePenombraVolume( const QString & name)
+{
+    m_penombraLineEdit->clear();
+    m_penombraLineEdit->insert(QString("%1").arg(m_penombraVolume - m_strokeVolume, 0, 'f', 2));
 }
+
+}
+
+
