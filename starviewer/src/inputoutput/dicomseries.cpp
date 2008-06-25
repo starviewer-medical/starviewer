@@ -14,7 +14,7 @@ DICOMSeries::DICOMSeries()
 DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
 {
     const char *text;
-    string path;
+    QString path;
 
     //set the series number
     seriesDataset->findAndGetString( DCM_SeriesNumber , text , false );
@@ -33,8 +33,7 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
     if ( text != NULL )
     {
         setStudyUID( text );
-        path = text;
-        path += "/";
+        path = QString(text) + "/";
     }
     //set series modality
     seriesDataset->findAndGetString( DCM_Modality , text , false );
@@ -49,7 +48,7 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
     if ( text != NULL )
     {
         setSeriesUID( text );
-        path += text + "/";
+        path += QString(text) + "/";
     }
 
     seriesDataset->findAndGetString( DCM_BodyPartExamined , text , false );
