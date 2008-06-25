@@ -206,7 +206,7 @@ OFCondition echoSCP(
 
             studyPath = piSingleton->getPath() + retrievedImage.getStudyUID() ;//agafem el path del directori on es guarden les imatges
             QDir directory;
-        
+
             //comprovem, si el directori de l'estudi ja està creat
             if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
 
@@ -216,9 +216,7 @@ OFCondition echoSCP(
             if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
 
             //acabem de concatenar el nom del fitxer
-            imagePath = seriesPath;
-            imagePath.append("/");
-            imagePath.append( cbdata->imageFileName );
+            imagePath = seriesPath + "/" + cbdata->imageFileName;
 
             E_TransferSyntax xfer = opt_writeTransferSyntax;
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();

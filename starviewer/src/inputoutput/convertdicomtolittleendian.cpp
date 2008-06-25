@@ -64,9 +64,7 @@ Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFi
 
     if ( !dataset->canWriteXfer( opt_oxfer ) )
     {
-        descriptionError =  "Error: no conversion to transfer syntax ";
-        descriptionError.append ( opt_oxferSyn.getXferName() );
-        descriptionError.append( " possible" );
+        descriptionError =  "Error: no conversion to transfer syntax " + opt_oxferSyn.getXferName() + " possible";
         state.setStatus( qPrintable(descriptionError) , false , 1300 );
 
         return state;
