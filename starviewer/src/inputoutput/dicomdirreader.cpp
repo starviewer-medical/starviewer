@@ -47,9 +47,9 @@ Status DICOMDIRReader::open(const QString &dicomdirFilePath)
     QFileInfo dicomdirFileInfo(dicomdirFilePath);
     m_dicomdirAbsolutePath =  dicomdirFileInfo.absolutePath();
 
-    /* L'estàndard del dicom indica que l'estructura del dicomdir ha d'estar guardada en un fitxer anomeant "DICOMDIR". En linux per 
-       defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules, per tant 
-       quan el dicomdir estigui guardat en unitats vfat i el volguem obrir trobarem que el fitxer ones guarda la informació del 
+    /* L'estàndard del dicom indica que l'estructura del dicomdir ha d'estar guardada en un fitxer anomeant "DICOMDIR". En linux per
+       defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules, per tant
+       quan el dicomdir estigui guardat en unitats vfat i el volguem obrir trobarem que el fitxer ones guarda la informació del
        dicomdir es dirà "dicomdir" en minúscules, per aquest motiu busquem el fitxer dicomdir tan en majúscules com minúscules
     */
     //busquem el nom del fitxer que conté les dades del dicomdir
@@ -284,9 +284,7 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
                 imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );//obtenim el path relatiu de la imatge
                 imagePath.clear();
                 //creem el path absolut
-                imagePath.insert( 0 , m_dicomdirAbsolutePath );
-                imagePath.append( "/" );
-                imagePath.append( buildImageRelativePath( text.c_str() ) );
+                imagePath =  m_dicomdirAbsolutePath + "/" + buildImageRelativePath( text.c_str() );
 
                 image.setImagePath( imagePath );
 
@@ -432,7 +430,7 @@ bool DICOMDIRReader::matchStudyMaskPatientId( QString studyMaskPatientId , QStri
 {
     //Si la màscara és buida rebem  * , si té valor és *ID_PACIENT*
     if ( studyMaskPatientId.length() > 1 )
-    { //si hi ha màscara Patient Id 
+    { //si hi ha màscara Patient Id
 
         studyMaskPatientId = studyMaskPatientId.replace( "*", "" );//treiem els "*"
 
@@ -540,9 +538,9 @@ QString DICOMDIRReader::backSlashToSlash( QString original )
 
 QString DICOMDIRReader::buildImageRelativePath( QString imageRelativePath )
 {
-    /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en 
+    /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en
         minúscules com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, m_dicomFilesInLowerCase
-        és true si s'ha troba tel fitxer dicomdir en minúscules, si és consistent el dicomdir els noms de les imatges i 
+        és true si s'ha troba tel fitxer dicomdir en minúscules, si és consistent el dicomdir els noms de les imatges i
         rutes també serà en minúscules
     */
 

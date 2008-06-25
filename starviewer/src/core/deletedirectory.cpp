@@ -19,16 +19,16 @@ DeleteDirectory::DeleteDirectory()
 }
 
 /**
- * 
- * @param directoryPath 
- * @return 
+ *
+ * @param directoryPath
+ * @return
  */
 bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDirectory)
 {
     QStringList filesList, directoryList;
-    QString absoluteFilePath , absoluteDirectoryPath;    
+    QString absoluteFilePath , absoluteDirectoryPath;
     QDir directory, directoryToDelete;
-    QFile fileToDelete;    
+    QFile fileToDelete;
 
     //si ens envien un directori amb la '/' al final la trèiem
     if ( directoryPath.at( directoryPath.length() - 1) == '/' )
@@ -37,16 +37,13 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
     }
 
     directory.setPath( directoryPath );
-   
+
     filesList =  directory.entryList( QDir::Files );//llista de fitxers del directori
     for ( QStringList::Iterator it = filesList.begin(); it != filesList.end(); ++it )//per cada fitxer
     {
         if ( *it != "." && *it != ".." )
         {
-            absoluteFilePath.truncate( 0 );
-            absoluteFilePath.append( directoryPath );       
-            absoluteFilePath.append( "/" );
-            absoluteFilePath.append( *it );
+            absoluteFilePath = directoryPath + "/" + (*it);
             if ( !fileToDelete.remove (absoluteFilePath ) )  //esborrem el fitxer
             {
                 return false;
@@ -59,10 +56,7 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
     {
         if ( *it != "." && *it != ".." )
         {
-            absoluteDirectoryPath.truncate( 0 );
-            absoluteDirectoryPath.append( directoryPath );          
-            absoluteDirectoryPath.append( "/" );
-            absoluteDirectoryPath.append( *it );
+            absoluteDirectoryPath = directoryPath + "/" + (*it);
             if ( !deleteDirectory( absoluteDirectoryPath , true ) ) return false; //invoquem el mateix mètode per a que esborri el subdirectori ( recursivitat )
         }
     }

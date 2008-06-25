@@ -49,8 +49,7 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
     if ( text != NULL )
     {
         setSeriesUID( text );
-        path.append( text );
-        path.append( "/" );
+        path += text + "/";
     }
 
     seriesDataset->findAndGetString( DCM_BodyPartExamined , text , false );
