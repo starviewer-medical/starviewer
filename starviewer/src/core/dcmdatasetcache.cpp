@@ -10,33 +10,34 @@
 
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QThread>
+#include <QApplication>
+#include <QSettings>
 
 #include "logging.h"
 
-#include <QThread>
-#include <QApplication>
-
 namespace udg {
 
-static const int DcmDatasetCacheFilesLimit = 1050;
+static const int DefaultMaxCacheCost = 1050;
 
 DcmDatasetCache::DcmDatasetCache()
-    : QObject(0), m_cache(DcmDatasetCacheFilesLimit), m_autoclearTimer(0), m_autoclearHasToBeActive(false)
+    : QObject(0), m_autoclearTimer(0), m_autoclearHasToBeActive(false)
 {
-    connect(this, SIGNAL(resetTimer()), SLOT(resetAutoclearTimer()));
+    InitializeCache();
 }
 
 DcmDatasetCache::DcmDatasetCache(int seconds)
-    : QObject(0), m_cache(DcmDatasetCacheFilesLimit), m_autoclearTimer(0), m_autoclearHasToBeActive(false)
+    : QObject(0), m_autoclearTimer(0), m_autoclearHasToBeActive(false)
 {
     // Només es marca com a activat, el timer no s'activa perquè no cal: no hi ha elements.
     m_autoclearHasToBeActive = true;
     m_secondsForAutoclear = seconds;
-    connect(this, SIGNAL(resetTimer()), SLOT(resetAutoclearTimer()));
+    InitializeCache();
 }
 
 DcmDatasetCache::~DcmDatasetCache()
 {
+    delete m_cache;
 }
 
 DcmDataset* DcmDatasetCache::find(const QString &filePath)
@@ -44,7 +45,7 @@ DcmDataset* DcmDatasetCache::find(const QString &filePath)
     emit resetTimer();
 
     QReadLocker locker(&m_cacheLock);
-    DcmDataset *foundDataset = m_cache[filePath];
+    DcmDataset *foundDataset = m_cache->object(filePath);
     return foundDataset ? dynamic_cast<DcmDataset*>( foundDataset->clone() ) :  NULL;
 }
 
@@ -53,7 +54,7 @@ bool DcmDatasetCache::insert(const QString &filePath, DcmDataset *dataSet, int c
     emit resetTimer();
 
     QWriteLocker locker(&m_cacheLock);
-    return m_cache.insert(filePath, dataSet, cost);
+    return m_cache->insert(filePath, dataSet, cost);
 }
 
 bool DcmDatasetCache::remove(const QString &filePath)
@@ -61,13 +62,13 @@ bool DcmDatasetCache::remove(const QString &filePath)
     emit resetTimer();
 
     QWriteLocker locker(&m_cacheLock);
-    return m_cache.remove(filePath);
+    return m_cache->remove(filePath);
 }
 
 void DcmDatasetCache::clear()
 {
     QWriteLocker locker(&m_cacheLock);
-    m_cache.clear();
+    m_cache->clear();
 }
 
 void DcmDatasetCache::startAutoclear(int seconds)
@@ -101,6 +102,15 @@ void DcmDatasetCache::resetAutoclearTimer()
     {
         startAutoclearTimer(m_secondsForAutoclear);
     }
+}
+
+void DcmDatasetCache::InitializeCache()
+{
+    connect(this, SIGNAL(resetTimer()), SLOT(resetAutoclearTimer()));
+
+    QSettings settings;
+    QWriteLocker locker(&m_cacheLock);
+    m_cache = new QCache<QString, DcmDataset>(settings.value("DICOMDatasetCacheMaxSize", DefaultMaxCacheCost).toInt());
 }
 
 bool DcmDatasetCache::isAutoclearTimerActive()
