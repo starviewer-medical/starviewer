@@ -78,7 +78,7 @@ private:
     QCache<QString, DcmDataset> m_cache;
     int m_autoclearTimer;
     int m_secondsForAutoclear;
-    bool m_autoclearIsActive;
+    bool m_autoclearHasToBeActive;
     QReadWriteLock m_cacheLock;
     QReadWriteLock m_timerLock;
 };

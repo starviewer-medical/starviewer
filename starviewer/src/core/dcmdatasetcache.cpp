@@ -13,21 +13,24 @@
 
 #include "logging.h"
 
+#include <QThread>
+#include <QApplication>
+
 namespace udg {
 
 static const int DcmDatasetCacheFilesLimit = 1050;
 
 DcmDatasetCache::DcmDatasetCache()
-    : QObject(0), m_cache(DcmDatasetCacheFilesLimit), m_autoclearTimer(0), m_autoclearIsActive(false)
+    : QObject(0), m_cache(DcmDatasetCacheFilesLimit), m_autoclearTimer(0), m_autoclearHasToBeActive(false)
 {
     connect(this, SIGNAL(resetTimer()), SLOT(resetAutoclearTimer()));
 }
 
 DcmDatasetCache::DcmDatasetCache(int seconds)
-    : QObject(0), m_cache(DcmDatasetCacheFilesLimit), m_autoclearTimer(0), m_autoclearIsActive(false)
+    : QObject(0), m_cache(DcmDatasetCacheFilesLimit), m_autoclearTimer(0), m_autoclearHasToBeActive(false)
 {
     // Només es marca com a activat, el timer no s'activa perquè no cal: no hi ha elements.
-    m_autoclearIsActive = true;
+    m_autoclearHasToBeActive = true;
     m_secondsForAutoclear = seconds;
     connect(this, SIGNAL(resetTimer()), SLOT(resetAutoclearTimer()));
 }
@@ -69,9 +72,9 @@ void DcmDatasetCache::clear()
 
 void DcmDatasetCache::startAutoclear(int seconds)
 {
-    if (seconds > 0)
+    if (seconds > 0 && !isAutoclearTimerActive())
     {
-        m_autoclearIsActive = true;
+        m_autoclearHasToBeActive = true;
         m_secondsForAutoclear = seconds;
         startAutoclearTimer(seconds);
     }
@@ -80,6 +83,7 @@ void DcmDatasetCache::startAutoclear(int seconds)
 void DcmDatasetCache::stopAutoclear()
 {
     stopAutoclearTimer();
+    m_autoclearHasToBeActive = false;
 }
 
 void DcmDatasetCache::timerEvent(QTimerEvent *)
@@ -91,12 +95,9 @@ void DcmDatasetCache::timerEvent(QTimerEvent *)
 
 void DcmDatasetCache::resetAutoclearTimer()
 {
-    if ( isAutoclearTimerActive() )
-    {
-        stopAutoclearTimer();
-    }
+    stopAutoclearTimer();
 
-    if (m_autoclearIsActive)
+    if (m_autoclearHasToBeActive)
     {
         startAutoclearTimer(m_secondsForAutoclear);
     }
@@ -110,12 +111,16 @@ bool DcmDatasetCache::isAutoclearTimerActive()
 
 void DcmDatasetCache::startAutoclearTimer(int seconds)
 {
-    if ( isAutoclearTimerActive() )
-    {
-        stopAutoclearTimer();
-    }
+    stopAutoclearTimer();
+    
     QWriteLocker locker(&m_timerLock);
+
     m_autoclearTimer = startTimer(seconds*1000);
+
+    if (QThread::currentThread() != QApplication::instance()->thread())
+    {
+        moveToThread(QApplication::instance()->thread());
+    }
 }
 
 void DcmDatasetCache::stopAutoclearTimer()
@@ -123,6 +128,7 @@ void DcmDatasetCache::stopAutoclearTimer()
     if ( isAutoclearTimerActive() )
     {
         QWriteLocker locker(&m_timerLock);
+
         killTimer(m_autoclearTimer);
         m_autoclearTimer = 0;
     }
