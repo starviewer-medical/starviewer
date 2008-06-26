@@ -24,6 +24,8 @@ namespace udg {
     L'autoclear, per defecte, està desactivat.
     Aquesta classe s'ha fet thread-safe a l'hora d'accedir a la cache propiament dita. En canvi, accedir a les funcions d'autoclear
     no és thread-safe. Per tant, abans de fer servir la classe a diferents threads (si cal) s'ha de configurar l'autoclear fora d'aquests.
+    També permet definir el tamany de la cache a partir d'un paràmetre de configuració: DICOMDatasetCacheMaxSize; del lloc on es
+    guardi la configuració amb QSettings.
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DcmDatasetCache : public QObject
@@ -67,6 +69,8 @@ private slots:
     void resetAutoclearTimer();
 
 private:
+    /// Inicialitza la cache
+    void InitializeCache();
     /// Retorna si tenim l'autoclear timer actiu o no
     bool isAutoclearTimerActive();
     /// Activa l'autoclear timer als segons indicats. Si ja n'hi havia un altre d'actiu, el reseteja als segons indicats.
@@ -75,7 +79,7 @@ private:
     void stopAutoclearTimer();
 
 private:
-    QCache<QString, DcmDataset> m_cache;
+    QCache<QString, DcmDataset> *m_cache;
     int m_autoclearTimer;
     int m_secondsForAutoclear;
     bool m_autoclearHasToBeActive;
