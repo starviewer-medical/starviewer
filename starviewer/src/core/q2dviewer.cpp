@@ -509,7 +509,20 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     QString orientation = m_mainVolume->getImages().at(index)->getPatientOrientation();
     QStringList list = orientation.split(",");
 
-    if( list.size() > 1 )
+    bool ok = false;
+    switch( list.size() )
+    {
+    case 2:
+        // afegim un element neutre perque la resta segueixi funcionant be
+        ok = true;
+        list << "";
+        break;
+    case 3:
+        ok = true;
+        break;
+    }
+
+    if( ok )
     {
         int index = 4-m_rotateFactor;
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
@@ -554,7 +567,7 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     }
     else
     {
-        DEBUG_LOG("L'orientació del pacient és buida. No s'aplicaran annotacions de referència sobre la imatge");
+        DEBUG_LOG("L'orientació del pacient conte un nombre incorrecte d'elements:[" + QString::number(list.size()) + "]. No s'aplicaran annotacions de referència sobre la imatge");
     }
 }
 
