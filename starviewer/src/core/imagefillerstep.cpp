@@ -145,7 +145,7 @@ bool ImageFillerStep::processImage( Image *image )
             // cerquem l'string amb la orientació del pacient
             value = dicomReader.getAttributeByName( DCM_PatientOrientation );
             if( !value.isEmpty() )
-                image->setPatientOrientation( value );
+                image->setPatientOrientation( value.replace( QString("\\") , QString(",") ).replace( QString("F") , QString("I") ).replace( QString("H") , QString("I") ) );
             else // si no tenim aquest valor, el calculem a partir dels direction cosines
             {
                 // I ara ens disposem a crear l'string amb l'orientació del pacient
@@ -168,8 +168,20 @@ bool ImageFillerStep::processImage( Image *image )
             }
         }
         else
-            DEBUG_LOG("Error inesperat llegint ImageOrientationPatient. Els valors trobats no són 6! Es pot tractar d'una imatge US.");
+        {
+            /* Si la modalitat no requereix el image plane module ( CR per exemple ) no disposem de ImageOrientationPatient.
+             * Això fa que el tag PatientOrientation no s'ompli.El PatientOrientation es necessari en cas que no hi hagi 
+             * ImageOrientationPatient i ImagePositionPatient.
+             */
+            // \TODO Part afegida per sortir del pas. S'hauria de refer aquesta part tenint mes en compte la dependencia de tags. Els
+            // replace serveixen perque l'aplicacio funcioni, ja que ara no es preveu que els valors estiguin separts per '\' sino per ','.
 
+            value = dicomReader.getAttributeByName( DCM_PatientOrientation );
+            if( !value.isEmpty() )
+                image->setPatientOrientation( value.replace( QString("\\") , QString(",") ).replace( QString("F") , QString("I") ).replace( QString("H") , QString("S") ) );
+
+            DEBUG_LOG("Error inesperat llegint ImageOrientationPatient. Els valors trobats no són 6! Es pot tractar d'una imatge US.");
+        }
         value = dicomReader.getAttributeByName( DCM_ImagePositionPatient );
         list = value.split("\\");
         if( list.size() == 3 )
