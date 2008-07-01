@@ -416,13 +416,27 @@ void Q2DViewer::updateScalarBar()
 
 void Q2DViewer::rotateClockWise()
 {
-    m_rotateFactor = (m_rotateFactor+1) % 4 ;
+    if( m_isImageFlipped )
+    {
+        m_rotateFactor = (m_rotateFactor-1) % 4 ;
+    }
+    else
+    {
+        m_rotateFactor = (m_rotateFactor+1) % 4 ;
+    }
     updateCamera();
 }
 
 void Q2DViewer::rotateCounterClockWise()
 {
-    m_rotateFactor = (m_rotateFactor+3) % 4 ;
+    if( m_isImageFlipped )
+    {
+        m_rotateFactor = (m_rotateFactor-3) % 4 ;
+    }
+    else
+    {
+        m_rotateFactor = (m_rotateFactor+3) % 4 ;
+    }
     updateCamera();
 }
 
@@ -436,7 +450,6 @@ void Q2DViewer::setRotationFactor( int factor )
 void Q2DViewer::horizontalFlip()
 {
     m_applyFlip = true;
-    m_isImageFlipped = ! m_isImageFlipped;
     updateCamera();
 }
 
@@ -498,27 +511,38 @@ void Q2DViewer::mapOrientationStringToAnnotation()
 
     if( list.size() > 1 )
     {
+        int index = 4-m_rotateFactor;
         // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
         if( m_lastView == Axial )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
-            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
+            m_patientOrientationTextActor[ (0 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
+            m_patientOrientationTextActor[ (2 + index) % 4 ]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[ (1 + index) % 4 ]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[ (3 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
         }
         else if( m_lastView == Sagital )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
-            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
-            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
+            // HACK FLIP de moment necessitem fer aquest truc. Durant el refactoring caldria
+            // veure si es pot fer d'una manera millor
+            if( m_isImageFlipped )
+                index -= 2;
+
+            m_patientOrientationTextActor[ (0 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
+            m_patientOrientationTextActor[ (2 + index) % 4 ]->SetInput( qPrintable( list.at(1) ) );
+            m_patientOrientationTextActor[ (1 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
+            m_patientOrientationTextActor[ (3 + index) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
         else if( m_lastView == Coronal )
         {
-            m_patientOrientationTextActor[ (0 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
-            m_patientOrientationTextActor[ (2 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(0) ) );
-            m_patientOrientationTextActor[ (1 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
-            m_patientOrientationTextActor[ (3 + (4-m_rotateFactor)) % 4 ]->SetInput( qPrintable( list.at(2) ) );
+            // HACK FLIP de moment necessitem fer aquest truc. Durant el refactoring caldria
+            // veure si es pot fer d'una manera millor
+            if( m_isImageFlipped )
+                index -= 2;
+
+            m_patientOrientationTextActor[ (0 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
+            m_patientOrientationTextActor[ (2 + index) % 4 ]->SetInput( qPrintable( list.at(0) ) );
+            m_patientOrientationTextActor[ (1 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
+            m_patientOrientationTextActor[ (3 + index) % 4 ]->SetInput( qPrintable( list.at(2) ) );
         }
         if( m_isImageFlipped )
         {
@@ -1107,88 +1131,102 @@ void Q2DViewer::updateCamera()
         vtkRenderer *renderer;
         vtkRendererCollection* renderCollection = m_viewer->GetRenderWindow()->GetRenderers();
         int i = 0;
+        double roll = 0.0;
 
         switch( this->m_lastView )
         {
         case Axial:
+            if( m_isImageFlipped )
+                roll = m_rotateFactor*90. + 180.;
+            else
+                roll = -m_rotateFactor*90. + 180.;
+
             while( i < (renderCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
                 if ( camera )
                 {
-                    camera->SetRoll( -m_rotateFactor*90. + 180. );
+                    camera->SetRoll( roll );
                 }
                 i++;
             }
-            emit rotationDegreesChanged( -m_rotateFactor*90. + 180. );
+            emit rotationDegreesChanged( roll );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
         case Sagital:
+            if( m_isImageFlipped )
+                roll = m_rotateFactor*90. -90.;
+            else
+                roll = -m_rotateFactor*90. - 90.;
+
             while( i < (renderCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
                 if ( camera )
                 {
-                    camera->SetRoll( -m_rotateFactor*90. -90. );
+                    camera->SetRoll( roll );
                 }
                 i++;
             }
-            emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
+            emit rotationDegreesChanged( roll );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
 
         case Coronal:
+            if( m_isImageFlipped )
+                roll = m_rotateFactor*90.;
+            else
+                roll = -m_rotateFactor*90.;
+
             while( i < (renderCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
             {
                 renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
                 camera = renderer->GetActiveCamera();
                 if ( camera )
                 {
-                    camera->SetRoll( -m_rotateFactor*90. );
+                    camera->SetRoll( roll );
                 }
                 i++;
             }
-            emit rotationDegreesChanged( -m_rotateFactor*90. );
+            emit rotationDegreesChanged( roll );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
-        emit rotationFactorChanged( m_rotateFactor );
-        //\TODO mirar bé com aplicar el flip,encara no és correcte
+
         if( m_applyFlip )
         {
-            // funciona bé només en axial!
-            // Caldria escollir quina és la manera que més convé de fer-ho
             // Alternativa 1)
-            // així movem la càmera, però faltaria que la imatge no es mogués de lloc
+            // TODO així movem la càmera, però faltaria que la imatge no es mogués de lloc
+            // potser implementant a la nostra manera el metode Azimuth i prenent com a centre
+            // el centre de la imatge. Una altra possibilitat es contrarestar el desplaçament de la
+            // camera en l'eix en que s'ha produit
             camera->Azimuth( 180 );
+            switch( this->m_lastView )
+            {
+            // HACK aquest hack esta relacionat amb els de mapOrientationStringToAnnotation()
+            // es un petit truc perque la imatge quedi orientada correctament. Caldria
+            // veure si en el refactoring podem fer-ho d'una forma millor
+            case Sagital:
+            case Coronal:
+                m_rotateFactor = (m_rotateFactor - 2) % 4;
+                break;
 
-            // Alternativa 2)
-            // D'aquesta manera només movem l'actor. Per contra, el sistema de coordenades queda "igual" cosa que es reflexa en els rulers que no indiquen les coordenades correctes de la imatge
-//             double *center;
-//             center = m_viewer->GetImageActor()->GetCenter();
-//             m_viewer->GetImageActor()->SetOrigin( center );
-//             m_viewer->GetImageActor()->RotateY( 180 );
+            default:
+                break;
+            }
 
-            // Alternativa 3) La que ens proposen a la mailing list. Fa el mateix que azimuth
-            // una manera d'arreglar això seria mirar la posició respecte el centre i llavors invertir el desplaçament que hi hagi tant sobre les Y com sobre les X
-//             double cameraPosition[3];
-//             camera->GetPosition(cameraPosition);
-//             double cameraFocalPoint[3];
-//             camera->GetFocalPoint(cameraFocalPoint);
-//             for ( int i = 0; i < 3; ++i )
-//             {
-//                 cameraPosition[i] = 2.0*cameraFocalPoint[i] - cameraPosition[i];
-//             }
-//             camera->SetPosition(cameraPosition);
-//             this->getRenderer()->ResetCameraClippingRange();
-//             m_viewer->Render();
+            this->getRenderer()->ResetCameraClippingRange();
+            m_viewer->Render();
             m_applyFlip = false;
+            m_isImageFlipped = ! m_isImageFlipped;
         }
+
+        emit rotationFactorChanged( m_rotateFactor );
         emit cameraChanged();
         mapOrientationStringToAnnotation();
         this->refresh();
