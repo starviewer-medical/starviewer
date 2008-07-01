@@ -2429,8 +2429,7 @@ void Q2DViewer::updatePatientAnnotationInformation()
     if( m_mainVolume )
     {
         // informació fixa
-        m_upperRightText = tr("%1")
-            .arg( m_mainVolume->getPatient()->getFullName() );
+        m_upperRightText = m_mainVolume->getPatient()->getFullName();
 
         m_upperRightText += tr("\n%1\n%2\n%3\nAcc:\n%4\n%5")
                     .arg( m_mainVolume->getSeries()->getInstitutionName() )
@@ -2439,8 +2438,9 @@ void Q2DViewer::updatePatientAnnotationInformation()
                     .arg( m_mainVolume->getStudy()->getDateAsString() )
                     .arg( m_mainVolume->getStudy()->getTimeAsString() );
 
-        m_lowerRightText = tr("%1")
-            .arg( m_mainVolume->getSeries()->getProtocolName() );
+        m_lowerRightText = m_mainVolume->getSeries()->getProtocolName();
+        if( m_lowerRightText.isEmpty() )
+            m_lowerRightText = m_mainVolume->getSeries()->getDescription();
 
         m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
         m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText ) );
