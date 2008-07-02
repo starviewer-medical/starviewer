@@ -29,11 +29,7 @@ void QueryPacs::setConnection( PacsConnection connection )
     m_assoc = connection.getPacsConnection();
 }
 
-/*It's a callback function, can't own to the class, It's can be called if its belongs to the class, for this
-  reason, it hasn't been declared in
-the class pacsfind  */
-/// This action is called for every patient that returns the find action. This is a callback action and inserts the found studies in the list study
-void progressCallbackStudy(
+void QueryPacs::foundMatchCallback(
         void * /*callbackData*/ ,
         T_DIMSE_C_FindRQ * /*request*/ ,
         int responseCount,
@@ -149,7 +145,7 @@ Status QueryPacs::query()
 
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,
-                          progressCallbackStudy , NULL ,
+                          foundMatchCallback , NULL ,
                           DIMSE_BLOCKING , 0 ,
                           &rsp , &statusDetail );
 
