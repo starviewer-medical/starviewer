@@ -5,7 +5,9 @@
 #include <dcfilefo.h>
 #include <assoc.h>
 #include <ofconapp.h>//necessari per fer les sortides per pantalla de les dcmtkz
+
 #include <QDir>
+#include <QTime>
 
 #include "struct.h"
 #include "processimagesingleton.h"
@@ -16,13 +18,20 @@
 #include "starviewersettings.h"
 #include "imagelistsingleton.h"
 #include "dicommask.h"
+#include "logging.h"
 
 namespace udg{
+
+int m_timeDownloadingImages; //Comptador per saber quant de temps estem descarregant les imatges de l'estudi
+int m_timeProcessingImages; //Comptador per saber quan de temps estem proce
+QTime timer;//rellotge per comptar quan tardem a descarrega una imatge
 
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 RetrieveImages::RetrieveImages()
 {
+    m_timeDownloadingImages = 0;
+    m_timeProcessingImages = 0;
 }
 
 void RetrieveImages::setConnection( PacsConnection connection )
@@ -165,6 +174,7 @@ OFCondition echoSCP(
     E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
     StarviewerSettings settings;
 
+
 #ifndef QT_NO_DEBUG
     if ( settings.getLogCommunicationPacsVerboseMode() )
     {
@@ -187,6 +197,9 @@ OFCondition echoSCP(
 
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
+        m_timeDownloadingImages += timer.elapsed();//temps que hem tardat a descarregar la imatge
+        timer.restart();//reiniciem per comptar el temps que estem processant la imatge
+
         *statusDetail = NULL;    /* no status detail */
 
         /* could save the image somewhere else, put it in database, etc */
@@ -271,6 +284,8 @@ OFCondition echoSCP(
             retrievedImage.setImageSize( imageSize );
 
             piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );
+            m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge
+            timer.restart();//reiniciem temporitzador per comptar quan tardem a descarregar la següent imatge
         }
     }
 
@@ -430,6 +445,8 @@ Status RetrieveImages::retrieve()
     // set the destination of the images to us
     ASC_getAPTitles( m_assoc->params, req.MoveDestination , NULL , NULL );
 
+
+    timer.start();//iniciem el temporitzador per saber quan tardem a descarregar la primera imatge
     OFCondition cond = DIMSE_moveUser( m_assoc , presId , &req , m_mask ,
         moveCallback , &callbackData , DIMSE_BLOCKING , 0 ,
         m_net , subOpCallback , NULL ,
@@ -460,6 +477,9 @@ Status RetrieveImages::retrieve()
 #endif
         delete statusDetail;
     }
+
+    DEBUG_LOG(QString( "TEMPS DESCARREGANT IMATGES : %1ms " ).arg( m_timeDownloadingImages ) );
+    DEBUG_LOG(QString( "TEMPS PROCESSANT IMATGES : %1ms " ).arg( m_timeProcessingImages ) );
 
     if ( rspIds != NULL ) delete rspIds;
 
