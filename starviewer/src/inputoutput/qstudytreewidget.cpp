@@ -24,6 +24,8 @@
 #include <QShortcut>
 #include <QString>
 #include <QDate>
+#include <QList>
+
 
 #include "qstudytreewidget.h"
 #include "pacslistdb.h"
@@ -98,6 +100,15 @@ void QStudyTreeWidget::insertStudyList( StudyList *studyList )
     }
 }
 
+void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
+{
+    m_studyTreeView->clear();
+
+    foreach( DICOMStudy study, studyList )
+    {
+        insertStudy( &study );
+    }
+}
 void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
     Status state;
@@ -162,6 +173,14 @@ void QStudyTreeWidget::insertSeriesList( SeriesList *seriesList )
     }
 }
 
+void QStudyTreeWidget::insertSeriesList( QList<DICOMSeries> seriesList )
+{
+    foreach( DICOMSeries series, seriesList )
+    {
+         insertSeries( &series );
+    }
+}
+
 void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
 {
     QTreeWidgetItem *item, *studyItem , *expandableItem;
@@ -207,6 +226,14 @@ void QStudyTreeWidget::insertImageList( ImageList *imageList )
     {
          insertImage( &imageList->getImage() );
          imageList->nextImage();
+    }
+}
+
+void QStudyTreeWidget::insertImageList( QList<DICOMImage> imageList )
+{
+    foreach( DICOMImage image , imageList )
+    {
+         insertImage( &image );
     }
 }
 
