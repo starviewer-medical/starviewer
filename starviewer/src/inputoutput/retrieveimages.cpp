@@ -16,9 +16,9 @@
 #include "errordcmtk.h"
 #include "pacsconnection.h"
 #include "starviewersettings.h"
-#include "imagelistsingleton.h"
 #include "dicommask.h"
 #include "logging.h"
+#include "dicomimage.h"
 
 namespace udg{
 

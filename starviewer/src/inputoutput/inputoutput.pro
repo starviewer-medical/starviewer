@@ -28,12 +28,10 @@ HEADERS += databaseconnection.h \
            retrieveimages.h \
            dicomseries.h \
            serieslist.h \
-           serieslistsingleton.h \
            starviewersettings.h \
            status.h \
            struct.h \
            dicomstudy.h \
-           studylistsingleton.h \
            studylist.h \
            cachepool.h \
            scalestudy.h \
@@ -55,7 +53,6 @@ HEADERS += databaseconnection.h \
            storeimages.h \
            starviewerprocessimagestored.h \
            starviewerprocessimageretrieved.h \
-           imagelistsingleton.h \
            querypacs.h \
            dicommask.h \
            dicomdirimporter.h \
@@ -82,11 +79,9 @@ SOURCES += databaseconnection.cpp \
            retrieveimages.cpp \
            dicomseries.cpp \
            serieslist.cpp \
-           serieslistsingleton.cpp \
            starviewersettings.cpp \
            status.cpp \
            dicomstudy.cpp \
-           studylistsingleton.cpp \
            studylist.cpp \
            cachepool.cpp \
            scalestudy.cpp \
@@ -108,7 +103,6 @@ SOURCES += databaseconnection.cpp \
            storeimages.cpp \
            starviewerprocessimagestored.cpp \
            starviewerprocessimageretrieved.cpp \
-           imagelistsingleton.cpp \
            querypacs.cpp \
            dicommask.cpp \
            dicomdirimporter.cpp \

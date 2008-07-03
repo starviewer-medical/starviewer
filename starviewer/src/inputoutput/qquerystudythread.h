@@ -7,7 +7,11 @@
 #ifndef UDGQQueryStudyThread_H
 #define UDGQQueryStudyThread_H
 #include <QThread>
+#include <QList>
 
+#include "dicomstudy.h"
+#include "dicomseries.h"
+#include "dicomimage.h"
 #include "dicommask.h"
 #include "pacsparameters.h"
 
@@ -37,6 +41,14 @@ public:
     /// el codi d'aquest mètode es el que s'executa en un nou thread
     void run();
 
+    ///Retorna la llista d'estudis trobats que compleixen el criteri de cerca
+    QList<DICOMStudy> getStudyList();
+
+    ///Retorna la llista de series trobades que compleixen els criteris de cerca
+    QList<DICOMSeries> getSeriesList();
+
+    QList<DICOMImage> getImageList();
+
     ///Destructor de la classe
     ~QQueryStudyThread();
 
@@ -54,6 +66,11 @@ signals:
 private :
     PacsParameters m_param;
     DicomMask m_mask;
+
+    QList<DICOMStudy> m_studyList;
+    QList<DICOMSeries> m_seriesList;
+    QList<DICOMImage> m_imageList;
+
 };
 
 }  //end namespace UdG
