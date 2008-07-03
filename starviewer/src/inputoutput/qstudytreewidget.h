@@ -22,6 +22,11 @@
 
 #include "ui_qstudytreewidgetbase.h"
 #include <QMenu>
+#include <QList>
+
+#include "dicomstudy.h"
+#include "dicomseries.h"
+#include "dicomimage.h"
 
 class QString;
 
@@ -57,6 +62,12 @@ public:
      */
     void insertStudyList( StudyList * studyList );
 
+    /** Mostra l'estudi pel ListWidget que se li passa per paràmetre
+     *  @param StudyList a mostrar
+     */
+    void insertStudyList( QList<DICOMStudy> studyList );
+
+
     /** Inseriex la informació d'un estudi
      * @param Dades de l'estudi
      */
@@ -67,6 +78,11 @@ public:
      */
     void insertSeriesList( SeriesList *seriesList );
 
+    /** Insereix un llista de sèries a l'estudi seleccionat actualment
+     * @param seriesList series afegir
+     */
+    void insertSeriesList( QList<DICOMSeries> seriesList );
+
     /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
      *@param informació de la serie
      */
@@ -76,6 +92,11 @@ public:
      * @param imageList llista d'imatges afegir a la sèrie
      */
     void insertImageList( ImageList *imageList );
+
+    /** Insereix una llista d'imatges a la sèrie seleccionada actualment
+     * @param imageList llista d'imatges afegir a la sèrie
+     */
+    void insertImageList( QList<DICOMImage> imageList );
 
     /** Insereix una image a la sèrie que està seleccionada
      * @param image imatge a afegir
