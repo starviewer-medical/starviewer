@@ -82,6 +82,11 @@ bool DICOMStudy::operator < ( DICOMStudy a )
     else return false;
 }
 
+bool DICOMStudy::operator == ( DICOMStudy compareStudy )
+{
+    return getStudyUID() == compareStudy.getStudyUID() && getPacsAETitle() == compareStudy.getPacsAETitle();
+}
+
 /**********************************************************************************************************************/
 /*                                    SET STUDY FIELDS                                                               */
 /********************************************************************************************************************/
