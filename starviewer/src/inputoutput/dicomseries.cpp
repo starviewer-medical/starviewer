@@ -95,6 +95,11 @@ bool DICOMSeries::operator<( DICOMSeries series )
     else return false;
 }
 
+bool DICOMSeries::operator==( DICOMSeries compareSeries )
+{
+    return getSeriesUID() == compareSeries.getSeriesUID();
+}
+
 /***********************************************************************************************************************/
 /*                                    SET STUDY FIELDS                                                                 */
 /***********************************************************************************************************************/

@@ -10,8 +10,6 @@ class DcmDataset;
 
 namespace udg{
 
-
-
 class DICOMStudy{
 public:
 
@@ -26,8 +24,12 @@ public:
     /** Operador de la classe
      * @param  Estudi amb el que sl'ha de comprar
      * @return cert si és menor
-     */
+     */ 
+    //TODO ESBRINAR ON S'UTILITZA
     bool operator<(DICOMStudy);
+
+    ///Operador d'igualtat compara si dos estudis tenen el mateix UID
+    bool operator==( DICOMStudy compareStudy );
 
     /** This action set the Patient's name.
      * @return  Patient's Name

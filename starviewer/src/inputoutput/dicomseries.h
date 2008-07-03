@@ -26,7 +26,11 @@ class DICOMSeries
     /** Operador que ens ajudar a ordenar les series pel camp seriesNumber
      * @param Serie amb la que hem de comparar
      */
+    //TODO ESBRINAR ON S'UTILITZA
     bool operator<( DICOMSeries series );
+
+    ///Operador d'igualtat compara el seriesUID
+    bool operator==( DICOMSeries compareSeries );
 
     /** This action set the series Number
      * @param Series Number
