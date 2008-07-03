@@ -9,9 +9,6 @@
 #include "pacsconnection.h"
 #include "status.h"
 #include "starviewersettings.h"
-#include "studylistsingleton.h"
-#include "serieslistsingleton.h"
-#include "imagelistsingleton.h"
 #include "pacsserver.h"
 #include "dicommask.h"
 #include "dicomstudy.h"
@@ -30,7 +27,7 @@ void QueryPacs::setConnection( PacsConnection connection )
 }
 
 void QueryPacs::foundMatchCallback(
-        void * /*callbackData*/ ,
+        void * callbackData ,
         T_DIMSE_C_FindRQ * /*request*/ ,
         int responseCount,
         T_DIMSE_C_FindRSP *rsp,
@@ -39,6 +36,7 @@ void QueryPacs::foundMatchCallback(
 {
     const char* text;
     StarviewerSettings settings;
+    QueryPacs* queryPacsCaller = (QueryPacs*)callbackData;
 
 #ifndef QT_NO_DEBUG
     if ( settings.getLogCommunicationPacsVerboseMode() )
@@ -61,37 +59,19 @@ void QueryPacs::foundMatchCallback(
     //en el cas que l'objecte que cercàvem fos un estudi afegi
     if ( strcmp( text ,"STUDY" ) == 0 )
     {
-        DICOMStudy queriedStudy( responseIdentifiers );
-        //gets the pointer to the study list and inserts the new study
-        StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
-
-        if ( !studyList->exists( queriedStudy.getStudyUID() , queriedStudy.getPacsAETitle() ) ) studyList->insert( DICOMStudy( responseIdentifiers ) );
+        queryPacsCaller->addStudy( responseIdentifiers );
 
     } //si la query retorna un objecte sèrie
     else if ( strcmp( text, "SERIES" ) == 0 )
     {
-        DICOMSeries queriedSerie( responseIdentifiers );
-
-        StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
-
-        if ( !studyList->exists( queriedSerie.getStudyUID() , queriedSerie.getPacsAETitle() ) ) studyList->insert( DICOMStudy( responseIdentifiers ) );
-
-        SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
-        seriesList->insert( DICOMSeries( responseIdentifiers) );
+        queryPacsCaller->addStudy( responseIdentifiers );
+        queryPacsCaller->addSeries( responseIdentifiers );
     }// si la query retorna un objecte imatge
     else if ( strcmp( text , "IMAGE" ) == 0)
     {
-        DICOMImage queriedImage( responseIdentifiers );
-
-        StudyListSingleton *studyList = StudyListSingleton::getStudyListSingleton();
-
-        if ( !studyList->exists( queriedImage.getStudyUID() , queriedImage.getPacsAETitle() ) ) studyList->insert( DICOMStudy( responseIdentifiers ) );
-
-        SeriesListSingleton *seriesList = SeriesListSingleton::getSeriesListSingleton();
-        if ( !seriesList->exists( queriedImage.getStudyUID() , queriedImage.getSeriesUID() , queriedImage.getPacsAETitle() ) )  seriesList->insert( DICOMSeries( responseIdentifiers ) );
-
-        ImageListSingleton *imageList = ImageListSingleton::getImageListSingleton();
-        imageList->insert( queriedImage );
+        queryPacsCaller->addStudy( responseIdentifiers );
+        queryPacsCaller->addSeries( responseIdentifiers );
+        queryPacsCaller->addImage( responseIdentifiers );
     }
 }
 
@@ -145,7 +125,7 @@ Status QueryPacs::query()
 
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,
-                          foundMatchCallback , NULL ,
+                          foundMatchCallback , this ,
                           DIMSE_BLOCKING , 0 ,
                           &rsp , &statusDetail );
 
@@ -181,4 +161,37 @@ Status QueryPacs::query( DicomMask mask )
     return query();
 }
 
+void QueryPacs::addStudy( DcmDataset *responsePacs )
+{
+    DICOMStudy dicomStudy( responsePacs );
+
+    if ( !m_studiesList.contains( dicomStudy ) ) m_studiesList.append( dicomStudy );
+}
+
+void QueryPacs::addSeries( DcmDataset * responsePacs )
+{
+    DICOMSeries dicomSeries( responsePacs );
+
+    if ( !m_seriesList.contains( dicomSeries) ) m_seriesList.append( dicomSeries );
+}
+
+void QueryPacs::addImage( DcmDataset * responsePacs )
+{
+    m_imageList.append( DICOMImage( responsePacs ) );
+}
+
+QList<DICOMStudy> QueryPacs::getQueryResultsAsStudyList()
+{
+    return m_studiesList;
+}
+
+QList<DICOMSeries> QueryPacs::getQueryResultsAsSeriesList()
+{
+    return m_seriesList;
+}
+
+QList<DICOMImage> QueryPacs::getQueryResultsAsImageList()
+{
+    return m_imageList;
+}
 }

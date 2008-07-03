@@ -14,8 +14,6 @@
 #include <QShortcut>
 
 #include "processimagesingleton.h"
-#include "serieslistsingleton.h"
-#include "imagelistsingleton.h"
 #include "pacsconnection.h"
 #include "studylist.h"
 #include "qstudytreewidget.h"
@@ -43,7 +41,8 @@
 #include "dicommask.h"
 #include "pacslist.h"
 #include "qoperationstatescreen.h"
-#include "studylistsingleton.h"
+#include "serieslist.h"
+#include "imagelist.h"
 
 namespace udg {
 
@@ -87,10 +86,6 @@ void QueryScreen::initialize()
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
-    //Instanciem els llistats
-    m_seriesListSingleton = SeriesListSingleton::getSeriesListSingleton();
-    m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
-    m_imageListSingleton = ImageListSingleton::getImageListSingleton();
 
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
@@ -504,9 +499,6 @@ void QueryScreen::queryStudyPacs()
     m_PACSNodes->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     pacsList.firstPacs();
-    m_seriesListSingleton->clear();
-    m_studyListSingleton->clear();
-    m_imageListSingleton->clear();
     if ( pacsList.end() ) //es comprova que hi hagi pacs seleccionats
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Please select a PACS to query" ) );
@@ -548,8 +540,7 @@ void QueryScreen::queryStudyPacs()
             return;
         }
 
-        m_studyListSingleton->firstStudy();
-        if ( m_studyListSingleton->end() )
+        if ( multipleQueryStudy.getStudyList().isEmpty() )
         {
             m_studyTreeWidgetPacs->clear();
             QApplication::restoreOverrideCursor();
@@ -557,9 +548,11 @@ void QueryScreen::queryStudyPacs()
             return;
         }
 
-        m_studyTreeWidgetPacs->insertStudyList( m_studyListSingleton ); //fem que es visualitzi l'studyView seleccionat
-        m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
-        m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
+        m_studyListQueriedPacs = multipleQueryStudy.getStudyList(); //Guardem una còpia en local de la llista d'estudis trobats al PACS
+
+        m_studyTreeWidgetPacs->insertStudyList( multipleQueryStudy.getStudyList() ); //fem que es visualitzi l'studyView seleccionat
+        m_studyTreeWidgetPacs->insertSeriesList( multipleQueryStudy.getSeriesList() );
+        m_studyTreeWidgetPacs->insertImageList( multipleQueryStudy.getImageList() );
         m_studyTreeWidgetPacs->setSortColumn( QStudyTreeWidget::ObjectName );
 
         QApplication::restoreOverrideCursor();
@@ -701,8 +694,6 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
     PacsServer pacsConnection;
     QueryPacs querySeriesPacs;
 
-    m_seriesListSingleton->clear();//netegem la llista de sèries
-
     INFO_LOG( "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle );
 
     if ( pacsAETitle.isEmpty() )
@@ -734,14 +725,13 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
         return;
     }
 
-    m_seriesListSingleton->firstSeries();
-    if ( m_seriesListSingleton->end() )
+    if ( querySeriesPacs.getQueryResultsAsSeriesList().isEmpty() )
     {
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
         return;
     }
 
-    m_studyTreeWidgetPacs->insertSeriesList( m_seriesListSingleton );
+    m_studyTreeWidgetPacs->insertSeriesList( querySeriesPacs.getQueryResultsAsSeriesList() );
 }
 
 void QueryScreen::querySeries( QString studyUID, QString source )
@@ -802,7 +792,6 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
     if ( AETitlePACS.isEmpty() )
         AETitlePACS = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
-    m_imageListSingleton->clear();//netejem la llista de sèries
 
     INFO_LOG( "Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + AETitlePACS );
 
@@ -842,15 +831,14 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
 
     pacsConnection.disconnect();
 
-    m_imageListSingleton->firstImage();
-    if ( m_imageListSingleton->end() )
+    if ( queryImages.getQueryResultsAsImageList().isEmpty() )
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this series.\n" ) );
         return;
     }
-
-    m_studyTreeWidgetPacs->insertImageList( m_imageListSingleton );
+    
+    m_studyTreeWidgetPacs->insertImageList( queryImages.getQueryResultsAsImageList() );
 
     QApplication::restoreOverrideCursor();
 }
@@ -914,6 +902,7 @@ void QueryScreen::retrievePacs( bool view )
 
     StarviewerSettings settings;
     bool ok;
+
     foreach( QString currentStudyUID, selectedStudiesUIDList )
     {
         DicomMask mask;
@@ -923,20 +912,24 @@ void QueryScreen::retrievePacs( bool view )
         PacsParameters pacs;
         PacsListDB pacsListDB;
         QString pacsAETitle;
-        DICOMStudy studyToRetrieve;
 
+        //Busquem en quina posició de la llista on guardem els estudis trobats al PACS en quina posició està per poder-lo recuperar 
+        //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
+        int indexStudyInList = getStudyPositionInStudyListQueriedPacs( currentStudyUID , 
+        m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies( currentStudyUID ) );
+       
         ok = true;
-        //Tenim l'informació de l'estudi a descarregar a la llista d'estudis, el busquem a la llista
-        if ( !m_studyListSingleton->exists( currentStudyUID, m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies(currentStudyUID) ) )
-        {
-            // TODO no sé què es comprova exactament aquí ni de quin tipus d'error es tracta això
+        //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
+        if ( indexStudyInList == -1 ) 
+        {//Es comprova que existeixi l'estudi a la llista d'estudis de la última query que s'ha fet al PACS
+         //TODO Arreglar missatge d'error
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Internal Error : " ) );
         }
         else
         {
-            // al haver fet un exists() ara mateix s'apunta a l'estudi trobat O_o!
-            studyToRetrieve = m_studyListSingleton->getStudy();
+            DICOMStudy studyToRetrieve =  m_studyListQueriedPacs.value( indexStudyInList );
+
             pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies(currentStudyUID);
             if ( pacsAETitle.isEmpty() ) //per les mesatools que no retornen a quin PACS pertany l'estudi cercat
             {
@@ -987,9 +980,6 @@ void QueryScreen::retrievePacs( bool view )
                 }
                 else
                 {
-                    //inserim a la pantalla de retrieve que iniciem la descarrega
-                    //m_operationStateScreen->insertNewRetrieve( &m_studyListSingleton->getStudy() );
-
                     //emplanem els parametres amb dades del starviewersettings
                     pacs.setAELocal( settings.getAETitleMachine() );
                     pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
@@ -1009,10 +999,10 @@ void QueryScreen::retrievePacs( bool view )
                         operation.setPriority( Operation::Low );
                     }
                     //emplenem les dades de l'operació
-                    operation.setPatientName( m_studyListSingleton->getStudy().getPatientName() );
-                    operation.setPatientID( m_studyListSingleton->getStudy().getPatientId() );
-                    operation.setStudyID( m_studyListSingleton->getStudy().getStudyId() );
-                    operation.setStudyUID( m_studyListSingleton->getStudy().getStudyUID() );
+                    operation.setPatientName( studyToRetrieve.getPatientName() );
+                    operation.setPatientID( studyToRetrieve.getPatientId() );
+                    operation.setStudyID( studyToRetrieve.getStudyId() );
+                    operation.setStudyUID( studyToRetrieve.getStudyUID() );
 
                     m_qexecuteOperationThread.queueOperation( operation );
                 }
@@ -1691,6 +1681,22 @@ void QueryScreen::addModalityStudyMask( DicomMask* mask, QString modality )
         studyModalities = modality;
 
     mask->setStudyModality( studyModalities );
+}
+
+int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle )
+{
+    int index = 0;
+    bool studyUIDisTheSame = false , pacsAETitleIsTheSame = false;
+
+    while ( index < m_studyListQueriedPacs.count() && ( !studyUIDisTheSame || !pacsAETitleIsTheSame ) )
+    {
+        studyUIDisTheSame = m_studyListQueriedPacs.value( index ).getStudyUID() == studyUID;
+        pacsAETitleIsTheSame = m_studyListQueriedPacs.value( index ).getPacsAETitle() == pacsAETitle;
+        
+        if (!studyUIDisTheSame || !pacsAETitleIsTheSame ) index++;
+    } 
+
+    return index < m_studyListQueriedPacs.count() ? index : -1;
 }
 
 QString QueryScreen::buildQueryParametersString()

@@ -11,6 +11,7 @@
 #include "qexecuteoperationthread.h"
 #include "dicomdirreader.h"
 #include "multiplequerystudy.h"
+#include "dicomstudy.h"
 
 namespace udg {
 
@@ -20,13 +21,10 @@ class PacsServer;
 class PatientFillerInput;
 class QCreateDicomdir;
 class ProcessImageSingleton;
-class SeriesListSingleton;
-class ImageListSingleton;
 class DicomMask;
 class PacsList;
 class PacsParameters;
 class QOperationStateScreen;
-class StudyListSingleton;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -284,6 +282,9 @@ private:
      */
     void addModalityStudyMask( DicomMask *mask, QString modality );
 
+    ///Ens indica en en quina posició es troba dins la llista dels estudis trobats a la última query del PACS l'estudi amb l'UID passat per paràmetre i l'AETitle del PACS passat per paràmetre
+    int getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle );
+
     /** Donat un AETitle busca les dades del PACS a la base de dades i prepara un objecte PACSERVER, per poder
      * connectar al PACS
      * @param AETitlePACS Aetitle del PACS a connectar
@@ -312,10 +313,7 @@ struct retrieveParameters
       };
 
     retrieveParameters retParam;
-    /// aquest es utilitzat per buscar estudis al pacs
-    StudyListSingleton *m_studyListSingleton;
-    SeriesListSingleton *m_seriesListSingleton;
-    ImageListSingleton *m_imageListSingleton;
+
     ProcessImageSingleton *m_processImageSingleton;
 
     /// Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
@@ -343,6 +341,8 @@ struct retrieveParameters
     QString m_lastQueriedPacs;
 
     QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs, m_contextMenuQStudyTreeWidgetDicomdir;
+
+    QList<DICOMStudy> m_studyListQueriedPacs;//llista dels estudis que s'han trobat a la última query al PACS
 };
 
 };

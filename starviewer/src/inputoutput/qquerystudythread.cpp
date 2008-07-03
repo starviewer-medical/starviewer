@@ -61,6 +61,12 @@ void QQueryStudyThread::run()
             ERROR_LOG( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_param.getAEPacs() ).arg( state.text() ) );
             emit( errorQueringStudiesPacs( m_param.getPacsID() ) );
         }
+        else 
+        {
+            m_studyList = queryPacsStudy.getQueryResultsAsStudyList();
+            m_seriesList = queryPacsStudy.getQueryResultsAsSeriesList();
+            m_imageList = queryPacsStudy.getQueryResultsAsImageList();
+        }
 
         INFO_LOG ( QString("Thread del PACS %1 finalitzant").arg( m_param.getAEPacs() ) );
 
@@ -68,6 +74,21 @@ void QQueryStudyThread::run()
         serverSCP.disconnect();
         exit( 0 );
     }
+}
+
+QList<DICOMStudy> QQueryStudyThread::getStudyList()
+{
+    return m_studyList;
+}
+
+QList<DICOMSeries> QQueryStudyThread::getSeriesList()
+{
+    return m_seriesList;
+}
+
+QList<DICOMImage> QQueryStudyThread::getImageList()
+{
+    return m_imageList;
 }
 
 QQueryStudyThread::~QQueryStudyThread()

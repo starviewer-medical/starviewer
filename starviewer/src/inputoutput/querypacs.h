@@ -21,6 +21,12 @@
 #ifndef QUERYPACS
 #define QUERYPACS
 
+#include <QList>
+
+#include "dicomstudy.h"
+#include "dicomseries.h"
+#include "dicomimage.h"
+
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 
 struct T_ASC_Association;
@@ -49,10 +55,20 @@ public:
      */
     Status query( DicomMask mask);
 
+    QList<DICOMStudy> getQueryResultsAsStudyList();
+    QList<DICOMSeries> getQueryResultsAsSeriesList();
+    QList<DICOMImage> getQueryResultsAsImageList();
+
+protected:
+
 private:
 
     T_ASC_Association *m_assoc; // request DICOM association;
     DcmDataset *m_mask;
+
+    QList<DICOMStudy> m_studiesList;
+    QList<DICOMSeries> m_seriesList;
+    QList<DICOMImage> m_imageList;
 
     //fa el query al pacs
     Status query();
@@ -67,6 +83,12 @@ private:
         DcmDataset *responseIdentifiers
         );
 
+    ///Afegeix l'objecte a la llista d'estudis si no hi existeix
+    void addStudy( DcmDataset * );
+    ///afegeix l'objecte dicom a la llista de sèries si no hi existeix
+    void addSeries( DcmDataset * );
+    ///afegeix l'objecte dicom a la llista d'imatges si no hi existeix
+    void addImage( DcmDataset * );
 };
 };
 #endif

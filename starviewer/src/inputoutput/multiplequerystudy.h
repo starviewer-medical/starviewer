@@ -8,9 +8,13 @@
 #define UDGMULTQUERYSTUDY_H
 
 #include <QObject>
+#include <QList>
 
 #include "pacslist.h"
 #include "dicommask.h"
+#include "dicomstudy.h"
+#include "dicomseries.h"
+#include "dicomimage.h"
 
 class QSemaphore;
 
@@ -18,7 +22,6 @@ namespace udg {
 
 class Status;
 class PacsParameters;
-class StudyListSingleton;
 
 /** Classe que permet fer diverses cerques simultànies, a diversos pacs a la vegada mitjançant la utilitzacio de threads
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -48,10 +51,14 @@ public:
      */
     Status StartQueries();
 
-    /** retorna un apuntador a la llist amb els estudis
-     * @return  Llista amb els estudis trobats que complien amb la màscara.
-     */
-    StudyListSingleton* getStudyList();
+    /// retorna els estudis trobats
+    QList<DICOMStudy> getStudyList();
+
+    ///Retorna les sèries trobades 
+    QList<DICOMSeries> getSeriesList();
+
+    ///Retorna les imatges trobades
+    QList<DICOMImage> getImageList();
 
 signals :
 
@@ -85,11 +92,14 @@ private :
 
     DicomMask m_searchMask;
 
-    StudyListSingleton* m_studyListSingleton;
     PacsList m_pacsList;
     int m_maxThreads;//Nombre màxim de threads que es poden executar a la vegada
     // Per raons d'optimització nomes es podran tenir un límit threads alhora executant la query, per aconseguir això utilitzem un semàfor
     QSemaphore *m_semaphoreActiveThreads;
+    
+    QList<DICOMStudy> m_studyList;
+    QList<DICOMSeries> m_seriesList;
+    QList<DICOMImage> m_imageList;
 
 };
 

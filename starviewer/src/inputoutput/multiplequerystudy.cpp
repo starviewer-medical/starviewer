@@ -16,7 +16,6 @@
 #include "starviewersettings.h"
 #include "pacsparameters.h"
 #include "qquerystudythread.h"
-#include "studylistsingleton.h"
 
 #include "errordcmtk.h"
 
@@ -28,7 +27,6 @@ MultipleQueryStudy::MultipleQueryStudy( QObject *parent )
     StarviewerSettings settings;
 
     m_semaphoreActiveThreads = new QSemaphore( settings.getMaxConnections().toInt( NULL , 10 ) );
-    m_studyListSingleton = StudyListSingleton::getStudyListSingleton();
 }
 
 void MultipleQueryStudy::setMask( DicomMask mask )
@@ -65,8 +63,6 @@ Status MultipleQueryStudy::StartQueries()
     PacsParameters pacsParameters;
     QString missatgeLog;
 
-    m_studyListSingleton->clear();
-
     m_pacsList.firstPacs();
 
     while ( !m_pacsList.end() ) //Anem creant threads per cercar
@@ -90,6 +86,11 @@ Status MultipleQueryStudy::StartQueries()
     foreach ( QQueryStudyThread *thread , llistaThreads )
     {
         thread->wait();
+        //fusionem les resultats dels diferents threads
+        m_studyList += thread->getStudyList();
+        m_seriesList += thread->getSeriesList();
+        m_imageList += thread->getImageList();
+
         delete thread;
     }
 
@@ -102,10 +103,19 @@ Status MultipleQueryStudy::StartQueries()
     return state;
 }
 
-StudyListSingleton * MultipleQueryStudy::getStudyList()
+QList<DICOMStudy> MultipleQueryStudy::getStudyList()
 {
-    m_studyListSingleton->firstStudy();
-    return m_studyListSingleton;
+    return m_studyList;
+}
+
+QList<DICOMSeries> MultipleQueryStudy::getSeriesList()
+{
+    return m_seriesList;
+}
+
+QList<DICOMImage> MultipleQueryStudy::getImageList()
+{
+    return m_imageList;
 }
 
 MultipleQueryStudy::~MultipleQueryStudy()
