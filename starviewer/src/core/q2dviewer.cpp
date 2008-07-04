@@ -1389,6 +1389,7 @@ void Q2DViewer::setSlice( int value )
             m_currentSlice = value;
 
         m_firstSlabSlice = m_currentSlice;
+        m_lastSlabSlice = m_firstSlabSlice + m_slabThickness;
 
         if( isThickSlabActive() )
         {
@@ -3160,13 +3161,13 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
         if( m_firstSlabSlice < this->getMinimumSlice() )
         {
             // si ens passem per sota, cal compensar creixent per dalt
-            m_lastSlabSlice += this->getMinimumSlice() - m_firstSlabSlice;
+            m_lastSlabSlice = this->getMinimumSlice() + newSlabThickness - 1;
             m_firstSlabSlice = this->getMinimumSlice(); // queda al límit inferior
         }
         else if( m_lastSlabSlice > m_maxSliceValue )
         {
             // si ens passem per dalt, cal compensar creixent per sota
-            m_firstSlabSlice -= m_lastSlabSlice - m_maxSliceValue;
+            m_firstSlabSlice = m_maxSliceValue - newSlabThickness + 1;
             m_lastSlabSlice = m_maxSliceValue;
         }
     }
