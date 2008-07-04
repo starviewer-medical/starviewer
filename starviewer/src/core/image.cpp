@@ -22,10 +22,10 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent), m_sliceThickness(1.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_KiloVoltagePeak(0), m_microAmpersSecond(0), m_milliAmpersSecond(0), m_parentSeries(NULL), m_CTLocalizer(false)
+ : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_KiloVoltagePeak(0), m_microAmpersSecond(0), m_milliAmpersSecond(0), m_parentSeries(NULL), m_CTLocalizer(false)
 {
-    m_pixelSpacing[0] = 1.;
-    m_pixelSpacing[0] = 2.;
+    m_pixelSpacing[0] = 0.;
+    m_pixelSpacing[1] = 0.;
     memset( m_imageOrientationPatient, 0, 9*sizeof(double) );
     memset( m_imagePositionPatient, 0, 3*sizeof(double) );
 }

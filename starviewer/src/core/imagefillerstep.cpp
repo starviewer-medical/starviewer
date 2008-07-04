@@ -120,12 +120,25 @@ bool ImageFillerStep::processImage( Image *image )
         if( !value.isEmpty() )
             image->setContentTime(value);
 
-        value = dicomReader.getAttributeByName( DCM_PixelSpacing );
-        QStringList list = value.split( "\\" );
-        if( list.size() == 2 )
-            image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
+        // \TODO Txapussa per sortir del pas. Serveix per calcular correctament el PixelSpacing
+        QString modality = dicomReader.getAttributeByName( DCM_Modality );
+        if ( modality == "CT" || modality == "MR")
+        {
+            value = dicomReader.getAttributeByName( DCM_PixelSpacing );
+        }
         else
-            DEBUG_LOG("Error a l'obtenir el pixel spacing. Es pot tractar d'una imatge US.");
+        {
+            value = dicomReader.getAttributeByName( DCM_ImagerPixelSpacing );
+        }
+        QStringList list;
+        if ( !value.isEmpty() )
+        {
+            list = value.split( "\\" );
+            if( list.size() == 2 )
+                image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
+            else
+                DEBUG_LOG("Error a l'obtenir el pixel spacing. Es pot tractar d'una imatge US.");
+        }
 
         value = dicomReader.getAttributeByName( DCM_SliceThickness );
         if( !value.isEmpty() )

@@ -11,6 +11,8 @@
 #include "drawer.h"
 #include "drawerline.h"
 #include "drawertext.h"
+#include "image.h"
+#include "volume.h"
 
 // Vtk's
 #include <vtkRenderWindowInteractor.h>
@@ -126,7 +128,17 @@ void DistanceTool::annotateNewPoint()
         }
 
         DrawerText * text = new DrawerText;
-        text->setText( tr("%1 mm").arg( m_line->computeDistance(), 0, 'f', 2 ) );
+        const double * pixelSpacing = m_2DViewer->getCurrentDisplayedImage()->getPixelSpacing();
+
+        if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
+        {
+            double * spacing = m_2DViewer->getInput()->getSpacing();
+            text->setText( tr("%1 px").arg( m_line->computeDistance( spacing ), 0, 'f', 0 ) );
+        }
+        else
+        {
+            text->setText( tr("%1 mm").arg( m_line->computeDistance(), 0, 'f', 2 ) );
+        }
         text->setAttatchmentPoint( leftPoint );
         text->setHorizontalJustification( "Right" );
         text->update( DrawerPrimitive::VTKRepresentation );
