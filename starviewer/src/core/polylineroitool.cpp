@@ -12,6 +12,7 @@
 #include "drawer.h"
 #include "drawerpolyline.h"
 #include "drawertext.h"
+#include "image.h"
 //vtk
 #include <vtkPNGWriter.h>
 #include <vtkImageActor.h>
@@ -638,7 +639,19 @@ void PolylineROITool::closeForm()
         intersection[2] = (bounds[5]+bounds[4])/2.0;
 
         DrawerText * text = new DrawerText;
-        text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+
+        const double * pixelSpacing = m_2DViewer->getCurrentDisplayedImage()->getPixelSpacing();
+
+        if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
+        {
+            double * spacing = m_2DViewer->getInput()->getSpacing();
+            text->setText( tr("Area: %1 px2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() , spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+        }
+        else
+        {
+            text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+        }
+        
         text->setAttatchmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );

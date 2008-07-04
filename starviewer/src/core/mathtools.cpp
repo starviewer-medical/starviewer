@@ -257,4 +257,9 @@ double MathTools::getDistance3D( const double firstPoint[3], const double second
     double value = pow(xx, 2) + pow(yy, 2) + pow(zz, 2);
     return (sqrt(value));
 }
+
+double MathTools::trunc( double x)
+{
+    return std::floor( x );
+}
 }; // end namespace udg

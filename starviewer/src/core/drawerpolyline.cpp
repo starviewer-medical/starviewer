@@ -192,18 +192,33 @@ int DrawerPolyline::getNumberOfPoints()
     return m_pointsList.count();
 }
 
-double DrawerPolyline::computeArea( int view )
+double DrawerPolyline::computeArea( int view , const double * spacing )
 {
     double area = 0.0;
-    double * actualPoint;
-    double * followPoint;
-
+    double actualPoint[3];
+    double followPoint[3];
+    double * point;
     for ( int j = 0; j < m_pointsList.count()-1 ; j++ )
     {
-        actualPoint = m_pointsList.at( j );
+        point = m_pointsList.at( j );
+        actualPoint[0] = point[0];
+        actualPoint[1] = point[1];
+        actualPoint[2] = point[2];
 
-        followPoint = m_pointsList.at( j+1 );
+        point = m_pointsList.at( j+1 );
+        followPoint[0] = point[0];
+        followPoint[1] = point[1];
+        followPoint[2] = point[2];
 
+        if ( spacing != NULL )
+        {
+            actualPoint[0] = MathTools::trunc( actualPoint[0]/spacing[0] );
+            actualPoint[1] = MathTools::trunc( actualPoint[1]/spacing[1] );
+            actualPoint[2] = MathTools::trunc( actualPoint[2]/spacing[2] );
+            followPoint[0] = MathTools::trunc( followPoint[0]/spacing[0] );
+            followPoint[1] = MathTools::trunc( followPoint[1]/spacing[1] );
+            followPoint[2] = MathTools::trunc( followPoint[2]/spacing[2] );
+        }
         switch( view )
         {
             case Q2DViewer::Axial:

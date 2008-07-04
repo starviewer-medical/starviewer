@@ -89,6 +89,8 @@ inline static double cbrt( double x )
 static double getDistance2D( const double firstPoint[2], const double secondPoint[2] );
 static double getDistance3D( const double firstPoint[3], const double secondPoint[3] );
 
+/// ens retorna el valor truncat
+static double trunc( double x);
 };
 
 } // end namespace udg

@@ -34,7 +34,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="410"/>
+        <location filename="angletool.cpp" line="406"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -42,8 +42,13 @@
 <context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="115"/>
+        <location filename="distancetool.cpp" line="140"/>
         <source>%1 mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="distancetool.cpp" line="136"/>
+        <source>%1 px</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -90,22 +95,22 @@
 <context>
     <name>udg::PatientItemModel</name>
     <message>
-        <location filename="patientitemmodel.cpp" line="191"/>
+        <location filename="patientitemmodel.cpp" line="197"/>
         <source>Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="patientitemmodel.cpp" line="191"/>
+        <location filename="patientitemmodel.cpp" line="197"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="patientitemmodel.cpp" line="191"/>
+        <location filename="patientitemmodel.cpp" line="197"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="patientitemmodel.cpp" line="191"/>
+        <location filename="patientitemmodel.cpp" line="197"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -113,8 +118,14 @@
 <context>
     <name>udg::PolylineROITool</name>
     <message>
-        <location filename="polylineroitool.cpp" line="641"/>
+        <location filename="polylineroitool.cpp" line="652"/>
         <source>Area: %1 mm2
+Mean: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="polylineroitool.cpp" line="648"/>
+        <source>Area: %1 px2
 Mean: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -122,12 +133,7 @@ Mean: %2</source>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2419"/>
-        <source>%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="2412"/>
+        <location filename="q2dviewer.cpp" line="2437"/>
         <source>
 %1
 %2
@@ -138,34 +144,34 @@ Acc:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2322"/>
+        <location filename="q2dviewer.cpp" line="2348"/>
         <source>Image Size: %1 x %2
 View Size: %3 x %4
 WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="633"/>
+        <location filename="q2dviewer.cpp" line="670"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="651"/>
+        <location filename="q2dviewer.cpp" line="688"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="624"/>
+        <location filename="q2dviewer.cpp" line="661"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="644"/>
+        <location filename="q2dviewer.cpp" line="681"/>
         <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="656"/>
+        <location filename="q2dviewer.cpp" line="694"/>
         <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,17 +215,7 @@ WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcinecontrollerbase.ui" line="69"/>
-        <source>Loop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcinecontrollerbase.ui" line="82"/>
-        <source>Go-back</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcinecontrollerbase.ui" line="142"/>
+        <location filename="qcinecontrollerbase.ui" line="134"/>
         <source>10 img/sec</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1004,7 +1000,7 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::Series</name>
     <message>
-        <location filename="series.cpp" line="452"/>
+        <location filename="series.cpp" line="456"/>
         <source>No Images Available</source>
         <translation type="unfinished"></translation>
     </message>
