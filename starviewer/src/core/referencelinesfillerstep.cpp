@@ -105,12 +105,20 @@ void ReferenceLinesFillerStep::processImage( Image *image )
         if ( image->getParentSeries()->getModality() == "CT" )
         {
             QString value = dicomReader.getAttributeByName( DCM_ImageType );
-            QStringList valueList = value.split( "\\" );
-
-            if ( valueList.at(2) == "LOCALIZER" )
+            if( value.isEmpty() )
             {
-                image->setCTLocalizer( true );
-                DEBUG_LOG( " La imatge " + image->getSOPInstanceUID() + " de la serie " + image->getParentSeries()->getInstanceUID() + " és un localitzador " );
+                // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
+                // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
+                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + image->getSOPInstanceUID() + " de la serie " + image->getParentSeries()->getInstanceUID() + " té el camp ImageType que és tipus 1, buit " );
+            }
+            else
+            {
+                QStringList valueList = value.split( "\\" );
+                if( valueList.at(2) == "LOCALIZER" )
+                {
+                    image->setCTLocalizer( true );
+                    DEBUG_LOG( " La imatge " + image->getSOPInstanceUID() + " de la serie " + image->getParentSeries()->getInstanceUID() + " és un localitzador " );
+                }
             }
         }
     }
