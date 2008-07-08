@@ -7,6 +7,8 @@
 #include <vtkVolumeRayCastMapper.h>
 
 #include "vector3.h"
+#include "voxelshader.h"
+#include <QColor>
 // #include <vtkEncodedGradientEstimator.h>
 // #include <vtkDirectionEncoder.h>
 
@@ -66,6 +68,8 @@ const char* vtkVolumeRayCastCompositeFxFunction::GetCompositeMethodAsString() co
 // to call.
 void vtkVolumeRayCastCompositeFxFunction::CastRay( vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo )
 {
+    Q_CHECK_PTR( m_voxelShader );
+
     void *data = staticInfo->ScalarDataPointer;
 
     switch ( staticInfo->ScalarDataType )
@@ -145,10 +149,11 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
         }
 
         // aquí es faria la crida al voxel shader
-        accumulatedRedIntensity += static_cast<float>( qrand() ) / RAND_MAX;
-        accumulatedGreenIntensity += static_cast<float>( qrand() ) / RAND_MAX;
-        accumulatedBlueIntensity += static_cast<float>( qrand() ) / RAND_MAX;
-        float opacity = static_cast<float>( qrand() ) / RAND_MAX;
+        QColor color = m_voxelShader->shade( offset );
+        float opacity = color.alphaF(), opacityRemainingOpacity = opacity * remainingOpacity;
+        accumulatedRedIntensity += opacityRemainingOpacity * color.redF();
+        accumulatedGreenIntensity += opacityRemainingOpacity * color.greenF();
+        accumulatedBlueIntensity += opacityRemainingOpacity * color.blueF();
         remainingOpacity *= (1.0 - opacity);
 
         // Increment our position and compute our voxel location

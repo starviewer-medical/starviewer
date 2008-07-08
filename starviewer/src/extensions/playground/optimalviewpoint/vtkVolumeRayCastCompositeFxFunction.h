@@ -11,6 +11,9 @@
 namespace udg {
 
 
+class VoxelShader;
+
+
 /**
  * Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel.
  */
@@ -37,8 +40,8 @@ public:
     float GetZeroOpacityThreshold( vtkVolume *volume );
     //ETX
 
-    void SetVoxelShader( int voxelShader ) { m_voxelShader = voxelShader; }
-    int GetVoxelShader() const { return m_voxelShader; }
+    void SetVoxelShader( VoxelShader * voxelShader ) { m_voxelShader = voxelShader; }
+    VoxelShader * GetVoxelShader() const { return m_voxelShader; }
 
 protected:
 
@@ -54,7 +57,7 @@ protected:
     void CastRay( const T *data, vtkVolumeRayCastDynamicInfo *dynamicInfo, const vtkVolumeRayCastStaticInfo *staticInfo ) const;
 
     CompositeMethod m_compositeMethod;
-    int m_voxelShader;
+    VoxelShader * m_voxelShader;
 
 private:
 

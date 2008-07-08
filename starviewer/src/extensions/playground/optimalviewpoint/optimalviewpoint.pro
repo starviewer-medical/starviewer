@@ -31,7 +31,9 @@ HEADERS += doublehistogram.h \
            obscurancethread2.h \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
-           vtkVolumeRayCastCompositeFxFunction.h 
+           vtkVolumeRayCastCompositeFxFunction.h \
+           voxelshader.h \
+           ambientvoxelshader.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
@@ -57,6 +59,8 @@ SOURCES += doublehistogram.cpp \
            obscurancethread2.cpp \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.cxx \
            vtkVolumeRayCastCompositeFunctionFx.cxx \
-           vtkVolumeRayCastCompositeFxFunction.cxx 
+           vtkVolumeRayCastCompositeFxFunction.cxx \
+           voxelshader.cpp \
+           ambientvoxelshader.cpp 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)
