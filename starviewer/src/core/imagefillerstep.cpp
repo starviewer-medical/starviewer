@@ -137,7 +137,7 @@ bool ImageFillerStep::processImage( Image *image )
             if( list.size() == 2 )
                 image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
             else
-                DEBUG_LOG("Error a l'obtenir el pixel spacing. Es pot tractar d'una imatge US.");
+                DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada. Madalitat de la imatge: [" + modality + "]" );
         }
 
         value = dicomReader.getAttributeByName( DCM_SliceThickness );
@@ -183,7 +183,7 @@ bool ImageFillerStep::processImage( Image *image )
         else
         {
             /* Si la modalitat no requereix el image plane module ( CR per exemple ) no disposem de ImageOrientationPatient.
-             * Això fa que el tag PatientOrientation no s'ompli.El PatientOrientation es necessari en cas que no hi hagi 
+             * Això fa que el tag PatientOrientation no s'ompli.El PatientOrientation es necessari en cas que no hi hagi
              * ImageOrientationPatient i ImagePositionPatient.
              */
             // \TODO Part afegida per sortir del pas. S'hauria de refer aquesta part tenint mes en compte la dependencia de tags. Els
@@ -192,15 +192,22 @@ bool ImageFillerStep::processImage( Image *image )
             value = dicomReader.getAttributeByName( DCM_PatientOrientation );
             if( !value.isEmpty() )
                 image->setPatientOrientation( value.replace( QString("\\") , QString(",") ).replace( QString("F") , QString("I") ).replace( QString("H") , QString("S") ) );
-
-            DEBUG_LOG("Error inesperat llegint ImageOrientationPatient. Els valors trobats no són 6! Es pot tractar d'una imatge US.");
+            else
+                DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + modality + "]");
         }
         value = dicomReader.getAttributeByName( DCM_ImagePositionPatient );
-        list = value.split("\\");
-        if( list.size() == 3 )
+        if( !value.isEmpty() )
         {
-            double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
-            image->setImagePositionPatient( position );
+            list = value.split("\\");
+            if( list.size() == 3 )
+            {
+                double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
+                image->setImagePositionPatient( position );
+            }
+        }
+        else
+        {
+            DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + modality + "]");
         }
 
         image->setSamplesPerPixel( dicomReader.getAttributeByName( DCM_SamplesPerPixel ).toInt() );
