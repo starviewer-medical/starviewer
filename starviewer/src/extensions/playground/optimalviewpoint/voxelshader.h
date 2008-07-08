@@ -19,14 +19,18 @@ public:
     virtual ~VoxelShader();
 
     /// Assigna el volum de dades que es farà servir.
-    void setData( unsigned char * data );
+    void setData( const unsigned char *data );
+    void setColorTable( const float *colorTable );
+    void setOpacityTable( const float *opacityTable );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual QColor shade( int offset ) const = 0;
 
 protected:
 
-    unsigned char * m_data;
+    const unsigned char *m_data;
+    const float *m_colorTable;
+    const float *m_opacityTable;
 
 };
 

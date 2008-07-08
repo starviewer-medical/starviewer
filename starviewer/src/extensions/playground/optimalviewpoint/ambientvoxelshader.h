@@ -4,6 +4,8 @@
 
 #include <voxelshader.h>
 
+#include "transferfunction.h"
+
 
 namespace udg {
 
@@ -19,8 +21,14 @@ public:
     AmbientVoxelShader();
     virtual ~AmbientVoxelShader();
 
+    void setTransferFunction( const TransferFunction &transferFunction );
+
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual QColor shade( int offset ) const;
+
+private:
+
+    TransferFunction m_transferFunction;
 
 };
 
