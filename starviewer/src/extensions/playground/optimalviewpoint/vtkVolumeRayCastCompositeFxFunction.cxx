@@ -24,6 +24,7 @@ vtkVolumeRayCastCompositeFxFunction::vtkVolumeRayCastCompositeFxFunction()
 {
     m_compositeMethod = ClassifyInterpolate;
     m_voxelShader = 0;
+    m_initializedVoxelShader = false;
 }
 
 
@@ -70,6 +71,13 @@ void vtkVolumeRayCastCompositeFxFunction::CastRay( vtkVolumeRayCastDynamicInfo *
 {
     Q_CHECK_PTR( m_voxelShader );
 
+    if ( !m_initializedVoxelShader )
+    {
+        m_voxelShader->setColorTable( staticInfo->Volume->GetRGBArray() );
+        m_voxelShader->setOpacityTable( staticInfo->Volume->GetCorrectedScalarOpacityArray() );
+        m_initializedVoxelShader = true;
+    }
+
     void *data = staticInfo->ScalarDataPointer;
 
     switch ( staticInfo->ScalarDataType )
@@ -96,8 +104,8 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
     const float * const A_RAY_INCREMENT = dynamicInfo->TransformedIncrement;
     const Vector3 RAY_INCREMENT( A_RAY_INCREMENT[0], A_RAY_INCREMENT[1], A_RAY_INCREMENT[2] );
 
-    const float * const SCALAR_OPACITY_TRANSFER_FUNCTION = staticInfo->Volume->GetCorrectedScalarOpacityArray();
-    const float * const COLOR_TRANSFER_FUNCTION = staticInfo->Volume->GetRGBArray();
+//     const float * const SCALAR_OPACITY_TRANSFER_FUNCTION = staticInfo->Volume->GetCorrectedScalarOpacityArray();
+//     const float * const COLOR_TRANSFER_FUNCTION = staticInfo->Volume->GetRGBArray();
     const float * const GRAY_TRANSFER_FUNCTION = staticInfo->Volume->GetGrayArray();
     const float * const GRADIENT_OPACITY_TRANSFER_FUNCTION = staticInfo->Volume->GetGradientOpacityArray();
 
@@ -148,7 +156,6 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
             previousVoxel[0] = voxel[0]; previousVoxel[1] = voxel[1]; previousVoxel[2] = voxel[2];
         }
 
-        // aquí es faria la crida al voxel shader
         QColor color = m_voxelShader->shade( offset );
         float opacity = color.alphaF(), opacityRemainingOpacity = opacity * remainingOpacity;
         accumulatedRedIntensity += opacityRemainingOpacity * color.redF();

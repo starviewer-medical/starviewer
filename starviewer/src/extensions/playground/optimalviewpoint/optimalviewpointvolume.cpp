@@ -346,6 +346,7 @@ void OptimalViewpointVolume::setTransferFunction( const TransferFunction & trans
 {
     m_volumeProperty->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_volumeProperty->SetColor( transferFunction.getColorTransferFunction() );
+    ((AmbientVoxelShader*)m_voxelShader)->setTransferFunction( transferFunction );
 
     m_transferFunction = transferFunction;
 }
