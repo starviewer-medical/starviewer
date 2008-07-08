@@ -52,6 +52,7 @@
 #include <vtkCamera.h>
 #include <QTime>
 #include "vtkVolumeRayCastCompositeFunctionFx.h"
+#include "vtkVolumeRayCastCompositeFxFunction.h"
 
 namespace udg {
 
@@ -140,6 +141,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New(); //m_volumeRayCastFunctionViewpointSaliency->Register( 0 );
     m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
     m_volumeRayCastFunctionFx = vtkVolumeRayCastCompositeFunctionFx::New();
+    m_volumeRayCastFunctionFx2 = vtkVolumeRayCastCompositeFxFunction::New();
 
 
 
@@ -280,6 +282,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_volumeRayCastFunctionObscurances->Delete();
     m_volumeRayCastFunctionViewpointSaliency->Delete();
     m_volumeRayCastFunctionFx->Delete();
+    m_volumeRayCastFunctionFx2->Delete();
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -851,6 +854,7 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionFx2->SetCompositeMethodToInterpolateFirst();
             break;
         case INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE:
             m_volumeProperty->SetInterpolationTypeToLinear();
@@ -859,6 +863,7 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionFx2->SetCompositeMethodToClassifyFirst();
             break;
     }
 }
