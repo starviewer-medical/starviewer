@@ -50,7 +50,8 @@ protected:
                                      vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper );
     //ETX
 
-    template <class T> void CastRay( T *data, vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo ) const;
+    template <class T>
+    void CastRay( const T *data, vtkVolumeRayCastDynamicInfo *dynamicInfo, const vtkVolumeRayCastStaticInfo *staticInfo ) const;
 
     CompositeMethod m_compositeMethod;
     int m_voxelShader;
