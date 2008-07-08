@@ -231,6 +231,9 @@ private:
     /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
     ToolManager *m_toolManager;
 
+    ///Perfil a mostrar la interficie
+    QString m_profile;
+
 };
 
 } // end namespace udg
