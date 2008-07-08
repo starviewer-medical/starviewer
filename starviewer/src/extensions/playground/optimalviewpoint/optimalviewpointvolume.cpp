@@ -53,6 +53,8 @@
 #include <QTime>
 #include "vtkVolumeRayCastCompositeFunctionFx.h"
 #include "vtkVolumeRayCastCompositeFxFunction.h"
+#include "voxelshader.h"
+#include "ambientvoxelshader.h"
 
 namespace udg {
 
@@ -141,7 +143,16 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New(); //m_volumeRayCastFunctionViewpointSaliency->Register( 0 );
     m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
     m_volumeRayCastFunctionFx = vtkVolumeRayCastCompositeFunctionFx::New();
+
+
+
+
+
+
     m_volumeRayCastFunctionFx2 = vtkVolumeRayCastCompositeFxFunction::New();
+    m_voxelShader = new AmbientVoxelShader();
+    m_volumeRayCastFunctionFx2->SetVoxelShader( m_voxelShader );
+    m_voxelShader->setData( m_data );
 
 
 
@@ -283,6 +294,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_volumeRayCastFunctionViewpointSaliency->Delete();
     m_volumeRayCastFunctionFx->Delete();
     m_volumeRayCastFunctionFx2->Delete();
+    delete m_voxelShader;
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -1969,7 +1981,7 @@ void OptimalViewpointVolume::setFx( bool fx )
 
     if ( m_fx )
     {
-        m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionFx );
+        m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionFx2 );
     }
     else
     {
