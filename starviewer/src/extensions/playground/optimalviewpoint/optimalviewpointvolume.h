@@ -36,6 +36,7 @@ namespace udg {
 
 
 class Vector3;
+class vtkVolumeRayCastCompositeFxFunction;
 
 
 /**
@@ -227,6 +228,7 @@ private:
     vtkVolumeRayCastCompositeFunctionObscurances * m_volumeRayCastFunctionObscurances;
     vtkVolumeRayCastCompositeFunctionViewpointSaliency * m_volumeRayCastFunctionViewpointSaliency;
     vtkVolumeRayCastCompositeFunctionFx * m_volumeRayCastFunctionFx;
+    vtkVolumeRayCastCompositeFxFunction * m_volumeRayCastFunctionFx2;
 
     /// Vector de funcions de transferència d'opacitat.
 //     vtkPiecewiseFunction * m_opacityTransferFunction;
