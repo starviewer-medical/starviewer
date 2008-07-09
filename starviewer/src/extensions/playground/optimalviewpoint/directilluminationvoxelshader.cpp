@@ -65,4 +65,10 @@ QColor DirectIlluminationVoxelShader::shade( int offset, const QColor &baseColor
 }
 
 
+QString DirectIlluminationVoxelShader::toString() const
+{
+    return "DirectIlluminationVoxelShader";
+}
+
+
 }

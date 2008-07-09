@@ -5,7 +5,7 @@
 #include <vtkVolumeRayCastFunction.h>
 
 
-#include <QtGlobal>
+#include <QList>
 
 
 namespace udg {
@@ -40,8 +40,8 @@ public:
     float GetZeroOpacityThreshold( vtkVolume *volume );
     //ETX
 
-    void SetVoxelShader( VoxelShader * voxelShader ) { m_voxelShader = voxelShader; }
-    VoxelShader * GetVoxelShader() const { return m_voxelShader; }
+    void AddVoxelShader( VoxelShader * voxelShader );
+    void RemoveAllVoxelShaders();
 
 protected:
 
@@ -57,7 +57,7 @@ protected:
     void CastRay( const T *data, vtkVolumeRayCastDynamicInfo *dynamicInfo, const vtkVolumeRayCastStaticInfo *staticInfo ) const;
 
     CompositeMethod m_compositeMethod;
-    VoxelShader * m_voxelShader;
+    QList<VoxelShader*> m_voxelShaderList;
 
 private:
 

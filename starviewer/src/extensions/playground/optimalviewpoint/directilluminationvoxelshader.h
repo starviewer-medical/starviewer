@@ -27,6 +27,8 @@ public:
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual QColor shade( int offset, const QColor &baseColor = Qt::white ) const;
+    /// Retorna un string representatiu del voxel shader.
+    virtual QString toString() const;
 
 protected:
 

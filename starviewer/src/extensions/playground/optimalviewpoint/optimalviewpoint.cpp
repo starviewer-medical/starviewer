@@ -44,6 +44,7 @@ OptimalViewpoint::OptimalViewpoint( QObject * parent )
     : QObject( parent )
 {
     m_renderer = 0;
+    m_volume = 0;
 //     m_renderer = vtkRenderer::New();    // creem el renderer principal
 //     m_renderer->SetBackground( 0.0, 0.0, 0.0 );       // posem el fons gris
 
@@ -92,6 +93,7 @@ void OptimalViewpoint::setMainRenderer( vtkRenderer * mainRenderer )
     m_renderer = mainRenderer; m_renderer->Register( 0 );
     m_renderer->SetActiveCamera( m_camera );
 //     m_renderer->SetBackground( 0.5, 0.5, 0.5 );       // posem el fons gris
+    if ( m_volume ) m_volume->setMainRenderer( mainRenderer );
 }
 
 void OptimalViewpoint::setInteractor( vtkRenderWindowInteractor * interactor )
@@ -162,6 +164,8 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     DEBUG_LOG( "last connect" );
     connect( m_volume, SIGNAL( adjustedTransferFunctionDefined(const TransferFunction&) ), SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
     DEBUG_LOG( "end setImage" );
+
+    if ( m_renderer ) m_volume->setMainRenderer( m_renderer );
 }
 
 void OptimalViewpoint::setSegmentationFileName( QString name )
