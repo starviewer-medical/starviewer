@@ -63,6 +63,8 @@ Status MultipleQueryStudy::StartQueries()
     PacsParameters pacsParameters;
     QString missatgeLog;
 
+    initializeResultsList();
+
     m_pacsList.firstPacs();
 
     while ( !m_pacsList.end() ) //Anem creant threads per cercar
@@ -101,6 +103,13 @@ Status MultipleQueryStudy::StartQueries()
     }
 
     return state;
+}
+
+void MultipleQueryStudy::initializeResultsList()
+{
+    m_studyList.clear();
+    m_seriesList.clear();
+    m_imageList.clear();
 }
 
 QList<DICOMStudy> MultipleQueryStudy::getStudyList()
