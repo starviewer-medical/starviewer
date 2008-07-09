@@ -181,6 +181,9 @@ public:
     void setFxSaliencyHigh( double fxSaliencyHigh );
 
 
+    void setMainRenderer( vtkRenderer * renderer ) { m_mainRenderer = renderer; }
+
+
 public slots:
 
     void setExcessEntropy( double excessEntropy );
@@ -234,6 +237,7 @@ private:
     vtkVolumeRayCastCompositeFxFunction * m_volumeRayCastFunctionFx2;
     AmbientVoxelShader * m_ambientVoxelShader;
     DirectIlluminationVoxelShader * m_directIlluminationVoxelShader;
+    vtkRenderer * m_mainRenderer;
 
     /// Vector de funcions de transferència d'opacitat.
 //     vtkPiecewiseFunction * m_opacityTransferFunction;

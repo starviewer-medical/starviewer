@@ -31,4 +31,10 @@ QColor AmbientVoxelShader::shade( int offset, const QColor &baseColor ) const
 }
 
 
+QString AmbientVoxelShader::toString() const
+{
+    return "AmbientVoxelShader";
+}
+
+
 }

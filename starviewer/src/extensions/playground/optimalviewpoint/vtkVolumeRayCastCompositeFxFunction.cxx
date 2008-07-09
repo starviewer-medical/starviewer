@@ -23,7 +23,6 @@ vtkStandardNewMacro( vtkVolumeRayCastCompositeFxFunction );
 vtkVolumeRayCastCompositeFxFunction::vtkVolumeRayCastCompositeFxFunction()
 {
     m_compositeMethod = ClassifyInterpolate;
-    m_voxelShader = 0;
 }
 
 
@@ -45,7 +44,14 @@ void vtkVolumeRayCastCompositeFxFunction::PrintSelf( ostream &os, vtkIndent inde
     this->Superclass::PrintSelf( os, indent );
 
     os << indent << "Composite Method: " << this->GetCompositeMethodAsString() << "\n";
-    os << indent << "Voxel Shader: " << m_voxelShader << "\n";
+    os << indent << "Voxel Shaders:\n";
+
+    if ( m_voxelShaderList.isEmpty() ) os << indent << "  (none)\n";
+    else
+    {
+        foreach ( VoxelShader *voxelShader, m_voxelShaderList )
+            os << indent << "  " << voxelShader->toString().toStdString() << "\n";
+    }
 }
 
 
@@ -68,8 +74,6 @@ const char* vtkVolumeRayCastCompositeFxFunction::GetCompositeMethodAsString() co
 // to call.
 void vtkVolumeRayCastCompositeFxFunction::CastRay( vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo )
 {
-    Q_CHECK_PTR( m_voxelShader );
-
     void *data = staticInfo->ScalarDataPointer;
 
     switch ( staticInfo->ScalarDataType )
@@ -87,6 +91,20 @@ float vtkVolumeRayCastCompositeFxFunction::GetZeroOpacityThreshold( vtkVolume *v
 }
 
 
+void vtkVolumeRayCastCompositeFxFunction::AddVoxelShader( VoxelShader * voxelShader )
+{
+    Q_CHECK_PTR( voxelShader );
+
+    m_voxelShaderList << voxelShader;
+}
+
+
+void vtkVolumeRayCastCompositeFxFunction::RemoveAllVoxelShaders()
+{
+    m_voxelShaderList.clear();
+}
+
+
 template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *data,
                                                                       vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                                                       const vtkVolumeRayCastStaticInfo *staticInfo ) const
@@ -98,8 +116,8 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
 
 //     const float * const SCALAR_OPACITY_TRANSFER_FUNCTION = staticInfo->Volume->GetCorrectedScalarOpacityArray();
 //     const float * const COLOR_TRANSFER_FUNCTION = staticInfo->Volume->GetRGBArray();
-    const float * const GRAY_TRANSFER_FUNCTION = staticInfo->Volume->GetGrayArray();
-    const float * const GRADIENT_OPACITY_TRANSFER_FUNCTION = staticInfo->Volume->GetGradientOpacityArray();
+//     const float * const GRAY_TRANSFER_FUNCTION = staticInfo->Volume->GetGrayArray();
+//     const float * const GRADIENT_OPACITY_TRANSFER_FUNCTION = staticInfo->Volume->GetGradientOpacityArray();
 
     // Get the gradient opacity constant. If this number is greater than
     // or equal to 0.0, then the gradient opacity transfer function is
@@ -148,7 +166,11 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
             previousVoxel[0] = voxel[0]; previousVoxel[1] = voxel[1]; previousVoxel[2] = voxel[2];
         }
 
-        QColor color = m_voxelShader->shade( offset );
+        QColor color;
+
+        foreach ( VoxelShader *voxelShader, m_voxelShaderList )
+            color = voxelShader->shade( offset, color );
+
         float opacity = color.alphaF(), opacityRemainingOpacity = opacity * remainingOpacity;
         accumulatedRedIntensity += opacityRemainingOpacity * color.redF();
         accumulatedGreenIntensity += opacityRemainingOpacity * color.greenF();

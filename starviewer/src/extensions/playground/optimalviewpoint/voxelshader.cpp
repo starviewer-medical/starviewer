@@ -15,8 +15,15 @@ VoxelShader::~VoxelShader()
 }
 
 
-void VoxelShader::setData( const unsigned char *data ) {
+void VoxelShader::setData( const unsigned char *data )
+{
     m_data = data;
+}
+
+
+QString VoxelShader::toString() const
+{
+    return "VoxelShader";
 }
 
 
