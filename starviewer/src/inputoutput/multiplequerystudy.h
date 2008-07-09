@@ -101,6 +101,9 @@ private :
     QList<DICOMSeries> m_seriesList;
     QList<DICOMImage> m_imageList;
 
+    ///Neteja les QList que contindran els resultats de les cerques
+    void initializeResultsList();
+
 };
 
 }
