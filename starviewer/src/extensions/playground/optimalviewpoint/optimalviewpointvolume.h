@@ -38,6 +38,7 @@ namespace udg {
 class Vector3;
 class VoxelShader;
 class AmbientVoxelShader;
+class DirectIlluminationVoxelShader;
 class vtkVolumeRayCastCompositeFxFunction;
 
 
@@ -232,6 +233,7 @@ private:
     vtkVolumeRayCastCompositeFunctionFx * m_volumeRayCastFunctionFx;
     vtkVolumeRayCastCompositeFxFunction * m_volumeRayCastFunctionFx2;
     AmbientVoxelShader * m_ambientVoxelShader;
+    DirectIlluminationVoxelShader * m_directIlluminationVoxelShader;
 
     /// Vector de funcions de transferència d'opacitat.
 //     vtkPiecewiseFunction * m_opacityTransferFunction;

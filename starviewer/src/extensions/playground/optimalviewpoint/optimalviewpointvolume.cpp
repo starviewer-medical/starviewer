@@ -55,6 +55,8 @@
 #include "vtkVolumeRayCastCompositeFxFunction.h"
 #include "voxelshader.h"
 #include "ambientvoxelshader.h"
+#include "directilluminationvoxelshader.h"
+#include <vtkEncodedGradientShader.h>
 
 namespace udg {
 
@@ -153,6 +155,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_ambientVoxelShader = new AmbientVoxelShader();
     m_volumeRayCastFunctionFx2->SetVoxelShader( m_ambientVoxelShader );
     m_ambientVoxelShader->setData( m_data );
+    m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
+    m_directIlluminationVoxelShader->setData( m_data );
 
 
 
@@ -295,6 +299,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_volumeRayCastFunctionFx->Delete();
     m_volumeRayCastFunctionFx2->Delete();
     delete m_ambientVoxelShader;
+    delete m_directIlluminationVoxelShader;
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -313,6 +318,18 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
 void OptimalViewpointVolume::setShade( bool on )
 {
     on ? m_volumeProperty->ShadeOn() : m_volumeProperty->ShadeOff();
+    if (on) {
+        m_volumeRayCastFunctionFx2->SetVoxelShader( m_directIlluminationVoxelShader );
+        m_directIlluminationVoxelShader->setEncodedNormals( m_mainMapper->GetGradientEstimator()->GetEncodedNormals() );
+        vtkEncodedGradientShader *gradientShader = m_mainMapper->GetGradientShader();
+        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_mainVolume ),
+                                                                  gradientShader->GetGreenDiffuseShadingTable( m_mainVolume ),
+                                                                  gradientShader->GetBlueDiffuseShadingTable( m_mainVolume ) );
+        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_mainVolume ),
+                                                                   gradientShader->GetGreenSpecularShadingTable( m_mainVolume ),
+                                                                   gradientShader->GetBlueSpecularShadingTable( m_mainVolume ) );
+    }
+    else m_volumeRayCastFunctionFx2->SetVoxelShader( m_ambientVoxelShader );
 }
 
 void OptimalViewpointVolume::setImageSampleDistance( double imageSampleDistance )
@@ -347,6 +364,7 @@ void OptimalViewpointVolume::setTransferFunction( const TransferFunction & trans
     m_volumeProperty->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_volumeProperty->SetColor( transferFunction.getColorTransferFunction() );
     m_ambientVoxelShader->setTransferFunction( transferFunction );
+    m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
 
     m_transferFunction = transferFunction;
 }

@@ -13,8 +13,7 @@ namespace udg {
 /**
  * És un voxel shader que pinta el volum amb il·luminació ambient.
  */
-class AmbientVoxelShader : public VoxelShader
-{
+class AmbientVoxelShader : public VoxelShader {
 
 public:
 
@@ -27,7 +26,7 @@ public:
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual QColor shade( int offset, const QColor &baseColor = Qt::white ) const;
 
-private:
+protected:
 
     TransferFunction m_transferFunction;
 
