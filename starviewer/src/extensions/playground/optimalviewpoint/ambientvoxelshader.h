@@ -21,10 +21,11 @@ public:
     AmbientVoxelShader();
     virtual ~AmbientVoxelShader();
 
+    /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual QColor shade( int offset ) const;
+    virtual QColor shade( int offset, const QColor &baseColor = Qt::white ) const;
 
 private:
 

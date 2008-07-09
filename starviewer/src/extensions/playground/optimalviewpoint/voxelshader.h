@@ -2,7 +2,7 @@
 #define UDGVOXELSHADER_H
 
 
-class QColor;
+#include <QColor>
 
 
 namespace udg {
@@ -18,19 +18,15 @@ public:
     VoxelShader();
     virtual ~VoxelShader();
 
-    /// Assigna el volum de dades que es farà servir.
+    /// Assigna el volum de dades.
     void setData( const unsigned char *data );
-    void setColorTable( const float *colorTable );
-    void setOpacityTable( const float *opacityTable );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual QColor shade( int offset ) const = 0;
+    virtual QColor shade( int offset, const QColor &baseColor = Qt::white ) const = 0;
 
 protected:
 
     const unsigned char *m_data;
-    const float *m_colorTable;
-    const float *m_opacityTable;
 
 };
 

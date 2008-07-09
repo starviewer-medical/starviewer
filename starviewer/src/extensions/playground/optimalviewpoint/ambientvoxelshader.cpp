@@ -1,7 +1,5 @@
 #include "ambientvoxelshader.h"
 
-#include <QColor>
-
 
 namespace udg {
 
@@ -23,15 +21,13 @@ void AmbientVoxelShader::setTransferFunction( const TransferFunction &transferFu
 }
 
 
-QColor AmbientVoxelShader::shade( int offset ) const
+QColor AmbientVoxelShader::shade( int offset, const QColor &baseColor ) const
 {
-    Q_CHECK_PTR( m_data );
-    Q_CHECK_PTR( m_colorTable );
-    Q_CHECK_PTR( m_opacityTable );
+    Q_UNUSED( baseColor );
 
-    unsigned char value = m_data[offset], value3 = value * 3;
-    //return QColor::fromRgbF( m_colorTable[value3], m_colorTable[value3+1], m_colorTable[value3+2], m_opacityTable[value] );
-    return m_transferFunction.get( value );
+    Q_CHECK_PTR( m_data );
+
+    return m_transferFunction.get( m_data[offset] );
 }
 
 
