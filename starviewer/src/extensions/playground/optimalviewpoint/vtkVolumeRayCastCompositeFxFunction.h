@@ -40,7 +40,7 @@ public:
     float GetZeroOpacityThreshold( vtkVolume *volume );
     //ETX
 
-    void SetVoxelShader( VoxelShader * voxelShader ) { m_voxelShader = voxelShader; m_initializedVoxelShader = false; }
+    void SetVoxelShader( VoxelShader * voxelShader ) { m_voxelShader = voxelShader; }
     VoxelShader * GetVoxelShader() const { return m_voxelShader; }
 
 protected:
@@ -58,7 +58,6 @@ protected:
 
     CompositeMethod m_compositeMethod;
     VoxelShader * m_voxelShader;
-    bool m_initializedVoxelShader;
 
 private:
 

@@ -150,9 +150,9 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
     m_volumeRayCastFunctionFx2 = vtkVolumeRayCastCompositeFxFunction::New();
-    m_voxelShader = new AmbientVoxelShader();
-    m_volumeRayCastFunctionFx2->SetVoxelShader( m_voxelShader );
-    m_voxelShader->setData( m_data );
+    m_ambientVoxelShader = new AmbientVoxelShader();
+    m_volumeRayCastFunctionFx2->SetVoxelShader( m_ambientVoxelShader );
+    m_ambientVoxelShader->setData( m_data );
 
 
 
@@ -294,7 +294,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_volumeRayCastFunctionViewpointSaliency->Delete();
     m_volumeRayCastFunctionFx->Delete();
     m_volumeRayCastFunctionFx2->Delete();
-    delete m_voxelShader;
+    delete m_ambientVoxelShader;
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -346,7 +346,7 @@ void OptimalViewpointVolume::setTransferFunction( const TransferFunction & trans
 {
     m_volumeProperty->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_volumeProperty->SetColor( transferFunction.getColorTransferFunction() );
-    ((AmbientVoxelShader*)m_voxelShader)->setTransferFunction( transferFunction );
+    m_ambientVoxelShader->setTransferFunction( transferFunction );
 
     m_transferFunction = transferFunction;
 }

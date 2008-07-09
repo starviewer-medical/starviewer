@@ -24,7 +24,6 @@ vtkVolumeRayCastCompositeFxFunction::vtkVolumeRayCastCompositeFxFunction()
 {
     m_compositeMethod = ClassifyInterpolate;
     m_voxelShader = 0;
-    m_initializedVoxelShader = false;
 }
 
 
@@ -70,13 +69,6 @@ const char* vtkVolumeRayCastCompositeFxFunction::GetCompositeMethodAsString() co
 void vtkVolumeRayCastCompositeFxFunction::CastRay( vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo )
 {
     Q_CHECK_PTR( m_voxelShader );
-
-    if ( !m_initializedVoxelShader )
-    {
-        m_voxelShader->setColorTable( staticInfo->Volume->GetRGBArray() );
-        m_voxelShader->setOpacityTable( staticInfo->Volume->GetCorrectedScalarOpacityArray() );
-        m_initializedVoxelShader = true;
-    }
 
     void *data = staticInfo->ScalarDataPointer;
 
