@@ -61,13 +61,12 @@ protected:
 
 private:
 
-    static const float REMAINING_OPACITY = 0.02;
+    static const float REMAINING_OPACITY;
 
     vtkVolumeRayCastCompositeFxFunction( const vtkVolumeRayCastCompositeFxFunction& );  // Not implemented.
     void operator=( const vtkVolumeRayCastCompositeFxFunction& );                       // Not implemented.
 
 };
-
 
 }
 
