@@ -169,7 +169,7 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
 
         QColor color;
 
-        for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList[i]->shade( offset, color );
+        for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( offset, color );
 
         float opacity = color.alphaF(), opacityRemainingOpacity = opacity * remainingOpacity;
         accumulatedRedIntensity += opacityRemainingOpacity * color.redF();
