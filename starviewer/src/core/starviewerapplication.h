@@ -9,4 +9,8 @@
 
 const QString StarviewerVersionString("0.6.0");
 
+const QString OrganizationNameString("GILab");
+const QString OrganizationDomainString("starviewer.udg.edu");
+const QString ApplicationNameString("Starviewer");
+
 #endif

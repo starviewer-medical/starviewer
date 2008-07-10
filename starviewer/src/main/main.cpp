@@ -16,6 +16,8 @@
 #include "logging.h"
 #include "extensions.h"
 #include "extensionmediatorfactory.h"
+// definicions globals d'aplicació
+#include "starviewerapplication.h"
 
 void configureLogging()
 {
@@ -97,9 +99,9 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    app.setOrganizationName("GILab");
-    app.setOrganizationDomain("starviewer.udg.edu");
-    app.setApplicationName("Starviewer");
+    app.setOrganizationName( OrganizationNameString );
+    app.setOrganizationDomain( OrganizationDomainString );
+    app.setApplicationName( ApplicationNameString );
 
     // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ).
     // Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
