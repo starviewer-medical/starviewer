@@ -2,7 +2,7 @@
 #define UDGDIRECTILLUMINATIONVOXELSHADER_H
 
 
-#include <ambientvoxelshader.h>
+#include "ambientvoxelshader.h"
 
 
 namespace udg {

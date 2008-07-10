@@ -19,6 +19,7 @@ namespace udg {
 vtkCxxRevisionMacro( vtkVolumeRayCastCompositeFxFunction, "$Revision: 1.0 $" );
 vtkStandardNewMacro( vtkVolumeRayCastCompositeFxFunction );
 
+const float vtkVolumeRayCastCompositeFxFunction::REMAINING_OPACITY = 0.02f;
 
 vtkVolumeRayCastCompositeFxFunction::vtkVolumeRayCastCompositeFxFunction()
 {
