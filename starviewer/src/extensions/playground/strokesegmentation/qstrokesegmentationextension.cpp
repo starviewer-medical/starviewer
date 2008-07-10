@@ -835,7 +835,7 @@ double QStrokeSegmentationExtension::updateMaskVolume()
 
 void QStrokeSegmentationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-StrokeSegmentation");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-StrokeSegmentation");
 
     m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
@@ -846,7 +846,7 @@ void QStrokeSegmentationExtension::readSettings()
 
 void QStrokeSegmentationExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-StrokeSegmentation");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-StrokeSegmentation");
 
     settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
