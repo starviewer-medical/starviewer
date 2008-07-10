@@ -68,7 +68,7 @@ public:
     double* getPolylineBounds();
 
     /// Calcula l'area del poligon
-    double computeArea( int view );
+    double computeArea( int view , const double * spacing = NULL );
     
     ///calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );

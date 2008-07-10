@@ -14,6 +14,7 @@
 #include <vtkProperty2D.h>
 #include <vtkActor2D.h>
 #include <vtkLine.h>
+
 namespace udg {
 
 DrawerLine::DrawerLine(QObject *parent) : DrawerPrimitive(parent), m_vtkLineSource(0), m_vtkActor(0), m_vtkMapper(0)
@@ -186,9 +187,29 @@ double *DrawerLine::getLeftPoint( int view )
     return point;
 }
 
-double DrawerLine::computeDistance()
+double DrawerLine::computeDistance( double * spacing )
 {
-    return ( MathTools::getDistance3D( m_firstPoint, m_secondPoint ) );
+    double distance;
+    if ( spacing == NULL )
+    {
+        distance = MathTools::getDistance3D( m_firstPoint, m_secondPoint );
+    }
+    else
+    {
+        double firstPoint[3];
+        double secondPoint[3];
+
+        firstPoint[0] = MathTools::trunc( m_firstPoint[0]/spacing[0] );
+        firstPoint[1] = MathTools::trunc( m_firstPoint[1]/spacing[1] );
+        firstPoint[2] = MathTools::trunc( m_firstPoint[2]/spacing[2] );
+
+        secondPoint[0] = MathTools::trunc( m_secondPoint[0]/spacing[0] );
+        secondPoint[1] = MathTools::trunc( m_secondPoint[1]/spacing[1] );
+        secondPoint[2] = MathTools::trunc( m_secondPoint[2]/spacing[2] );
+
+        distance = MathTools::getDistance3D( firstPoint, secondPoint );
+    }
+    return distance;
 }
 
 double DrawerLine::getDistanceToPoint( double *point3D )
