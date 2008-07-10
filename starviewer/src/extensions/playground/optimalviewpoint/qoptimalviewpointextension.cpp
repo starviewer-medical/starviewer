@@ -23,6 +23,7 @@
 #include "vector3.h"
 #include <QTextStream>
 #include "optimalviewpointvolume.h"
+#include <QTime>
 
 
 namespace udg {
@@ -224,7 +225,12 @@ void QOptimalViewpointExtension::execute()
     m_method->updatePlanes();
     std::cout << "OVD: update planes" << std::endl;
 //     m_viewer->render();
+    QTime t;
+    t.start();
     m_viewerWidget->render();
+    int elapsed = t.elapsed();
+    DEBUG_LOG( QString( "Temps de render: %1 s" ).arg( elapsed / 1000.0 ) );
+    INFO_LOG( QString( "Temps de render: %1 s" ).arg( elapsed / 1000.0 ) );
 
     if ( m_method->resultsChanged() )
     {
