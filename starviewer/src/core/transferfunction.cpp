@@ -51,61 +51,6 @@ void TransferFunction::setName( const QString & name )
     m_name = name;
 }
 
-QColor TransferFunction::get( double x ) const
-{
-    QColor rgba = getColor( x );
-    rgba.setAlphaF( getOpacity( x ) );
-    return rgba;
-}
-
-QColor TransferFunction::getColor( double x ) const
-{
-    if ( m_color.isEmpty() )
-        return Qt::black;
-
-    if ( m_color.contains( x ) )
-        return m_color[x];
-
-    if ( x < m_color.begin().key() )
-        return m_color.begin().value();
-
-    if ( x > ( m_color.end() - 1 ).key() )
-        return m_color.end().value();
-
-    QMap< double, QColor >::const_iterator a, b;
-    b = m_color.lowerBound( x );
-    a = b - 1;
-    double alpha = ( x - a.key() ) / ( b.key() - a.key() );
-    QColor color;
-    color.setRedF( a.value().redF() + alpha * ( b.value().redF() - a.value().redF() ) );
-    color.setGreenF( a.value().greenF() + alpha * ( b.value().greenF() - a.value().greenF() ) );
-    color.setBlueF( a.value().blueF() + alpha * ( b.value().blueF() - a.value().blueF() ) );
-
-    return color;
-}
-
-double TransferFunction::getOpacity( double x ) const
-{
-    if ( m_opacity.isEmpty() )
-        return 0.0;
-
-    if ( m_opacity.contains( x ) )
-        return m_opacity[x];
-
-    if ( x < m_opacity.begin().key() )
-        return m_opacity.begin().value();
-
-    if ( x > ( m_opacity.end() - 1 ).key() )
-        return m_opacity.end().value();
-
-    QMap< double, double >::const_iterator a, b;
-    b = m_opacity.lowerBound( x );
-    a = b - 1;
-    double alpha = ( x - a.key() ) / ( b.key() - a.key() );
-
-    return a.value() + alpha * ( b.value() - a.value() );
-}
-
 void TransferFunction::addPoint( double x, const QColor & rgba )
 {
     m_color[x] = rgba;
