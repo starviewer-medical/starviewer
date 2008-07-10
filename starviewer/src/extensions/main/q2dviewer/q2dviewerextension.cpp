@@ -73,6 +73,16 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
+
+    //TODO "Xapussa" del ticket #599 per tal de crear el perfil per CR o MG
+    if( m_profile == "ProfileOnlyCR")
+    {
+        m_slicingToolButton->defaultAction()->toggle();
+        m_zoomToolButton->defaultAction()->trigger();
+        m_flipVerticalToolButton->setVisible(true);
+        m_flipHorizontalToolButton->setVisible(true);
+        m_cineController->setVisible(false);
+    }
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
@@ -777,9 +787,7 @@ void Q2DViewerExtension::updateDICOMInformationButton( int view )
 void Q2DViewerExtension::readSettings()
 {
     QSettings settings;
-    settings.beginGroup("Starviewer-App-2DViewer");
-
-    settings.endGroup();
+    m_profile = settings.value("Starviewer-App-2DViewer/profile").toString();
 }
 
 void Q2DViewerExtension::writeSettings()
