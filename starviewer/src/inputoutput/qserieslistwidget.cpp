@@ -27,6 +27,9 @@ QSeriesListWidget::QSeriesListWidget(QWidget *parent )
     m_seriesListWidget->setIconSize( size );
 
     createConnections();
+
+    m_nonDicomImageSeriesList << "KO" << "PR" << "SR";
+    m_lastInsertedImageRow = -1;
 }
 
 void QSeriesListWidget::createConnections()
@@ -38,7 +41,7 @@ void QSeriesListWidget::createConnections()
 void QSeriesListWidget::insertSeries( DICOMSeries *serie )
 {
     QString text,num;
-    QListWidgetItem *item = new QListWidgetItem( m_seriesListWidget );
+    QListWidgetItem *item = new QListWidgetItem();
     QString statusTip;
 
     text = tr( " Series " ) + serie->getSeriesNumber();
@@ -72,6 +75,18 @@ void QSeriesListWidget::insertSeries( DICOMSeries *serie )
     item->setStatusTip(serie->getSeriesUID());
 
     m_HashSeriesStudy[serie->getSeriesUID()] = serie->getStudyUID();//Guardem per la sèrie a quin estudi pertany
+
+    //TODO s'hauria de millorar el sistema d'ordenació de les sèries
+    //Comprovem la posició que hem d'inserir la sèrie, si és un DICOM Non-Image (no és una imatge) val final, sinó va després de la última imatge inserida
+    if ( m_nonDicomImageSeriesList.contains( serie->getSeriesModality() ) )
+    {
+        m_seriesListWidget->addItem( item );
+    }
+    else
+    {//és una imatge
+        m_lastInsertedImageRow++;
+        m_seriesListWidget->insertItem( m_lastInsertedImageRow , item );
+    }
 }
 
 void QSeriesListWidget::setCurrentSeries( const QString &seriesUID )
@@ -116,6 +131,8 @@ void QSeriesListWidget::clear()
 {
     m_seriesListWidget->clear();
     m_HashSeriesStudy.clear();
+
+    m_lastInsertedImageRow = -1;//Indiquem que la última imatge insertada està a la posició 0 perquè hem un clear
 }
 
 QSeriesListWidget::~QSeriesListWidget()

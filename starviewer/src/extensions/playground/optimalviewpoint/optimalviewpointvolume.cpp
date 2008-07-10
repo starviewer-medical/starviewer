@@ -947,15 +947,16 @@ signed char OptimalViewpointVolume::rescale( int bins )
 // synchronized? potser no, si els threads es reparteixen el model sense interseccions
 void OptimalViewpointVolume::handleObscurances( int rayId, int offset )
 {
+    Q_UNUSED(rayId);
+    Q_UNUSED(offset);
 //     emit visited( rayId, *(m_labeledData + offset) );
 }
 
-
 void OptimalViewpointVolume::endRayObscurances( int rayId )
 {
+    Q_UNUSED(rayId);
 //     emit rayEnd( rayId );
 }
-
 
 // versió amb threads (deprecated)
 void OptimalViewpointVolume::computeObscurances()

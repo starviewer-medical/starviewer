@@ -27,7 +27,7 @@ class ToolManager;
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QVSIReconstructionExtension : public QWidget , private ::Ui::QVSIReconstructionExtensionBase {
+class QVSIReconstructionExtension : public QWidget , private Ui::QVSIReconstructionExtensionBase {
 Q_OBJECT
 public:
     QVSIReconstructionExtension( QWidget *parent = 0 );
@@ -47,6 +47,7 @@ private:
     /// Guarda i llegeix les característiques
     void readSettings();
     void writeSettings();
+    bool findProbableSeries( );
 
     void createColorMap( );
     void createColorMap2( );
@@ -65,6 +66,7 @@ private slots:
 
     ///aplica un filtre al mapa
     void applyFilterMapImage( );
+    void applyFilterMapImage2( );
 
     /// gestiona els events del botó esquerre
     void leftButtonEventHandler();

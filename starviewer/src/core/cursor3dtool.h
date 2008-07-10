@@ -32,7 +32,7 @@ Q_OBJECT
 public:
     /// estats de la tool
     enum { NONE , CALCULATING };
-    
+
     Cursor3DTool( QViewer *viewer, QObject *parent = 0 );
 
     ~Cursor3DTool();
@@ -61,14 +61,17 @@ private slots:
     /// Actualitza la posició de la tool
     void updatePosition();
 
+    /// Amaga el crossHair al canviar de llesca
+    void hideCrossHair();
+
 private:
     /// Projecta el pla de referència sobre el pla de localitzador
     void projectPoint();
 
-    /// Inicialitza la posició de la tool 
+    /// Inicialitza la posició de la tool
     void initializePosition();
 
-    /// Desactiva la tool 
+    /// Desactiva la tool
     void removePosition();
 
 private:

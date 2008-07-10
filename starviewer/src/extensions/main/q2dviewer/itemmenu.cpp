@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "itemmenu.h"
 #include <QEvent>
+#include <QApplication>
+#include <QPalette>
 
 namespace udg {
 
@@ -14,6 +16,9 @@ ItemMenu::ItemMenu( QWidget * parent )
 {
     setAutoFillBackground( true );
     m_fixed = false;
+
+    QPalette systemPalette( qApp->palette() );
+    setPalette( systemPalette );
 }
 
 ItemMenu::~ItemMenu()
@@ -45,11 +50,8 @@ bool ItemMenu::event( QEvent * event )
     }
     else if ( event->type() == QEvent::Leave && !m_fixed )
     {
-        QPalette palette = this->palette();
-        QBrush selected( QColor(239, 243, 247, 255) );
-        selected.setStyle( Qt::SolidPattern );
-        palette.setBrush( QPalette::Active, QPalette::Window, selected );
-        setPalette( palette );
+        QPalette systemPalette( qApp->palette() );
+        setPalette( systemPalette );
         return true;
     }
     else
@@ -76,11 +78,8 @@ void ItemMenu::setSelected( bool option )
     }
     else
     {
-        QPalette palette = this->palette();
-        QBrush selected( QColor(239, 243, 247, 255) );
-        selected.setStyle( Qt::SolidPattern );
-        palette.setBrush( QPalette::Active, QPalette::Window, selected );
-        setPalette( palette );
+        QPalette systemPalette( qApp->palette() );
+        setPalette( systemPalette );
     }
 }
 

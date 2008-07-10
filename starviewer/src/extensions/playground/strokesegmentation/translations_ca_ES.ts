@@ -91,47 +91,32 @@
 <context>
     <name>udg::QStrokeSegmentationExtension</name>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="98"/>
-        <source>Voxel Information</source>
-        <translation>Informació del voxel</translation>
-    </message>
-    <message>
-        <location filename="qstrokesegmentationextension.cpp" line="99"/>
-        <source>Ctrl+I</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qstrokesegmentationextension.cpp" line="100"/>
-        <source>Enable voxel information over cursor</source>
-        <translation>Habilitar l&apos;informació del voxel sota el cursor</translation>
-    </message>
-    <message>
-        <location filename="qstrokesegmentationextension.cpp" line="108"/>
+        <location filename="qstrokesegmentationextension.cpp" line="85"/>
         <source>Rotate Clockwise</source>
         <translation>Rotació a la dreta</translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="110"/>
+        <location filename="qstrokesegmentationextension.cpp" line="87"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rotació de la imatge en el sentit de les agulles del rellotge</translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="135"/>
+        <location filename="qstrokesegmentationextension.cpp" line="112"/>
         <source>EditorTool</source>
         <translation>Eina d&apos;edició</translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="136"/>
+        <location filename="qstrokesegmentationextension.cpp" line="113"/>
         <source>Enable/Disable editor tool</source>
         <translation>Habilitar/Deshabilitar l&apos;eina d&apos;edició</translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="245"/>
+        <location filename="qstrokesegmentationextension.cpp" line="207"/>
         <source>StarViewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="245"/>
+        <location filename="qstrokesegmentationextension.cpp" line="207"/>
         <source>ERROR: no hi ha definida llavor o m&#xc3;&#xa0;scara</source>
         <translation>ERROR: no hi ha definida cap llavor o màscara</translation>
     </message>

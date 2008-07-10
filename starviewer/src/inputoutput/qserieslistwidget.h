@@ -10,6 +10,7 @@
 #include "ui_qserieslistwidgetbase.h"
 #include <QWidget>
 #include <QHash>
+#include <QStringList>
 
 namespace udg {
 
@@ -67,8 +68,10 @@ signals:
 
 private:
 
-    QString m_className;///<Nom de la classe
     QHash<QString, QString> m_HashSeriesStudy;///Guardem per cada sèrie a quin estudi pertany
+    QStringList m_nonDicomImageSeriesList;//modalitats de sèries que no són images, com (KO, PR, SR) 
+    int m_lastInsertedImageRow; //indica a quina ha estat la última fila que hem inseritat una sèrie que era una imatge
+
 
     /// crea les connexions dels signals i slots
     void createConnections();

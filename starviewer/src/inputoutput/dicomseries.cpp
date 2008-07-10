@@ -14,7 +14,7 @@ DICOMSeries::DICOMSeries()
 DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
 {
     const char *text;
-    string path;
+    QString path;
 
     //set the series number
     seriesDataset->findAndGetString( DCM_SeriesNumber , text , false );
@@ -26,15 +26,14 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
 
     //set series description
     seriesDataset->findAndGetString( DCM_SeriesDescription , text , false );
-    if ( text != NULL ) setSeriesDescription( text );
+    if ( text != NULL ) setSeriesDescription( QString::fromLatin1( text ) );
 
     //set Study UID
     seriesDataset->findAndGetString( DCM_StudyInstanceUID , text , false );
     if ( text != NULL )
     {
         setStudyUID( text );
-        path = text;
-        path += "/";
+        path = QString(text) + "/";
     }
     //set series modality
     seriesDataset->findAndGetString( DCM_Modality , text , false );
@@ -49,18 +48,17 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
     if ( text != NULL )
     {
         setSeriesUID( text );
-        path.append( text );
-        path.append( "/" );
+        path += QString(text) + "/";
     }
 
     seriesDataset->findAndGetString( DCM_BodyPartExamined , text , false );
     if ( text != NULL ) setBodyPartExaminated( text );
 
     seriesDataset->findAndGetString(DCM_ProtocolName , text , false );
-    if ( text != NULL ) setProtocolName( text );
+    if ( text != NULL ) setProtocolName( QString::fromLatin1( text ) );
 
     seriesDataset->findAndGetString( DCM_OperatorsName , text , false );
-    if ( text != NULL ) setOperatorName( text );
+    if ( text != NULL ) setOperatorName( QString::fromLatin1( text ) );
 
     seriesDataset->findAndGetString( DCM_RetrieveAETitle , text , false );
     if ( text != NULL ) setPacsAETitle( text );

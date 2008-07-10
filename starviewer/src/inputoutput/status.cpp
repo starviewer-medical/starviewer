@@ -37,37 +37,6 @@ Status Status::setStatus( const OFCondition status )
 	m_success = status.good();
 	m_numberError = status.code();
     
-    switch( m_numberError )
-    {
-        case 0:
-            m_errorType = NoError;
-        break;
-            
-        case 1000:
-            m_errorType = UnknowError;
-        break;
-            
-        case 1120:
-            m_errorType = NoConnectionError;
-        break;
-        
-        case 1121:
-            m_errorType = NoMaskError;
-        break;
-            
-        case 1127:
-            m_errorType = MaskInsertTagError;
-        break;
-            
-        case 1200:
-            m_errorType = CanNotConnectError;
-        break;
-        
-        case 1201:
-            m_errorType = UserCancellation;
-        break;
-    }
-
     return *this;
 }
 

@@ -97,8 +97,8 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    app.setOrganizationName("GGG");
-    app.setOrganizationDomain("trueta.udg.cat");
+    app.setOrganizationName("GILab");
+    app.setOrganizationDomain("starviewer.udg.edu");
     app.setApplicationName("Starviewer");
 
     // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ).
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     delete splash;
 
     int returnValue = app.exec();
-    
+
     STAT_LOG("Es tanca l'aplicació");
 
     return returnValue;

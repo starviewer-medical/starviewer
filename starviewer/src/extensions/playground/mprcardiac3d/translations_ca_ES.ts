@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<defaultcodec></defaultcodec>
 <context>
     <name>QMPRCardiac3DExtensionBase</name>
     <message>
@@ -177,7 +176,7 @@
     <message>
         <location filename="qmprcardiac3dextension.cpp" line="115"/>
         <source>Space</source>
-        <translation type="unfinished">Espai</translation>
+        <translation>Espai</translation>
     </message>
 </context>
 </TS>

@@ -389,7 +389,6 @@ void Q2DViewerPresentationStateAttacher::applyVOILUT()
 
     // mirem totes les VOI LUT possibles que hi hagi per cadascuna de les imatges/frames
     int images = m_attachedDatasetsList.size();
-    int sliceNumber = 0;
     for( int i = 0; i < images; i++ )
     {
         DEBUG_LOG( QString("Attaching image #%1").arg( i ) );

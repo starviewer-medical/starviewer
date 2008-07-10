@@ -287,7 +287,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
     m_2DView->resetView( Q2DViewer::Axial );
-    m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
+    m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
     m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
 
@@ -650,7 +650,7 @@ void QEdemaSegmentationExtension::setEditorPoint(  )
                     break;
                 }
             }
-            double volume = this->updateMaskVolume();
+            this->updateMaskVolume();
             m_resultsLineEdit->clear();
             m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
             m_edemaVolumeLineEdit->clear();

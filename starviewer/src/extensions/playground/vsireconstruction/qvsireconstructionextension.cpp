@@ -11,6 +11,8 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "series.h"
+#include "study.h"
+#include "patient.h"
 #include "toolmanager.h"
 #include "patientbrowsermenu.h"
 
@@ -53,6 +55,10 @@ QVSIReconstructionExtension::QVSIReconstructionExtension( QWidget *parent )
 
 QVSIReconstructionExtension::~QVSIReconstructionExtension()
 {
+
+    delete m_toolManager;
+    delete m_rotateClockWiseAction;
+
     writeSettings();
 }
 
@@ -104,7 +110,7 @@ void QVSIReconstructionExtension::createActions()
     m_windowLevelToolButton->defaultAction()->trigger();
 
     // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
-    //m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
+    m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
 
     // registrem al manager les tools que van amb el viewer principal
     //initializeDefaultTools( m_selectedViewer->getViewer() );
@@ -133,6 +139,7 @@ void QVSIReconstructionExtension::createConnections()
   connect( m_chooseSEPostPushButton, SIGNAL( clicked() ), SLOT( contextMenuSEPostRelease() ) );
   connect( m_computeVSIPushButton, SIGNAL( clicked() ), SLOT( computeVSI() ) );
   connect( m_filterVSIPushButton, SIGNAL( clicked() ), SLOT( applyFilterMapImage() ) );
+  connect( m_filterCBVPushButton, SIGNAL( clicked() ), SLOT( applyFilterMapImage2() ) );
   //connect( m_2DView, SIGNAL( windowLevelChanged( double,double ) ), SLOT( createColorMap( double, double ) ) );
 }
 
@@ -141,20 +148,39 @@ void QVSIReconstructionExtension::setInput( Volume *input )
     m_mainVolume = input;
 
     //Posem els nivells de dins i fora de la m�cara els valors l�its del w/l per tal que es vegi correcte
-    double wl[2];
-    m_2DView->getDefaultWindowLevel( wl );
-    m_insideValue  = (int) wl[0];
-    m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
+//     double wl[2];
+//     m_2DView->getDefaultWindowLevel( wl );
+//     m_insideValue  = (int) wl[0];
+//     m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
 
     std::cout<<"Creating map..."<<std::endl;
     //this->computeMTT();
     //this->computeCBV();
     std::cout<<"Creating transfer function..."<<std::endl;
-    this->createColorMap( );
+    //this->createColorMap( );
     std::cout<<"Rendering map..."<<std::endl;
-    m_2DView->render();
+    //m_2DView->render();
     std::cout<<"Rendering image..."<<std::endl;
-    m_2DView_2->render();
+    //m_2DView_2->render();
+    /*m_2DView->setInput( m_mainVolume );
+    m_2DView->resetView( Q2DViewer::Axial );
+    m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
+    m_2DView->resetWindowLevelToDefault();
+
+    m_2DView_2->setInput( m_mainVolume );
+    m_2DView_2->resetView( Q2DViewer::Axial );
+    m_2DView_2->removeAnnotation(Q2DViewer::AllAnnotation);
+    m_2DView_2->resetWindowLevelToDefault();
+
+    m_2DView_4->setInput( m_mainVolume );
+    m_2DView_4->resetView( Q2DViewer::Axial );
+    m_2DView_4->removeAnnotation(Q2DViewer::AllAnnotation);
+    m_2DView_4->resetWindowLevelToDefault();*/
+    if (this->findProbableSeries( ) )
+    {
+        std::cout<<"Tot ok!!"<<std::endl;
+        //this->computeVSI();
+    }
     std::cout<<"Done!!"<<std::endl;
 
 
@@ -907,11 +933,11 @@ void QVSIReconstructionExtension::computeCBV( )
     m_mapVolume->setImages( m_mainVolume->getPhaseVolume(0)->getImages() );
     m_mapVolume->setData(mapImage);
 
-    typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
+/*    typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
     writerType::Pointer mapWriter = writerType::New();
     mapWriter->SetFileName("VSImap.mhd");
     mapWriter->SetInput(mapImage);
-    mapWriter->Update();
+    mapWriter->Update();*/
     std::cout<<"End new map "<<std::endl;
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
@@ -941,6 +967,7 @@ void QVSIReconstructionExtension::computeVSI( )
     if(!m_DSCVolume || !m_SEPreVolume || !m_SEPostVolume)
     {
         QMessageBox::information(0,tr("VSI Extension"), tr("Some of the images have not been introduced") );
+        std::cout<<m_DSCVolume<<"//"<<m_SEPreVolume<<"//"<<m_SEPostVolume<<std::endl;
         return;
     }
     std::cout<<"Init computeVSI"<<std::endl;
@@ -973,10 +1000,6 @@ void QVSIReconstructionExtension::computeVSI( )
     Volume::ItkImageType::Pointer maxImage = Volume::ItkImageType::New();
     maxImage->SetRegions( region );
     maxImage->Allocate();
-
-    Volume::ItkImageType::Pointer minImage = Volume::ItkImageType::New();
-    minImage->SetRegions( region );
-    minImage->Allocate();
 
     Volume::ItkImageType::Pointer mapImage2 = Volume::ItkImageType::New();
     mapImage2->SetRegions( region );
@@ -1031,8 +1054,8 @@ void QVSIReconstructionExtension::computeVSI( )
     Iterator initialMapIter2( mapImage2, mapImage2->GetBufferedRegion() );
     Iterator maxIter( maxImage, maxImage->GetBufferedRegion() );
     Iterator initialMaxIter( maxImage, maxImage->GetBufferedRegion() );
-    Iterator minIter( minImage, minImage->GetBufferedRegion() );
-    Iterator initialMinIter( minImage, minImage->GetBufferedRegion() );
+//     Iterator minIter( minImage, minImage->GetBufferedRegion() );
+//     Iterator initialMinIter( minImage, minImage->GetBufferedRegion() );
 
     typedef itk::ImageRegionIterator<DoubleImageType> DoubleIterator;
     DoubleIterator sbIter( sbImage, sbImage->GetBufferedRegion() );
@@ -1089,73 +1112,59 @@ void QVSIReconstructionExtension::computeVSI( )
     std::cout<<"Init recorregut: ["<<size[0]<<", "<<size[1]<<", "<<Nbaseline<<" ("<<pend<<"), "<<kend<<"]"<<std::endl;
     DSCiter.GoToBegin();
     sbIter.GoToBegin();
+    Volume::ItkImageType::IndexType DSCslicestart;
+    DSCslicestart[0]=0;
+    DSCslicestart[1]=0;
     for (k=0;k<kend;k++)
     {
         initialsbIter = sbIter;
-        for (p=0;p<pend;p++)
-        {
-            if(p<Nbaseline)
-            {
-                for (j=0;j<size[1];j++)
-                {
-                    for (i=0;i<size[0];i++)
-                    {
-                        value = DSCiter.Get();
-                        valuesb = sbIter.Get();
-                        //Calculem la mitjana del Nbaseline valors
-                        sbIter.Set(valuesb + ((double)value)/Nbaseline);
-
-//                         if((k==5)&&(p==(Nbaseline-1))&& value>600)
-//                         {
-//                             std::cout<<sbIter.Get()<<" ("<<sbIter.GetIndex()<<")";
-//                         }
-
-                        ++DSCiter;
-                        ++sbIter;
-                    }
-                }
-                if(p!=Nbaseline-1)
-                {
-                    sbIter=initialsbIter;
-                }
-            }
-            else
-            {
-                //TODO: segur que hi ha alguna manera millor de fer-ho!!!
-                //Diria que es pot fer amb iterators with index
-                for (j=0;j<size[1];j++)
-                {
-                    for (i=0;i<size[0];i++)
-                    {
-                        ++DSCiter;
-                    }
-                }
-            }
-        }
-    }
-
-    std::cout<<"Init recorregut max: "<<std::endl;
-    std::ofstream fout("DSC.dat", ios::out);
-    DSCiter.GoToBegin();
-    maxIter.GoToBegin();
-    minIter.GoToBegin();
-    for (k=0;k<kend;k++)
-    {
-        initialMaxIter = maxIter;
-        initialMinIter = minIter;
-        for (p=0;p<pend;p++)
+        DSCslicestart[2]=k*pend;
+        DSCiter.SetIndex(DSCslicestart);
+        for (p=0;p<Nbaseline;p++)
         {
             for (j=0;j<size[1];j++)
             {
                 for (i=0;i<size[0];i++)
                 {
                     value = DSCiter.Get();
+                    valuesb = sbIter.Get();
+                    //Calculem la mitjana del Nbaseline valors
+                    sbIter.Set(valuesb + ((double)value)/Nbaseline);
+
+                    ++DSCiter;
+                    ++sbIter;
+                }
+            }
+            if(p!=Nbaseline-1)
+            {
+                sbIter=initialsbIter;
+            }
+        }
+    }
+
+    std::cout<<"Init recorregut max: "<<pend<<std::endl;
+    DSCiter.GoToBegin();
+    maxIter.GoToBegin();
+    for (k=0;k<kend;k++)
+    {
+        initialMaxIter = maxIter;
+        DSCslicestart[2]=k*pend;
+        DSCiter.SetIndex(DSCslicestart);
+//        for (p=0;p<pend;p++)
+        for (p=0;p<1;p++)//Mirem només la primera llesca (encara no hi ha la baixada de senyal) per tal de descartar el voxel de fora el cap.
+        {
+            for (j=0;j<size[1];j++)
+            {
+                for (i=0;i<size[0];i++)
+                {
+//                     maxIter.Set( DSCiter.Get());
+//                     if(maxIter.Get()>200) std::cout<<".";
+
+                    value = DSCiter.Get();
 
                     if(p==0)
                     {
                         maxIter.Set(value);
-                        minIter.Set(value);
-
                     }
                     else
                     {
@@ -1163,29 +1172,24 @@ void QVSIReconstructionExtension::computeVSI( )
                         {
                             maxIter.Set(value);
                         }
-                        if(value<minIter.Get())
-                        {
-                            minIter.Set(value);
-                        }
                     }
-//                     if((i==51)&&(j==65)&&(k==6))
-//                     {
-//                         fout<<value<<std::endl;
-//                     }
 
                     ++DSCiter;
                     ++maxIter;
-                    ++minIter;
                 }
             }
-            if(p!=pend-1)
+//            std::cout<<std::endl;
+//            if(p!=pend-1)
+            if(p!=0)//en aquest cas mai
             {
                 maxIter=initialMaxIter;
-                minIter=initialMinIter;
             }
         }
     }
-    fout.close();
+//     writerType::Pointer mapWriter5 = writerType::New();
+//     mapWriter5->SetFileName("maxImage.mhd");
+//     mapWriter5->SetInput(maxImage);
+//     mapWriter5->Update();
 
     /*maxIter.GoToBegin();
     minIter.GoToBegin();
@@ -1220,7 +1224,6 @@ void QVSIReconstructionExtension::computeVSI( )
     rCBVIter.GoToBegin();
     mapIter2.GoToBegin();
     maxIter.GoToBegin();
-    minIter.GoToBegin();
     m_mapMax=0;
     m_mapMin=10000;
     m_maxValue=0;
@@ -1232,7 +1235,6 @@ void QVSIReconstructionExtension::computeVSI( )
         initialrCBVIter=rCBVIter;
         initialMapIter2 = mapIter2;
         initialMaxIter = maxIter;
-        initialMinIter = minIter;
         for (p=0;p<pend;p++)
         {
             for (j=0;j<size[1];j++)
@@ -1303,7 +1305,6 @@ void QVSIReconstructionExtension::computeVSI( )
                     ++sbIter;
                     ++mapIter2;
                     ++maxIter;
-                    ++minIter;
                     ++rCBVIter;
                 }
             }
@@ -1313,11 +1314,11 @@ void QVSIReconstructionExtension::computeVSI( )
                 mapIter2=initialMapIter2;
                 rCBVIter=initialrCBVIter;
                 maxIter=initialMaxIter;
-                minIter=initialMinIter;
             }
         }
     }
     std::cout<<"ContCBV= "<<contCBV2<<std::endl;
+    std::cout<<"max value:"<<m_maxValue<<std::endl;
 
 //     writerType::Pointer mapWriter5 = writerType::New();
 //     mapWriter5->SetFileName("rCBVImage.mhd");
@@ -1465,6 +1466,8 @@ void QVSIReconstructionExtension::computeVSI( )
         initialMapIter = mapIter;
         initialpreGEIter = preGEIter;
         initialpostGEIter = postGEIter;
+/*        DSCslicestart[2]=k;
+        DSCiter.SetIndex(DSCslicestart);*/
         for (p=0;p<pend;p++)
         {
             if(p<(unsigned int)m_SEPreVolume->getSeries()->getNumberOfPhases())//per fer les mitjanes entre els mateixos valors que l'SE
@@ -1501,7 +1504,8 @@ void QVSIReconstructionExtension::computeVSI( )
                     }
                 }
 
-            }else{
+            }
+            else{
                 for (j=0;j<size[1];j++)
                 {
                     for (i=0;i<size[0];i++)
@@ -1630,7 +1634,7 @@ void QVSIReconstructionExtension::computeVSI( )
                 else
                 {
                         vsicont0++;
-                    mapIter.Set(0.0);
+                    mapIter.Set(0);
                 }
 
                 if(mapIter.Get()>m_mapMax)
@@ -1652,12 +1656,10 @@ void QVSIReconstructionExtension::computeVSI( )
             }
         }
     }
-
     std::cout<<"End recorregut 8"<<std::endl;
     std::cout<<"Min:"<<m_mapMin<<" // Max:"<<m_mapMax<<std::endl;
     std::cout<<"Max Value: "<<m_maxValue<<", Min Value: "<<m_minValue<<std::endl;
     std::cout<<"cont: "<<vsicont<<" // cont0: "<<vsicont0<<std::endl;
-
 
     if(m_mapVolume!=0)
     {
@@ -1784,16 +1786,16 @@ void QVSIReconstructionExtension::applyFilterMapImage( )
         }
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         //output->setImages( m_Volume->getImages() );
-        std::cout<<"Init Saving Volume"<<std::endl;
-        typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
-        writerType::Pointer mapWriter3 = writerType::New();
-        mapWriter3->SetFileName("filteredImage.mhd");
-        mapWriter3->SetInput(outcaster->GetOutput() );
-        mapWriter3->Update();
-        writerType::Pointer mapWriter2 = writerType::New();
-        mapWriter2->SetFileName("originalImage.mhd");
-        mapWriter2->SetInput(m_mapVolume->getItkData() );
-        mapWriter2->Update();
+//         std::cout<<"Init Saving Volume"<<std::endl;
+//         typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
+//         writerType::Pointer mapWriter3 = writerType::New();
+//         mapWriter3->SetFileName("filteredImage.mhd");
+//         mapWriter3->SetInput(outcaster->GetOutput() );
+//         mapWriter3->Update();
+//         writerType::Pointer mapWriter2 = writerType::New();
+//         mapWriter2->SetFileName("originalImage.mhd");
+//         mapWriter2->SetInput(m_mapVolume->getItkData() );
+//         mapWriter2->Update();
 
         //auxImage = outcaster->GetOutput();
         if(m_mapVolume!=0)
@@ -1821,6 +1823,122 @@ void QVSIReconstructionExtension::applyFilterMapImage( )
         //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
         std::cout<<"Init Colormap"<<std::endl;
         this->createColorMap( );
+        m_2DView->setSlice( m_sliceViewSlider->value() );
+        QApplication::restoreOverrideCursor();
+        std::cout<<"End Filter Volume"<<std::endl;
+
+    }
+
+}
+
+void QVSIReconstructionExtension::applyFilterMapImage2( )
+{
+    typedef   float           InternalPixelType;
+    typedef itk::Image< InternalPixelType, 3 >  InternalImageType;
+
+    typedef itk::CastImageFilter< Volume::ItkImageType, InternalImageType >                     InputCastingFilterType;
+    typedef itk::CastImageFilter< InternalImageType, Volume::ItkImageType >                      OutputCastingFilterType;
+
+    typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >      CurvatureFlowImageFilterType;
+
+    if(m_mapVolume != 0)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+
+        Volume::ItkImageType::RegionType region;
+        Volume::ItkImageType::IndexType start;
+        start[0]=0;
+        start[1]=0;
+        start[2]=0;
+        std::cout<<"Init Filter Volume"<<std::endl;
+        Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
+        size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+        region.SetSize(size);
+        region.SetIndex(start);
+        Volume::ItkImageType::Pointer auxImage = Volume::ItkImageType::New();
+        auxImage->SetRegions( region );
+        auxImage->Allocate();
+
+
+        InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
+        OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
+        CurvatureFlowImageFilterType::Pointer smoothing = CurvatureFlowImageFilterType::New();
+
+        incaster->SetInput( m_mapVolume2->getItkData() );
+        smoothing->SetInput( incaster->GetOutput() );
+        outcaster->SetInput( smoothing->GetOutput() );
+
+        smoothing->SetNumberOfIterations( 5 );
+        smoothing->SetTimeStep( 0.0625 );
+
+        try
+        {
+            outcaster->Update();
+        }
+        catch( itk::ExceptionObject & excep )
+        {
+            std::cerr << "Exception caught !" << std::endl;
+            std::cerr << excep << std::endl;
+        }
+
+        typedef itk::ImageRegionIterator<Volume::ItkImageType> Iterator;
+        Iterator outIter( outcaster->GetOutput(), outcaster->GetOutput()->GetBufferedRegion() );
+        Iterator auxIter( auxImage, auxImage->GetBufferedRegion() );
+        outIter.GoToBegin();
+        auxIter.GoToBegin();
+        unsigned int i,j,k;
+        for (k=0;k<size[2];k++)
+        {
+            for (j=0;j<size[1];j++)
+            {
+                for (i=0;i<size[0];i++)
+                {
+                    auxIter.Set(outIter.Get());
+                    ++auxIter;
+                    ++outIter;
+                }
+            }
+        }
+        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
+        //output->setImages( m_Volume->getImages() );
+//         std::cout<<"Init Saving Volume"<<std::endl;
+//         typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
+//         writerType::Pointer mapWriter3 = writerType::New();
+//         mapWriter3->SetFileName("filteredImage.mhd");
+//         mapWriter3->SetInput(outcaster->GetOutput() );
+//         mapWriter3->Update();
+//         writerType::Pointer mapWriter2 = writerType::New();
+//         mapWriter2->SetFileName("originalImage.mhd");
+//         mapWriter2->SetInput(m_mapVolume->getItkData() );
+//         mapWriter2->Update();
+
+        //auxImage = outcaster->GetOutput();
+        if(m_mapVolume2!=0)
+        {
+            delete m_mapVolume2;
+        }
+        std::cout<<"Init SetData Volume"<<std::endl;
+        m_mapVolume2 = new Volume();
+        m_mapVolume2->setImages( m_DSCVolume->getPhaseVolume(0)->getImages() );
+        std::cout<<"SetData Volume"<<std::endl;
+        try
+        {
+//           m_mapVolume->setData( outcaster->GetOutput() );
+           m_mapVolume2->setData( auxImage );
+        }
+        catch( itk::ExceptionObject & excep )
+        {
+            std::cerr << "Exception caught !" << std::endl;
+            std::cerr << excep << std::endl;
+        }
+        std::cout<<"End SetData Volume"<<std::endl;
+        //m_mapVolume->getVtkData()->Update();
+        m_2DView_4->setInput( m_mapVolume2 );
+        //m_2DView->resetView( Q2DViewer::Axial );
+        //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
+        std::cout<<"Init Colormap"<<std::endl;
+        this->createColorMap2( );
+        m_2DView_4->setSlice( m_sliceViewSlider->value() );
         QApplication::restoreOverrideCursor();
         std::cout<<"End Filter Volume"<<std::endl;
 
@@ -1968,6 +2086,50 @@ void QVSIReconstructionExtension::setSeries(Series *series)
             break;
         }
     }
+}
+
+bool QVSIReconstructionExtension::findProbableSeries( )
+{
+    std::cout<<"Nombre d'estudis:" <<QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient()->getStudies().first()->getSeries().size() <<std::endl;
+    bool findDSC=false;
+    bool findpre=false;
+    bool findpost=false;
+    foreach( Study *study, m_mainVolume->getPatient()->getStudies() )
+    {
+        foreach( Series *series, study->getSeries() )
+        {
+            //DEBUG_LOG(series->getDescription());
+            if(series->getDescription().contains("DSC", Qt::CaseInsensitive) && series->getFirstVolume()) // && slicesDSC < series->getFirstVolume()->getDimensions()[3])
+            {
+                m_DSCLineEdit->clear();
+                m_DSCLineEdit->insert(series->getDescription());
+                m_DSCVolume = series->getFirstVolume();
+                findDSC=true;
+                std::cout<<"*";
+                //slicesDSC = series->getFirstVolume()->getDimensions()[3];
+            }
+            if(series->getDescription().contains("preGD", Qt::CaseInsensitive) && series->getFirstVolume()) // && slicespre < series->getFirstVolume()->getDimensions()[3])
+            {
+                m_SEPreLineEdit->clear();
+                m_SEPreLineEdit->insert(series->getDescription());
+                m_SEPreVolume = series->getFirstVolume();
+                findpre=true;
+                std::cout<<"+";
+                //slicespre = series->getFirstVolume()->getDimensions()[3];
+            }
+            if(series->getDescription().contains("postGD", Qt::CaseInsensitive) && series->getFirstVolume()) // && slicespost < series->getFirstVolume()->getDimensions()[3])
+            {
+                m_SEPostLineEdit->clear();
+                m_SEPostLineEdit->insert(series->getDescription());
+                m_SEPostVolume = series->getFirstVolume();
+                findpost=true;
+                std::cout<<"-";
+                //slicespost = series->getFirstVolume()->getDimensions()[3];
+            }
+            std::cout<<series->getDescription().toAscii().data()<<"//"<<series->getProtocolName().toAscii().data()<<"//"<<series->getInstanceUID().toAscii().data()<<"//"<<series->getFirstVolume()<<"//"<<series->getImages().size()<<std::endl;
+        }
+    }
+    return (findDSC && findpre && findpost);
 }
 
 

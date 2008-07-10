@@ -1,113 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
-<defaultcodec></defaultcodec>
 <context>
-    <name>QMPR3DExtensionBase</name>
+    <name>QVolumeContourDelimiterExtensionBase</name>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="308"/>
-        <source>WW/WL:</source>
-        <translation>WW/WL:</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="13"/>
+        <source>Form</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="107"/>
-        <source>Enable axial plane</source>
-        <translation>Habilitar el plano axial</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="49"/>
+        <source>Area of current slice:</source>
+        <translation>Área del corte actual:</translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="120"/>
-        <source>Enable sagital plane</source>
-        <translation>Habilitar el plano sagital</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="70"/>
+        <source>0 mm2</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="133"/>
-        <source>Enable coronal plane</source>
-        <translation>Habilitar el plano coronal</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="90"/>
+        <source>Volume of all slices:</source>
+        <translation>Volumen de todos los cortes:</translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="164"/>
-        <source>Switch to axial view</source>
-        <translation>Cambiar a la vista axial</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="111"/>
+        <source>0 mm3</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="167"/>
-        <source>Axial view</source>
-        <translation>Vista axial</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="125"/>
+        <source>Refresh area and volume</source>
+        <translation>Actualizar área y volumen</translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="194"/>
-        <source>Switch to sagital view</source>
-        <translation>Cambiar a vista sagital</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="148"/>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;Click &apos;c&apos; key when you want close the current &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#000000;&quot;&gt;spline (must have minimum two points)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;Puls la tecla &apos;c&apos; cuando desees cerrar el spline &lt;/span&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#000000;&quot;&gt;actual (debe tenen 2 puntos como mínimo)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="197"/>
-        <source>Sagital view</source>
-        <translation>Vista sagital</translation>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="179"/>
+        <source>window level</source>
+        <translation>Brillo / Contraste</translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="216"/>
-        <source>Switch to coronal view</source>
-        <translation>Cambiar a vista coronal</translation>
-    </message>
-    <message>
-        <location filename="qmpr3dextensionbase.ui" line="219"/>
-        <source>Coronal view</source>
-        <translation>Vista coronal</translation>
-    </message>
-    <message>
-        <location filename="qmpr3dextensionbase.ui" line="251"/>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="309"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="qmpr3dextensionbase.ui" line="13"/>
-        <source>Form1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qmpr3dextensionbase.ui" line="110"/>
-        <source>Axial</source>
-        <translation>Axial</translation>
-    </message>
-    <message>
-        <location filename="qmpr3dextensionbase.ui" line="123"/>
-        <source>Sagital</source>
-        <translation>Sagital</translation>
-    </message>
-    <message>
-        <location filename="qmpr3dextensionbase.ui" line="136"/>
-        <source>Coronal</source>
-        <translation>Coronal</translation>
-    </message>
-    <message>
-        <location filename="qmpr3dextensionbase.ui" line="270"/>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="261"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#dc143c;&quot;&gt;*The current Series has multiple phases. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;Currently the MPR 3D doesn&apos;t support &lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;Series with multiple phases so it won&apos;t work propperly.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#dc143c;&quot;&gt;*La série actual contiene mútiples fases. &lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;Actualmente el MPR 3D no soporta&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;séries con múltiples fases, per lo tanto no funcionará correctamente.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;Slice&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;p, li { white-space: pre-wrap; }&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#000000;&quot;&gt;Corte&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="858"/>
+        <source>create mask of this image</source>
+        <translation>Crear la máscara de esta imagen</translation>
+    </message>
+    <message>
+        <location filename="qvolumecontourdelimiterextensionbase.ui" line="861"/>
+        <source>Create Mask</source>
+        <translation>Crear máscara</translation>
     </message>
 </context>
 <context>
-    <name>udg::MPR3DExtensionMediator</name>
+    <name>udg::QVolumeContourDelimiterExtension</name>
     <message>
-        <location filename="mpr3dextensionmediator.cpp" line="27"/>
-        <source>MPR 3D</source>
-        <translation></translation>
+        <location filename="qvolumecontourdelimiterextension.cpp" line="422"/>
+        <source>Save Volume as...</source>
+        <translation>Guardar volumen como...</translation>
     </message>
     <message>
-        <location filename="mpr3dextensionmediator.cpp" line="41"/>
+        <location filename="qvolumecontourdelimiterextension.cpp" line="422"/>
+        <source>MHD Files (*.mhd)</source>
+        <translation>Archivos MHD (*.mhd)</translation>
+    </message>
+</context>
+<context>
+    <name>udg::VolumeContourDelimiterExtensionMediator</name>
+    <message>
+        <location filename="volumecontourdelimiterextensionmediator.cpp" line="27"/>
+        <source>Volume Contour Delimiter</source>
+        <translation>Delimitador de contornos de volúmenes</translation>
+    </message>
+    <message>
+        <location filename="volumecontourdelimiterextensionmediator.cpp" line="41"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mpr3dextensionmediator.cpp" line="41"/>
+        <location filename="volumecontourdelimiterextensionmediator.cpp" line="41"/>
         <source>The selected item is not an image</source>
         <translation>El ítem seleccionado no es una imagen</translation>
     </message>

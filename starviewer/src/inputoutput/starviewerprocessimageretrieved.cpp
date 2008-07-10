@@ -151,15 +151,9 @@ bool StarviewerProcessImageRetrieved::getSeriesInformation( QString imagePath, D
 QString StarviewerProcessImageRetrieved::createImagePath( DICOMImage *image )
 {
     StarviewerSettings settings;
-    DICOMSeries serie;
     QString imagePath;
 
-    imagePath.insert( 0 , settings.getCacheImagePath() );
-    imagePath.append( image->getStudyUID() );
-    imagePath.append( "/" );
-    imagePath.append( image->getSeriesUID() );
-    imagePath.append("/");
-    imagePath.append( image->getImageName() );
+    imagePath = settings.getCacheImagePath() + image->getStudyUID() + "/" + image->getSeriesUID() + "/" + image->getImageName();
 
     return imagePath;
 }

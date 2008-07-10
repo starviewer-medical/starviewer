@@ -90,12 +90,12 @@
     <message>
         <location filename="qlandmarkregistrationextensionbase.ui" line="411"/>
         <source>Try Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuelve a intentarlo</translation>
     </message>
     <message>
         <location filename="qlandmarkregistrationextensionbase.ui" line="579"/>
         <source>Serie</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -119,79 +119,64 @@
 <context>
     <name>udg::QLandmarkRegistrationExtension</name>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="78"/>
-        <source>Voxel Information</source>
-        <translation>Información de vóxel</translation>
-    </message>
-    <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="79"/>
-        <source>Ctrl+I</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="80"/>
-        <source>Enable voxel information over cursor</source>
-        <translation>Activar la información de vóxel</translation>
-    </message>
-    <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="89"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="74"/>
         <source>Rotate Clockwise</source>
         <translation>Rotación en sentido horario</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="91"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="76"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rotación de la imagen en sentido horario</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="99"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="84"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rotación en sentido antihorario</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="101"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="86"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rotación de la imagen en sentido antihorario</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="123"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="108"/>
         <source>SeedTool</source>
         <translation>Herramienta de semillas</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="124"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="109"/>
         <source>Enable/Disable seeding tool</source>
         <translation>Activar/Desactivar la herramienta de semillas</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="337"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
         <source>StarViewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1145"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1126"/>
         <source>Save Transform file</source>
         <translation>Guardar fichero de transformada</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1168"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
         <source>all Files (*)</source>
         <translation>todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1168"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
         <source>Chose a transform filename</source>
         <translation>Seleccione un fichero de trasformada</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="320"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="301"/>
         <source>There are not the same number of seeds into images</source>
         <translation>No hay el mismo número de semillas en la s dos imégenes</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="337"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
         <source>The registration process has not obtained successfull results</source>
-        <translation type="unfinished"></translation>
+        <translation>El proceso de registro no ha tenido un resultado satisfactorio</translation>
     </message>
 </context>
 </TS>

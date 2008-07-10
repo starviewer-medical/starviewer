@@ -94,22 +94,22 @@ void ScreenShotTool::screenShot()
             delete saveAsDialog;
             return;
         }
-        
+
         fileName = fileNames.first();
-                                
+
         //mirem que el nom del fitxer no contingui coses com: nom.png, és a dir, que no es mostri l'extensió
         QString selectedExtension = selectedFilter.mid(selectedFilter.length() - 5, 4);
-        
+
         if ( fileName.endsWith( selectedExtension ) )
-            fileName.remove( fileName.lastIndexOf( selectedExtension ), 4 ); 
-        
+            fileName.remove( fileName.lastIndexOf( selectedExtension ), 4 );
+
         //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
         m_lastScreenShotPath = saveAsDialog->directory().path();
 
         if ( QFileInfo( fileName + selectedFilter.mid(selectedFilter.length() - 5, 4) ).exists() && !m_userCancellation )
         {
             //0 -> Yes; 1->No
-            overWrite = QMessageBox::information( 0, tr( "existing file" ), tr( "This file is already created. Do you want to replace it?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
+            overWrite = QMessageBox::information( 0, tr( "Information" ), tr( "This file already exists. Do you want to replace it?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
         }
 
     }while( overWrite != 0 && !m_userCancellation );
@@ -143,8 +143,8 @@ void ScreenShotTool::screenShot()
             DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
             return;
         }
-        
-        
+
+
 
         m_windowToImageFilter->Update();
         m_windowToImageFilter->Modified();

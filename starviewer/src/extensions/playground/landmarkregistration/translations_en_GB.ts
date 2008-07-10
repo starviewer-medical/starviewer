@@ -119,77 +119,62 @@
 <context>
     <name>udg::QLandmarkRegistrationExtension</name>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="78"/>
-        <source>Voxel Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="79"/>
-        <source>Ctrl+I</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="80"/>
-        <source>Enable voxel information over cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="89"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="74"/>
         <source>Rotate Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="91"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="76"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="99"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="84"/>
         <source>Rotate Counter Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="101"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="86"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="123"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="108"/>
         <source>SeedTool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="124"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="109"/>
         <source>Enable/Disable seeding tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="337"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
         <source>StarViewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1145"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1126"/>
         <source>Save Transform file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1168"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
         <source>all Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1168"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
         <source>Chose a transform filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="320"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="301"/>
         <source>There are not the same number of seeds into images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="337"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
         <source>The registration process has not obtained successfull results</source>
         <translation type="unfinished"></translation>
     </message>

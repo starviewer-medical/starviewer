@@ -40,6 +40,9 @@ public:
 
     /// Obté el punt mig de la linia
     double *getMiddlePoint();
+    
+    /// Obté el punt de més a l'esquerra de la linia, segons la vista en la que estem
+    double *getLeftPoint( int view );
 
     /// Calcula la distancia entre punt i punt
     double computeDistance();

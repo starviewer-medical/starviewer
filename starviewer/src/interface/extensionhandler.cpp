@@ -151,6 +151,7 @@ void ExtensionHandler::createConnections()
 
 void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance )
 {
+    Q_UNUSED(defaultImageInstance);
     PatientFillerInput *fillerInput = new PatientFillerInput;
     fillerInput->setFilesList( inputFiles );
 

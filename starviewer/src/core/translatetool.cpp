@@ -72,7 +72,7 @@ void TranslateTool::pan()
     if( !renderer )
         return;
 
-    double viewFocus[4], focalDepth, viewPoint[3];
+    double viewFocus[4], focalDepth;
     double newPickPoint[4], oldPickPoint[4], motionVector[3];
 
     // Calculate the focal depth since we'll be using it a lot

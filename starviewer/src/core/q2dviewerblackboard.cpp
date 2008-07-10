@@ -421,8 +421,10 @@ void Q2DViewerBlackBoard::refreshRotation( int factor )
     }
 }
 
-void Q2DViewerBlackBoard::refreshRotation( double degrees )
+void Q2DViewerBlackBoard::refreshRotation( double vtkNotUsed(degrees) )
 {
+    // TODO implementa'm!!!!!
+    DEBUG_LOG("Estic sense implementar!!!!!!!!!!");
 }
 
 void Q2DViewerBlackBoard::clear()

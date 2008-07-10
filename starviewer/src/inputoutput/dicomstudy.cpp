@@ -14,7 +14,8 @@ DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
     const char *text;
 
     studyDcmDataset->findAndGetString( DCM_PatientsName , text , false );
-    if ( text != NULL ) setPatientName( text );
+    //TODO sabem que els estudis amb els que treballem tenen el Specific Character Set (0008,0005) el ISO_IR 100 que és el Latin 1, però que passa si tenim imatges que no tenen aquest tipus de Specific Character Set, ( El latin1 és el més usat a centre Europa). Consulta el C.12.1.1.2 del PS 3.3 per més informació i el PS 3.5
+    if ( text != NULL ) setPatientName( QString::fromLatin1( text ) );
 
     //set Patient's Birth Date
     studyDcmDataset->findAndGetString( DCM_PatientsBirthDate , text , false );
@@ -42,7 +43,7 @@ DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
 
         //set DICOMStudy Description
     studyDcmDataset->findAndGetString( DCM_StudyDescription , text , false );
-    if ( text != NULL ) setStudyDescription( text );
+    if ( text != NULL ) setStudyDescription( QString::fromLatin1( text ) );
 
     //set DICOMStudy Time
     studyDcmDataset->findAndGetString( DCM_StudyTime , text , false );
@@ -50,7 +51,7 @@ DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
 
     //set Institution Name
     studyDcmDataset->findAndGetString( DCM_InstitutionName , text , false );
-    if ( text != NULL ) setInstitutionName( text );
+    if ( text != NULL ) setInstitutionName( QString::fromLatin1( text ) );
 
     //set DICOMStudyUID
     studyDcmDataset->findAndGetString( DCM_StudyInstanceUID , text , false );
@@ -69,7 +70,7 @@ DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
     if ( text != NULL ) setPacsAETitle( text );
 
     studyDcmDataset->findAndGetString( DCM_ReferringPhysiciansName , text , false );
-    if ( text != NULL ) setReferringPhysiciansName( text );
+    if ( text != NULL ) setReferringPhysiciansName( QString::fromLatin1( text ) );
 }
 
 bool DICOMStudy::operator < ( DICOMStudy a )

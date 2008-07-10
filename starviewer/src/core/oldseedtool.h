@@ -29,7 +29,7 @@ public:
     /// estats de la tool
     enum { NONE , SEEDING };
 
-    OldSeedTool(Q2DViewer *viewer, QObject *parent = 0 );
+    OldSeedTool(Q2DViewer *viewer );
 
     ~OldSeedTool();
 

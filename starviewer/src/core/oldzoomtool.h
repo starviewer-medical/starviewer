@@ -21,7 +21,7 @@ class OldZoomTool : public OldTool
 Q_OBJECT
 public:
     enum { NONE , ZOOMING };
-    OldZoomTool( QViewer *viewer, QObject *parent = 0 );
+    OldZoomTool( QViewer *viewer );
 
     ~OldZoomTool();
 

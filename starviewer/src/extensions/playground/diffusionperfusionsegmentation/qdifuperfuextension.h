@@ -79,6 +79,9 @@ private slots:
 
     /// Visualitza la màscara donats uns thresholds
     void viewThresholds();
+    void viewThresholds(int i);
+    void viewThresholds2();
+    void viewThresholds2(int i);
 
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition();
@@ -138,6 +141,9 @@ private slots:
     // [temporal] el farem servir mentre no s'actualitzi la tècnica d'overlay del Q2DViewer
     void setPerfusionSlice( int slice );
     void synchronizeSlices( bool sync );
+
+    ///Calcula la diferència de volums
+    void computePenombraVolume( const QString & name);
 
 private:
     /// Crea les accions

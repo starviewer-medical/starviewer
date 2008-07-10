@@ -26,8 +26,5 @@ namespace udg{
     const OFConditionConst DcmtkMaskInsertTagError( 0 , 1127 , OF_error , "Error inserting tag in Mask" );
 
     const OFConditionConst DcmtkCanNotConnectError( 0 , 1200 , OF_error , "Can't connect" );
-
-    const OFConditionConst DcmtkUserCancellation( 0 , 1201 , OF_error , "User Cancellation" );
-    
 }; //end namespace
 #endif

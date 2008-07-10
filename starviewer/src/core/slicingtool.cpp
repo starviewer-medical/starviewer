@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
+
 //qt
 #include <QTime>
 //vtk
@@ -144,6 +145,7 @@ void SlicingTool::endSlicing()
 
 void SlicingTool::inputChanged( Volume *input )
 {
+    Q_UNUSED(input);
     m_slicingMode = SliceMode;
     m_mouseMovement = false;
 }

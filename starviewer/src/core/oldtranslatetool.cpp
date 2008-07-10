@@ -19,7 +19,7 @@
 
 namespace udg {
 
-OldTranslateTool::OldTranslateTool( QViewer *viewer, QObject *parent )
+OldTranslateTool::OldTranslateTool( QViewer *viewer )
 {
     m_state = NONE;
     m_viewer = viewer;
@@ -73,7 +73,7 @@ void OldTranslateTool::pan()
     if( !renderer )
         return;
 
-    double viewFocus[4], focalDepth, viewPoint[3];
+    double viewFocus[4], focalDepth;
     double newPickPoint[4], oldPickPoint[4], motionVector[3];
 
     // Calculate the focal depth since we'll be using it a lot

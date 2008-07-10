@@ -34,25 +34,29 @@ QVariant PatientItemModel::data(const QModelIndex &index, int role) const
 
 //     if (!index.isValid())
 //          return QVariant();
-// 
+//
 //      if (role != Qt::DisplayRole)
 //          return QVariant();
-// 
+//
 //      PatientItem *item = static_cast<PatientItem*>(index.internalPointer());
-// 
+//
 //      return item->data(index.column());
     return m_modelPatient->data(index,role);
 }
 
 
-Qt::ItemFlags PatientItemModel::flags(const QModelIndex &index) const
+Qt::ItemFlags PatientItemModel::flags(const QModelIndex &index ) const
 {
+    Q_UNUSED(index);
     //TODO: S'ha posat un item flag qualsevol, caldria repassar-ho i finalitzar correctament el model.
     return Qt::ItemIsSelectable;
 }
 
 QVariant PatientItemModel::headerData(int section, Qt::Orientation orientation, int role ) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
     return ( QStringList() << tr("Type") << tr("Data") << tr("Modality") << tr("Description") );
 }
 
@@ -86,13 +90,15 @@ QModelIndex PatientItemModel::parent(const QModelIndex &index) const
      return createIndex(patientItem->row(), 0, patientItem);
 }
 
-int PatientItemModel::rowCount(const QModelIndex &parent) const
-{   
+int PatientItemModel::rowCount(const QModelIndex &parent ) const
+{
+    Q_UNUSED(parent);
     return m_modelPatient->rowCount();
-}   
+}
 
 int PatientItemModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return m_modelPatient->columnCount();
 
     if (parent.isValid())
@@ -115,7 +121,7 @@ QStandardItemModel * PatientItemModel::createModel( Patient * patient )
 //    a) Obtenir les dades generals de l'study
 //    b) Afegir la fila que derivi de pacient amb totes les dades generals de l'estudi
 //    c) Per cada serie de l'estudi fer:
-//         i) Obtenir les dades generals de la serie 
+//         i) Obtenir les dades generals de la serie
 //        ii) Afegir una fila que derivi de study amb totes les dades generals de la serie
 
     DEBUG_LOG( QString("------Inici creacio del model----") );
@@ -148,7 +154,7 @@ QStandardItemModel * PatientItemModel::createModel( Patient * patient )
     itemPatient = new QStandardItem();
     itemPatient->setText( "Patient" );
     modelPatient->setItem( 0,0, itemPatient );
-    
+
     for( numberStudy = 0; numberStudy < patient->getNumberOfStudies(); numberStudy++ )
     {
         // Creació de l'estudi
@@ -195,6 +201,7 @@ QStandardItemModel * PatientItemModel::createModel( Patient * patient )
 
 void PatientItemModel::setupModelData(Patient * patient, PatientItem *parent)
 {
+    Q_UNUSED(parent);
     DEBUG_LOG( QString("Inici mètode setupModelData") );
 
     int i,j;
