@@ -236,8 +236,6 @@ bool ImageFillerStep::processImage( Image *image )
         int frames = dicomReader.getAttributeByName( DCM_NumberOfFrames ).toInt();
         image->setNumberOfFrames( frames ? frames : 1 );
 
-        image->setImageType( dicomReader.getAttributeByName( DCM_ImageType ) );
-
         if (dicomReader.tagExists( DCM_KVP ))
         {
             image->setKiloVoltagePeak( dicomReader.getAttributeByName( DCM_KVP ).toDouble() );
@@ -324,7 +322,28 @@ bool ImageFillerStep::processImage( Image *image )
 
         if (dicomReader.tagExists( DCM_ImageType ))
         {
-            image->setImageType( dicomReader.getAttributeByName( DCM_ImageType ) );
+            // aquest valor és de tipus 3 al mòdul General Image, però consta com a tipus 1 a
+            // gairebé totes les modalitats. Només consta com a tipus 2 per la modalitat US
+            value = dicomReader.getAttributeByName( DCM_ImageType );
+            image->setImageType( value );
+            if( modality == "CT" ) // en el cas del CT ens interessa saber si és localizer
+            {
+                QStringList valueList = value.split( "\\" );
+                if( valueList.count() >= 3 )
+                {
+                    if( valueList.at(2) == "LOCALIZER" )
+                    {
+                        image->setCTLocalizer( true );
+                        DEBUG_LOG( " La imatge amb UID " + image->getSOPInstanceUID() + " és un localitzador " );
+                    }
+                }
+                else
+                {
+                    // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
+                    // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
+                    DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + image->getSOPInstanceUID() + " de la serie " + image->getParentSeries()->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
+                }
+            }
         }
 
         if (dicomReader.tagExists( DCM_ScanArc ))

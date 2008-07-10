@@ -20,10 +20,12 @@
 #include "presentationstatefillerstep.h"
 #include "temporaldimensionfillerstep.h"
 #include "volumegeneratorstep.h"
-#include "referencelinesfillerstep.h"
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
 #include "philipstagsfillerstep.h"
+// TODO de moment deixem fora el ReferenceLinesFillerStep perquè
+// encara no fem ús de la informació que recopila
+// #include "referencelinesfillerstep.h"
 
 namespace udg {
 
@@ -106,10 +108,12 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new PresentationStateFillerStep() );
     m_registeredSteps.append(new TemporalDimensionFillerStep() );
     m_registeredSteps.append(new VolumeGeneratorStep() );
-    m_registeredSteps.append(new ReferenceLinesFillerStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
     m_registeredSteps.append(new OrderImagesFillerStep() );
     m_registeredSteps.append(new PhilipsTagsFillerStep() );
+// TODO de moment deixem fora el ReferenceLinesFillerStep perquè
+// encara no fem ús de la informació que recopila
+//     m_registeredSteps.append(new ReferenceLinesFillerStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
