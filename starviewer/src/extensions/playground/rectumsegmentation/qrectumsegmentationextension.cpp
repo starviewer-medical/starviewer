@@ -1164,7 +1164,7 @@ void QRectumSegmentationExtension::toolChanged( QAction* ac)
 
 void QRectumSegmentationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-RectumSegmentation");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-RectumSegmentation");
 
     m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
@@ -1176,7 +1176,7 @@ void QRectumSegmentationExtension::readSettings()
 
 void QRectumSegmentationExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-RectumSegmentation");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-RectumSegmentation");
 
     settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );

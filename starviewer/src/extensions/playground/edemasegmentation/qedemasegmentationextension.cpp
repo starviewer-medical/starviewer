@@ -1130,7 +1130,7 @@ void QEdemaSegmentationExtension::saveActivedMaskVolume()
 
 void QEdemaSegmentationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-EdemaSegmentation");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-EdemaSegmentation");
 
     m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
@@ -1142,7 +1142,7 @@ void QEdemaSegmentationExtension::readSettings()
 
 void QEdemaSegmentationExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-EdemaSegmentation");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-EdemaSegmentation");
 
     settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );

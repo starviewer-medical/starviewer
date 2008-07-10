@@ -2135,7 +2135,7 @@ bool QVSIReconstructionExtension::findProbableSeries( )
 
 void QVSIReconstructionExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-VSIReconstruction");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-VSIReconstruction");
 
     m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
@@ -2147,7 +2147,7 @@ void QVSIReconstructionExtension::readSettings()
 
 void QVSIReconstructionExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-VSIReconstruction");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-VSIReconstruction");
 
     settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );

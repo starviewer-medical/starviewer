@@ -279,7 +279,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
 
 void QDifuPerfuSegmentationExtension::readSettings()
 {
-    QSettings settings( "GGG", "StarViewer-App-DiffusionPerfusionSegmentation" );
+    QSettings settings;
     settings.beginGroup("StarViewer-App-DiffusionPerfusionSegmentation");
 
     m_horizontalSplitter->restoreState( settings.value( "horizontalSplitter" ).toByteArray() );
@@ -290,7 +290,7 @@ void QDifuPerfuSegmentationExtension::readSettings()
 
 void QDifuPerfuSegmentationExtension::writeSettings()
 {
-    QSettings settings( "GGG", "StarViewer-App-DiffusionPerfusionSegmentation" );
+    QSettings settings;
     settings.beginGroup( "StarViewer-App-DiffusionPerfusionSegmentation" );
 
     settings.setValue( "horizontalSplitter", m_horizontalSplitter->saveState() );
