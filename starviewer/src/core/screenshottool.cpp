@@ -8,6 +8,8 @@
 #include "qviewer.h"
 #include "q3dmprviewer.h"
 #include "logging.h"
+// definicions globals d'aplicació
+#include "starviewerapplication.h"
 
 #include <vtkCommand.h>
 #include <vtkWindowToImageFilter.h>
@@ -194,8 +196,8 @@ QString ScreenShotTool::compoundSelectedName()
 
 void ScreenShotTool::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-ScreenShotTool");
-    settings.beginGroup("StarViewer-App-ScreenShotTool");
+    QSettings settings;
+    settings.beginGroup("ScreenshotTool");
     m_lastScreenShotPath = settings.value( "defaultSaveFolder", QDir::homePath() ).toString();
     m_lastScreenShotExtension = settings.value( "defaultSaveExtension", "PNG (*.png)" ).toString();
     m_lastScreenShotName = settings.value( "defaultSaveName", "" ).toString();
@@ -204,8 +206,8 @@ void ScreenShotTool::readSettings()
 
 void ScreenShotTool::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-ScreenShotTool");
-    settings.beginGroup("StarViewer-App-ScreenShotTool");
+    QSettings settings;
+    settings.beginGroup("ScreenshotTool");
     settings.setValue("defaultSaveFolder", m_lastScreenShotPath );
     settings.setValue("defaultSaveExtension", m_lastScreenShotExtension );
     settings.setValue("defaultSaveName", m_lastScreenShotName );

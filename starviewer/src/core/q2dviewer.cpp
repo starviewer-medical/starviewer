@@ -2440,9 +2440,14 @@ void Q2DViewer::updatePatientAnnotationInformation()
                     .arg( m_mainVolume->getStudy()->getDateAsString() )
                     .arg( m_mainVolume->getStudy()->getTimeAsString() );
 
-        m_lowerRightText = m_mainVolume->getSeries()->getProtocolName();
-        if( m_lowerRightText.isEmpty() )
-            m_lowerRightText = m_mainVolume->getSeries()->getDescription();
+        // Si protocol i descripció coincideixen posarem el contingut de protocol
+        // Si són diferents, els fusionarem
+        QString protocolName, description;
+        protocolName = m_mainVolume->getSeries()->getProtocolName();
+        description = m_mainVolume->getSeries()->getDescription();
+        m_lowerRightText = protocolName;
+        if( description != protocolName )
+            m_lowerRightText += "\n" + description;
 
         m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
         m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText ) );

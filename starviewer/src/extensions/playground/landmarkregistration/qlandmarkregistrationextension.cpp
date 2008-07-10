@@ -157,7 +157,7 @@ void QLandmarkRegistrationExtension::createConnections()
 
 void QLandmarkRegistrationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-LandmarkRegistration");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-LandmarkRegistration");
 
     m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
@@ -168,7 +168,7 @@ void QLandmarkRegistrationExtension::readSettings()
 
 void QLandmarkRegistrationExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-LandmarkRegistration");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-LandmarkRegistration");
 
     settings.setValue("verticalSplitter" , m_verticalSplitter->saveState() );

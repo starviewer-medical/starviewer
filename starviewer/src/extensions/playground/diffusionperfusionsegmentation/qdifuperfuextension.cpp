@@ -97,6 +97,11 @@ QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
 
 void QDifuPerfuSegmentationExtension::createActions()
 {
+    // TODO el nom tant dels botons com de les icones, s'ahurien de millorar
+    m_splitterLeftButton->setIcon( QIcon( ":/images/back.png" ) );
+    m_splitterCenterButton->setIcon( QIcon( ":/images/view_left_right.png" ) );
+    m_splitterRightButton->setIcon( QIcon( ":/images/play.png" ) );
+
     m_rotateClockWiseAction = new QAction( this );
     m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
@@ -279,7 +284,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
 
 void QDifuPerfuSegmentationExtension::readSettings()
 {
-    QSettings settings( "GGG", "StarViewer-App-DiffusionPerfusionSegmentation" );
+    QSettings settings;
     settings.beginGroup("StarViewer-App-DiffusionPerfusionSegmentation");
 
     m_horizontalSplitter->restoreState( settings.value( "horizontalSplitter" ).toByteArray() );
@@ -290,7 +295,7 @@ void QDifuPerfuSegmentationExtension::readSettings()
 
 void QDifuPerfuSegmentationExtension::writeSettings()
 {
-    QSettings settings( "GGG", "StarViewer-App-DiffusionPerfusionSegmentation" );
+    QSettings settings;
     settings.beginGroup( "StarViewer-App-DiffusionPerfusionSegmentation" );
 
     settings.setValue( "horizontalSplitter", m_horizontalSplitter->saveState() );

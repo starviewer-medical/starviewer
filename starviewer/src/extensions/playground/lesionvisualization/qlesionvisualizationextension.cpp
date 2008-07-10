@@ -51,16 +51,16 @@ QLesionVisualizationExtension::QLesionVisualizationExtension( QWidget *parent )
 QLesionVisualizationExtension::~QLesionVisualizationExtension()
 {
     writeSettings();
-    
+
     if(m_lesionMaskVolume)
         delete m_lesionMaskVolume;
-    
+
     if ( m_maskLesionSlicesArea )
         delete m_maskLesionSlicesArea;
-    
+
     if ( m_cylindersCollection )
         m_cylindersCollection->Delete();
-    
+
     picker->Delete();
 }
 
@@ -121,7 +121,7 @@ void QLesionVisualizationExtension::setInput( Volume *input )
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     m_2DView->enableAnnotation( Q2DViewer::SliceAnnotation );
     m_numberOfSlices = m_2DView->getMaximumSlice()+1;
-    
+
     m_2DView->render();
 }
 
@@ -140,11 +140,11 @@ void QLesionVisualizationExtension::eventHandler( unsigned long id )
     case vtkCommand::LeaveEvent:
         m_inside3Dviewer = false;
         break;
-        
+
     case vtkCommand::EnterEvent:
         m_inside3Dviewer = true;
         break;
-    
+
     default:
     break;
     }
@@ -156,21 +156,21 @@ void QLesionVisualizationExtension::setSlice()
     if ( picker->PickProp ( eventPosition[0], eventPosition[1], m_lesion3Dviewer->getRenderer() ) )
     {
         vtkActor *actor = vtkActor::SafeDownCast( picker->GetViewProp() );
-        
+
         bool notFound = true;
         int position;
-        
+
         for ( int i = 0; i < m_cylindersCollection->GetNumberOfItems()&&notFound; i++)
         {
             vtkActor *current = vtkActor::SafeDownCast( m_cylindersCollection->GetItemAsObject( i ) );
-                    
+
             if ( current == actor )
             {
                 notFound = false;
-                position = i;            
+                position = i;
             }
         }
-        m_2DView->setSlice( position );     
+        m_2DView->setSlice( position );
     }
 }
 
@@ -181,7 +181,7 @@ void QLesionVisualizationExtension::mouseEvent()
         for ( int i = 0; i < m_cylindersCollection->GetNumberOfItems(); i++)
         {
             vtkActor *actor = vtkActor::SafeDownCast( m_cylindersCollection->GetItemAsObject( i ) );
-                    
+
             if ( m_maskLesionSlicesArea[i] == 0 )
                 actor->GetProperty()->SetColor( 1. ,1. ,1. );
             else
@@ -189,7 +189,7 @@ void QLesionVisualizationExtension::mouseEvent()
                 actor->GetProperty()->SetColor( 1.-( (double)m_maskLesionSlicesArea[i] / (double)m_maxLesion ), 0., 0. );
             }
         }
-        
+
         int *eventPosition = m_lesion3Dviewer->getInteractor()->GetEventPosition();
         if ( picker->PickProp ( eventPosition[0], eventPosition[1], m_lesion3Dviewer->getRenderer() ) )
         {
@@ -201,7 +201,7 @@ void QLesionVisualizationExtension::mouseEvent()
             vtkActor *actor = vtkActor::SafeDownCast( m_cylindersCollection->GetItemAsObject( m_2DView->getCurrentSlice() ) );
             actor->GetProperty()->SetColor( 0, 0, 1 );
         }
-        
+
         m_lesion3Dviewer->refresh();
     }
 }
@@ -213,7 +213,7 @@ void QLesionVisualizationExtension::markCurrentCylinder( int slice )
         for ( int i = 0; i < m_cylindersCollection->GetNumberOfItems(); i++)
         {
             vtkActor *actor = vtkActor::SafeDownCast( m_cylindersCollection->GetItemAsObject( i ) );
-                    
+
             if ( i == slice )
                 actor->GetProperty()->SetColor( 0., 0., 1. );
             else
@@ -247,12 +247,12 @@ void QLesionVisualizationExtension::openMaskVolume()
     {
         if( QFileInfo( fileName ).suffix() != "mhd" )
             fileName += ".mhd";
-        
+
         m_defaultOpenDirectory = QFileInfo( fileName ).absolutePath();
-        
+
         vtkMetaImageReader *reader = vtkMetaImageReader::New();
         reader->SetFileName(qPrintable( fileName ));
-        
+
         switch( reader->CanReadFile( qPrintable(fileName) ) )
         {
             case 0: // no és un arxiu mhd :(
@@ -267,7 +267,7 @@ void QLesionVisualizationExtension::openMaskVolume()
         }
         reader->Update();
         m_lesionMaskVolume = new Volume(reader->GetOutput());
-        
+
         m_2DView->setOpacityOverlay( ((double)m_opacitySlider->value()) / 100.0 );
         m_2DView->setOverlayToBlend();
         m_2DView->setOverlayInput( m_lesionMaskVolume );
@@ -276,7 +276,7 @@ void QLesionVisualizationExtension::openMaskVolume()
         m_opacitiyLabel->setEnabled( true );
         reader->Delete();
     }
-    
+
     extractLesionMaskArea();
     createCylinder();
     QApplication::restoreOverrideCursor();
@@ -286,15 +286,15 @@ void QLesionVisualizationExtension::extractLesionMaskArea()
 {
     m_maskLesionSlicesArea = new int[m_numberOfSlices];
     double lesionVolume = 0.;
-    
+
     int i;
-    
+
     for ( i = 0; i < m_numberOfSlices; i++ )
         m_maskLesionSlicesArea[i] = 0;
-            
-    int *dims =m_lesionMaskVolume->getVtkData()->GetExtent(); 
+
+    int *dims =m_lesionMaskVolume->getVtkData()->GetExtent();
     int *value;
-    
+
     for ( i = dims[4]; i < dims[5]; i++ )
     {
         for ( int j = dims[0]; j < dims[1]; j++ )
@@ -302,54 +302,54 @@ void QLesionVisualizationExtension::extractLesionMaskArea()
             for ( int k = dims[2]; k < dims[3]; k++ )
             {
                 value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer( j, k, i );
-                
+
                 if (*value != 0)
                 {
-                    m_maskLesionSlicesArea[i]++;  
+                    m_maskLesionSlicesArea[i]++;
                     lesionVolume++;
                 }
             }
         }
     }
     double *spacing = m_mainVolume->getSpacing();
-    
+
     for (i = 0; i < 3; i++)
         lesionVolume *= spacing[i];
-    
+
     m_volumeLabel->setText(QString("Lesion Volume (in mm3): %1").arg(lesionVolume, 0, 'f', 2));
 }
 
 void QLesionVisualizationExtension::createCylinder()
 {
-    int i; 
+    int i;
     double white[3] = { 1., 1., 1. };
     double selectedColor[3] = { 0., 0., 1.};
     double redLevel;
-    
+
     m_cylindersCollection = vtkActorCollection::New();
     vtkCamera *camera = m_lesion3Dviewer->getRenderer()->GetActiveCamera();
-    
+
     double position = -0.32 * (m_numberOfSlices/2);
-    
+
     for ( i = 0; i < m_numberOfSlices; i++ )
-    {        
+    {
         if ( m_maskLesionSlicesArea[i] > m_maxLesion )
             m_maxLesion = m_maskLesionSlicesArea[i];
     }
-    
+
     for ( i = 0; i < m_numberOfSlices; i++ )
     {
         vtkCylinderSource *source = vtkCylinderSource::New();
         source->SetResolution( 20 );
         source->SetHeight( 0.3 );
         source->SetRadius( 2 );
-        
+
         vtkPolyDataMapper *mapper = vtkPolyDataMapper::New();
         mapper->ImmediateModeRenderingOn();
         mapper->SetInputConnection(source->GetOutputPort());
-    
+
         vtkActor *actor = vtkActor::New();
-        
+
         if ( i == 0 ) //la llesca activa del 2DViewer serà la 0, per tant el cilindre 0 el pintem com a seleccionat.
             actor->GetProperty()->SetColor( selectedColor );
         else
@@ -361,21 +361,21 @@ void QLesionVisualizationExtension::createCylinder()
                 redLevel = (double)m_maskLesionSlicesArea[i] / (double)m_maxLesion;
                 actor->GetProperty()->SetColor( 1.-redLevel, 0., 0. );
             }
-        }        
+        }
         actor->SetMapper(mapper);
         source->SetCenter(0,position,0);
         actor->RotateZ( -90. );
-        
+
         position += 0.32;
         m_lesion3Dviewer->getRenderer()->AddActor(actor);
-        
+
         m_cylindersCollection->AddItem(actor);
-            
+
         source->Delete();
         mapper->Delete();
         actor->Delete();
     }
-    
+
 //     camera->SetPosition( bounds[0]+bounds[1] / 2, bounds[2]+bounds[2] / 2, bounds[5] + bounds[5] );
 //     camera->SetEyeAngle( 2. );
 //     camera->SetDistance( 10.7081 );
@@ -383,13 +383,13 @@ void QLesionVisualizationExtension::createCylinder()
     camera->SetPosition( camera->GetPosition()[0], camera->GetPosition()[1], (double)m_numberOfSlices/3.8 );
 //     camera->SetViewAngle(90);
 //     camera->SetViewUp( 0, 1, 0 );
-    
+
     m_lesion3Dviewer->render();
 }
 
 void QLesionVisualizationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-LesionVisualization");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-LesionVisualization");
 
     m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
@@ -399,7 +399,7 @@ void QLesionVisualizationExtension::readSettings()
 
 void QLesionVisualizationExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-LesionVisualization");
+    QSettings settings;
     settings.beginGroup("StarViewer-App-LesionVisualization");
 
     settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
