@@ -13,7 +13,7 @@
 #include "drawertext.h"
 #include "image.h"
 #include "volume.h"
-
+#include "series.h"
 // Vtk's
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
@@ -128,7 +128,7 @@ void DistanceTool::annotateNewPoint()
         }
 
         DrawerText * text = new DrawerText;
-        const double * pixelSpacing = m_2DViewer->getCurrentDisplayedImage()->getPixelSpacing();
+        const double * pixelSpacing = m_2DViewer->getInput()->getSeries()->getImages().at(0)->getPixelSpacing();
 
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
         {
