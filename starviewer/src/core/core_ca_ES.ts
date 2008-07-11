@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QTransferFunctionEditorByValuesBase</name>
     <message>
@@ -36,7 +37,7 @@
     <message>
         <location filename="angletool.cpp" line="406"/>
         <source>%1 degrees</source>
-        <translation>%1 grados</translation>
+        <translation>%1 graus</translation>
     </message>
 </context>
 <context>
@@ -57,7 +58,7 @@
     <message>
         <location filename="image.cpp" line="880"/>
         <source>Preview image not available</source>
-        <translation>Previsualización no disponible</translation>
+        <translation>Previsualització no disponible</translation>
     </message>
 </context>
 <context>
@@ -457,7 +458,7 @@ WW: %5 WL: %6 </translation>
     <message>
         <location filename="qdicomdumpcthelixwidgetbase.ui" line="478"/>
         <source>Pitch:</source>
-        <translation>Ptich:</translation>
+        <translation>Pitch:</translation>
     </message>
 </context>
 <context>
@@ -533,7 +534,7 @@ WW: %5 WL: %6 </translation>
     <message>
         <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="190"/>
         <source>Reconstruction Diameter:</source>
-        <translation>Diametre de reconstrucció:</translation>
+        <translation>Diàmetre de reconstrucció:</translation>
     </message>
     <message>
         <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="213"/>
@@ -912,7 +913,7 @@ WW: %5 WL: %6 </translation>
     <message>
         <location filename="qthickslabwidgetbase.ui" line="93"/>
         <source>2</source>
-        <translation></translation>
+        <translation>2</translation>
     </message>
 </context>
 <context>
@@ -970,42 +971,42 @@ WW: %5 WL: %6 </translation>
 <context>
     <name>udg::ScreenShotTool</name>
     <message>
-        <location filename="screenshottool.cpp" line="64"/>
+        <location filename="screenshottool.cpp" line="66"/>
         <source>Save screenshot as...</source>
         <translation>Desar captura de pantalla com...</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="127"/>
+        <location filename="screenshottool.cpp" line="129"/>
         <source>PNG (*.png)</source>
         <translation>PNG (*.png)</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="133"/>
+        <location filename="screenshottool.cpp" line="135"/>
         <source>Jpeg (*.jpg)</source>
         <translation>Jpeg (*.jpg)</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="139"/>
+        <location filename="screenshottool.cpp" line="141"/>
         <source>BMP (*.bmp)</source>
         <translation>BMP (*.bmp)</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>&amp;Yes</source>
         <translation>&amp;Sí</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>This file already exists. Do you want to replace it?</source>
         <translation>Aquest arxiu ja existeix. El vols re-emplaçar?</translation>
     </message>
@@ -1015,7 +1016,7 @@ WW: %5 WL: %6 </translation>
     <message>
         <location filename="series.cpp" line="456"/>
         <source>No Images Available</source>
-        <translation>No hi ha imatge disponible</translation>
+        <translation>No hi ha imatges disponibles</translation>
     </message>
 </context>
 <context>

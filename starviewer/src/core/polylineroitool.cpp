@@ -13,6 +13,7 @@
 #include "drawerpolyline.h"
 #include "drawertext.h"
 #include "image.h"
+#include "series.h"
 //vtk
 #include <vtkPNGWriter.h>
 #include <vtkImageActor.h>
@@ -640,7 +641,7 @@ void PolylineROITool::closeForm()
 
         DrawerText * text = new DrawerText;
 
-        const double * pixelSpacing = m_2DViewer->getCurrentDisplayedImage()->getPixelSpacing();
+        const double * pixelSpacing = m_2DViewer->getInput()->getSeries()->getImages().at(0)->getPixelSpacing();
 
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
         {
