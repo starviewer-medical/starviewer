@@ -970,42 +970,42 @@ WW: %5 WL: %6 </translation>
 <context>
     <name>udg::ScreenShotTool</name>
     <message>
-        <location filename="screenshottool.cpp" line="64"/>
+        <location filename="screenshottool.cpp" line="66"/>
         <source>Save screenshot as...</source>
         <translation>Guardar captura de pantalla como...</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="127"/>
+        <location filename="screenshottool.cpp" line="129"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="133"/>
+        <location filename="screenshottool.cpp" line="135"/>
         <source>Jpeg (*.jpg)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="139"/>
+        <location filename="screenshottool.cpp" line="141"/>
         <source>BMP (*.bmp)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>&amp;Yes</source>
         <translation>&amp;Sí</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="112"/>
+        <location filename="screenshottool.cpp" line="114"/>
         <source>This file already exists. Do you want to replace it?</source>
         <translation>El archivo ya existe. ¿Quiere reemplazarlo?</translation>
     </message>
