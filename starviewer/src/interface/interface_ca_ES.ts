@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QConfigurationDialogBase</name>
     <message>
@@ -309,7 +310,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="409"/>
         <source>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2008 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.&lt;p&gt;Version: %1 &lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Starviewer&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2008 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;Starviewer és un programari de processat d&apos;imatge dedicat a imatges DICOM produides per equips de captació (MRI, CT, PET, PET-CT...) També pot llegir altres formats de fitxer especificats per l&apos;estàndard MetaIO ( arxius *.mhd ). Compleix amb l&apos;estàndard DICOM a nivell de comunicació i format d&apos;imatge. Starviewer està preparat per rebre imatges transmeses pel protocol de comunicació DICOM desde qualsevol PACS o modalitat (STORE SCP - Service Class Provider, STORE SCU - Service Class User i Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;Starviewer ha estat especialment dissenyat per la navegació i visualització d&apos;imatge multimodal i multidimensional: Visor 2D, Visor MPR 2D ( Reconstrucció Multiplanar ), Visor MPR 3D, Visor MPR Híbrid i Projecció de Màxima Intensitat (MIP).&lt;p align=&apos;justify&apos;&gt;Starviewer és alhora una estació de treball DICOM i un programari per recerca i processat d&apos;imatge mèdica (radiologia i medicina nuclear), imatge funcional i 3D.&lt;p&gt;Versió: %1 &lt;/p&gt;</translation>
     </message>
 </context>
 </TS>
