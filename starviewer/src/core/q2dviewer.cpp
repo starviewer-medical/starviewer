@@ -2450,7 +2450,7 @@ void Q2DViewer::updatePatientAnnotationInformation()
             m_lowerRightText += "\n" + description;
 
         m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
-        m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText ) );
+        m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
         this->refresh();
     }
     else
