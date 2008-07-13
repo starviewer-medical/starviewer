@@ -5,9 +5,8 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "pacslistdb.h"
-
 #include <QString>
+
 #include <sqlite3.h>
 
 #include "pacslist.h"
@@ -15,272 +14,241 @@
 #include "status.h"
 #include "pacsparameters.h"
 #include "logging.h"
+#include "errordcmtk.h"
 
 namespace udg {
 
-PacsListDB::PacsListDB()
+PacsListDB::PacsListDB(): m_arrayQSettingsName( "PacsList" )
 {
-    m_DBConnect = DatabaseConnection::getDatabaseConnection();
 }
 
 Status PacsListDB::insertPacs( PacsParameters *pacs )
 {
-    Status state , stateQuery;
-    int i;
-    QString sqlSentence;
+    Status state;
 
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
-    //hem de comprovar que el pacs no existis ja abans! i ara estigui donat de baixa
-    stateQuery = queryPacsDeleted(pacs);
+    state.setStatus( DcmtkNoError );
 
-    if ( stateQuery.code() == 2099 )
-    {//El pacs no estava en està estat de baixa
-        //El PACSid s'autoincrementa sol amb max(PACSID)+1
-
-        sqlSentence = QString( "Insert into PacsList "
-                            "(AETitle,Server,Port,Inst,Loc,Desc,Def,PacsID,Del) "
-                            "Values ('%1','%2','%3','%4','%5','%6','%7',(select max(PacsID) from PacsList)+1,'N')"
-            )
-            .arg( pacs->getAEPacs() )
-            .arg( pacs->getPacsAdr() )
-            .arg( pacs->getPacsPort() )
-            .arg( pacs->getInstitution() )
-            .arg( pacs->getLocation() )
-            .arg( pacs->getDescription() )
-            .arg( pacs->getDefault() );
-
-        m_DBConnect->getLock();
-
-        i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0) ;
-
-        m_DBConnect->releaseLock();
-
-        state = m_DBConnect->databaseStatus( i );
-    }
-    else if ( stateQuery.code() == 0 )
-    {//existeix un PAcs amb el mateix AEtitle, actualitzem les dades i el donem d'alta
-
-        state = updatePacs( pacs );
-    }
-    else return stateQuery;
-
-    if ( !state.good() )
+    if ( !isPacsDeleted( pacs ) )
     {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        if ( stateQuery.code() == 2099 )
-            ERROR_LOG( sqlSentence );
+        if ( !existPacs( pacs ) )
+        {
+            int arrayIndex = countPacsParamentersInQSettings();//busquem a quina posició hem de gravar el següent pacs
+        
+            pacs->setPacsID( arrayIndex );
+            pacs->setIsDeleted( false );
+        
+            setPacsParametersToQSettingsValues( pacs , arrayIndex , countPacsParamentersInQSettings() + 1 ); 
+        }
+        else state.setStatus( "El pacs ja existeix ", false , 2099 );
+    }
+    else //El pacs està donat de baixa el tornem a donar d'alta
+    {
+        PacsParameters *pacsDeleted = new PacsParameters();
+
+        queryPacs( pacsDeleted , pacs->getAEPacs() );
+
+        pacs->setPacsID( pacsDeleted->getPacsID() );
+
+        setPacsParametersToQSettingsValues( pacs , pacsDeleted->getPacsID() , countPacsParamentersInQSettings() ); 
     }
 
     return state;
 }
 
-Status PacsListDB::updatePacs( PacsParameters *pacs )
+Status PacsListDB::updatePacs( PacsParameters *pacsToUpdate )
 {
     Status state;
-    int i;
-    QString sqlSentence;
 
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
+	setPacsParametersToQSettingsValues( pacsToUpdate , pacsToUpdate->getPacsID() , countPacsParamentersInQSettings() );
 
-    sqlSentence = QString("Update PacsList set AETitle = '%1', Server = '%2', Port = '%3', Inst = '%4', Loc = '%5', Desc = '%6', Def = '%7', Del = 'N' where PacsID = %8" )
-        .arg( pacs->getAEPacs() )
-        .arg( pacs->getPacsAdr() )
-        .arg( pacs->getPacsPort() )
-        .arg( pacs->getInstitution() )
-        .arg( pacs->getLocation() )
-        .arg( pacs->getDescription() )
-        .arg( pacs->getDefault() )
-        .arg( pacs->getPacsID() );
-
-    m_DBConnect->getLock();
-    i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 );
-    m_DBConnect->releaseLock();
-
-    state = m_DBConnect->databaseStatus( i );
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sqlSentence );
-        return state;
-    }
-
-    return state;
+    return state.setStatus( DcmtkNoError );
 }
 
 Status PacsListDB::queryPacsList( PacsList &list )
 {
-    int col , rows , i = 0 , estat;
-    PacsParameters pacs;
-    char **resposta = NULL , **error = NULL;
-    QString sqlSentence;
     Status state;
 
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
-
-    sqlSentence = "select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where del = 'N' order by AETitle";
-
-    m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
-    m_DBConnect->releaseLock();
-    state = m_DBConnect->databaseStatus( estat );
-
-    if ( !state.good() )
+    for ( int arrayIndex = 0 ; arrayIndex < countPacsParamentersInQSettings() ; arrayIndex ++ )
     {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sqlSentence );
-        return state;
+        PacsParameters pacs = getPacsParametersFromQSettinsValues( arrayIndex );
+
+        if (!pacs.isDeleted()) list.insertPacs( pacs );
     }
 
-    i = 1;//ignorem les capçaleres
-    while (i <= rows)
-    {
-        pacs.setAEPacs( resposta[ 0 + i*col ] );
-        pacs.setPacsAdr( resposta[ 1 + i*col ] );
-        pacs.setPacsPort( resposta[ 2 + i*col ] );
-        pacs.setInstitution( resposta[ 3 + i*col ] );
-        pacs.setLocation( resposta[ 4 + i*col ] );
-        pacs.setDescription( resposta[ 5 + i*col ] );
-        pacs.setDefault( resposta[ 6 + i*col ] );
-        pacs.setPacsID(atoi( resposta[ 7 + i*col]));
-
-        i++;
-        list.insertPacs(pacs);
-    }
-
-    return state;
+    return state.setStatus( DcmtkNoError );
 }
 
 Status PacsListDB::queryPacs( PacsParameters *pacs , QString AETitle )
 {
-    QString sqlSentence = this->getQueryPACSByAETitleSQLSentence( AETitle );
-    return this->queryPACSInformation( pacs, sqlSentence );
+    Status state;
+    int arrayIndex = 0;
+    bool trobat = false;
+    PacsParameters pacsFromQSettings; 
+
+    while ( arrayIndex < countPacsParamentersInQSettings()  && !trobat )
+    {
+        pacsFromQSettings = getPacsParametersFromQSettinsValues( arrayIndex );
+
+        if ( pacsFromQSettings.getAEPacs() == AETitle )
+        {
+            trobat = true;
+        }
+        else arrayIndex++;
+    }
+
+    if ( trobat )
+    {
+        pacs->setAEPacs( pacsFromQSettings.getAEPacs() );
+        pacs->setDefault( pacsFromQSettings.getDefault() );
+        pacs->setDescription( pacsFromQSettings.getDescription() );
+        pacs->setInstitution( pacsFromQSettings.getInstitution() );
+        pacs->setIsDeleted( pacsFromQSettings.isDeleted() );
+        pacs->setPacsPort( pacsFromQSettings.getPacsPort() );
+        pacs->setPacsID( pacsFromQSettings.getPacsID() );
+        pacs->setPacsAdr( pacsFromQSettings.getPacsAdr() );
+        pacs->setLocation( pacsFromQSettings.getLocation() );
+    }
+
+    return state.setStatus( DcmtkNoError );
 }
 
 Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
 {
-    QString sqlSentence = this->getQueryPACSByIDSQLSentence( pacsID );
-    return this->queryPACSInformation( pacs, sqlSentence );
-}
-
-QString PacsListDB::getQueryPACSByIDSQLSentence( int id )
-{
-    return QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where PacsID = %1").arg( id );
-}
-
-QString PacsListDB::getQueryPACSByAETitleSQLSentence( QString AETitle )
-{
-    return QString("select AETitle, Server, Port, Inst, Loc, Desc, Def,PacsID from PacsList where AEtitle = '%1'").arg( AETitle );
-}
-
-Status PacsListDB::queryPACSInformation( PacsParameters *pacs, QString sqlSentence )
-{
-    int col , rows = 0 , i = 0 , estat;
-    char **resposta = NULL , **error = NULL;
     Status state;
+    int arrayIndex = 0;
+    bool trobat = false;
+    PacsParameters pacsFromQSettings; 
 
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
-
-    m_DBConnect->getLock();
-    estat = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
-    m_DBConnect->releaseLock();
-
-    //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
-    if ( rows == 0 && estat == 0 )
-        estat = 99;
-
-    state = m_DBConnect->databaseStatus( estat );
-    if ( !state.good() )
+    while ( arrayIndex < countPacsParamentersInQSettings() && !trobat )
     {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sqlSentence );
-        return state;
+        pacsFromQSettings = getPacsParametersFromQSettinsValues( arrayIndex );
+
+        if ( pacsFromQSettings.getPacsID() == pacsID )
+        {
+            trobat = true;
+        }
+        else arrayIndex++;
     }
 
-    if ( rows > 0 )
+    if ( trobat )
     {
-        i = 1;//ignorem les capçaleres
-        pacs->setAEPacs( resposta[0 + i*col ] );
-        pacs->setPacsAdr( resposta[1 + i*col ] );
-        pacs->setPacsPort( resposta[2 + i*col ] );
-        pacs->setInstitution( resposta[3 + i*col ] );
-        pacs->setLocation( resposta[4 + i*col ] );
-        pacs->setDescription( resposta[5 + i*col ] );
-        pacs->setDefault( resposta[6 + i*col ] );
-        pacs->setPacsID(atoi( resposta[7 + i*col]));
+        pacs->setAEPacs( pacsFromQSettings.getAEPacs() );
+        pacs->setDefault( pacsFromQSettings.getDefault() );
+        pacs->setDescription( pacsFromQSettings.getDescription() );
+        pacs->setInstitution( pacsFromQSettings.getInstitution() );
+        pacs->setIsDeleted( pacsFromQSettings.isDeleted() );
+        pacs->setPacsPort( pacsFromQSettings.getPacsPort() );
+        pacs->setPacsID( pacsFromQSettings.getPacsID() );
+        pacs->setPacsAdr( pacsFromQSettings.getPacsAdr() );
+        pacs->setLocation( pacsFromQSettings.getLocation() );
     }
 
-    return state;
+    return state.setStatus( DcmtkNoError );
 }
 
-Status PacsListDB::deletePacs( PacsParameters *pacs )
+bool PacsListDB::existPacs( PacsParameters *pacs )
+{
+    int arrayIndex = 0;
+    bool trobat = false;
+    PacsParameters pacsFromQSettings;
+
+    while ( arrayIndex < countPacsParamentersInQSettings()  && !trobat )
+    {
+        pacsFromQSettings = getPacsParametersFromQSettinsValues( arrayIndex );
+
+        if ( pacsFromQSettings.getAEPacs() == pacs->getAEPacs() )
+        {
+            trobat = true;
+        }
+        else arrayIndex++;
+    }
+
+    return trobat;
+}
+
+bool PacsListDB::isPacsDeleted( PacsParameters *pacs )
+{
+    int arrayIndex = 0;
+    bool trobat = false;
+    PacsParameters pacsFromQSettings;
+
+    while ( arrayIndex < countPacsParamentersInQSettings()  && !trobat )
+    {
+        pacsFromQSettings = getPacsParametersFromQSettinsValues( arrayIndex );
+
+        if ( pacsFromQSettings.getAEPacs() == pacs->getAEPacs() && pacsFromQSettings.isDeleted() )
+        {
+            trobat = true;
+        }
+        else arrayIndex++;
+    }
+
+    return trobat;
+}
+
+Status PacsListDB::deletePacs( int pacsID )
 {
     Status state;
-    int i;
-    QString sqlSentence;
+    PacsParameters *pacsToDelete = new PacsParameters;;
 
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
-    sqlSentence = QString("update PacsList set Del = 'S' where PacsID = %1" ).arg( pacs->getPacsID() );
+    queryPacs( pacsToDelete , pacsID );
 
-    m_DBConnect->getLock();
-    i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sqlSentence), 0 , 0 , 0 );
+    pacsToDelete->setIsDeleted( true );//el marquem com a esborrat
 
-    m_DBConnect->releaseLock();
+    setPacsParametersToQSettingsValues( pacsToDelete , pacsToDelete->getPacsID() , countPacsParamentersInQSettings() );
 
-    state = m_DBConnect->databaseStatus( i );
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sqlSentence );
-    }
-    return state;
+    return state.setStatus( DcmtkNoError );
 
 }
 
-Status PacsListDB::queryPacsDeleted( PacsParameters *pacs )
+void PacsListDB::setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex , int sizeOfArray )
 {
-    int col , rows = 0 , estat;
-    char **resposta = NULL ,**error = NULL;
-    QString sqlSentence;
-    Status state;
+    /*Especifiquem  quina serà la mida de l'array de PacsParameters que guardem*/
+    m_pacsListQSettings.beginWriteArray( m_arrayQSettingsName , sizeOfArray );
 
-    sqlSentence = QString("select PacsID from PacsList where AEtitle = '%1' and Del = 'S'").arg( pacs->getAEPacs() );
+    m_pacsListQSettings.setArrayIndex( arrayIndex );
+    m_pacsListQSettings.setValue( "ID" , pacs->getPacsID() );
+    m_pacsListQSettings.setValue( "AETitle" , pacs->getAEPacs() );
+    m_pacsListQSettings.setValue( "PacsPort" , pacs->getPacsPort() );
+    m_pacsListQSettings.setValue( "Location" , pacs->getLocation() );
+    m_pacsListQSettings.setValue( "Institution" , pacs->getInstitution() );
+    m_pacsListQSettings.setValue( "Default" , pacs->getDefault() );
+    m_pacsListQSettings.setValue( "PacsHostname" , pacs->getPacsAdr() );
+    m_pacsListQSettings.setValue( "Deleted" , pacs->isDeleted() );
+    m_pacsListQSettings.setValue( "Description" , pacs->getDescription() );
 
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
+    m_pacsListQSettings.endArray();
+}
 
-    m_DBConnect->getLock();
-    estat=sqlite3_get_table( m_DBConnect->getConnection() , qPrintable(sqlSentence), &resposta , &rows , &col , error ); //connexio a la bdd,sentencia sql ,resposta, numero de files,numero de cols.
-    m_DBConnect->releaseLock();
+PacsParameters PacsListDB::getPacsParametersFromQSettinsValues( int arrayIndex )
+{
+    PacsParameters returnPacsParameters;
 
-    //sqlite no té estat per indica que no s'ha trobat dades, li assigno jo aquest estat!!
-    if ( rows == 0 && estat == 0 ) estat = 99;
+    m_pacsListQSettings.beginReadArray( m_arrayQSettingsName );
 
-    if ( rows > 0 ) pacs->setPacsID( atoi( resposta[1]) );
-    state = m_DBConnect->databaseStatus( estat );
+    m_pacsListQSettings.setArrayIndex( arrayIndex );
 
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sqlSentence );
-    }
-    return state;
+    returnPacsParameters.setPacsID( m_pacsListQSettings.value( "ID" ).toInt() );
+    returnPacsParameters.setAEPacs( m_pacsListQSettings.value( "AETitle" ).toString()  );
+    returnPacsParameters.setPacsPort( m_pacsListQSettings.value( "PacsPort" ).toString() );
+    returnPacsParameters.setLocation( m_pacsListQSettings.value( "Location" ).toString()  );
+    returnPacsParameters.setInstitution( m_pacsListQSettings.value( "Institution" ).toString() );
+    returnPacsParameters.setDefault( m_pacsListQSettings.value( "Default" ).toString() );
+    returnPacsParameters.setPacsAdr( m_pacsListQSettings.value( "PacsHostname" ).toString() );
+    returnPacsParameters.setIsDeleted( m_pacsListQSettings.value( "Deleted" ).toBool() );
+    returnPacsParameters.setDescription( m_pacsListQSettings.value( "Description" ).toString() );
+
+    m_pacsListQSettings.endArray();
+
+    return returnPacsParameters;
+}
+
+int PacsListDB::countPacsParamentersInQSettings()
+{
+    int arrayIndex = m_pacsListQSettings.beginReadArray( m_arrayQSettingsName );
+    m_pacsListQSettings.endArray();
+
+    return arrayIndex;
 }
 
 PacsListDB::~PacsListDB()

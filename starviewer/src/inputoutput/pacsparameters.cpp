@@ -10,12 +10,14 @@ PacsParameters::PacsParameters( QString adr , QString port , QString aet , QStri
     m_aeTitle = aet;
     m_aeCalled = aec;
     m_TimeOut = 15000; //establim que per defecte el timeout és de 15000 ms
-    m_PacsID = 0;
+    m_PacsID = -1;
+    m_isDeleted = false;
 }
 
 PacsParameters::PacsParameters()
 {
-    m_PacsID = 0;
+    m_PacsID = -1;
+    m_isDeleted = false;
 }
 
 void PacsParameters::setPacsAdr( QString adr )
@@ -71,6 +73,11 @@ void PacsParameters::setTimeOut( int time )
 void PacsParameters::setPacsID( int id )
 {
     m_PacsID = id;
+}
+
+void PacsParameters::setIsDeleted( bool isDeleted )
+{
+    m_isDeleted = isDeleted;
 }
 
 /*****************************************************************************************/
@@ -130,6 +137,11 @@ int PacsParameters::getPacsID()
     return m_PacsID;
 }
 
+bool PacsParameters::isDeleted()
+{
+    return m_isDeleted;
+}
+
 bool PacsParameters::operator ==(const PacsParameters &parameters)
 {
     if(    m_aeCalled == parameters.m_aeCalled
@@ -144,6 +156,7 @@ bool PacsParameters::operator ==(const PacsParameters &parameters)
         && m_Location == parameters.m_Location
         && m_PacsID == parameters.m_PacsID
         && m_TimeOut == parameters.m_TimeOut
+        && m_isDeleted == parameters.m_isDeleted
     )
         return true;
     else
