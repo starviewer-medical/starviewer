@@ -5,6 +5,8 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+#include "pacslistdb.h"
+
 #include <QString>
 
 #include <sqlite3.h>
