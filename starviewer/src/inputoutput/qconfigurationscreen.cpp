@@ -41,7 +41,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     setupUi( this );
     fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats
 
-    m_PacsID = 0;
+    m_selectedPacsID = -1;
 
     loadCacheDefaults();
     loadPacsDefaults();
@@ -211,7 +211,7 @@ void QConfigurationScreen:: clear()
     m_textLocation->clear();
     m_textDescription->clear();
     m_checkDefault->setChecked( false );
-    m_PacsID = 0;
+    m_selectedPacsID = -1;
 }
 
 void QConfigurationScreen::addPacs()
@@ -282,7 +282,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * item , int )
             m_textInstitution->setText( pacs.getInstitution() );
             m_textLocation->setText( pacs.getLocation() );
             m_textDescription->setText( pacs.getDescription() );
-            m_PacsID = pacs.getPacsID();
+            m_selectedPacsID = pacs.getPacsID();
             if ( pacs.getDefault() == "S" )
             {
                 m_checkDefault->setChecked( true );
@@ -290,6 +290,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * item , int )
             else m_checkDefault->setChecked( false );
        }
     }
+    else m_selectedPacsID = -1;
 }
 
 void QConfigurationScreen::updatePacs()
@@ -298,7 +299,7 @@ void QConfigurationScreen::updatePacs()
     Status state;
     PacsListDB pacsList;
 
-    if ( m_PacsID == 0 )
+    if ( m_selectedPacsID == -1 )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a PACS to update" ) );
         return;
@@ -312,7 +313,7 @@ void QConfigurationScreen::updatePacs()
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
         pacs.setDescription( m_textDescription->text() );
-        pacs.setPacsID( m_PacsID );
+        pacs.setPacsID( m_selectedPacsID );
         if ( m_checkDefault->isChecked() )
         {
             pacs.setDefault( "S" );
@@ -340,20 +341,17 @@ void QConfigurationScreen::updatePacs()
 void QConfigurationScreen::deletePacs()
 {
     Status state;
-    PacsParameters pacs;
     PacsListDB pacsList;
 
-    if ( m_PacsID == 0 )
+    if ( m_selectedPacsID == -1 )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a PACS to delete" ) );
         return;
     }
 
-    pacs.setPacsID( m_PacsID );//per donar de baixa n'hi prou amb el camp clau
-
     INFO_LOG( "Esborrant el PACS: " + m_textAETitle->text() );
 
-    state = pacsList.deletePacs( &pacs );
+    state = pacsList.deletePacs( m_selectedPacsID );
 
     if ( !state.good() )
     {

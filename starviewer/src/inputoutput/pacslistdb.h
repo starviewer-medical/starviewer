@@ -7,6 +7,8 @@
 #ifndef UDGPACSLISTDB_H
 #define UDGPACSLISTDB_H
 
+#include <QSettings>
+
 class QString;
 
 namespace udg {
@@ -17,7 +19,6 @@ namespace udg {
 
 class Status;
 class PacsParameters;
-class DatabaseConnection;
 class PacsList;
 
 class PacsListDB{
@@ -36,7 +37,7 @@ public:
      */
     Status insertPacs( PacsParameters *pacs );
 
-    /** Retorna un objecte PacsList amb tots els Pacs que hi ha la taula PacsList odernats per AEtitle. Nomes selecciona els pacs vius, els que estan en estat de baixa no els selecciona
+    /** Retorna un objecte PacsList amb tots els Pacs que hi ha la taula PacsList odernats per AEtitle. Nomes selecciona els pacs vius, és a dir els que no tenen estat d'esborrats
      * @param PacsList Conté tots els Pacs de la taula PacsList
      * @return estat de l'operació
      */
@@ -48,11 +49,11 @@ public:
      */
     Status updatePacs( PacsParameters *pacs );
 
-    /** Es donarà de baixa el Pacs de l'objecte PacsParameters passat. No es dona de baixa físicament, sinó que a la bd es posa en estat de baixa, ja que a la caché podem tenir estudis que hi facin referència, De PacsParameters només cal omplir el PacsID (camp clau= per esborrar el PACS
-     * @param  Objecte PacsParamets amb el PacsID del pacs a esborrar
+    /** Es donarà de baixa el Pacs de l'objecte PacsParameters passat. No es dona de baixa físicament, sinó que es posa en estat donat de baixa
+     * @param  Objecte pacsID del pacs a donar de baixa
      * @return estat de l'operació
      */
-    Status deletePacs( PacsParameters *pacs );
+    Status deletePacs( int pacsID );
 
     /** Cerca la informació d'un pacs en concret.
      * @param Conté la informació del pacs cercat
@@ -69,21 +70,32 @@ public:
     Status queryPacs( PacsParameters *pacs , int pacsID );
 
 private:
+
+    ///Ens indica si un Pacs ja està donat d'alta
+    bool existPacs( PacsParameters * pacs );
+
     /** Comprova si el pacs existeix en estat de baixa, comprovem si el AETitle està en estat donat de baixa
      * @param Pacs a Trobar
      * @return estat de l'operació
      */
-    Status queryPacsDeleted( PacsParameters *pacs );
+    bool isPacsDeleted( PacsParameters *pacs );
 
     /// Interroga la base de dades per obtenir la informació del PACS
     Status queryPACSInformation( PacsParameters *pacs, QString sqlSentence );
 
-    /// Construeixen les sentències SQL per a la interrogació de queryPACS...
-    QString getQueryPACSByIDSQLSentence( int id );
-    QString getQueryPACSByAETitleSQLSentence( QString AETitle );
-
 private:
-    DatabaseConnection *m_DBConnect;
+
+    ///Guarda les dades del Pacs passat per paràmetres a la posició que indica l'arrayIndex
+    void setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex, int sizeOfArray );
+
+    ///Legeix el Pacs de QSettings a la posició especificada
+    PacsParameters getPacsParametersFromQSettinsValues( int arrayIndex );
+
+    ///Compta quants pacs tenim guardats als QSettings
+    int countPacsParamentersInQSettings();
+
+    QSettings m_pacsListQSettings;
+    QString m_arrayQSettingsName;
 };
 
 };
