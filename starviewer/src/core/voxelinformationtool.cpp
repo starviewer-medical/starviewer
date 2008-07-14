@@ -27,7 +27,6 @@ VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
     {
         DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
     }
-
     createCaptionActor();
     connect( m_2DViewer, SIGNAL( sliceChanged(int) ), SLOT( updateVoxelInformation() ) );
     connect( m_2DViewer, SIGNAL( phaseChanged(int) ), SLOT( updateVoxelInformation() ) );
@@ -35,7 +34,8 @@ VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
 
 VoxelInformationTool::~VoxelInformationTool()
 {
-    m_2DViewer->getRenderer()->RemoveActor( m_voxelInformationCaption );
+    // TODO s'hauria de veure si és millor substituir aquest
+    // voxelInformationCaption (vtkCaptionActor2D) per un DrawerText
     m_voxelInformationCaption->Delete();
 }
 
@@ -127,16 +127,16 @@ void VoxelInformationTool::placeText( double textPosition[3] )
     double wPoint[4];
     int position[2];
     double xyz[3];
-    
+
     for ( int i = 0; i <3; i++)
         xyz[i] = textPosition[i];
-    
+
     correctPositionOfCaption( position );
     QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
     xyz[0] = wPoint[0];
     xyz[1] = wPoint[1];
     depthAccordingViewAndSlice( xyz );
-    
+
     m_voxelInformationCaption->VisibilityOn();
     m_voxelInformationCaption->SetAttachmentPoint( xyz );
     m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( m_2DViewer->getCurrentImageValue() ) ) );
