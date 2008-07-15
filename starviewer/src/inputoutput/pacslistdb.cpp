@@ -39,19 +39,19 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
             pacs->setPacsID( arrayIndex );
             pacs->setIsDeleted( false );
         
-            setPacsParametersToQSettingsValues( pacs , arrayIndex , countPacsParamentersInQSettings() + 1 ); 
+            setPacsParametersToQSettingsValues( pacs, arrayIndex, countPacsParamentersInQSettings() + 1 ); 
         }
-        else state.setStatus( "El pacs ja existeix ", false , 2099 );
+        else state.setStatus( "El pacs ja existeix ", false, 2099 );
     }
     else //El pacs està donat de baixa el tornem a donar d'alta
     {
         PacsParameters *pacsDeleted = new PacsParameters();
 
-        queryPacs( pacsDeleted , pacs->getAEPacs() );
+        queryPacs( pacsDeleted, pacs->getAEPacs() );
 
         pacs->setPacsID( pacsDeleted->getPacsID() );
 
-        setPacsParametersToQSettingsValues( pacs , pacsDeleted->getPacsID() , countPacsParamentersInQSettings() ); 
+        setPacsParametersToQSettingsValues( pacs, pacsDeleted->getPacsID(), countPacsParamentersInQSettings() ); 
     }
 
     return state;
@@ -61,7 +61,7 @@ Status PacsListDB::updatePacs( PacsParameters *pacsToUpdate )
 {
     Status state;
 
-	setPacsParametersToQSettingsValues( pacsToUpdate , pacsToUpdate->getPacsID() , countPacsParamentersInQSettings() );
+	setPacsParametersToQSettingsValues( pacsToUpdate, pacsToUpdate->getPacsID(), countPacsParamentersInQSettings() );
 
     return state.setStatus( DcmtkNoError );
 }
@@ -80,7 +80,7 @@ Status PacsListDB::queryPacsList( PacsList &list )
     return state.setStatus( DcmtkNoError );
 }
 
-Status PacsListDB::queryPacs( PacsParameters *pacs , QString AETitle )
+Status PacsListDB::queryPacs( PacsParameters *pacs, QString AETitle )
 {
     Status state;
     int arrayIndex = 0;
@@ -114,7 +114,7 @@ Status PacsListDB::queryPacs( PacsParameters *pacs , QString AETitle )
     return state.setStatus( DcmtkNoError );
 }
 
-Status PacsListDB::queryPacs( PacsParameters *pacs , int pacsID )
+Status PacsListDB::queryPacs( PacsParameters *pacs, int pacsID )
 {
     Status state;
     int arrayIndex = 0;
@@ -193,31 +193,31 @@ Status PacsListDB::deletePacs( int pacsID )
     Status state;
     PacsParameters *pacsToDelete = new PacsParameters;;
 
-    queryPacs( pacsToDelete , pacsID );
+    queryPacs( pacsToDelete, pacsID );
 
     pacsToDelete->setIsDeleted( true );//el marquem com a esborrat
 
-    setPacsParametersToQSettingsValues( pacsToDelete , pacsToDelete->getPacsID() , countPacsParamentersInQSettings() );
+    setPacsParametersToQSettingsValues( pacsToDelete, pacsToDelete->getPacsID(), countPacsParamentersInQSettings() );
 
     return state.setStatus( DcmtkNoError );
 
 }
 
-void PacsListDB::setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex , int sizeOfArray )
+void PacsListDB::setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex, int sizeOfArray )
 {
     /*Especifiquem  quina serà la mida de l'array de PacsParameters que guardem*/
-    m_pacsListQSettings.beginWriteArray( m_arrayQSettingsName , sizeOfArray );
+    m_pacsListQSettings.beginWriteArray( m_arrayQSettingsName, sizeOfArray );
 
     m_pacsListQSettings.setArrayIndex( arrayIndex );
-    m_pacsListQSettings.setValue( "ID" , pacs->getPacsID() );
-    m_pacsListQSettings.setValue( "AETitle" , pacs->getAEPacs() );
-    m_pacsListQSettings.setValue( "PacsPort" , pacs->getPacsPort() );
-    m_pacsListQSettings.setValue( "Location" , pacs->getLocation() );
-    m_pacsListQSettings.setValue( "Institution" , pacs->getInstitution() );
-    m_pacsListQSettings.setValue( "Default" , pacs->getDefault() );
-    m_pacsListQSettings.setValue( "PacsHostname" , pacs->getPacsAdr() );
-    m_pacsListQSettings.setValue( "Deleted" , pacs->isDeleted() );
-    m_pacsListQSettings.setValue( "Description" , pacs->getDescription() );
+    m_pacsListQSettings.setValue( "ID", pacs->getPacsID() );
+    m_pacsListQSettings.setValue( "AETitle", pacs->getAEPacs() );
+    m_pacsListQSettings.setValue( "PacsPort", pacs->getPacsPort() );
+    m_pacsListQSettings.setValue( "Location", pacs->getLocation() );
+    m_pacsListQSettings.setValue( "Institution", pacs->getInstitution() );
+    m_pacsListQSettings.setValue( "Default", pacs->getDefault() );
+    m_pacsListQSettings.setValue( "PacsHostname", pacs->getPacsAdr() );
+    m_pacsListQSettings.setValue( "Deleted", pacs->isDeleted() );
+    m_pacsListQSettings.setValue( "Description", pacs->getDescription() );
 
     m_pacsListQSettings.endArray();
 }

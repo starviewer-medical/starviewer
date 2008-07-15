@@ -74,7 +74,7 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study, QString source )
         PacsParameters *pacsParameters = new PacsParameters();
 
         pacsListDB.queryPacs( pacsParameters , study->getPacsAETitle() );
-		pacsID = pacsID.setNum( pacsParameters->getPacsID() , 10 );
+        pacsID = pacsID.setNum( pacsParameters->getPacsID() , 10 );
     }
     else if( source == "DICOMDIR" )
     {
