@@ -83,8 +83,6 @@ private:
     /// Interroga la base de dades per obtenir la informació del PACS
     Status queryPACSInformation( PacsParameters *pacs, QString sqlSentence );
 
-private:
-
     ///Guarda les dades del Pacs passat per paràmetres a la posició que indica l'arrayIndex
     void setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex, int sizeOfArray );
 
@@ -93,6 +91,8 @@ private:
 
     ///Compta quants pacs tenim guardats als QSettings
     int countPacsParamentersInQSettings();
+
+private:
 
     QSettings m_pacsListQSettings;
     QString m_arrayQSettingsName;
