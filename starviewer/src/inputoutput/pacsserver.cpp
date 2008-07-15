@@ -71,7 +71,7 @@ OFCondition PacsServer::configureEcho()
 
 OFCondition PacsServer::configureFind( levelConnection level )
 {
-    int pid;
+    int pid = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
 
     //we specify the type transfer
     const char* transferSyntaxes[] = { NULL , NULL , UID_LittleEndianImplicitTransferSyntax };
@@ -110,14 +110,12 @@ OFCondition PacsServer::configureFind( levelConnection level )
         opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
     }
 
-    pid = 3; //pid always have to be an odd number
-
     return ASC_addPresentationContext( m_params , pid , opt_abstractSyntax , transferSyntaxes , DIM_OF(transferSyntaxes) );
 }
 
 OFCondition PacsServer::configureMove( levelConnection level )
 {
-    int pid;
+    int pid = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
     OFCondition status;
 
     //we specify the transfer
@@ -137,39 +135,26 @@ OFCondition PacsServer::configureMove( levelConnection level )
     }
 
    //specify the modality of the find,this is necessary in move, bescause first of all the pacs has to search the study
-   static const char *     opt_abstractSyntaxFind;
    static const char *     opt_abstractSyntaxMove;
 
    //Alhora de moure les imatges, el PACS primer ha de verificar que existexi unes imatges que compleixin la màscara que se li ha passat
    //per això primer ha de fer un "find", degut aquest fet aquí hem d'especificar dos funcions a fer la de buscar "UID_FIND" i descarregar "UID_MOVE"
     if ( level == studyLevel )
     {
-        opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;
         opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;
     }
     else if ( level == patientLevel )
     {
-        opt_abstractSyntaxFind = UID_FINDPatientStudyOnlyQueryRetrieveInformationModel;
         opt_abstractSyntaxMove = UID_MOVEPatientStudyOnlyQueryRetrieveInformationModel;
     }
     else if ( level == seriesLevel )
     {
-        opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;
         opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;
     }
     else if ( level == imageLevel )
     {
-        opt_abstractSyntaxFind = UID_FINDStudyRootQueryRetrieveInformationModel;
         opt_abstractSyntaxMove = UID_MOVEStudyRootQueryRetrieveInformationModel;
     }
-
-   pid = 3; //sempre ha de ser imparell
-
-   status = addPresentationContextMove( m_params, pid , opt_abstractSyntaxFind );
-
-   if ( status.bad() ) return status;
-
-   pid = pid + 2; //pid always have to be an odd number
 
    status = addPresentationContextMove( m_params, pid , opt_abstractSyntaxMove );
 
@@ -406,14 +391,12 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     cond = ASC_setPresentationAddresses( m_params , adrLocal , qPrintable(AdrServer) );
     if ( !cond.good() ) return state.setStatus( cond );
 
-    //default, always configure the echo
-    cond = configureEcho();
-    if ( !cond.good() ) return state.setStatus( cond );
-
-
     switch ( modality )
     {
-        case echoPacs : //configure the pacs parameters
+        case echoPacs : //configure echo
+                        cond = configureEcho();
+                        if ( !cond.good() ) return state.setStatus( cond );
+
                         state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
                         if ( !state.good() ) return state;
 
