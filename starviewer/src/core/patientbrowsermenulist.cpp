@@ -15,7 +15,8 @@
 #include "series.h"
 #include "patientbrowsermenubasicitem.h"
 #include "logging.h"
-#include "math.h"
+
+#include <cmath>
 
 namespace udg {
 
