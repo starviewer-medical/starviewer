@@ -15,6 +15,7 @@
 #include "series.h"
 #include "patientbrowsermenubasicitem.h"
 #include "logging.h"
+#include "math.h"
 
 namespace udg {
 
@@ -95,15 +96,18 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
         maxColumns = 3;
 
     int row = 0;
+    int column = 0;
+    int columnElements = ceil ( (double) numberOfViewableSeries / maxColumns );
+
     while (!seriesToAdd.isEmpty())
     {
-        int column = 0;
-        while ( column < maxColumns && !seriesToAdd.isEmpty())
+        while ( row < columnElements && !seriesToAdd.isEmpty())
         {
             gridLayoutWidgets->addWidget( createSerieWidget(seriesToAdd.takeFirst(), studyWidget), row, column );
-            ++column;
+            ++row;
         }
-        ++row;
+        row = 0;
+        ++column;
     }
 
     return studyWidget;
