@@ -18,22 +18,19 @@ AmbientVoxelShader::~AmbientVoxelShader()
 void AmbientVoxelShader::setTransferFunction( const TransferFunction &transferFunction )
 {
     m_transferFunction = transferFunction;
-}
-
-
-QColor AmbientVoxelShader::shade( int offset, const QColor &baseColor ) const
-{
-    Q_UNUSED( baseColor );
-
-    Q_CHECK_PTR( m_data );
-
-    return m_transferFunction.get( m_data[offset] );
+    precomputeAmbientColors();
 }
 
 
 QString AmbientVoxelShader::toString() const
 {
     return "AmbientVoxelShader";
+}
+
+
+void AmbientVoxelShader::precomputeAmbientColors()
+{
+    for ( int i = 0; i < AMBIENT_COLORS_TABLE_SIZE; i++ ) m_ambientColors[i] = m_transferFunction.get( i );
 }
 
 

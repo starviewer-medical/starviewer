@@ -51,7 +51,8 @@ QColor DirectIlluminationVoxelShader::shade( int offset, const QColor &baseColor
     Q_CHECK_PTR( m_redDiffuseShadingTable ); Q_CHECK_PTR( m_greenDiffuseShadingTable ); Q_CHECK_PTR( m_blueDiffuseShadingTable );
     Q_CHECK_PTR( m_redSpecularShadingTable ); Q_CHECK_PTR( m_greenSpecularShadingTable ); Q_CHECK_PTR( m_blueSpecularShadingTable );
 
-    QColor color = m_transferFunction.get( m_data[offset] );
+    //QColor color = m_transferFunction.get( m_data[offset] );
+    QColor color = AmbientVoxelShader::shade( offset, baseColor );
 
     if ( color.alpha() > 0 )
     {
