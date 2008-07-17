@@ -1396,10 +1396,14 @@ void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
     }
     else
     {
-        m_perfusion2DView->getCurrentCursorPosition(pos);
-        m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-        m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-        index[2]=m_perfusion2DView->getCurrentSlice();
+        if( m_penombraMaskVolume )
+        {
+            m_perfusion2DView->getCurrentCursorPosition(pos);
+            m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+            m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+            index[2]=m_perfusion2DView->getCurrentSlice();
+        }
+        else return;
     }
     centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
     centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
@@ -1413,7 +1417,7 @@ void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
                 value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
-                if((*value) == m_diffusionMinValue)
+                if( value && ((*value) == m_diffusionMinValue) )
                 {
                     (*value) = m_diffusionMaxValue;
                     if(m_activedMaskVolume == m_strokeMaskVolume)
@@ -1431,7 +1435,7 @@ void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
                 value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
-                if((*value) != m_penombraMaskMaxValue)
+                if( value && ((*value) != m_penombraMaskMaxValue) )
                 {
                     (*value) = m_penombraMaskMaxValue;
                      m_penombraCont++;
