@@ -137,7 +137,6 @@ void QEdemaSegmentationExtension::createActions()
     m_editorAction->setEnabled( false );
     m_editorToolButton->setDefaultAction( m_editorAction );
 
-
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
@@ -558,23 +557,23 @@ void QEdemaSegmentationExtension::strokeEventHandler( unsigned long id )
 {
     switch( id )
     {
-    case vtkCommand::MouseMoveEvent:
-        setPaintCursor();
-    break;
+        case vtkCommand::MouseMoveEvent:
+            setPaintCursor();
+        break;
 
-    case vtkCommand::LeftButtonPressEvent:
-        leftButtonEventHandler();
-    break;
+        case vtkCommand::LeftButtonPressEvent:
+            leftButtonEventHandler();
+        break;
 
-    case vtkCommand::LeftButtonReleaseEvent:
-        setLeftButtonOff();
-    break;
+        case vtkCommand::LeftButtonReleaseEvent:
+            setLeftButtonOff();
+        break;
 
-    case vtkCommand::RightButtonPressEvent:
-    break;
+        case vtkCommand::RightButtonPressEvent:
+        break;
 
-    default:
-    break;
+        default:
+        break;
     }
 
 }
@@ -853,7 +852,7 @@ void QEdemaSegmentationExtension::paintMask(int size)
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
             value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
-            if((*value) != m_insideValue)
+            if(value && ((*value) != m_insideValue) )
             {
                 (*value) = m_insideValue;
                 (*m_activedCont)++;
