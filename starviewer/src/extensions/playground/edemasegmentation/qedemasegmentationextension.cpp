@@ -220,28 +220,32 @@ void QEdemaSegmentationExtension::createActions()
 
 void QEdemaSegmentationExtension::createConnections()
 {
-  connect( m_filterPushButton, SIGNAL( clicked() ), SLOT( applyFilterMainImage() ) );
-  connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( applyMethod() ) );
-  connect( m_applyCleanSkullButton, SIGNAL( clicked() ), SLOT( applyCleanSkullMethod() ) );
-  connect( m_applyVentriclesMethodButton, SIGNAL( clicked() ), SLOT( applyVentriclesMethod() ) );
-  connect( m_applyEdemaMethodButton, SIGNAL( clicked() ), SLOT( applyEdemaMethod() ) );
-  connect( m_lesionViewToolButton, SIGNAL( clicked() ), SLOT( viewLesionOverlay() ) );
-  connect( m_edemaViewToolButton, SIGNAL( clicked() ), SLOT( viewEdemaOverlay() ) );
-  connect( m_ventriclesViewToolButton, SIGNAL( clicked() ), SLOT( viewVentriclesOverlay() ) );
-  connect( m_eraseButton, SIGNAL( clicked() ), SLOT( setErase() ) );
-  connect( m_eraseSliceButton, SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
-  connect( m_eraseRegionButton, SIGNAL( clicked() ), SLOT( setEraseRegion() ) );
-  connect( m_paintButton, SIGNAL( clicked() ), SLOT( setPaint() ) );
-  connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
-  connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
-  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
-  connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-  connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
-  connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
-  connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
-  connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
-  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
-  connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
+    connect( m_filterPushButton, SIGNAL( clicked() ), SLOT( applyFilterMainImage() ) );
+    connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( applyMethod() ) );
+    connect( m_applyCleanSkullButton, SIGNAL( clicked() ), SLOT( applyCleanSkullMethod() ) );
+    connect( m_applyVentriclesMethodButton, SIGNAL( clicked() ), SLOT( applyVentriclesMethod() ) );
+    connect( m_applyEdemaMethodButton, SIGNAL( clicked() ), SLOT( applyEdemaMethod() ) );
+    connect( m_lesionViewToolButton, SIGNAL( clicked() ), SLOT( viewLesionOverlay() ) );
+    connect( m_edemaViewToolButton, SIGNAL( clicked() ), SLOT( viewEdemaOverlay() ) );
+    connect( m_ventriclesViewToolButton, SIGNAL( clicked() ), SLOT( viewVentriclesOverlay() ) );
+    connect( m_eraseButton, SIGNAL( clicked() ), SLOT( setErase() ) );
+    connect( m_eraseSliceButton, SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
+    connect( m_eraseRegionButton, SIGNAL( clicked() ), SLOT( setEraseRegion() ) );
+    connect( m_paintButton, SIGNAL( clicked() ), SLOT( setPaint() ) );
+    connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
+    connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+    connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
+    connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
+    connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
+    connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
+    connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
+    connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
+    connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
+
+    connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds() ) );
+    connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds() ) );
+
 }
 
 void QEdemaSegmentationExtension::setInput( Volume *input )
