@@ -375,6 +375,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     m_diffusion2DView->render();
 
     connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
+    connect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
 }
 
 void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
