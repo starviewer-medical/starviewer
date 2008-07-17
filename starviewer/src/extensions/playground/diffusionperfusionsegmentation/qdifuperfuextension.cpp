@@ -155,7 +155,6 @@ void QDifuPerfuSegmentationExtension::createActions()
     // TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
     m_seedAction->trigger();
 
-
     m_lesionViewAction = new QAction( this );
     m_lesionViewAction->setText( tr("Lesion Overlay") );
     m_lesionViewAction->setStatusTip( tr("Enable/disable lesion view overlay") );
@@ -419,6 +418,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
     m_perfusionHueLut->ForceBuild();    //effective built
     int nvalues=m_perfusionHueLut->GetNumberOfTableValues();
     double* tvalue= new double[4];
+
     for(int i=0;i<((threshold*nvalues)/255);i++)
     {
         tvalue=m_perfusionHueLut->GetTableValue(i);
@@ -428,6 +428,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
         tvalue[3]=0.0;  //Posem els valors transparents
         m_perfusionHueLut->SetTableValue(i, tvalue);
     }
+
     m_perfusionHueLut->Build();    //effective built
 
     vtkUnsignedCharArray * table = m_perfusionHueLut->GetTable();
@@ -815,6 +816,7 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         hueLut->Build();    //effective built
         int nvalues=hueLut->GetNumberOfTableValues();
         double* tvalue= new double[4];
+
         for(int i=0;i<(m_perfusionThresholdViewerSlider->value()*nvalues)/255;i++)
         {
             tvalue=hueLut->GetTableValue(i);
@@ -824,6 +826,7 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
             tvalue[3]=0.0;  //Posem els valors transparents
             hueLut->SetTableValue(i, tvalue);
         }
+
         hueLut->Build();    //effective built
 
         vtkUnsignedCharArray * table = hueLut->GetTable();
@@ -954,7 +957,6 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
 
-
     ItkImageType::PointType seedPoint( m_seedPosition );
     ItkImageType::IndexType seedIndex;
     m_blackpointEstimatedVolume->getItkData()->TransformPhysicalPointToIndex( seedPoint, seedIndex );
@@ -976,7 +978,6 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     m_penombraMaskVolume = new Volume();
     m_penombraMaskVolume->setImages( m_perfusionInputVolume->getImages() );
     m_penombraMaskVolume->setData( penombraMask );
-
 
     vtkImageCast * imageCast = vtkImageCast::New();
     imageCast->SetInput( m_penombraMaskVolume->getVtkData() );
@@ -1157,16 +1158,21 @@ void QDifuPerfuSegmentationExtension::setEditorPoint( int idViewer )
                 m_strokeVolumeLineEdit->insert(QString("%1").arg(m_strokeVolume, 0, 'f', 2));
                 m_diffusion2DView->setOverlayInput(m_activedMaskVolume);
                 m_diffusion2DView->refresh();
-            }else{
-                m_penombraVolumeLineEdit->clear();
-                m_penombraVolume=m_penombraMaskVolume->getSpacing()[0]*m_penombraMaskVolume->getSpacing()[1]*m_penombraMaskVolume->getSpacing()[2]*m_penombraCont;
-                m_penombraVolumeLineEdit->insert(QString("%1").arg(m_penombraVolume, 0, 'f', 2));
-                vtkImageCast * imageCast = vtkImageCast::New();
-                imageCast->SetInput( m_penombraMaskVolume->getVtkData() );
-                imageCast->SetOutputScalarTypeToUnsignedChar();
-                m_perfusionOverlay->SetInput( imageCast->GetOutput() );
-                imageCast->Delete();
-                m_perfusion2DView->refresh();
+            }
+            else
+            {
+                if( m_penombraVolume )
+                {
+                    m_penombraVolumeLineEdit->clear();
+                    m_penombraVolume=m_penombraMaskVolume->getSpacing()[0]*m_penombraMaskVolume->getSpacing()[1]*m_penombraMaskVolume->getSpacing()[2]*m_penombraCont;
+                    m_penombraVolumeLineEdit->insert(QString("%1").arg(m_penombraVolume, 0, 'f', 2));
+                    vtkImageCast * imageCast = vtkImageCast::New();
+                    imageCast->SetInput( m_penombraMaskVolume->getVtkData() );
+                    imageCast->SetOutputScalarTypeToUnsignedChar();
+                    m_perfusionOverlay->SetInput( imageCast->GetOutput() );
+                    imageCast->Delete();
+                    m_perfusion2DView->refresh();
+                }
             }
         }
     }
@@ -1258,7 +1264,6 @@ void QDifuPerfuSegmentationExtension::setPaintCursor(int idViewer)
             pointIds[2] = 2;
             pointIds[3] = 3;
 
-
             vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
 
             grid->Allocate(1);
@@ -1317,11 +1322,18 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
         m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
         m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
         index[2]=m_diffusion2DView->getCurrentSlice();
-    }else{
+    }
+    else
+    {
         m_perfusion2DView->getCurrentCursorPosition(pos);
-        m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-        m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-        index[2]=m_perfusion2DView->getCurrentSlice();
+
+        if( m_penombraMaskVolume )
+        {
+            m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+            m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+            index[2]=m_perfusion2DView->getCurrentSlice();
+        }
+        else return;
     }
     centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
     centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
@@ -1336,7 +1348,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
                 value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
-                if((*value) != m_diffusionMinValue)
+                if( value && ((*value) != m_diffusionMinValue) )
                 {
                     (*value) = m_diffusionMinValue;
                     if(m_activedMaskVolume == m_strokeMaskVolume)
@@ -1354,7 +1366,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
                 value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
-                if((*value) == m_penombraMaskMaxValue)
+                if( value && ( (*value) == m_penombraMaskMaxValue) )
                 {
                     (*value) = m_penombraMaskMinValue;
                     m_penombraCont--;
@@ -1381,7 +1393,9 @@ void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
         m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
         m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
         index[2]=m_diffusion2DView->getCurrentSlice();
-    }else{
+    }
+    else
+    {
         m_perfusion2DView->getCurrentCursorPosition(pos);
         m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
         m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
@@ -1457,7 +1471,9 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask( int idViewer)
                 }
             }
         }
-    }else{
+    }
+    else
+    {
         m_penombraMaskVolume->getVtkData()->GetExtent(ext);
         index[2]=m_perfusion2DView->getCurrentSlice();
         for(i=ext[0];i<=ext[1];i++)
@@ -1485,6 +1501,7 @@ void QDifuPerfuSegmentationExtension::eraseRegionMask( int idViewer)
     double origin[3];
     double spacing[3];
     int index[3];
+
     if(idViewer==1)
     {
         m_diffusion2DView->getCurrentCursorPosition(pos);
@@ -1494,7 +1511,9 @@ void QDifuPerfuSegmentationExtension::eraseRegionMask( int idViewer)
         index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
         index[2]=m_diffusion2DView->getCurrentSlice();
         eraseRegionMaskRecursive1(index[0],index[1],index[2]);
-    }else{
+    }
+    else
+    {
         m_perfusion2DView->getCurrentCursorPosition(pos);
         m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
         m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
