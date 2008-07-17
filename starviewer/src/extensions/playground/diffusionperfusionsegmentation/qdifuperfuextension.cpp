@@ -1478,19 +1478,22 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask( int idViewer)
     }
     else
     {
-        m_penombraMaskVolume->getVtkData()->GetExtent(ext);
-        index[2]=m_perfusion2DView->getCurrentSlice();
-        for(i=ext[0];i<=ext[1];i++)
+        if( m_penombraMaskVolume )
         {
-            for(j=ext[2];j<=ext[3];j++)
+            m_penombraMaskVolume->getVtkData()->GetExtent(ext);
+            index[2]=m_perfusion2DView->getCurrentSlice();
+            for(i=ext[0];i<=ext[1];i++)
             {
-                index[0]=i;
-                index[1]=j;
-                value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
-                if((*value) == m_penombraMaskMaxValue)
+                for(j=ext[2];j<=ext[3];j++)
                 {
-                    (*value) = m_penombraMaskMinValue;
-                    m_penombraCont--;
+                    index[0]=i;
+                    index[1]=j;
+                    value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+                    if((*value) == m_penombraMaskMaxValue)
+                    {
+                        (*value) = m_penombraMaskMinValue;
+                        m_penombraCont--;
+                    }
                 }
             }
         }
