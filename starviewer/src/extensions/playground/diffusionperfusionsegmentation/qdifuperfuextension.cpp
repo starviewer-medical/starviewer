@@ -1518,13 +1518,16 @@ void QDifuPerfuSegmentationExtension::eraseRegionMask( int idViewer)
     }
     else
     {
-        m_perfusion2DView->getCurrentCursorPosition(pos);
-        m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-        m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-        index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-        index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-        index[2]=m_perfusion2DView->getCurrentSlice();
-        eraseRegionMaskRecursive2(index[0],index[1],index[2]);
+        if( m_penombraMaskVolume )
+        {
+            m_perfusion2DView->getCurrentCursorPosition(pos);
+            m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
+            m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
+            index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
+            index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
+            index[2]=m_perfusion2DView->getCurrentSlice();
+            eraseRegionMaskRecursive2(index[0],index[1],index[2]);
+        }
     }
 }
 
