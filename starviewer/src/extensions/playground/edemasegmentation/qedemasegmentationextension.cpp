@@ -819,7 +819,7 @@ void QEdemaSegmentationExtension::eraseMask(int size)
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
             value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
-            if((*value) == m_insideValue)
+            if(value && ( (*value) == m_insideValue) )
             {
                 (*value) = m_outsideValue;
                 (*m_activedCont)--;
