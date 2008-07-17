@@ -73,18 +73,31 @@ acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
 
     if ( cond.good() )
     {
-          if ( gLocalByteOrder == EBO_LittleEndian )  /* defined in dcxfer.h */
-          {
-            transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
-            transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-          }
-          else
-          {
-            transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
-            transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
-          }
-          transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
-          numTransferSyntaxes = 3;
+#ifndef DISABLE_COMPRESSION_EXTENSION
+        // Si disposem de compressio la demanem, i podrem accelerar el temps de
+        // descarrega considerablement
+        // de moment demanem la compressio lossless que tot PACS que suporti compressio ha
+        // de proporcionar: JPEGLossless:Hierarchical-1stOrderPrediction
+        transferSyntaxes[0] = UID_JPEGProcess14SV1TransferSyntax;
+        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
+        transferSyntaxes[2] = UID_BigEndianExplicitTransferSyntax;
+        transferSyntaxes[3] = UID_LittleEndianImplicitTransferSyntax;
+        numTransferSyntaxes = 4;
+#else
+        if ( gLocalByteOrder == EBO_LittleEndian )  /* defined in dcxfer.h */
+        {
+        transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
+        transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
+        }
+        else
+        {
+        transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
+        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
+        }
+        transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
+        numTransferSyntaxes = 3;
+#endif
+
 
         /* accept the Verification SOP Class if presented */
         cond = ASC_acceptContextsWithPreferredTransferSyntaxes(
@@ -245,9 +258,9 @@ OFCondition echoSCP(
             //Guardem la imatge
             OFCondition cond = cbdata->dcmff->saveFile( qPrintable( QDir::toNativeSeparators( imagePath ) ) , xfer , opt_sequenceType , opt_groupLength ,
             opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
-			
+
 			m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
-            
+
 			if ( cond.bad() )
             {
                 piSingleton->setError( retrievedImage.getStudyUID() );
@@ -295,8 +308,8 @@ OFCondition echoSCP(
 
 			timerProcessDatabase.restart();
             piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );
-            m_timeProcessDatabase += timerProcessDatabase.elapsed();//temps d'operació per processar la imatge a la caché 
-			
+            m_timeProcessDatabase += timerProcessDatabase.elapsed();//temps d'operació per processar la imatge a la caché
+
 			m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge
             timer.restart();//reiniciem temporitzador per comptar quan tardem a descarregar la següent imatge
         }
