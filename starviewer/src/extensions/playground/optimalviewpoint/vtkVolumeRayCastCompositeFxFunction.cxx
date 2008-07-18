@@ -114,6 +114,9 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
     const float * const RAY_START = dynamicInfo->TransformedStart;
     const float * const A_RAY_INCREMENT = dynamicInfo->TransformedIncrement;
     const Vector3 RAY_INCREMENT( A_RAY_INCREMENT[0], A_RAY_INCREMENT[1], A_RAY_INCREMENT[2] );
+    const float * const A_DIRECTION = dynamicInfo->TransformedDirection;
+    Vector3 direction( A_DIRECTION[0], A_DIRECTION[1], A_DIRECTION[2] );
+    direction.normalize();
 
 //     const float * const SCALAR_OPACITY_TRANSFER_FUNCTION = staticInfo->Volume->GetCorrectedScalarOpacityArray();
 //     const float * const COLOR_TRANSFER_FUNCTION = staticInfo->Volume->GetRGBArray();
@@ -170,7 +173,7 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
 
         QColor color;
 
-        for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( offset, color );
+        for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( offset, direction, color );
 
         float opacity = color.alphaF(), opacityRemainingOpacity = opacity * remainingOpacity;
         accumulatedRedIntensity += opacityRemainingOpacity * color.redF();

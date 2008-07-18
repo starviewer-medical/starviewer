@@ -57,6 +57,7 @@
 #include "ambientvoxelshader.h"
 #include "directilluminationvoxelshader.h"
 #include <vtkEncodedGradientShader.h>
+#include "contourvoxelshader.h"
 
 namespace udg {
 
@@ -157,6 +158,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_ambientVoxelShader->setData( m_data );
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
     m_directIlluminationVoxelShader->setData( m_data );
+    m_contourVoxelShader = new ContourVoxelShader();
+    m_contourVoxelShader->setData( m_data );
 
 
 
@@ -2021,6 +2024,11 @@ void OptimalViewpointVolume::setFx( bool fx )
 void OptimalViewpointVolume::setFxContour( double fxContour )
 {
     m_volumeRayCastFunctionFx->SetFxContour( fxContour );
+    if ( fxContour > 0.0 ) {
+        m_contourVoxelShader->setGradientEstimator( m_mainMapper->GetGradientEstimator() );
+        m_contourVoxelShader->setThreshold( fxContour );
+        m_volumeRayCastFunctionFx2->AddVoxelShader( m_contourVoxelShader );
+    }
 }
 
 

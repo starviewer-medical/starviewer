@@ -39,6 +39,7 @@ class Vector3;
 class VoxelShader;
 class AmbientVoxelShader;
 class DirectIlluminationVoxelShader;
+class ContourVoxelShader;
 class vtkVolumeRayCastCompositeFxFunction;
 
 
@@ -237,6 +238,7 @@ private:
     vtkVolumeRayCastCompositeFxFunction * m_volumeRayCastFunctionFx2;
     AmbientVoxelShader * m_ambientVoxelShader;
     DirectIlluminationVoxelShader * m_directIlluminationVoxelShader;
+    ContourVoxelShader * m_contourVoxelShader;
     vtkRenderer * m_mainRenderer;
 
     /// Vector de funcions de transferència d'opacitat.

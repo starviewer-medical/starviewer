@@ -24,7 +24,7 @@ public:
     void setTransferFunction( const TransferFunction &transferFunction );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual QColor shade( int offset, const QColor &baseColor = Qt::white ) const;
+    virtual QColor shade( int offset, const Vector3 &direction, const QColor &baseColor = Qt::white ) const;
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -41,8 +41,9 @@ protected:
 };
 
 
-inline QColor AmbientVoxelShader::shade( int offset, const QColor &baseColor ) const
+inline QColor AmbientVoxelShader::shade( int offset, const Vector3 &direction, const QColor &baseColor ) const
 {
+    Q_UNUSED( direction );
     Q_UNUSED( baseColor );
 
     Q_CHECK_PTR( m_data );

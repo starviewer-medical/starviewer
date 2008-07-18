@@ -34,7 +34,8 @@ HEADERS += doublehistogram.h \
            vtkVolumeRayCastCompositeFxFunction.h \
            voxelshader.h \
            ambientvoxelshader.h \
-           directilluminationvoxelshader.h 
+           directilluminationvoxelshader.h \
+           contourvoxelshader.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
@@ -63,6 +64,7 @@ SOURCES += doublehistogram.cpp \
            vtkVolumeRayCastCompositeFxFunction.cxx \
            voxelshader.cpp \
            ambientvoxelshader.cpp \
-           directilluminationvoxelshader.cpp 
+           directilluminationvoxelshader.cpp \
+           contourvoxelshader.cpp 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)
