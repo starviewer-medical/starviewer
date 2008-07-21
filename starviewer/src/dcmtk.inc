@@ -32,10 +32,10 @@ LIBS += -L$${DCMTKLIBDIR} \
     -ldcmtls \
     -ldcmdsig \
     -ldcmpstat \
+    -ldcmjpeg \
     -lijg8 \ 
     -lijg12 \ 
-    -lijg16 \
-    -ldcmjpeg
+    -lijg16
 
 
 
