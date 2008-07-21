@@ -13,7 +13,6 @@
 #include "status.h"
 #include "databaseconnection.h"
 #include "dicomstudy.h"
-#include "studylist.h"
 #include "cachepool.h"
 #include "logging.h"
 #include "dicommask.h"
@@ -176,7 +175,7 @@ Status CacheStudyDAL::queryDatabase( DicomMask maskQuery, QList<QStringList> &re
     return this->queryDatabase( buildSqlQueryStudy(&maskQuery), results );
 }
 
-Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
+Status CacheStudyDAL::queryStudy( DicomMask studyMask , QList<DICOMStudy> &outResultsStudyList )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , databaseState;
@@ -216,14 +215,14 @@ Status CacheStudyDAL::queryStudy( DicomMask studyMask , StudyList &ls )
         stu.setAbsPath( reply [ 8 + i * columns ] );
         stu.setStudyModality( reply [ 9 + i * columns ] );
         stu.setAccessionNumber( reply [ 10 + i * columns ] );
-        ls.insert( stu );
+        outResultsStudyList.append( stu );
         i++;
     }
 
     return state;
 }
 
-Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
+Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , QList<DICOMStudy> &outResultsStudyList )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , databaseState;
@@ -267,7 +266,7 @@ Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , StudyList &ls )
         stu.setStudyUID( reply [ 5 + i * columns ] );
         stu.setAbsPath( reply [ 6 + i * columns ] );
         stu.setStudyModality( reply [ 7 + i * columns ] );
-        ls.insert( stu );
+        outResultsStudyList.append( stu );
         i++;
     }
 
@@ -382,7 +381,7 @@ QStringList CacheStudyDAL::getFiles( QString studyUID )
     return files;
 }
 
-Status CacheStudyDAL::queryAllStudies( StudyList &ls )
+Status CacheStudyDAL::queryAllStudies( QList<DICOMStudy> &outResultsStudyList )
 {
     DatabaseConnection* databaseConnection = DatabaseConnection::getDatabaseConnection();
     int columns , rows , i = 0 , databaseState;
@@ -424,7 +423,7 @@ Status CacheStudyDAL::queryAllStudies( StudyList &ls )
         selectedStudy.setAbsPath( reply [ 8 + i * columns ] );
         selectedStudy.setStudyModality( reply [ 9 + i * columns ] );
         selectedStudy.setAccessionNumber( reply [ 10 + i * columns ] );
-        ls.insert( selectedStudy );
+        outResultsStudyList.append( selectedStudy );
         i++;
     }
 

@@ -8,6 +8,7 @@
 #define UDGCACHEIMAGEDAL_H
 
 #include <QtGlobal>//necessària per el quint64, del qual no es pot fer class forwarding
+#include <QList>
 
 class QString;
 
@@ -16,7 +17,6 @@ namespace udg {
 class DicomMask;
 class Status;
 class DICOMImage;
-class ImageList;
 
 /** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -40,7 +40,7 @@ public:
      * @param llistat amb les imatges trobades
      * @return retorna estat del mètode
      */
-    Status queryImages( DicomMask mask , ImageList &list );
+    Status queryImages( DicomMask mask , QList<DICOMImage> &outResultList );
 
     /** compta les imatges d'una sèrie
      * @param dicomMask mascarà de les imatges a comptar les images. Las màscara ha de contenir el UID de l'estudi i opcionalment el UID de la sèrie

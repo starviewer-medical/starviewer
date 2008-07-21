@@ -172,8 +172,7 @@ void QueryScreen::setQStudyTreeWidgetColumnsWidth()
 
 void QueryScreen::setSeriesToSeriesListWidgetCache()
 {
-    DICOMSeries serie;
-    SeriesList seriesList;
+    QList<DICOMSeries> seriesList;
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     int imagesNumber;
@@ -193,21 +192,18 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
 
     m_seriesListWidgetCache->clear();
 
-    seriesList.firstSeries();
-    while ( !seriesList.end() )
+    foreach( DICOMSeries series , seriesList )
     {
-        serie = seriesList.getSeries();
         //preparem per fer la cerca d'imatges
-        mask.setSeriesUID( serie.getSeriesUID() );
+        mask.setSeriesUID( series.getSeriesUID() );
         state = cacheImageDAL.countImageNumber( mask , imagesNumber );
-        serie.setImageNumber( imagesNumber );
+        series.setImageNumber( imagesNumber );
         if ( !state.good() )
         {
             showDatabaseErrorMessage( state );
             return;
         }
-        m_seriesListWidgetCache->insertSeries( &serie );
-        seriesList.nextSeries();
+        m_seriesListWidgetCache->insertSeries( &series );
     }
 }
 
@@ -563,6 +559,7 @@ void QueryScreen::queryStudy( QString source )
 {
     CacheStudyDAL cacheStudyDAL;
     StudyList studyList;
+    QList<DICOMStudy> qListDicomStudy;
     Status state;
 
     INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString() );
@@ -571,7 +568,7 @@ void QueryScreen::queryStudy( QString source )
     if( source == "Cache" )
     {
         m_seriesListWidgetCache->clear();
-        state = cacheStudyDAL.queryStudy( buildDicomMask() , studyList ); //busquem els estudis a la cache
+        state = cacheStudyDAL.queryStudy( buildDicomMask() , qListDicomStudy ); //busquem els estudis a la cache
         if ( !state.good() )
         {
             m_studyTreeWidgetCache->clear();
@@ -615,7 +612,7 @@ void QueryScreen::queryStudy( QString source )
      * es fa és que per llançar el missatge es comprovi que la finestra estigui activa. Si la finestra no està activa
      * vol dir que el mètode ha estat invocat des del constructor
      */
-    if ( studyList.end() && isActiveWindow() )
+    if ( qListDicomStudy.isEmpty() && studyList.end() && isActiveWindow() )
     {
         //no hi ha estudis
         if( source == "Cache" )
@@ -630,7 +627,7 @@ void QueryScreen::queryStudy( QString source )
     {
         if( source == "Cache" )
         {
-            m_studyTreeWidgetCache->insertStudyList( &studyList );//es mostra la llista d'estudis
+            m_studyTreeWidgetCache->insertStudyList( qListDicomStudy );//es mostra la llista d'estudis
             m_studyTreeWidgetCache->setSortColumn( QStudyTreeWidget::ObjectName ); //ordenem pel nom
         }
         else if( source == "DICOMDIR" )
@@ -737,6 +734,7 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 void QueryScreen::querySeries( QString studyUID, QString source )
 {
     SeriesList seriesList;
+    QList<DICOMSeries> qListDicomSeriesList;
     CacheSeriesDAL cacheSeriesDAL;
     Status state;
     DicomMask mask;
@@ -747,7 +745,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
     {
         //preparem la mascara i cerquem les series a la cache
         mask.setStudyUID( studyUID );
-        state = cacheSeriesDAL.querySeries( mask , seriesList );
+        state = cacheSeriesDAL.querySeries( mask , qListDicomSeriesList );
         if ( !state.good() )
         {
             showDatabaseErrorMessage( state );
@@ -764,16 +762,29 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         return;
     }
 
-    seriesList.firstSeries();
-    if ( seriesList.end() )
+    //TODO quan s'hagi elimina la seriesList del DICOMDIR haurà de desapareixer aquest if, i utilitzar la comprovació de si és buida la QList
+    if ( source == "DICOMDIR" )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
-        return;
+        seriesList.firstSeries();
+        if ( seriesList.end() )
+        {
+            QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
+            return;
+        }
+    }
+    else if ( source == "Cache" )
+    {
+        if ( qListDicomSeriesList.isEmpty() )
+        {
+            QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
+            return;
+        }
+
     }
 
     if( source == "Cache" )
     {
-        m_studyTreeWidgetCache->insertSeriesList( &seriesList );//inserim la informació de les sèries al llist
+        m_studyTreeWidgetCache->insertSeriesList( qListDicomSeriesList );//inserim la informació de les sèries al llist
     }
     else if( source == "DICOMDIR" )
         m_studyTreeWidgetDicomdir->insertSeriesList( &seriesList );//inserim la informació de la sèrie al llistat
@@ -853,6 +864,7 @@ void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source
     CacheImageDAL cacheImageDAL;
     ImageList imageList;
     DicomMask mask;
+    QList<DICOMImage> imageQList;
 
     INFO_LOG( "Cerca d'imatges a la font " + source + " de l'estudi " + studyUID + " i serie " + seriesUID );
 
@@ -860,11 +872,25 @@ void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source
     {
         mask.setStudyUID( studyUID );
         mask.setSeriesUID( seriesUID );
-        cacheImageDAL.queryImages( mask , imageList );
+        cacheImageDAL.queryImages( mask , imageQList );
+
+        if (imageQList.isEmpty())
+        {
+            QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this study.\n" ) );
+            return;
+        }
+
     }
     else if( source == "DICOMDIR" )
     {
         m_readDicomdir.readImages( seriesUID , "", imageList );
+
+        imageList.firstImage();
+        if ( imageList.end() )
+        {
+            QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this study.\n" ) );
+            return;
+        }
     }
     else
     {
@@ -872,14 +898,9 @@ void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source
         return;
     }
 
-    imageList.firstImage();
-    if ( imageList.end() )
-    {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this study.\n" ) );
-        return;
-    }
+
     if( source == "Cache" )
-        m_studyTreeWidgetCache->insertImageList( &imageList );//inserim la informació de la sèrie al llistat
+        m_studyTreeWidgetCache->insertImageList( imageQList );//inserim la informació de la sèrie al llistat
     else if( source == "DICOMDIR" )
         m_studyTreeWidgetDicomdir->insertImageList( &imageList );//inserim la informació de la sèrie al llistat
 }
@@ -917,7 +938,6 @@ void QueryScreen::retrievePacs( bool view )
         //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
         int indexStudyInList = getStudyPositionInStudyListQueriedPacs( currentStudyUID , 
         m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies( currentStudyUID ) );
-       
         ok = true;
         //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
         if ( indexStudyInList == -1 ) 
@@ -955,6 +975,7 @@ void QueryScreen::retrievePacs( bool view )
                     cacheStudyDAL.updateStudy( studyToRetrieve );
                 }
             }
+
             if( ok )
             {
                 mask.setStudyUID( currentStudyUID );//definim la màscara per descarregar l'estudi

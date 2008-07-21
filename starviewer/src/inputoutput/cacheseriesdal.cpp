@@ -11,7 +11,6 @@
 #include "status.h"
 #include "cacheseriesdal.h"
 #include "dicomseries.h"
-#include "serieslist.h"
 #include "logging.h"
 #include "databaseconnection.h"
 
@@ -72,7 +71,7 @@ Status CacheSeriesDAL::insertSeries( DICOMSeries *serie )
     return state;
 }
 
-Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
+Status CacheSeriesDAL::querySeries( DicomMask seriesMask , QList<DICOMSeries> &outResultsSeriesList )
 {
     DcmDataset* mask = NULL;
     int columns , rows , i = 0 , stateDatabase;
@@ -115,7 +114,7 @@ Status CacheSeriesDAL::querySeries( DicomMask seriesMask , SeriesList &ls )
         series.setSeriesDate( reply[ 8 + i * columns ] );
         series.setSeriesTime( reply[ 9 + i * columns ] );
 
-        ls.insert( series );
+        outResultsSeriesList.append( series );
         i++;
     }
     return state;

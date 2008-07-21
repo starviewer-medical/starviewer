@@ -7,14 +7,16 @@
 #ifndef UDGSCALESTUDY_H
 #define UDGSCALESTUDY_H
 
+#include <QList>
+
+#include "dicomseries.h"
+
 class QString;
 
 namespace udg {
 
-class SeriesList;
 class Status;
 class DicomMask;
-class DICOMSeries;
 
 /** Escala les imatges del mig de cada sèrie d'un estudi, per poder ser previsualitzades quant es consulta la caché
 @author Grup de Gràfics de Girona  ( GGG )
@@ -44,7 +46,7 @@ private:
      * @param [out] retorna les sèries de l'estudi
      * @return retorna l'estat del mètode
      */
-    Status getSeriesOfStudy( QString studyUID , SeriesList &seriesList );
+    Status getSeriesOfStudy( QString studyUID , QList<DICOMSeries> &outResultsSeriesList );
 
     /** Compta el número d'imatges de l'estudi
      * @param màscara de les imatges a comptar
