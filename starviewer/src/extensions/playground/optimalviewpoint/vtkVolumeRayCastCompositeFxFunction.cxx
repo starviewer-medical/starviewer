@@ -53,6 +53,8 @@ void vtkVolumeRayCastCompositeFxFunction::PrintSelf( ostream &os, vtkIndent inde
         foreach ( VoxelShader *voxelShader, m_voxelShaderList )
             os << indent << "  " << voxelShader->toString().toStdString() << "\n";
     }
+
+    os << std::flush;
 }
 
 

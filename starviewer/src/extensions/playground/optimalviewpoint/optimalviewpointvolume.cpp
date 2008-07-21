@@ -59,6 +59,7 @@
 #include <vtkEncodedGradientShader.h>
 #include "contourvoxelshader.h"
 #include "obscurancevoxelshader.h"
+#include "saliencyvoxelshader.h"
 
 namespace udg {
 
@@ -163,6 +164,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_contourVoxelShader->setData( m_data );
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_obscuranceVoxelShader->setData( m_data );
+    m_saliencyVoxelShader = new SaliencyVoxelShader();
+    m_saliencyVoxelShader->setData( m_data );
 
 
 
@@ -308,6 +311,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     delete m_directIlluminationVoxelShader;
     delete m_contourVoxelShader;
     delete m_obscuranceVoxelShader;
+    delete m_saliencyVoxelShader;
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -1380,6 +1384,7 @@ void OptimalViewpointVolume::computeSaliency()
     for (int i = 0; i < m_dataSize; i++) m_saliency[i] = gradientMagnitudes[i] / maxSaliency;
 
     m_volumeRayCastFunctionFx->SetSaliency( m_saliency );
+    m_saliencyVoxelShader->setSaliency( m_saliency );
 
     {
         bool density = m_obscuranceVariant <= DensitySmooth;
@@ -2060,6 +2065,12 @@ void OptimalViewpointVolume::setFxContour( double fxContour )
 void OptimalViewpointVolume::setFxSaliency( bool fxSaliency )
 {
     m_volumeRayCastFunctionFx->SetFxSaliency( fxSaliency );
+    if ( fxSaliency ) {
+        if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_saliencyVoxelShader ) < 0 )
+            m_volumeRayCastFunctionFx2->AddVoxelShader( m_saliencyVoxelShader );
+    }
+    else m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_saliencyVoxelShader );
+    m_volumeRayCastFunctionFx2->Print( std::cout );
 }
 
 
@@ -2067,6 +2078,7 @@ void OptimalViewpointVolume::setFxSaliencyA( double fxSaliencyA )
 {
     m_volumeRayCastFunctionFx->SetFxSaliencyA( fxSaliencyA );
     m_fxSaliencyA = fxSaliencyA;
+    m_saliencyVoxelShader->setScale( m_fxSaliencyA, m_fxSaliencyB );
 }
 
 
@@ -2074,6 +2086,7 @@ void OptimalViewpointVolume::setFxSaliencyB( double fxSaliencyB )
 {
     m_volumeRayCastFunctionFx->SetFxSaliencyB( fxSaliencyB );
     m_fxSaliencyB = fxSaliencyB;
+    m_saliencyVoxelShader->setScale( m_fxSaliencyA, m_fxSaliencyB );
 }
 
 
@@ -2081,6 +2094,7 @@ void OptimalViewpointVolume::setFxSaliencyLow( double fxSaliencyLow )
 {
     m_volumeRayCastFunctionFx->SetFxSaliencyLow( fxSaliencyLow );
     m_fxSaliencyLow = fxSaliencyLow;
+    m_saliencyVoxelShader->setFilters( m_fxSaliencyLow, m_fxSaliencyHigh );
 }
 
 
@@ -2088,6 +2102,7 @@ void OptimalViewpointVolume::setFxSaliencyHigh( double fxSaliencyHigh )
 {
     m_volumeRayCastFunctionFx->SetFxSaliencyHigh( fxSaliencyHigh );
     m_fxSaliencyHigh = fxSaliencyHigh;
+    m_saliencyVoxelShader->setFilters( m_fxSaliencyLow, m_fxSaliencyHigh );
 }
 
 
