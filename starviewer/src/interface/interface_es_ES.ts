@@ -120,7 +120,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="174"/>
         <source>E&amp;xit</source>
-        <translation>Aban&amp;donar</translation>
+        <translation>&amp;Salir</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="175"/>
@@ -130,7 +130,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="176"/>
         <source>Exit the application</source>
-        <translation>Abandonar la aplicación</translation>
+        <translation>Salir de la aplicación</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="167"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="215"/>
         <source>&amp;File</source>
-        <translation>&amp;Archivar</translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="246"/>
@@ -215,12 +215,12 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="200"/>
         <source>Switch To Full Screen</source>
-        <translation>Cambiar a modo de pantalla completa</translation>
+        <translation>Cambiar a modo pantalla completa</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="192"/>
         <source>Retract Full Screen</source>
-        <translation>Salir de modo a pantalla completa</translation>
+        <translation>Salir de modo pantalla completa</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="193"/>
@@ -250,7 +250,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="96"/>
         <source>Open files from a directory...</source>
-        <translation>Abrir un archivo a partir de un directorio...</translation>
+        <translation>Abrir los archivo de un directorio...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="112"/>
