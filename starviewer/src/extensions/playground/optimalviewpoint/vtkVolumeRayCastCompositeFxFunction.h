@@ -41,6 +41,10 @@ public:
     //ETX
 
     void AddVoxelShader( VoxelShader * voxelShader );
+    void InsertVoxelShader( int i, VoxelShader * voxelShader );
+    int IndexOfVoxelShader( VoxelShader * voxelShader );
+    void RemoveVoxelShader( int i );
+    void RemoveVoxelShader( VoxelShader * voxelShader );
     void RemoveAllVoxelShaders();
 
 protected:

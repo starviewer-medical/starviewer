@@ -100,6 +100,31 @@ void vtkVolumeRayCastCompositeFxFunction::AddVoxelShader( VoxelShader * voxelSha
 }
 
 
+void vtkVolumeRayCastCompositeFxFunction::InsertVoxelShader( int i, VoxelShader * voxelShader )
+{
+    m_voxelShaderList.insert( i, voxelShader );
+}
+
+
+int vtkVolumeRayCastCompositeFxFunction::IndexOfVoxelShader( VoxelShader * voxelShader )
+{
+    return m_voxelShaderList.indexOf( voxelShader );
+}
+
+
+void vtkVolumeRayCastCompositeFxFunction::RemoveVoxelShader( int i )
+{
+    m_voxelShaderList.removeAt( i );
+}
+
+
+void vtkVolumeRayCastCompositeFxFunction::RemoveVoxelShader( VoxelShader * voxelShader )
+{
+    int index = m_voxelShaderList.indexOf( voxelShader );
+    if ( index >= 0 ) m_voxelShaderList.removeAt( index );
+}
+
+
 void vtkVolumeRayCastCompositeFxFunction::RemoveAllVoxelShaders()
 {
     m_voxelShaderList.clear();
