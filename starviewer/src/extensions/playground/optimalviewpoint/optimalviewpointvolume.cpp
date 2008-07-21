@@ -58,6 +58,7 @@
 #include "directilluminationvoxelshader.h"
 #include <vtkEncodedGradientShader.h>
 #include "contourvoxelshader.h"
+#include "obscurancevoxelshader.h"
 
 namespace udg {
 
@@ -160,6 +161,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_directIlluminationVoxelShader->setData( m_data );
     m_contourVoxelShader = new ContourVoxelShader();
     m_contourVoxelShader->setData( m_data );
+    m_obscuranceVoxelShader = new ObscuranceVoxelShader();
+    m_obscuranceVoxelShader->setData( m_data );
 
 
 
@@ -303,6 +306,8 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     m_volumeRayCastFunctionFx2->Delete();
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
+    delete m_contourVoxelShader;
+    delete m_obscuranceVoxelShader;
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -1298,6 +1303,15 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
 
     m_volumeRayCastFunctionFx->SetFxObscurance( renderWithObscurances );
 
+    // no podem fer-ho a l'if de més avall perquè surt amb l'if m_fx
+    if ( renderWithObscurances )
+    {
+        if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
+            m_volumeRayCastFunctionFx2->AddVoxelShader( m_obscuranceVoxelShader );
+    }
+    else m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+    m_volumeRayCastFunctionFx2->Print( std::cout );
+
     if ( m_fx ) return;
 
     if ( m_renderWithObscurances )
@@ -1316,6 +1330,7 @@ void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
 {
     m_volumeRayCastFunctionObscurances->SetObscuranceFactor( obscurancesFactor );
     m_volumeRayCastFunctionFx->SetObscuranceFactor( obscurancesFactor );
+    m_obscuranceVoxelShader->setFactor( obscurancesFactor );
 }
 
 
@@ -1323,6 +1338,8 @@ void OptimalViewpointVolume::setObscurancesFilterLow( double obscurancesFilterLo
 {
     m_volumeRayCastFunctionObscurances->SetObscuranceFilterLow( obscurancesFilterLow );
     m_volumeRayCastFunctionFx->SetObscuranceFilterLow( obscurancesFilterLow );
+    m_obscurancesFilterLow = obscurancesFilterLow;
+    m_obscuranceVoxelShader->setFilters( m_obscurancesFilterLow, m_obscurancesFilterHigh );
 }
 
 
@@ -1330,6 +1347,8 @@ void OptimalViewpointVolume::setObscurancesFilterHigh( double obscurancesFilterH
 {
     m_volumeRayCastFunctionObscurances->SetObscuranceFilterHigh( obscurancesFilterHigh );
     m_volumeRayCastFunctionFx->SetObscuranceFilterHigh( obscurancesFilterHigh );
+    m_obscurancesFilterHigh = obscurancesFilterHigh;
+    m_obscuranceVoxelShader->setFilters( m_obscurancesFilterLow, m_obscurancesFilterHigh );
 }
 
 
@@ -1686,6 +1705,8 @@ void OptimalViewpointVolume::computeObscurances2()
 
         m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
         m_volumeRayCastFunctionFx->SetColor( false );
+
+        m_obscuranceVoxelShader->setObscurance( m_obscurance );
     }
     else    // color bleeding
     {
@@ -1802,6 +1823,8 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
 
         m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
         m_volumeRayCastFunctionFx->SetColor( false );
+
+        m_obscuranceVoxelShader->setObscurance( m_obscurance );
     }
     else    // color bleeding
     {
