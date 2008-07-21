@@ -35,7 +35,8 @@ HEADERS += doublehistogram.h \
            voxelshader.h \
            ambientvoxelshader.h \
            directilluminationvoxelshader.h \
-           contourvoxelshader.h 
+           contourvoxelshader.h \
+           obscurancevoxelshader.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
@@ -65,6 +66,7 @@ SOURCES += doublehistogram.cpp \
            voxelshader.cpp \
            ambientvoxelshader.cpp \
            directilluminationvoxelshader.cpp \
-           contourvoxelshader.cpp 
+           contourvoxelshader.cpp \
+           obscurancevoxelshader.cpp 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)

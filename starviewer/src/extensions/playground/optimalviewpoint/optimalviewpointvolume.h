@@ -40,6 +40,7 @@ class VoxelShader;
 class AmbientVoxelShader;
 class DirectIlluminationVoxelShader;
 class ContourVoxelShader;
+class ObscuranceVoxelShader;
 class vtkVolumeRayCastCompositeFxFunction;
 
 
@@ -239,6 +240,8 @@ private:
     AmbientVoxelShader * m_ambientVoxelShader;
     DirectIlluminationVoxelShader * m_directIlluminationVoxelShader;
     ContourVoxelShader * m_contourVoxelShader;
+    ObscuranceVoxelShader * m_obscuranceVoxelShader;
+    double m_obscurancesFilterLow, m_obscurancesFilterHigh;
     vtkRenderer * m_mainRenderer;
 
     /// Vector de funcions de transferència d'opacitat.
