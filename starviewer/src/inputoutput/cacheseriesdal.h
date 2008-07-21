@@ -7,11 +7,13 @@
 #ifndef UDGCACHESERIESDAL_H
 #define UDGCACHESERIESDAL_H
 
+#include <QList>
+
+#include "dicomseries.h"
+
 namespace udg {
 
 class DicomMask;
-class DICOMSeries;
-class SeriesList;
 class Status;
 
 /** Classe que conté els mètodes d'accés a la Taula series
@@ -34,7 +36,7 @@ public:
      * @param  retorna la llista amb la sèries trobades
      * @return retorna estat del mètode
      */
-    Status querySeries( DicomMask mask , SeriesList &list );
+    Status querySeries( DicomMask mask , QList<DICOMSeries> &outResultsSeriesList );
 
     /** Esborra les series que tinguin el studyUID passat per paràmetre
       * @param studyUID StudyUID de les imatges a esborrar

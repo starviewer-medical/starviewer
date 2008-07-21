@@ -7,6 +7,8 @@
 
 #include <QSemaphore>
 #include <QMessageBox>
+#include <QList>
+
 #include "qexecuteoperationthread.h"
 #include "pacsserver.h"
 #include "retrieveimages.h"
@@ -32,6 +34,7 @@
 #include "querypacs.h"
 #include "pacsconnection.h"
 #include "databaseconnection.h"
+#include "dicomseries.h"
 
 namespace udg {
 
@@ -354,9 +357,8 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     DicomMask mask;
-    SeriesList seriesList;
-    DICOMSeries series;
-    ImageList imageListSeries;
+    QList<DICOMSeries> seriesList;
+    QList<DICOMImage> imageListSeries;
     DICOMImage image;
     Status state;
 
@@ -370,12 +372,8 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
         return state;
     }
 
-    seriesList.firstSeries();
-
-    while ( !seriesList.end() )
+    foreach( DICOMSeries series , seriesList )
     {
-        series = seriesList.getSeries();
-
         mask.setSeriesUID( series.getSeriesUID() );
 
         imageList.clear();
@@ -388,17 +386,13 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
             return state;
         }
 
-        imageListSeries.firstImage();
-        while ( !imageListSeries.end() )
+        foreach(DICOMImage imageToStore, imageListSeries)
         {
-            imageList.insert( imageListSeries.getImage() );
-            imageListSeries.nextImage();
+            imageList.insert( imageToStore );
         }
-        seriesList.nextSeries();
     }
 
     return state;
-
 }
 
 }

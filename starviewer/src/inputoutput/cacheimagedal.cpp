@@ -15,7 +15,6 @@
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "logging.h"
-#include "imagelist.h"
 
 namespace udg {
 
@@ -92,7 +91,7 @@ Status CacheImageDAL::insertImage( DICOMImage *image )
     return state;
 }
 
-Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
+Status CacheImageDAL::queryImages( DicomMask imageMask , QList<DICOMImage> &outResultsImageList )
 {
     int columns , rows , i = 0 , stateDatabase;
     DICOMImage image;
@@ -139,7 +138,7 @@ Status CacheImageDAL::queryImages( DicomMask imageMask , ImageList &ls )
         image.setSOPInstanceUID( reply [ 4 + i * columns ] );
         image.setImageName( reply [ 5 + i * columns ] );
 
-        ls.insert( image );
+        outResultsImageList.append( image );
         i++;
     }
 

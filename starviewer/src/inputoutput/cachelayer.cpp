@@ -9,15 +9,16 @@
 #include <QProgressDialog>
 #include <QDate>
 #include <QString>
+#include <QList>
 
 #include "status.h"
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include "logging.h"
 #include "cachestudydal.h"
-#include "studylist.h"
 #include "dicommask.h"
 #include "errordcmtk.h"
+#include "dicomstudy.h"
 
 namespace udg {
 
@@ -29,12 +30,12 @@ CacheLayer::CacheLayer( QObject *parent )
 Status CacheLayer::clearCache()
 {
     CacheStudyDAL cacheStudyDAL;
-    StudyList studyList;
+    QList<DICOMStudy> studyList;
     DICOMStudy study;
     Status state;
     CachePool pool;
     unsigned usedSpaceInit , usedSpace;
-    int deletedSpace = 0;
+    int deletedSpace = 0 , index = 0;
 
     pool.getPoolUsedSpace( usedSpaceInit );
     QProgressDialog *progress;
@@ -44,17 +45,16 @@ Status CacheLayer::clearCache()
 
     state = cacheStudyDAL.queryAllStudies( studyList );//consultem tots els estudis
 
-    studyList.firstStudy();
-    while ( !studyList.end() && state.good() )
+    while ( index < studyList.count() && state.good() )
     {
-        study = studyList.getStudy();
+        study = studyList.value( index );
         state = cacheStudyDAL.delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar
 
         if ( !state.good() ) state = pool.getPoolUsedSpace( usedSpace );
         deletedSpace = usedSpaceInit - usedSpace;//calculem l'espai esborrat
         progress->setValue( deletedSpace );
         progress->repaint();
-        studyList.nextStudy();
+        index++;
     }
 
     progress->close();
@@ -73,7 +73,7 @@ Status CacheLayer::deleteOldStudies()
 {
     QDate today,lastTimeViewedMinimum;
     StarviewerSettings settings;
-    StudyList studyList;
+    QList<DICOMStudy> studyList;
     Status state;
     DICOMStudy study;
     int comptador = 0;
@@ -87,18 +87,16 @@ Status CacheLayer::deleteOldStudies()
 
     //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre
     state = cacheStudyDAL.queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ) , studyList );
-    studyList.firstStudy();
 
     QProgressDialog *progress;
     progress = new QProgressDialog( tr( "Clearing old studies..." ) , "" , 0 , studyList.count() );
     progress->setMinimumDuration( 0 );
 	progress->setCancelButton( 0 );
 
-    while ( state.good() && !studyList.end() )
+    while ( state.good() && comptador < studyList.count() )
     {
-        study = studyList.getStudy();
+        study = studyList.value( comptador );
         state = cacheStudyDAL.delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar
-        studyList.nextStudy();
         comptador++;
         progress->setValue( comptador );
         progress->repaint();
@@ -119,12 +117,12 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
 {
     QDate maxDate;
     StarviewerSettings settings;
-    StudyList studyList;
+    QList<DICOMStudy> studyList;
     Status state;
     DICOMStudy study;
     CachePool pool;
     unsigned int usedSpaceInit = 0 , usedSpace = 0;
-    int deletedSpace = 0;
+    int deletedSpace = 0, index = 0;
     QString logMessage , numberOfDeletedStudies;
     CacheStudyDAL cacheStudyDAL;
 
@@ -137,16 +135,15 @@ Status CacheLayer::deleteOldStudies( int MbytesToErase )
 
     //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre, retorna la llista ordenada per data i hora de l'ultima visualitzacio, ordenada ascendentment
     state = cacheStudyDAL.queryOldStudies( maxDate.toString("yyyyMMdd"), studyList );
-    studyList.firstStudy();
 
     //esborrem estudis fins que la llista estigui buida o haguem alliberat l'espai en Mb passat per parametre
-    while ( state.good() && !studyList.end() && MbytesToErase >= deletedSpace )
+    while ( state.good() && index < studyList.count() && MbytesToErase >= deletedSpace )
     {
-        study = studyList.getStudy();
+        study = studyList.value( index );
         state = cacheStudyDAL.delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar
         pool.getPoolUsedSpace( usedSpace );//calculem l'espai esborrat
         deletedSpace = usedSpaceInit - usedSpace;
-        studyList.nextStudy();
+        index++;
     }
 
     if ( !state.good() )

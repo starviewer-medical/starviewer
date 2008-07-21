@@ -7,11 +7,12 @@
 #ifndef UDGCACHESTUDYDAL_H
 #define UDGCACHESTUDYDAL_H
 
+#include <QList>
+#include "dicomstudy.h"
+
 namespace udg {
 
-class DICOMStudy;
 class Status;
-class StudyList;
 class DicomMask;
 class Study;
 
@@ -65,7 +66,7 @@ public:
      * @param StudyList amb els resultats
      * @return retorna estat del mètode
      */
-    Status queryStudy( DicomMask mask , StudyList &list );
+    Status queryStudy( DicomMask mask , QList<DICOMStudy> &outResultsStudylist );
 
     /** Omple l'estudi amb l'uid donat.
      * @param  studyUID identificador de l'estudi
@@ -96,13 +97,13 @@ public:
      * @param StudyList amb els resultats dels estudis, que l'ultima vegada visualitzats es una data inferior a la passa per paràmetre
      * @return retorna estat del mètode
      */
-    Status queryOldStudies( QString OldStudiesDate, StudyList &list );
+    Status queryOldStudies( QString OldStudiesDate, QList<DICOMStudy> &outResultsStudyList );
 
     /** Selecciona tots els estudis de la base de dades, inclosos els que estan en estat PENDING and RETRIEVING
      * @param StudyList conté tots els estudis de la base de dades, independentment de l'estat
      * @return retorna estat del mètode
      */
-    Status queryAllStudies( StudyList &list );
+    Status queryAllStudies( QList<DICOMStudy> &outResultsStudyList );
 
     /** Esborra un estudi de la cache, l'esborra la taula estudi,series, i image, i si el pacient d'aquell estudi, no té cap altre estudi a la cache local tambe esborrem el pacient. Aquesta operació és dur a terme en una transacció, si falla el mètode, es tirara endarrera, fins a l'estat estable de la base de dades. En aquest mètode es fa accessos a altres taules de la caché com imatge, sèrie, etc.. això és degut a que les operacions d'esborrar un estudi com que afecta a altres taules, s'han de fer una transacció, per això s'ha de tenir juntes en un mateix mètode. Ja que si durant la invocació als diferents mètodes, n'entressin altres mètodes ajens a la operació esborrar estudi, quedarien dins la transacció quan no hi pertanyen. Degut aquest motiu tots es realitzen dins el mateix mètode
      * @param QString UID de l'estudi

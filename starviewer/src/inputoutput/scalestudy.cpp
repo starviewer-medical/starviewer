@@ -6,11 +6,9 @@
  ***************************************************************************/
 
 #include "scalestudy.h"
-#include "serieslist.h"
 #include "dicommask.h"
 #include "status.h"
 #include "dicomimage.h"
-#include "imagelist.h"
 #include "starviewersettings.h"
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
@@ -28,19 +26,17 @@ ScaleStudy::ScaleStudy()
 void ScaleStudy::scale( QString studyUID )
 {
     Status state;
-    SeriesList seriesList;
+    QList<DICOMSeries> seriesList;
     DicomMask mask;
     int imageNumber;
     QString absPath , relPath, absPathScal, imageNumberString;
     StarviewerSettings settings;
     state = getSeriesOfStudy( studyUID,seriesList ); //busquem les sèries de l'estudi
 
-    seriesList.firstSeries();
-
-    while ( !seriesList.end() ) //escalem una imatge per cada sèrie
+    foreach( DICOMSeries series , seriesList ) //escalem una imatge per cada sèrie
     {
         //preparem la màscara per buscar la imatge del mig de l'estudi
-        mask.setSeriesUID( seriesList.getSeries().getSeriesUID() );
+        mask.setSeriesUID( series.getSeriesUID() );
         mask.setStudyUID( studyUID );
         state = countImageNumber(mask, imageNumber);//comptem el número d'imatges, per saber quina és la imatge del mig
 
@@ -59,7 +55,7 @@ void ScaleStudy::scale( QString studyUID )
         absPath = settings.getCacheImagePath() + relPath; //creem el path absolut a la imatge a la imatge
 
         QImage thumbnail;
-        QString modality = seriesList.getSeries().getSeriesModality();
+        QString modality = series.getSeriesModality();
         if( modality == "KO" )
             thumbnail.load(":/images/kinThumbnail.png");
         else if( modality == "PR" )
@@ -73,12 +69,10 @@ void ScaleStudy::scale( QString studyUID )
             thumbnail = image.createThumbnail();
         }
 
-        if (!thumbnail.save( this->getScaledImagePath( &seriesList.getSeries() )))
+        if (!thumbnail.save( this->getScaledImagePath( &series )))
         {
-            ERROR_LOG("No s'ha pogut guardar el thumbnail a " + this->getScaledImagePath( &seriesList.getSeries() ));
+            ERROR_LOG("No s'ha pogut guardar el thumbnail a " + this->getScaledImagePath( &series ));
         }
-
-        seriesList.nextSeries();
     }
 }
 
@@ -88,14 +82,14 @@ QString ScaleStudy::getScaledImagePath(DICOMSeries* series)
     return settings.getCacheImagePath() + series->getStudyUID() + "/" + series->getSeriesUID() + "/scaled.png";
 }
 
-Status ScaleStudy::getSeriesOfStudy( QString studyUID , SeriesList &seriesList )
+Status ScaleStudy::getSeriesOfStudy( QString studyUID , QList<DICOMSeries> &outResultsSeriesList )
 {
     DicomMask mask;
     CacheSeriesDAL cacheSeriesDAL;
 
     mask.setStudyUID( studyUID );
 
-    return cacheSeriesDAL.querySeries( mask , seriesList );
+    return cacheSeriesDAL.querySeries( mask , outResultsSeriesList );
 }
 
 Status ScaleStudy::countImageNumber( DicomMask mask, int &number )
@@ -107,7 +101,7 @@ Status ScaleStudy::countImageNumber( DicomMask mask, int &number )
 
 Status ScaleStudy::imageRelativePath( DicomMask mask , QString &relPath )
 {
-    ImageList imageList;
+    QList<DICOMImage> imageList;
     DICOMImage image;
     Status state;
 
@@ -115,10 +109,9 @@ Status ScaleStudy::imageRelativePath( DicomMask mask , QString &relPath )
 
     state = cacheImageDAL.queryImages( mask , imageList );
 
-    imageList.firstImage();
-    if ( !imageList.end() )
+    if ( !imageList.isEmpty() )
     {
-        image = imageList.getImage();
+        image = imageList.value( 0 );
 
         relPath = QString("%1/%2/%3")
             .arg( image.getStudyUID() )

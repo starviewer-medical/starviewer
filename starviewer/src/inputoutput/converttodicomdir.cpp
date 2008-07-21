@@ -12,6 +12,7 @@
 #include <QChar>
 #include <QFile>
 #include <QTextStream>
+#include <QList>
 
 #include "logging.h"
 #include "status.h"
@@ -193,7 +194,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
     QDir studyDir;
     QChar fillChar = '0';
     QString studyName = QString( "/STU%1" ).arg( m_study , 5 , 10 , fillChar );
-    SeriesList seriesList;
+    QList<DICOMSeries> seriesList;
     DicomMask seriesMask;
     DICOMSeries series;
     Status state;
@@ -211,17 +212,11 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
 
     if ( !state.good() ) return state;
 
-    seriesList.firstSeries();
-
-    while ( !seriesList.end() ) //per cada sèrie de l'estudi, creem el directori de la sèrie
+    foreach( DICOMSeries series , seriesList ) //per cada sèrie de l'estudi, creem el directori de la sèrie
     {
-        state = copySeriesToDicomdirPath( seriesList.getSeries() );
+        state = copySeriesToDicomdirPath( series );
 
-        if ( !state.good() )
-        {
-            break;
-        }
-        else seriesList.nextSeries();
+        if ( !state.good() ) break;
     }
 
     return state;
@@ -236,7 +231,7 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
     QString seriesName = QString( "/SER%1" ).arg( m_series , 5 , 10 , fillChar );
     DICOMImage image;
     DicomMask imageMask;
-    ImageList imageList;
+    QList<DICOMImage> imageList;
     Status state;
 
     m_series++;
@@ -252,17 +247,11 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
 
     if ( !state.good() ) return state;
 
-    imageList.firstImage();
-
-    while ( !imageList.end() ) //per cada imatge de la sèrie, la convertim a foramt littleEndian, i la copiem al directori desti
+    foreach(DICOMImage imageToCopy, imageList)
     {
-        state = copyImageToDicomdirPath( imageList.getImage() );
+        state = copyImageToDicomdirPath( imageToCopy );
 
-        if ( !state.good() )
-        {
-            break;
-        }
-        else imageList.nextImage();
+        if ( !state.good() ) break;
     }
 
     return state;
