@@ -19,7 +19,7 @@ public:
     virtual ~ObscuranceVoxelShader();
 
     /// Assigna l'array d'obscurances.
-    void setObscurance( const double * obscurance );
+    void setObscurance( const double *obscurance );
     /// Assigna el factor pel qual es multipliquen les obscurances.
     void setFactor( double factor );
     /// Assigna els filtres d'obscurances: per sota de \a low es considera 0 i per sobre de \a high es considera 1.
@@ -32,7 +32,7 @@ public:
 
 protected:
 
-    const double * m_obscurance;
+    const double *m_obscurance;
     double m_factor;
     double m_lowFilter, m_highFilter;
 
