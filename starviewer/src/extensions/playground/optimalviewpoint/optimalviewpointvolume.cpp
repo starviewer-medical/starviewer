@@ -322,8 +322,8 @@ void OptimalViewpointVolume::setShade( bool on )
 {
     on ? m_volumeProperty->ShadeOn() : m_volumeProperty->ShadeOff();
     if (on) {
-        m_volumeRayCastFunctionFx2->RemoveAllVoxelShaders();
-        m_volumeRayCastFunctionFx2->AddVoxelShader( m_directIlluminationVoxelShader );
+        m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
+        m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
         vtkEncodedGradientEstimator *gradientEstimator = m_mainMapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
         vtkEncodedGradientShader *gradientShader = m_mainMapper->GetGradientShader();
@@ -336,8 +336,8 @@ void OptimalViewpointVolume::setShade( bool on )
                                                                    gradientShader->GetBlueSpecularShadingTable( m_mainVolume ) );
     }
     else {
-        m_volumeRayCastFunctionFx2->RemoveAllVoxelShaders();
-        m_volumeRayCastFunctionFx2->AddVoxelShader( m_ambientVoxelShader );
+        m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
+        m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_ambientVoxelShader );
     }
 }
 
@@ -2027,8 +2027,10 @@ void OptimalViewpointVolume::setFxContour( double fxContour )
     if ( fxContour > 0.0 ) {
         m_contourVoxelShader->setGradientEstimator( m_mainMapper->GetGradientEstimator() );
         m_contourVoxelShader->setThreshold( fxContour );
-        m_volumeRayCastFunctionFx2->AddVoxelShader( m_contourVoxelShader );
+        if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_contourVoxelShader ) < 0 )
+            m_volumeRayCastFunctionFx2->AddVoxelShader( m_contourVoxelShader );
     }
+    else m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_contourVoxelShader );
 }
 
 
