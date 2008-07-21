@@ -41,12 +41,15 @@ QColor ContourVoxelShader::shade( int offset, const Vector3 &direction, const QC
     Q_CHECK_PTR( m_encodedNormals );
     Q_CHECK_PTR( m_directionEncoder );
 
+    if ( baseColor.alpha() == 0 ) return baseColor;
+
     float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offset] );
     Vector3 normal( gradient[0], gradient[1], gradient[2] );
     double dotProduct = direction * normal;
     if ( dotProduct < 0.0 ) dotProduct = -dotProduct;
+    QColor black( 0, 0, 0, baseColor.alpha() );
 
-    return dotProduct < m_threshold ? Qt::black : baseColor;
+    return dotProduct < m_threshold ? black : baseColor;
 }
 
 
