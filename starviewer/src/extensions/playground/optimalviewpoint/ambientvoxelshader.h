@@ -3,7 +3,7 @@
 
 
 #include "voxelshader.h"
-
+#include "vector3.h"
 #include "transferfunction.h"
 
 

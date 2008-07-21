@@ -2,7 +2,7 @@
 #define UDGCONTOURVOXELSHADER_H
 
 
-#include <voxelshader.h>
+#include "voxelshader.h"
 
 
 class vtkDirectionEncoder;
