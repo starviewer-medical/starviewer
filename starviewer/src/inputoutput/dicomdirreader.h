@@ -8,17 +8,17 @@
 #define UDGDICOMDIRREADER_H
 
 #include <QString>
+#include <QList>
 
 class DcmDicomDir;
 
 namespace udg {
 
-class Status;
-class StudyList;
-class SeriesList;
-class ImageList;
 class DicomMask;
 class DICOMStudy;
+class DICOMSeries;
+class DICOMImage;
+class Status;
 
 /** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
   * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a realitzar cerques.
@@ -37,25 +37,25 @@ public:
     Status open(const QString &dicomdirFilePath);
 
     /** Retorna la llista d'estudis que conté el dicomdir
-      * @param studyList llista amb els estudis que conté el dicomdir
+      * @param outResultsStudyList llista amb els estudis que conté el dicomdir
       * @param studyMask màscara de cerca dels estudis a cercar dins el dicomdir
       * @return estat del mètode
       */
-    Status readStudies( StudyList &studyList , DicomMask studyMask );
+    Status readStudies( QList<DICOMStudy> &outResultsStudyList , DicomMask studyMask );
 
     /** Retorna la llista de sèries d'un estudi que estigui en el dicomdir
      * @param studyUID UID de l'estudi del qual es vol consultar les sèries
-     * @param seriesList llista amb les sèries que conté l'estudi
+     * @param outResultsSeriesList llista amb les sèries que conté l'estudi
      * @return estat del mètode
      */
-    Status readSeries ( QString studyUID , QString seriesUID , SeriesList  &serieList );
+    Status readSeries ( QString studyUID , QString seriesUID , QList<DICOMSeries> &outResultsSeriesList );
 
     /** Retorna la llista d'imatges que conté un estudi
      * @param seriesUID UID de la serie que volem obtenir les imatges
      * @param imageList Llistat de les imatges que conté
      * @return estat del mètode
      */
-    Status readImages( QString seriesUID , QString sopInstanceUID , ImageList &imageList );
+    Status readImages( QString seriesUID , QString sopInstanceUID , QList<DICOMImage> &outResultsImageList );
 
     /** Retorna el path del dicomdir
      * @return path del dicomdir

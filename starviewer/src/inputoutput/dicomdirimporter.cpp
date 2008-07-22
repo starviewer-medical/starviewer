@@ -54,8 +54,8 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
     CacheStudyDAL cacheStudyDAL;
     CacheSeriesDAL cacheSeriesDAL;
     DicomMask mask;
-    StudyList studyList;
-    SeriesList seriesList;
+    QList<DICOMStudy> studyListToImport;
+    QList<DICOMSeries> seriesListToImport;
     QString studyPath;
     StarviewerSettings starviewerSettings;
     DICOMStudy study;
@@ -68,17 +68,16 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
 
     mask.setStudyUID( studyUID );
 
-    m_readDicomdir.readStudies( studyList , mask );
-    studyList.firstStudy();
+    m_readDicomdir.readStudies( studyListToImport , mask );
 
-	if (studyList.end())//comprovem que s'hagin trobat estudis per importar
-	{
-		ERROR_LOG( "NO S'HAN TROBAT ESTUDIS PER IMPORTAR" );
-		state.setStatus( "No s'han trobat estudis per importar" , false , 1310 );
-		return state;
-	}
+    if (studyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
+    {
+        ERROR_LOG( "NO S'HAN TROBAT ESTUDIS PER IMPORTAR" );
+        state.setStatus( "No s'han trobat estudis per importar" , false , 1310 );
+        return state;
+    }
 
-    study = studyList.getStudy();
+    study = studyListToImport.value(0);
     study.setAbsPath( studyPath );
 
     state = cacheStudyDAL.insertStudy( &study, "DICOMDIR" );
@@ -92,31 +91,24 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
         if ( !state.good() ) ERROR_LOG( state.text() );
     }
 
-    m_readDicomdir.readSeries( studyUID , seriesUID , seriesList );
+    m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
 
-    seriesList.firstSeries();
-
-    if ( seriesList.end() ) ERROR_LOG ( "No s'han trobat series per l'estudi" );
+    if ( seriesListToImport.isEmpty() ) ERROR_LOG ( "No s'han trobat series per l'estudi" );
 
 
-    while ( !seriesList.end() )
+    foreach(DICOMSeries seriesToImport, seriesListToImport)
     {
-        serie = seriesList.getSeries();
-        cacheSeriesDAL.insertSeries( &serie );
-        state = importSeries( studyUID , serie.getSeriesUID() , sopInstanceUID );
+        cacheSeriesDAL.insertSeries( &seriesToImport );
+        state = importSeries( studyUID , seriesToImport.getSeriesUID() , sopInstanceUID );
 
-        if ( !state.good() ) 
-        {
-            break;
-        }
-        else seriesList.nextSeries();
+        if ( !state.good() ) break;
     }
 
     if ( state.good() )
     {
-        scaleDicomStudy.scale( studyList.getStudy().getStudyUID() );
+        scaleDicomStudy.scale( study.getStudyUID() );
 
-        state = cacheStudyDAL.setStudyRetrieved( studyList.getStudy().getStudyUID() );
+        state = cacheStudyDAL.setStudyRetrieved( study.getStudyUID() );
     }
 
     return state;
@@ -125,7 +117,7 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
 Status DICOMDIRImporter::importSeries( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
-    ImageList imageList;
+    QList<DICOMImage> imageListToImport;
     QString seriesPath;
     StarviewerSettings starviewerSettings;
 
@@ -133,22 +125,15 @@ Status DICOMDIRImporter::importSeries( QString studyUID , QString seriesUID , QS
     QDir directoryCreator;
     directoryCreator.mkdir( seriesPath );
 
-    m_readDicomdir.readImages( seriesUID , sopInstanceUID , imageList );
+    m_readDicomdir.readImages( seriesUID , sopInstanceUID , imageListToImport );
 
-    imageList.firstImage();
+    if ( imageListToImport.isEmpty() ) ERROR_LOG ( "No s'han trobat imatges per la serie" );
 
-    if ( imageList.end() ) ERROR_LOG ( "No s'han trobat imatges per la serie" );
-
-    while ( !imageList.end() )
+    foreach(DICOMImage imageToImport, imageListToImport)
     {
-        state = importImage( imageList.getImage() );
-        if ( !state.good() ) 
-        {
-            break;
-        }
-        else imageList.nextImage();
+        state = importImage( imageToImport );
+        if ( !state.good() ) break;
     }
-
     return state;
 }
 
