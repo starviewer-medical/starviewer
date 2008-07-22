@@ -14,12 +14,12 @@
 #include <QDir>
 
 #include "status.h"
-#include "imagelist.h"
 #include "processimagesingleton.h"
 #include "logging.h"
 #include "pacsconnection.h"
 #include "starviewersettings.h"
 #include "errordcmtk.h"
+#include "dicomimage.h"
 
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
@@ -204,7 +204,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     return cond;
 }
 
-Status StoreImages::store( ImageList imageList )
+Status StoreImages::store( QList<DICOMImage> imageListToStore )
 {
     OFCondition cond = EC_Normal;
     Status state;
@@ -220,12 +220,16 @@ Status StoreImages::store( ImageList imageList )
     //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
     piSingleton=ProcessImageSingleton::getProcessImageSingleton();
 
-    imageList.firstImage();
-    while ( !imageList.end() &&  !cond.bad() && m_lastStatusCode == STATUS_Success )
+    foreach(DICOMImage imageToStore, imageListToStore)
     {
-        cond = storeSCU( m_assoc , qPrintable(imageList.getImage().getImagePath()) );
-        piSingleton->process( imageList.getImage().getStudyUID() , &imageList.getImage() );
-        if ( m_lastStatusCode == STATUS_Success ) imageList.nextImage();
+        cond = storeSCU( m_assoc , qPrintable(imageToStore.getImagePath()) );
+        piSingleton->process( imageToStore.getStudyUID() , &imageToStore );
+
+        if ( m_lastStatusCode != STATUS_Success ) 
+        {
+            ERROR_LOG( QString("Error %1 al fer el store de la imatge " ).arg( m_lastStatusCode ) + imageToStore.getImagePath() );
+            break;
+        }
     }
 
     /*aquest codi és un altre que s'ha de comprovar que no s'hi hagi produït cap error, el retorna
@@ -235,8 +239,7 @@ Status StoreImages::store( ImageList imageList )
 
     if ( m_lastStatusCode != STATUS_Success )
     {
-        state.setStatus( QString("Error %1 al fer el store de les imatges " ).arg( m_lastStatusCode ), false , 1400 );
-        ERROR_LOG( QString("Error %1 al fer el store de la imatge " ).arg( m_lastStatusCode ) + imageList.getImage().getImagePath() );  
+        state.setStatus( QString("Error %1 al fer el store de les imatges " ).arg( m_lastStatusCode ), false , 1400 );  
         return state;
     }
     else return state.setStatus( cond );

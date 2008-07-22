@@ -296,7 +296,7 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
 
 Status QExecuteOperationThread::moveStudy( Operation operation )
 {
-    ImageList imageList;
+    QList<DICOMImage> imageListToStore;
     Status state;
     PacsParameters pacs;
     StarviewerSettings settings;
@@ -308,8 +308,8 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
 
     emit( setOperating( operation.getStudyUID() ) );//Indiquem al QOperationState que comença l'enviament de les imatges
 
-    //cercquem el path de les imatges a emmagatzemar
-    state = imagesPathToStore( operation.getStudyUID() , imageList );
+    //cerquem el path de les imatges a emmagatzemar
+    state = imagesPathToStore( operation.getStudyUID() , imageListToStore );
 
     if ( !state.good() ) return state;
 
@@ -333,7 +333,7 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
 
     storeImages.setConnection( pacsConnection.getConnection() );
     storeImages.setNetwork( pacsConnection.getNetwork() );
-    state = storeImages.store( imageList );
+    state = storeImages.store( imageListToStore );
 
     piSingleton->delProcessImage( operation.getStudyUID() );
     delete storedProcessImage; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
@@ -352,18 +352,17 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     return state;
 }
 
-Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList &imageList )
+Status QExecuteOperationThread::imagesPathToStore( QString studyUID , QList<DICOMImage> &imageListToStore )
 {
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     DicomMask mask;
-    QList<DICOMSeries> seriesList;
-    QList<DICOMImage> imageListSeries;
+    QList<DICOMSeries> seriesListToStore;
     DICOMImage image;
     Status state;
 
     mask.setStudyUID( studyUID );
-    state = cacheSeriesDAL.querySeries( mask ,seriesList );
+    state = cacheSeriesDAL.querySeries( mask ,seriesListToStore);
 
     if ( !state.good() )
     {
@@ -372,12 +371,13 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
         return state;
     }
 
-    foreach( DICOMSeries series , seriesList )
+    foreach(DICOMSeries seriesToStore, seriesListToStore)
     {
-        mask.setSeriesUID( series.getSeriesUID() );
+        QList<DICOMImage> imageListFromSeriesToStore;
 
-        imageList.clear();
-        state = cacheImageDAL.queryImages( mask , imageListSeries );
+        mask.setSeriesUID( seriesToStore.getSeriesUID() );
+
+        state = cacheImageDAL.queryImages( mask , imageListFromSeriesToStore );
 
         if ( !state.good() )
         {
@@ -386,10 +386,7 @@ Status QExecuteOperationThread::imagesPathToStore( QString studyUID , ImageList 
             return state;
         }
 
-        foreach(DICOMImage imageToStore, imageListSeries)
-        {
-            imageList.insert( imageToStore );
-        }
+        imageListToStore += imageListFromSeriesToStore;
     }
 
     return state;
