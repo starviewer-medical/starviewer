@@ -16,7 +16,6 @@ FORMS += qconfigurationscreenbase.ui \
          queryscreenbase.ui
 HEADERS += databaseconnection.h \
            dicomimage.h \
-           imagelist.h \
            pacsconnection.h \
            pacslistdb.h \
            pacslist.h \
@@ -27,12 +26,10 @@ HEADERS += databaseconnection.h \
            processimagesingleton.h \
            retrieveimages.h \
            dicomseries.h \
-           serieslist.h \
            starviewersettings.h \
            status.h \
            struct.h \
            dicomstudy.h \
-           studylist.h \
            cachepool.h \
            scalestudy.h \
            multiplequerystudy.h \
@@ -67,7 +64,6 @@ HEADERS += databaseconnection.h \
  	   errordcmtk.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
-           imagelist.cpp \
            pacsconnection.cpp \
            pacslist.cpp \
            pacslistdb.cpp \
@@ -78,11 +74,9 @@ SOURCES += databaseconnection.cpp \
            processimagesingleton.cpp \
            retrieveimages.cpp \
            dicomseries.cpp \
-           serieslist.cpp \
            starviewersettings.cpp \
            status.cpp \
            dicomstudy.cpp \
-           studylist.cpp \
            cachepool.cpp \
            scalestudy.cpp \
            multiplequerystudy.cpp \
