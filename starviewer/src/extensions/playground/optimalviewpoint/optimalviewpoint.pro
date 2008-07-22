@@ -37,7 +37,8 @@ HEADERS += doublehistogram.h \
            directilluminationvoxelshader.h \
            contourvoxelshader.h \
            obscurancevoxelshader.h \
-           saliencyvoxelshader.h 
+           saliencyvoxelshader.h \
+           hdrcolor.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
