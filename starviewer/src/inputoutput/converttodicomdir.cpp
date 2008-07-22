@@ -20,8 +20,6 @@
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
 #include "dicommask.h"
-#include "serieslist.h"
-#include "imagelist.h"
 #include "dicomstudy.h"
 #include "dicomseries.h"
 #include "dicomimage.h"

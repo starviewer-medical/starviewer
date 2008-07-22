@@ -17,12 +17,9 @@
 
 #include "status.h"
 #include "dicomstudy.h"
-#include "studylist.h"
 #include "dicomseries.h"
-#include "serieslist.h"
 #include "dicommask.h"
 #include "dicomimage.h"
-#include "imagelist.h"
 #include "logging.h"
 
 namespace udg {

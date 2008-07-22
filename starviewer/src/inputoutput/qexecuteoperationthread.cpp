@@ -29,8 +29,6 @@
 #include "cacheseriesdal.h"
 #include "cacheimagedal.h"
 #include "storeimages.h"
-#include "serieslist.h"
-#include "imagelist.h"
 #include "querypacs.h"
 #include "pacsconnection.h"
 #include "databaseconnection.h"
