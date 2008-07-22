@@ -28,7 +28,7 @@ public:
     void setThreshold( double threshold );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual QColor shade( int offset, const Vector3 &direction, const QColor &baseColor = Qt::white ) const;
+    virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 

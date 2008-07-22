@@ -40,25 +40,21 @@ void DirectIlluminationVoxelShader::setSpecularShadingTables( const float *red, 
 }
 
 
-// TODO el resultat d'especularitat és diferent de l'oficial perquè el màxim de cada component està capat a 1
-//      mentre que a l'oficial pot ser més de 1 i es capa a 1 al final del raig
-QColor DirectIlluminationVoxelShader::shade( int offset, const Vector3 &direction, const QColor &baseColor ) const
+HdrColor DirectIlluminationVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
     Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( m_encodedNormals );
     Q_CHECK_PTR( m_redDiffuseShadingTable ); Q_CHECK_PTR( m_greenDiffuseShadingTable ); Q_CHECK_PTR( m_blueDiffuseShadingTable );
     Q_CHECK_PTR( m_redSpecularShadingTable ); Q_CHECK_PTR( m_greenSpecularShadingTable ); Q_CHECK_PTR( m_blueSpecularShadingTable );
 
-    //QColor color = m_transferFunction.get( m_data[offset] );
-    QColor color = AmbientVoxelShader::shade( offset, direction, baseColor );
+    HdrColor color = AmbientVoxelShader::shade( offset, direction, baseColor );
 
-    if ( color.alpha() > 0 )
-    {
-        unsigned short normal = m_encodedNormals[offset];
-        color.setRedF( qMin( color.redF() * m_redDiffuseShadingTable[normal] + m_redSpecularShadingTable[normal], 1.0 ) );
-        color.setGreenF( qMin( color.greenF() * m_greenDiffuseShadingTable[normal] + m_greenSpecularShadingTable[normal], 1.0 ) );
-        color.setBlueF( qMin( color.blueF() * m_blueDiffuseShadingTable[normal] + m_blueSpecularShadingTable[normal], 1.0 ) );
-    }
+    if ( color.isTransparent() ) return color;
+
+    unsigned short normal = m_encodedNormals[offset];
+    color.red = color.red * m_redDiffuseShadingTable[normal] + m_redSpecularShadingTable[normal];
+    color.green = color.green * m_greenDiffuseShadingTable[normal] + m_greenSpecularShadingTable[normal];
+    color.blue = color.blue * m_blueDiffuseShadingTable[normal] + m_blueSpecularShadingTable[normal];
 
     return color;
 }

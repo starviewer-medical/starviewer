@@ -3,8 +3,9 @@
 
 
 #include "voxelshader.h"
-#include "vector3.h"
+
 #include "transferfunction.h"
+#include "vector3.h"
 
 
 namespace udg {
@@ -24,7 +25,7 @@ public:
     void setTransferFunction( const TransferFunction &transferFunction );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual QColor shade( int offset, const Vector3 &direction, const QColor &baseColor = Qt::white ) const;
+    virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -36,12 +37,12 @@ protected:
     static const unsigned int AMBIENT_COLORS_TABLE_SIZE = 256;
 
     TransferFunction m_transferFunction;
-    QColor m_ambientColors[AMBIENT_COLORS_TABLE_SIZE];
+    HdrColor m_ambientColors[AMBIENT_COLORS_TABLE_SIZE];
 
 };
 
 
-inline QColor AmbientVoxelShader::shade( int offset, const Vector3 &direction, const QColor &baseColor ) const
+inline HdrColor AmbientVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
     Q_UNUSED( direction );
     Q_UNUSED( baseColor );
