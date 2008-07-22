@@ -18,6 +18,7 @@ namespace udg {
 class Operation;
 class Status;
 class ImageList;
+class DICOMImage;
 
 class QExecuteOperationThread :public QThread
 {
@@ -134,7 +135,7 @@ private :
      * @param studyUID uid de l'estudi que es vol guardar al pacs
      * @return llista amb el path de totes les imatges que es vol guardar en el PACS
      */
-    Status imagesPathToStore( QString studyUID , ImageList &imageList );
+    Status imagesPathToStore( QString studyUID , QList<DICOMImage> &imageListToStore );
 
 };
 

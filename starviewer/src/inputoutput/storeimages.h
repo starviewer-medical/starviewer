@@ -7,6 +7,9 @@
 #ifndef UDGSTOREIMAGES_H
 #define UDGSTOREIMAGES_H
 
+#include <QList>
+
+//TODO són necessaris aquests structs ?
 struct T_ASC_Association;
 struct T_ASC_Network;
 
@@ -15,6 +18,7 @@ namespace udg {
 class Status;
 class ImageList;
 class PacsConnection;
+class DICOMImage;
 
 //codi d'error que retorna l'store a part del OFCondition, aquest status code també s'ha de comprovar
 static int m_lastStatusCode;
@@ -37,10 +41,10 @@ public:
    void setNetwork ( T_ASC_Network * network );
 
    /** Guarda les imatges que s'especifiquen a la llista en el pacs establert per la connexió
-    * @param imagePath llista amb el path de les imatges a guardar
+    * @param ImageListStore de les imatges a enviar al PACS
     * @return indica estat del mètode
     */
-   Status store( ImageList imageList );
+   Status store( QList<DICOMImage> imageListToStore );
 
     ~StoreImages();
 
