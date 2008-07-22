@@ -15,7 +15,6 @@
 
 #include "processimagesingleton.h"
 #include "pacsconnection.h"
-#include "studylist.h"
 #include "qstudytreewidget.h"
 #include "dicomseries.h"
 #include "querypacs.h"
@@ -41,8 +40,6 @@
 #include "dicommask.h"
 #include "pacslist.h"
 #include "qoperationstatescreen.h"
-#include "serieslist.h"
-#include "imagelist.h"
 
 namespace udg {
 
@@ -844,7 +841,6 @@ void QueryScreen::retrieve()
 void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source )
 {
     CacheImageDAL cacheImageDAL;
-    ImageList imageList;
     DicomMask mask;
     QList<DICOMImage> imageListQueryResults;
 

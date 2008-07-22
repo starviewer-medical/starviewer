@@ -12,14 +12,10 @@
 #include <QString>
 
 #include "status.h"
-#include "imagelist.h"
 #include "starviewersettings.h"
 #include "cachestudydal.h"
 #include "cacheimagedal.h"
 #include "cacheseriesdal.h"
-#include "studylist.h"
-#include "serieslist.h"
-#include "imagelist.h"
 #include "dicomstudy.h"
 #include "dicomseries.h"
 #include "dicomimage.h"
@@ -34,7 +30,6 @@ namespace udg
 Status DICOMDIRImporter::import( QString dicomdirPath , QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
     Status state;
-    ImageList imageList;
     QString studyPath;
 
     state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
