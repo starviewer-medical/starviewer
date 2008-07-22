@@ -37,23 +37,21 @@ void SaliencyVoxelShader::setFilters( double low, double high )
 }
 
 
-// TODO el resultat de saliency és diferent de l'oficial perquè el màxim de cada component està capat a 1
-//      mentre que a l'oficial pot ser més de 1 i es capa a 1 al final del raig
-QColor SaliencyVoxelShader::shade( int offset, const Vector3 &direction, const QColor &baseColor ) const
+HdrColor SaliencyVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
     Q_UNUSED( direction );
 
     Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( m_saliency );
 
-    if ( baseColor.alpha() == 0 ) return baseColor;
+    if ( baseColor.isTransparent() ) return baseColor;
 
     double saliency = 1.0 + m_saliency[offset] * m_ab - m_a;
     if ( saliency < m_lowFilter ) saliency = m_minimum;
     else if ( saliency > m_highFilter ) saliency = m_maximum;
 
-    QColor shaded = baseColor;
-    shaded.setAlphaF( qMin( shaded.alphaF() * saliency, 1.0 ) );
+    HdrColor shaded = baseColor;
+    shaded.alpha *= saliency;
 
     return shaded;
 }

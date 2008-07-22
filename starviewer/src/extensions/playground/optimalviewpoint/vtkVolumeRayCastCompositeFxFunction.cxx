@@ -198,14 +198,14 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
             previousVoxel[0] = voxel[0]; previousVoxel[1] = voxel[1]; previousVoxel[2] = voxel[2];
         }
 
-        QColor color;
+        HdrColor color;
 
         for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( offset, direction, color );
 
-        float opacity = color.alphaF(), opacityRemainingOpacity = opacity * remainingOpacity;
-        accumulatedRedIntensity += opacityRemainingOpacity * color.redF();
-        accumulatedGreenIntensity += opacityRemainingOpacity * color.greenF();
-        accumulatedBlueIntensity += opacityRemainingOpacity * color.blueF();
+        float opacity = color.alpha, opacityRemainingOpacity = opacity * remainingOpacity;
+        accumulatedRedIntensity += opacityRemainingOpacity * color.red;
+        accumulatedGreenIntensity += opacityRemainingOpacity * color.green;
+        accumulatedBlueIntensity += opacityRemainingOpacity * color.blue;
         remainingOpacity *= (1.0 - opacity);
 
         // Increment our position and compute our voxel location

@@ -24,6 +24,10 @@ public:
     /// Destructor.
     ~HdrColor();
 
+    /// Cert si red = green = blue = 0.
+    bool isBlack() const;
+    /// Cert si alpha = 0.
+    bool isTransparent() const;
     /// Multiplica les components de color per \a f i retorna el color.
     HdrColor& multiplyColorBy( float f );
     /// Posa a 1 les components més grans que 1.
@@ -79,6 +83,18 @@ inline HdrColor::HdrColor( const QColor &color )
 
 inline HdrColor::~HdrColor()
 {
+}
+
+
+inline bool HdrColor::isBlack() const
+{
+    return red == 0.0 && green == 0.0 && blue == 0.0;
+}
+
+
+inline bool HdrColor::isTransparent() const
+{
+    return alpha == 0.0;
 }
 
 

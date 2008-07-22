@@ -36,26 +36,22 @@ void ObscuranceVoxelShader::setFilters( double low, double high )
 }
 
 
-// TODO el resultat d'obscurances és diferent de l'oficial (un pèl més fosc) perquè el màxim de cada component està capat a 1
-//      mentre que a l'oficial pot ser més de 1 i es capa a 1 al final del raig
-QColor ObscuranceVoxelShader::shade( int offset, const Vector3 &direction, const QColor &baseColor ) const
+HdrColor ObscuranceVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
     Q_UNUSED( direction );
 
     Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( m_obscurance );
 
-    if ( baseColor.alpha() == 0 ) return baseColor;
+    if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 
     double obscurance = m_obscurance[offset];
     if ( obscurance < m_lowFilter ) obscurance = 0.0;
     else if ( obscurance > m_highFilter ) obscurance = 1.0;
     obscurance *= m_factor;
 
-    QColor shaded = baseColor;
-    shaded.setRedF( qMin( baseColor.redF() * obscurance, 1.0 ) );
-    shaded.setGreenF( qMin( baseColor.greenF() * obscurance, 1.0 ) );
-    shaded.setBlueF( qMin( baseColor.blueF() * obscurance, 1.0 ) );
+    HdrColor shaded = baseColor;
+    shaded.multiplyColorBy( obscurance );
 
     return shaded;
 }

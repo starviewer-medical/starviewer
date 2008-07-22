@@ -36,18 +36,18 @@ void ContourVoxelShader::setThreshold( double threshold )
 }
 
 
-QColor ContourVoxelShader::shade( int offset, const Vector3 &direction, const QColor &baseColor ) const
+HdrColor ContourVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
     Q_CHECK_PTR( m_encodedNormals );
     Q_CHECK_PTR( m_directionEncoder );
 
-    if ( baseColor.alpha() == 0 ) return baseColor;
+    if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 
     float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offset] );
     Vector3 normal( gradient[0], gradient[1], gradient[2] );
     double dotProduct = direction * normal;
     if ( dotProduct < 0.0 ) dotProduct = -dotProduct;
-    QColor black( 0, 0, 0, baseColor.alpha() );
+    HdrColor black( 0.0, 0.0, 0.0, baseColor.alpha );
 
     return dotProduct < m_threshold ? black : baseColor;
 }

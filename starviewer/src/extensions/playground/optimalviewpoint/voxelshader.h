@@ -2,7 +2,7 @@
 #define UDGVOXELSHADER_H
 
 
-#include <QColor>
+#include "hdrcolor.h"
 
 
 namespace udg {
@@ -25,7 +25,7 @@ public:
     void setData( const unsigned char *data );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual QColor shade( int offset, const Vector3 &direction, const QColor &baseColor = Qt::white ) const = 0;
+    virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const = 0;
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
