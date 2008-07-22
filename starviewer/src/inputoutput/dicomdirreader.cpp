@@ -71,7 +71,7 @@ Status DICOMDIRReader::open(const QString &dicomdirFilePath)
 }
 
 //El dicomdir segueix una estructura d'abre on tenim n pacients, que tenen n estudis, que conté n series, i que conté n imatges, per llegir la informació hem d'accedir a través d'aquesta estructura d'arbre, primer llegim el primer pacient, amb el primer pacient, podem accedir el segon nivell de l'arbre, els estudis del pacient, i anar fent així fins arribar al nivell de baix de tot, les imatges,
-Status DICOMDIRReader::readStudies( StudyList &studyList , DicomMask studyMask )
+Status DICOMDIRReader::readStudies( QList<DICOMStudy> &outResultsStudyList , DicomMask studyMask )
 {
     Status state;
 
@@ -121,11 +121,8 @@ Status DICOMDIRReader::readStudies( StudyList &studyList , DicomMask studyMask )
             studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
             study.setStudyUID( text.c_str() );
 
-
-            if ( matchStudyMask( study , studyMask ) ) //comprovem si l'estudi compleix la màscara de cerca que ens han passat
-            {
-                studyList.insert( study );
-            }
+            //comprovem si l'estudi compleix la màscara de cerca que ens han passat
+            if ( matchStudyMask( study , studyMask ) ) outResultsStudyList.append( study );
 
             studyRecord = patientRecord->nextSub( studyRecord ); //accedim al següent estudi del pacient
         }
@@ -137,7 +134,7 @@ Status DICOMDIRReader::readStudies( StudyList &studyList , DicomMask studyMask )
 }
 
 //Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada found, podrem accedir a la seva informacio de la sèrie
-Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , SeriesList &seriesList )
+Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , QList<DICOMSeries> &outResultsSeriesList )
 {
     Status state;
 
@@ -210,7 +207,7 @@ Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , Series
                 seriesPath = seriesPath.mid( 0 , seriesPath.toStdString().rfind("/") + 1 );//Ignorem el nom de la primera imatge, nosaltres volem el directori de la sèrie
                 series.setSeriesPath( seriesPath );
 
-                seriesList.insert( series );//inserim a la llista de sèrie
+                outResultsSeriesList.append(series);//inserim a la llista de sèrie
             }
             seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi
         }
@@ -219,7 +216,7 @@ Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , Series
     return state.setStatus( m_dicomdir->error() );
 }
 
-Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , ImageList &imageList )
+Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , QList<DICOMImage> &outResultsImageList )
 {
     Status state;
 
@@ -288,7 +285,7 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
 
                 image.setImagePath( imagePath );
 
-                imageList.insert( image );//inserim a la llista la imatge*/
+                outResultsImageList.append( image );//inserim a la llista la imatge*/
             }
 
             imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
