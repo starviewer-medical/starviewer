@@ -37,11 +37,8 @@ namespace udg {
 @author marc
 */
 
-class StudyList;
 class DICOMStudy;
-class SeriesList;
 class DICOMSeries;
-class ImageList;
 class DICOMImage;
 
 class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
@@ -60,23 +57,12 @@ public:
     /** Mostra l'estudi pel ListWidget que se li passa per paràmetre
      *  @param StudyList a mostrar
      */
-    void insertStudyList( StudyList * studyList );
-
-    /** Mostra l'estudi pel ListWidget que se li passa per paràmetre
-     *  @param StudyList a mostrar
-     */
     void insertStudyList( QList<DICOMStudy> studyList );
-
 
     /** Inseriex la informació d'un estudi
      * @param Dades de l'estudi
      */
     void insertStudy( DICOMStudy * );
-
-    /** Insereix un llista de sèries a l'estudi seleccionat actualment
-     * @param seriesList series afegir
-     */
-    void insertSeriesList( SeriesList *seriesList );
 
     /** Insereix un llista de sèries a l'estudi seleccionat actualment
      * @param seriesList series afegir
@@ -87,11 +73,6 @@ public:
      *@param informació de la serie
      */
     void insertSeries( DICOMSeries *serie );
-
-    /** Insereix una llista d'imatges a la sèrie seleccionada actualment
-     * @param imageList llista d'imatges afegir a la sèrie
-     */
-    void insertImageList( ImageList *imageList );
 
     /** Insereix una llista d'imatges a la sèrie seleccionada actualment
      * @param imageList llista d'imatges afegir a la sèrie

@@ -30,11 +30,8 @@
 #include "qstudytreewidget.h"
 #include "pacslistdb.h"
 #include "starviewersettings.h"
-#include "studylist.h"
 #include "dicomstudy.h"
-#include "serieslist.h"
 #include "dicomseries.h"
-#include "imagelist.h"
 #include "dicomimage.h"
 #include "status.h"
 #include "logging.h"
@@ -85,19 +82,6 @@ void QStudyTreeWidget::setColumnWidth( int columnNumber , int columnWidth )
 int QStudyTreeWidget::getColumnWidth( int columnNumber )
 {
     return m_studyTreeView->columnWidth( columnNumber );
-}
-
-void QStudyTreeWidget::insertStudyList( StudyList *studyList )
-{
-    m_studyTreeView->clear();
-
-    studyList->firstStudy();
-
-    while ( !studyList->end() )
-    {
-         insertStudy( &studyList->getStudy() );
-         studyList->nextStudy();
-    }
 }
 
 void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
@@ -162,17 +146,6 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
     m_studyTreeView->clearSelection();
 }
 
-void QStudyTreeWidget::insertSeriesList( SeriesList *seriesList )
-{
-    seriesList->firstSeries();
-
-    while ( !seriesList->end() )
-    {
-         insertSeries( &seriesList->getSeries() );
-         seriesList->nextSeries();
-    }
-}
-
 void QStudyTreeWidget::insertSeriesList( QList<DICOMSeries> seriesList )
 {
     foreach( DICOMSeries series, seriesList )
@@ -216,17 +189,6 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
        consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
      */
     expandableItem->setText( Type , "EXPANDABLE_ITEM" );
-}
-
-void QStudyTreeWidget::insertImageList( ImageList *imageList )
-{
-    imageList->firstImage();
-
-    while ( !imageList->end() )
-    {
-         insertImage( &imageList->getImage() );
-         imageList->nextImage();
-    }
 }
 
 void QStudyTreeWidget::insertImageList( QList<DICOMImage> imageList )
