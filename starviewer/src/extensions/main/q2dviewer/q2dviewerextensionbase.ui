@@ -22,7 +22,7 @@
       <number>0</number>
      </property>
      <property name="spacing" >
-      <number>3</number>
+      <number>0</number>
      </property>
      <item>
       <layout class="QVBoxLayout" >
@@ -122,7 +122,7 @@
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>5</hsizetype>
-           <vsizetype>5</vsizetype>
+           <vsizetype>0</vsizetype>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -261,9 +261,6 @@
           </size>
          </property>
          <property name="checkable" >
-          <bool>true</bool>
-         </property>
-         <property name="checked" >
           <bool>true</bool>
          </property>
          <property name="toolButtonStyle" >
@@ -713,8 +710,8 @@
         <widget class="udg::QThickSlabWidget" native="1" name="m_thickSlabWidget" >
          <property name="sizePolicy" >
           <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+           <hsizetype>5</hsizetype>
+           <vsizetype>5</vsizetype>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -752,7 +749,7 @@
      <item>
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>3</number>
        </property>
        <property name="spacing" >
         <number>0</number>
@@ -807,8 +804,8 @@
       <widget class="QCINEController" native="1" name="m_cineController" >
        <property name="sizePolicy" >
         <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
+         <hsizetype>5</hsizetype>
+         <vsizetype>5</vsizetype>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -818,7 +815,7 @@
      <item>
       <layout class="QVBoxLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="spacing" >
         <number>6</number>
@@ -842,7 +839,7 @@
        <item>
         <layout class="QHBoxLayout" >
          <property name="margin" >
-          <number>0</number>
+          <number>2</number>
          </property>
          <property name="spacing" >
           <number>6</number>
@@ -851,7 +848,7 @@
           <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox" >
            <property name="sizePolicy" >
             <sizepolicy>
-             <hsizetype>0</hsizetype>
+             <hsizetype>5</hsizetype>
              <vsizetype>0</vsizetype>
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
