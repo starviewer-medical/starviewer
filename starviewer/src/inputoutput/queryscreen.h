@@ -335,11 +335,6 @@ struct retrieveParameters
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;
 
-    /// Indica quin és l'últim pacs que hem consultat, això es per de cares anar al connectathon,
-    /// ja que les messatools no retornen el tag indicant a quin pacs pertanyen, per això és necessari guardar
-    /// quin és l'últim pacs consultat per saber si hem de descarregar l'estudi, consultar, sèrie etc a quin PACS atacar.
-    QString m_lastQueriedPacs;
-
     QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs, m_contextMenuQStudyTreeWidgetDicomdir;
 
     QList<DICOMStudy> m_studyListQueriedPacs;//llista dels estudis que s'han trobat a la última query al PACS
