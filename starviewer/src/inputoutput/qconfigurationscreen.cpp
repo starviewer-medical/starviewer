@@ -265,7 +265,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 
     if ( selectedItem != NULL )
     {
-        state = pacsListDB.queryPacsList( pacsList );
+        state = pacsListDB.queryPacs( &selectedPacs, selectedItem->text(0));// selectedItem->text(0) --> AETitle del pacs seleccionat al TreeWidget
 
         if ( !state.good() )
         {
@@ -273,33 +273,19 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
             return;
         }
 
-        //busquem el pacs que ens han seleccionat
-        while (index < pacsList.size() && !trobat)
+        //emplenem els textots
+        m_textAETitle->setText( selectedPacs.getAEPacs() );
+        m_textPort->setText( selectedPacs.getPacsPort() );
+        m_textAddress->setText( selectedPacs.getPacsAdr() );
+        m_textInstitution->setText( selectedPacs.getInstitution() );
+        m_textLocation->setText( selectedPacs.getLocation() );
+        m_textDescription->setText( selectedPacs.getDescription() );
+        m_selectedPacsID = selectedPacs.getPacsID();
+        if ( selectedPacs.getDefault() == "S" )
         {
-            if (pacsList.value(index).getAEPacs() == selectedItem->text(0)) 
-                trobat = true;
-            else
-                index++;
+            m_checkDefault->setChecked( true );
         }
-
-        if (trobat) //busquem les dades del PACS
-        {
-            selectedPacs = pacsList.value(index);
-
-            //emplenem els textots
-            m_textAETitle->setText( selectedPacs.getAEPacs() );
-            m_textPort->setText( selectedPacs.getPacsPort() );
-            m_textAddress->setText( selectedPacs.getPacsAdr() );
-            m_textInstitution->setText( selectedPacs.getInstitution() );
-            m_textLocation->setText( selectedPacs.getLocation() );
-            m_textDescription->setText( selectedPacs.getDescription() );
-            m_selectedPacsID = selectedPacs.getPacsID();
-            if ( selectedPacs.getDefault() == "S" )
-            {
-                m_checkDefault->setChecked( true );
-            }
-            else m_checkDefault->setChecked( false );
-       }
+        else m_checkDefault->setChecked( false );
     }
     else m_selectedPacsID = -1;
 }
