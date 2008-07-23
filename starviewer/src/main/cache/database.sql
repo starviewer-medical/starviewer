@@ -59,21 +59,6 @@ CREATE TABLE Image
 CREATE INDEX IND_IMAGE1 ON Image (StuInsUID,SerInsUID);
 CREATE INDEX IND_IMAGE2 ON Image (SerInsUID);
 
-
-Create table PacsList
-(
-   PacsID       INTEGER PRIMARY KEY,
-   AETitle      VARCHAR2(64) UNIQUE,
-   Server       VARCHAR2(64),
-   Port         VARCHAR2(6),
-   Inst         VARCHAR2(100),
-   Loc          VARCHAR2(100),
-   Desc         VARCHAR2(255),
-   Def          VARCHAR2(1),
-   Del          VARCHAR2(1)
-);
-
-
 create table Pool
 (
     Param       VARCHAR2(12) UNIQUE,
