@@ -17,7 +17,6 @@ namespace udg {
 
 class Operation;
 class Status;
-class ImageList;
 class DICOMImage;
 
 class QExecuteOperationThread :public QThread

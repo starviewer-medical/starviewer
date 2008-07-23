@@ -16,7 +16,6 @@ struct T_ASC_Network;
 namespace udg {
 
 class Status;
-class ImageList;
 class PacsConnection;
 class DICOMImage;
 

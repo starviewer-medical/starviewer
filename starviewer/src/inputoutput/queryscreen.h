@@ -16,15 +16,12 @@
 
 namespace udg {
 
-class SeriesList;
 class Status;
 class PacsServer;
 class PatientFillerInput;
 class QCreateDicomdir;
 class ProcessImageSingleton;
 class DicomMask;
-class PacsList;
-class PacsParameters;
 class QOperationStateScreen;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
