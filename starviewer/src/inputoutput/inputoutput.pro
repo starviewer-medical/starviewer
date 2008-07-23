@@ -18,7 +18,6 @@ HEADERS += databaseconnection.h \
            dicomimage.h \
            pacsconnection.h \
            pacslistdb.h \
-           pacslist.h \
            pacsnetwork.h \
            pacsparameters.h \
            pacsserver.h \
@@ -65,7 +64,6 @@ HEADERS += databaseconnection.h \
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
-           pacslist.cpp \
            pacslistdb.cpp \
            pacsnetwork.cpp \
            pacsparameters.cpp \
