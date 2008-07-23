@@ -11,7 +11,6 @@
 #include <QMessageBox>
 
 #include "pacslistdb.h"
-#include "pacslist.h"
 #include "pacsparameters.h"
 #include "starviewersettings.h"
 #include "status.h"
@@ -35,8 +34,7 @@ QPacsList::~QPacsList()
 void QPacsList::refresh()
 {
     PacsListDB pacsListDB;
-    PacsList   pacsList;
-    PacsParameters pacs;
+    QList<PacsParameters> pacsList;
     Status state;
 
     m_PacsTreeView->clear();
@@ -49,17 +47,14 @@ void QPacsList::refresh()
         return;
     }
 
-    pacsList.firstPacs();
-
-    while ( !pacsList.end() )
+    foreach(PacsParameters pacs, pacsList)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
-        pacs = pacsList.getPacs();
+
         item->setText( 0 , pacs.getAEPacs() );
         item->setText( 1 , pacs.getInstitution() );
         item->setText( 2 , pacs.getDescription() );
         item->setText( 3 , pacs.getDefault() );
-        pacsList.nextPacs();
     }
 
     setSelectedDefaultPacs();
@@ -80,7 +75,7 @@ void QPacsList::setSelectedDefaultPacs()
     }
 }
 
-Status QPacsList::getSelectedPacs( PacsList *pacsList )
+Status QPacsList::getSelectedPacs( QList<PacsParameters> &selectedPacsList )
 {
     PacsListDB pacsListDB;
     Status state;
@@ -101,7 +96,7 @@ Status QPacsList::getSelectedPacs( PacsList *pacsList )
             pacs.setAELocal( settings.getAETitleMachine() );
             //emplenem amb les dades del registre el timeout
             pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
-            pacsList->insertPacs( pacs ); //inserim a la llista
+            selectedPacsList.append( pacs ); //inserim a la llista
         }
         else return state;
     }

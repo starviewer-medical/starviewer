@@ -9,11 +9,12 @@
 
 #include "ui_qpacslistbase.h"
 #include <QWidget>
+#include <QList>
 
 namespace udg {
 
-class PacsList;
 class Status;
+class PacsParameters;
 
 /** Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
 @author marc
@@ -31,7 +32,7 @@ public:
      * @param pacslist , parametre de sortida que conte la llista de pacs seleccionats
      * @return estat de l'operació
      */
-    Status getSelectedPacs(PacsList * pacsList);
+    Status getSelectedPacs(QList<PacsParameters> &pacsList);
 
     ///Destructor de la classe
     ~QPacsList();

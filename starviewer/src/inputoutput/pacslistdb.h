@@ -8,6 +8,7 @@
 #define UDGPACSLISTDB_H
 
 #include <QSettings>
+#include <QList>
 
 class QString;
 
@@ -19,7 +20,6 @@ namespace udg {
 
 class Status;
 class PacsParameters;
-class PacsList;
 
 class PacsListDB{
 
@@ -41,7 +41,7 @@ public:
      * @param PacsList Conté tots els Pacs de la taula PacsList
      * @return estat de l'operació
      */
-    Status queryPacsList( PacsList & );
+    Status queryPacsList( QList<PacsParameters> &outResultsPacsList );
 
     /** Permet actualitzar la informació d'un pacs, el PacsID camp clau no es pot canviar!
      * @param Objecte PAcsParameters ambles noves dades del PACS

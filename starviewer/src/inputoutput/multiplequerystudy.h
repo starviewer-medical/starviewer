@@ -44,7 +44,7 @@ public:
     /** Estableix la llista de PACS als quals es farà la cerca
      * @param PacsList amb els pacs als quals es cercarà
      */
-    void setPacsList( PacsList );
+    void setPacsList( QList<PacsParameters> pacsListToQuery );
 
     /** Una vegada haguem especificat la màscara, i tots els PACS als que volem realitzar la query, aquesta acció iniciara el procés de cerca a tots els PACS
      * @return Estat del mètode
@@ -92,7 +92,7 @@ private :
 
     DicomMask m_searchMask;
 
-    PacsList m_pacsList;
+    QList<PacsParameters> m_pacsListToQuery;
     int m_maxThreads;//Nombre màxim de threads que es poden executar a la vegada
     // Per raons d'optimització nomes es podran tenir un límit threads alhora executant la query, per aconseguir això utilitzem un semàfor
     QSemaphore *m_semaphoreActiveThreads;
