@@ -58,18 +58,31 @@ acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
 
     if ( cond.good() )
     {
-          if ( gLocalByteOrder == EBO_LittleEndian )  /* defined in dcxfer.h */
-          {
-            transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
-            transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-          }
-          else
-          {
-            transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
-            transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
-          }
-          transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
-          numTransferSyntaxes = 3;
+#ifndef DISABLE_COMPRESSION_EXTENSION
+        // Si disposem de compressio la demanem, i podrem accelerar el temps de
+        // descarrega considerablement
+        // de moment demanem la compressio lossless que tot PACS que suporti compressio ha
+        // de proporcionar: JPEGLossless:Hierarchical-1stOrderPrediction
+        transferSyntaxes[0] = UID_JPEGProcess14SV1TransferSyntax;
+        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
+        transferSyntaxes[2] = UID_BigEndianExplicitTransferSyntax;
+        transferSyntaxes[3] = UID_LittleEndianImplicitTransferSyntax;
+        numTransferSyntaxes = 4;
+#else
+        if ( gLocalByteOrder == EBO_LittleEndian )  /* defined in dcxfer.h */
+        {
+        transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
+        transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
+        }
+        else
+        {
+        transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
+        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
+        }
+        transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
+        numTransferSyntaxes = 3;
+#endif
+
 
         /* accept the Verification SOP Class if presented */
         cond = ASC_acceptContextsWithPreferredTransferSyntaxes(

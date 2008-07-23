@@ -130,7 +130,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="176"/>
         <source>Exit the application</source>
-        <translation>Eixir de l&apos;aplicació</translation>
+        <translation>Sortir de l&apos;aplicació</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="167"/>
@@ -145,7 +145,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="215"/>
         <source>&amp;File</source>
-        <translation>&amp;Arxiva</translation>
+        <translation>&amp;Fitxer</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="246"/>
@@ -210,17 +210,17 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="199"/>
         <source>Show Full Screen</source>
-        <translation>Mostrar en mode a pantalla completa</translation>
+        <translation>Mostrar en mode pantalla completa</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="200"/>
         <source>Switch To Full Screen</source>
-        <translation>Canviar a mode de pantalla completa</translation>
+        <translation>Canviar a mode pantalla completa</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="192"/>
         <source>Retract Full Screen</source>
-        <translation>Sortir de mode a pantalla completa</translation>
+        <translation>Sortir de mode pantalla completa</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="193"/>
@@ -250,7 +250,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="96"/>
         <source>Open files from a directory...</source>
-        <translation>Obrir un arxiu d&apos;un directori...</translation>
+        <translation>Obrir els fitxers d&apos;un directori...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="112"/>

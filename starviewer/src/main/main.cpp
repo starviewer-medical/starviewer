@@ -18,6 +18,8 @@
 #include "extensionmediatorfactory.h"
 // definicions globals d'aplicació
 #include "starviewerapplication.h"
+// decodificacio jpeg
+#include "dcmtk/dcmjpeg/djdecode.h"
 
 void configureLogging()
 {
@@ -103,6 +105,9 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain( OrganizationDomainString );
     app.setApplicationName( ApplicationNameString );
 
+    //TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
+    // una classe dedicada a tal efecte
+
     // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ).
     // Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
@@ -112,6 +117,12 @@ int main(int argc, char *argv[])
 
     initQtPluginsDirectory();
     initializeTranslations(app);
+
+    // TODO aixo es necessari per, entre d'altres coses, poder crear thumbnails,
+    // dicomdirs, etc de dicoms comprimits i tractar-los correctament amb dcmtk
+    // aixo esta temporalment aqui, a la llarga anira a una classe de setup
+    // registrem els codecs decompressors JPEG
+    DJDecoderRegistration::registerCodecs();
 
     QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
     splash->show();
