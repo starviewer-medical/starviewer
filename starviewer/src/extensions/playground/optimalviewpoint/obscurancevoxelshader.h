@@ -1,12 +1,9 @@
 #ifndef UDGOBSCURANCEVOXELSHADER_H
 #define UDGOBSCURANCEVOXELSHADER_H
 
-
-#include <voxelshader.h>
-
+#include "voxelshader.h"
 
 namespace udg {
-
 
 /**
  * Voxel shader que aplica obscurances.
