@@ -61,34 +61,32 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
     }
     else
     {
-
         QStringList list = series->getImagesPathList();
         DICOMTagReader dicomReader( list[0] );
         QString sliceLocation = dicomReader.getAttributeByName( DCM_SliceLocation );
 
-        while ( !found && phases < list.count() )
+        // l'atribut és opcional, per tant si no hi
+        // és no podrem determinar si hi ha fases o no
+        // TODO caldria fer servir altres mètodes alternatius
+        // per determinar si tenim fases o no, en el cas que
+        // no disposem del tag SliceLocation
+        if( !sliceLocation.isEmpty() )
         {
-            dicomReader.setFile( list[phases] );
-            if ( sliceLocation == dicomReader.getAttributeByName( DCM_SliceLocation ) )
+            while ( !found && phases < list.count() )
             {
-                phases++;
-            }
-            else
-            {
-                found = true;
+                dicomReader.setFile( list[phases] );
+                if ( sliceLocation == dicomReader.getAttributeByName( DCM_SliceLocation  ) )
+                {
+                    phases++;
+                }
+                else
+                {
+                    found = true;
+                }
             }
         }
 
         slices = list.count() / phases;
-
-        if ( phases > 1 ) // és dinàmic
-        {
-            DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " és dinàmica." );
-        }
-        else
-        {
-            DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no és dinàmica." );
-        }
     }
 
     series->setNumberOfPhases( phases );
