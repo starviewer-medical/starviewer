@@ -11,7 +11,6 @@
 
 #include <sqlite3.h>
 
-#include "pacslist.h"
 #include "databaseconnection.h"
 #include "status.h"
 #include "pacsparameters.h"
@@ -66,7 +65,7 @@ Status PacsListDB::updatePacs( PacsParameters *pacsToUpdate )
     return state.setStatus( DcmtkNoError );
 }
 
-Status PacsListDB::queryPacsList( PacsList &list )
+Status PacsListDB::queryPacsList( QList<PacsParameters> &outResultsPacslist )
 {
     Status state;
 
@@ -74,7 +73,7 @@ Status PacsListDB::queryPacsList( PacsList &list )
     {
         PacsParameters pacs = getPacsParametersFromQSettinsValues( arrayIndex );
 
-        if (!pacs.isDeleted()) list.insertPacs( pacs );
+        if (!pacs.isDeleted()) outResultsPacslist.append( pacs );
     }
 
     return state.setStatus( DcmtkNoError );

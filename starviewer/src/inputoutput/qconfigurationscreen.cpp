@@ -17,11 +17,11 @@
 #include <QTreeView>
 #include <QCloseEvent>
 #include <QHeaderView>
+#include <QList>
 
 #include "pacsparameters.h"
 #include "status.h"
 #include "pacslistdb.h"
-#include "pacslist.h"
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include "status.h"
@@ -254,16 +254,18 @@ void QConfigurationScreen::addPacs()
     }
 }
 
-void QConfigurationScreen::selectedPacs( QTreeWidgetItem * item , int )
+void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 {
-    PacsList list;
-    PacsParameters pacs;
+    QList<PacsParameters> pacsList;
+    PacsParameters selectedPacs;
     Status state;
-    PacsListDB pacsList;
+    PacsListDB pacsListDB;
+    bool trobat = false;
+    int index = 0;
 
-    if ( item != NULL )
+    if ( selectedItem != NULL )
     {
-        state = pacsList.queryPacsList( list );
+        state = pacsListDB.queryPacsList( pacsList );
 
         if ( !state.good() )
         {
@@ -271,19 +273,28 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * item , int )
             return;
         }
 
-        if (list.findPacs( item->text(0) ) ) //busquem les dades del PACS
+        //busquem el pacs que ens han seleccionat
+        while (index < pacsList.size() && !trobat)
         {
-            pacs = list.getPacs();
+            if (pacsList.value(index).getAEPacs() == selectedItem->text(0)) 
+                trobat = true;
+            else
+                index++;
+        }
+
+        if (trobat) //busquem les dades del PACS
+        {
+            selectedPacs = pacsList.value(index);
 
             //emplenem els textots
-            m_textAETitle->setText( pacs.getAEPacs() );
-            m_textPort->setText( pacs.getPacsPort() );
-            m_textAddress->setText( pacs.getPacsAdr() );
-            m_textInstitution->setText( pacs.getInstitution() );
-            m_textLocation->setText( pacs.getLocation() );
-            m_textDescription->setText( pacs.getDescription() );
-            m_selectedPacsID = pacs.getPacsID();
-            if ( pacs.getDefault() == "S" )
+            m_textAETitle->setText( selectedPacs.getAEPacs() );
+            m_textPort->setText( selectedPacs.getPacsPort() );
+            m_textAddress->setText( selectedPacs.getPacsAdr() );
+            m_textInstitution->setText( selectedPacs.getInstitution() );
+            m_textLocation->setText( selectedPacs.getLocation() );
+            m_textDescription->setText( selectedPacs.getDescription() );
+            m_selectedPacsID = selectedPacs.getPacsID();
+            if ( selectedPacs.getDefault() == "S" )
             {
                 m_checkDefault->setChecked( true );
             }
@@ -368,22 +379,19 @@ void QConfigurationScreen::deletePacs()
 void QConfigurationScreen::fillPacsListView()
 {
     Status state;
-    PacsParameters pacs;
-    PacsList list;
-    PacsListDB pacsList;
+    QList<PacsParameters> pacsList;
+    PacsListDB pacsListDB;
 
     m_PacsTreeView->clear();
 
-    state = pacsList.queryPacsList( list );
+    state = pacsListDB.queryPacsList( pacsList );
 
     if ( state.good() )
     {
-        list.firstPacs();
-
-        while ( !list.end() )
+        foreach(PacsParameters pacs, pacsList)
         {
             QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
-            pacs = list.getPacs();
+
             item->setText( 0 , pacs.getAEPacs() );
             item->setText( 1 , pacs.getPacsAdr() );
             item->setText( 2 , pacs.getPacsPort() );
@@ -396,8 +404,6 @@ void QConfigurationScreen::fillPacsListView()
                 item->setText( 6 , tr( "Yes" ) );
             }
             else item->setText( 6 , tr( "No" ) );
-
-            list.nextPacs();
         }
     }
 }

@@ -481,24 +481,22 @@ Status QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer 
 
 void QueryScreen::queryStudyPacs()
 {
-    PacsList pacsList;
+    QList<PacsParameters> selectedPacsList;
     PacsParameters pa;
     QString result;
     StarviewerSettings settings;
 
     INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString() );
 
-    pacsList.clear(); //netejem el pacsLIST
-    m_PACSNodes->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+    m_PACSNodes->getSelectedPacs(selectedPacsList); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
-    pacsList.firstPacs();
-    if ( pacsList.end() ) //es comprova que hi hagi pacs seleccionats
+    if (selectedPacsList.isEmpty()) //es comprova que hi hagi pacs seleccionats
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Please select a PACS to query" ) );
         return;
     }
 
-    multipleQueryStudy.setPacsList( pacsList ); //indiquem a quins Pacs Cercar
+    multipleQueryStudy.setPacsList( selectedPacsList ); //indiquem a quins Pacs Cercar
 
     DicomMask searchMask = buildDicomMask();
     bool stopQuery = false;
@@ -519,8 +517,6 @@ void QueryScreen::queryStudyPacs()
     {
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
         multipleQueryStudy.setMask( searchMask ); //assignem la mascara
-
-        pacsList.firstPacs();
 
         Status queryStatus = multipleQueryStudy.StartQueries();
 
@@ -1362,14 +1358,13 @@ void QueryScreen::openDicomdir()
 
 void QueryScreen::storeStudiesToPacs()
 {
-    PacsList pacsList;
+    QList<PacsParameters> selectedPacsList;
     QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    pacsList.clear(); //netejem el pacsLIST
-    m_PACSNodes->getSelectedPacs( &pacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+    m_PACSNodes->getSelectedPacs( selectedPacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
-    switch( pacsList.size() )
+    switch( selectedPacsList.size() )
     {
         case  0 :
             QApplication::restoreOverrideCursor();
@@ -1399,12 +1394,10 @@ void QueryScreen::storeStudiesToPacs()
                 storeStudyOperation.setPatientID( study.getPatientId() );
                 storeStudyOperation.setStudyID( study.getStudyId() );
 
-                pacsList.firstPacs();
-                state = pacsListDB.queryPacs( &pacs, pacsList.getPacs().getAEPacs() );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
+                state = pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
                 if ( state.good() )
                 {
-                    pacsList.firstPacs();
-                    storeStudyOperation.setPacsParameters( pacsList.getPacs() );
+                    storeStudyOperation.setPacsParameters( pacs );
 
                     m_qexecuteOperationThread.queueOperation( storeStudyOperation );
                 }
