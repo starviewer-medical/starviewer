@@ -10,7 +10,6 @@
 #include <QObject>
 #include <QList>
 
-#include "pacslist.h"
 #include "dicommask.h"
 #include "dicomstudy.h"
 #include "dicomseries.h"

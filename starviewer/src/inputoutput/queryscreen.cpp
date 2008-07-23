@@ -18,10 +18,8 @@
 #include "qstudytreewidget.h"
 #include "dicomseries.h"
 #include "querypacs.h"
-#include "pacsparameters.h"
 #include "pacsserver.h"
 #include "qserieslistwidget.h"
-#include "pacslist.h"
 #include "qpacslist.h"
 #include "starviewersettings.h"
 #include "cachepool.h"
@@ -38,7 +36,6 @@
 #include "patientfillerinput.h"
 #include "qcreatedicomdir.h"
 #include "dicommask.h"
-#include "pacslist.h"
 #include "qoperationstatescreen.h"
 
 namespace udg {

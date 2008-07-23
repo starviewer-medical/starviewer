@@ -12,6 +12,7 @@
 #include "dicomdirreader.h"
 #include "multiplequerystudy.h"
 #include "dicomstudy.h"
+#include "pacsparameters.h"
 
 namespace udg {
 
