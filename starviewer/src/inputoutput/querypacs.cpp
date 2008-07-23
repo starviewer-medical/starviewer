@@ -165,6 +165,9 @@ void QueryPacs::addStudy( DcmDataset *responsePacs )
 {
     DICOMStudy dicomStudy( responsePacs );
 
+    ///Alguns pacs no retornen a quin pacs pertany l'estudi, nosaltres per defecte hi posem el nom del pacs al que hem fer la query
+    if ( dicomStudy.getPacsAETitle().isEmpty() ) dicomStudy.setPacsAETitle( m_assoc->params->DULparams.calledAPTitle );
+
     if ( !m_studiesList.contains( dicomStudy ) ) m_studiesList.append( dicomStudy );
 }
 

@@ -521,7 +521,6 @@ void QueryScreen::queryStudyPacs()
         multipleQueryStudy.setMask( searchMask ); //assignem la mascara
 
         pacsList.firstPacs();
-        m_lastQueriedPacs = pacsList.getPacs().getAEPacs();
 
         Status queryStatus = multipleQueryStudy.StartQueries();
 
@@ -688,9 +687,6 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 
     INFO_LOG( "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle );
 
-    if ( pacsAETitle.isEmpty() )
-        pacsAETitle = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
-
     if ( ! preparePacsServerConnection( pacsAETitle, &pacsConnection ).good() )
         return;
 
@@ -779,9 +775,6 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     DicomMask dicomMask;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
-    if ( AETitlePACS.isEmpty() )
-        AETitlePACS = m_lastQueriedPacs;//necessari per les mesatools no retornen a quin pacs pertany l'estudi
 
     INFO_LOG( "Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + AETitlePACS );
 
@@ -920,11 +913,6 @@ void QueryScreen::retrievePacs( bool view )
             DICOMStudy studyToRetrieve =  m_studyListQueriedPacs.value( indexStudyInList );
 
             pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies(currentStudyUID);
-            if ( pacsAETitle.isEmpty() ) //per les mesatools que no retornen a quin PACS pertany l'estudi cercat
-            {
-                pacsAETitle = m_lastQueriedPacs;
-                studyToRetrieve.setPacsAETitle( m_lastQueriedPacs );
-            }
 
             //Inserim l'informació de l'estudi a la caché!
             state = insertStudyCache( studyToRetrieve );
