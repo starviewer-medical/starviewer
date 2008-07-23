@@ -87,7 +87,7 @@ protected :
 
 private :
 
-    int m_PacsID; /// Conté el D del pacs seleccionat en aquell moment
+    int m_selectedPacsID; /// Conté el D del pacs seleccionat en aquell moment
     bool m_configurationChanged; ///Indica si la configuració ha canviat
     bool m_createDatabase; /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
 

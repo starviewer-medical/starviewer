@@ -17,6 +17,8 @@
 #include "cachepool.h"
 #include "logging.h"
 #include "dicommask.h"
+#include "pacslistdb.h"
+#include "pacsparameters.h"
 
 #include "study.h"
 
@@ -36,6 +38,7 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study, QString source )
     QString sqlSentence;
     int databaseState;
     Status state;
+
 
     if ( !databaseConnection->connected() )
     {//el 50 es l'error de no connectat a la base de dades
@@ -64,15 +67,18 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study, QString source )
     }
 
     //creem  el sqlSentence per inserir l'estudi
-    QString pacsAETitle;
+    QString pacsID;
     if( source == "PACS" )
-    {
-        // fem un select per assignar a l'estudi l'id del PACS al que pertany
-        pacsAETitle = QString("( select PacsID from PacsList where AETitle = '%1' )").arg( study->getPacsAETitle() );
+    {//busquem l'id del PACS del qual descarreguem l'estudi
+        PacsListDB pacsListDB;
+        PacsParameters *pacsParameters = new PacsParameters();
+
+        pacsListDB.queryPacs( pacsParameters , study->getPacsAETitle() );
+        pacsID = pacsID.setNum( pacsParameters->getPacsID() , 10 );
     }
     else if( source == "DICOMDIR" )
     {
-        pacsAETitle = "99999";
+        pacsID = "99999";
     }
     else
     {
@@ -100,7 +106,7 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study, QString source )
         .arg( getTime() ) // 13
         .arg( study->getAbsPath() ) // 14
         .arg( "PENDING" ) // 15 databaseState pendent perquè la descarrega de l'estudi encara no està completa
-        .arg( pacsAETitle ) // 16
+        .arg( pacsID ) // 16
         .arg( study->getPatientAge()  ); // 17
 
     databaseConnection->getLock();
