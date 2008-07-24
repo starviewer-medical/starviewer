@@ -62,7 +62,6 @@ void QOperationStateScreen::setWidthColumns()
 
 void QOperationStateScreen::insertNewOperation( Operation *operation )
 {
-    QTreeWidgetItem* item = new QTreeWidgetItem( m_treeRetrieveStudy );
     QTime time = QTime::currentTime();
     QString name, operationNumber;
     QDate date = QDate::currentDate();
@@ -70,6 +69,9 @@ void QOperationStateScreen::insertNewOperation( Operation *operation )
     deleteStudy( operation->getStudyUID() ); //si l'estudi ja existeix a la llista l'esborrem
     name.insert( 0 , operation->getPatientName() );
     name.replace( "^" ,", ");
+
+    //s'ha de posar després del deleteStudy, ja que si l'estudi existeix i s'esborra, però abans s'ha fet el new QTreeWidgetItem des de Qt 4.3 es dona segmentation fault
+    QTreeWidgetItem* item = new QTreeWidgetItem( m_treeRetrieveStudy );
 
     item->setText( 0 , tr( "PENDING" ) );
 
