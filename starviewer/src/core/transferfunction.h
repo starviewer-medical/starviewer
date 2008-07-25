@@ -155,23 +155,21 @@ inline QColor TransferFunction::getColor( double x ) const
     if ( m_color.isEmpty() )
         return Qt::black;
 
-    if ( m_color.contains( x ) )
-        return m_color[x];
+    QMap<double, QColor>::const_iterator lowerBound = m_color.lowerBound( x );
 
-    if ( x < m_color.begin().key() )
-        return m_color.begin().value();
+    if ( lowerBound == m_color.end() )  // > últim
+        return ( --lowerBound ).value();
 
-    if ( x > ( m_color.end() - 1 ).key() )
-        return m_color.end().value();
+    if ( lowerBound.key() == x || lowerBound == m_color.begin() )   // exacte o < primer
+        return lowerBound.value();
 
-    QMap< double, QColor >::const_iterator a, b;
-    b = m_color.lowerBound( x );
-    a = b - 1;
+    QMap<double, QColor>::const_iterator a = lowerBound - 1, b = lowerBound;
     double alpha = ( x - a.key() ) / ( b.key() - a.key() );
+    QColor aValue = a.value(), bValue = b.value();
     QColor color;
-    color.setRedF( a.value().redF() + alpha * ( b.value().redF() - a.value().redF() ) );
-    color.setGreenF( a.value().greenF() + alpha * ( b.value().greenF() - a.value().greenF() ) );
-    color.setBlueF( a.value().blueF() + alpha * ( b.value().blueF() - a.value().blueF() ) );
+    color.setRedF( aValue.redF() + alpha * ( bValue.redF() - aValue.redF() ) );
+    color.setGreenF( aValue.greenF() + alpha * ( bValue.greenF() - aValue.greenF() ) );
+    color.setBlueF( aValue.blueF() + alpha * ( bValue.blueF() - aValue.blueF() ) );
 
     return color;
 }
@@ -181,18 +179,15 @@ inline double TransferFunction::getOpacity( double x ) const
     if ( m_opacity.isEmpty() )
         return 0.0;
 
-    if ( m_opacity.contains( x ) )
-        return m_opacity[x];
+    QMap<double, double>::const_iterator lowerBound = m_opacity.lowerBound( x );
 
-    if ( x < m_opacity.begin().key() )
-        return m_opacity.begin().value();
+    if ( lowerBound == m_opacity.end() )    // > últim
+        return ( --lowerBound ).value();
 
-    if ( x > ( m_opacity.end() - 1 ).key() )
-        return m_opacity.end().value();
+    if ( lowerBound.key() == x || lowerBound == m_opacity.begin() ) // exacte o < primer
+        return lowerBound.value();
 
-    QMap< double, double >::const_iterator a, b;
-    b = m_opacity.lowerBound( x );
-    a = b - 1;
+    QMap<double, double>::const_iterator a = lowerBound - 1, b = lowerBound;
     double alpha = ( x - a.key() ) / ( b.key() - a.key() );
 
     return a.value() + alpha * ( b.value() - a.value() );
