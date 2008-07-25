@@ -2,19 +2,18 @@
 #
 
 PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
-             mpr2d \
-             edemasegmentation \
-             landmarkregistration \
-             strokesegmentation \
-             vsireconstruction \
-             optimalviewpoint \
-             rectumsegmentation \
-             volume3dviewtesting \
-             mprcardiac3d \
-             cardiac2dviewer \
-             rectum3dexplorer \
-             volumecontourdelimiter \
-	     lesionvisualization
+                        mpr2d \
+                        edemasegmentation \
+                        landmarkregistration \
+                        strokesegmentation \
+                        vsireconstruction \
+                        optimalviewpoint \
+                        rectumsegmentation \
+                        volume3dviewtesting \
+                        mprcardiac3d \
+                        cardiac2dviewer \
+                        volumecontourdelimiter \
+                        lesionvisualization
 
 #CONTRIB_EXTENSIONS =
 
