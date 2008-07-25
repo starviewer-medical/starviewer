@@ -3945,7 +3945,7 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         blue_value    += weight * CTF[((*dptr)) * 3 + 2] * fx;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
-      
+
       if ( B && Bgo )
         {
         weight         = x*t2*t3 * B * Bgo;
@@ -4260,7 +4260,7 @@ void vtkCastRay_TrilinVertices_Unshaded( T *data_ptr, vtkVolumeRayCastDynamicInf
         blue_value    += weight * CTF[((*(dptr + Hinc))) * 3 + 2] * fx;
         ////////////////////////////////////////////////////////////////////////////////////////////
         }
-      
+
       // Accumulate intensity and opacity for this sample location
       accum_red_intensity   += remaining_opacity * red_value;
       accum_green_intensity += remaining_opacity * green_value;

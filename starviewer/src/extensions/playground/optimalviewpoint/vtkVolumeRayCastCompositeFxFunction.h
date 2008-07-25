@@ -11,6 +11,7 @@
 namespace udg {
 
 
+class TrilinearInterpolator;
 class VoxelShader;
 
 
@@ -62,6 +63,7 @@ protected:
 
     CompositeMethod m_compositeMethod;
     QList<VoxelShader*> m_voxelShaderList;
+    TrilinearInterpolator *m_interpolator;
 
 private:
 

@@ -6,11 +6,12 @@
 #include <vtkVolumeProperty.h>
 #include <vtkVolumeRayCastMapper.h>
 
+#include <QColor>
+
+#include "trilinearinterpolator.h"
 #include "vector3.h"
 #include "voxelshader.h"
-#include <QColor>
-// #include <vtkEncodedGradientEstimator.h>
-// #include <vtkDirectionEncoder.h>
+
 
 
 namespace udg {
@@ -24,6 +25,7 @@ const float vtkVolumeRayCastCompositeFxFunction::REMAINING_OPACITY = 0.02f;
 vtkVolumeRayCastCompositeFxFunction::vtkVolumeRayCastCompositeFxFunction()
 {
     m_compositeMethod = ClassifyInterpolate;
+    m_interpolator = new TrilinearInterpolator();
 }
 
 
@@ -137,6 +139,8 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
                                                                       vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                                                       const vtkVolumeRayCastStaticInfo *staticInfo ) const
 {
+    const bool INTERPOLATION = staticInfo->InterpolationType == VTK_LINEAR_INTERPOLATION;
+    const bool CLASSIFY_INTERPOLATE = m_compositeMethod == ClassifyInterpolate;
     const int N_STEPS = dynamicInfo->NumberOfStepsToTake;
     const float * const RAY_START = dynamicInfo->TransformedStart;
     const float * const A_RAY_INCREMENT = dynamicInfo->TransformedIncrement;
@@ -160,12 +164,24 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
     const int * const INCREMENTS = staticInfo->DataIncrement;
     const int X_INC = INCREMENTS[0], Y_INC = INCREMENTS[1], Z_INC = INCREMENTS[2];
 
+    if ( INTERPOLATION ) m_interpolator->setIncrements( X_INC, Y_INC, Z_INC );
+
     // Initialize the ray position and voxel location
     Vector3 rayPosition( RAY_START[0], RAY_START[1], RAY_START[2] );
     int voxel[3];
-    voxel[0] = vtkRoundFuncMacro( rayPosition.x );
-    voxel[1] = vtkRoundFuncMacro( rayPosition.y );
-    voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+
+    if ( !INTERPOLATION )
+    {
+        voxel[0] = vtkRoundFuncMacro( rayPosition.x );
+        voxel[1] = vtkRoundFuncMacro( rayPosition.y );
+        voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+    }
+    else
+    {
+        voxel[0] = vtkFloorFuncMacro( rayPosition.x );
+        voxel[1] = vtkFloorFuncMacro( rayPosition.y );
+        voxel[2] = vtkFloorFuncMacro( rayPosition.z );
+    }
 
     // So far we haven't accumulated anything
     float accumulatedRedIntensity = 0.0, accumulatedGreenIntensity = 0.0, accumulatedBlueIntensity = 0.0;
@@ -200,19 +216,53 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
 
         HdrColor color;
 
-        for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( offset, direction, color );
+        if ( !INTERPOLATION )
+        {
+            for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( offset, direction, color );
+        }
+        else //if ( CLASSIFY_INTERPOLATE )
+        {
+            int offsets[8];
+            double weights[8];
 
-        float opacity = color.alpha, opacityRemainingOpacity = opacity * remainingOpacity;
-        accumulatedRedIntensity += opacityRemainingOpacity * color.red;
-        accumulatedGreenIntensity += opacityRemainingOpacity * color.green;
-        accumulatedBlueIntensity += opacityRemainingOpacity * color.blue;
-        remainingOpacity *= (1.0 - opacity);
+            m_interpolator->getOffsetsAndWeights( rayPosition, offsets, weights );
+
+            for ( int j = 0; j < 8; j++ )
+            {
+                HdrColor tempColor;
+
+                for ( int i = 0; i < nShaders; i++ ) tempColor = m_voxelShaderList.at( i )->shade( offsets[j], direction, tempColor );
+
+                tempColor.alpha *= weights[j];
+                color += tempColor.multiplyColorBy( tempColor.alpha );
+            }
+        }
+
+        float opacity = color.alpha, f;
+
+        if ( !INTERPOLATION ) f = opacity * remainingOpacity;
+        else f = remainingOpacity;
+
+        accumulatedRedIntensity += f * color.red;
+        accumulatedGreenIntensity += f * color.green;
+        accumulatedBlueIntensity += f * color.blue;
+        remainingOpacity *= ( 1.0 - opacity );
 
         // Increment our position and compute our voxel location
         rayPosition += RAY_INCREMENT;
-        voxel[0] = vtkRoundFuncMacro( rayPosition.x );
-        voxel[1] = vtkRoundFuncMacro( rayPosition.y );
-        voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+
+        if ( !INTERPOLATION )
+        {
+            voxel[0] = vtkRoundFuncMacro( rayPosition.x );
+            voxel[1] = vtkRoundFuncMacro( rayPosition.y );
+            voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+        }
+        else
+        {
+            voxel[0] = vtkFloorFuncMacro( rayPosition.x );
+            voxel[1] = vtkFloorFuncMacro( rayPosition.y );
+            voxel[2] = vtkFloorFuncMacro( rayPosition.z );
+        }
     }
 
     // Cap the intensity value at 1.0
