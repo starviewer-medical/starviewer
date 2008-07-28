@@ -99,7 +99,7 @@ public:
      * @param studyUID uid de l'estudi que volem saber l'AETitle
      * @return Retorna l'AETitle de l'estudi indicat, sempre que aquest estigui dins dels seleccionats
      */
-    QString getStudyPACSAETitleFromSelectedStudies( QString studyUID );
+    QString getStudyPACSAETitleFromSelectedItems( QString studyUID );
 
     /** Retorna el UID Study de l'estudi seleccionat
      * @return UID de l'estudi seleccionat
