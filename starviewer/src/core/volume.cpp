@@ -185,8 +185,6 @@ void Volume::setNumberOfPhases( int phases )
 {
     if( phases > 1 )
         m_numberOfPhases = phases;
-    else
-        DEBUG_LOG( QString("Nombre de phases >1 :: %1").arg(phases) );
 }
 
 int Volume::getNumberOfPhases() const
