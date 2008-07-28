@@ -21,6 +21,12 @@ void VoxelShader::setData( const unsigned char *data )
 }
 
 
+HdrColor VoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+{
+    return baseColor;
+}
+
+
 QString VoxelShader::toString() const
 {
     return "VoxelShader";

@@ -30,7 +30,7 @@ public:
      */
     void getOffsetsAndWeights( const Vector3 &position, int offsets[], double weights[] ) const;
     /// Retorna un valor interpolat a partir d'un array de valors, uns offsets i uns pesos.
-    template <class T> static T interpolate( const T *values, const int offsets[], const double weights[] );
+    template <class TOutput, class TInput> static TOutput interpolate( const TInput *values, const int offsets[], const double weights[] );
 
 private:
 
@@ -76,9 +76,9 @@ inline void TrilinearInterpolator::getOffsetsAndWeights( const Vector3 &position
 }
 
 
-template <class T> inline T TrilinearInterpolator::interpolate( const T *values, const int offsets[], const double weights[] )
+template <class TOutput, class TInput> inline TOutput TrilinearInterpolator::interpolate( const TInput *values, const int offsets[], const double weights[] )
 {
-    T interpolatedValue = weights[0] * values[offsets[0]];
+    TOutput interpolatedValue = weights[0] * values[offsets[0]];
     for ( int i = 1; i < 8; i++ ) interpolatedValue += weights[i] * values[offsets[i]];
 
     return interpolatedValue;

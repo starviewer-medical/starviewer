@@ -220,7 +220,7 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
         {
             for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( offset, direction, color );
         }
-        else //if ( CLASSIFY_INTERPOLATE )
+        else if ( CLASSIFY_INTERPOLATE )
         {
             int offsets[8];
             double weights[8];
@@ -237,10 +237,14 @@ template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *d
                 color += tempColor.multiplyColorBy( tempColor.alpha );
             }
         }
+        else //if ( !CLASSIFY_INTERPOLATE )
+        {
+            for ( int i = 0; i < nShaders; i++ ) color = m_voxelShaderList.at( i )->shade( rayPosition, direction, m_interpolator, color );
+        }
 
         float opacity = color.alpha, f;
 
-        if ( !INTERPOLATION ) f = opacity * remainingOpacity;
+        if ( !INTERPOLATION || !CLASSIFY_INTERPOLATE ) f = opacity * remainingOpacity;
         else f = remainingOpacity;
 
         accumulatedRedIntensity += f * color.red;

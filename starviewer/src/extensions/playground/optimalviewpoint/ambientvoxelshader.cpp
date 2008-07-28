@@ -30,7 +30,7 @@ QString AmbientVoxelShader::toString() const
 
 void AmbientVoxelShader::precomputeAmbientColors()
 {
-    for ( int i = 0; i < AMBIENT_COLORS_TABLE_SIZE; i++ ) m_ambientColors[i] = m_transferFunction.get( i );
+    for ( unsigned int i = 0; i < AMBIENT_COLORS_TABLE_SIZE; i++ ) m_ambientColors[i] = m_transferFunction.get( i );
 }
 
 
