@@ -60,6 +60,44 @@ HdrColor DirectIlluminationVoxelShader::shade( int offset, const Vector3 &direct
 }
 
 
+HdrColor DirectIlluminationVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+{
+    Q_UNUSED( baseColor );
+
+    Q_CHECK_PTR( interpolator );
+    Q_CHECK_PTR( m_data );
+    Q_CHECK_PTR( m_encodedNormals );
+    Q_CHECK_PTR( m_redDiffuseShadingTable ); Q_CHECK_PTR( m_greenDiffuseShadingTable ); Q_CHECK_PTR( m_blueDiffuseShadingTable );
+    Q_CHECK_PTR( m_redSpecularShadingTable ); Q_CHECK_PTR( m_greenSpecularShadingTable ); Q_CHECK_PTR( m_blueSpecularShadingTable );
+
+    int offsets[8];
+    double weights[8];
+    interpolator->getOffsetsAndWeights( position, offsets, weights );
+
+    double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
+
+    HdrColor color = m_ambientColors[static_cast<int>(value)];
+
+    if ( color.isTransparent() ) return color;
+
+    int normals[8];
+    for ( int i = 0; i < 8; i++ ) normals[i] = m_encodedNormals[offsets[i]];
+
+    double diffuseRed = TrilinearInterpolator::interpolate<double>( m_redDiffuseShadingTable, normals, weights );
+    double diffuseGreen = TrilinearInterpolator::interpolate<double>( m_greenDiffuseShadingTable, normals, weights );
+    double diffuseBlue = TrilinearInterpolator::interpolate<double>( m_blueDiffuseShadingTable, normals, weights );
+    double specularRed = TrilinearInterpolator::interpolate<double>( m_redSpecularShadingTable, normals, weights );
+    double specularGreen = TrilinearInterpolator::interpolate<double>( m_greenSpecularShadingTable, normals, weights );
+    double specularBlue = TrilinearInterpolator::interpolate<double>( m_blueSpecularShadingTable, normals, weights );
+
+    color.red = color.red * diffuseRed + specularRed;
+    color.green = color.green * diffuseGreen + specularGreen;
+    color.blue = color.blue * diffuseBlue + specularBlue;
+
+    return color;
+}
+
+
 QString DirectIlluminationVoxelShader::toString() const
 {
     return "DirectIlluminationVoxelShader";
