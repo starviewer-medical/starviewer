@@ -5,6 +5,7 @@
 #include "voxelshader.h"
 
 #include "transferfunction.h"
+#include "trilinearinterpolator.h"
 #include "vector3.h"
 
 
@@ -26,6 +27,8 @@ public:
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
+    /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
+    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const;
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -51,6 +54,25 @@ inline HdrColor AmbientVoxelShader::shade( int offset, const Vector3 &direction,
 
     //return m_transferFunction.get( m_data[offset] );
     return m_ambientColors[m_data[offset]];
+}
+
+
+inline HdrColor AmbientVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+{
+    Q_UNUSED( direction );
+    Q_UNUSED( baseColor );
+
+    Q_CHECK_PTR( m_data );
+    Q_CHECK_PTR( interpolator );
+
+    int offsets[8];
+    double weights[8];
+    interpolator->getOffsetsAndWeights( position, offsets, weights );
+
+    double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
+
+    //return m_transferFunction.get( value );
+    return m_ambientColors[static_cast<int>(value)];
 }
 
 
