@@ -62,8 +62,8 @@ inline HdrColor AmbientVoxelShader::shade( const Vector3 &position, const Vector
     Q_UNUSED( direction );
     Q_UNUSED( baseColor );
 
-    Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( interpolator );
+    Q_CHECK_PTR( m_data );
 
     int offsets[8];
     double weights[8];
