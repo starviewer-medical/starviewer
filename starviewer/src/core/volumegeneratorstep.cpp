@@ -54,7 +54,6 @@ void VolumeGeneratorStep::processSeries( Series *series )
     volume->setNumberOfPhases( series->getNumberOfPhases() );
     series->addVolume(volume);
     m_input->addLabelToSeries("VolumeGeneratorStep", series );
-    DEBUG_LOG("Generem un volum");
 }
 
 }
