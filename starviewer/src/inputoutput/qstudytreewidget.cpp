@@ -409,13 +409,19 @@ QString QStudyTreeWidget::getCurrentImageUID()
     return result;
 }
 
-QString QStudyTreeWidget::getStudyPACSAETitleFromSelectedStudies( QString studyUID )
+QString QStudyTreeWidget::getStudyPACSAETitleFromSelectedItems( QString studyUID )
 {
     QString result;
     QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
     foreach( QTreeWidgetItem *item, selectedItems )
     {
-        if( item->text(UID) == studyUID )
+        QTreeWidgetItem *studyItem;
+
+        if (item->text(Type) == "STUDY") studyItem = item;
+        if (item->text(Type) == "SERIES") studyItem = item->parent();
+        if (item->text(Type) == "IMAGE") studyItem = item->parent()->parent();
+
+        if (studyItem->text(UID) == studyUID)
         {
             result = item->text(PACSAETitle);
             break;

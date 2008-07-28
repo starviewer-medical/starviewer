@@ -892,7 +892,7 @@ void QueryScreen::retrievePacs( bool view )
         //Busquem en quina posició de la llista on guardem els estudis trobats al PACS en quina posició està per poder-lo recuperar 
         //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
         int indexStudyInList = getStudyPositionInStudyListQueriedPacs( currentStudyUID , 
-        m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies( currentStudyUID ) );
+        m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedItems( currentStudyUID ) );
         ok = true;
         //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
         if ( indexStudyInList == -1 ) 
@@ -905,7 +905,7 @@ void QueryScreen::retrievePacs( bool view )
         {
             DICOMStudy studyToRetrieve =  m_studyListQueriedPacs.value( indexStudyInList );
 
-            pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedStudies(currentStudyUID);
+            pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedItems(currentStudyUID);
 
             //Inserim l'informació de l'estudi a la caché!
             state = insertStudyCache( studyToRetrieve );
