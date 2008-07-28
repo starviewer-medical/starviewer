@@ -96,11 +96,14 @@ void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
 void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
     Status state;
-    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
-    QTreeWidgetItem* expandableItem = new QTreeWidgetItem( item );
 
     if ( getStudyItem( study->getStudyUID() , study->getPacsAETitle() ) != NULL )
         removeStudy( study->getStudyUID() ); //si l'estudi ja hi existeix a StudyTreeView l'esborrem
+
+    /*Des de qt 4.3 s'ha detectat que si abans es fa el new, i després es fa el remove al cap d'unes quantes repeticions d'aquest mètode al fer el new QTreeWidgetItem s'acaba donant un segmentation fault, per això s'ha de canviar l'ordre i primer fer el 
+    remove study, i llavors el new QTreeWidgetItem*/
+    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
+    QTreeWidgetItem* expandableItem = new QTreeWidgetItem( item );
 
     item->setIcon( ObjectName, m_closeFolder );
     item->setText( ObjectName , study->getPatientName() );
