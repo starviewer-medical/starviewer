@@ -1,5 +1,8 @@
 #include "saliencyvoxelshader.h"
+
+#include "trilinearinterpolator.h"
 #include "vector3.h"
+
 
 namespace udg {
 
@@ -47,6 +50,31 @@ HdrColor SaliencyVoxelShader::shade( int offset, const Vector3 &direction, const
     if ( baseColor.isTransparent() ) return baseColor;
 
     double saliency = 1.0 + m_saliency[offset] * m_ab - m_a;
+    if ( saliency < m_lowFilter ) saliency = m_minimum;
+    else if ( saliency > m_highFilter ) saliency = m_maximum;
+
+    HdrColor shaded = baseColor;
+    shaded.alpha *= saliency;
+
+    return shaded;
+}
+
+
+HdrColor SaliencyVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+{
+    Q_UNUSED( direction );
+
+    Q_CHECK_PTR( interpolator );
+    Q_CHECK_PTR( m_data );
+    Q_CHECK_PTR( m_saliency );
+
+    if ( baseColor.isTransparent() ) return baseColor;
+
+    int offsets[8];
+    double weights[8];
+    interpolator->getOffsetsAndWeights( position, offsets, weights );
+
+    double saliency = 1.0 + TrilinearInterpolator::interpolate<double>( m_saliency, offsets, weights ) * m_ab - m_a;
     if ( saliency < m_lowFilter ) saliency = m_minimum;
     else if ( saliency > m_highFilter ) saliency = m_maximum;
 
