@@ -42,6 +42,7 @@ class DirectIlluminationVoxelShader;
 class ContourVoxelShader;
 class ObscuranceVoxelShader;
 class SaliencyVoxelShader;
+class ColorBleedingVoxelShader;
 class vtkVolumeRayCastCompositeFxFunction;
 
 
@@ -243,6 +244,7 @@ private:
     ContourVoxelShader * m_contourVoxelShader;
     ObscuranceVoxelShader * m_obscuranceVoxelShader;
     SaliencyVoxelShader * m_saliencyVoxelShader;
+    ColorBleedingVoxelShader * m_colorBleedingVoxelShader;
     double m_obscurancesFilterLow, m_obscurancesFilterHigh;
     vtkRenderer * m_mainRenderer;
 

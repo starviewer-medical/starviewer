@@ -60,6 +60,7 @@
 #include "contourvoxelshader.h"
 #include "obscurancevoxelshader.h"
 #include "saliencyvoxelshader.h"
+#include "colorbleedingvoxelshader.h"
 
 namespace udg {
 
@@ -166,6 +167,8 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
     m_obscuranceVoxelShader->setData( m_data );
     m_saliencyVoxelShader = new SaliencyVoxelShader();
     m_saliencyVoxelShader->setData( m_data );
+    m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
+    m_colorBleedingVoxelShader->setData( m_data );
 
 
 
@@ -312,6 +315,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     delete m_contourVoxelShader;
     delete m_obscuranceVoxelShader;
     delete m_saliencyVoxelShader;
+    delete m_colorBleedingVoxelShader;
     m_mainMapper->Delete();
     m_planeMapper->Delete();
     m_mainVolume->Delete();
@@ -1310,10 +1314,26 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
     // no podem fer-ho a l'if de més avall perquè surt amb l'if m_fx
     if ( renderWithObscurances )
     {
-        if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
-            m_volumeRayCastFunctionFx2->AddVoxelShader( m_obscuranceVoxelShader );
+        if ( m_obscurance )
+        {
+            if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
+                m_volumeRayCastFunctionFx2->AddVoxelShader( m_obscuranceVoxelShader );
+
+            m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_colorBleedingVoxelShader );
+        }
+        else
+        {
+            m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+
+            if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_colorBleedingVoxelShader ) < 0 )
+                m_volumeRayCastFunctionFx2->AddVoxelShader( m_colorBleedingVoxelShader );
+        }
     }
-    else m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+    else
+    {
+        m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+        m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_colorBleedingVoxelShader );
+    }
     m_volumeRayCastFunctionFx2->Print( std::cout );
 
     if ( m_fx ) return;
@@ -1335,6 +1355,7 @@ void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
     m_volumeRayCastFunctionObscurances->SetObscuranceFactor( obscurancesFactor );
     m_volumeRayCastFunctionFx->SetObscuranceFactor( obscurancesFactor );
     m_obscuranceVoxelShader->setFactor( obscurancesFactor );
+    m_colorBleedingVoxelShader->setFactor( obscurancesFactor );
 }
 
 
@@ -1712,6 +1733,24 @@ void OptimalViewpointVolume::computeObscurances2()
         m_volumeRayCastFunctionFx->SetColor( false );
 
         m_obscuranceVoxelShader->setObscurance( m_obscurance );
+
+        if ( m_renderWithObscurances )
+        {
+            if ( m_obscurance )
+            {
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_obscuranceVoxelShader );
+
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_colorBleedingVoxelShader );
+            }
+            else
+            {
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_colorBleedingVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_colorBleedingVoxelShader );
+            }
+        }
     }
     else    // color bleeding
     {
@@ -1796,6 +1835,26 @@ void OptimalViewpointVolume::computeObscurances2()
 
         m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
         m_volumeRayCastFunctionFx->SetColor( true );
+
+        m_colorBleedingVoxelShader->setColorBleeding( m_colorBleeding );
+
+        if ( m_renderWithObscurances )
+        {
+            if ( m_obscurance )
+            {
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_obscuranceVoxelShader );
+
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_colorBleedingVoxelShader );
+            }
+            else
+            {
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_colorBleedingVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_colorBleedingVoxelShader );
+            }
+        }
     }
 }
 
@@ -1830,6 +1889,24 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
         m_volumeRayCastFunctionFx->SetColor( false );
 
         m_obscuranceVoxelShader->setObscurance( m_obscurance );
+
+        if ( m_renderWithObscurances )
+        {
+            if ( m_obscurance )
+            {
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_obscuranceVoxelShader );
+
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_colorBleedingVoxelShader );
+            }
+            else
+            {
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_colorBleedingVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_colorBleedingVoxelShader );
+            }
+        }
     }
     else    // color bleeding
     {
@@ -1863,6 +1940,26 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
 
         m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
         m_volumeRayCastFunctionFx->SetColor( true );
+
+        m_colorBleedingVoxelShader->setColorBleeding( m_colorBleeding );
+
+        if ( m_renderWithObscurances )
+        {
+            if ( m_obscurance )
+            {
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_obscuranceVoxelShader );
+
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_colorBleedingVoxelShader );
+            }
+            else
+            {
+                m_volumeRayCastFunctionFx2->RemoveVoxelShader( m_obscuranceVoxelShader );
+
+                if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_colorBleedingVoxelShader ) < 0 )
+                    m_volumeRayCastFunctionFx2->AddVoxelShader( m_colorBleedingVoxelShader );
+            }
+        }
     }
 
     obscurancesFile.close();
