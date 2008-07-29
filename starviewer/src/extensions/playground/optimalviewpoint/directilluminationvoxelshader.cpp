@@ -62,6 +62,7 @@ HdrColor DirectIlluminationVoxelShader::shade( int offset, const Vector3 &direct
 
 HdrColor DirectIlluminationVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
 {
+    Q_UNUSED( direction );
     Q_UNUSED( baseColor );
 
     Q_CHECK_PTR( interpolator );
