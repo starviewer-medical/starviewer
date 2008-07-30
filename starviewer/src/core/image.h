@@ -148,133 +148,17 @@ public:
     void setPath( QString path );
     QString getPath() const;
 
-    ///assigna / retorna el KiloVoltatge de la imatge
-    void setKiloVoltagePeak( double kvp );
-    double getKiloVoltagePeak() const;
-
-    ///assigna / retorna el microAmperatge de la imatge
-    void setMicroAmpersSecond( double uas );
-    double getMicroAmpersSecond() const;
-
     ///assigna / retorna el miliAperatge de la imatge
     void setMilliAmpersSecond( double mas );
     double getMilliAmpersSecond() const;
-
-    /// assigna / retorna el RepetitionTime de la imatge
-    void setRepetitionTime( QString repetitionTime );
-    QString getRepetitionTime() const;
-
-    ///assigna / retorna el EchoTime de la imatge
-    void setEchoTime( QString echoTime );
-    QString getEchoTime() const;
-
-    ///assigna / retorna el InversionTime de la imatge
-    void setInversionTime( QString inversionTime );
-    QString getInversionTime() const;
-
-    ///assigna / retorna l'espai entre llesques de la imatge
-    void setSpacingBetweenSlices( QString spacingBetweenSlices );
-    QString getSpacingBetweenSlices() const;
-
-    ///assigna / retorna el flip angle de la imatge
-    void setFlipAngle( QString philipsFlipAngle );
-    QString getFlipAngle() const;
-
-    ///assigna / retorna el factor turbo de la imatge
-    void setPhilipsTurboFactor( QString philipsTurboFactor );
-    QString getPhilipsTurboFactor() const;
-
-    ///assigna / retorna el factor Epi de la imatge
-    void setPhilipsEPIFactor( QString philipsEPIFactor );
-    QString getPhilipsEPIFactor() const;
-
-    ///assigna / retorna la posició del pla de la imatge a l'espai
-    void setPhilipsSpacialPlane( QString philipsSpacialPlane );
-    QString getPhilipsSpacialPlane() const;
-
-    ///assigna / retorna el Number Of Averages de la imatge
-    void setNumberOfAverages( QString numberOfAverages );
-    QString getNumberOfAverages() const;
-
-    ///assigna / retorna ratio del field of view de la imatge
-    void setPercentPhaseFieldOfView( QString percentPhaseFieldOfView );
-    QString getPercentPhaseFieldOfView() const;
-
-    ///assigna / retorna el nom de la bobina utiltizada per la imatge
-    void setReceiveCoilName( QString receiveCoilName );
-    QString getReceiveCoilName() const;
-
-    ///assigna / retorna el factor b de la imatge
-    void setPhilipsBFactor( QString philipsBFactor );
-    QString getPhilipsBFactor() const;
-
-    ///assigna / retorna el reconstruction diameter de la imatge
-    void setReconstructionDiameter( QString reconstructionDiameter );
-    QString getReconstructionDiameter() const;
-
-    ///assigna / retorna el exposure time de la imatge
-    void setExposureTime( QString exposureTime );
-    QString getExposureTime() const;
-
-    ///assigna / retorna el scan length de la imatge
-    void setPhilipsScanLength( QString philipsScanLength );
-    QString getPhilipsScanLength() const;
-
-    ///assigna / retorna el table height de la imatge
-    void setTableHeight( QString tableHeight );
-    QString getTableHeight() const;
 
     ///assigna / retorna el slice location de la imatge
     void setSliceLocation( QString sliceLocation );
     QString getSliceLocation() const;
 
-    ///assigna / retorna el reconstruction diameter de la imatge
-    void setPhilipsViewConvention( QString philipsViewConvention );
-    QString getPhilipsViewConvention() const;
-
-    ///assigna / retorna el filter type de la imatge
-    void setFilterType( QString filterType );
-    QString getFilterType() const;
-
     ///assigna / retorna el image type de la imatge
     void setImageType( QString ImageType );
     QString getImageType() const;
-
-    ///assigna / retorna el table speed de la imatge
-    void setPhilipsTableSpeed( QString philipsTableSpeed );
-    QString getPhilipsTableSpeed() const;
-
-    ///assigna / retorna el collimation de la imatge
-    void setPhilipsCollimation( QString philipsCollimation );
-    QString getPhilipsCollimation() const;
-
-    ///assigna / retorna scan arc de la imatge
-    void setScanArc( QString scanArc );
-    QString getScanArc() const;
-
-    ///assigna / retorna el tilt de la imatge
-    void setTilt( QString tilt );
-    QString getTilt() const;
-
-    ///assigna / retorna el cycle time de la imatge
-    void setPhilipsCycleTime( QString philipsXycleTime );
-    QString getPhilipsCycleTime() const;
-
-    ///assigna / retorna el pitch de la imatge
-    void setPhilipsPitch( QString philipsPitch );
-    QString getPhilipsPitch() const;
-
-    ///assigna / retorna el rotation time de la imatge
-    void setPhilipsRotationTime( QString philipsRotationTime );
-    QString getPhilipsRotationTime() const;
-
-    ///assigna / retorna el table increment de la imatge
-    void setPhilipsTableIncrement( QString tableIncrement );
-    QString getPhilipsTableIncrement() const;
-
-    ///assigna / retorna el scan time de la imatge
-    void setPhilipsScanTime( QString philipsScanTime );
-    QString getPhilipsScanTime() const;
 
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );

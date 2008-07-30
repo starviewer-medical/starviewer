@@ -135,7 +135,7 @@ HEADERS += extensionfactory.h \
            qdicomdump.h \
            qdicomdumpmrwidget.h \
            qdicomdumpctwidget.h \
-           philipstagsfillerstep.h \
+#           philipstagsfillerstep.h \
            qcinecontroller.h \
            hoverpoints.h \
            qcolorspinbox.h \
@@ -267,7 +267,7 @@ SOURCES += extensionmediator.cpp \
            qdicomdumpctlocalizerwidget.cpp \
            qdicomdumpmrwidget.cpp \
            qdicomdumpctwidget.cpp \
-           philipstagsfillerstep.cpp \
+#           philipstagsfillerstep.cpp \
            qcinecontroller.cpp \
            hoverpoints.cpp \
            qcolorspinbox.cpp \

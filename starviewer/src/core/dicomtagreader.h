@@ -34,17 +34,17 @@ public:
     /// Nom de l'arxiu DICOM que es vol llegir. Torna cert si l'arxiu s'ha pogut carregar correctament, fals altrament.
     bool setFile( QString filename );
 
-    /// Ens diu si el tag és present al fitxer o no.
+    /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
     bool tagExists( DcmTagKey tag );
     bool tagExists( unsigned int group, unsigned int element );
 
-    /// Obtenim el valor d'un atribut en un string fent el query pel seu tag en hexadecimal.
+    /// Obtenim el valor d'un atribut en un string fent el query pel seu tag en hexadecimal.Cal haver fet un ús correcte de l'objecte m_dicomData.
     /// Exemple: getAttributeByTag(0x0020, 0x0020);
     /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
     QString getAttributeByTag( unsigned int group, unsigned int element );
 
     /// Mètode igual que l'anterior però es cerca pel nom a través dels define's de dcmtk. Aquests defines
-    /// es poden trobar a /usr/include/dcmtk/dcmdata/dcdeftag.h
+    /// es poden trobar a /usr/include/dcmtk/dcmdata/dcdeftag.h. Cal haver fet un ús correcte de l'objecte m_dicomData.
     /// Exemple: getAttributeByName(DCM_PatientOrientation);  //Seria equivalent a l'anterior
     /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
     QString getAttributeByName( DcmTagKey tag );

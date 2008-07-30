@@ -22,7 +22,6 @@
 #include "volumegeneratorstep.h"
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
-#include "philipstagsfillerstep.h"
 // TODO de moment deixem fora el ReferenceLinesFillerStep perquè
 // encara no fem ús de la informació que recopila
 // #include "referencelinesfillerstep.h"
@@ -110,7 +109,6 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new VolumeGeneratorStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
     m_registeredSteps.append(new OrderImagesFillerStep() );
-    m_registeredSteps.append(new PhilipsTagsFillerStep() );
 // TODO de moment deixem fora el ReferenceLinesFillerStep perquè
 // encara no fem ús de la informació que recopila
 //     m_registeredSteps.append(new ReferenceLinesFillerStep() );
@@ -122,7 +120,7 @@ void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerSte
     patientFillerStep->setInput(input);
     time.start();
     patientFillerStep->fill();
-    DEBUG_LOG( QString(patientFillerStep->name() + " ha trigat: %1 ").arg( time.elapsed() ));
+    INFO_LOG( QString(patientFillerStep->name() + " ha trigat: %1 ").arg( time.elapsed() ));
 }
 
 }

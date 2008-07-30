@@ -8,6 +8,7 @@
 #include "qdicomdumpmrwidget.h"
 #include "image.h"
 #include "series.h"
+#include "dicomtagreader.h"
 
 namespace udg {
 
@@ -53,89 +54,97 @@ void QDicomDumpMRWidget::initialize()
 
 void QDicomDumpMRWidget::setImageDicomTagsValue( Image *currentImage )
 {
-    if ( currentImage->getReconstructionDiameter() != "" )
+    DICOMTagReader dicomReader;
+    bool ok = dicomReader.setFile( currentImage->getPath() );
+    if( ok )
     {
-        m_labelFieldOfViewValue->setText( currentImage->getReconstructionDiameter() +  QString( tr( " mm" ) ) );
-    }
+        if (dicomReader.tagExists( DCM_ReconstructionDiameter ))
+        {
+            m_labelFieldOfViewValue->setText( QString::number( dicomReader.getAttributeByName( DCM_ReconstructionDiameter ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
+        }
 
-    if ( currentImage->getPercentPhaseFieldOfView() != "" ) 
-    {
-        m_labelRatioFieldOfViewValue->setText( currentImage->getPercentPhaseFieldOfView() +  QString( tr( " %" ) ) );
-    }
+        if (dicomReader.tagExists( DCM_PercentPhaseFieldOfView ))
+        {
+            m_labelRatioFieldOfViewValue->setText( QString::number( dicomReader.getAttributeByName( DCM_PercentPhaseFieldOfView ).toDouble() , 'f' , 0 ) +  QString( tr( " %" ) ) );
+        }
 
-    if ( currentImage->getRepetitionTime() != "" ) 
-    {
-        m_labelRepetitionTimeValue->setText( currentImage->getRepetitionTime() +  QString( tr( " ms" ) ) );
-    }
+        if (dicomReader.tagExists( DCM_RepetitionTime ))
+        {
+            m_labelRepetitionTimeValue->setText( QString::number( dicomReader.getAttributeByName( DCM_RepetitionTime ).toDouble() , 'f' , 0 ) +  QString( tr( " ms" ) ) );
+        }
 
-    if ( currentImage->getEchoTime() != "" ) 
-    {
-        m_labelEchoTimeValue->setText( currentImage->getEchoTime() +  QString( tr( " ms" ) ) );
-    }
+        if (dicomReader.tagExists( DCM_EchoTime ))
+        {
+            m_labelEchoTimeValue->setText( QString::number( dicomReader.getAttributeByName( DCM_EchoTime ).toDouble() , 'f' , 1 ) +  QString( tr( " ms" ) ) );
+        }
 
-    if ( currentImage->getInversionTime() != "" ) 
-    {
-        m_labelInversionTimeValue->setText( currentImage->getInversionTime() +  QString( tr( " ms" ) ) );
-    }
+        if (dicomReader.tagExists( DCM_InversionTime ))
+        {
+            m_labelInversionTimeValue->setText( QString::number( dicomReader.getAttributeByName( DCM_InversionTime ).toDouble() , 'f' , 0 ) +  QString( tr( " ms" ) ) );
+        }
+        if (dicomReader.tagExists( DCM_FlipAngle))
+        {
+            m_labelFlipAngleValue->setText( dicomReader.getAttributeByName( DCM_FlipAngle) +  QString( tr( " degrees" ) ));
+        }
 
-    if ( currentImage->getFlipAngle() != "" ) 
-    {
-        m_labelFlipAngleValue->setText( currentImage->getFlipAngle() +  QString( tr( " degrees" ) ) );
-    }
+        if (dicomReader.tagExists( 0x2001, 0x1082 )) //Tag Turbo-Factor
+        {
+            m_labelPhilipsEPIFactorValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1082 ) );
+        }
 
-    if ( currentImage->getPhilipsEPIFactor() != "" ) 
-    {
-        m_labelPhilipsEPIFactorValue->setText( currentImage->getPhilipsEPIFactor() );
-    }
+        if (dicomReader.tagExists( 0x2001, 0x1013 )) //Tag EPI-Factor
+        {
+            m_labelPhilipsTurboFactorValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1013 ) );
+        }
 
-    if ( currentImage->getPhilipsTurboFactor() != "" ) 
-    {
-        m_labelPhilipsTurboFactorValue->setText( currentImage->getPhilipsTurboFactor() );
-    }
+        if (dicomReader.tagExists( DCM_NumberOfAverages ))
+        {
+            m_labelNumberOfAveragesValue->setText( dicomReader.getAttributeByName( DCM_NumberOfAverages ) );
+        }
 
-    if ( currentImage->getNumberOfAverages() != "" ) 
-    {
-        m_labelNumberOfAveragesValue->setText( currentImage->getNumberOfAverages() );
-    }
+        if (dicomReader.tagExists( 0x2001, 0x1003 )) //Tag B-Factor
+        {
+            m_labelPhilipsBFactorValue->setText( QString::number( dicomReader.getAttributeByTag( 0x2001, 0x1003 ).toDouble() , 'f' , 1 ) );
+        }
 
-    if ( currentImage->getPhilipsBFactor() != "" ) 
-    {
-        m_labelPhilipsBFactorValue->setText( currentImage->getPhilipsBFactor() );
-    }
+        if (dicomReader.tagExists( 0x2001, 0x100b )) //Tag Image Position
+        {
+            m_labelPhilipsSpacialPlaneValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x100b ) );
+        }
 
-    if ( currentImage->getPhilipsSpacialPlane() != "" )  
-    {
-        m_labelPhilipsSpacialPlaneValue->setText( currentImage->getPhilipsSpacialPlane() );
-    }
+        if (dicomReader.tagExists( DCM_ReceiveCoilName ))
+        {
+            m_labelReceiveCoilValue->setText( dicomReader.getAttributeByName( DCM_ReceiveCoilName ) );
+        }
 
-    if ( currentImage->getReceiveCoilName() != "" ) 
-    {
-        m_labelReceiveCoilValue->setText( currentImage->getReceiveCoilName() );
+        m_labelSliceThicknessValue->setText( QString::number( currentImage->getSliceThickness() , 'f' , 1 ) +  QString( tr( " mm" ) ) );
     }
-
-    m_labelSliceThicknessValue->setText( QString::number( currentImage->getSliceThickness() , 'f' , 1 ) +  QString( tr( " mm" ) ) );
 }
 
 void QDicomDumpMRWidget::setSeriesDicomTagsValue( Series *currentSeries )
 {
-    m_labelPhilipsDynamicScansValue->setText( QString::number( currentSeries->getNumberOfPhases() , 10 ) );
 
-    if ( currentSeries->getPhilipsNumberOfStacks() != "" ) 
+    DICOMTagReader dicomReader;
+    bool ok = dicomReader.setFile( currentSeries->getFilesPathList().at(0) );
+    if( ok )
     {
-        m_labelPhilipsNumberOfStacksValue->setText( currentSeries->getPhilipsNumberOfStacks() );
+        if ( dicomReader.tagExists( 0x2001, 0x1020 ) )
+        {
+            m_labelPhilipsScanningTechniqueValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1020 ) );
+        }
+
+        if ( dicomReader.tagExists( 0x2001, 0x1060 ) )
+        {
+            m_labelPhilipsNumberOfStacksValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1060 ) );
+        }
     }
 
-    if ( currentSeries->getProtocolName() != "" ) 
+    m_labelPhilipsDynamicScansValue->setText( QString::number( currentSeries->getNumberOfPhases() , 10 ) );
+
+    if ( currentSeries->getProtocolName() != "" )
     {
         m_labelProtocolNameValue->setText( currentSeries->getProtocolName() );
     }
-    else m_labelProtocolNameValue->setText( "-" );
-
-    if ( currentSeries->getPhilipsScanningTechnique() != "" ) 
-    {
-        m_labelPhilipsScanningTechniqueValue->setText( currentSeries->getPhilipsScanningTechnique() );
-    }
-    else m_labelPhilipsScanningTechniqueValue->setText( "-" );
 }
 
 }

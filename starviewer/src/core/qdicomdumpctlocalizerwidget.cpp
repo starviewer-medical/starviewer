@@ -8,6 +8,7 @@
 #include "qdicomdumpctlocalizerwidget.h"
 #include "series.h"
 #include "image.h"
+#include "dicomtagreader.h"
 
 namespace udg {
 
@@ -53,14 +54,51 @@ void QDicomDumpCTLocalizerWidget::initialize()
 
 void QDicomDumpCTLocalizerWidget::setImageDicomTagsValue(Image *currentImage)
 { 
-    if ( currentImage->getReconstructionDiameter() != "" )
+    DICOMTagReader dicomReader;
+    bool ok = dicomReader.setFile( currentImage->getPath() );
+    if( ok )
     {
-        m_labelReconstructionDiameterValue->setText( currentImage->getReconstructionDiameter()  +  QString( tr( " mm" ) ) );
-    }
+        if (dicomReader.tagExists( DCM_ReconstructionDiameter ))
+        {
+            m_labelReconstructionDiameterValue->setText( QString::number( dicomReader.getAttributeByName( DCM_ReconstructionDiameter ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
+        }
 
-    if ( currentImage->getTableHeight() != "" )
-    {
-        m_labelTableHeightValue->setText( currentImage->getTableHeight() +  QString( tr( " mm" ) ) );
+        if (dicomReader.tagExists( DCM_TableHeight ))
+        {
+            m_labelTableHeightValue->setText( QString::number( dicomReader.getAttributeByName( DCM_TableHeight ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
+        }
+
+        if (dicomReader.tagExists( DCM_ExposureTime ))
+        {
+            m_labelExposureTimeValue->setText( QString::number( dicomReader.getAttributeByName( DCM_ExposureTime ).toDouble() , 'f' , 2 ) +  QString( tr( " ms" ) ) );
+        }
+
+        if (dicomReader.tagExists( 0x01f1, 0x1008 )) //Tag Scan Length
+        {
+            m_labelPhilipsScanLengthValue->setText( QString::number( dicomReader.getAttributeByTag( 0x01f1, 0x1008 ).toDouble() , 'f' , 2 ) +  QString( tr( " mm" ) ) );
+        }
+
+        if (dicomReader.tagExists( 0x01f1, 0x1032 )) //Tag View Convention
+        {
+            m_labelPhilipsViewConventionValue->setText( dicomReader.getAttributeByTag( 0x01f1, 0x1032 ) );
+        }
+
+        if (dicomReader.tagExists( DCM_FilterType ))
+        {
+            m_labelFilterTypeValue->setText( dicomReader.getAttributeByName( DCM_FilterType ) );
+        }
+
+        m_labelImageMatrixValue->setText( QString::number( currentImage->getColumns() , 10 ) +  QString( tr( " x " ) ) + QString::number( currentImage->getRows() , 10 ) );
+        
+        if (dicomReader.tagExists( DCM_KVP ))
+        {
+            m_labelVoltageValue->setText( QString::number( dicomReader.getAttributeByName( DCM_KVP ).toDouble() , 'f' , 0 ) +  QString( tr( " KV" ) ) );
+        }
+
+        if (dicomReader.tagExists( DCM_ExposureInMicroAs ))
+        {
+            m_labelExposureValue->setText( QString::number( dicomReader.getAttributeByName( DCM_ExposureInMicroAs ).toDouble() , 'f' , 0 ) +  QString( tr( " mA" ) ) );
+        }
     }
 
     if ( currentImage->getSliceLocation() != "" )
@@ -68,44 +106,10 @@ void QDicomDumpCTLocalizerWidget::setImageDicomTagsValue(Image *currentImage)
         m_labelSliceLocationValue->setText( currentImage->getSliceLocation() + QString( tr( " mm" ) ) );
     }
 
-    if ( currentImage->getExposureTime() != "" )
-    {
-        m_labelExposureTimeValue->setText( currentImage->getExposureTime() +  QString( tr( " ms" ) ) );
-    }
-
-    if ( currentImage->getPhilipsScanLength() != "" )
-    {
-        m_labelPhilipsScanLengthValue->setText( currentImage->getPhilipsScanLength()  +  QString( tr( " mm" ) ) );
-    }
-
     if ( currentImage->getImageType() != "" )
     {
         m_labelImageTypeValue->setText( currentImage->getImageType() );
     }
-
-    if ( currentImage->getPhilipsViewConvention() != "" )
-    {
-        m_labelPhilipsViewConventionValue->setText( currentImage->getPhilipsViewConvention() );
-    }
-
-    if ( currentImage->getFilterType() != "" )
-    {
-        m_labelFilterTypeValue->setText( currentImage->getFilterType() );
-    }
-
-    m_labelImageMatrixValue->setText( QString::number( currentImage->getColumns() , 10 ) +  QString( tr( " x " ) ) + QString::number( currentImage->getRows() , 10 ) );
-    
-    if ( currentImage->getKiloVoltagePeak() != 0 )
-    {
-        m_labelVoltageValue->setText( QString::number( currentImage->getKiloVoltagePeak() , 'f' , 0 ) +  QString( tr( " KV" ) ) );
-    }
-    else m_labelVoltageValue->setText( "-" );
-
-    if ( currentImage->getMilliAmpersSecond() != 0 )
-    {
-        m_labelExposureValue->setText( QString::number( currentImage->getMilliAmpersSecond() , 'f' , 0 ) +  QString( tr( " mA" ) ) );
-    }
-    else m_labelExposureValue->setText( "-" );
 }
 
 void QDicomDumpCTLocalizerWidget::setSeriesDicomTagsValue( Series *currentSeries )
