@@ -413,11 +413,8 @@ void QApplicationMainWindow::about()
 void QApplicationMainWindow::writeSettings()
 {
     QSettings settings;
-    settings.beginGroup("Starviewer");
 
     settings.setValue("geometry", saveGeometry());
-
-    settings.endGroup();
 }
 
 void QApplicationMainWindow::enableExtensions()
@@ -460,12 +457,12 @@ void QApplicationMainWindow::showBetaVersionDialog()
 void QApplicationMainWindow::readSettings()
 {
     QSettings settings;
-    settings.beginGroup("Starviewer");
 
-    if (!settings.contains("geometry")) this->showMaximized();
+    if (!settings.contains("geometry")) 
+	this->showMaximized();
+
     this->restoreGeometry(settings.value("geometry").toByteArray());
 
-    settings.endGroup();
 }
 
 }; // end namespace udg
