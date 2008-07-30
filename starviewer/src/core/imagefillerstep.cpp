@@ -236,88 +236,19 @@ bool ImageFillerStep::processImage( Image *image )
         int frames = dicomReader.getAttributeByName( DCM_NumberOfFrames ).toInt();
         image->setNumberOfFrames( frames ? frames : 1 );
 
-        if (dicomReader.tagExists( DCM_KVP ))
-        {
-            image->setKiloVoltagePeak( dicomReader.getAttributeByName( DCM_KVP ).toDouble() );
-        }
-
-        if (dicomReader.tagExists( DCM_ExposureInMicroAs ))
-        {
-            image->setMicroAmpersSecond( dicomReader.getAttributeByName( DCM_ExposureInMicroAs ).toDouble() );
-        }
 
         if (dicomReader.getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs ).count() > 0)
         {//Comprovem si tenim la informació dins la seqüència d'exposició, ja el DCM_ExposureInmAs és de tipus 1 si existeix la seqüència Exposure, que conté informació sobre l'exposició del pacient
-                image->setMilliAmpersSecond( dicomReader.getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs )[0].toDouble() );//Accedim a la posició 0 per llegir el valor de MiliAmpers
+            image->setMilliAmpersSecond( dicomReader.getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs )[0].toDouble() );//Accedim a la posició 0 per llegir el valor de MiliAmpers
         }
         else if (dicomReader.tagExists( DCM_Exposure ))
         {//si no existeix al seqüència provem amb el camp DCM_Exposure que conté l'exposició en mAs
             image->setMilliAmpersSecond( dicomReader.getAttributeByName( DCM_Exposure ).toDouble() );
         }
 
-        if (dicomReader.tagExists( DCM_RepetitionTime ))
-        {
-            image->setRepetitionTime( QString::number( dicomReader.getAttributeByName( DCM_RepetitionTime ).toDouble() , 'f' , 0 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_EchoTime ))
-        {
-            image->setEchoTime( QString::number( dicomReader.getAttributeByName( DCM_EchoTime ).toDouble() , 'f' , 1 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_InversionTime ))
-        {
-            image->setInversionTime( QString::number( dicomReader.getAttributeByName( DCM_InversionTime ).toDouble() , 'f' , 0 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_SpacingBetweenSlices ))
-        {
-            image->setSpacingBetweenSlices( QString::number( dicomReader.getAttributeByName( DCM_SpacingBetweenSlices ).toDouble() , 'f' , 1 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_VariableFlipAngleFlag ))
-        {
-            image->setFlipAngle( QString::number( dicomReader.getAttributeByName( DCM_VariableFlipAngleFlag ).toDouble() , 'f' , 0 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_NumberOfAverages ))
-        {
-            image->setNumberOfAverages( dicomReader.getAttributeByName( DCM_NumberOfAverages ) );
-        }
-
-        if (dicomReader.tagExists( DCM_PercentPhaseFieldOfView ))
-        {
-            image->setPercentPhaseFieldOfView( QString::number( dicomReader.getAttributeByName( DCM_PercentPhaseFieldOfView ).toDouble() , 'f' , 0 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_ReceiveCoilName ))
-        {
-            image->setReceiveCoilName( dicomReader.getAttributeByName( DCM_ReceiveCoilName ) );
-        }
-
-        if (dicomReader.tagExists( DCM_ReconstructionDiameter ))
-        {
-            image->setReconstructionDiameter( QString::number( dicomReader.getAttributeByName( DCM_ReconstructionDiameter ).toDouble() , 'f' , 0 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_ExposureTime ))
-        {
-            image->setExposureTime( QString::number( dicomReader.getAttributeByName( DCM_ExposureTime ).toDouble() , 'f' , 2 ) );
-        }
-
-        if (dicomReader.tagExists( DCM_TableHeight ))
-        {
-            image->setTableHeight( QString::number( dicomReader.getAttributeByName( DCM_TableHeight ).toDouble() , 'f' , 0 ) );
-        }
-
         if (dicomReader.tagExists( DCM_SliceLocation ))
         {
             image->setSliceLocation( dicomReader.getAttributeByName( DCM_SliceLocation ) );
-        }
-
-        if (dicomReader.tagExists( DCM_FilterType ))
-        {
-            image->setFilterType( dicomReader.getAttributeByName( DCM_FilterType ) );
         }
 
         if (dicomReader.tagExists( DCM_ImageType ))
@@ -346,25 +277,6 @@ bool ImageFillerStep::processImage( Image *image )
             }
         }
 
-        if (dicomReader.tagExists( DCM_ScanArc ))
-        {
-            image->setScanArc( dicomReader.getAttributeByName( DCM_ScanArc ) );
-        }
-
-        if (dicomReader.tagExists( DCM_GantryDetectorTilt ))
-        {
-            image->setTilt( dicomReader.getAttributeByName( DCM_GantryDetectorTilt ) );
-        }
-
-        if (dicomReader.tagExists( DCM_ExposureTime ))
-        {
-            image->setExposureTime( dicomReader.getAttributeByName( DCM_ExposureTime ) );
-        }
-
-        if (dicomReader.tagExists( DCM_FlipAngle))
-        {
-            image->setFlipAngle( dicomReader.getAttributeByName( DCM_FlipAngle) );
-        }
     }
     else
     {

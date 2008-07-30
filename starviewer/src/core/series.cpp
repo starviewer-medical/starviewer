@@ -356,24 +356,19 @@ QList<Identifier> Series::getVolumesIDList() const
 
 void Series::addFilePath(QString filePath)
 {
-    if (!m_filesPathList.contains(filePath))
-    {
-        m_filesPathList.append(filePath);
-    }
+    m_filesPathList.insert(filePath);
 }
 
 void Series::removeFilePath(QString filePath)
 {
-    int i = m_filesPathList.indexOf(filePath);
-    if (i != -1)
-    {
-        m_filesPathList.removeAt(i);
-    }
+    m_filesPathList.remove(filePath);
 }
 
 QStringList Series::getFilesPathList()
 {
-    return m_filesPathList;
+   QList<QString> list = m_filesPathList.toList();
+   qSort(list); 
+   return list;
 }
 
 QStringList Series::getImagesPathList()
@@ -489,26 +484,6 @@ void Series::setManufacturer( QString manufacturer )
 QString Series::getManufacturer() const
 {
     return m_manufacturer;
-}
-
-void Series::setPhilipsScanningTechnique( QString philipsScanningTechnique )
-{
-    m_philipsScanningTechnique = philipsScanningTechnique;
-}
-
-QString Series::getPhilipsScanningTechnique() const
-{
-    return m_philipsScanningTechnique;
-}
-
-void Series::setPhilipsNumberOfStacks( QString philipsNumberOfStacks )
-{
-    m_philipsNumberOfStacks = philipsNumberOfStacks;
-}
-
-QString Series::getPhilipsNumberOfStacks() const
-{
-    return m_philipsNumberOfStacks;
 }
 
 void Series::insertImage( Image *image )

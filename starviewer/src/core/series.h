@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QSet>
 #include <QDateTime>
 #include <QPixmap>
 #include "identifier.h"
@@ -126,14 +127,6 @@ public:
     ///Assigna/Obté el nom del fabricat de l'equip amb el que s'ha n capturar les imatges de la sèrie
     void setManufacturer( QString manufactures );
     QString getManufacturer() const;
-
-    /// Assignar/Obtenir la tècnica d'escaneig
-    void setPhilipsScanningTechnique( QString philipsScanningTechnique );
-    QString getPhilipsScanningTechnique() const;
-
-    /// Assignar/Obtenir el número d'stacks
-    void setPhilipsNumberOfStacks( QString philipsNumberOfStacks );
-    QString getPhilipsNumberOfStacks() const;
 
     /// assigna l'estudi pare de la sèrie
     void setParentStudy( Study *study );
@@ -290,7 +283,7 @@ private:
     /// TODO falta definir quina és l'estrategia d'ordenació per defecte
     QList<Image *> m_imageSet;
 
-    QList<QString> m_filesPathList;
+    QSet<QString> m_filesPathList;
 
     /// Estudi pare
     Study *m_parentStudy;

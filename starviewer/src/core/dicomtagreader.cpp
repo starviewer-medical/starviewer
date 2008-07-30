@@ -66,15 +66,9 @@ bool DICOMTagReader::setFile( QString filename )
 
 bool DICOMTagReader::tagExists( DcmTagKey tag )
 {
-    if( m_dicomData )
-    {
-        return m_dicomData->tagExists( tag );
-    }
-    else
-    {
-        DEBUG_LOG("El m_dicomData no és vàlid");
-        return false;
-    }
+    Q_ASSERT( m_dicomData );
+
+    return m_dicomData->tagExists( tag );
 }
 
 bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
@@ -90,25 +84,24 @@ QString DICOMTagReader::getAttributeByTag( unsigned int group, unsigned int elem
 QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
 {
     QString result;
-    if( m_dicomData )
+
+    Q_ASSERT( m_dicomData );
+
+    OFString value;
+    OFCondition status = m_dicomData->findAndGetOFStringArray( tag , value );
+    if( status.good() )
     {
-        OFString value;
-        OFCondition status = m_dicomData->findAndGetOFStringArray( tag , value );
-        if( status.good() )
-        {
-            result = value.c_str();
-        }
-        else
-        {
-            if (QString(status.text()) != "Tag Not Found")
-            {
-                DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
-                                    .arg( tag.toString().c_str() ).arg( status.text() ) );
-            }
-        }
+        result = value.c_str();
     }
     else
-        DEBUG_LOG("El m_dicomData no és vàlid");
+    {
+        if (QString(status.text()) != "Tag Not Found")
+        {
+            DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
+                                .arg( tag.toString().c_str() ).arg( status.text() ) );
+        }
+    }
+
 
     return result;
 }
@@ -122,36 +115,33 @@ QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, D
 {
     QStringList result;
     // obtenim els atributs de cada item d'una seqüència de "primer nivell"
-    if( m_dicomData )
+
+    Q_ASSERT( m_dicomData );
+    DcmStack stack;
+
+    OFCondition status = m_dicomData->search( sequenceTag, stack );
+
+    if( status.good() )
     {
-        DcmStack stack;
-
-        OFCondition status = m_dicomData->search( sequenceTag, stack );
-
-        if( status.good() )
+        OFString value;
+        DcmSequenceOfItems *sequence = NULL;
+        sequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
+        for(unsigned int i = 0; i < sequence->card(); i++ )
         {
-            OFString value;
-            DcmSequenceOfItems *sequence = NULL;
-            sequence = OFstatic_cast( DcmSequenceOfItems *,stack.top() );
-            for(unsigned int i = 0; i < sequence->card(); i++ )
+            DcmItem *item = sequence->getItem( i );
+            status = item->findAndGetOFStringArray( attributeTag , value );
+            if( status.good() )
             {
-                DcmItem *item = sequence->getItem( i );
-                status = item->findAndGetOFStringArray( attributeTag , value );
-                if( status.good() )
-                {
-                    result << value.c_str();
-                }
-                else if( QString(status.text()) != "Tag Not Found" )
-                {
-                    DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( attributeTag.toString().c_str() ).arg( status.text() ) );
-                }
+                result << value.c_str();
+            }
+            else if( QString(status.text()) != "Tag Not Found" )
+            {
+                DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( attributeTag.toString().c_str() ).arg( status.text() ) );
             }
         }
-        else if( QString(status.text()) != "Tag Not Found" )
-            DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( sequenceTag.toString().c_str() ).arg( status.text() ) );
     }
-    else
-        DEBUG_LOG("El m_dicomData no és vàlid");
+    else if( QString(status.text()) != "Tag Not Found" )
+        DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( sequenceTag.toString().c_str() ).arg( status.text() ) );
 
     return result;
 // \TODO el que ve a continuació és com hauria de ser quan s'implementi el mètode amb seqüències "embedded"
