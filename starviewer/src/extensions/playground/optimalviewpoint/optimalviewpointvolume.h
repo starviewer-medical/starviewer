@@ -293,8 +293,6 @@ private:
 
     double m_excessEntropy;
 
-    QString m_segmentationFileName;
-
 
 
 
