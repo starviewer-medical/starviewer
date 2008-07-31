@@ -79,10 +79,10 @@ public:
     void setShade( bool on );
 
     void setImageSampleDistance( double imageSampleDistance );
-    double getImageSampleDistance() const { return m_imageSampleDistance; }
+    double getImageSampleDistance() const;
 
     void setSampleDistance( double sampleDistance );
-    double getSampleDistance() const { return m_sampleDistance; }
+    double getSampleDistance() const;
 
     void setTransferFunction( const TransferFunction & transferFunction );
 
@@ -289,12 +289,7 @@ private:
 
 
 
-    
 
-
-
-    double m_imageSampleDistance;
-    double m_sampleDistance;
 
     double m_excessEntropy;
 

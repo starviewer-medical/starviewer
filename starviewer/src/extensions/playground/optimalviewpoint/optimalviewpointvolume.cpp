@@ -276,13 +276,21 @@ void OptimalViewpointVolume::setShade( bool on )
 void OptimalViewpointVolume::setImageSampleDistance( double imageSampleDistance )
 {
     m_mapper->SetImageSampleDistance( imageSampleDistance );
-    m_imageSampleDistance = imageSampleDistance;
+}
+
+double OptimalViewpointVolume::getImageSampleDistance() const
+{
+    return m_mapper->GetImageSampleDistance();
 }
 
 void OptimalViewpointVolume::setSampleDistance( double sampleDistance )
 {
     m_mapper->SetSampleDistance( sampleDistance );
-    m_sampleDistance = sampleDistance;
+}
+
+double OptimalViewpointVolume::getSampleDistance() const
+{
+    return m_mapper->GetSampleDistance();
 }
 
 /// Retorna el vtkVolume corresponent a l'índex donat.
