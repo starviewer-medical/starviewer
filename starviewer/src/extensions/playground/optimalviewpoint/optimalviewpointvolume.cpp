@@ -121,72 +121,14 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
     createVoxelShaders();
     createVolumeRayCastFunctions();
     createMapper();
+    createProperty();
+    createVolume();
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-//     m_opacityTransferFunction = vtkPiecewiseFunction::New(); m_opacityTransferFunction->Register( 0 );
-//     m_opacityTransferFunction->AddPoint( 0.0, 0.0 );
-//     m_opacityTransferFunction->AddPoint( 255.0, 1.0 );
-    vtkPiecewiseFunction * opacityTransferFunction = vtkPiecewiseFunction::New();
-    opacityTransferFunction->AddPoint( m_rangeMin, 0.0 );
-    opacityTransferFunction->AddPoint( m_rangeMax, 1.0 );
-//     m_colorTransferFunction = vtkColorTransferFunction::New(); m_colorTransferFunction->Register( 0 );
-//     m_colorTransferFunction->AddRGBPoint( 0.0, 0.0, 0.0, 0.0 );
-//     m_colorTransferFunction->AddRGBPoint( 255.0, 1.0, 1.0, 1.0 );
-    vtkColorTransferFunction * colorTransferFunction = vtkColorTransferFunction::New();
-    colorTransferFunction->AddRGBPoint( m_rangeMin, 0.0, 0.0, 0.0 );
-    colorTransferFunction->AddRGBPoint( m_rangeMax, 1.0, 1.0, 1.0 );
-    m_volumeProperty = vtkVolumeProperty::New(); m_volumeProperty->Register( 0 );
-//     m_volumeProperty->SetScalarOpacity( m_opacityTransferFunction );
-    m_volumeProperty->SetScalarOpacity( opacityTransferFunction );
-//     m_volumeProperty->SetGradientOpacity( m_opacityTransferFunction );
-//     m_volumeProperty->SetColor( m_colorTransferFunction );
-    m_volumeProperty->SetColor( colorTransferFunction );
-
-
-
-//     gradientOpacityTransferFunction = vtkPiecewiseFunction::New();
-//     gradientOpacityTransferFunction->AddPoint( 0.0, 0.0 );
-//     gradientOpacityTransferFunction->AddPoint( 255.0, 1.0 );
-//     m_volumeProperty->SetGradientOpacity( gradientOpacityTransferFunction );
-
-
-
-
-//     m_volumeProperty->SetInterpolationTypeToLinear();
-
-
-//     m_volumeProperty->SetSpecular( 1.0 );
-//     m_volumeProperty->SetSpecularPower( 64.0 );
-
-
-
-
-    m_mainVolume = vtkVolume::New(); m_mainVolume->Register( 0 );
-    m_mainVolume->SetMapper( m_mapper );
-    m_mainVolume->SetProperty( m_volumeProperty );
-
-    // centrem el volum a (0,0,0)
-    double * center = m_mainVolume->GetCenter();
-    m_mainVolume->AddPosition( -center[0], -center[1], -center[2] );
-
-    m_planeVolume = vtkVolume::New(); m_planeVolume->Register( 0 );
-    m_planeVolume->SetMapper( m_mapper );
-    m_planeVolume->SetProperty( m_volumeProperty );
-    m_planeVolume->AddPosition( -center[0], -center[1], -center[2] );
 
 
 
@@ -238,21 +180,9 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
 
     m_mapper->Delete();
 
+    m_property->Delete();
 
-//     m_opacityTransferFunction->Delete();
-//     m_colorTransferFunction->Delete();
-    m_volumeProperty->Delete();
-
-    
-
-
-    m_mainVolume->Delete();
-    m_planeVolume->Delete();
-
-
-
-
-
+    m_volume->Delete();
 
 
     if ( m_clusterImage ) m_clusterImage->Delete();
@@ -304,22 +234,44 @@ void OptimalViewpointVolume::createMapper()
 }
 
 
+void OptimalViewpointVolume::createProperty()
+{
+    m_property = vtkVolumeProperty::New();
+    TransferFunction defaultTransferFunction;
+    defaultTransferFunction.addPoint( m_rangeMin, QColor( 0, 0, 0, 0 ) );
+    defaultTransferFunction.addPoint( m_rangeMax, QColor( 255, 255, 255, 255 ) );
+    setTransferFunction( defaultTransferFunction );
+}
+
+
+void OptimalViewpointVolume::createVolume()
+{
+    m_volume = vtkVolume::New();
+    m_volume->SetMapper( m_mapper );
+    m_volume->SetProperty( m_property );
+
+    // centrem el volum a (0,0,0)
+    double *center = m_volume->GetCenter();
+    m_volume->AddPosition( -center[0], -center[1], -center[2] );
+}
+
+
 void OptimalViewpointVolume::setShade( bool on )
 {
-    on ? m_volumeProperty->ShadeOn() : m_volumeProperty->ShadeOff();
+    on ? m_property->ShadeOn() : m_property->ShadeOff();
     if (on) {
         m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
         m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
         vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
         vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
-        gradientShader->UpdateShadingTable( m_mainRenderer, m_mainVolume, gradientEstimator );
-        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_mainVolume ),
-                                                                  gradientShader->GetGreenDiffuseShadingTable( m_mainVolume ),
-                                                                  gradientShader->GetBlueDiffuseShadingTable( m_mainVolume ) );
-        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_mainVolume ),
-                                                                   gradientShader->GetGreenSpecularShadingTable( m_mainVolume ),
-                                                                   gradientShader->GetBlueSpecularShadingTable( m_mainVolume ) );
+        gradientShader->UpdateShadingTable( m_mainRenderer, m_volume, gradientEstimator );
+        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_volume ),
+                                                                  gradientShader->GetGreenDiffuseShadingTable( m_volume ),
+                                                                  gradientShader->GetBlueDiffuseShadingTable( m_volume ) );
+        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_volume ),
+                                                                   gradientShader->GetGreenSpecularShadingTable( m_volume ),
+                                                                   gradientShader->GetBlueSpecularShadingTable( m_volume ) );
     }
     else {
         m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
@@ -342,20 +294,20 @@ void OptimalViewpointVolume::setSampleDistance( double sampleDistance )
 /// Retorna el vtkVolume corresponent a l'índex donat.
 vtkVolume * OptimalViewpointVolume::getMainVolume() const
 {
-    return m_mainVolume;
+    return m_volume;
 }
 
 /// Retorna el vtkVolume corresponent a l'índex donat.
 vtkVolume * OptimalViewpointVolume::getPlaneVolume() const
 {
-    return m_planeVolume;
+    return m_volume;
 }
 
 
 void OptimalViewpointVolume::setTransferFunction( const TransferFunction & transferFunction )
 {
-    m_volumeProperty->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
-    m_volumeProperty->SetColor( transferFunction.getColorTransferFunction() );
+    m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
+    m_property->SetColor( transferFunction.getColorTransferFunction() );
     m_ambientVoxelShader->setTransferFunction( transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
 
@@ -395,7 +347,7 @@ void OptimalViewpointVolume::setTransferFunction( const TransferFunction & trans
  */
 void OptimalViewpointVolume::synchronize()
 {
-    m_planeVolume->PokeMatrix( m_mainVolume->GetMatrix() );
+    //m_planeVolume->PokeMatrix( m_mainVolume->GetMatrix() );
     //m_planeVolume->ComputeMatrix();
 }
 
@@ -869,10 +821,10 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
     switch ( interpolation )
     {
         case INTERPOLATION_NEAREST_NEIGHBOUR:
-            m_volumeProperty->SetInterpolationTypeToNearest();
+            m_property->SetInterpolationTypeToNearest();
             break;
         case INTERPOLATION_LINEAR_INTERPOLATE_CLASSIFY:
-            m_volumeProperty->SetInterpolationTypeToLinear();
+            m_property->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
 //            m_planeVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
@@ -881,7 +833,7 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
             m_volumeRayCastFunctionFx2->SetCompositeMethodToInterpolateFirst();
             break;
         case INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE:
-            m_volumeProperty->SetInterpolationTypeToLinear();
+            m_property->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             //m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
@@ -896,14 +848,14 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
 
 void OptimalViewpointVolume::setSpecular( bool on )
 {
-    m_volumeProperty->SetSpecular( on ? 1.0 : 0.0 );
+    m_property->SetSpecular( on ? 1.0 : 0.0 );
 }
 
 
 
 void OptimalViewpointVolume::setSpecularPower( double specularPower )
 {
-    m_volumeProperty->SetSpecularPower( specularPower );
+    m_property->SetSpecularPower( specularPower );
 }
 
 
@@ -2006,7 +1958,7 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
     vtkCamera * camera = renderer->GetActiveCamera();
 
     // càlcul de direccions
-    POVSphereCloud cloud( 2.0 * m_mainVolume->GetLength(), numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    POVSphereCloud cloud( 2.0 * m_volume->GetLength(), numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
     cloud.createPOVCloud();
     const QVector<Vector3> & directions = cloud.getVertices();
     int nDirections = directions.size();
