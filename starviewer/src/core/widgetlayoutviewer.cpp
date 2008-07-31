@@ -325,7 +325,7 @@ int WidgetLayoutViewer::getNumberOfViewers()
 
 Q2DViewerWidget * WidgetLayoutViewer::getViewerWidget( int number )
 {
-    m_vectorViewers.value( number );
+    return m_vectorViewers.value( number );
 }
 
 }
