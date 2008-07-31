@@ -78,8 +78,6 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
     createVolume();
 
 
-    m_renderCluster = false;
-    
 
 
     m_obscurance = 0;
@@ -875,15 +873,8 @@ unsigned char OptimalViewpointVolume::getRangeMax() const
 
 void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
 {
-    if ( m_renderCluster != renderCluster )
-    {
-        if ( renderCluster )
-            m_mapper->SetInput( m_clusterImage );
-        else
-            m_mapper->SetInput( m_image );
-    }
-
-    m_renderCluster = renderCluster;
+    if ( renderCluster ) m_mapper->SetInput( m_clusterImage );
+    else m_mapper->SetInput( m_image );
 }
 
 
@@ -901,8 +892,6 @@ void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned sh
         if ( m_clusterImage ) m_clusterImage->Delete();
         m_clusterImage = clip->GetOutput(); m_clusterImage->Register( 0 );
         clip->Delete();
-        /// \todo Posar un booleà per fer això
-        m_renderCluster = false;    // perquè després es cridarà setRenderCluster i s'actualitzarà bé
     }
 
     m_clusterFirst = first; m_clusterLast = last;
