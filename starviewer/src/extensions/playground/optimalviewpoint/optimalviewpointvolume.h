@@ -208,6 +208,10 @@ private:
     void createVolumeRayCastFunctions();
     /// Crea el mapper.
     void createMapper();
+    /// Crea la propietat.
+    void createProperty();
+    /// Crea el volum.
+    void createVolume();
 
 
     // definició d'un vòxel
@@ -268,14 +272,18 @@ private:
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;
 
+    /// Propietat.
+    vtkVolumeProperty *m_property;
+
+    /// Volum.
+    vtkVolume *m_volume;
 
 
 
 
 
-    /// Vector de volums.
-    vtkVolume * m_mainVolume;
-    vtkVolume * m_planeVolume;
+
+
 
 
 
@@ -290,8 +298,7 @@ private:
     /// Vector de funcions de transferència de color.
 //     vtkColorTransferFunction * m_colorTransferFunction;
 
-    /// Vector de propietats de volum.
-    vtkVolumeProperty * m_volumeProperty;
+
 
 
     vtkImageData * m_clusterImage;
