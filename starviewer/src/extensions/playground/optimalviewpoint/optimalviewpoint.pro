@@ -21,7 +21,6 @@ HEADERS += doublehistogram.h \
            vtkInteractorStyleJoystickActorGgg.h \
            vtkInteractorStyleSwitchGgg.h \
            vtkInteractorStyleTrackballActorGgg.h \
-           vtkVolumeRayCastCompositeFunctionOptimalViewpoint.h \
            optimalviewpointextensionmediator.h \
            qoptimalviewpointextension.h \
            slicer.h \
@@ -56,7 +55,6 @@ SOURCES += doublehistogram.cpp \
            vtkInteractorStyleJoystickActorGgg.cxx \
            vtkInteractorStyleSwitchGgg.cxx \
            vtkInteractorStyleTrackballActorGgg.cxx \
-           vtkVolumeRayCastCompositeFunctionOptimalViewpoint.cxx \
            optimalviewpointextensionmediator.cpp \
            qoptimalviewpointextension.cpp \
            slicer.cpp \
