@@ -274,12 +274,6 @@ private:
      */
     QString buildQueryParametersString();
 
-    /** Afegeix una modalitat a cercar a la màscara d'estudi.
-     * @param mask màscara a la que s'ha d'afegir la modalitat
-     * @param modality modalitat a afegir
-     */
-    void addModalityStudyMask( DicomMask *mask, QString modality );
-
     ///Ens indica en en quina posició es troba dins la llista dels estudis trobats a la última query del PACS l'estudi amb l'UID passat per paràmetre i l'AETitle del PACS passat per paràmetre
     int getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle );
 

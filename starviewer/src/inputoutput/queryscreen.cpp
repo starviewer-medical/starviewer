@@ -1639,18 +1639,6 @@ DicomMask QueryScreen::buildDicomMask()
     return mask;
 }
 
-void QueryScreen::addModalityStudyMask( DicomMask* mask, QString modality )
-{
-    QString studyModalities;
-
-    if ( mask->getStudyModality().length() > 0 ) // ja hi ha una altra modalitat
-        studyModalities = mask->getStudyModality() + "," + modality;
-    else
-        studyModalities = modality;
-
-    mask->setStudyModality( studyModalities );
-}
-
 int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle )
 {
     int index = 0;
