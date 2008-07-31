@@ -28,7 +28,6 @@
 #include "logging.h"
 #include "transferfunction.h"
 #include "vtk4DLinearRegressionGradientEstimator.h"
-#include "vtkVolumeRayCastCompositeFunctionOptimalViewpoint.h"
 
 #include "povspherecloud.h"
 #include "vector3.h"
@@ -62,28 +61,30 @@
 #include "saliencyvoxelshader.h"
 #include "colorbleedingvoxelshader.h"
 
+
 namespace udg {
 
 
-OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * parent )
+OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *parent )
     : QObject( parent )
 {
-    Q_CHECK_PTR( image );
+    Q_ASSERT( image != 0 );
 
-    double range[2];
-    image->GetScalarRange( range );
+    // Dades
+
+    double *range = image->GetScalarRange();
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "[OVV] min = %1, max = %2" ).arg( min ).arg( max ) );
 
     if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
     {
         // cal fer el casting perquè ens arriba com a int
-        vtkImageCast * caster = vtkImageCast::New();
+        vtkImageCast *caster = vtkImageCast::New();
         caster->SetInput( image );
         caster->SetOutputScalarTypeToUnsignedChar();
         caster->Update();
 
-        m_image = caster->GetOutput(); m_image->Register( 0 );
+        m_image = caster->GetOutput(); m_image->Register( 0 );  // el register és necessari (comprovat)
         caster->Delete();
 
         m_rangeMin = static_cast<unsigned short>( qRound( min ) );
@@ -94,7 +95,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
         double shift = -min;
         double slope = 255.0 / ( max - min );
 
-        vtkImageShiftScale * shifter = vtkImageShiftScale::New();
+        vtkImageShiftScale *shifter = vtkImageShiftScale::New();
         shifter->SetInput( image );
         shifter->SetShift( shift );
         shifter->SetScale( slope );
@@ -102,49 +103,34 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
         shifter->ClampOverflowOn();
         shifter->Update();
 
-        m_image = shifter->GetOutput(); m_image->Register( 0 );
+        m_image = shifter->GetOutput(); m_image->Register( 0 ); // el register és necessari (comprovat)
         shifter->Delete();
 
         m_rangeMin = 0; m_rangeMax = 255;
 
-        double newRange[2];
-        m_image->GetScalarRange( newRange );
+        double *newRange = m_image->GetScalarRange();
         DEBUG_LOG( QString( "[OVV] new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
     }
 
-    m_data = reinterpret_cast<unsigned char *>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
-    m_labeledImage = vtkImageData::New();
-    m_labeledImage->DeepCopy( m_image );    //m_labeledImage->Register( 0 );    // no cal el register perquè hem fet un new
-    m_labeledData = reinterpret_cast<unsigned char *>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-
-    // ja no cal
-//     m_segmentedImage = vtkImageData::New();
-//     m_segmentedImage->DeepCopy( m_image );  //m_segmentedImage->Register( 0 );  // no cal el register perquè hem fet un new
-//     m_segmentedData = reinterpret_cast< unsigned char *>( m_segmentedImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_labeledImage = vtkImageData::New();   // no cal el register perquè hem fet un new
+    m_labeledImage->DeepCopy( m_image );
+    m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
 
+    // Volume ray cast functions
+
+    m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
+
+    // Mappers
+
+    m_mainMapper = vtkVolumeRayCastMapper::New();
+    m_planeMapper = vtkVolumeRayCastMapper::New();
 
 
-
-
-    m_mainMapper = vtkVolumeRayCastMapper::New(); m_mainMapper->Register( 0 );
-    m_planeMapper = vtkVolumeRayCastMapper::New(); m_planeMapper->Register( 0 );
-
-
-
-
-
-//     m_planeMapper->SetNumberOfThreads( 2 );
-
-
-
-
-
-
-    m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New(); //m_mainVolumeRayCastFunction->Register( 0 );
-    m_planeVolumeRayCastFunction = vtkVolumeRayCastCompositeFunctionOptimalViewpoint::New(); //m_planeVolumeRayCastFunction->Register( 0 );
+    
     m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New(); //m_volumeRayCastFunctionObscurances->Register( 0 );
     m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New(); //m_volumeRayCastFunctionViewpointSaliency->Register( 0 );
     m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
@@ -173,10 +159,6 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
 
 
-    m_planeVolumeRayCastFunction->setOptimalViewpointVolume( this );
-    m_planeVolumeRayCastFunction->setOpacityOn( false );
-    m_planeVolumeRayCastFunction->setComputing( false );
-
 
 
 
@@ -191,7 +173,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData * image, QObject * 
 
     m_mainMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
     m_mainMapper->SetInput( m_image );
-    m_planeMapper->SetVolumeRayCastFunction( m_planeVolumeRayCastFunction );
+    m_planeMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
 //     m_planeMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
 
 
@@ -305,7 +287,7 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
 //     m_colorTransferFunction->Delete();
     m_volumeProperty->Delete();
     m_mainVolumeRayCastFunction->Delete();
-    m_planeVolumeRayCastFunction->Delete();
+    
     m_volumeRayCastFunctionObscurances->Delete();
     m_volumeRayCastFunctionViewpointSaliency->Delete();
     m_volumeRayCastFunctionFx->Delete();
@@ -870,7 +852,7 @@ void OptimalViewpointVolume::generateAdjustedTransferFunction( const QVector< un
 
 void OptimalViewpointVolume::setComputing( bool on )
 {
-    m_planeVolumeRayCastFunction->setComputing( on );
+//    m_planeVolumeRayCastFunction->setComputing( on );
 }
 
 
@@ -888,7 +870,7 @@ void OptimalViewpointVolume::setSegmentationFileName( QString name )
 
 void OptimalViewpointVolume::setOpacityForComputing( bool on )
 {
-    m_planeVolumeRayCastFunction->setOpacityOn( on );
+//    m_planeVolumeRayCastFunction->setOpacityOn( on );
 }
 
 
@@ -903,7 +885,7 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
         case INTERPOLATION_LINEAR_INTERPOLATE_CLASSIFY:
             m_volumeProperty->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
-            m_planeVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
+//            m_planeVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
@@ -912,7 +894,7 @@ void OptimalViewpointVolume::setInterpolation( int interpolation )
         case INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE:
             m_volumeProperty->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
-            m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+            //m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();

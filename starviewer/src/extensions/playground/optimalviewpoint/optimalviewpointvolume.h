@@ -25,7 +25,6 @@ class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastCompositeFunctionObscurances;
-class vtkVolumeRayCastCompositeFunctionOptimalViewpoint;
 class vtkVolumeRayCastCompositeFunctionViewpointSaliency;
 class vtkVolumeRayCastCompositeFunctionFx;
 class vtkVolumeRayCastMapper;
@@ -71,8 +70,8 @@ public:
     enum ObscuranceFunction { Constant0, Distance, SquareRoot, Exponential, ExponentialNorm, CubeRoot };
     enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacitySaliency, OpacitySmoothSaliency, OpacityColorBleeding, OpacitySmoothColorBleeding };
 
-    /// Construeix el volum a partir de la imatge \a image.
-    OptimalViewpointVolume( vtkImageData * image, QObject * parent = 0 );
+    /// Construeix el volum a partir d'una imatge.
+    OptimalViewpointVolume( vtkImageData *image, QObject *parent = 0 );
     virtual ~OptimalViewpointVolume();
 
     /// Retorna el vtkVolume corresponent a l'índex donat.
@@ -219,26 +218,42 @@ private:
     void reduceToHalf();
 
 
-    /// Model de vòxels original.
-    vtkImageData * m_image;
-    vtkImageData * m_labeledImage;
-//     vtkImageData * m_segmentedImage; // ja no cal
+    /// Model de vòxels principal.
+    vtkImageData *m_image;
+    /// Model de vòxels etiquetat.
+    vtkImageData *m_labeledImage;
+
+    /// Valors de propietat mínim i màxim del volum.
+    unsigned char m_rangeMin, m_rangeMax;
+
+    /// Array dels valors principals.
+    unsigned char *m_data;
+    /// Array dels valors etiquetats.
+    unsigned char *m_labeledData;
+    /// Mida dels arrays de valors.
+    int m_dataSize;
+
+    /// Volume ray cast function principal.
+    vtkVolumeRayCastCompositeFunction * m_mainVolumeRayCastFunction;
+    vtkVolumeRayCastCompositeFunctionObscurances *m_volumeRayCastFunctionObscurances;
+    vtkVolumeRayCastCompositeFunctionViewpointSaliency *m_volumeRayCastFunctionViewpointSaliency;
+    vtkVolumeRayCastCompositeFunctionFx *m_volumeRayCastFunctionFx;
+    vtkVolumeRayCastCompositeFxFunction *m_volumeRayCastFunctionFx2;
+
+    /// Mapper principal.
+    vtkVolumeRayCastMapper *m_mainMapper;
+    /// Mapper pels plans.
+    vtkVolumeRayCastMapper *m_planeMapper;
+
+
 
     /// Vector de volums.
     vtkVolume * m_mainVolume;
     vtkVolume * m_planeVolume;
 
-    /// Vector de mappers.
-    vtkVolumeRayCastMapper * m_mainMapper;
-    vtkVolumeRayCastMapper * m_planeMapper;
 
-    /// Vector de funcions de ray-cast.
-    vtkVolumeRayCastCompositeFunction * m_mainVolumeRayCastFunction;
-    vtkVolumeRayCastCompositeFunctionOptimalViewpoint * m_planeVolumeRayCastFunction;
-    vtkVolumeRayCastCompositeFunctionObscurances * m_volumeRayCastFunctionObscurances;
-    vtkVolumeRayCastCompositeFunctionViewpointSaliency * m_volumeRayCastFunctionViewpointSaliency;
-    vtkVolumeRayCastCompositeFunctionFx * m_volumeRayCastFunctionFx;
-    vtkVolumeRayCastCompositeFxFunction * m_volumeRayCastFunctionFx2;
+
+
     AmbientVoxelShader * m_ambientVoxelShader;
     DirectIlluminationVoxelShader * m_directIlluminationVoxelShader;
     ContourVoxelShader * m_contourVoxelShader;
@@ -264,11 +279,6 @@ private:
 
 
 
-    unsigned char * m_data;
-    unsigned char * m_labeledData;
-//     unsigned char * m_segmentedData; // ja no cal
-    int m_dataSize;
-
     double m_imageSampleDistance;
     double m_sampleDistance;
 
@@ -276,8 +286,7 @@ private:
 
     QString m_segmentationFileName;
 
-    /// Valors de propietat mínim i màxim del volum.
-    unsigned char m_rangeMin, m_rangeMax;
+
 
 
     bool m_renderCluster;
