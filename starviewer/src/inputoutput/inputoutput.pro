@@ -13,8 +13,7 @@ FORMS += qconfigurationscreenbase.ui \
          qcreatedicomdirbase.ui \
          qoperationstatescreenbase.ui \
          qchooseoneobjectdialogbase.ui \
-         queryscreenbase.ui \
- qbasicsearchwidgetbase.ui
+         queryscreenbase.ui
 HEADERS += databaseconnection.h \
            dicomimage.h \
            pacsconnection.h \
@@ -61,9 +60,7 @@ HEADERS += databaseconnection.h \
            qoperationstatescreen.h \
            qchooseoneobjectdialog.h \
            queryscreen.h \
- 	   errordcmtk.h \
- dcmdatasettostarviewerobject.h \
- qbasicsearchwidget.h
+ 	   errordcmtk.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -108,9 +105,7 @@ SOURCES += databaseconnection.cpp \
            qcreatedicomdir.cpp \
            qoperationstatescreen.cpp \
            qchooseoneobjectdialog.cpp \
-           queryscreen.cpp \
- dcmdatasettostarviewerobject.cpp \
- qbasicsearchwidget.cpp
+           queryscreen.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
