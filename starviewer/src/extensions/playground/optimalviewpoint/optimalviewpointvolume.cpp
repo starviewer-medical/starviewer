@@ -70,8 +70,6 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
 {
     Q_ASSERT( image != 0 );
 
-    // Dades
-
     double *range = image->GetScalarRange();
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "[OVV] min = %1, max = %2" ).arg( min ).arg( max ) );
@@ -120,41 +118,9 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
 
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
 
-    // Volume ray cast functions
-
-    m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
-
-    // Mappers
-
-    m_mainMapper = vtkVolumeRayCastMapper::New();
-    m_planeMapper = vtkVolumeRayCastMapper::New();
-
-
-    
-    m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New(); //m_volumeRayCastFunctionObscurances->Register( 0 );
-    m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New(); //m_volumeRayCastFunctionViewpointSaliency->Register( 0 );
-    m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
-    m_volumeRayCastFunctionFx = vtkVolumeRayCastCompositeFunctionFx::New();
-
-
-
-
-
-
-    m_volumeRayCastFunctionFx2 = vtkVolumeRayCastCompositeFxFunction::New();
-    m_ambientVoxelShader = new AmbientVoxelShader();
-    m_volumeRayCastFunctionFx2->AddVoxelShader( m_ambientVoxelShader );
-    m_ambientVoxelShader->setData( m_data );
-    m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
-    m_directIlluminationVoxelShader->setData( m_data );
-    m_contourVoxelShader = new ContourVoxelShader();
-    m_contourVoxelShader->setData( m_data );
-    m_obscuranceVoxelShader = new ObscuranceVoxelShader();
-    m_obscuranceVoxelShader->setData( m_data );
-    m_saliencyVoxelShader = new SaliencyVoxelShader();
-    m_saliencyVoxelShader->setData( m_data );
-    m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
-    m_colorBleedingVoxelShader->setData( m_data );
+    createVoxelShaders();
+    createVolumeRayCastFunctions();
+    createMapper();
 
 
 
@@ -164,38 +130,9 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
 
 
 
-//     m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
-//     m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
 
 
 
-
-
-    m_mainMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
-    m_mainMapper->SetInput( m_image );
-    m_planeMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
-//     m_planeMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
-
-
-
-
-
-//     m_planeMapper->SetInput( m_segmentedImage ); // ara s'hauria de fer amb labeled
-    m_planeMapper->SetInput( m_image );
-
-
-
-
-    m_planeMapper->AutoAdjustSampleDistancesOff();
-
-
-
-
-
-    vtk4DLinearRegressionGradientEstimator * gradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
-    m_mainMapper->SetGradientEstimator( gradientEstimator );
-    m_planeMapper->SetGradientEstimator( gradientEstimator );
-    gradientEstimator->Delete();
 
 
 
@@ -239,7 +176,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
 
 
     m_mainVolume = vtkVolume::New(); m_mainVolume->Register( 0 );
-    m_mainVolume->SetMapper( m_mainMapper );
+    m_mainVolume->SetMapper( m_mapper );
     m_mainVolume->SetProperty( m_volumeProperty );
 
     // centrem el volum a (0,0,0)
@@ -247,7 +184,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
     m_mainVolume->AddPosition( -center[0], -center[1], -center[2] );
 
     m_planeVolume = vtkVolume::New(); m_planeVolume->Register( 0 );
-    m_planeVolume->SetMapper( m_planeMapper );
+    m_planeVolume->SetMapper( m_mapper );
     m_planeVolume->SetProperty( m_volumeProperty );
     m_planeVolume->AddPosition( -center[0], -center[1], -center[2] );
 
@@ -283,28 +220,40 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
 
 OptimalViewpointVolume::~OptimalViewpointVolume()
 {
-//     m_opacityTransferFunction->Delete();
-//     m_colorTransferFunction->Delete();
-    m_volumeProperty->Delete();
-    m_mainVolumeRayCastFunction->Delete();
-    
-    m_volumeRayCastFunctionObscurances->Delete();
-    m_volumeRayCastFunctionViewpointSaliency->Delete();
-    m_volumeRayCastFunctionFx->Delete();
-    m_volumeRayCastFunctionFx2->Delete();
+    m_image->Delete();
+    m_labeledImage->Delete();
+
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
     delete m_contourVoxelShader;
     delete m_obscuranceVoxelShader;
-    delete m_saliencyVoxelShader;
     delete m_colorBleedingVoxelShader;
-    m_mainMapper->Delete();
-    m_planeMapper->Delete();
+    delete m_saliencyVoxelShader;
+
+    m_mainVolumeRayCastFunction->Delete();
+    m_volumeRayCastFunctionObscurances->Delete();
+    m_volumeRayCastFunctionFx->Delete();
+    m_volumeRayCastFunctionFx2->Delete();
+    m_volumeRayCastFunctionViewpointSaliency->Delete();
+
+    m_mapper->Delete();
+
+
+//     m_opacityTransferFunction->Delete();
+//     m_colorTransferFunction->Delete();
+    m_volumeProperty->Delete();
+
+    
+
+
     m_mainVolume->Delete();
     m_planeVolume->Delete();
-    m_image->Delete();
-    m_labeledImage->Delete();
-//     m_segmentedImage->Delete();  // ja no cal
+
+
+
+
+
+
 
     if ( m_clusterImage ) m_clusterImage->Delete();
 
@@ -313,15 +262,57 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     delete [] m_saliency;
 }
 
+
+void OptimalViewpointVolume::createVoxelShaders()
+{
+    m_ambientVoxelShader = new AmbientVoxelShader();
+    m_ambientVoxelShader->setData( m_data );
+    m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
+    m_directIlluminationVoxelShader->setData( m_data );
+    m_contourVoxelShader = new ContourVoxelShader();
+    m_contourVoxelShader->setData( m_data );
+    m_obscuranceVoxelShader = new ObscuranceVoxelShader();
+    m_obscuranceVoxelShader->setData( m_data );
+    m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
+    m_colorBleedingVoxelShader->setData( m_data );
+    m_saliencyVoxelShader = new SaliencyVoxelShader();
+    m_saliencyVoxelShader->setData( m_data );
+}
+
+
+void OptimalViewpointVolume::createVolumeRayCastFunctions()
+{
+    m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
+    m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New();
+    m_volumeRayCastFunctionFx = vtkVolumeRayCastCompositeFunctionFx::New();
+    m_volumeRayCastFunctionFx2 = vtkVolumeRayCastCompositeFxFunction::New();
+    m_volumeRayCastFunctionFx2->AddVoxelShader( m_ambientVoxelShader );
+    m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New();
+    m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
+}
+
+
+void OptimalViewpointVolume::createMapper()
+{
+    m_mapper = vtkVolumeRayCastMapper::New();
+    m_mapper->SetInput( m_image );
+    m_mapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
+
+    vtk4DLinearRegressionGradientEstimator *gradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+    m_mapper->SetGradientEstimator( gradientEstimator );
+    gradientEstimator->Delete();
+}
+
+
 void OptimalViewpointVolume::setShade( bool on )
 {
     on ? m_volumeProperty->ShadeOn() : m_volumeProperty->ShadeOff();
     if (on) {
         m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
         m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
-        vtkEncodedGradientEstimator *gradientEstimator = m_mainMapper->GetGradientEstimator();
+        vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
-        vtkEncodedGradientShader *gradientShader = m_mainMapper->GetGradientShader();
+        vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
         gradientShader->UpdateShadingTable( m_mainRenderer, m_mainVolume, gradientEstimator );
         m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_mainVolume ),
                                                                   gradientShader->GetGreenDiffuseShadingTable( m_mainVolume ),
@@ -338,15 +329,13 @@ void OptimalViewpointVolume::setShade( bool on )
 
 void OptimalViewpointVolume::setImageSampleDistance( double imageSampleDistance )
 {
-    m_mainMapper->SetImageSampleDistance( imageSampleDistance );
-    m_planeMapper->SetImageSampleDistance( imageSampleDistance );
+    m_mapper->SetImageSampleDistance( imageSampleDistance );
     m_imageSampleDistance = imageSampleDistance;
 }
 
 void OptimalViewpointVolume::setSampleDistance( double sampleDistance )
 {
-    m_mainMapper->SetSampleDistance( sampleDistance );
-    m_planeMapper->SetSampleDistance( sampleDistance );
+    m_mapper->SetSampleDistance( sampleDistance );
     m_sampleDistance = sampleDistance;
 }
 
@@ -935,9 +924,9 @@ void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
     if ( m_renderCluster != renderCluster )
     {
         if ( renderCluster )
-            m_mainMapper->SetInput( m_clusterImage );
+            m_mapper->SetInput( m_clusterImage );
         else
-            m_mainMapper->SetInput( m_image );
+            m_mapper->SetInput( m_image );
     }
 
     m_renderCluster = renderCluster;
@@ -1007,8 +996,8 @@ void OptimalViewpointVolume::computeObscurances()
     delete [] m_obscurance; m_obscurance = 0;
     delete [] m_colorBleeding; m_colorBleeding = 0;
 
-    vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
-    unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
+    vtkDirectionEncoder * directionEncoder = m_mapper->GetGradientEstimator()->GetDirectionEncoder();
+    unsigned short * encodedNormals = m_mapper->GetGradientEstimator()->GetEncodedNormals();
 
     // càlcul de direccions
     POVSphereCloud cloud( 1.0, m_obscuranceDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
@@ -1322,11 +1311,11 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
 
     if ( m_renderWithObscurances )
     {
-        m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionObscurances );
+        m_mapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionObscurances );
     }
     else
     {
-        m_mainMapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
+        m_mapper->SetVolumeRayCastFunction( m_mainVolumeRayCastFunction );
     }
     DEBUG_LOG( "srwo:e" );
 }
@@ -1530,8 +1519,8 @@ void OptimalViewpointVolume::computeObscurances2()
         else for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] = Vector3();
     }
 
-    vtkDirectionEncoder * directionEncoder = m_mainMapper->GetGradientEstimator()->GetDirectionEncoder();
-    unsigned short * encodedNormals = m_mainMapper->GetGradientEstimator()->GetEncodedNormals();
+    vtkDirectionEncoder * directionEncoder = m_mapper->GetGradientEstimator()->GetDirectionEncoder();
+    unsigned short * encodedNormals = m_mapper->GetGradientEstimator()->GetEncodedNormals();
 
     // càlcul de direccions
     POVSphereCloud cloud( 1.0, m_obscuranceDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
@@ -2011,8 +2000,8 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
 
     m_volumeRayCastFunctionViewpointSaliency->SetSaliency( m_saliency );
 
-    vtkVolumeRayCastFunction * current = m_mainMapper->GetVolumeRayCastFunction();
-    m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionViewpointSaliency );
+    vtkVolumeRayCastFunction * current = m_mapper->GetVolumeRayCastFunction();
+    m_mapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionViewpointSaliency );
 
     vtkCamera * camera = renderer->GetActiveCamera();
 
@@ -2066,7 +2055,7 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
         }
     }
 
-    m_mainMapper->SetVolumeRayCastFunction( current );
+    m_mapper->SetVolumeRayCastFunction( current );
 
     DEBUG_LOG( QString( "most salient view: %1 (%2)" ).arg( maxView+1 ).arg( maxSaliency ) );
     camera->SetPosition( directions[maxView].x, directions[maxView].y, directions[maxView].z );
@@ -2116,7 +2105,7 @@ void OptimalViewpointVolume::setFx( bool fx )
 
     if ( m_fx )
     {
-        m_mainMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionFx2 );
+        m_mapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionFx2 );
     }
     else
     {
@@ -2132,7 +2121,7 @@ void OptimalViewpointVolume::setFxContour( double fxContour )
 {
     m_volumeRayCastFunctionFx->SetFxContour( fxContour );
     if ( fxContour > 0.0 ) {
-        m_contourVoxelShader->setGradientEstimator( m_mainMapper->GetGradientEstimator() );
+        m_contourVoxelShader->setGradientEstimator( m_mapper->GetGradientEstimator() );
         m_contourVoxelShader->setThreshold( fxContour );
         if ( m_volumeRayCastFunctionFx2->IndexOfVoxelShader( m_contourVoxelShader ) < 0 )
             m_volumeRayCastFunctionFx2->AddVoxelShader( m_contourVoxelShader );
