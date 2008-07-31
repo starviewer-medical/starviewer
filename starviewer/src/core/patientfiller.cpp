@@ -120,7 +120,7 @@ void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerSte
     patientFillerStep->setInput(input);
     time.start();
     patientFillerStep->fill();
-    INFO_LOG( QString(patientFillerStep->name() + " ha trigat: %1 ").arg( time.elapsed() ));
+    DEBUG_LOG( QString(patientFillerStep->name() + " ha trigat: %1 ").arg( time.elapsed() ));
 }
 
 }

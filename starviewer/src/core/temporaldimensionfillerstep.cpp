@@ -53,16 +53,36 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
     int phases = 1;
     int slices = 0;
 
-    if( series->getImages().at(0)->isCTLocalizer()  )
+    QStringList list = series->getImagesPathList();
+    DICOMTagReader dicomReader( list[0] );
+
+    // si és un localizer no el considerarem que tingui fases
+    if (dicomReader.tagExists( DCM_ImageType ))
     {
-        // si és un localizer no el considerarem que tingui fases
-        DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no és dinàmica (És un CT LOCALIZER)" );
-        slices = series->getImages().count();
+        // aquest valor és de tipus 3 al mòdul General Image, però consta com a tipus 1 a
+        // gairebé totes les modalitats. Només consta com a tipus 2 per la modalitat US
+        QString value = dicomReader.getAttributeByName( DCM_ImageType );
+        if( series->getModality() == "CT" ) // en el cas del CT ens interessa saber si és localizer
+        {
+            QStringList valueList = value.split( "\\" );
+            if( valueList.count() >= 3 )
+            {
+                if( valueList.at(2) == "LOCALIZER" )
+                {
+                    DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no és dinàmica (És un CT LOCALIZER)" );
+                    slices = series->getImages().count();
+                }
+            }
+            else
+            {
+                // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
+                // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
+                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + dicomReader.getAttributeByName(DCM_SOPInstanceUID ) + " de la serie " + series->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
+            }
+        }
     }
     else
     {
-        QStringList list = series->getImagesPathList();
-        DICOMTagReader dicomReader( list[0] );
         QString sliceLocation = dicomReader.getAttributeByName( DCM_SliceLocation );
 
         // l'atribut és opcional, per tant si no hi

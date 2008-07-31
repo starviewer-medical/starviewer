@@ -143,9 +143,9 @@ void QDicomDumpCTWidget::setImageDicomTagsValue( Image *currentImage )
         m_labelSliceLocationValue->setText( currentImage->getSliceLocation() + QString( tr( " mm" ) ) );
     }
 
-    if ( currentImage->getImageType() != "" )
+    if ( dicomReader.tagExists( DCM_ImageType ) )
     {
-        m_labelImageTypeValue->setText( currentImage->getImageType() );
+        m_labelImageTypeValue->setText( dicomReader.getAttributeByName( DCM_ImageType ) );
     }
 
 }
