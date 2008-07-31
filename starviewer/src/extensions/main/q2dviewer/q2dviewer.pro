@@ -8,7 +8,6 @@ FORMS += q2dviewerextensionbase.ui \
 
 HEADERS += q2dviewerextensionmediator.h \
 	   q2dviewerextension.h \
-	   q2dviewerwidget.h \
 	   gridicon.h \
 	   tablemenu.h \
 	   itemmenu.h \
@@ -16,7 +15,6 @@ HEADERS += q2dviewerextensionmediator.h \
 
 SOURCES += q2dviewerextensionmediator.cpp \
 	   q2dviewerextension.cpp \
-           q2dviewerwidget.cpp \
 	   gridicon.cpp \
 	   tablemenu.cpp \
 	   itemmenu.cpp \

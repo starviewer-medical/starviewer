@@ -67,17 +67,6 @@ public slots:
     /// Carrega un Presentation State
     void loadPresentationState(const QString &filename);
 
-    ///Canviar el nombre de files i columnes
-    void addColumns( int columns = 1 );
-    void addRows(  int rows = 1 );
-    void removeColumns( int columns = 1 );
-    void removeRows( int rows = 1 );
-    void setGrid( int rows, int columns );
-    void showRows( int rows );
-    void hideRows( int rows );
-    void showColumns( int columns );
-    void hideColumns( int columns );
-
     /// Mostrar menu per seleccionar grid predefinit
     ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showPredefinedGrid();
@@ -116,9 +105,6 @@ private:
     void readSettings();
     void writeSettings();
 
-    /// Retorna un nou widget Q2DViewerWidget per poder-lo inserir a una nova fila o columna
-    Q2DViewerWidget *getNewQ2DViewerWidget();
-
     void createProgressDialog();
 
     /**
@@ -135,12 +121,6 @@ private:
 private slots:
     /// activem o desactivem el presentation state
     void enablePresentationState( bool enable );
-
-    /// Inicialitza els layouts
-    void initLayouts();
-
-    /// Posem el widget seleccionat com a actual
-    void setViewerSelected( Q2DViewerWidget *viewer );
 
     /// Slots per canviar rotacions al widget seleccionat
     void rotateClockWise();
@@ -166,6 +146,12 @@ private slots:
 
     /// Activa la sincronització al visualitzador
     void synchronization( Q2DViewerWidget *, bool );
+
+    /// Mètode que tracta el nou visualitzador afegit
+    void activateNewViewer( Q2DViewerWidget * newViewerWidget );
+
+    /// Mètode que tracta el canvi de visualitzador seleccionat
+    void changeSelectedViewer( Q2DViewerWidget * viewerWidget );
 
 private:
     /// El volum principal
@@ -196,24 +182,8 @@ private:
     /// S'encarrega d'aplicar els presentation states
     Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
 
-    /// Grids per mostrar diferents q2dviewers alhora.
-    QGridLayout *m_gridLayout;
-    QGridLayout *m_viewersLayout;
-
-    /// Visualitzador seleccionat, també sempre en tindrem un
-    Q2DViewerWidget *m_selectedViewer;
-
     ///Obre la finestra de dicomdump per la imatge que tenim seleccionada en aquests moments
     QDicomDump *m_dicomDumpCurrentDisplayedImage;
-
-    /// Nombre de files i columnes per els layouts
-    int m_rows;
-    int m_columns;
-    int m_totalRows;
-    int m_totalColumns;
-
-    /// Renderers que tenim
-    QVector<Q2DViewerWidget *> m_vectorViewers;
 
     /// Pacient que estem tractant
     Patient *m_patient;
@@ -233,6 +203,9 @@ private:
 
     ///Perfil a mostrar la interficie
     QString m_profile;
+
+    /// Visualitzador actual seleccionat
+    Q2DViewerWidget * m_viewer;
 
 };
 

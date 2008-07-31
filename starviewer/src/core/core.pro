@@ -13,7 +13,8 @@ FORMS += qlogviewerbase.ui \
          qtransferfunctioneditorbyvaluesbase.ui \
          qtransferfunctionintervaleditorbase.ui \
          qcinecontrollerbase.ui  \
-         qthickslabwidgetbase.ui
+         qthickslabwidgetbase.ui \
+ q2dviewerwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
                 core_en_GB.ts
@@ -160,7 +161,9 @@ HEADERS += extensionfactory.h \
            cursor3dtooldata.h \
            angletool.h \
            drawercrosshair.h \
- starviewerapplication.h
+ starviewerapplication.h \
+ widgetlayoutviewer.h \
+ q2dviewerwidget.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -288,7 +291,9 @@ SOURCES += extensionmediator.cpp \
            cursor3dtool.cpp \
            cursor3dtooldata.cpp \
            angletool.cpp \
- drawercrosshair.cpp
+ drawercrosshair.cpp \
+ widgetlayoutviewer.cpp \
+ q2dviewerwidget.cpp
 TEMPLATE = lib
 
 DESTDIR = ./

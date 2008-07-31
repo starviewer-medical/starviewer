@@ -34,7 +34,7 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
- : QWidget( parent ), m_presentationStateAttacher(0), m_selectedViewer(0)
+ : QWidget( parent ), m_presentationStateAttacher(0), m_viewer(0)
 {
     setupUi( this );
 
@@ -63,16 +63,14 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     createProgressDialog();
     readSettings();
     createActions();
-    // TODO aquesta crida ha d'anar forçosament aquí, despŕés de "createActiuons()" i abans de
-    // "createConnections()", sinó petarà. Mirar de fer que no sigui tant fràgil en aquest sentit
-    this->setViewerSelected( this->getNewQ2DViewerWidget() );
     createConnections();
 
-    initLayouts();
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
+
+    activateNewViewer( m_workingArea->getViewerSelected() );
 
     //TODO "Xapussa" del ticket #599 per tal de crear el perfil per CR o MG
     if( m_profile == "ProfileOnlyCR")
@@ -88,8 +86,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 Q2DViewerExtension::~Q2DViewerExtension()
 {
     writeSettings();
-    delete m_viewersLayout;
-    delete m_gridLayout;
 
     delete m_predefinedSeriesGrid;
     delete m_seriesTableGrid;
@@ -191,45 +187,48 @@ void Q2DViewerExtension::createConnections()
     connect( m_imageGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveImageTable() ) );
 
     // Connexions del menu
-    connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
-    connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), SLOT( setGrid( int, int ) ) );
+    connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea , SLOT( setGrid( int, int ) ) );
+    connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea, SLOT( setGrid( int, int ) ) );
 
     // EXTRA!!!!!\TODO es temporal
     // enable/disable presentation states
     connect( m_presentationStateAction, SIGNAL( toggled(bool) ), SLOT( enablePresentationState(bool) ) );
 
     // Connexions necessaries pel primer visualitzador
-    connect( m_selectedViewer, SIGNAL( selected( Q2DViewerWidget *) ), SLOT( setViewerSelected( Q2DViewerWidget *) ) );
-    connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
+    connect( m_workingArea->getViewerSelected()->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
 
     connect( m_dicomDumpToolButton, SIGNAL( clicked() ) , SLOT( showDicomDumpCurrentDisplayedImage() ) );
+
+    // Connexions necessaries amb els canvis al layout
+    connect( m_workingArea, SIGNAL( viewerAdded( Q2DViewerWidget * ) ), SLOT( activateNewViewer( Q2DViewerWidget * ) ) );
+    connect( m_workingArea, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    m_vectorViewers.value( 0 )->setInput( m_mainVolume );
+    m_workingArea->getViewerSelected()->setInput( m_mainVolume );
     validePhases();
-    m_cineController->setQViewer( m_vectorViewers.value(0)->getViewer() );
+    m_cineController->setQViewer( m_workingArea->getViewerSelected()->getViewer() );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 }
 
 void Q2DViewerExtension::resetViewToAxial()
 {
-    m_selectedViewer->resetViewToAxial();
+    m_workingArea->getViewerSelected()->resetViewToAxial();
 }
 
 void Q2DViewerExtension::resetViewToSagital()
 {
-    m_selectedViewer->resetViewToSagital();
+    m_workingArea->getViewerSelected()->resetViewToSagital();
 }
 
 void Q2DViewerExtension::resetViewToCoronal()
 {
-    m_selectedViewer->resetViewToCoronal();
+    m_workingArea->getViewerSelected()->resetViewToCoronal();
 }
 
 void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
@@ -250,7 +249,7 @@ void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
     {
         delete m_keyImageNoteAttacher;
     }
-    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher( m_vectorViewers.value( 0 )->getViewer(), m_keyImageNote );
+    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher(  m_workingArea->getViewerSelected()->getViewer(), m_keyImageNote );
     m_keyImageNoteAttacher->setVisibleAdditionalInformation( true );
     m_keyImageNoteAttacher->attach();
 }
@@ -262,267 +261,29 @@ void Q2DViewerExtension::loadPresentationState(const QString &filename)
     {
         delete m_presentationStateAttacher;
     }
-    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher( m_vectorViewers.value( 0 )->getViewer(), qPrintable(filename) );
+    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher(  m_workingArea->getViewerSelected()->getViewer(), qPrintable(filename) );
     m_presentationStateAction->setEnabled( true );
     m_presentationStateAction->setChecked( true );
 }
 
-void Q2DViewerExtension::initLayouts()
-{
-    m_rows = 1;
-    m_columns = 1;
-    m_totalRows = 1;
-    m_totalColumns = 1;
-
-    m_gridLayout = new QGridLayout();
-    m_gridLayout->setSpacing(0);
-    m_gridLayout->setMargin(0);
-
-    m_viewersLayout = new QGridLayout();
-    m_viewersLayout->setSpacing(0);
-    m_viewersLayout->setMargin(0);
-
-    m_viewersLayout->addWidget( m_selectedViewer, 0, 0 );
-    m_gridLayout->addLayout( m_viewersLayout, 0, 0 );
-
-    m_vectorViewers.push_back( m_selectedViewer );
-    m_workingArea->setLayout(m_gridLayout);
-
-    m_selectedViewer->setSelected( true );
-}
-
-void Q2DViewerExtension::addColumns( int columns )
-{
-    int posViewer = m_columns;
-    Q2DViewerWidget *newViewer;
-
-    int rows;
-    while( columns > 0 )
-    {
-        rows = 0;
-        m_columns += 1;
-        m_totalColumns += 1;
-        while( rows < m_viewersLayout->rowCount() )
-        {
-            newViewer = getNewQ2DViewerWidget();
-            m_viewersLayout->addWidget( newViewer, rows, m_totalColumns-1);
-            m_vectorViewers.insert( posViewer,newViewer );
-            initializeDefaultTools( newViewer->getViewer() );
-            posViewer += m_columns;
-            if( rows >= m_rows )
-                newViewer->hide();
-            rows++;
-        }
-        posViewer = m_columns;
-        columns--;
-    }
-}
-
-void Q2DViewerExtension::addRows( int rows )
-{
-    Q2DViewerWidget *newViewer;
-    int column;
-
-    while( rows > 0 )
-    {
-        m_rows += 1;
-        m_totalRows += 1;
-        //Afegim tants widgets com columnes
-        for(column = 0; column < m_totalColumns; column++)
-        {
-            newViewer = getNewQ2DViewerWidget();
-            m_viewersLayout->addWidget( newViewer, m_rows-1, column);
-            m_vectorViewers.push_back( newViewer );
-            initializeDefaultTools( newViewer->getViewer() );
-            if( column >= m_columns)
-                newViewer->hide();
-        }
-        rows--;
-    }
-}
-
-void Q2DViewerExtension::removeColumns( int columns )
-{
-    int posViewer = m_columns-1;
-    Q2DViewerWidget *oldViewer;
-
-    int rows;
-    while( columns > 0 && m_columns > 1 )
-    {
-        rows = 0;
-        // Eliminem un widget de cada fila per tenir una columna menys
-        while (rows < m_viewersLayout->rowCount() )
-        {
-            oldViewer = m_vectorViewers.value(posViewer);
-            m_viewersLayout->removeWidget( oldViewer );
-            m_vectorViewers.remove( posViewer );
-            if ( m_selectedViewer == oldViewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
-            delete oldViewer;
-            posViewer += (m_columns-1);
-            rows++;
-        }
-        m_columns--;
-        posViewer = m_columns-1;
-        columns--;
-    }
-}
-
-void Q2DViewerExtension::removeRows( int rows )
-{
-    int i;
-    int posViewer = m_vectorViewers.count()-1;
-    Q2DViewerWidget *oldViewer;
-
-    while( rows > 0 && m_rows > 1 )
-    {
-        //Eliminem tants widgets com columnes
-        for(i = 0; i < m_columns; i++)
-        {
-            oldViewer = m_vectorViewers.value(posViewer);
-            m_vectorViewers.remove(posViewer);
-            m_viewersLayout->removeWidget( oldViewer );
-            // TODO eliminar els viewers que treiem del toolManager???
-            if ( m_selectedViewer == oldViewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
-            delete oldViewer;
-            posViewer -= 1;
-        }
-        m_rows--;
-        rows--;
-    }
-}
-
-Q2DViewerWidget* Q2DViewerExtension::getNewQ2DViewerWidget()
-{
-    Q2DViewerWidget *newViewer = new Q2DViewerWidget( m_workingArea );
-    connect( newViewer, SIGNAL( selected( Q2DViewerWidget *) ), SLOT( setViewerSelected( Q2DViewerWidget *) ) );
-    // per defecte no li posem cap annotació
-    newViewer->getViewer()->removeAnnotation( Q2DViewer::AllAnnotation );
-    // i si cal, activem les annotacions
-    if( m_viewerInformationToolButton->isChecked() )
-        newViewer->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
-        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
-        Q2DViewer::AcquisitionInformationAnnotation, true );
-
-    connect( newViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
-
-    return newViewer;
-}
-
-void Q2DViewerExtension::setGrid( int rows, int columns )
-{
-    // Mirem si les tenim amagades i mostrem totes les necessaries
-    int windowsToShow = 0;
-    int windowsToCreate = 0;
-    int windowsToHide = 0;
-
-    if( rows > m_rows )
-    {
-        int hideWindows = m_totalRows - m_rows;
-
-        if( hideWindows < (rows - m_rows) )
-             windowsToShow = hideWindows;
-        else
-            windowsToShow = rows-m_rows;
-
-        showRows( windowsToShow );
-
-        if( rows > m_totalRows )
-            windowsToCreate = rows - m_totalRows;
-
-        addRows( windowsToCreate );
-    }
-    else if( rows < m_rows )
-    {
-        hideRows( m_rows - rows );
-    }
-
-    windowsToShow = 0;
-    windowsToCreate = 0;
-    windowsToHide = 0;
-
-    if( columns > m_columns )
-    {
-        int hideWindows = m_totalColumns - m_columns;
-
-        if( hideWindows < (columns - m_columns) )
-            windowsToShow = hideWindows;
-        else
-            windowsToShow = columns-m_columns;
-
-        showColumns( windowsToShow );
-
-        if( columns > m_totalColumns )
-            windowsToCreate = columns - m_totalColumns;
-
-        addColumns( windowsToCreate );
-    }
-    else if( columns < m_columns )
-    {
-        hideColumns( m_columns - columns );
-    }
-}
-
-void Q2DViewerExtension::setViewerSelected( Q2DViewerWidget *viewer )
-{
-    if( !viewer )
-    {
-        DEBUG_LOG("El Viewer donat és NUL!");
-        return;
-    }
-
-    if ( viewer != m_selectedViewer )
-    {
-        ///TODO canviar aquestes connexions i desconnexions per dos mètodes el qual
-        /// enviin el senyal al visualitzador que toca.
-        if( m_selectedViewer )
-        {
-            disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-            disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-            disconnect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
-            disconnect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
-
-            m_selectedViewer->setSelected( false );
-        }
-        m_selectedViewer = viewer;
-        m_selectedViewer->setSelected( true );
-        validePhases();
-
-        connect( m_predefinedSlicesGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_sliceTableGrid, SIGNAL( selectedGrid( int , int ) ) , m_selectedViewer->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_selectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
-        connect( m_selectedViewer->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
-
-        // TODO potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
-        // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
-        m_windowLevelComboBox->setPresetsData( m_selectedViewer->getViewer()->getWindowLevelData() );
-        m_windowLevelComboBox->selectPreset( m_selectedViewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
-
-        m_cineController->setQViewer( viewer->getViewer() );
-        m_thickSlabWidget->link( m_selectedViewer->getViewer() );
-        updateDICOMInformationButton( m_selectedViewer->getViewer()->getView() );
-    }
-}
-
 void Q2DViewerExtension::rotateClockWise()
 {
-    ( m_selectedViewer->getViewer() )->rotateClockWise();
+    ( m_workingArea->getViewerSelected()->getViewer() )->rotateClockWise();
 }
 
 void Q2DViewerExtension::rotateCounterClockWise()
 {
-    ( m_selectedViewer->getViewer() )->rotateCounterClockWise();
+    ( m_workingArea->getViewerSelected()->getViewer() )->rotateCounterClockWise();
 }
 
 void Q2DViewerExtension::horizontalFlip()
 {
-    ( m_selectedViewer->getViewer() )->horizontalFlip();
+    ( m_workingArea->getViewerSelected()->getViewer() )->horizontalFlip();
 }
 
 void Q2DViewerExtension::verticalFlip()
 {
-    ( m_selectedViewer->getViewer() )->verticalFlip();
+    ( m_workingArea->getViewerSelected()->getViewer() )->verticalFlip();
 }
 
 void Q2DViewerExtension::showPredefinedGrid()
@@ -556,7 +317,7 @@ void Q2DViewerExtension::showPredefinedImageGrid()
 {
     QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
     m_predefinedSlicesGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
-    m_predefinedSlicesGrid->createPredefinedGrids( m_selectedViewer->getViewer()->getMaximumSlice() );
+    m_predefinedSlicesGrid->createPredefinedGrids( m_workingArea->getViewerSelected()->getViewer()->getMaximumSlice() );
     m_predefinedSlicesGrid->show();
 }
 
@@ -649,11 +410,6 @@ void Q2DViewerExtension::initializeTools()
     // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
     m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
 
-    // registrem al manager les tools que van amb el viewer principal
-    initializeDefaultTools( m_selectedViewer->getViewer() );
-
-    connect( m_selectedViewer, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
-
     //TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     //sincronització no té el model de totes les tools
     connect( m_cursor3DToolButton->defaultAction() , SIGNAL( triggered() ) , SLOT( disableSynchronization() ) );
@@ -667,83 +423,66 @@ void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
     m_toolManager->setViewerTools( viewer, toolsList );
 }
 
-void Q2DViewerExtension::showRows( int rows )
+void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
 {
-    Q2DViewerWidget *viewer;
-    int numColumn;
 
-    while( rows > 0 )
-    {
-        for( numColumn = 0; numColumn < m_columns; numColumn++ )
-        {
-            viewer = m_vectorViewers.value( ( m_totalColumns*m_rows ) + numColumn );
-            viewer->show();
-        }
-        m_rows++;
-        rows--;
-    }
+     // i si cal, activem les annotacions
+    if( m_viewerInformationToolButton->isChecked() )
+        newViewerWidget->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation, true );
+
+    connect( newViewerWidget, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
+
+    initializeDefaultTools( newViewerWidget->getViewer() );
 }
 
-void Q2DViewerExtension::hideRows( int rows )
+void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget * viewerWidget )
 {
-    Q2DViewerWidget *viewer;
-    int numColumn;
-
-    while( rows > 0 )
+    if( !viewerWidget )
     {
-        m_rows--;
-        for( numColumn = 0; numColumn < m_columns; numColumn++ )
-        {
-            viewer = m_vectorViewers.value( ( ( m_totalColumns*m_rows ) + numColumn ) );
-            viewer->hide();
-            if ( m_selectedViewer == viewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
-        }
-        rows--;
+        DEBUG_LOG("El Viewer donat és NUL!");
+        return;
     }
-}
 
-void Q2DViewerExtension::showColumns( int columns )
-{
-    Q2DViewerWidget *viewer;
-    int numRow;
-
-    while( columns > 0 )
+    if ( viewerWidget != m_viewer )
     {
-        for( numRow = 0; numRow < m_rows; numRow++ )
+        ///TODO canviar aquestes connexions i desconnexions per dos mètodes el qual
+        /// enviin el senyal al visualitzador que toca.
+        if( m_viewer )
         {
-            viewer = m_vectorViewers.value( ( m_totalColumns*numRow ) + m_columns );
-            viewer->show();
+//             disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
+//             disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
+            disconnect( m_viewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
+            disconnect( m_viewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
         }
-        m_columns++;
-        columns--;
-    }
-}
+        m_viewer = viewerWidget;
+        validePhases();
 
-void Q2DViewerExtension::hideColumns( int columns )
-{
-    Q2DViewerWidget *viewer;
-    int numRow;
+//         connect( m_predefinedSlicesGrid, SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
+//         connect( m_sliceTableGrid, SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
+        connect( m_viewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
+        connect( m_viewer->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
 
-    while( columns > 0 )
-    {
-        m_columns--;
-        for( numRow = 0; numRow < m_rows; numRow++ )
-        {
-            viewer = m_vectorViewers.value( ( m_totalColumns*numRow ) + m_columns );
-            viewer->hide();
-            if ( m_selectedViewer == viewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
-        }
-        columns--;
+        // TODO potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
+        // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
+        m_windowLevelComboBox->setPresetsData( m_viewer->getViewer()->getWindowLevelData() );
+        m_windowLevelComboBox->selectPreset( m_viewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
+
+        m_cineController->setQViewer( m_viewer->getViewer() );
+        m_thickSlabWidget->link( m_viewer->getViewer() );
+        updateDICOMInformationButton( m_viewer->getViewer()->getView() );
     }
 }
 
 void Q2DViewerExtension::showViewerInformation( bool show )
 {
-    for( int numViewer = 0; numViewer < m_vectorViewers.size(); numViewer++ )
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+    int numViewer;
+
+    for( numViewer = 0; numViewer < numberOfViewers; numViewer++ )
     {
-        m_vectorViewers.value( numViewer )->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+       m_workingArea->getViewerWidget( numViewer )->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
         Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
         Q2DViewer::AcquisitionInformationAnnotation, show );
     }
@@ -751,13 +490,13 @@ void Q2DViewerExtension::showViewerInformation( bool show )
 
 void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
 {
-    m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_selectedViewer->getViewer()->getCurrentDisplayedImage() );
+    m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_workingArea->getViewerSelected()->getViewer()->getCurrentDisplayedImage() );
     m_dicomDumpCurrentDisplayedImage->show();
 }
 
 void Q2DViewerExtension::validePhases()
 {
-    if( m_selectedViewer->hasPhases() )
+    if( m_workingArea->getViewerSelected()->hasPhases() )
     {
         m_sagitalViewAction->setEnabled( false );
         m_coronalViewAction->setEnabled( false );
@@ -771,7 +510,7 @@ void Q2DViewerExtension::validePhases()
 
 void Q2DViewerExtension::updateDICOMInformationButton( int view )
 {
-    if( m_selectedViewer->getViewer()->getInput() )
+    if( m_workingArea->getViewerSelected()->getViewer()->getInput() )
     {
         if( view == Q2DViewer::Axial )
             m_dicomDumpToolButton->setEnabled(true);
@@ -823,12 +562,14 @@ void Q2DViewerExtension::disableSynchronization()
     //TODO Mètode per desactivar l'eina i el boto de sincronització dels visualitzadors quan
     // es selecciona l'eina de cursor3D, per solucionar-ho de forma xapussa perquè l'eina de
     // sincronització encara no té el mateix format que la resta
-    int i;
+    int numViewer;
     Q2DViewerWidget * viewer;
 
-    for( i = 0; i < m_vectorViewers.size(); i++)
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for( numViewer = 0; numViewer < numberOfViewers; numViewer++ )
     {
-        viewer = m_vectorViewers.value( i );
+        viewer =  m_workingArea->getViewerWidget( numViewer );
         m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
         viewer->disableSynchronization();
     }
