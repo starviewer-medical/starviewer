@@ -70,6 +70,72 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
 {
     Q_ASSERT( image != 0 );
 
+    createImages( image );
+    createVoxelShaders();
+    createVolumeRayCastFunctions();
+    createMapper();
+    createProperty();
+    createVolume();
+
+
+    m_renderCluster = false;
+    
+
+
+    m_obscurance = 0;
+    m_colorBleeding = 0;
+    m_obscuranceDirections = 2;
+    m_obscuranceMaximumDistance = 64.0;
+    m_obscuranceFunction = Constant0;
+
+    m_renderWithObscurances = false;
+
+
+
+
+
+//     reduceToHalf();
+
+
+    m_saliency = 0;
+
+    DEBUG_LOG( "end constructor" );
+}
+
+
+OptimalViewpointVolume::~OptimalViewpointVolume()
+{
+    m_image->Delete();
+    m_labeledImage->Delete();
+    if ( m_clusterImage ) m_clusterImage->Delete();
+
+    delete m_ambientVoxelShader;
+    delete m_directIlluminationVoxelShader;
+    delete m_contourVoxelShader;
+    delete m_obscuranceVoxelShader;
+    delete m_colorBleedingVoxelShader;
+    delete m_saliencyVoxelShader;
+
+    m_mainVolumeRayCastFunction->Delete();
+    m_volumeRayCastFunctionObscurances->Delete();
+    m_volumeRayCastFunctionFx->Delete();
+    m_volumeRayCastFunctionFx2->Delete();
+    m_volumeRayCastFunctionViewpointSaliency->Delete();
+
+    m_mapper->Delete();
+
+    m_property->Delete();
+
+    m_volume->Delete();
+
+    delete [] m_obscurance;
+    delete [] m_colorBleeding;
+    delete [] m_saliency;
+}
+
+
+void OptimalViewpointVolume::createImages( vtkImageData *image )
+{
     double *range = image->GetScalarRange();
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "[OVV] min = %1, max = %2" ).arg( min ).arg( max ) );
@@ -110,86 +176,14 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
         DEBUG_LOG( QString( "[OVV] new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
     }
 
-    m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-
     m_labeledImage = vtkImageData::New();   // no cal el register perquè hem fet un new
     m_labeledImage->DeepCopy( m_image );
+    m_clusterImage = 0;
+
+    m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
-
-    createVoxelShaders();
-    createVolumeRayCastFunctions();
-    createMapper();
-    createProperty();
-    createVolume();
-
-
-
-
-
-
-
-
-
-
-
-    m_renderCluster = false;
-    m_clusterImage = 0;
-    m_clusterVolume = 0;
-    m_clusterMapper = 0;
-
-
-    m_obscurance = 0;
-    m_colorBleeding = 0;
-    m_obscuranceDirections = 2;
-    m_obscuranceMaximumDistance = 64.0;
-    m_obscuranceFunction = Constant0;
-
-    m_renderWithObscurances = false;
-
-
-
-
-
-//     reduceToHalf();
-
-
-    m_saliency = 0;
-
-    DEBUG_LOG( "end constructor" );
-}
-
-OptimalViewpointVolume::~OptimalViewpointVolume()
-{
-    m_image->Delete();
-    m_labeledImage->Delete();
-
-    delete m_ambientVoxelShader;
-    delete m_directIlluminationVoxelShader;
-    delete m_contourVoxelShader;
-    delete m_obscuranceVoxelShader;
-    delete m_colorBleedingVoxelShader;
-    delete m_saliencyVoxelShader;
-
-    m_mainVolumeRayCastFunction->Delete();
-    m_volumeRayCastFunctionObscurances->Delete();
-    m_volumeRayCastFunctionFx->Delete();
-    m_volumeRayCastFunctionFx2->Delete();
-    m_volumeRayCastFunctionViewpointSaliency->Delete();
-
-    m_mapper->Delete();
-
-    m_property->Delete();
-
-    m_volume->Delete();
-
-
-    if ( m_clusterImage ) m_clusterImage->Delete();
-
-    delete [] m_obscurance;
-    delete [] m_colorBleeding;
-    delete [] m_saliency;
 }
 
 

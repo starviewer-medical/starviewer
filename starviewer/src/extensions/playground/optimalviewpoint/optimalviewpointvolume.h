@@ -12,10 +12,9 @@
 
 #include <QObject>
 
-#include <QVector>
-#include <QList>
 #include <QHash>
 #include <QMutex>
+#include <QVector>
 
 #include "transferfunction.h"
 
@@ -24,9 +23,9 @@ class vtkImageData;
 class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
+class vtkVolumeRayCastCompositeFunctionFx;
 class vtkVolumeRayCastCompositeFunctionObscurances;
 class vtkVolumeRayCastCompositeFunctionViewpointSaliency;
-class vtkVolumeRayCastCompositeFunctionFx;
 class vtkVolumeRayCastMapper;
 class vtkRenderer;
 
@@ -34,14 +33,13 @@ class vtkRenderer;
 namespace udg {
 
 
-class Vector3;
-class VoxelShader;
 class AmbientVoxelShader;
-class DirectIlluminationVoxelShader;
+class ColorBleedingVoxelShader;
 class ContourVoxelShader;
+class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
 class SaliencyVoxelShader;
-class ColorBleedingVoxelShader;
+class Vector3;
 class vtkVolumeRayCastCompositeFxFunction;
 
 
@@ -202,6 +200,8 @@ signals:
 
 private:
 
+    /// Crea els models de vòxels de treball.
+    void createImages( vtkImageData *image );
     /// Crea els voxel shaders.
     void createVoxelShaders();
     /// Crea les volume ray cast functions.
@@ -234,6 +234,8 @@ private:
     vtkImageData *m_image;
     /// Model de vòxels etiquetat.
     vtkImageData *m_labeledImage;
+    /// Model de vòxels retallat.
+    vtkImageData * m_clusterImage;
 
     /// Valors de propietat mínim i màxim del volum.
     unsigned char m_rangeMin, m_rangeMax;
@@ -292,18 +294,9 @@ private:
     double m_obscurancesFilterLow, m_obscurancesFilterHigh;
     vtkRenderer * m_mainRenderer;
 
-    /// Vector de funcions de transferència d'opacitat.
-//     vtkPiecewiseFunction * m_opacityTransferFunction;
-
-    /// Vector de funcions de transferència de color.
-//     vtkColorTransferFunction * m_colorTransferFunction;
 
 
-
-
-    vtkImageData * m_clusterImage;
-    vtkVolume * m_clusterVolume;
-    vtkVolumeRayCastMapper * m_clusterMapper;
+    
 
 
 
