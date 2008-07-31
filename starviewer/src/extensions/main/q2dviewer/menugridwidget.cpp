@@ -9,12 +9,12 @@
 #include "gridicon.h"
 #include "itemmenu.h"
 #include "logging.h"
-#include "QFrame"
-#include "QPalette"
-#include "QMouseEvent"
-#include "QGridLayout"
-#include "QLabel"
 #include "math.h"
+#include <QFrame>
+#include <QPalette>
+#include <QMouseEvent>
+#include <QGridLayout>
+#include <QLabel>
 
 namespace udg {
 
