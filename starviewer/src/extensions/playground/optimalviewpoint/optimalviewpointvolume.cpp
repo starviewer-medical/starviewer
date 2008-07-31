@@ -388,12 +388,12 @@ double randomGenerator( long & seed )
 
 signed char OptimalViewpointVolume::loadSegmentationFromFile( const QString & segmentationFileName )
 {
-    std::cout << "OVV::ldSegFromFile(): " << qPrintable( m_segmentationFileName ) << std::endl;
+    std::cout << "OVV::ldSegFromFile(): " << qPrintable( segmentationFileName ) << std::endl;
     QFile segFile( segmentationFileName );
 
     if ( !segFile.open( QFile::ReadOnly | QFile::Text ) )
     {
-        std::cerr << "OVV::ldSegFromFile(): cannot open file " << qPrintable( m_segmentationFileName ) << std::endl;
+        std::cerr << "OVV::ldSegFromFile(): cannot open file " << qPrintable( segmentationFileName ) << std::endl;
         return -1;
     }
 
@@ -802,7 +802,7 @@ void OptimalViewpointVolume::setComputing( bool on )
 
 void OptimalViewpointVolume::setSegmentationFileName( QString name )
 {
-    m_segmentationFileName = name;
+    //m_segmentationFileName = name;
 }
 
 
