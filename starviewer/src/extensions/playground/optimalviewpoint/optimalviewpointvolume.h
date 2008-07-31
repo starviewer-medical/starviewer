@@ -162,8 +162,7 @@ public:
 
     void setRenderWithObscurances( bool renderWithObscurances );
     void setObscurancesFactor( double obscurancesFactor );
-    void setObscurancesFilterLow( double obscurancesFilterLow );
-    void setObscurancesFilterHigh( double obscurancesFilterHigh );
+    void setObscurancesFilters( double obscurancesFilterLow, double obscurancesFilterHigh );
 
     void computeSaliency();
 
@@ -286,12 +285,6 @@ private:
 
 
 
-
-
-
-
-
-    double m_obscurancesFilterLow, m_obscurancesFilterHigh;
     vtkRenderer * m_mainRenderer;
 
 
