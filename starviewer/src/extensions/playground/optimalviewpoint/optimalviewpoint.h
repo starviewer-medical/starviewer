@@ -213,6 +213,7 @@ private:
 
 
     OptimalViewpointParameters * m_parameters;
+    double m_obscurancesFilterLow, m_obscurancesFilterHigh;
 
 
 }; // end class OptimalViewpoint

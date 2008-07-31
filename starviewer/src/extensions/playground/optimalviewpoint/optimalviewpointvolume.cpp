@@ -244,7 +244,7 @@ void OptimalViewpointVolume::createVolume()
     m_volume->SetMapper( m_mapper );
     m_volume->SetProperty( m_property );
 
-    // centrem el volum a (0,0,0)
+    // Centrem el volum a (0,0,0)
     double *center = m_volume->GetCenter();
     m_volume->AddPosition( -center[0], -center[1], -center[2] );
 }
@@ -1276,21 +1276,13 @@ void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
 }
 
 
-void OptimalViewpointVolume::setObscurancesFilterLow( double obscurancesFilterLow )
+void OptimalViewpointVolume::setObscurancesFilters( double obscurancesFilterLow, double obscurancesFilterHigh )
 {
     m_volumeRayCastFunctionObscurances->SetObscuranceFilterLow( obscurancesFilterLow );
-    m_volumeRayCastFunctionFx->SetObscuranceFilterLow( obscurancesFilterLow );
-    m_obscurancesFilterLow = obscurancesFilterLow;
-    m_obscuranceVoxelShader->setFilters( m_obscurancesFilterLow, m_obscurancesFilterHigh );
-}
-
-
-void OptimalViewpointVolume::setObscurancesFilterHigh( double obscurancesFilterHigh )
-{
     m_volumeRayCastFunctionObscurances->SetObscuranceFilterHigh( obscurancesFilterHigh );
+    m_volumeRayCastFunctionFx->SetObscuranceFilterLow( obscurancesFilterLow );
     m_volumeRayCastFunctionFx->SetObscuranceFilterHigh( obscurancesFilterHigh );
-    m_obscurancesFilterHigh = obscurancesFilterHigh;
-    m_obscuranceVoxelShader->setFilters( m_obscurancesFilterLow, m_obscurancesFilterHigh );
+    m_obscuranceVoxelShader->setFilters( obscurancesFilterLow, obscurancesFilterHigh );
 }
 
 

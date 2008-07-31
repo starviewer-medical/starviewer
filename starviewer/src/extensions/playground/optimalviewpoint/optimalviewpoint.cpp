@@ -938,13 +938,15 @@ void OptimalViewpoint::setObscurancesFactor( double obscurancesFactor )
 
 void OptimalViewpoint::setObscurancesFilterLow( double obscurancesFilterLow )
 {
-    m_volume->setObscurancesFilterLow( obscurancesFilterLow );
+    m_obscurancesFilterLow = obscurancesFilterLow;
+    m_volume->setObscurancesFilters( m_obscurancesFilterLow, m_obscurancesFilterHigh );
 }
 
 
 void OptimalViewpoint::setObscurancesFilterHigh( double obscurancesFilterHigh )
 {
-    m_volume->setObscurancesFilterHigh( obscurancesFilterHigh );
+    m_obscurancesFilterHigh = obscurancesFilterHigh;
+    m_volume->setObscurancesFilters( m_obscurancesFilterLow, m_obscurancesFilterHigh );
 }
 
 
