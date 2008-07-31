@@ -202,6 +202,14 @@ signals:
 
 private:
 
+    /// Crea els voxel shaders.
+    void createVoxelShaders();
+    /// Crea les volume ray cast functions.
+    void createVolumeRayCastFunctions();
+    /// Crea el mapper.
+    void createMapper();
+
+
     // definició d'un vòxel
 //     struct Voxel { int x, y, z; };
 
@@ -233,17 +241,35 @@ private:
     /// Mida dels arrays de valors.
     int m_dataSize;
 
+    /// Ambient voxel shader.
+    AmbientVoxelShader *m_ambientVoxelShader;
+    /// Direct illumination voxel shader.
+    DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
+    /// Contour voxel shader.
+    ContourVoxelShader *m_contourVoxelShader;
+    /// Obscurance voxel shader.
+    ObscuranceVoxelShader *m_obscuranceVoxelShader;
+    /// Color bleeding voxel shader.
+    ColorBleedingVoxelShader *m_colorBleedingVoxelShader;
+    /// Saliency voxel shader.
+    SaliencyVoxelShader *m_saliencyVoxelShader;
+
     /// Volume ray cast function principal.
     vtkVolumeRayCastCompositeFunction * m_mainVolumeRayCastFunction;
+    /// Volume ray cast function per visualitzar amb obscurances.
     vtkVolumeRayCastCompositeFunctionObscurances *m_volumeRayCastFunctionObscurances;
-    vtkVolumeRayCastCompositeFunctionViewpointSaliency *m_volumeRayCastFunctionViewpointSaliency;
+    /// Volume ray cast function per visualitzar amb efectes.
     vtkVolumeRayCastCompositeFunctionFx *m_volumeRayCastFunctionFx;
+    /// Volume ray cast function per visualitzar amb efectes.
     vtkVolumeRayCastCompositeFxFunction *m_volumeRayCastFunctionFx2;
+    /// Volume ray cast function per calcular la viewpoint saliency.
+    vtkVolumeRayCastCompositeFunctionViewpointSaliency *m_volumeRayCastFunctionViewpointSaliency;
 
-    /// Mapper principal.
-    vtkVolumeRayCastMapper *m_mainMapper;
-    /// Mapper pels plans.
-    vtkVolumeRayCastMapper *m_planeMapper;
+    /// Mapper.
+    vtkVolumeRayCastMapper *m_mapper;
+
+
+
 
 
 
@@ -254,12 +280,7 @@ private:
 
 
 
-    AmbientVoxelShader * m_ambientVoxelShader;
-    DirectIlluminationVoxelShader * m_directIlluminationVoxelShader;
-    ContourVoxelShader * m_contourVoxelShader;
-    ObscuranceVoxelShader * m_obscuranceVoxelShader;
-    SaliencyVoxelShader * m_saliencyVoxelShader;
-    ColorBleedingVoxelShader * m_colorBleedingVoxelShader;
+
     double m_obscurancesFilterLow, m_obscurancesFilterHigh;
     vtkRenderer * m_mainRenderer;
 
