@@ -295,8 +295,6 @@ private:
 
 
 
-
-    bool m_renderCluster;
     bool m_clusterFirst, m_clusterLast;
 
 
