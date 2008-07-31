@@ -116,7 +116,7 @@ void ReferenceLinesFillerStep::processImage( Image *image )
                 QStringList valueList = value.split( "\\" );
                 if( valueList.at(2) == "LOCALIZER" )
                 {
-                    image->setCTLocalizer( true );
+//                     image->setCTLocalizer( true );
                     DEBUG_LOG( " La imatge " + image->getSOPInstanceUID() + " de la serie " + image->getParentSeries()->getInstanceUID() + " és un localitzador " );
                 }
             }

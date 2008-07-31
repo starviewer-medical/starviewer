@@ -136,7 +136,6 @@ HEADERS += extensionfactory.h \
            qdicomdump.h \
            qdicomdumpmrwidget.h \
            qdicomdumpctwidget.h \
-#           philipstagsfillerstep.h \
            qcinecontroller.h \
            hoverpoints.h \
            qcolorspinbox.h \
@@ -161,9 +160,9 @@ HEADERS += extensionfactory.h \
            cursor3dtooldata.h \
            angletool.h \
            drawercrosshair.h \
- starviewerapplication.h \
- widgetlayoutviewer.h \
- q2dviewerwidget.h
+           starviewerapplication.h \
+           widgetlayoutviewer.h \
+           q2dviewerwidget.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -270,7 +269,6 @@ SOURCES += extensionmediator.cpp \
            qdicomdumpctlocalizerwidget.cpp \
            qdicomdumpmrwidget.cpp \
            qdicomdumpctwidget.cpp \
-#           philipstagsfillerstep.cpp \
            qcinecontroller.cpp \
            hoverpoints.cpp \
            qcolorspinbox.cpp \
@@ -291,9 +289,9 @@ SOURCES += extensionmediator.cpp \
            cursor3dtool.cpp \
            cursor3dtooldata.cpp \
            angletool.cpp \
- drawercrosshair.cpp \
- widgetlayoutviewer.cpp \
- q2dviewerwidget.cpp
+           drawercrosshair.cpp \
+           widgetlayoutviewer.cpp \
+           q2dviewerwidget.cpp
 TEMPLATE = lib
 
 DESTDIR = ./

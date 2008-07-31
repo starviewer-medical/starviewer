@@ -22,7 +22,7 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_KiloVoltagePeak(0), m_microAmpersSecond(0), m_milliAmpersSecond(0), m_parentSeries(NULL), m_CTLocalizer(false)
+ : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_parentSeries(NULL)
 {
     m_pixelSpacing[0] = 0.;
     m_pixelSpacing[1] = 0.;
@@ -121,97 +121,6 @@ QString Image::getOrientationLabel()
     }
 
     return label;
-}
-
-bool Image::setContentDateTime(int day, int month, int year, int hour, int minute, int second)
-{
-    return this->setContentDate( day, month, year ) && this->setContentTime( hour, minute, second );
-}
-
-bool Image::setContentDateTime(QString date, QString time)
-{
-    return this->setContentDate( date ) && this->setContentTime( time );
-}
-
-bool Image::setContentDate(int day, int month, int year)
-{
-    return setContentDate( QDate(year, month, day) );
-}
-
-bool Image::setContentDate(QString date)
-{
-    // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd
-    return setContentDate( QDate::fromString(date.remove("."), "yyyyMMdd") );
-}
-
-bool Image::setContentDate(QDate date)
-{
-    if (date.isValid())
-    {
-        m_contentDate = date;
-        return true;
-    }
-    else
-    {
-        DEBUG_LOG("La data està en un mal format" );
-        return false;
-    }
-}
-
-bool Image::setContentTime(int hour, int minutes, int second)
-{
-    return setContentTime( QTime(hour, minutes, second) );
-}
-
-bool Image::setContentTime( QString time )
-{
-    // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
-    time = time.remove(":");
-
-    QStringList split = time.split(".");
-    QTime convertedTime = QTime::fromString(split[0], "hhmmss");
-
-    if (split.size() == 2) //té fracció al final
-    {
-        // Trunquem a milisegons i no a milionèssimes de segons
-        convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
-    }
-
-    return setContentTime( convertedTime );
-}
-
-bool Image::setContentTime(QTime time)
-{
-    if (time.isValid())
-    {
-        m_contentTime = time;
-        return true;
-    }
-    else
-    {
-        DEBUG_LOG("El time està en un mal format" );
-        return false;
-    }
-}
-
-QDate Image::getContentDate() const
-{
-    return m_contentDate;
-}
-
-QString Image::getContentDateAsString()
-{
-    return m_contentDate.toString(Qt::LocaleDate);
-}
-
-QTime Image::getContentTime() const
-{
-    return m_contentTime;
-}
-
-QString Image::getContentTimeAsString()
-{
-    return m_contentTime.toString("HH:mm:ss");
 }
 
 void Image::setPixelSpacing( double x, double y )
@@ -335,16 +244,6 @@ double Image::getRescaleIntercept() const
     return m_rescaleIntercept;
 }
 
-void Image::setMilliAmpersSecond( double mas )
-{
-    m_milliAmpersSecond = mas;
-}
-
-double Image::getMilliAmpersSecond() const
-{
-    return m_milliAmpersSecond;
-}
-
 void Image::setSliceLocation( QString sliceLocation )
 {
     m_sliceLocation = sliceLocation;
@@ -353,17 +252,6 @@ void Image::setSliceLocation( QString sliceLocation )
 QString Image::getSliceLocation() const
 {
     return m_sliceLocation;
-}
-
-
-void Image::setImageType( QString imageType )
-{
-    m_imageType = imageType;
-}
-
-QString Image::getImageType() const
-{
-    return m_imageType;
 }
 
 void Image::addWindowLevel( double window, double level )
@@ -478,16 +366,6 @@ QList<Image *> Image::getReferencedImages() const
 bool Image::hasReferencedImages() const
 {
     return ! m_referencedImageSequence.isEmpty();
-}
-
-void Image::setCTLocalizer( bool localizer )
-{
-    m_CTLocalizer = localizer;
-}
-
-bool Image::isCTLocalizer() const
-{
-    return m_CTLocalizer;
 }
 
 QPixmap Image::getThumbnail(int resolution)

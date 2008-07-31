@@ -112,13 +112,7 @@ bool ImageFillerStep::processImage( Image *image )
         image->setSOPInstanceUID( dicomReader.getAttributeByName( DCM_SOPInstanceUID ) );
         image->setInstanceNumber( dicomReader.getAttributeByName( DCM_InstanceNumber ) );
 
-        QString value = dicomReader.getAttributeByName( DCM_ContentDate );
-        if( !value.isEmpty() )
-            image->setContentDate(value);
-
-        value = dicomReader.getAttributeByName( DCM_ContentTime );
-        if( !value.isEmpty() )
-            image->setContentTime(value);
+        QString value;
 
         // \TODO Txapussa per sortir del pas. Serveix per calcular correctament el PixelSpacing
         QString modality = dicomReader.getAttributeByName( DCM_Modality );
@@ -236,7 +230,7 @@ bool ImageFillerStep::processImage( Image *image )
         int frames = dicomReader.getAttributeByName( DCM_NumberOfFrames ).toInt();
         image->setNumberOfFrames( frames ? frames : 1 );
 
-
+/*      // S'ha comentat perquè actualment no es fa servir.
         if (dicomReader.getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs ).count() > 0)
         {//Comprovem si tenim la informació dins la seqüència d'exposició, ja el DCM_ExposureInmAs és de tipus 1 si existeix la seqüència Exposure, que conté informació sobre l'exposició del pacient
             image->setMilliAmpersSecond( dicomReader.getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs )[0].toDouble() );//Accedim a la posició 0 per llegir el valor de MiliAmpers
@@ -245,36 +239,10 @@ bool ImageFillerStep::processImage( Image *image )
         {//si no existeix al seqüència provem amb el camp DCM_Exposure que conté l'exposició en mAs
             image->setMilliAmpersSecond( dicomReader.getAttributeByName( DCM_Exposure ).toDouble() );
         }
-
+*/
         if (dicomReader.tagExists( DCM_SliceLocation ))
         {
             image->setSliceLocation( dicomReader.getAttributeByName( DCM_SliceLocation ) );
-        }
-
-        if (dicomReader.tagExists( DCM_ImageType ))
-        {
-            // aquest valor és de tipus 3 al mòdul General Image, però consta com a tipus 1 a
-            // gairebé totes les modalitats. Només consta com a tipus 2 per la modalitat US
-            value = dicomReader.getAttributeByName( DCM_ImageType );
-            image->setImageType( value );
-            if( modality == "CT" ) // en el cas del CT ens interessa saber si és localizer
-            {
-                QStringList valueList = value.split( "\\" );
-                if( valueList.count() >= 3 )
-                {
-                    if( valueList.at(2) == "LOCALIZER" )
-                    {
-                        image->setCTLocalizer( true );
-                        DEBUG_LOG( " La imatge amb UID " + image->getSOPInstanceUID() + " és un localitzador " );
-                    }
-                }
-                else
-                {
-                    // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
-                    // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
-                    DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + image->getSOPInstanceUID() + " de la serie " + image->getParentSeries()->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
-                }
-            }
         }
 
     }

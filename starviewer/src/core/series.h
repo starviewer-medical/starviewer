@@ -300,11 +300,6 @@ private:
     ///Obté el fabricant de l'aparell amb que s'ha obtingut la sèrie (0008,0070) Tipus 2.
     QString m_manufacturer;
 
-    /// Indica la tècnica d'escaneig utilitza per MR. Tag de Philips (2001,1020)
-    QString m_philipsScanningTechnique;
-
-    ///Ens indica el numero d'stacks d'una sèrie. Tag de philips (2001,1060)
-    QString m_philipsNumberOfStacks;
 };
 
 }

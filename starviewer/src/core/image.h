@@ -61,22 +61,6 @@ public:
      */
     QString getOrientationLabel();
 
-    /// Assignar/Obtenir la data i hora d'adquisició de la imatge. El format de la data serà YYYYMMDD i el del
-    /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
-    ///  Retorna fals si hi ha algun error en el format
-    bool setContentDateTime(int day, int month, int year, int hour, int minute, int second = 0 );
-    bool setContentDateTime(QString date, QString time);
-    bool setContentDate(int day, int month, int year);
-    bool setContentDate(QString date);
-    bool setContentDate(QDate date);
-    bool setContentTime(int hour, int minute, int second = 0);
-    bool setContentTime(QString time);
-    bool setContentTime(QTime time);
-    QDate getContentDate() const;
-    QString getContentDateAsString();
-    QTime getContentTime() const;
-    QString getContentTimeAsString();
-
     /// Assignar/Obtenir l'espaiat dels pixels
     void setPixelSpacing( double x, double y );
     const double *getPixelSpacing() const;
@@ -148,17 +132,9 @@ public:
     void setPath( QString path );
     QString getPath() const;
 
-    ///assigna / retorna el miliAperatge de la imatge
-    void setMilliAmpersSecond( double mas );
-    double getMilliAmpersSecond() const;
-
     ///assigna / retorna el slice location de la imatge
     void setSliceLocation( QString sliceLocation );
     QString getSliceLocation() const;
-
-    ///assigna / retorna el image type de la imatge
-    void setImageType( QString ImageType );
-    QString getImageType() const;
 
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );
@@ -171,10 +147,6 @@ public:
 
     /// Indica si una imatge té imatges relacionades
     bool hasReferencedImages() const;
-
-    /// Ens indica si aquesta imatge és un localitzador sempre que la modalitat sigui CT
-    void setCTLocalizer( bool localizer );
-    bool isCTLocalizer() const;
 
     /**
      * El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
@@ -204,10 +176,6 @@ private:
 
     /// Direcció de les files i columnes de la imatge ( LR/AP/SI ). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
     QString m_patientOrientation;
-
-    /// La data i hora en que la imatge es va començar a generar. Requerit si la imatge és part d'una sèrie en que les imatges estan temporalment relacionades. (0008,0023)(0008,0033) Tipus 2C
-    QDate m_contentDate;
-    QTime m_contentTime;
 
     //\TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes, com un post-localizer per CT.
 
@@ -262,96 +230,6 @@ private:
     /// Nombre de frames de la imatge. (0028,0008) Tipus 1
     int m_numberOfFrames;
 
-    /** Kilo voltatge de sortida del generador de raigs-X. (0018,0060)
-        El tipus depèn de la modalitat:
-
-        CR IMAGE->tipus 3
-        CT IMAGE->tipus 2
-        X-RAY->   tipus 2
-        X-RAY SEQUENCE->tipus 1C: condició: requerit si el tipus de frame té valor 1.
-        X-RAY FRAME-> tipus 1.
-        XA/XRF->tipus 1.
-    */
-    double m_KiloVoltagePeak;
-
-    /** Exposició als raigs-X expressada en micro ampers per segon. (0018,1153)
-        El tipus depèn de la modalitat:
-
-        CR IMAGE->tipus 3
-        CT IMAGE->tipus 2
-        X-RAY->   tipus 3
-        X-RAY SEQUENCE->no en té.
-        X-RAY FRAME->no en té.
-    */
-    double m_microAmpersSecond;
-
-     /** Exposició als raigs-X expressada en mi·liampers per segon. (0018,1153)
-        El tipus depèn de la modalitat:
-
-        XA/XRF->tipus 1C: condició: requerit si el temps d'exposició en ms (0018,9328) o el corrent del tub de raigs-X en mA no estan presents.
-                                    Altrament també pot ser-hi.
-    */
-    double m_milliAmpersSecond;
-
-    /** Temps en ms entre cada puls en MR (0018,0080) Tipus 2
-     */
-    QString m_repetitionTime;
-
-    /** Temps d'echo en ms en MR (0018,0081) Tipus 2.
-     */
-    QString m_echoTime;
-
-    /** Temps en ms entre la meitat del puls RF invers i la la meita del puls d'exitació (0018,0082)
-        Tipus 2C , només apareix quan ImageSequence (0018,0020) = IR (Inversion Recovery)
-     */
-    QString m_inversionTime;
-
-    /** Espai en mm entre les llesques (0018,0088)
-        MR IMAGE-> tipus 3
-        NM IMAGE-> tipus 2
-    */
-    QString m_spacingBetweenSlices;
-
-    /** diferencia de graus entre el vector magnètic i el vector magnètic del camp primari per MR (0018,1314). Tipus 3
-     */
-    QString m_flipAngle;
-
-    //TODO Esbrinar significat camp
-    /** Per MR  (0018,0083)
-     */
-    QString m_numberOfAverages;
-
-    /** Ratio del field of view expressat en percentatge per MR (0018,0094). Tipus 3
-      */
-    QString m_percentPhaseFieldOfView;
-
-    /** Nom de bobina utilitzada en MR (0018,1250). Tipus 3
-      */
-    QString m_receiveCoilName;
-
-    /** Diametre en mm de la regió de la qual s'han utilitzat dades per crear la reconstrucció del a imatge (0018,1100)
-        CT Image->tipus 3
-        MR Image->tipus 3
-        PET Imate->tipus 3
-     */
-    QString m_reconstructionDiameter;
-
-    /** Temps d'exposició als raigs X en ms. (0018,1150)
-        CT-> tipus 3
-        NM-> tipus 3
-        CR-> tipus 3
-        X-ray -> tipus 2C
-        DX-> tipus 3
-     */
-    QString m_exposureTime;
-
-    /** Distància en mm del capdamunt de la taula de pacient fins al centre de rotació. (0018,1130)
-        CT->tipus 3
-        NM->tipus 3
-        X-ray->tipus 3
-     */
-    QString m_tableHeight;
-
     //TODO millorar definició
     /** Situació especial de la llesca en mm. (0020,1041)
         SC->tipus 3
@@ -359,90 +237,6 @@ private:
         CT-> A la documentació dicom aquest camp no hi figura però philips l'utiliza com a Table Position
       */
     QString m_sliceLocation;
-
-    /** Nom del filtre utilitzat en el raig X. (0018,1160)
-       CT->tipus 3
-       CR->tipus 3
-       X-Ray->tipus 3
-      */
-    QString m_filterType;
-
-    /** Indentificador de les característiques de la imatge. (0008,0008)
-     * Obligatoria per la majoria de modalitats en tipus 1 (CT,MR,DX,VL,US,...)
-     */
-    QString m_imageType;
-
-    /** Angle d'escaneig de les dades. (0018,1143)
-     */
-    QString m_scanArc;
-
-    /** Angle d'inclinació del detector (0018,1120)
-        CT->Tipus 3
-        NM->Tipus 3
-     */
-    QString m_tilt;
-
-    /** Factor turbo per MR. Tag de philips (2001,1082)
-     */
-    QString m_philipsTurboFactor;
-
-    /** Factor EPI per MR. Tag de philips (2001,1013)
-     */
-    QString m_philipsEPIFactor;
-
-    //TODO Esbrinar si el nom del camp correcte
-    /** Posició de espaial del pla de la imatge per MR. Tag de philips (2001,100b)
-     */
-    QString m_philipsSpacialPlane;
-
-    /** Factor b corresponent a una imatge per MR. Tag de Philips (2001,1003)
-     */
-    QString m_philipsBFactor;
-
-    //TODO preguntar significat signifcat camp
-    /** Tag de Philips per CT. (01f1,1008)
-     */
-    QString m_philipsScanLength;
-
-    //TODO demanar definició
-    /** Tag CT Philips S'utilitza per Surveys, Helicoïdals i no Helicoïdals (01f1,1032)
-      */
-    QString m_philipsViewConvention;
-
-    //TODO buscar significat tag
-    /** Tag de Philips per CT helicoïdal. (01f1,1026)
-     */
-    QString m_philipsPitch;
-
-    //TODO buscar significat tag
-    /** Tag de Philips per CT helicoïdal i no helicoïdal. (01f1,1027)
-     */
-    QString m_philipsRotationTime;
-
-    //TODO buscar significat tag
-    /** Tag de Philips per CT helicoïdal. (01f1,1007)
-     */
-    QString m_philipsTableSpeed;
-
-    //TODO buscar significat tag
-    /** Tag de philips per CT helicoïdal i no helicoïdal. (01f1,104b)
-     */
-    QString m_philipsCollimation;
-
-    //TODO buscar significat tag
-    /** Tag de philips per CT no helicoïdal. (01f1,1033)
-     */
-    QString m_philipsCycleTime;
-
-    //TODO buscar significat tag
-    /** Tag de philips per CT no helicoïdal. (01f1,1028)
-     */
-    QString m_philipsTableIncrement;
-
-    //TODO buscar significat tag
-    /** Tag de philips per CT no helicoïdal. (00e1,1050)
-     */
-    QString m_philipsScanTime;
 
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
@@ -455,9 +249,6 @@ private:
 
     /// Llista de les imatges relacionades amb l'actual. Estan ordenades amb el mateix ordre que estan al DICOM
     QList<Image *> m_referencedImageSequence;
-
-    /// Ens indica si aquesta imatge és un localitzador sempre que la modalitat sigui CT
-    bool m_CTLocalizer;
 
     /// Cache de la imatge de previsualització
     QImage m_thumbnail;
