@@ -6,8 +6,8 @@
  ***************************************************************************/
 
 
-#ifndef UDGOBSCURANCETHREAD2_H
-#define UDGOBSCURANCETHREAD2_H
+#ifndef UDGOBSCURANCETHREAD_H
+#define UDGOBSCURANCETHREAD_H
 
 
 #include <QThread>
@@ -30,14 +30,14 @@ namespace udg {
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
 */
-class ObscuranceThread2 : public QThread {
+class ObscuranceThread : public QThread {
 
     Q_OBJECT
 
 public:
 
-    ObscuranceThread2( int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent = 0 );
-    virtual ~ObscuranceThread2();
+    ObscuranceThread( int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent = 0 );
+    virtual ~ObscuranceThread();
 
     void setNormals( vtkDirectionEncoder * directionEncoder, const ushort * encodedNormals );
     void setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] );

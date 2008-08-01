@@ -6,7 +6,7 @@
  ***************************************************************************/
 
 
-#include "obscurancethread2.h"
+#include "obscurancethread.h"
 
 #include <QLinkedList>
 #include <QPair>
@@ -21,7 +21,7 @@
 namespace udg {
 
 
-ObscuranceThread2::ObscuranceThread2( int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent )
+ObscuranceThread::ObscuranceThread( int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent )
     : QThread(parent),
       m_id( id ), m_numberOfThreads( numberOfThreads ),
       m_transferFunction( transferFunction ),
@@ -30,19 +30,19 @@ ObscuranceThread2::ObscuranceThread2( int id, int numberOfThreads, const Transfe
 }
 
 
-ObscuranceThread2::~ObscuranceThread2()
+ObscuranceThread::~ObscuranceThread()
 {
 }
 
 
-void ObscuranceThread2::setNormals( vtkDirectionEncoder * directionEncoder, const ushort * encodedNormals )
+void ObscuranceThread::setNormals( vtkDirectionEncoder * directionEncoder, const ushort * encodedNormals )
 {
     m_directionEncoder = directionEncoder;
     m_encodedNormals = encodedNormals;
 }
 
 
-void ObscuranceThread2::setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] )
+void ObscuranceThread::setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] )
 {
     m_data = data;
     m_dataSize = dataSize;
@@ -51,7 +51,7 @@ void ObscuranceThread2::setData( const uchar * data, int dataSize, const int dim
 }
 
 
-void ObscuranceThread2::setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant, double * obscurance, Vector3 * colorBleeding )
+void ObscuranceThread::setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant, double * obscurance, Vector3 * colorBleeding )
 {
     m_obscuranceMaximumDistance = obscuranceMaximumDistance;
     m_obscuranceFunction = obscuranceFunction;
@@ -61,7 +61,7 @@ void ObscuranceThread2::setObscuranceParameters( double obscuranceMaximumDistanc
 }
 
 
-void ObscuranceThread2::setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh )
+void ObscuranceThread::setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh )
 {
     m_saliency = saliency;
     m_fxSaliencyA = fxSaliencyA;
@@ -71,7 +71,7 @@ void ObscuranceThread2::setSaliency( const double * saliency, double fxSaliencyA
 }
 
 
-void ObscuranceThread2::setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta )
+void ObscuranceThread::setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta )
 {
     m_direction = direction;
     m_forward = forward;
@@ -82,7 +82,7 @@ void ObscuranceThread2::setPerDirectionParameters( const Vector3 & direction, co
 }
 
 
-void ObscuranceThread2::run()
+void ObscuranceThread::run()
 {
     DEBUG_LOG( QString( "%1: run()" ).arg( m_id ) );
 
@@ -100,7 +100,7 @@ void ObscuranceThread2::run()
 }
 
 
-void ObscuranceThread2::runDensity() // optimitzat
+void ObscuranceThread::runDensity() // optimitzat
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -167,7 +167,7 @@ void ObscuranceThread2::runDensity() // optimitzat
 }
 
 
-void ObscuranceThread2::runDensitySmooth()
+void ObscuranceThread::runDensitySmooth()
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -313,7 +313,7 @@ void ObscuranceThread2::runDensitySmooth()
 }
 
 
-void ObscuranceThread2::runOpacity()
+void ObscuranceThread::runOpacity()
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -382,7 +382,7 @@ void ObscuranceThread2::runOpacity()
 }
 
 
-void ObscuranceThread2::runOpacitySmooth()
+void ObscuranceThread::runOpacitySmooth()
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -529,7 +529,7 @@ void ObscuranceThread2::runOpacitySmooth()
 }
 
 
-void ObscuranceThread2::runOpacitySaliency()    // = runOpacity() (de moment)
+void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -598,7 +598,7 @@ void ObscuranceThread2::runOpacitySaliency()    // = runOpacity() (de moment)
 }
 
 
-void ObscuranceThread2::runOpacitySmoothSaliency()
+void ObscuranceThread::runOpacitySmoothSaliency()
 {
     int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
     int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
@@ -751,7 +751,7 @@ void ObscuranceThread2::runOpacitySmoothSaliency()
 }
 
 
-void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
+void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
 {
     const Vector3 AMBIENT_COLOR( 1.0, 1.0, 1.0 );
 
@@ -902,7 +902,7 @@ void ObscuranceThread2::runOpacityColorBleeding()    /// \todo encara és smooth
 }
 
 
-void ObscuranceThread2::runOpacitySmoothColorBleeding()
+void ObscuranceThread::runOpacitySmoothColorBleeding()
 {
     const Vector3 AMBIENT_COLOR( 1.0, 1.0, 1.0 );
 
@@ -1053,7 +1053,7 @@ void ObscuranceThread2::runOpacitySmoothColorBleeding()
 }
 
 
-inline double ObscuranceThread2::obscurance( double distance ) const
+inline double ObscuranceThread::obscurance( double distance ) const
 {
     const double EXP_NORM = 1.0 - exp( -1.0 );
 

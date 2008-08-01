@@ -39,7 +39,7 @@
 #include <QStack>
 #include <QPair>
 #include <QThread>
-#include "obscurancethread2.h"
+#include "obscurancethread.h"
 #include <vtkMultiThreader.h>
 
 #include "vtkVolumeRayCastCompositeFunctionObscurances.h"
@@ -1303,11 +1303,11 @@ void OptimalViewpointVolume::computeObscurances2()
 
     // Creem els threads
     int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
-    QVector<ObscuranceThread2 *> threads(numberOfThreads);
+    QVector<ObscuranceThread *> threads(numberOfThreads);
 
     for ( int i = 0; i < numberOfThreads; i++ )
     {
-        ObscuranceThread2 * thread = new ObscuranceThread2( i, numberOfThreads, m_transferFunction, this );
+        ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, m_transferFunction, this );
         thread->setNormals( directionEncoder, encodedNormals );
         thread->setData( m_data, m_dataSize, dimensions, increments );
         thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant, m_obscurance, m_colorBleeding );
@@ -1390,7 +1390,7 @@ void OptimalViewpointVolume::computeObscurances2()
         // iniciem els threads
         for ( int j = 0; j < numberOfThreads; j++ )
         {
-            ObscuranceThread2 * thread = threads[j];
+            ObscuranceThread * thread = threads[j];
             thread->setPerDirectionParameters( direction, forward, xyz, sXYZ, lineStarts, startDelta );
             thread->start();
         }

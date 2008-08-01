@@ -26,7 +26,6 @@ HEADERS += doublehistogram.h \
            slicer.h \
            qshowhidewidget.h \
            vtkVolumeRayCastCompositeFunctionObscurances.h \
-           obscurancethread2.h \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
            vtkVolumeRayCastCompositeFxFunction.h \
@@ -38,7 +37,8 @@ HEADERS += doublehistogram.h \
            saliencyvoxelshader.h \
            hdrcolor.h \
            trilinearinterpolator.h \
-           colorbleedingvoxelshader.h 
+           colorbleedingvoxelshader.h \
+           obscurancethread.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
@@ -59,7 +59,6 @@ SOURCES += doublehistogram.cpp \
            slicer.cpp \
            qshowhidewidget.cpp \
            vtkVolumeRayCastCompositeFunctionObscurances.cxx \
-           obscurancethread2.cpp \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.cxx \
            vtkVolumeRayCastCompositeFunctionFx.cxx \
            vtkVolumeRayCastCompositeFxFunction.cxx \
@@ -70,6 +69,7 @@ SOURCES += doublehistogram.cpp \
            obscurancevoxelshader.cpp \
            saliencyvoxelshader.cpp \
            trilinearinterpolator.cpp \
-           colorbleedingvoxelshader.cpp 
+           colorbleedingvoxelshader.cpp \
+           obscurancethread.cpp 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)
