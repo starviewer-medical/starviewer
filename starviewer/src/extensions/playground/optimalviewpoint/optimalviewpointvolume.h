@@ -233,8 +233,11 @@ private:
     vtkImageData *m_image;
     /// Model de vòxels etiquetat.
     vtkImageData *m_labeledImage;
+
     /// Model de vòxels retallat.
-    vtkImageData * m_clusterImage;
+    vtkImageData *m_clusterImage;
+    /// Primera i última llesca del model retallat.
+    unsigned short m_clusterFirstSlice, m_clusterLastSlice;
 
     /// Valors de propietat mínim i màxim del volum.
     unsigned char m_rangeMin, m_rangeMax;
@@ -285,7 +288,12 @@ private:
 
 
 
-    vtkRenderer * m_mainRenderer;
+
+
+
+
+
+    vtkRenderer *m_mainRenderer;
 
 
 
@@ -295,7 +303,7 @@ private:
 
 
 
-    bool m_clusterFirst, m_clusterLast;
+    
 
 
 
