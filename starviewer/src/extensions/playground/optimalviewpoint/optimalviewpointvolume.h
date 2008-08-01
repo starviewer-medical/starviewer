@@ -87,6 +87,8 @@ public:
     /// Assigna el renderer.
     void setRenderer( vtkRenderer *renderer );
 
+    /// Assigna la funció de transferència.
+    void setTransferFunction( const TransferFunction &transferFunction );
     /// Assigna el tipus d'interpolació que es farà.
     void setInterpolation( Interpolation interpolation );
     /// Assigna si s'aplica ombreig (il·luminació difusa) o no (ambient).
@@ -102,26 +104,7 @@ public:
     void setSampleDistance( double sampleDistance );
     double getSampleDistance() const;
 
-    void setTransferFunction( const TransferFunction & transferFunction );
 
-    /**
-     * Estableix la funció de transferència d'opacitat pel vtkVolume
-     * corresponent a l'índex donat.
-     */
-//     void setOpacityTransferFunction( vtkPiecewiseFunction * opacityTransferFunction);
-
-    /**
-     * Estableix la funció de transferència de color pel vtkVolume corresponent
-     * a l'índex donat.
-     */
-//     void setColorTransferFunction( vtkColorTransferFunction * colorTransferFunction);
-
-    /**
-     * Sincronitza les tranformacions de tots els vtkVolumes. Concretament,
-     * aplica la transformació del vtkVolume amb índex 0 a tots els altres
-     * vtkVolumes.
-     */
-    void synchronize();
 
     void handle( int rayId, int offset );
     void endRay( int rayId );
@@ -161,12 +144,7 @@ public:
 
 
 
-    // synchronized? potser no, si els threads es reparteixen el model sense interseccions
-    void handleObscurances( int rayId, int offset );
-    void endRayObscurances( int rayId );
-
-
-    void computeObscurances2();
+    void computeObscurances();
     void setObscuranceDirections( int obscuranceDirections );
     void setObscuranceMaximumDistance( double obscuranceMaximumDistance );
     void setObscuranceFunction( ObscuranceFunction obscuranceFunction );
