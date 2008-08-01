@@ -93,7 +93,7 @@ void OptimalViewpoint::setMainRenderer( vtkRenderer * mainRenderer )
     m_renderer = mainRenderer; m_renderer->Register( 0 );
     m_renderer->SetActiveCamera( m_camera );
 //     m_renderer->SetBackground( 0.5, 0.5, 0.5 );       // posem el fons gris
-    if ( m_volume ) m_volume->setMainRenderer( mainRenderer );
+    if ( m_volume ) m_volume->setRenderer( mainRenderer );
 }
 
 void OptimalViewpoint::setInteractor( vtkRenderWindowInteractor * interactor )
@@ -153,7 +153,7 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     imageCaster->Delete();
 //     shifter->Delete();
 
-    vtkVolume * volume = m_volume->getMainVolume();
+    vtkVolume * volume = m_volume->getVolume();
 
     // ajustem la posició de les càmeres segons la mida del volum
     m_camera->SetPosition( 0.0, 0.0, volume->GetLength() * 4.0 );
@@ -165,7 +165,7 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     connect( m_volume, SIGNAL( adjustedTransferFunctionDefined(const TransferFunction&) ), SLOT( setAdjustedTransferFunction(const TransferFunction&) ) );
     DEBUG_LOG( "end setImage" );
 
-    if ( m_renderer ) m_volume->setMainRenderer( m_renderer );
+    if ( m_renderer ) m_volume->setRenderer( m_renderer );
 }
 
 void OptimalViewpoint::setSegmentationFileName( QString name )
@@ -192,8 +192,8 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
             for ( unsigned char i = size; i < 1 + numberOfPlanes; i++ )
             {
                 (*m_planes)[i] = new OptimalViewpointPlane( i, m_planeSize );
-                (*m_planes)[i]->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
-                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
+                (*m_planes)[i]->getRenderer()->AddViewProp( m_volume->getVolume() );
+                (*m_planes)[i]->setDistance( m_volume->getVolume()->GetLength() );
 //                 m_renderer->AddViewProp( (*m_planes)[i]->getPlane() );
                 (*m_planes)[i]->setEntropyL( m_parameters->getVisualizationBlockLength() );
                 (*m_planes)[i]->setEntropyN( m_numberOfClusters );
@@ -216,8 +216,8 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
         }
     }
 
-    m_renderer->RemoveViewProp( m_volume->getMainVolume() );
-    m_renderer->AddViewProp( m_volume->getMainVolume() );
+    m_renderer->RemoveViewProp( m_volume->getVolume() );
+    m_renderer->AddViewProp( m_volume->getVolume() );
 
     m_numberOfPlanes = numberOfPlanes;
 
@@ -229,7 +229,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
     {
         case 3:
             for ( unsigned char i = 1; i <= 3; i++ )
-                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
+                (*m_planes)[i]->setDistance( m_volume->getVolume()->GetLength() );
             (*m_planes)[1]->setLatitude( 0.0 ); (*m_planes)[1]->setLongitude( 180.0 );
             (*m_planes)[2]->setLatitude( 0.0 ); (*m_planes)[2]->setLongitude( 90.0 );
             (*m_planes)[3]->setLatitude( -90.0 ); (*m_planes)[3]->setLongitude( 0.0 );
@@ -237,7 +237,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
 
         case 4:
             for ( unsigned char i = 1; i <= 4; i++ )
-                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
+                (*m_planes)[i]->setDistance( m_volume->getVolume()->GetLength() );
             (*m_planes)[1]->setLatitude( 0.0 ); (*m_planes)[1]->setLongitude( 0.0 );
             (*m_planes)[2]->setLatitude( 60.0 ); (*m_planes)[2]->setLongitude( 180.0 );
             (*m_planes)[3]->setLatitude( -30.0 ); (*m_planes)[3]->setLongitude( -120.0 );
@@ -246,7 +246,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
 
         case 6:
             for ( unsigned char i = 1; i <= 6; i++ )
-                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
+                (*m_planes)[i]->setDistance( m_volume->getVolume()->GetLength() );
             (*m_planes)[1]->setLatitude( 0.0 ); (*m_planes)[1]->setLongitude( 0.0 );
             (*m_planes)[2]->setLatitude( 90.0 ); (*m_planes)[2]->setLongitude( 0.0 );
             (*m_planes)[3]->setLatitude( -90.0 ); (*m_planes)[3]->setLongitude( 0.0 );
@@ -257,7 +257,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
 
         case 8:
             for ( unsigned char i = 1; i <= 8; i++ )
-                (*m_planes)[i]->setDistance( m_volume->getMainVolume()->GetLength() );
+                (*m_planes)[i]->setDistance( m_volume->getVolume()->GetLength() );
             (*m_planes)[1]->setLatitude( 45.0 ); (*m_planes)[1]->setLongitude( -45.0 );
             (*m_planes)[2]->setLatitude( 45.0 ); (*m_planes)[2]->setLongitude( 45.0 );
             (*m_planes)[3]->setLatitude( -45.0 ); (*m_planes)[3]->setLongitude( -45.0 );
@@ -271,7 +271,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
         case 12:
             {
                 for ( unsigned char i = 1; i <= 12; i++ )
-                    (*m_planes)[i]->setDistance( 2.0 * m_volume->getMainVolume()->GetLength() );
+                    (*m_planes)[i]->setDistance( 2.0 * m_volume->getVolume()->GetLength() );
                 POVSphereCloud cloud( 1.0, 0 );
                 cloud.createPOVCloud();
                 const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
@@ -290,7 +290,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
         case 20:
             {
                 for ( unsigned char i = 1; i <= 20; i++ )
-                    (*m_planes)[i]->setDistance( 2.0 * m_volume->getMainVolume()->GetLength() );
+                    (*m_planes)[i]->setDistance( 2.0 * m_volume->getVolume()->GetLength() );
                 double b = ( sqrt( 5.0 ) + 1.0 ) / 2.0;
                 double psi = acos( sqrt( b * b * b / ( 3.0 * sqrt( 5.0 ) ) ) ); // colatitud (rad)
                 double phi = psi + 2 * acos( b / sqrt( 3.0 ) );                 // colatitud (rad)
@@ -355,7 +355,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
         case 42:
             {
                 for ( unsigned char i = 1; i <= 42; i++ )
-                    (*m_planes)[i]->setDistance( 2.0 * m_volume->getMainVolume()->GetLength() );
+                    (*m_planes)[i]->setDistance( 2.0 * m_volume->getVolume()->GetLength() );
                 POVSphereCloud cloud( 1.0, 1 );
                 cloud.createPOVCloud();
                 const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
@@ -378,7 +378,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
         case 162:
             {
                 for ( unsigned char i = 1; i <= 162; i++ )
-                    (*m_planes)[i]->setDistance( 4.0 * m_volume->getMainVolume()->GetLength() );
+                    (*m_planes)[i]->setDistance( 4.0 * m_volume->getVolume()->GetLength() );
                 POVSphereCloud cloud( 1.0, 2 );
                 cloud.createPOVCloud();
                 const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
@@ -699,8 +699,8 @@ void OptimalViewpoint::doAutomaticSegmentation(
     m_volume->setSampleDistance( sampleDistance );
 
     OptimalViewpointPlane * plane = new OptimalViewpointPlane( 0, m_planeSize );
-    plane->getRenderer()->AddViewProp( m_volume->getPlaneVolume() );
-    plane->setDistance( m_volume->getMainVolume()->GetLength() );
+    plane->getRenderer()->AddViewProp( m_volume->getVolume() );
+    plane->setDistance( m_volume->getVolume()->GetLength() );
     plane->setEntropyL( blockLength );
     plane->setEntropyN( numberOfClusters );
     plane->setVolume( m_volume );

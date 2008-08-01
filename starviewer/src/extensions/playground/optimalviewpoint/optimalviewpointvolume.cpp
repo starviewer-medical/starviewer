@@ -149,8 +149,8 @@ void OptimalViewpointVolume::createImages( vtkImageData *image )
         m_image = caster->GetOutput(); m_image->Register( 0 );  // el register és necessari (comprovat)
         caster->Delete();
 
-        m_rangeMin = static_cast<unsigned short>( qRound( min ) );
-        m_rangeMax = static_cast<unsigned short>( qRound( max ) );
+        m_rangeMin = static_cast<unsigned char>( qRound( min ) );
+        m_rangeMax = static_cast<unsigned char>( qRound( max ) );
     }
     else
     {
@@ -250,6 +250,30 @@ void OptimalViewpointVolume::createVolume()
 }
 
 
+unsigned char OptimalViewpointVolume::getRangeMin() const
+{
+    return m_rangeMin;
+}
+
+
+unsigned char OptimalViewpointVolume::getRangeMax() const
+{
+    return m_rangeMax;
+}
+
+
+vtkVolume* OptimalViewpointVolume::getVolume() const
+{
+    return m_volume;
+}
+
+
+void OptimalViewpointVolume::setRenderer( vtkRenderer *renderer )
+{
+    m_renderer = renderer;
+}
+
+
 void OptimalViewpointVolume::setShade( bool on )
 {
     on ? m_property->ShadeOn() : m_property->ShadeOff();
@@ -259,7 +283,7 @@ void OptimalViewpointVolume::setShade( bool on )
         vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
         vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
-        gradientShader->UpdateShadingTable( m_mainRenderer, m_volume, gradientEstimator );
+        gradientShader->UpdateShadingTable( m_renderer, m_volume, gradientEstimator );
         m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_volume ),
                                                                   gradientShader->GetGreenDiffuseShadingTable( m_volume ),
                                                                   gradientShader->GetBlueDiffuseShadingTable( m_volume ) );
@@ -291,18 +315,6 @@ void OptimalViewpointVolume::setSampleDistance( double sampleDistance )
 double OptimalViewpointVolume::getSampleDistance() const
 {
     return m_mapper->GetSampleDistance();
-}
-
-/// Retorna el vtkVolume corresponent a l'índex donat.
-vtkVolume * OptimalViewpointVolume::getMainVolume() const
-{
-    return m_volume;
-}
-
-/// Retorna el vtkVolume corresponent a l'índex donat.
-vtkVolume * OptimalViewpointVolume::getPlaneVolume() const
-{
-    return m_volume;
 }
 
 
@@ -858,18 +870,6 @@ void OptimalViewpointVolume::setSpecular( bool on )
 void OptimalViewpointVolume::setSpecularPower( double specularPower )
 {
     m_property->SetSpecularPower( specularPower );
-}
-
-
-unsigned char OptimalViewpointVolume::getRangeMin() const
-{
-    return m_rangeMin;
-}
-
-
-unsigned char OptimalViewpointVolume::getRangeMax() const
-{
-    return m_rangeMax;
 }
 
 
