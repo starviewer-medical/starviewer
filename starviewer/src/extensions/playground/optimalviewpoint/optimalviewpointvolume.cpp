@@ -176,7 +176,9 @@ void OptimalViewpointVolume::createImages( vtkImageData *image )
 
     m_labeledImage = vtkImageData::New();   // no cal el register perquè hem fet un new
     m_labeledImage->DeepCopy( m_image );
+
     m_clusterImage = 0;
+    m_clusterFirstSlice = 0; m_clusterLastSlice = 65535;
 
     m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
@@ -880,7 +882,7 @@ void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
 
 void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned short last )
 {
-    if ( m_clusterFirst != first || m_clusterLast != last )
+    if ( m_clusterFirstSlice != first || m_clusterLastSlice != last )
     {
         vtkImageClip * clip = vtkImageClip::New();
         clip->SetInput( m_image );
@@ -894,7 +896,7 @@ void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned sh
         clip->Delete();
     }
 
-    m_clusterFirst = first; m_clusterLast = last;
+    m_clusterFirstSlice = first; m_clusterLastSlice = last;
 }
 
 
