@@ -104,7 +104,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
 OptimalViewpointVolume::~OptimalViewpointVolume()
 {
     m_image->Delete();
-    m_labeledImage->Delete();
+    if ( m_labeledImage ) m_labeledImage->Delete();
     if ( m_clusterImage ) m_clusterImage->Delete();
 
     delete m_ambientVoxelShader;
@@ -174,14 +174,13 @@ void OptimalViewpointVolume::createImages( vtkImageData *image )
         DEBUG_LOG( QString( "[OVV] new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
     }
 
-    m_labeledImage = vtkImageData::New();   // no cal el register perquè hem fet un new
-    m_labeledImage->DeepCopy( m_image );
+    m_labeledImage = 0;
 
     m_clusterImage = 0;
     m_clusterFirstSlice = 0; m_clusterLastSlice = 65535;
 
     m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-    m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_labeledData = 0;
 
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
 }
@@ -367,7 +366,7 @@ void OptimalViewpointVolume::synchronize()
 
 void OptimalViewpointVolume::handle( int rayId, int offset )
 {
-    emit visited( rayId, *(m_labeledData + offset) );
+    //emit visited( rayId, *(m_labeledData + offset) );
 }
 
 void OptimalViewpointVolume::endRay( int rayId )
@@ -699,8 +698,30 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
 
 
 
+vtkImageData* OptimalViewpointVolume::getLabeledImage()
+{
+    if ( !m_labeledImage )
+    {
+        m_labeledImage = vtkImageData::New();
+        m_labeledImage->DeepCopy( m_image );
+        m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    }
+
+    return m_labeledImage;
+}
+
+
+
 void OptimalViewpointVolume::labelize( const QVector< unsigned char > & limits )
 {
+    if ( !m_labeledData )
+    {
+        m_labeledImage = vtkImageData::New();
+        m_labeledImage->DeepCopy( m_image );
+        m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    }
+
+
     unsigned char * fixIt = m_data;
 //    IteratorType grounIt(GrounImage, GrounImage->GetBufferedRegion());
     unsigned char * segIt = m_labeledData;
