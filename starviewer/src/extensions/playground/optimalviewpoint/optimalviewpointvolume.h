@@ -76,16 +76,25 @@ public:
     /// Destructor.
     virtual ~OptimalViewpointVolume();
 
+    /// Retorna la imatge principal.
+    vtkImageData* getImage() const;
+    /// Retorna la imatge etiquetada.
+    vtkImageData* getLabeledImage();
+    /// Retorna el vtkVolume.
+    vtkVolume* getVolume() const;
+
     /// Retorna el valor de propietat mínim.
     unsigned char getRangeMin() const;
     /// Retorna el valor de propietat màxim.
     unsigned char getRangeMax() const;
 
-    /// Retorna el vtkVolume.
-    vtkVolume* getVolume() const;
-
     /// Assigna el renderer.
     void setRenderer( vtkRenderer *renderer );
+
+    /// Assigna la primera i l'última llesca del model retallat.
+    void setClusterLimits( unsigned short first, unsigned short last );
+    /// Assigna si s'ha de visualitzar el model retallat.
+    void setRenderCluster( bool renderCluster );
 
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
@@ -97,6 +106,9 @@ public:
     void setSpecular( bool on );
     /// Assigna l'exponent del coeficient especular.
     void setSpecularPower( double specularPower );
+
+    
+
 
     void setImageSampleDistance( double imageSampleDistance );
     double getImageSampleDistance() const;
@@ -128,19 +140,6 @@ public:
 
 
 
-
-
-
-
-    vtkImageData * getImage() const { return m_image; }
-    vtkImageData * getLabeledImage();
-
-
-
-
-
-    void setRenderCluster( bool renderCluster );
-    void setClusterLimits( unsigned short first, unsigned short last );
 
 
 
@@ -201,6 +200,8 @@ private:
     void createProperty();
     /// Crea el volum.
     void createVolume();
+    /// Crea la imatge etiquetada.
+    void createLabeledImage();
 
 
     // definició d'un vòxel
