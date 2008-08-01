@@ -128,7 +128,7 @@ HEADERS += extensionfactory.h \
            drawertext.h \
            drawerpolyline.h \
            polylineroitool.h \
-           distancetool.h  \
+           distancetool.h \
            windowlevelpresetstooldata.h \
            qviewercinecontroller.h \
            qdicomdumpcthelixwidget.h \
@@ -156,6 +156,8 @@ HEADERS += extensionfactory.h \
            erasertool.h \
            patientitem.h \
            patientitemmodel.h \
+           drawerpoint.h \
+           seedtooldata.h \
            cursor3dtool.h \
            cursor3dtooldata.h \
            angletool.h \
@@ -261,7 +263,7 @@ SOURCES += extensionmediator.cpp \
            drawertext.cpp \
            drawerpolyline.cpp \
            polylineroitool.cpp \
-           distancetool.cpp  \
+           distancetool.cpp \
            windowlevelpresetstooldata.cpp \
            qviewercinecontroller.cpp \
            qdicomdump.cpp \
@@ -286,6 +288,8 @@ SOURCES += extensionmediator.cpp \
            erasertool.cpp \
            patientitem.cpp \
            patientitemmodel.cpp \
+           drawerpoint.cpp \
+           seedtooldata.cpp \
            cursor3dtool.cpp \
            cursor3dtooldata.cpp \
            angletool.cpp \
