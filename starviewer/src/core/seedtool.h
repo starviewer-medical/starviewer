@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr�fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -9,18 +9,16 @@
 
 #include "tool.h"
 
-class vtkActor;
-class vtkSphereSource;
-class vtkPolyDataMapper;
-
 namespace udg {
 
 class Q2DViewer;
+class DrawerPoint;
+class SeedToolData;
 
 /**
-Tool que serveix per posar llavors en un visor 2D
+Eina que serveix per posar llavors en un visor 2D
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+  @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SeedTool : public Tool
 {
@@ -33,52 +31,39 @@ public:
 
     ~SeedTool();
 
-    void handleEvent( unsigned long eventID );
+    ///funcio manejadora dels events passats.
+    void handleEvent( long unsigned eventID );
 
-    double* getSeedPosition(){return m_seedPosition;}
-
-    int getSeedSlice(){return m_seedSlice;}
-
-
-/// \TODO potser aquests m�todes slots passen a ser p�blics
-private slots:
+private:
     /// Posem la llavor
     void setSeed( );
 
     /// Calcula la llesca que s'ha de moure
     void doSeeding();
 
-    /// Atura l'estat d'slicing
+    /// Atura l'estat de seeding
     void endSeeding();
 
-    /// Pinta/despinta la llavor
-    void sliceChanged( int s );
-    
-private:
-    ///estat de la tool
-    int m_state;
-    
-    //M�tode deprecated
-    void createAction();
+    /// Retorna les dades pròpies de la seed
+    ToolData *getToolData() const;
 
+private:
+    /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
-    int m_seedSlice;
+    /// Punt que es dibuixa
+    DrawerPoint *m_point;
 
-    ///Actor que dibuixa la llavor
-    vtkActor *m_pointActor;
+    ///estat de la tool
+    int m_state;
 
-    ///esfera que representa en punt de la llavor
-    vtkSphereSource *m_point;
-
-    ///mapejador del punt
-    vtkPolyDataMapper *m_pointMapper;
-
-    /// Coordenades on s'ha posat la llavor
-    double m_seedPosition[3];
+    /// Dades específiques de la tool
+    SeedToolData *m_myData;
 
 };
 
+
 }
+
 
 #endif
