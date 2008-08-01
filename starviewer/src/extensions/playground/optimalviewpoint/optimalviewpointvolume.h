@@ -143,7 +143,7 @@ public:
 
 
     vtkImageData * getImage() const { return m_image; }
-    vtkImageData * getLabeledImage() const { return m_labeledImage; }
+    vtkImageData * getLabeledImage();
 
 
 
