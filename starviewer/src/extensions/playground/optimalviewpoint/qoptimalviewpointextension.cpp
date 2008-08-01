@@ -91,6 +91,13 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
 
     connect( m_viewpointSaliencyPushButton, SIGNAL( clicked() ), this, SLOT( computeViewpointSaliency() ) );
+
+
+
+
+
+    //m_segmentationWidget->setChecked( false );
+    //m_visualizationWidget->setChecked( true );
 }
 
 
