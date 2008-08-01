@@ -131,6 +131,145 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
 }
 
 
+vtkImageData* OptimalViewpointVolume::getImage() const
+{
+    return m_image;
+}
+
+
+vtkImageData* OptimalViewpointVolume::getLabeledImage()
+{
+    if ( !m_labeledImage ) createLabeledImage();
+    return m_labeledImage;
+}
+
+
+vtkVolume* OptimalViewpointVolume::getVolume() const
+{
+    return m_volume;
+}
+
+
+unsigned char OptimalViewpointVolume::getRangeMin() const
+{
+    return m_rangeMin;
+}
+
+
+unsigned char OptimalViewpointVolume::getRangeMax() const
+{
+    return m_rangeMax;
+}
+
+
+void OptimalViewpointVolume::setRenderer( vtkRenderer *renderer )
+{
+    m_renderer = renderer;
+}
+
+
+void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned short last )
+{
+    if ( m_clusterFirstSlice != first || m_clusterLastSlice != last )
+    {
+        vtkImageClip *clip = vtkImageClip::New();
+        clip->SetInput( m_image );
+        int *dimensions = m_image->GetDimensions();
+        clip->SetOutputWholeExtent( 0, dimensions[0] - 1, 0, dimensions[1] - 1, first, last );
+        clip->ClipDataOn();
+        clip->Update();
+        if ( m_clusterImage ) m_clusterImage->Delete();
+        m_clusterImage = clip->GetOutput(); m_clusterImage->Register( 0 );
+        clip->Delete();
+    }
+
+    m_clusterFirstSlice = first; m_clusterLastSlice = last;
+}
+
+
+void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
+{
+    if ( renderCluster ) m_mapper->SetInput( m_clusterImage );
+    else m_mapper->SetInput( m_image );
+}
+
+
+void OptimalViewpointVolume::setTransferFunction( const TransferFunction &transferFunction )
+{
+    m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
+    m_property->SetColor( transferFunction.getColorTransferFunction() );
+    m_ambientVoxelShader->setTransferFunction( transferFunction );
+    m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
+    m_transferFunction = transferFunction;
+}
+
+
+void OptimalViewpointVolume::setInterpolation( Interpolation interpolation )
+{
+    switch ( interpolation )
+    {
+        case NearestNeighbour:
+            m_property->SetInterpolationTypeToNearest();
+            break;
+        case LinearInterpolateClassify:
+            m_property->SetInterpolationTypeToLinear();
+            m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionFx2->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
+            break;
+        case LinearClassifyInterpolate:
+            m_property->SetInterpolationTypeToLinear();
+            m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionFx2->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
+            break;
+    }
+}
+
+
+void OptimalViewpointVolume::setShade( bool on )
+{
+    if ( on )
+    {
+        m_property->ShadeOn();
+        m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
+        m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
+        vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
+        m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+        vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
+        gradientShader->UpdateShadingTable( m_renderer, m_volume, gradientEstimator );
+        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_volume ),
+                                                                  gradientShader->GetGreenDiffuseShadingTable( m_volume ),
+                                                                  gradientShader->GetBlueDiffuseShadingTable( m_volume ) );
+        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_volume ),
+                                                                   gradientShader->GetGreenSpecularShadingTable( m_volume ),
+                                                                   gradientShader->GetBlueSpecularShadingTable( m_volume ) );
+    }
+    else
+    {
+        m_property->ShadeOff();
+        m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
+        m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_ambientVoxelShader );
+    }
+}
+
+
+void OptimalViewpointVolume::setSpecular( bool on )
+{
+    m_property->SetSpecular( on ? 1.0 : 0.0 );
+}
+
+
+void OptimalViewpointVolume::setSpecularPower( double specularPower )
+{
+    m_property->SetSpecularPower( specularPower );
+}
+
+
 void OptimalViewpointVolume::createImages( vtkImageData *image )
 {
     double *range = image->GetScalarRange();
@@ -248,103 +387,11 @@ void OptimalViewpointVolume::createVolume()
 }
 
 
-unsigned char OptimalViewpointVolume::getRangeMin() const
+void OptimalViewpointVolume::createLabeledImage()
 {
-    return m_rangeMin;
-}
-
-
-unsigned char OptimalViewpointVolume::getRangeMax() const
-{
-    return m_rangeMax;
-}
-
-
-vtkVolume* OptimalViewpointVolume::getVolume() const
-{
-    return m_volume;
-}
-
-
-void OptimalViewpointVolume::setRenderer( vtkRenderer *renderer )
-{
-    m_renderer = renderer;
-}
-
-
-void OptimalViewpointVolume::setTransferFunction( const TransferFunction &transferFunction )
-{
-    m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
-    m_property->SetColor( transferFunction.getColorTransferFunction() );
-    m_ambientVoxelShader->setTransferFunction( transferFunction );
-    m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
-    m_transferFunction = transferFunction;
-}
-
-
-void OptimalViewpointVolume::setInterpolation( Interpolation interpolation )
-{
-    switch ( interpolation )
-    {
-        case NearestNeighbour:
-            m_property->SetInterpolationTypeToNearest();
-            break;
-        case LinearInterpolateClassify:
-            m_property->SetInterpolationTypeToLinear();
-            m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionFx2->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
-            break;
-        case LinearClassifyInterpolate:
-            m_property->SetInterpolationTypeToLinear();
-            m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionFx2->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
-            break;
-    }
-}
-
-
-void OptimalViewpointVolume::setShade( bool on )
-{
-    if ( on )
-    {
-        m_property->ShadeOn();
-        m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
-        m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
-        vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
-        m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
-        vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
-        gradientShader->UpdateShadingTable( m_renderer, m_volume, gradientEstimator );
-        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_volume ),
-                                                                  gradientShader->GetGreenDiffuseShadingTable( m_volume ),
-                                                                  gradientShader->GetBlueDiffuseShadingTable( m_volume ) );
-        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_volume ),
-                                                                   gradientShader->GetGreenSpecularShadingTable( m_volume ),
-                                                                   gradientShader->GetBlueSpecularShadingTable( m_volume ) );
-    }
-    else
-    {
-        m_property->ShadeOff();
-        m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
-        m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_ambientVoxelShader );
-    }
-}
-
-
-void OptimalViewpointVolume::setSpecular( bool on )
-{
-    m_property->SetSpecular( on ? 1.0 : 0.0 );
-}
-
-
-void OptimalViewpointVolume::setSpecularPower( double specularPower )
-{
-    m_property->SetSpecularPower( specularPower );
+    m_labeledImage = vtkImageData::New();
+    m_labeledImage->DeepCopy( m_image );
+    m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 }
 
 
@@ -705,17 +752,7 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
 
 
 
-vtkImageData* OptimalViewpointVolume::getLabeledImage()
-{
-    if ( !m_labeledImage )
-    {
-        m_labeledImage = vtkImageData::New();
-        m_labeledImage->DeepCopy( m_image );
-        m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-    }
 
-    return m_labeledImage;
-}
 
 
 
@@ -723,9 +760,7 @@ void OptimalViewpointVolume::labelize( const QVector< unsigned char > & limits )
 {
     if ( !m_labeledData )
     {
-        m_labeledImage = vtkImageData::New();
-        m_labeledImage->DeepCopy( m_image );
-        m_labeledData = reinterpret_cast<unsigned char*>( m_labeledImage->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+        createLabeledImage();
     }
 
 
@@ -854,34 +889,6 @@ void OptimalViewpointVolume::setSegmentationFileName( QString name )
 void OptimalViewpointVolume::setOpacityForComputing( bool on )
 {
 //    m_planeVolumeRayCastFunction->setOpacityOn( on );
-}
-
-
-
-void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
-{
-    if ( renderCluster ) m_mapper->SetInput( m_clusterImage );
-    else m_mapper->SetInput( m_image );
-}
-
-
-void OptimalViewpointVolume::setClusterLimits( unsigned short first, unsigned short last )
-{
-    if ( m_clusterFirstSlice != first || m_clusterLastSlice != last )
-    {
-        vtkImageClip * clip = vtkImageClip::New();
-        clip->SetInput( m_image );
-        int dims[3];
-        m_image->GetDimensions( dims );
-        clip->SetOutputWholeExtent( 0, dims[0] - 1, 0, dims[1] - 1, first, last );
-        clip->ClipDataOn();
-        clip->Update();
-        if ( m_clusterImage ) m_clusterImage->Delete();
-        m_clusterImage = clip->GetOutput(); m_clusterImage->Register( 0 );
-        clip->Delete();
-    }
-
-    m_clusterFirstSlice = first; m_clusterLastSlice = last;
 }
 
 
