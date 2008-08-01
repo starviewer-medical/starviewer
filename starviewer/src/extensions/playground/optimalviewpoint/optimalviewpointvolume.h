@@ -158,7 +158,7 @@ public:
     void handleObscurances( int rayId, int offset );
     void endRayObscurances( int rayId );
 
-    void computeObscurances();
+
     void computeObscurances2();
     void setObscuranceDirections( int obscuranceDirections );
     void setObscuranceMaximumDistance( double obscuranceMaximumDistance );

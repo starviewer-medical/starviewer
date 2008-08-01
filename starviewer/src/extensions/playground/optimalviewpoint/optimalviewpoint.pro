@@ -25,7 +25,6 @@ HEADERS += doublehistogram.h \
            qoptimalviewpointextension.h \
            slicer.h \
            qshowhidewidget.h \
-           obscurancethread.h \
            vtkVolumeRayCastCompositeFunctionObscurances.h \
            obscurancethread2.h \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.h \
@@ -59,7 +58,6 @@ SOURCES += doublehistogram.cpp \
            qoptimalviewpointextension.cpp \
            slicer.cpp \
            qshowhidewidget.cpp \
-           obscurancethread.cpp \
            vtkVolumeRayCastCompositeFunctionObscurances.cxx \
            obscurancethread2.cpp \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.cxx \
