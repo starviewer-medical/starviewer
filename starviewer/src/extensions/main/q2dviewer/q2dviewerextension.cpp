@@ -435,6 +435,7 @@ void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
     connect( newViewerWidget, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
     initializeDefaultTools( newViewerWidget->getViewer() );
+    changeSelectedViewer( newViewerWidget );
 }
 
 void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget * viewerWidget )
