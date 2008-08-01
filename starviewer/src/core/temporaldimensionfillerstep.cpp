@@ -52,6 +52,7 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
     bool found = false;
     int phases = 1;
     int slices = 0;
+    bool localizer = false;
 
     QStringList list = series->getImagesPathList();
     DICOMTagReader dicomReader( list[0] );
@@ -71,6 +72,7 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
                 {
                     DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no és dinàmica (És un CT LOCALIZER)" );
                     slices = series->getImages().count();
+                    localizer = true;
                 }
             }
             else
@@ -81,7 +83,7 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
             }
         }
     }
-    else
+    if ( !localizer )
     {
         QString sliceLocation = dicomReader.getAttributeByName( DCM_SliceLocation );
 
