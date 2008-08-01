@@ -466,8 +466,6 @@ void OptimalViewpoint::setTransferFunction( const TransferFunction & transferFun
 
 void OptimalViewpoint::updatePlanes()
 {
-    m_volume->synchronize();
-
     switch ( m_updatePlane )
     {
         case -1:    // All
@@ -567,8 +565,6 @@ void OptimalViewpoint::updatePlanes()
 
 void OptimalViewpoint::renderPlanes( short plane )
 {
-    m_volume->synchronize();
-
     switch ( plane )
     {
         case -1:    // All
@@ -838,8 +834,6 @@ void OptimalViewpoint::readParameter( int parameter )
 
 void OptimalViewpoint::newMethod2( int step, bool normalized )
 {
-    m_volume->synchronize();
-
     double result;
 
     switch ( m_updatePlane )
@@ -913,7 +907,7 @@ void OptimalViewpoint::computeObscurances( int directions, double maximumDistanc
 
     QTime t;
     t.start();
-    m_volume->computeObscurances2();
+    m_volume->computeObscurances();
     int elapsed = t.elapsed();
     DEBUG_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
     INFO_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
@@ -960,8 +954,6 @@ void OptimalViewpoint::computeSaliency()
 
 void OptimalViewpoint::computeViewpointEntropies()
 {
-    m_volume->synchronize();
-
     switch ( m_updatePlane )
     {
         case -1:    // All

@@ -272,6 +272,16 @@ void OptimalViewpointVolume::setRenderer( vtkRenderer *renderer )
 }
 
 
+void OptimalViewpointVolume::setTransferFunction( const TransferFunction &transferFunction )
+{
+    m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
+    m_property->SetColor( transferFunction.getColorTransferFunction() );
+    m_ambientVoxelShader->setTransferFunction( transferFunction );
+    m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
+    m_transferFunction = transferFunction;
+}
+
+
 void OptimalViewpointVolume::setInterpolation( Interpolation interpolation )
 {
     switch ( interpolation )
@@ -359,52 +369,7 @@ double OptimalViewpointVolume::getSampleDistance() const
 }
 
 
-void OptimalViewpointVolume::setTransferFunction( const TransferFunction & transferFunction )
-{
-    m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
-    m_property->SetColor( transferFunction.getColorTransferFunction() );
-    m_ambientVoxelShader->setTransferFunction( transferFunction );
-    m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
 
-    m_transferFunction = transferFunction;
-}
-
-
-/**
- * Estableix la funció de transferència d'opacitat pel vtkVolume
- * corresponent a l'índex donat.
- */
-// void OptimalViewpointVolume::setOpacityTransferFunction( vtkPiecewiseFunction * opacityTransferFunction )
-// {
-//     m_opacityTransferFunction->Delete();
-//     m_opacityTransferFunction = opacityTransferFunction; m_opacityTransferFunction->Register( 0 );
-//     m_volumeProperty->SetScalarOpacity( opacityTransferFunction );
-// //     m_volumeProperty->SetGradientOpacity( opacityTransferFunction );
-//     opacityTransferFunction->Print( std::cout );
-// }
-
-/**
- * Estableix la funció de transferència de color pel vtkVolume corresponent
- * a l'índex donat.
- */
-// void OptimalViewpointVolume::setColorTransferFunction( vtkColorTransferFunction * colorTransferFunction )
-// {
-//     m_colorTransferFunction->Delete();
-//     m_colorTransferFunction = colorTransferFunction; m_colorTransferFunction->Register( 0 );
-//     m_volumeProperty->SetColor( colorTransferFunction );
-//     colorTransferFunction->Print( std::cout );
-// }
-
-/**
- * Sincronitza les tranformacions de tots els vtkVolumes. Concretament,
- * aplica la transformació del vtkVolume amb índex 0 a tots els altres
- * vtkVolumes.
- */
-void OptimalViewpointVolume::synchronize()
-{
-    //m_planeVolume->PokeMatrix( m_mainVolume->GetMatrix() );
-    //m_planeVolume->ComputeMatrix();
-}
 
 void OptimalViewpointVolume::handle( int rayId, int offset )
 {
@@ -938,77 +903,8 @@ signed char OptimalViewpointVolume::rescale( int bins )
 }
 
 
-// synchronized? potser no, si els threads es reparteixen el model sense interseccions
-void OptimalViewpointVolume::handleObscurances( int rayId, int offset )
-{
-    Q_UNUSED(rayId);
-    Q_UNUSED(offset);
-//     emit visited( rayId, *(m_labeledData + offset) );
-}
-
-void OptimalViewpointVolume::endRayObscurances( int rayId )
-{
-    Q_UNUSED(rayId);
-//     emit rayEnd( rayId );
-}
 
 
-
-
-// QList<Vector3> OptimalViewpointVolume::getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const
-// {
-//     // llista dels vòxels que són començament de línia
-//     QList<Vector3> lineStarts;
-//
-//     // tots els (0,y,z) són començament de línia
-//     Vector3 lineStart( 0, 0, 0 );
-//     for ( int iy = 0; iy < dimY; iy++ )
-//     {
-//         lineStart.y = iy;
-//         for ( int iz = 0; iz < dimZ; iz++ )
-//         {
-//             lineStart.z = iz;
-//             lineStarts << lineStart;
-// //             DEBUG_LOG( QString( "line start: (%1,%2,%3)" ).arg( lineStart.x ).arg( lineStart.y ).arg( lineStart.z ) );
-//         }
-//     }
-//     DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.count() ) );
-//
-//     // més començaments de línia
-//     Vector3 rv;
-//     Voxel v = { 0, 0, 0 }, pv = v;
-//
-//     // iterar per la línia que comença a (0,0,0)
-//     while ( v.x < dimX )
-//     {
-//         if ( v.y != pv.y )
-//         {
-//             lineStart.x = rv.x; lineStart.y = rv.y - v.y;   // y = 0
-//             for ( double iz = rv.z - v.z; iz < dimZ; iz++ )
-//             {
-//                 lineStart.z = iz;
-//                 lineStarts << lineStart;
-//             }
-//         }
-//         if ( v.z != pv.z )
-//         {
-//             lineStart.x = rv.x; lineStart.z = rv.z - v.z;   // z = 0
-//             for ( double iy = rv.y - v.y; iy < dimY; iy++ )
-//             {
-//                 lineStart.y = iy;
-//                 lineStarts << lineStart;
-//             }
-//         }
-//
-//         // avançar el vòxel
-//         rv += forward;
-//         pv = v;
-//         v.x = round( rv.x ); v.y = round( rv.y ); v.z = round( rv.z );
-//     }
-//     DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.count() ) );
-//
-//     return lineStarts;
-// }
 
 
 void OptimalViewpointVolume::setObscuranceDirections( int obscuranceDirections )
@@ -1034,18 +930,6 @@ void OptimalViewpointVolume::setObscuranceVariant( ObscuranceVariant obscuranceV
     m_obscuranceVariant = obscuranceVariant;
 }
 
-
-// inline double OptimalViewpointVolume::obscurance( double distance ) const
-// {
-//     if ( distance > m_obscuranceMaximumDistance ) return 1.0;
-//
-//     switch ( m_obscuranceFunction )
-//     {
-//         case Constant0: return 0.0;
-//         case SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
-//         case Exponential: return 1.0 - exp( distance / m_obscuranceMaximumDistance );
-//     }
-// }
 
 
 void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurances )
@@ -1265,10 +1149,8 @@ void OptimalViewpointVolume::reduceToHalf()
 
 
 // nova versió amb threads
-void OptimalViewpointVolume::computeObscurances2()
+void OptimalViewpointVolume::computeObscurances()
 {
-    synchronize();
-
     // Guardem en un booleà si treballem amb color o sense
     bool color = m_obscuranceVariant >= OpacityColorBleeding;
 
@@ -1762,8 +1644,6 @@ void OptimalViewpointVolume::getLineStarts( QVector<Vector3> & lineStarts, int d
 void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, vtkRenderer * renderer, bool divArea )
 {
     if ( !m_saliency ) return;
-
-    synchronize();
 
     m_volumeRayCastFunctionViewpointSaliency->SetSaliency( m_saliency );
 
