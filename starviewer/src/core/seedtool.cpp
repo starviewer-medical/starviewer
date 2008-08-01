@@ -1,59 +1,44 @@
 /***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr�fics de Girona                  *
+ *   Copyright (C) 2005-2006 by Grup de Gràfics de Girona                  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "seedtool.h"
+#include "seedtooldata.h"
 #include "q2dviewer.h"
+#include "drawerpoint.h"
 #include "volume.h"
+#include "drawer.h"
+#include "drawerpoint.h"
 
-#include <QAction>
-
+// Vtk's
 #include <vtkCommand.h>
-#include <vtkSphereSource.h>
-#include <vtkActor.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkProperty.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
+// Qt's
+#include <QVector>
+
 
 namespace udg {
 
 SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
 {
-    m_state = NONE;
     m_toolName = "SeedTool";
+    m_hasSharedData = false;
+
+    m_myData = new SeedToolData;
+
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if( !m_2DViewer )
-    {
-        DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
-    }
-    m_seedSlice = -1;
-    m_pointActor = vtkActor::New();
-    m_point = vtkSphereSource::New();
-    m_point->SetRadius( 2 );
-    m_pointActor -> GetProperty()->SetColor( 0.85, 0.13, 0.26 );
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
 
-    m_pointMapper = vtkPolyDataMapper::New();
-    m_pointMapper->SetInput( m_point->GetOutput() );
-    m_pointActor->SetMapper( m_pointMapper );
+    m_point = NULL;
+    m_state = NONE;
 
-    m_pointActor->VisibilityOff();
-    m_2DViewer->getRenderer()-> AddActor( m_pointActor );
-
-    connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
+    DEBUG_LOG("SEED TOOL CREADA ");
 }
 
 
 SeedTool::~SeedTool()
-{
-    m_pointActor-> Delete();
-    m_point->Delete();
-    m_pointMapper->Delete();
-}
-
-void SeedTool::createAction()
 {
 }
 
@@ -80,49 +65,98 @@ void SeedTool::handleEvent( unsigned long eventID )
 
 void SeedTool::setSeed()
 {
-    m_state=SEEDING;
+    if( m_2DViewer )
+    {
+        m_state=SEEDING;
 
-    m_2DViewer->getCurrentCursorPosition( m_seedPosition );
+        QVector<double> seedPosition(3);
+        double xyz[3];
+        m_2DViewer->getCurrentCursorPosition( xyz );
+        seedPosition[0]=xyz[0];
+        seedPosition[1]=xyz[1];
+        seedPosition[2]=xyz[2];
 
-    //es calcula correctament el valor de profunditat per a corretgir el bug #245
-    int slice = m_2DViewer->getCurrentSlice();
-    double *spacing = m_2DViewer->getInput()->getSpacing();
-    double *origin = m_2DViewer->getInput()->getOrigin();
+        //es calcula correctament el valor de profunditat per a corretgir el bug #245
+        int slice = m_2DViewer->getCurrentSlice();
+        double *spacing = m_2DViewer->getInput()->getSpacing();
+        double *origin = m_2DViewer->getInput()->getOrigin();
 
-        switch( m_2DViewer->getView() )
+            switch( m_2DViewer->getView() )
+            {
+                case Q2DViewer::Axial:
+                    seedPosition[2] = origin[2] + (slice * spacing[2]);
+                    xyz[2] = seedPosition[2];
+                break;
+                case Q2DViewer::Sagital:
+                    seedPosition[0] = origin[0] + (slice * spacing[0]);
+                    xyz[0] = seedPosition[0];
+                break;
+                case Q2DViewer::Coronal:
+                    seedPosition[1] = origin[1] + (slice * spacing[1]);
+                    xyz[1] = seedPosition[1];
+                break;
+            }
+
+        m_myData->setSeedPosition( seedPosition );
+        //Apanyo perquè funcioni de moment, però s'ha d'arreglar
+        m_2DViewer->setSeedPosition( xyz );
+
+        if ( !m_point )
         {
-            case Q2DViewer::Axial:
-                m_seedPosition[2] = origin[2] + (slice * spacing[2]);
-            break;
-            case Q2DViewer::Sagital:
-                m_seedPosition[0] = origin[0] + (slice * spacing[0]);
-            break;
-            case Q2DViewer::Coronal:
-                m_seedPosition[1] = origin[1] + (slice * spacing[1]);
-            break;
+            m_point = new DrawerPoint;
+            QColor color( 217, 33, 66 );
+            m_point->setColor( color );
         }
-    //
-
-    m_2DViewer->setSeedPosition(m_seedPosition);
-    m_point-> SetCenter(m_seedPosition);
-    m_seedSlice = m_2DViewer->getCurrentSlice();
-    m_pointActor->VisibilityOn();
-
-    m_2DViewer->refresh();
+        m_point->setPosition(seedPosition);
+        m_2DViewer->getDrawer()->draw( m_point , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    }
 }
 
 void SeedTool::doSeeding( )
 {
-    if(m_state==SEEDING)
+    if( m_2DViewer && m_state==SEEDING )
     {
-        QString aux;
-        m_2DViewer->getCurrentCursorPosition(m_seedPosition);
+        QVector<double> seedPosition(3);
+        double xyz[3];
+        m_2DViewer->getCurrentCursorPosition( xyz );
+        seedPosition[0]=xyz[0];
+        seedPosition[1]=xyz[1];
+        seedPosition[2]=xyz[2];
 
-        m_point-> SetCenter(m_seedPosition);
-        m_seedSlice = m_2DViewer->getCurrentSlice();
-        m_pointActor->VisibilityOn();
+        //es calcula correctament el valor de profunditat per a corretgir el bug #245
+        int slice = m_2DViewer->getCurrentSlice();
+        double *spacing = m_2DViewer->getInput()->getSpacing();
+        double *origin = m_2DViewer->getInput()->getOrigin();
 
-        m_2DViewer->refresh();
+            switch( m_2DViewer->getView() )
+            {
+                case Q2DViewer::Axial:
+                    seedPosition[2] = origin[2] + (slice * spacing[2]);
+                    xyz[2] = seedPosition[2];
+                break;
+                case Q2DViewer::Sagital:
+                    seedPosition[0] = origin[0] + (slice * spacing[0]);
+                    xyz[0] = seedPosition[0];
+                break;
+                case Q2DViewer::Coronal:
+                    seedPosition[1] = origin[1] + (slice * spacing[1]);
+                    xyz[1] = seedPosition[1];
+                break;
+            }
+
+        m_myData->setSeedPosition( seedPosition );
+        //Apanyo perquè funcioni de moment, però s'ha d'arreglar
+        m_2DViewer->setSeedPosition( xyz );
+
+        if ( !m_point )
+        {
+            m_point = new DrawerPoint;
+            QColor color( 217, 33, 66 );
+            m_point->setColor( color );
+        }
+        m_point->setPosition(seedPosition);
+        m_2DViewer->getDrawer()->draw( m_point , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        m_2DViewer->getDrawer()->refresh();
     }
 }
 
@@ -131,18 +165,11 @@ void SeedTool::endSeeding( )
     m_state = NONE;
 }
 
-void SeedTool::sliceChanged( int s )
+ToolData *SeedTool::getToolData() const
 {
-    if(m_seedSlice==s)
-    {
-        m_pointActor->VisibilityOn();
-    }
-    else
-    {
-        m_pointActor->VisibilityOff();
-    }
-    m_2DViewer->refresh();
+    return m_myData;
 }
+
 
 }
 
