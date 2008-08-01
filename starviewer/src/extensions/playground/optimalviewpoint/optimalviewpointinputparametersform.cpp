@@ -22,7 +22,7 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     setupUi( this );
 
     m_advancedControlsFrame->hide();
-    m_applyPushButton->setDisabled( true );
+    //m_applyPushButton->setDisabled( true );
 
     m_parameters = 0;
 

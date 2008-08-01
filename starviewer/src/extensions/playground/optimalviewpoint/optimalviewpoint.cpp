@@ -166,6 +166,8 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     DEBUG_LOG( "end setImage" );
 
     if ( m_renderer ) m_volume->setRenderer( m_renderer );
+    DEBUG_LOG( "renderer->AddViewProp(volume)" );
+    m_renderer->AddViewProp( volume );
 }
 
 void OptimalViewpoint::setSegmentationFileName( QString name )
