@@ -7,7 +7,7 @@
 #ifndef UDGSEEDTOOLDATA_H
 #define UDGSEEDTOOLDATA_H
 
-#include <tooldata.h>
+#include "tooldata.h"
 
 #include <QVector>
 
