@@ -63,6 +63,9 @@ class OptimalViewpointVolume : public QObject {
 
 public:
 
+    /// Tipus d'interpolació.
+    enum Interpolation { NearestNeighbour, LinearInterpolateClassify, LinearClassifyInterpolate };
+
     struct Voxel { int x, y, z; };
 
     enum ObscuranceFunction { Constant0, Distance, SquareRoot, Exponential, ExponentialNorm, CubeRoot };
@@ -84,7 +87,14 @@ public:
     /// Assigna el renderer.
     void setRenderer( vtkRenderer *renderer );
 
+    /// Assigna el tipus d'interpolació que es farà.
+    void setInterpolation( Interpolation interpolation );
+    /// Assigna si s'aplica ombreig (il·luminació difusa) o no (ambient).
     void setShade( bool on );
+    /// Assigna si s'aplica il·luminació especular o no (només té efecte si hi ha il·luminació difusa).
+    void setSpecular( bool on );
+    /// Assigna l'exponent del coeficient especular.
+    void setSpecularPower( double specularPower );
 
     void setImageSampleDistance( double imageSampleDistance );
     double getImageSampleDistance() const;
@@ -129,12 +139,9 @@ public:
 
     // nous paràmetres
     void setOpacityForComputing( bool on );
-    static const int INTERPOLATION_NEAREST_NEIGHBOUR = 0,
-                     INTERPOLATION_LINEAR_INTERPOLATE_CLASSIFY = 1,
-                     INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE = 2;
-    void setInterpolation( int interpolation );
-    void setSpecular( bool on );
-    void setSpecularPower( double specularPower );
+
+    
+
 
 
 

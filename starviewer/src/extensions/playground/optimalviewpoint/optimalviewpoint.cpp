@@ -659,7 +659,7 @@ void OptimalViewpoint::setOpacityForComputing( bool on )
 
 void OptimalViewpoint::setInterpolation( int interpolation )
 {
-    m_volume->setInterpolation( interpolation );
+    m_volume->setInterpolation( static_cast<OptimalViewpointVolume::Interpolation>( interpolation ) );
 }
 
 void OptimalViewpoint::setSpecular( bool specular )
