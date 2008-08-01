@@ -272,10 +272,38 @@ void OptimalViewpointVolume::setRenderer( vtkRenderer *renderer )
 }
 
 
+void OptimalViewpointVolume::setInterpolation( Interpolation interpolation )
+{
+    switch ( interpolation )
+    {
+        case NearestNeighbour:
+            m_property->SetInterpolationTypeToNearest();
+            break;
+        case LinearInterpolateClassify:
+            m_property->SetInterpolationTypeToLinear();
+            m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionFx2->SetCompositeMethodToInterpolateFirst();
+            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
+            break;
+        case LinearClassifyInterpolate:
+            m_property->SetInterpolationTypeToLinear();
+            m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionFx2->SetCompositeMethodToClassifyFirst();
+            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
+            break;
+    }
+}
+
+
 void OptimalViewpointVolume::setShade( bool on )
 {
-    on ? m_property->ShadeOn() : m_property->ShadeOff();
-    if (on) {
+    if ( on )
+    {
+        m_property->ShadeOn();
         m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
         m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
         vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
@@ -289,11 +317,26 @@ void OptimalViewpointVolume::setShade( bool on )
                                                                    gradientShader->GetGreenSpecularShadingTable( m_volume ),
                                                                    gradientShader->GetBlueSpecularShadingTable( m_volume ) );
     }
-    else {
+    else
+    {
+        m_property->ShadeOff();
         m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
         m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_ambientVoxelShader );
     }
 }
+
+
+void OptimalViewpointVolume::setSpecular( bool on )
+{
+    m_property->SetSpecular( on ? 1.0 : 0.0 );
+}
+
+
+void OptimalViewpointVolume::setSpecularPower( double specularPower )
+{
+    m_property->SetSpecularPower( specularPower );
+}
+
 
 void OptimalViewpointVolume::setImageSampleDistance( double imageSampleDistance )
 {
@@ -848,49 +891,6 @@ void OptimalViewpointVolume::setOpacityForComputing( bool on )
 //    m_planeVolumeRayCastFunction->setOpacityOn( on );
 }
 
-
-
-void OptimalViewpointVolume::setInterpolation( int interpolation )
-{
-    switch ( interpolation )
-    {
-        case INTERPOLATION_NEAREST_NEIGHBOUR:
-            m_property->SetInterpolationTypeToNearest();
-            break;
-        case INTERPOLATION_LINEAR_INTERPOLATE_CLASSIFY:
-            m_property->SetInterpolationTypeToLinear();
-            m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
-//            m_planeVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionFx2->SetCompositeMethodToInterpolateFirst();
-            break;
-        case INTERPOLATION_LINEAR_CLASSIFY_INTERPOLATE:
-            m_property->SetInterpolationTypeToLinear();
-            m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
-            //m_planeVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionFx2->SetCompositeMethodToClassifyFirst();
-            break;
-    }
-}
-
-
-
-void OptimalViewpointVolume::setSpecular( bool on )
-{
-    m_property->SetSpecular( on ? 1.0 : 0.0 );
-}
-
-
-
-void OptimalViewpointVolume::setSpecularPower( double specularPower )
-{
-    m_property->SetSpecularPower( specularPower );
-}
 
 
 void OptimalViewpointVolume::setRenderCluster( bool renderCluster )
