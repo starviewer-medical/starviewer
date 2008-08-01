@@ -70,11 +70,19 @@ public:
 
     /// Construeix el volum a partir d'una imatge.
     OptimalViewpointVolume( vtkImageData *image, QObject *parent = 0 );
+    /// Destructor.
     virtual ~OptimalViewpointVolume();
 
-    /// Retorna el vtkVolume corresponent a l'índex donat.
-    vtkVolume * getMainVolume() const;
-    vtkVolume * getPlaneVolume() const;
+    /// Retorna el valor de propietat mínim.
+    unsigned char getRangeMin() const;
+    /// Retorna el valor de propietat màxim.
+    unsigned char getRangeMax() const;
+
+    /// Retorna el vtkVolume.
+    vtkVolume* getVolume() const;
+
+    /// Assigna el renderer.
+    void setRenderer( vtkRenderer *renderer );
 
     void setShade( bool on );
 
@@ -137,10 +145,7 @@ public:
     vtkImageData * getImage() const { return m_image; }
     vtkImageData * getLabeledImage() const { return m_labeledImage; }
 
-    /// Retorna el valor de propietat mínim.
-    unsigned char getRangeMin() const;
-    /// Retorna el valor de propietat màxim.
-    unsigned char getRangeMax() const;
+
 
 
 
@@ -181,7 +186,7 @@ public:
     void setFxSaliencyHigh( double fxSaliencyHigh );
 
 
-    void setMainRenderer( vtkRenderer * renderer ) { m_mainRenderer = renderer; }
+   
 
 
 public slots:
@@ -282,6 +287,11 @@ private:
     /// Volum.
     vtkVolume *m_volume;
 
+    /// Funció de transferència actual.
+    TransferFunction m_transferFunction;    // necessària per les obscurances
+
+    /// El renderer on es visualitza el vtkVolume.
+    vtkRenderer *m_renderer;    // necessari pel direct illumination voxel shader
 
 
 
@@ -293,7 +303,8 @@ private:
 
 
 
-    vtkRenderer *m_mainRenderer;
+
+    
 
 
 
@@ -316,7 +327,7 @@ private:
 
     bool m_renderWithObscurances;
 
-    TransferFunction m_transferFunction;
+    
 
 
 
