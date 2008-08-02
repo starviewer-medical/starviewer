@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Utilitat per enviar testos i fer comprovacions d'estil
+
 
 DARTURL=http://trueta.udg.edu/dart
 DARTBOARD="Starviewer"
@@ -121,11 +121,16 @@ case "$1" in
         shift
         if [ -z "$1" ]
         then
-            # Fem check complet
+        	# Fem check complet
             $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -D kwsFiles.txt
         else
             # Fem check dels fitxers indicats com a paràmetres
-            $KWSTYLE -xml kws.xml -html KWStyle -lesshtml $*
+            for glob in $*
+            do
+                echo $glob
+            done > .inlineFiles.txt
+            $KWSTYLE -xml kws.xml -html KWStyle -lesshtml -D .inlineFiles.txt
+            rm -f .inlineFiles.txt 
         fi
         ;;
     Continuous)
