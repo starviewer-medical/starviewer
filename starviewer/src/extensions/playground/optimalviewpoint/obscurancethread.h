@@ -20,6 +20,7 @@
 
 
 class vtkDirectionEncoder;
+class vtkEncodedGradientEstimator;
 
 
 namespace udg {
@@ -39,7 +40,8 @@ public:
     ObscuranceThread( int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent = 0 );
     virtual ~ObscuranceThread();
 
-    void setNormals( vtkDirectionEncoder * directionEncoder, const ushort * encodedNormals );
+    /// Assigna l'estimador del gradient, d'on es treuran les normals.
+    void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
     void setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] );
     void setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant, double * obscurance, Vector3 * colorBleeding );
     void setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh );

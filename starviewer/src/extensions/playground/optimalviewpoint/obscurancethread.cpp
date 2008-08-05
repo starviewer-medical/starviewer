@@ -13,6 +13,7 @@
 #include <QStack>
 
 #include <vtkDirectionEncoder.h>
+#include <vtkEncodedGradientEstimator.h>
 
 #include "logging.h"
 #include "mathtools.h"
@@ -35,10 +36,10 @@ ObscuranceThread::~ObscuranceThread()
 }
 
 
-void ObscuranceThread::setNormals( vtkDirectionEncoder * directionEncoder, const ushort * encodedNormals )
+void ObscuranceThread::setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator )
 {
-    m_directionEncoder = directionEncoder;
-    m_encodedNormals = encodedNormals;
+    m_directionEncoder = gradientEstimator->GetDirectionEncoder();
+    m_encodedNormals = gradientEstimator->GetEncodedNormals();
 }
 
 

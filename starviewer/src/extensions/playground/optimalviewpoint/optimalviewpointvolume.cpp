@@ -1146,8 +1146,7 @@ void OptimalViewpointVolume::computeObscurances( int numberOfDirections, double 
         else for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] = Vector3();
     }
 
-    vtkDirectionEncoder * directionEncoder = m_mapper->GetGradientEstimator()->GetDirectionEncoder();
-    unsigned short * encodedNormals = m_mapper->GetGradientEstimator()->GetEncodedNormals();
+    vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
 
     // càlcul de direccions
     POVSphereCloud cloud( 1.0, numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
@@ -1168,7 +1167,7 @@ void OptimalViewpointVolume::computeObscurances( int numberOfDirections, double 
     for ( int i = 0; i < numberOfThreads; i++ )
     {
         ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, m_transferFunction, this );
-        thread->setNormals( directionEncoder, encodedNormals );
+        thread->setGradientEstimator( gradientEstimator );
         thread->setData( m_data, m_dataSize, dimensions, increments );
         thread->setObscuranceParameters( maximumDistance, function, variant, m_obscurance, m_colorBleeding );
         thread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
