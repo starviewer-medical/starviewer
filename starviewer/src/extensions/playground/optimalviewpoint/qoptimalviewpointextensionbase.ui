@@ -30,6 +30,13 @@
         <number>6</number>
        </property>
        <item>
+        <widget class="QPushButton" name="m_backgroundColorPushButton" >
+         <property name="text" >
+          <string>Background color...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="udg::QShowHideWidget" native="1" name="m_visualizationWidget" >
          <property name="title" >
           <string>Visualization</string>

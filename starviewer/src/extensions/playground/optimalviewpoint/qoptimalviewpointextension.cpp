@@ -24,6 +24,7 @@
 #include <QTextStream>
 #include "optimalviewpointvolume.h"
 #include <QTime>
+#include <QColorDialog>
 
 
 namespace udg {
@@ -98,6 +99,9 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
     //m_segmentationWidget->setChecked( false );
     //m_visualizationWidget->setChecked( true );
+
+
+    connect( m_backgroundColorPushButton, SIGNAL( clicked() ), SLOT( chooseBackgroundColor() ) );
 }
 
 
@@ -687,6 +691,13 @@ void QOptimalViewpointExtension::saveCameraParameters()
 void QOptimalViewpointExtension::computeViewpointSaliency()
 {
     m_method->computeViewpointSaliency( m_obscuranceDirectionsSpinBox->value(), m_viewpointSaliencyDivAreaCheckBox->isChecked() );
+}
+
+
+void QOptimalViewpointExtension::chooseBackgroundColor()
+{
+    QColor color = QColorDialog::getColor( m_viewerWidget->getBackgroundColor(), this );
+    if ( color.isValid() ) m_viewerWidget->setBackgroundColor( color );
 }
 
 

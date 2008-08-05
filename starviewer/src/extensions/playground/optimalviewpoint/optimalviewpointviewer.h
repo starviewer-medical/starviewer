@@ -40,6 +40,11 @@ public:
     /// Indiquem les dades d'entrada.
     virtual void setInput( Volume * volume );
 
+    /// Posa el color de fons a \a color.
+    void setBackgroundColor( QColor color );
+    /// Retorna el color de fons actual.
+    QColor getBackgroundColor();
+
     void getCurrentWindowLevel( double wl[2] );
     void resetView( CameraOrientationType view );
 
