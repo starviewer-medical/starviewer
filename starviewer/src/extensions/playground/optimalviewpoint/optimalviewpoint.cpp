@@ -900,14 +900,9 @@ void OptimalViewpoint::doRegularSegmentation( unsigned char numberOfBins )
 
 void OptimalViewpoint::computeObscurances( int directions, double maximumDistance, int obscuranceFunction, int obscuranceVariant )
 {
-    m_volume->setObscuranceDirections( directions );
-    m_volume->setObscuranceMaximumDistance( maximumDistance );
-    m_volume->setObscuranceFunction( static_cast<OptimalViewpointVolume::ObscuranceFunction>( obscuranceFunction ) );
-    m_volume->setObscuranceVariant( static_cast<OptimalViewpointVolume::ObscuranceVariant>( obscuranceVariant ) );
-
     QTime t;
     t.start();
-    m_volume->computeObscurances();
+    m_volume->computeObscurances( directions, maximumDistance, static_cast<OptimalViewpointVolume::ObscuranceFunction>( obscuranceFunction ), static_cast<OptimalViewpointVolume::ObscuranceVariant>( obscuranceVariant ) );
     int elapsed = t.elapsed();
     DEBUG_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
     INFO_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );

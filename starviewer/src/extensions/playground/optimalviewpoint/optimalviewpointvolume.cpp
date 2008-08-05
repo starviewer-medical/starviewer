@@ -76,14 +76,10 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
     createProperty();
     createVolume();
 
-
-
-
     m_obscurance = 0;
     m_colorBleeding = 0;
-    m_obscuranceDirections = 2;
-    m_obscuranceMaximumDistance = 64.0;
-    m_obscuranceFunction = Constant0;
+
+
 
     m_renderWithObscurances = false;
 
@@ -913,32 +909,6 @@ signed char OptimalViewpointVolume::rescale( int bins )
 
 
 
-
-void OptimalViewpointVolume::setObscuranceDirections( int obscuranceDirections )
-{
-    m_obscuranceDirections = obscuranceDirections;
-}
-
-
-void OptimalViewpointVolume::setObscuranceMaximumDistance( double obscuranceMaximumDistance )
-{
-    m_obscuranceMaximumDistance = obscuranceMaximumDistance;
-}
-
-
-void OptimalViewpointVolume::setObscuranceFunction( ObscuranceFunction obscuranceFunction )
-{
-    m_obscuranceFunction = obscuranceFunction;
-}
-
-
-void OptimalViewpointVolume::setObscuranceVariant( ObscuranceVariant obscuranceVariant )
-{
-    m_obscuranceVariant = obscuranceVariant;
-}
-
-
-
 void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurances )
 {
     DEBUG_LOG( QString( "srwo:b (%1,%2)" ).arg( m_renderWithObscurances ).arg( renderWithObscurances ) );
@@ -1156,8 +1126,9 @@ void OptimalViewpointVolume::reduceToHalf()
 
 
 // nova versió amb threads
-void OptimalViewpointVolume::computeObscurances()
+void OptimalViewpointVolume::computeObscurances( int numberOfDirections, double maximumDistance, ObscuranceFunction function, ObscuranceVariant variant )
 {
+    m_obscuranceVariant = variant;
     // Guardem en un booleà si treballem amb color o sense
     bool color = m_obscuranceVariant >= OpacityColorBleeding;
 
@@ -1179,7 +1150,7 @@ void OptimalViewpointVolume::computeObscurances()
     unsigned short * encodedNormals = m_mapper->GetGradientEstimator()->GetEncodedNormals();
 
     // càlcul de direccions
-    POVSphereCloud cloud( 1.0, m_obscuranceDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    POVSphereCloud cloud( 1.0, numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
     cloud.createPOVCloud();
     const QVector<Vector3> & directions = cloud.getVertices();
     int nDirections = directions.size();
@@ -1199,7 +1170,7 @@ void OptimalViewpointVolume::computeObscurances()
         ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, m_transferFunction, this );
         thread->setNormals( directionEncoder, encodedNormals );
         thread->setData( m_data, m_dataSize, dimensions, increments );
-        thread->setObscuranceParameters( m_obscuranceMaximumDistance, m_obscuranceFunction, m_obscuranceVariant, m_obscurance, m_colorBleeding );
+        thread->setObscuranceParameters( maximumDistance, function, variant, m_obscurance, m_colorBleeding );
         thread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
         threads[i] = thread;
     }

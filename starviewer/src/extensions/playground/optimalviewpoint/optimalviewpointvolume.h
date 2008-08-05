@@ -66,9 +66,11 @@ public:
     /// Tipus d'interpolació.
     enum Interpolation { NearestNeighbour, LinearInterpolateClassify, LinearClassifyInterpolate };
 
+    /// Estructura que guarda les coordenades d'un vòxel.
     struct Voxel { int x, y, z; };
-
+    /// Funcions d'obscurances.
     enum ObscuranceFunction { Constant0, Distance, SquareRoot, Exponential, ExponentialNorm, CubeRoot };
+    /// Variants de les obscurances.
     enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacitySaliency, OpacitySmoothSaliency, OpacityColorBleeding, OpacitySmoothColorBleeding };
 
     /// Construeix el volum a partir d'una imatge.
@@ -143,11 +145,7 @@ public:
 
 
 
-    void computeObscurances();
-    void setObscuranceDirections( int obscuranceDirections );
-    void setObscuranceMaximumDistance( double obscuranceMaximumDistance );
-    void setObscuranceFunction( ObscuranceFunction obscuranceFunction );
-    void setObscuranceVariant( ObscuranceVariant obscuranceVariant );
+    void computeObscurances( int numberOfDirections, double maximumDistance, ObscuranceFunction function, ObscuranceVariant variant );
 
     void setRenderWithObscurances( bool renderWithObscurances );
     void setObscurancesFactor( double obscurancesFactor );
@@ -279,18 +277,14 @@ private:
     /// El renderer on es visualitza el vtkVolume.
     vtkRenderer *m_renderer;    // necessari pel direct illumination voxel shader
 
+    /// Variant de les obscurances que s'ha calculat o carregat.
+    ObscuranceVariant m_obscuranceVariant;
+    /// Vector d'obscurances.
+    double *m_obscurance;
+    /// Vector de color bleeding.
+    Vector3 *m_colorBleeding;
 
 
-
-
-
-
-
-
-
-
-
-    
 
 
 
@@ -304,12 +298,8 @@ private:
 
 
 
-    double * m_obscurance;
-    Vector3 * m_colorBleeding;
-    int m_obscuranceDirections;
-    double m_obscuranceMaximumDistance;
-    ObscuranceFunction m_obscuranceFunction;
-    ObscuranceVariant m_obscuranceVariant;
+
+
 
     bool m_renderWithObscurances;
 
