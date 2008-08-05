@@ -51,6 +51,20 @@ void OptimalViewpointViewer::setInput( Volume * volume )
     m_mainVolume = volume;
 }
 
+
+void OptimalViewpointViewer::setBackgroundColor( QColor color )
+{
+    m_renderer->SetBackground( color.redF(), color.greenF(), color.blueF() );
+}
+
+
+QColor OptimalViewpointViewer::getBackgroundColor()
+{
+    double *background = m_renderer->GetBackground();
+    return QColor::fromRgbF( background[0], background[1], background[2] );
+}
+
+
 void OptimalViewpointViewer::getCurrentWindowLevel( double wl[2] )
 {
     // TODO estem obligats a implementar-lo. De moment retornem 0,0
@@ -96,7 +110,7 @@ void OptimalViewpointViewer::setTool( QString /*tool*/ )
 
 void OptimalViewpointViewer::reset()
 {
-    // de moment res
+    m_renderer->SetBackground( 1.0, 1.0, 1.0 );
 }
 
 void OptimalViewpointViewer::setWindowLevel( double, double )

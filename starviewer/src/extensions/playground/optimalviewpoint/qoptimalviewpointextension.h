@@ -85,6 +85,9 @@ public slots:
 
 private slots:
 
+    /// Obre un diàleg per triar el color de fons.
+    void chooseBackgroundColor();
+
     void openSegmentationFile();
     void toggleSegmentationParameters();
     void computeObscurances();
