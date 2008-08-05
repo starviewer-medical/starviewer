@@ -241,8 +241,8 @@ void QOptimalViewpointExtension::execute()
 
     if ( m_method->resultsChanged() )
     {
-        std::vector<double> * entropyRateResults = m_method->getEntropyRateResults();
-        std::vector<double> * excessEntropyResults = m_method->getExcessEntropyResults();
+        QVector<double> * entropyRateResults = m_method->getEntropyRateResults();
+        QVector<double> * excessEntropyResults = m_method->getExcessEntropyResults();
 
         QMessageBox * resultsDialog = new QMessageBox( tr("Results"), "", QMessageBox::Information,
                 QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, m_viewerWidget );
@@ -509,8 +509,8 @@ void QOptimalViewpointExtension::computeViewpointEntropies()
     m_method->computeViewpointEntropies();
 
     {
-        std::vector<double> * entropyRateResults = m_method->getEntropyRateResults();
-        std::vector<double> * excessEntropyResults = m_method->getExcessEntropyResults();
+        QVector<double> * entropyRateResults = m_method->getEntropyRateResults();
+        QVector<double> * excessEntropyResults = m_method->getExcessEntropyResults();
 
         QMessageBox * resultsDialog = new QMessageBox( tr("Results"), "", QMessageBox::Information,
                 QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, m_viewerWidget );

@@ -5,14 +5,17 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+
 #ifndef UDGOPTIMALVIEWPOINT_H
 #define UDGOPTIMALVIEWPOINT_H
 
+
 #include <QObject>
 
-// #include <QGradient>    // per QGradientStops
-#include <vector>       // per std::vector<*>
+#include <QVector>
+
 #include "transferfunction.h"
+
 
 class vtkCamera;
 class vtkRenderer;
@@ -109,9 +112,9 @@ public:
 
 
     bool resultsChanged() const;
-    std::vector<double> * getResults();
-    std::vector<double> * getEntropyRateResults();
-    std::vector<double> * getExcessEntropyResults();
+    QVector<double> * getResults();
+    QVector<double> * getEntropyRateResults();
+    QVector<double> * getExcessEntropyResults();
     const TransferFunction & getAdjustedTransferFunction() const;
 
 
@@ -188,7 +191,7 @@ private slots:
 
 private:
 
-    typedef std::vector<OptimalViewpointPlane *> PlaneVector;
+    typedef QVector<OptimalViewpointPlane *> PlaneVector;
 
     vtkRenderer * m_renderer;
     vtkCamera * m_camera;
