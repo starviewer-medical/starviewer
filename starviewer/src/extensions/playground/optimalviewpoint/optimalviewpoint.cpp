@@ -51,8 +51,8 @@ OptimalViewpoint::OptimalViewpoint( QObject * parent )
     m_camera = vtkCamera::New();  // creem la càmera principal
 //     m_renderer->SetActiveCamera( m_camera );
 
-    m_planes = new PlaneVector(); // creem el vector de plans
-    m_planes->resize( 1, 0 );
+    m_planes = new PlaneVector( 1 ); // creem el vector de plans
+    //m_planes->resize( 1 );
 
     m_interactor = 0;   // l'interactor és null inicialment
 
@@ -189,7 +189,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
         if ( 1 + numberOfPlanes > size ) // s'hauran d'afegir plans
         {
             // ampliem els vectors amb nulls
-            m_planes->resize( 1 + numberOfPlanes, 0 );
+            m_planes->resize( 1 + numberOfPlanes );
 
             for ( unsigned char i = size; i < 1 + numberOfPlanes; i++ )
             {
@@ -588,16 +588,16 @@ bool OptimalViewpoint::resultsChanged() const
     return m_resultsChanged;
 }
 
-std::vector<double> * OptimalViewpoint::getResults()
+QVector<double> * OptimalViewpoint::getResults()
 {
     return getExcessEntropyResults();
 }
 
-std::vector<double> * OptimalViewpoint::getEntropyRateResults()
+QVector<double> * OptimalViewpoint::getEntropyRateResults()
 {
     m_resultsChanged = false;
 
-    std::vector<double> * results = new std::vector<double>( 1 + m_numberOfPlanes );
+    QVector<double> * results = new QVector<double>( 1 + m_numberOfPlanes );
 
     for ( unsigned char i = 1; i <= m_numberOfPlanes; i++ )
     {
@@ -607,11 +607,11 @@ std::vector<double> * OptimalViewpoint::getEntropyRateResults()
     return results;
 }
 
-std::vector<double> * OptimalViewpoint::getExcessEntropyResults()
+QVector<double> * OptimalViewpoint::getExcessEntropyResults()
 {
     m_resultsChanged = false;
 
-    std::vector<double> * results = new std::vector<double>( 1 + m_numberOfPlanes );
+    QVector<double> * results = new QVector<double>( 1 + m_numberOfPlanes );
 
     for ( unsigned char i = 1; i <= m_numberOfPlanes; i++ )
     {
