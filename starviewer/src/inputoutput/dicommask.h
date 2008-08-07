@@ -21,6 +21,8 @@
 #ifndef DICOMMASK
 #define DICOMMASK
 
+#include <QString>
+
 class QString;
 class DcmDataset;
 
@@ -38,11 +40,8 @@ public:
 
     DicomMask();
 
-    /** This action especified that in the search we want the Patient's Name
-     * @param Name of the patient to search.
-     * @return state of the method
-     */
-    Status setPatientName( QString );
+    ///Indiquem el Patient name pel qual filtrar
+    void setPatientName(QString);
 
     /** Aquest mètode especifica la data de naixement del pacient amb la que s'han de cercar els estudis. El format és DDMMYYYY
      * Si el paràmetre no té valor, busca per totes les dates
@@ -53,31 +52,28 @@ public:
      * @param  Study's Data de naixement del pacient
      * @return state of the method
      */
-    Status setPatientBirth(QString date);
+    void setPatientBirth(QString date);
 
     /** This action especified that in the search we want the Patient's sex
      * @param Patient's sex of the patient to search.
      * @return state of the method
      */
-    Status setPatientSex(QString);
+    void setPatientSex(QString);
 
-    /** This action especified that in the search we want the Patient's ID
-     * @param   patientID Patient's ID of the patient to search.
-     * @return state of the method
-     */
-    Status setPatientId(QString);
+    ///Indiquem el patient Id pel qual filtrar
+    void setPatientId(QString);
 
     /** This action especified that in the search we want the Patient's Age
      * @param  Patient's age of the patient to search.
      * @return state of the method
      */
-    Status setPatientAge(QString);
+    void setPatientAge(QString);
 
     /** This action especified that in the search we want the Study's Id
      * @param  Study's Id of the study to search.
      * @return state of the method
      */
-    Status setStudyId(QString);
+    void setStudyId(QString);
 
     /** Aquest mètode especifica la data amb la que s'han de cercar els estudis. El format és DDMMYYYY
      * Si el paràmetre no té valor, busca per totes les dates
@@ -88,19 +84,19 @@ public:
      * @param  Study's date of the study to search.
      * @return state of the method
      */
-    Status setStudyDate(QString date);
+    void setStudyDate(QString date);
 
     /** This action especified that in the search we want the Study's description
      *  @param Study's description of the study to search.
      *  @return state of the method
      */
-    Status setStudyDescription(QString);
+    void setStudyDescription(QString);
 
     /** This action especified that in the search we want the Study's modality
      * @param Study's modality the study to search.
      * @return state of the method
      */
-    Status setStudyModality(QString);
+    void setStudyModality(QString);
 
     /** Especifica l'hora de l'estudi a buscar, les hores es passen en format HHMM
      *         Si es buit busca per qualsevol hora.
@@ -111,25 +107,25 @@ public:
      * @param  Hora de l'estudi
      * @retun estat del mètode
      */
-    Status setStudyTime(QString);
+    void setStudyTime(QString);
 
     /** This action especified that in the search we want the Study's instance UID
      * @param Study's instance UID the study to search.
      * @return state of the method
      */
-    Status setStudyUID(QString);
+    void setStudyUID(QString);
 
     /** This action especified that in the search we want the Accession Number
      * @param Accession Number of the study to search.
      * @return state of the method
      */
-    Status setAccessionNumber(QString);
+    void setAccessionNumber(QString);
 
     /** Establei el ReferringPhysiciansName
      * @param physiciansName
      * @return estat del mètode
      */
-    Status setReferringPhysiciansName( QString physiciansName );
+    void setReferringPhysiciansName(QString physiciansName);
 
     /** Retorna de la màscara l'estudi UID
      * @param mask [in] màscara de la cerca
@@ -137,14 +133,10 @@ public:
      */
     QString getStudyUID() const;
 
-    /** Retorna el Id del pacient a buscar
-     * @return   ID del pacient
-     */
+    /// Retorna el Id del pacient a filtrar
     QString getPatientId() const;
 
-    /** Retorna el nom del pacient
-     * @return Nom del pacient
-     */
+    /// Retorna el nom del pacient a filtrar
     QString getPatientName() const;
 
     /** Retorna la data naixement
@@ -201,7 +193,7 @@ public:
      * @param seriesNumber' Number of the series to search. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesNumber(QString );
+    void setSeriesNumber(QString);
 
     /** Aquest mètode especifica per quina data s'ha de buscar la serie. El format es YYYYMMDD
      * Si passem una data sola, per exemple 20040505 només buscara sèries d'aquell dia
@@ -211,7 +203,7 @@ public:
      * @param series data a cercar la sèrie
      * @return estat del mètode
      */
-    Status setSeriesDate(QString date);
+    void setSeriesDate(QString date);
 
      /** Especifica l'hora de la serie a buscar, les hores es passen en format HHMM
       *         Si es buit busca per qualsevol hora.
@@ -222,31 +214,31 @@ public:
       * @param Series Hora de la serie
       * @retun estat del mètode
       */
-    Status setSeriesTime(QString);
+    void setSeriesTime(QString);
 
     /** This action especified that in the search we want the seriess description
      * @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
      * @return estat del mètode
      */
-    Status setSeriesDescription(QString);
+    void setSeriesDescription(QString);
 
     /** This action especified that in the search we want the series modality
      * @param series modality the study to search. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesModality(QString);
+    void setSeriesModality(QString);
 
     /** This action especified that in the search we want to query the Protocol Name
      * @param Protocol Name. If this parameter is null it's supose that any mask is applied at this field
      * @return estat del mètode
      */
-    Status setSeriesProtocolName(QString);
+    void setSeriesProtocolName(QString);
 
      /** This action especified that in the search we want the seriess description
      * @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
      * @return estat del mètode
      */
-    Status setSeriesUID(QString date);
+    void setSeriesUID(QString seriesUID);
 
     /** Estableix la seqüència per cercar per la requested atribute sequence.
      * RequestAtrributeSequence està format pel RequestedProcedureID i el procedureStepID
@@ -254,19 +246,19 @@ public:
      * @param ScheduledProcedureStepID Scheduled Procedure Step ID pel qual s'ha de cercar
      * @return estat del mètode
      */
-    Status setRequestAttributeSequence( QString procedureID, QString procedureStepID );
+    void setRequestAttributeSequence(QString procedureID, QString procedureStepID);
 
     /** Estableix la màscara de cerca del Perfomed Procedure Step Start date
      * @param startDate Perfomed Procedure Step Start date pel qual cercar
      * @return estat del mètode
      */
-    Status setPPSStartDate( QString startDate );
+    void setPPSStartDate(QString startDate);
 
     /** Estableix la màscara de cerca del Perfomed Procedure Step Start Time
      * @param startTime Perfomed Procedure Step Start Time pel qual cercar
      * @return estat del mètode
      */
-    Status setPPStartTime( QString startTime );
+    void setPPStartTime(QString startTime);
 
     /** Retorna el series Number
      * @return   series Number
@@ -327,13 +319,13 @@ public:
      * @param   Study instance UID the study to search. If this parameter is null it's supose that any mask is applied at this field
      * @return The state of the action
      */
-    Status setImageNumber( QString );
+    void setImageNumber(QString);
 
     /** Estableix el instance UID de l'image
      * @param SOPIntanceUID Instance UID de l'imatge
      * @return estat del mètode
      */
-    Status setSOPInstanceUID( QString SOPInstanceUID);
+    void setSOPInstanceUID(QString SOPInstanceUID);
 
     /** Retorna el número d'imatge
       * @return número d'imatge
@@ -345,28 +337,44 @@ public:
      */
     QString getSOPInstanceUID() const;
 
-    /** retorna a quin nivell es fa la màscara
-     */
-    QString getRetrieveLevel() const;
-
     DcmDataset* getDicomMask();
 
     bool operator ==(const DicomMask &mask);
-    
+
     ///ens determina si la consulta al PACS pot esdevenir pesada, segons els paràmetres de cerca que s'han especificat
     bool isAHeavyQuery();
 
 private:
 
-   //enum objectMask { StudyMask , SeriesMask , ImageMask };
-    enum ObjectMask { StudyMask , SeriesMask , ImageMask };
-    DcmDataset *m_mask;
-    ObjectMask m_objectMask;
+    QString m_patientId;
+    QString m_patientName;
+    QString m_patientBirth;
+    QString m_patientSex;
+    QString m_patientAge;
+    QString m_studyId;
+    QString m_studyDate;
+    QString m_studyTime;
+    QString m_studyDescription;
+    QString m_studyModality; 
+    QString m_studyUID;
+    QString m_accessionNumber;
+    QString m_referringPhysiciansName;
+    QString m_seriesNumber;
+    QString m_seriesDate;
+    QString m_seriesTime;
+    QString m_seriesModality;
+    QString m_seriesDescription;
+    QString m_seriesProtocolName;
+    QString m_seriesUID;
+    QString m_requestedProcedureID;
+    QString m_scheduledProcedureStepID;
+    QString m_PPSStartDate;
+    QString m_PPSStartTime;
+    QString m_SOPInstanceUID;
+    QString m_imageNumber;
 
-    /** En funció de per quins elements establim que hem de crear la màscara el retrieve estableix un nivell o altre de cercar
-    * @param retrieveLevel retrieve level amb que ataquem al PACS
-    */
-    void retrieveLevel( ObjectMask retrieveLevel);
+    ///Retorna el nivell de QueryRetrieve, en funció dels camps de la màscara que ens han introduït
+    QString getQueryRetrieveLevel();
 };
 
 } //end namespace
