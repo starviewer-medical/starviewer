@@ -1457,7 +1457,6 @@ DicomMask QueryScreen::buildSeriesDicomMask( QString studyUID )
     mask.setSeriesTime( "" );
     mask.setSeriesModality( "" );
     mask.setSeriesNumber( "" );
-    mask.setSeriesBodyPartExaminated( "" );
     mask.setSeriesUID( "" );
     mask.setPPSStartDate( "" );
     mask.setPPStartTime( "" );
@@ -1542,7 +1541,6 @@ DicomMask QueryScreen::buildDicomMask()
     mask.setStudyDescription( "" );
     mask.setStudyTime( m_studyTimeText->text() );
     mask.setStudyUID( m_studyUIDText->text() );
-    mask.setInstitutionName( "" );
     mask.setStudyModality( m_studyModalityText->text() );
     mask.setPatientAge( "" );
     mask.setAccessionNumber( m_accessionNumberText->text() );
@@ -1562,7 +1560,6 @@ DicomMask QueryScreen::buildDicomMask()
         mask.setSeriesTime( "" );
         mask.setSeriesModality( "" );
         mask.setSeriesNumber( m_seriesNumberText->text() );
-        mask.setSeriesBodyPartExaminated( "" );
         mask.setSeriesUID( m_seriesUIDText->text() );
         mask.setRequestAttributeSequence( m_requestedProcedureIDText->text() , m_scheduledProcedureStepIDText->text() );
         mask.setPPSStartDate( m_PPStartDateText->text() );

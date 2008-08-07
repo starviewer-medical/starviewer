@@ -400,28 +400,6 @@ Status DicomMask:: setStudyUID( QString studyUID )
     return state.setStatus( DcmtkNoError );
 }
 
-Status DicomMask:: setInstitutionName( QString institution )
-{
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_InstitutionName );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(institution) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag Institution name in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
-}
-
 Status DicomMask:: setAccessionNumber( QString accession )
 {
     char val[100];
@@ -571,20 +549,6 @@ QString DicomMask::getAccessionNumber() const
     return accessionNumber;
 }
 
-QString DicomMask::getInstitutionName() const
-{
-    const char *value = NULL;
-    QString institutionName;
-
-    DcmTagKey institutionNameTagKey (DCM_InstitutionName);
-    OFCondition ec;
-    ec = m_mask->findAndGetString( institutionNameTagKey , value , OFFalse );
-
-    if ( value != NULL ) institutionName.insert( 0 , value );
-
-    return institutionName;
-}
-
 QString DicomMask::getReferringPhysiciansName() const
 {
     const char * value = NULL;
@@ -725,50 +689,6 @@ Status DicomMask:: setSeriesUID( QString seriesUID )
     retrieveLevel( SeriesMask );
 
     elem->putString( qPrintable(seriesUID) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
-}
-
-Status DicomMask:: setSeriesOperator( QString name )
-{
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_OperatorsName );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(name) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
-}
-
-Status DicomMask:: setSeriesBodyPartExaminated( QString part )
-{
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_BodyPartExamined );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(part) );
     if ( elem->error() != EC_Normal )
     {
         return state.setStatus( DcmtkMaskInsertTagError );
@@ -946,34 +866,6 @@ QString DicomMask::getSeriesModality() const
     if ( value != NULL ) seriesModality.insert( 0 , value );
 
     return seriesModality;
-}
-
-QString DicomMask::getSeriesOperator() const
-{
-    const char *value = NULL;
-    QString operatorsName;
-
-    DcmTagKey operatorsNameTagKey ( DCM_OperatorsName );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( operatorsNameTagKey , value , OFFalse );
-
-    if ( value != NULL ) operatorsName.insert( 0 ,  value );
-
-    return operatorsName;
-}
-
-QString DicomMask::getSeriesBodyPartExaminated() const
-{
-    const char *value = NULL;
-    QString bodyPartExaminated;
-
-    DcmTagKey bodyPartExaminatedTagKey ( DCM_BodyPartExamined );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( bodyPartExaminatedTagKey , value , OFFalse );
-
-    if ( value != NULL ) bodyPartExaminated.insert( 0 ,  value );
-
-    return bodyPartExaminated;
 }
 
 QString DicomMask::getSeriesProtocolName() const
@@ -1177,15 +1069,12 @@ bool DicomMask::operator ==(const DicomMask &mask)
         && getStudyModality() == mask.getStudyModality()
         && getStudyTime() == mask.getStudyTime()
         && getAccessionNumber() == mask.getAccessionNumber()
-        && getInstitutionName() == mask.getInstitutionName()
         && getReferringPhysiciansName() == mask.getReferringPhysiciansName()
         && getSeriesNumber() == mask.getSeriesNumber()
         && getSeriesDate() == mask.getSeriesDate()
         && getSeriesTime() == mask.getSeriesTime()
         && getSeriesDescription() == mask.getSeriesDescription()
         && getSeriesModality() == mask.getSeriesModality()
-        && getSeriesOperator() == mask.getSeriesOperator()
-        && getSeriesBodyPartExaminated() == mask.getSeriesBodyPartExaminated()
         && getSeriesProtocolName() == mask.getSeriesProtocolName()
         && getSeriesUID() == mask.getSeriesUID()
         && getRequestedProcedureID() == mask.getRequestedProcedureID()
