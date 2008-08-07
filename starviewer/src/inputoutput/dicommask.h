@@ -119,12 +119,6 @@ public:
      */
     Status setStudyUID(QString);
 
-    /** This action especified that in the search we want the Institution name
-     * @param Institution name of the study to search.
-     * @return state of the method
-     */
-    Status setInstitutionName(QString);
-
     /** This action especified that in the search we want the Accession Number
      * @param Accession Number of the study to search.
      * @return state of the method
@@ -198,11 +192,6 @@ public:
      */
     QString getAccessionNumber() const;
 
-    /** Retorna el nom de l'institució on s'ha realitzat l'estudi
-     * @return   Nom de l'institucio
-     */
-    QString getInstitutionName() const;
-
     /** retorna el ReferringPhysiciansName
       * @return ReferringPhysiciansName
       */
@@ -246,18 +235,6 @@ public:
      * @return estat del mètode
      */
     Status setSeriesModality(QString);
-
-    /** This action especified that in the search we want to query the operator's name
-     * @param Operator's name. If this parameter is null it's supose that any mask is applied at this field
-     * @return estat del mètode
-     */
-    Status setSeriesOperator(QString);
-
-    /** This action especified that in the search we want to query the body part examinated
-     * @param Body Part. If this parameter is null it's supose that any mask is applied at this field
-     * @return estat del mètode
-     */
-    Status setSeriesBodyPartExaminated(QString);
 
     /** This action especified that in the search we want to query the Protocol Name
      * @param Protocol Name. If this parameter is null it's supose that any mask is applied at this field
@@ -315,16 +292,6 @@ public:
      * @return modalitat de la sèrie
      */
     QString getSeriesModality() const;
-
-    /** Retorna l'operador que captat la serie
-     * @return operdor
-     */
-    QString getSeriesOperator() const;
-
-    /** Retorna la part del cos examinada en la serie
-     * @return part del cos examinada
-     */
-    QString getSeriesBodyPartExaminated() const;
 
     /** Retorna el nom del protocol utiltizat la serie
      * @return nom del protocol utilitzat a la seire
