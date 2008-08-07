@@ -11,1053 +11,480 @@
 
 #include "errordcmtk.h"
 #include "status.h"
+#include "logging.h"
 
 namespace udg{
 
 DicomMask::DicomMask()
 {
-    char val[15];
-    m_mask = new DcmDataset;
-
-    m_objectMask = StudyMask; // per defecte nivell de la màscara per estudi
-
-    DcmElement *elem = newDicomElement( DCM_QueryRetrieveLevel );
-
-    strcpy( val , "STUDY");
-    elem->putString( val );
-    m_mask->insert( elem , OFTrue );
-
-    //\TODO Revisar: Establim quin és el nostre implementationVersionName ( nom de l'aplicació que rebrà el pacs que es vol connectar contra ell)
-//     DcmElement *elemImplementationVersionName = newDicomElement( DCM_ImplementationVersionName );
-//     elemImplementationVersionName->putString( implementationVersionName) );
-//     m_mask->insert( elemImplementationVersionName , OFTrue );
-}
-
-void DicomMask::retrieveLevel( ObjectMask object )
-{
-    char val[15];
-
-    switch ( object )
-    {
-        case StudyMask :
-            //per defecte tenim nivell d'estudi
-            break;
-        case SeriesMask :
-            if ( m_objectMask == StudyMask ) // si fem un set a un tag d'una serie i tenim nivell d'estudi, especifiquem que el nivell de la màscara sera per sèrie
-            {
-                DcmElement *elem = newDicomElement( DCM_QueryRetrieveLevel );
-
-                strcpy( val , "SERIES") ;
-                elem->putString( val );
-                m_mask->insert( elem , OFTrue );
-            }
-            break;
-        case ImageMask :
-            if ( m_objectMask == StudyMask || m_objectMask == SeriesMask  ) // si fem un set a un tag d'una imatge especifiquem que el nivell de la màscara serà per imatge
-            {
-                DcmElement *elem = newDicomElement( DCM_QueryRetrieveLevel );
-
-                strcpy( val , "IMAGE") ;
-                elem->putString( val );
-                m_mask->insert( elem , OFTrue );
-            }
-            break;
-    }
-
 }
 
 /************************* PATIENT  *********************************************************************/
 
-Status DicomMask::setPatientId( QString patientID )
+void DicomMask::setPatientId(QString patientId)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_PatientID) ;
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(patientID) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag PATIENT ID in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_patientId = patientId;
 }
 
-Status DicomMask::setPatientName( QString patientName )
+void DicomMask::setPatientName(QString patientName)
 {
-    Status state;
-    DcmElement *elem = newDicomElement(DCM_PatientsName);
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(patientName) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-    return state.setStatus( DcmtkNoError );
+    m_patientName = patientName;
 }
 
-Status DicomMask::setPatientBirth( QString date )
+void DicomMask::setPatientBirth(QString patientBirth)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_PatientsBirthDate );
-
-    retrieveLevel( StudyMask );
-
-    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( DcmtkMaskInsertTagError );
-
-    elem->putString( qPrintable(date) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_patientBirth = patientBirth;
 }
 
-Status DicomMask::setPatientSex( QString patientSex )
+void DicomMask::setPatientSex(QString patientSex)
 {
-    Status state;
-    DcmElement *elem = newDicomElement(DCM_PatientsSex );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(patientSex) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_patientSex = patientSex;
 }
 
-Status DicomMask::setPatientAge( QString patientAge )
+void DicomMask::setPatientAge(QString patientAge)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_PatientsAge );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(patientAge) );
-
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_patientAge = patientAge;
 }
 
 
 QString DicomMask::getPatientId() const
 {
-    const char *value = NULL;
-    QString patientID;
-
-    DcmTagKey patientIDTagKey ( DCM_PatientID );
-    OFCondition ec;
-
-    ec = m_mask->findAndGetString( patientIDTagKey , value , OFFalse );
-
-    if ( value != NULL ) patientID.insert( 0 , value );
-
-    return patientID;
+    return m_patientId;
 }
 
 QString DicomMask::getPatientName() const
 {
-    const char *value = NULL;
-    QString patientName;
-
-    DcmTagKey patientIDTagKey ( DCM_PatientsName );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( patientIDTagKey , value , OFFalse );
-
-    if ( value != NULL ) patientName.insert( 0 , value );
-
-    return patientName;
+    return m_patientName;
 }
 
 QString DicomMask::getPatientBirth() const
 {
-    const char *value = NULL;
-    QString patientBirth;
-
-    DcmTagKey patientBirthTagKey ( DCM_PatientsBirthDate );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( patientBirthTagKey , value , OFFalse );
-
-
-    if ( value != NULL ) patientBirth.insert( 0 , value );
-
-    return patientBirth;
+    return m_patientBirth;
 }
 
 QString DicomMask::getPatientSex() const
 {
-    const char *value = NULL;
-    QString patientSex;
-
-    DcmTagKey patientSexTagKey ( DCM_PatientsSex );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( patientSexTagKey , value , OFFalse );
-
-    if ( value != NULL ) patientSex.insert( 0 , value );
-
-    return patientSex;
+    return m_patientSex;
 }
 
 QString DicomMask::getPatientAge() const
 {
-    const char *value = NULL;
-    QString patientAge;
-
-    DcmTagKey patientAgeTagKey ( DCM_PatientsAge );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( patientAgeTagKey , value , OFFalse );
-
-    if ( value != NULL ) patientAge.insert( 0 , value );
-
-    return patientAge;
+    return m_patientAge;
 }
 
 /****************************************** STUDY *****************************************************/
 
-Status DicomMask:: setStudyId( QString studyID )
+void DicomMask:: setStudyId(QString studyId)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_StudyID );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(studyID) );
-
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag StudyMask DATE in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_studyId = studyId;
 }
 
-Status DicomMask:: setStudyDate( QString date )
+void DicomMask:: setStudyDate(QString studyDate)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_StudyDate );
-
-    retrieveLevel( StudyMask );
-
-    //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
-    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() != 0 ) return state.setStatus( DcmtkMaskInsertTagError );
-
-    elem->putString( qPrintable(date) );
-
-    if ( elem->error() != EC_Normal )
-    {
-       return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag StudyMask DATE in the search mask
-    if ( m_mask == NULL ) m_mask = new DcmDataset;
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_studyDate = studyDate;
 }
 
-Status DicomMask:: setStudyDescription( QString desc )
+void DicomMask::setStudyDescription(QString studyDescription)
 {
-    Status state;
-    DcmElement *elem = newDicomElement(DCM_StudyDescription);
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(desc) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag StudyMask DESCRIPTION in the search mask
-    m_mask->insert( elem , OFTrue );
-
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_studyDescription = studyDescription;
 }
 
-Status DicomMask:: setStudyModality( QString modality )
+void DicomMask::setStudyModality(QString studyModality)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_ModalitiesInStudy );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(modality) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag STUDY Modality in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_studyModality = studyModality;
 }
 
-Status DicomMask:: setStudyTime( QString time )
+void DicomMask:: setStudyTime(QString studyTime)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_StudyTime );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(time) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag STUDY TIME in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_studyTime = studyTime;
 }
 
-Status DicomMask:: setStudyUID( QString studyUID )
+void DicomMask:: setStudyUID(QString studyUID)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_StudyInstanceUID );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(studyUID) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag STUDY UID in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_studyUID = studyUID;
 }
 
-Status DicomMask:: setAccessionNumber( QString accession )
+void DicomMask:: setAccessionNumber(QString accessionNumber)
 {
-    char val[100];
-    val[0] = '\0';
-    QString value;
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_AccessionNumber );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(accession) );
-
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag Accession Number in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_accessionNumber = accessionNumber;
 }
 
-Status DicomMask::setReferringPhysiciansName( QString physiciansName )
+void DicomMask::setReferringPhysiciansName(QString referringPhysiciansName)
 {
-    Status state;
-
-    DcmElement *elem = newDicomElement( DCM_ReferringPhysiciansName );
-
-    retrieveLevel( StudyMask );
-
-    elem->putString( qPrintable(physiciansName) );
-
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal ) {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_referringPhysiciansName = referringPhysiciansName;
 }
 
 /***************************************************************   GET **********************************************/
 
 QString DicomMask::getStudyUID() const
 {
-    const char * value =NULL;
-    QString studyUID;
-
-    DcmTagKey studyUIDTagKey ( DCM_StudyInstanceUID );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( studyUIDTagKey , value , OFFalse );;
-
-    if ( value != NULL ) studyUID.insert( 0 , value );
-
-    return studyUID;
+    return m_studyUID;
 }
 
 QString DicomMask::getStudyId() const
 {
-    const char *value = NULL;
-    QString studyID;
-
-    DcmTagKey studyIDTagKey ( DCM_StudyID );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( studyIDTagKey , value , OFFalse );
-
-    if ( value != NULL ) studyID.insert( 0 , value );
-
-    return studyID;
+    return m_studyId;
 }
 
 QString DicomMask::getStudyDate() const
 {
-    const char * value = NULL;
-    QString studyDate;
-
-    DcmTagKey studyDateTagKey ( DCM_StudyDate );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( studyDateTagKey , value , OFFalse );
-
-    if ( value != NULL ) studyDate.insert( 0 , value );
-
-    return studyDate;
+    return m_studyDate;
 }
 
 QString DicomMask::getStudyDescription() const
 {
-    const char *value = NULL;
-    QString studyDescription;
-
-    DcmTagKey studyDescriptionTagKey ( DCM_StudyDescription );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( studyDescriptionTagKey , value , OFFalse );
-
-    if ( value != NULL ) studyDescription.insert (0 , value );
-
-    return studyDescription;
+    return m_studyDescription;
 }
 
 QString DicomMask::getStudyTime() const
 {
-    const char *value = NULL;
-    QString studyTime;
-
-    DcmTagKey studyTimeTagKey ( DCM_StudyTime );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( studyTimeTagKey , value , OFFalse );
-
-    if ( value != NULL ) studyTime.insert( 0 , value );
-
-    return studyTime;
+    return m_studyTime;
 }
 
 QString DicomMask::getStudyModality() const
 {
-    const char *value = NULL;
-    QString studyModality;
-
-    DcmTagKey studyModalityTagKey ( DCM_ModalitiesInStudy );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( studyModalityTagKey , value , OFFalse );
-
-    if ( value != NULL ) studyModality.insert( 0 , value );
-
-    return studyModality;
+    return m_studyModality;
 }
 
 QString DicomMask::getAccessionNumber() const
 {
-    const char *value = NULL;
-    QString accessionNumber;
-
-    DcmTagKey accessionNumberTagKey ( DCM_AccessionNumber );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( accessionNumberTagKey , value , OFFalse );
-
-    if ( value != NULL ) accessionNumber.insert( 0 , value );
-
-    return accessionNumber;
+    return m_accessionNumber;
 }
 
 QString DicomMask::getReferringPhysiciansName() const
 {
-    const char * value = NULL;
-    QString referringPhysiciansName;
-
-    DcmTagKey referringPhysiciansNameTagKey ( DCM_ReferringPhysiciansName );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( referringPhysiciansNameTagKey , value , OFFalse );
-
-    if ( value != NULL ) referringPhysiciansName.insert( 0 , value );
-
-    return referringPhysiciansName;
+    return m_referringPhysiciansName;
 }
 
 /************************************** SERIES *************************************************/
 
-Status DicomMask:: setSeriesNumber( QString seriesNumber )
+void DicomMask:: setSeriesNumber(QString seriesNumber)
 {
-    DcmElement *elem = newDicomElement( DCM_SeriesNumber );
-    Status state;
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(seriesNumber) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag series Number in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_seriesNumber = seriesNumber;
 }
 
-Status DicomMask:: setSeriesDate( QString date )
+void DicomMask:: setSeriesDate(QString seriesDate)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_SeriesDate );
-
-    retrieveLevel( SeriesMask );
-
-    //pot venir la data amb format de 8 caracters, despres amb guio (9 càractes), o cerca entra dates (17 caràcters)
-    if ( date.length() != 8 && date.length() != 9 && date.length() != 17 && date.length() !=  0 )return state.setStatus( DcmtkMaskInsertTagError );
-
-    elem->putString( qPrintable(date) );
-    if ( elem->error() != EC_Normal )
-    {
-       return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-    return state.setStatus( DcmtkNoError );
+    m_seriesDate = seriesDate;
 }
 
-Status DicomMask:: setSeriesDescription( QString desc )
+void DicomMask:: setSeriesDescription(QString seriesDescription)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_SeriesDescription );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(desc) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_seriesDescription = seriesDescription;
 }
 
-Status DicomMask:: setSeriesModality( QString modality )
+void DicomMask:: setSeriesModality(QString seriesModality)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_Modality );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(modality) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_seriesModality = seriesModality;
 }
 
-Status DicomMask:: setSeriesTime( QString time )
+void DicomMask:: setSeriesTime(QString seriesTime)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_SeriesTime );
-
-    retrieveLevel( SeriesMask );
-
-    //la hora ha de ser de longitud 4 HHMM, o 5 HHMM- o -HHMM, o 9 HHMM-HHMM
-    if ( time.length() != 4 && time.length() != 5 && time.length() != 9 && time.length() !=0 ) return state.setStatus( DcmtkMaskInsertTagError );
-
-    elem->putString( qPrintable(time) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_seriesTime = seriesTime;
 }
 
-Status DicomMask:: setSeriesUID( QString seriesUID )
+void DicomMask:: setSeriesUID(QString seriesUID)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_SeriesInstanceUID );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(seriesUID) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_seriesUID = seriesUID;
 }
 
-Status DicomMask:: setSeriesProtocolName( QString name )
+void DicomMask:: setSeriesProtocolName(QString seriesProtocolName)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_ProtocolName );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(name) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_seriesProtocolName = seriesProtocolName;
 }
 
-Status DicomMask::setRequestAttributeSequence( QString requestedProcedureID, QString scheduledProcedureStepID )
+void DicomMask::setRequestAttributeSequence(QString requestedProcedureID, QString scheduledProcedureStepID)
 {
-     Status state;
-    // creem la sequencia
-
-    retrieveLevel( SeriesMask );
-
-    DcmSequenceOfItems *requestedAttributeSequence = new DcmSequenceOfItems( DCM_RequestAttributesSequence );
-
-    DcmItem *requestedAttributeSequenceItem = new DcmItem( DCM_Item );
-    requestedAttributeSequenceItem->putAndInsertString( DCM_RequestedProcedureID, qPrintable( requestedProcedureID ) );
-
-    requestedAttributeSequenceItem->putAndInsertString( DCM_ScheduledProcedureStepID, qPrintable( scheduledProcedureStepID ) );
-
-    requestedAttributeSequence->insert( requestedAttributeSequenceItem );
-    m_mask->insert( requestedAttributeSequence, OFTrue );
-
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_requestedProcedureID = requestedProcedureID;
+    m_scheduledProcedureStepID = scheduledProcedureStepID;
 }
 
-Status DicomMask::setPPSStartDate( QString startDate )
+void DicomMask::setPPSStartDate(QString PPPSStartDate)
 {
-    Status state;
-
-    DcmElement *elem = newDicomElement( DCM_PerformedProcedureStepStartDate );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(startDate) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError);
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_PPSStartDate = PPPSStartDate;
 }
 
-Status DicomMask::setPPStartTime( QString startTime )
+void DicomMask::setPPStartTime(QString PPSStartTime)
 {
-    Status state;
-
-    DcmElement *elem = newDicomElement( DCM_PerformedProcedureStepStartTime );
-
-    retrieveLevel( SeriesMask );
-
-    elem->putString( qPrintable(startTime) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError);
-    }
-
-    return state.setStatus( DcmtkNoError );
+    m_PPSStartTime = PPSStartTime;
 }
 
 /************************************************ GET **************************************************************/
 
 QString DicomMask::getSeriesNumber() const
 {
-    const char *value = NULL;
-    QString seriesNumber;
-
-    DcmTagKey seriesNumberTagKey (DCM_SeriesNumber);
-    OFCondition ec;
-    ec = m_mask->findAndGetString( seriesNumberTagKey , value , OFFalse );
-
-    if ( value != NULL ) seriesNumber.insert( 0 , value );
-
-    return seriesNumber;
+    return m_seriesNumber;
 }
 
 QString DicomMask::getSeriesDate() const
 {
-    const char *value = NULL;
-    QString seriesDate;
-
-    DcmTagKey seriesDateTagKey ( DCM_SeriesDate );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( seriesDateTagKey , value , OFFalse );
-
-    if ( value != NULL ) seriesDate.insert( 0 , value );
-
-    return seriesDate;
+    return m_seriesDate;
 }
 
 QString DicomMask::getSeriesTime() const
 {
-    const char *value = NULL;
-    QString seriesTime;
-
-    DcmTagKey seriesTimeTagKey ( DCM_SeriesTime );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( seriesTimeTagKey , value , OFFalse );
-
-    if ( value != NULL ) seriesTime.insert( 0 , value );
-
-    return seriesTime;
+    return m_seriesTime;
 }
 
 QString DicomMask::getSeriesDescription() const
 {
-    const char *value = NULL;
-    QString seriesDescription;
-
-    DcmTagKey seriesDescriptionTagKey ( DCM_SeriesDescription );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( seriesDescriptionTagKey , value , OFFalse );
-
-    if ( value != NULL ) seriesDescription.insert( 0 , value );
-
-    return seriesDescription;
+    return m_seriesDescription;
 }
 
 QString DicomMask::getSeriesModality() const
 {
-    const char *value = NULL;
-    QString seriesModality;
-
-    DcmTagKey seriesModalityTagKey ( DCM_Modality );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( seriesModalityTagKey , value , OFFalse );
-
-    if ( value != NULL ) seriesModality.insert( 0 , value );
-
-    return seriesModality;
+    return m_seriesModality;
 }
+
 
 QString DicomMask::getSeriesProtocolName() const
 {
-    const char *value = NULL;
-    QString ProtocolName;
-
-    DcmTagKey ProtocolNameTagKey ( DCM_ProtocolName );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( ProtocolNameTagKey , value , OFFalse );
-
-    if ( value != NULL ) ProtocolName.insert( 0 , value );
-
-    return ProtocolName;
+    return m_seriesProtocolName;
 }
 
 QString DicomMask::getSeriesUID() const
 {
-    const char *value = NULL;
-    QString seriesUID;
-
-    DcmTagKey seriesUIDTagKey ( DCM_SeriesInstanceUID );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( seriesUIDTagKey , value , OFFalse );
-
-    if ( value != NULL ) seriesUID.insert( 0 , value );
-
-    return seriesUID;
+    return m_seriesUID;
 }
 
 QString DicomMask::getRequestedProcedureID() const
 {
-    const char * value = NULL;
-    QString requestedProcedureID;
-    OFCondition ec;
-
-    DcmSequenceOfItems *requestAttributesSequence;
-    ec = m_mask->findAndGetSequence( DCM_RequestAttributesSequence , requestAttributesSequence , false );
-    if ( requestAttributesSequence != NULL )
-    {
-        DcmItem * itemsSequence = requestAttributesSequence->getItem( 0 );
-
-        itemsSequence->findAndGetString( DCM_RequestedProcedureID  , value , false );
-        if ( value != NULL ) requestedProcedureID.insert( 0 , value );
-    }
-
-    return requestedProcedureID;
+    return m_requestedProcedureID;
 }
 
 QString DicomMask::getScheduledProcedureStepID() const
 {
-    const char * value = NULL;
-    QString procedureStepID;
-    OFCondition ec;
-
-    DcmSequenceOfItems *requestAttributesSequence;
-    ec = m_mask->findAndGetSequence( DCM_RequestAttributesSequence , requestAttributesSequence , false );
-    if ( requestAttributesSequence != NULL )
-    {
-        DcmItem * itemsSequence = requestAttributesSequence->getItem( 0 );
-
-        itemsSequence->findAndGetString( DCM_ScheduledProcedureStepID , value , false );
-        if ( value != NULL ) procedureStepID.insert( 0 , value );
-    }
-
-    return procedureStepID;
+    return m_scheduledProcedureStepID;
 }
 
 QString DicomMask::getPPSStartDate() const
 {
-    const char * value =NULL;
-    QString startDate;
-
-    DcmTagKey tagKey ( DCM_PerformedProcedureStepStartDate );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( tagKey , value , OFFalse );
-
-    if ( value != NULL ) startDate.insert( 0 , value );
-
-    return startDate;
+    return m_PPSStartDate;
 }
 
 QString DicomMask::getPPSStartTime() const
 {
-    const char * value =NULL;
-    QString startTime;
-
-    DcmTagKey tagKey ( DCM_PerformedProcedureStepStartTime );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( tagKey , value , OFFalse );
-
-    if ( value != NULL ) startTime.insert( 0 , value );
-
-    return startTime;
+    return m_PPSStartTime;
 }
 
 /********************************************** IMAGE **************************************/
 
-Status DicomMask:: setImageNumber( QString imgNum )
+void DicomMask:: setImageNumber(QString imageNumber)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_InstanceNumber );
-
-    retrieveLevel( ImageMask );
-
-    elem->putString( qPrintable(imgNum) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-    return state.setStatus( DcmtkNoError );
+    m_imageNumber = imageNumber;
 }
 
-Status DicomMask:: setSOPInstanceUID( QString SOPInstanceUID )
+void DicomMask:: setSOPInstanceUID(QString SOPInstanceUID)
 {
-    Status state;
-    DcmElement *elem = newDicomElement( DCM_SOPInstanceUID );
-
-    retrieveLevel( ImageMask );
-
-    elem->putString( qPrintable(SOPInstanceUID) );
-    if ( elem->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-
-    //insert the tag SOPInstanceUID in the search mask
-    m_mask->insert( elem , OFTrue );
-    if ( m_mask->error() != EC_Normal )
-    {
-        return state.setStatus( DcmtkMaskInsertTagError );
-    }
-    return state.setStatus( DcmtkNoError );
+    m_SOPInstanceUID = SOPInstanceUID;
 }
 
 QString DicomMask::getImageNumber() const
 {
-    const char *value = NULL;
-    QString imageNumber;
-
-    DcmTagKey instanceNumberTagKey ( DCM_InstanceNumber );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( instanceNumberTagKey , value , OFFalse );
-
-    if ( value != NULL ) imageNumber.insert( 0 , value );
-
-    return imageNumber;
+    return m_imageNumber;
 }
 
 QString DicomMask::getSOPInstanceUID() const
 {
-    const char * value = NULL;
-    QString SOPInstanceUID;
-
-    DcmTagKey SOPInstanceUIDTagKey ( DCM_SOPInstanceUID );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( SOPInstanceUIDTagKey  , value , OFFalse );
-
-    if ( value != NULL ) SOPInstanceUID.insert( 0 , value );
-
-    return SOPInstanceUID;
-}
-
-QString DicomMask::getRetrieveLevel() const
-{
-    const char * value = NULL;
-    QString queryRetrieve;
-
-    DcmTagKey tagKey ( DCM_QueryRetrieveLevel );
-    OFCondition ec;
-    ec = m_mask->findAndGetString( tagKey  , value , OFFalse );
-
-    if ( value != NULL ) queryRetrieve.insert( 0 , value );
-
-    return queryRetrieve;
-
+    return m_SOPInstanceUID;
 }
 
 DcmDataset* DicomMask::getDicomMask()
 {
-    return m_mask;
+    DcmDataset *maskDcmDataset = new DcmDataset();
+
+    if (!getPatientId().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_PatientID);
+        elem->putString(qPrintable(getPatientId()));
+        maskDcmDataset->insert(elem, OFTrue);
+    }
+
+    if (!getPatientName().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_PatientsName);
+        elem->putString(qPrintable(getPatientName()));
+        maskDcmDataset->insert(elem, OFTrue);
+    }
+
+    if (!getPatientBirth().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_PatientsBirthDate);
+        elem->putString(qPrintable(getPatientBirth()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getPatientSex().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_PatientsSex);
+        elem->putString(qPrintable(getPatientSex()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getPatientAge().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_PatientsAge);
+        elem->putString(qPrintable(getPatientAge()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getStudyId().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_StudyID);
+        elem->putString(qPrintable(getStudyId()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getStudyDescription().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_StudyDescription);
+        elem->putString(qPrintable(getStudyDescription()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getStudyModality().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_ModalitiesInStudy);
+        elem->putString(qPrintable(getStudyModality()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getStudyDate().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_StudyDate);
+        elem->putString(qPrintable(getStudyDate()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getStudyTime().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_StudyTime);
+        elem->putString(qPrintable(getStudyTime()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getAccessionNumber().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_AccessionNumber);
+        elem->putString(qPrintable(getAccessionNumber()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getReferringPhysiciansName().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_ReferringPhysiciansName);
+        elem->putString(qPrintable(getReferringPhysiciansName()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getStudyUID().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
+        elem->putString(qPrintable(getStudyUID()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSeriesNumber().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_SeriesNumber);
+        elem->putString(qPrintable(getSeriesNumber()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSeriesDate().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_SeriesDate);
+        elem->putString(qPrintable(getSeriesDate()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSeriesModality().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_Modality);
+        elem->putString(qPrintable(getSeriesModality()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSeriesTime().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_SeriesTime);
+        elem->putString(qPrintable(getSeriesTime()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSeriesDescription().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_SeriesDescription);
+        elem->putString(qPrintable(getSeriesDescription()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSeriesProtocolName().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_ProtocolName);
+        elem->putString(qPrintable(getSeriesProtocolName()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSeriesUID().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_SeriesInstanceUID);
+        elem->putString(qPrintable(getSeriesUID()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull())
+    {
+        DcmSequenceOfItems *requestedAttributeSequence = new DcmSequenceOfItems(DCM_RequestAttributesSequence);
+
+        DcmItem *requestedAttributeSequenceItem = new DcmItem(DCM_Item);
+        requestedAttributeSequenceItem->putAndInsertString(DCM_RequestedProcedureID, qPrintable(getRequestedProcedureID()));
+
+        requestedAttributeSequenceItem->putAndInsertString(DCM_ScheduledProcedureStepID, qPrintable(getScheduledProcedureStepID()));
+
+        requestedAttributeSequence->insert(requestedAttributeSequenceItem);
+        maskDcmDataset->insert(requestedAttributeSequence, OFTrue);
+    }
+
+    if (!getPPSStartDate().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_PerformedProcedureStepStartDate);
+        elem->putString(qPrintable(getPPSStartDate()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getPPSStartTime().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_PerformedProcedureStepStartTime);
+        elem->putString(qPrintable(getPPSStartTime()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getSOPInstanceUID().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_SOPInstanceUID);
+        elem->putString(qPrintable(getSOPInstanceUID()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    if (!getImageNumber().isNull())
+    {
+        DcmElement *elem = newDicomElement(DCM_InstanceNumber);
+        elem->putString(qPrintable(getImageNumber()));
+        maskDcmDataset->insert(elem , OFTrue);
+    }
+
+    /*Especifiquem a quin nivell es fa el QueryRetrieve, a través del mètode getQueryRetrieveLevel, que ens retorna el nivell en funció dels camps de la màscara*/
+    DcmElement *elem = newDicomElement(DCM_QueryRetrieveLevel);
+    elem->putString(qPrintable(getQueryRetrieveLevel()));
+    maskDcmDataset->insert(elem , OFTrue);
+
+    return maskDcmDataset;
 }
 
 bool DicomMask::operator ==(const DicomMask &mask)
 {
-    if(    getStudyUID() == mask.getStudyUID()
+    if(   getStudyUID() == mask.getStudyUID()
         && getPatientId() == mask.getPatientId()
         && getPatientName() == mask.getPatientName()
         && getPatientBirth() == mask.getPatientBirth()
@@ -1083,8 +510,7 @@ bool DicomMask::operator ==(const DicomMask &mask)
         && getPPSStartTime() == mask.getPPSStartTime()
         && getImageNumber() == mask.getImageNumber()
         && getSOPInstanceUID() == mask.getSOPInstanceUID()
-        && getRetrieveLevel() == mask.getRetrieveLevel()
-    )
+   )
         return true;
     else
         return false;
@@ -1114,33 +540,52 @@ bool DicomMask::isAHeavyQuery()
     bool noID = getPatientId() == "*";
     
     /// PERÍODE RELATIVAMENT LLARG 
-    if ( studyDate.length() > 8 )
+    if (studyDate.length() > 8)
     {
-        QDateTime begin( QDate( studyDate.mid(0, 4).toInt(), studyDate.mid(4, 2).toInt(), studyDate.mid(6, 2).toInt() ) );
-        QDateTime end( QDate( studyDate.mid(10, 4).toInt(), studyDate.mid(14, 2).toInt(), studyDate.mid(16, 2).toInt() ) );
+        QDateTime begin(QDate(studyDate.mid(0, 4).toInt(), studyDate.mid(4, 2).toInt(), studyDate.mid(6, 2).toInt()));
+        QDateTime end(QDate(studyDate.mid(10, 4).toInt(), studyDate.mid(14, 2).toInt(), studyDate.mid(16, 2).toInt()));
         
         //consederem com a període llarg a partir d'una setmana
-        longPeriod = end.daysTo( begin ) > 7;
+        longPeriod = end.daysTo(begin) > 7;
     }
 
     ///NOM CURT
     QString nameWithoutAst =  patientName.remove(QChar('*'));
-    bool shortName = ( nameWithoutAst.length() < 4 );
+    bool shortName = (nameWithoutAst.length() < 4);
     
     //EL NOM ÉS UN STRING DELS DETERMINATS COM A PESATS A L'INICI DEL MÈTODE
     //no ho tenim en compte perquè en un hospital seran uns noms i en un altre hospital seran uns altres
-    //bool heavyName = singleWordAsName && heavyWords.contains ( nameWithoutAst, Qt::CaseInsensitive ); 
+    //bool heavyName = singleWordAsName && heavyWords.contains (nameWithoutAst, Qt::CaseInsensitive); 
     
     ///EL NÚMERO D'ESTUDI ÉS CURT
     QString idWithoutAst =  getPatientId().remove(QChar('*'));
     bool shortID = idWithoutAst.length() < 3;
     
     //Construïm les condicions que fan que una query pugui ser pesada
-    bool noIDOrName = ( noName && noID ) || ( shortName && shortID );
+    bool noIDOrName = (noName && noID) || (shortName && shortID);
     
-    bool heavyMask =  ( anyDate  && noIDOrName ) || ( longPeriod && noIDOrName );
+    bool heavyMask =  (anyDate  && noIDOrName) || (longPeriod && noIDOrName);
     
     return heavyMask;
+}
+
+QString DicomMask::getQueryRetrieveLevel()
+{
+    bool isImageLevel = !getSOPInstanceUID().isNull() || !getImageNumber().isNull();
+    bool isSeriesLevel = !getSeriesDescription().isNull()  || !getSeriesDate().isNull() || !getSeriesModality().isNull() ||
+                         !getSeriesNumber().isNull() || !getSeriesProtocolName().isNull() || !getSeriesTime().isNull() ||
+                         !getSeriesUID().isNull() || !getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull() ||
+                         !getPPSStartDate().isNull() || !getPPSStartTime().isNull();
+
+    if (isImageLevel)
+    {
+        return "IMAGE";
+    }
+    else if (isSeriesLevel)
+    {
+        return "SERIES";
+    }
+    else return "STUDY"; //PER DEFECTE DEL DICOM COM A MÍNIM SON A NIVELL D'ESTUDI
 }
 
 };
