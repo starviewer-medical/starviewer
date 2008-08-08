@@ -117,7 +117,7 @@ void QVolumeContourDelimiterExtension::setInput( Volume* volume )
     m_2DView->setInput( m_volume );
 
     //Determinem les propietats dels dos visors
-    m_2DView->updateAnnotationsInformation(Q2DViewer::NoAnnotation);
+    m_2DView->enableAnnotation(Q2DViewer::NoAnnotation);
 
     m_view = m_2DView->getView();
 
