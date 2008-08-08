@@ -89,8 +89,6 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         // restaurem manualment els valors per defecte
         m_slabThicknessSlider->setValue( 2 );
         updateThicknessLabel(2);
-        // TODO això s'hauria de fer automàticament quan tenim slab thickness d'1. Cal repassar bé tot el pipeline del Q2DViewer
-        m_currentViewer->updateSliceAnnotationInformation();
     }
     else
     {
