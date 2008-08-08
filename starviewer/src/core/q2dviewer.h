@@ -30,11 +30,6 @@ class vtkInteractorStyle;
 class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
-// tractament múltiples vistes
-class vtkPropCollection;
-class vtkRendererCollection;
-class vtkCollection;
-class vtkActor2DCollection;
 // grayscale pipeline
 class vtkImageMapToWindowLevelColors;
 class vtkImageShiftScale;
@@ -140,25 +135,6 @@ public:
 
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
-
-    /**
-        Mètodes pel tractament de múltiples vistes
-    */
-    /// Assignar/afegir files i columnes
-    void setRows( int rows );
-    void addRows( int rows );
-    void removeRows( int rows );
-    void setColumns( int columns );
-    void addColumns( int columns );
-    void removeColumns( int columns );
-    /// Donada una llesca, li diem en quantes files i columnes volem dividir les seves fases
-    void setPhaseRows( int slice, int rows );
-    void addPhaseRows( int slice, int rows );
-    void removePhaseRows( int slice, int rows );
-    void setPhaseColumns( int slice, int columns );
-    void addPhaseColumns( int slice, int columns );
-    void removePhaseColumns( int slice, int columns );
-    void setPhaseGrid( int slice, int rows, int columns );
 
     /// Actualitzem les dades de les annotacions, per defecte totes, sinó, només les especificades
     void updateAnnotationsInformation( AnnotationFlags annotation = Q2DViewer::AllAnnotation );
@@ -299,9 +275,6 @@ public slots:
     void setEnableTools( bool enable );
     void enableTools();
     void disableTools();
-
-    /// Assignar/afegir files i columnes
-    void setGrid( int rows, int columns );
 
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
@@ -450,22 +423,6 @@ private:
     /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
 
-    /**
-        Membres pel tractament de múltiples vistes
-    */
-    /// Afegeix/Eliminia un nou renderer amb imatge, actors, etc
-    void addRenderScene();
-    void removeRenderScene();
-
-    /// actualitza la distibució de files i columnes (a nivell de llesques)
-    void updateGrid();
-
-    /// actualitza la distibució de files i columnes (a nivell de fases)
-    void updatePhaseGrid( int slice );
-
-    /// actualitza la distribució de viewports
-    void updateViewports();
-
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();
 
@@ -566,9 +523,6 @@ protected:
     /// Annotacions de texte referents a informació de la sèrie (nom de pacient, protocol,descripció de sèrie, data de l'estudi)
     vtkCornerAnnotation *m_serieInformationAnnotation;
 
-    /// Col·lecció per guardar les informacions de cada llesca per tal que es mostrin el tamany d'acord amb el grid especificat per la llesca
-    vtkActor2DCollection *m_informationCollection;
-
     /// Per controlar l'espaiat en que presentem la imatge
     double m_presentationPixelSpacing[2];
 
@@ -612,32 +566,8 @@ private:
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
 
-    /// controla el nombre de files i columnes en que es distribueix el visor
-    int m_columns, m_rows;
-
-    /// Controla el nombre de llesques en que es subdivideix la finestra
-    int m_numberOfSlicesWindows;
-
-    /// per controlar els marges de la zona on es mostraran les llesques (xMin,yMin,xMax,yMax)
-    double m_slicesViewportExtent[4];
-
-    /// Col·lecció d'actors per cada llesca
-    vtkPropCollection *m_sliceActorCollection;
-
-    /// Col·lecció de renderers per cada llesca
-    vtkRendererCollection *m_rendererCollection;
-
-    /// Col·lecció de coordenades dels rulers \TODO canviar el vtkCollection per alguna estructura tipu stl::list<>
-    vtkCollection *m_anchoredRulerCoordinatesCollection;
-
-    /// Col·lecció de rulers per cada viewport
-    vtkActor2DCollection *m_rulerActorCollection;
-
-    /// Col·lecció per guardar tots els scalarBar de cada render, per tal que cadascún tingui la mida d'acord amb el render que la conté.
-    vtkActor2DCollection *m_scalarBarCollection;
-
-    /// Col·lecció d'anotacions per cada viewport
-    vtkActor2DCollection *m_sliceAnnotationsCollection;
+    // Annotació de texte per les llesques
+    vtkCornerAnnotation *m_sliceAnnotation;
 
     /// ampliació tractament dinàmic
     /// Nombre de fases
@@ -645,9 +575,6 @@ private:
 
     /// Valor màxim al que pot arribar m_currentSlice
     int m_maxSliceValue;
-
-    /// Mapa que guarda la distribució en graella de les fases d'una llesca ( si en té )
-    QMap<int, int *> m_phaseGridMap;
 
     /// Indica si cal aplicar un flip horitzontal o no sobre la càmera
     bool m_applyFlip;

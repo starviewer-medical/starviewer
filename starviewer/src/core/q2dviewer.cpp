@@ -61,11 +61,6 @@
 #include <vtkPointData.h>
 #include <vtkCell.h>
 #include <vtkPropPicker.h>
-
-#include <vtkPropCollection.h>
-#include <vtkRendererCollection.h>
-#include <vtkCollection.h>
-#include <vtkActor2DCollection.h>
 #include <vtkImageActor.h>
 
 // displayed area
@@ -82,10 +77,12 @@
 #include <vtkMatrix4x4.h>
 #include <vtkPlane.h>
 
+
+#include <vtkOpenGLRenderWindow.h>
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
- : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_columns(1), m_rows(1), m_numberOfSlicesWindows(1), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+ : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_sliceAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     // per composar el thickSlab
     m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
@@ -98,12 +95,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
-
-    // inicialització viewport de les llesques
-    m_slicesViewportExtent[0] = .0;
-    m_slicesViewportExtent[1] = .0;
-    m_slicesViewportExtent[2] = 1.;
-    m_slicesViewportExtent[3] = 1.;
 
     // inicialitzacions d'objectes
     // visor
@@ -121,23 +112,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     addActors();
 
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-
-    m_sliceActorCollection = vtkPropCollection::New();
-    m_rendererCollection = vtkRendererCollection::New();
-    m_informationCollection = vtkActor2DCollection::New();
-    m_scalarBarCollection = vtkActor2DCollection::New();
-
-    m_sliceActorCollection->AddItem( m_viewer->GetImageActor() );
-    m_rendererCollection->AddItem( m_viewer->GetRenderer() );
-    m_informationCollection->AddItem ( m_serieInformationAnnotation );
-    m_scalarBarCollection->AddItem( m_scalarBar );
-
-    m_anchoredRulerCoordinatesCollection = vtkCollection::New();
-    m_anchoredRulerCoordinatesCollection->AddItem( m_anchoredRulerCoordinates );
-    m_rulerActorCollection = vtkActor2DCollection::New();
-    m_rulerActorCollection->AddItem( m_bottomRuler );
-    m_rulerActorCollection->AddItem( m_sideRuler );
-
+    
     //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
 
@@ -180,9 +155,6 @@ void Q2DViewer::createAnnotations()
 {
     // contenidor d'anotacions de texte FIXE
     m_serieInformationAnnotation = vtkCornerAnnotation::New();
-
-    // contenidor d'anotacions de texte variable
-    m_sliceAnnotationsCollection = vtkActor2DCollection::New();
 
     // escala de colors
     m_scalarBar = createScalarBar();
@@ -289,75 +261,38 @@ vtkAxisActor2D* Q2DViewer::createRuler()
 
 void Q2DViewer::updateRulers()
 {
-    int numRuler = 0;
-    int i;
-    vtkRenderer *renderer;
-    vtkAxisActor2D *sideRuler;
-    vtkAxisActor2D *bottomRuler;
-    vtkCoordinate *anchoredRulerCoordinates;
-    double *anchoredCoordinates;
+    double *anchoredCoordinates = m_anchoredRulerCoordinates->GetComputedWorldValue( this->getRenderer() );
 
     switch( m_lastView )
     {
     case Axial:
-        for( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++ )
-        {
-            anchoredRulerCoordinates = vtkCoordinate::SafeDownCast ( m_anchoredRulerCoordinatesCollection->GetItemAsObject( i ));
-            renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
-            anchoredCoordinates = anchoredRulerCoordinates->GetComputedWorldValue( renderer );
+        m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
+        m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[2] , 0.0 );
+        m_sideRuler->SetRange( m_rulerExtent[3] , m_rulerExtent[2] );
 
-            sideRuler = vtkAxisActor2D::SafeDownCast( m_rulerActorCollection->GetItemAsObject( numRuler ) );
-            bottomRuler = vtkAxisActor2D::SafeDownCast( m_rulerActorCollection->GetItemAsObject( numRuler+1 ) );
-            numRuler += 2;
-
-            sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[3] , 0.0 );
-            sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , m_rulerExtent[2] , 0.0 );
-            sideRuler->SetRange( m_rulerExtent[3] , m_rulerExtent[2] );
-
-            bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
-            bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
-            bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );
-        }
+        m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
+        m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
+        m_bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );       
     break;
 
     case Sagital:
-        for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
-        {
-            anchoredRulerCoordinates = vtkCoordinate::SafeDownCast ( m_anchoredRulerCoordinatesCollection->GetItemAsObject( i ));
-            renderer = vtkRenderer::SafeDownCast ( m_rendererCollection->GetItemAsObject( i ));
-            anchoredCoordinates = anchoredRulerCoordinates->GetComputedWorldValue( renderer );
-            sideRuler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( numRuler ));
-            bottomRuler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( numRuler+1 ));
-            numRuler += 2;
+        m_sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[4] );
+        m_sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[5] );
+        m_sideRuler->SetRange( m_rulerExtent[4] , m_rulerExtent[5] );
 
-            sideRuler->GetPositionCoordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[4] );
-            sideRuler->GetPosition2Coordinate()->SetValue( 0.0 , anchoredCoordinates[1] , m_rulerExtent[5] );
-            sideRuler->SetRange( m_rulerExtent[4] , m_rulerExtent[5] );
-
-            bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[3] , anchoredCoordinates[2] );
-            bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[2] , anchoredCoordinates[2] );
-            bottomRuler->SetRange( m_rulerExtent[3] , m_rulerExtent[2] );
-        }
+        m_bottomRuler->GetPositionCoordinate()->SetValue( 0.0 , m_rulerExtent[3] , anchoredCoordinates[2] );
+        m_bottomRuler->GetPosition2Coordinate()->SetValue( 0.0 , m_rulerExtent[2] , anchoredCoordinates[2] );
+        m_bottomRuler->SetRange( m_rulerExtent[3] , m_rulerExtent[2] );
     break;
 
     case Coronal:
-        for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
-        {
-            anchoredRulerCoordinates = vtkCoordinate::SafeDownCast ( m_anchoredRulerCoordinatesCollection->GetItemAsObject( i ));
-            renderer = vtkRenderer::SafeDownCast ( m_rendererCollection->GetItemAsObject( i ));
-            anchoredCoordinates = anchoredRulerCoordinates->GetComputedWorldValue( renderer );
-            sideRuler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( numRuler ));
-            bottomRuler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( numRuler+1 ));
-            numRuler += 2;
+        m_sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[4] );
+        m_sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[5] );
+        m_sideRuler->SetRange( m_rulerExtent[4] , m_rulerExtent[5] );
 
-            sideRuler->GetPositionCoordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[4] );
-            sideRuler->GetPosition2Coordinate()->SetValue( anchoredCoordinates[0] , 0.0 , m_rulerExtent[5] );
-            sideRuler->SetRange( m_rulerExtent[4] , m_rulerExtent[5] );
-
-            bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , 0.0 , anchoredCoordinates[2] );
-            bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , 0.0 , anchoredCoordinates[2] );
-            bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );
-        }
+        m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , 0.0 , anchoredCoordinates[2] );
+        m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , 0.0 , anchoredCoordinates[2] );
+        m_bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );
     break;
     }
 }
@@ -397,18 +332,11 @@ void Q2DViewer::updateScalarBar()
 {
     if( m_mainVolume )
     {
-        vtkScalarBarActor *scalarBar;
-        int i;
-
         vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
         lookup->SetWindow( m_windowLevelLUTMapper->GetWindow() );
         lookup->SetLevel( m_windowLevelLUTMapper->GetLevel() );
         lookup->Build();
-        for ( i = 0; i < m_scalarBarCollection->GetNumberOfItems(); i++ )
-        {
-            scalarBar = vtkScalarBarActor::SafeDownCast( m_scalarBarCollection->GetItemAsObject( i ) );
-            scalarBar->SetLookupTable( lookup );
-        }
+        m_scalarBar->SetLookupTable( lookup );
     }
     else
         DEBUG_LOG( "No hi ha cap volum assignat. No podem donar LUT a l'escala de colors" );
@@ -581,63 +509,49 @@ void Q2DViewer::refreshAnnotations()
     else
         m_serieInformationAnnotation->VisibilityOff();
 
-    vtkCornerAnnotation *sliceAnnotation;
-    vtkRenderer *renderer;
-    vtkAxisActor2D *ruler;
-    int i = 0, rulerIndex = 0;
-
-    // Informació que es mostra per cada viewport
-    for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
+    if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
     {
-        renderer = vtkRenderer::SafeDownCast ( m_rendererCollection->GetItemAsObject( i ) );
-        // Mostrem o amaguem els rulers del volum
-        ruler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( rulerIndex ));
-        if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
-            ruler->VisibilityOn();
-        else
-            ruler->VisibilityOff();
-
-        ruler = vtkAxisActor2D::SafeDownCast ( m_rulerActorCollection->GetItemAsObject( rulerIndex+1 ));
-        if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
-            ruler->VisibilityOn();
-        else
-            ruler->VisibilityOff();
-
-        rulerIndex += 2;
-
-        sliceAnnotation = vtkCornerAnnotation::SafeDownCast ( m_sliceAnnotationsCollection->GetItemAsObject ( i ) );
-        // informació de la finestra
-        if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
-        {
-                m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                    .arg( m_imageSizeInformation[0] )
-                    .arg( m_imageSizeInformation[1] )
-                    .arg( renderer->GetSize()[0] )
-                    .arg( renderer->GetSize()[1] )
-                    .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
-                    .arg( vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
-        }
-        else
-            m_upperLeftText = "";
-
-        sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
-
-        if ( m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation )
-        {
-            for( int j = 0; j < 4; j++ )
-                m_patientOrientationTextActor[j]->VisibilityOn();
-        }
-        else
-        {
-            for( int j = 0; j < 4; j++ )
-                m_patientOrientationTextActor[j]->VisibilityOff();
-        }
-
-        if ( m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation )
-            m_scalarBar->VisibilityOn();
-        else
-            m_scalarBar->VisibilityOff();
+        m_sideRuler->VisibilityOn();
+        m_bottomRuler->VisibilityOn();
     }
+    else
+    {
+        m_sideRuler->VisibilityOff();
+        m_bottomRuler->VisibilityOff();
+    }
+
+    // informació de la finestra
+    if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
+    {
+            m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                .arg( m_imageSizeInformation[0] )
+                .arg( m_imageSizeInformation[1] )
+                .arg( this->getRenderer()->GetSize()[0] )
+                .arg( this->getRenderer()->GetSize()[1] )
+                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
+                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
+    }
+    else
+        m_upperLeftText = "";
+
+    m_sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
+
+    if ( m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation )
+    {
+        for( int j = 0; j < 4; j++ )
+            m_patientOrientationTextActor[j]->VisibilityOn();
+    }
+    else
+    {
+        for( int j = 0; j < 4; j++ )
+            m_patientOrientationTextActor[j]->VisibilityOff();
+    }
+
+    if ( m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation )
+        m_scalarBar->VisibilityOn();
+    else
+        m_scalarBar->VisibilityOff();
+
     this->updateSliceAnnotationInformation();
     this->refresh();
 }
@@ -798,9 +712,8 @@ void Q2DViewer::addActors()
     this->getRenderer()->AddActor2D( m_serieInformationAnnotation );
 
     // anotacions de texte variable (window/level, window size, etc)
-    vtkCornerAnnotation *sliceAnnotation = vtkCornerAnnotation::New();
-    this->getRenderer()->AddActor2D( sliceAnnotation );
-    m_sliceAnnotationsCollection->AddItem( sliceAnnotation );
+    m_sliceAnnotation = vtkCornerAnnotation::New();
+    this->getRenderer()->AddActor2D( m_sliceAnnotation );
 
     if( m_patientOrientationTextActor[0] )
     {
@@ -998,7 +911,6 @@ void Q2DViewer::setInput( Volume* volume )
 
     updateScalarBar();
     updatePatientAnnotationInformation();
-    updateGrid();
     resetViewToAxial();
     this->enableAnnotation( m_enabledAnnotations );
 
@@ -1141,10 +1053,9 @@ void Q2DViewer::updateCamera()
 {
     if( m_viewer->GetInput() )
     {
-        vtkCamera *camera;
-        vtkRenderer *renderer;
-        vtkRendererCollection* renderCollection = m_viewer->GetRenderWindow()->GetRenderers();
-        int i = 0;
+        vtkCamera *camera = this->getRenderer()->GetActiveCamera();
+        Q_ASSERT( camera );
+        
         double roll = 0.0;
 
         switch( this->m_lastView )
@@ -1155,37 +1066,16 @@ void Q2DViewer::updateCamera()
             else
                 roll = -m_rotateFactor*90. + 180.;
 
-            while( i < (renderCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
-            {
-                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                camera = renderer->GetActiveCamera();
-                if ( camera )
-                {
-                    camera->SetRoll( roll );
-                }
-                i++;
-            }
-            emit rotationDegreesChanged( roll );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
+
         case Sagital:
             if( m_isImageFlipped )
                 roll = m_rotateFactor*90. -90.;
             else
                 roll = -m_rotateFactor*90. - 90.;
 
-            while( i < (renderCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
-            {
-                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                camera = renderer->GetActiveCamera();
-                if ( camera )
-                {
-                    camera->SetRoll( roll );
-                }
-                i++;
-            }
-            emit rotationDegreesChanged( roll );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
@@ -1196,21 +1086,13 @@ void Q2DViewer::updateCamera()
             else
                 roll = -m_rotateFactor*90.;
 
-            while( i < (renderCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
-            {
-                renderer = vtkRenderer::SafeDownCast( renderCollection->GetItemAsObject( i ) );
-                camera = renderer->GetActiveCamera();
-                if ( camera )
-                {
-                    camera->SetRoll( roll );
-                }
-                i++;
-            }
-            emit rotationDegreesChanged( roll );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
+
+        camera->SetRoll( roll );
+        emit rotationDegreesChanged( roll );
 
         if( m_applyFlip )
         {
@@ -1263,32 +1145,28 @@ void Q2DViewer::resetCamera()
         m_rotateFactor = 0;
         m_applyFlip = false;
         m_isImageFlipped = false;
-        vtkCamera *camera;
-        vtkRenderer *renderer;
-        int i = 0;
+        vtkRenderer *renderer = this->getRenderer();
+        Q_ASSERT( renderer );
+        vtkCamera *camera = renderer->GetActiveCamera();
+        Q_ASSERT( camera );
+        
         double *bounds = m_viewer->GetImageActor()->GetBounds();
+        QString position;
 
         switch( m_lastView )
         {
         case Axial:
             m_viewer->SetSliceOrientationToXY();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
-            {
-                renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
-                camera = renderer->GetActiveCamera();
-                if ( camera )
-                {
-                    camera->SetFocalPoint(0,0,0);
-                    camera->SetViewUp(0,-1,0);
-                    camera->SetPosition(0,0,-1);
-                    camera->SetRoll( -m_rotateFactor*90. + 180. );
-                    renderer->ResetCamera();
-                    scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0, 0.0 );
-                    //scaleToFit( bounds[1], bounds[3], bounds[0], bounds[2] );
-                    updateCamera();
-                }
-                i++;
-            }
+            
+            camera->SetFocalPoint(0,0,0);
+            camera->SetViewUp(0,-1,0);
+            camera->SetPosition(0,0,-1);
+            camera->SetRoll( -m_rotateFactor*90. + 180. );
+            renderer->ResetCamera();
+            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0, 0.0 );
+            //scaleToFit( bounds[1], bounds[3], bounds[0], bounds[2] );
+            updateCamera();
+            
             emit rotationDegreesChanged( -m_rotateFactor*90. + 180. );
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
@@ -1296,59 +1174,48 @@ void Q2DViewer::resetCamera()
 
         case Sagital:
             m_viewer->SetSliceOrientationToYZ();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
-            {
-                renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
-                camera = renderer->GetActiveCamera();
-                if ( camera )
-                {
-                    camera->SetFocalPoint(0,0,0);
-                    camera->SetPosition(1,0,0); // -1 if medical ?
-                    camera->SetViewUp(0,0,1);
-                    camera->SetRoll( -m_rotateFactor*90. -90. );
-                    renderer->ResetCamera();
-                    scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4], 0.1 );
+            
+            camera->SetFocalPoint(0,0,0);
+            camera->SetPosition(1,0,0); // -1 if medical ?
+            camera->SetViewUp(0,0,1);
+            camera->SetRoll( -m_rotateFactor*90. -90. );
+            renderer->ResetCamera();
+            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4], 0.1 );
 
-                    // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-                    QString position = m_mainVolume->getSeries()->getPatientPosition();
-                    if( position == "FFP" || position == "HFP" )
-                        m_rotateFactor = (m_rotateFactor+2) % 4 ;
+            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+            position = m_mainVolume->getSeries()->getPatientPosition();
+            if( position == "FFP" || position == "HFP" )
+                m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
-                    updateCamera();
-                }
-                emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
-                i++;
-            }
+            updateCamera();
+            
+            emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
+            
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
+        
         break;
 
         case Coronal:
             m_viewer->SetSliceOrientationToXZ();
-            while( i < (m_rendererCollection->GetNumberOfItems()) && i <= m_maxSliceValue )
-            {
-                renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( i ) );
-                camera = renderer->GetActiveCamera();
-                if ( camera )
-                {
-                    camera->SetFocalPoint(0,0,0);
-                    camera->SetPosition(0,-1,0); // 1 if medical ?
-                    camera->SetViewUp(0,0,1);
-                    camera->SetRoll( -m_rotateFactor*90. );
-                    renderer->ResetCamera();
-                    scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5], 0.1 );
+            
+            camera->SetFocalPoint(0,0,0);
+            camera->SetPosition(0,-1,0); // 1 if medical ?
+            camera->SetViewUp(0,0,1);
+            camera->SetRoll( -m_rotateFactor*90. );
+            renderer->ResetCamera();
+            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5], 0.1 );
 
-                    // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-                    QString position = m_mainVolume->getSeries()->getPatientPosition();
-                    if( position == "FFP" || position == "HFP" )
-                        m_rotateFactor = (m_rotateFactor+2) % 4 ;
+            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+            position = m_mainVolume->getSeries()->getPatientPosition();
+            if( position == "FFP" || position == "HFP" )
+                m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
-                    updateCamera();
-                }
-                emit rotationDegreesChanged( -m_rotateFactor*90. );
-                i++;
-            }
+            updateCamera();
+    
+            emit rotationDegreesChanged( -m_rotateFactor*90. );
+     
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
@@ -1401,45 +1268,6 @@ void Q2DViewer::setSlice( int value )
         }
         // fi thick slab
 
-        // Calcular si necessitarem més renders o menys, ja que al canviar de llesca ens trobem que potser tenim un grid per una llesca que no es veu i passem a veure o al revés
-        int newNumberOfRenderers=0;
-        int i;
-        int slice = m_currentSlice;
-        int *grid;
-        QMap<int, int*>::iterator mapIterator;
-
-        for( i = 0; i < m_numberOfSlicesWindows; i++ )
-        {
-            mapIterator = m_phaseGridMap.find( slice );
-            if( mapIterator != m_phaseGridMap.end() )
-            {
-                grid = mapIterator.value();
-                newNumberOfRenderers += ( grid[0]*grid[1] );
-            }
-            else newNumberOfRenderers += 1;
-
-            if (slice == m_maxSliceValue) slice = 0;
-            else slice += 1;
-        }
-
-        int renderersAnteriors = m_rendererCollection->GetNumberOfItems();
-        newNumberOfRenderers -= renderersAnteriors;
-
-        if( newNumberOfRenderers > 0 )
-        {
-            for( i = 0; i < newNumberOfRenderers; i++ )
-            {
-                addRenderScene();
-            }
-        }
-        // eliminar renderers per fase
-        else if( newNumberOfRenderers < 0 )
-        {
-            for( i = 0; i > newNumberOfRenderers; i-- )
-            {
-                removeRenderScene();
-            }
-        }
         this->updateDisplayExtent();
         mapOrientationStringToAnnotation();
         emit sliceChanged( m_currentSlice );
@@ -2094,237 +1922,6 @@ void Q2DViewer::saveCurrent( QString baseName , FileType extension )
     }
 }
 
-void Q2DViewer::setRows( int rows )
-{
-    if( rows > 0 )
-    {
-        m_rows = rows;
-        this->updateGrid();
-    }
-}
-
-void Q2DViewer::addRows( int rows )
-{
-    if( rows > 0 )
-        this->setRows( m_rows + rows );
-}
-
-void Q2DViewer::removeRows( int rows )
-{
-    if( (m_rows - rows) > 0 )
-        this->setRows( m_rows - rows );
-}
-
-void Q2DViewer::setColumns( int columns )
-{
-    if( columns > 0 )
-    {
-        m_columns = columns;
-        this->updateGrid();
-    }
-}
-
-void Q2DViewer::removeColumns( int columns )
-{
-    if( (m_columns - columns) > 0 )
-        this->setColumns( m_columns - columns );
-}
-
-void Q2DViewer::addColumns( int columns )
-{
-
-    if( columns > 0 )
-        this->setColumns( m_columns + columns );
-}
-
-void Q2DViewer::setGrid( int rows, int columns )
-{
-    if( columns > 0 && rows > 0)
-    {
-        if (columns != m_columns || rows != m_rows)
-        {
-            m_columns = columns;
-            m_rows = rows;
-            this->updateGrid();
-        }
-    }
-}
-
-void Q2DViewer::setPhaseRows( int slice, int rows )
-{
-    if( rows > 0 && m_numberOfPhases > 1)
-    {
-        int *value;
-        int renderersCount = 0;
-        QMap<int, int*>::iterator mapIterator;
-        mapIterator = m_phaseGridMap.find( slice );
-        if( mapIterator != m_phaseGridMap.end() )
-        {
-            value = mapIterator.value();
-            renderersCount = (rows * value[1]) - (value[0]*value[1]);
-            value[0] = rows;
-        }
-        else
-        {
-            value = new int[2];
-            value[0] = rows;
-            value[1] = 1;
-            renderersCount = rows - 1;
-
-        }
-        // afegir renderers per fase
-        if( renderersCount > 0 )
-        {
-            for( int i = 0; i < renderersCount; i++ )
-            {
-                addRenderScene();
-            }
-        }
-        // eliminar renderers per fase
-        else if( renderersCount < 0 )
-        {
-            for( int i = 0; i > renderersCount; i-- )
-            {
-                removeRenderScene();
-            }
-        }
-        // actualitzem o insertem un nou
-        m_phaseGridMap.insert( slice, value );
-        this->updateGrid();
-    }
-}
-
-void Q2DViewer::addPhaseRows( int slice, int rows )
-{
-    if( rows > 0 )
-    {
-        QMap<int, int*>::iterator mapIterator;
-        mapIterator = m_phaseGridMap.find( slice );
-        if( mapIterator != m_phaseGridMap.end() )
-        {
-            // si ja en tenim, hem de sumar els actuals més al valor que donem
-            int *value = mapIterator.value();
-            rows += rows + value[0];
-        }// sinó serà com fer un set tal qual i prou
-        this->setRows( rows );
-    }
-}
-
-void Q2DViewer::removePhaseRows( int slice, int rows )
-{
-    QMap<int, int*>::iterator mapIterator;
-    mapIterator = m_phaseGridMap.find( slice );
-    if( mapIterator != m_phaseGridMap.end() )
-    {
-        // si ja en tenim, hem de restar els actuals més al valor que donem
-        int *value = mapIterator.value();
-        if( (value[0] - rows) > 0 )
-        {
-            rows = value[0] - rows;
-        }
-        else // si ens passem de llarg hem de deixar un row com a mínim
-        {
-            rows = 1;
-        }
-        // assignem la quantitat de files corresponents
-        this->setRows( rows );
-    }
-    // sinó en tenim per aquella llesca, no en podrem treure, per tant es queda igual
-}
-
-void Q2DViewer::setPhaseColumns( int slice, int columns )
-{
-    if( columns > 0 && m_numberOfPhases > 1)
-    {
-        int *value;
-        int renderersCount = 0;
-        QMap<int, int*>::iterator mapIterator;
-        mapIterator = m_phaseGridMap.find( slice );
-        if( mapIterator != m_phaseGridMap.end() )
-        {
-            value = mapIterator.value();
-            renderersCount =  (value[0] * columns) - (value[0]*value[1]);
-            value[1] = columns;
-        }
-        else
-        {
-            value = new int[2];
-            value[0] = 1;
-            value[1] = columns;
-            renderersCount = columns - 1;
-        }
-        // afegir renderers per fase
-        if( renderersCount > 0 )
-        {
-            for( int i = 0; i < renderersCount; i++ )
-            {
-                addRenderScene();
-            }
-        }
-        // eliminar renderers per fase
-        else if( renderersCount < 0 )
-        {
-            for( int i = 0; i > renderersCount; i-- )
-            {
-                removeRenderScene();
-            }
-        }
-        // actualitzem o insertem un nou
-        m_phaseGridMap.insert( slice, value );
-        this->updateGrid();
-    }
-}
-
-void Q2DViewer::removePhaseColumns( int slice, int columns )
-{
-    QMap<int, int*>::iterator mapIterator;
-    mapIterator = m_phaseGridMap.find( slice );
-    if( mapIterator != m_phaseGridMap.end() )
-    {
-        // si ja en tenim, hem de restar els actuals més al valor que donem
-        int *value = mapIterator.value();
-        if( (value[1] - columns) > 0 )
-        {
-            columns = value[1] - columns;
-        }
-        else // si ens passem de llarg hem de deixar una columna com a mínim
-        {
-            columns = 1;
-        }
-        // assignem la quantitat de columnes corresponents
-        this->setColumns( columns );
-    }
-    // sinó en tenim per aquella llesca, no en podrem treure, per tant es queda igual
-}
-
-void Q2DViewer::addPhaseColumns( int slice, int columns )
-{
-    if( columns > 0 )
-    {
-        QMap<int, int*>::iterator mapIterator;
-        mapIterator = m_phaseGridMap.find( slice );
-        if( mapIterator != m_phaseGridMap.end() )
-        {
-            // si ja en tenim, hem de sumar els actuals més al valor que donem
-            int *value = mapIterator.value();
-            columns += columns + value[1];
-        }// sinó serà com fer un set tal qual i prou
-
-        this->setColumns( columns );
-    }
-}
-
-void Q2DViewer::setPhaseGrid( int slice, int rows, int columns )
-{
-    if( columns > 0 && rows > 0)
-    {
-        //\TODO això és pot fer de manera més òptima sense recòrrer als mètodes setPhaseRows/Columns
-        this->setPhaseRows( slice, rows );
-        this->setPhaseColumns( slice, columns );
-        this->updateGrid();
-    }
-}
-
 void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
 {
     if( !m_mainVolume )
@@ -2333,29 +1930,22 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
     // Informació que es mostra per cada viewport
     if( annotation & Q2DViewer::WindowInformationAnnotation )
     {
-        vtkCornerAnnotation *sliceAnnotation;
-        vtkRenderer *renderer;
-        int i = 0;
-        for ( i = 0; i < m_rendererCollection->GetNumberOfItems(); i++)
-        {
-            sliceAnnotation = vtkCornerAnnotation::SafeDownCast ( m_sliceAnnotationsCollection->GetItemAsObject ( i ) );
-            renderer = vtkRenderer::SafeDownCast ( m_rendererCollection->GetItemAsObject( i ) );
+        vtkRenderer *renderer = this->getRenderer();
 
-            // informació de la finestra
-            if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
-            {
-                m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                    .arg( m_imageSizeInformation[0] )
-                    .arg( m_imageSizeInformation[1] )
-                    .arg( renderer->GetSize()[0] )
-                    .arg( renderer->GetSize()[1] )
-                    .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
-                    .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
-            }
-            else
-                m_upperLeftText = "";
-            sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
+        // informació de la finestra
+        if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
+        {
+            m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+                .arg( m_imageSizeInformation[0] )
+                .arg( m_imageSizeInformation[1] )
+                .arg( renderer->GetSize()[0] )
+                .arg( renderer->GetSize()[1] )
+                .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
+                .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
         }
+        else
+            m_upperLeftText = "";
+        m_sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
     }
 
     if( annotation & Q2DViewer::SliceAnnotation )
@@ -2366,63 +1956,27 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
 
 void Q2DViewer::updateSliceAnnotationInformation()
 {
+    Q_ASSERT( m_sliceAnnotation );
+
     if( !m_mainVolume )
         return;
 
-    int i = 0;
-    int rendererIndex = 0;
     int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
-    vtkCornerAnnotation *sliceAnnotation = NULL;
 
-    for( i = 0; i < m_numberOfSlicesWindows; i++ )
+    if ( m_numberOfPhases > 1)
     {
-        QMap<int,int*>::iterator iterator = m_phaseGridMap.find( m_currentSlice + i );
-        if( iterator != m_phaseGridMap.end() )
-        {
-            int *phaseGrid = iterator.value();
-            for( int j = 0; j < phaseGrid[0]*phaseGrid[1]; j++  )
-            {
-                sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
-
-                if( sliceAnnotation )
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, ((int)(value/m_numberOfPhases)) + 1, m_maxSliceValue+1, value+1, m_numberOfPhases );
-                    if( value >=  m_maxSliceValue )
-                        value = 0;
-                    else
-                        value++;
-                }
-                rendererIndex++;
-            }
-            // si no es mostren totes les fases ens ho haurem de saltar
-            if( phaseGrid[0]*phaseGrid[1] < m_numberOfPhases )
-            {
-                value += m_numberOfPhases - phaseGrid[0]*phaseGrid[1];
-            }
-
-        }
-        else
-        {
-            sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
-
-            if( sliceAnnotation )
-            {
-                if ( m_numberOfPhases > 1)
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
-                }
-                else
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, value+1, m_maxSliceValue+1 );
-                }
-                if( value >= m_maxSliceValue )
-                    value = 0;
-                else
-                    value += m_numberOfPhases;
-            }
-            rendererIndex++;
-        }
+        this->updateSliceAnnotation( m_sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
     }
+    else
+    {
+        this->updateSliceAnnotation( m_sliceAnnotation, value+1, m_maxSliceValue+1 );
+    }
+    if( value >= m_maxSliceValue )
+        value = 0;
+    else
+        value += m_numberOfPhases;
+
+
     this->refresh();
 }
 
@@ -2465,209 +2019,6 @@ void Q2DViewer::updatePatientOrientationAnnotationInformation()
     // TODO per implementar correctament
 }
 
-void Q2DViewer::addRenderScene()
-{
-    vtkRenderWindow* renderWindow = m_viewer->GetRenderWindow();
-    vtkRenderer *renderer;
-    vtkCamera *camera;
-    vtkImageActor *actor;
-    vtkCornerAnnotation *sliceAnnotation;
-    vtkCornerAnnotation *serieInformationAnnotation;
-    vtkAxisActor2D *sideRuler;
-    vtkAxisActor2D *bottomRuler;
-    vtkCoordinate *anchoredRulerCoordinates;
-    vtkScalarBarActor *scalarBar;
-
-    vtkCamera *referenceCamera = this->getRenderer()->GetActiveCamera();
-    double position[3], focalPoint[3], viewUp[3];
-
-    referenceCamera->GetPosition(position);
-    referenceCamera->GetFocalPoint(focalPoint);
-    referenceCamera->GetViewUp(viewUp);
-
-    // li donem una càmera
-    camera = vtkCamera::New();
-    camera->SetPosition(position);
-    camera->SetFocalPoint(focalPoint);
-    camera->SetViewUp(viewUp);
-
-    renderer = vtkRenderer::New();
-    renderWindow->AddRenderer( renderer );
-    renderer->SetActiveCamera( camera );
-
-    // li creem el corresponent image actor
-    actor = vtkImageActor::New();
-    actor->SetInput( m_viewer->GetWindowLevel()->GetOutput() );
-    renderer->AddActor( actor );
-    m_sliceActorCollection->AddItem( actor );
-
-    // li afegim les annotacions de texte corresponents
-    sliceAnnotation = vtkCornerAnnotation::New();
-    renderer->AddActor2D( sliceAnnotation );
-    m_sliceAnnotationsCollection->AddItem( sliceAnnotation );
-
-    // li afegim les annotacions fixes
-//     renderer->AddActor2D( m_serieInformationAnnotation );
-    // afegim una nova anotació per cada llesca perquè al mostrar sigui
-    // d'acord amb el grid escollit
-    serieInformationAnnotation = vtkCornerAnnotation::New();
-    serieInformationAnnotation->SetText( 1,m_serieInformationAnnotation->GetText( 1 ) );
-    serieInformationAnnotation->SetText( 3,m_serieInformationAnnotation->GetText( 3 ) );
-    renderer->AddActor2D( serieInformationAnnotation );
-    m_informationCollection->AddItem( serieInformationAnnotation );
-
-    // afegim les annotacions d'orientació de pacient (per cada llesca)
-    for( int j = 0; j < 4; j++ )
-        renderer->AddActor2D( m_patientOrientationTextActor[j] );
-
-    // li afegim els rulers
-    sideRuler = this->createRuler();
-    bottomRuler = this->createRuler();
-    m_rulerActorCollection->AddItem( sideRuler );
-    m_rulerActorCollection->AddItem( bottomRuler );
-    renderer->AddActor2D( sideRuler );
-    renderer->AddActor2D( bottomRuler );
-
-    // Afegim a cada viewport el mateix scalar bar.\TODO tenir en compte que podria ser diferent, ara mateix afegim sempre el mateix actor
-//     renderer->AddActor2D( m_scalarBar );
-
-    // afegim l'scalarBar a cada llesca per tal que tingui el tamany corresponent amb el grid assignat.
-    scalarBar = createScalarBar();
-    renderer->AddActor2D( scalarBar );
-    m_scalarBarCollection->AddItem( scalarBar );
-
-
-    // coordenades fixes per ancorar els rulers al lateral i a la part inferior
-    anchoredRulerCoordinates = vtkCoordinate::New();
-    anchoredRulerCoordinates->SetCoordinateSystemToView();
-    anchoredRulerCoordinates->SetValue( -0.95 , -0.9 , -0.95 );
-    m_anchoredRulerCoordinatesCollection->AddItem( anchoredRulerCoordinates );
-
-    // afegim el renderer a la col·lecció
-    m_rendererCollection->AddItem(renderer);
-    renderer->ResetCameraClippingRange();
-}
-
-void Q2DViewer::removeRenderScene()
-{
-    vtkRenderer *renderer;
-    renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( m_rendererCollection->GetNumberOfItems()-1 ) );
-
-    renderer->RemoveAllViewProps();
-    m_viewer->GetRenderWindow()->RemoveRenderer( renderer );
-    m_sliceActorCollection->RemoveItem( m_sliceActorCollection->GetLastProp() );
-    m_rendererCollection->RemoveItem( renderer );
-    m_sliceAnnotationsCollection->RemoveItem( m_sliceAnnotationsCollection->GetLastActor2D());
-    m_informationCollection->RemoveItem( m_informationCollection->GetLastActor2D() );
-    m_scalarBarCollection->RemoveItem( m_scalarBarCollection->GetLastActor2D() );
-    m_rulerActorCollection->RemoveItem( m_rulerActorCollection->GetLastActor2D() );
-    m_rulerActorCollection->RemoveItem( m_rulerActorCollection->GetLastActor2D() );
-
-    renderer->Render();
-    renderer->Delete();
-}
-
-void Q2DViewer::updateGrid()
-{
-    int i = 0;
-
-    // Comprovar si s'han d'afegir o treure amb els rows/columns actuals
-    if( m_numberOfSlicesWindows < m_columns*m_rows )
-    {
-        // afegim nous viewports
-        i = m_numberOfSlicesWindows;
-        while( i < (m_columns*m_rows) && i < m_maxSliceValue )
-        {
-            addRenderScene();
-            i++;
-        }
-    }
-    else if( (m_numberOfSlicesWindows > m_columns*m_rows || m_numberOfSlicesWindows > m_maxSliceValue ) && m_numberOfSlicesWindows > 1 )
-    {
-        i = m_numberOfSlicesWindows;
-        while( i > (m_columns*m_rows) || i > m_maxSliceValue )
-        {
-            removeRenderScene();
-            i--;
-        }
-    }
-
-    m_numberOfSlicesWindows = m_columns*m_rows;
-
-    if( m_viewer->GetInput() )
-    {
-        this->setSlice( m_currentSlice );
-    }
-    else
-        updateViewports(); // Redistribuir viewports TODO perquè si no tinc input he de fer un updateViewports?
-    m_viewer->Render();
-}
-
-void Q2DViewer::updateViewports()
-{
-    int i,j;
-    double xmin = m_slicesViewportExtent[0];
-    double ymin = m_slicesViewportExtent[1];
-    double xmax = m_slicesViewportExtent[2];
-    double ymax = m_slicesViewportExtent[3];
-    double sizeHorizontal = (m_slicesViewportExtent[2]-m_slicesViewportExtent[0])/m_columns;
-    double sizeVertical = (m_slicesViewportExtent[3]-m_slicesViewportExtent[1])/m_rows;
-    double sizePhaseHorizontal;
-    double sizePhaseVertical;
-    double xPhaseMin, yPhaseMin;
-
-    vtkRenderer* renderer;
-
-    int rendererIndex = 0;
-    int slice = m_currentSlice;
-
-    for ( i = 0; i < m_rows; i++ )
-    {
-        ymin = ymax-sizeVertical;
-        j=0;
-
-        while (j < m_columns && ((i*m_columns + j)< m_maxSliceValue ) )
-        {
-            QMap<int,int*>::iterator iterator = m_phaseGridMap.find( slice );
-            if( iterator != m_phaseGridMap.end() )
-            {
-                int *value = iterator.value();
-                sizePhaseHorizontal = sizeHorizontal / value[1];
-                sizePhaseVertical = sizeVertical / value[0];
-
-                yPhaseMin = ymax - sizePhaseVertical;
-                for( int k = 0; k < value[0]; k++ )
-                {
-                    xPhaseMin = xmin;
-                    for( int l = 0; l < value[1]; l++ )
-                    {
-                        renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( rendererIndex ) );
-                        renderer->SetViewport( xPhaseMin, yPhaseMin, xPhaseMin+sizePhaseHorizontal, yPhaseMin+sizePhaseVertical );
-                        renderer->ResetCameraClippingRange();
-                        xPhaseMin += sizePhaseHorizontal;
-                        rendererIndex++;
-                    }
-                    yPhaseMin -= sizePhaseVertical;
-                }
-            }
-            else
-            {
-                xmax = xmin+sizeHorizontal;
-                renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( rendererIndex ) );
-                renderer->SetViewport( xmin,ymin,xmax,ymax );
-                renderer->ResetCameraClippingRange();
-                rendererIndex++;
-            }
-            xmin += sizeHorizontal;
-            j++;
-
-            if( slice == m_maxSliceValue ) slice = 0;
-            else slice += 1;
-        }
-        xmin = m_slicesViewportExtent[0];
-        ymax = ymax - sizeVertical;
-    }
-}
 
 void Q2DViewer::updateDisplayExtent()
 {
@@ -2685,106 +2036,39 @@ void Q2DViewer::updateDisplayExtent()
     else
         sliceValue = m_currentSlice*m_numberOfPhases + m_currentPhase;
 
-    int i = 0;
-    int rendererIndex = 0;
-    vtkRenderer *renderer;
-    vtkImageActor *imageActor;
-    vtkCornerAnnotation *sliceAnnotation;
+    vtkRenderer *renderer = this->getRenderer();
+    vtkImageActor *imageActor = m_viewer->GetImageActor();
     int *wholeExtent = input->GetWholeExtent();
 
-    for( i = 0; i < m_numberOfSlicesWindows; i++ )
+    if( imageActor )
     {
-        QMap<int,int*>::iterator iterator = m_phaseGridMap.find( m_currentSlice + i );
-        if( iterator != m_phaseGridMap.end() )
+        switch( m_lastView )
         {
-            int *phaseGrid = iterator.value();
-            for( int j = 0; j < phaseGrid[0]*phaseGrid[1]; j++  )
-            {
-                renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( rendererIndex ) );
-                imageActor = vtkImageActor::SafeDownCast( m_sliceActorCollection->GetItemAsObject( rendererIndex ) );
-                sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
+            case Axial:
+                imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], sliceValue, sliceValue );
+                break;
 
-                if( imageActor )
-                {
-                    switch( m_lastView )
-                    {
-                        case Axial:
-                            imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], sliceValue, sliceValue );
-                            break;
+            case Coronal:
+                imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], sliceValue, sliceValue, wholeExtent[4], wholeExtent[5] );
+                break;
 
-                        case Coronal:
-                            imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], sliceValue, sliceValue, wholeExtent[4], wholeExtent[5] );
-                            break;
-
-                        case Sagital:
-                            imageActor->SetDisplayExtent( sliceValue, sliceValue, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
-                            break;
-                    }
-                    // TODO com que per aquí no es passa pràcticament mai, no ho hem tocat pas
-                    this->updateSliceAnnotation( sliceAnnotation, ((int)(sliceValue/m_numberOfPhases)) + 1, m_maxSliceValue+1, sliceValue+1, m_numberOfPhases );
-                    if( sliceValue >=  m_maxSliceValue )
-                        sliceValue = 0;
-                    else
-                        sliceValue++;
-                }
-                rendererIndex++;
-            }
-            // si no es mostren totes les fases ens ho haurem de saltar
-            if( phaseGrid[0]*phaseGrid[1] < m_numberOfPhases )
-            {
-                sliceValue += m_numberOfPhases - phaseGrid[0]*phaseGrid[1];
-            }
+            case Sagital:
+                imageActor->SetDisplayExtent( sliceValue, sliceValue, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
+                break;
+        }
+        // TODO provar si cal fer això amb "value" o si amb sliceValue ja és correcte
+        int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
+        if ( m_numberOfPhases > 1)
+        {
+            this->updateSliceAnnotation( m_sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
         }
         else
         {
-            renderer = vtkRenderer::SafeDownCast( m_rendererCollection->GetItemAsObject( rendererIndex ) );
-            imageActor = vtkImageActor::SafeDownCast( m_sliceActorCollection->GetItemAsObject( rendererIndex ) );
-            sliceAnnotation = vtkCornerAnnotation::SafeDownCast( m_sliceAnnotationsCollection->GetItemAsObject ( rendererIndex ) );
-
-            if( imageActor )
-            {
-                switch( m_lastView )
-                {
-                    case Axial:
-                        imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], sliceValue, sliceValue );
-                        break;
-
-                    case Coronal:
-                        imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], sliceValue, sliceValue, wholeExtent[4], wholeExtent[5] );
-                        break;
-
-                    case Sagital:
-                        imageActor->SetDisplayExtent( sliceValue, sliceValue, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
-                        break;
-                }
-                // TODO provar si cal fer això amb "value" o si amb sliceValue ja és correcte
-                int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
-                if ( m_numberOfPhases > 1)
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
-                }
-                else
-                {
-                    this->updateSliceAnnotation( sliceAnnotation, value+1, m_maxSliceValue+1 );
-                }
-//                 if ( m_numberOfPhases > 1)
-//                 {
-//                     this->updateSliceAnnotation( sliceAnnotation, (sliceValue/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
-//                 }
-//                 else
-//                 {
-//                     this->updateSliceAnnotation( sliceAnnotation, sliceValue+1, m_maxSliceValue+1 );
-//                 }
-//
-//                 if( sliceValue >=  m_maxSliceValue )
-//                     sliceValue = 0;
-//                 else
-//                     sliceValue += m_numberOfPhases;
-            }
-            rendererIndex++;
+            this->updateSliceAnnotation( m_sliceAnnotation, value+1, m_maxSliceValue+1 );
         }
         renderer->ResetCameraClippingRange();
     }
+
 }
 
 void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
