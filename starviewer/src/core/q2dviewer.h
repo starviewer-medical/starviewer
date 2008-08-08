@@ -383,7 +383,6 @@ private:
     void updateAnnotationsInformation( AnnotationFlags annotation = Q2DViewer::AllAnnotation );
 
     /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
-    void updateWindowAnnotationInformation();
     void updateSliceAnnotationInformation();
     void updatePatientAnnotationInformation();
     void updatePatientOrientationAnnotationInformation();
