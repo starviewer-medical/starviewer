@@ -77,8 +77,6 @@
 #include <vtkMatrix4x4.h>
 #include <vtkPlane.h>
 
-
-#include <vtkOpenGLRenderWindow.h>
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
