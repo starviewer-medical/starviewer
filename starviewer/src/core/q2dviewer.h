@@ -136,15 +136,6 @@ public:
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
 
-    /// Actualitzem les dades de les annotacions, per defecte totes, sinó, només les especificades
-    void updateAnnotationsInformation( AnnotationFlags annotation = Q2DViewer::AllAnnotation );
-
-    /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
-    void updateWindowAnnotationInformation();
-    void updateSliceAnnotationInformation();
-    void updatePatientAnnotationInformation();
-    void updatePatientOrientationAnnotationInformation();
-
     /// Mètodes de conveniència pels presentation state
     void setModalityRescale( vtkImageShiftScale *rescale );
     vtkImageActor *getImageActor();
@@ -387,6 +378,15 @@ private:
      * Refresca la visibilitat de les annotacions en funció dels flags que tenim
      */
     void refreshAnnotations();
+
+    /// Actualitzem les dades de les annotacions, per defecte totes, sinó, només les especificades
+    void updateAnnotationsInformation( AnnotationFlags annotation = Q2DViewer::AllAnnotation );
+
+    /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
+    void updateWindowAnnotationInformation();
+    void updateSliceAnnotationInformation();
+    void updatePatientAnnotationInformation();
+    void updatePatientOrientationAnnotationInformation();
 
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
