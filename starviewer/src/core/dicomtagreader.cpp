@@ -25,8 +25,17 @@ DICOMTagReader::DICOMTagReader() : m_dicomData(0)
     DcmDatasetCacheSingleton::instance()->startAutoclear(300);
 }
 
+DICOMTagReader::DICOMTagReader(QString filename, DcmDataset *dcmDataset)
+{
+    DcmDatasetCacheSingleton::instance()->startAutoclear(300);
+
+    this->setDcmDataset(filename, dcmDataset);
+}
+
 DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0)
 {
+    DcmDatasetCacheSingleton::instance()->startAutoclear(300);
+
     this->setFile( filename );
 }
 
@@ -37,6 +46,8 @@ DICOMTagReader::~DICOMTagReader()
 
 bool DICOMTagReader::setFile( QString filename )
 {
+    m_filename = filename;
+
     DcmFileFormat dicomFile;
     DcmDataset *dataset = DcmDatasetCacheSingleton::instance()->find(filename);
     if (! dataset)
@@ -64,6 +75,14 @@ bool DICOMTagReader::setFile( QString filename )
     return true;
 }
 
+void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
+{
+    Q_ASSERT(dcmDataset);
+
+    m_filename = filename;
+    m_dicomData = dcmDataset;
+}
+
 bool DICOMTagReader::tagExists( DcmTagKey tag )
 {
     Q_ASSERT( m_dicomData );
@@ -83,9 +102,9 @@ QString DICOMTagReader::getAttributeByTag( unsigned int group, unsigned int elem
 
 QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
 {
-    QString result;
-
     Q_ASSERT( m_dicomData );
+
+    QString result;
 
     OFString value;
     OFCondition status = m_dicomData->findAndGetOFStringArray( tag , value );
@@ -113,10 +132,11 @@ QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGrou
 
 QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag )
 {
+    Q_ASSERT( m_dicomData );
+
     QStringList result;
     // obtenim els atributs de cada item d'una seqüència de "primer nivell"
 
-    Q_ASSERT( m_dicomData );
     DcmStack stack;
 
     OFCondition status = m_dicomData->search( sequenceTag, stack );
