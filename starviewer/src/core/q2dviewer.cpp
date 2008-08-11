@@ -551,7 +551,6 @@ void Q2DViewer::refreshAnnotations()
         m_scalarBar->VisibilityOff();
 
     this->updateSliceAnnotationInformation();
-    this->refresh();
 }
 
 void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int currentSlice, int maxSlice, int currentPhase, int maxPhase )
@@ -907,13 +906,12 @@ void Q2DViewer::setInput( Volume* volume )
     m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
     m_thickSlabProjectionFilter->SetStep( m_numberOfPhases );
 
-    updateScalarBar();
-    updatePatientAnnotationInformation();
-    resetViewToAxial();
-    this->enableAnnotation( m_enabledAnnotations );
-
     // actualitzem la informació de window level
     this->updateWindowLevelData();
+    updateScalarBar();
+    updatePatientAnnotationInformation();
+    this->enableAnnotation( m_enabledAnnotations );
+    resetViewToAxial();
 
     // \TODO això no sabem si serà del tot necessari
     //     m_picker->PickFromListOn();
@@ -1115,7 +1113,6 @@ void Q2DViewer::updateCamera()
             }
 
             this->getRenderer()->ResetCameraClippingRange();
-            m_viewer->Render();
             m_applyFlip = false;
             m_isImageFlipped = ! m_isImageFlipped;
         }
@@ -1336,7 +1333,7 @@ void Q2DViewer::setWindowLevel( double window , double level )
         m_windowLevelLUTMapper->SetLevel( level );
         updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
         updateScalarBar();
-        refresh();
+        this->refresh();
         emit windowLevelChanged( window , level );
     }
     else
@@ -1399,18 +1396,7 @@ void Q2DViewer::resetWindowLevelToDefault()
     // això ens dóna un level/level "maco" per defecte
     // situem el level al mig i donem un window complet de tot el rang
     //\TODO aquí caldria tenir en compte el default del presentation state actual si l'hi ha
-    if( m_mainVolume )
-    {
-        m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
-        m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
-        this->refresh();
-        //\TODO fer updateAnnotationsInformation() en comptes d'aquest?
-        updateWindowLevelAnnotation();
-    }
-    else
-    {
-        DEBUG_LOG( "::resetWindowLevelToDefault() : No tenim input" );
-    }
+    this->setWindowLevel( m_defaultWindow, m_defaultLevel );    
 }
 
 void Q2DViewer::setModalityRescale( vtkImageShiftScale *rescale )
@@ -1948,8 +1934,6 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
 
     if( annotation & Q2DViewer::SliceAnnotation )
         this->updateSliceAnnotationInformation();
-
-    this->refresh();
 }
 
 void Q2DViewer::updateSliceAnnotationInformation()
@@ -1973,9 +1957,6 @@ void Q2DViewer::updateSliceAnnotationInformation()
         value = 0;
     else
         value += m_numberOfPhases;
-
-
-    this->refresh();
 }
 
 void Q2DViewer::updatePatientAnnotationInformation()
@@ -2003,11 +1984,10 @@ void Q2DViewer::updatePatientAnnotationInformation()
 
         m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
         m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
-        this->refresh();
     }
     else
     {
-        DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte");
+        DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte d'informació de pacient");
     }
 
 }
@@ -2077,6 +2057,7 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
         m_enabledAnnotations =  m_enabledAnnotations & ~annotation ;
 
     refreshAnnotations();
+    this->refresh();
 }
 
 void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
