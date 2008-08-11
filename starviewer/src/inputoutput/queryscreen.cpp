@@ -307,6 +307,7 @@ void QueryScreen::setAdvancedSearchVisible(bool visible)
     }
     else
     {
+        m_qadvancedSearchWidget->clear();
         m_advancedSearchToolButton->setText( m_advancedSearchToolButton->text().replace("<<",">>") );
     }
 }
