@@ -341,6 +341,9 @@ public:
 
     bool operator ==(const DicomMask &mask);
 
+    ///Defineix l'operador suma dos màscares, en el cas que el this i la màscara passada per paràmetre tinguin un valor de filtratge per una determinada propietat, no es cercarà pels dos valors,sinó només pel de la màscara this
+    DicomMask operator +(const DicomMask &mask);
+
     ///ens determina si la consulta al PACS pot esdevenir pesada, segons els paràmetres de cerca que s'han especificat
     bool isAHeavyQuery();
 

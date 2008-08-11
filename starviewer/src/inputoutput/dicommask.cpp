@@ -11,7 +11,6 @@
 
 #include "errordcmtk.h"
 #include "status.h"
-#include "logging.h"
 
 namespace udg{
 
@@ -514,6 +513,52 @@ bool DicomMask::operator ==(const DicomMask &mask)
         return true;
     else
         return false;
+}
+
+DicomMask DicomMask::operator +(const DicomMask &mask)
+{
+    DicomMask returnDicomMask = * this;
+
+    /* L'operador + no fa que cerquem pels dos valors, sinó que per la màscara this, totes les seves propietats que siguin empties,
+     * s'emplenaran amb el valor de la màscara passada per paràmetre
+     */
+
+    if (!mask.getPatientAge().isNull() && getPatientAge().isEmpty()) returnDicomMask.setPatientAge(mask.getPatientAge());
+    if (!mask.getPatientBirth().isNull() && getPatientBirth().isEmpty()) returnDicomMask.setPatientBirth(mask.getPatientBirth());
+    if (!mask.getPatientId().isNull() && getPatientId().isEmpty()) returnDicomMask.setPatientId(mask.getPatientId());
+    if (!mask.getPatientName().isNull() && getPatientName().isEmpty()) returnDicomMask.setPatientName(mask.getPatientName());
+    if (!mask.getPatientSex().isNull() && getPatientSex().isEmpty()) returnDicomMask.setPatientSex(mask.getPatientSex());
+
+    if (!mask.getStudyId().isNull() && getStudyId().isEmpty()) returnDicomMask.setStudyId(mask.getStudyId());
+    if (!mask.getStudyDate().isNull() && getStudyDate().isEmpty()) returnDicomMask.setStudyDate(mask.getStudyDate());
+    if (!mask.getStudyDescription().isNull() && getStudyDescription().isEmpty()) returnDicomMask.setStudyDescription(mask.getStudyDescription());
+    if (!mask.getStudyModality().isNull() && getStudyModality().isEmpty()) returnDicomMask.setStudyModality(mask.getStudyModality());
+    if (!mask.getStudyTime().isNull() && getStudyTime().isEmpty()) returnDicomMask.setStudyTime(mask.getStudyTime());
+    if (!mask.getStudyUID().isNull() && getStudyUID().isEmpty()) returnDicomMask.setStudyUID(mask.getStudyUID());
+    if (!mask.getReferringPhysiciansName().isNull() && getReferringPhysiciansName().isEmpty()) returnDicomMask.setReferringPhysiciansName(mask.getReferringPhysiciansName());
+    if (!mask.getAccessionNumber().isNull() && getAccessionNumber().isEmpty()) returnDicomMask.setAccessionNumber(mask.getAccessionNumber());
+
+    if (!mask.getSeriesDate().isNull() &&getSeriesDate().isEmpty()) returnDicomMask.setSeriesDate(mask.getSeriesDate());
+    if (!mask.getSeriesDescription().isNull() && getSeriesDescription().isEmpty()) returnDicomMask.setSeriesDescription(mask.getSeriesDescription());
+    if (!mask.getSeriesModality().isNull() && getSeriesModality().isEmpty()) returnDicomMask.setSeriesModality(mask.getSeriesModality());
+    if (!mask.getSeriesNumber().isNull() && getSeriesNumber().isEmpty()) returnDicomMask.setSeriesNumber(mask.getSeriesNumber());
+    if (!mask.getSeriesProtocolName().isNull() && getSeriesProtocolName().isEmpty()) returnDicomMask.setSeriesProtocolName(mask.getSeriesProtocolName());
+    if (!mask.getSeriesTime().isNull() && getSeriesTime().isEmpty()) returnDicomMask.setSeriesTime(mask.getSeriesTime());
+    if (!mask.getSeriesUID().isNull() && getSeriesUID().isEmpty()) returnDicomMask.setSeriesUID(mask.getSeriesUID());
+    if (!mask.getRequestedProcedureID().isNull() && getRequestedProcedureID().isEmpty() &&
+        !mask.getScheduledProcedureStepID().isNull() && getScheduledProcedureStepID().isEmpty()) 
+    {
+        returnDicomMask.setRequestAttributeSequence(mask.getRequestedProcedureID(), mask.getScheduledProcedureStepID());
+    }
+
+    if (!mask.getPPSStartDate().isNull() && getPPSStartDate().isEmpty()) returnDicomMask.setPPSStartDate(mask.getPPSStartDate());
+    if (!mask.getPPSStartTime().isNull() && getPPSStartTime().isEmpty()) returnDicomMask.setPPStartTime(mask.getPPSStartTime());
+
+    if (!mask.getSOPInstanceUID().isNull() && getSOPInstanceUID().isEmpty()) returnDicomMask.setSOPInstanceUID(mask.getScheduledProcedureStepID());
+    if (!mask.getImageNumber().isNull() && getImageNumber().isEmpty()) returnDicomMask.setImageNumber(mask.getImageNumber());
+
+    return returnDicomMask;
+
 }
 
 bool DicomMask::isAHeavyQuery()
