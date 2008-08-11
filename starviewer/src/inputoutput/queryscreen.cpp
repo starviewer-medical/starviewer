@@ -69,9 +69,6 @@ void QueryScreen::initialize()
     m_showPACSNodes = false;
     m_PACSNodes->setVisible(false);
 
-    m_fromStudyDate->setDate( QDate::currentDate() );
-    m_toStudyDate->setDate( QDate::currentDate() );
-
     /* Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
      * el QOperationStateScreen també es tancarà
      */
@@ -86,8 +83,7 @@ void QueryScreen::initialize()
     m_operationAnimation->setMovie(operationAnimation);
     operationAnimation->start();
 
-    m_patientNameText->setFocus();
-    m_qwidgetAdvancedSearch->hide();
+    m_qadvancedSearchWidget->hide();
     m_operationAnimation->hide();
     m_labelOperation->hide();
     refreshTab( LocalDataBaseTab );
@@ -299,37 +295,11 @@ void QueryScreen::createConnections()
 
     //Amaga o ensenya la cerca avançada
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
-
-    connect( m_textOtherModality, SIGNAL( editingFinished () ), SLOT( textOtherModalityEdited() ) );
-
-    connect( m_fromStudyDate, SIGNAL( dateChanged( QDate ) ), SLOT( checkNewFromDate( QDate ) ) );
-    connect( m_toStudyDate, SIGNAL( dateChanged( QDate ) ), SLOT( checkNewToDate( QDate ) ) );
-
-    foreach(QLineEdit *lineEdit, m_qwidgetAdvancedSearch->findChildren<QLineEdit*>())
-    {
-        connect(lineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateAdvancedSearchModifiedStatus()));
-    }
-}
-
-void QueryScreen::checkNewFromDate( QDate date )
-{
-    if( date > m_toStudyDate->date() )
-    {
-        m_toStudyDate->setDate( date );
-    }
-}
-
-void QueryScreen::checkNewToDate( QDate date )
-{
-    if( date < m_fromStudyDate->date()   )
-    {
-        m_fromStudyDate->setDate( date );
-    }
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)
 {
-    m_qwidgetAdvancedSearch->setVisible(visible);
+    m_qadvancedSearchWidget->setVisible(visible);
 
     if (visible)
     {
@@ -338,30 +308,6 @@ void QueryScreen::setAdvancedSearchVisible(bool visible)
     else
     {
         m_advancedSearchToolButton->setText( m_advancedSearchToolButton->text().replace("<<",">>") );
-    }
-}
-
-void QueryScreen::updateAdvancedSearchModifiedStatus()
-{
-    for(int i = 0; i < m_qwidgetAdvancedSearch->count(); i++)
-    {
-        bool hasModifiedLineEdit = false;
-        QWidget *tab = m_qwidgetAdvancedSearch->widget(i);
-
-        foreach(QLineEdit *lineEdit, tab->findChildren<QLineEdit*>())
-        {
-            if (lineEdit->text() != "")
-            {
-                hasModifiedLineEdit = true;
-                break;
-            }
-        }
-        QString tabText = m_qwidgetAdvancedSearch->tabText(i).remove(QRegExp("\\*$"));
-        if (hasModifiedLineEdit)
-        {
-            tabText += "*";
-        }
-        m_qwidgetAdvancedSearch->setTabText(i, tabText);
     }
 }
 
@@ -380,40 +326,8 @@ void QueryScreen::readSettings()
 
 void QueryScreen::clearTexts()
 {
-    m_studyIDText->clear();
-    m_patientIDText->clear();
-    m_patientNameText->clear();
-    m_accessionNumberText->clear();
-    m_referringPhysiciansNameText->clear();
-    m_studyUIDText->clear();
-    m_seriesUIDText->clear();
-    m_requestedProcedureIDText->clear();
-    m_scheduledProcedureStepIDText->clear();
-    m_SOPInstanceUIDText->clear();
-    m_instanceNumberText->clear();
-    m_PPStartDateText->clear();
-    m_PPStartTimeText->clear();
-    m_seriesNumberText->clear();
-    m_studyModalityText->clear();
-    m_studyTimeText->clear();
-
-    clearCheckedModality();
-
-    m_anyDateRadioButton->setChecked( true );
-}
-
-void QueryScreen::clearCheckedModality()
-{
-    m_checkAll->setChecked( true );
-    m_textOtherModality->clear();
-}
-
-void QueryScreen::textOtherModalityEdited()
-{
-    if ( m_textOtherModality->text().isEmpty() )
-    {
-        m_checkAll->setChecked(true);
-    }
+    m_qbasicSearchWidget->clear();
+    m_qadvancedSearchWidget->clear();
 }
 
 void QueryScreen::updateConfiguration(const QString &configuration)
@@ -483,7 +397,7 @@ void QueryScreen::queryStudyPacs()
     QString result;
     StarviewerSettings settings;
 
-    INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString() );
+    INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
 
     m_PACSNodes->getSelectedPacs(selectedPacsList); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
@@ -550,7 +464,7 @@ void QueryScreen::queryStudy( QString source )
     QList<DICOMStudy> studyListResultQuery;
     Status state;
 
-    INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString() );
+    INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     if( source == "Cache" )
@@ -1010,21 +924,18 @@ void QueryScreen::refreshTab( int index )
     switch ( index )
     {
         case LocalDataBaseTab:
-                m_buttonGroupModality->setEnabled(false);
-                clearCheckedModality();
-                m_qwidgetAdvancedSearch->setEnabled(false);
+                m_qbasicSearchWidget->setEnabledSeriesModality(false);
+                m_qadvancedSearchWidget->setEnabled(false);
                 break;
 
         case PACSQueryTab:
-                m_buttonGroupModality->setEnabled(true);
-                clearCheckedModality();
-                m_qwidgetAdvancedSearch->setEnabled( true );
+                m_qbasicSearchWidget->setEnabledSeriesModality(true);
+                m_qadvancedSearchWidget->setEnabled( true );
                 break;
 
         case DICOMDIRTab:
-                m_buttonGroupModality->setEnabled(false);
-                clearCheckedModality();
-                m_qwidgetAdvancedSearch->setEnabled(false);
+                m_qbasicSearchWidget->setEnabledSeriesModality(false);
+                m_qadvancedSearchWidget->setEnabled(false);
                 break;
     }
 }
@@ -1465,175 +1376,9 @@ DicomMask QueryScreen::buildSeriesDicomMask( QString studyUID )
     return mask;
 }
 
-QString QueryScreen::getStudyDatesStringMask()
-{
-    if (m_anyDateRadioButton->isChecked())
-    {
-        return "";
-    }
-    else if (m_todayRadioButton->isChecked())
-    {
-        return QDate::currentDate().toString("yyyyMMdd");
-    }
-    else if (m_yesterdayRadioButton->isChecked())
-    {
-        return QDate::currentDate().addDays(-1).toString("yyyyMMdd");
-    }
-    else if (m_lastWeekRadioButton->isChecked())
-    {
-        return QDate::currentDate().addDays(-7).toString("yyyyMMdd") + "-" + QDate::currentDate().toString("yyyyMMdd");
-    }
-    else if (m_customDateRadioButton->isChecked())
-    {
-        QString date;
-
-        if ( m_fromDateCheck->isChecked() && m_toDateCheck->isChecked() )
-        {
-            if ( m_fromStudyDate->date() == m_toStudyDate->date() )
-            {
-                date = m_fromStudyDate->date().toString( "yyyyMMdd" );
-            }
-            else
-            {
-                date = m_fromStudyDate->date().toString( "yyyyMMdd" ) + "-" + m_toStudyDate->date().toString( "yyyyMMdd" );
-            }
-        }
-        else
-        {
-            if ( m_fromDateCheck->isChecked() )
-            {
-                // indiquem que volem buscar tots els estudis d'aquella data en endavant
-                date = m_fromStudyDate->date().toString( "yyyyMMdd" ) + "-";
-            }
-            else if ( m_toDateCheck->isChecked() )
-            {
-                //indiquem que volem buscar tots els estudis que no superin aquesta data
-                date = "-"+ m_toStudyDate->date().toString( "yyyyMMdd" );
-            }
-        }
-
-        return date;
-    }
-    return "";
-}
-
 DicomMask QueryScreen::buildDicomMask()
 {
-    /*Per fer cerques entre valors consultat el capítol 4 de DICOM punt C.2.2.2.5*/
-    /*Per defecte si passem un valor buit a la màscara,farà una cerca per tots els els valor d'aquella camp*/
-    /*En aquí hem de fer un set a tots els camps que volem cercar */
-    DicomMask mask;
-    QString modalityMask;
-
-    //S'afegeix '*' al patientId i patientName automàticament
-    QString patientID = m_patientIDText->text();
-    if ( ! patientID.startsWith("*") ) patientID = "*" + patientID;
-    if ( ! patientID.endsWith("*") ) patientID = patientID + "*";
-    mask.setPatientId(patientID);
-
-    QString patientName = m_patientNameText->text();
-    if ( ! patientName.startsWith("*") ) patientName = "*" + patientName;
-    if ( ! patientName.endsWith("*") ) patientName = patientName + "*";
-    mask.setPatientName(patientName);
-
-    mask.setStudyId( m_studyIDText->text()  );
-    mask.setStudyDate( getStudyDatesStringMask() );
-    mask.setStudyDescription( "" );
-    mask.setStudyTime( m_studyTimeText->text() );
-    mask.setStudyUID( m_studyUIDText->text() );
-    mask.setStudyModality( m_studyModalityText->text() );
-    mask.setPatientAge( "" );
-    mask.setAccessionNumber( m_accessionNumberText->text() );
-    mask.setReferringPhysiciansName( m_referringPhysiciansNameText->text() );
-    mask.setPatientSex( "" );
-    mask.setPatientBirth( "" );
-
-    //si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
-    if (!m_seriesUIDText->text().isEmpty() || !m_scheduledProcedureStepIDText->text().isEmpty() ||
-        !m_requestedProcedureIDText->text().isEmpty() || !m_checkAll->isChecked() ||
-        !m_SOPInstanceUIDText->text().isEmpty() || !m_instanceNumberText->text().isEmpty() ||
-        !m_PPStartDateText->text().isEmpty() || !m_PPStartTimeText->text().isEmpty() ||
-        !m_seriesNumberText->text().isEmpty()
-       )
-    {
-        mask.setSeriesDate( "" );
-        mask.setSeriesTime( "" );
-        mask.setSeriesModality( "" );
-        mask.setSeriesNumber( m_seriesNumberText->text() );
-        mask.setSeriesUID( m_seriesUIDText->text() );
-        mask.setRequestAttributeSequence( m_requestedProcedureIDText->text() , m_scheduledProcedureStepIDText->text() );
-        mask.setPPSStartDate( m_PPStartDateText->text() );
-        mask.setPPStartTime( m_PPStartTimeText->text() );
-
-        if ( m_buttonGroupModality->isEnabled() )
-        { //es crea una sentencia per poder fer un in
-            if ( m_checkCT->isChecked() )
-            {
-                mask.setSeriesModality( "CT" );
-            }
-            else if ( m_checkCR->isChecked() )
-            {
-                mask.setSeriesModality( "CR" );
-            }
-            else if ( m_checkDX->isChecked() )
-            {
-                mask.setSeriesModality( "DX" );
-            }
-            else if ( m_checkES->isChecked() )
-            {
-                mask.setSeriesModality( "ES" );
-            }
-            else if ( m_checkMG->isChecked() )
-            {
-                mask.setSeriesModality( "MG" );
-            }
-            else if ( m_checkMR->isChecked() )
-            {
-                mask.setSeriesModality( "MR" );
-            }
-            else if ( m_checkNM->isChecked() )
-            {
-                mask.setSeriesModality( "NM" );
-            }
-            else if ( m_checkDT->isChecked() )
-            {
-                mask.setSeriesModality( "DT" );
-            }
-            else if ( m_checkPT->isChecked() )
-            {
-                mask.setSeriesModality(  "PT" );
-            }
-            else if ( m_checkRF->isChecked() )
-            {
-                mask.setSeriesModality(  "RF" );
-            }
-            else if ( m_checkSC->isChecked() )
-            {
-                mask.setSeriesModality(  "SC" );
-            }
-            else if ( m_checkUS->isChecked() )
-            {
-                mask.setSeriesModality(  "US" );
-            }
-            else if ( m_checkXA->isChecked() )
-            {
-                mask.setSeriesModality(  "XA" );
-            }
-            else if ( m_checkOtherModality->isChecked() )
-            {
-                mask.setSeriesModality( m_textOtherModality->text() );
-            }
-        }
-
-        if ( !m_SOPInstanceUIDText->text().isEmpty() || !m_instanceNumberText->text().isEmpty() )
-        {
-            mask.setImageNumber( m_instanceNumberText->text() );
-            mask.setSOPInstanceUID( m_SOPInstanceUIDText->text() );
-        }
-
-    }
-
-    return mask;
+    return m_qbasicSearchWidget->buildDicomMask() + m_qadvancedSearchWidget->buildDicomMask();
 }
 
 int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle )
@@ -1652,15 +1397,15 @@ int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QStr
     return index < m_studyListQueriedPacs.count() ? index : -1;
 }
 
-QString QueryScreen::buildQueryParametersString()
+QString QueryScreen::buildQueryParametersString(DicomMask mask)
 {
 	QString logMessage;
 
-    logMessage = "PATIENT_ID=[" + m_patientIDText->text() + "] "
-        + "PATIENT_NAME=[" + m_patientNameText->text() + "] "
-        + "STUDY_ID=[" + m_studyIDText->text() + "] "
-        + "DATES_MASK=[" + getStudyDatesStringMask() + "] "
-        + "ACCESSION_NUMBER=[" + m_accessionNumberText->text() + "]";
+    logMessage = "PATIENT_ID=[" + mask.getPatientId() + "] "
+        + "PATIENT_NAME=[" + mask.getPatientName() + "] "
+        + "STUDY_ID=[" + mask.getStudyId() + "] "
+        + "DATES_MASK=[" + mask.getStudyDate() + "] "
+        + "ACCESSION_NUMBER=[" + mask.getAccessionNumber() + "]";
 
     return logMessage;
 }

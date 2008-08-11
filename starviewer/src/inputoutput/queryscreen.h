@@ -112,9 +112,6 @@ private slots:
      */
     void studyRetrievedView( QString studyUID , QString seriesUID , QString sopInstanceUID );
 
-    /// Posa a verdader o fals tots els check modality, i deixa a true el all
-    void clearCheckedModality();
-
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al connectar amb el pacs
      * @param pacsID ID del pacs a la base de ades local
      */
@@ -153,23 +150,10 @@ private slots:
      */
     void queryImage(QString studyUID, QString seriesUID, QString source );
 
-    /** Slot que s'activa quan s'ha editat el m_textOtherModality, en cas que el text sigui <> "" deselecciona totes les modalitats, i en cas que sigui = "" selecciona la modalitat checkAll
-     */
-    void textOtherModalityEdited();
-
     void updateOperationsInProgressMessage();
-
-    /**
-     * Checkeig de les dates que canvien els QDateEdit per mantenir consistència
-     * @param date
-     */
-    void checkNewFromDate( QDate date );
-    void checkNewToDate( QDate date );
 
     /// Mostra/amaga els camps de cerca avançats
     void setAdvancedSearchVisible(bool visible);
-
-    void updateAdvancedSearchModifiedStatus();
 
     ///S'activa quan seleccionem un estudi del m_qstudyTreeWidgetCache i envia al QSeriesListWidget la informació de les sèries de l'estudi
     void setSeriesToSeriesListWidgetCache();
@@ -272,7 +256,7 @@ private:
     /** Construeix un string amb els parametres de cerca, per debug/logs
      * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis
      */
-    QString buildQueryParametersString();
+    QString buildQueryParametersString(DicomMask mask);
 
     ///Ens indica en en quina posició es troba dins la llista dels estudis trobats a la última query del PACS l'estudi amb l'UID passat per paràmetre i l'AETitle del PACS passat per paràmetre
     int getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle );
