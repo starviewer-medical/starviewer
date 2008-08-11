@@ -26,13 +26,24 @@ class DICOMTagReader
 {
 public:
     DICOMTagReader();
-    /// constructor per nom de fitxer
-    DICOMTagReader( QString filename );
+    /// Constructor per nom de fitxer.
+    DICOMTagReader(QString filename);
+    /// Constructor per nom de fitxer per si es té un DcmDataset ja llegit. D'aquesta forma no cal tornar-lo
+    /// a llegir.
+    DICOMTagReader(QString filename, DcmDataset *dcmDataset);
+
+    /// Constructor
 
     ~DICOMTagReader();
 
     /// Nom de l'arxiu DICOM que es vol llegir. Torna cert si l'arxiu s'ha pogut carregar correctament, fals altrament.
     bool setFile( QString filename );
+
+    /// Retorna el nom del fitxer que tracta el tag reader.
+    QString getFileName() const;
+
+    /// Mètode de conveniència per aprofitar un DcmDataset ja obert. Es presuposa que dcmDataset no és null i pertany al fitxer passat
+    void setDcmDataset(QString filename, DcmDataset *dcmDataset);
 
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
     bool tagExists( DcmTagKey tag );
