@@ -1510,20 +1510,14 @@ void QGlialEstimationExtension::setRegistrationOpacity(int op)
 
 void QGlialEstimationExtension::readSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-GlialEstimation");
-    settings.beginGroup("StarViewer-App-GlialEstimation");
-
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
-    settings.endGroup();
+    QSettings settings;
+    m_verticalSplitter->restoreState( settings.value("StarViewer-App-GlialEstimation/verticalSplitter").toByteArray() );
 }
 
 void QGlialEstimationExtension::writeSettings()
 {
-    QSettings settings("GGG", "StarViewer-App-GlialEstimation");
-    settings.beginGroup("StarViewer-App-GlialEstimation");
-
-    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-    settings.endGroup();
+    QSettings settings;
+    settings.setValue("StarViewer-App-GlialEstimation/verticalSplitter", m_verticalSplitter->saveState() );
 }
 
 }
