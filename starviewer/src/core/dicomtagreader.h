@@ -18,9 +18,12 @@ class DcmDataset;
 namespace udg {
 
 /**
-Classe encarregada de la lectura d'informació de fitxers DICOM.
+   Classe encarregada de la lectura d'informació de fitxers DICOM.
+   Es pot crear a partir d'un fitxer (el cas més habitual) o bé aprofitant un DcmDataset ja existent (per casos d'eficiència).
+   En el cas de crear un DICOMTagReader a partir d'un DcmDataset cal tenir en compte que el propietari d'aquest serà el
+   mateix DICOMTagReader i, per tant, no es pot destruir l'objecte des de fora. Ho farà el mateix DICOMTagReader.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DICOMTagReader
 {
@@ -42,7 +45,9 @@ public:
     /// Retorna el nom del fitxer que tracta el tag reader.
     QString getFileName() const;
 
-    /// Mètode de conveniència per aprofitar un DcmDataset ja obert. Es presuposa que dcmDataset no és null i pertany al fitxer passat
+    /// Mètode de conveniència per aprofitar un DcmDataset ja obert. Es presuposa que dcmDataset no és null i pertany al fitxer passat.
+    /// En el cas que ja tingués un fitxer obert, el substitueix esborrant el DcmDataset anterior. Un cop passat el propietari
+    /// del DcmDataset passa a ser el DICOMTagReader.
     void setDcmDataset(QString filename, DcmDataset *dcmDataset);
 
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.

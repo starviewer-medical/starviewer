@@ -25,7 +25,7 @@ DICOMTagReader::DICOMTagReader() : m_dicomData(0)
     DcmDatasetCacheSingleton::instance()->startAutoclear(300);
 }
 
-DICOMTagReader::DICOMTagReader(QString filename, DcmDataset *dcmDataset)
+DICOMTagReader::DICOMTagReader(QString filename, DcmDataset *dcmDataset) : m_dicomData(0)
 {
     DcmDatasetCacheSingleton::instance()->startAutoclear(300);
 
@@ -80,6 +80,12 @@ void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
     Q_ASSERT(dcmDataset);
 
     m_filename = filename;
+
+    if (m_dicomData)
+    {
+        delete m_dicomData;
+    }
+
     m_dicomData = dcmDataset;
 }
 
