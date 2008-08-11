@@ -1,0 +1,355 @@
+<ui version="4.0" >
+ <class>QAdvancedSearchWidgetBase</class>
+ <widget class="QWidget" name="QAdvancedSearchWidgetBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>771</width>
+    <height>154</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Advanced search</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QTabWidget" name="m_qwidgetAdvancedSearch" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="m_advancedSearchStudy" >
+      <attribute name="title" >
+       <string>Study</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>9</number>
+       </property>
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>6</number>
+       </property>
+       <item row="2" column="1" >
+        <widget class="QLineEdit" name="m_studyModalityText" />
+       </item>
+       <item row="0" column="4" >
+        <widget class="QLineEdit" name="m_studyUIDText" />
+       </item>
+       <item row="0" column="3" >
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>UID Study</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyUIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_13" >
+         <property name="text" >
+          <string>Time</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyTimeText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="5" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="4" >
+        <widget class="QLineEdit" name="m_accessionNumberText" />
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_12" >
+         <property name="text" >
+          <string>Study Modalities</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyModalityText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3" >
+        <widget class="QLabel" name="label_11" >
+         <property name="text" >
+          <string>Referring Physicians Name</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_referringPhysiciansNameText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="m_studyIDText" />
+       </item>
+       <item row="2" column="4" >
+        <widget class="QLineEdit" name="m_referringPhysiciansNameText" />
+       </item>
+       <item row="1" column="3" >
+        <widget class="QLabel" name="label_9" >
+         <property name="text" >
+          <string>Accession Number</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_accessionNumberText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="textLabel5_3" >
+         <property name="text" >
+          <string>Study ID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_studyIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="m_studyTimeText" />
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_advancedSearchSeries" >
+      <attribute name="title" >
+       <string>Series</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>9</number>
+       </property>
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>6</number>
+       </property>
+       <item row="2" column="1" >
+        <widget class="QLineEdit" name="m_PPStartTimeText" />
+       </item>
+       <item row="2" column="4" >
+        <widget class="QLineEdit" name="m_PPStartDateText" />
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Series number</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_seriesNumberText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Req. Proc. ID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_requestedProcedureIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4" >
+        <widget class="QLineEdit" name="m_scheduledProcedureStepIDText" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="m_seriesNumberText" />
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="m_seriesUIDText" />
+       </item>
+       <item row="0" column="4" >
+        <widget class="QLineEdit" name="m_requestedProcedureIDText" />
+       </item>
+       <item row="1" column="3" >
+        <widget class="QLabel" name="label_5" >
+         <property name="text" >
+          <string>Sche. Proc. Step ID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_scheduledProcedureStepIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>UID Series</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_seriesUIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_10" >
+         <property name="text" >
+          <string>Time</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_PPStartTimeText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Proc. Perf. Start Date</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_PPStartDateText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_advancedSearchSeries_2" >
+      <attribute name="title" >
+       <string>Image</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>9</number>
+       </property>
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>9</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>9</number>
+       </property>
+       <property name="horizontalSpacing" >
+        <number>6</number>
+       </property>
+       <property name="verticalSpacing" >
+        <number>6</number>
+       </property>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_8" >
+         <property name="text" >
+          <string>Instance Number</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_instanceNumberText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>SOP Instance UID</string>
+         </property>
+         <property name="buddy" >
+          <cstring>m_SOPInstanceUIDText</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="m_SOPInstanceUIDText" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="m_instanceNumberText" />
+       </item>
+       <item row="1" column="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
