@@ -44,7 +44,7 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study, QString source )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("Insert into Patient ( PatId , PatNam , PatBirDat , PatSex ) values ( '%1' , '%2' , '%3' , '%4' )")
+    sqlSentence = QString("Insert into PatientOld ( PatId , PatNam , PatBirDat , PatSex ) values ( '%1' , '%2' , '%3' , '%4' )")
         .arg( study->getPatientId() )
         .arg( study->getPatientName() )
         .arg( study->getPatientBirthDate() )
@@ -85,7 +85,7 @@ Status CacheStudyDAL::insertStudy( DICOMStudy *study, QString source )
         return state.setStatus( "Unrecognized source: " + source, false, 0 );
     }
 
-    sqlSentence = QString( "Insert into Study"
+    sqlSentence = QString( "Insert into StudyOld"
         "( PatId , StuInsUID , StuID , StuDat , StuTim , RefPhyNam , AccNum , StuDes , Modali , "
         " OpeNam , Locati , AccDat , AccTim , AbsPath , Status , PacsID , PatAge ) "
         "Values ( '%1' , '%2' , '%3' , '%4' , '%5' , '%6' , '%7' , '%8' , '%9' , '%10' , '%11' , %12 , %13 , '%14' , '%15' , "
@@ -230,7 +230,7 @@ Status CacheStudyDAL::queryOldStudies( QString OldStudiesDate , QList<DICOMStudy
     QString sqlSentence;
 
     sqlSentence = QString( "select PatId, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali "
-            " from Study"
+            " from StudyOld"
             " where AccDat < %1 "
             " order by StuDat,StuTim " )
             .arg( OldStudiesDate );
@@ -281,9 +281,9 @@ Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
     Status state;
     QString sqlSentence;
 
-    sqlSentence = QString( "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali "
-            " from Patient,Study "
-            " where Study.PatID=Patient.PatId "
+    sqlSentence = QString( "select StudyOld.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali "
+            " from PatientOld, StudyOld "
+            " where StudyOld.PatID=PatientOld.PatId "
             " and Status in ( 'RETRIEVED' , 'RETRIEVING' ) "
             " and StuInsUID = '%1'")
         .arg( studyUID );
@@ -338,7 +338,7 @@ Status CacheStudyDAL::queryStudy( QString studyUID , DICOMStudy &study )
 Status CacheStudyDAL::queryStudy( QString studyUID , Study *study )
 {
     QString sqlSentence = QString( "select StuID, StuDat, StuTim, StuDes, StuInsUID "
-            " from Study "
+            " from StudyOld "
             " where Status in ( 'RETRIEVED' , 'RETRIEVING' ) "
             " and StuInsUID = '%1'")
         .arg( studyUID );
@@ -364,8 +364,8 @@ QStringList CacheStudyDAL::getFiles( QString studyUID )
 {
     QStringList files;
     QString sqlSentence = QString( "select AbsPath , SerInsUID , ImgNam "
-            " from image , study "
-            " where Image.StuInsUID = '%1' and study.StuInsUID = '%1'" )
+            " from imageOld , studyOld "
+            " where ImageOld.StuInsUID = '%1' and studyOld.StuInsUID = '%1'" )
             .arg(studyUID);
 
     Status state;
@@ -395,7 +395,7 @@ Status CacheStudyDAL::queryAllStudies( QList<DICOMStudy> &outResultsStudyList )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum  from Study, Patient where Study.PatId = Patient.PatId ";
+    sqlSentence = "select StudyOld.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum  from StudyOld, PatientOld where StudyOld.PatId = PatientOld.PatId ";
 
     databaseConnection->getLock();
     databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable(sqlSentence) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sql ,reply, numero de files,numero de cols.
@@ -450,7 +450,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     databaseConnection->beginTransaction();
 
     //sqlSentence per saber el directori on es guarda l'estudi
-    sqlSentence = QString("select AbsPath from study where StuInsUID = '%1'").arg(studyUID);
+    sqlSentence = QString("select AbsPath from studyOld where StuInsUID = '%1'").arg(studyUID);
 
     databaseState = sqlite3_get_table(databaseConnection->getConnection(), qPrintable( sqlSentence ), &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de columnss.
 
@@ -480,7 +480,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     }
 
     //sqlSentence per saber quants estudis te el pacient
-    sqlSentence = QString( "select count(*) from study where PatID in (select PatID from study where StuInsUID = '%1')").arg(studyUID);
+    sqlSentence = QString( "select count(*) from studyOld where PatID in (select PatID from studyOld where StuInsUID = '%1')").arg(studyUID);
 
 
     databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error ); //connexio a la bdd,sentencia sqlSentence ,reply, numero de files,numero de columnss.
@@ -508,7 +508,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     if ( atoi( reply [1] ) == 1 )
     {//si aquell pacient nomes te un estudi l'esborrem de la taula Patient
 
-        sqlSentence = QString("delete from Patient where PatID in (select PatID from study where StuInsUID = '%1')").arg(studyUID);
+        sqlSentence = QString("delete from PatientOld where PatID in (select PatID from studyOld where StuInsUID = '%1')").arg(studyUID);
 
         databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
@@ -524,7 +524,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     }
 
     //esborrem de la taula estudi
-    sqlSentence = QString("delete from study where StuInsUID= '%1'").arg( studyUID );
+    sqlSentence = QString("delete from studyOld where StuInsUID= '%1'").arg( studyUID );
 
     databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
@@ -538,7 +538,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
         return state;
     }
 
-    sqlSentence = QString("delete from series where StuInsUID= '%1'").arg(studyUID);
+    sqlSentence = QString("delete from seriesOld where StuInsUID= '%1'").arg(studyUID);
 
     databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
@@ -553,7 +553,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     }
 
     //calculem el que ocupava l'estudi per actualitzar l'espai actualitzat
-    sqlSentence = QString("select sum(ImgSiz) from image where StuInsUID= '%1'").arg(studyUID);
+    sqlSentence = QString("select sum(ImgSiz) from imageOld where StuInsUID= '%1'").arg(studyUID);
 
     databaseState = sqlite3_get_table( databaseConnection->getConnection() , qPrintable( sqlSentence ) , &reply , &rows , &columns , error );
 
@@ -574,7 +574,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     else studySize = 0;
 
     //esborrem de la taula image
-    sqlSentence = QString("delete from image where StuInsUID= '%1'").arg( studyUID );
+    sqlSentence = QString("delete from imageOld where StuInsUID= '%1'").arg( studyUID );
 
     databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
@@ -588,7 +588,7 @@ Status CacheStudyDAL::delStudy( QString studyUID )
         return state;
     }
 
-    sqlSentence = QString("Update Pool Set Space = Space - %1 where Param = 'USED'").arg( studySize );
+    sqlSentence = QString("Update PoolOld Set Space = Space - %1 where Param = 'USED'").arg( studySize );
 
     databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
 
@@ -625,7 +625,7 @@ Status CacheStudyDAL::setStudyRetrieved( QString studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("update study set Status = 'RETRIEVED' where StuInsUID= '%1'").arg( studyUID );
+    sqlSentence = QString("update studyOld set Status = 'RETRIEVED' where StuInsUID= '%1'").arg( studyUID );
 
     databaseConnection->getLock();
     databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
@@ -654,7 +654,7 @@ Status CacheStudyDAL::setStudyRetrieving( QString studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("update study set Status = 'RETRIEVING' where StuInsUID= '%1'").arg(studyUID);
+    sqlSentence = QString("update studyOld set Status = 'RETRIEVING' where StuInsUID= '%1'").arg(studyUID);
 
     databaseConnection->getLock();
     databaseState = sqlite3_exec( databaseConnection->getConnection(), qPrintable(sqlSentence), 0, 0, 0);
@@ -683,7 +683,7 @@ Status CacheStudyDAL::updateStudyAccTime( QString studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("Update Study Set AccDat = %1, AccTim = %2 where StuInsUID = '%3'")
+    sqlSentence = QString("Update StudyOld Set AccDat = %1, AccTim = %2 where StuInsUID = '%3'")
         .arg( getDate() )
         .arg( getTime() )
         .arg( studyUID );
@@ -716,7 +716,7 @@ Status CacheStudyDAL::updateStudy( DICOMStudy updateStudy )
 
     //Actualizem estudi
 
-    sqlSentence = QString( "Update Study set StuID = '%1', StuDat = '%2', StuTim = '%3', RefPhyNam = '%4', AccNum = '%5', StuDes = '%6',  Modali = '%7', OpeNam = '%8', Locati = '%9', AccDat = %10, AccTim = %11, Status = 'PENDING', PatID = '%12' where StuInsUID = '%13'"
+    sqlSentence = QString( "Update StudyOld set StuID = '%1', StuDat = '%2', StuTim = '%3', RefPhyNam = '%4', AccNum = '%5', StuDes = '%6',  Modali = '%7', OpeNam = '%8', Locati = '%9', AccDat = %10, AccTim = %11, Status = 'PENDING', PatID = '%12' where StuInsUID = '%13'"
     )
     .arg( updateStudy.getStudyId() )
     .arg( updateStudy.getStudyDate() )
@@ -746,7 +746,7 @@ Status CacheStudyDAL::updateStudy( DICOMStudy updateStudy )
 
     //ACTUALITZEM DADES PACIENT
 
-    sqlSentence = QString("Update Patient set PatNam = '%1', PatBirDat = '%2', PatSex = '%3' where PatID = '%4'")
+    sqlSentence = QString("Update PatientOld set PatNam = '%1', PatBirDat = '%2', PatSex = '%3' where PatID = '%4'")
         .arg( updateStudy.getPatientName() )
         .arg( updateStudy.getPatientBirthDate() )
         .arg( updateStudy.getPatientSex() )
@@ -770,7 +770,7 @@ QString CacheStudyDAL::buildSqlQueryStudy(DicomMask* studyMask)
 {
     QString sqlSentence ,patientName,patID,stuDatMin,stuDatMax,stuID,accNum,stuInsUID,stuMod,studyDate;
 
-    sqlSentence = "select Study.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum from Patient,Study where Study.PatID=Patient.PatId and Status = 'RETRIEVED' ";
+    sqlSentence = "select StudyOld.PatId, PatNam, PatAge, StuID, StuDat, StuTim, StuDes, StuInsUID, AbsPath, Modali, AccNum from PatientOld,StudyOld where StudyOld.PatID=PatientOld.PatId and Status = 'RETRIEVED' ";
 
     //llegim la informació de la màscara
     patientName = replaceAsterisk( studyMask->getPatientName() );
@@ -789,7 +789,7 @@ QString CacheStudyDAL::buildSqlQueryStudy(DicomMask* studyMask)
     //Id del pacient
     if ( patID != "*" && !patID.isEmpty() )
     {
-        sqlSentence += QString(" and Study.PatID like '%1'").arg( replaceAsterisk( patID ) );
+        sqlSentence += QString(" and StudyOld.PatID like '%1'").arg( replaceAsterisk( patID ) );
     }
 
     //data

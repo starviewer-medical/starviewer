@@ -36,7 +36,7 @@ Status CacheSeriesDAL::insertSeries( DICOMSeries *serie )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("Insert into Series "
+    sqlSentence = QString("Insert into SeriesOld "
                 " ( SerInsUID , SerNum , StuInsUID , SerMod , ProNam , SerDes , SerPath , BodParExa , SerDat , SerTim ) "
                 " values ( '%1' , '%2' , '%3' , '%4' , '%5' , '%6' , '%7' , '%8' , '%9' , '%10' ) " )
             .arg( serie->getSeriesUID() )
@@ -135,7 +135,7 @@ Status CacheSeriesDAL::deleteSeries( QString studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("delete from series where StuInsUID = '%1'").arg( studyUID );
+    sqlSentence = QString("delete from seriesOld where StuInsUID = '%1'").arg( studyUID );
 
     databaseConnection->getLock();
     stateDatabase = sqlite3_exec( databaseConnection->getConnection() , qPrintable( sqlSentence ), 0 , 0 , 0 ) ;
@@ -156,7 +156,7 @@ QString CacheSeriesDAL::buildSqlQuerySeries( DicomMask *seriesMask )
     QString sql;
 
     sql = QString("select SerInsUID , SerNum , StuInsUID , SerMod , SerDes , ProNam, SerPath , BodParExa, SerDat , SerTim "
-            " from series where StuInsUID = '%1' order by SerNum" ).arg( seriesMask->getStudyUID() );
+            " from seriesOld where StuInsUID = '%1' order by SerNum" ).arg( seriesMask->getStudyUID() );
 
     return sql;
 }
