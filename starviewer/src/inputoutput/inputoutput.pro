@@ -64,7 +64,8 @@ HEADERS += databaseconnection.h \
            queryscreen.h \
  	   errordcmtk.h \
  qadvancedsearchwidget.h \
- qbasicsearchwidget.h
+ qbasicsearchwidget.h \
+ localdatabasemanager.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -111,7 +112,8 @@ SOURCES += databaseconnection.cpp \
            qchooseoneobjectdialog.cpp \
            queryscreen.cpp \
  qadvancedsearchwidget.cpp \
- qbasicsearchwidget.cpp
+ qbasicsearchwidget.cpp \
+ localdatabasemanager.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
