@@ -599,63 +599,17 @@
    <extends>QWidget</extends>
    <header>qstudytreewidget.h</header>
   </customwidget>
+  <customwidget>
+   <class>udg::QBasicSearchWidget</class>
+   <extends>QWidget</extends>
+   <header>qbasicsearchwidget.h</header>
+  </customwidget>
+ <customwidget>
+   <class>udg::QAdvancedSearchWidget</class>
+   <extends>QWidget</extends>
+   <header>qadvancedsearchwidget.h</header>
+  </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>m_patientNameText</tabstop>
-  <tabstop>m_patientIDText</tabstop>
-  <tabstop>m_anyDateRadioButton</tabstop>
-  <tabstop>m_todayRadioButton</tabstop>
-  <tabstop>m_yesterdayRadioButton</tabstop>
-  <tabstop>m_lastWeekRadioButton</tabstop>
-  <tabstop>m_customDateRadioButton</tabstop>
-  <tabstop>m_fromDateCheck</tabstop>
-  <tabstop>m_fromStudyDate</tabstop>
-  <tabstop>m_toDateCheck</tabstop>
-  <tabstop>m_toStudyDate</tabstop>
-  <tabstop>m_checkAll</tabstop>
-  <tabstop>m_checkCR</tabstop>
-  <tabstop>m_checkES</tabstop>
-  <tabstop>m_checkNM</tabstop>
-  <tabstop>m_checkRF</tabstop>
-  <tabstop>m_checkXA</tabstop>
-  <tabstop>m_checkCT</tabstop>
-  <tabstop>m_checkMG</tabstop>
-  <tabstop>m_checkDT</tabstop>
-  <tabstop>m_checkSC</tabstop>
-  <tabstop>m_checkOtherModality</tabstop>
-  <tabstop>m_textOtherModality</tabstop>
-  <tabstop>m_checkDX</tabstop>
-  <tabstop>m_checkMR</tabstop>
-  <tabstop>m_checkPT</tabstop>
-  <tabstop>m_checkUS</tabstop>
-  <tabstop>m_qwidgetAdvancedSearch</tabstop>
-  <tabstop>m_studyTimeText</tabstop>
-  <tabstop>m_studyUIDText</tabstop>
-  <tabstop>m_studyIDText</tabstop>
-  <tabstop>m_accessionNumberText</tabstop>
-  <tabstop>m_studyModalityText</tabstop>
-  <tabstop>m_referringPhysiciansNameText</tabstop>
-  <tabstop>m_seriesUIDText</tabstop>
-  <tabstop>m_requestedProcedureIDText</tabstop>
-  <tabstop>m_seriesNumberText</tabstop>
-  <tabstop>m_scheduledProcedureStepIDText</tabstop>
-  <tabstop>m_PPStartTimeText</tabstop>
-  <tabstop>m_PPStartDateText</tabstop>
-  <tabstop>m_SOPInstanceUIDText</tabstop>
-  <tabstop>m_instanceNumberText</tabstop>
-  <tabstop>m_advancedSearchToolButton</tabstop>
-  <tabstop>m_clearToolButton</tabstop>
-  <tabstop>m_searchButton</tabstop>
-  <tabstop>m_tab</tabstop>
-  <tabstop>m_viewButtonLocal</tabstop>
-  <tabstop>m_viewButtonPACS</tabstop>
-  <tabstop>m_retrieveButtonPACS</tabstop>
-  <tabstop>m_viewButtonDICOMDIR</tabstop>
-  <tabstop>m_retrieveButtonDICOMDIR</tabstop>
-  <tabstop>m_operationListToolButton</tabstop>
-  <tabstop>m_showPACSNodesToolButton</tabstop>
-  <tabstop>m_createDICOMDIRToolButton</tabstop>
- </tabstops>
  <resources>
   <include location="../main/main.qrc" />
  </resources>
