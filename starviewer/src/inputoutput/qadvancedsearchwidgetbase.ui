@@ -23,8 +23,8 @@
     <widget class="QTabWidget" name="m_qwidgetAdvancedSearch" >
      <property name="sizePolicy" >
       <sizepolicy>
-       <hsizetype>0</hsizetype>
-       <vsizetype>0</vsizetype>
+       <hsizetype>7</hsizetype>
+       <vsizetype>1</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
