@@ -31,7 +31,7 @@
       <widget class="QGroupBox" name="groupBox_3" >
        <property name="sizePolicy" >
         <sizepolicy>
-         <hsizetype>0</hsizetype>
+         <hsizetype>7</hsizetype>
          <vsizetype>0</vsizetype>
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
@@ -142,7 +142,7 @@
         <widget class="QGroupBox" name="groupBox_6" >
          <property name="sizePolicy" >
           <sizepolicy>
-           <hsizetype>0</hsizetype>
+           <hsizetype>7</hsizetype>
            <vsizetype>0</vsizetype>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
@@ -356,8 +356,8 @@
          </property>
          <property name="sizePolicy" >
           <sizepolicy>
-           <hsizetype>0</hsizetype>
-           <vsizetype>0</vsizetype>
+           <hsizetype>7</hsizetype>
+           <vsizetype>1</vsizetype>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -593,7 +593,7 @@
                 </property>
                 <property name="sizePolicy" >
                  <sizepolicy>
-                  <hsizetype>0</hsizetype>
+                  <hsizetype>3</hsizetype>
                   <vsizetype>0</vsizetype>
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
