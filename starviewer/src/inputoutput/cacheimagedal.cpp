@@ -37,7 +37,7 @@ Status CacheImageDAL::insertImage( DICOMImage *image )
 
     databaseConnection->getLock();
 
-    sqlSentence = QString("Insert into Image (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) values ('%1','%2','%3',%4,'%5','%6',%7,'%8')" )
+    sqlSentence = QString("Insert into ImageOld (SopInsUID, StuInsUID, SerInsUID, ImgNum, ImgTim,ImgDat, ImgSiz, ImgNam) values ('%1','%2','%3',%4,'%5','%6',%7,'%8')" )
         .arg( image->getSOPInstanceUID() )
         .arg( image->getStudyUID() )
         .arg( image->getSeriesUID() )
@@ -72,7 +72,7 @@ Status CacheImageDAL::insertImage( DICOMImage *image )
     }
 
     //Actualitzem l'espai ocupat de la cache , per la nova imatge descarregada
-    sqlSentence = QString("Update Pool Set Space = Space + %1 where Param = 'USED'" ).arg(image->getImageSize() );
+    sqlSentence = QString("Update PoolOld Set Space = Space + %1 where Param = 'USED'" ).arg(image->getImageSize() );
 
     stateDatabase = sqlite3_exec( databaseConnection->getConnection(), qPrintable( sqlSentence ), 0, 0, 0);
 
@@ -256,7 +256,7 @@ Status CacheImageDAL::deleteImages( QString studyUID )
         return databaseConnection->databaseStatus( 50 );
     }
 
-    sqlSentence = QString("delete from image where StuInsUID = '%1'").arg( studyUID );
+    sqlSentence = QString("delete from imageOld where StuInsUID = '%1'").arg( studyUID );
 
     databaseConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
 
@@ -279,7 +279,7 @@ QString CacheImageDAL::buildSqlCountImageNumber( DicomMask *imageMask )
 {
     QString sql , whereClause;
 
-    sql = "select count(*) from image ";
+    sql = "select count(*) from imageOld ";
 
     //si hi ha UID study
     if ( !imageMask->getStudyUID().isEmpty() )
@@ -325,7 +325,7 @@ QString CacheImageDAL::buildSqlSizeImage( DicomMask *imageMask )
 {
     QString sql , whereClause;
 
-    sql = "select sum(ImgSiz) from image ";
+    sql = "select sum(ImgSiz) from imageOld ";
 
     //si hi ha UID study
     if ( !imageMask->getStudyUID().isEmpty() )
@@ -371,7 +371,7 @@ QString CacheImageDAL::buildSqlExistImage( DicomMask *imageMask )
 {
     QString sql , whereClause;
 
-    sql = "select sum(ImgSiz) from image ";
+    sql = "select sum(ImgSiz) from imageOld ";
 
     //si hi ha UID study
     if ( !imageMask->getStudyUID().isEmpty() )
@@ -417,7 +417,7 @@ QString CacheImageDAL::buildSqlQueryImages( DicomMask *imageMask )
 {
     QString sql  ,imgNum;
 
-    sql = QString( "select ImgNum , AbsPath , Image.StuInsUID , SerInsUID , SopInsUID , ImgNam from image , study where Image.StuInsUID = '%1'" ).arg( imageMask->getStudyUID() );
+    sql = QString( "select ImgNum , AbsPath , ImageOld.StuInsUID , SerInsUID , SopInsUID , ImgNam from imageOld , studyOld where ImageOld.StuInsUID = '%1'" ).arg( imageMask->getStudyUID() );
 
     if ( !imageMask->getSeriesUID().isEmpty() )
     {
@@ -429,7 +429,7 @@ QString CacheImageDAL::buildSqlQueryImages( DicomMask *imageMask )
         sql += QString( " and SopInsUID = '%1'" ).arg( imageMask->getSOPInstanceUID() );
     }
 
-    sql += " and Study.StuInsUID = Image.StuInsUID ";
+    sql += " and StudyOld.StuInsUID = ImageOld.StuInsUID ";
 
     imgNum = imageMask->getImageNumber();
 

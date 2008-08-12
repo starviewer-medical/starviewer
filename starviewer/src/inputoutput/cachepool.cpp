@@ -49,7 +49,7 @@ Status CachePool::updatePoolSpace( int size )
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sql = QString("Update Pool Set Space = Space + %1 where Param = 'USED'").arg( size );
+    sql = QString("Update PoolOld Set Space = Space + %1 where Param = 'USED'").arg( size );
 
     m_DBConnect->getLock();
     i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sql), 0 , 0 , 0 );
@@ -81,7 +81,7 @@ Status CachePool::updatePoolTotalSize( int space )
 
     spaceBytes = space;
     spaceBytes = spaceBytes * 1024 * 1024; //convertim els Mb en bytes, ja que es guarden en bytes les unitats a la base de dades
-    sql = QString("Update Pool Set Space = %1 where Param = 'POOLSIZE'").arg( spaceBytes );
+    sql = QString("Update PoolOld Set Space = %1 where Param = 'POOLSIZE'").arg( spaceBytes );
 
     m_DBConnect->getLock();
     i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable( sql ), 0 , 0 , 0 );
@@ -108,7 +108,7 @@ Status CachePool::resetPoolSpace()
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sql = QString("Update Pool Set Space = 0 where Param = 'USED'" );
+    sql = QString("Update PoolOld Set Space = 0 where Param = 'USED'" );
 
     m_DBConnect->getLock();
     i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable( sql ), 0 , 0 , 0 );
@@ -137,7 +137,7 @@ Status CachePool::getPoolUsedSpace( unsigned int &space )
     }
 
     //convertim de bytes a Mb
-    sql = QString("select round(Space/(1024*1024)) from Pool where Param = 'USED'" );
+    sql = QString("select round(Space/(1024*1024)) from PoolOld where Param = 'USED'" );
 
     m_DBConnect->getLock();
     i = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable( sql ), &resposta , &rows , &col , error );
@@ -169,7 +169,7 @@ Status CachePool::getPoolTotalSize( unsigned int &space )
         return m_DBConnect->databaseStatus( 50 );
     }
 
-    sql = QString("select round(Space/(1024*1024)) from Pool where Param = 'POOLSIZE'" );
+    sql = QString("select round(Space/(1024*1024)) from PoolOld where Param = 'POOLSIZE'" );
 
     m_DBConnect->getLock();
     i = sqlite3_get_table( m_DBConnect->getConnection() , qPrintable( sql ), &resposta , &rows , &col , error );
