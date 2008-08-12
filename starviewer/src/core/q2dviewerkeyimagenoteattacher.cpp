@@ -7,7 +7,6 @@
 #include "q2dviewerkeyimagenoteattacher.h"
 
 #include <QFileInfo>
-#include <vtkImageViewer2.h> //\TODO S'hauria d'eliminar aquesta dependència...
 
 #include "keyimagenote.h"
 #include "q2dviewer.h"
@@ -26,7 +25,6 @@ Q2DViewerKeyImageNoteAttacher::Q2DViewerKeyImageNoteAttacher(Q2DViewer *viewer, 
     m_isVisibleAdditionalInformation = true;
     m_board = NULL;
 }
-
 
 Q2DViewerKeyImageNoteAttacher::~Q2DViewerKeyImageNoteAttacher()
 {
@@ -53,7 +51,7 @@ void Q2DViewerKeyImageNoteAttacher::attach()
     QStringList seriesReferenced = m_keyImageNote->getReferencedSOPInstancesUID();
 
     // \TODO S'hauria de mirar el num. de llesques d'una altra manera...
-    int maxSlice = m_viewer->getImageViewer() ->GetSliceRange()[1];
+    int maxSlice = m_viewer->getSliceRange()[1];
     QString SOPClass;
     for(int slice = 0; slice <= maxSlice; ++slice )
     {
