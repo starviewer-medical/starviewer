@@ -88,7 +88,6 @@ void AngleTool::handleEvent( long unsigned eventID )
             else if ( m_mainPolyline && m_state == CENTER_FIXED )
                 this->simulateSecondSegmentOfAngle();
 
-            m_2DViewer->getDrawer()->refresh();
         break;
     }
 }
@@ -351,6 +350,7 @@ void AngleTool::simulateFirstSegmentOfAngle()
     //afegim el nou segon punt que simula el nou primer angle
     m_mainPolyline->addPoint( computed );
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+    m_2DViewer->getDrawer()->refresh();
 }
 
 void AngleTool::simulateSecondSegmentOfAngle()
@@ -380,6 +380,7 @@ void AngleTool::simulateSecondSegmentOfAngle()
 
     m_circumferencePolyline->deleteAllPoints();
     drawCircumference();
+    m_2DViewer->getDrawer()->refresh();
 }
 
 void AngleTool::computeAngle()
@@ -405,7 +406,7 @@ void AngleTool::computeAngle()
     DrawerText * text = new DrawerText;
     text->setText( tr("%1 degrees").arg( angle,0,'f',1) );
     textPosition( p1, p2, p3, text );
-    
+
     text->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     m_2DViewer->getDrawer()->refresh();
@@ -415,30 +416,30 @@ void AngleTool::textPosition( double *p1, double *p2, double *p3, DrawerText *an
 {
     double position[3];
     int i, horizontalCoord, verticalCoord;
-    
+
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::Axial:
             horizontalCoord = 0;
             verticalCoord = 1;
             break;
-                
+
         case Q2DViewer::Sagital:
             horizontalCoord = 1;
             verticalCoord = 2;
             break;
-            
+
         case Q2DViewer::Coronal:
             horizontalCoord = 0;
             verticalCoord = 2;
             break;
     }
-          
+
         //mirem on estan horitzontalment els punts p1 i p3 respecte del p2
     if ( p1[0] <= p2[0] )
     {
         angleText->setHorizontalJustification( "Left" );
-            
+
         if ( p3[horizontalCoord] <= p2[horizontalCoord] )
         {
             angleText->setAttatchmentPoint( p2 );
@@ -447,10 +448,10 @@ void AngleTool::textPosition( double *p1, double *p2, double *p3, DrawerText *an
         {
             for ( i = 0; i < 3; i++ )
                 position[i] = p2[i];
-                    
+
             if ( p2[verticalCoord] <= p3[verticalCoord] )
             {
-                position[verticalCoord] -= 2.;  
+                position[verticalCoord] -= 2.;
             }
             else
             {
@@ -462,7 +463,7 @@ void AngleTool::textPosition( double *p1, double *p2, double *p3, DrawerText *an
     else
     {
         angleText->setHorizontalJustification( "Right" );
-            
+
         if ( p3[horizontalCoord] <= p2[horizontalCoord] )
         {
             angleText->setAttatchmentPoint( p2 );
@@ -471,10 +472,10 @@ void AngleTool::textPosition( double *p1, double *p2, double *p3, DrawerText *an
         {
             for ( i = 0; i < 3; i++ )
                 position[i] = p2[i];
-                    
+
             if ( p2[verticalCoord] <= p3[verticalCoord] )
             {
-                position[verticalCoord] += 2.;  
+                position[verticalCoord] += 2.;
             }
             else
             {
