@@ -75,6 +75,11 @@ bool DICOMTagReader::setFile( QString filename )
     return true;
 }
 
+QString DICOMTagReader::getFileName() const
+{
+    return m_filename;
+}
+
 void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
 {
     Q_ASSERT(dcmDataset);
