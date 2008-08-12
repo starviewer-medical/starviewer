@@ -8,7 +8,6 @@
 #include "qviewer.h"
 #include "logging.h"
 // vtk
-#include <vtkInteractorStyle.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
@@ -80,9 +79,7 @@ void ZoomTool::doZoom()
         if( m_state == ZOOMING )
         {
             m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
-            vtkInteractorStyle *interactor = m_viewer->getInteractorStyle();
-
-            double *center = interactor->GetCurrentRenderer()->GetCenter();
+            double *center = m_viewer->getRenderer()->GetCenter();
             int dy = m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY();
             // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
             double dyf = 10.0 * (double)(dy) / (double)(center[1]);
