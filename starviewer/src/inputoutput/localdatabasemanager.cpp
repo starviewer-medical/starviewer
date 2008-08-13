@@ -7,7 +7,6 @@
 
 #include "localdatabasemanager.h"
 
-#include "status.h"
 #include "patient.h"
 
 namespace udg

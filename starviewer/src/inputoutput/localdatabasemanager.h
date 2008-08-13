@@ -10,9 +10,10 @@
 
 #include <QObject>
 
+#include "status.h"
+
 namespace udg {
 
-class Status;
 class Patient;
 
 /** Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
