@@ -238,8 +238,8 @@ OFCondition echoSCP(
 
             studyPath = piSingleton->getPath() + retrievedImage.getStudyUID() ;//agafem el path del directori on es guarden les imatges
 
-			timerSaveImage.restart();
-			QDir directory;
+            timerSaveImage.restart();
+            QDir directory;
 
             //comprovem, si el directori de l'estudi ja està creat
             if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
@@ -259,9 +259,9 @@ OFCondition echoSCP(
             OFCondition cond = cbdata->dcmff->saveFile( qPrintable( QDir::toNativeSeparators( imagePath ) ) , xfer , opt_sequenceType , opt_groupLength ,
             opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
 
-			m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
+            m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
 
-			if ( cond.bad() )
+            if ( cond.bad() )
             {
                 piSingleton->setError( retrievedImage.getStudyUID() );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
@@ -306,11 +306,11 @@ OFCondition echoSCP(
             retrievedImage.setImagePath( qPrintable( imagePath ) );
             retrievedImage.setImageSize( imageSize );
 
-			timerProcessDatabase.restart();
+            timerProcessDatabase.restart();
             piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );
             m_timeProcessDatabase += timerProcessDatabase.elapsed();//temps d'operació per processar la imatge a la caché
 
-			m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge
+            m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge
             timer.restart();//reiniciem temporitzador per comptar quan tardem a descarregar la següent imatge
         }
     }
@@ -506,8 +506,8 @@ Status RetrieveImages::retrieve()
 
     DEBUG_LOG(QString( "TEMPS DESCARREGANT IMATGES : %1ms " ).arg( m_timeDownloadingImages ) );
     DEBUG_LOG(QString( "TEMPS PROCESSANT IMATGES : %1ms " ).arg( m_timeProcessingImages ) );
-	DEBUG_LOG(QString( "TEMPS GUARDANT IMATGES : %1ms " ).arg( m_timeSaveImages ) );
-	DEBUG_LOG(QString( "TEMPS PROCESSANT IMATGE PER LA BASE DE DADES: %1ms " ).arg( m_timeProcessDatabase ) );
+    DEBUG_LOG(QString( "TEMPS GUARDANT IMATGES : %1ms " ).arg( m_timeSaveImages ) );
+    DEBUG_LOG(QString( "TEMPS PROCESSANT IMATGE PER LA BASE DE DADES: %1ms " ).arg( m_timeProcessDatabase ) );
 
     if ( rspIds != NULL ) delete rspIds;
 
