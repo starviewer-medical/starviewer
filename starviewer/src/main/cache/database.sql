@@ -1,3 +1,80 @@
+CREATE TABLE Patient
+( 
+  ID				TEXT PRIMARY KEY,
+  Name	 			TEXT,
+  BirthDate			TEXT,
+  Sex				TEXT
+);
+
+
+CREATE TABLE Study
+(
+  InstanceUID			TEXT PRIMARY KEY,
+  PatientID			TEXT NOT NULL,
+  ID				TEXT NOT NULL,
+  PatientAge			INTEGER,
+  PatientWeigth 		INTEGER,
+  PatientHeigth 		INTEGER,
+  Modalities			TEXT,
+  Date				TEXT,
+  Time				TEXT,
+  AccessionNumber		TEXT,
+  Description			TEXT,
+  ReferringPhysicianName	TEXT,
+  LastAccessDate		TEXT	
+);
+
+CREATE TABLE Series
+(
+  InstanceUID			TEXT PRIMARY KEY,
+  StudyInstanceUID		TEXT,
+  Number			INTEGER,
+  Modality			TEXT,
+  Date				TEXT,
+  Time				TEXT,
+  InstituionName		TEXT,
+  PatientPosition		TEXT,
+  ProtocolName			TEXT,
+  Description			TEXT,
+  FrameOfReferenceUID		TEXT,
+  PositionReferenceIndicator	TEXT,
+  NumberOfPhases		INTEGER,
+  NumberOfSlicesPerPhase	INTEGER,
+  BodyPartExaminated		TEXT,
+  ViewPosition			TEXT,
+  Manufacturer			TEXT
+);
+
+CREATE INDEX  IndexSeries_StudyInstanceUID ON Series (StudyInstanceUID); 
+
+CREATE TABLE Image
+(
+  SOPInstanceUID		TEXT PRIMARY KEY,
+  StudyInstanceUID		TEXT,
+  SeriesInstanceUID		TEXT,
+  InstanceNumber		INTEGER,
+  ImageOrientationPatient	TEXT,
+  PatientOrientation		TEXT,
+  PixelSpacing			TEXT,
+  SliceThickness		REAL,
+  PatientPosition		TEXT,
+  SamplesPerPixel		INTEGER,
+  Row				INTEGER,
+  Columns			INTEGER,
+  BitsAllocated 		INTEGER,
+  BitsStored			INTEGER,
+  PixelRepresentation		INTEGER,
+  RescaleSlope			REAL,
+  WindowLevelWidth		TEXT,
+  WindowLevelCenter		TEXT,
+  WindowLevelExplanations	TEXT,
+  SOPInstanceReferenceImage	TEXT,
+  SliceLocation 		TEXT
+);
+
+CREATE INDEX  IndexImage_StudyInstanceUIDSeriesInstanceUID ON Image (StudyInstanceUID,SeriesInstanceUID); 
+
+
 CREATE TABLE PatientOld
 ( PatID		VARCHAR2(64) PRIMARY KEY,
   PatNam 	VARCHAR2(64),
