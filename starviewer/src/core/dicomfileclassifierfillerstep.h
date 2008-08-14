@@ -35,12 +35,19 @@ public:
 
     bool fill();
 
+    bool fillIndividually();
+
+    void postProcessing() {}
+
     QString name() {  return "DICOMFileClassifierFillerStep";  }
 
 private:
     /// Donat un arxiu el classifica dins de pacient.
     /// Retorna fals si no el pot classificar, és a dir, no és un arxiu que es pugui parsejar com a DICOM, cert altrament.
     bool classifyFile( QString file );
+
+    /// Classifica l'arxiu que tenim al lector de tags. Presuposa que es treballa amb un lector correcte.
+    void classifyFile();
 
     /// Retorna el pacient que cumpleixi un dels dos paràmetres.
     /// \TODO quin seria el criteri adequat per identificar un mateix pacient? només pel nom? només per l'ID? la concatenació de nom i d'ID?

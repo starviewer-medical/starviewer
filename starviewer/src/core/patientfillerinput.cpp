@@ -7,15 +7,17 @@
 #include "patientfillerinput.h"
 #include "logging.h"
 #include "patient.h"
+#include "dicomtagreader.h"
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput()
+PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentImage(0), m_currentSeries(0)
 {
 }
 
 PatientFillerInput::~PatientFillerInput()
 {
+    delete m_dicomFile;
 }
 
 void PatientFillerInput::addPatient( Patient *patient )
@@ -177,6 +179,57 @@ QList<Series *> PatientFillerInput::getSeriesWithLabels( QStringList labels )
         }
     }
     return resultSeries;
+}
+
+void PatientFillerInput::initializeAllLabels()
+{
+    while(!m_allLabels.isEmpty())
+    {
+        m_allLabels.removeFirst();
+    }
+    while(!m_globalLabels.isEmpty())
+    {
+        m_globalLabels.removeFirst();
+    }
+    foreach ( Series *key, m_seriesLabels.keys() )
+    {
+        m_seriesLabels.remove(key);
+    }
+}
+
+void PatientFillerInput::setDICOMFile(DICOMTagReader *dicomTagReader)
+{
+    if (m_dicomFile)
+    {
+        delete m_dicomFile;
+    }
+
+    m_dicomFile = dicomTagReader;
+}
+
+DICOMTagReader * PatientFillerInput::getDICOMFile()
+{
+    return m_dicomFile;
+}
+
+void PatientFillerInput::setCurrentImage(Image *image)
+{
+    m_currentImage = image;
+}
+
+Image * PatientFillerInput::getCurrentImage()
+{
+    return m_currentImage;
+}
+
+void PatientFillerInput::setCurrentSeries(Series *series)
+{
+    m_currentSeries = series;
+}
+
+Series * PatientFillerInput::getCurrentSeries()
+{
+    return m_currentSeries;
 }
 
 }

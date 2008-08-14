@@ -52,44 +52,25 @@ bool DICOMFileClassifierFillerStep::fill()
     return ok;
 }
 
+bool DICOMFileClassifierFillerStep::fillIndividually()
+{
+    Q_ASSERT(m_input);
+
+    m_dicomReader = m_input->getDICOMFile();
+    classifyFile();
+
+    m_input->addLabel("DICOMFileClassifierFillerStep");
+
+    return true;
+}
+
 bool DICOMFileClassifierFillerStep::classifyFile( QString file )
 {
     // no està classificat per tal l'hem de tractar
     bool ok = m_dicomReader->setFile( file );
     if( ok )
     {
-        // primer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
-        QString patientID = m_dicomReader->getAttributeByName( DCM_PatientID );
-        QString studyUID = m_dicomReader->getAttributeByName( DCM_StudyInstanceUID );
-        QString seriesUID = m_dicomReader->getAttributeByName( DCM_SeriesInstanceUID );
-
-        // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
-        // d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més
-        // ràpid o no? o és ben igual?
-        // obtenim el pacient si ja existeix, altrament el creem
-        Patient *patient = m_input->getPatientByID( patientID );
-        if( !patient )
-        {
-            patient = createPatient();
-            m_input->addPatient( patient );
-        }
-
-        // obtenim l'estudi corresponent si ja existeix, altrament el creem
-        Study *study = patient->getStudy( studyUID );
-        if( !study )
-        {
-            study = createStudy();
-            patient->addStudy( study );
-        }
-
-        // obtenim la serie corresponent si ja existeix, altrament la creem
-        Series *series = study->getSeries( seriesUID );
-        if( !series )
-        {
-            series = createSeries();
-            study->addSeries( series );
-        }
-        series->addFilePath( file );
+        classifyFile();
     }
     else
     {
@@ -97,6 +78,46 @@ bool DICOMFileClassifierFillerStep::classifyFile( QString file )
     }
 
     return ok;
+}
+
+void DICOMFileClassifierFillerStep::classifyFile()
+{
+    Q_ASSERT(m_dicomReader);
+
+    // primer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
+    QString patientID = m_dicomReader->getAttributeByName( DCM_PatientID );
+    QString studyUID = m_dicomReader->getAttributeByName( DCM_StudyInstanceUID );
+    QString seriesUID = m_dicomReader->getAttributeByName( DCM_SeriesInstanceUID );
+
+    // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
+    // d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més
+    // ràpid o no? o és ben igual?
+    // obtenim el pacient si ja existeix, altrament el creem
+    Patient *patient = m_input->getPatientByID( patientID );
+    if( !patient )
+    {
+        patient = createPatient();
+        m_input->addPatient( patient );
+    }
+
+    // obtenim l'estudi corresponent si ja existeix, altrament el creem
+    Study *study = patient->getStudy( studyUID );
+    if( !study )
+    {
+        study = createStudy();
+        patient->addStudy( study );
+    }
+
+    // obtenim la serie corresponent si ja existeix, altrament la creem
+    Series *series = study->getSeries( seriesUID );
+    if( !series )
+    {
+        series = createSeries();
+        study->addSeries( series );
+    }
+    series->addFilePath( m_dicomReader->getFileName() );
+
+    m_input->setCurrentSeries(series);
 }
 
 Patient *DICOMFileClassifierFillerStep::getPatient( QString patientName, QString patientID )

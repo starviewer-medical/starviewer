@@ -14,6 +14,8 @@ namespace udg {
 
 class Patient;
 class Series;
+class Image;
+class DICOMTagReader;
 
 /**
 Classe que encapsula els paràmetres d'input que es faran servir a PatientFiller
@@ -66,6 +68,24 @@ public:
     /// Retorna les series que continguin almenys les etiquetes contingudes en la llista d'etiquetes que li passem
     QList<Series *> getSeriesWithLabels( QStringList labels );
 
+    /// Buida totes les llistes d'etiquetes.
+    void initializeAllLabels();
+
+    ///Afegim un DICOMTagReader. Aquest mètode esborrarà l'objecte que es tenia guardat
+    ///anteriorment fent que no es pugui utilitzar més. Pren el control absolut de l'objecte.
+    void setDICOMFile(DICOMTagReader *dicomTagReader);
+
+    ///Obtenim el DICOMTagReader emmagatzemat.
+    DICOMTagReader *getDICOMFile();
+
+    /// Afegir / Obtenir la imatge que s'ha de processar.
+    void setCurrentImage(Image *image);
+    Image *getCurrentImage();
+
+    /// Afegir / Obtenir la sèrie del fitxer que s'ha de processar.
+    void setCurrentSeries(Series *series);
+    Series *getCurrentSeries();
+
 private:
     /// Llista de pacients a omplir
     QList<Patient *> m_patientList;
@@ -82,6 +102,15 @@ private:
 
     /// Llista d'etiquetes assignades a nivell de sèries. Per cada Series tenim vàries etiquetes
     QMultiMap<Series *, QString> m_seriesLabels;
+
+    /// Atribut que s'utilitza per executar els fillers individualment.
+    DICOMTagReader *m_dicomFile;
+
+    /// Guardem la imatge que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
+    Image *m_currentImage;
+
+    /// Guardem la sèrie del fitxer que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
+    Series *m_currentSeries;
 };
 
 }

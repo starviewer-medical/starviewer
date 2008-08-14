@@ -42,6 +42,15 @@ public:
     /// que li toca retorna fals, true altrament
     virtual bool fill() = 0;
 
+    /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
+    /// que li toca retorna fals, true altrament. Es diferencia del fill() en que aquest s'ha d'utilitzar
+    /// quan es passen els steps individualment per fitxers.
+    virtual bool fillIndividually() = 0;
+
+    /// Al executar els steps individualment per cada fitxer, és possible que alguns steps necessitin fer quelcom
+    /// un cop s'han processat tots els fitxers.
+    virtual void postProcessing() = 0;
+
     /// Retorna el nom del Filler Step. Aquest no serà mai visible per l'usuari però ajuda a l'hora de debugar el sistema.
     virtual QString name() = 0;
 

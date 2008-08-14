@@ -9,6 +9,7 @@
 
 #include "patientfillerstep.h"
 #include <QMap>
+#include <QHash>
 #include <QString>
 
 namespace udg {
@@ -31,6 +32,10 @@ public:
 
     bool fill();
 
+    bool fillIndividually();
+
+    void postProcessing();
+
     QString name() {  return "OrderImagesFillerStep";  }
 
 private:
@@ -41,8 +46,13 @@ private:
     /// Mètode per calcular la distància a on es troba la llesca
     double distance( Image *image );
 
+    /// Mètode que transforma l'estructura d'imatges ordenades a una llista i l'insereix a la sèrie.
+    void setOrderedImagesIntoSeries( Series *series );
+
     /// Estructura per guardar les imatges ordenades
-    QMap< QString, QMap< double , QMap< int , Image* >* >* > m_orderedImageSet;
+    QMap< QString, QMap< double , QMap< int , Image* >* >* > *m_orderedImageSet;
+
+    QHash< Series *, QMap< QString, QMap< double , QMap< int , Image* >* >* >* > OrderImagesInternalInfo;
 };
 
 }
