@@ -46,7 +46,7 @@ class Volume : public QObject
 Q_OBJECT
 public:
     /// Tipus d'imatge intern per defecte d'itk
-    typedef signed int ItkPixelType;
+    typedef signed short int ItkPixelType;
     static const unsigned int VDimension = 3;
 
     typedef itk::Image<ItkPixelType, VDimension >    ItkImageType;
