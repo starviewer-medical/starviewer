@@ -81,6 +81,9 @@ private:
 
     static void moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int responseCount , T_DIMSE_C_MoveRSP *response );
 
+    ///Responem a una petició d'echo
+    static OFCondition echoSCP( T_ASC_Association * assoc , T_DIMSE_Message * msg , T_ASC_PresentationContextID presID );
+
     /// Aquesta funció s'encarrega de guardar cada trama DICOM que rebem
     static void storeSCPCallback(void *callbackData ,
                                  T_DIMSE_StoreProgress *progress ,    /* progress state */

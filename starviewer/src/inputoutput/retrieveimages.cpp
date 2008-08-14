@@ -140,7 +140,7 @@ void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*requ
     myCallbackData = ( MyCallbackInfo* )callbackData;
 }
 
-OFCondition echoSCP(
+OFCondition RetrieveImages::echoSCP(
   T_ASC_Association * assoc ,
   T_DIMSE_Message * msg ,
   T_ASC_PresentationContextID presID )
