@@ -8,7 +8,7 @@
 #define UDGTEMPORALDIMENSIONFILLERSTEP_H
 
 #include "patientfillerstep.h"
-
+#include <QHash>
 namespace udg {
 
 class Patient;
@@ -29,11 +29,27 @@ public:
 
     bool fill();
 
+    bool fillIndividually();
+
+    void postProcessing();
+
     QString name() {  return "TemporalDimensionFillerStep";  }
 
 private:
+
+    struct SeriesInfo
+    {
+        int numberOfPhases;
+        int numberOfImages;
+        bool isCTLocalizer;
+        QString firstImagePosition;
+    };
+
     /// Mètodes per processar la informació específica de series
     void processSeries( Series *series );
+
+    /// Estructura que s'utiliza en cas que es processi l'step individiualment per fitxers.
+    QHash< Series *, SeriesInfo *> TemporalDimensionInternalInfo;
 };
 
 }

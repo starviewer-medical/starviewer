@@ -31,6 +31,10 @@ public:
 
     bool fill();
 
+    bool fillIndividually(){return false;};
+
+    void postProcessing(){};
+
     QString name() {  return "ReferenceLinesFillerStep";  }
 
 private:

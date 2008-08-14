@@ -33,6 +33,7 @@ const QString UntilEndLabel = "UntilEndLabel1234|@#~";
 PatientFiller::PatientFiller(QObject * parent) :QObject(parent)
 {
     registerSteps();
+    m_patientFillerInput = new PatientFillerInput();
 }
 
 PatientFiller::~PatientFiller()
@@ -123,4 +124,56 @@ void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerSte
     DEBUG_LOG( QString(patientFillerStep->name() + " ha trigat: %1 ").arg( time.elapsed() ));
 }
 
+void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
+{
+    Q_ASSERT(dicomTagReader);
+
+    m_patientFillerInput->setDICOMFile(dicomTagReader);
+
+    QList<PatientFillerStep*> processedFillerSteps;
+    QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
+    bool continueIterating = true;
+
+    while (!m_patientFillerInput->getLabels().contains(UntilEndLabel) && !candidatesFillerSteps.isEmpty() && continueIterating)
+    {
+        QList<PatientFillerStep*> fillerStepsToProcess;
+        QList<PatientFillerStep*> newCandidatesFillerSteps;
+        continueIterating = false;
+
+        for (int i = 0; i < candidatesFillerSteps.size(); ++i)
+        {
+            if (m_patientFillerInput->hasAllLabels( candidatesFillerSteps.at(i)->getRequiredLabels() ))
+            {
+                fillerStepsToProcess.append( candidatesFillerSteps.at(i) );
+                continueIterating = true;
+            }
+            else
+            {
+                newCandidatesFillerSteps.append( candidatesFillerSteps.at(i) );
+            }
+        }
+        candidatesFillerSteps = newCandidatesFillerSteps;
+
+        qSort(fillerStepsToProcess.begin(), fillerStepsToProcess.end(), patientFillerMorePriorityFirst); // Ordenem segons la seva prioritat
+
+        foreach (PatientFillerStep *fillerStep, fillerStepsToProcess)
+        {
+            fillerStep->setInput(m_patientFillerInput);
+            fillerStep->fillIndividually();
+        }
+    }
+
+    m_patientFillerInput->initializeAllLabels();
+
+}
+
+void PatientFiller::finishDICOMFilesProcess()
+{
+    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
+    {
+        fillerStep->postProcessing();
+    }
+
+    emit patientProcessed(m_patientFillerInput->getPatient());
+}
 }
