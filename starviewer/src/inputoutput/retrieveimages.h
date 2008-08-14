@@ -20,8 +20,17 @@
 #ifndef RETRIEVEIMAGES
 #define RETRIEVEIMAGES
 
+#include "ofcond.h"
+#include "assoc.h"
+
 struct T_ASC_Network;
-struct T_ASC_Association;
+struct T_DIMSE_C_MoveRQ;
+struct T_DIMSE_C_MoveRSP;
+struct T_DIMSE_C_StoreRQ;
+struct T_DIMSE_StoreProgress;
+struct T_DIMSE_C_StoreRSP;
+struct T_DIMSE_Message;
+
 class DcmDataset;
 
 /** This class helps to interactive with the pacs, retrieve images that match with the mask
@@ -67,6 +76,25 @@ private:
     T_ASC_Network *m_net;
     DcmDataset *m_mask;
 
+    /// En aquesta funció acceptem la connexió que se'ns sol·licita per transmetre'ns imatges, i indiquem quins transfer syntax suportem
+    static OFCondition acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc );
+
+    static void moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int responseCount , T_DIMSE_C_MoveRSP *response );
+
+    /// Aquesta funció s'encarrega de guardar cada trama DICOM que rebem
+    static void storeSCPCallback(void *callbackData ,
+                                 T_DIMSE_StoreProgress *progress ,    /* progress state */
+                                 T_DIMSE_C_StoreRQ *req ,             /* original store request */
+                                 char */*imageFileName*/, DcmDataset **imageDataSet , /* being received into */
+                                 T_DIMSE_C_StoreRSP *rsp ,            /* final store response */
+                                 DcmDataset **statusDetail );
+
+    static OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_PresentationContextID presID );
+
+    /// Accepta la connexió que ens fa el PACS, per convertir-nos en un scp
+    static OFCondition subOpSCP( T_ASC_Association **subAssoc );
+
+    static void subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_Association **subAssoc );
 };
 };
 #endif

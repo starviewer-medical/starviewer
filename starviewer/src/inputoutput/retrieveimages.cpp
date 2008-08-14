@@ -3,7 +3,7 @@
 #include <osconfig.h> /* make sure OS specific configuration is included first */
 #include <diutil.h>
 #include <dcfilefo.h>
-#include <assoc.h>
+
 #include <ofconapp.h>//necessari per fer les sortides per pantalla de les dcmtkz
 
 #include <QDir>
@@ -55,9 +55,7 @@ void RetrieveImages:: setMask( DicomMask mask )
     m_mask = mask.getDicomMask();
 }
 
-/// En aquesta funció acceptem la connexió que se'ns sol·licita per transmetre'ns imatges
-OFCondition
-acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
+OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
 {
     const char* knownAbstractSyntaxes[] = {
         UID_VerificationSOPClass
@@ -125,7 +123,7 @@ acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
     return cond;
 }
 
-void moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int responseCount , T_DIMSE_C_MoveRSP *response )
+void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int responseCount , T_DIMSE_C_MoveRSP *response )
 {
     OFCondition cond = EC_Normal;
     MyCallbackInfo *myCallbackData;
@@ -158,19 +156,7 @@ OFCondition echoSCP(
   return cond;
 }
 
-/// Aquesta funció s'encarrega de guardar cada paquet que rebem
-/*It's a callback function, can't own to the class */
- /**
-  *
-  * @param callbackData
-  * @param progress
-  * @param req
-  * @param
-  * @param imageDataSet
-  * @param rsp
-  * @param statusDetail
-  */
- void storeSCPCallback(
+void RetrieveImages::storeSCPCallback(
     /* in */
     void *callbackData ,
     T_DIMSE_StoreProgress *progress ,    /* progress state */
@@ -318,7 +304,7 @@ OFCondition echoSCP(
     return;
 }
 
-OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_PresentationContextID presID )
+OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_PresentationContextID presID )
 {
     OFCondition cond = EC_Normal;
     T_DIMSE_C_StoreRQ *req;
@@ -354,8 +340,7 @@ OFCondition storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_Pr
     return cond;
 }
 
-/// Accepta la connexió que ens fa el PACS, per convertir-nos en un scp
-OFCondition subOpSCP( T_ASC_Association **subAssoc )
+OFCondition RetrieveImages::subOpSCP( T_ASC_Association **subAssoc )
 {
     //ens convertim com en un servidor el PACS ens envai comandes que nosaltres hem de fer en aquest
     //CAS ENS POT DEMANAR UN ECHO O QUE GUARDER UNA IMATGE
@@ -407,8 +392,7 @@ OFCondition subOpSCP( T_ASC_Association **subAssoc )
     return cond;
 }
 
-
-void subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_Association **subAssoc )
+void RetrieveImages::subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_Association **subAssoc )
 {
     if ( aNet == NULL )
     {
