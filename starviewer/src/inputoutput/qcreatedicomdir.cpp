@@ -21,14 +21,13 @@
 #include <QHeaderView>
 #include <QSignalMapper>
 #include <QDate>
+#include <QFileInfo>
 
 #include "dicomstudy.h"
 #include "converttodicomdir.h"
 #include "status.h"
 #include "logging.h"
 #include "status.h"
-#include "cacheimagedal.h"
-#include "dicommask.h"
 #include "harddiskinformation.h"
 #include "deletedirectory.h"
 #include "starviewersettings.h"
@@ -154,27 +153,19 @@ void QCreateDicomdir::setDicomdirSize()
 
 void QCreateDicomdir::addStudy( DICOMStudy study )
 {
-    CacheImageDAL cacheImageDAL;
-    DicomMask imageMask;
-    quint64 studySizeBytes;
+    qint64 studySizeBytes;
     Status state;
 
     if ( !studyExists( study.getStudyUID() ) )
     {
-        //consultem la mida de l'estudi
-        imageMask.setStudyUID( study.getStudyUID() );
+        QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-        state = cacheImageDAL.imageSize( imageMask , studySizeBytes );
-
-        if ( !state.good() )
-        {
-            showDatabaseErrorMessage( state );
-            return;
-        }
+        studySizeBytes = getDirectorySize(study.getAbsPath());
 
         //només comprovem l'espai si gravem a un cd o dvd
         if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
         {
+            QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
         }
         else
@@ -191,12 +182,11 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
             item->setText( 5 , QDate::fromString( study.getStudyDate(), "yyyyMMdd" ).toString(Qt::ISODate) );
             item->setText( 6 , QTime::fromString( study.getStudyTime(), "hhmmss" ).toString(Qt::ISODate) );
             item->setText( 7 , study.getStudyUID() );
+
+            QApplication::restoreOverrideCursor();
         }
     }
-    else
-    {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study already exists in the DICOMDIR list" ) );
-    }
+    else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study already exists in the DICOMDIR list" ) );
 }
 
 void QCreateDicomdir::createDicomdir()
@@ -446,39 +436,23 @@ void QCreateDicomdir::removeAllStudies()
 
 void QCreateDicomdir::removeSelectedStudy()
 {
-    DicomMask imageMask;
-    CacheImageDAL cacheImageDAL;
-    Status state;
-    quint64 studySizeBytes;
-    QList<QTreeWidgetItem *> selectedStudies;
+    qint64 studySizeBytes;
+    StarviewerSettings settings;
 
-    selectedStudies = m_dicomdirStudiesList->selectedItems();
-
-    if ( selectedStudies.count() == 0 )
+    if (m_dicomdirStudiesList->selectedItems().count() != 0)
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please select a study to remove of the list" ) );
-    }
-    else
-    {
-        for ( int i = 0; i < selectedStudies.count(); i++)
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
-            //consultem la mida de l'estudi
-            imageMask.setStudyUID( selectedStudies.at( i )->text( 7 ) );
-
-            state = cacheImageDAL.imageSize( imageMask , studySizeBytes );
-
-            if ( !state.good() )
-            {
-                showDatabaseErrorMessage( state );
-                return;
-            }
-
+            studySizeBytes = getDirectorySize(settings.getCacheImagePath() + "/" + selectedStudy->text(7) + "/"); 
             m_dicomdirSizeBytes = m_dicomdirSizeBytes - studySizeBytes;
             setDicomdirSize();
 
-            delete selectedStudies.at( i );
+            delete selectedStudy;
         }
+        QApplication::restoreOverrideCursor();
     }
+    else QMessageBox::information(this, tr("Starviewer"), tr("Please select a study to remove of the list"));
 }
 
 bool QCreateDicomdir::studyExists( QString studyUID )
@@ -614,6 +588,30 @@ void QCreateDicomdir::clearTemporaryDir()
     }
 }
 
+qint64 QCreateDicomdir::getDirectorySize(QString directoryPath)
+{
+    QDir directory(directoryPath);
+    QFileInfoList fileInfoList;
+    QStringList directoryList;
+    qint64 directorySize = 0;
+
+    fileInfoList =  directory.entryInfoList( QDir::Files );//llista de fitxers del directori
+
+    foreach(QFileInfo fileInfo, fileInfoList)
+    {
+        directorySize += fileInfo.size();
+    }
+
+    directoryList =  directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
+
+    foreach(QString subdirectory, directoryList) //per cada subdirectori
+    {
+        directorySize += getDirectorySize(directoryPath + subdirectory);
+    }
+
+    return directorySize;
+}
+
 void QCreateDicomdir::showDatabaseErrorMessage( const Status &state )
 {
     if( !state.good() )
@@ -690,7 +688,6 @@ void QCreateDicomdir::deviceChanged( int index )
         m_progressBarOcupat->setValue( int( sizeInMB ) );
     else
         m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
-
 }
 
 }
