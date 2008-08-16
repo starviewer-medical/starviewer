@@ -81,6 +81,10 @@ private:
      */
     bool enoughFreeSpace( QString path );
 
+    //TODO Aquest mètode s'hauria de traslladar a una classe genèrica
+    ///Retorna el que ocupa en bytes el directori
+    qint64 getDirectorySize(QString directoryPath);
+
     /** Tracta els errors que s'han produït a la base de dades en general
      * @param state  Estat del mètode
      */
