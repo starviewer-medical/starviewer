@@ -356,16 +356,6 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     QString AdrServer;
     StarviewerSettings settings;
 
-#ifndef QT_NO_DEBUG
-    // si hi ha mode verbose activem el mode debug de les dcmtk perquè es vegin les sortides
-    if ( settings.getLogCommunicationPacsVerboseMode() )
-    {
-        DUL_Debug( OFTrue );
-        DIMSE_debug( OFTrue );
-        SetDebugLevel( 3 );
-    }
-#endif
-
     //create the parameters of the connection
     cond = ASC_createAssociationParameters( &m_params , ASC_DEFAULTMAXPDU );
     if ( !cond.good() ) return state.setStatus( cond );
@@ -402,10 +392,6 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
                         m_net = m_pacsNetwork->getNetworkQuery();
 
-#ifndef QT_NO_DEBUG
-                        if ( settings.getLogCommunicationPacsVerboseMode() )
-                        cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< C-ECHO OPERATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-#endif
                         break;
         case query :    //configure the find paramaters depending on modality connection
                         cond = configureFind( level );
@@ -416,10 +402,6 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
                         m_net = m_pacsNetwork->getNetworkQuery();
 
-#ifndef QT_NO_DEBUG
-                        if ( settings.getLogCommunicationPacsVerboseMode() )
-                        cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< C-FIND OPERATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-#endif
                         break;
         case retrieveImages : //configure the move paramaters depending on modality connection
                         cond=configureMove( level );
@@ -430,10 +412,6 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
                         m_net = m_pacsNetwork->getNetworkRetrieve();
 
-#ifndef QT_NO_DEBUG
-                        if ( settings.getLogCommunicationPacsVerboseMode() )
-                        cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< C-MOVE OPERATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-#endif
                         break;
         case storeImages :
                         cond = configureStore();
@@ -444,32 +422,11 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
                         m_net = m_pacsNetwork->getNetworkQuery();
 
-#ifndef QT_NO_DEBUG
-                        if ( settings.getLogCommunicationPacsVerboseMode() )
-                        cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<< C-STORE OPERATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-#endif
                         break;
     }
 
-#ifndef QT_NO_DEBUG
-    if ( settings.getLogCommunicationPacsVerboseMode() )
-    {
-        cout << "====================================== Request Parameters: ======================================" << endl;
-        ASC_dumpParameters( m_params , COUT ) ;
-        cout << "REQUESTING ASSOCIATION \n";
-    }
-#endif
-
     //try to connect
     cond = ASC_requestAssociation( m_net , m_params , &m_assoc );
-
-#ifndef QT_NO_DEBUG
-    if ( settings.getLogCommunicationPacsVerboseMode() )
-    {
-        cout << "====================================== Association Parameters Negotiated : ======================================" << endl;
-        ASC_dumpParameters( m_params, COUT );
-    }
-#endif
 
     if ( cond.good() )
     {
@@ -479,13 +436,6 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
         }
     }
     else return state.setStatus( cond );
-
-#ifndef QT_NO_DEBUG
-    if ( settings.getLogCommunicationPacsVerboseMode() )
-    {
-        cout << "ASSOCIATION ACCEPTED (MAX SEND PDV: " << m_assoc->sendPDVLength << endl;
-    }
-#endif
 
    return state.setStatus( DcmtkNoError );
 }

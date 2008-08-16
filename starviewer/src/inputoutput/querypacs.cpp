@@ -38,20 +38,6 @@ void QueryPacs::foundMatchCallback(
     StarviewerSettings settings;
     QueryPacs* queryPacsCaller = (QueryPacs*)callbackData;
 
-#ifndef QT_NO_DEBUG
-    if ( settings.getLogCommunicationPacsVerboseMode() )
-    {
-        /* dump response number */
-        cout<< "RESPONSE: " << responseCount << "(" << DU_cfindStatusString( rsp->DimseStatus ) << ")" << endl;
-
-        /* dump data set which was received */
-        responseIdentifiers->print(COUT);
-
-        /* dump delimiter */
-        cout << "--------" << endl;
-    }
-#endif
-
     responseIdentifiers->findAndGetString( DCM_QueryRetrieveLevel , text , false );
 
     //Comprovem quin tipus d'objecte ens ha retorna el PACS i el transforme a un objecte del nostre tipus
@@ -114,39 +100,15 @@ Status QueryPacs::query()
     req.DataSetType = DIMSE_DATASET_PRESENT;
     req.Priority = DIMSE_PRIORITY_LOW;
 
-#ifndef QT_NO_DEBUG
-    if ( settings.getLogCommunicationPacsVerboseMode() )
-    {
-        cout << "Find SCU RQ: MsgID " << msgId << endl;
-        cout << "====================================== REQUEST ======================================" <<endl;
-        m_mask->print( COUT );
-    }
-#endif
-
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,
                           foundMatchCallback , this ,
                           DIMSE_BLOCKING , 0 ,
                           &rsp , &statusDetail );
 
-#ifndef QT_NO_DEBUG
-    if ( settings.getLogCommunicationPacsVerboseMode() )
-    {
-        cout << "====================================== CFIND-RSP ======================================" <<endl;
-        DIMSE_printCFindRSP( stdout , &rsp );
-    }
-#endif
-
     /* dump status detail information if there is some */
     if ( statusDetail != NULL )
     {
-#ifndef QT_NO_DEBUG
-        if ( settings.getLogCommunicationPacsVerboseMode() )
-        {
-            cout << "====================================== STATUS-DETAIL ======================================" <<endl;
-            statusDetail->print( COUT );
-        }
-#endif
         delete statusDetail;
     }
 
