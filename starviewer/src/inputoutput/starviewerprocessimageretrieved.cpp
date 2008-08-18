@@ -67,9 +67,6 @@ void StarviewerProcessImageRetrieved::process( DICOMImage *image )
         }
     }
 
-    DICOMTagReader dicomFile;
-    dicomFile.setFile( createImagePath(image) );
-
     //inserim imatge
     state = cacheImageDAL.insertImage( image );
     //si es produeix error no podem cancel·lar la descarregar, tirem endavant, quant finalitzi la descarregar avisarem de l'error, en cas de l'error 2019 és que la imatge ja existia a la cache
