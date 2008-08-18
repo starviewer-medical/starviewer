@@ -20,6 +20,8 @@
 #ifndef RETRIEVEIMAGES
 #define RETRIEVEIMAGES
 
+#include <QString>
+
 #include "ofcond.h"
 #include "assoc.h"
 
@@ -30,6 +32,7 @@ struct T_DIMSE_C_StoreRQ;
 struct T_DIMSE_StoreProgress;
 struct T_DIMSE_C_StoreRSP;
 struct T_DIMSE_Message;
+struct StoreCallbackData;
 
 class DcmDataset;
 
@@ -41,6 +44,7 @@ namespace udg{
 class Status;
 class PacsConnection;
 class DicomMask;
+class DICOMTagReader;
 
 class RetrieveImages
 {
@@ -79,7 +83,7 @@ private:
     /// En aquesta funció acceptem la connexió que se'ns sol·licita per transmetre'ns imatges, i indiquem quins transfer syntax suportem
     static OFCondition acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc );
 
-    static void moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int responseCount , T_DIMSE_C_MoveRSP *response );
+    static void moveCallback( void *callbackData , T_DIMSE_C_MoveRQ *req, int responseCount , T_DIMSE_C_MoveRSP *response );
 
     ///Responem a una petició d'echo
     static OFCondition echoSCP( T_ASC_Association * assoc , T_DIMSE_Message * msg , T_ASC_PresentationContextID presID );
@@ -88,7 +92,7 @@ private:
     static void storeSCPCallback(void *callbackData ,
                                  T_DIMSE_StoreProgress *progress ,    /* progress state */
                                  T_DIMSE_C_StoreRQ *req ,             /* original store request */
-                                 char */*imageFileName*/, DcmDataset **imageDataSet , /* being received into */
+                                 char *imageFileName, DcmDataset **imageDataSet , /* being received into */
                                  T_DIMSE_C_StoreRSP *rsp ,            /* final store response */
                                  DcmDataset **statusDetail );
 
@@ -98,6 +102,12 @@ private:
     static OFCondition subOpSCP( T_ASC_Association **subAssoc );
 
     static void subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_Association **subAssoc );
+
+    ///Guarda una composite instance descarregada
+    static OFCondition save(StoreCallbackData *storeCallbackData, DICOMTagReader * dataset);
+
+    ///Retorna el path del directori on s'ha de guardar la composite instance descarregada, si el directori on s'ha de guardar no existeix el crea
+    static QString getCompositeInstancePath(DICOMTagReader *dicomTagReader);
 };
 };
 #endif
