@@ -19,6 +19,7 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomimage.h"
+#include "dicomtagreader.h"
 
 namespace udg{
 
@@ -123,7 +124,7 @@ OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Associa
     return cond;
 }
 
-void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ */*request*/ , int responseCount , T_DIMSE_C_MoveRSP *response )
+void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ *req, int responseCount , T_DIMSE_C_MoveRSP *response )
 {
     OFCondition cond = EC_Normal;
     MyCallbackInfo *myCallbackData;
@@ -153,7 +154,7 @@ void RetrieveImages::storeSCPCallback(
     void *callbackData ,
     T_DIMSE_StoreProgress *progress ,    /* progress state */
     T_DIMSE_C_StoreRQ *req ,             /* original store request */
-    char */*imageFileName*/, DcmDataset **imageDataSet , /* being received into */
+    char *imageFileName, DcmDataset **imageDataSet , /* being received into */
     /* out */
     T_DIMSE_C_StoreRSP *rsp ,            /* final store response */
     DcmDataset **statusDetail )
@@ -161,15 +162,11 @@ void RetrieveImages::storeSCPCallback(
     DIC_UI sopClass;
     DIC_UI sopInstance;
     /* I found their default value in movescu.cpp */
-    OFBool opt_useMetaheader = OFTrue;
     E_EncodingType    opt_sequenceType = EET_ExplicitLength;
-    E_GrpLenEncoding  opt_groupLength = EGL_recalcGL;
-    E_PaddingEncoding opt_paddingType = EPD_withoutPadding;
-    OFCmdUnsignedInt  opt_filepad = 0;
-    OFCmdUnsignedInt  opt_itempad = 0;
     OFBool            opt_correctUIDPadding = OFFalse;
     E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
     StarviewerSettings settings;
+    
 
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
@@ -178,57 +175,32 @@ void RetrieveImages::storeSCPCallback(
 
         *statusDetail = NULL;    /* no status detail */
 
-        /* could save the image somewhere else, put it in database, etc */
         /*
         * An appropriate status code is already set in the resp structure, it need not be success.
         * For example, if the caller has already detected an out of resources problem then the
         * status will reflect this.  The callback function is still called to allow cleanup.
         */
-        // rsp->DimseStatus = STATUS_Success;
         if ( (imageDataSet) && ( *imageDataSet ) )
         {
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
+            DICOMTagReader dicomTagReader(cbdata->imageFileName, new DcmDataset((**imageDataSet)));
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();//proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
-            QString studyPath, seriesPath, imagePath;
-            int imageSize;
             DICOMImage retrievedImage( * imageDataSet );
 
-            studyPath = piSingleton->getPath() + retrievedImage.getStudyUID() ;//agafem el path del directori on es guarden les imatges
-
             timerSaveImage.restart();
-            QDir directory;
-
-            //comprovem, si el directori de l'estudi ja està creat
-            if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
-
-            seriesPath = studyPath + "/" + retrievedImage.getSeriesUID();
-
-            //comprovem, si el directori de la sèrie ja està creat, sinó el creem
-            if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
-
-            //acabem de concatenar el nom del fitxer
-            imagePath = seriesPath + "/" + cbdata->imageFileName;
 
             E_TransferSyntax xfer = opt_writeTransferSyntax;
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
-            //Guardem la imatge
-            OFCondition cond = cbdata->dcmff->saveFile( qPrintable( QDir::toNativeSeparators( imagePath ) ) , xfer , opt_sequenceType , opt_groupLength ,
-            opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
-
             m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
-
-            if ( cond.bad() )
+            //Guardem la imatge
+            if ( save(cbdata, &dicomTagReader).bad() )
             {
                 piSingleton->setError( retrievedImage.getStudyUID() );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
             }
 
-            //calculem la mida de l'image TODO alerta! això ens torna un Uint32! i ho guardem en un int
-            imageSize = cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType );
-
-            /* should really check the image to make sure it is consistent,
-            * that its sopClass and sopInstance correspond with those in
+            /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in
             * the request.
             */
             if ( rsp->DimseStatus == STATUS_Success )
@@ -238,23 +210,28 @@ void RetrieveImages::storeSCPCallback(
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
                     piSingleton->setError( retrievedImage.getStudyUID() );
+                    ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(cbdata->imageFileName));
                 }
                 else if ( strcmp( sopClass , req->AffectedSOPClassUID ) != 0 )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( retrievedImage.getStudyUID() );
+                    ERROR_LOG(QString("No concorda la sop class rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
                 else if ( strcmp( sopInstance , req->AffectedSOPInstanceUID ) != 0 )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( retrievedImage.getStudyUID() );
+                    ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
             }
 
+            //TODO AQUEST CODI S'HA D'ESBORRAR QUAN HI HAGI IMPLEMENTAT EL NOU MODEL DE BD I FILLERS
             //guardem la informacio que hem calculat nosaltres a l'objecte imatge
             retrievedImage.setImageName( cbdata->imageFileName );
-            retrievedImage.setImagePath( qPrintable( imagePath ) );
-            retrievedImage.setImageSize( imageSize );
+            retrievedImage.setImagePath( settings.getCacheImagePath() + retrievedImage.getStudyUID() + "/" + retrievedImage.getSeriesUID() + "/" + cbdata->imageFileName );
+            //calculem la mida de l'image TODO alerta! això ens torna un Uint32! i ho guardem en un int
+            retrievedImage.setImageSize( cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType ) );
 
             timerProcessDatabase.restart();
             piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );
@@ -266,6 +243,23 @@ void RetrieveImages::storeSCPCallback(
     }
 
     return;
+}
+
+OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, DICOMTagReader *dicomTagReader)
+{
+    OFBool opt_useMetaheader = OFTrue;
+    E_EncodingType    opt_sequenceType = EET_ExplicitLength;
+    E_GrpLenEncoding  opt_groupLength = EGL_recalcGL;
+    E_PaddingEncoding opt_paddingType = EPD_withoutPadding;
+    OFCmdUnsignedInt  opt_filepad = 0;
+    OFCmdUnsignedInt  opt_itempad = 0;
+    E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
+
+    E_TransferSyntax xfer = opt_writeTransferSyntax;
+    if (xfer == EXS_Unknown) xfer = storeCallbackData->dcmff->getDataset()->getOriginalXfer();
+
+    return storeCallbackData->dcmff->saveFile( qPrintable( QDir::toNativeSeparators( getCompositeInstancePath(dicomTagReader) + "/" + storeCallbackData->imageFileName) ) , 
+                                                xfer , opt_sequenceType , opt_groupLength , opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
 }
 
 OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_PresentationContextID presID )
@@ -426,4 +420,23 @@ Status RetrieveImages::retrieve()
 
     return state;
 }
+
+QString RetrieveImages::getCompositeInstancePath(DICOMTagReader *dicomTagReader)
+{
+    QString studyPath, seriesPath;
+    StarviewerSettings settings;
+    QDir directory;
+
+    studyPath = settings.getCacheImagePath() + dicomTagReader->getAttributeByName(DCM_StudyInstanceUID);
+
+    //comprovem, si el directori de l'estudi ja està creat
+    if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
+
+    seriesPath = studyPath + "/" + dicomTagReader->getAttributeByName(DCM_SeriesInstanceUID);
+
+    //comprovem, si el directori de la sèrie ja està creat, sinó el creem
+    if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
+    return seriesPath;
+}
+
 }
