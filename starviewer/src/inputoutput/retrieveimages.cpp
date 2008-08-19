@@ -183,7 +183,7 @@ void RetrieveImages::storeSCPCallback(
         if ( (imageDataSet) && ( *imageDataSet ) )
         {
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
-            DICOMTagReader dicomTagReader(cbdata->imageFileName, new DcmDataset((**imageDataSet)));
+            DICOMTagReader *dicomTagReader = new DICOMTagReader(cbdata->imageFileName, new DcmDataset((**imageDataSet)));
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();//proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
             DICOMImage retrievedImage( * imageDataSet );
 
@@ -194,7 +194,7 @@ void RetrieveImages::storeSCPCallback(
 
             m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
             //Guardem la imatge
-            if ( save(cbdata, &dicomTagReader).bad() )
+            if ( save(cbdata, dicomTagReader).bad() )
             {
                 piSingleton->setError( retrievedImage.getStudyUID() );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
@@ -225,6 +225,9 @@ void RetrieveImages::storeSCPCallback(
                     ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
             }
+
+            //TODO DESCOMENTAR PER FER FUNCIONAR EL NOU MODEL DE BD I FILLERS
+            //piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
 
             //TODO AQUEST CODI S'HA D'ESBORRAR QUAN HI HAGI IMPLEMENTAT EL NOU MODEL DE BD I FILLERS
             //guardem la informacio que hem calculat nosaltres a l'objecte imatge

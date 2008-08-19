@@ -76,6 +76,11 @@ void StarviewerProcessImageRetrieved::process( DICOMImage *image )
     emit( imageRetrieved( image->getStudyUID(),m_downloadedImages ) );
 }
 
+void StarviewerProcessImageRetrieved::process(DICOMTagReader *dicomTagReader)
+{
+    emit fileRetrieved(dicomTagReader);
+}
+
 bool StarviewerProcessImageRetrieved::insertSerie(DICOMImage *newImage)
 {
     DICOMSeries serie;

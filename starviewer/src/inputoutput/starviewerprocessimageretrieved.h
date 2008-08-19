@@ -17,6 +17,7 @@ namespace udg {
 
 class DICOMImage;
 class DICOMSeries;
+class DICOMTagReader;
 
 /**
 @author marc
@@ -34,6 +35,8 @@ public:
      * @param imatge a processar
      */
     void process( DICOMImage* image );
+
+    void process(DICOMTagReader *dicomTagReader);
 
     /// Retorna si s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     bool getError();
@@ -63,6 +66,9 @@ signals :
       *@para UID de l'estudi
       */
     void seriesView ( QString );
+
+    ///signal que s'ement quant s'ha descarregat un fitxer
+    void fileRetrieved(DICOMTagReader *dicomTagReader);
 
 private :
 

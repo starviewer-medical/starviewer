@@ -11,6 +11,7 @@
 
 #include "processimage.h"
 #include "dicomimage.h"
+#include "dicomtagreader.h"
 
 namespace udg {
 
@@ -61,6 +62,27 @@ void ProcessImageSingleton::process( QString UID , DICOMImage* img )
     if ( j != m_listProcess.end() )
     {
         (*j).imgProcess->process( img );
+    }
+}
+
+void ProcessImageSingleton::process(QString UID, DICOMTagReader *dicomTagReader)
+{
+    list<SingletonProcess>::iterator j;
+
+    j = m_listProcess.begin();
+
+    while ( j != m_listProcess.end() )
+    {
+        if ( (*j).studyUID != UID )
+        {
+            j++;
+        }
+        else break;
+    }
+
+    if ( j != m_listProcess.end() )
+    {
+        (*j).imgProcess->process(dicomTagReader);
     }
 }
 
