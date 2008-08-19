@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "starviewerprocessimagestored.h"
 
+#include "dicomtagreader.h"
+
 namespace udg {
 
 StarviewerProcessImageStored::StarviewerProcessImageStored(QObject *parent)
@@ -30,6 +32,10 @@ void StarviewerProcessImageStored::process( DICOMImage *image )
 
     m_imagesStored++;
     emit( imageStored( image->getStudyUID() , m_imagesStored ) );
+}
+
+void StarviewerProcessImageStored::process(DICOMTagReader *)
+{
 }
 
 StarviewerProcessImageStored::~StarviewerProcessImageStored()

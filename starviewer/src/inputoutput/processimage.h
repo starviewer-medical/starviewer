@@ -10,6 +10,7 @@
 namespace udg {
 
 class DICOMImage;
+class DICOMTagReader;
 
 /** Classe que s'encarrega de dur a terme unes accions determinades per cada descarrega d'una imatge. Aquesta classe és una classe genèrica, per ser reimplementada
 @author marc
@@ -26,6 +27,9 @@ public:
  	 * @param imatge a processar
  	 */
     virtual void process(DICOMImage* image) = 0;
+
+    ///Processa el DICOMTagReader
+    virtual void process(DICOMTagReader *dicomTagReader) = 0;
 
 	///Indica que s'ha produit algun error descarregant alguna de les imatges de l'estudi
     virtual void setError() = 0;

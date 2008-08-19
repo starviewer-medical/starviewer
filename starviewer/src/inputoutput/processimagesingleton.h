@@ -18,6 +18,7 @@ namespace udg {
 
 class ProcessImage;
 class DICOMImage;
+class DICOMTagReader;
 
 /** Aquesta és una classe singleton que conté una col.leció d'objectes ProcessImage. La classe és necessaria per poder descarregar estudis simultàniament ja que per cada estudi que és descarrega, a través del seu studyUID té associat un ProcessImage, que és que s'encarrega de dur a terme les accions pertinents després de la descèrrega de cada imatge.
  *
@@ -42,6 +43,9 @@ public:
      * @param imatge descarregada
      */
     void process( QString ,  DICOMImage *image );
+
+    ///Processa el DicomTagReader
+    void process(QString, DICOMTagReader *dicomTagReader);
 
     /** buscar l'objecte processimage que s'encarrega de gestionar la descarrega de l'estudi studyUID, per notificar l'error
      * @param UID de l'estudi que ha produit l'error

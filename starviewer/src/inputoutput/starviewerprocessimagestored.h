@@ -13,6 +13,8 @@
 
 namespace udg {
 
+class DICOMTagReader;
+
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -23,6 +25,8 @@ public:
     StarviewerProcessImageStored(QObject *parent = 0);
 
     void process( DICOMImage * image );
+
+    void process(DICOMTagReader *dicomTagReader);
 
     ~StarviewerProcessImageStored();
 
