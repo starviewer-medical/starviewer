@@ -91,6 +91,12 @@ signals :
      */
     void newOperation( Operation *newOperation );
 
+    ///ha acabat la descàrrega
+    void retrieveFinished();
+
+    ///Signal que s'emet quan s'ha produït un error a l'operació de descàrrega
+    void abort();
+
 private slots :
 
     /** Emet un singnal cap al queryscreen per indicar que s'ha descarregat una imatge
