@@ -209,6 +209,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         }
 
         emit( setErrorOperation( studyUID ) );
+        emit abort();
         cacheStudyDAL.delStudy( studyUID );
     }
     else
@@ -218,6 +219,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         scaleStudy.scale( studyUID ); //escalem l'estudi per la previsualització de la caché
         emit( setOperationFinished( studyUID ) );// descarregat a QOperationStateScreen
         emit( setRetrieveFinished( studyUID ) );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
+        emit retrieveFinished();
 
         if ( m_view )
             emit ( viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() ) );
