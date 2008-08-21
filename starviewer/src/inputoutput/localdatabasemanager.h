@@ -11,6 +11,7 @@
 #include <QObject>
 
 #include "status.h"
+#include "image.h"
 
 namespace udg {
 
@@ -34,6 +35,9 @@ public slots:
     Status insert(Patient *newPatient);
 
 private :
+
+    Image* getImage();
+    Image* getImage2();
 
 };
 

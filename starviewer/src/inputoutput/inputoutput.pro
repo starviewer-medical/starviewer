@@ -65,7 +65,9 @@ HEADERS += databaseconnection.h \
  	   errordcmtk.h \
  qadvancedsearchwidget.h \
  qbasicsearchwidget.h \
- localdatabasemanager.h
+ localdatabasemanager.h \
+ localdatabaseimagedal.h \
+ testdicomobjects.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -113,7 +115,9 @@ SOURCES += databaseconnection.cpp \
            queryscreen.cpp \
  qadvancedsearchwidget.cpp \
  qbasicsearchwidget.cpp \
- localdatabasemanager.cpp
+ localdatabasemanager.cpp \
+ localdatabaseimagedal.cpp \
+ testdicomobjects.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
