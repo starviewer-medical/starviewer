@@ -21,7 +21,8 @@ CREATE TABLE Study
   AccessionNumber		TEXT,
   Description			TEXT,
   ReferringPhysicianName	TEXT,
-  LastAccessDate		TEXT	
+  LastAccessDate		TEXT,
+  State				INTEGER	
 );
 
 CREATE TABLE Series
@@ -42,7 +43,8 @@ CREATE TABLE Series
   NumberOfSlicesPerPhase	INTEGER,
   BodyPartExaminated		TEXT,
   ViewPosition			TEXT,
-  Manufacturer			TEXT
+  Manufacturer			TEXT,
+  State				INTEGER
 );
 
 CREATE INDEX  IndexSeries_StudyInstanceUID ON Series (StudyInstanceUID); 
@@ -59,7 +61,7 @@ CREATE TABLE Image
   SliceThickness		REAL,
   PatientPosition		TEXT,
   SamplesPerPixel		INTEGER,
-  Row				INTEGER,
+  Rows				INTEGER,
   Columns			INTEGER,
   BitsAllocated 		INTEGER,
   BitsStored			INTEGER,
@@ -69,7 +71,12 @@ CREATE TABLE Image
   WindowLevelCenter		TEXT,
   WindowLevelExplanations	TEXT,
   SOPInstanceReferenceImage	TEXT,
-  SliceLocation 		TEXT
+  SliceLocation 		TEXT,
+  RescaleIntercept		REAL,
+  NumberOfFrames		INTEGER,
+  PhotometricInterpretation	TEXT,
+  OrderNumberInSeries		INTEGER,
+  State				INTEGER		
 );
 
 CREATE INDEX  IndexImage_StudyInstanceUIDSeriesInstanceUID ON Image (StudyInstanceUID,SeriesInstanceUID); 
