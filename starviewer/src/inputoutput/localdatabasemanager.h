@@ -8,6 +8,7 @@
 #ifndef UDGLOCALDATABASEMANAGER_H
 #define UDGLOCALDATABASEMANAGER_H
 
+#include <QList>
 #include <QObject>
 
 #include "status.h"
@@ -16,6 +17,7 @@
 namespace udg {
 
 class Patient;
+class DicomMask;
 
 /** Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -28,6 +30,9 @@ public:
 
     ///Constructor de la classe
     LocalDatabaseManager();
+
+    ///Ens retorna les imatges que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
+    QList<Image*> queryImage(DicomMask imageMaskToQuery);
 
 public slots:
 

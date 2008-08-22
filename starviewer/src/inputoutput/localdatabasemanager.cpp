@@ -40,12 +40,19 @@ Status LocalDatabaseManager::insert(Patient *newPatient)
     localDatabaseImageDAL.deleteImage(imageMask);
 
     //localDatabaseImageDAL.insert(getImage(),1);
-    
+
     /*TestDicomObjects::printImage(getImage());
     TestDicomObjects::printImage(localDatabaseImageDAL.query(imageMask).at(0));
     TestDicomObjects::printImage(localDatabaseImageDAL.query(imageMask).at(1));
     */
     return state;
+}
+
+QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
+{
+    LocalDatabaseImageDAL imageDAL;
+
+    return imageDAL.query(imageMaskToQuery);
 }
 
 Image * LocalDatabaseManager::getImage()
