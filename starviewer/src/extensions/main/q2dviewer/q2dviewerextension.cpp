@@ -19,6 +19,7 @@
 #include "toolconfiguration.h"
 #include "windowlevelpresetstooldata.h"
 #include "qdicomdump.h"
+#include "hangingprotocolmanager.h"
 
 #include <QAction>
 #include <QSettings>
@@ -215,6 +216,10 @@ void Q2DViewerExtension::setInput( Volume *input )
     validePhases();
     m_cineController->setQViewer( m_workingArea->getViewerSelected()->getViewer() );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal");
+
+    /// Aplicació dels hanging protocols
+    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+    hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
 }
 
 void Q2DViewerExtension::resetViewToAxial()

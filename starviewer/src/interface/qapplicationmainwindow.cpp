@@ -22,6 +22,7 @@
 #include "qlogviewer.h"
 #include "patient.h"
 #include "qconfigurationdialog.h"
+#include "hangingprotocolsloader.h"
 
 // Mini - aplicacions
 #include "cacheinstallation.h"
@@ -56,6 +57,10 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     // icona de l'aplicació
     this->setWindowIcon( QIcon(":/images/starviewer.png") );
     this->setWindowTitle( tr("Starviewer") );
+
+    /// Càrrega dels hanging protocols
+    HangingProtocolsLoader * hangingProtocolsLoader = new HangingProtocolsLoader();
+    hangingProtocolsLoader->loadDefaults();
 
 #ifdef BETA_VERSION
     markAsBetaVersion();
@@ -458,7 +463,7 @@ void QApplicationMainWindow::readSettings()
 {
     QSettings settings;
 
-    if (!settings.contains("geometry")) 
+    if (!settings.contains("geometry"))
 	this->showMaximized();
 
     this->restoreGeometry(settings.value("geometry").toByteArray());

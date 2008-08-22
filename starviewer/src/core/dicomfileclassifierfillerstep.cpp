@@ -175,6 +175,10 @@ Series *DICOMFileClassifierFillerStep::createSeries()
     series->setPositionReferenceIndicator( m_dicomReader->getAttributeByName( DCM_PositionReferenceIndicator ) );
     series->setManufacturer( m_dicomReader->getAttributeByName( DCM_Manufacturer ) );
 
+    /// Atributs necessaris pels hanging protocols
+    series->setBodyPartExamined( m_dicomReader->getAttributeByName( DCM_BodyPartExamined ) );
+    series->setViewPosition( m_dicomReader->getAttributeByName( DCM_ViewPosition ) );
+
     return series;
 }
 
