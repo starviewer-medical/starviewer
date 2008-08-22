@@ -4,10 +4,12 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGWIDGETLAYOUTVIEWER_H
-#define UDGWIDGETLAYOUTVIEWER_H
+#ifndef UDGVIEWERSLAYOUT_H
+#define UDGVIEWERSLAYOUT_H
 
 #include <QWidget>
+#include <QList>
+#include <QResizeEvent>
 #include "q2dviewerwidget.h"
 
 namespace udg {
@@ -17,14 +19,14 @@ Classe que permet crear un widget de visualitzadors amb diferents layouts
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class WidgetLayoutViewer : public QWidget
+class ViewersLayout : public QWidget
 {
 Q_OBJECT
 public:
 
-    WidgetLayoutViewer(QWidget *parent = 0);
+    ViewersLayout(QWidget *parent = 0);
 
-    ~WidgetLayoutViewer();
+    ~ViewersLayout();
 
     /// Obtenir el visualitzador seleccionat
     Q2DViewerWidget* getViewerSelected();
@@ -58,11 +60,18 @@ public slots:
     void hideRows( int rows );
     void showColumns( int columns );
     void hideColumns( int columns );
+    void setGrid( QList<QString> );
+
+    /// Afegeix un nou visualitzador
+    Q2DViewerWidget * addViewer( QString position );
 
 private slots:
 
     /// Inicialitza els layouts
     void initLayouts();
+
+    /// Elimina els layouts
+    void removeLayouts();
 
     /// Posem el widget seleccionat com a actual
     void setViewerSelected( Q2DViewerWidget *viewer );
@@ -91,6 +100,12 @@ private:
 
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;
+
+    QList<QString> m_positionsList;
+
+protected:
+
+    void resizeEvent ( QResizeEvent * event );
 };
 
 }

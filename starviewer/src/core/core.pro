@@ -14,7 +14,7 @@ FORMS += qlogviewerbase.ui \
          qtransferfunctionintervaleditorbase.ui \
          qcinecontrollerbase.ui  \
          qthickslabwidgetbase.ui \
- q2dviewerwidgetbase.ui
+         q2dviewerwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
                 core_en_GB.ts
@@ -163,8 +163,16 @@ HEADERS += extensionfactory.h \
            angletool.h \
            drawercrosshair.h \
            starviewerapplication.h \
-           widgetlayoutviewer.h \
-           q2dviewerwidget.h
+           viewerslayout.h \
+           q2dviewerwidget.h \
+           hangingprotocol.h \
+           hangingprotocollayout.h \
+           hangingprotocolsloader.h \
+           hangingprotocolsrepository.h \
+           hangingprotocolmanager.h \
+           hangingprotocolmask.h \
+           hangingprotocolimageset.h \
+           hangingprotocoldisplayset.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -294,8 +302,16 @@ SOURCES += extensionmediator.cpp \
            cursor3dtooldata.cpp \
            angletool.cpp \
            drawercrosshair.cpp \
-           widgetlayoutviewer.cpp \
-           q2dviewerwidget.cpp
+           viewerslayout.cpp \
+           q2dviewerwidget.cpp \
+           hangingprotocol.cpp \
+           hangingprotocollayout.cpp \
+           hangingprotocolsloader.cpp \
+           hangingprotocolsrepository.cpp \
+           hangingprotocolmanager.cpp \
+           hangingprotocolmask.cpp \
+           hangingprotocolimageset.cpp \
+           hangingprotocoldisplayset.cpp
 TEMPLATE = lib
 
 DESTDIR = ./
