@@ -33,6 +33,9 @@ public:
     ///Constructor de la classe
     LocalDatabaseManager();
 
+    ///Ens retorna els estudis que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID
+    QList<Study*> queryStudy(DicomMask studyMaskToQuery);
+
     ///Ens retorna les series que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID i SeriesUID 
     QList<Series*> querySeries(DicomMask seriesMaskToQuery);
 
