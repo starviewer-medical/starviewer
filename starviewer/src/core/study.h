@@ -72,7 +72,11 @@ public:
      * @return una llista d'strings
      */
     QStringList getModalities() const;
-    
+
+    ///Assigna/Obtenir el referring physician's name de l'estudi
+    void setReferringPhysiciansName(QString referringPhysiciansName);
+    QString getReferringPhysiciansName();
+
     /// Assignar/Obtenir la data i hora d'adquisició de l'estudi. El format de la data serà YYYYMMDD i el del
     /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
     ///  Retorna fals si hi ha algun error en el format
@@ -164,6 +168,9 @@ private:
 
     /// Pes ( en Kg. ) del pacient (0010,1030) Tipus 3
     double m_weight;
+
+    ///Metge que atén el pacient durant visita, relacionada amb la prova exploratòria (0008,0090) Tipus 2
+    QString m_referringPhysiciansName;
 
     /// Llista de les Series de l'estudi ordenades per número de serie
     QList<Series *> m_seriesSet;
