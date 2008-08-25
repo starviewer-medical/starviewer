@@ -25,6 +25,8 @@ public:
 
     static void printSeries(Series *seriesToPrint);
 
+    static void printStudy(Study *studyToPrint);
+
 };
 
 }

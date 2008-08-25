@@ -10,7 +10,7 @@
 #include "logging.h"
 #include "image.h"
 #include "series.h"
-
+#include "study.h"
 
 namespace udg
 {
@@ -66,6 +66,22 @@ void TestDicomObjects::printSeries(Series *seriesToPrint)
     DEBUG_LOG("BodyPartExaminated: " + seriesToPrint->getBodyPartExamined());
     DEBUG_LOG("ViewPosition: " + seriesToPrint->getViewPosition());
     DEBUG_LOG("Manufacturer: " + seriesToPrint->getManufacturer());
+}
+
+void TestDicomObjects::printStudy(Study *studyToPrint)
+{
+    DEBUG_LOG("Instance UID" + studyToPrint->getInstanceUID());
+    DEBUG_LOG("ID" + studyToPrint->getID());
+    DEBUG_LOG("Patient Age" + QString().setNum(studyToPrint->getPatientAge(), 10));
+    DEBUG_LOG("Patien Weigth" + QString().setNum(studyToPrint->getWeight(), 'g', 10));
+    DEBUG_LOG("Patient Height" + QString().setNum(studyToPrint->getHeight(), 'g', 10));
+    DEBUG_LOG("Modalities" + studyToPrint->getModalitiesAsSingleString());
+    DEBUG_LOG("Date" + studyToPrint->getDateAsString());
+    DEBUG_LOG("Time" + studyToPrint->getTimeAsString());
+    DEBUG_LOG("Accession Number" + studyToPrint->getAccessionNumber());
+    DEBUG_LOG("Description" + studyToPrint->getDescription());
+    DEBUG_LOG("Referring Phsysicians Name" + studyToPrint->getReferringPhysiciansName());
+
 }
 
 }
