@@ -21,7 +21,9 @@ class TestDicomObjects
 
 public:
 
-    static void printImage(Image *imateToPrint);
+    static void printImage(Image *imageToPrint);
+
+    static void printSeries(Series *seriesToPrint);
 
 };
 

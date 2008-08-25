@@ -9,6 +9,7 @@
 
 #include "logging.h"
 #include "image.h"
+#include "series.h"
 
 
 namespace udg
@@ -16,7 +17,6 @@ namespace udg
 
 void TestDicomObjects::printImage(Image *imageToPrint)
 {
-    
     DEBUG_LOG("SOPInstanceUID" + imageToPrint->getSOPInstanceUID());
     DEBUG_LOG("InstanceNumber" + imageToPrint->getInstanceNumber());
     DEBUG_LOG("ImageOrientationPatient: " + QString().setNum(imageToPrint->getImageOrientationPatient()[0], 'g', 10) + "," +
@@ -46,6 +46,26 @@ void TestDicomObjects::printImage(Image *imageToPrint)
     DEBUG_LOG("RescaleIntercept: " + QString().setNum(imageToPrint->getRescaleIntercept(), 'g', 10));
     DEBUG_LOG("NumberOfFrames: " + QString().setNum(imageToPrint->getNumberOfFrames(), 10));
     DEBUG_LOG("PhotometricInterpretation: " + imageToPrint->getPhotometricInterpretation());
+}
+
+void TestDicomObjects::printSeries(Series *seriesToPrint)
+{
+    DEBUG_LOG("InstanceUID: " + seriesToPrint->getInstanceUID());
+    DEBUG_LOG("Number: " + seriesToPrint->getSeriesNumber());
+    DEBUG_LOG("Modality: " + seriesToPrint->getModality());
+    DEBUG_LOG("Date: " + seriesToPrint->getDateAsString());
+    DEBUG_LOG("Time: " + seriesToPrint->getTimeAsString());
+    DEBUG_LOG("InstitutionName: " + seriesToPrint->getInstitutionName());
+    DEBUG_LOG("PatientPosition: " + seriesToPrint->getPatientPosition());
+    DEBUG_LOG("ProtocolName: " + seriesToPrint->getProtocolName());
+    DEBUG_LOG("Description: " + seriesToPrint->getDescription());
+    DEBUG_LOG("FrameOfReferenceUID " + seriesToPrint->getFrameOfReferenceUID());
+    DEBUG_LOG("PositionReferenceIndicator: " + seriesToPrint->getPositionReferenceIndicator());
+    DEBUG_LOG("NumberOfPhases: " + QString().setNum(seriesToPrint->getNumberOfPhases(), 10));
+    DEBUG_LOG("NumberOfSlicesPerPhase: " + QString().setNum(seriesToPrint->getNumberOfSlicesPerPhase(), 10));
+    DEBUG_LOG("BodyPartExaminated: " + seriesToPrint->getBodyPartExamined());
+    DEBUG_LOG("ViewPosition: " + seriesToPrint->getViewPosition());
+    DEBUG_LOG("Manufacturer: " + seriesToPrint->getManufacturer());
 }
 
 }
