@@ -65,6 +65,13 @@ Status LocalDatabaseManager::insert(Patient *newPatient)
     return state;
 }
 
+QList<Series*> LocalDatabaseManager::querySeries(DicomMask seriesMaskToQuery)
+{
+    LocalDatabaseSeriesDAL seriesDAL;
+
+    return seriesDAL.query(seriesMaskToQuery);
+}
+
 QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
 {
     LocalDatabaseImageDAL imageDAL;

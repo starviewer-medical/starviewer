@@ -32,6 +32,9 @@ public:
     ///Constructor de la classe
     LocalDatabaseManager();
 
+    ///Ens retorna les series que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID i SeriesUID 
+    QList<Series*> querySeries(DicomMask seriesMaskToQuery);
+
     ///Ens retorna les imatges que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     QList<Image*> queryImage(DicomMask imageMaskToQuery);
 
