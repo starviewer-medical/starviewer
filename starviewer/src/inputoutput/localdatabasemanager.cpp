@@ -8,12 +8,15 @@
 #include "localdatabasemanager.h"
 
 #include "patient.h"
+#include "study.h"
 #include "localdatabaseimagedal.h"
 #include "localdatabaseseriesdal.h"
+#include "localdatabasestudydal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "testdicomobjects.h"
 
+#include <QDate>
 
 namespace udg
 {
@@ -32,13 +35,23 @@ Status LocalDatabaseManager::insert(Patient *newPatient)
 
     DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
 
+    //dicomMask.setStudyUID("1.2");
+
+ /*   LocalDatabaseStudyDAL localDatabaseStudyDAL;
+
+    localDatabaseStudyDAL.setConnection(dbConnect);
+
+    localDatabaseStudyDAL.insert(getStudy(), QDate::currentDate());
+
+    localDatabaseStudyDAL.insert(getStudy2(), QDate::currentDate());
+
+    localDatabaseStudyDAL.del(dicomMask);
+*/
     LocalDatabaseSeriesDAL localDatabaseSeriesDAL;
 
 //    localDatabaseSeriesDAL.setConnection(dbConnect);
 //    localDatabaseSeriesDAL.insert(getSeries());
 //    localDatabaseSeriesDAL.insert(getSeries2());
-
-    dicomMask.setStudyUID("1.2");
 
     /*TestDicomObjects::printSeries(getSeries());
     TestDicomObjects::printSeries(localDatabaseSeriesDAL.query(dicomMask).at(0));
@@ -184,6 +197,42 @@ Series* LocalDatabaseManager::getSeries2()
     newSeries->setManufacturer("15");
 
     return newSeries;
+}
+
+Study* LocalDatabaseManager::getStudy()
+{
+    Study *newStudy = new Study();
+
+    newStudy->setInstanceUID("1.2");
+    newStudy->setID("1");
+    newStudy->setPatientAge(2);
+    newStudy->setWeight(3.21);
+    newStudy->setHeight(4.321);
+    newStudy->setDate("20080706");
+    newStudy->setTime("123456");
+    newStudy->setAccessionNumber("5");
+    newStudy->setDescription("6");
+    newStudy->setReferringPhysiciansName("7");
+
+    return newStudy;
+}
+
+Study* LocalDatabaseManager::getStudy2()
+{
+    Study *newStudy = new Study();
+
+    newStudy->setInstanceUID("1.3");
+    newStudy->setID("2");
+    newStudy->setPatientAge(3);
+    newStudy->setWeight(4.321);
+    newStudy->setHeight(5.4321);
+    newStudy->setDate("20080807");
+    newStudy->setTime("023456");
+    newStudy->setAccessionNumber("6");
+    newStudy->setDescription("7");
+    newStudy->setReferringPhysiciansName("8");
+
+    return newStudy;
 }
 
 }

@@ -14,6 +14,7 @@
 #include "status.h"
 #include "image.h"
 #include "series.h"
+#include "study.h"
 
 namespace udg {
 
@@ -51,6 +52,8 @@ private :
     Series *getSeries();
     Series *getSeries2();
 
+    Study *getStudy();
+    Study *getStudy2();
 };
 
 }
