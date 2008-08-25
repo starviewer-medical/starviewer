@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGCACHESTUDYDAL_H
-#define UDGCACHESTUDYDAL_H
+#ifndef UDGLOCALDATABASESTUDY_H
+#define UDGLOCALDATABASESTUDY_H
 
 #include <QList>
 
