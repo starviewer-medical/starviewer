@@ -67,7 +67,8 @@ HEADERS += databaseconnection.h \
  qbasicsearchwidget.h \
  localdatabasemanager.h \
  localdatabaseimagedal.h \
- testdicomobjects.h
+ testdicomobjects.h \
+ localdatabaseseriesdal.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -117,7 +118,8 @@ SOURCES += databaseconnection.cpp \
  qbasicsearchwidget.cpp \
  localdatabasemanager.cpp \
  localdatabaseimagedal.cpp \
- testdicomobjects.cpp
+ testdicomobjects.cpp \
+ localdatabaseseriesdal.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core

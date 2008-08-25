@@ -13,6 +13,7 @@
 
 #include "status.h"
 #include "image.h"
+#include "series.h"
 
 namespace udg {
 
@@ -43,6 +44,9 @@ private :
 
     Image* getImage();
     Image* getImage2();
+
+    Series *getSeries();
+    Series *getSeries2();
 
 };
 
