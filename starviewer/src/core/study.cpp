@@ -111,6 +111,16 @@ QStringList Study::getModalities() const
     return m_modalities;
 }
 
+void Study::setReferringPhysiciansName(QString referringPhysiciansName)
+{
+    m_referringPhysiciansName = referringPhysiciansName;
+}
+
+QString Study::getReferringPhysiciansName()
+{
+    return m_referringPhysiciansName;
+}
+
 bool Study::setDateTime( int day , int month , int year , int hour , int minute, int second )
 {
     return this->setDate( day, month, year ) && this->setTime( hour, minute, second );
