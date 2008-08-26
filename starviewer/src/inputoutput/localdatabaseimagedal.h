@@ -36,7 +36,7 @@ public:
     void insert(Image *newImage, int orderNumberInSeries);
 
     /// Esborra les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    void deleteImage(DicomMask imageMaskToDelete);
+    void del(DicomMask imageMaskToDelete);
 
     ///Actualitza la imatge passada per paràmetre
     void update(Image *imageToUpdate, int orderNumberInSeries);
@@ -63,7 +63,7 @@ private :
     double m_patientPosition[3];
 
 
-    ///Emplena un l'objecte imatge de la columna passada per paràmetre
+    ///Emplena un l'objecte imatge de la fila passada per paràmetre
     Image *fillImage(char **reply, int row, int columns);
 
     ///Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 

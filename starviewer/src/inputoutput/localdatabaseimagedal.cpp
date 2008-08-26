@@ -35,7 +35,7 @@ void LocalDatabaseImageDAL::insert(Image *newImage, int orderNumberInSeries)
     if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newImage, orderNumberInSeries)); 
 }
 
-void LocalDatabaseImageDAL::deleteImage(DicomMask imageMaskToDelete)
+void LocalDatabaseImageDAL::del(DicomMask imageMaskToDelete)
 {
     m_dbConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
 
@@ -253,11 +253,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
 
 QString LocalDatabaseImageDAL::buildSqlDelete(DicomMask imageMaskToDelete)
 {
-    QString deleteSentence, whereSentence = "";
-
-    deleteSentence = "delete from Image " + buildWhereSentence(imageMaskToDelete);
-
-    return deleteSentence;
+    return "delete from Image " + buildWhereSentence(imageMaskToDelete);
 }
 
 QString LocalDatabaseImageDAL::buildWhereSentence(DicomMask imageMask)
