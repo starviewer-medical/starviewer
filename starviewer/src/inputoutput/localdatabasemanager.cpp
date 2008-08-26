@@ -17,6 +17,8 @@
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "testdicomobjects.h"
+#include "sqlite3.h"
+#include "logging.h"
 
 #include <QDate>
 
@@ -28,64 +30,28 @@ LocalDatabaseManager::LocalDatabaseManager()
 
 }
 
-
 Status LocalDatabaseManager::insert(Patient *newPatient)
 {
     Status state;
-    DicomMask dicomMask;
     state.setStatus("Normal", true, 0);
-
+    int status = SQLITE_OK;
 
     DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
 
-    LocalDatabasePatientDAL localDatabasePatient;
+    dbConnect->beginTransaction();
 
-    localDatabasePatient.setConnection(dbConnect);
+    ///Guardem primer els estudis
+    if (newPatient->getStudies().count() > 0)
+    {
+        status = saveStudies(dbConnect, newPatient->getStudies());
 
-    //localDatabasePatient.insert(getPatient());
+        if (status != SQLITE_OK) return state;
+    }
 
-    //localDatabasePatient.del(dicomMask);
+    status = savePatient(dbConnect, newPatient);
 
-    //dicomMask.setStudyUID("1.2");
+    dbConnect->endTransaction();
 
- /*   LocalDatabaseStudyDAL localDatabaseStudyDAL;
-
-    localDatabaseStudyDAL.setConnection(dbConnect);
-
-    localDatabaseStudyDAL.insert(getStudy(), QDate::currentDate());
-
-    localDatabaseStudyDAL.insert(getStudy2(), QDate::currentDate());
-
-    localDatabaseStudyDAL.del(dicomMask);
-*/
-    LocalDatabaseSeriesDAL localDatabaseSeriesDAL;
-
-//    localDatabaseSeriesDAL.setConnection(dbConnect);
-//    localDatabaseSeriesDAL.insert(getSeries());
-//    localDatabaseSeriesDAL.insert(getSeries2());
-
-    /*TestDicomObjects::printSeries(getSeries());
-    TestDicomObjects::printSeries(localDatabaseSeriesDAL.query(dicomMask).at(0));
-    TestDicomObjects::printSeries(getSeries2());
-    TestDicomObjects::printSeries(localDatabaseSeriesDAL.query(dicomMask).at(1));
-*/
-//    localDatabaseSeriesDAL.del(dicomMask);
-
-    /*LocalDatabaseImageDAL localDatabaseImageDAL;
-
-    dicomMask.setStudyUID("1.2");
-    dicomMask.setSeriesUID("1.2.3");
-
-    localDatabaseImageDAL.setDatabaseConnection(dbConnect);
-
-    localDatabaseImageDAL.deleteImage(dicomMask);
-
-    localDatabaseImageDAL.insert(getImage(),1);
-
-    TestDicomObjects::printImage(getImage());
-    TestDicomObjects::printImage(localDatabaseImageDAL.query(dicomMask).at(0));
-    TestDicomObjects::printImage(localDatabaseImageDAL.query(dicomMask).at(1));
-    */
     return state;
 }
 
@@ -93,7 +59,7 @@ QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
 {
     LocalDatabasePatientDAL patientDAL;
 
-    patientDAL.setConnection(DatabaseConnection::getDatabaseConnection());
+    patientDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
 
     return patientDAL.query(patientMaskToQuery);
 }
@@ -102,7 +68,7 @@ QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
 {
     LocalDatabaseStudyDAL studyDAL;
 
-    studyDAL.setConnection(DatabaseConnection::getDatabaseConnection());
+    studyDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
 
     return studyDAL.query(studyMaskToQuery);
 }
@@ -111,7 +77,7 @@ QList<Series*> LocalDatabaseManager::querySeries(DicomMask seriesMaskToQuery)
 {
     LocalDatabaseSeriesDAL seriesDAL;
 
-    seriesDAL.setConnection(DatabaseConnection::getDatabaseConnection());
+    seriesDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
 
     return seriesDAL.query(seriesMaskToQuery);
 }
@@ -129,176 +95,120 @@ void LocalDatabaseManager::compact()
 {
     LocalDatabaseUtilDAL utilDAL;
 
-    utilDAL.setConnection(DatabaseConnection::getDatabaseConnection());
+    utilDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
 
     utilDAL.compact();
 }
 
-Image * LocalDatabaseManager::getImage()
+int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave)
 {
-    Image *newImage = new Image();
-    double imagePatientPosition[6] = {6,7,8,9,10,11}, imageOrientationPatient[6] = {26,27,28,29,30,31};
+    int status = SQLITE_OK;
 
-    newImage->setSOPInstanceUID("1.2.3.4");
-    newImage->setInstanceNumber("1");
-    newImage->setImageOrientationPatient(imageOrientationPatient);
-    newImage->setPatientOrientation("2");
-    newImage->setPixelSpacing(3,4);
-    newImage->setSliceThickness(5.4321);
-    newImage->setImagePositionPatient(imagePatientPosition);
-    newImage->setSamplesPerPixel(12);
-    newImage->setRows(13);
-    newImage->setColumns(14);
-    newImage->setBitsAllocated(15);
-    newImage->setBitsStored(16);
-    newImage->setPixelRepresentation(17);
-    newImage->setRescaleSlope(18.9);
-    newImage->addWindowLevel(19.9, 20.1);
-    newImage->addWindowLevelExplanation("21");
-    newImage->setSliceLocation("22");
-    newImage->setRescaleIntercept(23.21);
-    newImage->setNumberOfFrames(24);
-    newImage->setPhotometricInterpretation("25");
+    foreach(Study* studyToSave, listStudyToSave)
+    {
+        ///primer guardem les sèries
+        status = saveSeries(dbConnect, studyToSave->getSeries());
 
+        if (status != SQLITE_OK)
+            return status;
+        else //Guardem la sèrie si no s'ha produït cap error
+            status = saveStudy(dbConnect, studyToSave);
 
-    return newImage;
+        if (status != SQLITE_OK) return status;
+    }
+
+    return status;
 }
 
-Image * LocalDatabaseManager::getImage2()
+int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave)
 {
-    Image *newImage = new Image();
-    double imagePatientPosition[6] = {7,8,9,10,11,12}, imageOrientationPatient[6] = {27,28,29,30,31,32};
+    int status = SQLITE_OK;
 
-    newImage->setSOPInstanceUID("1.2.3.4");
-    newImage->setInstanceNumber("2");
-    newImage->setImageOrientationPatient(imageOrientationPatient);
-    newImage->setPatientOrientation("3");
-    newImage->setPixelSpacing(4,5);
-    newImage->setSliceThickness(6.54321);
-    newImage->setImagePositionPatient(imagePatientPosition);
-    newImage->setSamplesPerPixel(13);
-    newImage->setRows(14);
-    newImage->setColumns(15);
-    newImage->setBitsAllocated(16);
-    newImage->setBitsStored(17);
-    newImage->setPixelRepresentation(18);
-    newImage->setRescaleSlope(19.9);
-    newImage->addWindowLevel(20.1, 21.0);
-    newImage->addWindowLevelExplanation("22");
-    newImage->setSliceLocation("23");
-    newImage->setRescaleIntercept(24.321);
-    newImage->setNumberOfFrames(25);
-    newImage->setPhotometricInterpretation("26");
+    foreach(Series* seriesToSave, listSeriesToSave)
+    {
+        ///primer guardem les imatges
+        status = saveImages(dbConnect, seriesToSave->getImages());
 
-    return newImage;
+        if (status != SQLITE_OK)
+            return status;
+        else //Guardem la sèrie si no s'ha produït cap error
+            status = saveSeries(dbConnect, seriesToSave);
+
+        if (status != SQLITE_OK) return status;
+    }
+
+    return status;
 }
 
-Series* LocalDatabaseManager::getSeries()
+int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave)
 {
-    Series *newSeries = new Series();
+    int imageOrderInSeries = 0;
+    int status = SQLITE_OK;
 
-    newSeries->setInstanceUID("1.2.3");
-    newSeries->setSeriesNumber("1");
-    newSeries->setModality("2");
-    newSeries->setDate("20080102");
-    newSeries->setTime("123456");
-    newSeries->setInstitutionName("5");
-    newSeries->setPatientPosition("6");
-    newSeries->setProtocolName("7");
-    newSeries->setDescription("8");
-    newSeries->setFrameOfReferenceUID("1.2.3.4");
-    newSeries->setPositionReferenceIndicator("9");
-    newSeries->setNumberOfPhases(10);
-    newSeries->setNumberOfSlicesPerPhase(11);
-    newSeries->setBodyPartExamined("12");
-    newSeries->setViewPosition("13");
-    newSeries->setManufacturer("14");
+    foreach(Image* imageToSave, listImageToSave)
+    {
+        status = saveImage(dbConnect, imageToSave, imageOrderInSeries);
 
-    return newSeries;
+        if (status != SQLITE_OK) return status;
+    }
+
+    return status;
 }
 
-Series* LocalDatabaseManager::getSeries2()
+int LocalDatabaseManager::savePatient(DatabaseConnection *dbConnect, Patient *patientToSave)
 {
-    Series *newSeries = new Series();
+    LocalDatabasePatientDAL patientDAL;
 
-    newSeries->setInstanceUID("1.2.4");
-    newSeries->setSeriesNumber("2");
-    newSeries->setModality("3");
-    newSeries->setDate("20090203");
-    newSeries->setTime("023456");
-    newSeries->setInstitutionName("6");
-    newSeries->setPatientPosition("7");
-    newSeries->setProtocolName("8");
-    newSeries->setDescription("9");
-    newSeries->setFrameOfReferenceUID("1.2.3.5");
-    newSeries->setPositionReferenceIndicator("10");
-    newSeries->setNumberOfPhases(11);
-    newSeries->setNumberOfSlicesPerPhase(12);
-    newSeries->setBodyPartExamined("13");
-    newSeries->setViewPosition("14");
-    newSeries->setManufacturer("15");
+    patientDAL.setDatabaseConnection(dbConnect);
 
-    return newSeries;
+    patientDAL.insert(patientToSave);
+
+    ///Si el pacient ja existia actualitzem la seva informació
+    if (patientDAL.getLastError() == SQLITE_CONSTRAINT) patientDAL.update(patientToSave);
+
+    return patientDAL.getLastError();
 }
 
-Study* LocalDatabaseManager::getStudy()
+int LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *studyToSave)
 {
-    Study *newStudy = new Study();
+    LocalDatabaseStudyDAL studyDAL;
 
-    newStudy->setInstanceUID("1.2");
-    newStudy->setID("1");
-    newStudy->setPatientAge(2);
-    newStudy->setWeight(3.21);
-    newStudy->setHeight(4.321);
-    newStudy->setDate("20080706");
-    newStudy->setTime("123456");
-    newStudy->setAccessionNumber("5");
-    newStudy->setDescription("6");
-    newStudy->setReferringPhysiciansName("7");
+    studyDAL.setDatabaseConnection(dbConnect);
 
-    return newStudy;
+    studyDAL.insert(studyToSave, QDate::currentDate());
+
+    ///Si l'estudi ja existia actualitzem la seva informació
+    if (studyDAL.getLastError() == SQLITE_CONSTRAINT) studyDAL.update(studyToSave, QDate::currentDate());
+
+    return studyDAL.getLastError();
 }
 
-Study* LocalDatabaseManager::getStudy2()
+int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave)
 {
-    Study *newStudy = new Study();
+    LocalDatabaseSeriesDAL seriesDAL;
 
-    newStudy->setInstanceUID("1.3");
-    newStudy->setID("2");
-    newStudy->setPatientAge(3);
-    newStudy->setWeight(4.321);
-    newStudy->setHeight(5.4321);
-    newStudy->setDate("20080807");
-    newStudy->setTime("023456");
-    newStudy->setAccessionNumber("6");
-    newStudy->setDescription("7");
-    newStudy->setReferringPhysiciansName("8");
+    seriesDAL.setDatabaseConnection(dbConnect);
 
-    return newStudy;
+    seriesDAL.insert(seriesToSave);
+
+    ///Si la serie ja existia actualitzem la seva informació
+    if (seriesDAL.getLastError() == SQLITE_CONSTRAINT) seriesDAL.update(seriesToSave);
+
+    return seriesDAL.getLastError();
 }
 
-Patient* LocalDatabaseManager::getPatient()
+int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageToSave, int imageOrderInSeries)
 {
-    Patient *newPatient = new Patient();
+    LocalDatabaseImageDAL imageDAL;
 
-    newPatient->setID("0");
-    newPatient->setFullName("1");
-    newPatient->setBirthDate("20080201");
-    newPatient->setSex("2");
+    imageDAL.setDatabaseConnection(dbConnect);
 
-    return newPatient;
-}
+    imageDAL.insert(imageToSave, imageOrderInSeries);
 
-Patient* LocalDatabaseManager::getPatient2()
-{
-    Patient *newPatient = new Patient();
+    ///Si el pacient ja existia actualitzem la seva informació
+    if (imageDAL.getLastError() == SQLITE_CONSTRAINT) imageDAL.update(imageToSave, imageOrderInSeries);
 
-    newPatient->setID("1");
-    newPatient->setFullName("3");
-    newPatient->setBirthDate("20080303");
-    newPatient->setSex("4");
-
-    return newPatient;
+    return imageDAL.getLastError();
 }
 
 }
