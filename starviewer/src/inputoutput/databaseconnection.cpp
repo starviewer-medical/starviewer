@@ -41,12 +41,17 @@ void DatabaseConnection::connectDB()
 
 void DatabaseConnection::beginTransaction()
 {
-	sqlite3_exec(m_databaseConnection, "BEGIN TRANSACTION", 0 , 0 , 0);
+    sqlite3_exec(m_databaseConnection, "BEGIN TRANSACTION", 0 , 0 , 0);
 }
 
 void DatabaseConnection::endTransaction()
 {
-	sqlite3_exec(m_databaseConnection, "END TRANSACTION", 0 , 0 , 0);
+    sqlite3_exec(m_databaseConnection, "END TRANSACTION", 0 , 0 , 0);
+}
+
+void DatabaseConnection::rollbackTransaction()
+{
+    sqlite3_exec(m_databaseConnection, "ROLLBACK TRANSACTION ", 0, 0, 0);
 }
 
 sqlite3* DatabaseConnection::getConnection()
