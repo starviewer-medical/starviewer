@@ -8,6 +8,7 @@
 #include <QString>
 #include <QDate>
 
+#include "patient.h"
 #include "localdatabasestudydal.h"
 #include "databaseconnection.h"
 #include "logging.h"
@@ -80,7 +81,7 @@ QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask)
     return studyList;
 }
 
-void LocalDatabaseStudyDAL::setConnection(DatabaseConnection *dbConnection)
+void LocalDatabaseStudyDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;
 }
@@ -140,7 +141,7 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDa
                                                    "values ('%1', '%2', '%3', %4, %5, %6, '%7', '%8', '%9', '%10', '%11', "
                                                             "'%12', '%13', %14 )")
                                     .arg(newStudy->getInstanceUID())
-                                    .arg("1")
+                                    .arg(newStudy->getParentPatient()->getID())
                                     .arg(newStudy->getID())
                                     .arg(newStudy->getPatientAge())
                                     .arg(newStudy->getWeight())
@@ -173,7 +174,7 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *newStudy, QDate lastAccessD
                                                        "LastAccessDate = '%12', "
                                                        "State = %13 "
                                                 "Where InstanceUid = %14")
-                                    .arg("1")
+                                    .arg(newStudy->getParentPatient()->getID())
                                     .arg(newStudy->getID())
                                     .arg(newStudy->getPatientAge())
                                     .arg(newStudy->getWeight())

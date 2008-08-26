@@ -82,7 +82,7 @@ QList<Series*> LocalDatabaseSeriesDAL::query(DicomMask seriesMask)
     return seriesList;
 }
 
-void LocalDatabaseSeriesDAL::setConnection(DatabaseConnection *dbConnection)
+void LocalDatabaseSeriesDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;
 }
@@ -142,7 +142,7 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                                     "values ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10', '%11', "
                                                             "'%12', %13, %14, '%15', '%16', '%17', %18 )")
                                     .arg(newSeries->getInstanceUID())
-                                    .arg("1.2")
+                                    .arg(newSeries->getParentStudy()->getInstanceUID())
                                     .arg(newSeries->getSeriesNumber())
                                     .arg(newSeries->getModality())
                                     .arg(newSeries->getDate().toString("yyyyMMdd"))
@@ -159,8 +159,6 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                     .arg(newSeries->getViewPosition())
                                     .arg(newSeries->getManufacturer())
                                     .arg("0");
-
-//arg(newSeries->getParentStudy()->getInstanceUID())
 
     return insertSentence;
 }
@@ -185,7 +183,7 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *newSeries)
                                                         "Manufacturer = '%16', "
                                                         "State = '%17' "
                                                  "Where InstanceUID = '%18'")
-                                    .arg("1.2")
+                                    .arg(newSeries->getParentStudy()->getInstanceUID())
                                     .arg(newSeries->getSeriesNumber())
                                     .arg(newSeries->getModality())
                                     .arg(newSeries->getDate().toString("yyyyMMdd"))
