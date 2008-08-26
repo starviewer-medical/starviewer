@@ -51,10 +51,11 @@ public:
     /// Allibera al candau per a que altres processos puguin accedir a la base de dades
     void releaseLock();
 
-    /// Comença/finalitza una transacció a la base de dades
+    /// Comença/finalitza/Fa rollback una transacció a la base de dades
     //TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
     void beginTransaction();
     void endTransaction();
+    void rollbackTransaction();
 
     ///Construeix l'estat de la base de dades en funció del valor que ha retornat la operació
     Status databaseStatus( int state );
