@@ -31,7 +31,7 @@ void LocalDatabaseUtilDAL::compact()
     if (getLastError() != SQLITE_OK) logError(compactSentence);
 }
 
-void LocalDatabaseUtilDAL::setConnection(DatabaseConnection *dbConnection)
+void LocalDatabaseUtilDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;
 }
