@@ -20,6 +20,7 @@
 namespace udg {
 
 class DicomMask;
+class DatabaseConnection;
 
 /** Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -55,17 +56,21 @@ public slots:
 
 private :
 
-    Image* getImage();
-    Image* getImage2();
+    ///Guarda a la base de dades la llista d'estudis passada per paràmetre, si algun dels estudis ja existeix actualitza la info
+    int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave);
+    ///Guarda a la base de dades la llista de series passada per paràmetre, si alguna de les series ja existeix actualitza la info
+    int saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave);
+    ///Guarda a la base de dades la llista d'imatges passada per paràmetre, si alguna de les imatges ja existeix actualitza la info
+    int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave);
 
-    Series *getSeries();
-    Series *getSeries2();
-
-    Study *getStudy();
-    Study *getStudy2();
-
-    Patient* getPatient();
-    Patient* getPatient2();
+    ///Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
+    int savePatient(DatabaseConnection *dbConnect, Patient *patientToSave);
+    ///Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
+    int saveStudy(DatabaseConnection *dbConnect, Study *studyToSave);
+    ///Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
+    int saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave);
+    ///Guarda la imatge a la base de dades, si ja existeix li actualitza la informació
+    int saveImage(DatabaseConnection *dbConnect, Image *imageToSave, int imageOrderInSeries);
 
 };
 
