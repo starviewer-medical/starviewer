@@ -70,7 +70,8 @@ HEADERS += databaseconnection.h \
  testdicomobjects.h \
  localdatabaseseriesdal.h \
  localdatabasestudydal.h \
- localdatabasepatientdal.h
+ localdatabasepatientdal.h \
+ localdatabaseutildal.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -123,7 +124,8 @@ SOURCES += databaseconnection.cpp \
  testdicomobjects.cpp \
  localdatabaseseriesdal.cpp \
  localdatabasestudydal.cpp \
- localdatabasepatientdal.cpp
+ localdatabasepatientdal.cpp \
+ localdatabaseutildal.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
