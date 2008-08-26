@@ -12,6 +12,7 @@
 #include "localdatabaseimagedal.h"
 #include "localdatabaseseriesdal.h"
 #include "localdatabasestudydal.h"
+#include "localdatabasepatientdal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "testdicomobjects.h"
@@ -33,7 +34,16 @@ Status LocalDatabaseManager::insert(Patient *newPatient)
     DicomMask dicomMask;
     state.setStatus("Normal", true, 0);
 
+
     DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
+
+    LocalDatabasePatientDAL localDatabasePatient;
+
+    localDatabasePatient.setConnection(dbConnect);
+
+    //localDatabasePatient.insert(getPatient());
+
+    //localDatabasePatient.del(dicomMask);
 
     //dicomMask.setStudyUID("1.2");
 
@@ -240,6 +250,30 @@ Study* LocalDatabaseManager::getStudy2()
     newStudy->setReferringPhysiciansName("8");
 
     return newStudy;
+}
+
+Patient* LocalDatabaseManager::getPatient()
+{
+    Patient *newPatient = new Patient();
+
+    newPatient->setID("0");
+    newPatient->setFullName("1");
+    newPatient->setBirthDate("20080201");
+    newPatient->setSex("2");
+
+    return newPatient;
+}
+
+Patient* LocalDatabaseManager::getPatient2()
+{
+    Patient *newPatient = new Patient();
+
+    newPatient->setID("1");
+    newPatient->setFullName("3");
+    newPatient->setBirthDate("20080303");
+    newPatient->setSex("4");
+
+    return newPatient;
 }
 
 }

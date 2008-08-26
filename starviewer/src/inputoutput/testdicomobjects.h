@@ -27,6 +27,8 @@ public:
 
     static void printStudy(Study *studyToPrint);
 
+    static void printPatient(Patient *patientToPrint);
+
 };
 
 }
