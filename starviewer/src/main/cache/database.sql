@@ -29,11 +29,11 @@ CREATE TABLE Series
 (
   InstanceUID			TEXT PRIMARY KEY,
   StudyInstanceUID		TEXT,
-  Number			INTEGER,
+  Number			TEXT,
   Modality			TEXT,
   Date				TEXT,
   Time				TEXT,
-  InstituionName		TEXT,
+  InstitutionName		TEXT,
   PatientPosition		TEXT,
   ProtocolName			TEXT,
   Description			TEXT,
