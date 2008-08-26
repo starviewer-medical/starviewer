@@ -79,7 +79,7 @@ QList<Patient*> LocalDatabasePatientDAL::query(DicomMask patientMask)
     return patientList;
 }
 
-void LocalDatabasePatientDAL::setConnection(DatabaseConnection *dbConnection)
+void LocalDatabasePatientDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;
 }

@@ -38,7 +38,7 @@ public:
     QList<Patient*> query(DicomMask patientMaskToQuery);
 
     ///Connexió de la base de dades a utilitzar
-    void setConnection(DatabaseConnection *dbConnection);
+    void setDatabaseConnection(DatabaseConnection *dbConnection);
 
     ///Retorna l'estat de la última operació realitzada
     int getLastError();
