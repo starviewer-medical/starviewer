@@ -33,6 +33,9 @@ public:
     ///Constructor de la classe
     LocalDatabaseManager();
 
+    ///Ens retorna els pacients que compleixen amb els criteris de la màscara, només es té en compte el patientID
+    QList<Patient*> queryPatient(DicomMask patientMaskToQuery);
+
     ///Ens retorna els estudis que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID
     QList<Study*> queryStudy(DicomMask studyMaskToQuery);
 
@@ -41,6 +44,9 @@ public:
 
     ///Ens retorna les imatges que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     QList<Image*> queryImage(DicomMask imageMaskToQuery);
+
+    ///comptacta la base de dades
+    void compact();
 
 public slots:
 
