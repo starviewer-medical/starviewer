@@ -13,6 +13,7 @@
 #include "localdatabaseseriesdal.h"
 #include "localdatabasestudydal.h"
 #include "localdatabasepatientdal.h"
+#include "localdatabaseutildal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "testdicomobjects.h"
@@ -88,6 +89,13 @@ Status LocalDatabaseManager::insert(Patient *newPatient)
     return state;
 }
 
+QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
+{
+    LocalDatabasePatientDAL patientDAL;
+
+    return patientDAL.query(patientMaskToQuery);
+}
+
 QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
 {
     LocalDatabaseStudyDAL studyDAL;
@@ -107,6 +115,13 @@ QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
     LocalDatabaseImageDAL imageDAL;
 
     return imageDAL.query(imageMaskToQuery);
+}
+
+void LocalDatabaseManager::compact()
+{
+    LocalDatabaseUtilDAL utilDAL;
+
+    utilDAL.compact();
 }
 
 Image * LocalDatabaseManager::getImage()
