@@ -144,7 +144,6 @@ QString LocalDatabaseImageDAL::buildSqlSelect(DicomMask imageMaskToSelect)
 QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage, int orderNumberInSeries)
 {
     QString insertSentence;
-    DEBUG_LOG("ARRIBO");
 
     insertSentence = QString("Insert into Image (SOPInstanceUID, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
                                              "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness," 
@@ -156,8 +155,8 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage, int orderNumberIn
                                      "values ('%1','%2','%3',%4,'%5','%6','%7',%8,'%9', %10, %11, %12, %13, %14, %15, %16,"
                                               "'%17', '%18', '%19', '%20', '%21', %22, %23, '%24', %25, %26)" )
                             .arg(newImage->getSOPInstanceUID())
-                            .arg("1.2")
-                            .arg("1.2.3")
+                            .arg(newImage->getParentSeries()->getParentStudy()->getInstanceUID())
+                            .arg(newImage->getParentSeries()->getInstanceUID())
                             .arg(newImage->getInstanceNumber())
                             .arg(getImageOrientationPatientAsQString(newImage))
                             .arg(newImage->getPatientOrientation())
@@ -182,8 +181,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage, int orderNumberIn
                             .arg(orderNumberInSeries)
                             .arg(0);
 
-//                            .arg(newImage->getParentSeries()->getParentStudy()->getInstanceUID())
-//                            .arg(newImage->getParentSeries()->getInstanceUID() ).arg(newImage->getInstanceNumber())
+
 
     return insertSentence;
 }
@@ -218,8 +216,8 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
                                               "OrderNumberInSeries = '%24',"
                                               "State = '%25' "
                                      "Where SOPInstanceUID = '%26'")
-                            .arg("1.2")
-                            .arg("1.2.3")
+                            .arg(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID())
+                            .arg(imageToUpdate->getParentSeries()->getInstanceUID())
                             .arg(imageToUpdate->getInstanceNumber())
                             .arg(getImageOrientationPatientAsQString(imageToUpdate))
                             .arg(imageToUpdate->getPatientOrientation())
@@ -244,9 +242,6 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
                             .arg(orderNumberInSeries)
                             .arg(0)
                             .arg(imageToUpdate->getSOPInstanceUID());
-
-//                            .arg(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID())
-//                            .arg(imageToUpdate->getParentSeries()->getInstanceUID() )
 
     return updateSentence;
 }
