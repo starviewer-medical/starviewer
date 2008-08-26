@@ -93,12 +93,16 @@ QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
 {
     LocalDatabasePatientDAL patientDAL;
 
+    patientDAL.setConnection(DatabaseConnection::getDatabaseConnection());
+
     return patientDAL.query(patientMaskToQuery);
 }
 
 QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
 {
     LocalDatabaseStudyDAL studyDAL;
+
+    studyDAL.setConnection(DatabaseConnection::getDatabaseConnection());
 
     return studyDAL.query(studyMaskToQuery);
 }
@@ -107,6 +111,8 @@ QList<Series*> LocalDatabaseManager::querySeries(DicomMask seriesMaskToQuery)
 {
     LocalDatabaseSeriesDAL seriesDAL;
 
+    seriesDAL.setConnection(DatabaseConnection::getDatabaseConnection());
+
     return seriesDAL.query(seriesMaskToQuery);
 }
 
@@ -114,12 +120,16 @@ QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
 {
     LocalDatabaseImageDAL imageDAL;
 
+    imageDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
+
     return imageDAL.query(imageMaskToQuery);
 }
 
 void LocalDatabaseManager::compact()
 {
     LocalDatabaseUtilDAL utilDAL;
+
+    utilDAL.setConnection(DatabaseConnection::getDatabaseConnection());
 
     utilDAL.compact();
 }
