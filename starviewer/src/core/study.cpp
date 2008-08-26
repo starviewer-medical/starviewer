@@ -13,7 +13,7 @@
 namespace udg {
 
 Study::Study( Patient *parentPatient, QObject *parent )
- : QObject(parent), m_parentPatient( parentPatient )
+ : QObject(parent), m_age(0), m_height(0), m_weight(0), m_parentPatient( parentPatient )
 {
 }
 
