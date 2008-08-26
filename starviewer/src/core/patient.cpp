@@ -53,9 +53,14 @@ void Patient::setBirthDate( QString date )
     m_birthDate = QDate::fromString( date.remove("."), "yyyyMMdd" );
 }
 
-QString Patient::getBirthDate()
+QString Patient::getBirthDateAsString()
 {
     return m_birthDate.toString( Qt::LocaleDate );
+}
+
+QDate Patient::getBirthDate()
+{
+    return m_birthDate;
 }
 
 int Patient::getDayOfBirth()
