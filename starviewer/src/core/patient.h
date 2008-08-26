@@ -44,7 +44,8 @@ public:
     /// Assigna/Obté data de naixement
     void setBirthDate( int day , int month , int year );
     void setBirthDate( QString date );
-    QString getBirthDate();
+    QString getBirthDateAsString();
+    QDate getBirthDate();
     int getDayOfBirth();
     int getMonthOfBirth();
     int getYearOfBirth();
