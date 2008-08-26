@@ -15,10 +15,10 @@
 #include "image.h"
 #include "series.h"
 #include "study.h"
+#include "patient.h"
 
 namespace udg {
 
-class Patient;
 class DicomMask;
 
 /** Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
@@ -57,6 +57,10 @@ private :
 
     Study *getStudy();
     Study *getStudy2();
+
+    Patient* getPatient();
+    Patient* getPatient2();
+
 };
 
 }

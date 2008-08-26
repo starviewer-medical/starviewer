@@ -11,6 +11,7 @@
 #include "image.h"
 #include "series.h"
 #include "study.h"
+#include "patient.h"
 
 namespace udg
 {
@@ -81,7 +82,14 @@ void TestDicomObjects::printStudy(Study *studyToPrint)
     DEBUG_LOG("Accession Number" + studyToPrint->getAccessionNumber());
     DEBUG_LOG("Description" + studyToPrint->getDescription());
     DEBUG_LOG("Referring Phsysicians Name" + studyToPrint->getReferringPhysiciansName());
+}
 
+void TestDicomObjects::printPatient(Patient *patientToPrint)
+{
+    DEBUG_LOG("Id: " + patientToPrint->getID());
+    DEBUG_LOG("Full name: " + patientToPrint->getFullName());
+    DEBUG_LOG("Birth date : " + patientToPrint->getBirthDateAsString());
+    DEBUG_LOG("Sex : " + patientToPrint->getSex());
 }
 
 }
