@@ -63,11 +63,10 @@ private:
     QString buildSqlDelete(DicomMask seriesMaskToDelete);
 
     ///Construeix la sentència del where tenint en compte la màscara, només té en compte el StudyUID, i SeriesUID
-    QString buildWhereSentence(DicomMask imageMask);
+    QString buildWhereSentence(DicomMask seriesMask);
 
     ///Emplena un l'objecte series de la fila passada per paràmetre
     Series* fillSeries(char **reply, int row, int columns);
-
 
     ///Ens fa un ErrorLog d'una sentència sql
     void logError(QString sqlSentence);

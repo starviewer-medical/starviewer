@@ -36,7 +36,7 @@ public:
     ///Esborra els estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     void del(DicomMask studyMaskToDelete);
 
-    ///Cerca les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
+    ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     QList<Study*> query(DicomMask studyMaskToQuery);
 
     ///Connexió de la base de dades a utilitzar
@@ -51,16 +51,16 @@ private :
 
     int m_lastSqliteError;
 
-    ///Construeix la sentència sql per inserir la nova sèrie
+    ///Construeix la sentència sql per inserir el nou estudi
     QString buildSqlInsert(Study *newStudy, QDate lastAcessDate);
 
-    ///Construeix la sentència updata la sèrie
+    ///Construeix la sentència updata l'estudi
     QString buildSqlUpdate(Study *studyToUpdate, QDate lastAccessDate);
 
     ///Construeix la setència per fer select de sèries a partir de la màscara, només té en compte el StudyUID i els estudis que tinguin un LastAccessDate menor que el de la màscara
     QString buildSqlSelect(DicomMask studyMaskToSelect);
 
-    ///Construeix la setència per esborrar sèries a partir de la màscara, només té en compte el StudyUID
+    ///Construeix la setència per esborrar l'estudi a partir de la màscara, només té en compte el StudyUID
     QString buildSqlDelete(DicomMask studyMaskToDelete);
 
     ///Emplena un l'objecte series de la fila passada per paràmetre

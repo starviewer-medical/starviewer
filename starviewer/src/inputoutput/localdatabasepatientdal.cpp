@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include <sqlite3.h>
 #include <QString>
-#include <QDate>
 
 #include "localdatabasepatientdal.h"
 #include "databaseconnection.h"

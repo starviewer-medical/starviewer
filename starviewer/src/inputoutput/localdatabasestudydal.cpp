@@ -34,8 +34,6 @@ void LocalDatabaseStudyDAL::update(Study *studyToUpdate, QDate lastAccessDate)
 {
     m_dbConnection->getLock();
 
-    DEBUG_LOG(buildSqlUpdate(studyToUpdate, lastAccessDate));
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(studyToUpdate, lastAccessDate)), 0, 0, 0);
 
     m_dbConnection->releaseLock();
@@ -61,8 +59,6 @@ QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask)
     QList<Study*> studyList;
 
     m_dbConnection->getLock();
-
-    DEBUG_LOG(buildSqlSelect(studyMask));
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                       qPrintable(buildSqlSelect(studyMask)),
