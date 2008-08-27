@@ -32,10 +32,11 @@ LocalDatabaseManager::LocalDatabaseManager()
 
 }
 
-Status LocalDatabaseManager::insert(Patient *newPatient)
+void LocalDatabaseManager::insert(Patient *newPatient)
 {
-    Status state;
-    state.setStatus("Normal", true, 0);
+    DeleteDirectory delDirectory;
+    StarviewerSettings settings;
+ 
     int status = SQLITE_OK;
 
     DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
@@ -47,14 +48,23 @@ Status LocalDatabaseManager::insert(Patient *newPatient)
     {
         status = saveStudies(dbConnect, newPatient->getStudies());
 
-        if (status != SQLITE_OK) return state;
+        if (status != SQLITE_OK) 
+        {
+            dbConnect->rollbackTransaction();
+            deleteRetrievedObjects(newPatient);
+            return;
+        }
     }
 
     status = savePatient(dbConnect, newPatient);
 
-    dbConnect->endTransaction();
-
-    return state;
+    if (status != SQLITE_OK) 
+    {
+        dbConnect->rollbackTransaction();
+        deleteRetrievedObjects(newPatient);
+    }
+    else
+        dbConnect->endTransaction();
 }
 
 QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
@@ -268,6 +278,17 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
     if (imageDAL.getLastError() == SQLITE_CONSTRAINT) imageDAL.update(imageToSave, imageOrderInSeries);
 
     return imageDAL.getLastError();
+}
+
+void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
+{
+    DeleteDirectory delDirectory;
+    StarviewerSettings settings;
+
+    foreach(Study *failedStudy, failedPatient->getStudies())
+    {
+        delDirectory.deleteDirectory(settings.getCacheImagePath() + failedStudy->getInstanceUID(), true);
+    }
 }
 
 }
