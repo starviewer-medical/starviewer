@@ -46,6 +46,9 @@ public:
     ///Ens retorna les imatges que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     QList<Image*> queryImage(DicomMask imageMaskToQuery);
 
+    ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
+    void clear();
+
     ///comptacta la base de dades
     void compact();
 
