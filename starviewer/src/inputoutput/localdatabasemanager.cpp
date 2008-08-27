@@ -19,6 +19,8 @@
 #include "testdicomobjects.h"
 #include "sqlite3.h"
 #include "logging.h"
+#include "deletedirectory.h"
+#include "starviewersettings.h"
 
 #include <QDate>
 
@@ -89,6 +91,62 @@ QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
     imageDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
 
     return imageDAL.query(imageMaskToQuery);
+}
+
+void LocalDatabaseManager::clear()
+{
+    DicomMask maskToDelete;
+    LocalDatabasePatientDAL patientDAL;
+    LocalDatabaseStudyDAL studyDAL;
+    LocalDatabaseSeriesDAL seriesDAL;
+    LocalDatabaseImageDAL imageDAL;
+    DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
+    DeleteDirectory delDirectory;
+
+    dbConnect->beginTransaction();
+
+    //esborrem tots els pacients
+    patientDAL.setDatabaseConnection(dbConnect);
+    patientDAL.del(maskToDelete);
+
+    if (patientDAL.getLastError() != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        return;
+    }
+
+    //esborrem tots els estudis
+    studyDAL.setDatabaseConnection(dbConnect);
+    studyDAL.del(maskToDelete);
+
+    if (studyDAL.getLastError() != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        return;
+    }
+    seriesDAL.setDatabaseConnection(dbConnect);
+    seriesDAL.del(maskToDelete);
+
+    if (seriesDAL.getLastError() != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        return;
+    }
+
+    //esborrem totes les imatges 
+    imageDAL.setDatabaseConnection(dbConnect);
+    imageDAL.del(maskToDelete);
+
+    if (imageDAL.getLastError() != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        return;
+    }
+
+    dbConnect->endTransaction();
+
+    //esborrem tots els estudis descarregats
+    delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), false);
 }
 
 void LocalDatabaseManager::compact()
