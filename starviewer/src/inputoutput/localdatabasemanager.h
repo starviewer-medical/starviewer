@@ -48,6 +48,9 @@ public:
     ///Ens retorna les imatges que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     QList<Image*> queryImage(DicomMask imageMaskToQuery);
 
+    ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
+    QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery);
+
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
 

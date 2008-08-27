@@ -81,6 +81,37 @@ QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask)
     return studyList;
 }
 
+QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(DicomMask patientStudyMaskToQuery)
+{
+    int columns , rows;
+    char **reply = NULL , **error = NULL;
+    QList<Patient*> patientList;
+
+    m_dbConnection->getLock();
+
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
+                                      qPrintable(buildSqlSelectStudyPatient((patientStudyMaskToQuery))),
+                                    &reply, &rows, &columns, error);
+    m_dbConnection->releaseLock();
+
+    if (getLastError() != SQLITE_OK)
+    {
+        logError (buildSqlSelectStudyPatient(patientStudyMaskToQuery));
+        return patientList;
+    }
+
+    //index = 1 ignorem les capçaleres
+    for (int index = 1; index <= rows ; index++)
+    {
+        Patient *patient = fillPatient(reply, index, columns);
+        patient->addStudy(fillStudy(reply, index, columns));
+
+        patientList.append(patient);
+    }
+
+    return patientList;
+}
+
 void LocalDatabaseStudyDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;
@@ -110,6 +141,18 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     return study;
 }
 
+Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
+{
+    Patient *patient = new Patient();
+
+    patient->setID(reply[14 + row * columns]);
+    patient->setFullName(reply[15 + row * columns]);
+    patient->setBirthDate(reply[16 + row * columns]);
+    patient->setSex(reply[17 + row * columns]);
+
+    return patient;
+}
+
 QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
 {
     QString selectSentence, whereSentence;
@@ -131,6 +174,52 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
     }
 
     return selectSentence + whereSentence;
+}
+
+QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToSelect)
+{
+    QString selectSentence, whereSentence, orderBySentence;
+
+    selectSentence = "Select InstanceUID, PatientID, Study.ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
+                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, Study.State, Patient.Id,  "
+                            "Patient.Name, Patient.Birthdate, Patient.Sex "
+                       "From Study, Patient ";
+
+    whereSentence = "Where Study.PatientId = Patient.Id ";
+
+    if (!studyMaskToSelect.getStudyUID().isEmpty())
+        whereSentence += QString(" and InstanceUID = '%1' ").arg(studyMaskToSelect.getStudyUID());
+
+    if (!studyMaskToSelect.getPatientId().isEmpty())
+        whereSentence += QString(" and Patient.Id = '%1' ").arg(studyMaskToSelect.getPatientId());
+
+    if (!studyMaskToSelect.getPatientName().isEmpty())
+        whereSentence += QString(" and Patient.Name like '%%1%' ").arg(studyMaskToSelect.getPatientName());
+
+    //Si filtrem per data
+    if (studyMaskToSelect.getStudyDate().length() == 8)
+    {
+        whereSentence += QString(" and Date = '%1'" ).arg(studyMaskToSelect.getStudyDate());
+    }
+    else if (studyMaskToSelect.getStudyDate().length() == 9)
+    {
+        if (studyMaskToSelect.getStudyDate().at(0) == '-')
+        {
+            whereSentence += QString(" and Date <= '%1'").arg(studyMaskToSelect.getStudyDate().mid(1, 8));
+        }
+        else if (studyMaskToSelect.getStudyDate().at(8) == '-')
+        {
+            whereSentence += QString(" and Date >= '%1'").arg(studyMaskToSelect.getStudyDate().mid(0, 8));
+        }
+    }
+    else if (studyMaskToSelect.getStudyDate().length() == 17)
+    {
+        whereSentence += QString(" and Date between '%1' and '%2'").arg(studyMaskToSelect.getStudyDate().mid(0, 8)).arg( studyMaskToSelect.getStudyDate().mid(9, 8));
+    }
+
+    orderBySentence = " Order by Patient.Name";
+
+    return selectSentence + whereSentence + orderBySentence;
 }
 
 QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDate)
