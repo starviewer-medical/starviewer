@@ -52,6 +52,7 @@ void LocalDatabaseManager::insert(Patient *newPatient)
         {
             dbConnect->rollbackTransaction();
             deleteRetrievedObjects(newPatient);
+            setLastError(status);
             return;
         }
     }
@@ -65,42 +66,56 @@ void LocalDatabaseManager::insert(Patient *newPatient)
     }
     else
         dbConnect->endTransaction();
+
+    setLastError(status);
 }
 
 QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
 {
     LocalDatabasePatientDAL patientDAL;
+    QList<Patient*> queryResult;
 
     patientDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
+    queryResult = patientDAL.query(patientMaskToQuery);
+    setLastError(patientDAL.getLastError());
 
-    return patientDAL.query(patientMaskToQuery);
+    return queryResult;
 }
 
 QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
 {
     LocalDatabaseStudyDAL studyDAL;
+    QList<Study*> queryResult;
 
     studyDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
+    queryResult = studyDAL.query(studyMaskToQuery);
+    setLastError(studyDAL.getLastError());
 
-    return studyDAL.query(studyMaskToQuery);
+    return queryResult;
 }
 
 QList<Series*> LocalDatabaseManager::querySeries(DicomMask seriesMaskToQuery)
 {
     LocalDatabaseSeriesDAL seriesDAL;
+    QList<Series*> queryResult;
 
     seriesDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
+    queryResult = seriesDAL.query(seriesMaskToQuery);
+    setLastError(seriesDAL.getLastError());
 
-    return seriesDAL.query(seriesMaskToQuery);
+    return queryResult;
 }
 
 QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
 {
     LocalDatabaseImageDAL imageDAL;
+    QList<Image*> queryResult;
 
     imageDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
+    queryResult = imageDAL.query(imageMaskToQuery);
+    setLastError(imageDAL.getLastError());
 
-    return imageDAL.query(imageMaskToQuery);
+    return queryResult;
 }
 
 void LocalDatabaseManager::clear()
@@ -122,6 +137,7 @@ void LocalDatabaseManager::clear()
     if (patientDAL.getLastError() != SQLITE_OK)
     {
         dbConnect->rollbackTransaction();
+        setLastError(patientDAL.getLastError());
         return;
     }
 
@@ -132,14 +148,18 @@ void LocalDatabaseManager::clear()
     if (studyDAL.getLastError() != SQLITE_OK)
     {
         dbConnect->rollbackTransaction();
+        setLastError(studyDAL.getLastError());
         return;
     }
+
+    //esborrem totes les series
     seriesDAL.setDatabaseConnection(dbConnect);
     seriesDAL.del(maskToDelete);
 
     if (seriesDAL.getLastError() != SQLITE_OK)
     {
         dbConnect->rollbackTransaction();
+        setLastError(seriesDAL.getLastError());
         return;
     }
 
@@ -150,13 +170,14 @@ void LocalDatabaseManager::clear()
     if (imageDAL.getLastError() != SQLITE_OK)
     {
         dbConnect->rollbackTransaction();
+        setLastError(imageDAL.getLastError());
         return;
     }
 
     dbConnect->endTransaction();
 
     //esborrem tots els estudis descarregats
-    delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), false);
+    if (!delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), true)) m_lastError = DeletingFilesError;
 }
 
 void LocalDatabaseManager::compact()
@@ -164,8 +185,13 @@ void LocalDatabaseManager::compact()
     LocalDatabaseUtilDAL utilDAL;
 
     utilDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
-
     utilDAL.compact();
+    setLastError(utilDAL.getLastError());
+}
+
+LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
+{
+    return m_lastError;
 }
 
 int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave)
@@ -289,6 +315,30 @@ void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
     {
         delDirectory.deleteDirectory(settings.getCacheImagePath() + failedStudy->getInstanceUID(), true);
     }
+}
+
+void LocalDatabaseManager::setLastError(int sqliteLastError)
+{
+    //Es tradueixen els errors de Sqlite a errors nostres, per consulta codi d'errors Sqlite http://www.sqlite.org/c3ref/c_abort.html
+    if (sqliteLastError == SQLITE_OK)
+    {
+        m_lastError = Ok;
+    }
+    else if (sqliteLastError == SQLITE_ERROR)
+    {
+        m_lastError = SyntaxErrorSQL;
+    }
+    else if (sqliteLastError == SQLITE_LOCKED || sqliteLastError == SQLITE_BUSY)
+    {
+        m_lastError = DatabaseLocked;
+    }
+    else if (sqliteLastError == SQLITE_CORRUPT || sqliteLastError == SQLITE_EMPTY ||
+             sqliteLastError == SQLITE_SCHEMA || sqliteLastError == SQLITE_MISMATCH ||
+             sqliteLastError == SQLITE_NOTADB)
+    {
+        m_lastError = DatabaseCorrupted;
+    }
+    else m_lastError = DatabaseError;
 }
 
 }
