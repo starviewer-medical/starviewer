@@ -42,6 +42,8 @@ PatientFiller::~PatientFiller()
     {
         delete fillerStep;
     }
+
+    delete m_patientFillerInput;
 }
 
 void PatientFiller::fill(PatientFillerInput *input)
@@ -169,6 +171,8 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
 
 void PatientFiller::finishDICOMFilesProcess()
 {
+    DEBUG_LOG( "eeeeeeeeeeeeeeeeeeeee" );
+        
     foreach (PatientFillerStep *fillerStep, m_registeredSteps)
     {
         fillerStep->postProcessing();
