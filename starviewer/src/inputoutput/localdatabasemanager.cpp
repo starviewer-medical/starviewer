@@ -208,6 +208,7 @@ int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*
         status = saveImage(dbConnect, imageToSave, imageOrderInSeries);
 
         if (status != SQLITE_OK) return status;
+        imageOrderInSeries++;
     }
 
     return status;
