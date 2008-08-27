@@ -39,6 +39,9 @@ public:
     ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     QList<Study*> query(DicomMask studyMaskToQuery);
 
+    ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
+    QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery);
+
     ///Connexió de la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
 
@@ -57,14 +60,21 @@ private :
     ///Construeix la sentència updata l'estudi
     QString buildSqlUpdate(Study *studyToUpdate, QDate lastAccessDate);
 
-    ///Construeix la setència per fer select de sèries a partir de la màscara, només té en compte el StudyUID i els estudis que tinguin un LastAccessDate menor que el de la màscara
+    ///Construeix la setència per fer select d'estudis a partir de la màscara, només té en compte el StudyUID i els estudis que tinguin un LastAccessDate menor que el de la màscara
     QString buildSqlSelect(DicomMask studyMaskToSelect);
 
     ///Construeix la setència per esborrar l'estudi a partir de la màscara, només té en compte el StudyUID
     QString buildSqlDelete(DicomMask studyMaskToDelete);
 
-    ///Emplena un l'objecte series de la fila passada per paràmetre
+    ///Construeix la sentència per fer select d'estudi i pacients a partir de la màscara. Té en compte studyUID, Patient Id, Patient Name, i data de l'estudi
+    QString buildSqlSelectStudyPatient(DicomMask studyMaskToSelect);
+
+    ///Emplena un l'objecte Study de la fila passada per paràmetre
     Study* fillStudy(char **reply, int row, int columns);
+
+    ///Emplena un objecte Patient a partir de la fila passada per paràmetre
+    Patient* fillPatient(char **reply, int row, int columns);
+
 
     ///Ens fa un ErrorLog d'una sentència sql
     void logError(QString sqlSentence);

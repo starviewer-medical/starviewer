@@ -82,6 +82,18 @@ QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
     return queryResult;
 }
 
+QList<Patient*> LocalDatabaseManager::queryPatientStudy(DicomMask patientStudyMaskToQuery)
+{
+    LocalDatabaseStudyDAL studyDAL;
+    QList<Patient*> queryResult;
+
+    studyDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
+    queryResult = studyDAL.queryPatientStudy(patientStudyMaskToQuery);
+    setLastError(studyDAL.getLastError());
+
+    return queryResult;
+}
+
 QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
 {
     LocalDatabaseStudyDAL studyDAL;
