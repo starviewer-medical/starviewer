@@ -30,6 +30,8 @@ class LocalDatabaseManager : public QObject
 {
 Q_OBJECT
 public:
+    ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
+    enum LastError{Ok, DatabaseLocked, DatabaseCorrupted, SyntaxErrorSQL, DeletingFilesError, DatabaseError};
 
     ///Constructor de la classe
     LocalDatabaseManager();
@@ -52,12 +54,16 @@ public:
     ///comptacta la base de dades
     void compact();
 
+    LastError getLastError();
+
 public slots:
 
     ///Inseriex un nou pacient a la base de dades
     void insert(Patient *newPatient);
 
 private :
+
+    LastError m_lastError;
 
     ///Guarda a la base de dades la llista d'estudis passada per paràmetre, si algun dels estudis ja existeix actualitza la info
     int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave);
@@ -77,6 +83,9 @@ private :
 
     ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);
+
+    ///Passant un status de sqlite ens el converteix al nostra status
+    void setLastError(int sqliteLastError);
 
 };
 
