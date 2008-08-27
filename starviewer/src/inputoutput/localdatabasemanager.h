@@ -55,7 +55,7 @@ public:
 public slots:
 
     ///Inseriex un nou pacient a la base de dades
-    Status insert(Patient *newPatient);
+    void insert(Patient *newPatient);
 
 private :
 
@@ -74,6 +74,9 @@ private :
     int saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave);
     ///Guarda la imatge a la base de dades, si ja existeix li actualitza la informació
     int saveImage(DatabaseConnection *dbConnect, Image *imageToSave, int imageOrderInSeries);
+
+    ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
+    void deleteRetrievedObjects(Patient *failedPatient);
 
 };
 
