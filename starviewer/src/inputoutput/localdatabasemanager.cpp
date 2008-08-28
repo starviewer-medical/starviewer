@@ -130,6 +130,67 @@ QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
     return queryResult;
 }
 
+Patient* LocalDatabaseManager::retrieve(DicomMask maskToRetrieve)
+{
+    LocalDatabaseStudyDAL studyDAL;
+    LocalDatabaseSeriesDAL seriesDAL;
+    LocalDatabaseImageDAL imageDAL;
+    QList<Patient*> patientList;
+    QList<Series*> seriesList;
+    Patient *retrievedPatient;
+    Study *retrievedStudy;
+    DicomMask maskImagesToRetrieve;
+    DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
+
+    //busquem l'estudi i pacient
+    studyDAL.setDatabaseConnection(dbConnect);
+    patientList = studyDAL.queryPatientStudy(maskToRetrieve);
+
+    if (patientList.count() != 1) 
+    {
+        setLastError(studyDAL.getLastError());
+        return retrievedPatient;
+    }
+    else 
+        retrievedPatient = patientList.at(0);
+
+    //busquem les series de l'estudi
+    seriesDAL.setDatabaseConnection(dbConnect);
+    seriesList = seriesDAL.query(maskToRetrieve);
+
+    if (seriesDAL.getLastError() != SQLITE_OK)
+    {
+        setLastError(seriesDAL.getLastError());
+        return new Patient();
+    }
+
+    //busquem les imatges per cada sèrie
+    maskImagesToRetrieve.setStudyUID(maskToRetrieve.getStudyUID());//estudi del que s'han de cercar les imatges
+    imageDAL.setDatabaseConnection(dbConnect);
+
+    foreach(Series *series, seriesList)
+    {
+        maskImagesToRetrieve.setSeriesUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
+
+        series->setImages(imageDAL.query(maskImagesToRetrieve));
+        if (imageDAL.getLastError() != SQLITE_OK) break;
+
+        retrievedPatient->getStudy(maskToRetrieve.getStudyUID())->addSeries(series);
+    }
+
+    if (imageDAL.getLastError() != SQLITE_OK)
+    {
+        setLastError(imageDAL.getLastError());
+        return new Patient();
+    }
+
+    //Actulitzem la última data d'acces de l'estudi
+    retrievedStudy = retrievedPatient->getStudy(maskToRetrieve.getStudyUID());
+    studyDAL.update(retrievedStudy, QDate::currentDate());
+
+    return retrievedPatient;
+}
+
 void LocalDatabaseManager::clear()
 {
     DicomMask maskToDelete;
