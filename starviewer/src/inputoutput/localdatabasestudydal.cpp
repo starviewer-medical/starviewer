@@ -262,7 +262,7 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *newStudy, QDate lastAccessD
                                                        "ReferringPhysicianName = '%11', "
                                                        "LastAccessDate = '%12', "
                                                        "State = %13 "
-                                                "Where InstanceUid = %14")
+                                                "Where InstanceUid = '%14'")
                                     .arg(newStudy->getParentPatient()->getID())
                                     .arg(newStudy->getID())
                                     .arg(newStudy->getPatientAge())
