@@ -51,6 +51,9 @@ public:
     ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
     QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery);
 
+    ///Retorna tota l'estructura Patient,Study,Series,Image, de l'estudi que compleix amb el criteri de cerca, té en compte el Study InstanceUID, el SeriesInstanceUID i el SOP Instance UID
+    Patient* retrieve(DicomMask maskToRetrieve);
+
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
 
