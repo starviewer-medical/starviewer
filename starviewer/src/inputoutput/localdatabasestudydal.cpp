@@ -190,10 +190,11 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToS
     if (!studyMaskToSelect.getStudyUID().isEmpty())
         whereSentence += QString(" and InstanceUID = '%1' ").arg(studyMaskToSelect.getStudyUID());
 
-    if (!studyMaskToSelect.getPatientId().isEmpty())
-        whereSentence += QString(" and Patient.Id = '%1' ").arg(studyMaskToSelect.getPatientId());
-
-    if (!studyMaskToSelect.getPatientName().isEmpty())
+    if (!studyMaskToSelect.getPatientId().isEmpty() && studyMaskToSelect.getPatientId() != "*")
+    {
+        whereSentence += QString(" and Patient.Id like '%%1%' ").arg(studyMaskToSelect.getPatientId());
+    }
+    if (!studyMaskToSelect.getPatientName().isEmpty() && studyMaskToSelect.getPatientName() != "*")
         whereSentence += QString(" and Patient.Name like '%%1%' ").arg(studyMaskToSelect.getPatientName());
 
     //Si filtrem per data
