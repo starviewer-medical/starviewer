@@ -20,7 +20,6 @@
 
 namespace udg {
 
-class QSemaphore;
 class DicomMask;
 class DatabaseConnection;
 
