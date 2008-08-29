@@ -21,12 +21,13 @@ namespace udg {
 
 DatabaseConnection::DatabaseConnection()
 {
-   StarviewerSettings settings;
+    StarviewerSettings settings;
 
-   m_databasePath = settings.getDatabasePath();
-   m_databaseLock = new QSemaphore( 1 );//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
-   connectDB();
+    m_databasePath = settings.getDatabasePath();
+    m_databaseLock = new QSemaphore(1);//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
+    m_transactionLock = new QSemaphore(1);
 
+    connectDB();
 }
 
 void DatabaseConnection::setDatabasePath( QString path )
@@ -41,17 +42,22 @@ void DatabaseConnection::connectDB()
 
 void DatabaseConnection::beginTransaction()
 {
+    m_transactionLock->acquire();
     sqlite3_exec(m_databaseConnection, "BEGIN TRANSACTION", 0 , 0 , 0);
 }
 
 void DatabaseConnection::endTransaction()
 {
     sqlite3_exec(m_databaseConnection, "END TRANSACTION", 0 , 0 , 0);
+    m_transactionLock->release();
 }
 
 void DatabaseConnection::rollbackTransaction()
 {
+    getLock();
     sqlite3_exec(m_databaseConnection, "ROLLBACK TRANSACTION ", 0, 0, 0);
+    m_transactionLock->release();
+    releaseLock();
 }
 
 sqlite3* DatabaseConnection::getConnection()

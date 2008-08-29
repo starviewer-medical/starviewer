@@ -446,8 +446,9 @@ Status CacheStudyDAL::delStudy( QString studyUID )
     }
 
     /* La part d'esborrar un estudi com que s'ha d'accedir a diverses taules, ho farem en un transaccio per si falla alguna sentencia sqlSentence fer un rollback, i així deixa la taula en estat estable, no deixem anar el candau fins al final */
-    databaseConnection->getLock();
+
     databaseConnection->beginTransaction();
+    databaseConnection->getLock();
 
     //sqlSentence per saber el directori on es guarda l'estudi
     sqlSentence = QString("select AbsPath from studyOld where StuInsUID = '%1'").arg(studyUID);
