@@ -1105,7 +1105,7 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
         {
         #if 0
             patientToProcessMask.setStudyUID(studyUID);
-            emit processPatient(localDatabaseManager.retrieve(patientToProcessMask));
+            emit selectedPatient(localDatabaseManager.retrieve(patientToProcessMask), defaultSeriesUID);
 
             if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
             {
