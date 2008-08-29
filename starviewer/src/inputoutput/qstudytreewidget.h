@@ -41,6 +41,10 @@ class DICOMStudy;
 class DICOMSeries;
 class DICOMImage;
 
+class Patient;
+class Series;
+class Image;
+
 class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
 {
 Q_OBJECT
@@ -59,30 +63,56 @@ public:
      */
     void insertStudyList( QList<DICOMStudy> studyList );
 
+    ///Mostrar els estudis passats per paràmetres (Els pacients passats per paràmetre ha de contenir un estudi)
+    void insertPatientList(QList<Patient*> patientList);
+
     /** Inseriex la informació d'un estudi
      * @param Dades de l'estudi
      */
     void insertStudy( DICOMStudy * );
+
+    ///Mostra la informació del pacient (El pacient passat per paràmetre ha de contenir un estudi)
+    void insertPatient(Patient *);
 
     /** Insereix un llista de sèries a l'estudi seleccionat actualment
      * @param seriesList series afegir
      */
     void insertSeriesList( QList<DICOMSeries> seriesList );
 
+    /** Insereix un llista de sèries a l'estudi seleccionat actualment
+     * @param seriesList series afegir
+     */
+    void insertSeriesList(QString studyIstanceUID, QList<Series*> seriesList);
+
     /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
      *@param informació de la serie
      */
-    void insertSeries( DICOMSeries *serie );
+    void insertSeries(DICOMSeries *serie);
+
+    /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
+     *@param informació de la serie
+     */
+    void insertSeries(QString studyIstanceUID, Series *serie);
 
     /** Insereix una llista d'imatges a la sèrie seleccionada actualment
      * @param imageList llista d'imatges afegir a la sèrie
      */
     void insertImageList( QList<DICOMImage> imageList );
 
+    /** Insereix una llista d'imatges a la sèrie seleccionada actualment
+     * @param imageList llista d'imatges afegir a la sèrie
+     */
+    void insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList);
+
     /** Insereix una image a la sèrie que està seleccionada
      * @param image imatge a afegir
      */
     void insertImage( DICOMImage *image );
+
+    /** Insereix una image a la sèrie que està seleccionada
+     * @param image imatge a afegir
+     */
+    void insertImage(QString studyInstanceUID, QString seriesInstanceUID, Image* image);
 
     /** removes study from the list
      * @param esbora l'estudi amb StudyUID de la llista
