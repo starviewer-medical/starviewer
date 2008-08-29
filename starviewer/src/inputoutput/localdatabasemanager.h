@@ -11,6 +11,7 @@
 #include <QList>
 #include <QObject>
 
+
 #include "status.h"
 #include "image.h"
 #include "series.h"
@@ -19,6 +20,7 @@
 
 namespace udg {
 
+class QSemaphore;
 class DicomMask;
 class DatabaseConnection;
 
@@ -54,6 +56,9 @@ public:
     ///Retorna tota l'estructura Patient,Study,Series,Image, de l'estudi que compleix amb el criteri de cerca, té en compte el Study InstanceUID, el SeriesInstanceUID i el SOP Instance UID
     Patient* retrieve(DicomMask maskToRetrieve);
 
+    ///Esborra de la base de dades i del disc l'estudi passat per paràmetre
+    void del(QString studyInstanceUIDToDelete);
+
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
 
@@ -86,6 +91,17 @@ private :
     int saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave);
     ///Guarda la imatge a la base de dades, si ja existeix li actualitza la informació
     int saveImage(DatabaseConnection *dbConnect, Image *imageToSave, int imageOrderInSeries);
+
+    ///Esborra el pacient que compleixi amb la màscara a esborrar. A la màscara hem d'indicar el UID de l'estudi a esborrar i comprova si el pacient el qual pertany l'estudi té més d'un estudi, si és així no l'esborrar, si només en té un l'esborra
+    int delPatientOfStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    ///Esborra el pacient que compleix la màscara passada per paràmetre, només es té en compte el patientID
+    int delPatient(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    ///Esborra el l'estudi que compleixi amb la màscara a esborrar
+    int delStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    ///Esborra la serie que compleixi amb la màscara a esborrar
+    int delSeries(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    ///Esborra la imatge que compleixi amb la màscara a esborrar
+    int delImage(DatabaseConnection *dbConnect, DicomMask maskToDelete);
 
     ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);

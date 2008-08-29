@@ -191,66 +191,112 @@ Patient* LocalDatabaseManager::retrieve(DicomMask maskToRetrieve)
     return retrievedPatient;
 }
 
-void LocalDatabaseManager::clear()
+void LocalDatabaseManager::del(QString studyInstanceToDelete)
 {
-    DicomMask maskToDelete;
-    LocalDatabasePatientDAL patientDAL;
-    LocalDatabaseStudyDAL studyDAL;
-    LocalDatabaseSeriesDAL seriesDAL;
-    LocalDatabaseImageDAL imageDAL;
     DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
-    DeleteDirectory delDirectory;
+    StarviewerSettings settings;
+    DeleteDirectory deleteDirectory;
+    DicomMask studyMaskToDelete;
+    int status;
+
+    if (studyInstanceToDelete.isEmpty()) 
+        return;
+    else
+        studyMaskToDelete.setStudyUID(studyInstanceToDelete);
 
     dbConnect->beginTransaction();
 
-    //esborrem tots els pacients
-    patientDAL.setDatabaseConnection(dbConnect);
-    patientDAL.del(maskToDelete);
-
-    if (patientDAL.getLastError() != SQLITE_OK)
+    status = delPatientOfStudy(dbConnect, studyMaskToDelete);
+    if (status != SQLITE_OK) 
     {
         dbConnect->rollbackTransaction();
-        setLastError(patientDAL.getLastError());
+        setLastError(status);
         return;
     }
 
-    //esborrem tots els estudis
-    studyDAL.setDatabaseConnection(dbConnect);
-    studyDAL.del(maskToDelete);
-
-    if (studyDAL.getLastError() != SQLITE_OK)
+    status = delStudy(dbConnect, studyMaskToDelete);
+    if (status != SQLITE_OK) 
     {
         dbConnect->rollbackTransaction();
-        setLastError(studyDAL.getLastError());
+        setLastError(status);
         return;
     }
 
-    //esborrem totes les series
-    seriesDAL.setDatabaseConnection(dbConnect);
-    seriesDAL.del(maskToDelete);
-
-    if (seriesDAL.getLastError() != SQLITE_OK)
+    status = delSeries(dbConnect, studyMaskToDelete);
+    if (status != SQLITE_OK) 
     {
         dbConnect->rollbackTransaction();
-        setLastError(seriesDAL.getLastError());
+        setLastError(status);
         return;
     }
 
-    //esborrem totes les imatges 
-    imageDAL.setDatabaseConnection(dbConnect);
-    imageDAL.del(maskToDelete);
-
-    if (imageDAL.getLastError() != SQLITE_OK)
+    status = delImage(dbConnect, studyMaskToDelete);
+    if (status != SQLITE_OK) 
     {
         dbConnect->rollbackTransaction();
-        setLastError(imageDAL.getLastError());
+        setLastError(status);
         return;
     }
 
     dbConnect->endTransaction();
 
-    //esborrem tots els estudis descarregats
-    if (!delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), true)) m_lastError = DeletingFilesError;
+    if (!deleteDirectory.deleteDirectory(settings.getCacheImagePath() + studyInstanceToDelete, true))
+        m_lastError = LocalDatabaseManager::DeletingFilesError;
+    else
+       m_lastError = LocalDatabaseManager::Ok;
+}
+
+void LocalDatabaseManager::clear()
+{
+    DicomMask maskToDelete;//creem màscara buida, ho esborrarà tot
+    DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
+    DeleteDirectory delDirectory;
+    int status;
+
+    dbConnect->beginTransaction();
+
+    status = delPatient(dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        setLastError(status);
+        return;
+    }
+
+    //esborrem tots els estudis
+    status = delStudy(dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        setLastError(status);
+        return;
+    }
+
+    //esborrem totes les series
+    status = delSeries(dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        setLastError(status);
+        return;
+    }
+
+    //esborrem totes les imatges 
+    status = delImage(dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        dbConnect->rollbackTransaction();
+        setLastError(status);
+        return;
+    }
+
+    dbConnect->endTransaction();
+
+    //esborrem tots els estudis descarregats, físicament del disc dur
+    if (!delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), true)) 
+        m_lastError = DeletingFilesError;
+    else 
+        m_lastError = Ok;
 }
 
 void LocalDatabaseManager::compact()
@@ -388,6 +434,84 @@ void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
     {
         delDirectory.deleteDirectory(settings.getCacheImagePath() + failedStudy->getInstanceUID(), true);
     }
+}
+
+int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+{
+    LocalDatabaseStudyDAL localDatabaseStudyDAL;
+    QList<Patient*> patientList;
+    QString patientID;
+    int numberOfStudies;
+
+    //Només podem esborrar el pacient si no té cap més estudi que el que s'ha d'esborrar
+    localDatabaseStudyDAL.setDatabaseConnection(dbConnect);
+
+    //com de la màscara a esborrar ens passa l'studyUID hem de buscar el patient id per aquell estudi 
+    patientList = localDatabaseStudyDAL.queryPatientStudy(maskToDelete);
+    if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
+        return localDatabaseStudyDAL.getLastError();
+
+    if (patientList.count() == 1) 
+    {
+        patientID = patientList.at(0)->getID();
+        delete patientList.at(0);//esborrem el pacient no el necessitem més
+    }
+    else 
+        return -1;
+
+    //busquem quants estudis té el pacient
+    numberOfStudies = localDatabaseStudyDAL.countHowManyStudiesHaveAPatient(patientID);
+    if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
+        return localDatabaseStudyDAL.getLastError();
+
+    if (numberOfStudies == 1) //si només té un estudi l'esborrem
+    {
+        DicomMask patientMaskToDelete;
+        patientMaskToDelete.setPatientId(patientID);
+
+        return delPatient(dbConnect, patientMaskToDelete);
+    }
+    else return localDatabaseStudyDAL.getLastError();
+}
+
+int LocalDatabaseManager::delPatient(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+{
+    LocalDatabasePatientDAL localDatabasePatientDAL;
+
+    localDatabasePatientDAL.setDatabaseConnection(dbConnect);
+    localDatabasePatientDAL.del(maskToDelete);
+
+    return localDatabasePatientDAL.getLastError();
+}
+
+int LocalDatabaseManager::delStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+{
+    LocalDatabaseStudyDAL localDatabaseStudyDAL;
+
+    localDatabaseStudyDAL.setDatabaseConnection(dbConnect);
+    localDatabaseStudyDAL.del(maskToDelete);
+
+    return localDatabaseStudyDAL.getLastError();
+}
+
+int LocalDatabaseManager::delSeries(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+{
+    LocalDatabaseSeriesDAL localDatabaseSeriesDAL;
+
+    localDatabaseSeriesDAL.setDatabaseConnection(dbConnect);
+    localDatabaseSeriesDAL.del(maskToDelete);
+
+    return localDatabaseSeriesDAL.getLastError();
+}
+
+int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+{
+    LocalDatabaseImageDAL localDatabaseImageDAL;
+
+    localDatabaseImageDAL.setDatabaseConnection(dbConnect);
+    localDatabaseImageDAL.del(maskToDelete);
+
+    return localDatabaseImageDAL.getLastError();
 }
 
 void LocalDatabaseManager::setLastError(int sqliteLastError)
