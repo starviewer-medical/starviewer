@@ -13,6 +13,7 @@
 #include "multiplequerystudy.h"
 #include "dicomstudy.h"
 #include "pacsparameters.h"
+#include "localdatabasemanager.h"
 
 namespace udg {
 
@@ -58,6 +59,9 @@ signals:
      * @param defaultImageInstance imatge que es voldrà veure per defecte
      */
     void processFiles( QStringList files, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance );
+
+    ///Signal per quan tenim un pacient carregat a punt per processar-lo per visualitzar
+    void processPatient( Patient *patientToProcess);
 
 protected :
     /** Event que s'activa al tancar al rebren un event de tancament
@@ -232,6 +236,9 @@ private:
 
     /// esborra els estudis vells de la cache
     void deleteOldStudies();
+
+    ///Mostra els errors del manager de base de dades
+    void showDatabaseManagerError(LocalDatabaseManager::LastError lastError );
 
     /** Tracta els errors de la base de dades
      * @param state del mètode de la base de dades

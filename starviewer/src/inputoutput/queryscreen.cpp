@@ -37,6 +37,11 @@
 #include "qcreatedicomdir.h"
 #include "dicommask.h"
 #include "qoperationstatescreen.h"
+#include "localdatabasemanager.h"
+#include "patient.h"
+#include "testdatabase.h"
+#include "testdicomobjects.h"
+#include <QTime>
 
 namespace udg {
 
@@ -162,27 +167,54 @@ void QueryScreen::setQStudyTreeWidgetColumnsWidth()
 
 void QueryScreen::setSeriesToSeriesListWidgetCache()
 {
-    QList<DICOMSeries> seriesList;
+    QList<DICOMSeries> oldSeriesList;
+    QList<Series*> seriesList;
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
+    LocalDatabaseManager localDatabaseManager;
     int imagesNumber;
     Status state;
     DicomMask mask;
+    QString studyInstanceUID = m_studyTreeWidgetCache->getCurrentStudyUID();
 
-    INFO_LOG( "Cerca de sèries a la cache de l'estudi " + m_studyTreeWidgetCache->getCurrentStudyUID() );
+    INFO_LOG("Cerca de sèries a la cache de l'estudi " + studyInstanceUID);
 
     //preparem la mascara i cerquem les series a la cache
-    mask.setStudyUID( m_studyTreeWidgetCache->getCurrentStudyUID() );
-    state = cacheSeriesDAL.querySeries( mask , seriesList );
+    mask.setStudyUID(studyInstanceUID);
+
+#if 0
+    seriesList = localDatabaseManager.querySeries(mask);
+    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+    {
+        showDatabaseManagerError(localDatabaseManager.getLastError());
+        return;
+    }
+#else
+    state = cacheSeriesDAL.querySeries( mask , oldSeriesList );
     if ( !state.good() )
     {
         showDatabaseErrorMessage( state );
         return;
     }
-
+#endif
     m_seriesListWidgetCache->clear();
 
-    foreach( DICOMSeries series , seriesList )
+#if 0
+    foreach(Series* series, seriesList)
+    {
+        mask.setSeriesUID(series->getInstanceUID());
+
+        series->setImages(localDatabaseManager.queryImage(mask));
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        {
+            showDatabaseManagerError(localDatabaseManager.getLastError());
+            return;
+        }
+
+        m_seriesListWidgetCache->insertSeries(studyInstanceUID, series);
+    }
+#else
+    foreach( DICOMSeries series , oldSeriesList )
     {
         //preparem per fer la cerca d'imatges
         mask.setSeriesUID( series.getSeriesUID() );
@@ -195,6 +227,7 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
         }
         m_seriesListWidgetCache->insertSeries( &series );
     }
+#endif
 }
 
 void QueryScreen::deleteOldStudies()
@@ -462,7 +495,9 @@ void QueryScreen::queryStudyPacs()
 void QueryScreen::queryStudy( QString source )
 {
     CacheStudyDAL cacheStudyDAL;
+    LocalDatabaseManager localDatabaseManager;
     QList<DICOMStudy> studyListResultQuery;
+    QList<Patient*> patientList;
     Status state;
 
     INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
@@ -471,6 +506,15 @@ void QueryScreen::queryStudy( QString source )
     if( source == "Cache" )
     {
         m_seriesListWidgetCache->clear();
+    #if 0
+        patientList = localDatabaseManager.queryPatientStudy(buildDicomMask());
+
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        {
+            showDatabaseManagerError(localDatabaseManager.getLastError());
+            return;
+        }
+    #else
         state = cacheStudyDAL.queryStudy( buildDicomMask() , studyListResultQuery ); //busquem els estudis a la cache
         if ( !state.good() )
         {
@@ -479,6 +523,7 @@ void QueryScreen::queryStudy( QString source )
             showDatabaseErrorMessage( state );
             return;
         }
+    #endif
     }
     else if( source == "DICOMDIR" )
     {
@@ -514,7 +559,7 @@ void QueryScreen::queryStudy( QString source )
      * es fa és que per llançar el missatge es comprovi que la finestra estigui activa. Si la finestra no està activa
      * vol dir que el mètode ha estat invocat des del constructor
      */
-    if ( studyListResultQuery.isEmpty() && isActiveWindow() )
+    if (patientList.isEmpty() && studyListResultQuery.isEmpty() && isActiveWindow() )
     {
         //no hi ha estudis
         if( source == "Cache" )
@@ -529,7 +574,11 @@ void QueryScreen::queryStudy( QString source )
     {
         if( source == "Cache" )
         {
-            m_studyTreeWidgetCache->insertStudyList( studyListResultQuery );//es mostra la llista d'estudis
+        #if 0
+            m_studyTreeWidgetCache->insertPatientList(patientList);//es mostra la llista d'estudis
+        #else
+            m_studyTreeWidgetCache->insertStudyList(studyListResultQuery);//es mostra la llista d'estudis
+        #endif
             m_studyTreeWidgetCache->setSortColumn( QStudyTreeWidget::ObjectName ); //ordenem pel nom
         }
         else if( source == "DICOMDIR" )
@@ -633,6 +682,8 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 void QueryScreen::querySeries( QString studyUID, QString source )
 {
     QList<DICOMSeries> seriesListQueryResults;
+    QList<Series*> seriesList;
+    LocalDatabaseManager localDatabaseManager;
     CacheSeriesDAL cacheSeriesDAL;
     Status state;
     DicomMask mask;
@@ -641,13 +692,23 @@ void QueryScreen::querySeries( QString studyUID, QString source )
     if( source == "Cache" )
     {
         //preparem la mascara i cerquem les series a la cache
-        mask.setStudyUID( studyUID );
+        mask.setStudyUID(studyUID);
+    #if 0
+        seriesList = localDatabaseManager.querySeries(mask);
+
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        {
+            showDatabaseManagerError(localDatabaseManager.getLastError());
+            return;
+        }
+    #else
         state = cacheSeriesDAL.querySeries( mask , seriesListQueryResults );
         if ( !state.good() )
         {
             showDatabaseErrorMessage( state );
             return;
         }
+    #endif
     }
     else if( source == "DICOMDIR" )
     {
@@ -659,7 +720,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         return;
     }
 
-    if ( seriesListQueryResults.isEmpty() )
+    if ( seriesListQueryResults.isEmpty() && seriesList.isEmpty() )
     {
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
         return;
@@ -667,7 +728,11 @@ void QueryScreen::querySeries( QString studyUID, QString source )
 
     if( source == "Cache" )
     {
+    #if 0
+        m_studyTreeWidgetCache->insertSeriesList(studyUID, seriesList); //inserim la informació de les sèries al estudi
+    #else
         m_studyTreeWidgetCache->insertSeriesList( seriesListQueryResults );//inserim la informació de les sèries al llist
+    #endif
     }
     else if( source == "DICOMDIR" )
         m_studyTreeWidgetDicomdir->insertSeriesList( seriesListQueryResults );//inserim la informació de la sèrie al llistat
@@ -739,38 +804,53 @@ void QueryScreen::retrieve()
     retrievePacs( false );
 }
 
-void QueryScreen::queryImage(QString studyUID, QString seriesUID, QString source )
+void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID, QString source)
 {
+    LocalDatabaseManager localDatabaseManager;
     CacheImageDAL cacheImageDAL;
     DicomMask mask;
+    QList<Image*> imageList;
     QList<DICOMImage> imageListQueryResults;
 
-    INFO_LOG( "Cerca d'imatges a la font " + source + " de l'estudi " + studyUID + " i serie " + seriesUID );
+    INFO_LOG("Cerca d'imatges a la font " + source + " de l'estudi " + studyInstanceUID + " i serie " + seriesInstanceUID);
 
-    if( source == "Cache" )
+    if(source == "Cache")
     {
-        mask.setStudyUID( studyUID );
-        mask.setSeriesUID( seriesUID );
+        mask.setStudyUID(studyInstanceUID);
+        mask.setSeriesUID(seriesInstanceUID);
+    #if 0
+        imageList = localDatabaseManager.queryImage(mask);
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        {
+            showDatabaseManagerError(localDatabaseManager.getLastError());
+            return;
+        }
+    #else
         cacheImageDAL.queryImages( mask , imageListQueryResults );
+    #endif
     }
-    else if( source == "DICOMDIR" )
+    else if (source == "DICOMDIR")
     {
-        m_readDicomdir.readImages( seriesUID , "", imageListQueryResults );
+        m_readDicomdir.readImages(seriesInstanceUID, "", imageListQueryResults);
     }
     else
     {
-        DEBUG_LOG( "Unrecognised source: " + source );
+        DEBUG_LOG("Unrecognised source: " + source);
         return;
     }
 
-    if (imageListQueryResults.isEmpty())
+    if (imageListQueryResults.isEmpty() && imageList.isEmpty())
     {
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this study.\n" ) );
         return;
     }
 
     if( source == "Cache" )
+    #if 0
+        m_studyTreeWidgetCache->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
+    #else
         m_studyTreeWidgetCache->insertImageList( imageListQueryResults );//inserim la informació de la sèrie al llistat
+    #endif
     else if( source == "DICOMDIR" )
         m_studyTreeWidgetDicomdir->insertImageList( imageListQueryResults );//inserim la informació de la sèrie al llistat
 }
@@ -1008,6 +1088,9 @@ void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopIn
 
 void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source )
 {
+    LocalDatabaseManager localDatabaseManager;
+    DicomMask patientToProcessMask;
+
     if( studiesUIDList.isEmpty() )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select at least one study to view" ) );
@@ -1020,8 +1103,20 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
     {
         foreach(QString studyUID, studiesUIDList )
         {
+        #if 0
+            patientToProcessMask.setStudyUID(studyUID);
+            emit processPatient(localDatabaseManager.retrieve(patientToProcessMask));
+
+            if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+            {
+                showDatabaseManagerError(localDatabaseManager.getLastError());
+                return;
+            }
+        #else
+            //Codi vell a esborrar
             files += cacheStudyDAL.getFiles( studyUID );
             cacheStudyDAL.updateStudyAccTime( studyUID );
+        #endif
         }
     }
     else if( source == "DICOMDIR" )
@@ -1132,7 +1227,29 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
     DICOMStudy study;
     CacheStudyDAL cacheStudyDAL;
     Status state;
+    LocalDatabaseManager localDatabaseManager;
+    DicomMask studyMask;
+    QList<Patient*> patientList;
 
+#if 0
+    //El signal que desperta aquests slot es fa abans que acabi l'insersió a la base de dades, per això posem aquest sleep per assegurar que s'hagi inserit l'estudi a la bd
+    sleep(4);
+
+    studyMask.setStudyUID(studyUID);
+    patientList = localDatabaseManager.queryPatientStudy(studyMask);
+
+    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+    {
+        showDatabaseManagerError(localDatabaseManager.getLastError());
+        return;
+    }
+
+    if (patientList.count() == 1)
+    {
+        m_studyTreeWidgetCache->insertPatient(patientList.at(0));
+        m_studyTreeWidgetCache->sort();
+    }
+#else
     state = cacheStudyDAL.queryStudy( studyUID , study );
 
     if ( state.good() )
@@ -1142,6 +1259,7 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
     }
     else
         showDatabaseErrorMessage( state );
+#endif
 }
 
 void QueryScreen::closeEvent( QCloseEvent* event )
@@ -1411,6 +1529,50 @@ QString QueryScreen::buildQueryParametersString(DicomMask mask)
     return logMessage;
 }
 
+void QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError lastError )
+{
+    QString message;
+
+    if (lastError != LocalDatabaseManager::Ok)
+    {
+        QApplication::restoreOverrideCursor();
+
+        if (lastError == LocalDatabaseManager::DatabaseLocked)
+        {
+            message = tr("The Cache is blocked by another Starviewer window."
+                         "\nTry to close all the others Starviewer windows and try again."
+                         "\n\nIf you want to open different Starviewer's windows always choose the 'New' option from the File menu.");
+        }
+        else if (lastError == LocalDatabaseManager::DatabaseCorrupted)
+        {
+            message = tr("Starviewer database is corrupted."
+                         "\n Try to close all Starviewer windows and try again."
+                         "\n\nIf the problem persist contact with an administrator");
+        }
+        else if (lastError == LocalDatabaseManager::SyntaxErrorSQL)
+        {
+            message = tr("Starviewer Database manager error."
+                         "\n Try to close all Starviewer windows and try again."
+                         "\n\nIf the problem persist contact with an administrator");
+        }
+        else if (lastError == LocalDatabaseManager::DatabaseError)
+        {
+            message = tr("An internal error occurs with Starviewer database."
+                         "\n Try to close all Starviewer windows and try again."
+                         "\n\nIf the problem persist contact with an administrator");
+        }
+        else if (lastError == LocalDatabaseManager::DeletingFilesError) 
+        {
+            message = tr("Some files can not be delete."
+                         "\n Theses have to be delete manually.");
+        }
+        else message = tr("An unknow error has ocurred");
+
+        QMessageBox::critical( this , tr( "Starviewer" ) , message );
+    }
+}
+
+//TODO TREURE QUAN NO S'UTILITZI LA BASE DE DADES VELLA
 void QueryScreen::showDatabaseErrorMessage( const Status &state )
 {
     QString message;
