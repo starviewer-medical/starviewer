@@ -42,6 +42,9 @@ public:
     ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
     QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery);
 
+    ///Ens retorna quan estudis té un determinat pacient
+    int countHowManyStudiesHaveAPatient(QString patientID);
+
     ///Connexió de la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
 
@@ -68,6 +71,9 @@ private :
 
     ///Construeix la sentència per fer select d'estudi i pacients a partir de la màscara. Té en compte studyUID, Patient Id, Patient Name, i data de l'estudi
     QString buildSqlSelectStudyPatient(DicomMask studyMaskToSelect);
+
+    ///Construeix la sentència per comptar quants estudis té un pacient
+    QString buildSqlCountHowManyStudiesHaveAPatient(QString patientID);
 
     ///Emplena un l'objecte Study de la fila passada per paràmetre
     Study* fillStudy(char **reply, int row, int columns);
