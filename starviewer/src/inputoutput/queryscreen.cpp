@@ -1193,6 +1193,8 @@ void QueryScreen::deleteSelectedStudiesInCache()
 
                 Status state;
                 CacheStudyDAL cacheStudyDAL;
+                LocalDatabaseManager localDatabaseManager;
+
                 foreach(QString studyUID, studiesList)
                 {
                     if( m_qcreateDicomdir->studyExists( studyUID ) )
@@ -1202,10 +1204,22 @@ void QueryScreen::deleteSelectedStudiesInCache()
                     }
                     else
                     {
+                        INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
+                    #if 0
+                        localDatabaseManager.del(studyUID);
+
+                        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+                        {
+                            showDatabaseManagerError(localDatabaseManager.getLastError());
+                            break;
+                        }
+
+                        m_studyTreeWidgetCache->removeStudy( studyUID );
+                        m_seriesListWidgetCache->clear();
+                    #else
                         state = cacheStudyDAL.delStudy( studyUID );
                         if ( state.good() )
                         {
-                            INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
                             m_studyTreeWidgetCache->removeStudy( studyUID );
                             m_seriesListWidgetCache->clear();
                         }
@@ -1214,6 +1228,7 @@ void QueryScreen::deleteSelectedStudiesInCache()
                             // TODO potser s'hauria de fer al final, recollir per quins hi ha hagut error i mostrar-ho
                             showDatabaseErrorMessage( state );
                         }
+                    #endif
                     }
                 }
 
