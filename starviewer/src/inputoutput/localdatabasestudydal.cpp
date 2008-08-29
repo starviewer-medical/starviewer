@@ -112,6 +112,28 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(DicomMask patientStudyM
     return patientList;
 }
 
+int LocalDatabaseStudyDAL::countHowManyStudiesHaveAPatient(QString patientID)
+{
+    int columns , rows;
+    char **reply = NULL , **error = NULL;
+    QList<Study*> studyList;
+
+    m_dbConnection->getLock();
+
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
+                                      qPrintable(buildSqlCountHowManyStudiesHaveAPatient(patientID)),
+                                    &reply, &rows, &columns, error);
+    m_dbConnection->releaseLock();
+
+    if (getLastError() != SQLITE_OK)
+    {
+        logError (buildSqlCountHowManyStudiesHaveAPatient(patientID));
+        return -1;
+    }
+
+    return QString(reply[1]).toInt();
+}
+
 void LocalDatabaseStudyDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;
@@ -221,6 +243,17 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToS
     orderBySentence = " Order by Patient.Name";
 
     return selectSentence + whereSentence + orderBySentence;
+}
+
+QString LocalDatabaseStudyDAL::buildSqlCountHowManyStudiesHaveAPatient(QString patientID)
+{
+    QString selectSentence = QString ("Select count(*) "
+                                      " From Patient, Study "
+                                      "Where Patient.Id = Study.PatientId  and"
+                                      "      Patient.Id = '%1'")
+                                    .arg(patientID);
+
+    return selectSentence;
 }
 
 QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDate)
