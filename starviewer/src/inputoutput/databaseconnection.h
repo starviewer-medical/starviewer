@@ -51,7 +51,7 @@ public:
     /// Allibera al candau per a que altres processos puguin accedir a la base de dades
     void releaseLock();
 
-    /// Comença/finalitza/Fa rollback una transacció a la base de dades
+    /// Comença/finalitza/Fa rollback una transacció a la base de dades. Només pot haver una transacció a la vegada amb la mateixa connexió, per això aquests mètodes tenen implantat un semàfor, qeu control l'accés a les transaccions
     //TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
     void beginTransaction();
     void endTransaction();
@@ -67,6 +67,9 @@ private :
 
     sqlite3 *m_databaseConnection;
     QSemaphore *m_databaseLock;
+    /*Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix 
+      no per tant per assegurar que no tenim dos transaccions a la vegada implantem aquests semàfor*/
+    QSemaphore *m_transactionLock;
 
     QString m_databasePath;
 
