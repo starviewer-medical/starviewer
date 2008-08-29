@@ -19,6 +19,7 @@ namespace udg {
 */
 
 class DICOMSeries;
+class Series;
 
 const int scaledSeriesSizeX = 100;///< Mida de la imatge escalada a l'eix x
 const int scaledSeriesSizeY = 100;///< Mida de la imatge escalada a l'eix y
@@ -48,6 +49,9 @@ public slots:
      * @param descripció de la sèrie
      */
     void insertSeries( DICOMSeries *serie );
+
+    ///Insereix l'informació d'una sèrie
+    void insertSeries(QString studyInstanceUID, Series *series);
 
     /** slot que s'activa quant es selecciona una serie, emiteix signal a QStudyTreeWidget, perquè selecciona la mateixa serie que el QSeriesListWidget
      *  @param serie Seleccionada

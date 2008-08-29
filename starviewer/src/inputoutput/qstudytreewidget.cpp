@@ -36,6 +36,10 @@
 #include "status.h"
 #include "logging.h"
 #include "pacsparameters.h"
+#include "patient.h"
+#include "study.h"
+#include "series.h"
+#include "image.h"
 
 namespace udg {
 
@@ -93,6 +97,18 @@ void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
         insertStudy( &study );
     }
 }
+
+void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
+{
+    m_studyTreeView->clear();
+
+    foreach(Patient *patient, patientList)
+    {
+        insertPatient(patient);
+    }
+}
+
+
 void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
     Status state;
@@ -149,11 +165,59 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
     m_studyTreeView->clearSelection();
 }
 
+void QStudyTreeWidget::insertPatient(Patient *patient)
+{
+    Study *study;
+    if (patient->getStudies().count() != 1) return;
+
+    study = patient->getStudies().at(0);
+
+    if (getStudyItem(study->getInstanceUID() , "" /*study->getPacsAETitle()*/) != NULL)
+        removeStudy(study->getInstanceUID()); //si l'estudi ja hi existeix a StudyTreeView l'esborrem
+
+    /*Des de qt 4.3 s'ha detectat que si abans es fa el new, i després es fa el remove al cap d'unes quantes repeticions d'aquest mètode al fer el new QTreeWidgetItem s'acaba donant un segmentation fault, per això s'ha de canviar l'ordre i primer fer el 
+    remove study, i llavors el new QTreeWidgetItem*/
+    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
+    QTreeWidgetItem* expandableItem = new QTreeWidgetItem( item );
+
+    item->setIcon(ObjectName, m_closeFolder);
+    item->setText(ObjectName, patient->getFullName());
+    item->setText(PatientID, patient->getID());
+    item->setText(PatientAge, formatAge(QString().setNum(study->getPatientAge(), 10)));
+    item->setText(Modality, study->getModalitiesAsSingleString());
+    item->setText(Description, study->getDescription());
+    item->setText(Date, formatDate(study->getDate().toString("yyyyMMdd")));
+    item->setText(Time, formatHour(study->getTime().toString("hhmmss")));
+    item->setText(StudyID, tr("Study %1").arg(study->getID()));
+
+    item->setText( AccNumber, study->getAccessionNumber());
+    //item->setText( PACSAETitle, study->getPacsAETitle() );
+    item->setText(UID, study->getInstanceUID());
+    item->setText(Type , "STUDY");//indiquem de que es tracta d'un estudi
+    item->setText(RefPhysName, study->getReferringPhysiciansName());
+
+    /* degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
+       una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+       consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
+     */
+    expandableItem->setText( Type , "EXPANDABLE_ITEM" );
+
+    m_studyTreeView->clearSelection();
+}
+
 void QStudyTreeWidget::insertSeriesList( QList<DICOMSeries> seriesList )
 {
     foreach( DICOMSeries series, seriesList )
     {
          insertSeries( &series );
+    }
+}
+
+void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*> seriesList)
+{
+    foreach(Series *series, seriesList)
+    {
+         insertSeries(studyInstanceUID, series);
     }
 }
 
@@ -194,11 +258,56 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
     expandableItem->setText( Type , "EXPANDABLE_ITEM" );
 }
 
+void QStudyTreeWidget::insertSeries(QString studyIstanceUID, Series *series)
+{
+    QTreeWidgetItem *item, *studyItem , *expandableItem;
+
+    studyItem = getStudyItem(studyIstanceUID, "" /*serie->getPacsAETitle()*/ );
+    item = new QTreeWidgetItem(studyItem);
+    expandableItem = new QTreeWidgetItem(item);
+
+    item->setIcon(ObjectName, m_iconSeries);
+    //Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+    item->setText(ObjectName, tr("Series %1").arg(paddingLeft(series->getSeriesNumber() , 4)));
+    item->setText(Modality, series->getModality());
+
+    item->setText(Description, series->getDescription().simplified());//treiem els espaics en blanc del davant i darrera
+
+    //si no tenim data o hora de la sèrie mostrem la de l'estudi
+    if (!series->getDateAsString().isEmpty()) item->setText(Date, formatDate(series->getDate().toString("yyyyMMdd")));
+
+    if (!series->getTimeAsString().isEmpty()) item->setText(Time , formatHour(series->getTime().toString("hhmmss")));
+
+    item->setText(PACSAETitle, ""/*serie->getPacsAETitle()*/);
+    item->setText(UID, series->getInstanceUID());
+    item->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
+
+    item->setText(ProtocolName , series->getProtocolName());
+    item->setText(PPStartDate , "");
+    item->setText(PPStartTime , "");
+    item->setText(ReqProcID , "");
+    item->setText(SchedProcStep , "");
+
+    /* degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
+       una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+       consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
+     */
+    expandableItem->setText(Type, "EXPANDABLE_ITEM");
+}
+
 void QStudyTreeWidget::insertImageList( QList<DICOMImage> imageList )
 {
     foreach( DICOMImage image , imageList )
     {
          insertImage( &image );
+    }
+}
+
+void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList)
+{
+    foreach(Image *image, imageList)
+    {
+         insertImage(studyInstanceUID, seriesInstanceUID, image);
     }
 }
 
@@ -230,6 +339,35 @@ void QStudyTreeWidget::insertImage( DICOMImage * image )
     item->setText( PACSAETitle , image->getPacsAETitle() );
     item->setText( UID , image->getSOPInstanceUID() );
     item->setText( Type, "IMAGE" ); //indiquem que es tracta d'una imatge
+}
+
+void QStudyTreeWidget::insertImage(QString studyInstanceUID, QString seriesInstanceUID, Image *image)
+{
+    QTreeWidgetItem* studyItem, *item;
+    bool stop = false;
+    int index = 0;
+    QString imageNumber;
+
+    studyItem = getStudyItem(studyInstanceUID, ""/*image->getPacsAETitle()*/);
+
+    while (!stop && index < studyItem->childCount())//cerquem la sèrie de la que depen la imatge
+    {
+        if (studyItem->child(index)->text(UID) == seriesInstanceUID)
+        {
+            stop = true;
+        }
+        else index++;
+    }
+
+    item = new QTreeWidgetItem(studyItem->child(index));
+
+    item->setIcon(ObjectName, m_iconSeries);
+
+    item->setText(ObjectName, tr("Image %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+
+    item->setText(PACSAETitle, "");
+    item->setText(UID, image->getSOPInstanceUID());
+    item->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
 }
 
 QString QStudyTreeWidget::formatAge( const QString age )

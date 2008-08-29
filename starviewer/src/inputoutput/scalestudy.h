@@ -17,6 +17,7 @@ namespace udg {
 
 class Status;
 class DicomMask;
+class Series;
 
 /** Escala les imatges del mig de cada sèrie d'un estudi, per poder ser previsualitzades quant es consulta la caché
 @author Grup de Gràfics de Girona  ( GGG )
@@ -39,6 +40,9 @@ public:
     void scale( QString studyUID );
 
     static QString getScaledImagePath(DICOMSeries* series);
+
+    ///Retorna el path de la imatge escalada d'una sèrie guardada a la base de dades
+    static QString getScaledImagePath(QString studyInstanceUID, Series *series);
 
 private:
     /** Cerca les series de l'estudi

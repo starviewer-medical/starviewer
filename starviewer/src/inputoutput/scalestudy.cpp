@@ -16,6 +16,7 @@
 #include "image.h" // per scalar l'imatge
 #include "dicomseries.h"
 #include "logging.h"
+#include "series.h"
 
 namespace udg {
 
@@ -76,10 +77,17 @@ void ScaleStudy::scale( QString studyUID )
     }
 }
 
+//TODO TREURE AQUEST MÈTODE QUAN NO S'UTILITZI EL DICOMSeries
 QString ScaleStudy::getScaledImagePath(DICOMSeries* series)
 {
     StarviewerSettings settings;
     return settings.getCacheImagePath() + series->getStudyUID() + "/" + series->getSeriesUID() + "/scaled.png";
+}
+
+QString ScaleStudy::getScaledImagePath(QString studyInstanceUID, Series *series)
+{
+    StarviewerSettings settings;
+    return settings.getCacheImagePath() + studyInstanceUID + "/" + series->getInstanceUID() + "/scaled.png";
 }
 
 Status ScaleStudy::getSeriesOfStudy( QString studyUID , QList<DICOMSeries> &outResultsSeriesList )
