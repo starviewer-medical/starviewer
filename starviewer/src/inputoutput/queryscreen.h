@@ -61,7 +61,7 @@ signals:
     void processFiles( QStringList files, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance );
 
     ///Signal per quan tenim un pacient carregat a punt per processar-lo per visualitzar
-    void processPatient( Patient *patientToProcess);
+    void selectedPatient( Patient *patientToProcess, QString selectedSeries);
 
 protected :
     /** Event que s'activa al tancar al rebren un event de tancament
