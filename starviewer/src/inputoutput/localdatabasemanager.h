@@ -64,6 +64,9 @@ public:
     ///Esborra els estudis vells que fa que superen el temps màxim que poden estar a la base de dades sense ser visualitzats
     void deleteOldStudies();
 
+    ///Esborra estudis fins alliberar l'espai passat per paràmetre, comença esborrant dels que fa més que no es visualitzen
+    void freeSpace(int MbytesToErase);
+
     ///comptacta la base de dades
     void compact();
 
@@ -110,6 +113,10 @@ private :
 
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);
+
+    //TODO Aquest mètode s'hauria de traslladar a una classe genèrica
+    ///Retorna el que ocupa en bytes el directori
+    qint64 getDirectorySize(QString directoryPath);
 
 };
 
