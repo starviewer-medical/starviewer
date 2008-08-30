@@ -179,7 +179,7 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 
 QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
 {
-    QString selectSentence, whereSentence;
+    QString selectSentence, whereSentence, orderSentence;
 
     selectSentence = "Select InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
                             "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, "
@@ -198,7 +198,9 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
         whereSentence += QString(" LastAccessDate < '%1' ").arg(studyMaskToSelect.getLastAccessDate().toString("yyyyMMdd"));
     }
 
-    return selectSentence + whereSentence;
+    orderSentence = " Order by LastAccessDate";
+
+    return selectSentence + whereSentence + orderSentence;
 }
 
 QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToSelect)
