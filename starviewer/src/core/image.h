@@ -136,6 +136,12 @@ public:
     void setSliceLocation( QString sliceLocation );
     QString getSliceLocation() const;
 
+    ///Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
+    void setRetrievedDate(QDate date);
+    void setRetrievedTime(QTime time);
+    QDate getRetrievedDate();
+    QTime getRetrievedTime();
+
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );
 
@@ -243,6 +249,10 @@ private:
 
     /// el path absolut de la imatge
     QString m_path;
+
+    ///Data en que la imatge s'ha descarregat a la base de dades local
+    QDate m_retrievedDate;
+    QTime m_retrieveTime;
 
     /// La sèrie pare
     Series *m_parentSeries;

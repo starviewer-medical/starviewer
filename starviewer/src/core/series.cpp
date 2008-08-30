@@ -486,6 +486,26 @@ QString Series::getManufacturer() const
     return m_manufacturer;
 }
 
+void Series::setRetrievedDate(QDate retrievedDate)
+{
+    m_retrievedDate = retrievedDate;
+}
+
+void Series::setRetrievedTime(QTime retrievedTime)
+{
+    m_retrieveTime = retrievedTime;
+}
+
+QDate Series::getRetrievedDate()
+{
+    return m_retrievedDate;
+}
+
+QTime Series::getRetrievedTime()
+{
+    return m_retrieveTime;
+}
+
 void Series::insertImage( Image *image )
 {
     int i = 0;
