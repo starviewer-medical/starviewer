@@ -22,6 +22,8 @@ CREATE TABLE Study
   Description			TEXT,
   ReferringPhysicianName	TEXT,
   LastAccessDate		TEXT,
+  RetrievedDate			TEXT,
+  RetrievedTime			TEXT,
   State				INTEGER	
 );
 
@@ -44,6 +46,8 @@ CREATE TABLE Series
   BodyPartExaminated		TEXT,
   ViewPosition			TEXT,
   Manufacturer			TEXT,
+  RetrievedDate			TEXT,
+  RetrievedTime			TEXT,
   State				INTEGER
 );
 
@@ -76,6 +80,8 @@ CREATE TABLE Image
   NumberOfFrames		INTEGER,
   PhotometricInterpretation	TEXT,
   OrderNumberInSeries		INTEGER,
+  RetrievedDate			TEXT,
+  RetrievedTime			TEXT,
   State				INTEGER		
 );
 
