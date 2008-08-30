@@ -116,6 +116,8 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
     series->setBodyPartExamined(reply[14 + row * columns]);
     series->setViewPosition(reply[15 + row * columns]);
     series->setManufacturer(reply[16 + row * columns]);
+    series->setRetrievedDate(QDate().fromString(reply[17 + row * columns], "yyyyMMdd"));
+    series->setRetrievedTime(QTime().fromString(reply[18 + row * columns], "hhmmss"));
     series->setImagesPath(settings.getCacheImagePath() + "/" + studyInstanceUID + "/" + series->getInstanceUID());
 
     return series;
@@ -126,7 +128,7 @@ QString LocalDatabaseSeriesDAL::buildSqlSelect(DicomMask seriesMaskToSelect)
     QString selectSentence = "Select InstanceUID, StudyInstanceUID, Number, Modality, Date, Time, InstitutionName, "
                                     "PatientPosition, ProtocolName, Description, FrameOfReferenceUID, PositionReferenceIndicator, "
                                     "NumberOfPhases, NumberOfSlicesPerPhase, BodyPartExaminated, ViewPosition, "
-                                    "Manufacturer, State "
+                                    "Manufacturer, RetrievedDate, RetrievedTime, State "
                               "From Series ";
 
     return selectSentence + buildWhereSentence(seriesMaskToSelect);
@@ -138,9 +140,9 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                                             "InstitutionName, PatientPosition, ProtocolName, Description, "
                                                             "FrameOfReferenceUID, PositionReferenceIndicator, NumberOfPhases, "
                                                             "NumberOfSlicesPerPhase, BodyPartExaminated, ViewPosition, "
-                                                            "Manufacturer, State) "
+                                                            "Manufacturer, RetrievedDate, RetrievedTime, State) "
                                                     "values ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10', '%11', "
-                                                            "'%12', %13, %14, '%15', '%16', '%17', %18 )")
+                                                            "'%12', %13, %14, '%15', '%16', '%17', '%18', '%19', %20)")
                                     .arg(newSeries->getInstanceUID())
                                     .arg(newSeries->getParentStudy()->getInstanceUID())
                                     .arg(newSeries->getSeriesNumber())
@@ -158,12 +160,14 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                     .arg(newSeries->getBodyPartExamined())
                                     .arg(newSeries->getViewPosition())
                                     .arg(newSeries->getManufacturer())
+                                    .arg(newSeries->getRetrievedDate().toString("yyyyMMdd"))
+                                    .arg(newSeries->getRetrievedTime().toString("hhmmss"))
                                     .arg("0");
 
     return insertSentence;
 }
 
-QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *newSeries)
+QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
 {
     QString updateSentence = QString ("Update Series Set StudyInstanceUID = '%1', " 
                                                         "Number = '%2', "
@@ -181,28 +185,30 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *newSeries)
                                                         "BodyPartExaminated = '%14', "
                                                         "ViewPosition = '%15', "
                                                         "Manufacturer = '%16', "
-                                                        "State = '%17' "
-                                                 "Where InstanceUID = '%18'")
-                                    .arg(newSeries->getParentStudy()->getInstanceUID())
-                                    .arg(newSeries->getSeriesNumber())
-                                    .arg(newSeries->getModality())
-                                    .arg(newSeries->getDate().toString("yyyyMMdd"))
-                                    .arg(newSeries->getTime().toString("hhmmss"))
-                                    .arg(newSeries->getInstitutionName())
-                                    .arg(newSeries->getPatientPosition())
-                                    .arg(newSeries->getProtocolName())
-                                    .arg(newSeries->getDescription())
-                                    .arg(newSeries->getFrameOfReferenceUID())
-                                    .arg(newSeries->getPositionReferenceIndicator())
-                                    .arg(newSeries->getNumberOfPhases())
-                                    .arg(newSeries->getNumberOfSlicesPerPhase())
-                                    .arg(newSeries->getBodyPartExamined())
-                                    .arg(newSeries->getViewPosition())
-                                    .arg(newSeries->getManufacturer())
+                                                        "RetrievedDate = '%17', "
+                                                        "RetrievedTime = '%18', "
+                                                        "State = '%19' "
+                                                 "Where InstanceUID = '%20'")
+                                    .arg(seriesToUpdate->getParentStudy()->getInstanceUID())
+                                    .arg(seriesToUpdate->getSeriesNumber())
+                                    .arg(seriesToUpdate->getModality())
+                                    .arg(seriesToUpdate->getDate().toString("yyyyMMdd"))
+                                    .arg(seriesToUpdate->getTime().toString("hhmmss"))
+                                    .arg(seriesToUpdate->getInstitutionName())
+                                    .arg(seriesToUpdate->getPatientPosition())
+                                    .arg(seriesToUpdate->getProtocolName())
+                                    .arg(seriesToUpdate->getDescription())
+                                    .arg(seriesToUpdate->getFrameOfReferenceUID())
+                                    .arg(seriesToUpdate->getPositionReferenceIndicator())
+                                    .arg(seriesToUpdate->getNumberOfPhases())
+                                    .arg(seriesToUpdate->getNumberOfSlicesPerPhase())
+                                    .arg(seriesToUpdate->getBodyPartExamined())
+                                    .arg(seriesToUpdate->getViewPosition())
+                                    .arg(seriesToUpdate->getManufacturer())
+                                    .arg(seriesToUpdate->getRetrievedDate().toString("yyyyMMdd"))
+                                    .arg(seriesToUpdate->getRetrievedTime().toString("hhmmss"))
                                     .arg("0")
-                                    .arg(newSeries->getInstanceUID());
-
-                                    //arg(newSeries->getParentStudy()->getInstanceUID())
+                                    .arg(seriesToUpdate->getInstanceUID());
 
     return updateSentence;
 }

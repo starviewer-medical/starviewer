@@ -119,6 +119,8 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
     image->setNumberOfFrames(QString(reply[22 + row * columns]).toInt());
     image->setPhotometricInterpretation(reply[23 + row * columns]);
+    image->setRetrievedDate(QDate().fromString(reply[25 + row * columns], "yyyyMMdd"));
+    image->setRetrievedTime(QTime().fromString(reply[26 + row * columns], "hhmmss"));
 
     return image;
 }
@@ -133,7 +135,8 @@ QString LocalDatabaseImageDAL::buildSqlSelect(DicomMask imageMaskToSelect)
                                     "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
                                     "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
                                     "WindowLevelExplanations, SOPInstanceReferenceImage, SliceLocation, RescaleIntercept,"
-                                    "NumberOfFrames, PhotometricInterpretation, OrderNumberInSeries, State "
+                                    "NumberOfFrames, PhotometricInterpretation, OrderNumberInSeries, RetrievedDate, "
+                                    "RetrievedTime, State "
                             "from Image ";
 
     orderSentence = " order by OrderNumberInSeries";
@@ -151,9 +154,9 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage, int orderNumberIn
                                              "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
                                              "WindowLevelExplanations, SOPInstanceReferenceImage, SliceLocation,"
                                              "RescaleIntercept, NumberOfFrames, PhotometricInterpretation, OrderNumberInSeries,"
-                                             " State) "
+                                             "RetrievedDate, RetrievedTime, State) "
                                      "values ('%1','%2','%3',%4,'%5','%6','%7',%8,'%9', %10, %11, %12, %13, %14, %15, %16,"
-                                              "'%17', '%18', '%19', '%20', '%21', %22, %23, '%24', %25, %26)" )
+                                              "'%17', '%18', '%19', '%20', '%21', %22, %23, '%24', %25, '%26' , '%27', %28)" )
                             .arg(newImage->getSOPInstanceUID())
                             .arg(newImage->getParentSeries()->getParentStudy()->getInstanceUID())
                             .arg(newImage->getParentSeries()->getInstanceUID())
@@ -179,6 +182,8 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage, int orderNumberIn
                             .arg(newImage->getNumberOfFrames())
                             .arg(newImage->getPhotometricInterpretation())
                             .arg(orderNumberInSeries)
+                            .arg(newImage->getRetrievedDate().toString("yyyyMMdd"))
+                            .arg(newImage->getRetrievedTime().toString("hhmmss"))
                             .arg(0);
 
 
@@ -213,9 +218,11 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
                                               "RescaleIntercept = '%21', "
                                               "NumberOfFrames = '%22', "
                                               "PhotometricInterpretation = '%23', "
-                                              "OrderNumberInSeries = '%24',"
-                                              "State = '%25' "
-                                     "Where SOPInstanceUID = '%26'")
+                                              "OrderNumberInSeries = '%24', "
+                                              "RetrievedDate = '%25', "
+                                              "RetrievedTime = '%26', "
+                                              "State = '%27' "
+                                     "Where SOPInstanceUID = '%28'")
                             .arg(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID())
                             .arg(imageToUpdate->getParentSeries()->getInstanceUID())
                             .arg(imageToUpdate->getInstanceNumber())
@@ -240,6 +247,8 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
                             .arg(imageToUpdate->getNumberOfFrames())
                             .arg(imageToUpdate->getPhotometricInterpretation())
                             .arg(orderNumberInSeries)
+                            .arg(imageToUpdate->getRetrievedDate().toString("yyyyMMdd"))
+                            .arg(imageToUpdate->getRetrievedTime().toString("hhmmss"))
                             .arg(0)
                             .arg(imageToUpdate->getSOPInstanceUID());
 
