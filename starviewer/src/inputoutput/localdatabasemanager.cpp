@@ -24,6 +24,9 @@
 
 #include <QDate>
 #include <QTime>
+#include <QFileInfo>
+#include <QDir>
+#include <QStringList>
 
 namespace udg
 {
@@ -322,6 +325,43 @@ void LocalDatabaseManager::deleteOldStudies()
         del(study->getInstanceUID());
         if (getLastError() != LocalDatabaseManager::Ok)
             break;
+
+        //esborrem el punter a study
+        delete study;
+    } 
+}
+
+void LocalDatabaseManager::freeSpace(int MbytesToErase)
+{
+    QDate lastDateViewedMinimum;
+    StarviewerSettings settings;
+    DicomMask oldStudiesMask;
+    QList<Study*> studyListToDelete;
+    Study *studyToDelete;
+    int MbytesErased = 0, index = 0;
+
+    studyListToDelete = queryStudy(oldStudiesMask);
+    if (getLastError() != LocalDatabaseManager::Ok)
+        return;
+
+    while (index < studyListToDelete.count() && MbytesErased < MbytesToErase)
+    {
+        studyToDelete = studyListToDelete.at(index);
+        MbytesErased += getDirectorySize(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
+
+        del(studyToDelete->getInstanceUID());
+        if (getLastError() != LocalDatabaseManager::Ok)
+            break;
+
+        index++;
+    }
+
+    INFO_LOG("S'han alliberat " + QString().setNum(MbytesErased, 10) + " Mb");
+
+    ///Esborrem els estudis de la memòria
+    foreach(Study *study, studyListToDelete)
+    {
+        delete study;
     } 
 }
 
@@ -577,4 +617,27 @@ void LocalDatabaseManager::setLastError(int sqliteLastError)
     else m_lastError = DatabaseError;
 }
 
+qint64 LocalDatabaseManager::getDirectorySize(QString directoryPath)
+{
+    QDir directory(directoryPath);
+    QFileInfoList fileInfoList;
+    QStringList directoryList;
+    qint64 directorySize = 0;
+
+    fileInfoList =  directory.entryInfoList( QDir::Files );//llista de fitxers del directori
+
+    foreach(QFileInfo fileInfo, fileInfoList)
+    {
+        directorySize += fileInfo.size();
+    }
+
+    directoryList =  directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
+
+    foreach(QString subdirectory, directoryList) //per cada subdirectori
+    {
+        directorySize += getDirectorySize(directoryPath + "/" + subdirectory);
+    } 
+
+    return directorySize;
+}
 }
