@@ -128,6 +128,12 @@ public:
     void setManufacturer( QString manufactures );
     QString getManufacturer() const;
 
+    ///Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
+    void setRetrievedDate(QDate date);
+    void setRetrievedTime(QTime time);
+    QDate getRetrievedDate();
+    QTime getRetrievedTime();
+
     /// assigna l'estudi pare de la sèrie
     void setParentStudy( Study *study );
     Study *getParentStudy() const;
@@ -299,6 +305,10 @@ private:
 
     ///Obté el fabricant de l'aparell amb que s'ha obtingut la sèrie (0008,0070) Tipus 2.
     QString m_manufacturer;
+
+    ///Data en que la sèrie s'ha descarregat a la base de dades local
+    QDate m_retrievedDate;
+    QTime m_retrieveTime;
 
 };
 

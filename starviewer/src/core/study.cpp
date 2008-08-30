@@ -221,6 +221,26 @@ QDateTime Study::getDateTime()
     return QDateTime( m_date, m_time );
 }
 
+void Study::setRetrievedDate(QDate retrievedDate)
+{
+    m_retrievedDate = retrievedDate;
+}
+
+void Study::setRetrievedTime(QTime retrievedTime)
+{
+    m_retrieveTime = retrievedTime;
+}
+
+QDate Study::getRetrievedDate()
+{
+    return m_retrievedDate;
+}
+
+QTime Study::getRetrievedTime()
+{
+    return m_retrieveTime;
+}
+
 bool Study::addSeries( Series *series )
 {
     bool ok = true;

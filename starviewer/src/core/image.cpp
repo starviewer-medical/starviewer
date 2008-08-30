@@ -307,6 +307,26 @@ QString Image::getWindowLevelExplanation( int index ) const
     }
 }
 
+void Image::setRetrievedDate(QDate retrievedDate)
+{
+    m_retrievedDate = retrievedDate;
+}
+
+void Image::setRetrievedTime(QTime retrievedTime)
+{
+    m_retrieveTime = retrievedTime;
+}
+
+QDate Image::getRetrievedDate()
+{
+    return m_retrievedDate;
+}
+
+QTime Image::getRetrievedTime()
+{
+    return m_retrieveTime;
+}
+
 void Image::setParentSeries( Series *series )
 {
     m_parentSeries = series;

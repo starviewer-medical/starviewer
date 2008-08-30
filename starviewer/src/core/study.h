@@ -94,6 +94,12 @@ public:
     QString getTimeAsString();
     QDateTime getDateTime();
 
+    ///Assignar/Obtenir la data i hora en que l'estudi s'ha descarregat a la base de dades Local
+    void setRetrievedDate(QDate date);
+    void setRetrievedTime(QTime time);
+    QDate getRetrievedDate();
+    QTime getRetrievedTime();
+
     /// Afegeix una nova sèrie i li assigna com a parent aquest objecte study. Retorna fals si existeix una sèrie amb el mateix uid
     bool addSeries( Series *series );
 
@@ -171,6 +177,10 @@ private:
 
     ///Metge que atén el pacient durant visita, relacionada amb la prova exploratòria (0008,0090) Tipus 2
     QString m_referringPhysiciansName;
+
+    ///Data en que l'estudi s'ha descarregat a la base de dades local
+    QDate m_retrievedDate;
+    QTime m_retrieveTime;
 
     /// Llista de les Series de l'estudi ordenades per número de serie
     QList<Series *> m_seriesSet;
