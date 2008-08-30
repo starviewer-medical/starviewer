@@ -159,6 +159,8 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     study->setAccessionNumber(reply[9 + row * columns]);
     study->setDescription(reply[10 + row * columns]);
     study->setReferringPhysiciansName(reply[11 + row * columns]);
+    study->setRetrievedDate(QDate().fromString(reply[13 + row * columns], "yyyyMMdd"));
+    study->setRetrievedTime(QTime().fromString(reply[14 + row * columns], "hhmmss"));
 
     return study;
 }
@@ -167,10 +169,10 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 {
     Patient *patient = new Patient();
 
-    patient->setID(reply[14 + row * columns]);
-    patient->setFullName(reply[15 + row * columns]);
-    patient->setBirthDate(reply[16 + row * columns]);
-    patient->setSex(reply[17 + row * columns]);
+    patient->setID(reply[16 + row * columns]);
+    patient->setFullName(reply[17 + row * columns]);
+    patient->setBirthDate(reply[18 + row * columns]);
+    patient->setSex(reply[19 + row * columns]);
 
     return patient;
 }
@@ -180,7 +182,8 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
     QString selectSentence, whereSentence;
 
     selectSentence = "Select InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
-                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, State "
+                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrieveDate, RetrievedTime, "
+                            "State "
                        "From Study ";
 
     if (!studyMaskToSelect.getStudyUID().isEmpty())
@@ -203,8 +206,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToS
     QString selectSentence, whereSentence, orderBySentence;
 
     selectSentence = "Select InstanceUID, PatientID, Study.ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
-                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, Study.State, Patient.Id,  "
-                            "Patient.Name, Patient.Birthdate, Patient.Sex "
+                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, " "Study.State, Patient.Id, Patient.Name, Patient.Birthdate, Patient.Sex "
                        "From Study, Patient ";
 
     whereSentence = "Where Study.PatientId = Patient.Id ";
@@ -260,9 +262,10 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDa
 {
     QString insertSentence = QString ("Insert into Study   (InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, "
                                                            "Modalities, Date, Time, AccessionNumber, Description, "
-                                                           "ReferringPhysicianName, LastAccessDate, State) "
+                                                           "ReferringPhysicianName, LastAccessDate, RetrievedDate, "
+                                                           "RetrievedTime , State) "
                                                    "values ('%1', '%2', '%3', %4, %5, %6, '%7', '%8', '%9', '%10', '%11', "
-                                                            "'%12', '%13', %14 )")
+                                                            "'%12', '%13', '%14', '%15', %16)")
                                     .arg(newStudy->getInstanceUID())
                                     .arg(newStudy->getParentPatient()->getID())
                                     .arg(newStudy->getID())
@@ -276,12 +279,14 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDa
                                     .arg(newStudy->getDescription())
                                     .arg(newStudy->getReferringPhysiciansName())
                                     .arg(lastAcessDate.toString("yyyyMMdd"))
+                                    .arg(newStudy->getRetrievedDate().toString("yyyyMMdd"))
+                                    .arg(newStudy->getRetrievedTime().toString("hhmmss"))
                                     .arg("0");
 
     return insertSentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *newStudy, QDate lastAccessDate)
+QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, QDate lastAccessDate)
 {
     QString updateSentence = QString ("Update Study set PatientID = '%1', " 
                                                        "ID = '%2', " 
@@ -295,22 +300,26 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *newStudy, QDate lastAccessD
                                                        "Description = '%10', "
                                                        "ReferringPhysicianName = '%11', "
                                                        "LastAccessDate = '%12', "
-                                                       "State = %13 "
-                                                "Where InstanceUid = '%14'")
-                                    .arg(newStudy->getParentPatient()->getID())
-                                    .arg(newStudy->getID())
-                                    .arg(newStudy->getPatientAge())
-                                    .arg(newStudy->getWeight())
-                                    .arg(newStudy->getHeight())
-                                    .arg(newStudy->getModalitiesAsSingleString())
-                                    .arg(newStudy->getDate().toString("yyyyMMdd"))
-                                    .arg(newStudy->getTime().toString("hhmmss"))
-                                    .arg(newStudy->getAccessionNumber())
-                                    .arg(newStudy->getDescription())
-                                    .arg(newStudy->getReferringPhysiciansName())
+                                                       "RetrievedDate = '%13', "
+                                                       "RetrievedTime = '%14', "
+                                                       "State = %15 "
+                                                "Where InstanceUid = '%16'")
+                                    .arg(studyToUpdate->getParentPatient()->getID())
+                                    .arg(studyToUpdate->getID())
+                                    .arg(studyToUpdate->getPatientAge())
+                                    .arg(studyToUpdate->getWeight())
+                                    .arg(studyToUpdate->getHeight())
+                                    .arg(studyToUpdate->getModalitiesAsSingleString())
+                                    .arg(studyToUpdate->getDate().toString("yyyyMMdd"))
+                                    .arg(studyToUpdate->getTime().toString("hhmmss"))
+                                    .arg(studyToUpdate->getAccessionNumber())
+                                    .arg(studyToUpdate->getDescription())
+                                    .arg(studyToUpdate->getReferringPhysiciansName())
                                     .arg(lastAccessDate.toString("yyyyMMdd"))
+                                    .arg(studyToUpdate->getRetrievedDate().toString("yyyyMMdd"))
+                                    .arg(studyToUpdate->getRetrievedTime().toString("hhmmss"))
                                     .arg("0")
-                                    .arg(newStudy->getInstanceUID());
+                                    .arg(studyToUpdate->getInstanceUID());
 
     return updateSentence;
 }

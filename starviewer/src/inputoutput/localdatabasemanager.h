@@ -76,11 +76,11 @@ private :
     LastError m_lastError;
 
     ///Guarda a la base de dades la llista d'estudis passada per paràmetre, si algun dels estudis ja existeix actualitza la info
-    int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave);
+    int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, QDate currentDate, QTime currentTime);
     ///Guarda a la base de dades la llista de series passada per paràmetre, si alguna de les series ja existeix actualitza la info
-    int saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave);
+    int saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, QDate currentDate, QTime currentTime);
     ///Guarda a la base de dades la llista d'imatges passada per paràmetre, si alguna de les imatges ja existeix actualitza la info
-    int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave);
+    int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave,QDate currentDate, QTime currentTime);
 
     ///Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
     int savePatient(DatabaseConnection *dbConnect, Patient *patientToSave);

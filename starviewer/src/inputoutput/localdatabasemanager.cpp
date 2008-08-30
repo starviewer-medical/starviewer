@@ -23,6 +23,7 @@
 #include "starviewersettings.h"
 
 #include <QDate>
+#include <QTime>
 
 namespace udg
 {
@@ -36,7 +37,9 @@ void LocalDatabaseManager::insert(Patient *newPatient)
 {
     DeleteDirectory delDirectory;
     StarviewerSettings settings;
- 
+    QDate currentDate = QDate::currentDate();
+    QTime currentTime = QTime::currentTime();
+
     int status = SQLITE_OK;
 
     DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
@@ -46,7 +49,7 @@ void LocalDatabaseManager::insert(Patient *newPatient)
     ///Guardem primer els estudis
     if (newPatient->getStudies().count() > 0)
     {
-        status = saveStudies(dbConnect, newPatient->getStudies());
+        status = saveStudies(dbConnect, newPatient->getStudies(), currentDate, currentTime);
 
         if (status != SQLITE_OK) 
         {
@@ -313,53 +316,66 @@ LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
     return m_lastError;
 }
 
-int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave)
+int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, QDate currentDate, QTime currentTime)
 {
     int status = SQLITE_OK;
 
     foreach(Study* studyToSave, listStudyToSave)
     {
         ///primer guardem les sèries
-        status = saveSeries(dbConnect, studyToSave->getSeries());
+        status = saveSeries(dbConnect, studyToSave->getSeries(), currentDate, currentTime);
 
         if (status != SQLITE_OK)
-            return status;
-        else //Guardem la sèrie si no s'ha produït cap error
-            status = saveStudy(dbConnect, studyToSave);
+            break;
 
-        if (status != SQLITE_OK) return status;
+        studyToSave->setRetrievedDate(currentDate);
+        studyToSave->setRetrievedTime(currentTime);
+
+        //Guardem la sèrie si no s'ha produït cap error
+        status = saveStudy(dbConnect, studyToSave);
+
+        if (status != SQLITE_OK) 
+            break;
     }
 
     return status;
 }
 
-int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave)
+int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, QDate currentDate, QTime currentTime)
 {
     int status = SQLITE_OK;
 
     foreach(Series* seriesToSave, listSeriesToSave)
     {
         ///primer guardem les imatges
-        status = saveImages(dbConnect, seriesToSave->getImages());
+        status = saveImages(dbConnect, seriesToSave->getImages(), currentDate, currentTime);
 
         if (status != SQLITE_OK)
-            return status;
-        else //Guardem la sèrie si no s'ha produït cap error
-            status = saveSeries(dbConnect, seriesToSave);
+            break;
 
-        if (status != SQLITE_OK) return status;
+        //Guardem la sèrie si no s'ha produït cap error
+        seriesToSave->setRetrievedDate(currentDate);
+        seriesToSave->setRetrievedTime(currentTime);
+
+        status = saveSeries(dbConnect, seriesToSave);
+
+        if (status != SQLITE_OK) 
+            break;
     }
 
     return status;
 }
 
-int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave)
+int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, QDate currentDate, QTime currentTime)
 {
     int imageOrderInSeries = 0;
     int status = SQLITE_OK;
 
     foreach(Image* imageToSave, listImageToSave)
     {
+        imageToSave->setRetrievedDate(currentDate);
+        imageToSave->setRetrievedTime(currentTime);
+
         status = saveImage(dbConnect, imageToSave, imageOrderInSeries);
 
         if (status != SQLITE_OK) return status;
