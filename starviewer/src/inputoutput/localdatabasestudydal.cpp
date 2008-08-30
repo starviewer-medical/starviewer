@@ -182,7 +182,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
     QString selectSentence, whereSentence;
 
     selectSentence = "Select InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
-                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrieveDate, RetrievedTime, "
+                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, "
                             "State "
                        "From Study ";
 
