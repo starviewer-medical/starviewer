@@ -61,6 +61,9 @@ public:
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
 
+    ///Esborra els estudis vells que fa que superen el temps màxim que poden estar a la base de dades sense ser visualitzats
+    void deleteOldStudies();
+
     ///comptacta la base de dades
     void compact();
 

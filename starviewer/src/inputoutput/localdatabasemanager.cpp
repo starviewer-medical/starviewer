@@ -190,6 +190,7 @@ Patient* LocalDatabaseManager::retrieve(DicomMask maskToRetrieve)
     //Actulitzem la última data d'acces de l'estudi
     retrievedStudy = retrievedPatient->getStudy(maskToRetrieve.getStudyUID());
     studyDAL.update(retrievedStudy, QDate::currentDate());
+    setLastError(studyDAL.getLastError());
 
     return retrievedPatient;
 }
@@ -300,6 +301,28 @@ void LocalDatabaseManager::clear()
         m_lastError = DeletingFilesError;
     else 
         m_lastError = Ok;
+}
+
+void LocalDatabaseManager::deleteOldStudies()
+{
+    QDate lastDateViewedMinimum;
+    StarviewerSettings settings;
+    DicomMask oldStudiesMask;
+    QList<Study*> studyListToDelete;
+
+    lastDateViewedMinimum = QDate::currentDate().addDays(-settings.getMaximumDaysNotViewedStudy().toInt(NULL, 10));
+    oldStudiesMask.setLastAccessDate(lastDateViewedMinimum);
+
+    studyListToDelete = queryStudy(oldStudiesMask);
+    if (getLastError() != LocalDatabaseManager::Ok)
+        return;
+
+    foreach(Study *study, studyListToDelete)
+    {
+        del(study->getInstanceUID());
+        if (getLastError() != LocalDatabaseManager::Ok)
+            break;
+    } 
 }
 
 void LocalDatabaseManager::compact()
