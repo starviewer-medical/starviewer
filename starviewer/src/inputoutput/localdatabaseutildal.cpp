@@ -14,12 +14,15 @@
 
 namespace udg {
 
-LocalDatabaseUtilDAL::LocalDatabaseUtilDAL()
+LocalDatabaseUtilDAL::LocalDatabaseUtilDAL() 
+: m_dbConnection(0)
 {
 }
 
 void LocalDatabaseUtilDAL::compact()
 {
+    Q_ASSERT( m_dbConnection );
+
     QString compactSentence = "vacuum";
 
     m_dbConnection->getLock();
@@ -28,7 +31,8 @@ void LocalDatabaseUtilDAL::compact()
 
     m_dbConnection->releaseLock();
 
-    if (getLastError() != SQLITE_OK) logError(compactSentence);
+    if (getLastError() != SQLITE_OK) 
+        logError(compactSentence);
 }
 
 void LocalDatabaseUtilDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
