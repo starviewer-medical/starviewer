@@ -67,7 +67,7 @@ public:
     ///Esborra estudis fins alliberar l'espai passat per paràmetre, comença esborrant dels que fa més que no es visualitzen
     void freeSpace(int MbytesToErase);
 
-    ///comptacta la base de dades
+    ///compacta la base de dades
     void compact();
 
     LastError getLastError();
