@@ -186,11 +186,7 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
 
 #ifdef NEW_PACS
     seriesList = localDatabaseManager.querySeries(mask);
-    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-    {
-        showDatabaseManagerError(localDatabaseManager.getLastError());
-        return;
-    }
+    if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
 #else
     state = cacheSeriesDAL.querySeries( mask , oldSeriesList );
     if ( !state.good() )
@@ -207,11 +203,7 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
         mask.setSeriesUID(series->getInstanceUID());
 
         series->setImages(localDatabaseManager.queryImage(mask));
-        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-        {
-            showDatabaseManagerError(localDatabaseManager.getLastError());
-            return;
-        }
+        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
 
         m_seriesListWidgetCache->insertSeries(studyInstanceUID, series);
     }
@@ -511,11 +503,7 @@ void QueryScreen::queryStudy( QString source )
 #ifdef NEW_PACS
         patientList = localDatabaseManager.queryPatientStudy(buildDicomMask());
 
-        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-        {
-            showDatabaseManagerError(localDatabaseManager.getLastError());
-            return;
-        }
+        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
 #else
         state = cacheStudyDAL.queryStudy( buildDicomMask() , studyListResultQuery ); //busquem els estudis a la cache
         if ( !state.good() )
@@ -697,12 +685,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         mask.setStudyUID(studyUID);
 #ifdef NEW_PACS
         seriesList = localDatabaseManager.querySeries(mask);
-
-        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-        {
-            showDatabaseManagerError(localDatabaseManager.getLastError());
-            return;
-        }
+        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
 #else
         state = cacheSeriesDAL.querySeries( mask , seriesListQueryResults );
         if ( !state.good() )
@@ -822,11 +805,7 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
         mask.setSeriesUID(seriesInstanceUID);
 #ifdef NEW_PACS
         imageList = localDatabaseManager.queryImage(mask);
-        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-        {
-            showDatabaseManagerError(localDatabaseManager.getLastError());
-            return;
-        }
+        if(showDatabaseManagerError(localDatabaseManager.getLastError()))   return;
 #else
         cacheImageDAL.queryImages( mask , imageListQueryResults );
 #endif
@@ -1108,9 +1087,8 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
 
         DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
 
-        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        if(showDatabaseManagerError(localDatabaseManager.getLastError()))
         {
-            showDatabaseManagerError(localDatabaseManager.getLastError());
             return;
         }
         else
@@ -1192,12 +1170,7 @@ void QueryScreen::deleteSelectedStudiesInCache()
                         INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
 #ifdef NEW_PACS
                         localDatabaseManager.del(studyUID);
-
-                        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-                        {
-                            showDatabaseManagerError(localDatabaseManager.getLastError());
-                            break;
-                        }
+                        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    break;
 
                         m_studyTreeWidgetCache->removeStudy( studyUID );
                         m_seriesListWidgetCache->clear();
@@ -1237,12 +1210,7 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
 
     studyMask.setStudyUID(studyUID);
     patientList = localDatabaseManager.queryPatientStudy(studyMask);
-
-    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-    {
-        showDatabaseManagerError(localDatabaseManager.getLastError());
-        return;
-    }
+    if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
 
     if (patientList.count() == 1)
     {
@@ -1529,47 +1497,49 @@ QString QueryScreen::buildQueryParametersString(DicomMask mask)
     return logMessage;
 }
 
-void QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError lastError )
+bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error )
 {
     QString message;
 
-    if (lastError != LocalDatabaseManager::Ok)
+    switch(error)
     {
-        QApplication::restoreOverrideCursor();
+        case LocalDatabaseManager::Ok:
+            return false;
 
-        if (lastError == LocalDatabaseManager::DatabaseLocked)
-        {
+        case LocalDatabaseManager::DatabaseLocked:
             message = tr("The Cache is blocked by another Starviewer window."
                          "\nTry to close all the others Starviewer windows and try again."
                          "\n\nIf you want to open different Starviewer's windows always choose the 'New' option from the File menu.");
-        }
-        else if (lastError == LocalDatabaseManager::DatabaseCorrupted)
-        {
+            break;
+        case LocalDatabaseManager::DatabaseCorrupted:
             message = tr("Starviewer database is corrupted."
                          "\n Try to close all Starviewer windows and try again."
                          "\n\nIf the problem persist contact with an administrator");
-        }
-        else if (lastError == LocalDatabaseManager::SyntaxErrorSQL)
-        {
+            break;
+        case LocalDatabaseManager::SyntaxErrorSQL:
             message = tr("Starviewer Database manager error."
                          "\n Try to close all Starviewer windows and try again."
                          "\n\nIf the problem persist contact with an administrator");
-        }
-        else if (lastError == LocalDatabaseManager::DatabaseError)
-        {
+            break;
+        case LocalDatabaseManager::DatabaseError:
             message = tr("An internal error occurs with Starviewer database."
                          "\n Try to close all Starviewer windows and try again."
                          "\n\nIf the problem persist contact with an administrator");
-        }
-        else if (lastError == LocalDatabaseManager::DeletingFilesError) 
-        {
+            break;
+        case LocalDatabaseManager::DeletingFilesError:
             message = tr("Some files can not be delete."
                          "\n Theses have to be delete manually.");
-        }
-        else message = tr("An unknow error has ocurred");
-
-        QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        default:
+            message = tr("An unknow error has ocurred");
+            break;
     }
+
+    QApplication::restoreOverrideCursor();
+
+    QMessageBox::critical( this , tr( "Starviewer" ) , message );
+
+    return true;
 }
 
 //TODO TREURE QUAN NO S'UTILITZI LA BASE DE DADES VELLA

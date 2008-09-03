@@ -228,8 +228,9 @@ private:
     /// esborra els estudis vells de la cache
     void deleteOldStudies();
 
-    ///Mostra els errors del manager de base de dades
-    void showDatabaseManagerError(LocalDatabaseManager::LastError lastError );
+    ///En el cas que l'error que se li passa com a paràmetre realment sigui un error, mostrarà un missatge a l'usuari explicant-lo.
+    ///Es retorna true en el cas que hi hagi error, false si no n'hi ha.
+    bool showDatabaseManagerError(LocalDatabaseManager::LastError error);
 
     /** Tracta els errors de la base de dades
      * @param state del mètode de la base de dades
