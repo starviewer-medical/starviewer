@@ -14,7 +14,7 @@ class QString;
 
 namespace udg {
 
-/** Aquesta classe implementa les accions necessaries per afegir nous pacs o modificar/consultar els paràmetres dels PACS  que tenim disponible a l'aplicació, guardats a la base de dades local
+/** Aquesta classe implementa les accions necessaries per afegir nous pacs o modificar/consultar els paràmetres dels PACS  que tenim disponible a l'aplicació, guardats en un fitxer de configuració.
 @author marc
 */
 
