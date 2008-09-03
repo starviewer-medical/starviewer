@@ -43,8 +43,6 @@
 #include "testdicomobjects.h"
 #include <QTime>
 
-#define NEW_PACS 1
-
 namespace udg {
 
 QueryScreen::QueryScreen( QWidget *parent )
