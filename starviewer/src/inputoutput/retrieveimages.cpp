@@ -192,13 +192,14 @@ void RetrieveImages::storeSCPCallback(
             E_TransferSyntax xfer = opt_writeTransferSyntax;
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
-            m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
             //Guardem la imatge
             if ( save(cbdata, dicomTagReader).bad() )
             {
                 piSingleton->setError( retrievedImage.getStudyUID() );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
             }
+
+            m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
 
             /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in
             * the request.
