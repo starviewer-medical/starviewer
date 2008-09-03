@@ -23,11 +23,14 @@
 #include "logging.h"
 #include "scalestudy.h"
 #include "errordcmtk.h"
+#include "patientfiller.h"
+#include "dicomtagreader.h"
+#include "localdatabasemanager.h"
 
 namespace udg
 {
 
-Status DICOMDIRImporter::import( QString dicomdirPath , QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     Status state;
     QString studyPath;
@@ -35,15 +38,28 @@ Status DICOMDIRImporter::import( QString dicomdirPath , QString studyUID , QStri
     state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
     if ( !state.good() ) return state;
+#ifdef NEW_PACS
+    PatientFiller patientFiller;
+    LocalDatabaseManager localDatabaseManager;
+
+    connect(this, SIGNAL( imageImportedToDisk(DICOMTagReader*) ), &patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
+    connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManager, SLOT( insert(Patient *) ));
+#endif
 
     state = importStudy( studyUID , seriesUID , sopInstanceUID );
 
+#ifdef NEW_PACS
+    if (state.good())
+    {
+        patientFiller.finishDICOMFilesProcess();
+    }
+#endif
     INFO_LOG( "Estudi " + studyUID + " importat" );
 
     return state;
 }
 
-Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
@@ -75,6 +91,7 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
     study = studyListToImport.value(0);
     study.setAbsPath( studyPath );
 
+#ifndef NEW_PACS
     state = cacheStudyDAL.insertStudy( &study, "DICOMDIR" );
 
     if ( state.code() == 2019 ) // si ja existeix l'estudi actualitzem la informació
@@ -85,6 +102,7 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
     {
         if ( !state.good() ) ERROR_LOG( state.text() );
     }
+#endif
 
     m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
 
@@ -93,7 +111,9 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
 
     foreach(DICOMSeries seriesToImport, seriesListToImport)
     {
+#ifndef NEW_PACS
         cacheSeriesDAL.insertSeries( &seriesToImport );
+#endif
         state = importSeries( studyUID , seriesToImport.getSeriesUID() , sopInstanceUID );
 
         if ( !state.good() ) break;
@@ -103,13 +123,15 @@ Status DICOMDIRImporter::importStudy( QString studyUID , QString seriesUID , QSt
     {
         scaleDicomStudy.scale( study.getStudyUID() );
 
+#ifndef NEW_PACS
         state = cacheStudyDAL.setStudyRetrieved( study.getStudyUID() );
+#endif
     }
 
     return state;
 }
 
-Status DICOMDIRImporter::importSeries( QString studyUID , QString seriesUID , QString sopInstanceUID )
+Status DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     Status state;
     QList<DICOMImage> imageListToImport;
@@ -153,7 +175,7 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
          */
         dicomdirImagePath = image.getImagePath().toLower();
     }
-    else 
+    else
     {
         state.setStatus( "Inconsistent dicomdir, some files don't exist" , false , 1303 );
         ERROR_LOG("Dicomdir inconsistent: La imatge [" + image.getImagePath() + "] no existeix" );
@@ -162,6 +184,11 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
 
     if( QFile::copy( dicomdirImagePath , cacheImagePath ) )
     {
+#ifdef NEW_PACS
+        DICOMTagReader *dicomTagReader = new DICOMTagReader(cacheImagePath);
+        emit imageImportedToDisk(dicomTagReader);
+        state.setStatus( DcmtkNoError );
+#else
         image.setImageName ( image.getSOPInstanceUID() );
         QFileInfo imageInfo( cacheImagePath );
         if( imageInfo.exists() )
@@ -173,10 +200,12 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
             if (state.code() == 2019) state.setStatus( DcmtkNoError );
         }
         else
-        {//No s'hauria de produir mai aquest error
+        {
+            //No s'hauria de produir mai aquest error
             ERROR_LOG("Error no s'ha copiat la imatge [" + dicomdirImagePath + "] no s'ha copiat a [" + cacheImagePath + "] " );
             state.setStatus( DcmtkUnknowError );
         }
+#endif
     }
     else
     {
