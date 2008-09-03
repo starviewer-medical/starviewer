@@ -75,9 +75,15 @@ void ExtensionHandler::request( int who )
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
+#ifdef NEW_PACS
+            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatient(Patient*, QString) ), 0,0 );
+            QueryScreenSingleton::instance()->bringToFront();
+            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatient(Patient*, QString) ), SLOT(processInput(Patient*, QString)));
+#else
             disconnect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString) ), 0,0 );
             QueryScreenSingleton::instance()->bringToFront();
             connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
+#endif
             break;
 
         case 8:
@@ -275,6 +281,47 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
         this->addPatientToWindow( fillerInput->getPatient(i), canReplaceActualPatient );
         canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
     }
+}
+
+void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeriesUID)
+{
+    foreach(Study *study, patient->getStudies() )
+    {
+        foreach(Series *series, study->getSeries() )
+        {
+            // TODO ara el que fem és que 1 Series equival a 1 Volume, més endavant es podrien fer un tracte més elaborat
+            Volume *volume = new Volume;
+            volume->setImages( series->getImages() );
+            volume->setNumberOfPhases( series->getNumberOfPhases() );
+            series->addVolume(volume);
+        }
+    }
+    DEBUG_LOG( QString("Patient:\n%1").arg( patient->toString() ));
+
+    // Marquem les series seleccionades
+    Series *selectedSeries = patient->getSeries(defaultSeriesUID);
+    if ( selectedSeries )
+    {
+        DEBUG_LOG("Marquem com a seleccionada");
+        selectedSeries->select();
+    }
+    else
+    {
+        QList<Study *> studyList = patient->getStudies();
+        if (!studyList.isEmpty())
+        {
+            QList<Series *> seriesList = studyList.first()->getSeries();
+            if( !seriesList.isEmpty() )
+            {
+                seriesList.first()->select();
+            }
+        }
+    }
+
+    // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
+    bool canReplaceActualPatient = !(m_mainApp->getCurrentPatient() && m_mainApp->getCurrentPatient()->compareTo( patient ) == Patient::SamePatients );
+
+    this->addPatientToWindow(patient, canReplaceActualPatient);
 }
 
 void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient)

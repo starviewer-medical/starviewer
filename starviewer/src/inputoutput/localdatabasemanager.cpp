@@ -178,8 +178,13 @@ Patient* LocalDatabaseManager::retrieve(DicomMask maskToRetrieve)
     {
         maskImagesToRetrieve.setSeriesUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
 
-        series->setImages(imageDAL.query(maskImagesToRetrieve));
+        QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
         if (imageDAL.getLastError() != SQLITE_OK) break;
+
+        foreach(Image *image, images)
+        {
+            series->addImage(image);
+        }
 
         retrievedPatient->getStudy(maskToRetrieve.getStudyUID())->addSeries(series);
     }
