@@ -62,7 +62,7 @@ QViewer::QViewer( QWidget *parent )
     m_mainVolume = 0;
 
     // 2x buffer
-    m_vtkWidget->GetRenderWindow()->DoubleBufferOff();
+    m_vtkWidget->GetRenderWindow()->DoubleBufferOn();
 
     m_windowToImageFilter = vtkWindowToImageFilter::New();
     this->setMouseTracking( true );
@@ -258,6 +258,7 @@ void QViewer::zoom( double factor )
 {
     // TODO potser caldria una comprovació de seguretat pel que torna cadascuna d'aquestes crides
     vtkRenderer *renderer = this->getInteractor()->GetInteractorStyle()->GetCurrentRenderer();
+    renderer = this->getRenderer();
     if( renderer )
     {
         // codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
@@ -269,11 +270,11 @@ void QViewer::zoom( double factor )
         else
         {
             camera->Dolly(factor);
-            if( vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() )->GetAutoAdjustCameraClippingRange() )
-            {
+            //if( vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() )->GetAutoAdjustCameraClippingRange() )
+            //{
                 // TODO en principi sempre ens interessarà fer això? ens podriem enstalviar l'if??
                 renderer->ResetCameraClippingRange();
-            }
+            //}
         }
         if ( this->getInteractor()->GetLightFollowCamera() )
         {
@@ -398,8 +399,6 @@ void QViewer::scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, d
     if( !m_mainVolume )
         return;
 
-    int *size = this->getRenderer()->GetSize();
-
     // Calcular la width i height en coordenades de display
     double displayTopLeft[3], displayBottomRight[3];
     this->computeWorldToDisplay( this->getRenderer(), topLeftX, topLeftY, topLeftZ, displayTopLeft );
@@ -410,15 +409,12 @@ void QViewer::scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, d
     width = fabs( displayTopLeft[0] - displayBottomRight[0] );
     height = fabs( displayTopLeft[1] - displayBottomRight[1] );
 
-    //\TODO caldria considerar l'opció d'afegir un marge per si no volem que la regió escollida mantingui una distància amb les vores de la finestra
     // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
-
+    int *size = this->getRenderer()->GetSize();
     if( ( width/size[0] ) > ( height/size[1] ) )
         this->zoom( (size[0] / (float)width ) * ( 1.0 - marginRate ) );
     else
         this->zoom( (size[1] / (float)height ) * ( 1.0 - marginRate ) );
-
-    this->getRenderer()->ResetCameraClippingRange();
 }
 
 WindowLevelPresetsToolData *QViewer::getWindowLevelData() const
