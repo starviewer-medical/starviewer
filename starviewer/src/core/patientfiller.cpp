@@ -171,8 +171,6 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
 
 void PatientFiller::finishDICOMFilesProcess()
 {
-    DEBUG_LOG( "eeeeeeeeeeeeeeeeeeeee" );
-        
     foreach (PatientFillerStep *fillerStep, m_registeredSteps)
     {
         fillerStep->postProcessing();
