@@ -182,8 +182,8 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
     piSingleton->addNewProcessImage( studyUID,sProcessImg) ;
 
-    connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageCommitSlot( QString , int ) ) );
-    connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesCommitSlot( QString ) ) );
+    connect(sProcessImg, SIGNAL( imageRetrieved(QString, int) ), this, SIGNAL( imageCommit(QString, int) ));
+    connect(sProcessImg, SIGNAL( seriesRetrieved(QString) ), this, SLOT( seriesCommit(QString) ));
 
 #ifdef NEW_PACS
     connect( sProcessImg , SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller , SLOT( processDICOMFile(DICOMTagReader*) ) );
@@ -246,16 +246,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
     delete patientFiller;
     delete localDatabaseManager;
-}
-
-void QExecuteOperationThread::imageCommitSlot( QString studyUID , int imageNumber)
-{
-    emit imageCommit( studyUID , imageNumber );
-}
-
-void QExecuteOperationThread::seriesCommitSlot( QString studyUID)
-{
-    emit seriesCommit( studyUID );
 }
 
 Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
@@ -346,8 +336,8 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges guardades
     piSingleton->addNewProcessImage( operation.getStudyUID() , storedProcessImage ) ;
 
-    connect( storedProcessImage , SIGNAL( imageStored( QString , int ) ) , this , SLOT( imageCommitSlot( QString , int ) ) );
-    connect( storedProcessImage , SIGNAL( seriesStored( QString ) ) , this , SLOT( seriesCommitSlot( QString ) ) );
+    connect(storedProcessImage, SIGNAL( imageStored(QString, int) ), this, SIGNAL( imageCommit(QString, int) ));
+    connect(storedProcessImage, SIGNAL( seriesStored(QString) ), this, SIGNAL( seriesCommit(QString) ));
 
     storeImages.setConnection( pacsConnection.getConnection() );
     storeImages.setNetwork( pacsConnection.getNetwork() );

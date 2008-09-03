@@ -97,20 +97,6 @@ signals :
     ///Signal que s'emet quan s'ha produït un error a l'operació de descàrrega
     void abort();
 
-private slots :
-
-    /** Emet un singnal cap al queryscreen per indicar que s'ha descarregat una imatge
-      *     @param UID de l'estudi
-      *     @param número d'imatge
-      */
-    void imageCommitSlot( QString , int );
-
-    /** Emet un singal per indicar que s'ha descarregat una sèrie
-      *     @param studyUID de l'estudi a descarregar
-      */
-    void seriesCommitSlot( QString );
-
-
 private :
 
     bool m_stop;//indica si el thread esta parat
