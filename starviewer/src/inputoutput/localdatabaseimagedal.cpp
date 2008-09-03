@@ -18,6 +18,8 @@
 #include "dicommask.h"
 #include "logging.h"
 
+#include "starviewersettings.h" //TODO arrrgghh!!
+
 namespace udg {
 
 LocalDatabaseImageDAL::LocalDatabaseImageDAL()
@@ -121,6 +123,10 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setPhotometricInterpretation(reply[23 + row * columns]);
     image->setRetrievedDate(QDate().fromString(reply[25 + row * columns], "yyyyMMdd"));
     image->setRetrievedTime(QTime().fromString(reply[26 + row * columns], "hhmmss"));
+
+    //TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
+    StarviewerSettings settings;
+    image->setPath( settings.getCacheImagePath() + reply[1 + row * columns] + "/" + reply[2 + row * columns] + "/" + reply[0 + row * columns] );
 
     return image;
 }
