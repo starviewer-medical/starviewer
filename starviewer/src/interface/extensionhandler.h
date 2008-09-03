@@ -54,6 +54,7 @@ public slots:
      * @param defaultImageInstance Imatge que es vol per defecte
      */
     void processInput( QStringList inputFiles, QString defaultStudyUID = QString(), QString  defaultSeriesUID = QString(), QString defaultImageInstance = QString() );
+    void processInput(Patient *patient, const QString &defaultSeriesUID);
 
     /**
      * Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.

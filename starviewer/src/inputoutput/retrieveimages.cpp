@@ -226,9 +226,9 @@ void RetrieveImages::storeSCPCallback(
                 }
             }
 
-            //TODO DESCOMENTAR PER FER FUNCIONAR EL NOU MODEL DE BD I FILLERS
-            //piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
-
+#ifdef NEW_PACS
+            piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
+#else
             //TODO AQUEST CODI S'HA D'ESBORRAR QUAN HI HAGI IMPLEMENTAT EL NOU MODEL DE BD I FILLERS
             //guardem la informacio que hem calculat nosaltres a l'objecte imatge
             retrievedImage.setImageName( cbdata->imageFileName );
@@ -242,6 +242,7 @@ void RetrieveImages::storeSCPCallback(
 
             m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge
             timer.restart();//reiniciem temporitzador per comptar quan tardem a descarregar la següent imatge
+#endif
         }
     }
 

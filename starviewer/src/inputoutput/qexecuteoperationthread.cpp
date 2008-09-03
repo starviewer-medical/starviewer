@@ -33,6 +33,9 @@
 #include "pacsconnection.h"
 #include "databaseconnection.h"
 #include "dicomseries.h"
+#include "patientfiller.h"
+#include "dicomtagreader.h"
+#include "localdatabasemanager.h"
 
 namespace udg {
 
@@ -122,6 +125,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     Status state,retState;
     CacheStudyDAL cacheStudyDAL;
 
+    LocalDatabaseManager *localDatabaseManager = new LocalDatabaseManager();
+    PatientFiller *patientFiller = new PatientFiller();
+
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
@@ -179,6 +185,12 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     connect( sProcessImg , SIGNAL( imageRetrieved( QString , int ) ) , this , SLOT( imageCommitSlot( QString , int ) ) );
     connect( sProcessImg , SIGNAL( seriesRetrieved( QString ) ) , this , SLOT( seriesCommitSlot( QString ) ) );
 
+#ifdef NEW_PACS
+    connect( sProcessImg , SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller , SLOT( processDICOMFile(DICOMTagReader*) ) );
+    connect( this , SIGNAL( retrieveFinished() ), patientFiller, SLOT( finishDICOMFilesProcess() ), Qt::DirectConnection );
+    connect( patientFiller , SIGNAL( patientProcessed(Patient *) ), localDatabaseManager , SLOT( insert(Patient *) ) );
+#endif
+
     //TODO: Hack pels problemes de lentitud que tenim a windows. Això és molt fràgil perquè
     // tenim que DatabaseConnection és singleton quan no ho hauria de ser. Un rollback des d'un lloc incontrolat
     // faria quedar la bd inconsistent respecte el que esperem.
@@ -196,6 +208,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     errorRetrieving = sProcessImg->getError();
 
+#ifndef NEW_PACS
     if (!retState.good() || errorRetrieving )
     {//si s'ha produit algun error ho indiquem i esborrem l'estudi
         if ( !retState.good() )
@@ -215,6 +228,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     else
     {
         cacheStudyDAL.setStudyRetrieved( studyUID ); //posem l'estudi com a   descarregat
+#endif
         INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
         scaleStudy.scale( studyUID ); //escalem l'estudi per la previsualització de la caché
         emit( setOperationFinished( studyUID ) );// descarregat a QOperationStateScreen
@@ -223,11 +237,15 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
         if ( m_view )
             emit ( viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() ) );
+#ifndef NEW_PACS
     }
+#endif
 
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID );
     delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
+    delete patientFiller;
+    delete localDatabaseManager;
 }
 
 void QExecuteOperationThread::imageCommitSlot( QString studyUID , int imageNumber)
