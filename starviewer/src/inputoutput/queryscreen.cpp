@@ -778,7 +778,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
         QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this series.\n" ) );
         return;
     }
-    
+
     m_studyTreeWidgetPacs->insertImageList( queryImages.getQueryResultsAsImageList() );
 
     QApplication::restoreOverrideCursor();
@@ -1306,11 +1306,15 @@ void QueryScreen::convertToDicomdir()
 
     foreach(QString studyUID, studiesUIDList )
     {
+#ifndef NEW_PACS
         //busquem la informació de l'estudi
         cacheStudyDAL.queryStudy( studyUID , study );
 
         //afegim l'estudi a la llista d'estudis pendents per crear el Dicomdir
         m_qcreateDicomdir->addStudy( study );
+#else
+        QMessageBox::critical(this, "Nova BD", "Eiii, que encara falta implementar el gravar dicomdirs amb la nova bd!");
+#endif
     }
 }
 
@@ -1378,8 +1382,12 @@ void QueryScreen::storeStudiesToPacs()
                 DicomMask dicomMask;
                 Status state;
                 DICOMStudy study;
-
+#ifndef NEW_PACS
                 cacheStudy.queryStudy( studyUID, study );
+#else
+                QMessageBox::critical(this, "Nova BD", "Eiii, que encara falta implementar el gravar al pacs amb la nova bd!");
+                return;
+#endif
                 dicomMask.setStudyUID( studyUID );
                 storeStudyOperation.setPatientName( study.getPatientName() );
                 storeStudyOperation.setStudyUID( study.getStudyUID() );
@@ -1389,7 +1397,8 @@ void QueryScreen::storeStudiesToPacs()
                 storeStudyOperation.setPatientID( study.getPatientId() );
                 storeStudyOperation.setStudyID( study.getStudyId() );
 
-                state = pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );//cerquem els par�etres del Pacs al qual s'han de cercar les dades
+                //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+                state = pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );
                 if ( state.good() )
                 {
                     storeStudyOperation.setPacsParameters( pacs );
