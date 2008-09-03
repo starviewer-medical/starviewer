@@ -880,21 +880,19 @@ void QueryScreen::retrievePacs( bool view )
     {
         DicomMask mask;
         QString defaultSeriesUID;
-        Status state;
         Operation operation;
         PacsParameters pacs;
-        PacsListDB pacsListDB;
         QString pacsAETitle;
 
         //Busquem en quina posició de la llista on guardem els estudis trobats al PACS en quina posició està per poder-lo recuperar 
         //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
         int indexStudyInList = getStudyPositionInStudyListQueriedPacs( currentStudyUID , 
         m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedItems( currentStudyUID ) );
-        ok = true;
+
         //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
         if ( indexStudyInList == -1 ) 
-        {//Es comprova que existeixi l'estudi a la llista d'estudis de la última query que s'ha fet al PACS
-         //TODO Arreglar missatge d'error
+        {   //Es comprova que existeixi l'estudi a la llista d'estudis de la última query que s'ha fet al PACS
+            //TODO Arreglar missatge d'error
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Internal Error : " ) );
         }
@@ -904,27 +902,33 @@ void QueryScreen::retrievePacs( bool view )
 
             pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedItems(currentStudyUID);
 
+#ifndef NEW_PACS
             //Inserim l'informació de l'estudi a la caché!
-            state = insertStudyCache( studyToRetrieve );
+            Status state = insertStudyCache( studyToRetrieve );
 
+            ok = true;
             if( !state.good() )
             {
-                if ( state.code() != 2019 ) // si hi ha l'error 2019, indica que l'estudi ja existeix a la base de dades, per tant estar parcialment o totalment descarregat, de totes maneres el tornem a descarregar
+                if ( state.code() == 2019 )
                 {
-                    //TODO no entenc que es fa aquí, el comentari anterior no sembla gaire coherent
+                    //L'error 2019 indica que l'estudi ja existeix a la base de dades
+                    //Això vol dir que pot estar parcialment o totalment descarregat.
+                    //Per assegurar que les dades que tenim estan bé el tornem a descarregar i actualitzem la info d'aquest
+                    //per si aquesta ha canviat al servidor del pacs des de l'última vegada que el vàrem descarregar.
+                    CacheStudyDAL cacheStudyDAL;
+                    cacheStudyDAL.updateStudy( studyToRetrieve );
+                }
+                else
+                {
                     QApplication::restoreOverrideCursor();
                     showDatabaseErrorMessage( state );
                     ok = false;
-                }
-                else // si l'estudi ja existeix actualizem la seva informació també
-                {
-                    CacheStudyDAL cacheStudyDAL; //Actualitzem la informació
-                    cacheStudyDAL.updateStudy( studyToRetrieve );
                 }
             }
 
             if( ok )
             {
+#endif
                 mask.setStudyUID( currentStudyUID );//definim la màscara per descarregar l'estudi
 
                 // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
@@ -937,44 +941,38 @@ void QueryScreen::retrievePacs( bool view )
                     mask.setSOPInstanceUID( m_studyTreeWidgetPacs->getCurrentImageUID() );
 
                 //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-                state = pacsListDB.queryPacs( &pacs , pacsAETitle );
+                PacsListDB pacsListDB;
+                pacsListDB.queryPacs(&pacs, pacsAETitle);
 
-                if ( !state.good() )
+                //emplanem els parametres amb dades del starviewersettings
+                pacs.setAELocal( settings.getAETitleMachine() );
+                pacs.setTimeOut( settings.getTimeout().toInt( NULL, 10 ) );
+                pacs.setLocalPort( settings.getLocalPort() );
+
+                //definim l'operacio
+                operation.setPacsParameters( pacs );
+                operation.setDicomMask( mask );
+                if ( view )
                 {
-                    QApplication::restoreOverrideCursor();
-                    showDatabaseErrorMessage( state );
-                    // TODO potser l'error no s'hauria de mostrar aquí, es podria fer un missatge de
-                    // "hi ha hagut errors en alguns estudis" o algo per l'estil
+                    operation.setOperation( Operation::View );
+                    operation.setPriority( Operation::Medium );//Té priorita mitjà per passar al davant de les operacions de Retrieve
                 }
                 else
                 {
-                    //emplanem els parametres amb dades del starviewersettings
-                    pacs.setAELocal( settings.getAETitleMachine() );
-                    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
-                    pacs.setLocalPort( settings.getLocalPort() );
-
-                    //definim l'operacio
-                    operation.setPacsParameters( pacs );
-                    operation.setDicomMask( mask );
-                    if ( view )
-                    {
-                        operation.setOperation( Operation::View );
-                        operation.setPriority( Operation::Medium );//Té priorita mitjà per passar al davant de les operacions de Retrieve
-                    }
-                    else
-                    {
-                        operation.setOperation( Operation::Retrieve );
-                        operation.setPriority( Operation::Low );
-                    }
-                    //emplenem les dades de l'operació
-                    operation.setPatientName( studyToRetrieve.getPatientName() );
-                    operation.setPatientID( studyToRetrieve.getPatientId() );
-                    operation.setStudyID( studyToRetrieve.getStudyId() );
-                    operation.setStudyUID( studyToRetrieve.getStudyUID() );
-
-                    m_qexecuteOperationThread.queueOperation( operation );
+                    operation.setOperation( Operation::Retrieve );
+                    operation.setPriority( Operation::Low );
                 }
+                //emplenem les dades de l'operació
+                operation.setPatientName( studyToRetrieve.getPatientName() );
+                operation.setPatientID( studyToRetrieve.getPatientId() );
+                operation.setStudyID( studyToRetrieve.getStudyId() );
+                operation.setStudyUID( studyToRetrieve.getStudyUID() );
+
+                m_qexecuteOperationThread.queueOperation( operation );
+
+#ifndef NEW_PACS
             }
+#endif
         }
     }
     QApplication::restoreOverrideCursor();
