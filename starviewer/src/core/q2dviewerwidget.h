@@ -39,7 +39,7 @@ public:
     bool hasPhases();
 
     /// Acció pel botó de sincronitzacio
-    void setDefaultAction( QAction * synchronizeAction );
+    void setDefaultAction( QAction *synchronizeAction );
 
     void setInput( Volume *input );
 
@@ -68,6 +68,12 @@ private:
     void createConnections();
 
 private slots:
+    /// Aquest slot es cridarà quan es faci alguna acció sobre l'slider
+    /// i segons l'acció rebuda actualitzarà el valor de la llesca al visor
+    /// Així doncs, quan l'usuari mogui l'slider, ja sigui amb la rodeta del
+    /// mouse o pitjant a sobre del widget, li donarem el valor correcte al viewer
+    void updateViewerSliceAccordingToSliderAction( int action );
+
     void updateInput(Volume *input);
 
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
@@ -76,8 +82,8 @@ private slots:
     /// Quan s'activa el boto de sincronitzar
     void emitSynchronize();
 
-    /// actualitza correctament els valors de l'slider i l'spinbox quan hi ha thick slab
-    void updateSliderAndSpinBox();
+    /// actualitza correctament el valor de l'slider quan hi ha thick slab
+    void updateSlider();
 
 	/// TODO: Canviar si es fa refactoring del tema "actiu". Ara es posa en un mètode propi per no llençar un signal
 	/// cada vegada que es canvia de llesca
