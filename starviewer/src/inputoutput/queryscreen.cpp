@@ -997,7 +997,10 @@ Status QueryScreen::insertStudyCache( DICOMStudy stu )
 
 void QueryScreen::studyRetrievedView( QString studyUID , QString seriesUID , QString sopInstanceUID )
 {
-    retrieve( studyUID , seriesUID , sopInstanceUID, "Cache" );
+    QStringList studyUIDList;
+    studyUIDList << studyUID;
+
+    loadStudies(studyUIDList, seriesUID, sopInstanceUID, "Cache");
 }
 
 void QueryScreen::refreshTab( int index )
@@ -1048,42 +1051,6 @@ void QueryScreen::viewFromQSeriesListWidget()
 
     studyUIDList << m_seriesListWidgetCache->getCurrentStudyUID();//Agafem l'estudi uid de la sèrie seleccionada
     loadStudies( studyUIDList, m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
-}
-
-void QueryScreen::retrieve( QString studyUID , QString seriesUID , QString sopInstanceUID, QString source )
-{
-    CacheStudyDAL cacheStudyDAL;
-
-    if ( studyUID.isEmpty() )
-    {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
-        return;
-    }
-
-    QStringList files;
-    if( source == "Cache" )
-    {
-        files = cacheStudyDAL.getFiles( studyUID );
-        cacheStudyDAL.updateStudyAccTime( studyUID );
-    }
-    else if( source == "DICOMDIR" )
-    {
-        files = m_readDicomdir.getFiles( studyUID );
-    }
-    else
-    {
-        DEBUG_LOG("Unrecognized source: " + source );
-        return;
-    }
-
-    this->close();//s'amaga per poder visualitzar la serie
-    if ( m_operationStateScreen->isVisible() )
-    {
-        m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
-    }
-
-    // enviem la informació a processar
-    emit processFiles( files, studyUID, seriesUID, sopInstanceUID );
 }
 
 void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source )
@@ -1381,7 +1348,7 @@ void QueryScreen::convertToDicomdir()
 
 void QueryScreen::openDicomdir()
 {
-	StarviewerSettings settings;
+    StarviewerSettings settings;
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , settings.getLastOpenedDICOMDIRPath(), "DICOMDIR" );
     QString path, dicomdirPath;
 
@@ -1403,7 +1370,7 @@ void QueryScreen::openDicomdir()
         else
         {
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
-			settings.setLastOpenedDICOMDIRPath( QFileInfo(dicomdirPath).dir().path() );
+            settings.setLastOpenedDICOMDIRPath( QFileInfo(dicomdirPath).dir().path() );
             this->bringToFront();
             m_tab->setCurrentIndex( 2 ); // mostre el tab del dicomdir
         }
@@ -1542,16 +1509,16 @@ int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QStr
     {
         studyUIDisTheSame = m_studyListQueriedPacs.value( index ).getStudyUID() == studyUID;
         pacsAETitleIsTheSame = m_studyListQueriedPacs.value( index ).getPacsAETitle() == pacsAETitle;
-        
+
         if (!studyUIDisTheSame || !pacsAETitleIsTheSame ) index++;
-    } 
+    }
 
     return index < m_studyListQueriedPacs.count() ? index : -1;
 }
 
 QString QueryScreen::buildQueryParametersString(DicomMask mask)
 {
-	QString logMessage;
+    QString logMessage;
 
     logMessage = "PATIENT_ID=[" + mask.getPatientId() + "] "
         + "PATIENT_NAME=[" + mask.getPatientName() + "] "
