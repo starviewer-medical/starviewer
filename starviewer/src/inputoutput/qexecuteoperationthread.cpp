@@ -61,7 +61,7 @@ void QExecuteOperationThread::queueOperation(Operation operation)
 {
     QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
 
-    emit( newOperation( &operation ) );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operació, i la mostri per pantalla
+    emit newOperation( &operation );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operació, i la mostri per pantalla
 
     m_semaphor.acquire();
 
@@ -138,13 +138,13 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     state = enoughFreeSpace( enoughSpace );
 
     //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
-    emit( setOperating( studyUID ) );
+    emit setOperating( studyUID );
 
     if ( !state.good() || !enoughSpace )
     {
         QString logMessage = "La descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs();
 
-        emit( setErrorOperation( studyUID ) );
+        emit setErrorOperation( studyUID );
 
         if ( !enoughSpace ) //si no hi ha prou espai emitim aquest signal
         {
@@ -168,8 +168,8 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         ERROR_LOG( "Error al connectar al pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " + state.text() );
 
-        emit( setErrorOperation( studyUID ) );
-        emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) );
+        emit setErrorOperation( studyUID );
+        emit errorConnectingPacs( operation.getPacsParameters().getPacsID() );
         cacheStudyDAL.delStudy( studyUID) ;
         return;
     }
@@ -221,7 +221,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             ERROR_LOG( "S'ha produit algun error durant el processat de les imatges descarregades ( Classe StarviewerProcessImage) per l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() );
         }
 
-        emit( setErrorOperation( studyUID ) );
+        emit setErrorOperation( studyUID );
         emit abort();
         cacheStudyDAL.delStudy( studyUID );
     }
@@ -231,8 +231,8 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 #endif
         INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
         scaleStudy.scale( studyUID ); //escalem l'estudi per la previsualització de la caché
-        emit( setOperationFinished( studyUID ) );// descarregat a QOperationStateScreen
-        emit( setRetrieveFinished( studyUID ) );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
+        emit setOperationFinished( studyUID );// descarregat a QOperationStateScreen
+        emit setRetrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
         emit retrieveFinished();
 
         if ( m_view )
@@ -250,12 +250,12 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
 void QExecuteOperationThread::imageCommitSlot( QString studyUID , int imageNumber)
 {
-    emit( imageCommit( studyUID , imageNumber ) ) ;
+    emit imageCommit( studyUID , imageNumber );
 }
 
 void QExecuteOperationThread::seriesCommitSlot( QString studyUID)
 {
-    emit( seriesCommit( studyUID ) );
+    emit seriesCommit( studyUID );
 }
 
 Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
@@ -324,7 +324,7 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
 
     INFO_LOG( "Preparant les dades per moure estudi " + operation.getStudyUID() + " al PACS " + operation.getPacsParameters().getAEPacs() );
 
-    emit( setOperating( operation.getStudyUID() ) );//Indiquem al QOperationState que comença l'enviament de les imatges
+    emit setOperating( operation.getStudyUID() );//Indiquem al QOperationState que comença l'enviament de les imatges
 
     //cerquem el path de les imatges a emmagatzemar
     state = imagesPathToStore( operation.getStudyUID() , imageListToStore );
@@ -338,8 +338,8 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     if ( !state.good() )
     {
         ERROR_LOG( " S'ha produït un error al intentar connectar al PACS " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " + state.text() );
-        emit( errorConnectingPacs( operation.getPacsParameters().getPacsID() ) );
-        emit( setErrorOperation( operation.getStudyUID() ) );
+        emit errorConnectingPacs( operation.getPacsParameters().getPacsID() );
+        emit setErrorOperation( operation.getStudyUID() );
         return state;
     }
 
@@ -359,11 +359,11 @@ Status QExecuteOperationThread::moveStudy( Operation operation )
     if ( state.good() )
     {
         INFO_LOG("S'ha mogut l'estudi correctament" );
-        emit( setOperationFinished( operation.getStudyUID() ) );// descarregat
+        emit setOperationFinished( operation.getStudyUID() );// descarregat
     }
     else
     {
-        emit( setErrorOperation( operation.getStudyUID() ) );
+        emit setErrorOperation( operation.getStudyUID() );
         ERROR_LOG( "S'ha produit un error intentant guardar l'estudi : " + state.text() );
     }
 
