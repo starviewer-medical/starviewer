@@ -1144,53 +1144,52 @@ void QueryScreen::deleteSelectedStudiesInCache()
     }
     else
     {
-        switch( QMessageBox::information( this , tr( "Starviewer" ) ,
-                        tr( "Are you sure you want to delete the selected Studies?" ) ,
-                        tr( "&Yes" ) , tr( "&No" ) ,
-                        0, 1 )
-                )
+        QMessageBox::StandardButton response = QMessageBox::question(this, tr( "Starviewer" ),
+                                                                           tr( "Are you sure you want to delete the selected Studies?" ),
+                                                                           QMessageBox::Yes | QMessageBox::No,
+                                                                           QMessageBox::No);
+        if (response  == QMessageBox::Yes)
         {
-            case 0:
-                //Posem el cursor en espera
-                QApplication::setOverrideCursor(Qt::WaitCursor);
+            //Posem el cursor en espera
+            QApplication::setOverrideCursor(Qt::WaitCursor);
 
-                Status state;
-                CacheStudyDAL cacheStudyDAL;
-                LocalDatabaseManager localDatabaseManager;
+            Status state;
+            CacheStudyDAL cacheStudyDAL;
+            LocalDatabaseManager localDatabaseManager;
 
-                foreach(QString studyUID, studiesList)
+            foreach(QString studyUID, studiesList)
+            {
+                if( m_qcreateDicomdir->studyExists( studyUID ) )
                 {
-                    if( m_qcreateDicomdir->studyExists( studyUID ) )
+                    QMessageBox::warning( this , tr( "Starviewer" ) ,
+                    tr( "The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first." ).arg(studyUID) );
+                }
+                else
+                {
+                    INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
+#ifdef NEW_PACS
+                    localDatabaseManager.del(studyUID);
+                    if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    break;
+
+                    m_studyTreeWidgetCache->removeStudy( studyUID );
+                    m_seriesListWidgetCache->clear();
+#else
+                    state = cacheStudyDAL.delStudy( studyUID );
+                    if ( state.good() )
                     {
-                        QMessageBox::warning( this , tr( "Starviewer" ) ,
-                        tr( "The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first." ).arg(studyUID) );
+                        m_studyTreeWidgetCache->removeStudy( studyUID );
+                        m_seriesListWidgetCache->clear();
                     }
                     else
                     {
-                        INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
-#ifdef NEW_PACS
-                        localDatabaseManager.del(studyUID);
-                        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    break;
-
-                        m_studyTreeWidgetCache->removeStudy( studyUID );
-                        m_seriesListWidgetCache->clear();
-#else
-                        state = cacheStudyDAL.delStudy( studyUID );
-                        if ( state.good() )
-                        {
-                            m_studyTreeWidgetCache->removeStudy( studyUID );
-                            m_seriesListWidgetCache->clear();
-                        }
-                        else
-                        {
-                            // TODO potser s'hauria de fer al final, recollir per quins hi ha hagut error i mostrar-ho
-                            showDatabaseErrorMessage( state );
-                        }
-#endif
+                        // TODO potser s'hauria de fer al final, recollir per quins hi ha hagut error i mostrar-ho
+                        showDatabaseErrorMessage( state );
                     }
+#endif
                 }
+            }
 
-                QApplication::restoreOverrideCursor();
+            QApplication::restoreOverrideCursor();
         }
     }
 }
