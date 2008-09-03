@@ -36,17 +36,33 @@ Q2DViewerWidget::~Q2DViewerWidget()
 {
 }
 
+void Q2DViewerWidget::updateViewerSliceAccordingToSliderAction( int action )
+{
+    switch( action )
+    {
+    case QAbstractSlider::SliderMove:
+    case QAbstractSlider::SliderPageStepAdd:
+    case QAbstractSlider::SliderPageStepSub:
+        m_2DView->setSlice( m_slider->sliderPosition() );
+        break;
+
+    default:
+        break;
+    }
+}
+
 void Q2DViewerWidget::createConnections()
 {
-    connect( m_slider , SIGNAL( valueChanged( int ) ) , m_spinBox , SLOT( setValue( int ) ) );
-    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
+    connect( m_slider, SIGNAL( actionTriggered(int) ), SLOT( updateViewerSliceAccordingToSliderAction(int) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
-    // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider o l'spin box, el viewer es marqui com a seleccionat
-    connect(m_slider, SIGNAL( sliderPressed() ), SLOT( sliderPressed() ));
+
+    // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider, el viewer es marqui com a seleccionat
+    connect( m_slider, SIGNAL( sliderPressed() ), SLOT( sliderPressed() ));
+
     connect( m_2DView, SIGNAL ( selected() ), SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateInput( Volume *) ) );
 
-    connect( m_2DView, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateSliderAndSpinBox() ) );
+    connect( m_2DView, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateSlider() ) );
 
     connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), SLOT( emitSynchronize() ) );
 }
@@ -56,12 +72,14 @@ void Q2DViewerWidget::setInput( Volume *input )
     m_mainVolume = input;
     m_2DView->setInput( input );
     m_synchronizeButton->setEnabled( true );
+    m_slider->setMaximum( m_2DView->getMaximumSlice() );
 }
 
 void Q2DViewerWidget::updateInput( Volume *input )
 {
     m_mainVolume = input;
     m_synchronizeButton->setEnabled( true );
+    m_slider->setMaximum( m_2DView->getMaximumSlice() );
 }
 
 void Q2DViewerWidget::mousePressEvent( QMouseEvent *event )
@@ -77,61 +95,35 @@ void Q2DViewerWidget::emitSelectedViewer()
 
 void Q2DViewerWidget::resetViewToAxial()
 {
-    if( !m_mainVolume )
-        return;
-
-    int phases = m_mainVolume->getSeries()->getNumberOfPhases();
-
-    int extent[6];
-    m_mainVolume->getWholeExtent( extent );
-
-    disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
-    m_spinBox->setMinimum( extent[4] );
-    m_spinBox->setMaximum( extent[5] / phases );
-    m_slider->setMaximum( extent[5] / phases);
-    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_viewText->setText( tr("XY : Axial") );
     m_2DView->resetViewToAxial();
 
-    INFO_LOG("Visor per defecte: Canviem a vista axial");
+    m_slider->setMaximum( m_2DView->getMaximumSlice() );
+    m_slider->setSliderPosition( m_2DView->getCurrentSlice() );
+
+    INFO_LOG("Q2DViewerWidget actiu: Canviem a vista axial");
 }
 
 void Q2DViewerWidget::resetViewToSagital()
 {
-    if( !m_mainVolume )
-        return;
-
-    int extent[6];
-    m_mainVolume->getWholeExtent( extent );
-
-    disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
-    m_spinBox->setMinimum( extent[0] );
-    m_spinBox->setMaximum( extent[1] );
-    m_slider->setMaximum( extent[1] );
-    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_viewText->setText( tr( "XY : Sagital" ) );
     m_2DView->resetViewToSagital();
 
-    INFO_LOG( "Visor per defecte: Canviem a vista sagital" );
+    m_slider->setMaximum( m_2DView->getMaximumSlice() );
+    m_slider->setSliderPosition( m_2DView->getCurrentSlice() );
+
+    INFO_LOG( "Q2DViewerWidget actiu: Canviem a vista sagital" );
 }
 
 void Q2DViewerWidget::resetViewToCoronal()
 {
-    if( !m_mainVolume )
-        return;
-
-    int extent[6];
-    m_mainVolume->getWholeExtent( extent );
-
-    disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
-    m_spinBox->setMinimum( extent[2] );
-    m_spinBox->setMaximum( extent[3] );
-    m_slider->setMaximum( extent[3] );
-    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
     m_viewText->setText( tr( "XY : Coronal" ) );
     m_2DView->resetViewToCoronal();
 
-    INFO_LOG( "Visor per defecte: Canviem a vista coronal" );
+    m_slider->setMaximum( m_2DView->getMaximumSlice() );
+    m_slider->setSliderPosition( m_2DView->getCurrentSlice() );
+
+    INFO_LOG( "Q2DViewerWidget actiu: Canviem a vista coronal" );
 }
 
 void Q2DViewerWidget::setSelected( bool option )
@@ -155,7 +147,7 @@ void Q2DViewerWidget::setSelected( bool option )
     m_2DView->setActive( option );
 }
 
-Q2DViewer * Q2DViewerWidget::getViewer()
+Q2DViewer *Q2DViewerWidget::getViewer()
 {
     return m_2DView;
 }
@@ -170,7 +162,7 @@ bool Q2DViewerWidget::hasPhases()
     return ( phases > 1 ) ;
 }
 
-void Q2DViewerWidget::setDefaultAction( QAction * synchronizeAction )
+void Q2DViewerWidget::setDefaultAction( QAction *synchronizeAction )
 {
     m_synchronizeButton->setDefaultAction( synchronizeAction );
 }
@@ -180,20 +172,15 @@ void Q2DViewerWidget::emitSynchronize()
     emit synchronize( this, m_buttonSynchronizeAction->isChecked() );
 }
 
-void Q2DViewerWidget::updateSliderAndSpinBox()
+void Q2DViewerWidget::updateSlider()
 {
-    disconnect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
-    m_spinBox->setValue( m_2DView->getCurrentSlice() );
     m_slider->setValue( m_2DView->getCurrentSlice() );
-    connect( m_spinBox , SIGNAL( valueChanged( int ) ) , m_2DView , SLOT( setSlice( int ) ) );
 }
 
 void Q2DViewerWidget::sliderPressed()
 {
-	INFO_LOG("Q2DViewerWidget::sliderPressed entrem");
-	if (!m_2DView->isActive())
+	if( !m_2DView->isActive() )
 	{
-		INFO_LOG("Q2DViewerWidget::sliderPressed emit");
 		this->emitSelectedViewer();
 	}
 }

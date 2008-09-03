@@ -60,19 +60,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="m_spinBox" >
-       <property name="maximum" >
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QToolButton" name="m_synchronizeButton" >
        <property name="text" >
         <string>...</string>
        </property>
        <property name="icon" >
-        <iconset resource="../../../main/main.qrc" >:/images/synchronize.png</iconset>
+        <iconset/>
        </property>
        <property name="checkable" >
         <bool>true</bool>
