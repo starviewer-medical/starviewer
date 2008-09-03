@@ -191,15 +191,6 @@ private:
      */
     void retrievePacs( bool view );
 
-    /** Carrega un estudi del source especificat (Cache,DICOMDIR) la cache perque pugui ser visualitzat a la
-     *  classe Volum i emet una senyal perque sigui visualitzat
-     * @param studyUID de l'estudi
-     * @param seriesUID de la serie que s'ha de visualitzar per defecte, si es buit, es posara per defecte la primera serie de l'estudi
-     * @param sopInstanceUID sopInstanceUID de l'imatge a visualitzar
-     * @param source font des d'on es volen carregar les dades (Cache i DICOMDIR suportats de moment)
-    */
-    void retrieve( QString studyUID , QString seriesUID , QString sopInstanceUID, QString source );
-
     /**
      * Donada una llista de uid's d'estudi, procedeix a carregar-los desde la font indicada (Cache,DICOMDIR)
      * @param studiesUIDList Llista d'uid's d'estudi
