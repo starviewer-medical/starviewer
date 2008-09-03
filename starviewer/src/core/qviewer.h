@@ -138,7 +138,7 @@ public:
      * @param bottomRightZ coordenada Z inferior dreta del requadre
      * @param marginRate valor en percentatge del marge que es vol deixar
      */
-    void scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, double bottomRightX, double bottomRightY, double bottomRightZ, double marginRate );
+    void scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, double bottomRightX, double bottomRightY, double bottomRightZ, double marginRate = 0.0 );
 
     /**
      * Ens retorna l'objecte que conté tota la informació referent al window level

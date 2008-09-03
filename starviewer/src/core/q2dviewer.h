@@ -15,7 +15,6 @@
 class QEvent;
 class QAction;
 // vtk
-class vtkImageViewer2;
 class vtkPropPicker;
 class vtkTextActor;
 class vtkObject;
@@ -26,10 +25,10 @@ class vtkAxisActor2D;
 class vtkWindowToImageFilter;
 class vtkCoordinate;
 class vtkScalarBarActor;
-class vtkInteractorStyle;
 class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
+class vtkInteractorStyleImage;
 // grayscale pipeline
 class vtkImageMapToWindowLevelColors;
 class vtkImageShiftScale;
@@ -84,8 +83,6 @@ public:
     virtual vtkRenderer *getRenderer();
     virtual void setInput( Volume* volume );
 
-    vtkInteractorStyle *getInteractorStyle();
-
     void resetView( CameraOrientationType view );
     void resetViewToAxial();
     void resetViewToCoronal();
@@ -96,9 +93,6 @@ public:
 
     /// ens retorna la vista que tenim en aquells moments del volum
     CameraOrientationType getView() const;
-
-    /// Ens retorna l'ImageViewer
-    vtkImageViewer2 *getImageViewer() const;
 
     /// Afegim el volum solapat
     void setOverlayInput( Volume* volume );
@@ -389,8 +383,8 @@ private:
 
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
-    /// li proporcionem també el corner annotation sobre el qual s'aplica
-    void updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0 );
+    /// Si hi ha thick slab, mostrarà el rang d'aquest
+    void updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0 );
 
     /// configuració de la interacció amb l'usuari
     void setupInteraction();
@@ -474,8 +468,11 @@ private:
      */
     void computeVOILUT();
 
-    // thick slab
+    /// thick slab
     void computeRangeAndSlice( int newSlabThickness );
+
+    ///  Valida el valor d'slice donat i actualitza les variables membres pertinents, com m_currentSlice o m_firstSlabSlice
+    void checkAndUpdateSliceValue( int value );
 
 private slots:
     /// Actualitza les transformacions de càmera ( de moment rotació i flip )
@@ -484,16 +481,22 @@ private slots:
     /// Actualitza els rulers
     void updateRulers();
 
-    // thick slab
+    /// thick slab
     void setupDefaultPipeline();
     void setupThickSlabPipeline();
-
+    
 protected:
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
 
-    /// per a les vistes 2D farem servir el vtkImageViewer2
-    vtkImageViewer2 *m_viewer;
+    /// Renderer principal. S'encarrega de pintar la imatge
+    vtkRenderer *m_imageRenderer;
+
+    /// Actor d'imatge
+    vtkImageActor *m_imageActor;
+
+    /// Interactor Style
+    vtkInteractorStyleImage *m_interactorStyle;
 
     /// conserva la vista actual
     CameraOrientationType m_lastView;

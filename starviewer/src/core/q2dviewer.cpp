@@ -80,41 +80,35 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
- : QViewer( parent ), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_sliceAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_sliceAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
-    // per composar el thickSlab
-    m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
-
-    m_enabledAnnotations = Q2DViewer::AllAnnotation;
-    m_lastView = Q2DViewer::Axial;
-    m_imageSizeInformation[0] = 0;
-    m_imageSizeInformation[1] = 0;
-    m_overlay = CheckerBoard; // per defecte
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
+    m_imageSizeInformation[0] = 0;
+    m_imageSizeInformation[1] = 0;
 
-    // inicialitzacions d'objectes
-    // visor
-    m_viewer = vtkImageViewer2::New();
-    // grayscale pipeline
+    // configuració del viewer
+    m_imageRenderer = vtkRenderer::New();
+    m_imageActor = vtkImageActor::New();
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
+    m_interactorStyle = vtkInteractorStyleImage::New();
+    m_interactorStyle->AutoAdjustCameraClippingRangeOn();
+    // per composar el thickSlab
+    m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
 
     setupInteraction();
-    m_enabledTools = false;
-    m_toolManager = new Q2DViewerToolManager( this );
-    this->enableTools();
-
     // anotacions
     createAnnotations();
     addActors();
 
-    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-    
     //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
-
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
+
+    // old tools management /TODO /deprecated  s'eliminarà quan s'hagi fet tota la transició de tools
+    m_toolManager = new Q2DViewerToolManager( this );
+    this->enableTools();
 }
 
 Q2DViewer::~Q2DViewer()
@@ -127,8 +121,8 @@ Q2DViewer::~Q2DViewer()
     m_sideRuler->Delete();
     m_bottomRuler->Delete();
     m_serieInformationAnnotation->Delete();
+    m_sliceAnnotation->Delete();
     m_picker->Delete();
-    m_viewer->Delete();
     m_vtkQtConnections->Delete();
     // TODO hem hagut de fer eliminar primer el drawer per davant d'altres objectes
     // per solucionar el ticket #539, però això denota que hi ha algun problema de
@@ -141,19 +135,15 @@ Q2DViewer::~Q2DViewer()
 
 vtkRenderer *Q2DViewer::getRenderer()
 {
-    if( m_viewer )
-    {
-        return m_viewer->GetRenderer();
-    }
-    else
-        return NULL;
+    return m_imageRenderer;
 }
 
 void Q2DViewer::createAnnotations()
 {
     // contenidor d'anotacions de texte FIXE
     m_serieInformationAnnotation = vtkCornerAnnotation::New();
-
+    // anotacions de texte variable (window/level, window size, etc)
+    m_sliceAnnotation = vtkCornerAnnotation::New();
     // escala de colors
     m_scalarBar = createScalarBar();
     // anotacions de l'orientació del pacient
@@ -270,7 +260,7 @@ void Q2DViewer::updateRulers()
 
         m_bottomRuler->GetPositionCoordinate()->SetValue( m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0 );
         m_bottomRuler->GetPosition2Coordinate()->SetValue( m_rulerExtent[0] , anchoredCoordinates[1] , 0.0  );
-        m_bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );       
+        m_bottomRuler->SetRange( m_rulerExtent[1] , m_rulerExtent[0] );
     break;
 
     case Sagital:
@@ -299,14 +289,12 @@ void Q2DViewer::setupDefaultPipeline()
 {
     if( m_mainVolume )
     {
-        m_viewer->SetInput( m_mainVolume->getVtkData() );
         m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
     }
 }
 
 void Q2DViewer::setupThickSlabPipeline()
 {
-    m_viewer->SetInput( m_thickSlabProjectionFilter->GetOutput() );
     m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
 }
 
@@ -369,7 +357,6 @@ void Q2DViewer::rotateCounterClockWise()
 void Q2DViewer::setRotationFactor( int factor )
 {
     m_rotateFactor = factor;
-//     this->updateCameraRotation();
     updateCamera();
 }
 
@@ -553,14 +540,10 @@ void Q2DViewer::refreshAnnotations()
     this->updateSliceAnnotationInformation();
 }
 
-void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int currentSlice, int maxSlice, int currentPhase, int maxPhase )
+void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
 {
-    if( !sliceAnnotation )
-    {
-        DEBUG_LOG("l'sliceAnnotation proporcionat és NUL!");
-        return;
-    }
-
+    Q_ASSERT( m_sliceAnnotation );
+    
     if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // si les annotacions estan habilitades
     {
         QString lowerLeftText;
@@ -604,11 +587,11 @@ void Q2DViewer::updateSliceAnnotation( vtkCornerAnnotation *sliceAnnotation, int
         if ( this->getThickness() > 0.0 )
             lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness(), 0, 'g', 2 );
 
-        sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
+        m_sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
     }
     else
     {
-        sliceAnnotation->SetText( 0 , "" );
+        m_sliceAnnotation->SetText( 0 , "" );
     }
 }
 
@@ -705,44 +688,33 @@ int Q2DViewer::getMaximumSlice()
 
 void Q2DViewer::addActors()
 {
+    Q_ASSERT( m_serieInformationAnnotation );
+    Q_ASSERT( m_sliceAnnotation );
+    Q_ASSERT( m_patientOrientationTextActor[0] );
+    Q_ASSERT( m_patientOrientationTextActor[1] );
+    Q_ASSERT( m_patientOrientationTextActor[2] );
+    Q_ASSERT( m_patientOrientationTextActor[3] );
+    Q_ASSERT( m_sideRuler );
+    Q_ASSERT( m_bottomRuler );
+    Q_ASSERT( m_scalarBar );
+    Q_ASSERT( m_imageActor );
+
     // anotacions de texte FIXE
     this->getRenderer()->AddActor2D( m_serieInformationAnnotation );
-
-    // anotacions de texte variable (window/level, window size, etc)
-    m_sliceAnnotation = vtkCornerAnnotation::New();
+    // anotacions d'slice TODO cal separar-les?
     this->getRenderer()->AddActor2D( m_sliceAnnotation );
 
-    if( m_patientOrientationTextActor[0] )
-    {
-        this->getRenderer()->AddActor( m_patientOrientationTextActor[0] );
-        this->getRenderer()->AddActor( m_patientOrientationTextActor[1] );
-        this->getRenderer()->AddActor( m_patientOrientationTextActor[2] );
-        this->getRenderer()->AddActor( m_patientOrientationTextActor[3] );
-    }
-    else
-    {
-        DEBUG_LOG( "No s'han creat els actors textuals d'informació d'orientació del pacient; no es poden afegir a l'escena" );
-    }
-    if( m_sideRuler )
-        this->getRenderer()->AddActor2D( m_sideRuler );
-    else
-    {
-        DEBUG_LOG( "No s'ha creat l'actor d'indicador d'escala lateral; no es pot afegir a l'escena" );
-    }
-    if( m_bottomRuler )
-        this->getRenderer()->AddActor2D( m_bottomRuler );
-    else
-    {
-        DEBUG_LOG( "No s'ha creat l'actor d'indicador d'escala inferior; no es pot afegir a l'escena" );
-    }
-    if( m_scalarBar ) // aquest l'hauríem d'afegir quan hi ha un input?
-    {
-        this->getRenderer()->AddActor2D( m_scalarBar );
-    }
-    else
-    {
-        DEBUG_LOG( "No s'ha creat l'actor d'escala de colors; no es pot afegir a l'escena" );
-    }
+    this->getRenderer()->AddActor( m_patientOrientationTextActor[0] );
+    this->getRenderer()->AddActor( m_patientOrientationTextActor[1] );
+    this->getRenderer()->AddActor( m_patientOrientationTextActor[2] );
+    this->getRenderer()->AddActor( m_patientOrientationTextActor[3] );
+    this->getRenderer()->AddActor2D( m_sideRuler );
+    this->getRenderer()->AddActor2D( m_bottomRuler );
+    this->getRenderer()->AddActor2D( m_scalarBar );
+    m_imageRenderer->AddViewProp( m_imageActor );
+    // TODO colocar aix`o en un lloc mes adient
+    m_imageRenderer->GetActiveCamera()->ParallelProjectionOn();
+
 }
 
 QString Q2DViewer::getOppositeOrientationLabel( QString label )
@@ -827,13 +799,27 @@ void Q2DViewer::disableTools()
 
 void Q2DViewer::setupInteraction()
 {
+    Q_ASSERT( m_imageRenderer );
+    Q_ASSERT( m_vtkWidget );
+    Q_ASSERT( m_interactorStyle );
+
+    m_vtkWidget->GetRenderWindow()->AddRenderer( m_imageRenderer );
+    this->getInteractor()->SetInteractorStyle( m_interactorStyle );
+    m_interactorStyle->SetCurrentRenderer( m_imageRenderer );
+    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
+
     m_picker = vtkPropPicker::New();
-    // configurem l'Image Viewer i el qvtkWidget
+    // configurem la interacció de qvtkWidget
     m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
-    m_viewer->SetupInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-    m_viewer->GetInteractorStyle()->SetCurrentRenderer( this->getRenderer() );
-    //\TODO això dóna un error de vtk perquè el viewer no té input, però no afecta a la execució de l'apicació
-    m_vtkWidget->SetRenderWindow( m_viewer->GetRenderWindow() );
+
+    // \TODO fer això aquí? o fer-ho en el tool manager?
+    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
+
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools
     m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
@@ -845,26 +831,21 @@ void Q2DViewer::setupInteraction()
                                  SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
 #endif
                                  );
-    // \TODO fer això aquí? o fer-ho en el tool manager?
-    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
 }
 
 void Q2DViewer::setInput( Volume* volume )
 {
+    if( !volume )
+        return;
+
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if( m_mainVolume )
         m_drawer->removeAllPrimitives();
 
-    if( volume == 0 )
-        return;
     m_mainVolume = volume;
     m_currentSlice = 0;
     m_currentPhase = 0;
+    m_lastView = Q2DViewer::Axial;
 
     // Inicialització del thickSlab
     m_slabThickness = 1;
@@ -906,24 +887,17 @@ void Q2DViewer::setInput( Volume* volume )
     m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
     m_thickSlabProjectionFilter->SetStep( m_numberOfPhases );
 
-    // actualitzem la informació de window level
-    this->updateWindowLevelData();
-    updateScalarBar();
+    updateDisplayExtent(); // TODO BUG sino fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
+    resetViewToAxial();
+    
     updatePatientAnnotationInformation();
     this->enableAnnotation( m_enabledAnnotations );
-    resetViewToAxial();
-
+    
+    // actualitzem la informació de window level
+    this->updateWindowLevelData();
     // \TODO això no sabem si serà del tot necessari
     //     m_picker->PickFromListOn();
-    //     m_picker->AddPickList( m_viewer->GetImageActor() );
-}
-
-vtkInteractorStyle *Q2DViewer::getInteractorStyle()
-{
-    if( m_viewer )
-        return m_viewer->GetInteractorStyle();
-    else
-        return 0;
+    //     m_picker->AddPickList( m_imageActor );
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )
@@ -949,8 +923,9 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         imageCheckerBoard->SetInput1( m_mainVolume->getVtkData() );
         imageCheckerBoard->SetInput2( m_overlayVolume->getVtkData() );
         imageCheckerBoard->SetNumberOfDivisions( m_divisions );
-        // actualitzem el viewer
-        m_viewer->SetInputConnection( imageCheckerBoard->GetOutputPort() ); // li donem el m_imageCheckerboard com a input
+        // actualitzem el pipeline
+        m_windowLevelLUTMapper->SetInputConnection( imageCheckerBoard->GetOutputPort() );
+        //updateDisplayExtent?
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
 
@@ -973,7 +948,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         wipe->SetInput( 1 , m_overlayVolume->getVtkData() );
         wipe->SetPosition(20,20);
         wipe->SetWipeToUpperLeft();
-        m_viewer->SetInput( wipe->GetOutput() );
+        m_windowLevelLUTMapper->SetInput( wipe->GetOutput() );
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
     }
@@ -989,10 +964,7 @@ void Q2DViewer::render()
     // si tenim dades
     if( m_mainVolume )
     {
-       // Això és necessari perquè la imatge es rescali a les mides de la finestreta
-       // Automatically set up the camera based on the visible actors. The camera will reposition itself to view the center point of the actors, and move along its initial view plane normal (i.e., vector defined from camera position to focal point) so that all of the actors can be seen.
-        this->getRenderer()->ResetCamera();
-        updateCamera();
+        this->getRenderWindow()->Render();
     }
     else
     {
@@ -1003,31 +975,16 @@ void Q2DViewer::render()
 void Q2DViewer::resetView( CameraOrientationType view )
 {
     m_lastView = view;
-    emit viewChanged( m_lastView );
+    // TODO aquest signal el mantenim aquí i no el posem 
+    // al final del mètode, com semblaria lògic, degut
+    // a que cal millorar la interacció amb QThickSlabWidget
+    // ara si es posa al final, després de resetCamera, peta
+    emit viewChanged( m_lastView ); 
+    
     // thick Slab, li indiquem la direcció de projecció
     m_thickSlabProjectionFilter->SetProjectionDimension( m_lastView );
-    //TODO això és necessari perquè encara depenem de m_viewer->SetSliceOrientationTo.... Quan ens fem amb el control total del pipeline això no serà necessari
-    setupDefaultPipeline();
-    // fins que no ens desfem del SetSliceOrientationTo... i d'alguns problemes del pipeline
-    // hem de fer aquestes xapussilles
-    if ( isThickSlabActive() )
-        m_slabThickness = 2;
-    else
-        m_slabThickness = 1;
+
     resetCamera();
-    if ( isThickSlabActive() )
-    {
-        // cada cop que fem reset d'una vista posarem el thickness al mínim, és a dir 2
-        // TODO una altre alternativa és mantenir el thickness al màxim del que permet aquella vista si és que ens passem
-        // per exemple, tenim un volum de 512x512x28, si en Sagital hem fet un thickness de 50 i passem a Axial, el màxim haurà de ser 28, ja que 50 es passa de rang
-//         setSlabThickness(2);
-        emit slabThicknessChanged( m_slabThickness );
-        // TODO Existeix un altre problema amb els extents si anem canviant de vista i no li donem aquest thickness "segur"
-        // cal mirar com fer perquè no hi hagi aquest problema per veure si és cosa del filtre, del mètode setSlabThickness,
-        // o per alguna altra causa
-        // necessari pel "todo" anterior del default pipeline i restaurar el sistema
-        setupThickSlabPipeline();
-    }
 }
 
 void Q2DViewer::resetViewToAxial()
@@ -1047,23 +1004,20 @@ void Q2DViewer::resetViewToSagital()
 
 void Q2DViewer::updateCamera()
 {
-    if( m_viewer->GetInput() )
+    if( m_mainVolume )
     {
         vtkCamera *camera = this->getRenderer()->GetActiveCamera();
         Q_ASSERT( camera );
-        
+
         double roll = 0.0;
 
-        switch( this->m_lastView )
+        switch( m_lastView )
         {
         case Axial:
             if( m_isImageFlipped )
                 roll = m_rotateFactor*90. + 180.;
             else
                 roll = -m_rotateFactor*90. + 180.;
-
-            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
-            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
 
         case Sagital:
@@ -1071,9 +1025,6 @@ void Q2DViewer::updateCamera()
                 roll = m_rotateFactor*90. -90.;
             else
                 roll = -m_rotateFactor*90. - 90.;
-
-            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
-            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
 
         case Coronal:
@@ -1081,9 +1032,6 @@ void Q2DViewer::updateCamera()
                 roll = m_rotateFactor*90.;
             else
                 roll = -m_rotateFactor*90.;
-
-            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
-            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
 
@@ -1130,103 +1078,102 @@ void Q2DViewer::updateCamera()
 
 void Q2DViewer::resetCamera()
 {
-    if( m_viewer->GetInput()  )
+    if( m_mainVolume )
     {
         // en comptes de fer servir sempre this->getMaximumSlice(), actualitzem
         // aquest valor quan cal, és a dir, al posar input i al canviar de vista
         // estalviant-nos crides i crides
         m_maxSliceValue = this->getMaximumSlice();
 
+        // reiniciem valors per defecte de la càmera
         m_rotateFactor = 0;
         m_applyFlip = false;
         m_isImageFlipped = false;
-        vtkRenderer *renderer = this->getRenderer();
-        Q_ASSERT( renderer );
-        vtkCamera *camera = renderer->GetActiveCamera();
+
+        vtkCamera *camera = m_imageRenderer->GetActiveCamera();
         Q_ASSERT( camera );
         
-        double *bounds = m_viewer->GetImageActor()->GetBounds();
+        double bounds[6];
         QString position;
-
         switch( m_lastView )
         {
         case Axial:
-            m_viewer->SetSliceOrientationToXY();
-            
+            // ajustem la càmera
             camera->SetFocalPoint(0,0,0);
             camera->SetViewUp(0,-1,0);
             camera->SetPosition(0,0,-1);
             camera->SetRoll( -m_rotateFactor*90. + 180. );
-            renderer->ResetCamera();
-            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0, 0.0 );
-            //scaleToFit( bounds[1], bounds[3], bounds[0], bounds[2] );
-            updateCamera();
             
-            emit rotationDegreesChanged( -m_rotateFactor*90. + 180. );
+            // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
+            checkAndUpdateSliceValue(0);
+            updateDisplayExtent();
+            m_imageRenderer->ResetCamera();
+
+            // ajustem la imatge al viewport
+            m_imageActor->GetBounds( bounds );
+            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
+
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
 
         case Sagital:
-            m_viewer->SetSliceOrientationToYZ();
-            
+            // ajustem la càmera
             camera->SetFocalPoint(0,0,0);
             camera->SetPosition(1,0,0); // -1 if medical ?
             camera->SetViewUp(0,0,1);
             camera->SetRoll( -m_rotateFactor*90. -90. );
-            renderer->ResetCamera();
-            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4], 0.1 );
+            
+            // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
+            checkAndUpdateSliceValue(m_maxSliceValue/2);
+            updateDisplayExtent();
+            m_imageRenderer->ResetCamera();
 
+            // ajustem la imatge al viewport
+            m_imageActor->GetBounds( bounds );
+            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
+            
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
                 m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
-            updateCamera();
-            
-            emit rotationDegreesChanged( -m_rotateFactor*90. - 90. );
-            
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
-        
+
         break;
 
         case Coronal:
-            m_viewer->SetSliceOrientationToXZ();
-            
+            // ajustem la càmera
             camera->SetFocalPoint(0,0,0);
             camera->SetPosition(0,-1,0); // 1 if medical ?
             camera->SetViewUp(0,0,1);
             camera->SetRoll( -m_rotateFactor*90. );
-            renderer->ResetCamera();
-            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5], 0.1 );
+            
+            // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
+            checkAndUpdateSliceValue(m_maxSliceValue/2);
+            updateDisplayExtent();
+            m_imageRenderer->ResetCamera();
 
+            // ajustem la imatge al viewport
+            m_imageActor->GetBounds( bounds );
+            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
+            
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
                 m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
-            updateCamera();
-    
-            emit rotationDegreesChanged( -m_rotateFactor*90. );
-     
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
-
-        if( m_lastView == Axial ) // en axial sempre començarem a visualitzar des de la llesca 0
-            setSlice(0);
-        else // posem la llesca del mig
-            setSlice( m_maxSliceValue/2 );
-
-        emit cameraChanged();
+        updateSliceAnnotationInformation();
         mapOrientationStringToAnnotation();
-        updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
-        this->updateDisplayExtent();
-        this->refresh();
+        // TODO potser això no és del tot correcte, cal fer més consistent conjuntament amb setSlice
+        emit sliceChanged( m_currentSlice );
     }
     else
     {
@@ -1243,30 +1190,19 @@ void Q2DViewer::setSlice( int value )
 {
     if( this->m_mainVolume && this->m_currentSlice != value )
     {
-        // thick slab
-        if( value < 0 )
-            m_currentSlice = 0;
-        else if( value + m_slabThickness-1 > m_maxSliceValue )
-            m_currentSlice = m_maxSliceValue - m_slabThickness + 1;
-        else
-            m_currentSlice = value;
-
-        m_firstSlabSlice = m_currentSlice;
-        m_lastSlabSlice = m_firstSlabSlice + m_slabThickness;
-
+        this->checkAndUpdateSliceValue( value );
         if( isThickSlabActive() )
         {
             m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice );
-            m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
+            // TODO cal actualitzar aquest valor?
+            m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness ); 
             //si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
-        // fi thick slab
-
         this->updateDisplayExtent();
+        updateSliceAnnotationInformation();
         mapOrientationStringToAnnotation();
         emit sliceChanged( m_currentSlice );
-        this->refresh();
     }
 }
 
@@ -1396,7 +1332,7 @@ void Q2DViewer::resetWindowLevelToDefault()
     // això ens dóna un level/level "maco" per defecte
     // situem el level al mig i donem un window complet de tot el rang
     //\TODO aquí caldria tenir en compte el default del presentation state actual si l'hi ha
-    this->setWindowLevel( m_defaultWindow, m_defaultLevel );    
+    this->setWindowLevel( m_defaultWindow, m_defaultLevel );
 }
 
 void Q2DViewer::setModalityRescale( vtkImageShiftScale *rescale )
@@ -1406,7 +1342,7 @@ void Q2DViewer::setModalityRescale( vtkImageShiftScale *rescale )
 
 vtkImageActor *Q2DViewer::getImageActor()
 {
-    return m_viewer->GetImageActor();
+    return m_imageActor;
 }
 
 void Q2DViewer::setPixelAspectRatio( double ratio )
@@ -1418,13 +1354,14 @@ void Q2DViewer::setPixelAspectRatio( double ratio )
         m_mainVolume->getSpacing( spacing );
 
         vtkImageChangeInformation *change = vtkImageChangeInformation::New();
-        change->SetInput( m_viewer->GetImageActor()->GetInput() );
+        change->SetInput( m_imageActor->GetInput() );
 
         if( ratio > 1.0 )
             change->SetOutputSpacing( spacing[0]*ratio, spacing[1], spacing[2] );
         else
             change->SetOutputSpacing( spacing[0], spacing[1]*ratio, spacing[2] );
-        m_viewer->GetImageActor()->SetInput( change->GetOutput() );
+
+        m_imageActor->SetInput( change->GetOutput() );
     }
     else
     {
@@ -1456,7 +1393,7 @@ void Q2DViewer::setMagnificationFactor( double factor )
         double spacing[3];
         m_mainVolume->getSpacing( spacing );
         vtkImageChangeInformation *change = vtkImageChangeInformation::New();
-        change->SetInput( m_viewer->GetImageActor()->GetInput() );
+        change->SetInput( m_imageActor->GetInput() );
         change->SetOutputSpacing( spacing[0]*factor, spacing[1]*factor, spacing[2] );
         vtkImageResample *resample = vtkImageResample::New();
         resample->SetInput( change->GetOutput() );
@@ -1467,7 +1404,7 @@ void Q2DViewer::setMagnificationFactor( double factor )
         resample->SetAxisOutputSpacing( 1, spacing[1]*factor );
         resample->SetAxisOutputSpacing( 2, 1.0 );
         resample->Update();
-        m_viewer->GetImageActor()->SetInput( resample->GetOutput() );
+        m_imageActor->SetInput( resample->GetOutput() );
     }
     else
     {
@@ -1688,7 +1625,7 @@ bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
     if( !m_mainVolume )
         return found;
     // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
-    m_picker->PickProp( this->getEventPositionX(), this->getEventPositionY(), m_viewer->GetRenderer() );
+    m_picker->PickProp( this->getEventPositionX(), this->getEventPositionY(), m_imageRenderer );
     // calculem el pixel trobat
     m_picker->GetPickPosition( xyz );
 
@@ -1778,11 +1715,6 @@ void Q2DViewer::updateWindowLevelAnnotation()
 Q2DViewer::CameraOrientationType Q2DViewer::getView() const
 {
     return m_lastView;
-}
-
-vtkImageViewer2 *Q2DViewer::getImageViewer() const
-{
-    return m_viewer;
 }
 
 void Q2DViewer::reset()
@@ -1940,23 +1872,15 @@ void Q2DViewer::updateSliceAnnotationInformation()
 {
     Q_ASSERT( m_sliceAnnotation );
 
-    if( !m_mainVolume )
-        return;
-
     int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
-
-    if ( m_numberOfPhases > 1)
+    if( m_numberOfPhases > 1 )
     {
-        this->updateSliceAnnotation( m_sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
+        this->updateSliceAnnotation( (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
     }
     else
     {
-        this->updateSliceAnnotation( m_sliceAnnotation, value+1, m_maxSliceValue+1 );
+        this->updateSliceAnnotation( value+1, m_maxSliceValue+1 );
     }
-    if( value >= m_maxSliceValue )
-        value = 0;
-    else
-        value += m_numberOfPhases;
 }
 
 void Q2DViewer::updatePatientAnnotationInformation()
@@ -2000,7 +1924,9 @@ void Q2DViewer::updatePatientOrientationAnnotationInformation()
 
 void Q2DViewer::updateDisplayExtent()
 {
-    vtkImageData *input = m_viewer->GetInput();
+    Q_ASSERT( m_imageActor );
+
+    vtkImageData *input = m_mainVolume->getVtkData();
     if( !input )
         return;
 
@@ -2014,39 +1940,24 @@ void Q2DViewer::updateDisplayExtent()
     else
         sliceValue = m_currentSlice*m_numberOfPhases + m_currentPhase;
 
-    vtkRenderer *renderer = this->getRenderer();
-    vtkImageActor *imageActor = m_viewer->GetImageActor();
+    input->UpdateInformation();
     int *wholeExtent = input->GetWholeExtent();
-
-    if( imageActor )
+    switch( m_lastView )
     {
-        switch( m_lastView )
-        {
-            case Axial:
-                imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], sliceValue, sliceValue );
-                break;
+        case Axial:
+            m_imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], sliceValue, sliceValue );
+            break;
 
-            case Coronal:
-                imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], sliceValue, sliceValue, wholeExtent[4], wholeExtent[5] );
-                break;
+        case Coronal:
+            m_imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], sliceValue, sliceValue, wholeExtent[4], wholeExtent[5] );
+            break;
 
-            case Sagital:
-                imageActor->SetDisplayExtent( sliceValue, sliceValue, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
-                break;
-        }
-        // TODO provar si cal fer això amb "value" o si amb sliceValue ja és correcte
-        int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
-        if ( m_numberOfPhases > 1)
-        {
-            this->updateSliceAnnotation( m_sliceAnnotation, (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
-        }
-        else
-        {
-            this->updateSliceAnnotation( m_sliceAnnotation, value+1, m_maxSliceValue+1 );
-        }
-        renderer->ResetCameraClippingRange();
+        case Sagital:
+            m_imageActor->SetDisplayExtent( sliceValue, sliceValue, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
+            break;
     }
-
+    // TODO si separem els renderers potser caldria aplicar-ho a cada renderer?
+    m_imageRenderer->ResetCameraClippingRange();
 }
 
 void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
@@ -2115,10 +2026,9 @@ void Q2DViewer::applyGrayscalePipeline()
             if( m_presentationLut ) // modality lut + windowlevel lut + presentation lut
             {
                 DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> Window Level LUT -> Presentation LUT -> Output  :: FIRST TRY OF IMPLEMENTATION!");
-                m_viewer->SetInput( m_mainVolume->getVtkData() );
                 m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
                 m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
-                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
                 // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
                 m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
                 m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
@@ -2137,10 +2047,9 @@ void Q2DViewer::applyGrayscalePipeline()
             else // modality [ + ww/wl ]
             {
                 DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> [Window Level] -> Output ");
-                m_viewer->SetInput( m_mainVolume->getVtkData() );
                 m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
                 m_windowLevelLUTMapper->SetLookupTable( m_modalityLut );
-                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
                 // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
                 m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
                 m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
@@ -2167,17 +2076,15 @@ void Q2DViewer::applyGrayscalePipeline()
                 if( m_modalityLUTRescale ) // rescale slope + windowlevel lut
                 {
                     DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> Window Level LUT -> Output ");
-                    m_viewer->SetInput( m_modalityLUTRescale->GetOutput() );
                     m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
                 }
                 else // windowlevel lut
                 {
                     DEBUG_LOG("Grayscale pipeline: Source Data -> Window Level LUT -> Output ");
-                    m_viewer->SetInput( m_mainVolume->getVtkData() );
                     m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
                 }
                 m_windowLevelLUTMapper->SetLookupTable( m_windowLevelLut );
-                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
                 // es dóna per fet que el window level queda ajustat per defecte
                 m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
                 m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
@@ -2191,20 +2098,18 @@ void Q2DViewer::applyGrayscalePipeline()
                 {
                     DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Presentation LUT -> Output ");
                     m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
-                    m_viewer->SetInput( m_modalityLUTRescale->GetOutput() );
                     m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
                 }
                 else // [ww/wl +] presentation
                 {
                     DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Presentation LUT -> Output ");
-                    m_viewer->SetInput( m_mainVolume->getVtkData() );
                     m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
                 }
                 m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
                 // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
                 m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
                 m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
-                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
             }
             else
             {
@@ -2212,18 +2117,16 @@ void Q2DViewer::applyGrayscalePipeline()
                 {
                     DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Output ");
 //                     m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
-                    m_viewer->SetInput( m_modalityLUTRescale->GetOutput() );
                     m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
                 }
                 else // res
                 {
                     DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
-                    m_viewer->SetInput( m_mainVolume->getVtkData() );
                     m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
                 }
                 m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
                 m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
-                m_viewer->GetImageActor()->SetInput( m_windowLevelLUTMapper->GetOutput() );
+                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
             }
         }
     }
@@ -2272,10 +2175,15 @@ void Q2DViewer::setSlabThickness( int thickness )
         m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice );
         m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
         updateDisplayExtent();
+        updateSliceAnnotationInformation();
         this->refresh();
     }
 
+    // TODO és del tot correcte que vagi aquí aquesta crida?
+    // tal com està posat se suposa que sempre el valor de thickness ha
+    // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
     emit slabThicknessChanged( m_slabThickness );
+    
 }
 
 int Q2DViewer::getSlabThickness() const
@@ -2463,9 +2371,22 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
     m_currentSlice = m_firstSlabSlice;
 }
 
+void Q2DViewer::checkAndUpdateSliceValue( int value )
+{
+    if( value < 0 )
+        m_currentSlice = 0;
+    else if( value + m_slabThickness-1 > m_maxSliceValue )
+        m_currentSlice = m_maxSliceValue - m_slabThickness + 1;
+    else
+        m_currentSlice = value;
+
+    m_firstSlabSlice = m_currentSlice;
+    m_lastSlabSlice = m_firstSlabSlice + m_slabThickness;
+}
+
 double *Q2DViewer::pointInModel( int screen_x, int screen_y )
 {
-    double *bounds = m_viewer->GetImageActor()->GetBounds();
+    double *bounds = m_imageActor->GetBounds();
     double position[4];
     computeDisplayToWorld( getRenderer(), screen_x, screen_y, 0, position );
     double *lastPointInModel = new double[3];
