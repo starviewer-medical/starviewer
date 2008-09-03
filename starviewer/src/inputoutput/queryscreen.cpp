@@ -1117,9 +1117,10 @@ void QueryScreen::importDicomdir()
     // TODO ara només permetrem importar estudis sencers
     foreach( QString studyUID, m_studyTreeWidgetDicomdir->getSelectedStudiesUID() )
     {
-        state = importDicom.import( m_readDicomdir.getDicomdirFilePath(), studyUID, QString(), QString() );
-
-        if (!state.good()) failedStudies++;
+        if ( !importDicom.import(m_readDicomdir.getDicomdirFilePath(), studyUID, QString(), QString() ) )
+        {
+            failedStudies++;
+        }
     }
 
     queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca

@@ -15,7 +15,6 @@ class QString;
 
 namespace udg {
 
-class Status;
 class DICOMImage;
 class DICOMTagReader;
 
@@ -29,7 +28,7 @@ class DICOMDIRImporter : QObject {
 
 public:
     ///Importa les dades del dicomdir que es trova a dicomdirPath que pertanyen a l'study amb UID studyUID
-    Status import( QString dicomdirPath, QString studyUID, QString seriesUID, QString imageUID );
+    bool import( QString dicomdirPath, QString studyUID, QString seriesUID, QString imageUID );
 
 signals:
     ///Senyal que ens indica que s'ha importat una imatge a disc. Quan s'emet aquest senyal encara no s'ha guardat a la bd.
@@ -38,11 +37,11 @@ signals:
 private:
     DICOMDIRReader m_readDicomdir;
 
-    Status importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID);
+    bool importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
-    Status importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID);
+    bool importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
-    Status importImage(DICOMImage image);
+    bool importImage(DICOMImage image);
 };
 
 }

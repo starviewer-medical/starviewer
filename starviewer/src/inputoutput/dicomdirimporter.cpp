@@ -30,14 +30,11 @@
 namespace udg
 {
 
-Status DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
+bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
-    Status state;
-    QString studyPath;
+    Status state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
-    state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
-
-    if ( !state.good() ) return state;
+    if ( !state.good() ) return false;
 #ifdef NEW_PACS
     PatientFiller patientFiller;
     LocalDatabaseManager localDatabaseManager;
@@ -46,20 +43,20 @@ Status DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString 
     connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManager, SLOT( insert(Patient *) ));
 #endif
 
-    state = importStudy( studyUID , seriesUID , sopInstanceUID );
+    bool ok = importStudy( studyUID , seriesUID , sopInstanceUID );
 
 #ifdef NEW_PACS
-    if (state.good())
+    if (ok)
     {
         patientFiller.finishDICOMFilesProcess();
     }
 #endif
     INFO_LOG( "Estudi " + studyUID + " importat" );
 
-    return state;
+    return ok;
 }
 
-Status DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
+bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     Status state;
     CacheStudyDAL cacheStudyDAL;
@@ -83,9 +80,8 @@ Status DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QStrin
 
     if (studyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
     {
-        ERROR_LOG( "NO S'HAN TROBAT ESTUDIS PER IMPORTAR" );
-        state.setStatus( "No s'han trobat estudis per importar" , false , 1310 );
-        return state;
+        ERROR_LOG( "No s'han trobat estudis per importar" );
+        return false;
     }
 
     study = studyListToImport.value(0);
@@ -114,26 +110,22 @@ Status DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QStrin
 #ifndef NEW_PACS
         cacheSeriesDAL.insertSeries( &seriesToImport );
 #endif
-        state = importSeries( studyUID , seriesToImport.getSeriesUID() , sopInstanceUID );
-
-        if ( !state.good() ) break;
+        if ( !importSeries(studyUID, seriesToImport.getSeriesUID(), sopInstanceUID) ) return false;
     }
 
-    if ( state.good() )
-    {
-        scaleDicomStudy.scale( study.getStudyUID() );
+    scaleDicomStudy.scale( study.getStudyUID() );
 
+    bool ok = true;
 #ifndef NEW_PACS
-        state = cacheStudyDAL.setStudyRetrieved( study.getStudyUID() );
+    state = cacheStudyDAL.setStudyRetrieved( study.getStudyUID() );
+    ok = state.good();
 #endif
-    }
 
-    return state;
+    return ok;
 }
 
-Status DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
+bool DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
-    Status state;
     QList<DICOMImage> imageListToImport;
     QString seriesPath;
     StarviewerSettings starviewerSettings;
@@ -148,18 +140,17 @@ Status DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QStri
 
     foreach(DICOMImage imageToImport, imageListToImport)
     {
-        state = importImage( imageToImport );
-        if ( !state.good() ) break;
+        if ( !importImage(imageToImport) ) return false;
     }
-    return state;
+
+    return true;
 }
 
-Status DICOMDIRImporter::importImage(DICOMImage image)
+bool DICOMDIRImporter::importImage(DICOMImage image)
 {
     QString cacheImagePath, dicomdirImagePath;
     StarviewerSettings starviewerSettings;
     CacheImageDAL cacheImage;
-    Status state;
 
     cacheImagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
 
@@ -177,9 +168,8 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
     }
     else
     {
-        state.setStatus( "Inconsistent dicomdir, some files don't exist" , false , 1303 );
         ERROR_LOG("Dicomdir inconsistent: La imatge [" + image.getImagePath() + "] no existeix" );
-        return state;
+        return false;
     }
 
     if( QFile::copy( dicomdirImagePath , cacheImagePath ) )
@@ -187,23 +177,22 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
 #ifdef NEW_PACS
         DICOMTagReader *dicomTagReader = new DICOMTagReader(cacheImagePath);
         emit imageImportedToDisk(dicomTagReader);
-        state.setStatus( DcmtkNoError );
 #else
         image.setImageName ( image.getSOPInstanceUID() );
         QFileInfo imageInfo( cacheImagePath );
         if( imageInfo.exists() )
         {
             image.setImageSize( imageInfo.size() );
-            state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
+            Status state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
 
             //la imatge ja existeix a la base de dades, en aquest cas l'ignorem l'error ja pot ser que alguna part de les imatges que s'importen les tinguessim en la la base de dades local
-            if (state.code() == 2019) state.setStatus( DcmtkNoError );
+            if (state.code() == 2019) return true;
         }
         else
         {
             //No s'hauria de produir mai aquest error
             ERROR_LOG("Error no s'ha copiat la imatge [" + dicomdirImagePath + "] no s'ha copiat a [" + cacheImagePath + "] " );
-            state.setStatus( DcmtkUnknowError );
+            return false;
         }
 #endif
     }
@@ -214,7 +203,7 @@ Status DICOMDIRImporter::importImage(DICOMImage image)
         //state.setStatus( DcmtkUnknowError );
     }
 
-    return state;
+    return true;
 }
 
 }
