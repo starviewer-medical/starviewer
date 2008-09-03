@@ -94,19 +94,13 @@ void QExecuteOperationThread::run()
 
         switch (operation.getOperation())
         {
-            case Operation::Retrieve :
-                 m_view = false;
+            case Operation::Retrieve:
+            case Operation::View:
                  retrieveStudy(operation);
                  break;
-            case Operation::View :
-                 m_view = true;
-                 retrieveStudy(operation);
+            case Operation::Move:
+                 moveStudy(operation);
                  break;
-            case Operation::Move :
-                 moveStudy( operation );
-                 break;
-            default:
-            break;
         }
 
         //comprovem si hem de parar
@@ -114,7 +108,7 @@ void QExecuteOperationThread::run()
         m_stop = queueOperationList->isEmpty();
         m_semaphor.release();
     }
-	INFO_LOG("Finalitzant thread que executa operacions");
+    INFO_LOG("Finalitzant thread que executa operacions");
 }
 
 //descarrega un estudi
@@ -131,8 +125,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    ScaleStudy scaleStudy;
-    RetrieveImages retrieveImages;
     bool enoughSpace , errorRetrieving ;
 
     state = enoughFreeSpace( enoughSpace );
@@ -157,8 +149,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             QMessageBox::critical( 0 , tr( "Starviewer" ) , tr( "Error freeing space. The study couldn't be retrieved" ) );
         }
         ERROR_LOG( logMessage );
-
+#ifndef NEW_PACS
         cacheStudyDAL.delStudy( studyUID);
+#endif
         return;
     }
 
@@ -170,40 +163,46 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
         emit setErrorOperation( studyUID );
         emit errorConnectingPacs( operation.getPacsParameters().getPacsID() );
+#ifndef NEW_PACS
         cacheStudyDAL.delStudy( studyUID) ;
+#endif
         return;
     }
 
     //passem els parametres a la classe retrieveImages
+    RetrieveImages retrieveImages;
     retrieveImages.setConnection( pacsConnection.getConnection() );
     retrieveImages.setMask( operation.getDicomMask() );
     retrieveImages.setNetwork( pacsConnection.getNetwork() );
 
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
-    piSingleton->addNewProcessImage( studyUID,sProcessImg) ;
+    piSingleton->addNewProcessImage(studyUID, sProcessImg);
 
     connect(sProcessImg, SIGNAL( imageRetrieved(QString, int) ), this, SIGNAL( imageCommit(QString, int) ));
-    connect(sProcessImg, SIGNAL( seriesRetrieved(QString) ), this, SLOT( seriesCommit(QString) ));
+    connect(sProcessImg, SIGNAL( seriesRetrieved(QString) ), this, SIGNAL( seriesCommit(QString) ));
 
 #ifdef NEW_PACS
-    connect( sProcessImg , SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller , SLOT( processDICOMFile(DICOMTagReader*) ) );
-    connect( this , SIGNAL( retrieveFinished() ), patientFiller, SLOT( finishDICOMFilesProcess() ), Qt::DirectConnection );
-    connect( patientFiller , SIGNAL( patientProcessed(Patient *) ), localDatabaseManager , SLOT( insert(Patient *) ) );
+    connect(sProcessImg, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
+    connect(this, SIGNAL( retrieveFinished() ), patientFiller, SLOT( finishDICOMFilesProcess() ), Qt::DirectConnection);
+    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManager, SLOT( insert(Patient *) ));
 #endif
 
+#ifndef NEW_PACS
     //TODO: Hack pels problemes de lentitud que tenim a windows. Això és molt fràgil perquè
     // tenim que DatabaseConnection és singleton quan no ho hauria de ser. Un rollback des d'un lloc incontrolat
     // faria quedar la bd inconsistent respecte el que esperem.
     DatabaseConnection::getDatabaseConnection()->getLock();
     DatabaseConnection::getDatabaseConnection()->beginTransaction();
     DatabaseConnection::getDatabaseConnection()->releaseLock();
+#endif
 
     retState = retrieveImages.retrieve();
 
+#ifndef NEW_PACS
     DatabaseConnection::getDatabaseConnection()->getLock();
     DatabaseConnection::getDatabaseConnection()->endTransaction();
     DatabaseConnection::getDatabaseConnection()->releaseLock();
-
+#endif
     pacsConnection.disconnect();
 
     errorRetrieving = sProcessImg->getError();
@@ -230,13 +229,19 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         cacheStudyDAL.setStudyRetrieved( studyUID ); //posem l'estudi com a   descarregat
 #endif
         INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
-        scaleStudy.scale( studyUID ); //escalem l'estudi per la previsualització de la caché
+
+        //escalem l'estudi per la previsualització de la caché
+        ScaleStudy scaleStudy;
+        scaleStudy.scale(studyUID);
+
         emit setOperationFinished( studyUID );// descarregat a QOperationStateScreen
         emit setRetrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
         emit retrieveFinished();
 
-        if ( m_view )
-            emit ( viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() ) );
+        if ( operation.getOperation() == Operation::View )
+        {
+            emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
+        }
 #ifndef NEW_PACS
     }
 #endif

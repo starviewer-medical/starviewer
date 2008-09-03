@@ -100,7 +100,6 @@ signals :
 private :
 
     bool m_stop;//indica si el thread esta parat
-    bool m_view;//indica si la operacio que s'esta realitzant és la descarrega d'un estudi per visualitzar-lo
 
     /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar
       * captura els signals de l'objecte starviewersettings que es emes cada vegada que finalitza la descarrega d'una  serie
