@@ -263,8 +263,9 @@ OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, DICOMTagR
     E_TransferSyntax xfer = opt_writeTransferSyntax;
     if (xfer == EXS_Unknown) xfer = storeCallbackData->dcmff->getDataset()->getOriginalXfer();
 
-    return storeCallbackData->dcmff->saveFile( qPrintable( QDir::toNativeSeparators( getCompositeInstancePath(dicomTagReader) + "/" + storeCallbackData->imageFileName) ) , 
-                                                xfer , opt_sequenceType , opt_groupLength , opt_paddingType , (Uint32)opt_filepad , (Uint32)opt_itempad , !opt_useMetaheader );
+    return storeCallbackData->dcmff->saveFile(
+            qPrintable( QDir::toNativeSeparators( getCompositeInstancePath(dicomTagReader) + "/" + storeCallbackData->imageFileName) ),
+            xfer, opt_sequenceType, opt_groupLength, opt_paddingType, (Uint32)opt_filepad, (Uint32)opt_itempad, !opt_useMetaheader );
 }
 
 OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_PresentationContextID presID )
