@@ -395,7 +395,7 @@ private:
     void createRulers();
 
     /// Crea la barra de valors
-    vtkScalarBarActor * createScalarBar();
+    void createScalarBar();
 
     /// Actualitza la barra de valors
     void updateScalarBar();
@@ -410,16 +410,13 @@ private:
     /// Per exemple, si l'etiqueta que ens donen és RPI (Right-Posterior,Inferior), el valor retornat seria LAS (Left-Anterior-Superior)
     /// Les etiquetes vàlides i els seus oposats són les següents:
     /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
-    static QString getOppositeOrientationLabel( QString label );
+    static QString getOppositeOrientationLabel( const QString &label );
 
     /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
 
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();
-
-    /// crea i retorna un ruler stàndar
-    vtkAxisActor2D* createRuler();
 
     /// Fa els càlculs del pipeline de l'escala de grisos del volum d'entrada. És a dir calcularà la modality lut, voi lut i presentation lut però no l'aplicarà
     void computeInputGrayscalePipeline();
