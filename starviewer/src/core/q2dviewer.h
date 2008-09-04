@@ -379,7 +379,6 @@ private:
     /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
     void updateSliceAnnotationInformation();
     void updatePatientAnnotationInformation();
-    void updatePatientOrientationAnnotationInformation();
 
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
@@ -484,7 +483,7 @@ private slots:
     /// thick slab
     void setupDefaultPipeline();
     void setupThickSlabPipeline();
-    
+
 protected:
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;

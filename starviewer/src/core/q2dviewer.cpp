@@ -543,7 +543,7 @@ void Q2DViewer::refreshAnnotations()
 void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
 {
     Q_ASSERT( m_sliceAnnotation );
-    
+
     if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // si les annotacions estan habilitades
     {
         QString lowerLeftText;
@@ -803,7 +803,7 @@ void Q2DViewer::setupInteraction()
     Q_ASSERT( m_vtkWidget );
     Q_ASSERT( m_interactorStyle );
 
-    m_vtkWidget->GetRenderWindow()->AddRenderer( m_imageRenderer );
+    this->getRenderWindow()->AddRenderer( m_imageRenderer );
     this->getInteractor()->SetInteractorStyle( m_interactorStyle );
     m_interactorStyle->SetCurrentRenderer( m_imageRenderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
@@ -889,10 +889,10 @@ void Q2DViewer::setInput( Volume* volume )
 
     updateDisplayExtent(); // TODO BUG sino fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
     resetViewToAxial();
-    
+
     updatePatientAnnotationInformation();
     this->enableAnnotation( m_enabledAnnotations );
-    
+
     // actualitzem la informació de window level
     this->updateWindowLevelData();
     // \TODO això no sabem si serà del tot necessari
@@ -975,12 +975,12 @@ void Q2DViewer::render()
 void Q2DViewer::resetView( CameraOrientationType view )
 {
     m_lastView = view;
-    // TODO aquest signal el mantenim aquí i no el posem 
+    // TODO aquest signal el mantenim aquí i no el posem
     // al final del mètode, com semblaria lògic, degut
     // a que cal millorar la interacció amb QThickSlabWidget
     // ara si es posa al final, després de resetCamera, peta
-    emit viewChanged( m_lastView ); 
-    
+    emit viewChanged( m_lastView );
+
     // thick Slab, li indiquem la direcció de projecció
     m_thickSlabProjectionFilter->SetProjectionDimension( m_lastView );
 
@@ -1092,7 +1092,7 @@ void Q2DViewer::resetCamera()
 
         vtkCamera *camera = m_imageRenderer->GetActiveCamera();
         Q_ASSERT( camera );
-        
+
         double bounds[6];
         QString position;
         switch( m_lastView )
@@ -1103,7 +1103,7 @@ void Q2DViewer::resetCamera()
             camera->SetViewUp(0,-1,0);
             camera->SetPosition(0,0,-1);
             camera->SetRoll( -m_rotateFactor*90. + 180. );
-            
+
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
             checkAndUpdateSliceValue(0);
             updateDisplayExtent();
@@ -1123,7 +1123,7 @@ void Q2DViewer::resetCamera()
             camera->SetPosition(1,0,0); // -1 if medical ?
             camera->SetViewUp(0,0,1);
             camera->SetRoll( -m_rotateFactor*90. -90. );
-            
+
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
             checkAndUpdateSliceValue(m_maxSliceValue/2);
             updateDisplayExtent();
@@ -1132,7 +1132,7 @@ void Q2DViewer::resetCamera()
             // ajustem la imatge al viewport
             m_imageActor->GetBounds( bounds );
             scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
-            
+
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
@@ -1150,7 +1150,7 @@ void Q2DViewer::resetCamera()
             camera->SetPosition(0,-1,0); // 1 if medical ?
             camera->SetViewUp(0,0,1);
             camera->SetRoll( -m_rotateFactor*90. );
-            
+
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
             checkAndUpdateSliceValue(m_maxSliceValue/2);
             updateDisplayExtent();
@@ -1159,7 +1159,7 @@ void Q2DViewer::resetCamera()
             // ajustem la imatge al viewport
             m_imageActor->GetBounds( bounds );
             scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
-            
+
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
@@ -1195,7 +1195,7 @@ void Q2DViewer::setSlice( int value )
         {
             m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice );
             // TODO cal actualitzar aquest valor?
-            m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness ); 
+            m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
             //si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
@@ -1916,12 +1916,6 @@ void Q2DViewer::updatePatientAnnotationInformation()
 
 }
 
-void Q2DViewer::updatePatientOrientationAnnotationInformation()
-{
-    // TODO per implementar correctament
-}
-
-
 void Q2DViewer::updateDisplayExtent()
 {
     Q_ASSERT( m_imageActor );
@@ -2183,7 +2177,7 @@ void Q2DViewer::setSlabThickness( int thickness )
     // tal com està posat se suposa que sempre el valor de thickness ha
     // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
     emit slabThicknessChanged( m_slabThickness );
-    
+
 }
 
 int Q2DViewer::getSlabThickness() const
