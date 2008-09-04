@@ -161,7 +161,6 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             double firstIntersectionPoint[3], secondIntersectionPoint[3];
 
             int numberOfIntersections = this->getIntersections( upperPlaneBounds.at(0), upperPlaneBounds.at(1), upperPlaneBounds.at(2), upperPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
-            DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
             if( numberOfIntersections > 0 )
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
@@ -186,7 +185,6 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             numberOfIntersections = this->getIntersections( lowerPlaneBounds.at(0), lowerPlaneBounds.at(1), lowerPlaneBounds.at(2), lowerPlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
 
             // un cop tenim les interseccions nomes cal projectar-les i pintar la linia
-            DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
             if( numberOfIntersections > 0 )
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
@@ -216,7 +214,6 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
             double firstIntersectionPoint[3], secondIntersectionPoint[3];
 
             int numberOfIntersections = this->getIntersections( planeBounds.at(0), planeBounds.at(1), planeBounds.at(2), planeBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint );
-            DEBUG_LOG(" ======== Nombre d'interseccions entre plans: " +  QString::number( numberOfIntersections ) );
             if( numberOfIntersections > 0 )
             {
                 m_2DViewer->projectDICOMPointToCurrentDisplayedImage( firstIntersectionPoint, firstIntersectionPoint );
