@@ -311,7 +311,15 @@ public:
 	QString getLastOpenedDICOMDIRPath() const;
 	void setLastOpenedDICOMDIRPath( QString const & path );
 
-private :
+private: 
+    /// Ens dóna el nom del host local. 
+    /// El mètode l'hem extret del propi codi de Qt (QtNetwork) per així evitar haver de 
+    /// linkar contra una altre llibreria més.
+    /// TODO el mètode està aquí temporalment, fins que tinguem una classe de caràcter general
+    /// per utilitats a nivell de sistema
+    QString getLocalHostName();
+
+private:
     /// Nom del grup on es guarda la configuració d'aquesta classe
     QString GroupSettingsName;
 
