@@ -1282,12 +1282,12 @@ void QDifuPerfuSegmentationExtension::setPaintCursor(int idViewer)
 
             if(idViewer==1)
             {
-                m_diffusion2DView->getRenderer()-> AddActor( m_squareActor );
+                m_diffusion2DView->getRenderer()->AddViewProp( m_squareActor );
                 m_diffusion2DView->refresh();
             }
             else    //idViewer=2
             {
-                m_perfusion2DView->getRenderer()-> AddActor( m_squareActor );
+                m_perfusion2DView->getRenderer()->AddViewProp( m_squareActor );
                 m_perfusion2DView->refresh();
             }
 

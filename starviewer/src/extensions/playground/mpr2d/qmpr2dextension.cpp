@@ -973,12 +973,12 @@ void QMPR2DExtension::createActors()
     m_thickSlabOverSagitalActor->GetProperty()->SetColor( .0 , 1. , 1. );
     m_thickSlabOverSagitalActor->GetProperty()->SetLineStipplePattern( 65280 );
 
-    m_axial2DView->getRenderer()->AddActor2D( m_sagitalOverAxialAxisActor );
-    m_axial2DView->getRenderer()->AddActor2D( m_coronalOverAxialIntersectionAxis );
-    m_axial2DView->getRenderer()->AddActor2D( m_thickSlabOverAxialActor );
-    m_sagital2DView->getRenderer()->AddActor2D( m_coronalOverSagitalIntersectionAxis );
-    m_sagital2DView->getRenderer()->AddActor2D( m_axialOverSagitalIntersectionAxis );
-    m_sagital2DView->getRenderer()->AddActor2D( m_thickSlabOverSagitalActor );
+    m_axial2DView->getRenderer()->AddViewProp( m_sagitalOverAxialAxisActor );
+    m_axial2DView->getRenderer()->AddViewProp( m_coronalOverAxialIntersectionAxis );
+    m_axial2DView->getRenderer()->AddViewProp( m_thickSlabOverAxialActor );
+    m_sagital2DView->getRenderer()->AddViewProp( m_coronalOverSagitalIntersectionAxis );
+    m_sagital2DView->getRenderer()->AddViewProp( m_axialOverSagitalIntersectionAxis );
+    m_sagital2DView->getRenderer()->AddViewProp( m_thickSlabOverSagitalActor );
 
 }
 

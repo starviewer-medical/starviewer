@@ -83,7 +83,7 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
     if( prop )
     {
         connect( primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *) ) );
-        m_2DViewer->getRenderer()->AddActor( prop );
+        m_2DViewer->getRenderer()->AddViewProp( prop );
         refresh();
     }
 }
@@ -134,7 +134,7 @@ void Drawer::removeAllPrimitives()
         // només esborrarem si ningú és propietari
         if( !primitive->hasOwners() )
         {
-            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+            m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
             delete primitive;
         }
     }
@@ -172,7 +172,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         {
             found = true;
             axialIterator.remove();
-            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+            m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
 
         }
     }
@@ -188,7 +188,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         {
             found = true;
             sagitalIterator.remove();
-            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+            m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
         }
     }
 
@@ -203,7 +203,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         {
             found = true;
             coronalIterator.remove();
-            m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+            m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
         }
     }
 
@@ -214,7 +214,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
     {
         found = true;
         m_top2DPlanePrimitives.removeAt( m_top2DPlanePrimitives.indexOf(primitive) );
-        m_2DViewer->getRenderer()->RemoveActor( primitive->getAsVtkProp() );
+        m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
         m_2DViewer->refresh();
     }
 }

@@ -126,7 +126,7 @@ void SliceAnnotationController::removeThemAll()
     while( axialIterator.hasNext() )
     {
         axialIterator.next();
-//         m_2DViewer->getRenderer()->RemoveActor( axialIterator.value() );
+//         m_2DViewer->getRenderer()->RemoveViewProp( axialIterator.value() );
         axialIterator.remove();
     }
 
@@ -135,7 +135,7 @@ void SliceAnnotationController::removeThemAll()
     while( sagitalIterator.hasNext() )
     {
         sagitalIterator.next();
-//         m_2DViewer->getRenderer()->RemoveActor( sagitalIterator.value() );
+//         m_2DViewer->getRenderer()->RemoveViewProp( sagitalIterator.value() );
         sagitalIterator.remove();
     }
 
@@ -144,7 +144,7 @@ void SliceAnnotationController::removeThemAll()
     while( coronalIterator.hasNext() )
     {
         coronalIterator.next();
-//         m_2DViewer->getRenderer()->RemoveActor( coronalIterator.value() );
+//         m_2DViewer->getRenderer()->RemoveViewProp( coronalIterator.value() );
         coronalIterator.remove();
     }
     // refresquem l'escena

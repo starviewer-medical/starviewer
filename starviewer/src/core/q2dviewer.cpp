@@ -700,17 +700,17 @@ void Q2DViewer::addActors()
     Q_ASSERT( m_imageActor );
 
     // anotacions de texte FIXE
-    this->getRenderer()->AddActor2D( m_serieInformationAnnotation );
+    this->getRenderer()->AddViewProp( m_serieInformationAnnotation );
     // anotacions d'slice TODO cal separar-les?
-    this->getRenderer()->AddActor2D( m_sliceAnnotation );
+    this->getRenderer()->AddViewProp( m_sliceAnnotation );
 
-    this->getRenderer()->AddActor( m_patientOrientationTextActor[0] );
-    this->getRenderer()->AddActor( m_patientOrientationTextActor[1] );
-    this->getRenderer()->AddActor( m_patientOrientationTextActor[2] );
-    this->getRenderer()->AddActor( m_patientOrientationTextActor[3] );
-    this->getRenderer()->AddActor2D( m_sideRuler );
-    this->getRenderer()->AddActor2D( m_bottomRuler );
-    this->getRenderer()->AddActor2D( m_scalarBar );
+    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[0] );
+    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[1] );
+    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[2] );
+    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[3] );
+    this->getRenderer()->AddViewProp( m_sideRuler );
+    this->getRenderer()->AddViewProp( m_bottomRuler );
+    this->getRenderer()->AddViewProp( m_scalarBar );
     m_imageRenderer->AddViewProp( m_imageActor );
     // TODO colocar aix`o en un lloc mes adient
     m_imageRenderer->GetActiveCamera()->ParallelProjectionOn();

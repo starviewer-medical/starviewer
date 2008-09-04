@@ -152,7 +152,7 @@ void Q3DMPRViewer::addActors()
     }
     else
     {
-        m_renderer->AddActor( m_outlineActor );
+        m_renderer->AddViewProp( m_outlineActor );
     }
 }
 

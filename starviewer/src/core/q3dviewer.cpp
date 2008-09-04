@@ -402,7 +402,7 @@ void Q3DViewer::renderContouring()
         m_3DActor->SetMapper( m_polyDataMapper );
         m_3DActor->GetProperty()->SetColor(1,0.8,0.81);
 
-        m_renderer->AddActor( m_3DActor );
+        m_renderer->AddViewProp( m_3DActor );
         m_renderer->Render();
 
         decimator->Delete();

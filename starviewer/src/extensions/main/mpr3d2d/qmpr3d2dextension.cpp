@@ -240,11 +240,11 @@ void QMPR3D2DExtension::createActors()
     m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor( .0 , 1. , 1. );
 
     // Els afegim als visors corresponents
-    m_axial2DView->getRenderer()->AddActor2D( m_sagitalOverAxialIntersectionAxis );
-    m_axial2DView->getRenderer()->AddActor2D( m_coronalOverAxialIntersectionAxis );
+    m_axial2DView->getRenderer()->AddViewProp( m_sagitalOverAxialIntersectionAxis );
+    m_axial2DView->getRenderer()->AddViewProp( m_coronalOverAxialIntersectionAxis );
 
-    m_sagital2DView->getRenderer()->AddActor2D( m_axialOverSagitalIntersectionAxis );
-    m_sagital2DView->getRenderer()->AddActor2D( m_coronalOverSagitalIntersectionAxis );
+    m_sagital2DView->getRenderer()->AddViewProp( m_axialOverSagitalIntersectionAxis );
+    m_sagital2DView->getRenderer()->AddViewProp( m_coronalOverSagitalIntersectionAxis );
 }
 
 void QMPR3D2DExtension::updateActors()

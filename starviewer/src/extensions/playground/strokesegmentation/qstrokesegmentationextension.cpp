@@ -617,14 +617,14 @@ void QStrokeSegmentationExtension::setPaintCursor()
 
             squareActor->SetMapper( squareMapper );
 
-            m_2DView->getRenderer()-> AddActor( squareActor );
+            m_2DView->getRenderer()->AddViewProp( squareActor );
             m_2DView->refresh();
 
             squareActor->VisibilityOn();
 
-            squareMapper-> Delete();
-            points      -> Delete();
-            grid        -> Delete();
+            squareMapper->Delete();
+            points->Delete();
+            grid->Delete();
         }
         else
         {
