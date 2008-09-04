@@ -40,7 +40,6 @@
 #include <QPair>
 #include <QThread>
 #include "obscurancethread.h"
-#include <vtkMultiThreader.h>
 
 #include "vtkVolumeRayCastCompositeFunctionObscurances.h"
 #include <vtkDoubleArray.h>
@@ -1658,8 +1657,8 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
 
         // finalitzar viewpoint saliency
         viewpointSaliency[i] = 0.0;
-        QHashIterator<int, double> it( m_accumulatedViewpointSaliencyPerThread );
-        QHashIterator<int, uint> it2( m_pixelsPerThread );
+        QHashIterator<vtkMultiThreaderIDType, double> it( m_accumulatedViewpointSaliencyPerThread );
+        QHashIterator<vtkMultiThreaderIDType, uint> it2( m_pixelsPerThread );
         uint area = 0;
         while ( it.hasNext() )
         {
@@ -1705,7 +1704,7 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
 }
 
 
-void OptimalViewpointVolume::accumulateViewpointSaliency( int threadId, double saliency )
+void OptimalViewpointVolume::accumulateViewpointSaliency( vtkMultiThreaderIDType threadId, double saliency )
 {
     if ( !m_accumulatedViewpointSaliencyPerThread.contains( threadId ) )
     {

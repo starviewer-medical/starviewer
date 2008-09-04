@@ -16,6 +16,8 @@
 #include <QMutex>
 #include <QVector>
 
+#include <vtkMultiThreader.h>
+
 #include "transferfunction.h"
 
 
@@ -155,7 +157,7 @@ public:
 
 
     void computeViewpointSaliency( int directions, vtkRenderer * renderer, bool divArea );
-    void accumulateViewpointSaliency( int threadId, double saliency );
+    void accumulateViewpointSaliency( vtkMultiThreaderIDType threadId, double saliency );
 
     bool loadObscurances( const QString & obscurancesFileName, bool color);
 
@@ -309,8 +311,8 @@ private:
 
     // viewpoint saliency
     double * m_saliency;
-    QHash<int, double> m_accumulatedViewpointSaliencyPerThread;
-    QHash<int, uint> m_pixelsPerThread;
+    QHash<vtkMultiThreaderIDType, double> m_accumulatedViewpointSaliencyPerThread;
+    QHash<vtkMultiThreaderIDType, uint> m_pixelsPerThread;
     QMutex m_mutex;
 
 
