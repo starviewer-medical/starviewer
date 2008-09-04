@@ -12,7 +12,6 @@
 //qt
 #include <QTime>
 //vtk
-#include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
 namespace udg {
@@ -29,10 +28,9 @@ SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
     m_time = new QTime();
     m_latestTime = 0;
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    if( !m_2DViewer )
-    {
-        DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
-    }
+    // ens assegurem que desde la creació tenim un viewer vàlid
+    Q_ASSERT( m_2DViewer );
+
     // cada cop que canvïi l'input cal fer algunes inicialitzacions
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( inputChanged(Volume *) ) );
 }
@@ -77,10 +75,12 @@ void SlicingTool::handleEvent( unsigned long eventID )
     case vtkCommand::MiddleButtonPressEvent:
         m_mouseMovement = false;
     break;
+
     case vtkCommand::MiddleButtonReleaseEvent:
         if( !m_mouseMovement )
             switchSlicingMode();
     break;
+
     default:
     break;
     }
@@ -88,59 +88,44 @@ void SlicingTool::handleEvent( unsigned long eventID )
 
 void SlicingTool::startSlicing()
 {
-    if( m_2DViewer )
-    {
-        m_state = SLICING;
-        m_startPosition[0] = m_2DViewer->getEventPositionX();
-        m_startPosition[1] = m_2DViewer->getEventPositionY();
-        m_time->start();
-    }
-    else
-        DEBUG_LOG( "::startSlicing(): El 2DViewer és NUL!" );
+    m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
+    m_state = SLICING;
+    m_startPosition[0] = m_2DViewer->getEventPositionX();
+    m_startPosition[1] = m_2DViewer->getEventPositionY();
+    m_time->start();
 }
 
 void SlicingTool::doSlicing()
 {
-    if( m_2DViewer )
+    if( m_state == SLICING )
     {
-        if( m_state == SLICING )
-        {
-            m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
-            m_currentPosition[1] = m_2DViewer->getEventPositionY();
-            int dy = m_currentPosition[1] - m_startPosition[1];
+        m_currentPosition[1] = m_2DViewer->getEventPositionY();
+        int dy = m_currentPosition[1] - m_startPosition[1];
 
-            double timeElapsed = ( m_time->elapsed() - m_latestTime )/1000.0; // Es passa a segons
-            double acceleracio = (dy*( 1/5000.0 ) )/( timeElapsed*timeElapsed );// 1m = 5000 px aprox. Com + gran + lent anirà.
-            m_latestTime = m_time->elapsed();
-            m_startPosition[1] = m_currentPosition[1];
-            int value = 0;
-            if( dy && timeElapsed > 0.002 && timeElapsed != 0 ) // Control de casos extrems
+        double timeElapsed = ( m_time->elapsed() - m_latestTime )/1000.0; // Es passa a segons
+        double acceleracio = (dy*( 1/5000.0 ) )/( timeElapsed*timeElapsed );// 1m = 5000 px aprox. Com + gran + lent anirà.
+        m_latestTime = m_time->elapsed();
+        m_startPosition[1] = m_currentPosition[1];
+        int value = 0;
+        if( dy && timeElapsed > 0.002 && timeElapsed != 0 ) // Control de casos extrems
+        {
+            /*value = dy/abs(dy);*/
+            /// Canviem un nombre de llesques segons una acceleracio
+            value = (int)qRound(acceleracio);
+            if( value == 0 )
             {
-                /*value = dy/abs(dy);*/
-                /// Canviem un nombre de llesques segons una acceleracio
-                value = (int)qRound(acceleracio);
-                if( value == 0 )
-                {
-                    if( dy >= 0 ) value = 1;
-                    else value = -1;
-                }
+                if( dy >= 0 ) value = 1;
+                else value = -1;
             }
-            this->updateIncrement( value );
         }
+        this->updateIncrement( value );
     }
-    else
-        DEBUG_LOG( "::doSlicing(): El 2DViewer és NUL!" );
 }
 
 void SlicingTool::endSlicing()
 {
-    if( m_2DViewer )
-    {
-        m_viewer->setCursor( Qt::ArrowCursor );
-        m_state = NONE;
-    }
-    else
-        DEBUG_LOG( "::endSlicing(): El 2DViewer és NUL!" );
+    m_viewer->setCursor( Qt::ArrowCursor );
+    m_state = NONE;
 }
 
 void SlicingTool::inputChanged( Volume *input )
@@ -154,21 +139,14 @@ bool SlicingTool::currentInputHasPhases()
 {
     bool hasPhases = false;
 
-    if( m_2DViewer )
+    if( m_2DViewer->getInput() )
     {
-        if( m_2DViewer->getInput() )
-        {
-            if( m_2DViewer->getInput()->getNumberOfPhases() > 1 )
-                hasPhases = true;
-        }
-        else
-        {
-            DEBUG_LOG("L'input del viewer és NULL!");
-        }
+        if( m_2DViewer->getInput()->getNumberOfPhases() > 1 )
+            hasPhases = true;
     }
     else
     {
-        DEBUG_LOG("El viewer és NULL!");
+        DEBUG_LOG("L'input del viewer és NULL!");
     }
 
     return hasPhases;
