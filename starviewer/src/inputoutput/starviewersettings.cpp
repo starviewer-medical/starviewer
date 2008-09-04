@@ -13,6 +13,12 @@
 
 #include "logging.h"
 
+// per getHostName
+#ifdef _WIN32
+#include <winsock2.h>
+#else
+#include <unistd.h>
+#endif
 
 const QString databaseRootKey("/cache/sdatabasePath" ); //indica on es troba la bd
 const QString poolSizeKey("/cache/poolSize" );
@@ -47,6 +53,10 @@ namespace udg {
 
 StarviewerSettings::StarviewerSettings()
     :GroupSettingsName("PACS")
+{
+}
+
+StarviewerSettings::~StarviewerSettings()
 {
 }
 
@@ -126,7 +136,7 @@ void StarviewerSettings::setMaxConnections( QString maxConn )
 
 QString StarviewerSettings::getAETitleMachine()
 {
-    return m_starviewerSettings.value( GroupSettingsName + AETitleMachineKey , GroupSettingsName ).toString();
+    return m_starviewerSettings.value( GroupSettingsName + AETitleMachineKey , this->getLocalHostName() ).toString();
 }
 
 QString StarviewerSettings::getTimeout()
@@ -369,8 +379,13 @@ void StarviewerSettings::setLastOpenedDICOMDIRPath( QString const & path )
 	m_starviewerSettings.setValue( GroupSettingsName + lastOpenedDICOMDIRPath, path );
 }
 
-StarviewerSettings::~StarviewerSettings()
-{
+QString StarviewerSettings::getLocalHostName()
+{ 
+    char hostName[512];
+    if (gethostname(hostName, sizeof(hostName)) == -1)
+        return QString();
+    hostName[sizeof(hostName) - 1] = '\0';
+    return QString::fromLocal8Bit(hostName);
 }
 
 };
