@@ -57,7 +57,7 @@ void Q2DViewerWidget::createConnections()
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
 
     // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider, el viewer es marqui com a seleccionat
-    connect( m_slider, SIGNAL( sliderPressed() ), SLOT( sliderPressed() ));
+    connect( m_slider, SIGNAL( sliderPressed() ), SLOT( emitSelectedViewer() ));
 
     connect( m_2DView, SIGNAL ( selected() ), SLOT( emitSelectedViewer() ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateInput( Volume *) ) );
@@ -85,12 +85,13 @@ void Q2DViewerWidget::updateInput( Volume *input )
 void Q2DViewerWidget::mousePressEvent( QMouseEvent *event )
 {
     Q_UNUSED(event);
-    emit selected( this );
+    emitSelectedViewer();
 }
 
 void Q2DViewerWidget::emitSelectedViewer()
 {
-    emit selected( this );
+    if( !m_2DView->isActive() )
+        emit selected( this );
 }
 
 void Q2DViewerWidget::resetViewToAxial()
@@ -175,14 +176,6 @@ void Q2DViewerWidget::emitSynchronize()
 void Q2DViewerWidget::updateSlider()
 {
     m_slider->setValue( m_2DView->getCurrentSlice() );
-}
-
-void Q2DViewerWidget::sliderPressed()
-{
-	if( !m_2DView->isActive() )
-	{
-		this->emitSelectedViewer();
-	}
 }
 
 void Q2DViewerWidget::disableSynchronization()
