@@ -20,6 +20,8 @@ ZoomTool::ZoomTool( QViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_toolName = "ZoomTool";
+    // ens assegurem que desde la creació tenim un viewer vàlid
+    Q_ASSERT( m_viewer );
 }
 
 ZoomTool::~ZoomTool()
@@ -63,44 +65,28 @@ void ZoomTool::handleEvent( unsigned long eventID )
 
 void ZoomTool::startZoom()
 {
-    if( m_viewer )
-    {
-        m_state = ZOOMING;
-        m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
-    }
-    else
-        DEBUG_LOG( "::startZoom(): El viewer és nul!" );
+    m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
+    m_state = ZOOMING;
+    m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
 
 void ZoomTool::doZoom()
 {
-    if( m_viewer )
+    if( m_state == ZOOMING )
     {
-        if( m_state == ZOOMING )
-        {
-            m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
-            double *center = m_viewer->getRenderer()->GetCenter();
-            int dy = m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY();
-            // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
-            double dyf = 10.0 * (double)(dy) / (double)(center[1]);
-            m_viewer->zoom( pow((double)1.1, dyf) );
-        }
+        double *center = m_viewer->getRenderer()->GetCenter();
+        int dy = m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY();
+        // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
+        double dyf = 10.0 * (double)(dy) / (double)(center[1]);
+        m_viewer->zoom( pow((double)1.1, dyf) );
     }
-    else
-        DEBUG_LOG( "::doZoom(): El viewer és nul!" );
 }
 
 void ZoomTool::endZoom()
 {
-    if( m_viewer )
-    {
-        m_viewer->setCursor( Qt::ArrowCursor );
-        m_state = NONE;
-        m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
-        m_viewer->refresh();
-    }
-    else
-        DEBUG_LOG( "::endZoom(): El viewer és nul!" );
+    m_viewer->setCursor( Qt::ArrowCursor );
+    m_state = NONE;
+    m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
 }
 
 }

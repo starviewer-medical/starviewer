@@ -12,7 +12,6 @@
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
@@ -21,8 +20,8 @@ WindowLevelTool::WindowLevelTool( QViewer *viewer, QObject *parent )  : Tool( vi
     m_state = NONE;
     m_toolName = "WindowLevelTool";
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    if( !m_2DViewer )
-        DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
+    // ens assegurem que desde la creació tenim un viewer vàlid
+    Q_ASSERT( m_2DViewer );
 }
 
 WindowLevelTool::~WindowLevelTool()
@@ -53,91 +52,76 @@ void WindowLevelTool::handleEvent( unsigned long eventID )
 
 void WindowLevelTool::startWindowLevel()
 {
-    if( m_2DViewer )
-    {
-        m_state = WINDOWLEVELING;
-        m_initialWindow = m_2DViewer->getCurrentColorWindow();
-        m_initialLevel = m_2DViewer->getCurrentColorLevel();
-        m_windowLevelStartPosition[0] = m_2DViewer->getEventPositionX();
-        m_windowLevelStartPosition[1] = m_2DViewer->getEventPositionY();
-    }
-    else
-        DEBUG_LOG( "::startWindowLevel(): El 2DViewer és NUL!" );
+    m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
+    m_state = WINDOWLEVELING;
+    m_initialWindow = m_2DViewer->getCurrentColorWindow();
+    m_initialLevel = m_2DViewer->getCurrentColorLevel();
+    m_windowLevelStartPosition[0] = m_2DViewer->getEventPositionX();
+    m_windowLevelStartPosition[1] = m_2DViewer->getEventPositionY();
 }
 
 void WindowLevelTool::doWindowLevel()
 {
-    if( m_2DViewer )
+    m_windowLevelCurrentPosition[0] = m_2DViewer->getEventPositionX();
+    m_windowLevelCurrentPosition[1] = m_2DViewer->getEventPositionY();
+
+    int *size = m_2DViewer->getRenderer()->GetRenderWindow()->GetSize();
+    double window = m_initialWindow;
+    double level = m_initialLevel;
+
+    // Compute normalized delta
+    double dx = 4.0 *( m_windowLevelCurrentPosition[0] - m_windowLevelStartPosition[0]) / size[0];
+    double dy = 4.0 *( m_windowLevelStartPosition[1] - m_windowLevelCurrentPosition[1]) / size[1];
+
+    // Scale by current values
+    if (fabs(window) > 0.01)
     {
-        m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
-        m_windowLevelCurrentPosition[0] = m_2DViewer->getEventPositionX();
-        m_windowLevelCurrentPosition[1] = m_2DViewer->getEventPositionY();
-
-        int *size = m_2DViewer->getRenderer()->GetRenderWindow()->GetSize();
-        double window = m_initialWindow;
-        double level = m_initialLevel;
-
-        // Compute normalized delta
-        double dx = 4.0 *( m_windowLevelCurrentPosition[0] - m_windowLevelStartPosition[0]) / size[0];
-        double dy = 4.0 *( m_windowLevelStartPosition[1] - m_windowLevelCurrentPosition[1]) / size[1];
-
-        // Scale by current values
-        if (fabs(window) > 0.01)
-        {
-            dx = dx * window;
-        }
-        else
-        {
-            dx = dx * (window < 0 ? -0.01 : 0.01);
-        }
-        if (fabs(level) > 0.01)
-        {
-            dy = dy * level;
-        }
-        else
-        {
-            dy = dy * (level < 0 ? -0.01 : 0.01);
-        }
-
-        // Abs so that direction does not flip
-        if (window < 0.0)
-        {
-            dx = -1*dx;
-        }
-        if (level < 0.0)
-        {
-            dy = -1*dy;
-        }
-
-        // Compute new window level
-        double newWindow = dx + window;
-        double newLevel;
-        newLevel = level - dy;
-
-        // Stay away from zero and really
-        if ( fabs(newWindow) < 0.01 )
-        {
-            newWindow = 0.01 * ( newWindow < 0 ? -1 : 1 );
-        }
-        if ( fabs(newLevel) < 0.01 )
-        {
-            newLevel = 0.01 * ( newLevel < 0 ? -1 : 1 );
-        }
-        m_2DViewer->getWindowLevelData()->setCustomWindowLevel( newWindow , newLevel );
+        dx = dx * window;
     }
     else
-        DEBUG_LOG( "::doWindowLevel(): El 2DViewer és NUL!" );
+    {
+        dx = dx * (window < 0 ? -0.01 : 0.01);
+    }
+    if (fabs(level) > 0.01)
+    {
+        dy = dy * level;
+    }
+    else
+    {
+        dy = dy * (level < 0 ? -0.01 : 0.01);
+    }
+
+    // Abs so that direction does not flip
+    if (window < 0.0)
+    {
+        dx = -1*dx;
+    }
+    if (level < 0.0)
+    {
+        dy = -1*dy;
+    }
+
+    // Compute new window level
+    double newWindow = dx + window;
+    double newLevel;
+    newLevel = level - dy;
+
+    // Stay away from zero and really
+    if ( fabs(newWindow) < 0.01 )
+    {
+        newWindow = 0.01 * ( newWindow < 0 ? -1 : 1 );
+    }
+    if ( fabs(newLevel) < 0.01 )
+    {
+        newLevel = 0.01 * ( newLevel < 0 ? -1 : 1 );
+    }
+    m_2DViewer->getWindowLevelData()->setCustomWindowLevel( newWindow , newLevel );
 }
 
 void WindowLevelTool::endWindowLevel()
 {
-    if( m_2DViewer )
-    {
-        m_viewer->setCursor( Qt::ArrowCursor );
-        m_state = NONE;
-    }
-    else
-        DEBUG_LOG( "::endWindowLevel(): El 2DViewer és NUL!" );
+    m_viewer->setCursor( Qt::ArrowCursor );
+    m_state = NONE;
 }
 
 }

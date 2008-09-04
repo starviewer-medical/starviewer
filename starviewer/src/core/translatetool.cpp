@@ -22,6 +22,8 @@ TranslateTool::TranslateTool( QViewer *viewer, QObject *parent )
 {
     m_state = NONE;
     m_toolName = "TranslateTool";
+    // ens assegurem que desde la creació tenim un viewer vàlid
+    Q_ASSERT( m_viewer );
 }
 
 TranslateTool::~TranslateTool()
@@ -51,6 +53,7 @@ void TranslateTool::handleEvent( unsigned long eventID )
 
 void TranslateTool::startTranslate()
 {
+    m_viewer->setCursor( QCursor(QPixmap(":/images/move.png")) );
     m_state = TRANSLATING;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
@@ -59,7 +62,6 @@ void TranslateTool::doTranslate()
 {
     if( m_state == TRANSLATING )
     {
-        m_viewer->setCursor( QCursor(QPixmap(":/images/move.png")) );
         this->pan();
     }
 }
