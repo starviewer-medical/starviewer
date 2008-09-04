@@ -367,7 +367,7 @@ void QLesionVisualizationExtension::createCylinder()
         actor->RotateZ( -90. );
 
         position += 0.32;
-        m_lesion3Dviewer->getRenderer()->AddActor(actor);
+        m_lesion3Dviewer->getRenderer()->AddViewProp(actor);
 
         m_cylindersCollection->AddItem(actor);
 

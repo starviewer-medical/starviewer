@@ -81,7 +81,7 @@ void VoxelInformationTool::createCaptionActor()
     m_voxelInformationCaption->GetCaptionTextProperty()->BoldOff();
 
     // l'afegim al Q2DViewer TODO ara només es té en compte 1 sol renderer!
-    m_2DViewer->getRenderer()->AddActor( m_voxelInformationCaption );
+    m_2DViewer->getRenderer()->AddViewProp( m_voxelInformationCaption );
 }
 
 void VoxelInformationTool::updateVoxelInformation()

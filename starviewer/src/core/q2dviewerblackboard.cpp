@@ -52,19 +52,19 @@ Q2DViewerBlackBoard::~Q2DViewerBlackBoard()
 
     foreach(vtkActor2D *actor, m_axialAnnotations)
     {
-        renderer->RemoveActor(actor);
+        renderer->RemoveViewProp(actor);
         actor->Delete();
     }
 
     foreach(vtkActor2D *actor, m_sagitalAnnotations)
     {
-        renderer->RemoveActor(actor);
+        renderer->RemoveViewProp(actor);
         actor->Delete();
     }
 
     foreach(vtkActor2D *actor, m_coronalAnnotations)
     {
-        renderer->RemoveActor(actor);
+        renderer->RemoveViewProp(actor);
         //if (actor) actor->Delete();
         actor->Delete();
     }
@@ -354,7 +354,7 @@ void Q2DViewerBlackBoard::addActor( vtkActor2D *actor, int slice, int view )
     if( ok )
     {
         actor->VisibilityOff();
-        m_2DViewer->getRenderer()->AddActor( actor );
+        m_2DViewer->getRenderer()->AddViewProp( actor );
         this->refreshObjects( m_2DViewer->getCurrentSlice() );
     }
 }
@@ -435,7 +435,7 @@ void Q2DViewerBlackBoard::clear()
     while( axialIterator.hasNext() )
     {
         axialIterator.next();
-        m_2DViewer->getRenderer()->RemoveActor( axialIterator.value() );
+        m_2DViewer->getRenderer()->RemoveViewProp( axialIterator.value() );
         axialIterator.remove();
     }
 
@@ -444,7 +444,7 @@ void Q2DViewerBlackBoard::clear()
     while( sagitalIterator.hasNext() )
     {
         sagitalIterator.next();
-        m_2DViewer->getRenderer()->RemoveActor( sagitalIterator.value() );
+        m_2DViewer->getRenderer()->RemoveViewProp( sagitalIterator.value() );
         sagitalIterator.remove();
     }
 
@@ -453,7 +453,7 @@ void Q2DViewerBlackBoard::clear()
     while( coronalIterator.hasNext() )
     {
         coronalIterator.next();
-        m_2DViewer->getRenderer()->RemoveActor( coronalIterator.value() );
+        m_2DViewer->getRenderer()->RemoveViewProp( coronalIterator.value() );
         coronalIterator.remove();
     }
     // refresquem l'escena

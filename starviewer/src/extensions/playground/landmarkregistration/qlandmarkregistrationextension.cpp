@@ -552,7 +552,7 @@ void QLandmarkRegistrationExtension::applyMethod()
         //std::cout<<"Moved seed Slice: "<<(int)(pos[2]/m_firstVolume->getSpacing()[2])<<std::endl;
         m_seedSliceVectorReg.push_back((int)((pos[2]/m_firstVolume->getSpacing()[2])+1.5));
         //std::cout<<"slice2:"<<(int)((pos[2]/m_firstVolume->getSpacing()[2])+1.5)<<std::endl;
-        m_2DView->getRenderer()-> AddActor( pointActor );
+        m_2DView->getRenderer()-> AddViewProp( pointActor );
         m_seedActorVectorReg.push_back(pointActor);
 
         it2++;
@@ -802,7 +802,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 1, newItem2);
             m_seedList1TableWidget->setItem(m_seedList1.size()-1, 2, newItem3);
 
-            m_2DView->getRenderer()-> AddActor( pointActor );
+            m_2DView->getRenderer()-> AddViewProp( pointActor );
             m_seedActorVector1.push_back(pointActor);
             m_2DView->refresh();
 
@@ -817,7 +817,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 1, newItem2);
             m_seedList2TableWidget->setItem(m_seedList2.size()-1, 2, newItem3);
 
-            m_2DView_2->getRenderer()-> AddActor( pointActor );
+            m_2DView_2->getRenderer()-> AddViewProp( pointActor );
             m_seedActorVector2.push_back(pointActor);
             m_2DView_2->refresh();
         }
@@ -956,8 +956,8 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 0, newItem);
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 1, newItem2);
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 2, newItem3);
-            m_2DView->getRenderer()-> RemoveActor( m_selectedActor );
-            m_2DView->getRenderer()-> AddActor( pointActor );
+            m_2DView->getRenderer()->RemoveViewProp( m_selectedActor );
+            m_2DView->getRenderer()->AddViewProp( pointActor );
             m_seedActorVector1[m_idSelectedSeed] = pointActor;
             m_2DView->refresh();
         }
@@ -966,14 +966,13 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 0, newItem);
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 1, newItem2);
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 2, newItem3);
-            m_2DView_2->getRenderer()-> RemoveActor( m_selectedActor );
-            m_2DView_2->getRenderer()-> AddActor( pointActor );
+            m_2DView_2->getRenderer()->RemoveViewProp( m_selectedActor );
+            m_2DView_2->getRenderer()->AddViewProp( pointActor );
             m_seedActorVector2[m_idSelectedSeed] = pointActor;
             m_2DView_2->refresh();
         }
-        pointMapper -> Delete();
-        point       -> Delete();
-
+        pointMapper->Delete();
+        point->Delete();
     }
     m_movingSeed = false;
 }
@@ -1252,19 +1251,19 @@ void QLandmarkRegistrationExtension::restore(  )
     itActor  = m_seedActorVector1.begin();
     while(itActor != m_seedActorVector1.end())
     {
-        m_2DView->getRenderer()-> RemoveActor( *itActor );
+        m_2DView->getRenderer()-> RemoveViewProp( *itActor );
         itActor++;
     }
     itActor  = m_seedActorVector2.begin();
     while(itActor != m_seedActorVector2.end())
     {
-        m_2DView_2->getRenderer()-> RemoveActor( *itActor );
+        m_2DView_2->getRenderer()-> RemoveViewProp( *itActor );
         itActor++;
     }
     itActor  = m_seedActorVectorReg.begin();
     while(itActor != m_seedActorVectorReg.end())
     {
-        m_2DView->getRenderer()-> RemoveActor( *itActor );
+        m_2DView->getRenderer()-> RemoveViewProp( *itActor );
         itActor++;
     }
     m_seedList1TableWidget->clear();
@@ -1303,7 +1302,7 @@ void QLandmarkRegistrationExtension::tryAgain(  )
     itActor  = m_seedActorVectorReg.begin();
     while(itActor != m_seedActorVectorReg.end())
     {
-        m_2DView->getRenderer()-> RemoveActor( *itActor );
+        m_2DView->getRenderer()-> RemoveViewProp( *itActor );
         itActor++;
     }
     m_seedActorVectorReg.clear();

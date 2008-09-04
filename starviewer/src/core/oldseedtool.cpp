@@ -36,7 +36,7 @@ OldSeedTool::OldSeedTool( Q2DViewer *viewer )
     m_pointActor->SetMapper( m_pointMapper );
 
     m_pointActor->VisibilityOff();
-    m_2DViewer->getRenderer()-> AddActor( m_pointActor );
+    m_2DViewer->getRenderer()->AddViewProp( m_pointActor );
 
     connect( m_2DViewer , SIGNAL( sliceChanged(int) ) , this , SLOT( sliceChanged(int) ) );
 }

@@ -575,7 +575,7 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
         squareRegionActor->SetMapper( squareMapper );
 
         std::cout<<"3"<<std::endl;
-        m_2DView->getRenderer()-> AddActor( squareRegionActor );
+        m_2DView->getRenderer()->AddViewProp( squareRegionActor );
         m_2DView->refresh();
 
         squareRegionActor->VisibilityOn();
@@ -768,14 +768,14 @@ void QRectumSegmentationExtension::setPaintCursor()
 
         squareActor->SetMapper( squareMapper );
 
-        m_2DView->getRenderer()-> AddActor( squareActor );
+        m_2DView->getRenderer()->AddViewProp( squareActor );
         m_2DView->refresh();
 
         squareActor->VisibilityOn();
 
-        squareMapper-> Delete();
-        points      -> Delete();
-        grid        -> Delete();
+        squareMapper->Delete();
+        points->Delete();
+        grid->Delete();
     }
     else
     {
