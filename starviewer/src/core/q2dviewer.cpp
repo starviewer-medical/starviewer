@@ -145,7 +145,7 @@ void Q2DViewer::createAnnotations()
     // anotacions de texte variable (window/level, window size, etc)
     m_sliceAnnotation = vtkCornerAnnotation::New();
     // escala de colors
-    m_scalarBar = createScalarBar();
+    createScalarBar();
     // anotacions de l'orientació del pacient
     createOrientationAnnotations();
     // Marcadors d'escala
@@ -225,28 +225,6 @@ void Q2DViewer::createRulers()
     m_anchoredRulerCoordinates->SetValue( -0.95 , -0.9 , -0.95 );
 }
 
-vtkAxisActor2D* Q2DViewer::createRuler()
-{
-    vtkAxisActor2D *ruler = vtkAxisActor2D::New();
-    ruler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    ruler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
-    ruler->AxisVisibilityOn();
-    ruler->TickVisibilityOn();
-    ruler->LabelVisibilityOn();
-    ruler->AdjustLabelsOff();
-    ruler->SetLabelFormat("%.2f");
-    ruler->SetLabelFactor( 0.35 );
-    ruler->GetLabelTextProperty()->ItalicOff();
-    ruler->GetLabelTextProperty()->BoldOff();
-    ruler->GetLabelTextProperty()->ShadowOff();
-    ruler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
-    ruler->TitleVisibilityOff();
-    ruler->SetTickLength( 10 );
-    ruler->GetProperty()->SetColor( 0 , 1 , 0 );
-
-    return ruler;
-}
-
 void Q2DViewer::updateRulers()
 {
     double *anchoredCoordinates = m_anchoredRulerCoordinates->GetComputedWorldValue( this->getRenderer() );
@@ -298,34 +276,34 @@ void Q2DViewer::setupThickSlabPipeline()
     m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
 }
 
-vtkScalarBarActor* Q2DViewer::createScalarBar()
+void Q2DViewer::createScalarBar()
 {
-    vtkScalarBarActor *scalarBar = vtkScalarBarActor::New();
-    scalarBar->SetOrientationToVertical();
-    scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
-    scalarBar->SetPosition( 0.8 , -0.8 );
-    scalarBar->SetWidth( 0.08 );
-    scalarBar->SetHeight( 0.6 );
-    scalarBar->SetLabelFormat( " %.f  " );
-    scalarBar->SetNumberOfLabels( 3 );
-    scalarBar->GetLabelTextProperty()->ItalicOff();
-    scalarBar->GetLabelTextProperty()->BoldOff();
-    scalarBar->GetLabelTextProperty()->SetJustificationToRight();
-    return scalarBar;
+    m_scalarBar = vtkScalarBarActor::New();
+    m_scalarBar->SetOrientationToVertical();
+    m_scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
+    m_scalarBar->SetPosition( 0.8 , -0.8 );
+    m_scalarBar->SetWidth( 0.08 );
+    m_scalarBar->SetHeight( 0.6 );
+    m_scalarBar->SetLabelFormat( " %.f  " );
+    m_scalarBar->SetNumberOfLabels( 3 );
+    m_scalarBar->GetLabelTextProperty()->ItalicOff();
+    m_scalarBar->GetLabelTextProperty()->BoldOff();
+    m_scalarBar->GetLabelTextProperty()->SetJustificationToRight();
+    m_scalarBar->VisibilityOff(); // inicialment sera invisible fins que no hi hagi input
+
+    // Li configurem la lookup table
+    vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
+    lookup->SetWindow( m_windowLevelLUTMapper->GetWindow() );
+    lookup->SetLevel( m_windowLevelLUTMapper->GetLevel() );
+    lookup->Build();
+    m_scalarBar->SetLookupTable( lookup );
 }
 
 void Q2DViewer::updateScalarBar()
 {
-    if( m_mainVolume )
-    {
-        vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
-        lookup->SetWindow( m_windowLevelLUTMapper->GetWindow() );
-        lookup->SetLevel( m_windowLevelLUTMapper->GetLevel() );
-        lookup->Build();
-        m_scalarBar->SetLookupTable( lookup );
-    }
-    else
-        DEBUG_LOG( "No hi ha cap volum assignat. No podem donar LUT a l'escala de colors" );
+    Q_ASSERT( m_scalarBar );
+    vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetWindow( m_windowLevelLUTMapper->GetWindow() );
+    vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetLevel( m_windowLevelLUTMapper->GetLevel() );
 }
 
 void Q2DViewer::rotateClockWise()
@@ -714,10 +692,9 @@ void Q2DViewer::addActors()
     m_imageRenderer->AddViewProp( m_imageActor );
     // TODO colocar aix`o en un lloc mes adient
     m_imageRenderer->GetActiveCamera()->ParallelProjectionOn();
-
 }
 
-QString Q2DViewer::getOppositeOrientationLabel( QString label )
+QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
 {
     int i = 0;
     QString oppositeLabel;
