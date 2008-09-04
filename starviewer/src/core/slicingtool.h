@@ -79,7 +79,7 @@ private:
     int m_slicingMode;
 
     /// Temps que ha passat des de que s'ha iniciat l'slicing
-    QTime * m_time;
+    QTime *m_time;
 
     /// Temps en milisegons de l'ultim event tractat
     int m_latestTime;
