@@ -50,6 +50,8 @@ void ViewersLayout::initLayouts()
     this->setLayout(m_gridLayout);
     m_gridLayout->update();
 
+    m_isRegular = true;
+
 }
 
 void ViewersLayout::removeLayouts()
@@ -188,7 +190,7 @@ void ViewersLayout::removeRows( int rows )
 void ViewersLayout::setGrid( int rows, int columns )
 {
 
-    this->setLayout( NULL );
+//     this->setLayout( NULL );
 
     // Mirem si les tenim amagades i mostrem totes les necessaries
     int windowsToShow = 0;
@@ -240,6 +242,7 @@ void ViewersLayout::setGrid( int rows, int columns )
     {
         hideColumns( m_columns - columns );
     }
+    m_isRegular = true;
 }
 
 void ViewersLayout::setGrid( QList<QString> positionsList )
@@ -278,14 +281,12 @@ void ViewersLayout::setGrid( QList<QString> positionsList )
         emit viewerAdded( newViewer );
     }
 
-    DEBUG_LOG( tr("MIDES: \n SCREEN_X: %1 \n SCREEN_Y: %2 \n [THIS.X, THIS.Y]: [%3,%4] \n, WIDTH: %5, HEIGHT: %6").arg(screen_x).arg( screen_y).arg(this->x()).arg(this->y()).arg(this->width()).arg(this->height()) );
-
     m_positionsList = positionsList;
+    m_isRegular = false;
 }
 
 Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 {
-    int i;
     Q2DViewerWidget *newViewer;
     QStringList listOfPositions;
     double x1;
@@ -310,8 +311,6 @@ Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 
     emit viewerAdded( newViewer );
 
-    DEBUG_LOG( tr("MIDES: \n SCREEN_X: %1 \n SCREEN_Y: %2 \n [THIS.X, THIS.Y]: [%3,%4] \n, WIDTH: %5, HEIGHT: %6").arg(screen_x).arg( screen_y).arg(this->x()).arg(this->y()).arg(this->width()).arg(this->height()) );
-
     m_positionsList << position;
 
     return newViewer;
@@ -331,25 +330,23 @@ void ViewersLayout::resizeEvent ( QResizeEvent * event )
 
     QWidget::resizeEvent(event);
 
-    int screen_x = this->width();
-    int screen_y = this->height();
-
-    for( i = 0; i < numberOfElements; i++ )
+    if( !m_isRegular )
     {
-        viewer = m_vectorViewers.value( i );
-        position = m_positionsList.value( i );
-        listOfPositions = position.split("\\");
-        x1 = listOfPositions.value( 0 ).toDouble();
-        y1 = listOfPositions.value( 1 ).toDouble();
-        x2 = listOfPositions.value( 2 ).toDouble();
-        y2 = listOfPositions.value( 3 ).toDouble();
-        viewer->setGeometry( x1*screen_x, (1-y1)*screen_y, (x2-x1)*screen_x, (y1-y2)*screen_y );
+        int screen_x = this->width();
+        int screen_y = this->height();
 
-        DEBUG_LOG( tr("NOUS VALORS: \n X: %1 \n Y: %2 \n WIDTH: %3, HEIGHT: %4 AMB x1 = %5, y1 = %6, x2 = %7 Y2 = %8 ").arg(x1*screen_x).arg( (1-y1)*screen_y).arg(((x2-x1)*screen_x)).arg((y1-y2)*screen_y).arg(x1).arg(y1).arg(x2).arg(y2) );
+        for( i = 0; i < numberOfElements; i++ )
+        {
+            viewer = m_vectorViewers.value( i );
+            position = m_positionsList.value( i );
+            listOfPositions = position.split("\\");
+            x1 = listOfPositions.value( 0 ).toDouble();
+            y1 = listOfPositions.value( 1 ).toDouble();
+            x2 = listOfPositions.value( 2 ).toDouble();
+            y2 = listOfPositions.value( 3 ).toDouble();
+            viewer->setGeometry( x1*screen_x, (1-y1)*screen_y, (x2-x1)*screen_x, (y1-y2)*screen_y );
+        }
     }
-
-     DEBUG_LOG( tr("MIDES al resize: \n SCREEN_X: %1 \n SCREEN_Y: %2 \n [THIS.X, THIS.Y]: [%3,%4] \n, WIDTH: %5, HEIGHT: %6").arg(screen_x).arg( screen_y).arg(this->x()).arg(this->y()).arg(this->width()).arg(this->height()) );
-
 }
 
 void ViewersLayout::setViewerSelected( Q2DViewerWidget *viewer )
