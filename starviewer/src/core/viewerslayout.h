@@ -37,17 +37,6 @@ public:
     /// Obtenir el visualitzador numero "number".
     Q2DViewerWidget * getViewerWidget( int number );
 
-signals:
-
-    /// Senyal que s'emet quan s'afegeix un visualitzador
-    void viewerAdded( Q2DViewerWidget * );
-
-    /// Senyal que s'emet quan s'amaga un visualitzador
-    void viewerRemoved( Q2DViewerWidget * );
-
-    /// Senyal que s'emet quan el visualitzador seleccionat canvia
-    void viewerSelectedChanged( Q2DViewerWidget * );
-
 public slots:
 
     ///Canviar el nombre de files i columnes
@@ -65,6 +54,25 @@ public slots:
     /// Afegeix un nou visualitzador
     Q2DViewerWidget * addViewer( QString position );
 
+signals:
+
+    /// Senyal que s'emet quan s'afegeix un visualitzador
+    void viewerAdded( Q2DViewerWidget * );
+
+    /// Senyal que s'emet quan s'amaga un visualitzador
+    void viewerRemoved( Q2DViewerWidget * );
+
+    /// Senyal que s'emet quan el visualitzador seleccionat canvia
+    void viewerSelectedChanged( Q2DViewerWidget * );
+
+protected:
+
+    void resizeEvent ( QResizeEvent * event );
+
+private:
+
+    Q2DViewerWidget* getNewQ2DViewerWidget();
+
 private slots:
 
     /// Inicialitza els layouts
@@ -75,10 +83,6 @@ private slots:
 
     /// Posem el widget seleccionat com a actual
     void setViewerSelected( Q2DViewerWidget *viewer );
-
-private:
-
-    Q2DViewerWidget* getNewQ2DViewerWidget();
 
 private:
 
@@ -103,9 +107,8 @@ private:
 
     QList<QString> m_positionsList;
 
-protected:
-
-    void resizeEvent ( QResizeEvent * event );
+    /// Grid regular o no regular
+    bool m_isRegular;
 };
 
 }
