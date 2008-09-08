@@ -319,7 +319,7 @@ void ConvertToDicomdir::createReadmeTxt()
     }
 
     out << "The dicomdir has been generated with Starviewer Version " << StarviewerVersionString << "\n";
-    out << "E-mail contact : starviewer@ima.udg.edu" << "\n";
+    out << "E-mail contact : " << OrganizationEmailString << "\n";
 
     file.close();
 }
