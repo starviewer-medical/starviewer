@@ -65,7 +65,7 @@ QViewer::QViewer( QWidget *parent )
     m_vtkWidget->GetRenderWindow()->DoubleBufferOn();
 
     m_windowToImageFilter = vtkWindowToImageFilter::New();
-    this->setMouseTracking( true );
+    this->setMouseTracking( false );
 
     m_vtkQtConnections = 0;
     m_toolProxy = new ToolProxy(this);
@@ -95,6 +95,31 @@ vtkInteractorStyle *QViewer::getInteractorStyle()
 vtkRenderWindow *QViewer::getRenderWindow()
 {
     return m_vtkWidget->GetRenderWindow();
+}
+
+int *QViewer::getRenderWindowSize()
+{
+    return this->getRenderWindow()->GetSize();
+}
+
+int *QViewer::getEventPosition()
+{
+    return this->getInteractor()->GetEventPosition();
+}
+
+int *QViewer::getLastEventPosition()
+{
+    return this->getInteractor()->GetLastEventPosition();
+}
+
+void QViewer::getEventPosition( int position[2] )
+{
+    this->getInteractor()->GetEventPosition(position);
+}
+
+void QViewer::getLastEventPosition( int position[2] )
+{
+    this->getInteractor()->GetLastEventPosition(position);
 }
 
 int QViewer::getEventPositionX()
@@ -324,7 +349,7 @@ void QViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX,
     width = fabs( topLeftX - bottomRightX );
     height = fabs( topLeftY - bottomRightY );
 
-    int *size = this->getRenderer()->GetSize();
+    int *size = this->getRenderWindowSize();
     int *rendererOrigin = this->getRenderer()->GetOrigin();
     vtkCamera *camera = this->getRenderer()->GetActiveCamera();
 
@@ -410,7 +435,7 @@ void QViewer::scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, d
     height = fabs( displayTopLeft[1] - displayBottomRight[1] );
 
     // Ajustem la imatge segons si la finestra és més estreta per ample o per alçada. Si volem que es vegi tota la regió que em escollit, ajustarem per el que sigui més estret, si ajustèssim pel més ample perderiem imatge per l'altre part
-    int *size = this->getRenderer()->GetSize();
+    int *size = this->getRenderWindowSize();
     if( ( width/size[0] ) > ( height/size[1] ) )
         this->zoom( (size[0] / (float)width ) * ( 1.0 - marginRate ) );
     else
@@ -494,7 +519,7 @@ void QViewer::contextMenuRelease()
     int eventPositionX = this->getEventPositionX();
     int eventPositionY = this->getEventPositionY();
 
-    int* size = this->getInteractor()->GetSize();
+    int* size = this->getRenderWindowSize();
     // remember to flip y
     QPoint point = QPoint( eventPositionX, size[1]-eventPositionY );
 

@@ -408,11 +408,11 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
 void QMPRExtension::detectAxialViewAxisActor()
 {
     // obtenim el punt que s'ha clicat \TODO unificar aquesta operació en un sol mètode privat o fer un mètode d'accès directament del propi viewer per obtenir les coordenades de món actuals on es troba el cursor
-    int x, y;
-    x = m_axial2DView->getEventPositionX();
-    y = m_axial2DView->getEventPositionY();
+    int xy[2];
+    m_axial2DView->getEventPosition( xy );
+    
     double toWorld[4];
-    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , xy[0], xy[1] , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
@@ -452,11 +452,10 @@ void QMPRExtension::detectAxialViewAxisActor()
 void QMPRExtension::rotateAxialViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_axial2DView->getEventPositionX();
-    y = m_axial2DView->getEventPositionY();
+    int xy[2];
+    m_axial2DView->getEventPosition( xy );
     double toWorld[4];
-    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x , y , 0 , toWorld );
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , xy[0] , xy[1] , 0 , toWorld );
 
     double vec1[3], vec2[3];
     double axis[3];
@@ -513,11 +512,10 @@ void QMPRExtension::releaseAxialViewAxisActor()
 void QMPRExtension::detectSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_sagital2DView->getEventPositionX();
-    y = m_sagital2DView->getEventPositionY();
+    int xy[2];
+    m_sagital2DView->getEventPosition( xy );
     double toWorld[4];
-    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , xy[0] , xy[1] , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
@@ -547,11 +545,10 @@ void QMPRExtension::detectSagitalViewAxisActor()
 void QMPRExtension::rotateSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_sagital2DView->getEventPositionX();
-    y = m_sagital2DView->getEventPositionY();
+    int xy[2];
+    m_sagital2DView->getEventPosition( xy );
     double toWorld[4];
-    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , xy[0] , xy[1] , 0 , toWorld );
 
     //
     double vec1[3], vec2[3];
@@ -615,11 +612,10 @@ void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
 void QMPRExtension::detectPushAxialViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_axial2DView->getEventPositionX();
-    y = m_axial2DView->getEventPositionY();
+    int xy[2];
+    m_axial2DView->getEventPosition( xy );
     double toWorld[4];
-    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , xy[0], xy[0] , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
     double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
@@ -660,11 +656,10 @@ void QMPRExtension::pushSagitalViewCoronalAxisActor()
 {
     this->setCursor( QCursor( Qt::ClosedHandCursor ) );
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_sagital2DView->getEventPositionX();
-    y = m_sagital2DView->getEventPositionY();
+    int xy[2];
+    m_sagital2DView->getEventPosition( xy );
     double toWorld[4];
-    m_axial2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x, y , 0 , toWorld );
+    m_axial2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , xy[0], xy[1] , 0 , toWorld );
 
     // Get the motion vector
     //
@@ -685,11 +680,10 @@ void QMPRExtension::pushAxialViewAxisActor()
 {
     this->setCursor( QCursor( Qt::ClosedHandCursor ) );
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_axial2DView->getEventPositionX();
-    y = m_axial2DView->getEventPositionY();
+    int xy[2];
+    m_axial2DView->getEventPosition( xy );
     double toWorld[4];
-    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , x, y , 0 , toWorld );
+    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , xy[0], xy[1] , 0 , toWorld );
 
     // Get the motion vector
     //
@@ -730,11 +724,10 @@ void QMPRExtension::releasePushAxialViewAxisActor()
 void QMPRExtension::detectPushSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_sagital2DView->getEventPositionX();
-    y = m_sagital2DView->getEventPositionY();
+    int xy[2];
+    m_sagital2DView->getEventPosition( xy );
     double toWorld[4];
-    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , xy[0] , xy[1] , 0 , toWorld );
 
     // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
     // únicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
@@ -775,11 +768,10 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
 void QMPRExtension::pushSagitalViewAxialAxisActor()
 {
     // obtenim el punt que s'ha clicat
-    int x, y;
-    x = m_sagital2DView->getEventPositionX();
-    y = m_sagital2DView->getEventPositionY();
+    int xy[2];
+    m_sagital2DView->getEventPosition( xy );
     double toWorld[4];
-    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , x , y , 0 , toWorld );
+    m_sagital2DView->computeDisplayToWorld( m_sagital2DView->getRenderer() , xy[0] , xy[1] , 0 , toWorld );
 
     m_axial2DView->setSlice( m_axial2DView->getMaximumSlice() - static_cast<int>( toWorld[1] / m_axialSpacing[2] ) );
     updatePlanes();

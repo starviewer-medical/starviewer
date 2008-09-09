@@ -90,8 +90,7 @@ void SlicingTool::startSlicing()
 {
     m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
     m_state = SLICING;
-    m_startPosition[0] = m_2DViewer->getEventPositionX();
-    m_startPosition[1] = m_2DViewer->getEventPositionY();
+    m_2DViewer->getEventPosition( m_startPosition );
     m_time->start();
 }
 

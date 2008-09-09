@@ -84,18 +84,21 @@ void TranslateTool::pan()
                                 viewFocus);
     focalDepth = viewFocus[2];
 
+    int xy[2];
+    m_viewer->getEventPosition( xy );
     QViewer::computeDisplayToWorld( renderer,
-                                (double)m_viewer->getEventPositionX(),
-                                (double)m_viewer->getEventPositionY(),
+                                (double)xy[0],
+                                (double)xy[1],
                                 focalDepth,
                                 newPickPoint);
 
     // Has to recalc old mouse point since the viewport has moved,
     // so can't move it outside the loop
-
+    int last_xy[2];
+    m_viewer->getLastEventPosition( xy );
     QViewer::computeDisplayToWorld( renderer,
-                                (double)m_viewer->getLastEventPositionX(),
-                                (double)m_viewer->getLastEventPositionY(),
+                                (double)xy[0],
+                                (double)xy[1],
                                 focalDepth,
                                 oldPickPoint );
 

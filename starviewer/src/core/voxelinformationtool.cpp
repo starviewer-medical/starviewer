@@ -13,7 +13,6 @@
 #include <vtkTextProperty.h>
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
@@ -142,14 +141,9 @@ void VoxelInformationTool::placeText( double textPosition[3] )
     m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( m_2DViewer->getCurrentImageValue() ) ) );
 }
 
-int* VoxelInformationTool::viewportDimensions()
-{
-    return m_2DViewer->getRenderer()->GetSize();
-}
-
 bool VoxelInformationTool::captionExceedsViewportTopLimit()
 {
-    int *dimensions = viewportDimensions();
+    int *dimensions = m_2DViewer->getRenderWindowSize();
     double captionHeigth = ((double)dimensions[1]*0.05);
 
     return ( m_2DViewer->getEventPositionY()+captionHeigth > dimensions[1] );
@@ -157,7 +151,7 @@ bool VoxelInformationTool::captionExceedsViewportTopLimit()
 
 bool VoxelInformationTool::captionExceedsViewportRightLimit()
 {
-    int *dimensions = viewportDimensions();
+    int *dimensions = m_2DViewer->getRenderWindowSize();
     double captionWidth = ((double)dimensions[0]*0.3)+1.;
 
     return ( m_2DViewer->getEventPositionX()+captionWidth > dimensions[0] );
@@ -171,23 +165,24 @@ bool VoxelInformationTool::captionExceedsViewportLimits()
 void VoxelInformationTool::correctPositionOfCaption( int correctPositionInViewPort[2] )
 {
     double xSecurityRange = 20.;
-    int eventPositionX = m_2DViewer->getEventPositionX();
-    int eventPositionY = m_2DViewer->getEventPositionY();
-    int *dimensions = viewportDimensions();
+    int eventPosition[2];
+    m_2DViewer->getEventPosition( eventPosition );
+    
+    int *dimensions = m_2DViewer->getRenderWindowSize();
     double captionWidth = ((double)dimensions[0]*0.3)+xSecurityRange;
     double captionHeight = ((double)dimensions[1]*0.05)+xSecurityRange;
 
-    correctPositionInViewPort[0] = eventPositionX;
-    correctPositionInViewPort[1] = eventPositionY;
+    correctPositionInViewPort[0] = eventPosition[0];
+    correctPositionInViewPort[1] = eventPosition[1];
 
     if ( captionExceedsViewportRightLimit() )
     {
-        correctPositionInViewPort[0] = eventPositionX - ( eventPositionX + captionWidth - dimensions[0] );
+        correctPositionInViewPort[0] = eventPosition[0] - ( eventPosition[0] + captionWidth - dimensions[0] );
     }
 
     if ( captionExceedsViewportTopLimit() )
     {
-        correctPositionInViewPort[1] = eventPositionY - ( eventPositionY + captionHeight - dimensions[1] );
+        correctPositionInViewPort[1] = eventPosition[1] - ( eventPosition[1] + captionHeight - dimensions[1] );
     }
 }
 

@@ -16,7 +16,6 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
 #include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
@@ -29,7 +28,7 @@ OldSeedTool::OldSeedTool( Q2DViewer *viewer )
     m_pointActor = vtkActor::New();
     m_point = vtkSphereSource::New();
     m_point->SetRadius( 2 );
-    m_pointActor -> GetProperty()->SetColor( 0.85, 0.13, 0.26 );
+    m_pointActor->GetProperty()->SetColor( 0.85, 0.13, 0.26 );
 
     m_pointMapper = vtkPolyDataMapper::New();
     m_pointMapper->SetInput( m_point->GetOutput() );
@@ -44,7 +43,7 @@ OldSeedTool::OldSeedTool( Q2DViewer *viewer )
 
 OldSeedTool::~OldSeedTool()
 {
-    m_pointActor-> Delete();
+    m_pointActor->Delete();
     m_point->Delete();
     m_pointMapper->Delete();
 }
@@ -100,7 +99,7 @@ void OldSeedTool::setSeed()
     //
 
     m_2DViewer->setSeedPosition(m_seedPosition);
-    m_point-> SetCenter(m_seedPosition);
+    m_point->SetCenter(m_seedPosition);
     m_seedSlice = m_2DViewer->getCurrentSlice();
     m_pointActor->VisibilityOn();
 
@@ -114,7 +113,7 @@ void OldSeedTool::doSeeding( )
         QString aux;
         m_2DViewer->getCurrentCursorPosition(m_seedPosition);
 
-        m_point-> SetCenter(m_seedPosition);
+        m_point->SetCenter(m_seedPosition);
         m_seedSlice = m_2DViewer->getCurrentSlice();
         m_pointActor->VisibilityOn();
 

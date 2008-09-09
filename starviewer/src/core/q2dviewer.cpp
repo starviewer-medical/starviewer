@@ -496,11 +496,12 @@ void Q2DViewer::refreshAnnotations()
     // informació de la finestra
     if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
     {
+        int *size = this->getRenderWindowSize();
             m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
                 .arg( m_imageSizeInformation[0] )
                 .arg( m_imageSizeInformation[1] )
-                .arg( this->getRenderer()->GetSize()[0] )
-                .arg( this->getRenderer()->GetSize()[1] )
+                .arg( size[0] )
+                .arg( size[1] )
                 .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
                 .arg( vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
     }
@@ -1614,7 +1615,9 @@ bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
     if( !m_mainVolume )
         return found;
     // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
-    m_picker->PickProp( this->getEventPositionX(), this->getEventPositionY(), m_imageRenderer );
+    int position[2];
+    m_2DViewer->getEventPosition( position );
+    m_picker->PickProp( position[0], position[1], m_imageRenderer );
     // calculem el pixel trobat
     m_picker->GetPickPosition( xyz );
 
@@ -1840,11 +1843,12 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
         // informació de la finestra
         if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
         {
+            int *size = this->getRenderWindowSize();
             m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
                 .arg( m_imageSizeInformation[0] )
                 .arg( m_imageSizeInformation[1] )
-                .arg( renderer->GetSize()[0] )
-                .arg( renderer->GetSize()[1] )
+                .arg( size[0] )
+                .arg( size[1] )
                 .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
                 .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
         }

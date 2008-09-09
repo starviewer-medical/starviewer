@@ -67,11 +67,19 @@ public:
     /// retorna el vtkRenderWindow
     vtkRenderWindow *getRenderWindow();
 
+    /// Retorna la mida en coordenades de pantalla (píxels?) de tot el viewport del viewer
+    /// amaga la crida vtkRenderWindow::GetSize()
+    int *getRenderWindowSize();
+
     /**
      * Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
      * del ratolí durant l'últim event
      * Les coordenades retornades estan en sistema de coordenades de Display
      */
+    int *getEventPosition();
+    int *getLastEventPosition();
+    void getEventPosition( int position[2] );
+    void getLastEventPosition( int position[2] );
     int getEventPositionX();
     int getEventPositionY();
     int getLastEventPositionX();
