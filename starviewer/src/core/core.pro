@@ -172,7 +172,8 @@ HEADERS += extensionfactory.h \
            hangingprotocolmanager.h \
            hangingprotocolmask.h \
            hangingprotocolimageset.h \
-           hangingprotocoldisplayset.h
+           hangingprotocoldisplayset.h \
+           hangingprotocolxmlreader.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -311,7 +312,8 @@ SOURCES += extensionmediator.cpp \
            hangingprotocolmanager.cpp \
            hangingprotocolmask.cpp \
            hangingprotocolimageset.cpp \
-           hangingprotocoldisplayset.cpp
+           hangingprotocoldisplayset.cpp \
+           hangingprotocolxmlreader.cpp
 TEMPLATE = lib
 
 DESTDIR = ./
@@ -323,3 +325,5 @@ include(../dcmtk.inc)
 include(../log4cxx.inc)
 include(../compilationtype.inc)
 include(../translations.inc)
+
+QT += xml

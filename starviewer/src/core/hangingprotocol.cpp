@@ -10,6 +10,7 @@
 #include "hangingprotocolmask.h"
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -105,6 +106,31 @@ HangingProtocolDisplaySet * HangingProtocol::getDisplaySetOfImageSet( int number
 
     return displaySet;
 
+}
+
+void HangingProtocol::show()
+{
+    DEBUG_LOG( tr("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\nLevel: %3\nCreator: %4\nDate: %5\n").arg(m_name).arg(m_description).arg(m_level).arg(m_creator).arg(m_dateTime) );
+
+    DEBUG_LOG( tr("List of protocols: \n") );
+    for( int i = 0; i < m_mask->getProtocolList().size(); i++ )
+    {
+        DEBUG_LOG( tr("%1, \n").arg(m_mask->getProtocolList().value( i )) );
+    }
+
+    DEBUG_LOG( tr("List of image sets: \n") );
+
+    for( int i = 0; i < m_listOfImageSets.size(); i++ )
+    {
+        m_listOfImageSets.value( i )->show();
+    }
+
+    DEBUG_LOG( tr("List of display sets: \n") );
+
+    for( int i = 0; i < m_listOfDisplaySets.size(); i++ )
+    {
+        m_listOfDisplaySets.value( i )->show();
+    }
 }
 
 

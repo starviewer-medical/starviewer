@@ -46,6 +46,8 @@ public:
     /// Obtenir la posició del visualitzador
     QString getPosition();
 
+    /// Mètode per mostrar els valors
+    void show();
 private:
 
     /// Identificador de la seqüència

@@ -60,6 +60,8 @@ public:
     /// Obté el display set corresponent a l'image set amb l'identificador detallat
     HangingProtocolDisplaySet * getDisplaySetOfImageSet( int numberOfImageSet );
 
+    /// Mètode per mostrar els valors
+    void show();
 private:
 
     /// Nom del hanging protocol

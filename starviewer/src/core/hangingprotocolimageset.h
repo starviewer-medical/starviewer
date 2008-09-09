@@ -47,6 +47,9 @@ public:
     /// Obtenir les restriccions
     QList<Restriction> getRestrictions();
 
+    /// Mètode per mostrar els valors
+    void show();
+
 private:
 
     /// Llista de restriccions que ha de complir l'Image Set

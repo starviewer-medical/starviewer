@@ -12,9 +12,14 @@
 #include "hangingprotocolsrepository.h"
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
+#include "hangingprotocolxmlreader.h"
 #include "identifier.h"
 
-
+// Qt's
+#include <QFile>
+#include <QMessageBox>
+#include <QTextStream>
+#include <QSettings>
 namespace udg {
 
 HangingProtocolsLoader::HangingProtocolsLoader(QObject *parent)
@@ -31,8 +36,11 @@ HangingProtocolsLoader::~HangingProtocolsLoader()
 
 void HangingProtocolsLoader::loadDefaults()
 {
-    loadMamoGuell();
-    loadMamoTrueta();
+    QSettings systemSettings;
+    QString path = 0;
+    path = systemSettings.value("Hanging-Protocols/path").toString();
+    if( path != 0 )
+        loadXMLFile( path );
 }
 
 void HangingProtocolsLoader::loadMamoGuell()
@@ -146,16 +154,7 @@ void HangingProtocolsLoader::loadMamoGuell()
     protocol2x2->addDisplaySet( displaySet_3 );
     protocol2x2->addDisplaySet( displaySet_4 );
 
-//     QList<QString> positions;
-//     positions << "0.0\\1.0\\0.5\\0.3" << "0.7\\1.0\\1.0\\0.5" << "0.2\\0.3\\0.8\\0.0"; //Irregular
-//     positions << "0.0\\1.0\\0.5\\0.0" << "0.5\\1.0\\1.0\\0.5" << "0.5\\0.5\\1.0\\0.0"; // 1 gros + 2 petits
-//     positions << "0.0\\1.0\\0.5\\0.5" << "0.5\\ 1.0\\1.0\\0.5" << "0.0\\0.5\\0.5\\0.0" << "0.5\\0.5\\1.0\\0.0" ; // 2x2
-
-//     protocol2x2->setDisplayEnvironmentSpatialPositionList( positions );
-
-    Identifier id = HangingProtocolsRepository::getRepository()->addItem( protocol2x2 );
-
-    DEBUG_LOG( tr("Hanging Protocol afegit amb id = %1.").arg(id.getValue() ) );
+    HangingProtocolsRepository::getRepository()->addItem( protocol2x2 );
 }
 
 void HangingProtocolsLoader::loadMamoTrueta()
@@ -245,9 +244,23 @@ void HangingProtocolsLoader::loadMamoTrueta()
     protocol2x2->addDisplaySet( displaySet_3 );
     protocol2x2->addDisplaySet( displaySet_4 );
 
-    Identifier id = HangingProtocolsRepository::getRepository()->addItem( protocol2x2 );
-
-    DEBUG_LOG( tr("Hanging Protocol afegit amb id = %1.").arg(id.getValue() ) );
+    HangingProtocolsRepository::getRepository()->addItem( protocol2x2 );
 }
 
+bool HangingProtocolsLoader::loadXMLFile( QString filePath )
+{
+    HangingProtocolXMLReader * xmlReader = new HangingProtocolXMLReader();
+    QList<HangingProtocol * > listHangingProtocols = xmlReader->readFile( filePath );
+
+    if( listHangingProtocols.size() > 0 )
+    {
+        foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
+        {
+            HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
+            hangingProtocol->show();
+        }
+    }
+
+    return true;
+}
 }
