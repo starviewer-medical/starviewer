@@ -142,8 +142,12 @@ void Q2DViewer::createAnnotations()
 {
     // contenidor d'anotacions de texte FIXE
     m_serieInformationAnnotation = vtkCornerAnnotation::New();
+    m_serieInformationAnnotation->GetTextProperty()->SetFontFamilyToArial();
+    m_serieInformationAnnotation->GetTextProperty()->ShadowOff();
     // anotacions de texte variable (window/level, window size, etc)
     m_sliceAnnotation = vtkCornerAnnotation::New();
+    m_sliceAnnotation->GetTextProperty()->SetFontFamilyToArial();
+    m_sliceAnnotation->GetTextProperty()->ShadowOff();
     // escala de colors
     createScalarBar();
     // anotacions de l'orientació del pacient
@@ -161,6 +165,8 @@ void Q2DViewer::createOrientationAnnotations()
         m_patientOrientationTextActor[i]->ScaledTextOff();
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize( 18 );
         m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
+        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontFamilyToArial();
+        m_patientOrientationTextActor[i]->GetTextProperty()->ShadowOff();
 
         m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
         m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
@@ -176,7 +182,7 @@ void Q2DViewer::createOrientationAnnotations()
     m_patientOrientationTextActor[2]->SetPosition( 0.99 , 0.5 );
 
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
-    m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.95 );
+    m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.99 );
 }
 
 void Q2DViewer::createRulers()
@@ -195,6 +201,7 @@ void Q2DViewer::createRulers()
     m_sideRuler->GetLabelTextProperty()->BoldOff();
     m_sideRuler->GetLabelTextProperty()->ShadowOff();
     m_sideRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
+    m_sideRuler->GetLabelTextProperty()->SetFontFamilyToArial();
     m_sideRuler->TitleVisibilityOff();
     m_sideRuler->SetTickLength( 10 );
     m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
@@ -214,6 +221,7 @@ void Q2DViewer::createRulers()
     m_bottomRuler->GetLabelTextProperty()->BoldOff();
     m_bottomRuler->GetLabelTextProperty()->ShadowOff();
     m_bottomRuler->GetLabelTextProperty()->SetColor( 0 , 0.7 , 0 );
+    m_bottomRuler->GetLabelTextProperty()->SetFontFamilyToArial();
     m_bottomRuler->TitleVisibilityOff();
     m_bottomRuler->SetTickLength( 10 );
     m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
@@ -289,6 +297,8 @@ void Q2DViewer::createScalarBar()
     m_scalarBar->GetLabelTextProperty()->ItalicOff();
     m_scalarBar->GetLabelTextProperty()->BoldOff();
     m_scalarBar->GetLabelTextProperty()->SetJustificationToRight();
+    m_scalarBar->GetLabelTextProperty()->SetFontFamilyToArial();
+    m_scalarBar->GetLabelTextProperty()->ShadowOff();
     m_scalarBar->VisibilityOff(); // inicialment sera invisible fins que no hi hagi input
 
     // Li configurem la lookup table
@@ -1177,6 +1187,8 @@ void Q2DViewer::setSlice( int value )
             this->getDrawer()->removeAllPrimitives();
         }
         this->updateDisplayExtent();
+        // TODO per cada canvi de llesca potser també caldria
+        // comprovar si el ww/wwl és diferent i aplicar el que toqui ( #478 )
         updateSliceAnnotationInformation();
         mapOrientationStringToAnnotation();
         emit sliceChanged( m_currentSlice );
