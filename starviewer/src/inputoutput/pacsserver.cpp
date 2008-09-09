@@ -19,7 +19,7 @@ namespace udg{
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 
-PacsServer::PacsServer( PacsParameters p )
+PacsServer::PacsServer(PacsParameters p)
 {
     // Variable global de dcmtk per evitar el dnslookup, que dona problemes de lentitu a windows.
     // TODO: Al fer refactoring aquesta inicialització hauria de quedar en un lloc central de configuracions per dcmtk.
