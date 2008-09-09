@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "hangingprotocolimageset.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -37,6 +38,18 @@ QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrict
 {
     return m_listOfRestrictions;
 }
+
+void HangingProtocolImageSet::show()
+{
+    DEBUG_LOG( tr("    Identifier %1\n    List of restrictions:\n").arg(m_identifier) );
+
+    for( int i = 0; i < m_listOfRestrictions.size(); i ++)
+    {
+        HangingProtocolImageSet::Restriction restriction = m_listOfRestrictions.value(i);
+        DEBUG_LOG( tr("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n").arg(restriction.usageFlag).arg(restriction.selectorAttribute).arg(restriction.valueRepresentation).arg(restriction.selectorValueNumber) );
+    }
+}
+
 
 }
 

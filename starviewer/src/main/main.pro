@@ -64,3 +64,5 @@ include(../compilationtype.inc)
 CONFIG -= staticlib
 
 include(installextensions.inc)
+
+QT += xml
