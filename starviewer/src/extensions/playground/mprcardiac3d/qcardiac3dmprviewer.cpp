@@ -12,8 +12,6 @@
 #include <vtkCellPicker.h>
 #include <vtkProperty.h>
 #include <vtkImagePlaneWidget.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkInteractorStyle.h>
 #include <vtkEventQtSlotConnect.h>
 #include <QVTKWidget.h>
 #include <vtkCamera.h>

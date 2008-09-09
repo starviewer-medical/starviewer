@@ -7,7 +7,6 @@
 #include "slicing2dtool.h"
 
 // VTK
-#include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 // Qt
 #include <QTime>
@@ -82,8 +81,7 @@ void Slicing2DTool::startSlicing()
     if( m_2DViewer )
     {
         m_state = SLICING;
-        m_startPosition[0] = m_2DViewer->getEventPositionX();
-        m_startPosition[1] = m_2DViewer->getEventPositionY();
+        m_2DViewer->getEventPosition( m_startPosition );
         m_time->start();
     }
     else

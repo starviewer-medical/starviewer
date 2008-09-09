@@ -143,13 +143,11 @@ void AngleTool::annotateFirstPoint()
     m_mainPolyline = new DrawerPolyline;
     m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
-    int x,y;
     double position[4], computed[3];
-
     //capturem l'event de clic esquerre
-    x = m_2DViewer->getEventPositionX();
-    y = m_2DViewer->getEventPositionY();
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
+    int *xy = m_2DViewer->getEventPosition();
+
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), xy[0], xy[1], 0, position );
     computed[0] = position[0];
     computed[1] = position[1];
     computed[2] = position[2];
@@ -328,13 +326,11 @@ void AngleTool::drawCircumference()
 
 void AngleTool::simulateFirstSegmentOfAngle()
 {
-    int x,y;
     double position[4], computed[3];
-
     //capturem l'event de clic esquerre
-    x = m_2DViewer->getEventPositionX();
-    y = m_2DViewer->getEventPositionY();
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
+    int *xy = m_2DViewer->getEventPosition();
+
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), xy[0], xy[1], 0, position );
 
     //només ens interessen els 3 primers valors de l'array de 4
     computed[0] = position[0];
@@ -355,13 +351,11 @@ void AngleTool::simulateFirstSegmentOfAngle()
 
 void AngleTool::simulateSecondSegmentOfAngle()
 {
-    int x,y;
     double position[4], computed[3];
-
     //capturem l'event de clic esquerre
-    x = m_2DViewer->getEventPositionX();
-    y = m_2DViewer->getEventPositionY();
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), x, y, 0, position );
+    int *xy = m_2DViewer->getEventPosition();
+
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), xy[0], xy[1], 0, position );
 
     //només ens interessen els 3 primers valors de l'array de 4
     computed[0] = position[0];

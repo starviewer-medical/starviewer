@@ -123,7 +123,9 @@ void PolylineROITool::annotateNewPoint()
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 
-    double *lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
+    int position[2];
+    m_2DViewer->getEventPosition( position );
+    double *lastPointInModel = m_2DViewer->pointInModel( position[0], position[1] );
 
     //afegim el punt
     m_mainPolyline->addPoint( lastPointInModel );
@@ -143,7 +145,9 @@ void PolylineROITool::simulateClosingPolyline( )
 
     m_closingPolyline->deleteAllPoints();
 
-    double *lastPointInModel = m_2DViewer->pointInModel( m_2DViewer->getEventPositionX(), m_2DViewer->getEventPositionY() );
+    int position[2];
+    m_2DViewer->getEventPosition( position );
+    double *lastPointInModel = m_2DViewer->pointInModel( position[0], position[1] );
 
     //afegim els punts que simulen aquesta polilinia
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );

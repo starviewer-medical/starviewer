@@ -20,7 +20,6 @@
 
 // VTK
 #include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkImageMask.h>
 #include <vtkProperty.h>
 #include <vtkImageIterator.h>
@@ -152,7 +151,7 @@ void QLesionVisualizationExtension::eventHandler( unsigned long id )
 
 void QLesionVisualizationExtension::setSlice()
 {
-    int *eventPosition = m_lesion3Dviewer->getInteractor()->GetEventPosition();
+    int *eventPosition = m_lesion3Dviewer->getEventPosition();
     if ( picker->PickProp ( eventPosition[0], eventPosition[1], m_lesion3Dviewer->getRenderer() ) )
     {
         vtkActor *actor = vtkActor::SafeDownCast( picker->GetViewProp() );
@@ -190,7 +189,7 @@ void QLesionVisualizationExtension::mouseEvent()
             }
         }
 
-        int *eventPosition = m_lesion3Dviewer->getInteractor()->GetEventPosition();
+        int *eventPosition = m_lesion3Dviewer->getEventPosition();
         if ( picker->PickProp ( eventPosition[0], eventPosition[1], m_lesion3Dviewer->getRenderer() ) )
         {
             vtkActor *actor = vtkActor::SafeDownCast( picker->GetViewProp() );

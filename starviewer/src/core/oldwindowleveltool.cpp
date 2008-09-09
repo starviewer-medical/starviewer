@@ -7,11 +7,8 @@
 #include "oldwindowleveltool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include <vtkInteractorStyleImage.h> // per controlar el window level
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
@@ -59,8 +56,7 @@ void OldWindowLevelTool::startWindowLevel()
         m_state = WINDOWLEVELING;
         m_initialWindow = m_2DViewer->getCurrentColorWindow();
         m_initialLevel = m_2DViewer->getCurrentColorLevel();
-        m_windowLevelStartPosition[0] = m_2DViewer->getEventPositionX();
-        m_windowLevelStartPosition[1] = m_2DViewer->getEventPositionY();
+        m_2DViewer->getEventPosition( m_windowLevelStartPosition );
     }
     else
         DEBUG_LOG( "::startWindowLevel(): El 2DViewer és NUL!" );
@@ -70,10 +66,9 @@ void OldWindowLevelTool::doWindowLevel()
 {
     if( m_2DViewer )
     {
-        m_windowLevelCurrentPosition[0] = m_2DViewer->getEventPositionX();
-        m_windowLevelCurrentPosition[1] = m_2DViewer->getEventPositionY();
+        m_2DViewer->getEventPosition( m_windowLevelCurrentPosition );
 
-        int *size = m_2DViewer->getRenderer()->GetRenderWindow()->GetSize();
+        int *size = m_2DViewer->getRenderWindowSize();
         double window = m_initialWindow;
         double level = m_initialLevel;
 

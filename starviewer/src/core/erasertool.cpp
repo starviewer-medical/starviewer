@@ -13,7 +13,6 @@
 // vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
 namespace udg {
@@ -73,10 +72,9 @@ void EraserTool::startEraserAction()
     double position[4];
 
     //capturem l'event de clic esquerre
-    int x = m_2DViewer->getEventPositionX();
-    int y = m_2DViewer->getEventPositionY();
+    int *xy = m_2DViewer->getEventPosition();
 
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
     m_startPoint[0] = position[0];
     m_startPoint[1] = position[1];
     m_startPoint[2] = position[2];
@@ -102,10 +100,9 @@ void EraserTool::drawAreaOfErasure()
     double position[4], p2[3], p3[3];
 
     //capturem l'event de clic esquerre
-    int x = m_2DViewer->getEventPositionX();
-    int y = m_2DViewer->getEventPositionY();
+    int *xy = m_2DViewer->getEventPosition();
 
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , x, y, 0, position );
+    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
     m_endPoint[0] = position[0];
     m_endPoint[1] = position[1];
     m_endPoint[2] = position[2];
