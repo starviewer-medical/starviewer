@@ -1616,7 +1616,7 @@ bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
         return found;
     // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
     int position[2];
-    m_2DViewer->getEventPosition( position );
+    this->getEventPosition( position );
     m_picker->PickProp( position[0], position[1], m_imageRenderer );
     // calculem el pixel trobat
     m_picker->GetPickPosition( xyz );
