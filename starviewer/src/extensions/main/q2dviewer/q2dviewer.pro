@@ -3,8 +3,8 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/q2dviewer
 # L'objectiu �s una biblioteca:  
 
-FORMS += q2dviewerextensionbase.ui \
-	 q2dviewerwidgetbase.ui
+FORMS += q2dviewerextensionbase.ui 
+	 
 
 HEADERS += q2dviewerextensionmediator.h \
 	   q2dviewerextension.h \
