@@ -9,8 +9,11 @@
 
 #include <QObject>
 #include <QList>
-#include <QXmlStreamReader>
 #include "hangingprotocolimageset.h"
+
+#if QT_VERSION >= 0x040300
+
+#include <QXmlStreamReader>
 
 namespace udg {
 
@@ -48,5 +51,34 @@ private:
 };
 
 }
+
+#else
+
+namespace udg {
+
+class HangingProtocol;
+class HangingProtocolDisplaySet;
+
+/**
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+ */
+class HangingProtocolXMLReader : public QObject
+{
+Q_OBJECT
+public:
+    HangingProtocolXMLReader(QObject *parent = 0):QObject(parent){};
+
+    ~HangingProtocolXMLReader(){};
+
+    /// llegeix els hanging protocols del fitxer
+    QList<HangingProtocol * > readFile( QString path )
+    {
+        return QList<HangingProtocol * >();
+    };
+
+};
+}
+
+#endif
 
 #endif

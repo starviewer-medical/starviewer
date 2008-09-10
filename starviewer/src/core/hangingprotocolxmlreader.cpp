@@ -4,7 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+
 #include "hangingprotocolxmlreader.h"
+
+#if QT_VERSION >= 0x040300
 
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
@@ -203,3 +206,4 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
     return displaySet;
 }
 }
+#endif
