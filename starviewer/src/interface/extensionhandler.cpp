@@ -158,8 +158,6 @@ void ExtensionHandler::createConnections()
 void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance )
 {
     Q_UNUSED(defaultImageInstance);
-    PatientFillerInput *fillerInput = new PatientFillerInput;
-    fillerInput->setFilesList( inputFiles );
 
     QProgressDialog progressDialog( m_mainApp );
     progressDialog.setModal( true );
@@ -174,11 +172,11 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
 
     qApp->processEvents();
 
-    patientFiller.fill( fillerInput );
+    QList<Patient*> patientsList = patientFiller.processDICOMFileList(inputFiles);
 
     progressDialog.close();
 
-    unsigned int numberOfPatients = fillerInput->getNumberOfPatients();
+    unsigned int numberOfPatients = patientsList.size();
 
     if (numberOfPatients == 0)
     {
@@ -187,22 +185,21 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
         return;
     }
 
-    DEBUG_LOG( "Labels: " + fillerInput->getLabels().join("; "));
     DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
 
     QList<int> correctlyLoadedPatients;
 
     for(unsigned int i = 0; i < numberOfPatients; i++ )
     {
-        DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( fillerInput->getPatient(i)->toString() ) );
+        DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( patientsList.at(i)->toString() ) );
 
         // marquem les series seleccionades
         Study *study = NULL;
-        study = fillerInput->getPatient(i)->getStudy( defaultStudyUID );
+        study = patientsList.at(i)->getStudy( defaultStudyUID );
         // Si no ens diuen un study seleccionat en seleccionem un nosaltres. Això pot ser perquè l'uid d'estudi sigui d'un altre pacient o perquè l'uid està buit
         if(!study)
         {
-            QList<Study *> studyList = fillerInput->getPatient(i)->getStudies();
+            QList<Study *> studyList = patientsList.at(i)->getStudies();
             if ( !studyList.isEmpty() )
             {
                 study = studyList.first();
@@ -213,7 +210,7 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
         if( study )
         {
             Series *series = NULL;
-            series = fillerInput->getPatient(i)->getSeries( defaultSeriesUID );
+            series = patientsList.at(i)->getSeries( defaultSeriesUID );
             // si aquest ens "falla" és perquè possiblement l'UID és d'un altre estudi
             // o perquè l'uid és buit, per tant no tenim cap predilecció i escollim el primer
             if( !series ) // No tenim cap serie seleccionada, seleccionem per defecte la primera
@@ -232,18 +229,31 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
             }
             else
             {
-                ERROR_LOG(fillerInput->getPatient(i)->toString());
+                ERROR_LOG(patientsList.at(i)->toString());
                 ERROR_LOG("Error carregant aquest pacient. La serie retornada és null. defaultSeriesUID: " + defaultSeriesUID);
             }
         }
         else
         {
-            ERROR_LOG(fillerInput->getPatient(i)->toString());
+            ERROR_LOG(patientsList.at(i)->toString());
             ERROR_LOG("Error carregant aquest pacient. L'study retornat és null. defaultStudyUID: " + defaultStudyUID);
         }
 
         if (!error)
         {
+            /// Hem de fer el que feia l'step del volume perquè ja no es fa.
+            foreach(Study *study, patientsList.at(i)->getStudies() )
+            {
+                foreach(Series *series, study->getSeries() )
+                {
+                    // TODO ara el que fem és que 1 Series equival a 1 Volume, més endavant es podrien fer un tracte més elaborat
+                    Volume *volume = new Volume;
+                    volume->setImages( series->getImages() );
+                    volume->setNumberOfPhases( series->getNumberOfPhases() );
+                    series->addVolume(volume);
+                }
+            }
+
             correctlyLoadedPatients << i;
         }
     }
@@ -255,7 +265,7 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
         {
             if (!correctlyLoadedPatients.contains(i))
             {
-                patientsWithError += "- " + fillerInput->getPatient(i)->getFullName() + "; ID: " + fillerInput->getPatient(i)->getID() + "<br>";
+                patientsWithError += "- " + patientsList.at(i)->getFullName() + "; ID: " + patientsList.at(i)->getID() + "<br>";
             }
         }
         QMessageBox::critical(0, tr("Starviewer"), tr("Sorry, an error ocurred while loading the data of patients:<br> %1").arg(patientsWithError) );
@@ -267,7 +277,7 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     {
         foreach (int i, correctlyLoadedPatients)
         {
-            if (m_mainApp->getCurrentPatient()->compareTo( fillerInput->getPatient(i) ) == Patient::SamePatients )
+            if (m_mainApp->getCurrentPatient()->compareTo( patientsList.at(i) ) == Patient::SamePatients )
             {
                 canReplaceActualPatient = false;
                 break;
@@ -278,7 +288,7 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     // Afegim els pacients carregats correctament
     foreach (int i, correctlyLoadedPatients)
     {
-        this->addPatientToWindow( fillerInput->getPatient(i), canReplaceActualPatient );
+        this->addPatientToWindow( patientsList.at(i), canReplaceActualPatient );
         canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
     }
 }
