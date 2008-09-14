@@ -302,6 +302,7 @@ void QueryScreen::createConnections()
 
     connect( &m_qexecuteOperationThread, SIGNAL( setOperating( QString ) ), m_operationStateScreen, SLOT(  setOperating( QString ) ) );
     connect( &m_qexecuteOperationThread, SIGNAL( imageCommit( QString , int) ), m_operationStateScreen, SLOT(  imageCommit( QString , int ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int)), m_operationStateScreen, SLOT( setRetrievedImagesToCurrentProcessingStudy(int) ));
     connect( &m_qexecuteOperationThread, SIGNAL( seriesCommit( QString ) ), m_operationStateScreen, SLOT(  seriesCommit( QString ) ) );
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation( Operation * ) ), m_operationStateScreen, SLOT(  insertNewOperation( Operation *) ) );
 

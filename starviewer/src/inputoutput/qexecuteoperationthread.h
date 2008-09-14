@@ -76,6 +76,10 @@ signals :
      */
     void imageCommit( QString studyUID , int );
 
+    /// Signal que s'emet quan canvia el nombre d'imatges que s'han descarregats del study que s'està processant actualment.
+    /// L'study actual es pot saber a partir del signal setOperating
+    void currentProcessingStudyImagesRetrievedChanged(int imagesRetrieved);
+
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova sèroe de l'estudi
      * @param studyUID UID de l'estudi que s'esta descarregat
      */

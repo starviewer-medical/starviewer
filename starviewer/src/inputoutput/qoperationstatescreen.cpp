@@ -6,11 +6,12 @@
  ***************************************************************************/
 
 #include "qoperationstatescreen.h"
+
 #include <QString>
-#include <qdatetime.h>
 #include <QCloseEvent>
 #include <QHeaderView>
 #include "operation.h"
+
 #include "starviewersettings.h"
 
 namespace udg {
@@ -141,6 +142,20 @@ void QOperationStateScreen::imageCommit( QString studyUID , int downloadedImages
     }
 }
 
+void QOperationStateScreen::setRetrievedImagesToCurrentProcessingStudy(int numberOfImages)
+{
+    QString Images;
+    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems(m_currentProcessingStudyUID, Qt::MatchExactly, 9) );
+    QTreeWidgetItem *item;
+
+    if  ( !qRetrieveList.isEmpty() )
+    {
+        item = qRetrieveList.at( 0 );
+        Images.setNum( numberOfImages , 10 );
+        item->setText( 8 , Images );
+    }
+}
+
 void QOperationStateScreen::seriesCommit( QString studyUID )
 {
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
@@ -160,6 +175,8 @@ void QOperationStateScreen::seriesCommit( QString studyUID )
 
 void QOperationStateScreen::setOperating( QString studyUID )
 {
+    m_currentProcessingStudyUID = studyUID;
+
     QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
     QTreeWidgetItem *item;
 
