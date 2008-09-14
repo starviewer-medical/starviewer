@@ -38,7 +38,7 @@ void QPacsList::refresh()
 
     m_PacsTreeView->clear();
 
-    pacsListDB.queryPacsList( pacsList );
+    pacsList = pacsListDB.queryPacsList();
 
     foreach(PacsParameters pacs, pacsList)
     {
@@ -83,7 +83,7 @@ QList<PacsParameters> QPacsList::getSelectedPacs()
         item = qPacsList.at( i );
         PacsParameters pacs;
 
-        pacsListDB.queryPacs( &pacs , item->text( 0 ) ); //fem el query per cercar la informació del PACS
+        pacs = pacsListDB.queryPacs( item->text(0) ); //fem el query per cercar la informació del PACS
 
         pacs.setAELocal( settings.getAETitleMachine() );
         //emplenem amb les dades del registre el timeout

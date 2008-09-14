@@ -135,7 +135,7 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
             PacsListDB pacsList;
             PacsParameters pacs;
 
-            pacsList.queryPacs( &pacs , study->getPacsAETitle() );
+            pacs = pacsList.queryPacs( study->getPacsAETitle() );
             item->setText( Institution, pacs.getInstitution() );
             m_OldInstitution = pacs.getInstitution();
             m_oldPacsAETitle = study->getPacsAETitle();

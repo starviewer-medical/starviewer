@@ -356,7 +356,7 @@ PacsServer QueryScreen::getPacsServerByAETitle(QString AETitlePACS)
 {
     PacsParameters pacsParameters;
     PacsListDB pacsListDB;
-    pacsListDB.queryPacs( &pacsParameters, AETitlePACS );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+    pacsParameters = pacsListDB.queryPacs(AETitlePACS);//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
 
     StarviewerSettings settings;
     pacsParameters.setAELocal( settings.getAETitleMachine() ); //especifiquem el nostres AE
@@ -792,7 +792,7 @@ void QueryScreen::retrievePacs( bool view )
 
             //busquem els paràmetres del pacs del qual volem descarregar l'estudi
             PacsListDB pacsListDB;
-            pacsListDB.queryPacs(&pacs, pacsAETitle);
+            pacs = pacsListDB.queryPacs(pacsAETitle);
 
             //emplanem els parametres amb dades del starviewersettings
             pacs.setAELocal( settings.getAETitleMachine() );
@@ -1207,7 +1207,7 @@ void QueryScreen::storeStudiesToPacs()
 
             delete patient;
             //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-            pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );
+            pacs = pacsListDB.queryPacs( selectedPacsList.value(0).getAEPacs() );
             storeStudyOperation.setPacsParameters( pacs );
 
             m_qexecuteOperationThread.queueOperation( storeStudyOperation );
@@ -1228,7 +1228,7 @@ void QueryScreen::errorConnectingPacs( int IDPacs )
     PacsParameters errorPacs;
     QString errorMessage;
 
-    pacsListDB.queryPacs( &errorPacs, IDPacs );
+    errorPacs = pacsListDB.queryPacs(IDPacs);
 
     errorMessage = tr( "Can't connect to PACS %1 from %2\nBe sure that the IP and AETitle of the PACS are correct" )
         .arg( errorPacs.getAEPacs() )
@@ -1244,7 +1244,7 @@ void QueryScreen::errorQueringStudiesPacs( int PacsID )
     PacsParameters errorPacs;
     QString errorMessage;
 
-    pacsListDB.queryPacs( &errorPacs, PacsID );
+    errorPacs = pacsListDB.queryPacs(PacsID);
     errorMessage = tr( "Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct" )
         .arg( errorPacs.getAEPacs() )
         .arg( errorPacs.getInstitution()
