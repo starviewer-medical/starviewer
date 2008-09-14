@@ -15,7 +15,7 @@ ProcessImage::ProcessImage()
 {
 }
 
-void ProcessImage::process(DICOMImage* image)
+void ProcessImage::process(Image* image)
 {
     qFatal("process Not implemented");
 }

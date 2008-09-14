@@ -12,7 +12,7 @@
 
 namespace udg {
 
-class DICOMImage;
+class Image;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -23,11 +23,11 @@ Q_OBJECT
 public:
     StarviewerProcessImageStored(QObject *parent = 0);
 
-    void process( DICOMImage * image );
+    void process(Image * image);
 
     ~StarviewerProcessImageStored();
 
-signals :
+signals:
 
     /** signal que s'emet a QExcuteOperationThread per indica que s'ha descarregat una image
       *@param uid de l'estudi
@@ -49,7 +49,7 @@ signals :
 
     void setError();
 
-    private:
+private:
 
     int m_imagesStored;
     QString m_oldSeriesUID, m_studyUID;

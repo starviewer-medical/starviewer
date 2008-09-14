@@ -6,7 +6,9 @@
  ***************************************************************************/
 #include "starviewerprocessimagestored.h"
 
-#include "dicomimage.h"
+#include "image.h"
+#include "series.h"
+#include "study.h"
 
 namespace udg {
 
@@ -16,22 +18,25 @@ StarviewerProcessImageStored::StarviewerProcessImageStored(QObject *parent)
     m_imagesStored = 0;
 }
 
-void StarviewerProcessImageStored::process( DICOMImage *image )
+void StarviewerProcessImageStored::process(Image *image)
 {
+    QString seriesUID = image->getParentSeries()->getInstanceUID();
+    QString studyUID = image->getParentSeries()->getParentStudy()->getInstanceUID();
+
     if ( m_imagesStored == 0 ) // és la primera imatge que guardem
     {
-      m_oldSeriesUID = image->getSeriesUID();
-      m_studyUID = image->getStudyUID();
+        m_oldSeriesUID = seriesUID;
+        m_studyUID = studyUID;
     }
 
-    if ( m_oldSeriesUID != image->getSeriesUID() ) // canviem de serie d'imatges guardades
+    if ( m_oldSeriesUID != seriesUID ) // canviem de serie d'imatges guardades
     {
-        emit( seriesStored( image->getStudyUID() ) );
-        m_oldSeriesUID = image->getSeriesUID();
+        emit( seriesStored(studyUID) );
+        m_oldSeriesUID = seriesUID;
     }
 
     m_imagesStored++;
-    emit( imageStored( image->getStudyUID() , m_imagesStored ) );
+    emit( imageStored(studyUID, m_imagesStored) );
 }
 
 StarviewerProcessImageStored::~StarviewerProcessImageStored()
