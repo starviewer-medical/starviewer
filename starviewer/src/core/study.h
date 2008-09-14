@@ -49,7 +49,7 @@ public:
     void setDescription( QString description );
     QString getDescription() const;
 
-    /// Assignar/Obtenir el pes del pacient
+    /// Assignar/Obtenir l'edat del pacient
     void setPatientAge( short int age );
     short int getPatientAge() const;
 
