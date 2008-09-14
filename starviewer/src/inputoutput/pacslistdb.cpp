@@ -18,7 +18,7 @@ PacsListDB::PacsListDB(): m_arrayQSettingsName( "PacsList" )
 {
 }
 
-bool PacsListDB::insertPacs(PacsParameters *pacs)
+bool PacsListDB::insertPacs(const PacsParameters &pacs)
 {
     if ( !isPacsDeleted( pacs ) )
     {
@@ -26,10 +26,11 @@ bool PacsListDB::insertPacs(PacsParameters *pacs)
         {
             int arrayIndex = countPacsParamentersInQSettings();//busquem a quina posició hem de gravar el següent pacs
 
-            pacs->setPacsID( arrayIndex );
-            pacs->setIsDeleted( false );
+            PacsParameters pacsNew = pacs;
+            pacsNew.setPacsID( arrayIndex );
+            pacsNew.setIsDeleted( false );
 
-            setPacsParametersToQSettingsValues( pacs, arrayIndex, countPacsParamentersInQSettings() + 1 ); 
+            setPacsParametersToQSettingsValues( pacsNew, arrayIndex, countPacsParamentersInQSettings() + 1 );
         }
         else
         {
@@ -38,34 +39,36 @@ bool PacsListDB::insertPacs(PacsParameters *pacs)
     }
     else //El pacs està donat de baixa el tornem a donar d'alta
     {
-        PacsParameters *pacsDeleted = new PacsParameters();
+        PacsParameters pacsDeleted = queryPacs( pacs.getAEPacs() );
 
-        queryPacs( pacsDeleted, pacs->getAEPacs() );
+        PacsParameters pacsNew = pacs;
+        pacsNew.setPacsID( pacsDeleted.getPacsID() );
 
-        pacs->setPacsID( pacsDeleted->getPacsID() );
-
-        setPacsParametersToQSettingsValues( pacs, pacsDeleted->getPacsID(), countPacsParamentersInQSettings() ); 
+        setPacsParametersToQSettingsValues( pacsNew, pacsDeleted.getPacsID(), countPacsParamentersInQSettings() );
     }
 
     return true;
 }
 
-void PacsListDB::updatePacs(PacsParameters *pacsToUpdate)
+void PacsListDB::updatePacs(const PacsParameters &pacsToUpdate)
 {
-    setPacsParametersToQSettingsValues( pacsToUpdate, pacsToUpdate->getPacsID(), countPacsParamentersInQSettings() );
+    setPacsParametersToQSettingsValues( pacsToUpdate, pacsToUpdate.getPacsID(), countPacsParamentersInQSettings() );
 }
 
-void PacsListDB::queryPacsList(QList<PacsParameters> &outResultsPacslist)
+QList<PacsParameters> PacsListDB::queryPacsList()
 {
+    QList<PacsParameters> outResultsPacslist;
     for ( int arrayIndex = 0 ; arrayIndex < countPacsParamentersInQSettings() ; arrayIndex ++ )
     {
         PacsParameters pacs = getPacsParametersFromQSettinsValues( arrayIndex );
 
         if (!pacs.isDeleted()) outResultsPacslist.append( pacs );
     }
+
+    return outResultsPacslist;
 }
 
-void PacsListDB::queryPacs(PacsParameters *pacs, QString AETitle)
+PacsParameters PacsListDB::queryPacs(QString AETitle)
 {
     int arrayIndex = 0;
     bool trobat = false;
@@ -82,25 +85,28 @@ void PacsListDB::queryPacs(PacsParameters *pacs, QString AETitle)
         else arrayIndex++;
     }
 
+    PacsParameters pacs;
     if ( trobat )
     {
-        pacs->setAEPacs( pacsFromQSettings.getAEPacs() );
-        pacs->setDefault( pacsFromQSettings.getDefault() );
-        pacs->setDescription( pacsFromQSettings.getDescription() );
-        pacs->setInstitution( pacsFromQSettings.getInstitution() );
-        pacs->setIsDeleted( pacsFromQSettings.isDeleted() );
-        pacs->setPacsPort( pacsFromQSettings.getPacsPort() );
-        pacs->setPacsID( pacsFromQSettings.getPacsID() );
-        pacs->setPacsAdr( pacsFromQSettings.getPacsAdr() );
-        pacs->setLocation( pacsFromQSettings.getLocation() );
+        pacs.setAEPacs( pacsFromQSettings.getAEPacs() );
+        pacs.setDefault( pacsFromQSettings.getDefault() );
+        pacs.setDescription( pacsFromQSettings.getDescription() );
+        pacs.setInstitution( pacsFromQSettings.getInstitution() );
+        pacs.setIsDeleted( pacsFromQSettings.isDeleted() );
+        pacs.setPacsPort( pacsFromQSettings.getPacsPort() );
+        pacs.setPacsID( pacsFromQSettings.getPacsID() );
+        pacs.setPacsAdr( pacsFromQSettings.getPacsAdr() );
+        pacs.setLocation( pacsFromQSettings.getLocation() );
     }
+
+    return pacs;
 }
 
-void PacsListDB::queryPacs(PacsParameters *pacs, int pacsID)
+PacsParameters PacsListDB::queryPacs(int pacsID)
 {
     int arrayIndex = 0;
     bool trobat = false;
-    PacsParameters pacsFromQSettings; 
+    PacsParameters pacsFromQSettings;
 
     while ( arrayIndex < countPacsParamentersInQSettings() && !trobat )
     {
@@ -113,21 +119,24 @@ void PacsListDB::queryPacs(PacsParameters *pacs, int pacsID)
         else arrayIndex++;
     }
 
+    PacsParameters pacs;
     if ( trobat )
     {
-        pacs->setAEPacs( pacsFromQSettings.getAEPacs() );
-        pacs->setDefault( pacsFromQSettings.getDefault() );
-        pacs->setDescription( pacsFromQSettings.getDescription() );
-        pacs->setInstitution( pacsFromQSettings.getInstitution() );
-        pacs->setIsDeleted( pacsFromQSettings.isDeleted() );
-        pacs->setPacsPort( pacsFromQSettings.getPacsPort() );
-        pacs->setPacsID( pacsFromQSettings.getPacsID() );
-        pacs->setPacsAdr( pacsFromQSettings.getPacsAdr() );
-        pacs->setLocation( pacsFromQSettings.getLocation() );
+        pacs.setAEPacs( pacsFromQSettings.getAEPacs() );
+        pacs.setDefault( pacsFromQSettings.getDefault() );
+        pacs.setDescription( pacsFromQSettings.getDescription() );
+        pacs.setInstitution( pacsFromQSettings.getInstitution() );
+        pacs.setIsDeleted( pacsFromQSettings.isDeleted() );
+        pacs.setPacsPort( pacsFromQSettings.getPacsPort() );
+        pacs.setPacsID( pacsFromQSettings.getPacsID() );
+        pacs.setPacsAdr( pacsFromQSettings.getPacsAdr() );
+        pacs.setLocation( pacsFromQSettings.getLocation() );
     }
+
+    return pacs;
 }
 
-bool PacsListDB::existPacs( PacsParameters *pacs )
+bool PacsListDB::existPacs(const PacsParameters &pacs)
 {
     int arrayIndex = 0;
     bool trobat = false;
@@ -137,7 +146,7 @@ bool PacsListDB::existPacs( PacsParameters *pacs )
     {
         pacsFromQSettings = getPacsParametersFromQSettinsValues( arrayIndex );
 
-        if ( pacsFromQSettings.getAEPacs() == pacs->getAEPacs() )
+        if ( pacsFromQSettings.getAEPacs() == pacs.getAEPacs() )
         {
             trobat = true;
         }
@@ -147,7 +156,7 @@ bool PacsListDB::existPacs( PacsParameters *pacs )
     return trobat;
 }
 
-bool PacsListDB::isPacsDeleted( PacsParameters *pacs )
+bool PacsListDB::isPacsDeleted(const PacsParameters &pacs)
 {
     int arrayIndex = 0;
     bool trobat = false;
@@ -157,7 +166,7 @@ bool PacsListDB::isPacsDeleted( PacsParameters *pacs )
     {
         pacsFromQSettings = getPacsParametersFromQSettinsValues( arrayIndex );
 
-        if ( pacsFromQSettings.getAEPacs() == pacs->getAEPacs() && pacsFromQSettings.isDeleted() )
+        if ( pacsFromQSettings.getAEPacs() == pacs.getAEPacs() && pacsFromQSettings.isDeleted() )
         {
             trobat = true;
         }
@@ -169,30 +178,28 @@ bool PacsListDB::isPacsDeleted( PacsParameters *pacs )
 
 void PacsListDB::deletePacs( int pacsID )
 {
-    PacsParameters *pacsToDelete = new PacsParameters;;
+    PacsParameters pacsToDelete = queryPacs(pacsID);
 
-    queryPacs( pacsToDelete, pacsID );
+    pacsToDelete.setIsDeleted( true );//el marquem com a esborrat
 
-    pacsToDelete->setIsDeleted( true );//el marquem com a esborrat
-
-    setPacsParametersToQSettingsValues( pacsToDelete, pacsToDelete->getPacsID(), countPacsParamentersInQSettings() );
+    setPacsParametersToQSettingsValues( pacsToDelete, pacsToDelete.getPacsID(), countPacsParamentersInQSettings() );
 }
 
-void PacsListDB::setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex, int sizeOfArray )
+void PacsListDB::setPacsParametersToQSettingsValues(const PacsParameters &pacs, int arrayIndex, int sizeOfArray)
 {
     /*Especifiquem  quina serà la mida de l'array de PacsParameters que guardem*/
     m_pacsListQSettings.beginWriteArray( m_arrayQSettingsName, sizeOfArray );
 
     m_pacsListQSettings.setArrayIndex( arrayIndex );
-    m_pacsListQSettings.setValue( "ID", pacs->getPacsID() );
-    m_pacsListQSettings.setValue( "AETitle", pacs->getAEPacs() );
-    m_pacsListQSettings.setValue( "PacsPort", pacs->getPacsPort() );
-    m_pacsListQSettings.setValue( "Location", pacs->getLocation() );
-    m_pacsListQSettings.setValue( "Institution", pacs->getInstitution() );
-    m_pacsListQSettings.setValue( "Default", pacs->getDefault() );
-    m_pacsListQSettings.setValue( "PacsHostname", pacs->getPacsAdr() );
-    m_pacsListQSettings.setValue( "Deleted", pacs->isDeleted() );
-    m_pacsListQSettings.setValue( "Description", pacs->getDescription() );
+    m_pacsListQSettings.setValue( "ID", pacs.getPacsID() );
+    m_pacsListQSettings.setValue( "AETitle", pacs.getAEPacs() );
+    m_pacsListQSettings.setValue( "PacsPort", pacs.getPacsPort() );
+    m_pacsListQSettings.setValue( "Location", pacs.getLocation() );
+    m_pacsListQSettings.setValue( "Institution", pacs.getInstitution() );
+    m_pacsListQSettings.setValue( "Default", pacs.getDefault() );
+    m_pacsListQSettings.setValue( "PacsHostname", pacs.getPacsAdr() );
+    m_pacsListQSettings.setValue( "Deleted", pacs.isDeleted() );
+    m_pacsListQSettings.setValue( "Description", pacs.getDescription() );
 
     m_pacsListQSettings.endArray();
 }

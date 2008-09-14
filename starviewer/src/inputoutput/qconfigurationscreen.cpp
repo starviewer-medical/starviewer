@@ -234,7 +234,7 @@ void QConfigurationScreen::addPacs()
 
         INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
 
-        if ( !pacsList.insertPacs(&pacs) )
+        if ( !pacsList.insertPacs(pacs) )
         {
             QMessageBox::warning(this, tr("Starviewer"), tr("AETitle %1 exists").arg( pacs.getAEPacs() ));
         }
@@ -255,7 +255,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 
     if ( selectedItem != NULL )
     {
-        pacsListDB.queryPacs( &selectedPacs, selectedItem->text(0));// selectedItem->text(0) --> AETitle del pacs seleccionat al TreeWidget
+        selectedPacs = pacsListDB.queryPacs( selectedItem->text(0) );// selectedItem->text(0) --> AETitle del pacs seleccionat al TreeWidget
 
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAEPacs() );
@@ -303,7 +303,7 @@ void QConfigurationScreen::updatePacs()
 
         INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
 
-        pacsList.updatePacs( &pacs );
+        pacsList.updatePacs(pacs);
 
         fillPacsListView();
         clear();
@@ -338,7 +338,7 @@ void QConfigurationScreen::fillPacsListView()
 
     m_PacsTreeView->clear();
 
-    pacsListDB.queryPacsList( pacsList );
+    pacsList = pacsListDB.queryPacsList();
 
     foreach(PacsParameters pacs, pacsList)
     {

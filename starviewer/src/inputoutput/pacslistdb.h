@@ -10,6 +10,8 @@
 #include <QSettings>
 #include <QList>
 
+#include "pacsparameters.h"
+
 class QString;
 
 namespace udg {
@@ -19,7 +21,6 @@ namespace udg {
 */
 
 class Status;
-class PacsParameters;
 
 class PacsListDB{
 
@@ -35,17 +36,17 @@ public:
      * @param Objecte PacsParameters amb les dades del pacs
      * @return true en el cas que s'hagi inserit correctament. False si el pacs ja existia.
      */
-    bool insertPacs(PacsParameters *pacs);
+    bool insertPacs(const PacsParameters &pacs);
 
     /** Retorna un objecte PacsList amb tots els Pacs que hi ha la taula PacsList odernats per AEtitle. Nomes selecciona els pacs vius, és a dir els que no tenen estat d'esborrats
      * @param PacsList Conté tots els Pacs de la taula PacsList
      */
-    void queryPacsList(QList<PacsParameters> &outResultsPacsList);
+    QList<PacsParameters> queryPacsList();
 
     /** Permet actualitzar la informació d'un pacs, el PacsID camp clau no es pot canviar!
      * @param Objecte PAcsParameters ambles noves dades del PACS
      */
-    void updatePacs(PacsParameters *pacs);
+    void updatePacs(const PacsParameters &pacs);
 
     /** Es donarà de baixa el Pacs. No es dona de baixa físicament, sinó que es posa en estat donat de baixa
      * @param  Objecte pacsID del pacs a donar de baixa
@@ -56,27 +57,27 @@ public:
      * @param Conté la informació del pacs cercat
      * @param pacs a cercar
      */
-    void queryPacs(PacsParameters *pacs, QString AETitle);
+    PacsParameters queryPacs(QString AETitle);
 
     /** Cerca la informació d'un pacs en concret.
      * @param Conté la informació del pacs cercat
      * @param pacs a cercar
      */
-    void queryPacs(PacsParameters *pacs, int pacsID);
+    PacsParameters queryPacs(int pacsID);
 
 private:
 
     ///Ens indica si un Pacs ja està donat d'alta
-    bool existPacs( PacsParameters * pacs );
+    bool existPacs(const PacsParameters &pacs );
 
     /** Comprova si el pacs existeix en estat de baixa, comprovem si el AETitle està en estat donat de baixa
      * @param Pacs a Trobar
      * @return estat de l'operació
      */
-    bool isPacsDeleted( PacsParameters *pacs );
+    bool isPacsDeleted(const PacsParameters &pacs );
 
     ///Guarda les dades del Pacs passat per paràmetres a la posició que indica l'arrayIndex
-    void setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex, int sizeOfArray );
+    void setPacsParametersToQSettingsValues(const PacsParameters &pacs, int arrayIndex, int sizeOfArray );
 
     ///Legeix el Pacs de QSettings a la posició especificada
     PacsParameters getPacsParametersFromQSettinsValues( int arrayIndex );
