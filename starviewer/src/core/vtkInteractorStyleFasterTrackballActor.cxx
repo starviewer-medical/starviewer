@@ -25,7 +25,7 @@
 
 
 
-#include "vtkInteractorStyleTrackballActorGgg.h"
+#include "vtkInteractorStyleFasterTrackballActor.h"
 
 #include "vtkCamera.h"
 #include "vtkPropPicker.h"
@@ -38,11 +38,13 @@
 #include "vtkRenderer.h"
 #include "vtkTransform.h"
 
-vtkCxxRevisionMacro(vtkInteractorStyleTrackballActorGgg, "$Revision: 1.33 $");
-vtkStandardNewMacro(vtkInteractorStyleTrackballActorGgg);
+namespace udg {
+
+vtkCxxRevisionMacro(vtkInteractorStyleFasterTrackballActor, "$Revision: 1.33 $");
+vtkStandardNewMacro(vtkInteractorStyleFasterTrackballActor);
 
 //----------------------------------------------------------------------------
-vtkInteractorStyleTrackballActorGgg::vtkInteractorStyleTrackballActorGgg()
+vtkInteractorStyleFasterTrackballActor::vtkInteractorStyleFasterTrackballActor()
 {
   this->MotionFactor    = 10.0;
   this->InteractionProp = NULL;
@@ -50,13 +52,13 @@ vtkInteractorStyleTrackballActorGgg::vtkInteractorStyleTrackballActorGgg()
 }
 
 //----------------------------------------------------------------------------
-vtkInteractorStyleTrackballActorGgg::~vtkInteractorStyleTrackballActorGgg()
+vtkInteractorStyleFasterTrackballActor::~vtkInteractorStyleFasterTrackballActor()
 {
   this->InteractionPicker->Delete();
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::OnMouseMove()
+void vtkInteractorStyleFasterTrackballActor::OnMouseMove()
 {
   int x = this->Interactor->GetEventPosition()[0];
   int y = this->Interactor->GetEventPosition()[1];
@@ -96,7 +98,7 @@ void vtkInteractorStyleTrackballActorGgg::OnMouseMove()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::OnLeftButtonDown()
+void vtkInteractorStyleFasterTrackballActor::OnLeftButtonDown()
 {
   int x = this->Interactor->GetEventPosition()[0];
   int y = this->Interactor->GetEventPosition()[1];
@@ -123,7 +125,7 @@ void vtkInteractorStyleTrackballActorGgg::OnLeftButtonDown()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::OnLeftButtonUp()
+void vtkInteractorStyleFasterTrackballActor::OnLeftButtonUp()
 {
   switch (this->State) 
     {
@@ -142,7 +144,7 @@ void vtkInteractorStyleTrackballActorGgg::OnLeftButtonUp()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::OnMiddleButtonDown()
+void vtkInteractorStyleFasterTrackballActor::OnMiddleButtonDown()
 {
   int x = this->Interactor->GetEventPosition()[0];
   int y = this->Interactor->GetEventPosition()[1];
@@ -165,7 +167,7 @@ void vtkInteractorStyleTrackballActorGgg::OnMiddleButtonDown()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::OnMiddleButtonUp()
+void vtkInteractorStyleFasterTrackballActor::OnMiddleButtonUp()
 {
   switch (this->State) 
     {
@@ -180,7 +182,7 @@ void vtkInteractorStyleTrackballActorGgg::OnMiddleButtonUp()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::OnRightButtonDown()
+void vtkInteractorStyleFasterTrackballActor::OnRightButtonDown()
 {
   int x = this->Interactor->GetEventPosition()[0];
   int y = this->Interactor->GetEventPosition()[1];
@@ -196,7 +198,7 @@ void vtkInteractorStyleTrackballActorGgg::OnRightButtonDown()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::OnRightButtonUp()
+void vtkInteractorStyleFasterTrackballActor::OnRightButtonUp()
 {
   switch (this->State) 
     {
@@ -207,7 +209,7 @@ void vtkInteractorStyleTrackballActorGgg::OnRightButtonUp()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::Rotate()
+void vtkInteractorStyleFasterTrackballActor::Rotate()
 {
   if (this->CurrentRenderer == NULL || this->InteractionProp == NULL)
     {
@@ -311,7 +313,7 @@ void vtkInteractorStyleTrackballActorGgg::Rotate()
 }
   
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::Spin()
+void vtkInteractorStyleFasterTrackballActor::Spin()
 {
   if (this->CurrentRenderer == NULL || this->InteractionProp == NULL)
     {
@@ -389,7 +391,7 @@ void vtkInteractorStyleTrackballActorGgg::Spin()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::Pan()
+void vtkInteractorStyleFasterTrackballActor::Pan()
 {
   if (this->CurrentRenderer == NULL || this->InteractionProp == NULL)
     {
@@ -447,7 +449,7 @@ void vtkInteractorStyleTrackballActorGgg::Pan()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::Dolly()
+void vtkInteractorStyleFasterTrackballActor::Dolly()
 {
   if (this->CurrentRenderer == NULL || this->InteractionProp == NULL)
     {
@@ -498,7 +500,7 @@ void vtkInteractorStyleTrackballActorGgg::Dolly()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::UniformScale()
+void vtkInteractorStyleFasterTrackballActor::UniformScale()
 {
   if (this->CurrentRenderer == NULL || this->InteractionProp == NULL)
     {
@@ -535,13 +537,13 @@ void vtkInteractorStyleTrackballActorGgg::UniformScale()
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::PrintSelf(ostream& os, vtkIndent indent)
+void vtkInteractorStyleFasterTrackballActor::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::FindPickedActor(int x, int y)
+void vtkInteractorStyleFasterTrackballActor::FindPickedActor(int x, int y)
 {
   this->InteractionPicker->Pick(x, y, 0.0, this->CurrentRenderer);
   vtkProp *prop = this->InteractionPicker->GetViewProp();
@@ -556,7 +558,7 @@ void vtkInteractorStyleTrackballActorGgg::FindPickedActor(int x, int y)
 }
 
 //----------------------------------------------------------------------------
-void vtkInteractorStyleTrackballActorGgg::Prop3DTransform(vtkProp3D *prop3D,
+void vtkInteractorStyleFasterTrackballActor::Prop3DTransform(vtkProp3D *prop3D,
                                                        double *boxCenter,
                                                        int numRotation,
                                                        double **rotate,
@@ -613,3 +615,4 @@ void vtkInteractorStyleTrackballActorGgg::Prop3DTransform(vtkProp3D *prop3D,
   newTransform->Delete();
 }
 
+}

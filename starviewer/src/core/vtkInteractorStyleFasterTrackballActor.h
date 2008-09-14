@@ -40,7 +40,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 /**
- * \class vtkInteractorStyleTrackballActorGgg
+ * \class vtkInteractorStyleFasterTrackballActor
  *
  * És una versió modificada de vtkInteractorStyleTrackballActor que fa servir un
  * vtkPropPicker en lloc d'un vtkCellPicker. D'aquesta manera és més ràpida la
@@ -49,18 +49,20 @@
 
 
 
-#ifndef __vtkInteractorStyleTrackballActorGgg_h
-#define __vtkInteractorStyleTrackballActorGgg_h
+#ifndef __vtkInteractorStyleFasterTrackballActor_h
+#define __vtkInteractorStyleFasterTrackballActor_h
 
 #include "vtkInteractorStyle.h"
 
 class vtkPropPicker;
 
-class vtkInteractorStyleTrackballActorGgg : public vtkInteractorStyle
+namespace udg {
+
+class vtkInteractorStyleFasterTrackballActor : public vtkInteractorStyle
 {
 public:
-  static vtkInteractorStyleTrackballActorGgg *New();
-  vtkTypeRevisionMacro(vtkInteractorStyleTrackballActorGgg,vtkInteractorStyle);
+  static vtkInteractorStyleFasterTrackballActor *New();
+  vtkTypeRevisionMacro(vtkInteractorStyleFasterTrackballActor,vtkInteractorStyle);
   void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
@@ -85,8 +87,8 @@ public:
   virtual void UniformScale();
 
 protected:
-  vtkInteractorStyleTrackballActorGgg();
-  ~vtkInteractorStyleTrackballActorGgg();
+  vtkInteractorStyleFasterTrackballActor();
+  ~vtkInteractorStyleFasterTrackballActor();
 
   void FindPickedActor(int x, int y);
 
@@ -102,8 +104,10 @@ protected:
   vtkPropPicker *InteractionPicker;
 
 private:
-  vtkInteractorStyleTrackballActorGgg(const vtkInteractorStyleTrackballActorGgg&);  // Not implemented.
-  void operator=(const vtkInteractorStyleTrackballActorGgg&);  // Not implemented.
+  vtkInteractorStyleFasterTrackballActor(const vtkInteractorStyleFasterTrackballActor&);  // Not implemented.
+  void operator=(const vtkInteractorStyleFasterTrackballActor&);  // Not implemented.
 };
+
+}
 
 #endif

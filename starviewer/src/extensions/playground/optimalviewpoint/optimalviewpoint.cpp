@@ -9,7 +9,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "optimalviewpoint.h"
-#include "povspherecloud.h"
+#include "sphereuniformpointcloudgenerator.h"
 #include "vector3.h"
 #include "transferfunctionio.h"
 #include "slicer.h"
@@ -274,7 +274,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
             {
                 for ( unsigned char i = 1; i <= 12; i++ )
                     (*m_planes)[i]->setDistance( 2.0 * m_volume->getVolume()->GetLength() );
-                POVSphereCloud cloud( 1.0, 0 );
+                SphereUniformPointCloudGenerator cloud( 1.0, 0 );
                 cloud.createPOVCloud();
                 const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
                 if ( geographicVertices.size() != 12 )
@@ -358,7 +358,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
             {
                 for ( unsigned char i = 1; i <= 42; i++ )
                     (*m_planes)[i]->setDistance( 2.0 * m_volume->getVolume()->GetLength() );
-                POVSphereCloud cloud( 1.0, 1 );
+                SphereUniformPointCloudGenerator cloud( 1.0, 1 );
                 cloud.createPOVCloud();
                 const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
                 if ( geographicVertices.size() != 42 )
@@ -381,7 +381,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
             {
                 for ( unsigned char i = 1; i <= 162; i++ )
                     (*m_planes)[i]->setDistance( 4.0 * m_volume->getVolume()->GetLength() );
-                POVSphereCloud cloud( 1.0, 2 );
+                SphereUniformPointCloudGenerator cloud( 1.0, 2 );
                 cloud.createPOVCloud();
                 const QVector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
                 if ( geographicVertices.size() != 162 )
@@ -401,7 +401,7 @@ void OptimalViewpoint::setNumberOfPlanes( unsigned char numberOfPlanes )
     //////////////////// PROVA DE POSICIONAMENT DELS PLANS /////////////////////
     ////////////////////////////////////////////////////////////////////////////
 
-//     POVSphereCloud cloud( 1.0, 4 );
+//     SphereUniformPointCloudGenerator cloud( 1.0, 4 );
 //     cloud.createPOVCloud();
 //     const std::vector< Vector3 > & vertices = cloud.getVertices();
 //     const std::vector< Vector3 > & geographicVertices = cloud.getGeographicVertices();
@@ -527,7 +527,7 @@ void OptimalViewpoint::updatePlanes()
 
 
                 ///\warning Això només funcionarà si són 42 plans!!!
-                POVSphereCloud cloud( 1.0, 1 );
+                SphereUniformPointCloudGenerator cloud( 1.0, 1 );
                 cloud.createPOVCloud();
                 const QVector< Vector3 > & vertices = cloud.getVertices();
                 slicer.setVector( vertices[m_updatePlane - 1] );

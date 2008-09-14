@@ -173,7 +173,17 @@ HEADERS += extensionfactory.h \
            hangingprotocolmask.h \
            hangingprotocolimageset.h \
            hangingprotocoldisplayset.h \
-           hangingprotocolxmlreader.h
+           hangingprotocolxmlreader.h \
+ ambientvoxelshader.h \
+ contourvoxelshader.h \
+ directilluminationvoxelshader.h \
+ voxelshader.h \
+ hdrcolor.h \
+ trilinearinterpolator.h \
+ vector3.h \
+ vtkVolumeRayCastVoxelShaderCompositeFunction.h \
+ sphereuniformpointcloudgenerator.h \
+ vtkInteractorStyleFasterTrackballActor.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -313,7 +323,16 @@ SOURCES += extensionmediator.cpp \
            hangingprotocolmask.cpp \
            hangingprotocolimageset.cpp \
            hangingprotocoldisplayset.cpp \
-           hangingprotocolxmlreader.cpp
+           hangingprotocolxmlreader.cpp \
+ ambientvoxelshader.cpp \
+ contourvoxelshader.cpp \
+ directilluminationvoxelshader.cpp \
+ voxelshader.cpp \
+ trilinearinterpolator.cpp \
+ vector3.cpp \
+ vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
+ sphereuniformpointcloudgenerator.cpp \
+ vtkInteractorStyleFasterTrackballActor.cxx
 TEMPLATE = lib
 
 DESTDIR = ./

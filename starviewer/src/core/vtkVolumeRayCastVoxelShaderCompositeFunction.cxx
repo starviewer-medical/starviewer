@@ -1,4 +1,4 @@
-#include "vtkVolumeRayCastCompositeFxFunction.h"
+#include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 
 #include <vtkObjectFactory.h>
 #include <vtkPiecewiseFunction.h>
@@ -17,32 +17,32 @@
 namespace udg {
 
 
-vtkCxxRevisionMacro( vtkVolumeRayCastCompositeFxFunction, "$Revision: 1.0 $" );
-vtkStandardNewMacro( vtkVolumeRayCastCompositeFxFunction );
+vtkCxxRevisionMacro( vtkVolumeRayCastVoxelShaderCompositeFunction, "$Revision: 1.0 $" );
+vtkStandardNewMacro( vtkVolumeRayCastVoxelShaderCompositeFunction );
 
-const float vtkVolumeRayCastCompositeFxFunction::REMAINING_OPACITY = 0.02f;
+const float vtkVolumeRayCastVoxelShaderCompositeFunction::REMAINING_OPACITY = 0.02f;
 
-vtkVolumeRayCastCompositeFxFunction::vtkVolumeRayCastCompositeFxFunction()
+vtkVolumeRayCastVoxelShaderCompositeFunction::vtkVolumeRayCastVoxelShaderCompositeFunction()
 {
     m_compositeMethod = ClassifyInterpolate;
     m_interpolator = new TrilinearInterpolator();
 }
 
 
-vtkVolumeRayCastCompositeFxFunction::~vtkVolumeRayCastCompositeFxFunction()
+vtkVolumeRayCastVoxelShaderCompositeFunction::~vtkVolumeRayCastVoxelShaderCompositeFunction()
 {
 }
 
 
 // We don't need to do any specific initialization here...
-void vtkVolumeRayCastCompositeFxFunction::SpecificFunctionInitialize( vtkRenderer *vtkNotUsed(renderer), vtkVolume *vtkNotUsed(volume),
+void vtkVolumeRayCastVoxelShaderCompositeFunction::SpecificFunctionInitialize( vtkRenderer *vtkNotUsed(renderer), vtkVolume *vtkNotUsed(volume),
                                                                       vtkVolumeRayCastStaticInfo *vtkNotUsed(staticInfo),
                                                                       vtkVolumeRayCastMapper *vtkNotUsed(mapper) )
 {
 }
 
 
-void vtkVolumeRayCastCompositeFxFunction::PrintSelf( ostream &os, vtkIndent indent )
+void vtkVolumeRayCastVoxelShaderCompositeFunction::PrintSelf( ostream &os, vtkIndent indent )
 {
     this->Superclass::PrintSelf( os, indent );
 
@@ -60,7 +60,7 @@ void vtkVolumeRayCastCompositeFxFunction::PrintSelf( ostream &os, vtkIndent inde
 }
 
 
-const char* vtkVolumeRayCastCompositeFxFunction::GetCompositeMethodAsString() const
+const char* vtkVolumeRayCastVoxelShaderCompositeFunction::GetCompositeMethodAsString() const
 {
     switch ( m_compositeMethod )
     {
@@ -77,7 +77,7 @@ const char* vtkVolumeRayCastCompositeFxFunction::GetCompositeMethodAsString() co
 // by a templated function.  It also uses the shading and
 // interpolation types to determine which templated function
 // to call.
-void vtkVolumeRayCastCompositeFxFunction::CastRay( vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo )
+void vtkVolumeRayCastVoxelShaderCompositeFunction::CastRay( vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo )
 {
     void *data = staticInfo->ScalarDataPointer;
 
@@ -90,13 +90,13 @@ void vtkVolumeRayCastCompositeFxFunction::CastRay( vtkVolumeRayCastDynamicInfo *
 }
 
 
-float vtkVolumeRayCastCompositeFxFunction::GetZeroOpacityThreshold( vtkVolume *volume )
+float vtkVolumeRayCastVoxelShaderCompositeFunction::GetZeroOpacityThreshold( vtkVolume *volume )
 {
     return volume->GetProperty()->GetScalarOpacity()->GetFirstNonZeroValue();
 }
 
 
-void vtkVolumeRayCastCompositeFxFunction::AddVoxelShader( VoxelShader * voxelShader )
+void vtkVolumeRayCastVoxelShaderCompositeFunction::AddVoxelShader( VoxelShader * voxelShader )
 {
     Q_CHECK_PTR( voxelShader );
 
@@ -104,38 +104,38 @@ void vtkVolumeRayCastCompositeFxFunction::AddVoxelShader( VoxelShader * voxelSha
 }
 
 
-void vtkVolumeRayCastCompositeFxFunction::InsertVoxelShader( int i, VoxelShader * voxelShader )
+void vtkVolumeRayCastVoxelShaderCompositeFunction::InsertVoxelShader( int i, VoxelShader * voxelShader )
 {
     m_voxelShaderList.insert( i, voxelShader );
 }
 
 
-int vtkVolumeRayCastCompositeFxFunction::IndexOfVoxelShader( VoxelShader * voxelShader )
+int vtkVolumeRayCastVoxelShaderCompositeFunction::IndexOfVoxelShader( VoxelShader * voxelShader )
 {
     return m_voxelShaderList.indexOf( voxelShader );
 }
 
 
-void vtkVolumeRayCastCompositeFxFunction::RemoveVoxelShader( int i )
+void vtkVolumeRayCastVoxelShaderCompositeFunction::RemoveVoxelShader( int i )
 {
     m_voxelShaderList.removeAt( i );
 }
 
 
-void vtkVolumeRayCastCompositeFxFunction::RemoveVoxelShader( VoxelShader * voxelShader )
+void vtkVolumeRayCastVoxelShaderCompositeFunction::RemoveVoxelShader( VoxelShader * voxelShader )
 {
     int index = m_voxelShaderList.indexOf( voxelShader );
     if ( index >= 0 ) m_voxelShaderList.removeAt( index );
 }
 
 
-void vtkVolumeRayCastCompositeFxFunction::RemoveAllVoxelShaders()
+void vtkVolumeRayCastVoxelShaderCompositeFunction::RemoveAllVoxelShaders()
 {
     m_voxelShaderList.clear();
 }
 
 
-template <class T> void vtkVolumeRayCastCompositeFxFunction::CastRay( const T *data,
+template <class T> void vtkVolumeRayCastVoxelShaderCompositeFunction::CastRay( const T *data,
                                                                       vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                                                       const vtkVolumeRayCastStaticInfo *staticInfo ) const
 {

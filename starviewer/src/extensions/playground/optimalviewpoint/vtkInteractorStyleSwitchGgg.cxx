@@ -22,7 +22,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 // Versió modificada per fer servir les classes
-// vtkInteractorStyleJoystickActorGgg i vtkInteractorStyleTrackballActorGgg
+// vtkInteractorStyleJoystickActorGgg i vtkInteractorStyleFasterTrackballActor
 // en lloc de vtkInteractorStyleJoystickActor i
 // vtkInteractorStyleTrackballActor.
 
@@ -34,7 +34,7 @@
 #include "vtkCommand.h"
 #include "vtkInteractorStyleJoystickActorGgg.h"
 #include "vtkInteractorStyleJoystickCamera.h"
-#include "vtkInteractorStyleTrackballActorGgg.h"
+#include "vtkInteractorStyleFasterTrackballActor.h"
 #include "vtkInteractorStyleTrackballCamera.h"
 #include "vtkObjectFactory.h"
 #include "vtkRenderWindowInteractor.h"
@@ -47,7 +47,7 @@ vtkInteractorStyleSwitchGgg::vtkInteractorStyleSwitchGgg()
 {
   this->JoystickActor = vtkInteractorStyleJoystickActorGgg::New();
   this->JoystickCamera = vtkInteractorStyleJoystickCamera::New();
-  this->TrackballActor = vtkInteractorStyleTrackballActorGgg::New();
+  this->TrackballActor = udg::vtkInteractorStyleFasterTrackballActor::New();
   this->TrackballCamera = vtkInteractorStyleTrackballCamera::New();
   this->JoystickOrTrackball = VTKIS_JOYSTICK;
   this->CameraOrActor = VTKIS_CAMERA;
