@@ -21,7 +21,6 @@
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include "errordcmtk.h"
-#include "cachelayer.h"
 #include "logging.h"
 #include "status.h"
 #include "storeimages.h"
@@ -214,7 +213,6 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     unsigned int freePoolSpace;
     quint64 freeSystemSpace;
     Status state;
-    CacheLayer cacheLayer;
 
     freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
     if ( freeSystemSpace == 0 )
@@ -230,11 +228,13 @@ Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
     {
         ERROR_LOG( QString("No hi ha suficient espai a la cache. Alliberant espai. Espai lliure cache %1 Mb. Espai lliure al disc %2 Mb").arg(freePoolSpace).arg(freeSystemSpace) );
 
-        state = cacheLayer.deleteOldStudies( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis
+        LocalDatabaseManager localDatabaseManager;
+        localDatabaseManager.freeSpace( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis
 
-        if ( !state.good() )
+        if ( localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
         {
             enoughSpace = false;
+            state.setStatus("Error al alliberar espai", false, -1 );
             return state;
         }
 

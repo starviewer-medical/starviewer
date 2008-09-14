@@ -24,7 +24,6 @@
 #include "starviewersettings.h"
 #include "cachepool.h"
 #include "operation.h"
-#include "cachelayer.h"
 #include "pacslistdb.h"
 #include "logging.h"
 #include "status.h"
