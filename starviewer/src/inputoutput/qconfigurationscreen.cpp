@@ -216,7 +216,6 @@ void QConfigurationScreen:: clear()
 void QConfigurationScreen::addPacs()
 {
     PacsParameters pacs;
-    Status state;
     PacsListDB pacsList;
 
     if (validatePacsParameters())
@@ -233,22 +232,17 @@ void QConfigurationScreen::addPacs()
         }
         else pacs.setDefault( "N" );
 
-		INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
+        INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
 
-        state =  pacsList.insertPacs( &pacs );
-
-        if ( !state.good() )
+        if ( !pacsList.insertPacs(&pacs) )
         {
-            if ( state.code() == 2019 )
-                QMessageBox::warning( this , tr("Starviewer") , tr("AETitle %1 exists").arg( pacs.getAEPacs() ) );
-            else
-                showDatabaseErrorMessage( state );
+            QMessageBox::warning(this, tr("Starviewer"), tr("AETitle %1 exists").arg( pacs.getAEPacs() ));
         }
         else
         {
             fillPacsListView();
             clear();
-            emit( configurationChanged("Pacs/ListChanged") );
+            emit configurationChanged("Pacs/ListChanged");
         }
     }
 }
@@ -257,18 +251,11 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 {
     QList<PacsParameters> pacsList;
     PacsParameters selectedPacs;
-    Status state;
     PacsListDB pacsListDB;
 
     if ( selectedItem != NULL )
     {
-        state = pacsListDB.queryPacs( &selectedPacs, selectedItem->text(0));// selectedItem->text(0) --> AETitle del pacs seleccionat al TreeWidget
-
-        if ( !state.good() )
-        {
-            showDatabaseErrorMessage( state );
-            return;
-        }
+        pacsListDB.queryPacs( &selectedPacs, selectedItem->text(0));// selectedItem->text(0) --> AETitle del pacs seleccionat al TreeWidget
 
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAEPacs() );
@@ -290,7 +277,6 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 void QConfigurationScreen::updatePacs()
 {
     PacsParameters pacs;
-    Status state;
     PacsListDB pacsList;
 
     if ( m_selectedPacsID == -1 )
@@ -317,24 +303,16 @@ void QConfigurationScreen::updatePacs()
 
         INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
 
-        state = pacsList.updatePacs( &pacs );
+        pacsList.updatePacs( &pacs );
 
-        if ( !state.good() )
-        {
-            showDatabaseErrorMessage( state );
-        }
-        else
-        {
-            fillPacsListView();
-            clear();
-            emit( configurationChanged("Pacs/ListChanged") );
-        }
+        fillPacsListView();
+        clear();
+        emit configurationChanged("Pacs/ListChanged");
     }
 }
 
 void QConfigurationScreen::deletePacs()
 {
-    Status state;
     PacsListDB pacsList;
 
     if ( m_selectedPacsID == -1 )
@@ -345,18 +323,11 @@ void QConfigurationScreen::deletePacs()
 
     INFO_LOG( "Esborrant el PACS: " + m_textAETitle->text() );
 
-    state = pacsList.deletePacs( m_selectedPacsID );
+    pacsList.deletePacs( m_selectedPacsID );
 
-    if ( !state.good() )
-    {
-        showDatabaseErrorMessage( state );
-    }
-    else
-    {
-        fillPacsListView();
-        clear();
-        emit( configurationChanged("Pacs/ListChanged") );
-    }
+    fillPacsListView();
+    clear();
+    emit configurationChanged("Pacs/ListChanged");
 }
 
 void QConfigurationScreen::fillPacsListView()
@@ -367,27 +338,24 @@ void QConfigurationScreen::fillPacsListView()
 
     m_PacsTreeView->clear();
 
-    state = pacsListDB.queryPacsList( pacsList );
+    pacsListDB.queryPacsList( pacsList );
 
-    if ( state.good() )
+    foreach(PacsParameters pacs, pacsList)
     {
-        foreach(PacsParameters pacs, pacsList)
+        QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
+
+        item->setText( 0 , pacs.getAEPacs() );
+        item->setText( 1 , pacs.getPacsAdr() );
+        item->setText( 2 , pacs.getPacsPort() );
+        item->setText( 3 , pacs.getInstitution() );
+        item->setText( 4 , pacs.getLocation() );
+        item->setText( 5 , pacs.getDescription() );
+
+        if ( pacs.getDefault() == "S" )
         {
-            QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
-
-            item->setText( 0 , pacs.getAEPacs() );
-            item->setText( 1 , pacs.getPacsAdr() );
-            item->setText( 2 , pacs.getPacsPort() );
-            item->setText( 3 , pacs.getInstitution() );
-            item->setText( 4 , pacs.getLocation() );
-            item->setText( 5 , pacs.getDescription() );
-
-            if ( pacs.getDefault() == "S" )
-            {
-                item->setText( 6 , tr( "Yes" ) );
-            }
-            else item->setText( 6 , tr( "No" ) );
+            item->setText( 6 , tr( "Yes" ) );
         }
+        else item->setText( 6 , tr( "No" ) );
     }
 }
 
@@ -484,8 +452,8 @@ bool QConfigurationScreen::validatePacsParameters()
 bool QConfigurationScreen::validateChanges()
 {
     QDir dir;
-	unsigned int usedSpace;
-	CachePool pool;
+    unsigned int usedSpace;
+    CachePool pool;
 
     if ( m_textLocalPort->isModified() )
     {
@@ -538,24 +506,23 @@ bool QConfigurationScreen::validateChanges()
         }
     }
 
-	if ( m_textPoolSize->isModified() )
-	{
-		//hem de comprova que si canviem el tamany de la cache, si el reduim que no sigui mes petit que l'espia usat
-		pool.getPoolUsedSpace( usedSpace );
+    if ( m_textPoolSize->isModified() )
+    {
+        //hem de comprova que si canviem el tamany de la cache, si el reduim que no sigui mes petit que l'espia usat
+        pool.getPoolUsedSpace( usedSpace );
 
-		if ( m_textPoolSize->text().toUInt( NULL , 10 )* 1024 < usedSpace )
-		{
+        if ( m_textPoolSize->text().toUInt( NULL , 10 )* 1024 < usedSpace )
+        {
             QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Pool space can't be less than used space" ) );
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
     return true;
 }
 
 bool QConfigurationScreen::applyChanges()
 {
-
     if (validateChanges())
     {
         applyChangesPacs();

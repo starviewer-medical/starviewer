@@ -352,25 +352,18 @@ void QueryScreen::searchStudy()
     }
 }
 
-Status QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer *pacsConnection )
+void QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer *pacsConnection )
 {
     PacsParameters pacs;
     PacsListDB pacsListDB;
-    Status state;
     StarviewerSettings settings;
 
-    state = pacsListDB.queryPacs( &pacs, AETitlePACS );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-    if ( !state.good() )
-    {
-        return state;
-    }
+    pacsListDB.queryPacs( &pacs, AETitlePACS );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
 
     pacs.setAELocal( settings.getAETitleMachine() ); //especifiquem el nostres AE
     pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) ); //li especifiquem el TimeOut
 
     pacsConnection->setPacs( pacs );
-
-    return state;
 }
 
 void QueryScreen::queryStudyPacs()
@@ -382,7 +375,7 @@ void QueryScreen::queryStudyPacs()
 
     INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
 
-    m_PACSNodes->getSelectedPacs(selectedPacsList); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+    selectedPacsList = m_PACSNodes->getSelectedPacs(); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     if (selectedPacsList.isEmpty()) //es comprova que hi hagi pacs seleccionats
     {
@@ -569,8 +562,7 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
 
     INFO_LOG( "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle );
 
-    if ( ! preparePacsServerConnection( pacsAETitle, &pacsConnection ).good() )
-        return;
+    preparePacsServerConnection( pacsAETitle, &pacsConnection );
 
     state = pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel);
     if ( !state.good() )
@@ -661,11 +653,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     dicomMask.setImageNumber( "" );
     dicomMask.setSOPInstanceUID( "" );
 
-    if ( ! preparePacsServerConnection( AETitlePACS, &pacsConnection ).good() )
-    {
-        QApplication::restoreOverrideCursor();
-        return;
-    }
+    preparePacsServerConnection( AETitlePACS, &pacsConnection );
 
     state = pacsConnection.connect(PacsServer::query,PacsServer::imageLevel);
     if ( !state.good() )
@@ -1174,7 +1162,7 @@ void QueryScreen::storeStudiesToPacs()
     QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    m_PACSNodes->getSelectedPacs( selectedPacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
+    selectedPacsList = m_PACSNodes->getSelectedPacs(); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     if(selectedPacsList.size() == 0)
     {
@@ -1189,7 +1177,6 @@ void QueryScreen::storeStudiesToPacs()
             PacsListDB pacsListDB;
             PacsParameters pacs;
             Operation storeStudyOperation;
-            Status state;
             Study *study;
             LocalDatabaseManager localDatabaseManager;
             QList<Patient*> patientList;
@@ -1220,18 +1207,10 @@ void QueryScreen::storeStudiesToPacs()
 
             delete patient;
             //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-            state = pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );
-            if ( state.good() )
-            {
-                storeStudyOperation.setPacsParameters( pacs );
+            pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );
+            storeStudyOperation.setPacsParameters( pacs );
 
-                m_qexecuteOperationThread.queueOperation( storeStudyOperation );
-            }
-            else
-            {
-                QApplication::restoreOverrideCursor();
-                // TODO potser s'haurien de recollir si hi ha hagut errors i al final fer el sumari si calgues
-            }
+            m_qexecuteOperationThread.queueOperation( storeStudyOperation );
         }
     }
     else
