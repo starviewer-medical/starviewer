@@ -67,27 +67,19 @@ public:
 
 private:
 
-    ///Ens indica si un Pacs ja està donat d'alta
-    bool existPacs(const PacsParameters &pacs );
+    ///Ens indica si un Pacs ja està donat d'alta a partir del seu AETitle
+    bool existPacsByAETitle(const QString &pacsAETitle );
 
-    /** Comprova si el pacs existeix en estat de baixa, comprovem si el AETitle està en estat donat de baixa
-     * @param Pacs a Trobar
-     * @return estat de l'operació
-     */
-    bool isPacsDeleted(const PacsParameters &pacs );
+    ///Mètode que s'ha de fer servir sempre que es vulgui accedir a la llista de pacs configurats.
+    ///S'encarrega d'omplir la llista en el cas que no s'hagi fet prèviament.
+    QList<PacsParameters> getConfiguredPacsList();
+    void saveConfiguredPacsListToDisk();
 
-    ///Guarda les dades del Pacs passat per paràmetres a la posició que indica l'arrayIndex
-    void setPacsParametersToQSettingsValues(const PacsParameters &pacs, int arrayIndex, int sizeOfArray );
-
-    ///Legeix el Pacs de QSettings a la posició especificada
-    PacsParameters getPacsParametersFromQSettinsValues( int arrayIndex );
-
-    ///Compta quants pacs tenim guardats als QSettings
-    int countPacsParamentersInQSettings();
+    PacsParameters fillPacs(const QSettings &settings);
 
 private:
 
-    QSettings m_pacsListQSettings;
+    QList<PacsParameters> m_configuredPacsList;
     static const QString PacsListConfigurationSectionName;
 };
 
