@@ -12,6 +12,7 @@
 
 #include "patientfillerinput.h"
 #include "logging.h"
+#include "dicomtagreader.h"
 
 // TODO Include's temporals mentre no tenim un registre:
 #include "keyimagenotefillerstep.h"
@@ -159,7 +160,6 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
     }
 
     m_patientFillerInput->initializeAllLabels();
-
 }
 
 void PatientFiller::finishDICOMFilesProcess()
@@ -170,5 +170,22 @@ void PatientFiller::finishDICOMFilesProcess()
     }
 
     emit patientProcessed(m_patientFillerInput->getPatient());
+}
+
+QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
+{
+    foreach(QString dicomFile, dicomFiles)
+    {
+        DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
+
+        this->processDICOMFile( dicomTagReader );
+    }
+
+    foreach(PatientFillerStep *fillerStep, m_registeredSteps)
+    {
+        fillerStep->postProcessing();
+    }
+
+    return m_patientFillerInput->getPatientsList();
 }
 }

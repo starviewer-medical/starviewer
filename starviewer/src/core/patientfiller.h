@@ -7,9 +7,7 @@
 #ifndef UDGPATIENTFILLER_H
 #define UDGPATIENTFILLER_H
 
-#include <QObject>
-#include <QString>
-#include <QList>
+#include <QStringList>
 
 namespace udg {
 
@@ -41,6 +39,10 @@ public slots:
 
     ///Procés encarregat d'executar quelcom que s'hagi de fer un cop rebut tots els fitxers.
     void finishDICOMFilesProcess();
+
+    /// Mètode que processa tots els fitxers que se li passin de cop, retornant la llista d'objectes
+    /// Patient que es generin.
+    QList<Patient*> processDICOMFileList(QStringList dicomFiles);
 
 signals:
     /// Senyal que s'emet regularment al fer un fill o fillUntil indicant el % realitzat.
