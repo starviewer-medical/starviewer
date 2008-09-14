@@ -73,7 +73,7 @@ void TestDicomObjects::printStudy(Study *studyToPrint)
 {
     DEBUG_LOG("Instance UID" + studyToPrint->getInstanceUID());
     DEBUG_LOG("ID" + studyToPrint->getID());
-    DEBUG_LOG("Patient Age" + QString().setNum(studyToPrint->getPatientAge(), 10));
+    DEBUG_LOG("Patient Age" + studyToPrint->getPatientAgeAsString());
     DEBUG_LOG("Patien Weigth" + QString().setNum(studyToPrint->getWeight(), 'g', 10));
     DEBUG_LOG("Patient Height" + QString().setNum(studyToPrint->getHeight(), 'g', 10));
     DEBUG_LOG("Modalities" + studyToPrint->getModalitiesAsSingleString());
