@@ -69,50 +69,6 @@ Status CacheLayer::clearCache()
     }
 }
 
-Status CacheLayer::deleteOldStudies()
-{
-    QDate today,lastTimeViewedMinimum;
-    StarviewerSettings settings;
-    QList<DICOMStudy> studyList;
-    Status state;
-    DICOMStudy study;
-    int comptador = 0;
-    QString logMessage , numberOfDeletedStudies;
-    CacheStudyDAL cacheStudyDAL;
-
-    today = today.currentDate();
-    //calculem fins a quin dia conservarem els estudis
-    //de la data del dia restem el paràmetre definit per l'usuari, que estableix quants dies pot estar un estudi sense ser visualitzat
-    lastTimeViewedMinimum = today.addDays( - settings.getMaximumDaysNotViewedStudy().toInt( NULL , 10 ) );
-
-    //cerquem els estudis que no han estat visualitzats, en una data inferior a la passada per paràmetre
-    state = cacheStudyDAL.queryOldStudies( lastTimeViewedMinimum.toString( "yyyyMMdd" ) , studyList );
-
-    QProgressDialog *progress;
-    progress = new QProgressDialog( tr( "Clearing old studies..." ) , "" , 0 , studyList.count() );
-    progress->setMinimumDuration( 0 );
-	progress->setCancelButton( 0 );
-
-    while ( state.good() && comptador < studyList.count() )
-    {
-        study = studyList.value( comptador );
-        state = cacheStudyDAL.delStudy( study.getStudyUID() ); //indiquem l'estudi a esborrar
-        comptador++;
-        progress->setValue( comptador );
-        progress->repaint();
-    }
-
-	logMessage = "S'han esborrat " + numberOfDeletedStudies.setNum( comptador , 10 ) + " estudis vells";
-	INFO_LOG( logMessage.toAscii().constData() );
-    progress->close();
-
-    if ( !state.good() )
-    {
-        return state;
-    }
-    else return state.setStatus( DcmtkNoError );
-}
-
 Status CacheLayer::deleteOldStudies( int MbytesToErase )
 {
     QDate maxDate;

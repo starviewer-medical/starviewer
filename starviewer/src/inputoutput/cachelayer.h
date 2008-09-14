@@ -30,10 +30,6 @@ public:
     /// Neteja la cache de l'aplicacio, Mostra un QProgressDialog amb el progress de la neteja
     Status clearCache();
 
-    /** Esborra els estudis vells que superen el temps maxim que poden estar a la cache especificats per a l'usuari
-      */
-    Status deleteOldStudies();
-
     /** Esborra els estudis vells, fins alliberar a la cache la quantitat d'espai en Mb passat per parametres.
       * Aquest metode s'utilitzara quant al descarregar un estudi es detecti, que no hi ha suficient espai lliure a la cache o en el disc per descarregar un nou estudi. Invocant aquest metode allibararem l'espai passat per parametre
       *         @param nombre de Mb d'estudis vells a esborrar
