@@ -98,60 +98,60 @@ public :
     /** retorna l'adreça del pacs
      * @return Adreça del pacs
      */
-     QString  getPacsAdr();
+     QString  getPacsAdr() const;
 
     /** retorna el port del pacs
      * @return Port del pacs
      */
-     QString  getPacsPort();
+     QString  getPacsPort() const;
 
     /** retorna l'AE Local
      * @return AE title local
      */
-     QString  getAELocal();
+     QString  getAELocal() const;
 
     /** retorna l'AE del pacs
      * @return Adreça del pacs
      */
-     QString  getAEPacs();
+     QString  getAEPacs() const;
 
     /** retorna el port Local pel qual desitgem rebre les imatges
      * @return Port local
      */
-     QString  getLocalPort();
+     QString  getLocalPort() const;
 
     /** retorna la descripció del PACS
      * @return descripció
      */
-     QString  getDescription();
+     QString  getDescription() const;
 
     /** retorna la institució a la que pertany el PACS
      * @return institucio
      */
-     QString  getInstitution();
+     QString  getInstitution() const;
 
     /** retorna la localització del PACS
      * @return localització
      */
-     QString  getLocation();
+     QString  getLocation() const;
 
     /** retorna si és el pacs predeterminat
      * @return si val 'S' voldrà di que és el pacs predeterminat per realitzar les cerques
      */
-     QString  getDefault();
+     QString  getDefault() const;
 
     /** retorna l'id del PACS, aquest es un camp clau de la taula PacsList, que l'assigna l'aplicacio
      * @return Id del pacs
      */
-    int getPacsID();
+    int getPacsID() const;
 
     /** retorna el temps de time out en ms
      * @return Time out
      */
-    int getTimeOut();
-    
+    int getTimeOut() const;
+
     ///Indica si el pacs està esborrat, és a dir no és visible per a l'usuari per poguer-s'hi connectar
-    bool isDeleted();
+    bool isDeleted() const;
 
     bool operator ==(const PacsParameters &parameters);
 
