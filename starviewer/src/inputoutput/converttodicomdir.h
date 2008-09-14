@@ -18,8 +18,6 @@ class QProgressDialog;
 namespace udg {
 
 class Status;
-class DICOMSeries;
-class DICOMImage;
 class Study;
 class Series;
 class Image;
