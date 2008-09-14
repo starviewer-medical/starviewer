@@ -7,6 +7,7 @@
 
 #include "cachepool.h"
 
+#include <cstdlib>
 #include <sqlite3.h>
 #include <QString>
 #include <QDir>
