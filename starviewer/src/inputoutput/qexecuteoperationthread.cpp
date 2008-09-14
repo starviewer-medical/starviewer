@@ -120,7 +120,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    bool enoughSpace , errorRetrieving ;
+    bool enoughSpace;
 
     state = enoughFreeSpace( enoughSpace );
 
