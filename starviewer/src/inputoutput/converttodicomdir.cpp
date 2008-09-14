@@ -25,9 +25,12 @@
 #include "dicomimage.h"
 #include "convertdicomtolittleendian.h"
 #include "starviewersettings.h"
-#include "createdicomdir.h"
 #include "deletedirectory.h"
 #include "starviewerapplication.h"
+#include "localdatabasemanager.h"
+#include "patient.h"
+#include "study.h"
+#include "image.h"
 
 namespace udg {
 
@@ -46,15 +49,29 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     /*Els estudis s'han d'agrupar per pacient, el que fem és afegir-los a llista d'estudis per convertir a
      dicomdir ja ordenats per pacient*/
     StudyToConvert studyToConvert;
-    CacheStudyDAL cacheStudyDAL;
-    DICOMStudy study;
     int index = 0;
     bool stop = false;
 
-    cacheStudyDAL.queryStudy( studyUID, study ); //busquem patientID
+    LocalDatabaseManager localDatabaseManager;
+    DicomMask studyMask;
+    studyMask.setStudyUID(studyUID);
+    QList<Patient*> patientList = localDatabaseManager.queryPatientStudy(studyMask);
+    if(localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+    {
+        ERROR_LOG(QString("Error al afegir un study per generar un DICOMDIR; Error: %1; StudyUID: %2")
+                  .arg(localDatabaseManager.getLastError())
+                  .arg(studyUID));
+        return;
+    }
+
+    // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
+    // Nosaltres, en realitat només en volem un.
+    Patient *patient = patientList.first();
 
     studyToConvert.studyUID = studyUID;
-    studyToConvert.patientId = study.getPatientId();
+    studyToConvert.patientId = patient->getID();
+
+    delete patient;
 
     while ( index < m_studiesToConvert.count() && !stop )  //busquem la posició on s'ha d'inserir l'estudi a llista d'estudis per convertir a dicomdir, ordenant per id de pacient
     {
@@ -75,24 +92,41 @@ void ConvertToDicomdir::addStudy( QString studyUID )
 Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
-    CacheImageDAL cacheImageDAL;
-    DicomMask imageMask;
     Status state;
-    int imageNumberStudy , imageNumberTotal = 0 , i = 0;
-
-    QString studyUID;
+    int imageNumberTotal = 0;
 
     m_dicomDirPath = dicomdirPath;
 
-    //comptem el numero d'imatges pel progress de la barra
-    while ( i < m_studiesToConvert.count() )
-    {
-        imageMask.setStudyUID( m_studiesToConvert.value( i ).studyUID );
-        state = cacheImageDAL.countImageNumber( imageMask , imageNumberStudy );
-        if ( !state.good() ) break;
+    DicomMask studyMask;
+    QList<Study*> studyList;
 
-        imageNumberTotal = imageNumberStudy + imageNumberTotal;
-        i++;
+    LocalDatabaseManager localDatabaseManager;
+
+    foreach(StudyToConvert studyToConvert, m_studiesToConvert)
+    {
+        studyMask.setStudyUID(studyToConvert.studyUID);
+        Patient *patient = localDatabaseManager.retrieve(studyMask);
+        if(localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        {
+            QString error = QString("Error al fer un retrieve study per generar un DICOMDIR; Error: %1; StudyUID: %2")
+                    .arg(localDatabaseManager.getLastError())
+                    .arg(studyToConvert.studyUID);
+            state.setStatus(error, false, -1);
+            break;
+        }
+        else
+        {
+            state.setStatus("", true, -1);
+        }
+
+        // \TODO Això de patient->getStudies().first s'ha de fer perquè queryPatientStudy retorna llista de Patients
+        // Nosaltres, en realitat només en volem un sol study.
+        Study *study = patient->getStudies().first();
+        studyList.append(study);
+        foreach(Series *series, study->getSeries())
+        {
+            imageNumberTotal += series->getNumberOfImages();
+        }
     }
 
     if ( !state.good() )
@@ -107,7 +141,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordD
     m_progress->setCancelButton( 0 );
 
     //copiem les imatges dels estudis seleccionats al directori desti
-    state = copyStudiesToDicomdirPath();
+    state = copyStudiesToDicomdirPath(studyList);
 
     if ( !state.good() )
     {
@@ -149,7 +183,7 @@ Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, CreateDicomdir::
     return state;
 }
 
-Status ConvertToDicomdir::copyStudiesToDicomdirPath()
+Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
 {
     StudyToConvert studyToConvert;
     QString m_OldPatientId;
@@ -157,6 +191,7 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath()
     QDir patientDir;
     Status state;
     QChar fillChar = '0';
+    Study *study;
 
     m_patient = 0;
 
@@ -164,6 +199,17 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath()
     while ( !m_studiesToConvert.isEmpty() )
     {
         studyToConvert = m_studiesToConvert.takeFirst();
+
+        // \TODO: Es fa xapussa per anar ràpid. En realitat s'hauria de refer el mètode perquè funcionés amb una llista d'Study i no
+        // mantenir dues llistes, una d'uids i l'altra d'study's. Ara, com que creem studyList a partir de m_studiesToConvert, ens aprofitem
+        // de que hi tenim el mateix ordre.
+        study = studyList.takeFirst();
+
+        if(study->getInstanceUID() != studyToConvert.studyUID)
+        {
+            state.setStatus("La xapussa del copyStudiesToDicomdirPath no funciona, hi ha ordre diferent entre la llista studyList i m_studiesToConvert", false, -1);
+            break;
+        }
 
         //si el pacient es diferent creem un nou directori PAtient
         if ( m_OldPatientId != studyToConvert.patientId )
@@ -176,7 +222,9 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath()
             m_patientDirectories.push_back( m_dicomdirPatientPath );//creem una llista amb els directoris creats, per si es produeix algun error esborrar-los
         }
 
-        state = copyStudyToDicomdirPath( studyToConvert.studyUID );
+        state = copyStudyToDicomdirPath(study);
+
+        delete study;
         if ( !state.good() ) break;
         m_OldPatientId = studyToConvert.patientId;
     }
@@ -185,15 +233,13 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath()
 }
 
 
-Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
+Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
 {
     /*Creem el directori de l'estudi on es mourà un estudi seleccionat per convertir a dicomdir*/
-    CacheSeriesDAL cacheSeriesDAL;
     QDir studyDir;
     QChar fillChar = '0';
     QString studyName = QString( "/STU%1" ).arg( m_study , 5 , 10 , fillChar );
     QList<DICOMSeries> seriesList;
-    DicomMask seriesMask;
     DICOMSeries series;
     Status state;
 
@@ -204,13 +250,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
     m_dicomDirStudyPath = m_dicomdirPatientPath + studyName;
     studyDir.mkdir( m_dicomDirStudyPath );
 
-    seriesMask.setStudyUID( studyUID );
-
-    state = cacheSeriesDAL.querySeries( seriesMask , seriesList ); //cerquem sèries de l'estudi
-
-    if ( !state.good() ) return state;
-
-    foreach( DICOMSeries series , seriesList ) //per cada sèrie de l'estudi, creem el directori de la sèrie
+    foreach(Series *series, study->getSeries() ) //per cada sèrie de l'estudi, creem el directori de la sèrie
     {
         state = copySeriesToDicomdirPath( series );
 
@@ -220,16 +260,13 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath( QString studyUID )
     return state;
 }
 
-Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
+Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
 {
     QDir seriesDir;
     QChar fillChar = '0';
-    CacheImageDAL cacheImageDAL;
     //creem el nom del directori de la sèrie, el format és SERXXXXX, on XXXXX és el numero de sèrie dins l'estudi
     QString seriesName = QString( "/SER%1" ).arg( m_series , 5 , 10 , fillChar );
     DICOMImage image;
-    DicomMask imageMask;
-    QList<DICOMImage> imageList;
     Status state;
 
     m_series++;
@@ -238,14 +275,7 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
     m_dicomDirSeriesPath = m_dicomDirStudyPath + seriesName;
     seriesDir.mkdir( m_dicomDirSeriesPath );
 
-    imageMask.setSeriesUID( series.getSeriesUID() );
-    imageMask.setStudyUID( series.getStudyUID() );
-
-    state = cacheImageDAL.queryImages( imageMask , imageList ); // cerquem imatges de la sèrie
-
-    if ( !state.good() ) return state;
-
-    foreach(DICOMImage imageToCopy, imageList)
+    foreach(Image *imageToCopy, series->getImages())
     {
         state = copyImageToDicomdirPath( imageToCopy );
 
@@ -255,11 +285,12 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath( DICOMSeries series )
     return state;
 }
 
-Status ConvertToDicomdir::copyImageToDicomdirPath( DICOMImage image )
+Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 {
     QChar fillChar = '0';
     //creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
-    QString  imageName = QString( "/IMG%1" ).arg( m_image , 5 , 10 , fillChar ) , imageInputPath , imageOutputPath;
+    QString  imageName = QString( "/IMG%1" ).arg( m_image , 5 , 10 , fillChar );
+    QString imageInputPath, imageOutputPath;
     ConvertDicomToLittleEndian convertDicom;
     StarviewerSettings settings;
     DICOMSeries serie;
@@ -268,12 +299,12 @@ Status ConvertToDicomdir::copyImageToDicomdirPath( DICOMImage image )
     m_image++;
 
     //Creem el path de la imatge
-    imageInputPath = settings.getCacheImagePath() + image.getStudyUID() + QString("/") + image.getSeriesUID() + QString("/") + image.getImageName();
+    imageInputPath = image->getPath();
 
     imageOutputPath = m_dicomDirSeriesPath + imageName;
 
     //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
-    state = convertDicom.convert( imageInputPath , imageOutputPath );
+    state = convertDicom.convert(imageInputPath, imageOutputPath );
 
      m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
      m_progress->repaint();
