@@ -12,10 +12,11 @@
 namespace udg {
 
 class Status;
+
 /** Interfície que permet configurar els paràmetres del pacs i de la caché
 @author marc
 */
-class QConfigurationScreen : public QWidget , private ::Ui::QConfigurationScreenBase
+class QConfigurationScreen : public QWidget, private ::Ui::QConfigurationScreenBase
 {
 Q_OBJECT
 
@@ -27,8 +28,20 @@ public:
     ///Destructor de classe
     ~QConfigurationScreen();
 
-public slots :
+public slots:
+    /// Aplica els canvis de la configuració
+    bool applyChanges();
 
+signals:
+    /// Signal que s'emet cada vegada que hi ha un canvi a la configuració que pot afectar al queryscreen
+    void configurationChanged(const QString& configuration);
+
+protected:
+
+    /// Event que s'activa al tancar al rebren un event de tancament
+    void closeEvent( QCloseEvent* ce );
+
+private slots:
     /// Neteja els line edit de la pantalla
     void clear();
 
@@ -59,9 +72,6 @@ public slots :
     /// Compacta la base de dades de la cache
     void compactCache();
 
-    /// Aplica els canvis de la configuració
-    bool applyChanges();
-
     /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
     void enableApplyButtons();
 
@@ -74,28 +84,12 @@ public slots :
     /// crear base de dades
     void createDatabase();
 
-signals :
-    /// Signal que s'emet cada vegada que hi ha un canvi a la configuració que pot afectar al queryscreen
-    void configurationChanged(const QString& configuration);
-
-protected :
-
-    /** Event que s'activa al tancar al rebren un event de tancament
-     * @param event de tancament
-     */
-    void closeEvent( QCloseEvent* ce );
-
-private :
-
-    int m_selectedPacsID; /// Conté el D del pacs seleccionat en aquell moment
-    bool m_configurationChanged; ///Indica si la configuració ha canviat
-    bool m_createDatabase; /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
-
+private:
     ///crea els connects dels signals i slots
     void createConnections();
 
-    /** Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla. La mida de les columnes la tenim guardada al StarviewerSettings
-     */
+    /// Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla.
+    /// La mida de les columnes la tenim guardada al StarviewerSettings
     void setWidthColumns();
 
     /** Comprovem que els paràmetres dels PACS siguin correctes.
@@ -118,9 +112,7 @@ private :
     /// Emplena el ListView amb les dades dels PACS que tenim guardades a la bd
     void fillPacsListView();
 
-    /** Tracta els errors que s'han produït a la base de dades en general
-     *           @param state  Estat del mètode
-     */
+    /// Tracta els errors que s'han produït a la base de dades en general
     void showDatabaseErrorMessage( const Status &state );
 
     /// Carrega les dades de configuració de la cache
@@ -144,13 +136,16 @@ private :
     /// Aplica els canvis fets a la informació de la institució
     void applyChangesInstitution();
 
-	/// col·loca les icones als buttons d'acceptar, cancel·lar i applicar de l'apartat de Pacs i la Cache
-	void setIconButtons();
+    /// col·loca les icones als buttons d'acceptar, cancel·lar i applicar de l'apartat de Pacs i la Cache
+    void setIconButtons();
 
-    /** Guarda la mida de les columnes del QTreeWidget de la pestanya de PACS Device al StarviewerSettings
-     */
+    /// Guarda la mida de les columnes del QTreeWidget de la pestanya de PACS Device al StarviewerSettings
     void saveColumnsWidth();
 
+private:
+    int m_selectedPacsID; /// Conté el D del pacs seleccionat en aquell moment
+    bool m_configurationChanged; ///Indica si la configuració ha canviat
+    bool m_createDatabase; /// Indica si s'ha comprovat demanat que es creï la base de dades indicada a m_textDatabaseRoot
 };
 
 };// end namespace udg
