@@ -118,7 +118,7 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
             text += tr(" Images");
     }
 
-    QIcon  icon(ScaleStudy::getScaledImagePath(studyInstanceUID ,series));
+    QIcon  icon( series->getThumbnail() );
 
     item->setText(text);
     item->setIcon(icon);
