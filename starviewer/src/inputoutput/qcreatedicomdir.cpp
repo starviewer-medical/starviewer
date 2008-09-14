@@ -337,21 +337,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         INFO_LOG( "L'estudi " + item->text( 7 ) + " s'afegirà al DICOMDIR " );
     }
 
-    switch( m_currentDevice )
-    {
-        case CreateDicomdir::HardDisk: //disc dur o dispositiu extrable
-                 state = convertToDicomdir.convert( dicomdirPath, CreateDicomdir::HardDisk );
-                 break;
-        case CreateDicomdir::UsbPen: //usb o memòria flash
-                 state = convertToDicomdir.convert( dicomdirPath, CreateDicomdir::UsbPen );
-                 break;
-        case CreateDicomdir::CdRom: //cd
-                 state = convertToDicomdir.convert( dicomdirPath, CreateDicomdir::CdRom );
-                 break;
-        case CreateDicomdir::DvdRom: //dvd
-                 state = convertToDicomdir.convert( dicomdirPath, CreateDicomdir::DvdRom );
-                 break;
-    }
+    state = convertToDicomdir.convert(dicomdirPath, m_currentDevice);
 
     if ( !state.good() )
     {
