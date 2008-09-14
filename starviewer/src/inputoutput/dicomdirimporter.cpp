@@ -35,22 +35,20 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     Status state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
     if ( !state.good() ) return false;
-#ifdef NEW_PACS
+
     PatientFiller patientFiller;
     LocalDatabaseManager localDatabaseManager;
 
     connect(this, SIGNAL( imageImportedToDisk(DICOMTagReader*) ), &patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
     connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManager, SLOT( insert(Patient *) ));
-#endif
 
     bool ok = importStudy( studyUID , seriesUID , sopInstanceUID );
 
-#ifdef NEW_PACS
     if (ok)
     {
         patientFiller.finishDICOMFilesProcess();
     }
-#endif
+
     INFO_LOG( "Estudi " + studyUID + " importat" );
 
     return ok;
@@ -87,19 +85,6 @@ bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
     study = studyListToImport.value(0);
     study.setAbsPath( studyPath );
 
-#ifndef NEW_PACS
-    state = cacheStudyDAL.insertStudy( &study, "DICOMDIR" );
-
-    if ( state.code() == 2019 ) // si ja existeix l'estudi actualitzem la informació
-    {
-        cacheStudyDAL.updateStudy( study );
-    }
-    else
-    {
-        if ( !state.good() ) ERROR_LOG( state.text() );
-    }
-#endif
-
     m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
 
     if ( seriesListToImport.isEmpty() ) ERROR_LOG ( "No s'han trobat series per l'estudi" );
@@ -107,21 +92,12 @@ bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
     foreach(DICOMSeries seriesToImport, seriesListToImport)
     {
-#ifndef NEW_PACS
-        cacheSeriesDAL.insertSeries( &seriesToImport );
-#endif
         if ( !importSeries(studyUID, seriesToImport.getSeriesUID(), sopInstanceUID) ) return false;
     }
 
     scaleDicomStudy.scale( study.getStudyUID() );
 
-    bool ok = true;
-#ifndef NEW_PACS
-    state = cacheStudyDAL.setStudyRetrieved( study.getStudyUID() );
-    ok = state.good();
-#endif
-
-    return ok;
+    return true;
 }
 
 bool DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
@@ -174,27 +150,8 @@ bool DICOMDIRImporter::importImage(DICOMImage image)
 
     if( QFile::copy( dicomdirImagePath , cacheImagePath ) )
     {
-#ifdef NEW_PACS
         DICOMTagReader *dicomTagReader = new DICOMTagReader(cacheImagePath);
         emit imageImportedToDisk(dicomTagReader);
-#else
-        image.setImageName ( image.getSOPInstanceUID() );
-        QFileInfo imageInfo( cacheImagePath );
-        if( imageInfo.exists() )
-        {
-            image.setImageSize( imageInfo.size() );
-            Status state = cacheImage.insertImage( &image ); // TODO no se li hauria de canviar el path, sinó ara conté el del DICOMDIR, no?
-
-            //la imatge ja existeix a la base de dades, en aquest cas l'ignorem l'error ja pot ser que alguna part de les imatges que s'importen les tinguessim en la la base de dades local
-            if (state.code() == 2019) return true;
-        }
-        else
-        {
-            //No s'hauria de produir mai aquest error
-            ERROR_LOG("Error no s'ha copiat la imatge [" + dicomdirImagePath + "] no s'ha copiat a [" + cacheImagePath + "] " );
-            return false;
-        }
-#endif
     }
     else
     {
