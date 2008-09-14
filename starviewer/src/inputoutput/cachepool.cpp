@@ -35,37 +35,6 @@ void CachePool::removeStudy( QString absPathStudy )
     deleteDirectory.deleteDirectory( absPathStudy , true );
 }
 
-//AQUESTA FUNCIO NO S'UTILITZA, JA QUE SEMPRE QUE ACTUALITZEM L'ESPAI ES QUANT INSERIM O ESBORREM UN ESTUDI I AQUESTES ACCIONS
-//S'HAN DE FER AMB UN TRANSACCIO SINO ENS PODRIEM TROBAR QUE INSERISSIM UNA IMATGE L'APLICACIO ES TANQUES I NO S'HAGUES ACTUALITAT L'ESPAI OCUPAT
-//SI TOT S'ENGLOBA DINS UNA TRANSACCIO NO HI HAURA AQUEST PROBLEMA
-
-Status CachePool::updatePoolSpace( int size )
-{
-    int i;
-    Status state;
-    QString sql;
-
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
-
-    sql = QString("Update PoolOld Set Space = Space + %1 where Param = 'USED'").arg( size );
-
-    m_DBConnect->getLock();
-    i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable(sql), 0 , 0 , 0 );
-    m_DBConnect->releaseLock();
-
-    state = m_DBConnect->databaseStatus( i );
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sql );
-    }
-
-    return state;
-}
-
 Status CachePool::updatePoolTotalSize( int space )
 {
     int i;
@@ -83,33 +52,6 @@ Status CachePool::updatePoolTotalSize( int space )
     spaceBytes = space;
     spaceBytes = spaceBytes * 1024 * 1024; //convertim els Mb en bytes, ja que es guarden en bytes les unitats a la base de dades
     sql = QString("Update PoolOld Set Space = %1 where Param = 'POOLSIZE'").arg( spaceBytes );
-
-    m_DBConnect->getLock();
-    i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable( sql ), 0 , 0 , 0 );
-    m_DBConnect->releaseLock();
-
-    state = m_DBConnect->databaseStatus( i );
-    if ( !state.good() )
-    {
-        ERROR_LOG( QString("Error a la cache número %1").arg( state.code() ) );
-        ERROR_LOG( sql );
-    }
-
-    return state;
-}
-
-Status CachePool::resetPoolSpace()
-{
-    int i;
-    Status state;
-    QString sql;
-
-    if ( !m_DBConnect->connected() )
-    {//el 50 es l'error de no connectat a la base de dades
-        return m_DBConnect->databaseStatus( 50 );
-    }
-
-    sql = QString("Update PoolOld Set Space = 0 where Param = 'USED'" );
 
     m_DBConnect->getLock();
     i = sqlite3_exec( m_DBConnect->getConnection() , qPrintable( sql ), 0 , 0 , 0 );

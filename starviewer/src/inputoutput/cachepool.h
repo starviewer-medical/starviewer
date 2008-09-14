@@ -33,17 +33,6 @@ public:
      */
     void removeStudy( QString studyUID );
 
-    /** actualitza l'espai utiltizat de la cache a 0 bytes
-     * @return estat el mètode
-     */
-    Status resetPoolSpace();
-
-    /** Actualitza l'espai utilitzat de caché, amb la quantitat de bytes passats per paràmetre
-     * @param mida a actualitzar
-     * @return retorna estat del mètode
-     */
-    Status updatePoolSpace( int );
-
     /** Retorna l'espai que estem utilitzan de l'spool en Mb
      * @param  Espai ocupat del Pool (la caché) actualment en Mb
      * @return estat el mètode
