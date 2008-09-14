@@ -18,7 +18,7 @@ namespace udg {
 class Operation;
 class Status;
 
-class QExecuteOperationThread :public QThread
+class QExecuteOperationThread : public QThread
 {
 Q_OBJECT
 
@@ -26,6 +26,10 @@ public:
     /** Constructor de la classe
       */
     QExecuteOperationThread( QObject *parent = 0 );
+
+    /** Destructor de la classe
+     */
+    ~QExecuteOperationThread();
 
     /** afegeix una operacio a la cua, si la cua esta buida l'afegeix i crea el thread que l'executarà
       *@param Operation a executar. Si l'operació de moure imatges cap un PACS, a la màscara de l'estudi de l'operació només caldrà especificar el studyUID
@@ -36,11 +40,7 @@ public:
       */
     void run();
 
-    /** Destructor de la classe
-      */
-    ~QExecuteOperationThread();
-
-signals :
+signals:
 
     /** signal que s'emet cap a QueryScreen quant s'ha descarregat la primera serie d'un estudi per a que pugui ser visualitzat
      * @param studyUID UID de l'estudi a visualitzar
@@ -100,9 +100,7 @@ signals :
     ///Signal que s'emet quan s'ha produït un error a l'operació de descàrrega
     void abort();
 
-private :
-
-    bool m_stop;//indica si el thread esta parat
+private:
 
     /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar
       * captura els signals de l'objecte starviewersettings que es emes cada vegada que finalitza la descarrega d'una  serie
@@ -117,13 +115,14 @@ private :
       */
     Status enoughFreeSpace( bool &enoughSpace);
 
-
     /** Mou un estudi descarregat al pacs especificat
      * @param operation paràmetres de l'operació que s'ha de dur a terme. Si � un Move a la màscara només cal especificar el studyUID
      * @return estat del mètode
      */
     void moveStudy( Operation operation );
 
+private:
+    bool m_stop;//indica si el thread esta parat
 };
 
 }
