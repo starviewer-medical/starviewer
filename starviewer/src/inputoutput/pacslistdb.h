@@ -88,7 +88,7 @@ private:
 private:
 
     QSettings m_pacsListQSettings;
-    QString m_arrayQSettingsName;
+    static const QString PacsListConfigurationSectionName;
 };
 
 };

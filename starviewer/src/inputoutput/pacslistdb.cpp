@@ -14,7 +14,9 @@
 
 namespace udg {
 
-PacsListDB::PacsListDB(): m_arrayQSettingsName( "PacsList" )
+const QString PacsListDB::PacsListConfigurationSectionName = "PacsList";
+
+PacsListDB::PacsListDB()
 {
 }
 
@@ -188,7 +190,7 @@ void PacsListDB::deletePacs( int pacsID )
 void PacsListDB::setPacsParametersToQSettingsValues(const PacsParameters &pacs, int arrayIndex, int sizeOfArray)
 {
     /*Especifiquem  quina serà la mida de l'array de PacsParameters que guardem*/
-    m_pacsListQSettings.beginWriteArray( m_arrayQSettingsName, sizeOfArray );
+    m_pacsListQSettings.beginWriteArray(PacsListConfigurationSectionName, sizeOfArray);
 
     m_pacsListQSettings.setArrayIndex( arrayIndex );
     m_pacsListQSettings.setValue( "ID", pacs.getPacsID() );
@@ -208,7 +210,7 @@ PacsParameters PacsListDB::getPacsParametersFromQSettinsValues( int arrayIndex )
 {
     PacsParameters returnPacsParameters;
 
-    m_pacsListQSettings.beginReadArray( m_arrayQSettingsName );
+    m_pacsListQSettings.beginReadArray(PacsListConfigurationSectionName);
 
     m_pacsListQSettings.setArrayIndex( arrayIndex );
 
@@ -229,7 +231,7 @@ PacsParameters PacsListDB::getPacsParametersFromQSettinsValues( int arrayIndex )
 
 int PacsListDB::countPacsParamentersInQSettings()
 {
-    int arrayIndex = m_pacsListQSettings.beginReadArray( m_arrayQSettingsName );
+    int arrayIndex = m_pacsListQSettings.beginReadArray(PacsListConfigurationSectionName);
     m_pacsListQSettings.endArray();
 
     return arrayIndex;
