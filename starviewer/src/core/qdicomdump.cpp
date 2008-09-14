@@ -104,11 +104,10 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
 
     //Definim  el valor dels tags de Pacient
     m_labelPatientIDValue->setText( currentPatient->getID() );
-    
-    //Millor no mostrar-la en el cas que sigui 0 que no dona informació errònia, pq quan el tag patieng age no existeix sempre val 0
-    if ( currentImage->getParentSeries()->getParentStudy()->getPatientAge() != 0 )
+
+    if ( currentImage->getParentSeries()->getParentStudy()->getPatientAgeAsString() != "" )
     {
-        m_labelPatientAgeValue->setText( QString::number( currentImage->getParentSeries()->getParentStudy()->getPatientAge() , 10 ) );
+        m_labelPatientAgeValue->setText( currentImage->getParentSeries()->getParentStudy()->getPatientAgeAsString() );
     }
 
     if ( currentPatient->getFullName() != "" )
