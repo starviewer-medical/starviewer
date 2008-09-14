@@ -33,8 +33,7 @@
 namespace udg {
 
 
-QConfigurationScreen::QConfigurationScreen( QWidget *parent )
- : QWidget( parent )
+QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
 {
     setupUi( this );
     fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats
@@ -51,7 +50,8 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent )
     m_createDatabase = false;
 
     createConnections();
-	setIconButtons();
+    setIconButtons();
+    configureInputValidator();
 
     setWidthColumns();
 }
@@ -108,6 +108,16 @@ void QConfigurationScreen::createConnections()
     connect( m_buttonUpdatePacs , SIGNAL( clicked() ), SLOT( updatePacs() ) );
     connect( m_buttonTestPacs , SIGNAL( clicked() ), SLOT( test() ) );
     connect( m_PacsTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int) ), SLOT( selectedPacs( QTreeWidgetItem * , int ) ) );
+}
+
+void QConfigurationScreen::configureInputValidator()
+{
+    m_textPort->setValidator( new QIntValidator(0, 65535, m_textPort) );
+    m_textLocalPort->setValidator( new QIntValidator(0, 65535, m_textPort) );
+    m_textTimeout->setValidator( new QIntValidator(0, 99, m_textTimeout) );
+    m_textMaxConnections->setValidator( new QIntValidator(0, 99, m_textMaxConnections) );
+    m_textMaximumDaysNotViewed->setValidator( new QIntValidator(0, 9999, m_textMaximumDaysNotViewed) );
+    m_textPoolSize->setValidator( new QIntValidator(0, 999, m_textPoolSize) );
 }
 
 void QConfigurationScreen::setWidthColumns()

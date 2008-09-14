@@ -317,12 +317,6 @@
                    <height>32767</height>
                   </size>
                  </property>
-                 <property name="inputMask" >
-                  <string>99999; </string>
-                 </property>
-                 <property name="maxLength" >
-                  <number>5</number>
-                 </property>
                 </widget>
                </item>
                <item row="0" column="2" colspan="4" >
@@ -562,34 +556,16 @@
             </widget>
            </item>
            <item row="0" column="4" >
-            <widget class="QLineEdit" name="m_textTimeout" >
-             <property name="inputMask" >
-              <string>99; </string>
-             </property>
-             <property name="maxLength" >
-              <number>2</number>
-             </property>
-            </widget>
+            <widget class="QLineEdit" name="m_textTimeout" />
            </item>
            <item row="0" column="1" >
             <widget class="QLineEdit" name="m_textAETitleMachine" />
            </item>
            <item row="1" column="4" >
-            <widget class="QLineEdit" name="m_textMaxConnections" >
-             <property name="inputMask" >
-              <string>99; </string>
-             </property>
-            </widget>
+            <widget class="QLineEdit" name="m_textMaxConnections" />
            </item>
            <item row="1" column="1" >
-            <widget class="QLineEdit" name="m_textLocalPort" >
-             <property name="inputMask" >
-              <string>99999; </string>
-             </property>
-             <property name="maxLength" >
-              <number>5</number>
-             </property>
-            </widget>
+            <widget class="QLineEdit" name="m_textLocalPort" />
            </item>
            <item row="1" column="3" >
             <widget class="QLabel" name="textLabel7_5" >
@@ -992,9 +968,6 @@
                  <height>16777215</height>
                 </size>
                </property>
-               <property name="inputMask" >
-                <string>9999; </string>
-               </property>
                <property name="alignment" >
                 <set>Qt::AlignRight</set>
                </property>
@@ -1044,9 +1017,6 @@
                  <width>50</width>
                  <height>32767</height>
                 </size>
-               </property>
-               <property name="inputMask" >
-                <string>999; </string>
                </property>
                <property name="alignment" >
                 <set>Qt::AlignLeading</set>
