@@ -36,7 +36,7 @@
  *
  * És una versió modificada de vtkInteractorStyleSwitch que fa servir
  * vtkInteractorStyleJoystickActorGgg en lloc de vtkInteractorStyleJoystickActor
- * i vtkInteractorStyleTrackballActorGgg en lloc de
+ * i vtkInteractorStyleFasterTrackballActor en lloc de
  * vtkInteractorStyleTrackballActor. Aquestes classes permeten una interacció
  * més ràpida amb el volum.
  */
@@ -56,7 +56,7 @@
 
 class vtkInteractorStyleJoystickActorGgg;
 class vtkInteractorStyleJoystickCamera;
-class vtkInteractorStyleTrackballActorGgg;
+namespace udg { class vtkInteractorStyleFasterTrackballActor; }
 class vtkInteractorStyleTrackballCamera;
 
 class vtkInteractorStyleSwitchGgg : public vtkInteractorStyle
@@ -102,7 +102,7 @@ protected:
   
   vtkInteractorStyleJoystickActorGgg *JoystickActor;
   vtkInteractorStyleJoystickCamera *JoystickCamera;
-  vtkInteractorStyleTrackballActorGgg *TrackballActor;
+  udg::vtkInteractorStyleFasterTrackballActor *TrackballActor;
   vtkInteractorStyleTrackballCamera *TrackballCamera;
   vtkInteractorStyle* CurrentStyle;
 

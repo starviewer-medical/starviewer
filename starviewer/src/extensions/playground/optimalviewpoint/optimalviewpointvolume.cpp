@@ -29,7 +29,7 @@
 #include "transferfunction.h"
 #include "vtk4DLinearRegressionGradientEstimator.h"
 
-#include "povspherecloud.h"
+#include "sphereuniformpointcloudgenerator.h"
 #include "vector3.h"
 #include <QLinkedList>
 #include <QList>
@@ -49,7 +49,7 @@
 #include <vtkCamera.h>
 #include <QTime>
 #include "vtkVolumeRayCastCompositeFunctionFx.h"
-#include "vtkVolumeRayCastCompositeFxFunction.h"
+#include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 #include "voxelshader.h"
 #include "ambientvoxelshader.h"
 #include "directilluminationvoxelshader.h"
@@ -341,7 +341,7 @@ void OptimalViewpointVolume::createVolumeRayCastFunctions()
     m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
     m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New();
     m_volumeRayCastFunctionFx = vtkVolumeRayCastCompositeFunctionFx::New();
-    m_volumeRayCastFunctionFx2 = vtkVolumeRayCastCompositeFxFunction::New();
+    m_volumeRayCastFunctionFx2 = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
     m_volumeRayCastFunctionFx2->AddVoxelShader( m_ambientVoxelShader );
     m_volumeRayCastFunctionViewpointSaliency = vtkVolumeRayCastCompositeFunctionViewpointSaliency::New();
     m_volumeRayCastFunctionViewpointSaliency->SetVolume( this );
@@ -1148,7 +1148,7 @@ void OptimalViewpointVolume::computeObscurances( int numberOfDirections, double 
     vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
 
     // càlcul de direccions
-    POVSphereCloud cloud( 1.0, numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    SphereUniformPointCloudGenerator cloud( 1.0, numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
     cloud.createPOVCloud();
     const QVector<Vector3> & directions = cloud.getVertices();
     int nDirections = directions.size();
@@ -1629,7 +1629,7 @@ void OptimalViewpointVolume::computeViewpointSaliency( int numberOfDirections, v
     vtkCamera * camera = renderer->GetActiveCamera();
 
     // càlcul de direccions
-    POVSphereCloud cloud( 2.0 * m_volume->GetLength(), numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+    SphereUniformPointCloudGenerator cloud( 2.0 * m_volume->GetLength(), numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
     cloud.createPOVCloud();
     const QVector<Vector3> & directions = cloud.getVertices();
     int nDirections = directions.size();

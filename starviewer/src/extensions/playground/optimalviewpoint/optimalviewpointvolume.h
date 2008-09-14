@@ -42,7 +42,7 @@ class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
 class SaliencyVoxelShader;
 class Vector3;
-class vtkVolumeRayCastCompositeFxFunction;
+class vtkVolumeRayCastVoxelShaderCompositeFunction;
 
 
 /**
@@ -260,7 +260,7 @@ private:
     /// Volume ray cast function per visualitzar amb efectes.
     vtkVolumeRayCastCompositeFunctionFx *m_volumeRayCastFunctionFx;
     /// Volume ray cast function per visualitzar amb efectes.
-    vtkVolumeRayCastCompositeFxFunction *m_volumeRayCastFunctionFx2;
+    vtkVolumeRayCastVoxelShaderCompositeFunction *m_volumeRayCastFunctionFx2;
     /// Volume ray cast function per calcular la viewpoint saliency.
     vtkVolumeRayCastCompositeFunctionViewpointSaliency *m_volumeRayCastFunctionViewpointSaliency;
 

@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/optimalviewpoint
-# L'objectiu és una aplicaci??:  
+# L'objectiu ï¿½s una aplicaci??:  
 
 FORMS += optimalviewpointinputparametersformbase.ui \
          qoptimalviewpointextensionbase.ui \
@@ -15,12 +15,9 @@ HEADERS += doublehistogram.h \
            optimalviewpointplanehelper.h \
            optimalviewpointviewer.h \
            optimalviewpointvolume.h \
-           povspherecloud.h \
-           vector3.h \
            vtk4DLinearRegressionGradientEstimator.h \
            vtkInteractorStyleJoystickActorGgg.h \
            vtkInteractorStyleSwitchGgg.h \
-           vtkInteractorStyleTrackballActorGgg.h \
            optimalviewpointextensionmediator.h \
            qoptimalviewpointextension.h \
            slicer.h \
@@ -28,15 +25,8 @@ HEADERS += doublehistogram.h \
            vtkVolumeRayCastCompositeFunctionObscurances.h \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
-           vtkVolumeRayCastCompositeFxFunction.h \
-           voxelshader.h \
-           ambientvoxelshader.h \
-           directilluminationvoxelshader.h \
-           contourvoxelshader.h \
            obscurancevoxelshader.h \
            saliencyvoxelshader.h \
-           hdrcolor.h \
-           trilinearinterpolator.h \
            colorbleedingvoxelshader.h \
            obscurancethread.h 
 SOURCES += doublehistogram.cpp \
@@ -48,12 +38,9 @@ SOURCES += doublehistogram.cpp \
            optimalviewpointplanehelper.cpp \
            optimalviewpointviewer.cpp \
            optimalviewpointvolume.cpp \
-           povspherecloud.cpp \
-           vector3.cpp \
            vtk4DLinearRegressionGradientEstimator.cxx \
            vtkInteractorStyleJoystickActorGgg.cxx \
            vtkInteractorStyleSwitchGgg.cxx \
-           vtkInteractorStyleTrackballActorGgg.cxx \
            optimalviewpointextensionmediator.cpp \
            qoptimalviewpointextension.cpp \
            slicer.cpp \
@@ -61,14 +48,8 @@ SOURCES += doublehistogram.cpp \
            vtkVolumeRayCastCompositeFunctionObscurances.cxx \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.cxx \
            vtkVolumeRayCastCompositeFunctionFx.cxx \
-           vtkVolumeRayCastCompositeFxFunction.cxx \
-           voxelshader.cpp \
-           ambientvoxelshader.cpp \
-           directilluminationvoxelshader.cpp \
-           contourvoxelshader.cpp \
            obscurancevoxelshader.cpp \
            saliencyvoxelshader.cpp \
-           trilinearinterpolator.cpp \
            colorbleedingvoxelshader.cpp \
            obscurancethread.cpp 
 RESOURCES += optimalviewpoint.qrc

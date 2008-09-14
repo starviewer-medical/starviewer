@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "povspherecloud.h"
+#include "sphereuniformpointcloudgenerator.h"
 #include "mathtools.h"
 #include "vector3.h"
 
@@ -13,19 +13,19 @@
 namespace udg {
 
 
-POVSphereCloud::POVSphereCloud( float radius, unsigned char depth )
+SphereUniformPointCloudGenerator::SphereUniformPointCloudGenerator( float radius, unsigned char depth )
 {
     m_radius = radius;
     m_depth = depth;
 }
 
 
-POVSphereCloud::~POVSphereCloud()
+SphereUniformPointCloudGenerator::~SphereUniformPointCloudGenerator()
 {
 }
 
 
-void POVSphereCloud::createPOVCloud()
+void SphereUniformPointCloudGenerator::createPOVCloud()
 {
     m_vertices.clear();
     m_faces.clear();
@@ -62,19 +62,19 @@ void POVSphereCloud::createPOVCloud()
 }
 
 
-const QVector< Vector3 > & POVSphereCloud::getVertices() const
+const QVector< Vector3 > & SphereUniformPointCloudGenerator::getVertices() const
 {
     return m_vertices;
 }
 
 
-const QVector< Vector3 > & POVSphereCloud::getGeographicVertices() const
+const QVector< Vector3 > & SphereUniformPointCloudGenerator::getGeographicVertices() const
 {
     return m_geographicVertices;
 }
 
 
-void POVSphereCloud::createIcosahedronVertices()
+void SphereUniformPointCloudGenerator::createIcosahedronVertices()
 {
     Vector3 v( 1.0, 0.0, ( 1.0 + sqrt( 5.0 ) ) / 2.0 );
     v.normalize();
@@ -110,7 +110,7 @@ void POVSphereCloud::createIcosahedronVertices()
 }
 
 
-void POVSphereCloud::createIcosahedronFaces()
+void SphereUniformPointCloudGenerator::createIcosahedronFaces()
 {
     m_faces.append(  1 ); m_faces.append(  4 ); m_faces.append(  0 );
     m_faces.append(  4 ); m_faces.append(  9 ); m_faces.append(  0 );
@@ -143,7 +143,7 @@ inline bool equal( const Vector3 & v1, const Vector3 & v2, float error )
 }
 
 
-bool POVSphereCloud::findSphereCloudVertex( const Vector3 & v, unsigned short & position ) const
+bool SphereUniformPointCloudGenerator::findSphereCloudVertex( const Vector3 & v, unsigned short & position ) const
 {
     unsigned short i = 0;
     bool trobat = false;
@@ -160,7 +160,7 @@ bool POVSphereCloud::findSphereCloudVertex( const Vector3 & v, unsigned short & 
 }
 
 
-void POVSphereCloud::createSphereCloudTriangle( const Vector3 & v1, const Vector3 & v2, const Vector3 & v3 )
+void SphereUniformPointCloudGenerator::createSphereCloudTriangle( const Vector3 & v1, const Vector3 & v2, const Vector3 & v3 )
 {
     unsigned short pos;
 
@@ -211,7 +211,7 @@ void POVSphereCloud::createSphereCloudTriangle( const Vector3 & v1, const Vector
  * \todo En teoria es podrien passar els vectors com a referències constants,
  * però llavors a vegades es modifiquen màgicament. (!!!!!!!!!!!!!!!!!!!!!!!)
  */
-void POVSphereCloud::subdivide( Vector3 v1, Vector3 v2, Vector3 v3, unsigned short depth )
+void SphereUniformPointCloudGenerator::subdivide( Vector3 v1, Vector3 v2, Vector3 v3, unsigned short depth )
 {
     if ( depth == 0 ) createSphereCloudTriangle( v1, v2, v3 );
     else
@@ -236,7 +236,7 @@ void POVSphereCloud::subdivide( Vector3 v1, Vector3 v2, Vector3 v3, unsigned sho
 }
 
 
-void POVSphereCloud::createGeographicVertices()
+void SphereUniformPointCloudGenerator::createGeographicVertices()
 {
     m_geographicVertices.clear();
     m_geographicVertices.resize( m_vertices.size() );

@@ -6,8 +6,8 @@
  ***************************************************************************/
 
 
-#ifndef UDGPOVSPHERECLOUD_H
-#define UDGPOVSPHERECLOUD_H
+#ifndef UDGSPHEREUNIFORMPOINTCLOUDGENERATOR_H
+#define UDGSPHEREUNIFORMPOINTCLOUDGENERATOR_H
 
 
 #include <QVector>
@@ -28,7 +28,7 @@ class Vector3;
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class POVSphereCloud {
+class SphereUniformPointCloudGenerator {
 
 public:
 
@@ -39,8 +39,8 @@ public:
      * \param depth Nivells de recursió. 0 = 12 punts, 1 = 42 punts, 2 = 162
      * punts, 3 = 642 punts, 4 = 2562 punts, etc. (n = 2^(2*n)*10+2 punts).
      */
-    POVSphereCloud( float radius = 10.0, unsigned char depth = 0 );
-    ~POVSphereCloud();
+    SphereUniformPointCloudGenerator( float radius = 10.0, unsigned char depth = 0 );
+    ~SphereUniformPointCloudGenerator();
 
     /// Genera els punts segons els paràmetres definits al constructor.
     void createPOVCloud();

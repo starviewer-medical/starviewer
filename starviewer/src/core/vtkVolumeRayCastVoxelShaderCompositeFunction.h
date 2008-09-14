@@ -1,5 +1,5 @@
-#ifndef UDGVTKVOLUMERAYCASTCOMPOSITEFXFUNCTION_H
-#define UDGVTKVOLUMERAYCASTCOMPOSITEFXFUNCTION_H
+#ifndef UDGVTKVOLUMERAYCASTVOXELSHADERCOMPOSITEFUNCTION_H
+#define UDGVTKVOLUMERAYCASTVOXELSHADERCOMPOSITEFUNCTION_H
 
 
 #include <vtkVolumeRayCastFunction.h>
@@ -18,14 +18,14 @@ class VoxelShader;
 /**
  * Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel.
  */
-class vtkVolumeRayCastCompositeFxFunction : public vtkVolumeRayCastFunction {
+class vtkVolumeRayCastVoxelShaderCompositeFunction : public vtkVolumeRayCastFunction {
 
 public:
 
     enum CompositeMethod { ClassifyInterpolate, InterpolateClassify };
 
-    static vtkVolumeRayCastCompositeFxFunction* New();
-    vtkTypeRevisionMacro( vtkVolumeRayCastCompositeFxFunction, vtkVolumeRayCastFunction );
+    static vtkVolumeRayCastVoxelShaderCompositeFunction* New();
+    vtkTypeRevisionMacro( vtkVolumeRayCastVoxelShaderCompositeFunction, vtkVolumeRayCastFunction );
     void PrintSelf( ostream &os, vtkIndent indent );
 
     void SetCompositeMethod( CompositeMethod compositeMethod )
@@ -50,8 +50,8 @@ public:
 
 protected:
 
-    vtkVolumeRayCastCompositeFxFunction();
-    ~vtkVolumeRayCastCompositeFxFunction();
+    vtkVolumeRayCastVoxelShaderCompositeFunction();
+    ~vtkVolumeRayCastVoxelShaderCompositeFunction();
 
     //BTX
     void SpecificFunctionInitialize( vtkRenderer *renderer, vtkVolume *volume,
@@ -69,8 +69,8 @@ private:
 
     static const float REMAINING_OPACITY;
 
-    vtkVolumeRayCastCompositeFxFunction( const vtkVolumeRayCastCompositeFxFunction& );  // Not implemented.
-    void operator=( const vtkVolumeRayCastCompositeFxFunction& );                       // Not implemented.
+    vtkVolumeRayCastVoxelShaderCompositeFunction( const vtkVolumeRayCastVoxelShaderCompositeFunction& );  // Not implemented.
+    void operator=( const vtkVolumeRayCastVoxelShaderCompositeFunction& );                       // Not implemented.
 
 };
 
