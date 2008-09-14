@@ -371,7 +371,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     cond = ASC_setTransportLayerType(m_params, OFFalse);
     if (!cond.good()) return state.setStatus( cond );
 
-    AdrServer = constructAdrServer( m_pacs.getPacsAdr() , m_pacs.getPacsPort() );
+    AdrServer = constructAdrServer( m_pacs.getPacsAddress(), m_pacs.getPacsPort() );
 
     //get localhost name
 

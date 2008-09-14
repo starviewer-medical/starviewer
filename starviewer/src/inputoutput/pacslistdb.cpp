@@ -133,7 +133,7 @@ void PacsListDB::saveConfiguredPacsListToDisk()
         settings.setValue("Location", m_configuredPacsList.at(i).getLocation() );
         settings.setValue("Institution", m_configuredPacsList.at(i).getInstitution() );
         settings.setValue("Default", m_configuredPacsList.at(i).getDefault() );
-        settings.setValue("PacsHostname", m_configuredPacsList.at(i).getPacsAdr() );
+        settings.setValue("PacsHostname", m_configuredPacsList.at(i).getPacsAddress() );
         settings.setValue("Description", m_configuredPacsList.at(i).getDescription() );
     }
     settings.endArray();
@@ -149,7 +149,7 @@ PacsParameters PacsListDB::fillPacs(const QSettings &settings)
     pacsParameters.setLocation( settings.value("Location" ).toString() );
     pacsParameters.setInstitution( settings.value("Institution" ).toString() );
     pacsParameters.setDefault( settings.value("Default" ).toString() );
-    pacsParameters.setPacsAdr( settings.value("PacsHostname" ).toString() );
+    pacsParameters.setPacsAddress( settings.value("PacsHostname" ).toString() );
     pacsParameters.setDescription( settings.value("Description" ).toString() );
 
     return pacsParameters;

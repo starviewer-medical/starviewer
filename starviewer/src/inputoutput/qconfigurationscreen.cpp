@@ -221,7 +221,7 @@ void QConfigurationScreen::addPacs()
     {
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
-        pacs.setPacsAdr( m_textAddress->text() );
+        pacs.setPacsAddress( m_textAddress->text() );
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
         pacs.setDescription( m_textDescription->text() );
@@ -259,7 +259,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAEPacs() );
         m_textPort->setText( selectedPacs.getPacsPort() );
-        m_textAddress->setText( selectedPacs.getPacsAdr() );
+        m_textAddress->setText( selectedPacs.getPacsAddress() );
         m_textInstitution->setText( selectedPacs.getInstitution() );
         m_textLocation->setText( selectedPacs.getLocation() );
         m_textDescription->setText( selectedPacs.getDescription() );
@@ -288,7 +288,7 @@ void QConfigurationScreen::updatePacs()
     {
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
-        pacs.setPacsAdr( m_textAddress->text() );
+        pacs.setPacsAddress( m_textAddress->text() );
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
         pacs.setDescription( m_textDescription->text() );
@@ -343,7 +343,7 @@ void QConfigurationScreen::fillPacsListView()
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
 
         item->setText( 0 , pacs.getAEPacs() );
-        item->setText( 1 , pacs.getPacsAdr() );
+        item->setText( 1 , pacs.getPacsAddress() );
         item->setText( 2 , pacs.getPacsPort() );
         item->setText( 3 , pacs.getInstitution() );
         item->setText( 4 , pacs.getLocation() );
@@ -372,7 +372,7 @@ void QConfigurationScreen::test()
         //Agafem les dades del PACS que estan el textbox per testejar
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
-        pacs.setPacsAdr( m_textAddress->text() );
+        pacs.setPacsAddress( m_textAddress->text() );
         pacs.setAELocal( settings.getAETitleMachine() );
         pacsServer.setPacs( pacs );
 
