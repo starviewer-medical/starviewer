@@ -18,7 +18,6 @@
 #include "starviewerprocessimageretrieved.h"
 #include "starviewerprocessimagestored.h"
 #include "harddiskinformation.h"
-#include "scalestudy.h"
 #include "cachepool.h"
 #include "starviewersettings.h"
 #include "errordcmtk.h"
@@ -194,10 +193,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         cacheStudyDAL.setStudyRetrieved( studyUID ); //posem l'estudi com a   descarregat
         INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
-
-        //escalem l'estudi per la previsualització de la caché
-        ScaleStudy scaleStudy;
-        scaleStudy.scale(studyUID);
 
         emit setOperationFinished( studyUID );// descarregat a QOperationStateScreen
         emit setRetrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
