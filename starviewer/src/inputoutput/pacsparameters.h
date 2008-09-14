@@ -92,9 +92,6 @@ public :
      */
     void setPacsID( int );
 
-    ///Indica si el pacs està esborrat, és a dir no és visible pels usuaris
-    void setIsDeleted( bool );
-
     /** retorna l'adreça del pacs
      * @return Adreça del pacs
      */
@@ -150,9 +147,6 @@ public :
      */
     int getTimeOut() const;
 
-    ///Indica si el pacs està esborrat, és a dir no és visible per a l'usuari per poguer-s'hi connectar
-    bool isDeleted() const;
-
     bool operator ==(const PacsParameters &parameters);
 
 private :
@@ -166,8 +160,6 @@ private :
     QString  m_Inst;
     QString  m_Location;
     QString  m_Default;
-
-    bool  m_isDeleted;
 
     int          m_PacsID; //camp clau de la taula PacsList, serveix per identificar els PACS, és invisible per a l'usuari, aquest camp l'assigna l'aplicacio
     int m_TimeOut;
