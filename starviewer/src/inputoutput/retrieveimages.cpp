@@ -228,18 +228,9 @@ void RetrieveImages::storeSCPCallback(
             }
 
             timerProcessDatabase.restart();
-#ifdef NEW_PACS
-            piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
-#else
-            //TODO AQUEST CODI S'HA D'ESBORRAR QUAN HI HAGI IMPLEMENTAT EL NOU MODEL DE BD I FILLERS
-            //guardem la informacio que hem calculat nosaltres a l'objecte imatge
-            retrievedImage.setImageName( cbdata->imageFileName );
-            retrievedImage.setImagePath( settings.getCacheImagePath() + retrievedImage.getStudyUID() + "/" + retrievedImage.getSeriesUID() + "/" + cbdata->imageFileName );
-            //calculem la mida de l'image TODO alerta! això ens torna un Uint32! i ho guardem en un int
-            retrievedImage.setImageSize( cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType ) );
 
-            piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );
-#endif
+            piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
+
             m_timeProcessDatabase += timerProcessDatabase.elapsed();//temps d'operació per processar la imatge a la caché
 
             m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge

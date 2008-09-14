@@ -51,14 +51,6 @@ public slots:
     void bringToFront();
 
 signals:
-    /**
-     * Envia un senyal amb els fitxers que s'han de processar per a carregar les dades
-     * @param files Llista d'arxius a processar
-     * @param defaultStudyUID estudi que es voldrà veure per defecte
-     * @param defaultSeriesUID serie que es voldrà veure per defecte
-     * @param defaultImageInstance imatge que es voldrà veure per defecte
-     */
-    void processFiles( QStringList files, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance );
 
     ///Signal per quan tenim un pacient carregat a punt per processar-lo per visualitzar
     void selectedPatient( Patient *patientToProcess, QString selectedSeries);
@@ -231,11 +223,6 @@ private:
     ///En el cas que l'error que se li passa com a paràmetre realment sigui un error, mostrarà un missatge a l'usuari explicant-lo.
     ///Es retorna true en el cas que hi hagi error, false si no n'hi ha.
     bool showDatabaseManagerError(LocalDatabaseManager::LastError error);
-
-    /** Tracta els errors de la base de dades
-     * @param state del mètode de la base de dades
-     */
-    void showDatabaseErrorMessage( const Status &state );
 
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();

@@ -75,15 +75,11 @@ void ExtensionHandler::request( int who )
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
-#ifdef NEW_PACS
             disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatient(Patient*, QString) ), 0,0 );
+
             QueryScreenSingleton::instance()->bringToFront();
+
             connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatient(Patient*, QString) ), SLOT(processInput(Patient*, QString)));
-#else
-            disconnect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString) ), 0,0 );
-            QueryScreenSingleton::instance()->bringToFront();
-            connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
-#endif
             break;
 
         case 8:
@@ -91,7 +87,9 @@ void ExtensionHandler::request( int who )
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
             disconnect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString) ), 0,0 );
+
             QueryScreenSingleton::instance()->openDicomdir();
+
             connect( QueryScreenSingleton::instance(), SIGNAL(processFiles(QStringList,QString,QString,QString)), SLOT(processInput(QStringList,QString,QString,QString)) );
             break;
     }

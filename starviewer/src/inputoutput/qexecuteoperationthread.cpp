@@ -149,9 +149,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             QMessageBox::critical( 0 , tr( "Starviewer" ) , tr( "Error freeing space. The study couldn't be retrieved" ) );
         }
         ERROR_LOG( logMessage );
-#ifndef NEW_PACS
-        cacheStudyDAL.delStudy( studyUID);
-#endif
+
         return;
     }
 
@@ -163,9 +161,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
         emit setErrorOperation( studyUID );
         emit errorConnectingPacs( operation.getPacsParameters().getPacsID() );
-#ifndef NEW_PACS
-        cacheStudyDAL.delStudy( studyUID) ;
-#endif
+
         return;
     }
 
@@ -178,57 +174,21 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
     piSingleton->addNewProcessImage(studyUID, sProcessImg);
 
-    connect(sProcessImg, SIGNAL( imageRetrieved(QString, int) ), this, SIGNAL( imageCommit(QString, int) ));
-    connect(sProcessImg, SIGNAL( seriesRetrieved(QString) ), this, SIGNAL( seriesCommit(QString) ));
-
-#ifdef NEW_PACS
     connect(patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
     connect(sProcessImg, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
     connect(this, SIGNAL( retrieveFinished() ), patientFiller, SLOT( finishDICOMFilesProcess() ), Qt::DirectConnection);
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManager, SLOT( insert(Patient *) ));
-#endif
-
-#ifndef NEW_PACS
-    //TODO: Hack pels problemes de lentitud que tenim a windows. Això és molt fràgil perquè
-    // tenim que DatabaseConnection és singleton quan no ho hauria de ser. Un rollback des d'un lloc incontrolat
-    // faria quedar la bd inconsistent respecte el que esperem.
-    DatabaseConnection::getDatabaseConnection()->getLock();
-    DatabaseConnection::getDatabaseConnection()->beginTransaction();
-    DatabaseConnection::getDatabaseConnection()->releaseLock();
-#endif
 
     retState = retrieveImages.retrieve();
 
-#ifndef NEW_PACS
-    DatabaseConnection::getDatabaseConnection()->getLock();
-    DatabaseConnection::getDatabaseConnection()->endTransaction();
-    DatabaseConnection::getDatabaseConnection()->releaseLock();
-#endif
     pacsConnection.disconnect();
 
-#ifndef NEW_PACS
-    errorRetrieving = sProcessImg->getError();
-
-    if (!retState.good() || errorRetrieving )
-    {   //si s'ha produit algun error ho indiquem i esborrem l'estudi
-#endif
-        if ( !retState.good() )
-        {
-            ERROR_LOG( "S'ha produit algun error durant la descàrrega de l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " +retState.text() );
-#ifndef NEW_PACS
-        }
-
-        if ( errorRetrieving )
-        {
-            ERROR_LOG( "S'ha produit algun error durant el processat de les imatges descarregades ( Classe StarviewerProcessImage) per l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() );
-        }
-#endif
+    if ( !retState.good() )
+    {
+        ERROR_LOG( "S'ha produit algun error durant la descàrrega de l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " +retState.text() );
 
         emit setErrorOperation( studyUID );
         emit abort();
-#ifndef NEW_PACS
-        cacheStudyDAL.delStudy( studyUID );
-#endif
     }
     else
     {
