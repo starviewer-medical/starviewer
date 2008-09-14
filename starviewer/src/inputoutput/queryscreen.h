@@ -190,12 +190,6 @@ private:
      */
     void loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source );
 
-    /** Insereix un estudi a descarregar a la cache
-     * @param estudi a insertat
-     * @return retorna si la operacio s'ha realitzat amb èxit
-     */
-    Status insertStudyCache( DICOMStudy );
-
     /// Cerca als pacs seleccionats
     void queryStudyPacs();
 
