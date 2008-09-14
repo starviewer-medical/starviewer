@@ -1152,10 +1152,28 @@ void QueryScreen::convertToDicomdir()
     DICOMStudy study;
     QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
 
+    DicomMask studyMask;
+    LocalDatabaseManager localDatabaseManager;
+    QList<Patient*> patientList;
+
     foreach(QString studyUID, studiesUIDList )
     {
-        QMessageBox::critical(this, "Nova BD", "Eiii, que encara falta implementar el gravar dicomdirs amb la nova bd!");
-    }
+        studyMask.setStudyUID(studyUID);
+        patientList = localDatabaseManager.queryPatientStudy(studyMask);
+        if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
+
+        // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
+        // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
+        if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
+        {
+            showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
+            return;
+        }
+
+        m_qcreateDicomdir->addStudy(patientList.first()->getStudies().first());
+
+        delete patientList.first();
+   }
 }
 
 void QueryScreen::openDicomdir()

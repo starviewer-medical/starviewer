@@ -16,7 +16,7 @@ class QProcess;
 
 namespace udg {
 
-class DICOMStudy;
+class Study;
 class Status;
 
 /**
@@ -31,7 +31,7 @@ public:
     /** Afegeix un estudi per convertir a dicomdir
      * @param study estudi per convertir a dicomdir
      */
-    void addStudy( DICOMStudy study );
+    void addStudy(Study* study);
 
     ///Neteja el directori temporal utilitzat crear els dicomdir que es gravaran en cd o dvd
     void clearTemporaryDir();

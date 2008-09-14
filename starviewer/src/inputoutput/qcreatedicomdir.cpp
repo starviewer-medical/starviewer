@@ -23,7 +23,6 @@
 #include <QDate>
 #include <QFileInfo>
 
-#include "dicomstudy.h"
 #include "converttodicomdir.h"
 #include "status.h"
 #include "logging.h"
@@ -32,6 +31,8 @@
 #include "deletedirectory.h"
 #include "starviewersettings.h"
 #include "createdicomdir.h"
+#include "study.h"
+#include "patient.h"
 
 namespace udg {
 
@@ -151,16 +152,20 @@ void QCreateDicomdir::setDicomdirSize()
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
 }
 
-void QCreateDicomdir::addStudy( DICOMStudy study )
+void QCreateDicomdir::addStudy(Study *study)
 {
     qint64 studySizeBytes;
     Status state;
 
-    if ( !studyExists( study.getStudyUID() ) )
+    if ( !studyExists( study->getInstanceUID() ) )
     {
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-        studySizeBytes = getDirectorySize(study.getAbsPath());
+        // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
+        // "a quin directori està aquest study"?
+        StarviewerSettings settings;
+
+        studySizeBytes = getDirectorySize(settings.getCacheImagePath() + study->getInstanceUID() + "/");
 
         //només comprovem l'espai si gravem a un cd o dvd
         if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
@@ -174,14 +179,15 @@ void QCreateDicomdir::addStudy( DICOMStudy study )
             m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
             setDicomdirSize();
 
-            item->setText( 0 , study.getPatientName() );
-            item->setText( 1 , study.getPatientId() );
-            item->setText( 2 , study.getPatientAge() );
-            item->setText( 3 , study.getStudyDescription() );
-            item->setText( 4 , study.getStudyModality() );
-            item->setText( 5 , QDate::fromString( study.getStudyDate(), "yyyyMMdd" ).toString(Qt::ISODate) );
-            item->setText( 6 , QTime::fromString( study.getStudyTime(), "hhmmss" ).toString(Qt::ISODate) );
-            item->setText( 7 , study.getStudyUID() );
+            Patient *patient = study->getParentPatient();
+            item->setText( 0, patient->getFullName() );
+            item->setText( 1, patient->getID() );
+            item->setText( 2, QString(study->getPatientAge()) );
+            item->setText( 3, study->getDescription() );
+            item->setText( 4, study->getModalitiesAsSingleString() );
+            item->setText( 5, study->getDate().toString(Qt::ISODate) );
+            item->setText( 6, study->getTime().toString(Qt::ISODate) );
+            item->setText( 7, study->getInstanceUID() );
 
             QApplication::restoreOverrideCursor();
         }
