@@ -30,7 +30,6 @@
 #include "harddiskinformation.h"
 #include "deletedirectory.h"
 #include "starviewersettings.h"
-#include "createdicomdir.h"
 #include "study.h"
 #include "patient.h"
 
