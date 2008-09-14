@@ -19,6 +19,7 @@ class DICOMStudy;
 class DICOMSeries;
 class DICOMImage;
 class Status;
+class Patient;
 
 /** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
   * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a realitzar cerques.
@@ -69,6 +70,10 @@ public:
      * @return Una llista amb els paths absoluts dels arxius en qüestió
      */
     QStringList getFiles( QString studyUID );
+
+    /// Retorna l'estructura Patient per l'estudi que compleixi la màscara que se li passi.
+    /// En la màscara només es té en compte el StudyInstanceUID.
+    Patient* retrieve(DicomMask maskToRetrieve);
 
 private :
 

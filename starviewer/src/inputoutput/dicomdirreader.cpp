@@ -21,6 +21,7 @@
 #include "dicommask.h"
 #include "dicomimage.h"
 #include "logging.h"
+#include "patientfiller.h"
 
 namespace udg {
 
@@ -361,6 +362,15 @@ QStringList DICOMDIRReader::getFiles( QString studyUID )
         DEBUG_LOG("No s'ha trobat cap estudi amb aquest uid: " + studyUID + " al dicomdir");
     }
     return files;
+}
+
+Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
+{
+    QStringList files = this->getFiles( maskToRetrieve.getStudyUID() );
+
+    PatientFiller patientFiller;
+
+    return patientFiller.processDICOMFileList(files).first();
 }
 
 //Per fer el match seguirem els criteris del PACS
