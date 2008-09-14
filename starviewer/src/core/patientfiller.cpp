@@ -28,10 +28,11 @@
 
 namespace udg {
 
-PatientFiller::PatientFiller(QObject * parent) :QObject(parent)
+PatientFiller::PatientFiller(QObject * parent) : QObject(parent)
 {
     registerSteps();
     m_patientFillerInput = new PatientFillerInput();
+    m_imageCounter = 0;
 }
 
 PatientFiller::~PatientFiller()
@@ -113,6 +114,8 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
     }
 
     m_patientFillerInput->initializeAllLabels();
+
+    emit progress(m_imageCounter++);
 }
 
 void PatientFiller::finishDICOMFilesProcess()
@@ -123,15 +126,22 @@ void PatientFiller::finishDICOMFilesProcess()
     }
 
     emit patientProcessed(m_patientFillerInput->getPatient());
+
+    // Al acabar hem de reiniciar el comptador d'imatges
+    m_imageCounter = 0;
 }
 
 QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
 {
+    m_imageCounter = 0;
+
     foreach(QString dicomFile, dicomFiles)
     {
         DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
 
         this->processDICOMFile( dicomTagReader );
+
+        emit progress(++m_imageCounter);
     }
 
     foreach(PatientFillerStep *fillerStep, m_registeredSteps)

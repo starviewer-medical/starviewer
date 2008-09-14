@@ -63,6 +63,9 @@ private:
     /// S'encarrega de guardar l'input durant tota l'execucció dels mòduls. S'utilitza 
     /// en cas que es processin fitxer individualment.
     PatientFillerInput *m_patientFillerInput;
+
+    // Contador per saber el núm. d'imatge que estem tractant.
+    int m_imageCounter;
 };
 
 }
