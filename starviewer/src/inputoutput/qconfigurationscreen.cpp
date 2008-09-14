@@ -24,7 +24,6 @@
 #include "pacslistdb.h"
 #include "cachepool.h"
 #include "starviewersettings.h"
-#include "status.h"
 
 #include "localdatabasemanager.h"
 #include "logging.h"
@@ -332,7 +331,6 @@ void QConfigurationScreen::deletePacs()
 
 void QConfigurationScreen::fillPacsListView()
 {
-    Status state;
     QList<PacsParameters> pacsList;
     PacsListDB pacsListDB;
 
