@@ -206,29 +206,33 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 #endif
     pacsConnection.disconnect();
 
+#ifndef NEW_PACS
     errorRetrieving = sProcessImg->getError();
 
-#ifndef NEW_PACS
     if (!retState.good() || errorRetrieving )
-    {//si s'ha produit algun error ho indiquem i esborrem l'estudi
+    {   //si s'ha produit algun error ho indiquem i esborrem l'estudi
+#endif
         if ( !retState.good() )
         {
             ERROR_LOG( "S'ha produit algun error durant la descàrrega de l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " +retState.text() );
+#ifndef NEW_PACS
         }
 
         if ( errorRetrieving )
         {
             ERROR_LOG( "S'ha produit algun error durant el processat de les imatges descarregades ( Classe StarviewerProcessImage) per l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() );
         }
+#endif
 
         emit setErrorOperation( studyUID );
         emit abort();
+#ifndef NEW_PACS
         cacheStudyDAL.delStudy( studyUID );
+#endif
     }
     else
     {
         cacheStudyDAL.setStudyRetrieved( studyUID ); //posem l'estudi com a   descarregat
-#endif
         INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
 
         //escalem l'estudi per la previsualització de la caché
@@ -243,9 +247,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         {
             emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
         }
-#ifndef NEW_PACS
     }
-#endif
 
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID );
