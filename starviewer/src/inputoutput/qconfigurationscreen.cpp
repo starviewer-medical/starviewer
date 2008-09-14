@@ -30,7 +30,6 @@
 #include "logging.h"
 #include "pacsserver.h"
 #include "pacsnetwork.h"
-#include "cachetools.h"
 
 namespace udg {
 
@@ -723,22 +722,23 @@ void QConfigurationScreen::deleteStudies()
 
 void QConfigurationScreen::compactCache()
 {
-    CacheTools cacheTools;
-    Status state;
-
     INFO_LOG( "Compactacio de la cache" );
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    state = cacheTools.compactCachePacs();
+    LocalDatabaseManager localDatabaseManager;
+    localDatabaseManager.compact();
 
     QApplication::restoreOverrideCursor();
 
-    if ( !state.good() )
+    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
     {
+        Status state;
+        state.setStatus(tr("The cache cannot be delete, an unknown error has ocurred."
+                "\n Try to close all Starviewer windows and try again."
+                "\n\nIf the problem persist contact with an administrator."), false, -1);
         showDatabaseErrorMessage( state );
     }
-
 }
 
 void QConfigurationScreen::cacheImagePathEditingFinish()
