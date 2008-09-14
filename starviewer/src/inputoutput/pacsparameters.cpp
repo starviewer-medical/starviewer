@@ -3,9 +3,9 @@
 
 namespace udg{
 
-PacsParameters::PacsParameters( QString adr , QString port , QString aet , QString aec )
+PacsParameters::PacsParameters(QString address, QString port, QString aet, QString aec)
 {
-    m_Adr = adr;
+    m_address = address;
     m_Port = port;
     m_aeTitle = aet;
     m_aeCalled = aec;
@@ -18,9 +18,9 @@ PacsParameters::PacsParameters()
     m_PacsID = -1;
 }
 
-void PacsParameters::setPacsAdr( QString adr )
+void PacsParameters::setPacsAddress(QString address)
 {
-     m_Adr = adr;
+    m_address = address;
 }
 
 void PacsParameters::setPacsPort( QString port )
@@ -75,9 +75,9 @@ void PacsParameters::setPacsID( int id )
 
 /*****************************************************************************************/
 
-QString PacsParameters::getPacsAdr() const
+QString PacsParameters::getPacsAddress() const
 {
-    return m_Adr;
+    return m_address;
 }
 
 QString PacsParameters::getPacsPort() const
@@ -135,7 +135,7 @@ bool PacsParameters::operator ==(const PacsParameters &parameters)
     if(    m_aeCalled == parameters.m_aeCalled
         && m_aeTitle == parameters.m_aeTitle
         && m_Port == parameters.m_Port
-        && m_Adr == parameters.m_Adr
+        && m_address == parameters.m_address
         && m_LocalPort == parameters.m_LocalPort
         && m_Desc == parameters.m_Desc
         && m_Inst == parameters.m_Inst

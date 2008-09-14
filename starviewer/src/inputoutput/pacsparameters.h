@@ -40,7 +40,7 @@ public :
     /** assigna l'adreça al pacs al qual ens volem connectar
      * @param  Adreça del PACS
      */
-    void setPacsAdr( QString );
+    void setPacsAddress( QString );
 
     /** assigna el port del pacs al qual ens volem connectar
      * @param port de connexió del pacs
@@ -95,7 +95,7 @@ public :
     /** retorna l'adreça del pacs
      * @return Adreça del pacs
      */
-     QString  getPacsAdr() const;
+     QString  getPacsAddress() const;
 
     /** retorna el port del pacs
      * @return Port del pacs
@@ -154,7 +154,7 @@ private :
     QString  m_aeCalled;
     QString  m_aeTitle;
     QString  m_Port;
-    QString  m_Adr;
+    QString  m_address;
     QString  m_LocalPort; //especifica el port pel qual rebrem imatges
     QString  m_Desc;
     QString  m_Inst;
