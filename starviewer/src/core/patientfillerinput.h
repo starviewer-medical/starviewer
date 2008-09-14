@@ -43,6 +43,9 @@ public:
     /// Retorna el nombre de pacients que tenim a la llista
     unsigned int getNumberOfPatients();
 
+    /// Retorna la llista de Patients que tenim.
+    QList<Patient*> getPatientsList();
+
     /// Assigna/Obté la llista d'arxius. A l'assignar els arxius, s'esborren les dades de pacient que hi puguin haver-hi
     /// ja que es considera que donar tota la llista d'arxius és com un 'reset'
     void setFilesList( QStringList files );

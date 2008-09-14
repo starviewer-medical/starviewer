@@ -96,6 +96,11 @@ void PatientFillerInput::setFilesList( QStringList files )
     }
 }
 
+QList<Patient*> PatientFillerInput::getPatientsList()
+{
+    return m_patientList;
+}
+
 QStringList PatientFillerInput::getFilesList() const
 {
     return m_fileList;
