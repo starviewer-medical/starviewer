@@ -7,6 +7,7 @@
 
 #include "cacheimagedal.h"
 
+#include <cstdlib>
 #include <QString>
 #include <sqlite3.h>
 
