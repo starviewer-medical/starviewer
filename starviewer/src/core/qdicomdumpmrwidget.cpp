@@ -125,7 +125,7 @@ void QDicomDumpMRWidget::setSeriesDicomTagsValue( Series *currentSeries )
 {
 
     DICOMTagReader dicomReader;
-    bool ok = dicomReader.setFile( currentSeries->getFilesPathList().at(0) );
+    bool ok = dicomReader.setFile( currentSeries->getImagesPathList().first() );
     if( ok )
     {
         if ( dicomReader.tagExists( 0x2001, 0x1020 ) )
