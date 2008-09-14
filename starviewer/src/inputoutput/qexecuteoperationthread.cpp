@@ -182,6 +182,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     connect(sProcessImg, SIGNAL( seriesRetrieved(QString) ), this, SIGNAL( seriesCommit(QString) ));
 
 #ifdef NEW_PACS
+    connect(patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
     connect(sProcessImg, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
     connect(this, SIGNAL( retrieveFinished() ), patientFiller, SLOT( finishDICOMFilesProcess() ), Qt::DirectConnection);
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManager, SLOT( insert(Patient *) ));

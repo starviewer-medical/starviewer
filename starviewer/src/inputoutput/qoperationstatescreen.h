@@ -47,6 +47,12 @@ public slots :
      */
     void imageCommit( QString stidyUID , int numberOfImages );
 
+    /** Especifica la imatge per la que es va per l'estudy "actual" que s'està processant.
+      * Nota: Això funciona perquè les operacions només es poden fer de 1 en 1, si es fessin
+      * de forma paral·lela, s'hauria d'especificar, cada vegada, quin estudi és.
+      */
+    void setRetrievedImagesToCurrentProcessingStudy(int numberOfImages);
+
     /** Augmenta en un el nombre de series descarregades
      * @param UID de l'estudi que s'ha descarregat una sèrie
      */
@@ -97,6 +103,9 @@ private:
 
     /// Indica si una operació es pot considerar com a finalitzada a partir del seu missatge d'estat
     bool isOperationFinalized(const QString &message);
+
+private:
+    QString m_currentProcessingStudyUID;
 };
 
 };
