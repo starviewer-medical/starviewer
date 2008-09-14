@@ -223,7 +223,6 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     QDir temporaryDirPath;
     QString dicomdirPath;
     Status state;
-    ConvertToDicomdir convertToDicomdir;
 
     // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
     dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
