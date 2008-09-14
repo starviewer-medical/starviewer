@@ -41,7 +41,6 @@ HEADERS += databaseconnection.h \
            converttodicomdir.h \
            convertdicomtolittleendian.h \
            createdicomdir.h \
-           cachetools.h \
            dicomdirreader.h \
            storeimages.h \
            starviewerprocessimagestored.h \
@@ -92,7 +91,6 @@ SOURCES += databaseconnection.cpp \
            converttodicomdir.cpp \
            convertdicomtolittleendian.cpp \
            createdicomdir.cpp \
-           cachetools.cpp \
            dicomdirreader.cpp \
            storeimages.cpp \
            starviewerprocessimagestored.cpp \
