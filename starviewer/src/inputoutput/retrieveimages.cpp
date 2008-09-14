@@ -227,6 +227,7 @@ void RetrieveImages::storeSCPCallback(
                 }
             }
 
+            timerProcessDatabase.restart();
 #ifdef NEW_PACS
             piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
 #else
@@ -237,13 +238,13 @@ void RetrieveImages::storeSCPCallback(
             //calculem la mida de l'image TODO alerta! això ens torna un Uint32! i ho guardem en un int
             retrievedImage.setImageSize( cbdata->dcmff->calcElementLength( xfer ,opt_sequenceType ) );
 
-            timerProcessDatabase.restart();
             piSingleton->process( retrievedImage.getStudyUID() , &retrievedImage );
+#endif
             m_timeProcessDatabase += timerProcessDatabase.elapsed();//temps d'operació per processar la imatge a la caché
 
             m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge
             timer.restart();//reiniciem temporitzador per comptar quan tardem a descarregar la següent imatge
-#endif
+
         }
     }
 
