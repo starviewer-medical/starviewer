@@ -1038,10 +1038,10 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
         return;
     }
 
+#ifndef NEW_PACS
     QStringList files;
     if( source == "Cache" )
     {
-#ifndef NEW_PACS
         CacheStudyDAL cacheStudyDAL;
 
         foreach(QString studyUID, studiesUIDList )
@@ -1049,7 +1049,6 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
             files += cacheStudyDAL.getFiles( studyUID );
             cacheStudyDAL.updateStudyAccTime( studyUID );
         }
-#endif
     }
     else if( source == "DICOMDIR" )
     {
@@ -1063,6 +1062,7 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
         DEBUG_LOG("Unrecognized source: " + source );
         return;
     }
+#endif
 
     this->close();//s'amaga per poder visualitzar la serie
     if ( m_operationStateScreen->isVisible() )
@@ -1071,17 +1071,18 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
     }
 
 #ifdef NEW_PACS
+    DicomMask patientToProcessMask;
+    Patient *patient;
+
+    QTime time;
+    //TODO: Què passa si seleccionem més d'un pacient???? hem de tractar el cas a l'extensionhandler i/o passar una llista de pacients.
+    patientToProcessMask.setStudyUID(studiesUIDList.first());
     if( source == "Cache" )
     {
         LocalDatabaseManager localDatabaseManager;
-        DicomMask patientToProcessMask;
 
-        QTime time;
         time.start();
-
-        //TODO: Què passa si seleccionem més d'un pacient???? hem de tractar el cas a l'extensionhandler i/o passar una llista de pacients.
-        patientToProcessMask.setStudyUID(studiesUIDList.first());
-        Patient *patient = localDatabaseManager.retrieve(patientToProcessMask);
+        patient = localDatabaseManager.retrieve(patientToProcessMask);
 
         DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
 
@@ -1089,12 +1090,16 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
         {
             return;
         }
-        else
-        {
-            DEBUG_LOG("Fem emit de selectedPatient");
-            emit selectedPatient(patient, defaultSeriesUID);
-        }
     }
+    else if(source == "DICOMDIR")
+    {
+        time.start();
+        patient = m_readDicomdir.retrieve(patientToProcessMask);
+        DEBUG_LOG( QString("Llegir del DICOMDIR directament (sense importar) ha trigat: %1 ").arg( time.elapsed() ));
+    }
+
+    DEBUG_LOG("Fem emit de selectedPatient");
+    emit selectedPatient(patient, defaultSeriesUID);
 #else
     // enviem la informació a processar
     emit processFiles( files, studiesUIDList.first(), defaultSeriesUID, defaultSOPInstanceUID );
