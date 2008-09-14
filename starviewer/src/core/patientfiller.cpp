@@ -20,7 +20,6 @@
 #include "dicomfileclassifierfillerstep.h"
 #include "presentationstatefillerstep.h"
 #include "temporaldimensionfillerstep.h"
-#include "volumegeneratorstep.h"
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
 // TODO de moment deixem fora el ReferenceLinesFillerStep perquè
@@ -51,51 +50,6 @@ bool patientFillerMorePriorityFirst(const PatientFillerStep *s1, const PatientFi
     return (*s1) < (*s2);
 }
 
-void PatientFiller::fill(PatientFillerInput *input)
-{
-    QList<PatientFillerStep*> processedFillerSteps;
-    QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
-    bool continueIterating = true;
-
-    DEBUG_LOG("Entrem a fillUntil");
-
-    int totalFillerSteps = m_registeredSteps.size();
-
-    emit progress(1);
-    qApp->processEvents();
-
-    while (!candidatesFillerSteps.isEmpty() && continueIterating)
-    {
-        QList<PatientFillerStep*> fillerStepsToProcess;
-        QList<PatientFillerStep*> newCandidatesFillerSteps;
-        continueIterating = false;
-
-        for (int i = 0; i < candidatesFillerSteps.size(); ++i)
-        {
-            if (input->hasAllLabels( candidatesFillerSteps.at(i)->getRequiredLabels() ))
-            {
-                fillerStepsToProcess.append( candidatesFillerSteps.at(i) );
-                continueIterating = true;
-            }
-            else
-            {
-                newCandidatesFillerSteps.append( candidatesFillerSteps.at(i) );
-            }
-        }
-        candidatesFillerSteps = newCandidatesFillerSteps;
-
-        qSort(fillerStepsToProcess.begin(), fillerStepsToProcess.end(), patientFillerMorePriorityFirst); // Ordenem segons la seva prioritat
-
-        foreach (PatientFillerStep *fillerStep, fillerStepsToProcess)
-        {
-            processPatientFillerStep(fillerStep, input);
-        }
-        emit progress(totalFillerSteps - candidatesFillerSteps.size());
-        qApp->processEvents();
-    }
-    emit progress(100);
-}
-
 void PatientFiller::registerSteps()
 {
     m_registeredSteps.append(new KeyImageNoteFillerStep() );
@@ -103,12 +57,11 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new DICOMFileClassifierFillerStep() );
     m_registeredSteps.append(new PresentationStateFillerStep() );
     m_registeredSteps.append(new TemporalDimensionFillerStep() );
-    m_registeredSteps.append(new VolumeGeneratorStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
     m_registeredSteps.append(new OrderImagesFillerStep() );
-// TODO de moment deixem fora el ReferenceLinesFillerStep perquè
-// encara no fem ús de la informació que recopila
-//     m_registeredSteps.append(new ReferenceLinesFillerStep() );
+    // TODO de moment deixem fora el ReferenceLinesFillerStep perquè
+    // encara no fem ús de la informació que recopila
+    //m_registeredSteps.append(new ReferenceLinesFillerStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
