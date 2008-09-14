@@ -81,6 +81,11 @@ short int Study::getPatientAge() const
     return m_age;
 }
 
+QString Study::getPatientAgeAsString() const
+{
+    return m_age != 0 ? QString::number(m_age) : "";
+}
+
 void Study::setWeight( double weight )
 {
     m_weight = weight;

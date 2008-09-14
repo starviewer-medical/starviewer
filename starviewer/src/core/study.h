@@ -52,6 +52,7 @@ public:
     /// Assignar/Obtenir l'edat del pacient
     void setPatientAge( short int age );
     short int getPatientAge() const;
+    QString getPatientAgeAsString() const;
 
     /// Assignar/Obtenir el pes del pacient
     void setWeight( double weight );
