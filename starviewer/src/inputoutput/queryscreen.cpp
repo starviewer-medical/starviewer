@@ -1237,22 +1237,36 @@ void QueryScreen::storeStudiesToPacs()
                 PacsListDB pacsListDB;
                 PacsParameters pacs;
                 Operation storeStudyOperation;
-                DicomMask dicomMask;
                 Status state;
-                DICOMStudy study;
+                Study *study;
+                LocalDatabaseManager localDatabaseManager;
+                QList<Patient*> patientList;
 
-                QMessageBox::critical(this, "Nova BD", "Eiii, que encara falta implementar el gravar al pacs amb la nova bd!");
-                return;
+                DicomMask dicomMask;
+                dicomMask.setStudyUID(studyUID);
+                patientList = localDatabaseManager.queryPatientStudy(dicomMask);
+                if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
 
-                dicomMask.setStudyUID( studyUID );
-                storeStudyOperation.setPatientName( study.getPatientName() );
-                storeStudyOperation.setStudyUID( study.getStudyUID() );
+                // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
+                // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
+                if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
+                {
+                    showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
+                    return;
+                }
+
+                study = patientList.first()->getStudies().first();
+                Patient *patient = study->getParentPatient();
+
+                storeStudyOperation.setPatientName( patient->getFullName() );
+                storeStudyOperation.setPatientID( patient->getID() );
+                storeStudyOperation.setStudyUID( study->getInstanceUID() );
+                storeStudyOperation.setStudyID( study->getID() );
                 storeStudyOperation.setPriority( Operation::Low );
                 storeStudyOperation.setOperation( Operation::Move );
                 storeStudyOperation.setDicomMask( dicomMask );
-                storeStudyOperation.setPatientID( study.getPatientId() );
-                storeStudyOperation.setStudyID( study.getStudyId() );
 
+                delete patient;
                 //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
                 state = pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );
                 if ( state.good() )
