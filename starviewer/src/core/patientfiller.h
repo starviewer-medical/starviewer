@@ -28,9 +28,6 @@ public:
 
     ~PatientFiller();
 
-    /// Donat l'input i els steps disponibles omple l'estructura Patient
-    void fill(PatientFillerInput *input);
-
 public slots:
 
     ///Procés encarregat de fer un processat de tots els mòduls per un fitxer DICOM passat.

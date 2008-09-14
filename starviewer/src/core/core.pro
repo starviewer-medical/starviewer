@@ -89,7 +89,6 @@ HEADERS += extensionfactory.h \
            dicomimagereaderitkgdcm.h \
            dicomimagereadervtk.h \
            dicomimagereaderdcmtk.h \
-           volumegeneratorstep.h \
            patientbrowsermenu.h \
            patientbrowsermenubasicitem.h \
            patientbrowsermenuextendeditem.h \
@@ -243,7 +242,6 @@ SOURCES += extensionmediator.cpp \
            dicomimagereaderitkgdcm.cpp \
            dicomimagereadervtk.cpp \
            dicomimagereaderdcmtk.cpp \
-           volumegeneratorstep.cpp \
            patientbrowsermenu.cpp \
            patientbrowsermenubasicitem.cpp \
            patientbrowsermenuextendeditem.cpp \
