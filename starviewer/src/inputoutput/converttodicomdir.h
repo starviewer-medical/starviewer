@@ -20,6 +20,9 @@ namespace udg {
 class Status;
 class DICOMSeries;
 class DICOMImage;
+class Study;
+class Series;
+class Image;
 
 /** Converteix un estudi a DICOMDIR, invocant el mètodes i classes necessàries.
   * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes són :
@@ -72,25 +75,25 @@ private :
     Status createDicomdir( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice );
 
     /// Copia els estudis seleccionats per passar a dicomdir, al directori desti
-    Status copyStudiesToDicomdirPath();
+    Status copyStudiesToDicomdirPath(QList<Study*> studyList);
 
     /** Converteix un estudi al format littleendian, i la copia al directori dicomdir
      * @param studyUID Uid de l'estudi a convertir
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status copyStudyToDicomdirPath( QString studyUID );
+    Status copyStudyToDicomdirPath(Study* study);
 
     /** Converteix una sèrie al format littleendian, i la copia al directori dicomdir
      * @param series
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status copySeriesToDicomdirPath( DICOMSeries series );
+    Status copySeriesToDicomdirPath(Series* series);
 
     /** Converteix una imatge al format littleendian, i la copia al directori dicomdir
      * @param image
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status copyImageToDicomdirPath( DICOMImage image );
+    Status copyImageToDicomdirPath(Image *image);
 
     /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
