@@ -352,18 +352,20 @@ void QueryScreen::searchStudy()
     }
 }
 
-void QueryScreen::preparePacsServerConnection(QString AETitlePACS, PacsServer *pacsConnection )
+PacsServer QueryScreen::getPacsServerByAETitle(QString AETitlePACS)
 {
-    PacsParameters pacs;
+    PacsParameters pacsParameters;
     PacsListDB pacsListDB;
+    pacsListDB.queryPacs( &pacsParameters, AETitlePACS );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+
     StarviewerSettings settings;
+    pacsParameters.setAELocal( settings.getAETitleMachine() ); //especifiquem el nostres AE
+    pacsParameters.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) ); //li especifiquem el TimeOut
 
-    pacsListDB.queryPacs( &pacs, AETitlePACS );//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+    PacsServer pacsServer;
+    pacsServer.setPacs( pacsParameters );
 
-    pacs.setAELocal( settings.getAETitleMachine() ); //especifiquem el nostres AE
-    pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) ); //li especifiquem el TimeOut
-
-    pacsConnection->setPacs( pacs );
+    return pacsServer;
 }
 
 void QueryScreen::queryStudyPacs()
@@ -557,25 +559,24 @@ void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
     DICOMSeries serie;
     Status state;
     QString text;
-    PacsServer pacsConnection;
     QueryPacs querySeriesPacs;
 
     INFO_LOG( "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle );
 
-    preparePacsServerConnection( pacsAETitle, &pacsConnection );
+    PacsServer pacsServer = getPacsServerByAETitle(pacsAETitle);
 
-    state = pacsConnection.connect(PacsServer::query,PacsServer::seriesLevel);
+    state = pacsServer.connect(PacsServer::query,PacsServer::seriesLevel);
     if ( !state.good() )
     {
         //Error al connectar
         ERROR_LOG( "Error al connectar al pacs " + pacsAETitle + ". PACS ERROR : " + state.text() );
-        errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
+        errorConnectingPacs ( pacsServer.getPacs().getPacsID() );
         return;
     }
 
-    querySeriesPacs.setConnection( pacsConnection.getConnection() );
+    querySeriesPacs.setConnection( pacsServer.getConnection() );
     state = querySeriesPacs.query( buildSeriesDicomMask( studyUID ) );
-    pacsConnection.disconnect();
+    pacsServer.disconnect();
 
     if ( !state.good() )
     {
@@ -640,7 +641,6 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     DICOMSeries serie;
     Status state;
     QString text;
-    PacsServer pacsConnection;
     QueryPacs queryImages;
     DicomMask dicomMask;
 
@@ -653,18 +653,18 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
     dicomMask.setImageNumber( "" );
     dicomMask.setSOPInstanceUID( "" );
 
-    preparePacsServerConnection( AETitlePACS, &pacsConnection );
+    PacsServer pacsServer = getPacsServerByAETitle(AETitlePACS);
 
-    state = pacsConnection.connect(PacsServer::query,PacsServer::imageLevel);
+    state = pacsServer.connect(PacsServer::query,PacsServer::imageLevel);
     if ( !state.good() )
     {   //Error al connectar
         QApplication::restoreOverrideCursor();
         ERROR_LOG( "Error al connectar al pacs " + AETitlePACS + ". PACS ERROR : " + state.text() );
-        errorConnectingPacs ( pacsConnection.getPacs().getPacsID() );
+        errorConnectingPacs ( pacsServer.getPacs().getPacsID() );
         return;
     }
 
-    queryImages.setConnection( pacsConnection.getConnection() );
+    queryImages.setConnection( pacsServer.getConnection() );
 
     state = queryImages.query( dicomMask );
     if ( !state.good() )
@@ -678,7 +678,7 @@ void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString
         return;
     }
 
-    pacsConnection.disconnect();
+    pacsServer.disconnect();
 
     if ( queryImages.getQueryResultsAsImageList().isEmpty() )
     {
