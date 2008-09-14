@@ -6,11 +6,23 @@
  ***************************************************************************/
 #include "processimage.h"
 
+#include <QtGlobal>
+
 namespace udg {
 
 //aquesta classes està buida per poder ser reimplementada
 ProcessImage::ProcessImage()
 {
+}
+
+void ProcessImage::process(DICOMImage* image)
+{
+    qFatal("process Not implemented");
+}
+
+void ProcessImage::process(DICOMTagReader *dicomTagReader)
+{
+    qFatal("process Not implemented");
 }
 
 };
