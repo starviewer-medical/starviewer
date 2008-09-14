@@ -27,7 +27,6 @@
 #include "pacslistdb.h"
 #include "logging.h"
 #include "status.h"
-#include "qchooseoneobjectdialog.h"
 #include "dicomdirimporter.h"
 #include "patientfillerinput.h"
 #include "qcreatedicomdir.h"
