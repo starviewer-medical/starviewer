@@ -50,6 +50,7 @@ public:
     QList<Image*> queryImage(DicomMask imageMaskToQuery);
 
     ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
+    ///Retorna l'estructura omplerta fins al nivell d'study (no omple ni les sèries ni les imatges).
     QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery);
 
     ///Retorna tota l'estructura Patient,Study,Series,Image, de l'estudi que compleix amb el criteri de cerca, té en compte el Study InstanceUID, el SeriesInstanceUID i el SOP Instance UID
