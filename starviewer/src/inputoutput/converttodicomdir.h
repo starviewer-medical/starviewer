@@ -64,22 +64,6 @@ private :
             QString studyUID;
         };
 
-    QList<StudyToConvert> m_studiesToConvert;
-    QProgressDialog *m_progress;
-
-    QString m_dicomDirPath;
-    QString m_dicomDirStudyPath;
-    QString m_dicomDirSeriesPath;
-    QString m_oldPatientId;
-    QString m_dicomdirPatientPath;
-
-    QStringList m_patientDirectories;
-
-    int m_patient;
-    int m_study;
-    int m_series;
-    int m_image;
-
     /** crea un dicomdir, al directori especificat
      * @param dicomdirPath lloc a crear el dicomdir
      * @param selectedDevice dispositiu on es crearà el dicomdir
@@ -111,6 +95,22 @@ private :
     /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
 
+private:
+    QList<StudyToConvert> m_studiesToConvert;
+    QProgressDialog *m_progress;
+
+    QString m_dicomDirPath;
+    QString m_dicomDirStudyPath;
+    QString m_dicomDirSeriesPath;
+    QString m_oldPatientId;
+    QString m_dicomdirPatientPath;
+
+    QStringList m_patientDirectories;
+
+    int m_patient;
+    int m_study;
+    int m_series;
+    int m_image;
 };
 
 }
