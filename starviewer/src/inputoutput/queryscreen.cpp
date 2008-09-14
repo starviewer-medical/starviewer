@@ -395,7 +395,7 @@ void QueryScreen::queryStudyPacs()
                                                                      tr("This query can take a long time.\nDo you want continue?"),
                                                                      QMessageBox::Yes | QMessageBox::No,
                                                                      QMessageBox::No);
-        stopQuery = response  == QMessageBox::Yes;
+        stopQuery = (response == QMessageBox::No);
     }
     if( !stopQuery )
     {
