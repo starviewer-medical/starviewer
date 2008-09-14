@@ -56,9 +56,6 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
 
 bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
-    Status state;
-    CacheStudyDAL cacheStudyDAL;
-    CacheSeriesDAL cacheSeriesDAL;
     DicomMask mask;
     QList<DICOMStudy> studyListToImport;
     QList<DICOMSeries> seriesListToImport;
@@ -66,7 +63,6 @@ bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
     StarviewerSettings starviewerSettings;
     DICOMStudy study;
     DICOMSeries serie;
-    ScaleStudy scaleDicomStudy;
 
     studyPath = starviewerSettings.getCacheImagePath() + studyUID + "/";
     QDir directoryCreator;
@@ -94,8 +90,6 @@ bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
     {
         if ( !importSeries(studyUID, seriesToImport.getSeriesUID(), sopInstanceUID) ) return false;
     }
-
-    scaleDicomStudy.scale( study.getStudyUID() );
 
     return true;
 }
@@ -126,7 +120,6 @@ bool DICOMDIRImporter::importImage(DICOMImage image)
 {
     QString cacheImagePath, dicomdirImagePath;
     StarviewerSettings starviewerSettings;
-    CacheImageDAL cacheImage;
 
     cacheImagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
 
@@ -157,7 +150,6 @@ bool DICOMDIRImporter::importImage(DICOMImage image)
     {
         // TODO s'hauria de forçar la sobreescriptura, ara de moment no ho tractem, però la imatge bona hauria de ser la del dicomdir no la de la cache
         //ERROR_LOG("El fitxer: <" + image.getImagePath() + "> no s'ha pogut copiar a <" + imagePath + ">, podria ser que ja existeix amb aquest mateix nom, o que no tinguis permisos en el directori destí");
-        //state.setStatus( DcmtkUnknowError );
     }
 
     return true;

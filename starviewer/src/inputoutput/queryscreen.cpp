@@ -172,7 +172,6 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;
     LocalDatabaseManager localDatabaseManager;
-    int imagesNumber;
     Status state;
     DicomMask mask;
     QString studyInstanceUID = m_studyTreeWidgetCache->getCurrentStudyUID();
@@ -453,7 +452,6 @@ void QueryScreen::queryStudyPacs()
 
 void QueryScreen::queryStudy( QString source )
 {
-    CacheStudyDAL cacheStudyDAL;
     LocalDatabaseManager localDatabaseManager;
     QList<DICOMStudy> studyListResultQuery;
     QList<Patient*> patientList;
@@ -783,7 +781,6 @@ void QueryScreen::retrievePacs( bool view )
     }
 
     StarviewerSettings settings;
-    bool ok;
 
     foreach( QString currentStudyUID, selectedStudiesUIDList )
     {
@@ -854,23 +851,6 @@ void QueryScreen::retrievePacs( bool view )
         }
     }
     QApplication::restoreOverrideCursor();
-}
-
-Status QueryScreen::insertStudyCache( DICOMStudy stu )
-{
-    QString absPath;
-    Status state;
-    DICOMStudy study = stu;
-    StarviewerSettings settings;
-    CacheStudyDAL cacheStudyDAL;
-
-    //creem el path absolut de l'estudi
-    absPath = settings.getCacheImagePath() + study.getStudyUID() + "/";
-    //inserim l'estudi a la caché
-    study.setAbsPath(absPath);
-    state = cacheStudyDAL.insertStudy( &study );
-
-    return state;
 }
 
 void QueryScreen::studyRetrievedView( QString studyUID , QString seriesUID , QString sopInstanceUID )
@@ -1027,8 +1007,6 @@ void QueryScreen::deleteSelectedStudiesInCache()
             //Posem el cursor en espera
             QApplication::setOverrideCursor(Qt::WaitCursor);
 
-            Status state;
-            CacheStudyDAL cacheStudyDAL;
             LocalDatabaseManager localDatabaseManager;
 
             foreach(QString studyUID, studiesList)
@@ -1057,9 +1035,6 @@ void QueryScreen::deleteSelectedStudiesInCache()
 
 void QueryScreen::studyRetrieveFinished( QString studyUID )
 {
-    DICOMStudy study;
-    CacheStudyDAL cacheStudyDAL;
-    Status state;
     LocalDatabaseManager localDatabaseManager;
     DicomMask studyMask;
     QList<Patient*> patientList;
@@ -1148,8 +1123,6 @@ void QueryScreen::showOperationStateScreen()
 
 void QueryScreen::convertToDicomdir()
 {
-    CacheStudyDAL cacheStudyDAL;
-    DICOMStudy study;
     QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
 
     DicomMask studyMask;
@@ -1233,7 +1206,6 @@ void QueryScreen::storeStudiesToPacs()
             StarviewerSettings settings;
             foreach( QString studyUID, studiesUIDList )
             {
-                CacheStudyDAL cacheStudy;
                 PacsListDB pacsListDB;
                 PacsParameters pacs;
                 Operation storeStudyOperation;
