@@ -3,151 +3,145 @@
 
 namespace udg{
 
-PacsParameters::PacsParameters(QString address, QString port, QString aet, QString aec)
+PacsParameters::PacsParameters(const QString &address, const QString &port, const QString &myAEtitle, const QString &remoteServerAEtitle)
 {
-    m_address = address;
-    m_Port = port;
-    m_aeTitle = aet;
-    m_aeCalled = aec;
-    m_TimeOut = 15000; //establim que per defecte el timeout és de 15000 ms
-    m_PacsID = -1;
+    m_pacsAddress = address;
+    m_pacsPort = port;
+    m_myAETitle = myAEtitle;
+    m_pacsAETitle = remoteServerAEtitle;
+    m_connectionTimeOutInMilliseconds = 15000; //establim que per defecte el timeout és de 15000 ms
+    m_pacsID = -1;
 }
 
 PacsParameters::PacsParameters()
 {
-    m_PacsID = -1;
+    m_pacsID = -1;
 }
 
-void PacsParameters::setPacsAddress(QString address)
+void PacsParameters::setPacsAddress(const QString &address)
 {
-    m_address = address;
+    m_pacsAddress = address;
 }
-
-void PacsParameters::setPacsPort( QString port )
-{
-     m_Port = port;
-}
-
-void PacsParameters::setAELocal( QString aet )
-{
-     m_aeTitle = aet;
-}
-
-void PacsParameters::setAEPacs( QString aec )
-{
-     m_aeCalled = aec;
-}
-
-void PacsParameters::setLocalPort( QString port )
-{
-    m_LocalPort = port;
-}
-
-void PacsParameters::setInstitution( QString inst )
-{
-    m_Inst = inst;
-}
-
-void PacsParameters::setLocation( QString local )
-{
-    m_Location = local;
-}
-
-void PacsParameters::setDescription( QString desc )
-{
-    m_Desc = desc;
-}
-
-void PacsParameters::setDefault( QString def )
-{
-    m_Default = def;
-}
-
-void PacsParameters::setTimeOut( int time )
-{
-    m_TimeOut = time * 1000; //convertim a ms
-}
-
-void PacsParameters::setPacsID( int id )
-{
-    m_PacsID = id;
-}
-
-/*****************************************************************************************/
 
 QString PacsParameters::getPacsAddress() const
 {
-    return m_address;
+    return m_pacsAddress;
+}
+
+void PacsParameters::setPacsPort(const QString &port)
+{
+    m_pacsPort = port;
 }
 
 QString PacsParameters::getPacsPort() const
 {
-    return m_Port;
+    return m_pacsPort;
+}
+
+void PacsParameters::setAELocal(const QString &AETitle)
+{
+    m_myAETitle = AETitle;
 }
 
 QString PacsParameters::getAELocal() const
 {
-    return m_aeTitle;
+    return m_myAETitle;
+}
+
+void PacsParameters::setAEPacs(const QString &remoteServerAETitle)
+{
+    m_pacsAETitle = remoteServerAETitle;
 }
 
 QString PacsParameters::getAEPacs() const
 {
-    return m_aeCalled;
+    return m_pacsAETitle;
+}
+
+void PacsParameters::setLocalPort(const QString &port)
+{
+    m_localPort = port;
 }
 
 QString PacsParameters::getLocalPort() const
 {
-    return m_LocalPort;
+    return m_localPort;
+}
+
+void PacsParameters::setInstitution(const QString &institution)
+{
+    m_pacsInstitution = institution;
 }
 
 QString PacsParameters::getInstitution() const
 {
-    return m_Inst;
+    return m_pacsInstitution;
+}
+
+void PacsParameters::setLocation(const QString &location)
+{
+    m_pacsLocation = location;
 }
 
 QString PacsParameters::getLocation() const
 {
-    return m_Location;
+    return m_pacsLocation;
+}
+
+void PacsParameters::setDescription(const QString &description)
+{
+    m_pacsDescription = description;
 }
 
 QString PacsParameters::getDescription() const
 {
-    return m_Desc;
+    return m_pacsDescription;
+}
+
+void PacsParameters::setDefault(const QString &isDefault)
+{
+    m_pacsIsDefault = isDefault;
 }
 
 QString PacsParameters::getDefault() const
 {
-    return m_Default;
+    return m_pacsIsDefault;
+}
+
+void PacsParameters::setTimeOut(int timeoutInSeconds)
+{
+    m_connectionTimeOutInMilliseconds = timeoutInSeconds * 1000; //convertim a ms
 }
 
 int PacsParameters::getTimeOut() const
 {
-    return m_TimeOut;
+    return m_connectionTimeOutInMilliseconds;
+}
+
+void PacsParameters::setPacsID(int ID)
+{
+    m_pacsID = ID;
 }
 
 int PacsParameters::getPacsID() const
 {
-    return m_PacsID;
+    return m_pacsID;
 }
 
 bool PacsParameters::operator ==(const PacsParameters &parameters)
 {
-    if(    m_aeCalled == parameters.m_aeCalled
-        && m_aeTitle == parameters.m_aeTitle
-        && m_Port == parameters.m_Port
-        && m_address == parameters.m_address
-        && m_LocalPort == parameters.m_LocalPort
-        && m_Desc == parameters.m_Desc
-        && m_Inst == parameters.m_Inst
-        && m_Location == parameters.m_Location
-        && m_Default == parameters.m_Default
-        && m_Location == parameters.m_Location
-        && m_PacsID == parameters.m_PacsID
-        && m_TimeOut == parameters.m_TimeOut
-    )
-        return true;
-    else
-        return false;
+    return m_pacsAETitle == parameters.m_pacsAETitle
+        && m_myAETitle == parameters.m_myAETitle
+        && m_pacsPort == parameters.m_pacsPort
+        && m_pacsAddress == parameters.m_pacsAddress
+        && m_localPort == parameters.m_localPort
+        && m_pacsDescription == parameters.m_pacsDescription
+        && m_pacsInstitution == parameters.m_pacsInstitution
+        && m_pacsLocation == parameters.m_pacsLocation
+        && m_pacsIsDefault == parameters.m_pacsIsDefault
+        && m_pacsLocation == parameters.m_pacsLocation
+        && m_pacsID == parameters.m_pacsID
+        && m_connectionTimeOutInMilliseconds == parameters.m_connectionTimeOutInMilliseconds;
 }
 
 }
