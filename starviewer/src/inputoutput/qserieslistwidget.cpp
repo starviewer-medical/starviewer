@@ -10,8 +10,6 @@
 #include <QIcon>
 #include <QHash>
 
-#include "dicomseries.h"
-#include "scalestudy.h"
 #include "series.h"
 
 namespace udg {
@@ -37,58 +35,6 @@ void QSeriesListWidget::createConnections()
 {
     connect( m_seriesListWidget , SIGNAL( itemClicked ( QListWidgetItem *) ) , SLOT( clicked( QListWidgetItem * ) ) );
     connect( m_seriesListWidget , SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ), SLOT( view(QListWidgetItem * ) ) );
-}
-
-//TODO TREURE AQUEST METODE QUAN ES TREGUI LA CLASSE DICOMSERIES
-void QSeriesListWidget::insertSeries( DICOMSeries *serie )
-{
-    QString text,num;
-    QListWidgetItem *item = new QListWidgetItem();
-    QString statusTip;
-
-    text = tr( " Series " ) + serie->getSeriesNumber();
-    if ( serie->getProtocolName().length() > 0 )
-    {//si hi ha descripció la inserim
-        text += " " + serie->getProtocolName();
-    }
-    text +="\n";
-
-    if( serie->getImageNumber() > 0 )
-    {
-        text += QString::number( serie->getImageNumber() );
-        QString modality = serie->getSeriesModality();
-        if( modality == "KO" )
-            text += tr(" Key Object Note");
-        else if( modality == "PR" )
-            text += tr(" Presentation State");
-        else if( modality == "SR" )
-            text += tr(" Structured Report");
-        else
-            text += tr(" Images");
-    }
-
-    QIcon  icon( ScaleStudy::getScaledImagePath(serie) );
-
-    item->setText(text);
-    item->setIcon(icon);
-
-    /* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
-   enlloc per amagar-lo, ho utilitzo per identificar la sèrie */
-    item->setStatusTip(serie->getSeriesUID());
-
-    m_HashSeriesStudy[serie->getSeriesUID()] = serie->getStudyUID();//Guardem per la sèrie a quin estudi pertany
-
-    //TODO s'hauria de millorar el sistema d'ordenació de les sèries
-    //Comprovem la posició que hem d'inserir la sèrie, si és un DICOM Non-Image (no és una imatge) val final, sinó va després de la última imatge inserida
-    if ( m_nonDicomImageSeriesList.contains( serie->getSeriesModality() ) )
-    {
-        m_seriesListWidget->addItem( item );
-    }
-    else
-    {//és una imatge
-        m_lastInsertedImageRow++;
-        m_seriesListWidget->insertItem( m_lastInsertedImageRow , item );
-    }
 }
 
 void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)

@@ -18,7 +18,6 @@ namespace udg {
 @author marc
 */
 
-class DICOMSeries;
 class Series;
 
 const int scaledSeriesSizeX = 100;///< Mida de la imatge escalada a l'eix x
@@ -44,11 +43,6 @@ public slots:
 
     ///Neteja el ListWidget de sèries
     void clear();
-
-    /** Insereix l'informació d'una sèrie al ListICon
-     * @param descripció de la sèrie
-     */
-    void insertSeries( DICOMSeries *serie );
 
     ///Insereix l'informació d'una sèrie
     void insertSeries(QString studyInstanceUID, Series *series);
