@@ -33,9 +33,6 @@ public:
     /// Donat l'input i els steps disponibles omple l'estructura Patient
     void fill(PatientFillerInput *input);
 
-    /// Ídem fill() però en aquest cas té un criteri d'aturada. Quan hagi conseguit l'etiqueta indicada s'aturarà i no processarà més mòduls
-    void fillUntil(PatientFillerInput *input, QString stopLabel);
-
 public slots:
 
     ///Procés encarregat de fer un processat de tots els mòduls per un fitxer DICOM passat.
@@ -61,7 +58,6 @@ private:
     void processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input);
 
 private:
-    const QString UntilEndLabel; //< Label que, teòricament, és impossible que sigui definida per un FillerStep
     /// Registre d'steps
     QList<PatientFillerStep *> m_registeredSteps;
 

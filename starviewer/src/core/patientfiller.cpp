@@ -28,8 +28,6 @@
 
 namespace udg {
 
-const QString UntilEndLabel = "UntilEndLabel1234|@#~";
-
 PatientFiller::PatientFiller(QObject * parent) :QObject(parent)
 {
     registerSteps();
@@ -46,31 +44,26 @@ PatientFiller::~PatientFiller()
     delete m_patientFillerInput;
 }
 
-void PatientFiller::fill(PatientFillerInput *input)
-{
-    fillUntil(input, UntilEndLabel);
-}
-
 // Mètode intern per poder realitzar l'ordenació dels patientfiller
 bool patientFillerMorePriorityFirst(const PatientFillerStep *s1, const PatientFillerStep *s2)
 {
     return (*s1) < (*s2);
 }
 
-void PatientFiller::fillUntil(PatientFillerInput *input, QString stopLabel)
+void PatientFiller::fill(PatientFillerInput *input)
 {
     QList<PatientFillerStep*> processedFillerSteps;
     QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
     bool continueIterating = true;
 
-    DEBUG_LOG("Entrem a fillUntil amb stopLabel = " + stopLabel);
+    DEBUG_LOG("Entrem a fillUntil");
 
     int totalFillerSteps = m_registeredSteps.size();
 
     emit progress(1);
     qApp->processEvents();
 
-    while (!input->getLabels().contains(stopLabel) && !candidatesFillerSteps.isEmpty() && continueIterating)
+    while (!candidatesFillerSteps.isEmpty() && continueIterating)
     {
         QList<PatientFillerStep*> fillerStepsToProcess;
         QList<PatientFillerStep*> newCandidatesFillerSteps;
@@ -136,7 +129,7 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
     QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
     bool continueIterating = true;
 
-    while (!m_patientFillerInput->getLabels().contains(UntilEndLabel) && !candidatesFillerSteps.isEmpty() && continueIterating)
+    while (!candidatesFillerSteps.isEmpty() && continueIterating)
     {
         QList<PatientFillerStep*> fillerStepsToProcess;
         QList<PatientFillerStep*> newCandidatesFillerSteps;
