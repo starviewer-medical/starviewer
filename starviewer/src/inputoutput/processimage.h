@@ -20,24 +20,24 @@ class ProcessImage
 
 public:
 
-	///Constructor de la classe
+    ///Constructor de la classe
     ProcessImage();
 
-	/** Processa la imatge
- 	 * @param imatge a processar
- 	 */
-    virtual void process(DICOMImage* image) = 0;
+    /** Processa la imatge
+    * @param imatge a processar
+    */
+    virtual void process(DICOMImage* image);
 
     ///Processa el DICOMTagReader
-    virtual void process(DICOMTagReader *dicomTagReader) = 0;
+    virtual void process(DICOMTagReader *dicomTagReader);
 
-	///Indica que s'ha produit algun error descarregant alguna de les imatges de l'estudi
+    ///Indica que s'ha produit algun error descarregant alguna de les imatges de l'estudi
     virtual void setError() = 0;
 
-	///Indica si s'ha produit algun error descarregant alguna de les imatges de l'estudi
+    ///Indica si s'ha produit algun error descarregant alguna de les imatges de l'estudi
     virtual bool getError() = 0;
 
-	///Destructor de la classe
+    ///Destructor de la classe
     virtual ~ProcessImage() {};
 
 };
