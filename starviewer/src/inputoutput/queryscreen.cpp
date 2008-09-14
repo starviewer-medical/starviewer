@@ -167,7 +167,6 @@ void QueryScreen::setQStudyTreeWidgetColumnsWidth()
 
 void QueryScreen::setSeriesToSeriesListWidgetCache()
 {
-    QList<DICOMSeries> oldSeriesList;
     QList<Series*> seriesList;
     CacheSeriesDAL cacheSeriesDAL;
     CacheImageDAL cacheImageDAL;

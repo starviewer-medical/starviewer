@@ -21,7 +21,6 @@
 #include "dicomimage.h"
 #include "dicommask.h"
 #include "logging.h"
-#include "scalestudy.h"
 #include "errordcmtk.h"
 #include "patientfiller.h"
 #include "dicomtagreader.h"

@@ -32,7 +32,6 @@ HEADERS += databaseconnection.h \
            struct.h \
            dicomstudy.h \
            cachepool.h \
-           scalestudy.h \
            multiplequerystudy.h \
            qquerystudythread.h \
            operation.h \
@@ -88,7 +87,6 @@ SOURCES += databaseconnection.cpp \
            status.cpp \
            dicomstudy.cpp \
            cachepool.cpp \
-           scalestudy.cpp \
            multiplequerystudy.cpp \
            qquerystudythread.cpp \
            operation.cpp \
