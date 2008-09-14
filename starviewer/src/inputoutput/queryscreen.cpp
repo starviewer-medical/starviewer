@@ -28,9 +28,6 @@
 #include "pacslistdb.h"
 #include "logging.h"
 #include "status.h"
-#include "cachestudydal.h"
-#include "cacheseriesdal.h"
-#include "cacheimagedal.h"
 #include "qchooseoneobjectdialog.h"
 #include "dicomdirimporter.h"
 #include "patientfillerinput.h"
@@ -168,10 +165,7 @@ void QueryScreen::setQStudyTreeWidgetColumnsWidth()
 void QueryScreen::setSeriesToSeriesListWidgetCache()
 {
     QList<Series*> seriesList;
-    CacheSeriesDAL cacheSeriesDAL;
-    CacheImageDAL cacheImageDAL;
     LocalDatabaseManager localDatabaseManager;
-    Status state;
     DicomMask mask;
     QString studyInstanceUID = m_studyTreeWidgetCache->getCurrentStudyUID();
 
@@ -622,8 +616,6 @@ void QueryScreen::querySeries( QString studyUID, QString source )
     QList<DICOMSeries> seriesListQueryResults;
     QList<Series*> seriesList;
     LocalDatabaseManager localDatabaseManager;
-    CacheSeriesDAL cacheSeriesDAL;
-    Status state;
     DicomMask mask;
 
     INFO_LOG( "Cerca de sèries a la font " + source +" de l'estudi " + studyUID );
@@ -727,7 +719,6 @@ void QueryScreen::retrieve()
 void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID, QString source)
 {
     LocalDatabaseManager localDatabaseManager;
-    CacheImageDAL cacheImageDAL;
     DicomMask mask;
     QList<Image*> imageList;
     QList<DICOMImage> imageListQueryResults;
@@ -960,7 +951,6 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
 void QueryScreen::importDicomdir()
 {
     DICOMDIRImporter importDicom;
-    Status state;
     int failedStudies = 0;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
