@@ -9,7 +9,7 @@
 
 namespace udg {
 
-class DICOMImage;
+class Image;
 class DICOMTagReader;
 
 /** Classe que s'encarrega de dur a terme unes accions determinades per cada descarrega d'una imatge. Aquesta classe és una classe genèrica, per ser reimplementada
@@ -26,7 +26,7 @@ public:
     /** Processa la imatge
     * @param imatge a processar
     */
-    virtual void process(DICOMImage* image);
+    virtual void process(Image* image);
 
     ///Processa el DICOMTagReader
     virtual void process(DICOMTagReader *dicomTagReader);

@@ -17,7 +17,7 @@ namespace udg {
 
 class Status;
 class PacsConnection;
-class DICOMImage;
+class Image;
 
 //codi d'error que retorna l'store a part del OFCondition, aquest status code també s'ha de comprovar
 static int m_lastStatusCode;
@@ -43,7 +43,7 @@ public:
     * @param ImageListStore de les imatges a enviar al PACS
     * @return indica estat del mètode
     */
-   Status store( QList<DICOMImage> imageListToStore );
+   Status store( QList<Image*> imageListToStore );
 
     ~StoreImages();
 

@@ -44,7 +44,7 @@ void ProcessImageSingleton::addNewProcessImage( QString UID , ProcessImage *pi )
     m_semaphore->release();
 }
 
-void ProcessImageSingleton::process( QString UID , DICOMImage* img )
+void ProcessImageSingleton::process(const QString &studyUID, Image *image)
 {
     list<SingletonProcess>::iterator j;
 
@@ -52,7 +52,7 @@ void ProcessImageSingleton::process( QString UID , DICOMImage* img )
 
     while ( j != m_listProcess.end() )
     {
-        if ( (*j).studyUID != UID )
+        if ( (*j).studyUID != studyUID )
         {
             j++;
         }
@@ -61,11 +61,11 @@ void ProcessImageSingleton::process( QString UID , DICOMImage* img )
 
     if ( j != m_listProcess.end() )
     {
-        (*j).imgProcess->process( img );
+        (*j).imgProcess->process( image );
     }
 }
 
-void ProcessImageSingleton::process(QString UID, DICOMTagReader *dicomTagReader)
+void ProcessImageSingleton::process(const QString &studyUID, DICOMTagReader *dicomTagReader)
 {
     list<SingletonProcess>::iterator j;
 
@@ -73,7 +73,7 @@ void ProcessImageSingleton::process(QString UID, DICOMTagReader *dicomTagReader)
 
     while ( j != m_listProcess.end() )
     {
-        if ( (*j).studyUID != UID )
+        if ( (*j).studyUID != studyUID )
         {
             j++;
         }
