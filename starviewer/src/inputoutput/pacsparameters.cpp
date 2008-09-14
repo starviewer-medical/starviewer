@@ -82,62 +82,62 @@ void PacsParameters::setIsDeleted( bool isDeleted )
 
 /*****************************************************************************************/
 
-QString PacsParameters::getPacsAdr()
+QString PacsParameters::getPacsAdr() const
 {
     return m_Adr;
 }
 
-QString PacsParameters::getPacsPort()
+QString PacsParameters::getPacsPort() const
 {
     return m_Port;
 }
 
-QString PacsParameters::getAELocal()
+QString PacsParameters::getAELocal() const
 {
     return m_aeTitle;
 }
 
-QString PacsParameters::getAEPacs()
+QString PacsParameters::getAEPacs() const
 {
     return m_aeCalled;
 }
 
-QString PacsParameters::getLocalPort()
+QString PacsParameters::getLocalPort() const
 {
     return m_LocalPort;
 }
 
-QString PacsParameters::getInstitution()
+QString PacsParameters::getInstitution() const
 {
     return m_Inst;
 }
 
-QString PacsParameters::getLocation()
+QString PacsParameters::getLocation() const
 {
     return m_Location;
 }
 
-QString PacsParameters::getDescription()
+QString PacsParameters::getDescription() const
 {
     return m_Desc;
 }
 
-QString PacsParameters::getDefault()
+QString PacsParameters::getDefault() const
 {
     return m_Default;
 }
 
-int PacsParameters::getTimeOut()
+int PacsParameters::getTimeOut() const
 {
     return m_TimeOut;
 }
 
-int PacsParameters::getPacsID()
+int PacsParameters::getPacsID() const
 {
     return m_PacsID;
 }
 
-bool PacsParameters::isDeleted()
+bool PacsParameters::isDeleted() const
 {
     return m_isDeleted;
 }
