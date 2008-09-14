@@ -398,16 +398,11 @@ void QueryScreen::queryStudyPacs()
     bool stopQuery = false;
     if ( searchMask.isAHeavyQuery() )
     {
-        //0 -> Yes; 1->No
-        switch( QMessageBox::information( 0 , tr( "Warning" ) , tr( "This query can take a long time.\nDo you want continue?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
-        {
-            case 1:
-                stopQuery = true;
-            break;
-
-            default:
-            break;
-        }
+        QMessageBox::StandardButton response = QMessageBox::question(this, tr("Starviewer"),
+                                                                     tr("This query can take a long time.\nDo you want continue?"),
+                                                                     QMessageBox::Yes | QMessageBox::No,
+                                                                     QMessageBox::No);
+        stopQuery = response  == QMessageBox::Yes;
     }
     if( !stopQuery )
     {
@@ -1183,72 +1178,68 @@ void QueryScreen::storeStudiesToPacs()
 
     m_PACSNodes->getSelectedPacs( selectedPacsList ); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
-    switch( selectedPacsList.size() )
+    if(selectedPacsList.size() == 0)
     {
-        case  0 :
-            QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "You have to select a PACS to store the study in" ));
-            break;
-
-        case 1 :
+        QApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, tr("Starviewer"), tr("You have to select a PACS to store the study in") );
+    }
+    else if(selectedPacsList.size() == 1)
+    {
+        StarviewerSettings settings;
+        foreach( QString studyUID, studiesUIDList )
         {
-            StarviewerSettings settings;
-            foreach( QString studyUID, studiesUIDList )
+            PacsListDB pacsListDB;
+            PacsParameters pacs;
+            Operation storeStudyOperation;
+            Status state;
+            Study *study;
+            LocalDatabaseManager localDatabaseManager;
+            QList<Patient*> patientList;
+
+            DicomMask dicomMask;
+            dicomMask.setStudyUID(studyUID);
+            patientList = localDatabaseManager.queryPatientStudy(dicomMask);
+            if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
+
+            // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
+            // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
+            if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
             {
-                PacsListDB pacsListDB;
-                PacsParameters pacs;
-                Operation storeStudyOperation;
-                Status state;
-                Study *study;
-                LocalDatabaseManager localDatabaseManager;
-                QList<Patient*> patientList;
-
-                DicomMask dicomMask;
-                dicomMask.setStudyUID(studyUID);
-                patientList = localDatabaseManager.queryPatientStudy(dicomMask);
-                if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
-
-                // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
-                // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
-                if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
-                {
-                    showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
-                    return;
-                }
-
-                study = patientList.first()->getStudies().first();
-                Patient *patient = study->getParentPatient();
-
-                storeStudyOperation.setPatientName( patient->getFullName() );
-                storeStudyOperation.setPatientID( patient->getID() );
-                storeStudyOperation.setStudyUID( study->getInstanceUID() );
-                storeStudyOperation.setStudyID( study->getID() );
-                storeStudyOperation.setPriority( Operation::Low );
-                storeStudyOperation.setOperation( Operation::Move );
-                storeStudyOperation.setDicomMask( dicomMask );
-
-                delete patient;
-                //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-                state = pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );
-                if ( state.good() )
-                {
-                    storeStudyOperation.setPacsParameters( pacs );
-
-                    m_qexecuteOperationThread.queueOperation( storeStudyOperation );
-                }
-                else
-                {
-                    QApplication::restoreOverrideCursor();
-                    // TODO potser s'haurien de recollir si hi ha hagut errors i al final fer el sumari si calgues
-                }
+                showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
+                return;
             }
-            break;
-        }
 
-        default :
-            QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The studies can only be stored to one PACS" ));
-            break;
+            study = patientList.first()->getStudies().first();
+            Patient *patient = study->getParentPatient();
+
+            storeStudyOperation.setPatientName( patient->getFullName() );
+            storeStudyOperation.setPatientID( patient->getID() );
+            storeStudyOperation.setStudyUID( study->getInstanceUID() );
+            storeStudyOperation.setStudyID( study->getID() );
+            storeStudyOperation.setPriority( Operation::Low );
+            storeStudyOperation.setOperation( Operation::Move );
+            storeStudyOperation.setDicomMask( dicomMask );
+
+            delete patient;
+            //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+            state = pacsListDB.queryPacs( &pacs, selectedPacsList.value(0).getAEPacs() );
+            if ( state.good() )
+            {
+                storeStudyOperation.setPacsParameters( pacs );
+
+                m_qexecuteOperationThread.queueOperation( storeStudyOperation );
+            }
+            else
+            {
+                QApplication::restoreOverrideCursor();
+                // TODO potser s'haurien de recollir si hi ha hagut errors i al final fer el sumari si calgues
+            }
+        }
+    }
+    else
+    {
+        QApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, tr("Starviewer"), tr("The studies can only be stored to one PACS") );
     }
 
     QApplication::restoreOverrideCursor();
