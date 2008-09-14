@@ -38,7 +38,6 @@ HEADERS += databaseconnection.h \
            queueoperationlist.h \
            cacheinstallation.h \
            qexecuteoperationthread.h \
-           cachelayer.h \
            cachestudydal.h \
            converttodicomdir.h \
            convertdicomtolittleendian.h \
@@ -91,7 +90,6 @@ SOURCES += databaseconnection.cpp \
            queueoperationlist.cpp \
            cacheinstallation.cpp \
            qexecuteoperationthread.cpp \
-           cachelayer.cpp \
            cachestudydal.cpp \
            converttodicomdir.cpp \
            convertdicomtolittleendian.cpp \
