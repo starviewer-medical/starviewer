@@ -88,6 +88,9 @@ private:
     ///crea els connects dels signals i slots
     void createConnections();
 
+    /// Crea els input validators necessaris pels diferents camps d'edició.
+    void configureInputValidator();
+
     /// Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla.
     /// La mida de les columnes la tenim guardada al StarviewerSettings
     void setWidthColumns();
