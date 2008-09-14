@@ -241,12 +241,12 @@ private:
     ///Ens indica en en quina posició es troba dins la llista dels estudis trobats a la última query del PACS l'estudi amb l'UID passat per paràmetre i l'AETitle del PACS passat per paràmetre
     int getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle );
 
-    /** Donat un AETitle busca les dades del PACS a la base de dades i prepara un objecte PACSERVER, per poder
+    /** Donat un AETitle busca les dades del PACS a la configuració i prepara un objecte PACSERVER, per poder
      * connectar al PACS
      * @param AETitlePACS Aetitle del PACS a connectar
      * @return Objecte ParcsServer a punt per connectar amb el PACS
      */
-    void preparePacsServerConnection( QString AETitlePACS , PacsServer *pacsConnection );
+    PacsServer getPacsServerByAETitle(QString AETitlePACS);
 
     /**
      * Llegeix i aplica dades de configuració
