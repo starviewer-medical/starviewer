@@ -33,7 +33,6 @@
 #include "dicomstudy.h"
 #include "dicomseries.h"
 #include "dicomimage.h"
-#include "status.h"
 #include "logging.h"
 #include "pacsparameters.h"
 #include "patient.h"
@@ -111,8 +110,6 @@ void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
 
 void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
-    Status state;
-
     if ( getStudyItem( study->getStudyUID() , study->getPacsAETitle() ) != NULL )
         removeStudy( study->getStudyUID() ); //si l'estudi ja hi existeix a StudyTreeView l'esborrem
 
@@ -138,12 +135,9 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
             PacsListDB pacsList;
             PacsParameters pacs;
 
-            state = pacsList.queryPacs( &pacs , study->getPacsAETitle() );
-            if ( state.good() )
-            {
-                item->setText( Institution, pacs.getInstitution() );
-                m_OldInstitution = pacs.getInstitution();
-            }
+            pacsList.queryPacs( &pacs , study->getPacsAETitle() );
+            item->setText( Institution, pacs.getInstitution() );
+            m_OldInstitution = pacs.getInstitution();
             m_oldPacsAETitle = study->getPacsAETitle();
         }
         else item->setText( Institution , m_OldInstitution );

@@ -9,13 +9,8 @@
 
 #include <QString>
 
-#include <sqlite3.h>
-
-#include "databaseconnection.h"
-#include "status.h"
 #include "pacsparameters.h"
 #include "logging.h"
-#include "errordcmtk.h"
 
 namespace udg {
 
@@ -23,24 +18,23 @@ PacsListDB::PacsListDB(): m_arrayQSettingsName( "PacsList" )
 {
 }
 
-Status PacsListDB::insertPacs( PacsParameters *pacs )
+bool PacsListDB::insertPacs(PacsParameters *pacs)
 {
-    Status state;
-
-    state.setStatus( DcmtkNoError );
-
     if ( !isPacsDeleted( pacs ) )
     {
         if ( !existPacs( pacs ) )
         {
             int arrayIndex = countPacsParamentersInQSettings();//busquem a quina posició hem de gravar el següent pacs
-        
+
             pacs->setPacsID( arrayIndex );
             pacs->setIsDeleted( false );
-        
+
             setPacsParametersToQSettingsValues( pacs, arrayIndex, countPacsParamentersInQSettings() + 1 ); 
         }
-        else state.setStatus( "El pacs ja existeix ", false, 2099 );
+        else
+        {
+            return false;
+        }
     }
     else //El pacs està donat de baixa el tornem a donar d'alta
     {
@@ -53,35 +47,26 @@ Status PacsListDB::insertPacs( PacsParameters *pacs )
         setPacsParametersToQSettingsValues( pacs, pacsDeleted->getPacsID(), countPacsParamentersInQSettings() ); 
     }
 
-    return state;
+    return true;
 }
 
-Status PacsListDB::updatePacs( PacsParameters *pacsToUpdate )
+void PacsListDB::updatePacs(PacsParameters *pacsToUpdate)
 {
-    Status state;
-
-	setPacsParametersToQSettingsValues( pacsToUpdate, pacsToUpdate->getPacsID(), countPacsParamentersInQSettings() );
-
-    return state.setStatus( DcmtkNoError );
+    setPacsParametersToQSettingsValues( pacsToUpdate, pacsToUpdate->getPacsID(), countPacsParamentersInQSettings() );
 }
 
-Status PacsListDB::queryPacsList( QList<PacsParameters> &outResultsPacslist )
+void PacsListDB::queryPacsList(QList<PacsParameters> &outResultsPacslist)
 {
-    Status state;
-
     for ( int arrayIndex = 0 ; arrayIndex < countPacsParamentersInQSettings() ; arrayIndex ++ )
     {
         PacsParameters pacs = getPacsParametersFromQSettinsValues( arrayIndex );
 
         if (!pacs.isDeleted()) outResultsPacslist.append( pacs );
     }
-
-    return state.setStatus( DcmtkNoError );
 }
 
-Status PacsListDB::queryPacs( PacsParameters *pacs, QString AETitle )
+void PacsListDB::queryPacs(PacsParameters *pacs, QString AETitle)
 {
-    Status state;
     int arrayIndex = 0;
     bool trobat = false;
     PacsParameters pacsFromQSettings; 
@@ -109,13 +94,10 @@ Status PacsListDB::queryPacs( PacsParameters *pacs, QString AETitle )
         pacs->setPacsAdr( pacsFromQSettings.getPacsAdr() );
         pacs->setLocation( pacsFromQSettings.getLocation() );
     }
-
-    return state.setStatus( DcmtkNoError );
 }
 
-Status PacsListDB::queryPacs( PacsParameters *pacs, int pacsID )
+void PacsListDB::queryPacs(PacsParameters *pacs, int pacsID)
 {
-    Status state;
     int arrayIndex = 0;
     bool trobat = false;
     PacsParameters pacsFromQSettings; 
@@ -143,8 +125,6 @@ Status PacsListDB::queryPacs( PacsParameters *pacs, int pacsID )
         pacs->setPacsAdr( pacsFromQSettings.getPacsAdr() );
         pacs->setLocation( pacsFromQSettings.getLocation() );
     }
-
-    return state.setStatus( DcmtkNoError );
 }
 
 bool PacsListDB::existPacs( PacsParameters *pacs )
@@ -187,9 +167,8 @@ bool PacsListDB::isPacsDeleted( PacsParameters *pacs )
     return trobat;
 }
 
-Status PacsListDB::deletePacs( int pacsID )
+void PacsListDB::deletePacs( int pacsID )
 {
-    Status state;
     PacsParameters *pacsToDelete = new PacsParameters;;
 
     queryPacs( pacsToDelete, pacsID );
@@ -197,9 +176,6 @@ Status PacsListDB::deletePacs( int pacsID )
     pacsToDelete->setIsDeleted( true );//el marquem com a esborrat
 
     setPacsParametersToQSettingsValues( pacsToDelete, pacsToDelete->getPacsID(), countPacsParamentersInQSettings() );
-
-    return state.setStatus( DcmtkNoError );
-
 }
 
 void PacsListDB::setPacsParametersToQSettingsValues( PacsParameters *pacs, int arrayIndex, int sizeOfArray )

@@ -28,23 +28,21 @@ public:
     ///Constructor de la classe
     QPacsList(QWidget *parent = 0 );
 
-    /** Retorna els pacs seleccionats per l'usuari per a realitzar la cerca
-     * @param pacslist , parametre de sortida que conte la llista de pacs seleccionats
-     * @return estat de l'operació
-     */
-    Status getSelectedPacs(QList<PacsParameters> &pacsList);
+    /// Retorna els pacs seleccionats per l'usuari
+    QList<PacsParameters> getSelectedPacs();
 
     ///Destructor de la classe
     ~QPacsList();
 
-public slots :
+public slots:
 
     /// Carrega al ListView la Llista de Pacs disponibles
     void refresh();
 
-private :
+private:
 
-    /// Aquesta accio selecciona en el PacsListView els Pacs que tenen a 'S' a Default. Son els pacs que per defecte l'usuari te que es realitzin les cerques
+    ///Aquesta accio selecciona en el PacsListView els Pacs que tenen a 'S' a Default. Son els pacs que per defecte l'usuari te que es
+    ///realitzin les cerques
     void setSelectedDefaultPacs();
 
 };

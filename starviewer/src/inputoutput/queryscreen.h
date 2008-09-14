@@ -246,7 +246,7 @@ private:
      * @param AETitlePACS Aetitle del PACS a connectar
      * @return Objecte ParcsServer a punt per connectar amb el PACS
      */
-    Status preparePacsServerConnection( QString AETitlePACS , PacsServer *pacsConnection );
+    void preparePacsServerConnection( QString AETitlePACS , PacsServer *pacsConnection );
 
     /**
      * Llegeix i aplica dades de configuració

@@ -35,17 +35,10 @@ void QPacsList::refresh()
 {
     PacsListDB pacsListDB;
     QList<PacsParameters> pacsList;
-    Status state;
 
     m_PacsTreeView->clear();
 
-    state = pacsListDB.queryPacsList( pacsList );
-
-    if ( !state.good() )
-    {
-        QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code() ) );
-        return;
-    }
+    pacsListDB.queryPacsList( pacsList );
 
     foreach(PacsParameters pacs, pacsList)
     {
@@ -75,33 +68,30 @@ void QPacsList::setSelectedDefaultPacs()
     }
 }
 
-Status QPacsList::getSelectedPacs( QList<PacsParameters> &selectedPacsList )
+QList<PacsParameters> QPacsList::getSelectedPacs()
 {
     PacsListDB pacsListDB;
-    Status state;
     StarviewerSettings settings;
 
     QList< QTreeWidgetItem * > qPacsList( m_PacsTreeView->selectedItems() );
     QTreeWidgetItem *item;
+
+    QList<PacsParameters> selectedPacsList;
 
     for ( int i = 0; i < qPacsList.count(); i++ )
     {
         item = qPacsList.at( i );
         PacsParameters pacs;
 
-        state = pacsListDB.queryPacs( &pacs , item->text( 0 ) ); //fem el query per cercar la informació del PACS
+        pacsListDB.queryPacs( &pacs , item->text( 0 ) ); //fem el query per cercar la informació del PACS
 
-        if ( state.good() )
-        {
-            pacs.setAELocal( settings.getAETitleMachine() );
-            //emplenem amb les dades del registre el timeout
-            pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
-            selectedPacsList.append( pacs ); //inserim a la llista
-        }
-        else return state;
+        pacs.setAELocal( settings.getAETitleMachine() );
+        //emplenem amb les dades del registre el timeout
+        pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
+        selectedPacsList.append( pacs ); //inserim a la llista
     }
 
-  return state;
+    return selectedPacsList;
 }
 
 };
