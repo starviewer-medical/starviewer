@@ -26,7 +26,7 @@
 #include "starviewersettings.h"
 #include "status.h"
 
-#include "cachelayer.h"
+#include "localdatabasemanager.h"
 #include "logging.h"
 #include "pacsserver.h"
 #include "pacsnetwork.h"
@@ -260,8 +260,6 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
     PacsParameters selectedPacs;
     Status state;
     PacsListDB pacsListDB;
-    bool trobat = false;
-    int index = 0;
 
     if ( selectedItem != NULL )
     {
@@ -694,33 +692,32 @@ void QConfigurationScreen::applyChangesCache()
 
 void QConfigurationScreen::deleteStudies()
 {
-    Status state;
-    CacheLayer cacheLayer;
-
-   switch( QMessageBox::information( this , tr( "Starviewer" ),
-				      tr ( "Are you sure you want to delete all Studies of the cache ?" ),
-				      tr( "&Yes" ) , tr( "&No" ) ,
-				      0 , 1 ) )
+    QMessageBox::StandardButton response = QMessageBox::question(this, tr("Starviewer"),
+                                                                       tr("Are you sure you want to delete all Studies of the cache ?"),
+                                                                       QMessageBox::Yes | QMessageBox::No,
+                                                                       QMessageBox::No);
+    if(response == QMessageBox::Yes)
     {
-    case 0:
-
-        INFO_LOG ( "Neteja de la cache" );
+        INFO_LOG( "Neteja de la cache" );
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-        state =  cacheLayer.clearCache();
+        LocalDatabaseManager localDatabaseManager;
+        localDatabaseManager.clear();
 
         QApplication::restoreOverrideCursor();
 
-        if ( !state.good() )
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
         {
+            Status state;
+            state.setStatus(tr("The cache cannot be delete, an unknown error has ocurred."
+                               "\n Try to close all Starviewer windows and try again."
+                               "\n\nIf the problem persist contact with an administrator."), false, -1);
             showDatabaseErrorMessage( state );
         }
 
         loadCachePoolDefaults();
-        emit( configurationChanged("Pacs/CacheCleared") );
-
-        break;
+        emit configurationChanged("Pacs/CacheCleared");
     }
 }
 
