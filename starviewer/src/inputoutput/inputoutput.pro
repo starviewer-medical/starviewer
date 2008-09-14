@@ -12,7 +12,6 @@ FORMS += qconfigurationscreenbase.ui \
          qserieslistwidgetbase.ui \
          qcreatedicomdirbase.ui \
          qoperationstatescreenbase.ui \
-         qchooseoneobjectdialogbase.ui \
          queryscreenbase.ui \
  qadvancedsearchwidgetbase.ui \
  qbasicsearchwidgetbase.ui
@@ -54,7 +53,6 @@ HEADERS += databaseconnection.h \
            qserieslistwidget.h \
            qcreatedicomdir.h \
            qoperationstatescreen.h \
-           qchooseoneobjectdialog.h \
            queryscreen.h \
  	   errordcmtk.h \
  qadvancedsearchwidget.h \
@@ -104,7 +102,6 @@ SOURCES += databaseconnection.cpp \
            qserieslistwidget.cpp \
            qcreatedicomdir.cpp \
            qoperationstatescreen.cpp \
-           qchooseoneobjectdialog.cpp \
            queryscreen.cpp \
  qadvancedsearchwidget.cpp \
  qbasicsearchwidget.cpp \
