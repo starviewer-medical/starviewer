@@ -13,9 +13,6 @@
 
 #include "status.h"
 #include "starviewersettings.h"
-#include "cachestudydal.h"
-#include "cacheimagedal.h"
-#include "cacheseriesdal.h"
 #include "dicomstudy.h"
 #include "dicomseries.h"
 #include "dicomimage.h"

@@ -16,13 +16,7 @@
 
 #include "logging.h"
 #include "status.h"
-#include "cachestudydal.h"
-#include "cacheseriesdal.h"
-#include "cacheimagedal.h"
 #include "dicommask.h"
-#include "dicomstudy.h"
-#include "dicomseries.h"
-#include "dicomimage.h"
 #include "convertdicomtolittleendian.h"
 #include "starviewersettings.h"
 #include "deletedirectory.h"
@@ -239,8 +233,6 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
     QDir studyDir;
     QChar fillChar = '0';
     QString studyName = QString( "/STU%1" ).arg( m_study , 5 , 10 , fillChar );
-    QList<DICOMSeries> seriesList;
-    DICOMSeries series;
     Status state;
 
     m_study++;
@@ -266,7 +258,6 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
     QChar fillChar = '0';
     //creem el nom del directori de la sèrie, el format és SERXXXXX, on XXXXX és el numero de sèrie dins l'estudi
     QString seriesName = QString( "/SER%1" ).arg( m_series , 5 , 10 , fillChar );
-    DICOMImage image;
     Status state;
 
     m_series++;
@@ -293,7 +284,6 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
     QString imageInputPath, imageOutputPath;
     ConvertDicomToLittleEndian convertDicom;
     StarviewerSettings settings;
-    DICOMSeries serie;
     Status state;
 
     m_image++;
