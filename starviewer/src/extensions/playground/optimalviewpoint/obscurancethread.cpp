@@ -1044,7 +1044,9 @@ inline double ObscuranceThread::obscurance( double distance ) const
 }
 
 
-inline bool ObscuranceThread::smoothBlocking( const Vector3 &blocking, const Vector3 &blocked, double distance, const float *blockedGradient ) const
+/// \bug Si posem l'inline surt un resultat incorrecte a vegades (amb gcc (GCC) 4.1.2 20061115 (prerelease) (SUSE Linux)).
+///      Es podria provar també de deixar-ho inline i passar els paràmetres per valor, i deixar el més ràpid dels que funcionin.
+/*inline*/ bool ObscuranceThread::smoothBlocking( const Vector3 &blocking, const Vector3 &blocked, double distance, const float *blockedGradient ) const
 {
     if ( distance <= 3.0 )
     {
