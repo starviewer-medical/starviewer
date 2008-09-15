@@ -66,7 +66,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
-    m_renderFunction = Contouring; // per defecte
+    m_renderFunction = RayCasting; // per defecte
 
     m_imageCaster = vtkImageCast::New();
     m_currentOrientation = Axial;
