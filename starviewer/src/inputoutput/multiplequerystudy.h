@@ -59,8 +59,7 @@ public:
     ///Retorna les imatges trobades
     QList<DICOMImage> getImageList();
 
-signals :
-
+signals:
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
      * @param  pacsID del pacs amb que s'ha produit error
      */
@@ -71,23 +70,12 @@ signals :
      */
     void errorQueringStudiesPacs( int pacsID );
 
-public slots :
+public slots:
 
     /// Slot que s'activa pel signal de QQuerStudyThread, quan un thread acaba allibera un recurs del semàfor, perquè es pugui iniciar una altre thread per continuar amb la cerca
     void threadFinished();
 
-    /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produït algun error al connectar amb el PACS
-     * @param pacsID del pacs que ha produït l'error
-     */
-    void slotErrorConnectingPacs( int );
-
-    /** slot que s'activa pel signal de QQueryStudThread, quan s'ha produït algun error al fer la query amb el PACS
-     * @param pacsID del pacs que ha produït l'error
-     */
-    void slotErrorQueringStudiesPacs( int );
-
-
-private :
+private:
 
     DicomMask m_searchMask;
 
@@ -95,7 +83,7 @@ private :
     int m_maxThreads;//Nombre màxim de threads que es poden executar a la vegada
     // Per raons d'optimització nomes es podran tenir un límit threads alhora executant la query, per aconseguir això utilitzem un semàfor
     QSemaphore *m_semaphoreActiveThreads;
-    
+
     QList<DICOMStudy> m_studyList;
     QList<DICOMSeries> m_seriesList;
     QList<DICOMImage> m_imageList;
