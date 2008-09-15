@@ -907,22 +907,24 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
 {
     const Vector3 AMBIENT_COLOR( 1.0, 1.0, 1.0 );
 
-    int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
-    int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
-    int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
-    int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
+    const int x = m_xyz[0], y = m_xyz[1], z = m_xyz[2];
+    const int sX = m_sXYZ[0], sY = m_sXYZ[1], sZ = m_sXYZ[2];
+    const int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
+    const int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
 
-    const unsigned char * dataPtr = m_data + m_startDelta;
-    int nLineStarts = m_lineStarts.size();
+    const unsigned char *dataPtr = m_data + m_startDelta;
+    const int nLineStarts = m_lineStarts.size();
 
+    // u és el tapat, v és el que tapa
     // iterar per cada línia
     for ( int j = m_id; j < nLineStarts; j += m_numberOfThreads )
     {
         Vector3 rv = m_lineStarts.at( j );
         Voxel v = { qRound( rv.x ), qRound( rv.y ), qRound( rv.z ) };
+
         Q_ASSERT( unresolvedVoxels.isEmpty() );
         Q_ASSERT( postponedVoxels.isEmpty() );
 
@@ -930,85 +932,61 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
         {
             // tractar el vòxel
-            unsigned char value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
-            double opacity = m_transferFunction.getOpacity( value );
-            QColor vColor = m_transferFunction.getColor( value );
-            Vector3 vColorVector( vColor.redF(), vColor.greenF(), vColor.blueF() );
+            const double value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+            const double opacity = m_transferFunction.getOpacity( value );
+            const QColor vColor = m_transferFunction.getColor( value );
+            const Vector3 vColorVector( vColor.redF(), vColor.greenF(), vColor.blueF() );
 
             QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
-            QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxelsEnd = postponedVoxels.end();
+            const QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxelsEnd = postponedVoxels.end();
 
             while ( itPostponedVoxels != itPostponedVoxelsEnd )
             {
                 if ( itPostponedVoxels->first <= opacity )
                 {
-                    Vector3 ru = itPostponedVoxels->second;
-                    Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+                    const Vector3 ru = itPostponedVoxels->second;
+                    const Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
 
-                    int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                    float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
-                    Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+                    const int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                    const float *uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+                    const double distance = ( rv - ru ).length();
 
-                    double distance = ( rv - ru ).length();
-
-                    if ( distance <= 3.0 )
+                    if ( smoothBlocking( rv, ru, distance, uGradient ) )  // ru és tapat -> calculem el color bleeding
                     {
-                        // tangent plane at u
-                        Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
-                        double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                        // distance from v to tangent plane at u
-                        double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
+                        const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+                        const double cos = uNormal * m_direction;
 
-                        if ( D <= 1.5 ) // not blocking -> advance to the next
-                        {
-                            ++itPostponedVoxels;
-                            continue;
-                        }
+                        if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
+
+                        itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
+
+                        continue;   // evitem avançar l'iterador
                     }
-
-                    // blocking
-                    double cos = uNormal * m_direction;
-                    if ( cos < 0.0 )
-                    {
-                        m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
-                    }
-
-                    itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
                 }
-                else ++itPostponedVoxels;
+
+                ++itPostponedVoxels;
             }
 
             while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= opacity )
             {
-                QPair<double,Vector3> uPair = unresolvedVoxels.pop();
-                Vector3 ru = uPair.second;
-                Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+                const QPair<double,Vector3> uPair = unresolvedVoxels.pop();
+                const Vector3 ru = uPair.second;
+                const Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
 
-                int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-                float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
-                Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+                const int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
+                const float *uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+                const double distance = ( rv - ru ).length();
 
-                double distance = ( rv - ru ).length();
-
-                if ( distance <= 3.0 )
+                if ( smoothBlocking( rv, ru, distance, uGradient ) )  // ru és tapat -> calculem el color bleeding
                 {
-                    // tangent plane at u
-                    Vector3 uNormalLocal( sX * uGradient[x], sY * uGradient[y], sZ * uGradient[z] ); // normal en espai local (transformat)
-                    double a = uNormalLocal.x, b = uNormalLocal.y, c = uNormalLocal.z, d = -uNormalLocal * ru;
-                    // distance from v to tangent plane at u
-                    double D = qAbs( a * rv.x + b * rv.y + c * rv.z + d );
+                    const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+                    const double cos = uNormal * m_direction;
 
-                    if ( D <= 1.5 ) // add u to postponed list
-                    {
-                        postponedVoxels.append( uPair );
-                        continue;
-                    }
+                    if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
                 }
-
-                double cos = uNormal * m_direction;
-                if ( cos < 0.0 )
+                else    // ru no és tapat -> el posposem
                 {
-                    m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
+                    postponedVoxels.append( uPair );
                 }
             }
 
@@ -1021,34 +999,28 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
 
         while ( !postponedVoxels.isEmpty() )
         {
-            Vector3 ru = postponedVoxels.takeFirst().second;
-            Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+            const Vector3 ru = postponedVoxels.takeFirst().second;
+            const Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
 
-            int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
-            Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+            const int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
+            const float *uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+            const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+            const double cos = uNormal * m_direction;
 
-            double cos = uNormal * m_direction;
-            if ( cos < 0.0 )
-            {
-                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
-            }
+            if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
         }
 
         while ( !unresolvedVoxels.isEmpty() )
         {
-            Vector3 ru = unresolvedVoxels.pop().second;
-            Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
+            const Vector3 ru = unresolvedVoxels.pop().second;
+            const Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
 
-            int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
-            float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
-            Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+            const int uIndex = m_startDelta + u.x * incX + u.y * incY + u.z * incZ;
+            const float * uGradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[uIndex] );
+            const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
+            const double cos = uNormal * m_direction;
 
-            double cos = uNormal * m_direction;
-            if ( cos < 0.0 )
-            {
-                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
-            }
+            if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
         }
     }
 }
@@ -1069,6 +1041,23 @@ inline double ObscuranceThread::obscurance( double distance ) const
         case OptimalViewpointVolume::ExponentialNorm: return ( 1.0 - exp( -distance / m_obscuranceMaximumDistance ) ) / EXP_NORM;
         case OptimalViewpointVolume::CubeRoot: return MathTools::cbrt( distance / m_obscuranceMaximumDistance );
     }
+}
+
+
+inline bool ObscuranceThread::smoothBlocking( const Vector3 &blocking, const Vector3 &blocked, double distance, const float *blockedGradient ) const
+{
+    if ( distance <= 3.0 )
+    {
+        // tangent plane at blocked
+        const Vector3 blockedNormalLocal( m_sXYZ[0] * blockedGradient[m_xyz[0]],
+                                          m_sXYZ[1] * blockedGradient[m_xyz[1]],
+                                          m_sXYZ[2] * blockedGradient[m_xyz[2]] );  // normal en espai local (transformat)
+        const double a = blockedNormalLocal.x, b = blockedNormalLocal.y, c = blockedNormalLocal.z, d = -blockedNormalLocal * blocked;
+        // distance from blocking to tangent plane at blocked
+        if ( qAbs( a * blocking.x + b * blocking.y + c * blocking.z + d ) <= 1.5 ) return false;
+    }
+
+    return true;
 }
 
 

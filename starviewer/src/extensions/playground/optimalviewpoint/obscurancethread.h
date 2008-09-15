@@ -64,6 +64,7 @@ private:
     void runOpacityColorBleeding();
     void runOpacitySmoothColorBleeding();
     double obscurance( double distance ) const;
+    bool smoothBlocking( const Vector3 &blocking, const Vector3 &blocked, double distance, const float *blockedGradient ) const;
 
     int m_id, m_numberOfThreads;
     const TransferFunction & m_transferFunction;
