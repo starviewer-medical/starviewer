@@ -136,6 +136,10 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
     case 4:
         m_3DView->setRenderFunctionToIsoSurface();
     break;
+
+    case 5:
+        m_3DView->setRenderFunctionToContouring();
+    break;
     }
     m_3DView->render();
     this->setCursor( QCursor(Qt::ArrowCursor) );
