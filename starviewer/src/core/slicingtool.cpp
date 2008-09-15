@@ -9,15 +9,13 @@
 #include "q2dviewer.h"
 #include "volume.h"
 
-//qt
-#include <QTime>
 //vtk
 #include <vtkCommand.h>
 
 namespace udg {
 
 SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false)
+ : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfSlices(1)
 {
     m_state = NONE;
     m_toolName = "SlicingTool";
@@ -25,8 +23,6 @@ SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
     m_startPosition[1] = 0;
     m_currentPosition[0] = 0;
     m_currentPosition[1] = 0;
-    m_time = new QTime();
-    m_latestTime = 0;
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     // ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT( m_2DViewer );
@@ -91,7 +87,7 @@ void SlicingTool::startSlicing()
     m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
     m_state = SLICING;
     m_2DViewer->getEventPosition( m_startPosition );
-    m_time->start();
+    m_numberOfSlices = m_2DViewer->getMaximumSlice();
 }
 
 void SlicingTool::doSlicing()
@@ -99,23 +95,21 @@ void SlicingTool::doSlicing()
     if( m_state == SLICING )
     {
         m_currentPosition[1] = m_2DViewer->getEventPositionY();
-        int dy = m_currentPosition[1] - m_startPosition[1];
+        int *size = m_2DViewer->getRenderWindowSize();
 
-        double timeElapsed = ( m_time->elapsed() - m_latestTime )/1000.0; // Es passa a segons
-        double acceleracio = (dy*( 1/5000.0 ) )/( timeElapsed*timeElapsed );// 1m = 5000 px aprox. Com + gran + lent anirà.
-        m_latestTime = m_time->elapsed();
+        // increment normalitzat segons la mida de la finestra i el nombre de llesques
+        double increase = (1.75 * ( m_currentPosition[1] - m_startPosition[1] ) / (double)size[1]) * m_numberOfSlices;
         m_startPosition[1] = m_currentPosition[1];
+
         int value = 0;
-        if( dy && timeElapsed > 0.002 && timeElapsed != 0 ) // Control de casos extrems
+        // Canviem un nombre de llesques segons el desplaçament del mouse
+        value = (int)qRound(increase);
+        if( value == 0 )
         {
-            /*value = dy/abs(dy);*/
-            /// Canviem un nombre de llesques segons una acceleracio
-            value = (int)qRound(acceleracio);
-            if( value == 0 )
-            {
-                if( dy >= 0 ) value = 1;
-                else value = -1;
-            }
+            if( increase >= 0 )
+                value = 1;
+            else
+                value = -1;
         }
         this->updateIncrement( value );
     }

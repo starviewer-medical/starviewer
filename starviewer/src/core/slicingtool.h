@@ -9,8 +9,6 @@
 
 #include "tool.h"
 
-class QTime;
-
 namespace udg {
 
 class Q2DViewer;
@@ -78,17 +76,15 @@ private:
     /// De moment podrà tenir els valors SliceMode o PhaseMode, per defecte SliceMode
     int m_slicingMode;
 
-    /// Temps que ha passat des de que s'ha iniciat l'slicing
-    QTime *m_time;
-
-    /// Temps en milisegons de l'ultim event tractat
-    int m_latestTime;
-
     /// estats d'execució de la tool
     int m_state;
 
     /// indica si entre event i event hi ha hagut moviment del ratolí
     bool m_mouseMovement;
+
+    /// Nombre de llesques del volum sobre el que fem slicing
+    /// útil per calcular l'increment proporcional de llesques
+    int m_numberOfSlices;
 };
 
 }
