@@ -275,28 +275,47 @@ void Q3DViewer::resetOrientation()
     }
 }
 
+// reescalem entre 0 i 255 si el rang és més gran (el que passarà normalment); sinó el deixem igual
 bool Q3DViewer::rescale()
 {
-    bool ok = false;
-    if( m_mainVolume )
+    if ( m_mainVolume )
     {
-        // Fem un casting de les dades ja que el ray cast mapper nomes accepta unsigned char/short
-        double * range = m_mainVolume->getVtkData()->GetScalarRange();
-        // Fem un rescale primer, perquè les dades quedin en un rang 0-256
-        // tal com està fet ara no és del tot bo, potser caldria passar-li el filtre itk::RescaleIntensityImageFilter
-        vtkImageShiftScale* rescale = vtkImageShiftScale::New();
-        rescale->SetInput( m_mainVolume->getVtkData() );
-        rescale->SetShift(0);
-        rescale->SetScale( 256.0 / range[1] );
-        rescale->SetOutputScalarType( VTK_UNSIGNED_SHORT );
-    //     Fem un casting de les dades ja que el ray cast mapper nomes accepta unsigned char/short
-        m_imageCaster->SetInput(  rescale->GetOutput() );
-        m_imageCaster->SetOutputScalarType( VTK_UNSIGNED_SHORT ); // tbé seria vàlid VTK_UNSIGNED_SHORT
-        m_imageCaster->ClampOverflowOn();
+        vtkImageData *image = m_mainVolume->getVtkData();
+        double *range = image->GetScalarRange();
+        double min = range[0], max = range[1];
+        DEBUG_LOG( QString( "Q3DViewer: m_mainVolume scalar range: min = %1, max = %2" ).arg( min ).arg( max ) );
+
+        if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
+        {
+            // cal fer el casting perquè ens arriba com a int
+            m_imageCaster->SetInput( image );
+        }
+        else
+        {
+            double shift = -min;
+            double slope = 255.0 / ( max - min );
+
+            vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
+            rescaler->SetInput( image );
+            rescaler->SetShift( shift );
+            rescaler->SetScale( slope );
+            rescaler->SetOutputScalarTypeToUnsignedChar();
+            rescaler->ClampOverflowOn();
+            rescaler->Update();
+            m_imageCaster->SetInput( rescaler->GetOutput() );
+
+            double *newRange = rescaler->GetOutput()->GetScalarRange();
+            DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
+
+            rescaler->Delete();
+        }
+
+        m_imageCaster->SetOutputScalarTypeToUnsignedChar();
         m_imageCaster->Update();
-        ok = true;
+
+        return true;
     }
-    return ok;
+    else return false;
 }
 
 void Q3DViewer::renderRayCasting()

@@ -77,8 +77,6 @@ private:
     QDir m_clutsDir;
     /// Mapa entre noms de funcions de transferència i el nom de fitxer corresponent.
     QMap<QString, QString> m_clutNameToFileName;
-    /// Valor de propietat màxim del volum.
-    unsigned short m_maximumValue;
 
     QClutEditorDialog * m_clutEditorDialog;
 };
