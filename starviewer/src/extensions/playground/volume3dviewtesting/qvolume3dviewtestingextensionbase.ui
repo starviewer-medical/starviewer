@@ -134,12 +134,6 @@
          <property name="sizeType" >
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>5</height>
-          </size>
-         </property>
         </spacer>
        </item>
        <item>
@@ -272,12 +266,6 @@
          <property name="sizeType" >
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>5</height>
-          </size>
-         </property>
         </spacer>
        </item>
        <item>
@@ -368,16 +356,18 @@
          <property name="sizeType" >
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>5</height>
-          </size>
-         </property>
         </spacer>
        </item>
        <item>
         <widget class="QLabel" name="label_3" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>CLUT</string>
          </property>
@@ -401,6 +391,11 @@
          <item>
           <property name="text" >
            <string>Ray Casting</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Ray Casting with Shading</string>
           </property>
          </item>
          <item>
@@ -431,6 +426,59 @@
         </widget>
        </item>
        <item>
+        <widget class="QWidget" native="1" name="m_shadingOptionsWidget" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>4</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="m_specularCheckBox" >
+            <property name="text" >
+             <string>Specular</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="m_specularPowerLabel" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Specular power</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="decimals" >
+             <number>1</number>
+            </property>
+            <property name="maximum" >
+             <double>128.000000000000000</double>
+            </property>
+            <property name="value" >
+             <double>64.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -438,16 +486,18 @@
          <property name="sizeType" >
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>50</height>
-          </size>
-         </property>
         </spacer>
        </item>
        <item>
         <widget class="QLabel" name="label_7" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
           <string>Rendering Method</string>
          </property>
