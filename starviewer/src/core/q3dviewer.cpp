@@ -143,6 +143,11 @@ void Q3DViewer::setRenderFunctionToRayCasting()
     m_renderFunction = RayCasting;
 }
 
+void Q3DViewer::setRenderFunctionToRayCastingShading()
+{
+    m_renderFunction = RayCastingShading;
+}
+
 void Q3DViewer::setRenderFunctionToContouring()
 {
     m_renderFunction = Contouring;
@@ -175,6 +180,9 @@ QString Q3DViewer::getRenderFunctionAsString()
     {
     case RayCasting:
         result = "RayCasting";
+    break;
+    case RayCastingShading:
+        result = "RayCastingShading";
     break;
     case MIP3D:
         result = "MIP 3D";
@@ -211,6 +219,9 @@ void Q3DViewer::render()
         break;
         case RayCasting:
             renderRayCasting();
+        break;
+        case RayCastingShading:
+            renderRayCastingShading();
         break;
         case MIP3D:
             renderMIP3D();
@@ -324,6 +335,28 @@ void Q3DViewer::renderRayCasting()
     {
         m_volumeProperty->DisableGradientOpacityOn();
         m_volumeProperty->ShadeOff();
+
+        // el mapper (funcio de ray cast) sabrà com visualitzar les dades
+        vtkVolumeRayCastCompositeFunction* compositeFunction = vtkVolumeRayCastCompositeFunction::New();
+        compositeFunction->SetCompositeMethodToClassifyFirst();
+        vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
+
+        volumeMapper->SetVolumeRayCastFunction( compositeFunction );
+        volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
+
+        m_vtkVolume->SetMapper( volumeMapper );
+        m_renderer->Render();
+    }
+    else
+        DEBUG_LOG( "No es pot fer render per ray casting, no s'ha proporcionat cap volum d'entrada" );
+}
+
+void Q3DViewer::renderRayCastingShading()
+{
+    if( rescale() )
+    {
+        m_volumeProperty->DisableGradientOpacityOn();
+        m_volumeProperty->ShadeOn();
 
         // el mapper (funcio de ray cast) sabrà com visualitzar les dades
         vtkVolumeRayCastCompositeFunction* compositeFunction = vtkVolumeRayCastCompositeFunction::New();
@@ -563,6 +596,16 @@ void Q3DViewer::orientationMarkerOn()
 void Q3DViewer::orientationMarkerOff()
 {
     this->enableOrientationMarker( false );
+}
+
+void Q3DViewer::setSpecular( bool on )
+{
+    m_volumeProperty->SetSpecular( on ? 1.0 : 0.0 );
+}
+
+void Q3DViewer::setSpecularPower( double power )
+{
+    m_volumeProperty->SetSpecularPower( power );
 }
 
 };  // end namespace udg {

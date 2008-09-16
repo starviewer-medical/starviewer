@@ -104,6 +104,15 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
 
     connect( m_clutEditToolButton, SIGNAL( clicked() ), SLOT( showClutEditorDialog() ) );
+
+    // mètodes de rendering
+    m_shadingOptionsWidget->hide();
+    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerLabel, SLOT( setEnabled(bool) ) );
+    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( setSpecular(bool) ) );
+    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( render() ) );
+    connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setSpecularPower(double) ) );
+    connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( render() ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -120,26 +129,37 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
     switch( index )
     {
     case 0:
+        m_shadingOptionsWidget->hide();
         m_3DView->setRenderFunctionToRayCasting();
     break;
 
     case 1:
-        m_3DView->setRenderFunctionToMIP3D();
+        m_shadingOptionsWidget->show();
+        m_3DView->setRenderFunctionToRayCastingShading();
     break;
 
     case 2:
-        m_3DView->setRenderFunctionToTexture3D();
+        m_shadingOptionsWidget->hide();
+        m_3DView->setRenderFunctionToMIP3D();
     break;
 
     case 3:
-        m_3DView->setRenderFunctionToTexture2D();
+        m_shadingOptionsWidget->hide();
+        m_3DView->setRenderFunctionToTexture3D();
     break;
 
     case 4:
-        m_3DView->setRenderFunctionToIsoSurface();
+        m_shadingOptionsWidget->hide();
+        m_3DView->setRenderFunctionToTexture2D();
     break;
 
     case 5:
+        m_shadingOptionsWidget->hide();
+        m_3DView->setRenderFunctionToIsoSurface();
+    break;
+
+    case 6:
+        m_shadingOptionsWidget->hide();
         m_3DView->setRenderFunctionToContouring();
     break;
     }
