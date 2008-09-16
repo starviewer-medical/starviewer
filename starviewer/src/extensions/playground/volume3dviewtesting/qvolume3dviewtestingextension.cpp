@@ -29,6 +29,9 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     readSettings();
 
     m_clutEditorDialog = 0;
+
+    m_currentClut.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
+    m_currentClut.addPoint( 255.0, QColor( 255, 255, 255, 255 ) );
 }
 
 QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
@@ -57,6 +60,8 @@ void QVolume3DViewTestingExtension::initializeTools()
 
 void QVolume3DViewTestingExtension::loadClutPresets()
 {
+    DEBUG_LOG( "loadClutPresets()" );
+
     disconnect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
 
     m_clutPresetsComboBox->clear();
@@ -105,6 +110,7 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
 {
     m_input = input;
     m_3DView->setInput( m_input );
+    m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
     m_3DView->render();
 }
 
@@ -143,10 +149,13 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
 
 void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
 {
+    DEBUG_LOG( "applyPresetClut()" );
+
     const QString & fileName = m_clutNameToFileName[clutName];
     TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( QDir::toNativeSeparators( fileName ) ) );
     if ( transferFunction )
     {
+        m_currentClut = *transferFunction;
         m_3DView->setTransferFunction( transferFunction );
     }
     m_3DView->render();
@@ -154,10 +163,13 @@ void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
 
 void QVolume3DViewTestingExtension::showClutEditorDialog()
 {
+    DEBUG_LOG( "showClutEditorDialog()" );
+
     if ( m_clutEditorDialog ) return;
 
     m_clutEditorDialog = new QClutEditorDialog( this );
     m_clutEditorDialog->setCluts( m_clutsDir, m_clutNameToFileName );
+    m_clutEditorDialog->setCurrentClut( m_currentClut );
     //m_clutEditorDialog->setMaximum( 255 );    // 255 és el valor per defecte
     m_clutEditorDialog->show();
 
@@ -167,14 +179,24 @@ void QVolume3DViewTestingExtension::showClutEditorDialog()
 
 void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut )
 {
-    m_3DView->setTransferFunction( new TransferFunction( clut ) );
+    DEBUG_LOG( "applyClut()" );
+
+    m_currentClut = clut;
+    // cal fer el disconnect per evitar un bucle infinit
+    disconnect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
+    m_clutPresetsComboBox->setCurrentIndex( m_clutPresetsComboBox->findText( m_currentClut.name() ) );
+    connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
+    m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
     m_3DView->render();
 }
 
 void QVolume3DViewTestingExtension::manageClosedDialog()
 {
+    DEBUG_LOG( "manageClosedDialog()" );
+
     m_clutEditorDialog = 0;
     loadClutPresets();
+    m_clutPresetsComboBox->setCurrentIndex( m_clutPresetsComboBox->findText( m_currentClut.name() ) );
 }
 
 void QVolume3DViewTestingExtension::readSettings()

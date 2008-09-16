@@ -48,6 +48,14 @@ void QClutEditorDialog::setCluts( const QDir & clutsDir, const QMap<QString, QSt
 }
 
 
+void QClutEditorDialog::setCurrentClut( const TransferFunction &currentClut )
+{
+    m_gradientEditor->setTransferFunction( currentClut );
+    m_editorByValues->setTransferFunction( currentClut );
+    m_clutPresetsComboBox->setCurrentIndex( m_clutPresetsComboBox->findText( currentClut.name() ) );
+}
+
+
 void QClutEditorDialog::setMaximum( unsigned short maximum )
 {
     m_gradientEditor->setMaximum( maximum );

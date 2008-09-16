@@ -13,6 +13,8 @@
 #include <QDir>
 #include <QMap>
 
+#include "transferfunction.h"
+
 class QAction;
 
 namespace udg {
@@ -78,7 +80,11 @@ private:
     /// Mapa entre noms de funcions de transferència i el nom de fitxer corresponent.
     QMap<QString, QString> m_clutNameToFileName;
 
+    /// Editor de cluts.
     QClutEditorDialog * m_clutEditorDialog;
+
+    /// Última clut aplicada.
+    TransferFunction m_currentClut;
 };
 
 } // end namespace udg
