@@ -38,6 +38,11 @@
 #include "testdicomobjects.h"
 #include <QTime>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <winbase.h>
+#endif
+
 namespace udg {
 
 QueryScreen::QueryScreen( QWidget *parent )
@@ -1010,8 +1015,12 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
     QList<Patient*> patientList;
 
     //El signal que desperta aquests slot es fa abans que acabi l'insersió a la base de dades, per això posem aquest sleep per assegurar que s'hagi inserit l'estudi a la bd
-    sleep(4);
-
+#ifdef _WIN32
+	Sleep(4);
+#else
+	sleep(4);
+#endif
+    
     studyMask.setStudyUID(studyUID);
     patientList = localDatabaseManager.queryPatientStudy(studyMask);
     if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
