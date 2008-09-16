@@ -36,6 +36,7 @@ public:
     virtual ~QClutEditorDialog();
 
     void setCluts( const QDir & clutsDir, const QMap<QString, QString> & clutNameToFileName );
+    void setCurrentClut( const TransferFunction &currentClut );
     void setMaximum( unsigned short maximum );
 
 signals:
