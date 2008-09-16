@@ -106,10 +106,6 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
     m_input = input;
     m_3DView->setInput( m_input );
     m_3DView->render();
-
-    double range[2];
-    input->getVtkData()->GetScalarRange( range );
-    m_maximumValue = range[1];
 }
 
 void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
@@ -162,7 +158,7 @@ void QVolume3DViewTestingExtension::showClutEditorDialog()
 
     m_clutEditorDialog = new QClutEditorDialog( this );
     m_clutEditorDialog->setCluts( m_clutsDir, m_clutNameToFileName );
-    m_clutEditorDialog->setMaximum( m_maximumValue );
+    //m_clutEditorDialog->setMaximum( 255 );    // 255 és el valor per defecte
     m_clutEditorDialog->show();
 
     connect( m_clutEditorDialog, SIGNAL( clutApplied(const TransferFunction&) ), SLOT( applyClut(const TransferFunction&) ) );
