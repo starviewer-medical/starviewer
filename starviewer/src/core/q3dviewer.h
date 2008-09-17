@@ -16,6 +16,8 @@ class vtkRenderWindowInteractor;
 class vtkInteractorStyle;
 class vtkVolume;
 class vtkVolumeProperty;
+class vtkVolumeRayCastCompositeFunction;
+class vtkVolumeRayCastMapper;
 
 namespace udg {
 
@@ -133,8 +135,17 @@ private:
     /// Propietats que defineixen com es renderitzarà el volum
     vtkVolumeProperty *m_volumeProperty;
 
+    /// Mapper del volum.
+    vtkVolumeRayCastMapper *m_volumeMapper;
+
+    /// Funció de ray cast.
+    vtkVolumeRayCastCompositeFunction *m_volumeRayCastFunction;
+
     /// La funció de transferència que s'aplica
     TransferFunction *m_transferFunction;
+
+    /// Booleà per saber si estem fent el primer render (per reiniciar l'orientació).
+    bool m_firstRender;
 
 };
 

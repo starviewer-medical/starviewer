@@ -92,6 +92,8 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_volumeProperty = vtkVolumeProperty::New();
     m_volumeProperty->SetInterpolationTypeToLinear();
     m_vtkVolume->SetProperty( m_volumeProperty );
+    m_volumeMapper = vtkVolumeRayCastMapper::New();
+    m_vtkVolume->SetMapper( m_volumeMapper );
     m_renderer->AddViewProp( m_vtkVolume );
 
     m_transferFunction = new TransferFunction;
@@ -108,6 +110,11 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 
     m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
     m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
+
+    m_volumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
+    m_volumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+
+    m_firstRender = true;
 }
 
 Q3DViewer::~Q3DViewer()
@@ -206,6 +213,8 @@ QString Q3DViewer::getRenderFunctionAsString()
 void Q3DViewer::setInput( Volume* volume )
 {
     m_mainVolume = volume;
+
+    if ( rescale() ) m_volumeMapper->SetInput( m_imageCaster->GetOutput() );
 }
 
 void Q3DViewer::render()
@@ -236,7 +245,12 @@ void Q3DViewer::render()
             renderTexture3D();
         break;
         }
-        this->resetOrientation();
+
+        if ( m_firstRender )
+        {
+            this->resetOrientation();
+            m_firstRender = false;
+        }
     }
     else
     {
@@ -331,46 +345,22 @@ bool Q3DViewer::rescale()
 
 void Q3DViewer::renderRayCasting()
 {
-    if( rescale() )
-    {
-        m_volumeProperty->DisableGradientOpacityOn();
-        m_volumeProperty->ShadeOff();
+    m_volumeProperty->DisableGradientOpacityOn();
+    m_volumeProperty->ShadeOff();
 
-        // el mapper (funcio de ray cast) sabrà com visualitzar les dades
-        vtkVolumeRayCastCompositeFunction* compositeFunction = vtkVolumeRayCastCompositeFunction::New();
-        compositeFunction->SetCompositeMethodToClassifyFirst();
-        vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
+    m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
-        volumeMapper->SetVolumeRayCastFunction( compositeFunction );
-        volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
-
-        m_vtkVolume->SetMapper( volumeMapper );
-        m_renderer->Render();
-    }
-    else
-        DEBUG_LOG( "No es pot fer render per ray casting, no s'ha proporcionat cap volum d'entrada" );
+    m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::renderRayCastingShading()
 {
-    if( rescale() )
-    {
-        m_volumeProperty->DisableGradientOpacityOn();
-        m_volumeProperty->ShadeOn();
+    m_volumeProperty->DisableGradientOpacityOn();
+    m_volumeProperty->ShadeOn();
 
-        // el mapper (funcio de ray cast) sabrà com visualitzar les dades
-        vtkVolumeRayCastCompositeFunction* compositeFunction = vtkVolumeRayCastCompositeFunction::New();
-        compositeFunction->SetCompositeMethodToClassifyFirst();
-        vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
+    m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
-        volumeMapper->SetVolumeRayCastFunction( compositeFunction );
-        volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
-
-        m_vtkVolume->SetMapper( volumeMapper );
-        m_renderer->Render();
-    }
-    else
-        DEBUG_LOG( "No es pot fer render per ray casting, no s'ha proporcionat cap volum d'entrada" );
+    m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::renderMIP3D()
