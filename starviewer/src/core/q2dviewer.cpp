@@ -1208,6 +1208,7 @@ void Q2DViewer::setPhase( int value )
 
         m_currentPhase = value;
         this->updateDisplayExtent();
+		updateSliceAnnotationInformation();
         emit phaseChanged( m_currentPhase );
         this->refresh();
     }
