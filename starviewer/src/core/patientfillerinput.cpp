@@ -20,6 +20,16 @@ PatientFillerInput::~PatientFillerInput()
     delete m_dicomFile;
 }
 
+void PatientFillerInput::initialize()
+{
+    initializeAllLabels();
+    m_patientList.clear();
+    setDICOMFile(NULL);
+    m_currentImage = NULL;
+    m_currentSeries = NULL;
+    m_fileList.clear();    
+}
+
 void PatientFillerInput::addPatient( Patient *patient )
 {
     if( patient )
@@ -188,18 +198,9 @@ QList<Series *> PatientFillerInput::getSeriesWithLabels( QStringList labels )
 
 void PatientFillerInput::initializeAllLabels()
 {
-    while(!m_allLabels.isEmpty())
-    {
-        m_allLabels.removeFirst();
-    }
-    while(!m_globalLabels.isEmpty())
-    {
-        m_globalLabels.removeFirst();
-    }
-    foreach ( Series *key, m_seriesLabels.keys() )
-    {
-        m_seriesLabels.remove(key);
-    }
+    m_allLabels.clear();
+    m_globalLabels.clear();
+    m_seriesLabels.clear();
 }
 
 void PatientFillerInput::setDICOMFile(DICOMTagReader *dicomTagReader)

@@ -131,6 +131,21 @@ void PatientFiller::finishDICOMFilesProcess()
     m_imageCounter = 0;
 }
 
+void PatientFiller::abortDICOMFilesProcess()
+{
+    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
+    {
+        fillerStep->abort();
+    }
+    
+    m_patientFillerInput->initialize();
+
+    // Reinicialitzem el comptador d'imatges
+    m_imageCounter = 0;
+
+    emit DICOMFilesProcessAborted();
+}
+
 QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
 {
     m_imageCounter = 0;

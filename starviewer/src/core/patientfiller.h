@@ -44,7 +44,7 @@ public:
 
 public slots:
 
-    ///Procem un fitxer DICOM. Ens permet anar passant fitxers un a un i, un cop acabem, cridar el mètode finishDICOMFilesProcess
+    ///Processem un fitxer DICOM. Ens permet anar passant fitxers un a un i, un cop acabem, cridar el mètode finishDICOMFilesProcess
     ///per obtenir el resultat a partir del signal patientProcessed.
     ///Es presuposa que el fitxer DICOM passat no està buit.
     void processDICOMFile(DICOMTagReader *dicomTagReader);
@@ -52,6 +52,10 @@ public slots:
     ///Indica que ja hem acabat de processar fitxers i ja podem obtenir el resultat final, és a dir, l'estructura Patient omplerta.
     ///Aquesta se'ns dona a partir del signal patientProcessed.
     void finishDICOMFilesProcess();
+    
+    ///Abortem el procés asíncron d'omplir un Patient a partir de fitxers DICOM. La seva tasca és eliminar les estructures internes
+    ///que els fillers poguessin està utilitant.
+    void abortDICOMFilesProcess();
 
     ///Processa tots els fitxers que se li passin de cop, retornant la llista d'objectes Patient que es generin.
     QList<Patient*> processDICOMFileList(QStringList dicomFiles);
@@ -62,6 +66,9 @@ signals:
 
     /// Senyal que s'emet quan en el mode asíncron s'ha acabat de processar totes les images passades.
     void patientProcessed(Patient *);
+
+    /// Senyal que s'emet quan en el mode asíncron s'ha acabat l'abortament del processat.
+    void DICOMFilesProcessAborted();
 
 private:
     /// S'encarrega de registrar els mòduls/steps que processaran l'input.

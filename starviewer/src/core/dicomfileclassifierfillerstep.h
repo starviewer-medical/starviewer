@@ -39,6 +39,8 @@ public:
 
     void postProcessing() {}
 
+    void abort(){};
+
     QString name() {  return "DICOMFileClassifierFillerStep";  }
 
 private:
