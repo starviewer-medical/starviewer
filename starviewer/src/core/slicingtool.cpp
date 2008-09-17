@@ -15,7 +15,7 @@
 namespace udg {
 
 SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfSlices(1)
+ : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfSlices(1), m_screenSize(0)
 {
     m_state = NONE;
     m_toolName = "SlicingTool";
@@ -88,17 +88,18 @@ void SlicingTool::startSlicing()
     m_state = SLICING;
     m_2DViewer->getEventPosition( m_startPosition );
     m_numberOfSlices = m_2DViewer->getMaximumSlice();
+	m_screenSize = m_2DViewer->getRenderWindowSize();
 }
 
 void SlicingTool::doSlicing()
 {
+	Q_ASSERT( m_screenSize );
     if( m_state == SLICING )
     {
         m_currentPosition[1] = m_2DViewer->getEventPositionY();
-        int *size = m_2DViewer->getRenderWindowSize();
 
         // increment normalitzat segons la mida de la finestra i el nombre de llesques
-        double increase = (1.75 * ( m_currentPosition[1] - m_startPosition[1] ) / (double)size[1]) * m_numberOfSlices;
+        double increase = (1.75 * ( m_currentPosition[1] - m_startPosition[1] ) / (double)m_screenSize[1]) * m_numberOfSlices;
         m_startPosition[1] = m_currentPosition[1];
 
         int value = 0;
