@@ -33,6 +33,8 @@ public:
     bool fillIndividually(){return false;};
 
     void postProcessing(){};
+    
+    void abort(){};
 
     QString name() {  return "CTFillerStep";  }
 

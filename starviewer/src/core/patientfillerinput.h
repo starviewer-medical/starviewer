@@ -27,6 +27,9 @@ public:
     PatientFillerInput();
 
     ~PatientFillerInput();
+    
+    ///Deixa l'objecte com acabat de crear
+    void initialize();
 
     /// Afegeix un pacient a la llista
     void addPatient( Patient *patient );

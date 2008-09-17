@@ -33,6 +33,8 @@ public:
 
     void postProcessing();
 
+    void abort();
+
     QString name() {  return "TemporalDimensionFillerStep";  }
 
 private:

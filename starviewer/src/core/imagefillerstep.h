@@ -34,6 +34,8 @@ public:
 
     void postProcessing() {}
 
+    void abort(){};
+
     QString name() {  return "ImageFillerStep";  }
 
 private:

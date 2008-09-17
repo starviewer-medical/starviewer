@@ -36,6 +36,8 @@ public:
 
     void postProcessing();
 
+    void abort();
+
     QString name() {  return "OrderImagesFillerStep";  }
 
 private:
