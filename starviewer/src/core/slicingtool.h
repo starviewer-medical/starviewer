@@ -85,6 +85,10 @@ private:
     /// Nombre de llesques del volum sobre el que fem slicing
     /// útil per calcular l'increment proporcional de llesques
     int m_numberOfSlices;
+	
+	/// mida de la pantalla
+	/// útil per calcular l'increment proporcional de llesques
+	int *m_screenSize;
 };
 
 }
