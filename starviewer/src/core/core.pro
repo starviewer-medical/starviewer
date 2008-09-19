@@ -1,10 +1,10 @@
-# Fitxer generat pel gestor de qmake de kdevelop.
-# -------------------------------------------
+# Fitxer generat pel gestor de qmake de kdevelop. 
+# ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu Ã©s una biblioteca:
+# L'objectiu és una biblioteca:  
 
 FORMS += qlogviewerbase.ui \
-         qcustomwindowleveldialogbase.ui  \
+         qcustomwindowleveldialogbase.ui \
          qdicomdumpbase.ui \
          qdicomdumpcthelixwidgetbase.ui \
          qdicomdumpctlocalizerwidgetbase.ui \
@@ -12,12 +12,12 @@ FORMS += qlogviewerbase.ui \
          qdicomdumpctwidgetbase.ui \
          qtransferfunctioneditorbyvaluesbase.ui \
          qtransferfunctionintervaleditorbase.ui \
-         qcinecontrollerbase.ui  \
+         qcinecontrollerbase.ui \
          qthickslabwidgetbase.ui \
-         q2dviewerwidgetbase.ui
+         q2dviewerwidgetbase.ui 
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
-                core_en_GB.ts
+                core_en_GB.ts 
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \
@@ -173,16 +173,15 @@ HEADERS += extensionfactory.h \
            hangingprotocolimageset.h \
            hangingprotocoldisplayset.h \
            hangingprotocolxmlreader.h \
- ambientvoxelshader.h \
- contourvoxelshader.h \
- directilluminationvoxelshader.h \
- voxelshader.h \
- hdrcolor.h \
- trilinearinterpolator.h \
- vector3.h \
- vtkVolumeRayCastVoxelShaderCompositeFunction.h \
- sphereuniformpointcloudgenerator.h \
- vtkInteractorStyleFasterTrackballActor.h
+           ambientvoxelshader.h \
+           contourvoxelshader.h \
+           directilluminationvoxelshader.h \
+           voxelshader.h \
+           hdrcolor.h \
+           trilinearinterpolator.h \
+           vector3.h \
+           vtkVolumeRayCastVoxelShaderCompositeFunction.h \
+           sphereuniformpointcloudgenerator.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -322,19 +321,16 @@ SOURCES += extensionmediator.cpp \
            hangingprotocolimageset.cpp \
            hangingprotocoldisplayset.cpp \
            hangingprotocolxmlreader.cpp \
- ambientvoxelshader.cpp \
- contourvoxelshader.cpp \
- directilluminationvoxelshader.cpp \
- voxelshader.cpp \
- trilinearinterpolator.cpp \
- vector3.cpp \
- vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
- sphereuniformpointcloudgenerator.cpp \
- vtkInteractorStyleFasterTrackballActor.cxx
+           ambientvoxelshader.cpp \
+           contourvoxelshader.cpp \
+           directilluminationvoxelshader.cpp \
+           voxelshader.cpp \
+           trilinearinterpolator.cpp \
+           vector3.cpp \
+           vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
+           sphereuniformpointcloudgenerator.cpp 
 TEMPLATE = lib
-
 DESTDIR = ./
-
 include(../corelibsconfiguration.inc)
 include(../itk.inc)
 include(../vtk.inc)
@@ -342,5 +338,4 @@ include(../dcmtk.inc)
 include(../log4cxx.inc)
 include(../compilationtype.inc)
 include(../translations.inc)
-
 QT += xml
