@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/optimalviewpoint
-# L'objectiu ï¿½s una aplicaci??:  
+# L'objectiu és una aplicaci??:  
 
 FORMS += optimalviewpointinputparametersformbase.ui \
          qoptimalviewpointextensionbase.ui \
@@ -28,7 +28,8 @@ HEADERS += doublehistogram.h \
            obscurancevoxelshader.h \
            saliencyvoxelshader.h \
            colorbleedingvoxelshader.h \
-           obscurancethread.h 
+           obscurancethread.h \
+           vtkInteractorStyleFasterTrackballActor.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
@@ -51,6 +52,7 @@ SOURCES += doublehistogram.cpp \
            obscurancevoxelshader.cpp \
            saliencyvoxelshader.cpp \
            colorbleedingvoxelshader.cpp \
-           obscurancethread.cpp 
+           obscurancethread.cpp \
+           vtkInteractorStyleFasterTrackballActor.cxx 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)
