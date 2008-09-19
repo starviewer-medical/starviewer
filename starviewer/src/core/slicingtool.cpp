@@ -93,9 +93,9 @@ void SlicingTool::startSlicing()
 
 void SlicingTool::doSlicing()
 {
-	Q_ASSERT( m_screenSize );
     if( m_state == SLICING )
     {
+		Q_ASSERT( m_screenSize );
         m_currentPosition[1] = m_2DViewer->getEventPositionY();
 
         // increment normalitzat segons la mida de la finestra i el nombre de llesques
