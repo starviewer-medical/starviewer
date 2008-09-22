@@ -25,6 +25,7 @@
 #include "optimalviewpointvolume.h"
 #include <QTime>
 #include <QColorDialog>
+#include "obscurancemainthread.h"
 
 
 namespace udg {
@@ -102,6 +103,8 @@ QOptimalViewpointExtension::QOptimalViewpointExtension( QWidget * parent )
 
 
     connect( m_backgroundColorPushButton, SIGNAL( clicked() ), SLOT( chooseBackgroundColor() ) );
+
+    connect( m_method, SIGNAL( finishedObscurances() ), this, SLOT( finishedObscurances() ) );
 }
 
 
@@ -448,10 +451,17 @@ void QOptimalViewpointExtension::createConnections()
 
 void QOptimalViewpointExtension::computeObscurances()
 {
+    m_obscurancesPushButton->setEnabled( false );
     m_method->computeObscurances( m_obscuranceDirectionsSpinBox->value(),
                                   m_obscuranceMaximumDistanceDoubleSpinBox->value(),
                                   m_obscuranceFunctionComboBox->currentIndex(),
                                   m_obscuranceVariantComboBox->currentIndex() );
+}
+
+
+void QOptimalViewpointExtension::finishedObscurances()
+{
+    m_obscurancesPushButton->setEnabled( true );
 }
 
 
@@ -469,7 +479,7 @@ void QOptimalViewpointExtension::loadObscurances()
 
     if ( !obscurancesFileName.isNull() )
     {
-        bool color = m_obscuranceVariantComboBox->currentIndex() >= OptimalViewpointVolume::OpacityColorBleeding;
+        bool color = m_obscuranceVariantComboBox->currentIndex() >= ObscuranceMainThread::OpacityColorBleeding;
 
         if ( !m_method->loadObscurances( obscurancesFileName, color ) )
         {

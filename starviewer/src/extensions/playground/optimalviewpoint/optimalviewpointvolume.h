@@ -68,13 +68,6 @@ public:
     /// Tipus d'interpolació.
     enum Interpolation { NearestNeighbour, LinearInterpolateClassify, LinearClassifyInterpolate };
 
-    /// Estructura que guarda les coordenades d'un vòxel.
-    struct Voxel { int x, y, z; };
-    /// Funcions d'obscurances.
-    enum ObscuranceFunction { Constant0, Distance, SquareRoot, Exponential, ExponentialNorm, CubeRoot };
-    /// Variants de les obscurances.
-    enum ObscuranceVariant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacitySaliency, OpacitySmoothSaliency, OpacityColorBleeding, OpacitySmoothColorBleeding };
-
     /// Construeix el volum a partir d'una imatge.
     OptimalViewpointVolume( vtkImageData *image, QObject *parent = 0 );
     /// Destructor.
@@ -147,7 +140,7 @@ public:
 
 
 
-    void computeObscurances( int numberOfDirections, double maximumDistance, ObscuranceFunction function, ObscuranceVariant variant );
+    void computeObscurances( int numberOfDirections, double maximumDistance, int function, int variant );
 
     void setRenderWithObscurances( bool renderWithObscurances );
     void setObscurancesFactor( double obscurancesFactor );
@@ -185,6 +178,7 @@ signals:
     void visited( int rayId, unsigned char value );
     void rayEnd( int rayId );
     void adjustedTransferFunctionDefined( const TransferFunction & adjustedTransferFunction );
+    void finishedObscurances();
 
 private:
 
@@ -209,7 +203,7 @@ private:
 
 //     QList<Vector3> getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
 //     double obscurance( double distance ) const;
-    static void getLineStarts( QVector<Vector3> & lineStarts, int dimX, int dimY, int dimZ, const Vector3 & forward );
+    
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
     void labelize( const QVector< unsigned char > & limits );
@@ -218,6 +212,12 @@ private:
 
 
     void reduceToHalf();
+
+private slots:
+
+    void endComputeObscurances();
+
+private:
 
 
     /// Model de vòxels principal.
@@ -280,7 +280,7 @@ private:
     vtkRenderer *m_renderer;    // necessari pel direct illumination voxel shader
 
     /// Variant de les obscurances que s'ha calculat o carregat.
-    ObscuranceVariant m_obscuranceVariant;
+    int m_obscuranceVariant;
     /// Vector d'obscurances.
     double *m_obscurance;
     /// Vector de color bleeding.

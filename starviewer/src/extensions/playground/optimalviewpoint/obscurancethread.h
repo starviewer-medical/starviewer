@@ -14,6 +14,7 @@
 
 #include <QVector>
 
+#include "obscurancemainthread.h"
 #include "optimalviewpointvolume.h"
 #include "transferfunction.h"
 #include "vector3.h"
@@ -43,7 +44,7 @@ public:
     /// Assigna l'estimador del gradient, d'on es treuran les normals.
     void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
     void setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] );
-    void setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant, double * obscurance, Vector3 * colorBleeding );
+    void setObscuranceParameters( double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction, ObscuranceMainThread::Variant obscuranceVariant, double * obscurance, Vector3 * colorBleeding );
     void setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh );
     void setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta );
 
@@ -53,7 +54,9 @@ protected:
 
 private:
 
-    typedef OptimalViewpointVolume::Voxel Voxel;
+    typedef ObscuranceMainThread::Voxel Voxel;
+    typedef ObscuranceMainThread::Function Function;
+    typedef ObscuranceMainThread::Variant Variant;
 
     void runDensity();
     void runDensitySmooth();
@@ -75,8 +78,8 @@ private:
     const int * m_dimensions;
     const int * m_increments;
     double m_obscuranceMaximumDistance;
-    OptimalViewpointVolume::ObscuranceFunction m_obscuranceFunction;
-    OptimalViewpointVolume::ObscuranceVariant m_obscuranceVariant;
+    Function m_obscuranceFunction;
+    Variant m_obscuranceVariant;
     double * m_obscurance;
     Vector3 * m_colorBleeding;
     const double * m_saliency;
