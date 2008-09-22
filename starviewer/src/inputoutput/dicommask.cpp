@@ -113,11 +113,6 @@ void DicomMask::setReferringPhysiciansName(QString referringPhysiciansName)
     m_referringPhysiciansName = referringPhysiciansName;
 }
 
-void DicomMask::setLastAccessDate(QDate lastAccessDate)
-{
-    m_lastAccessDate = lastAccessDate;
-}
-
 /***************************************************************   GET **********************************************/
 
 QString DicomMask::getStudyUID() const
@@ -158,11 +153,6 @@ QString DicomMask::getAccessionNumber() const
 QString DicomMask::getReferringPhysiciansName() const
 {
     return m_referringPhysiciansName;
-}
-
-QDate DicomMask::getLastAccessDate() const
-{
-    return m_lastAccessDate;
 }
 
 /************************************** SERIES *************************************************/
