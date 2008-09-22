@@ -80,7 +80,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_sliceAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_sliceAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledOldTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -107,8 +107,8 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
 
     // old tools management /TODO /deprecated  s'eliminarà quan s'hagi fet tota la transició de tools
-    m_toolManager = new Q2DViewerToolManager( this );
-    this->enableTools();
+    m_oldToolManager = new Q2DViewerToolManager( this );
+    this->enableOldTools();
 }
 
 Q2DViewer::~Q2DViewer()
@@ -130,7 +130,7 @@ Q2DViewer::~Q2DViewer()
     // no ens hauria d'afectar
     // HACK imposem que s'esborri primer el drawer
     delete m_drawer;
-    delete m_toolManager;
+    delete m_oldToolManager;
 }
 
 vtkRenderer *Q2DViewer::getRenderer()
@@ -734,9 +734,9 @@ QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
     return oppositeLabel;
 }
 
-void Q2DViewer::setTool( QString toolName )
+void Q2DViewer::setOldTool( QString toolName )
 {
-    if( m_toolManager->setCurrentTool( toolName ) )
+    if( m_oldToolManager->setCurrentTool( toolName ) )
     {
         ///\Todo per implementar
         DEBUG_LOG( QString("OK, hem activat la tool: ") + toolName );
@@ -748,40 +748,40 @@ void Q2DViewer::setTool( QString toolName )
     }
 }
 
-OldTool *Q2DViewer::getTool( QString toolName )
+OldTool *Q2DViewer::getOldTool( QString toolName )
 {
-    return m_toolManager->getTool( toolName );
+    return m_oldToolManager->getTool( toolName );
 }
 
-QString Q2DViewer::getCurrentToolName()
+QString Q2DViewer::getCurrentOldToolName()
 {
-    return m_toolManager->getCurrentToolName();
+    return m_oldToolManager->getCurrentToolName();
 }
 
-void Q2DViewer::setEnableTools( bool enable )
+void Q2DViewer::setEnableOldTools( bool enable )
 {
     if( enable )
-        this->enableTools();
+        this->enableOldTools();
     else
-        this->disableTools();
+        this->disableOldTools();
 }
 
-void Q2DViewer::enableTools()
+void Q2DViewer::enableOldTools()
 {
     /// Això evita que es faci més d'un connect en cas que es cridi aquesta funció i ja s'hagi fet abans
-    if(!m_enabledTools)
+    if(!m_enabledOldTools)
     {
-        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
-        m_enabledTools = true;
+        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_oldToolManager , SLOT( forwardEvent(unsigned long) ) );
+        m_enabledOldTools = true;
     }
 }
 
-void Q2DViewer::disableTools()
+void Q2DViewer::disableOldTools()
 {
-    if(m_enabledTools)
+    if(m_enabledOldTools)
     {
-        disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_toolManager , SLOT( forwardEvent(unsigned long) ) );
-        m_enabledTools = false;
+        disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_oldToolManager , SLOT( forwardEvent(unsigned long) ) );
+        m_enabledOldTools = false;
     }
 }
 

@@ -292,11 +292,11 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
             // això és un petit parxe per solventar que el mip no sap quina tool estem fent servir
             // \TODO solucionar això d'una manera més elegant
             if( m_zoomAction->isChecked() )
-                m_mipViewer->setTool( "ZoomTool" );
+                m_mipViewer->setOldTool( "ZoomTool" );
             else if( m_moveAction->isChecked() )
-                m_mipViewer->setTool( "TranslateTool" );
+                m_mipViewer->setOldTool( "TranslateTool" );
             else if( m_screenShotAction->isChecked() )
-                m_mipViewer->setTool("ScreenShotTool");
+                m_mipViewer->setOldTool("ScreenShotTool");
             // fi parxe
             m_mipViewer->setRenderFunctionToMIP3D();
         }
@@ -410,7 +410,7 @@ void QMPRExtension::detectAxialViewAxisActor()
     // obtenim el punt que s'ha clicat \TODO unificar aquesta operació en un sol mètode privat o fer un mètode d'accès directament del propi viewer per obtenir les coordenades de món actuals on es troba el cursor
     int xy[2];
     m_axial2DView->getEventPosition( xy );
-    
+
     double toWorld[4];
     m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , xy[0], xy[1] , 0 , toWorld );
 

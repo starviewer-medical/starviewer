@@ -79,7 +79,7 @@ void QLesionVisualizationExtension::createActions()
     m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
     m_moveToolButton->setDefaultAction( m_moveAction );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -98,7 +98,6 @@ void QLesionVisualizationExtension::createConnections()
   connect( m_2DView, SIGNAL( sliceChanged(int) ), m_sliceViewSlider, SLOT( setValue( int ) ) );
   connect( m_2DView, SIGNAL( sliceChanged(int) ), this, SLOT( markCurrentCylinder( int ) ) );
   connect( m_openMaskPushButton, SIGNAL( clicked() ), SLOT( openMaskVolume() ) );
-  connect( m_toolsActionGroup, SIGNAL( triggered(QAction*) ), SLOT( toolChanged(QAction*) ) );
 }
 
 void QLesionVisualizationExtension::setInput( Volume *input )

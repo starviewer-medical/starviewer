@@ -137,7 +137,7 @@ void QEdemaSegmentationExtension::createActions()
     m_editorAction->setEnabled( false );
     m_editorToolButton->setDefaultAction( m_editorAction );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -468,7 +468,7 @@ void QEdemaSegmentationExtension::applyMethod( )
     m_applyVentriclesMethodButton->setEnabled(true);
     m_applyCleanSkullButton->setEnabled(true);
     m_editorAction->trigger();
-    m_2DView->disableTools();
+    m_2DView->disableOldTools();
     m_editorAction->setEnabled( true );
 
     m_paintEditorAction->setEnabled(true);
@@ -589,12 +589,12 @@ void QEdemaSegmentationExtension::leftButtonEventHandler( )
     if(m_editorToolButton->isChecked())
     {
         //std::cout<<"Editor Tool"<<std::endl;
-        m_2DView->disableTools();
+        m_2DView->disableOldTools();
         setEditorPoint(  );
     }
     else
     {
-        m_2DView->enableTools();
+        m_2DView->enableOldTools();
     }
 }
 

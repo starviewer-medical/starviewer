@@ -110,7 +110,7 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
 
-    this->enableTools();
+    this->enableOldTools();
     this->createActors();
     this->addActors();
 }

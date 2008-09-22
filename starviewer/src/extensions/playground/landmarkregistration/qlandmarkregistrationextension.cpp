@@ -112,8 +112,8 @@ void QLandmarkRegistrationExtension::createActions()
     m_seedToolButton->setDefaultAction( m_seedAction );
 
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2 , SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2 , SLOT( setOldTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -215,8 +215,8 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
     //std::cout<<"setInput: NumSlices:"<<dim[2]-1<<std::endl;
     /*m_actionFactory = new ToolsActionFactory( 0 );
     m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView , SLOT( setTool(QString) ) );
-    m_2DView->enableTools();
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView , SLOT( setOldTool(QString) ) );
+    m_2DView->enableOldTools();
     m_windowLevelAction->trigger();
 */
     m_2DView->setCursor(Qt::CrossCursor);
@@ -272,8 +272,8 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
     m_sliceViewSlider_2->setValue(m_2DView_2->getCurrentSlice());
 
     /*m_windowLevelAction_2 = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2 , SLOT( setTool(QString) ) );
-    m_2DView_2->enableTools();
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2 , SLOT( setOldTool(QString) ) );
+    m_2DView_2->enableOldTools();
     m_windowLevelAction_2->trigger();
     */
 
@@ -740,14 +740,14 @@ void QLandmarkRegistrationExtension::leftButtonEventHandler( int idVolume )
     if(m_seedToolButton->isChecked())
     {
         //std::cout<<"Seed Tool"<<std::endl;
-        m_2DView->disableTools();
-        m_2DView_2->disableTools();
+        m_2DView->disableOldTools();
+        m_2DView_2->disableOldTools();
         setNewSeedPosition( idVolume );
     }
     else
     {
-        m_2DView->enableTools();
-        m_2DView_2->enableTools();
+        m_2DView->enableOldTools();
+        m_2DView_2->enableOldTools();
     }
 }
 

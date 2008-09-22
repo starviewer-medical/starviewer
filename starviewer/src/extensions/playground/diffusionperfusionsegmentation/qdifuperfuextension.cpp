@@ -139,8 +139,8 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_seedAction->setIcon( QIcon( ":/images/seed.png" ) );
     m_seedToolButton->setDefaultAction( m_seedAction );
 
-    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_diffusion2DView, SLOT( setTool(QString) ) );
-    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_perfusion2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_diffusion2DView, SLOT( setOldTool(QString) ) );
+    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_perfusion2DView, SLOT( setOldTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( this );
     m_toolsActionGroup->setExclusive( true );
@@ -662,7 +662,7 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_strokeVolumeLineEdit->setEnabled( true );
 
     m_editorAction->trigger();
-    m_diffusion2DView->disableTools();
+    m_diffusion2DView->disableOldTools();
     m_editorAction->setEnabled( true );
 
     m_paintEditorAction->setEnabled(true);
@@ -1089,12 +1089,12 @@ void QDifuPerfuSegmentationExtension::leftButtonEventHandler(int idViewer )
         //DEBUG_LOG("Editor Tool");
         if(idViewer==1)
         {
-            m_diffusion2DView->disableTools();
+            m_diffusion2DView->disableOldTools();
             setEditorPoint( idViewer );
         }
         else    //idViewer=2
         {
-            m_perfusion2DView->disableTools();
+            m_perfusion2DView->disableOldTools();
             setEditorPoint( idViewer );
         }
     }
@@ -1102,11 +1102,11 @@ void QDifuPerfuSegmentationExtension::leftButtonEventHandler(int idViewer )
     {
         if(idViewer==1)
         {
-            m_diffusion2DView->enableTools();
+            m_diffusion2DView->enableOldTools();
         }
         else    //idViewer=2
         {
-            m_perfusion2DView->enableTools();
+            m_perfusion2DView->enableOldTools();
         }
     }
 }

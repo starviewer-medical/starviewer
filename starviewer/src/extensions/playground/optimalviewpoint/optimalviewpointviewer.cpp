@@ -83,31 +83,6 @@ void OptimalViewpointViewer::render()
     m_vtkWidget->GetRenderWindow()->Render();
 }
 
-
-void OptimalViewpointViewer::setEnableTools( bool /*enable*/ )
-{
-    // de moment res
-}
-
-
-void OptimalViewpointViewer::enableTools()
-{
-    // de moment res
-}
-
-
-void OptimalViewpointViewer::disableTools()
-{
-    // de moment res
-}
-
-
-void OptimalViewpointViewer::setTool( QString /*tool*/ )
-{
-    // de moment res
-}
-
-
 void OptimalViewpointViewer::reset()
 {
     m_renderer->SetBackground( 1.0, 1.0, 1.0 );

@@ -137,7 +137,7 @@ void QRectumSegmentationExtension::createActions()
     m_regionAction->setEnabled( true );
     m_regionToolButton->setDefaultAction( m_regionAction );
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -407,7 +407,7 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_eraseRegionButton->setEnabled(true);
     m_editorSize->setEnabled(true);
     m_editorAction->trigger();
-    m_2DView->disableTools();
+    m_2DView->disableOldTools();
     m_editorAction->setEnabled( true );
 
     m_paintEditorAction->setEnabled(true);
@@ -471,7 +471,7 @@ void QRectumSegmentationExtension::leftButtonEventHandler( )
 
     if((m_editorToolButton->isChecked())||(m_regionToolButton->isChecked()))
     {
-        m_2DView->disableTools();
+        m_2DView->disableOldTools();
         if(m_editorToolButton->isChecked())
         {
             setEditorPoint(  );
@@ -483,7 +483,7 @@ void QRectumSegmentationExtension::leftButtonEventHandler( )
     }
     else
     {
-        m_2DView->enableTools();
+        m_2DView->enableOldTools();
     }
 }
 
@@ -1153,11 +1153,11 @@ void QRectumSegmentationExtension::toolChanged( QAction* ac)
 {
     if(ac==m_seedAction || ac==m_regionAction)
     {
-        m_2DView->disableTools();
+        m_2DView->disableOldTools();
     }
     else
     {
-        m_2DView->enableTools();
+        m_2DView->enableOldTools();
     }
 }
 
