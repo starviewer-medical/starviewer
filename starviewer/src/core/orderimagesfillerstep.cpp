@@ -77,30 +77,6 @@ void OrderImagesFillerStep::postProcessing()
     }
 }
 
-void OrderImagesFillerStep::abort()
-{
-    QMap< int , Image* > * instanceNumberSet;
-    QMap< double , QMap< int , Image* >* >* imagePositionSet;
-    QMap< QString, QMap< double , QMap< int , Image* >* >* > *lastOrderedImageSet;
-    
-    foreach ( Series * key , OrderImagesInternalInfo.keys() )
-    {
-        lastOrderedImageSet = OrderImagesInternalInfo.take(key);
-        foreach ( QString key, lastOrderedImageSet->keys() )
-        {
-            imagePositionSet = lastOrderedImageSet->take(key);
-            foreach ( double key2 , imagePositionSet->keys() )
-            {
-                instanceNumberSet = imagePositionSet->take(key2);
-                foreach ( int key3 , instanceNumberSet->keys() )
-                {
-                    instanceNumberSet->take(key3);
-                }
-            }
-        }
-    }
-}
-
 void OrderImagesFillerStep::processSeries( Series *series )
 {
     QList<Image *> imageList = series->getImages();

@@ -29,8 +29,6 @@ public:
 
     void postProcessing(){};
 
-    void abort(){};
-
     QString name() {  return "MHDFileClassifierStep";  }
 
 private:
