@@ -7,20 +7,18 @@
 #ifndef UDGPACSLISTDB_H
 #define UDGPACSLISTDB_H
 
-#include <QSettings>
 #include <QList>
 
 #include "pacsparameters.h"
 
 class QString;
+class QSettings;
 
 namespace udg {
 
 /** Aquesta classe implementa les accions necessaries per afegir nous pacs o modificar/consultar els paràmetres dels PACS  que tenim disponible a l'aplicació, guardats en un fitxer de configuració.
 @author marc
 */
-
-class Status;
 
 class PacsListDB{
 
@@ -73,13 +71,12 @@ private:
     ///Mètode que s'ha de fer servir sempre que es vulgui accedir a la llista de pacs configurats.
     ///S'encarrega d'omplir la llista en el cas que no s'hagi fet prèviament.
     QList<PacsParameters> getConfiguredPacsList();
-    void saveConfiguredPacsListToDisk();
+    void saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacsList);
 
     PacsParameters fillPacs(const QSettings &settings);
 
 private:
 
-    QList<PacsParameters> m_configuredPacsList;
     static const QString PacsListConfigurationSectionName;
 };
 

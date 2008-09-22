@@ -8,6 +8,7 @@
 #include "pacslistdb.h"
 
 #include <QString>
+#include <QSettings>
 
 #include "pacsparameters.h"
 #include "logging.h"
@@ -31,8 +32,7 @@ bool PacsListDB::insertPacs(const PacsParameters &pacs)
         QList<PacsParameters> pacsList = getConfiguredPacsList();
         pacsList.append(pacs);
 
-        m_configuredPacsList = pacsList;
-        this->saveConfiguredPacsListToDisk();
+        this->saveConfiguredPacsListToDisk(pacsList);
 
         return true;
     }
@@ -45,8 +45,7 @@ void PacsListDB::updatePacs(const PacsParameters &pacsToUpdate)
 
     pacsList[pacsToUpdate.getPacsID()] = pacsToUpdate;
 
-    m_configuredPacsList = pacsList;
-    this->saveConfiguredPacsListToDisk();
+    this->saveConfiguredPacsListToDisk(pacsList);
 }
 
 QList<PacsParameters> PacsListDB::queryPacsList()
@@ -96,13 +95,12 @@ void PacsListDB::deletePacs(int pacsID)
 
     pacsList.removeAt(pacsID);
 
-    m_configuredPacsList = pacsList;
-    this->saveConfiguredPacsListToDisk();
+    this->saveConfiguredPacsListToDisk(pacsList);
 }
 
 QList<PacsParameters> PacsListDB::getConfiguredPacsList()
 {
-    m_configuredPacsList.clear();
+    QList<PacsParameters> configuredPacsList;
     QSettings settings;
     int size = settings.beginReadArray(PacsListConfigurationSectionName);
 
@@ -110,31 +108,31 @@ QList<PacsParameters> PacsListDB::getConfiguredPacsList()
     {
         settings.setArrayIndex(i);
         PacsParameters pacs = fillPacs(settings);
-        m_configuredPacsList.append(pacs);
+        configuredPacsList.append(pacs);
     }
     settings.endArray();
 
-    return m_configuredPacsList;
+    return configuredPacsList;
 }
 
-void PacsListDB::saveConfiguredPacsListToDisk()
+void PacsListDB::saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacsList)
 {
     QSettings settings;
 
     settings.beginWriteArray(PacsListConfigurationSectionName);
     settings.remove(""); //Esborrem la llista de pacs abans de guardar la nova.
-    for(int i = 0; i < m_configuredPacsList.size(); ++i)
+    for(int i = 0; i < pacsList.size(); ++i)
     {
         settings.setArrayIndex(i);
 
         settings.setValue("ID", i);
-        settings.setValue("AETitle", m_configuredPacsList.at(i).getAEPacs() );
-        settings.setValue("PacsPort", m_configuredPacsList.at(i).getPacsPort() );
-        settings.setValue("Location", m_configuredPacsList.at(i).getLocation() );
-        settings.setValue("Institution", m_configuredPacsList.at(i).getInstitution() );
-        settings.setValue("Default", m_configuredPacsList.at(i).getDefault() );
-        settings.setValue("PacsHostname", m_configuredPacsList.at(i).getPacsAddress() );
-        settings.setValue("Description", m_configuredPacsList.at(i).getDescription() );
+        settings.setValue("AETitle", pacsList.at(i).getAEPacs() );
+        settings.setValue("PacsPort", pacsList.at(i).getPacsPort() );
+        settings.setValue("Location", pacsList.at(i).getLocation() );
+        settings.setValue("Institution", pacsList.at(i).getInstitution() );
+        settings.setValue("Default", pacsList.at(i).getDefault() );
+        settings.setValue("PacsHostname", pacsList.at(i).getPacsAddress() );
+        settings.setValue("Description", pacsList.at(i).getDescription() );
     }
     settings.endArray();
 }
