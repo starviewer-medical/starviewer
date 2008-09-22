@@ -26,7 +26,6 @@ class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastCompositeFunctionFx;
-class vtkVolumeRayCastCompositeFunctionObscurances;
 class vtkVolumeRayCastCompositeFunctionViewpointSaliency;
 class vtkVolumeRayCastMapper;
 class vtkRenderer;
@@ -255,8 +254,6 @@ private:
 
     /// Volume ray cast function principal.
     vtkVolumeRayCastCompositeFunction * m_mainVolumeRayCastFunction;
-    /// Volume ray cast function per visualitzar amb obscurances.
-    vtkVolumeRayCastCompositeFunctionObscurances *m_volumeRayCastFunctionObscurances;
     /// Volume ray cast function per visualitzar amb efectes.
     vtkVolumeRayCastCompositeFunctionFx *m_volumeRayCastFunctionFx;
     /// Volume ray cast function per visualitzar amb efectes.
