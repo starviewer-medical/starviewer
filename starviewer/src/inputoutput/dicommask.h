@@ -127,9 +127,6 @@ public:
      */
     void setReferringPhysiciansName(QString physiciansName);
 
-    ///Estableix la data que ha singut accedit l'estudi en la base de dades
-    void setLastAccessDate(QDate lastAccessDate);
-
     /** Retorna de la màscara l'estudi UID
      * @param mask [in] màscara de la cerca
      * @return   Estudi UID que cerquem
@@ -191,9 +188,6 @@ public:
       * @return ReferringPhysiciansName
       */
     QString getReferringPhysiciansName() const;
-
-    ///Retorna el LastAccessDate
-    QDate getLastAccessDate() const;
 
     /** This action especified in the search which series number we want to match
      * @param seriesNumber' Number of the series to search. If this parameter is null it's supose that any mask is applied at this field
@@ -368,7 +362,6 @@ private:
     QString m_studyUID;
     QString m_accessionNumber;
     QString m_referringPhysiciansName;
-    QDate m_lastAccessDate;
     QString m_seriesNumber;
     QString m_seriesDate;
     QString m_seriesTime;

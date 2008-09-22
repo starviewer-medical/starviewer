@@ -31,9 +31,16 @@
 namespace udg
 {
 
+QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
+
 LocalDatabaseManager::LocalDatabaseManager()
 {
+    StarviewerSettings settings;
 
+    if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
+    {
+        LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getMaximumDaysNotViewedStudy().toInt(NULL, 10));
+    }
 }
 
 void LocalDatabaseManager::insert(Patient *newPatient)
@@ -96,7 +103,7 @@ QList<Patient*> LocalDatabaseManager::queryPatientStudy(DicomMask patientStudyMa
     QList<Patient*> queryResult;
 
     studyDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
-    queryResult = studyDAL.queryPatientStudy(patientStudyMaskToQuery);
+    queryResult = studyDAL.queryPatientStudy(patientStudyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
 
     return queryResult;
@@ -108,7 +115,7 @@ QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
     QList<Study*> queryResult;
 
     studyDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
-    queryResult = studyDAL.query(studyMaskToQuery);
+    queryResult = studyDAL.query(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
 
     return queryResult;
@@ -152,7 +159,7 @@ Patient* LocalDatabaseManager::retrieve(DicomMask maskToRetrieve)
 
     //busquem l'estudi i pacient
     studyDAL.setDatabaseConnection(dbConnect);
-    patientList = studyDAL.queryPatientStudy(maskToRetrieve);
+    patientList = studyDAL.queryPatientStudy(maskToRetrieve, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
 
     if (patientList.count() != 1) 
     {
@@ -319,13 +326,17 @@ void LocalDatabaseManager::deleteOldStudies()
     StarviewerSettings settings;
     DicomMask oldStudiesMask;
     QList<Study*> studyListToDelete;
+    LocalDatabaseStudyDAL studyDAL;
+    DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
 
-    lastDateViewedMinimum = QDate::currentDate().addDays(-settings.getMaximumDaysNotViewedStudy().toInt(NULL, 10));
-    oldStudiesMask.setLastAccessDate(lastDateViewedMinimum);
+    studyDAL.setDatabaseConnection(dbConnect);
+    studyListToDelete = studyDAL.query(oldStudiesMask, LocalDatabaseManager::LastAccessDateSelectedStudies);
 
-    studyListToDelete = queryStudy(oldStudiesMask);
-    if (getLastError() != LocalDatabaseManager::Ok)
+    if (studyDAL.getLastError() != SQLITE_OK)
+    {
+        setLastError(studyDAL.getLastError());
         return;
+    }
 
     foreach(Study *study, studyListToDelete)
     {

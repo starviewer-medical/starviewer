@@ -37,10 +37,10 @@ public:
     void del(DicomMask studyMaskToDelete);
 
     ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
-    QList<Study*> query(DicomMask studyMaskToQuery);
+    QList<Study*> query(DicomMask studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate() );
 
     ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
-    QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery);
+    QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
 
     ///Ens retorna quan estudis té un determinat pacient
     int countHowManyStudiesHaveAPatient(QString patientID);
@@ -64,13 +64,13 @@ private :
     QString buildSqlUpdate(Study *studyToUpdate, QDate lastAccessDate);
 
     ///Construeix la setència per fer select d'estudis a partir de la màscara, només té en compte el StudyUID i els estudis que tinguin un LastAccessDate menor que el de la màscara
-    QString buildSqlSelect(DicomMask studyMaskToSelect);
+    QString buildSqlSelect(DicomMask studyMaskToSelect, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor);
 
     ///Construeix la setència per esborrar l'estudi a partir de la màscara, només té en compte el StudyUID
     QString buildSqlDelete(DicomMask studyMaskToDelete);
 
     ///Construeix la sentència per fer select d'estudi i pacients a partir de la màscara. Té en compte studyUID, Patient Id, Patient Name, i data de l'estudi
-    QString buildSqlSelectStudyPatient(DicomMask studyMaskToSelect);
+    QString buildSqlSelectStudyPatient(DicomMask studyMaskToSelect, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor);
 
     ///Construeix la sentència per comptar quants estudis té un pacient
     QString buildSqlCountHowManyStudiesHaveAPatient(QString patientID);

@@ -11,7 +11,6 @@
 #include <QList>
 #include <QObject>
 
-
 #include "status.h"
 #include "image.h"
 #include "series.h"
@@ -22,6 +21,7 @@ namespace udg {
 
 class DicomMask;
 class DatabaseConnection;
+class QDate;
 
 /** Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -79,6 +79,9 @@ public slots:
     void insert(Patient *newPatient);
 
 private :
+
+    ///Guardem a partir de quina data de lastAccessDate cerquem els estudis, d'aquesta manera sabem quins estudis vells s'han d'esborrar, quins hem de mostrar al fer cerques, i evitem incoherències, com la que podria ser que al cercar estudis en una mateixa sessió de l'apliació a les 23:59,o a les 0:01 de l'endemà donint resultats diferents, perquè hi han estudis que passen a ser considerats estudis vells. D'aquesta manera en tota la vida de l'aplicació mantenim el mateix criteri de data per establir si un estudi es vell o no i s'ha de mostrar a les cerques.
+    static QDate LastAccessDateSelectedStudies;
 
     LastError m_lastError;
 

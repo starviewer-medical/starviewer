@@ -53,7 +53,7 @@ void LocalDatabaseStudyDAL::del(DicomMask studyMaskToDelete)
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(studyMaskToDelete));
 }
 
-QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask)
+QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -62,13 +62,13 @@ QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask)
     m_dbConnection->getLock();
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                      qPrintable(buildSqlSelect(studyMask)),
+                                      qPrintable(buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor)),
                                     &reply, &rows, &columns, error);
     m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK)
     {
-        logError (buildSqlSelect(studyMask));
+        logError (buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor));
         return studyList;
     }
 
@@ -81,7 +81,7 @@ QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask)
     return studyList;
 }
 
-QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(DicomMask patientStudyMaskToQuery)
+QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(DicomMask patientStudyMaskToQuery, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -90,13 +90,13 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(DicomMask patientStudyM
     m_dbConnection->getLock();
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                      qPrintable(buildSqlSelectStudyPatient((patientStudyMaskToQuery))),
+                                      qPrintable(buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor)),
                                     &reply, &rows, &columns, error);
     m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK)
     {
-        logError (buildSqlSelectStudyPatient(patientStudyMaskToQuery));
+        logError (buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor));
         return patientList;
     }
 
@@ -177,7 +177,7 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
     return patient;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
+QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     QString selectSentence, whereSentence, orderSentence;
 
@@ -189,21 +189,31 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect)
     if (!studyMaskToSelect.getStudyUID().isEmpty())
         whereSentence = QString(" Where InstanceUID = '%1' ").arg(studyMaskToSelect.getStudyUID());
 
-    if (!studyMaskToSelect.getLastAccessDate().isNull())
+    if (lastAccessDateMinor.isValid())
     {
         if (!whereSentence.isEmpty())
             whereSentence += " and ";
         else whereSentence = " where ";
 
-        whereSentence += QString(" LastAccessDate < '%1' ").arg(studyMaskToSelect.getLastAccessDate().toString("yyyyMMdd"));
+        whereSentence += QString(" LastAccessDate < '%1' ").arg(lastAccessDateMinor.toString("yyyyMMdd"));
     }
+
+    if (lastAccessDateEqualOrMajor.isValid())
+    {
+        if (!whereSentence.isEmpty())
+            whereSentence += " and ";
+        else whereSentence = " where ";
+
+        whereSentence += QString(" '%1' <= LastAccessDate ").arg(lastAccessDateEqualOrMajor.toString("yyyyMMdd"));
+    }
+
 
     orderSentence = " Order by LastAccessDate";
 
     return selectSentence + whereSentence + orderSentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToSelect)
+QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToSelect, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     QString selectSentence, whereSentence, orderBySentence;
 
@@ -243,6 +253,11 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToS
     {
         whereSentence += QString(" and Date between '%1' and '%2'").arg(studyMaskToSelect.getStudyDate().mid(0, 8)).arg( studyMaskToSelect.getStudyDate().mid(9, 8));
     }
+
+    if (lastAccessDateMinor.isValid())
+        whereSentence += QString(" and LastAccessDate < '%1' ").arg(lastAccessDateMinor.toString("yyyyMMdd"));
+    if (lastAccessDateEqualOrMajor.isValid())
+        whereSentence += QString(" and '%1' <= LastAccessDate ").arg(lastAccessDateEqualOrMajor.toString("yyyyMMdd"));
 
     orderBySentence = " Order by Patient.Name";
 
