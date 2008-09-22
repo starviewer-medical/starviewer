@@ -10,6 +10,8 @@
 #include <QDir>
 #include <QTextCodec>
 #include <QFileDialog>
+#include <QSettings>
+
 #include "logging.h"
 
 namespace udg {
@@ -18,6 +20,7 @@ QLogViewer::QLogViewer(QWidget *parent)
  : QDialog(parent)
 {
     setupUi( this );
+	readSettings();
 //     // carreguem l'arxiu de log
 //     updateData();
     createConnections();
@@ -25,6 +28,7 @@ QLogViewer::QLogViewer(QWidget *parent)
 
 QLogViewer::~QLogViewer()
 {
+	writeSettings();
 }
 
 void QLogViewer::updateData()
@@ -52,7 +56,7 @@ void QLogViewer::createConnections()
 
 void QLogViewer::saveLogFileAs()
 {
-    QString fileName = QFileDialog::getSaveFileName( this, tr("Save as..."),                                             QString(), tr("Log Files (*.log)") );
+    QString fileName = QFileDialog::getSaveFileName( this, tr("Save as..."), QString(), tr("Log Files (*.log)") );
 
     if ( fileName.isEmpty() )
         return;
@@ -63,6 +67,18 @@ void QLogViewer::saveLogFileAs()
 
     QTextStream logStream( &file );
     logStream << m_logBrowser->document()->toPlainText();
+}
+
+void QLogViewer::writeSettings()
+{
+	QSettings settings;
+    settings.setValue("logViewerDialogGeometry", saveGeometry());
+}
+
+void QLogViewer::readSettings()
+{
+    QSettings settings;
+    this->restoreGeometry(settings.value("logViewerDialogGeometry").toByteArray());
 }
 
 }
