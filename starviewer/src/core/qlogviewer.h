@@ -33,6 +33,9 @@ private slots:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
+private:
+	void writeSettings();
+	void readSettings();
 };
 
 }

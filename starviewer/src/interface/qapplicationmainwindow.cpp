@@ -47,7 +47,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
 
     m_extensionHandler = new ExtensionHandler( this );
 
-    m_logViewer = new QLogViewer( 0 );
+    m_logViewer = new QLogViewer( this );
 
     createActions();
     createMenus();
