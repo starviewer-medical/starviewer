@@ -248,7 +248,6 @@ void Drawer::hide( int plane, int slice )
             primitive->update( DrawerPrimitive::VTKRepresentation );
         }
     }
-    m_2DViewer->refresh();
 }
 
 void Drawer::show( int plane, int slice )
@@ -280,7 +279,6 @@ void Drawer::show( int plane, int slice )
             primitive->update( DrawerPrimitive::VTKRepresentation );
         }
     }
-    m_2DViewer->refresh();
 }
 
 int Drawer::getNumberOfDrawnPrimitives()
