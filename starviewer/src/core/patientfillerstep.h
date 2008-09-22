@@ -50,9 +50,6 @@ public:
     /// Al executar els steps individualment per cada fitxer, és possible que alguns steps necessitin fer quelcom
     /// un cop s'han processat tots els fitxers.
     virtual void postProcessing() = 0;
-    
-    /// Elimina les estructures internes que el filler pugui utilitzar pel seu bon funcionament.
-    virtual void abort() = 0;
 
     /// Retorna el nom del Filler Step. Aquest no serà mai visible per l'usuari però ajuda a l'hora de debugar el sistema.
     virtual QString name() = 0;

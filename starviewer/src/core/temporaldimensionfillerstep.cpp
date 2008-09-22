@@ -121,11 +121,6 @@ void TemporalDimensionFillerStep::postProcessing()
     }
 }
 
-void TemporalDimensionFillerStep::abort()
-{
-    TemporalDimensionInternalInfo.clear();
-}
-        
 void TemporalDimensionFillerStep::processSeries( Series *series )
 {
     bool found = false;
