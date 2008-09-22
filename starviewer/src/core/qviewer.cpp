@@ -276,7 +276,10 @@ bool QViewer::saveGrabbedViews( QString baseName , FileType extension )
 
 void QViewer::refresh()
 {
+	QTime time;
+	time.start();
     this->getInteractor()->Render();
+	WARN_LOG( QString("Fem refresh: %1ms").arg(time.elapsed() ) );
 }
 
 void QViewer::zoom( double factor )

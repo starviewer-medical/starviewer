@@ -165,10 +165,10 @@ void QVolumeContourDelimiterExtension::createActions()
     connect( m_createMask, SIGNAL( clicked() )  , this, SLOT( createModelOfVoxelsWithObtainedMasks() ) );
     connect( m_setSpline, SIGNAL( clicked ( bool ) ), this, SLOT( buttonAddSplineEnabled( bool ) ) );
     connect( m_addSpline, SIGNAL( clicked() ), this, SLOT( addNewSpline() ) );
-    connect( m_splineAction, SIGNAL( triggered() ), m_2DView, SLOT( disableTools() ) );
-    connect( m_zoomAction, SIGNAL( triggered() ), m_2DView, SLOT( enableTools() ) );
-    connect( m_windowLevelAction, SIGNAL( triggered() ), m_2DView, SLOT( enableTools() ) );
-    connect( m_slicingAction, SIGNAL( triggered() ), m_2DView, SLOT( enableTools() ) );
+    connect( m_splineAction, SIGNAL( triggered() ), m_2DView, SLOT( disableOldTools() ) );
+    connect( m_zoomAction, SIGNAL( triggered() ), m_2DView, SLOT( enableOldTools() ) );
+    connect( m_windowLevelAction, SIGNAL( triggered() ), m_2DView, SLOT( enableOldTools() ) );
+    connect( m_slicingAction, SIGNAL( triggered() ), m_2DView, SLOT( enableOldTools() ) );
     connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
     connect( m_2DView, SIGNAL( sliceChanged( int ) ), m_spinBox, SLOT( setValue( int ) ) );
     connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( computeCurrentArea( int ) ) );
@@ -177,7 +177,7 @@ void QVolumeContourDelimiterExtension::createActions()
     connect( m_spinBox, SIGNAL( valueChanged(int) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
     connect( m_spinBox, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setSlice( int ) ) );
     connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), this, SLOT( myEventHandler( unsigned long )) );
-    connect( m_actionFactory, SIGNAL( triggeredTool( QString ) )  , m_2DView, SLOT( setTool( QString ) ) );
+    connect( m_actionFactory, SIGNAL( triggeredTool( QString ) )  , m_2DView, SLOT( setOldTool( QString ) ) );
 
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     m_2DView->enableAnnotation( Q2DViewer::SliceAnnotation );

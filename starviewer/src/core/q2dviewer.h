@@ -122,10 +122,10 @@ public:
     void getCurrentWindowLevel( double wl[2] );
 
     /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
-    OldTool *getTool( QString toolName );
+    OldTool *getOldTool( QString toolName );
 
-    /// Retorna el nom de la tool activa
-    QString getCurrentToolName();
+    /// Retorna el nom de la tool antiga activa
+    QString getCurrentOldToolName();
 
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
@@ -256,10 +256,10 @@ public:
 public slots:
     virtual void render();
     void reset();
-    void setTool( QString toolName );
-    void setEnableTools( bool enable );
-    void enableTools();
-    void disableTools();
+    void setOldTool( QString toolName );
+    void setEnableOldTools( bool enable );
+    void enableOldTools();
+    void disableOldTools();
 
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
@@ -556,7 +556,7 @@ private:
     vtkScalarBarActor *m_scalarBar;
 
     /// El manager de les tools
-    Q2DViewerToolManager *m_toolManager;
+    Q2DViewerToolManager *m_oldToolManager;
 
     ///Informació de la posició de la seed
     double m_seedPosition[3];
@@ -595,7 +595,7 @@ private:
 
     /// Variable que controla si les tools estant habilitades
     /// Aquesta variable evita que es faci més d'un "connect" quan es fa l'enableTool i ja estan habilitades
-    bool m_enabledTools;
+    bool m_enabledOldTools;
 
     // Secció "ThickSlab"
     /// Nombre de llesques que composen el thickSlab

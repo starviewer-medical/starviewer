@@ -53,16 +53,6 @@ public slots:
     /// Força l'execució de la visualització.
     virtual void render();
 
-    /// Activa o desactiva que el manager escolti els events per processar tools.
-    virtual void setEnableTools( bool enable );
-    virtual void enableTools();
-    virtual void disableTools();
-
-    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool
-    /// està disponible o no el viewer farà el que calgui. Reimplementat en cada
-    /// viewer.
-    virtual void setTool( QString tool );
-
     /// Crida que reinicia a l'estat incial el visor.
     virtual void reset();
 

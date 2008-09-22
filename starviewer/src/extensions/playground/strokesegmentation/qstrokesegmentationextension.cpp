@@ -117,7 +117,7 @@ void QStrokeSegmentationExtension::createActions()
     m_editorToolButton->setDefaultAction( m_editorAction );
 
 
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setTool(QString) ) );
+    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
 
     m_toolsActionGroup = new QActionGroup( 0 );
     m_toolsActionGroup->setExclusive( true );
@@ -248,7 +248,7 @@ void QStrokeSegmentationExtension::applyMethod( )
     m_eraseSliceButton->setFlat(false);
     m_editorSize->setEnabled(true);
     m_editorAction->trigger();
-    m_2DView->disableTools();
+    m_2DView->disableOldTools();
     m_isPaint = true;
     m_isErase = false;
     m_isEraseSlice = false;
@@ -389,12 +389,12 @@ void QStrokeSegmentationExtension::leftButtonEventHandler( )
     if(m_editorToolButton->isChecked())
     {
         //std::cout<<"Editor Tool"<<std::endl;
-        m_2DView->disableTools();
+        m_2DView->disableOldTools();
         setEditorPoint(  );
     }
     else
     {
-        m_2DView->enableTools();
+        m_2DView->enableOldTools();
     }
 }
 

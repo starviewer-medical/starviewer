@@ -1262,7 +1262,7 @@ void QGlialEstimationExtension::applyT1Segmentation()
     m_T1VolumeLineEdit->setEnabled( true );
 
 /*    m_editorAction->trigger();
-    m_diffusion2DView->disableTools();
+    m_diffusion2DView->disableOldTools();
     m_editorAction->setEnabled( true );
 
     m_paintEditorAction->setEnabled(true);

@@ -266,11 +266,11 @@ void QMPR2DExtension::switchToMIPLayout( bool isMIPChecked )
             // això és un petit parxe per solventar que el mip no sap quina tool estem fent servir
             // \TODO solucionar això d'una manera més elegant
             if( m_zoomAction->isChecked() )
-                m_mipViewer->setTool( "ZoomTool" );
+                m_mipViewer->setOldTool( "ZoomTool" );
             else if( m_moveAction->isChecked() )
-                m_mipViewer->setTool( "TranslateTool" );
+                m_mipViewer->setOldTool( "TranslateTool" );
             else if( m_screenShotAction->isChecked() )
-                m_mipViewer->setTool("ScreenShotTool");
+                m_mipViewer->setOldTool("ScreenShotTool");
             // fi parxe
             m_mipViewer->setRenderFunctionToMIP3D();
         }
