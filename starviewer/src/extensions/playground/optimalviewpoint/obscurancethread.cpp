@@ -52,7 +52,7 @@ void ObscuranceThread::setData( const uchar * data, int dataSize, const int dime
 }
 
 
-void ObscuranceThread::setObscuranceParameters( double obscuranceMaximumDistance, OptimalViewpointVolume::ObscuranceFunction obscuranceFunction, OptimalViewpointVolume::ObscuranceVariant obscuranceVariant, double * obscurance, Vector3 * colorBleeding )
+void ObscuranceThread::setObscuranceParameters( double obscuranceMaximumDistance, Function obscuranceFunction, Variant obscuranceVariant, double * obscurance, Vector3 * colorBleeding )
 {
     m_obscuranceMaximumDistance = obscuranceMaximumDistance;
     m_obscuranceFunction = obscuranceFunction;
@@ -89,14 +89,14 @@ void ObscuranceThread::run()
 
     switch ( m_obscuranceVariant )
     {
-        case OptimalViewpointVolume::Density: runDensity(); break;
-        case OptimalViewpointVolume::DensitySmooth: runDensitySmooth(); break;
-        case OptimalViewpointVolume::Opacity: runOpacity(); break;
-        case OptimalViewpointVolume::OpacitySmooth: runOpacitySmooth(); break;
-        case OptimalViewpointVolume::OpacitySaliency: runOpacitySaliency(); break;
-        case OptimalViewpointVolume::OpacitySmoothSaliency: runOpacitySmoothSaliency(); break;
-        case OptimalViewpointVolume::OpacityColorBleeding: runOpacityColorBleeding(); break;
-        case OptimalViewpointVolume::OpacitySmoothColorBleeding: runOpacitySmoothColorBleeding(); break;
+        case ObscuranceMainThread::Density: runDensity(); break;
+        case ObscuranceMainThread::DensitySmooth: runDensitySmooth(); break;
+        case ObscuranceMainThread::Opacity: runOpacity(); break;
+        case ObscuranceMainThread::OpacitySmooth: runOpacitySmooth(); break;
+        case ObscuranceMainThread::OpacitySaliency: runOpacitySaliency(); break;
+        case ObscuranceMainThread::OpacitySmoothSaliency: runOpacitySmoothSaliency(); break;
+        case ObscuranceMainThread::OpacityColorBleeding: runOpacityColorBleeding(); break;
+        case ObscuranceMainThread::OpacitySmoothColorBleeding: runOpacitySmoothColorBleeding(); break;
     }
 }
 
@@ -1034,12 +1034,12 @@ inline double ObscuranceThread::obscurance( double distance ) const
 
     switch ( m_obscuranceFunction )
     {
-        case OptimalViewpointVolume::Constant0: return 0.0;
-        case OptimalViewpointVolume::Distance: return distance / m_obscuranceMaximumDistance;
-        case OptimalViewpointVolume::SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
-        case OptimalViewpointVolume::Exponential: return 1.0 - exp( -distance / m_obscuranceMaximumDistance );
-        case OptimalViewpointVolume::ExponentialNorm: return ( 1.0 - exp( -distance / m_obscuranceMaximumDistance ) ) / EXP_NORM;
-        case OptimalViewpointVolume::CubeRoot: return MathTools::cbrt( distance / m_obscuranceMaximumDistance );
+        case ObscuranceMainThread::Constant0: return 0.0;
+        case ObscuranceMainThread::Distance: return distance / m_obscuranceMaximumDistance;
+        case ObscuranceMainThread::SquareRoot: return sqrt( distance / m_obscuranceMaximumDistance );
+        case ObscuranceMainThread::Exponential: return 1.0 - exp( -distance / m_obscuranceMaximumDistance );
+        case ObscuranceMainThread::ExponentialNorm: return ( 1.0 - exp( -distance / m_obscuranceMaximumDistance ) ) / EXP_NORM;
+        case ObscuranceMainThread::CubeRoot: return MathTools::cbrt( distance / m_obscuranceMaximumDistance );
     }
 }
 

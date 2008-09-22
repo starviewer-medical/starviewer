@@ -218,6 +218,10 @@ private:
     OptimalViewpointParameters * m_parameters;
     double m_obscurancesFilterLow, m_obscurancesFilterHigh;
 
+signals:
+
+    void finishedObscurances();
+
 
 }; // end class OptimalViewpoint
 

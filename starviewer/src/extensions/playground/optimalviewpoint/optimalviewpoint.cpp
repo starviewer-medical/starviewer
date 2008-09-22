@@ -168,6 +168,8 @@ void OptimalViewpoint::setImage( vtkImageData * image )
     if ( m_renderer ) m_volume->setRenderer( m_renderer );
     DEBUG_LOG( "renderer->AddViewProp(volume)" );
     m_renderer->AddViewProp( volume );
+
+    connect( m_volume, SIGNAL( finishedObscurances() ), this, SIGNAL( finishedObscurances() ) );
 }
 
 void OptimalViewpoint::setSegmentationFileName( QString name )
@@ -902,7 +904,7 @@ void OptimalViewpoint::computeObscurances( int directions, double maximumDistanc
 {
     QTime t;
     t.start();
-    m_volume->computeObscurances( directions, maximumDistance, static_cast<OptimalViewpointVolume::ObscuranceFunction>( obscuranceFunction ), static_cast<OptimalViewpointVolume::ObscuranceVariant>( obscuranceVariant ) );
+    m_volume->computeObscurances( directions, maximumDistance, obscuranceFunction, obscuranceVariant );
     int elapsed = t.elapsed();
     DEBUG_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );
     INFO_LOG( QString( "[Obscurances-%1-%2-%3] Time elapsed: %4 s" ).arg( directions ).arg( maximumDistance ).arg( obscuranceFunction ).arg( elapsed / 1000.0 ) );

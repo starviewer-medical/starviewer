@@ -91,6 +91,7 @@ private slots:
     void openSegmentationFile();
     void toggleSegmentationParameters();
     void computeObscurances();
+    void finishedObscurances();
     void loadObscurances();
     void computeSaliency();
     void renderPlane();

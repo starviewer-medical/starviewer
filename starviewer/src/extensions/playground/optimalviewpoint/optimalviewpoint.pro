@@ -29,7 +29,8 @@ HEADERS += doublehistogram.h \
            saliencyvoxelshader.h \
            colorbleedingvoxelshader.h \
            obscurancethread.h \
-           vtkInteractorStyleFasterTrackballActor.h 
+           vtkInteractorStyleFasterTrackballActor.h \
+           obscurancemainthread.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
@@ -53,6 +54,7 @@ SOURCES += doublehistogram.cpp \
            saliencyvoxelshader.cpp \
            colorbleedingvoxelshader.cpp \
            obscurancethread.cpp \
-           vtkInteractorStyleFasterTrackballActor.cxx 
+           vtkInteractorStyleFasterTrackballActor.cxx \
+           obscurancemainthread.cpp 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)
