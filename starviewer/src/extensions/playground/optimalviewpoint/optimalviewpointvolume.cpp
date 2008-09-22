@@ -41,7 +41,6 @@
 #include <QThread>
 #include "obscurancethread.h"
 
-#include "vtkVolumeRayCastCompositeFunctionObscurances.h"
 #include <vtkDoubleArray.h>
 #include "vtkVolumeRayCastCompositeFunctionViewpointSaliency.h"
 #include <vtkVolumeRayCastFunction.h>
@@ -110,7 +109,6 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
     delete m_saliencyVoxelShader;
 
     m_mainVolumeRayCastFunction->Delete();
-    m_volumeRayCastFunctionObscurances->Delete();
     m_volumeRayCastFunctionFx->Delete();
     m_volumeRayCastFunctionFx2->Delete();
     m_volumeRayCastFunctionViewpointSaliency->Delete();
@@ -210,7 +208,6 @@ void OptimalViewpointVolume::setInterpolation( Interpolation interpolation )
         case LinearInterpolateClassify:
             m_property->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
-            m_volumeRayCastFunctionObscurances->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionFx->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionFx2->SetCompositeMethodToInterpolateFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToInterpolateFirst();
@@ -218,7 +215,6 @@ void OptimalViewpointVolume::setInterpolation( Interpolation interpolation )
         case LinearClassifyInterpolate:
             m_property->SetInterpolationTypeToLinear();
             m_mainVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
-            m_volumeRayCastFunctionObscurances->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionFx->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionFx2->SetCompositeMethodToClassifyFirst();
             m_volumeRayCastFunctionViewpointSaliency->SetCompositeMethodToClassifyFirst();
@@ -340,7 +336,6 @@ void OptimalViewpointVolume::createVoxelShaders()
 void OptimalViewpointVolume::createVolumeRayCastFunctions()
 {
     m_mainVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
-    m_volumeRayCastFunctionObscurances = vtkVolumeRayCastCompositeFunctionObscurances::New();
     m_volumeRayCastFunctionFx = vtkVolumeRayCastCompositeFunctionFx::New();
     m_volumeRayCastFunctionFx2 = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
     m_volumeRayCastFunctionFx2->AddVoxelShader( m_ambientVoxelShader );
@@ -947,7 +942,7 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
 
     if ( m_renderWithObscurances )
     {
-        m_mapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionObscurances );
+        m_mapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionFx2 );
     }
     else
     {
@@ -959,7 +954,6 @@ void OptimalViewpointVolume::setRenderWithObscurances( bool renderWithObscurance
 
 void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
 {
-    m_volumeRayCastFunctionObscurances->SetObscuranceFactor( obscurancesFactor );
     m_volumeRayCastFunctionFx->SetObscuranceFactor( obscurancesFactor );
     m_obscuranceVoxelShader->setFactor( obscurancesFactor );
     m_colorBleedingVoxelShader->setFactor( obscurancesFactor );
@@ -968,8 +962,6 @@ void OptimalViewpointVolume::setObscurancesFactor( double obscurancesFactor )
 
 void OptimalViewpointVolume::setObscurancesFilters( double obscurancesFilterLow, double obscurancesFilterHigh )
 {
-    m_volumeRayCastFunctionObscurances->SetObscuranceFilterLow( obscurancesFilterLow );
-    m_volumeRayCastFunctionObscurances->SetObscuranceFilterHigh( obscurancesFilterHigh );
     m_volumeRayCastFunctionFx->SetObscuranceFilterLow( obscurancesFilterLow );
     m_volumeRayCastFunctionFx->SetObscuranceFilterHigh( obscurancesFilterHigh );
     m_obscuranceVoxelShader->setFilters( obscurancesFilterLow, obscurancesFilterHigh );
@@ -1210,9 +1202,6 @@ void OptimalViewpointVolume::endComputeObscurances()
 
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
-        m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
-        m_volumeRayCastFunctionObscurances->SetColor( false );
-
         m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
         m_volumeRayCastFunctionFx->SetColor( false );
 
@@ -1305,9 +1294,6 @@ void OptimalViewpointVolume::endComputeObscurances()
 
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
-        m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
-        m_volumeRayCastFunctionObscurances->SetColor( true );
-
         m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
         m_volumeRayCastFunctionFx->SetColor( true );
 
@@ -1359,9 +1345,6 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
             else in >> m_obscurance[i];
         }
 
-        m_volumeRayCastFunctionObscurances->SetObscurance( m_obscurance );
-        m_volumeRayCastFunctionObscurances->SetColor( false );
-
         m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
         m_volumeRayCastFunctionFx->SetColor( false );
 
@@ -1411,9 +1394,6 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
             else in >> colorBleeding.z;
             m_colorBleeding[i] = colorBleeding;
         }
-
-        m_volumeRayCastFunctionObscurances->SetColorBleeding( m_colorBleeding );
-        m_volumeRayCastFunctionObscurances->SetColor( true );
 
         m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
         m_volumeRayCastFunctionFx->SetColor( true );
