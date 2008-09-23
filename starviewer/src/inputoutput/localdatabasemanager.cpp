@@ -332,11 +332,10 @@ void LocalDatabaseManager::deleteOldStudies()
     studyDAL.setDatabaseConnection(dbConnect);
     studyListToDelete = studyDAL.query(oldStudiesMask, LocalDatabaseManager::LastAccessDateSelectedStudies);
 
+    setLastError(studyDAL.getLastError());
+
     if (studyDAL.getLastError() != SQLITE_OK)
-    {
-        setLastError(studyDAL.getLastError());
         return;
-    }
 
     foreach(Study *study, studyListToDelete)
     {
