@@ -1146,8 +1146,15 @@ void OptimalViewpointVolume::computeObscurances( int numberOfDirections, double 
     obscuranceMainThread->setObscurance( m_obscurance, m_colorBleeding );
     obscuranceMainThread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
 
+    connect( obscuranceMainThread, SIGNAL( progress(int) ), this, SLOT( showObscuranceProgress(int) ) );
     connect( obscuranceMainThread, SIGNAL( finished() ), this, SLOT( endComputeObscurances() ) );
     obscuranceMainThread->start();
+}
+
+
+void OptimalViewpointVolume::showObscuranceProgress( int percent )
+{
+    DEBUG_LOG( QString( "Progrés de les obscurances: %1%" ).arg( percent ) );
 }
 
 

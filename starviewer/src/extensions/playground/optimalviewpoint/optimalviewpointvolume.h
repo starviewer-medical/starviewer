@@ -103,7 +103,7 @@ public:
     /// Assigna l'exponent del coeficient especular.
     void setSpecularPower( double specularPower );
 
-    
+
 
 
     void setImageSampleDistance( double imageSampleDistance );
@@ -131,7 +131,7 @@ public:
     // nous paràmetres
     void setOpacityForComputing( bool on );
 
-    
+
 
 
 
@@ -162,7 +162,7 @@ public:
     void setFxSaliencyHigh( double fxSaliencyHigh );
 
 
-   
+
 
 
 public slots:
@@ -170,9 +170,9 @@ public slots:
     void setExcessEntropy( double excessEntropy );
     void setComputing( bool on = true );
 
-    
+
 signals:
-    
+
     void needsExcessEntropy();
     void visited( int rayId, unsigned char value );
     void rayEnd( int rayId );
@@ -202,7 +202,7 @@ private:
 
 //     QList<Vector3> getLineStarts( int dimX, int dimY, int dimZ, const Vector3 & forward ) const;
 //     double obscurance( double distance ) const;
-    
+
 
     /// Genera la imatge etiquetada i la segmentada a partir dels limits donats.
     void labelize( const QVector< unsigned char > & limits );
@@ -215,6 +215,7 @@ private:
 private slots:
 
     void endComputeObscurances();
+    void showObscuranceProgress( int percent );
 
 private:
 
@@ -293,7 +294,7 @@ private:
 
 
 
-    
+
 
 
 
@@ -302,7 +303,7 @@ private:
 
     bool m_renderWithObscurances;
 
-    
+
 
 
 

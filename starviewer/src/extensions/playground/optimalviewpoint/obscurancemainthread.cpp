@@ -65,15 +65,23 @@ void ObscuranceMainThread::setSaliency( const double *saliency, double fxSalienc
 }
 
 
+void ObscuranceMainThread::stop()
+{
+    m_stopped = true;
+}
+
+
 void ObscuranceMainThread::run()
 {
     Q_ASSERT( m_volume );
+
+    m_stopped = false;
 
     vtkVolumeRayCastMapper *mapper = vtkVolumeRayCastMapper::SafeDownCast( m_volume->GetMapper() );
     vtkEncodedGradientEstimator *gradientEstimator = mapper->GetGradientEstimator();
 
     // Creem els threads
-    int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();
+    int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();  /// \todo QThread::idealThreadCount() amb Qt >= 4.3
     QVector<ObscuranceThread *> threads(numberOfThreads);
 
     // variables necessàries
@@ -105,7 +113,7 @@ void ObscuranceMainThread::run()
     int nDirections = directions.size();
 
     // iterem per les direccions
-    for ( int i = 0; i < nDirections; i++ )
+    for ( int i = 0; i < nDirections && !m_stopped; i++ )
     {
         const Vector3 &direction = directions.at( i );
 
@@ -186,6 +194,8 @@ void ObscuranceMainThread::run()
         {
             threads[j]->wait();
         }
+
+        emit progress( 100 * ( i + 1 ) / nDirections );
     }
 
     // destruïm els threads
@@ -193,6 +203,8 @@ void ObscuranceMainThread::run()
     {
         delete threads[j];
     }
+
+    if ( m_stopped ) return;    // si han cancel·lat el procés ja podem plegar
 
     if ( !hasColor() )   // obscurances
     {

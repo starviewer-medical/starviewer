@@ -43,6 +43,14 @@ public:
     void setObscurance( double *obscurance, Vector3 *colorBleeding );
     void setSaliency( const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh );
 
+public slots:
+
+    void stop();
+
+signals:
+
+    void progress( int percent );
+
 protected:
 
     virtual void run();
@@ -62,6 +70,8 @@ private:
     const double *m_saliency;
     double m_fxSaliencyA, m_fxSaliencyB;
     double m_fxSaliencyLow, m_fxSaliencyHigh;
+
+    bool m_stopped;
 
 };
 
