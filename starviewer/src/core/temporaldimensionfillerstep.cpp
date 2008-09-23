@@ -24,6 +24,12 @@ TemporalDimensionFillerStep::TemporalDimensionFillerStep()
 
 TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
 {
+    SeriesInfo *seriesInfo;
+    foreach ( Series * key , TemporalDimensionInternalInfo.keys() )
+    {
+        seriesInfo = TemporalDimensionInternalInfo.take(key);
+        delete seriesInfo;
+    }
 }
 
 bool TemporalDimensionFillerStep::fill()
