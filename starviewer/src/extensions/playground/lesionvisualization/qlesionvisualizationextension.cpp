@@ -38,6 +38,9 @@ QLesionVisualizationExtension::QLesionVisualizationExtension( QWidget *parent )
 {
     setupUi( this );
 
+    // activem el framework de "Old Tools"
+    // TODO cal reciclar per les noves tools
+    m_2DView->enableOldTools();
     createActions();
     createConnections();
     readSettings();

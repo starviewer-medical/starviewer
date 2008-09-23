@@ -66,6 +66,9 @@ QVolumeContourDelimiterExtension::QVolumeContourDelimiterExtension(QWidget *pare
     m_extrude = vtkLinearExtrusionFilter::New();
     m_addSpline->setEnabled( false );
     m_createMask->setEnabled( false );
+    // activem el framework de "Old Tools"
+    // TODO cal reciclar per les noves tools
+    m_2DView->enableOldTools();
     createActions();
 }
 

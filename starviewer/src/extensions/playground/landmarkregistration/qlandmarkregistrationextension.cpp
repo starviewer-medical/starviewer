@@ -50,6 +50,10 @@ QLandmarkRegistrationExtension::QLandmarkRegistrationExtension(QWidget *parent)
     m_seedSet1 = itk::VectorContainer<int, PointType>::New();
     m_seedSet2 = itk::VectorContainer<int, PointType>::New();
 
+    // activem el framework de "Old Tools"
+    // TODO cal reciclar per les noves tools
+    m_2DView->enableOldTools();
+    m_2DView_2->enableOldTools();
     createActions();
     createConnections();
     readSettings();
