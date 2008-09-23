@@ -21,7 +21,6 @@ namespace udg {
 
 class DicomMask;
 class DatabaseConnection;
-class QDate;
 
 /** Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>

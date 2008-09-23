@@ -8,10 +8,7 @@
 #define UDGLOCALDATABASESTUDY_H
 
 #include <QList>
-
 #include "study.h"
-
-class QDate;
 
 namespace udg {
 
