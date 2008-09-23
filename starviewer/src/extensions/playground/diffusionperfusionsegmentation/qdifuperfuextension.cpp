@@ -58,6 +58,10 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
     m_squareActor = vtkActor::New();
     m_perfusionHueLut = vtkLookupTable::New();
 
+    // activem el framework de "Old Tools"
+    // TODO cal reciclar per les noves tools
+    m_diffusion2DView->enableOldTools();
+    m_perfusion2DView->enableOldTools();
     createActions();
     createConnections();
     readSettings();

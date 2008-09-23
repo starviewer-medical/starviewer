@@ -121,10 +121,16 @@ public:
 
     void getCurrentWindowLevel( double wl[2] );
 
-    /// Obté la tool que li demanem. \TODO Mètode "temporal" (o no) per poder accedir a les dades d'una tool; per exemple, si tenim la tool de seeds, per certes extensions necessitarem obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
+    /// Obté la tool antiga que li demanem.
+    /// \TODO Mètode "temporal" per poder accedir a les dades d'una tool;
+    /// per exemple, si tenim la tool de seeds, per certes extensions necessitarem
+    /// obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
+    /// S'eliminara quan ens desfem de les tools antigues
     OldTool *getOldTool( QString toolName );
 
     /// Retorna el nom de la tool antiga activa
+    /// TODO eliminar quan el sistema de tools antigues
+    /// s'hagi eliminat del core
     QString getCurrentOldToolName();
 
     /// Obtenir la llavor
@@ -256,6 +262,11 @@ public:
 public slots:
     virtual void render();
     void reset();
+    /// Metodes per activar les Tools antigues.
+    /// Per poder-les fer servir cal activar-les explicitament
+    /// Per defecte estan desactivades
+    /// TODO Quan ens desfem de totes les eines
+    /// antigues aquests metodes han de desapareixer
     void setOldTool( QString toolName );
     void setEnableOldTools( bool enable );
     void enableOldTools();
@@ -564,7 +575,7 @@ private:
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
 
-    // Annotació de texte per les llesques
+    /// Annotació de texte per les llesques
     vtkCornerAnnotation *m_sliceAnnotation;
 
     /// ampliació tractament dinàmic
@@ -594,7 +605,8 @@ private:
     vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
 
     /// Variable que controla si les tools estant habilitades
-    /// Aquesta variable evita que es faci més d'un "connect" quan es fa l'enableTool i ja estan habilitades
+    /// Aquesta variable evita que es faci més d'un "connect"
+    /// quan es fa l'enableOldTools i ja estan habilitades
     bool m_enabledOldTools;
 
     // Secció "ThickSlab"
