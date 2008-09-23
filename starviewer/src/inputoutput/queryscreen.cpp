@@ -12,6 +12,7 @@
 #include <QMovie>
 #include <QContextMenuEvent>
 #include <QShortcut>
+#include <QTime>
 
 #include "processimagesingleton.h"
 #include "pacsconnection.h"
@@ -36,7 +37,6 @@
 #include "patient.h"
 #include "testdatabase.h"
 #include "testdicomobjects.h"
-#include <QTime>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -195,7 +195,7 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
 
 void QueryScreen::deleteOldStudies()
 {
-    //TODO: Per implementar!
+    m_qdeleteOldStudiesThread.deleteOldStudies();
 }
 
 void QueryScreen::updateOperationsInProgressMessage()
@@ -283,6 +283,9 @@ void QueryScreen::createConnections()
 
     //Amaga o ensenya la cerca avançada
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
+
+    //Connecta amb el signal que indica que ha finalitza el thread d'esborrar els estudis vells
+    connect(&m_qdeleteOldStudiesThread, SIGNAL(finished()), SLOT(deleteOldStudiesThreadFinished()));
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)
@@ -887,6 +890,11 @@ void QueryScreen::viewFromQSeriesListWidget()
     loadStudies( studyUIDList, m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
 }
 
+void QueryScreen::deleteOldStudiesThreadFinished()
+{
+    showDatabaseManagerError(m_qdeleteOldStudiesThread.getLastError(), tr("deleting old studies"));
+}
+
 void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source )
 {
     if( studiesUIDList.isEmpty() )
@@ -1313,9 +1321,12 @@ QString QueryScreen::buildQueryParametersString(DicomMask mask)
     return logMessage;
 }
 
-bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error )
+bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)
 {
     QString message;
+
+    if (!doingWhat.isEmpty())
+        message = tr("An error has ocurred while ") + doingWhat + ":\n\n";
 
     switch(error)
     {
@@ -1323,28 +1334,28 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
             return false;
 
         case LocalDatabaseManager::DatabaseLocked:
-            message = tr("The Cache is blocked by another Starviewer window."
+            message += tr("The Cache is blocked by another Starviewer window."
                          "\nTry to close all the others Starviewer windows and try again."
                          "\n\nIf you want to open different Starviewer's windows always choose the 'New' option from the File menu.");
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
-            message = tr("Starviewer database is corrupted."
-                         "\n Try to close all Starviewer windows and try again."
+            message += tr("Starviewer database is corrupted."
+                         "\nTry to close all Starviewer windows and try again."
                          "\n\nIf the problem persist contact with an administrator");
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
-            message = tr("Starviewer Database manager error."
-                         "\n Try to close all Starviewer windows and try again."
+            message += tr("Starviewer Database manager error."
+                         "\nTry to close all Starviewer windows and try again."
                          "\n\nIf the problem persist contact with an administrator");
             break;
         case LocalDatabaseManager::DatabaseError:
-            message = tr("An internal error occurs with Starviewer database."
-                         "\n Try to close all Starviewer windows and try again."
+            message += tr("An internal error occurs with Starviewer database."
+                         "\nTry to close all Starviewer windows and try again."
                          "\n\nIf the problem persist contact with an administrator");
             break;
         case LocalDatabaseManager::DeletingFilesError:
-            message = tr("Some files can not be delete."
-                         "\n Theses have to be delete manually.");
+            message += tr("Some files can not be delete."
+                         "\nThese have to be delete manually.");
             break;
         default:
             message = tr("An unknow error has ocurred");

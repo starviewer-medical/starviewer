@@ -14,6 +14,7 @@
 #include "dicomstudy.h"
 #include "pacsparameters.h"
 #include "localdatabasemanager.h"
+#include "qdeleteoldstudiesthread.h"
 
 namespace udg {
 
@@ -24,6 +25,7 @@ class QCreateDicomdir;
 class ProcessImageSingleton;
 class DicomMask;
 class QOperationStateScreen;
+class QDeleteOldStudiesThread;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -160,6 +162,9 @@ private slots:
     ///Visualitza la sèrie sobre la que s'ha fet un view des del QSeriesListWidget
     void viewFromQSeriesListWidget();
 
+    ///Slot que es dispara quan ha finalitzat el thread que esborrar els estudis vells, aquest slot comprova que no s'hagi produït cap error esborrant els estudis vells
+    void deleteOldStudiesThreadFinished();
+
 private:
     enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
 
@@ -216,7 +221,7 @@ private:
 
     ///En el cas que l'error que se li passa com a paràmetre realment sigui un error, mostrarà un missatge a l'usuari explicant-lo.
     ///Es retorna true en el cas que hi hagi error, false si no n'hi ha.
-    bool showDatabaseManagerError(LocalDatabaseManager::LastError error);
+    bool showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat = "");
 
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();
@@ -290,6 +295,7 @@ struct retrieveParameters
     QOperationStateScreen *m_operationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;
+    QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
 
     QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs, m_contextMenuQStudyTreeWidgetDicomdir;
 
