@@ -40,9 +40,6 @@ public:
     int getSeedSlice(){return m_seedSlice;}
 
 private:
-    //M�tode deprecated
-    void createAction();
-
     Q2DViewer *m_2DViewer;
 
     int m_seedSlice;

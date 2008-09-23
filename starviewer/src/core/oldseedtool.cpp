@@ -48,10 +48,6 @@ OldSeedTool::~OldSeedTool()
     m_pointMapper->Delete();
 }
 
-void OldSeedTool::createAction()
-{
-}
-
 void OldSeedTool::handleEvent( unsigned long eventID )
 {
     switch( eventID )
