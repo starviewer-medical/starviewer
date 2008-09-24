@@ -277,6 +277,13 @@ void QOptimalViewpointExtension::setScalarRange( unsigned char rangeMin, unsigne
     unsigned short maximum = rangeMax - rangeMin + 1;
     if ( maximum < m_segmentationNumberOfBinsSpinBox->maximum() )
         m_segmentationNumberOfBinsSpinBox->setMaximum( maximum );
+
+    TransferFunction defaultTransferFunction;
+    defaultTransferFunction.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
+    defaultTransferFunction.addPoint( rangeMax, QColor( 255, 255, 255, 255 ) );
+
+    m_inputParametersWidget->setTransferFunction( defaultTransferFunction );
+    m_method->setTransferFunction( defaultTransferFunction );
 }
 
 
