@@ -230,6 +230,8 @@ void ObscuranceMainThread::run()
 
         for ( int i = 0; i < dataSize; i++ ) m_colorBleeding[i] /= maximumObscurance;
     }
+
+    emit computed();
 }
 
 

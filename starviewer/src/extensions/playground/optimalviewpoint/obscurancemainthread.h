@@ -50,6 +50,7 @@ public slots:
 signals:
 
     void progress( int percent );
+    void computed();
 
 protected:
 
