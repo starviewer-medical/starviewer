@@ -21,7 +21,8 @@
 #include "errordcmtk.h"
 #include "patientfiller.h"
 #include "dicomtagreader.h"
-#include "localdatabasemanager.h"
+#include "localdatabasemanagerthreaded.h"
+#include "qthreadrunwithexec.h"
 
 namespace udg
 {
@@ -31,20 +32,45 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     Status state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
     if ( !state.good() ) return false;
-
+    
+    LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
     PatientFiller patientFiller;
-    LocalDatabaseManager localDatabaseManager;
-
+    QThreadRunWithExec fillersThread;
+    patientFiller.moveToThread( &fillersThread );
+    
+    //Connexions entre la descarrega i el processat dels fitxers
     connect(this, SIGNAL( imageImportedToDisk(DICOMTagReader*) ), &patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
-    connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManager, SLOT( insert(Patient *) ));
+    connect(this, SIGNAL( importFinished() ), &patientFiller, SLOT( finishDICOMFilesProcess() ));
+    
+    //Connexió entre el processat i l'insersió al a BD
+    connect(&patientFiller, SIGNAL( patientProcessed(Patient*) ), &localDatabaseManagerThreaded, SLOT( insert(Patient*) ), Qt::DirectConnection);
+    
+    //Connexions per finalitzar els threads
+    connect(&patientFiller, SIGNAL( patientProcessed(Patient*) ), &fillersThread, SLOT( quit() ), Qt::DirectConnection);
+    connect(&localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection);
 
+    //Connexions d'abortament
+    connect(this, SIGNAL( importAborted() ), &fillersThread, SLOT( quit() ), Qt::DirectConnection );
+    connect(this, SIGNAL( importAborted() ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
+    
+    localDatabaseManagerThreaded.start();
+    fillersThread.start();
+    
     bool ok = importStudy( studyUID , seriesUID , sopInstanceUID );
 
-    if (ok)
+    if ( ok )
     {
-        patientFiller.finishDICOMFilesProcess();
+        emit importFinished();
     }
-
+    else
+    {
+        emit importAborted();
+    }
+    
+    //Esperem que el processat i l'insersió a la base de dades acabin
+    fillersThread.wait();
+    localDatabaseManagerThreaded.wait();
+    
     INFO_LOG( "Estudi " + studyUID + " importat" );
 
     return ok;

@@ -34,6 +34,9 @@ signals:
     ///Senyal que ens indica que s'ha importat una imatge a disc. Quan s'emet aquest senyal encara no s'ha guardat a la bd.
     void imageImportedToDisk(DICOMTagReader *dicomTagReader);
 
+    void importFinished();
+    void importAborted();
+
 private:
     DICOMDIRReader m_readDicomdir;
 
