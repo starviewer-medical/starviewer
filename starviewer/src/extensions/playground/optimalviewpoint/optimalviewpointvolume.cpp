@@ -1147,7 +1147,7 @@ void OptimalViewpointVolume::computeObscurances( int numberOfDirections, double 
     obscuranceMainThread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
 
     connect( obscuranceMainThread, SIGNAL( progress(int) ), this, SLOT( showObscuranceProgress(int) ) );
-    connect( obscuranceMainThread, SIGNAL( finished() ), this, SLOT( endComputeObscurances() ) );
+    connect( obscuranceMainThread, SIGNAL( computed() ), this, SLOT( endComputeObscurances() ) );
     obscuranceMainThread->start();
 }
 
