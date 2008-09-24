@@ -65,7 +65,9 @@ HEADERS += databaseconnection.h \
  localdatabasepatientdal.h \
  localdatabaseutildal.h \
  testdatabase.h \
- qdeleteoldstudiesthread.h
+ qdeleteoldstudiesthread.h \
+ localdatabasemanagerthreaded.h \
+ qthreadrunwithexec.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -114,7 +116,8 @@ SOURCES += databaseconnection.cpp \
  localdatabasepatientdal.cpp \
  localdatabaseutildal.cpp \
  testdatabase.cpp \
- qdeleteoldstudiesthread.cpp
+ qdeleteoldstudiesthread.cpp \
+ localdatabasemanagerthreaded.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core

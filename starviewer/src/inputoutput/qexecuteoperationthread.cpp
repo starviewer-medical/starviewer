@@ -30,7 +30,8 @@
 #include "dicomseries.h"
 #include "patientfiller.h"
 #include "dicomtagreader.h"
-#include "localdatabasemanager.h"
+#include "localdatabasemanagerthreaded.h"
+#include "qthreadrunwithexec.h"
 
 namespace udg {
 
@@ -113,8 +114,10 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     QString studyUID = operation.getStudyUID();
     Status state,retState;
 
-    LocalDatabaseManager *localDatabaseManager = new LocalDatabaseManager();
-    PatientFiller *patientFiller = new PatientFiller();
+    LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
+    PatientFiller patientFiller;
+    QThreadRunWithExec fillersThread;
+    patientFiller.moveToThread( &fillersThread );
 
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
@@ -168,10 +171,25 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
     piSingleton->addNewProcessImage(studyUID, sProcessImg);
 
-    connect(patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
-    connect(sProcessImg, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
-    connect(this, SIGNAL( retrieveFinished() ), patientFiller, SLOT( finishDICOMFilesProcess() ), Qt::DirectConnection);
-    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManager, SLOT( insert(Patient *) ));
+    connect(&patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
+    
+    //Connexions entre la descarrega i el processat dels fitxers
+    connect(sProcessImg, SIGNAL( fileRetrieved(DICOMTagReader*) ), &patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
+    connect(this, SIGNAL( retrieveFinished() ), &patientFiller, SLOT( finishDICOMFilesProcess() ));
+    
+    //Connexió entre el processat i l'insersió al a BD
+    connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManagerThreaded, SLOT( insert(Patient *) ), Qt::DirectConnection);
+    
+    //Connexions per finalitzar els threads
+    connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &fillersThread, SLOT( quit() ), Qt::DirectConnection);
+    connect(&localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
+    
+    //Connexions d'abortament
+    connect(this, SIGNAL( abort() ), &fillersThread, SLOT( quit() ), Qt::DirectConnection );
+    connect(this, SIGNAL( abort() ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
+    
+    localDatabaseManagerThreaded.start();
+    fillersThread.start();
 
     retState = retrieveImages.retrieve();
 
@@ -197,12 +215,14 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
         }
     }
-
+    
+    //Esperem que el processat i l'insersió a la base de dades acabin
+    fillersThread.wait();
+    localDatabaseManagerThreaded.wait();
+    
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID );
     delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
-    delete patientFiller;
-    delete localDatabaseManager;
 }
 
 Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
