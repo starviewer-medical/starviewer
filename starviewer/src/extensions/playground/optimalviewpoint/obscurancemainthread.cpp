@@ -95,7 +95,7 @@ void ObscuranceMainThread::run()
 
     for ( int i = 0; i < numberOfThreads; i++ )
     {
-        ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, m_transferFunction, this );
+        ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, m_transferFunction );
         thread->setGradientEstimator( gradientEstimator );
         thread->setData( data, dataSize, dimensions, increments );
         thread->setObscuranceParameters( m_maximumDistance, m_function, m_variant, m_obscurance, m_colorBleeding );
