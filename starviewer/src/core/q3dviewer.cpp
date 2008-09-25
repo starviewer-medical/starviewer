@@ -63,6 +63,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();
     m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
+    m_vtkWidget->setAutomaticImageCacheEnabled( true );
     this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 

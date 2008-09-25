@@ -31,6 +31,7 @@ OptimalViewpointViewer::OptimalViewpointViewer( QWidget * parent )
     m_renderer->SetBackground( 1.0, 1.0, 1.0 );
 
     m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
+    m_vtkWidget->setAutomaticImageCacheEnabled( true );
 }
 
 
