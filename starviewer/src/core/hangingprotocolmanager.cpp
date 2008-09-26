@@ -9,6 +9,8 @@
 #include "viewerslayout.h"
 #include "patient.h"
 #include "series.h"
+#include "volume.h"
+#include "q2dviewerwidget.h"
 #include "hangingprotocolsrepository.h"
 #include "hangingprotocol.h"
 #include "hangingprotocollayout.h"
@@ -44,6 +46,7 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
     Series * serie;
     QList<QString> positions;
     QList<Series *> series;
+	Q2DViewerWidget * viewerWidget;
 
     for( i = 0; i < numberOfItems; i++)
     {
@@ -66,20 +69,15 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
                     positions << displaySet->getPosition();
                     series << serie;
 
-//                     layout->addViewer( displaySet->getPosition() )->setInput( serie->getFirstVolume() );
+					viewerWidget = layout->addViewer( displaySet->getPosition() );
+					viewerWidget->setInput( serie->getFirstVolume() );
+					
+					applyDisplayTransformations( patient, viewerWidget, displaySet );
 
                     DEBUG_LOG( tr("Image set number : %1, serie: %2, pos: %3").arg( imageSetNumber).arg(serie->getDescription()).arg(displaySet->getPosition()) );
                 }
 
                 imageSetNumber++;
-            }
-
-            layout->setGrid( positions );
-            int numberOfViewer = 0;
-            foreach( Series * serie, series )
-            {
-                layout->getViewerWidget( numberOfViewer )->setInput( serie->getFirstVolume() );
-                numberOfViewer++;
             }
         }
     }
@@ -188,6 +186,13 @@ bool HangingProtocolManager::isValidSerie( Series * serie, HangingProtocolImageS
     }
 
     return valid;
+}
+
+void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet )
+{
+	QString patientDisplayOrientation = displaySet->getPatientOrientation();
+	QString patientOrientation = viewer->getViewer()->getInput()->getSeries()->getPatientPosition();
+
 }
 
 }

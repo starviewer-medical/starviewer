@@ -40,6 +40,11 @@ void HangingProtocolDisplaySet::setPosition( QString position )
     m_position = position;
 }
 
+void HangingProtocolDisplaySet::setPatientOrientation( QString orientation )
+{
+	m_patientOrientation = orientation;
+}
+
 int HangingProtocolDisplaySet::getIdentifier()
 {
     return m_identifier;
@@ -58,6 +63,11 @@ int HangingProtocolDisplaySet::getImageSetNumber()
 QString HangingProtocolDisplaySet::getPosition()
 {
     return m_position;
+}
+
+QString HangingProtocolDisplaySet::getPatientOrientation()
+{
+	return m_patientOrientation;
 }
 
 void HangingProtocolDisplaySet::show()

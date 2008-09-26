@@ -14,8 +14,10 @@ namespace udg {
 class ViewersLayout;
 class HangingProtocol;
 class HangingProtocolImageSet;
+class HangingProtocolDisplaySet;
 class Patient;
 class Series;
+class Q2DViewerWidget;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -42,6 +44,8 @@ private:
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
     bool isValidSerie( Series * serie, HangingProtocolImageSet * imageSet );
 
+	/// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
+	void applyDisplayTransformations( Patient * patient, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet );
 };
 
 }

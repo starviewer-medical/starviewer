@@ -34,7 +34,10 @@ public:
     /// Posar la posició del visualitzador
     void setPosition( QString position );
 
-    /// Obtenir l'identificador
+	/// Posar la posició del pacient
+	void setPatientOrientation( QString string );
+
+	/// Obtenir l'identificador
     int getIdentifier();
 
     /// Obtenir la descripcio
@@ -46,8 +49,12 @@ public:
     /// Obtenir la posició del visualitzador
     QString getPosition();
 
+	/// Obtenir la posició del pacient
+	QString getPatientOrientation();
+
     /// Mètode per mostrar els valors
     void show();
+
 private:
 
     /// Identificador de la seqüència
@@ -62,7 +69,8 @@ private:
     /// Posició a on es troba
     QString m_position;
 
-
+	/// Orientacio del pacient
+	QString m_patientOrientation;
 };
 
 }
