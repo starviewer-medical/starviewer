@@ -109,6 +109,9 @@ private:
 
     /// Grid regular o no regular
     bool m_isRegular;
+
+	/// Nombre de visualitzadors visibles
+	int m_numberOfVisibleViewers;
 };
 
 }

@@ -256,8 +256,8 @@ bool HangingProtocolsLoader::loadXMLFile( QString filePath )
     {
         foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
         {
-            HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
-            hangingProtocol->show();
+			HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
+			hangingProtocol->show();
         }
     }
 

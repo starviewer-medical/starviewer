@@ -196,6 +196,11 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
             reader->readNext();
             displaySet->setPosition( reader->text().toString() );
         }
+		if( reader->name() == "patientOrientation" )
+        {
+            reader->readNext();
+			displaySet->setPatientOrientation( reader->text().toString() );
+        }
         else if( reader->name() == "displaySet" && reader->tokenType() == QXmlStreamReader::EndElement )
         {
             break;

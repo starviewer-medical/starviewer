@@ -20,6 +20,8 @@ ViewersLayout::ViewersLayout(QWidget *parent) : QWidget(parent), m_selectedViewe
     this->setViewerSelected( this->getNewQ2DViewerWidget() );
     m_vectorViewers.push_back( m_selectedViewer );
     m_selectedViewer->setSelected( true );
+	
+	m_numberOfVisibleViewers = 0;
 
     initLayouts();
 }
@@ -190,8 +192,6 @@ void ViewersLayout::removeRows( int rows )
 void ViewersLayout::setGrid( int rows, int columns )
 {
 
-//     this->setLayout( NULL );
-
     // Mirem si les tenim amagades i mostrem totes les necessaries
     int windowsToShow = 0;
     int windowsToCreate = 0;
@@ -259,6 +259,8 @@ void ViewersLayout::setGrid( QList<QString> positionsList )
     int screen_x = this->width();
     int screen_y = this->height();
 
+	m_numberOfVisibleViewers = 0;
+
     if( m_gridLayout ) removeLayouts();
 
     for( i = 0; i < numberOfElements; i++ )
@@ -278,6 +280,8 @@ void ViewersLayout::setGrid( QList<QString> positionsList )
         y2 = listOfPositions.value( 3 ).toDouble();
         newViewer->setGeometry( x1*screen_x, (1-y1)*screen_y, ((x2-x1)*screen_x), (y1-y2)*screen_y );
 
+		m_numberOfVisibleViewers++;
+
         emit viewerAdded( newViewer );
     }
 
@@ -287,6 +291,7 @@ void ViewersLayout::setGrid( QList<QString> positionsList )
 
 Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 {
+
     Q2DViewerWidget *newViewer;
     QStringList listOfPositions;
     double x1;
@@ -298,22 +303,31 @@ Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 
     if( m_gridLayout ) removeLayouts();
 
-    newViewer = getNewQ2DViewerWidget();
-    m_vectorViewers.push_back( newViewer );
-
+	if ( m_numberOfVisibleViewers < m_vectorViewers.size() )
+	{
+		newViewer = m_vectorViewers.value( m_numberOfVisibleViewers );
+	}
+	else
+	{
+		newViewer = getNewQ2DViewerWidget();
+		m_vectorViewers.push_back( newViewer );
+	}
+	
     listOfPositions = position.split("\\");
     x1 = listOfPositions.value( 0 ).toDouble();
     y1 = listOfPositions.value( 1 ).toDouble();
     x2 = listOfPositions.value( 2 ).toDouble();
     y2 = listOfPositions.value( 3 ).toDouble();
-
     newViewer->setGeometry( x1*screen_x, (1-y1)*screen_y, ((x2-x1)*screen_x), (y1-y2)*screen_y );
 
+	m_numberOfVisibleViewers++;
+
     emit viewerAdded( newViewer );
-
+    
     m_positionsList << position;
+    m_isRegular = false;
 
-    return newViewer;
+	return newViewer;
 }
 
 void ViewersLayout::resizeEvent ( QResizeEvent * event )
