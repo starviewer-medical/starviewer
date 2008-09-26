@@ -189,7 +189,6 @@ void QOptimalViewpointExtension::doSegmentation()
     m_segmentationWidget->setChecked( false );
     m_visualizationOkPushButton->setEnabled( true );
     m_visualizationWidget->setChecked( true );
-    m_viewpointSelectionOkPushButton->setEnabled( true );
     m_viewpointEntropiesOkPushButton->setEnabled( true );
 }
 
