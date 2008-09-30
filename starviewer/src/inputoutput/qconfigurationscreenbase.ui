@@ -1006,12 +1006,12 @@
              <item>
               <widget class="QLabel" name="textLabel3_7" >
                <property name="text" >
-                <string>Maximum Cache size :</string>
+                <string>Minimum space required in harddisk to retrieve dicom objects:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="m_textPoolSize" >
+              <widget class="QLineEdit" name="m_textMinimumSpaceRequiredToRetrieve" >
                <property name="maximumSize" >
                 <size>
                  <width>50</width>
@@ -1019,7 +1019,7 @@
                 </size>
                </property>
                <property name="alignment" >
-                <set>Qt::AlignLeading</set>
+                <set>Qt::AlignRight</set>
                </property>
               </widget>
              </item>
@@ -1027,16 +1027,6 @@
               <widget class="QLabel" name="textLabel4_6" >
                <property name="text" >
                 <string>Gb</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="m_cacheUtilization" >
-               <property name="text" >
-                <string/>
-               </property>
-               <property name="alignment" >
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -1363,7 +1353,7 @@
   <tabstop>m_textDatabaseRoot</tabstop>
   <tabstop>m_textCacheImagePath</tabstop>
   <tabstop>m_textMaximumDaysNotViewed</tabstop>
-  <tabstop>m_textPoolSize</tabstop>
+  <tabstop>m_textMinimumSpaceRequiredToRetrieve</tabstop>
   <tabstop>m_buttonCreateDatabase</tabstop>
   <tabstop>m_buttonCompactDatabase</tabstop>
   <tabstop>m_buttonDeleteStudies</tabstop>

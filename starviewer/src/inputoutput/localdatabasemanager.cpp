@@ -21,6 +21,7 @@
 #include "logging.h"
 #include "deletedirectory.h"
 #include "starviewersettings.h"
+#include "harddiskinformation.h"
 
 #include <QDate>
 #include <QTime>
@@ -348,40 +349,6 @@ void LocalDatabaseManager::deleteOldStudies()
     } 
 }
 
-void LocalDatabaseManager::freeSpace(int MbytesToErase)
-{
-    QDate lastDateViewedMinimum;
-    StarviewerSettings settings;
-    DicomMask oldStudiesMask;
-    QList<Study*> studyListToDelete;
-    Study *studyToDelete;
-    int MbytesErased = 0, index = 0;
-
-    studyListToDelete = queryStudy(oldStudiesMask);
-    if (getLastError() != LocalDatabaseManager::Ok)
-        return;
-
-    while (index < studyListToDelete.count() && MbytesErased < MbytesToErase)
-    {
-        studyToDelete = studyListToDelete.at(index);
-        MbytesErased += getDirectorySize(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
-
-        del(studyToDelete->getInstanceUID());
-        if (getLastError() != LocalDatabaseManager::Ok)
-            break;
-
-        index++;
-    }
-
-    INFO_LOG("S'han alliberat " + QString().setNum(MbytesErased, 10) + " Mb");
-
-    ///Esborrem els estudis de la memòria
-    foreach(Study *study, studyListToDelete)
-    {
-        delete study;
-    } 
-}
-
 void LocalDatabaseManager::compact()
 {
     LocalDatabaseUtilDAL utilDAL;
@@ -389,6 +356,40 @@ void LocalDatabaseManager::compact()
     utilDAL.setDatabaseConnection(DatabaseConnection::getDatabaseConnection());
     utilDAL.compact();
     setLastError(utilDAL.getLastError());
+}
+
+bool LocalDatabaseManager::isEnoughSpace()
+{
+    HardDiskInformation hardDiskInformation;
+    StarviewerSettings settings;
+    quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());
+    quint64 minimumSpaceRequired = quint64(settings.getMinimumSpaceRequiredToRetrieveInMbytes());
+
+    if (freeSpaceInHardDisk < minimumSpaceRequired)
+    {
+        INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb) " +
+                 "s'intentarà esborrar estudis vells per alliberar suficient espai");
+
+        freeSpaceDeletingStudies(MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk);//Alliberem 2Gbytes d'espais d'estudis vells
+
+        if (getLastError() != LocalDatabaseManager::Ok)
+        {
+            ERROR_LOG("S'ha produït un error intentant alliberar espai");
+            return false;
+        }
+
+        freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());//Tornem a consultar l'espai lliure
+
+        if (freeSpaceInHardDisk < minimumSpaceRequired)
+        {
+            INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb)");
+            return false;
+        }
+        else
+            return true;
+    }
+
+    return true;
 }
 
 LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
@@ -610,6 +611,40 @@ int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, DicomMask mask
     localDatabaseImageDAL.del(maskToDelete);
 
     return localDatabaseImageDAL.getLastError();
+}
+
+void LocalDatabaseManager::freeSpaceDeletingStudies(int MbytesToErase)
+{
+    QDate lastDateViewedMinimum;
+    StarviewerSettings settings;
+    DicomMask oldStudiesMask;
+    QList<Study*> studyListToDelete;
+    Study *studyToDelete;
+    int MbytesErased = 0, index = 0;
+
+    studyListToDelete = queryStudy(oldStudiesMask);
+    if (getLastError() != LocalDatabaseManager::Ok)
+        return;
+
+    while (index < studyListToDelete.count() && MbytesErased < MbytesToErase)
+    {
+        studyToDelete = studyListToDelete.at(index);
+        MbytesErased += getDirectorySize(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
+
+        del(studyToDelete->getInstanceUID());
+        if (getLastError() != LocalDatabaseManager::Ok)
+            break;
+
+        index++;
+    }
+
+    INFO_LOG("S'han alliberat " + QString().setNum(MbytesErased, 10) + " Mb");
+
+    ///Esborrem els estudis de la memòria
+    foreach(Study *study, studyListToDelete)
+    {
+        delete study;
+    } 
 }
 
 void LocalDatabaseManager::setLastError(int sqliteLastError)

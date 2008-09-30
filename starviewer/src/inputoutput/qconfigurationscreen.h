@@ -127,9 +127,6 @@ private:
     /// Carrega la informació de la institució
     void loadInstitutionInformation();
 
-    /// calcula les dades del pool
-    void loadCachePoolDefaults();
-
     /// Guarda els canvis a la configuració dels paràmetres del PACS
     void applyChangesPacs();
 

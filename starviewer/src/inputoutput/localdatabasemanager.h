@@ -64,11 +64,11 @@ public:
     ///Esborra els estudis vells que fa que superen el temps màxim que poden estar a la base de dades sense ser visualitzats
     void deleteOldStudies();
 
-    ///Esborra estudis fins alliberar l'espai passat per paràmetre, comença esborrant dels que fa més que no es visualitzen
-    void freeSpace(int MbytesToErase);
-
     ///compacta la base de dades
     void compact();
+
+    ///Comprova si hi espai suficient al disc dur per descarregar nous objectes, si no n'hi ha suficient esborra estudis vells per intentar alliberar prou espai per permetre la descàrrega de nous objectes
+    bool isEnoughSpace();
 
     LastError getLastError();
 
@@ -81,6 +81,8 @@ private :
 
     ///Guardem a partir de quina data de lastAccessDate cerquem els estudis, d'aquesta manera sabem quins estudis vells s'han d'esborrar, quins hem de mostrar al fer cerques, i evitem incoherències, com la que podria ser que al cercar estudis en una mateixa sessió de l'apliació a les 23:59,o a les 0:01 de l'endemà donint resultats diferents, perquè hi han estudis que passen a ser considerats estudis vells. D'aquesta manera en tota la vida de l'aplicació mantenim el mateix criteri de data per establir si un estudi es vell o no i s'ha de mostrar a les cerques.
     static QDate LastAccessDateSelectedStudies;
+    ///Ens indica l'espai en Mbytes que hem d'alliberar quan no hi ha suficient espai en el disc
+    static const unsigned int MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk = 2*1024; 
 
     LastError m_lastError;
 
@@ -113,6 +115,9 @@ private :
 
     ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);
+
+    ///Esborra estudis  fins alliberar l'espai passat per paràmetre, comença esborrant els estudisque fa més que no es visualitzen
+    void freeSpaceDeletingStudies(int MbytesToErase);
 
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);

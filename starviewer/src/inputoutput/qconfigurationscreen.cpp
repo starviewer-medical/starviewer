@@ -80,7 +80,7 @@ void QConfigurationScreen::createConnections()
     //activen el boto apply quant canvia el seu valor
     connect( m_textDatabaseRoot, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textCacheImagePath, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
-    connect( m_textPoolSize, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
+    connect( m_textMinimumSpaceRequiredToRetrieve, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textAETitleMachine, SIGNAL( textChanged(const QString &) ) , SLOT( enableApplyButtons() ) );
     connect( m_textTimeout, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textDatabaseRoot, SIGNAL( textChanged(const QString &) ), SLOT ( configurationChangedDatabaseRoot() ) );
@@ -117,7 +117,7 @@ void QConfigurationScreen::configureInputValidator()
     m_textTimeout->setValidator( new QIntValidator(0, 99, m_textTimeout) );
     m_textMaxConnections->setValidator( new QIntValidator(0, 99, m_textMaxConnections) );
     m_textMaximumDaysNotViewed->setValidator( new QIntValidator(0, 9999, m_textMaximumDaysNotViewed) );
-    m_textPoolSize->setValidator( new QIntValidator(0, 999, m_textPoolSize) );
+    m_textMinimumSpaceRequiredToRetrieve->setValidator( new QIntValidator(0, 999, m_textMinimumSpaceRequiredToRetrieve) );
 }
 
 void QConfigurationScreen::setWidthColumns()
@@ -140,46 +140,10 @@ void QConfigurationScreen::loadCacheDefaults()
 {
     StarviewerSettings settings;
 
-    m_textDatabaseRoot->setText( settings.getDatabasePath() );
-    m_textCacheImagePath->setText( settings.getCacheImagePath() );
-    m_textMaximumDaysNotViewed->setText( settings.getMaximumDaysNotViewedStudy() );
-
-    loadCachePoolDefaults();
-}
-
-void QConfigurationScreen::loadCachePoolDefaults()
-{
-    Status state;
-    unsigned int space,used;
-    CachePool pool;
-
-    //accemdim a la caché a agafar les dades del Pool
-    state = pool.getPoolTotalSize( space );
-    if ( !state.good() )
-    {
-        showDatabaseErrorMessage( state );
-        return;
-    }
-
-    state = pool.getPoolUsedSpace( used );
-    if ( !state.good() )
-    {
-        showDatabaseErrorMessage( state );
-        return;
-    }
-
-    m_textPoolSize->setText( QString::number( space / 1024 , 10 ) );
-
-    float usedMBs = used / 1024.f;
-    float freeMBs = (space - used) / 1024.f;
-    float usedPercentage = static_cast<float>(used) / space * 100.f;
-    float freePercentage = static_cast<float>(space - used) / space * 100.f;
-
-    m_cacheUtilization->setText( tr("<i>(Used: %1Gb, %2%;  Free: %3Gb, %4%)</i>")
-            .arg(usedMBs, 0, 'f', 2)
-            .arg(usedPercentage, 0, 'f', 1)
-            .arg(freeMBs, 0, 'f', 2)
-            .arg(freePercentage, 0, 'f', 1));
+    m_textDatabaseRoot->setText(settings.getDatabasePath());
+    m_textCacheImagePath->setText(settings.getCacheImagePath());
+    m_textMaximumDaysNotViewed->setText(settings.getMaximumDaysNotViewedStudy());
+    m_textMinimumSpaceRequiredToRetrieve->setText(QString().setNum(settings.getMinimumSpaceRequiredToRetrieveInGbytes()));
 }
 
 void QConfigurationScreen::loadPacsDefaults()
@@ -460,8 +424,6 @@ bool QConfigurationScreen::validatePacsParameters()
 bool QConfigurationScreen::validateChanges()
 {
     QDir dir;
-    unsigned int usedSpace;
-    CachePool pool;
 
     if ( m_textLocalPort->isModified() )
     {
@@ -514,14 +476,11 @@ bool QConfigurationScreen::validateChanges()
         }
     }
 
-    if ( m_textPoolSize->isModified() )
+    if (m_textMinimumSpaceRequiredToRetrieve->isModified())
     {
-        //hem de comprova que si canviem el tamany de la cache, si el reduim que no sigui mes petit que l'espia usat
-        pool.getPoolUsedSpace( usedSpace );
-
-        if ( m_textPoolSize->text().toUInt( NULL , 10 )* 1024 < usedSpace )
+        if (m_textMinimumSpaceRequiredToRetrieve->text().toUInt() < 1)
         {
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Pool space can't be less than used space" ) );
+            QMessageBox::warning(this, tr("Starviewer"), tr("At least 1 GByte of free space is necessary"));
             return false;
         }
     }
@@ -535,7 +494,6 @@ bool QConfigurationScreen::applyChanges()
     {
         applyChangesPacs();
         applyChangesCache();
-        loadCachePoolDefaults();
         applyChangesInstitution();
 
         if ( m_textDatabaseRoot->isModified() && m_createDatabase == false ) // només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
@@ -635,18 +593,15 @@ void QConfigurationScreen::examinateCacheImagePath()
 void QConfigurationScreen::applyChangesCache()
 {
     StarviewerSettings settings;
-    CachePool pool;
-    Status state;
 
     //Aquest els guardem sempre
     settings.setCacheImagePath( m_textCacheImagePath->text() );
     settings.setDatabasePath( m_textDatabaseRoot->text() );
 
-    if ( m_textPoolSize->isModified() )
+    if ( m_textMinimumSpaceRequiredToRetrieve->isModified() )
     {
-        INFO_LOG( "Es modificarà la mida de la cache " + m_textPoolSize->text() );
-        state = pool.updatePoolTotalSize( m_textPoolSize->text().toInt( NULL , 10 )* 1024 );//Passem l'espai a Mb
-        showDatabaseErrorMessage( state );
+        INFO_LOG( "Es modificarà l'espai mínim necessari per descarregar" + m_textMinimumSpaceRequiredToRetrieve->text() );
+        settings.setMinimumSpaceRequiredToRetrieveInGbytes(m_textMinimumSpaceRequiredToRetrieve->text().toUInt());
     }
 
     if ( m_textCacheImagePath->isModified() )
@@ -690,7 +645,6 @@ void QConfigurationScreen::deleteStudies()
             showDatabaseErrorMessage( state );
         }
 
-        loadCachePoolDefaults();
         emit configurationChanged("Pacs/CacheCleared");
     }
 }
