@@ -364,14 +364,17 @@ bool LocalDatabaseManager::isEnoughSpace()
     StarviewerSettings settings;
     quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());
     quint64 minimumSpaceRequired = quint64(settings.getMinimumSpaceRequiredToRetrieveInMbytes());
+    uint MbytesToFree;
 
     if (freeSpaceInHardDisk < minimumSpaceRequired)
     {
         INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb) " +
                  "s'intentarà esborrar estudis vells per alliberar suficient espai");
 
-        freeSpaceDeletingStudies(MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk);//Alliberem 2Gbytes d'espais d'estudis vells
+        //No hi ha suficient espai indiquem quina és la quantitat de Mb d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
+        MbytesToFree = (minimumSpaceRequired - freeSpaceInHardDisk) + MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk;
 
+        freeSpaceDeletingStudies(MbytesToFree);
         if (getLastError() != LocalDatabaseManager::Ok)
         {
             ERROR_LOG("S'ha produït un error intentant alliberar espai");
