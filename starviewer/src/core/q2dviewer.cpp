@@ -489,23 +489,6 @@ void Q2DViewer::refreshAnnotations()
         m_bottomRuler->VisibilityOff();
     }
 
-    // informació de la finestra
-    if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
-    {
-        int *size = this->getRenderWindowSize();
-            m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
-                .arg( m_imageSizeInformation[0] )
-                .arg( m_imageSizeInformation[1] )
-                .arg( size[0] )
-                .arg( size[1] )
-                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
-                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
-    }
-    else
-        m_upperLeftText = "";
-
-    m_sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
-
     if ( m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation )
     {
         for( int j = 0; j < 4; j++ )
@@ -521,8 +504,6 @@ void Q2DViewer::refreshAnnotations()
         m_scalarBar->VisibilityOn();
     else
         m_scalarBar->VisibilityOff();
-
-    this->updateSliceAnnotationInformation();
 }
 
 void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
@@ -1172,7 +1153,7 @@ void Q2DViewer::resetCamera()
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
-        updateSliceAnnotationInformation();
+		updateAnnotationsInformation( Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation );
         mapOrientationStringToAnnotation();
         // TODO potser això no és del tot correcte, cal fer més consistent conjuntament amb setSlice
         emit sliceChanged( m_currentSlice );
@@ -1857,7 +1838,7 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
         if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
         {
             int *size = this->getRenderWindowSize();
-            m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+			m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
                 .arg( m_imageSizeInformation[0] )
                 .arg( m_imageSizeInformation[1] )
                 .arg( size[0] )
