@@ -23,7 +23,6 @@
 #include "qserieslistwidget.h"
 #include "qpacslist.h"
 #include "starviewersettings.h"
-#include "cachepool.h"
 #include "operation.h"
 #include "pacslistdb.h"
 #include "logging.h"

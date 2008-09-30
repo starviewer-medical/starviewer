@@ -30,7 +30,6 @@ HEADERS += databaseconnection.h \
            status.h \
            struct.h \
            dicomstudy.h \
-           cachepool.h \
            multiplequerystudy.h \
            qquerystudythread.h \
            operation.h \
@@ -82,7 +81,6 @@ SOURCES += databaseconnection.cpp \
            starviewersettings.cpp \
            status.cpp \
            dicomstudy.cpp \
-           cachepool.cpp \
            multiplequerystudy.cpp \
            qquerystudythread.cpp \
            operation.cpp \

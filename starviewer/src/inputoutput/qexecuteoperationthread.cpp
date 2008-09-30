@@ -18,7 +18,6 @@
 #include "starviewerprocessimageretrieved.h"
 #include "starviewerprocessimagestored.h"
 #include "harddiskinformation.h"
-#include "cachepool.h"
 #include "starviewersettings.h"
 #include "errordcmtk.h"
 #include "logging.h"
