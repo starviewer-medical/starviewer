@@ -216,14 +216,14 @@ double rectumSegmentationMethod::applyMethod()
         std::cerr << excep << std::endl;
     }
 
-        OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
-        typedef itk::ImageFileWriter< ExternalImageType > ExternalWriterType;
-
-        ExternalWriterType::Pointer mapWriter = ExternalWriterType::New();
-        outcaster->SetInput( connectedThreshold2->GetOutput() );
-        mapWriter->SetInput( outcaster->GetOutput() );
-        mapWriter->SetFileName("segmented.jpg");
-        mapWriter->Update();
+//         OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
+//         typedef itk::ImageFileWriter< ExternalImageType > ExternalWriterType;
+//
+//         ExternalWriterType::Pointer mapWriter = ExternalWriterType::New();
+//         outcaster->SetInput( connectedThreshold2->GetOutput() );
+//         mapWriter->SetInput( outcaster->GetOutput() );
+//         mapWriter->SetFileName("segmented.jpg");
+//         mapWriter->Update();
 
     typedef itk::BinaryThresholdImageFilter< InternalImageType, InternalImageType > BinThresholdFilterType;
     typedef itk::DanielssonDistanceMapImageFilter<InternalImageType, InternalImageType >  DistanceFilterType;
