@@ -1,0 +1,178 @@
+<ui version="4.0" >
+ <class>QCrashReporterBase</class>
+ <widget class="QWidget" name="QCrashReporterBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>541</width>
+    <height>560</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Starviewer Crash Reporter</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="m_titleLabel" >
+     <property name="font" >
+      <font>
+       <pointsize>14</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text" >
+      <string>The application Starviewer crashed</string>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="2" row="0" column="1" >
+    <widget class="QLabel" name="logoLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>65</width>
+       <height>65</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>65</width>
+       <height>65</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap>../main/images/starviewer.png</pixmap>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="m_informationLabel" >
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="text" >
+      <string>We're sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap" >
+      <bool>true</bool>
+     </property>
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="indent" >
+      <number>0</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QCheckBox" name="m_sendReportCheckBox" >
+     <property name="text" >
+      <string>Tell Starviewer about this crash</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="QTabWidget" name="m_commentsAndProblemDetailsTabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Comments</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>Please describe any steps needed to trigger the problem (Optional):</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QTextEdit" name="m_descriptionTextEdit" />
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Email me when more information is available (Optional):</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <widget class="QLineEdit" name="m_emailLineEdit" />
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2" >
+      <attribute name="title" >
+       <string>Problem Details</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QTextEdit" name="m_problemDetailsTextEdit" />
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2" >
+    <layout class="QHBoxLayout" >
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>41</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_quitPushButton" >
+       <property name="text" >
+        <string>Quit Starviewer</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_restartPushButton" >
+       <property name="text" >
+        <string>Restart Starviewer</string>
+       </property>
+       <property name="default" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

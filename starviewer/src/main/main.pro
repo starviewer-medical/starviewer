@@ -1,11 +1,15 @@
 # Afegim dependències de les extensions
 
-TARGET = starviewer
+include(../applicationstargetnames.inc)
+
+TARGET = $${TARGET_STARVIEWER}
 DESTDIR = ../../bin
 TEMPLATE = app
 
 SOURCES += main.cpp
 RESOURCES = main.qrc
+
+include(crashhandler.inc)
 
 win32{
 RC_FILE = starviewer.rc
