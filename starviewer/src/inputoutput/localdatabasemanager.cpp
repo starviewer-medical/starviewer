@@ -364,7 +364,7 @@ bool LocalDatabaseManager::isEnoughSpace()
     StarviewerSettings settings;
     quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());
     quint64 minimumSpaceRequired = quint64(settings.getMinimumSpaceRequiredToRetrieveInMbytes());
-    uint MbytesToFree;
+    quint64 MbytesToFree;
 
     if (freeSpaceInHardDisk < minimumSpaceRequired)
     {
@@ -616,14 +616,15 @@ int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, DicomMask mask
     return localDatabaseImageDAL.getLastError();
 }
 
-void LocalDatabaseManager::freeSpaceDeletingStudies(int MbytesToErase)
+void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
 {
     QDate lastDateViewedMinimum;
     StarviewerSettings settings;
     DicomMask oldStudiesMask;
     QList<Study*> studyListToDelete;
     Study *studyToDelete;
-    int MbytesErased = 0, index = 0;
+    quint64 MbytesErased = 0;
+    int index = 0;
 
     studyListToDelete = queryStudy(oldStudiesMask);
     if (getLastError() != LocalDatabaseManager::Ok)
