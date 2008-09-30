@@ -129,22 +129,18 @@ void Q2DViewerWidget::resetViewToCoronal()
 
 void Q2DViewerWidget::setSelected( bool option )
 {
+	// per defecte li donem l'aspecte de background que té l'aplicació en general
+	// TODO podríem tenir a nivell d'aplicació centralitzat el tema de
+	// gestió de les diferents paletes de l'aplicació
+	QBrush brush = QApplication::palette().window();
     if( option )
     {
-        QPalette palette = this->palette();
-        QBrush selected( QColor( 85, 160, 255, 128 ) );
-        selected.setStyle( Qt::SolidPattern );
-        palette.setBrush( QPalette::Active, QPalette::Window, selected );
-        setPalette( palette );
+		// si seleccionem el widget, li canviem el color de fons
+		brush.setColor( QColor( 85, 160, 255 ) );	
     }
-    else
-    {
-        QPalette palette = this->palette();
-        QBrush noSelected( QColor(239, 243, 247, 255) );
-        noSelected.setStyle( Qt::SolidPattern );
-        palette.setBrush( QPalette::Active, QPalette::Window, noSelected );
-        setPalette( palette );
-    }
+	QPalette palette = this->palette();
+	palette.setBrush( QPalette::Active, QPalette::Window, brush );
+	setPalette( palette );
     m_2DView->setActive( option );
 }
 
