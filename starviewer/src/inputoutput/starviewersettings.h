@@ -32,10 +32,8 @@ public:
 	 */
     void setDatabasePath( QString );
 
-	/** estableix la mida de la pool
-	 * @param mida de la pool
-	 */
-    void setPoolSize( QString );
+    ///Espai lliure mínim necessari expressat en Gbytes per poder descarregar objectes dicom
+    void setMinimumSpaceRequiredToRetrieveInGbytes(uint minimumSpaceRequired);
 
 	/** estableix el path on es guarden les imatges de la cache
 	 * @param path de la cache
@@ -52,10 +50,10 @@ public:
 	 */
     QString getDatabasePath();
 
-	/** retorna la mida de la pool
-	 * @return retorna la mida de la pool
-	 */
-    QString getPoolSize();
+    ///Retorna l'espai mínim necessari en Gbytes al disc dur per poder descàrregar objectes dicom
+    uint getMinimumSpaceRequiredToRetrieveInGbytes();
+    ///Retorna l'espai mínim necessari en Mbytes al disc dur per poder descàrregar objectes dicom
+    uint getMinimumSpaceRequiredToRetrieveInMbytes();
 
 	/** retorna el Path on es guarden les imatges
 	 * @return retorn el path de la cache

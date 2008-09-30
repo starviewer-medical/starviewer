@@ -113,40 +113,28 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     StarviewerProcessImageRetrieved *sProcessImg = new StarviewerProcessImageRetrieved();
     QString studyUID = operation.getStudyUID();
     Status state,retState;
-
+    LocalDatabaseManager localDatabaseManager;
     LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
     PatientFiller patientFiller;
     QThreadRunWithExec fillersThread;
     patientFiller.moveToThread( &fillersThread );
+    ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
-
-    ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    bool enoughSpace;
-
-    state = enoughFreeSpace( enoughSpace );
 
     //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
     emit setOperating( studyUID );
 
-    if ( !state.good() || !enoughSpace )
+    if (!localDatabaseManager.isEnoughSpace())
     {
-        QString logMessage = "La descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs();
-
         emit setErrorOperation( studyUID );
 
-        if ( !enoughSpace ) //si no hi ha prou espai emitim aquest signal
-        {
-            logMessage += " al no haver suficient espai lliure al disc";
-            QMessageBox::warning( 0 , tr( "Starviewer" ) , tr( "Not enough space to retrieve studies. Please free space" ) );
-        }
+	//TODO emetre signal indicant el tipus d'error
+        /*if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
+            QMessageBox::warning(0, tr("Starviewer"), tr("Not enough space to retrieve studies. Please free space"));
         else
-        {
-            logMessage += " al intentar alliberar espai al disc ";
-            QMessageBox::critical( 0 , tr( "Starviewer" ) , tr( "Error freeing space. The study couldn't be retrieved" ) );
-        }
-        ERROR_LOG( logMessage );
-
+            QMessageBox::critical(0, tr("Starviewer"), tr("Error freeing space. The study couldn't be retrieved"));
+	*/
         return;
     }
 
@@ -223,61 +211,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID );
     delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
-}
-
-Status QExecuteOperationThread::enoughFreeSpace( bool &enoughSpace)
-{
-    HardDiskInformation hardDiskInformation;
-    CachePool pool;
-    StarviewerSettings settings;
-    unsigned int freePoolSpace;
-    quint64 freeSystemSpace;
-    Status state;
-
-    freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
-    if ( freeSystemSpace == 0 )
-    {
-        enoughSpace = false;
-        return state.setStatus( DcmtkUnknowError );
-    }
-    pool.getPoolFreeSpace( freePoolSpace );
-
-    //si no hi ha suficient espai lliure a la cache o al disc dur intera esborrar dos Gb
-    if ( freeSystemSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired ||
-         freePoolSpace <= CachePool::MinimumMBytesOfDiskSpaceRequired )
-    {
-        ERROR_LOG( QString("No hi ha suficient espai a la cache. Alliberant espai. Espai lliure cache %1 Mb. Espai lliure al disc %2 Mb").arg(freePoolSpace).arg(freeSystemSpace) );
-
-        LocalDatabaseManager localDatabaseManager;
-        localDatabaseManager.freeSpace( CachePool::MBytesToEraseWhenDiskOrCacheFull ); //esborrem els estudis
-
-        if ( localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
-        {
-            enoughSpace = false;
-            state.setStatus("Error al alliberar espai", false, -1 );
-            return state;
-        }
-
-        freeSystemSpace = hardDiskInformation.getNumberOfFreeMBytes( settings.getCacheImagePath() );
-        if ( freeSystemSpace == 0 ) return state.setStatus( DcmtkUnknowError );
-
-        pool.getPoolFreeSpace( freePoolSpace );
-
-        //hem intentat esborrar pero no hi ha hagut suficient espai
-        if ( freeSystemSpace <=  CachePool::MinimumMBytesOfDiskSpaceRequired ||
-             freePoolSpace <=  CachePool::MinimumMBytesOfDiskSpaceRequired )
-        {
-            //si no hi ha suficient espai,significa que no hi ha prou espai al disc, perque de la cache sempre podem alliberar espai
-            enoughSpace = false;
-            INFO_LOG( "No hi ha suficient espai lliure al disc dur" );
-        }
-        else
-            enoughSpace = true;
-    }
-    else
-        enoughSpace = true;
-
-    return state.setStatus( DcmtkNoError );
 }
 
 void QExecuteOperationThread::moveStudy( Operation operation )

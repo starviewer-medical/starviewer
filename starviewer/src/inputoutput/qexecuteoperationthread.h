@@ -108,13 +108,6 @@ private:
       */
     void retrieveStudy(Operation operation);
 
-    /** Indica si hi ha com a minim 1Gb d'espai lliure tant a la cache com al disc per descarregar el nou estudi.
-      * Si detecta,que no hi ha suficient a la cache o al disc, intenterà alliberar 2000 Mb, esborrant estudis vells, si no retornara que no hi ha suficient espai al disc
-      *     @param retorna si hi ha suficient espai per descarregar l'estudi
-      *     @return retorna l'estat de l'operacio
-      */
-    Status enoughFreeSpace( bool &enoughSpace);
-
     /** Mou un estudi descarregat al pacs especificat
      * @param operation paràmetres de l'operació que s'ha de dur a terme. Si � un Move a la màscara només cal especificar el studyUID
      * @return estat del mètode

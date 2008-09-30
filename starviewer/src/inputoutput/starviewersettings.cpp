@@ -21,7 +21,7 @@
 #endif
 
 const QString databaseRootKey("/cache/sdatabasePath" ); //indica on es troba la bd
-const QString poolSizeKey("/cache/poolSize" );
+const QString minimumSpaceRequiredToRetrieveInGbytesKey("/cache/minimumSpaceRequiredToRetrieveInGbytes" );
 const QString cacheImagePathKey("/cache/imagePath" );
 const QString AETitleMachineKey("/pacsparam/AETitle" );
 const QString localPortKey("/pacsparam/localPort" );
@@ -70,9 +70,9 @@ void StarviewerSettings::setCacheImagePath( QString path )
     m_starviewerSettings.setValue( GroupSettingsName + cacheImagePathKey , QDir::fromNativeSeparators( path ) );
 }
 
-void StarviewerSettings::setPoolSize(QString size )
+void StarviewerSettings::setMinimumSpaceRequiredToRetrieveInGbytes(uint minimumSpaceRequired)
 {
-    m_starviewerSettings.setValue( GroupSettingsName + poolSizeKey , size );
+    m_starviewerSettings.setValue(GroupSettingsName + minimumSpaceRequiredToRetrieveInGbytesKey, QString().setNum(minimumSpaceRequired));
 }
 
 void StarviewerSettings::setMaximumDaysNotViewedStudy( QString  days )
@@ -91,10 +91,16 @@ QString StarviewerSettings::getDatabasePath()
     return QDir::toNativeSeparators( m_starviewerSettings.value( GroupSettingsName + databaseRootKey , defaultDir ).toString() );
 }
 
-QString StarviewerSettings::getPoolSize()
+uint StarviewerSettings::getMinimumSpaceRequiredToRetrieveInGbytes()
 {
-    return m_starviewerSettings.value( GroupSettingsName + poolSizeKey , "20" ).toString();
+    return m_starviewerSettings.value(GroupSettingsName + minimumSpaceRequiredToRetrieveInGbytesKey, "5").toString().toUInt();
 }
+
+uint StarviewerSettings::getMinimumSpaceRequiredToRetrieveInMbytes()
+{
+    return m_starviewerSettings.value(GroupSettingsName + minimumSpaceRequiredToRetrieveInGbytesKey, "5").toString().toUInt() * 1024;
+}
+
 
 QString StarviewerSettings::getCacheImagePath()
 {
