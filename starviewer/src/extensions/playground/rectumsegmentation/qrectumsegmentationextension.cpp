@@ -138,6 +138,7 @@ void QRectumSegmentationExtension::createActions()
     m_regionAction->setStatusTip( tr("Enable/Disable region tool") );
     m_regionAction->setCheckable( true );
     m_regionAction->setEnabled( true );
+    m_regionAction->setIcon( QIcon(":/images/roi.png") );
     m_regionToolButton->setDefaultAction( m_regionAction );
 
     connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
@@ -152,7 +153,7 @@ void QRectumSegmentationExtension::createActions()
     m_toolsActionGroup->addAction( m_editorAction );
     m_toolsActionGroup->addAction( m_regionAction );
     //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_seedAction->trigger();
+    m_slicingAction->trigger();
 
     m_paintEditorAction = new QAction( 0 );
     m_paintEditorAction->setText( tr("Paint Editor Tool") );
@@ -206,6 +207,7 @@ void QRectumSegmentationExtension::createConnections()
   connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
   connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
   connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
+  connect( m_2DView, SIGNAL( sliceChanged(int) ) , m_sliceViewSlider , SLOT( setValue(int) ) );
   connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
   connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
   connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
@@ -220,7 +222,7 @@ void QRectumSegmentationExtension::createConnections()
 void QRectumSegmentationExtension::setInput( Volume *input )
 {
     m_mainVolume = new Volume();
-    std::cout<<"Inici d'input"<<std::endl;
+    //std::cout<<"Inici d'input"<<std::endl;
 
     //Prova pel mètode de FastMarching
 /*    typedef itk::LinearInterpolateImageFunction< Volume::ItkImageType, double > InterpolatorType;
@@ -307,8 +309,8 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     m_upperValueSlider->setMinimum(m_minValue);
     m_upperValueSlider->setMaximum(m_maxValue);
     //empirical values!!
-    m_lowerValueSlider->setValue(35);
-    m_upperValueSlider->setValue(170);
+    //m_lowerValueSlider->setValue(35);   //Ara ho fem pel QtDesigner
+    //m_upperValueSlider->setValue(170);  //Ara ho fem pel QtDesigner
 
     m_2DView->render();
 
@@ -357,8 +359,9 @@ void QRectumSegmentationExtension::ApplyMethod( )
     {
         m_lesionMaskVolume = new Volume();
     }
+    m_lesionMaskVolume->setImages(m_mainVolume->getImages());
     m_segMethod->setMask(m_lesionMaskVolume);
-    std::cout<<"Inici Apply method!!"<<std::endl;
+    //std::cout<<"Inici Apply method!!"<<std::endl;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_segMethod->setInsideMaskValue ( m_insideValue );
     m_segMethod->setOutsideMaskValue( m_outsideValue );
@@ -392,12 +395,9 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_volume = m_segMethod->applyMethod();
     m_cont = m_segMethod->getNumberOfVoxels();
 
-    std::cout<<"FI Apply filter!!"<<std::endl;
+    //std::cout<<"FI Apply filter!!"<<std::endl;
 
     this->viewLesionOverlay();
-//     m_2DView->setOverlayToBlend();
-//     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
-//     m_2DView->setOverlayInput(m_lesionMaskVolume);
 
     m_resultsLineEdit->clear();
     m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
@@ -424,7 +424,7 @@ void QRectumSegmentationExtension::ApplyMethod( )
     //m_2DView->refresh();
     m_cont = &m_cont;*/
     QApplication::restoreOverrideCursor();
-    std::cout<<"Fi Apply method!!"<<std::endl;
+    //std::cout<<"Fi Apply method!!"<<std::endl;
  }
 
 
@@ -523,7 +523,7 @@ void QRectumSegmentationExtension::setSeedPosition( )
 
 void QRectumSegmentationExtension::setRegionOfInterest( )
 {
-    std::cout<<"SetRegionOfInterest"<<std::endl;
+    //std::cout<<"SetRegionOfInterest"<<std::endl;
     double pos[3];
     m_2DView->getCurrentCursorPosition(pos);
     m_initialRegionPoint[0]= pos[0];
@@ -535,23 +535,19 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
 {
     if(m_isRegionSetting)
     {
-        std::cout<<"isSettingRegionOfInterest"<<std::endl;
         double pos[3];
         double spacing[3];
         m_mainVolume->getSpacing(spacing);
         m_2DView->getCurrentCursorPosition(pos);
         m_finalRegionPoint[0]= pos[0];
         m_finalRegionPoint[1]= pos[1];
-        std::cout<<"1"<<std::endl;
 
         vtkPoints *points = vtkPoints::New();
         points->SetNumberOfPoints(4);
-        points->SetPoint(0, m_initialRegionPoint[0], m_initialRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
-        points->SetPoint(1, m_initialRegionPoint[0], m_finalRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
-        points->SetPoint(2, m_finalRegionPoint[0], m_finalRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
-        points->SetPoint(3, m_finalRegionPoint[0], m_initialRegionPoint[1], m_mainVolume->getOrigin()[2]+0.1);
-
-        std::cout<<"Points: ["<<m_initialRegionPoint[0]<<","<<m_initialRegionPoint[1]<<"] ,["<<m_finalRegionPoint[0]<<","<<m_finalRegionPoint[1]<<"]"<<std::endl;
+        points->SetPoint(0, m_initialRegionPoint[0], m_initialRegionPoint[1], m_mainVolume->getOrigin()[2]-1);
+        points->SetPoint(1, m_initialRegionPoint[0], m_finalRegionPoint[1], m_mainVolume->getOrigin()[2]-1);
+        points->SetPoint(2, m_finalRegionPoint[0], m_finalRegionPoint[1], m_mainVolume->getOrigin()[2]-1);
+        points->SetPoint(3, m_finalRegionPoint[0], m_initialRegionPoint[1], m_mainVolume->getOrigin()[2]-1);
 
         vtkIdType pointIds[4];
 
@@ -560,8 +556,6 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
         pointIds[2] = 2;
         pointIds[3] = 3;
 
-
-        std::cout<<"2"<<std::endl;
         vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
 
         grid->Allocate(1);
@@ -577,11 +571,11 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
 
         squareRegionActor->SetMapper( squareMapper );
 
-        std::cout<<"3"<<std::endl;
+        squareRegionActor->VisibilityOn();
         m_2DView->getRenderer()->AddViewProp( squareRegionActor );
+        m_2DView->getRenderer()->ResetCameraClippingRange();
         m_2DView->refresh();
 
-        squareRegionActor->VisibilityOn();
 
         squareMapper-> Delete();
         points      -> Delete();
@@ -591,7 +585,7 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
 
 void QRectumSegmentationExtension::setReleaseRegionOfInterest( )
 {
-    std::cout<<"FinalRegionOfInterest"<<std::endl;
+    //std::cout<<"FinalRegionOfInterest"<<std::endl;
     m_isRegionSet=true;
     m_isRegionSetting=false;
     m_viewROICheckBox->setEnabled(true);
@@ -677,7 +671,7 @@ void QRectumSegmentationExtension::setLowerValue( int x )
     {
         m_upperValueSlider->setValue(x);
     }
-
+    this->viewThresholds();
     m_segMethod->setHistogramLowerLevel (x);
     m_isMask=true;
     if(m_isSeed)
@@ -692,6 +686,7 @@ void QRectumSegmentationExtension::setUpperValue( int x )
     {
         m_lowerValueSlider->setValue(x);
     }
+    this->viewThresholds();
     m_segMethod->setHistogramUpperLevel (x);
     m_isMask=true;
     if(m_isSeed)
@@ -789,7 +784,7 @@ void QRectumSegmentationExtension::setPaintCursor()
 void QRectumSegmentationExtension::eraseMask(int size)
 {
     int i,j;
-    int* value;
+    Volume::ItkPixelType* value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -809,7 +804,7 @@ void QRectumSegmentationExtension::eraseMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+            value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
             if((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
@@ -825,7 +820,7 @@ void QRectumSegmentationExtension::eraseMask(int size)
 void QRectumSegmentationExtension::paintMask(int size)
 {
     int i,j;
-    int* value;
+    Volume::ItkPixelType* value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -844,7 +839,7 @@ void QRectumSegmentationExtension::paintMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+            value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
             if((*value) != m_insideValue)
             {
                 (*value) = m_insideValue;
@@ -859,7 +854,7 @@ void QRectumSegmentationExtension::paintMask(int size)
 void QRectumSegmentationExtension::eraseSliceMask()
 {
     int i,j;
-    int* value;
+    Volume::ItkPixelType* value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -881,7 +876,7 @@ void QRectumSegmentationExtension::eraseSliceMask()
         {
             index[0]=i;
             index[1]=j;
-            value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+            value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
             if((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
@@ -926,7 +921,7 @@ void QRectumSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
         index[0]=a;
         index[1]=b;
         index[2]=c;
-        int* value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+        Volume::ItkPixelType* value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
         if ((*value) == m_insideValue)
         {
             //std::cout<<m_outsideValue<<" "<<m_insideValue<<"->"<<(*value)<<std::endl;
@@ -1006,11 +1001,13 @@ double QRectumSegmentationExtension::calculateMaskVolume()
 
     if(m_lesionMaskVolume->getVtkData()->GetScalarType()!=6)
     {
-        std::cout<<"Compte!!! Mask Vtk Data Type != INT ("<<m_lesionMaskVolume->getVtkData()->GetScalarTypeAsString()<<")"<<std::endl;
+        //std::cout<<"Compte!!! Mask Vtk Data Type != INT ("<<m_lesionMaskVolume->getVtkData()->GetScalarTypeAsString()<<")"<<std::endl;
+        DEBUG_LOG("Mask Vtk Data Type != INT!");
+        return -1.0;
     }
 
-    int* value;
-    value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer();
+    Volume::ItkPixelType* value;
+    value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer();
     for(i=ext[0];i<=ext[1];i++)
     {
         for(j=ext[2];j<=ext[3];j++)
@@ -1110,7 +1107,7 @@ void QRectumSegmentationExtension::saveSegmentation3DVolume()
         int seedSl=(int) (pos[2]-m_mainVolume->getOrigin()[2])/m_mainVolume->getSpacing()[2];
 
         int i,j,k;
-        std::cout<<"m_seedSlice: "<<m_seedSlice<<", pos[2]: "<<pos[2]<<", seedSl: "<<seedSl<<endl;
+        //std::cout<<"m_seedSlice: "<<m_seedSlice<<", pos[2]: "<<pos[2]<<", seedSl: "<<seedSl<<endl;
         for(k=0;k<m_mainVolume->getDimensions()[2];k++)
         {
             for(j=0;j<m_mainVolume->getDimensions()[1];j++)
