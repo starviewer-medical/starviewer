@@ -21,6 +21,10 @@
 // decodificacio jpeg
 #include "dcmtk/dcmjpeg/djdecode.h"
 
+#ifndef NO_CRASH_REPORTER
+#include "crashhandler.h"
+#endif
+
 void configureLogging()
 {
     // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
@@ -105,7 +109,12 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain( OrganizationDomainString );
     app.setApplicationName( ApplicationNameString );
 
-    //TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
+	// Inicialitzem el crash handler en el cas que ho suportem.
+#ifndef NO_CRASH_REPORTER
+    CrashHandler *crashHandler = new CrashHandler();
+#endif
+    
+	//TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
     // una classe dedicada a tal efecte
 
     // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ).
