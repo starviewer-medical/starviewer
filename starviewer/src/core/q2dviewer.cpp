@@ -504,6 +504,8 @@ void Q2DViewer::refreshAnnotations()
         m_scalarBar->VisibilityOn();
     else
         m_scalarBar->VisibilityOff();
+
+	updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation );
 }
 
 void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
