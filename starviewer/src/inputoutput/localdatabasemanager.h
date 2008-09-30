@@ -82,7 +82,7 @@ private :
     ///Guardem a partir de quina data de lastAccessDate cerquem els estudis, d'aquesta manera sabem quins estudis vells s'han d'esborrar, quins hem de mostrar al fer cerques, i evitem incoherències, com la que podria ser que al cercar estudis en una mateixa sessió de l'apliació a les 23:59,o a les 0:01 de l'endemà donint resultats diferents, perquè hi han estudis que passen a ser considerats estudis vells. D'aquesta manera en tota la vida de l'aplicació mantenim el mateix criteri de data per establir si un estudi es vell o no i s'ha de mostrar a les cerques.
     static QDate LastAccessDateSelectedStudies;
     ///Ens indica l'espai en Mbytes que hem d'alliberar quan no hi ha suficient espai en el disc
-    static const unsigned int MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk = 2*1024; 
+    static const quint64 MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk = 2*1024; 
 
     LastError m_lastError;
 
@@ -117,7 +117,7 @@ private :
     void deleteRetrievedObjects(Patient *failedPatient);
 
     ///Esborra estudis  fins alliberar l'espai passat per paràmetre, comença esborrant els estudisque fa més que no es visualitzen
-    void freeSpaceDeletingStudies(int MbytesToErase);
+    void freeSpaceDeletingStudies(quint64 MbytesToErase);
 
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);
