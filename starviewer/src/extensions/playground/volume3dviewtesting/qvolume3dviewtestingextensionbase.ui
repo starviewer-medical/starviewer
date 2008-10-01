@@ -132,7 +132,13 @@
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType" >
-          <enum>QSizePolicy::Minimum</enum>
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
          </property>
         </spacer>
        </item>
@@ -264,7 +270,13 @@
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType" >
-          <enum>QSizePolicy::Minimum</enum>
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
          </property>
         </spacer>
        </item>
@@ -354,7 +366,13 @@
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType" >
-          <enum>QSizePolicy::Minimum</enum>
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
          </property>
         </spacer>
        </item>
@@ -396,6 +414,16 @@
          <item>
           <property name="text" >
            <string>Ray Casting with Shading</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Ray Casting with Obscurances</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Ray Casting with Shading and Obscurances</string>
           </property>
          </item>
          <item>
@@ -479,12 +507,126 @@
         </widget>
        </item>
        <item>
+        <widget class="QWidget" native="1" name="m_obscuranceOptionsWidget" >
+         <layout class="QVBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="m_obscuranceQualityLabel" >
+              <property name="text" >
+               <string>Obscurance quality</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="m_obscuranceQualityComboBox" >
+              <item>
+               <property name="text" >
+                <string>Fast</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>Normal</string>
+               </property>
+              </item>
+              <item>
+               <property name="text" >
+                <string>High</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_obscuranceComputeCancelPushButton" >
+              <property name="text" >
+               <string>Compute</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="m_obscuranceProgressBar" >
+            <property name="value" >
+             <number>0</number>
+            </property>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="m_obscuranceCheckBox" >
+              <property name="text" >
+               <string>Obscurance</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_obscuranceFactorLabel" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="text" >
+               <string>Brightness</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_obscuranceFactorDoubleSpinBox" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="maximum" >
+               <double>2.000000000000000</double>
+              </property>
+              <property name="singleStep" >
+               <double>0.100000000000000</double>
+              </property>
+              <property name="value" >
+               <double>1.300000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeType" >
-          <enum>QSizePolicy::Minimum</enum>
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
          </property>
         </spacer>
        </item>
@@ -516,8 +658,8 @@
       <sizepolicy>
        <hsizetype>7</hsizetype>
        <vsizetype>7</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
+       <horstretch>1</horstretch>
+       <verstretch>1</verstretch>
       </sizepolicy>
      </property>
     </widget>

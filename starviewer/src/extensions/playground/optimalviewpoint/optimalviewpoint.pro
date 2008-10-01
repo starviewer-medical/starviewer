@@ -15,7 +15,6 @@ HEADERS += doublehistogram.h \
            optimalviewpointplanehelper.h \
            optimalviewpointviewer.h \
            optimalviewpointvolume.h \
-           vtk4DLinearRegressionGradientEstimator.h \
            vtkInteractorStyleJoystickActorGgg.h \
            vtkInteractorStyleSwitchGgg.h \
            optimalviewpointextensionmediator.h \
@@ -24,12 +23,9 @@ HEADERS += doublehistogram.h \
            qshowhidewidget.h \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
-           obscurancevoxelshader.h \
            saliencyvoxelshader.h \
            colorbleedingvoxelshader.h \
-           obscurancethread.h \
-           vtkInteractorStyleFasterTrackballActor.h \
-           obscurancemainthread.h 
+           vtkInteractorStyleFasterTrackballActor.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
@@ -39,7 +35,6 @@ SOURCES += doublehistogram.cpp \
            optimalviewpointplanehelper.cpp \
            optimalviewpointviewer.cpp \
            optimalviewpointvolume.cpp \
-           vtk4DLinearRegressionGradientEstimator.cxx \
            vtkInteractorStyleJoystickActorGgg.cxx \
            vtkInteractorStyleSwitchGgg.cxx \
            optimalviewpointextensionmediator.cpp \
@@ -48,11 +43,8 @@ SOURCES += doublehistogram.cpp \
            qshowhidewidget.cpp \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.cxx \
            vtkVolumeRayCastCompositeFunctionFx.cxx \
-           obscurancevoxelshader.cpp \
            saliencyvoxelshader.cpp \
            colorbleedingvoxelshader.cpp \
-           obscurancethread.cpp \
-           vtkInteractorStyleFasterTrackballActor.cxx \
-           obscurancemainthread.cpp 
+           vtkInteractorStyleFasterTrackballActor.cxx 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)
