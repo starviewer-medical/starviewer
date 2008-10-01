@@ -41,6 +41,9 @@ QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
  : QThread(parent)
 {
      m_stop = true;
+
+    //Registrem aquest tipus per poder-ne fer signals
+    qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationError");
 }
 
 QExecuteOperationThread::~QExecuteOperationThread()
@@ -126,14 +129,11 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     if (!localDatabaseManager.isEnoughSpace())
     {
-        emit setErrorOperation( studyUID );
-
-	//TODO emetre signal indicant el tipus d'error
-        /*if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
-            QMessageBox::warning(0, tr("Starviewer"), tr("Not enough space to retrieve studies. Please free space"));
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
+            emit errorInOperation(studyUID, ErrorFreeingSpace);
         else
-            QMessageBox::critical(0, tr("Starviewer"), tr("Error freeing space. The study couldn't be retrieved"));
-	*/
+            emit errorInOperation(studyUID, NoEnoughSpace);
+
         return;
     }
 
@@ -143,9 +143,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         ERROR_LOG( "Error al connectar al pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " + state.text() );
 
-        emit setErrorOperation( studyUID );
-        emit errorConnectingPacs( operation.getPacsParameters().getPacsID() );
-
+        emit errorInOperation(studyUID, ErrorConnectingPacs);
         return;
     }
 
@@ -158,55 +156,37 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
     piSingleton->addNewProcessImage(studyUID, sProcessImg);
 
-    connect(&patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
-    
-    //Connexions entre la descarrega i el processat dels fitxers
-    connect(sProcessImg, SIGNAL( fileRetrieved(DICOMTagReader*) ), &patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
-    connect(this, SIGNAL( retrieveFinished() ), &patientFiller, SLOT( finishDICOMFilesProcess() ));
-    
-    //Connexió entre el processat i l'insersió al a BD
-    connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManagerThreaded, SLOT( insert(Patient *) ), Qt::DirectConnection);
-    
-    //Connexions per finalitzar els threads
-    connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &fillersThread, SLOT( quit() ), Qt::DirectConnection);
-    connect(&localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
-    
-    //Connexions d'abortament
-    connect(this, SIGNAL( abort() ), &fillersThread, SLOT( quit() ), Qt::DirectConnection );
-    connect(this, SIGNAL( abort() ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
-    
+    //creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
+    createRetrieveStudyConnections(&localDatabaseManagerThreaded, &patientFiller, &fillersThread, sProcessImg);
+
     localDatabaseManagerThreaded.start();
     fillersThread.start();
-
     retState = retrieveImages.retrieve();
-
     pacsConnection.disconnect();
 
     if ( !retState.good() )
     {
         ERROR_LOG( "S'ha produit algun error durant la descàrrega de l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " +retState.text() );
 
-        emit setErrorOperation( studyUID );
-        emit abort();
+        emit errorInOperation(studyUID , ErrorConnectingPacs);
     }
     else
     {
         INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
 
         emit setOperationFinished( studyUID );// descarregat a QOperationStateScreen
-        emit setRetrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
-        emit retrieveFinished();
+        emit retrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
 
         if ( operation.getOperation() == Operation::View )
         {
             emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
         }
     }
-    
+
     //Esperem que el processat i l'insersió a la base de dades acabin
     fillersThread.wait();
     localDatabaseManagerThreaded.wait();
-    
+
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID );
     delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
@@ -282,6 +262,26 @@ void QExecuteOperationThread::moveStudy( Operation operation )
         emit setErrorOperation( operation.getStudyUID() );
         ERROR_LOG( "S'ha produit un error intentant guardar l'estudi : " + state.text() );
     }
+}
+
+void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved)
+{
+    connect(patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
+
+    //Connexions entre la descarrega i el processat dels fitxers
+    connect(starviewerProcessImageRetrieved, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
+    connect(this, SIGNAL( retrieveFinished(QString) ), patientFiller, SLOT( finishDICOMFilesProcess() ));
+
+    //Connexió entre el processat i l'insersió al a BD
+    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( insert(Patient *) ), Qt::DirectConnection);
+
+    //Connexions per finalitzar els threads
+    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), fillersThread, SLOT( quit() ), Qt::DirectConnection);
+    connect(localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
+
+    //Connexions d'abortament
+    connect(this, SIGNAL(errorInOperation(studyUID, OperationError::lastError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(errorInOperation(studyUID, OperationError::lastError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 }
 
 }

@@ -259,6 +259,8 @@ void QueryScreen::createConnections()
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation( QString ) ), m_operationStateScreen, SLOT(  setErrorOperation( QString ) ) );
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), m_operationStateScreen, SLOT(setErrorOperation(QString)));
+
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished( QString ) ), m_operationStateScreen, SLOT(  setOperationFinished( QString ) ) );
 
     connect( &m_qexecuteOperationThread, SIGNAL( setOperating( QString ) ), m_operationStateScreen, SLOT(  setOperating( QString ) ) );
@@ -268,6 +270,7 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation( Operation * ) ), m_operationStateScreen, SLOT(  insertNewOperation( Operation *) ) );
 
     // Label d'informació (cutre-xapussa)
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT( updateOperationsInProgressMessage()));
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ), SLOT( updateOperationsInProgressMessage() ));
@@ -277,8 +280,8 @@ void QueryScreen::createConnections()
     connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( int ) ), SLOT( errorQueringStudiesPacs( int ) ) );
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
-    connect ( &m_qexecuteOperationThread, SIGNAL( errorConnectingPacs( int ) ), SLOT( errorConnectingPacs( int ) ) );
-    connect( &m_qexecuteOperationThread, SIGNAL( setRetrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
+    connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QExecuteOperationThread::OperationError)));
+    connect( &m_qexecuteOperationThread, SIGNAL( retrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
 
     //Amaga o ensenya la cerca avançada
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
@@ -1368,5 +1371,45 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
     return true;
 }
 
+void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error)
+{
+    QString message;
+
+    switch (error)
+    {
+        case QExecuteOperationThread::ErrorConnectingPacs :
+            message = tr("Please review the operation state screen, ");
+            message += tr("an error ocurred connecting to a Pacs while retrieving or storing a study.\n");
+            message += tr("\nBe sure that your computer is connected on network, the Pacs parameters are well configured.");
+            message += tr("\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        case QExecuteOperationThread::NoEnoughSpace :
+            message = tr("There is not enough space to retreive studies, please free space.");
+            QMessageBox::warning( this , tr( "Starviewer" ) , message );
+            break;
+        case QExecuteOperationThread::ErrorFreeingSpace :
+            message = tr("Please review the operation state screen, ");
+            message += tr("an error ocurred freeing space and some operations may have failed.");
+            message += tr("\n\nClose all Starviewer windows and try again."
+                         "\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        case QExecuteOperationThread::DatabaseError :
+            message = tr("Please review the operation state screen, ");
+            message += tr("a database error ocurred and some operations may have failed");
+            message += tr("\n\nClose all Starviewer windows and try again."
+                         "\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        default:
+            message = tr("Please review the operation state screen, ");
+            message += tr("an unknow error has ocurred");
+            message += tr("\n\nClose all Starviewer windows and try again."
+                         "\nIf the problem persist contact with an administrator.");
+    }
+
+    
+}
 };
 
