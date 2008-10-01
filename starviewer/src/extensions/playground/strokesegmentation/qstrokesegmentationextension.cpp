@@ -639,7 +639,7 @@ void QStrokeSegmentationExtension::setPaintCursor()
 void QStrokeSegmentationExtension::eraseMask(int size)
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -659,7 +659,7 @@ void QStrokeSegmentationExtension::eraseMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_maskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_maskVolume->getScalarPointer(index);
             if((*value) != m_outsideValue)
             {
                 (*value) = m_outsideValue;
@@ -674,7 +674,7 @@ void QStrokeSegmentationExtension::eraseMask(int size)
 void QStrokeSegmentationExtension::paintMask(int size)
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -693,7 +693,7 @@ void QStrokeSegmentationExtension::paintMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_maskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_maskVolume->getScalarPointer(index);
             if((*value) == m_outsideValue)
             {
                 (*value) = m_insideValue;
@@ -708,7 +708,7 @@ void QStrokeSegmentationExtension::paintMask(int size)
 void QStrokeSegmentationExtension::eraseSliceMask()
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -730,7 +730,7 @@ void QStrokeSegmentationExtension::eraseSliceMask()
         {
             index[0]=i;
             index[1]=j;
-            value=(int*)m_maskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_maskVolume->getScalarPointer(index);
             if((*value) != m_outsideValue)
             {
                 (*value) = m_outsideValue;
@@ -789,11 +789,10 @@ double QStrokeSegmentationExtension::calculateMaskVolume()
 
     if(m_maskVolume->getVtkData()->GetScalarType()!=6)
     {
-        DEBUG_LOG( QString("Compte!!! Mask Vtk Data Type != INT (%1)").arg( m_maskVolume->getVtkData()->GetScalarTypeAsString() ) );
+        DEBUG_LOG( QString("Compte!!! Mask Vtk Data Type != INT (%1) - POTSER aquest missatge de debug ha quedat obsolet!!!!").arg( m_maskVolume->getVtkData()->GetScalarTypeAsString() ) );
     }
 
-    int* value;
-    value=(int*)m_maskVolume->getVtkData()->GetScalarPointer();
+    Volume::VoxelType *value = m_maskVolume->getScalarPointer();
     for(i=ext[0];i<=ext[1];i++)
     {
         for(j=ext[2];j<=ext[3];j++)

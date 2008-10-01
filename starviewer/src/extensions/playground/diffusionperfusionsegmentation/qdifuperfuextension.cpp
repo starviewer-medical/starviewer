@@ -1315,7 +1315,7 @@ void QDifuPerfuSegmentationExtension::setPaintCursor(int idViewer)
 void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -1352,7 +1352,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
             {
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
-                value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+                value = m_activedMaskVolume->getScalarPointer(index);
                 if( value && ((*value) != m_diffusionMinValue) )
                 {
                     (*value) = m_diffusionMinValue;
@@ -1370,7 +1370,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
             {
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
-                value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+                value = m_penombraMaskVolume->getScalarPointer(index);
                 if( value && ( (*value) == m_penombraMaskMaxValue) )
                 {
                     (*value) = m_penombraMaskMinValue;
@@ -1386,7 +1386,7 @@ void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
 void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -1421,7 +1421,7 @@ void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
             {
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
-                value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+                value = m_activedMaskVolume->getScalarPointer(index);
                 if( value && ((*value) == m_diffusionMinValue) )
                 {
                     (*value) = m_diffusionMaxValue;
@@ -1439,7 +1439,7 @@ void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
             {
                 index[0]=centralIndex[0]+i;
                 index[1]=centralIndex[1]+j;
-                value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+                value = m_penombraMaskVolume->getScalarPointer(index);
                 if( value && ((*value) != m_penombraMaskMaxValue) )
                 {
                     (*value) = m_penombraMaskMaxValue;
@@ -1455,7 +1455,7 @@ void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
 void QDifuPerfuSegmentationExtension::eraseSliceMask( int idViewer)
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     int index[3];
     int ext[6];
 
@@ -1469,7 +1469,7 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask( int idViewer)
             {
                 index[0]=i;
                 index[1]=j;
-                value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+                value = m_activedMaskVolume->getScalarPointer(index);
                 if((*value) != m_diffusionMinValue)
                 {
                     (*value) = m_diffusionMinValue;
@@ -1493,7 +1493,7 @@ void QDifuPerfuSegmentationExtension::eraseSliceMask( int idViewer)
                 {
                     index[0]=i;
                     index[1]=j;
-                    value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+                    value = m_penombraMaskVolume->getScalarPointer(index);
                     if((*value) == m_penombraMaskMaxValue)
                     {
                         (*value) = m_penombraMaskMinValue;
@@ -1545,11 +1545,7 @@ void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive1(int a, int b, in
     m_activedMaskVolume->getVtkData()->GetExtent(ext);
     if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
     {
-        int index[3];
-        index[0]=a;
-        index[1]=b;
-        index[2]=c;
-        int* value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+        Volume::VoxelType *value = m_activedMaskVolume->getScalarPointer(a,b,c);
         if ((*value) != m_diffusionMinValue)
         {
             //DEBUG_LOG(m_outsideValue<<" "<<m_insideValue<<"->"<<(*value));
@@ -1573,11 +1569,7 @@ void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive2(int a, int b, in
     m_penombraMaskVolume->getVtkData()->GetExtent(ext);
     if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
     {
-        int index[3];
-        index[0]=a;
-        index[1]=b;
-        index[2]=c;
-        int* value=(int*)m_penombraMaskVolume->getVtkData()->GetScalarPointer(index);
+        Volume::VoxelType *value = m_penombraMaskVolume->getScalarPointer(a,b,c);
         if ((*value) == m_penombraMaskMaxValue)
         {
             (*value)= m_penombraMaskMinValue;

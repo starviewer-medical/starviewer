@@ -784,7 +784,7 @@ void QRectumSegmentationExtension::setPaintCursor()
 void QRectumSegmentationExtension::eraseMask(int size)
 {
     int i,j;
-    Volume::ItkPixelType* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -804,7 +804,7 @@ void QRectumSegmentationExtension::eraseMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_lesionMaskVolume->getScalarPointer(index);
             if((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
@@ -820,7 +820,7 @@ void QRectumSegmentationExtension::eraseMask(int size)
 void QRectumSegmentationExtension::paintMask(int size)
 {
     int i,j;
-    Volume::ItkPixelType* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -839,7 +839,7 @@ void QRectumSegmentationExtension::paintMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_lesionMaskVolume->getScalarPointer(index);
             if((*value) != m_insideValue)
             {
                 (*value) = m_insideValue;
@@ -854,7 +854,7 @@ void QRectumSegmentationExtension::paintMask(int size)
 void QRectumSegmentationExtension::eraseSliceMask()
 {
     int i,j;
-    Volume::ItkPixelType* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -876,7 +876,7 @@ void QRectumSegmentationExtension::eraseSliceMask()
         {
             index[0]=i;
             index[1]=j;
-            value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_lesionMaskVolume->getScalarPointer(index);
             if((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
@@ -921,7 +921,7 @@ void QRectumSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
         index[0]=a;
         index[1]=b;
         index[2]=c;
-        Volume::ItkPixelType* value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer(index);
+        Volume::VoxelType *value = m_lesionMaskVolume->getScalarPointer(index);
         if ((*value) == m_insideValue)
         {
             //std::cout<<m_outsideValue<<" "<<m_insideValue<<"->"<<(*value)<<std::endl;
@@ -1006,8 +1006,7 @@ double QRectumSegmentationExtension::calculateMaskVolume()
         return -1.0;
     }
 
-    Volume::ItkPixelType* value;
-    value=(Volume::ItkPixelType*)m_lesionMaskVolume->getVtkData()->GetScalarPointer();
+    Volume::VoxelType *value = m_lesionMaskVolume->getScalarPointer();
     for(i=ext[0];i<=ext[1];i++)
     {
         for(j=ext[2];j<=ext[3];j++)
