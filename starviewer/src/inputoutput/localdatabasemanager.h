@@ -70,6 +70,9 @@ public:
     ///Comprova si hi espai suficient al disc dur per descarregar nous objectes, si no n'hi ha suficient esborra estudis vells per intentar alliberar prou espai per permetre la descàrrega de nous objectes
     bool isEnoughSpace();
 
+    ///Donat un study instance UID ens indica a quin ha de ser el directori de l'estudi
+    QString getStudyPath(QString studyInstanceUID);
+
     LastError getLastError();
 
 public slots:
