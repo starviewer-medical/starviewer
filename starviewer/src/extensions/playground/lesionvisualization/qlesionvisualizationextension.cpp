@@ -294,7 +294,7 @@ void QLesionVisualizationExtension::extractLesionMaskArea()
         m_maskLesionSlicesArea[i] = 0;
 
     int *dims =m_lesionMaskVolume->getVtkData()->GetExtent();
-    int *value;
+    Volume::VoxelType *value;
 
     for ( i = dims[4]; i < dims[5]; i++ )
     {
@@ -302,8 +302,7 @@ void QLesionVisualizationExtension::extractLesionMaskArea()
         {
             for ( int k = dims[2]; k < dims[3]; k++ )
             {
-                value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer( j, k, i );
-
+                value = m_lesionMaskVolume->getScalarPointer( j, k, i );
                 if (*value != 0)
                 {
                     m_maskLesionSlicesArea[i]++;

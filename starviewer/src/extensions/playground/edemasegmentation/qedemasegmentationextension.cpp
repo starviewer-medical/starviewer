@@ -804,7 +804,7 @@ void QEdemaSegmentationExtension::setPaintCursor()
 void QEdemaSegmentationExtension::eraseMask(int size)
 {
     int i,j;
-    int* value;
+	Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -824,7 +824,7 @@ void QEdemaSegmentationExtension::eraseMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_activedMaskVolume->getScalarPointer(index);
             if(value && ( (*value) == m_insideValue) )
             {
                 (*value) = m_outsideValue;
@@ -839,7 +839,7 @@ void QEdemaSegmentationExtension::eraseMask(int size)
 void QEdemaSegmentationExtension::paintMask(int size)
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -858,7 +858,7 @@ void QEdemaSegmentationExtension::paintMask(int size)
         {
             index[0]=centralIndex[0]+i;
             index[1]=centralIndex[1]+j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_activedMaskVolume->getScalarPointer(index);
             if(value && ((*value) != m_insideValue) )
             {
                 (*value) = m_insideValue;
@@ -873,7 +873,7 @@ void QEdemaSegmentationExtension::paintMask(int size)
 void QEdemaSegmentationExtension::eraseSliceMask()
 {
     int i,j;
-    int* value;
+    Volume::VoxelType *value;
     double pos[3];
     double origin[3];
     double spacing[3];
@@ -895,7 +895,7 @@ void QEdemaSegmentationExtension::eraseSliceMask()
         {
             index[0]=i;
             index[1]=j;
-            value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+            value = m_activedMaskVolume->getScalarPointer(index);
             if((*value) == m_insideValue)
             {
                 (*value) = m_outsideValue;
@@ -936,11 +936,7 @@ void QEdemaSegmentationExtension::eraseRegionMaskRecursive(int a, int b, int c)
     //std::cout<<"Extension: ["<<ext[0]<<" "<<ext[1]<<", "<<ext[2]<<" "<<ext[3]<<", "<<ext[4]<<" "<<ext[5]<<"], Index: ["<<a<<", "<<b<<", "<<c<<"]"<<std::endl;
     if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
     {
-        int index[3];
-        index[0]=a;
-        index[1]=b;
-        index[2]=c;
-        int* value=(int*)m_activedMaskVolume->getVtkData()->GetScalarPointer(index);
+        Volume::VoxelType *value = m_activedMaskVolume->getScalarPointer(a,b,c);
         if ((*value) == m_insideValue)
         {
             //std::cout<<m_outsideValue<<" "<<m_insideValue<<"->"<<(*value)<<std::endl;
@@ -1058,8 +1054,7 @@ double QEdemaSegmentationExtension::calculateMaskVolume()
         DEBUG_LOG( QString("Compte!!! Mask Vtk Data Type != INT (%1)").arg( m_lesionMaskVolume->getVtkData()->GetScalarTypeAsString() ) );
     }
 
-    int* value;
-    value=(int*)m_lesionMaskVolume->getVtkData()->GetScalarPointer();
+    Volume::VoxelType *value = m_lesionMaskVolume->getScalarPointer();
     for(i=ext[0];i<=ext[1];i++)
     {
         for(j=ext[2];j<=ext[3];j++)

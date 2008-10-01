@@ -196,12 +196,12 @@ double StrokeSegmentationMethod::applyMethodVTK()
 
 void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int a, int b, int c, int prof)
 {
-    int* value;
-    int* maskValue;
+	Volume::VoxelType *value;
+    Volume::VoxelType *maskValue;
     if((a>=m_Volume->getWholeExtent()[0])&&(a<=m_Volume->getWholeExtent()[1])&&(b>=m_Volume->getWholeExtent()[2])&&(b<=m_Volume->getWholeExtent()[3])&&(c>=m_Volume->getWholeExtent()[4])&&(c<=m_Volume->getWholeExtent()[5]))
     {
-        value=(int*)m_Volume->getVtkData()->GetScalarPointer(a,b,c);
-        maskValue=(int*)imMask->GetScalarPointer(a,b,c);
+        value = m_Volume->getScalarPointer(a,b,c);
+		maskValue = (Volume::VoxelType *)imMask->GetScalarPointer(a,b,c);
         if ((*maskValue) == m_insideMaskValue-100)
         {
             (*maskValue)= m_insideMaskValue;

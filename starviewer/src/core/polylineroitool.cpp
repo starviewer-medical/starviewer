@@ -7,7 +7,6 @@
 #include "polylineroitool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "volume.h"
 #include "series.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
@@ -454,7 +453,7 @@ double PolylineROITool::computeGrayMeanSagittal()
     return mean;
 }
 
-int PolylineROITool::getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 )
+Volume::VoxelType PolylineROITool::getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 )
 {
     double *origin = m_2DViewer->getInput()->getOrigin();
     int index[3];
@@ -481,9 +480,9 @@ int PolylineROITool::getGrayValue( double *coords, double spacing0, double spaci
     }
 
     if ( m_2DViewer->isThickSlabActive() )
-        return *((int*)m_2DViewer->getCurrentSlabProjection()->GetScalarPointer(index));
+		return *((Volume::VoxelType *)m_2DViewer->getCurrentSlabProjection()->GetScalarPointer(index));
     else
-        return *((int*)m_2DViewer->getInput()->getVtkData()->GetScalarPointer(index));
+        return *(m_2DViewer->getInput()->getScalarPointer(index));
 }
 
 double PolylineROITool::computeGrayMeanCoronal()

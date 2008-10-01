@@ -8,13 +8,13 @@
 #define UDGPOLYLINEROITOOL_H
 
 #include "tool.h"
+#include "volume.h"
 #include <QPointer>
 
 namespace udg {
 
 class PolylineROIToolData;
 class Q2DViewer;
-class Volume;
 class ImagePlane;
 class DrawerPolyline;
 
@@ -56,7 +56,7 @@ private:
     double computeGrayMeanCoronal();
     
     /// calcula el voxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
-    int getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 );
+	Volume::VoxelType getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 );
     
 private:
     /// Viewer 2D sobre el qual treballem
