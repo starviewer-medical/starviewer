@@ -32,6 +32,8 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
 
     m_currentClut.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
     m_currentClut.addPoint( 255.0, QColor( 255, 255, 255, 255 ) );
+
+    m_computingObscurance = false;
 }
 
 QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
@@ -106,6 +108,7 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_clutEditToolButton, SIGNAL( clicked() ), SLOT( showClutEditorDialog() ) );
 
     // mètodes de rendering
+
     m_shadingOptionsWidget->hide();
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerLabel, SLOT( setEnabled(bool) ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
@@ -113,6 +116,18 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( render() ) );
     connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setSpecularPower(double) ) );
     connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( render() ) );
+
+    m_obscuranceOptionsWidget->hide();
+    m_obscuranceCheckBox->hide(); m_obscuranceFactorLabel->hide(); m_obscuranceFactorDoubleSpinBox->hide();
+    connect( m_obscuranceComputeCancelPushButton, SIGNAL( clicked() ), this, SLOT( computeOrCancelObscurance() ) );
+    connect( m_3DView, SIGNAL( obscuranceProgress(int) ), m_obscuranceProgressBar, SLOT( setValue(int) ) );
+    connect( m_3DView, SIGNAL( obscuranceComputed() ), this, SLOT( endComputeObscurance() ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool ) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( setObscurance(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( render() ) );
+    connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setObscuranceFactor(double) ) );
+    connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( render() ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -126,44 +141,55 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
 void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
 {
     this->setCursor( QCursor(Qt::WaitCursor) );
+
+    m_shadingOptionsWidget->hide();
+    m_obscuranceOptionsWidget->hide();
+
     switch( index )
     {
-    case 0:
-        m_shadingOptionsWidget->hide();
-        m_3DView->setRenderFunctionToRayCasting();
-    break;
+        case 0:
+            m_3DView->setRenderFunctionToRayCasting();
+            break;
 
-    case 1:
-        m_shadingOptionsWidget->show();
-        m_3DView->setRenderFunctionToRayCastingShading();
-    break;
+        case 1:
+            m_shadingOptionsWidget->show();
+            m_3DView->setRenderFunctionToRayCastingShading();
+            break;
 
-    case 2:
-        m_shadingOptionsWidget->hide();
-        m_3DView->setRenderFunctionToMIP3D();
-    break;
+        case 2:
+            m_obscuranceOptionsWidget->show();
+            m_3DView->setRenderFunctionToRayCastingObscurance();
+            break;
 
-    case 3:
-        m_shadingOptionsWidget->hide();
-        m_3DView->setRenderFunctionToTexture3D();
-    break;
+        case 3:
+            m_shadingOptionsWidget->show();
+            m_obscuranceOptionsWidget->show();
+            m_3DView->setRenderFunctionToRayCastingShadingObscurance();
+            break;
 
-    case 4:
-        m_shadingOptionsWidget->hide();
-        m_3DView->setRenderFunctionToTexture2D();
-    break;
+        case 4:
+            m_3DView->setRenderFunctionToMIP3D();
+            break;
 
-    case 5:
-        m_shadingOptionsWidget->hide();
-        m_3DView->setRenderFunctionToIsoSurface();
-    break;
+        case 5:
+            m_3DView->setRenderFunctionToTexture3D();
+            break;
 
-    case 6:
-        m_shadingOptionsWidget->hide();
-        m_3DView->setRenderFunctionToContouring();
-    break;
+        case 6:
+            m_3DView->setRenderFunctionToTexture2D();
+            break;
+
+        case 7:
+            m_3DView->setRenderFunctionToIsoSurface();
+            break;
+
+        case 8:
+            m_3DView->setRenderFunctionToContouring();
+            break;
     }
+
     m_3DView->render();
+
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
@@ -231,6 +257,53 @@ void QVolume3DViewTestingExtension::writeSettings()
     QSettings settings;
     settings.beginGroup("Starviewer-App-3DTesting");
     settings.endGroup();
+}
+
+void QVolume3DViewTestingExtension::computeOrCancelObscurance()
+{
+    if ( !m_computingObscurance )   // no s'estan calculant -> comencem
+    {
+        m_computingObscurance = true;
+
+        enableObscuranceRendering( false );
+
+        m_obscuranceComputeCancelPushButton->setText( tr("Cancel") );
+        m_obscuranceProgressBar->setValue( 0 );
+
+        switch ( m_obscuranceQualityComboBox->currentIndex() )
+        {
+            case 0: m_3DView->computeObscurance( Q3DViewer::Minimum ); break;   // mínim
+            case 1: m_3DView->computeObscurance( Q3DViewer::Low ); break;       // baix
+            case 2: m_3DView->computeObscurance( Q3DViewer::Medium ); break;    // mitjà
+            default: ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( m_obscuranceQualityComboBox->currentIndex() ) );
+        }
+    }
+    else    // s'estan calculant -> aturem-ho
+    {
+        m_computingObscurance = false;
+
+        m_obscuranceComputeCancelPushButton->setText( tr("Compute") );
+
+        m_3DView->cancelObscurance();
+    }
+}
+
+void QVolume3DViewTestingExtension::endComputeObscurance()
+{
+    m_computingObscurance = false;
+    m_obscuranceComputeCancelPushButton->setText( tr("Compute") );
+    enableObscuranceRendering( true );
+}
+
+void QVolume3DViewTestingExtension::enableObscuranceRendering( bool on )
+{
+    if ( !on ) m_obscuranceCheckBox->setChecked( false );
+
+    m_obscuranceCheckBox->setEnabled( on );
+    m_obscuranceCheckBox->setVisible( on );
+    m_obscuranceFactorLabel->setVisible( on );
+    m_obscuranceFactorDoubleSpinBox->setVisible( on );
+    m_obscuranceProgressBar->setVisible( !on );
 }
 
 }

@@ -18,6 +18,7 @@ class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastMapper;
+class vtk4DLinearRegressionGradientEstimator;
 
 namespace udg {
 
@@ -25,6 +26,11 @@ namespace udg {
 class Volume;
 class Q3DOrientationMarker;
 class TransferFunction;
+class ObscuranceMainThread;
+class vtkVolumeRayCastVoxelShaderCompositeFunction;
+class AmbientVoxelShader;
+class DirectIlluminationVoxelShader;
+class ObscuranceVoxelShader;
 
 /**
 Classe base per als visualitzadors 3D
@@ -34,8 +40,9 @@ Classe base per als visualitzadors 3D
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
-    enum RenderFunction{ RayCasting, RayCastingShading,
+    enum RenderFunction{ RayCasting, RayCastingShading, RayCastingObscurance, RayCastingShadingObscurance,
                          MIP3D, IsoSurface , Texture2D , Texture3D, Contouring };
+    enum ObscuranceQuality { Minimum, Low, Medium };
 
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
@@ -58,6 +65,8 @@ public slots:
     void setRenderFunction(RenderFunction function);
     void setRenderFunctionToRayCasting();
     void setRenderFunctionToRayCastingShading();
+    void setRenderFunctionToRayCastingObscurance();
+    void setRenderFunctionToRayCastingShadingObscurance();
     void setRenderFunctionToMIP3D();
     void setRenderFunctionToIsoSurface();
     void setRenderFunctionToTexture2D();
@@ -84,12 +93,31 @@ public slots:
     void setSpecular( bool on );
     void setSpecularPower( double power );
 
+    /// Càlcul d'obscurances.
+    void computeObscurance( ObscuranceQuality quality );
+    void cancelObscurance();
+
+    /// Paràmetres d'obscurances.
+    void setObscurance( bool on );
+    void setObscuranceFactor( double factor );
+
+signals:
+
+    void obscuranceProgress( int progress );
+    void obscuranceComputed();
+
 private:
     /// fa la visualització per raycasting
     void renderRayCasting();
 
-    /// fa la visualització per raycasting amb shading i opcionalment especularitat
+    /// fa la visualització per raycasting amb shading (i opcionalment especularitat)
     void renderRayCastingShading();
+
+    /// fa la visualització per raycasting amb obscurances
+    void renderRayCastingObscurance();
+
+    /// fa la visualització per raycasting amb shading (i opcionalment especularitat) i obscurances
+    void renderRayCastingShadingObscurance();
 
     /// fa la visualització per contouring
     void renderContouring();
@@ -114,6 +142,10 @@ private:
 
     /// reinicia la orientació
     void resetOrientation();
+
+private slots:
+
+    void endComputeObscurance();
 
 protected:
     /// el renderer
@@ -140,12 +172,27 @@ private:
 
     /// Funció de ray cast.
     vtkVolumeRayCastCompositeFunction *m_volumeRayCastFunction;
+    vtkVolumeRayCastVoxelShaderCompositeFunction *m_volumeRayCastVoxelShaderFunction;
+
+    /// Voxel shaders.
+    AmbientVoxelShader *m_ambientVoxelShader;
+    DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
+    ObscuranceVoxelShader *m_obscuranceVoxelShader;
 
     /// La funció de transferència que s'aplica
     TransferFunction *m_transferFunction;
 
     /// Booleà per saber si estem fent el primer render (per reiniciar l'orientació).
     bool m_firstRender;
+
+    /// Thread de control del càlcul d'obscurances.
+    ObscuranceMainThread *m_obscuranceMainThread;
+
+    /// Vector d'obscurances.
+    double *m_obscurance;
+
+    /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
+    vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
 
 };
 

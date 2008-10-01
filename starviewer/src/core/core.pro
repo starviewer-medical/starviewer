@@ -181,7 +181,11 @@ HEADERS += extensionfactory.h \
            trilinearinterpolator.h \
            vector3.h \
            vtkVolumeRayCastVoxelShaderCompositeFunction.h \
-           sphereuniformpointcloudgenerator.h 
+           sphereuniformpointcloudgenerator.h \
+           obscurancemainthread.h \
+           obscurancethread.h \
+           obscurancevoxelshader.h \
+           vtk4DLinearRegressionGradientEstimator.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -328,7 +332,11 @@ SOURCES += extensionmediator.cpp \
            trilinearinterpolator.cpp \
            vector3.cpp \
            vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
-           sphereuniformpointcloudgenerator.cpp 
+           sphereuniformpointcloudgenerator.cpp \
+           obscurancemainthread.cpp \
+           obscurancethread.cpp \
+           obscurancevoxelshader.cpp \
+           vtk4DLinearRegressionGradientEstimator.cxx 
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

@@ -54,6 +54,10 @@ public slots:
 
     void manageClosedDialog();
 
+    /// Comença a calcular les obscurances, i si ja s'estan calculant ho cancel·la.
+    void computeOrCancelObscurance();
+    void endComputeObscurance();
+
 private:
     /// posa a punt les tools que es poden fer servir en l'extensió
     void initializeTools();
@@ -67,6 +71,8 @@ private:
     /// Lectura/escriptura de configuració
     void readSettings();
     void writeSettings();
+
+    void enableObscuranceRendering( bool on );
 
 private:
     /// El volum d'input
@@ -85,6 +91,9 @@ private:
 
     /// Última clut aplicada.
     TransferFunction m_currentClut;
+
+    /// Ens indica si en aquests moments s'estan calculant les obscurances.
+    bool m_computingObscurance;
 };
 
 } // end namespace udg

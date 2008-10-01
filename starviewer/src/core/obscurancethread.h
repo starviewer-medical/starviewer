@@ -15,7 +15,6 @@
 #include <QVector>
 
 #include "obscurancemainthread.h"
-#include "optimalviewpointvolume.h"
 #include "transferfunction.h"
 #include "vector3.h"
 
