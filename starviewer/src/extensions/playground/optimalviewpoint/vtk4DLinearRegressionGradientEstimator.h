@@ -32,6 +32,9 @@ public:
   // Construct a vtk4DLinearRegressionGradientEstimator.
   static vtk4DLinearRegressionGradientEstimator *New();
 
+  vtkSetMacro( Radius, unsigned int );
+  vtkGetMacro( Radius, unsigned int );
+
 protected:
   vtk4DLinearRegressionGradientEstimator();
   ~vtk4DLinearRegressionGradientEstimator();
@@ -43,7 +46,10 @@ protected:
 private:
   vtk4DLinearRegressionGradientEstimator(const vtk4DLinearRegressionGradientEstimator&);  // Not implemented.
   void operator=(const vtk4DLinearRegressionGradientEstimator&);  // Not implemented.
-}; 
+
+  // Radi d'aplicació del gradient.
+  unsigned int Radius;
+};
 
 
 #endif
