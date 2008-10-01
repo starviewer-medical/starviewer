@@ -45,8 +45,10 @@ class Volume : public QObject
 {
 Q_OBJECT
 public:
+	/// Tipus de vòxel del volum
+	typedef signed short int VoxelType;
     /// Tipus d'imatge intern per defecte d'itk
-    typedef signed short int ItkPixelType;
+    typedef VoxelType ItkPixelType;
     static const unsigned int VDimension = 3;
 
     typedef itk::Image<ItkPixelType, VDimension >    ItkImageType;
@@ -162,6 +164,12 @@ public:
      * @param direction[]
      */
     void getStackDirection( double direction[3], int stack = 0 );
+
+	/// Obtenim el punter a les dades que es troben en l'índex donat
+	/// És un accés a baix nivell, ja que obtenim el punter de les dades
+	/// Retornem el punter transformat al tipus natiu de dades VoxelType
+	VoxelType *getScalarPointer( int x = 0, int y = 0, int z = 0 );
+	VoxelType *getScalarPointer( int index[3] );
 
 signals:
     /**
