@@ -1384,6 +1384,13 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
+        case QExecuteOperationThread::ErrorRetrieving :
+            message = tr("Please review the operation list screen, ");
+            message += tr("an error ocurred retrieving a study.\n");
+            message += tr("\nBe sure that your computer is connected on network, the Pacs parameters are well configured.");
+            message += tr("\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
         case QExecuteOperationThread::NoEnoughSpace :
             message = tr("There is not enough space to retreive studies, please free space.");
             QMessageBox::warning( this , tr( "Starviewer" ) , message );
