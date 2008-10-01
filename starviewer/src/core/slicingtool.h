@@ -82,9 +82,9 @@ private:
     /// indica si entre event i event hi ha hagut moviment del ratolí
     bool m_mouseMovement;
 
-    /// Nombre de llesques del volum sobre el que fem slicing
+	/// Nombre d'imatges ( ja siguin fases o llesques ) del volum sobre el que fem slicing
     /// útil per calcular l'increment proporcional de llesques
-    int m_numberOfSlices;
+    int m_numberOfImages;
 	
 	/// mida de la pantalla
 	/// útil per calcular l'increment proporcional de llesques
