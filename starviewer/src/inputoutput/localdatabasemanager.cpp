@@ -395,6 +395,13 @@ bool LocalDatabaseManager::isEnoughSpace()
     return true;
 }
 
+QString LocalDatabaseManager::getStudyPath(QString studyInstanceUID)
+{
+    StarviewerSettings settings;
+
+    return settings.getCacheImagePath() + studyInstanceUID;
+}
+
 LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
 {
     return m_lastError;

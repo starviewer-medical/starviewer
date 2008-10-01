@@ -31,6 +31,7 @@
 #include "dicomtagreader.h"
 #include "localdatabasemanagerthreaded.h"
 #include "qthreadrunwithexec.h"
+#include "deletedirectory.h"
 
 namespace udg {
 
@@ -130,9 +131,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     if (!localDatabaseManager.isEnoughSpace())
     {
         if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
-            emit errorInOperation(studyUID, ErrorFreeingSpace);
+            errorRetrieving(studyUID, ErrorFreeingSpace);
         else
-            emit errorInOperation(studyUID, NoEnoughSpace);
+            errorRetrieving(studyUID, NoEnoughSpace);
 
         return;
     }
@@ -143,7 +144,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         ERROR_LOG( "Error al connectar al pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " + state.text() );
 
-        emit errorInOperation(studyUID, ErrorConnectingPacs);
+        errorRetrieving(studyUID, ErrorConnectingPacs);
         return;
     }
 
@@ -164,11 +165,11 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     retState = retrieveImages.retrieve();
     pacsConnection.disconnect();
 
-    if ( !retState.good() )
+    if (!retState.good())
     {
         ERROR_LOG( "S'ha produit algun error durant la descàrrega de l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " +retState.text() );
 
-        emit errorInOperation(studyUID , ErrorConnectingPacs);
+        errorRetrieving(studyUID, ErrorConnectingPacs);
     }
     else
     {
@@ -283,5 +284,17 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
     connect(this, SIGNAL(errorInOperation(studyUID, OperationError::lastError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
     connect(this, SIGNAL(errorInOperation(studyUID, OperationError::lastError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 }
+
+void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QExecuteOperationThread::OperationError lastError)
+{
+    DeleteDirectory deleteDirectory;
+    LocalDatabaseManager localDatabaseManager;
+
+    emit errorInOperation(studyInstanceUID, lastError);
+
+    //Com la descàrrega ha fallat esborrem el directori on s'havia de descarregar l'estudi, per si s'ha descarregat alguna imatge
+    deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
+}
+
 
 }

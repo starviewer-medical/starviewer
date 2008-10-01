@@ -124,6 +124,9 @@ private:
 
     //Crea les connexions de signals i slots necessaries per a descarregar un estudi
     void createRetrieveStudyConnections(LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
+
+    ///Si es produeix un error emet un signal amb l'error i esborra el directori de l'estudi per si s'hagués pogut descarregar alguna imatge
+    void errorRetrieving(QString studyInstanceUID, QExecuteOperationThread::OperationError lastError);
 };
 
 }
