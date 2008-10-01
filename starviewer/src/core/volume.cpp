@@ -463,6 +463,18 @@ void Volume::getStackDirection( double direction[3], int stack )
     }
 }
 
+Volume::VoxelType *Volume::getScalarPointer( int x, int y, int z )
+{
+	// TODO caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
+	return (Volume::VoxelType *)this->getVtkData()->GetScalarPointer(x,y,z);
+}
+
+Volume::VoxelType *Volume::getScalarPointer( int index[3] )
+{
+	// TODO caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
+	return this->getScalarPointer(index[0], index[1], index[2]);
+}
+
 void Volume::allocateImageData()
 {
     //\TODO si les dades estan allotjades per defecte, fer un delete primer i després fer un new? o amb un ReleaseData n'hi ha prou?
