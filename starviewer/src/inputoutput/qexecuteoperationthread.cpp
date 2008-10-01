@@ -169,7 +169,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         ERROR_LOG( "S'ha produit algun error durant la descàrrega de l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " +retState.text() );
 
-        errorRetrieving(studyUID, ErrorConnectingPacs);
+        errorRetrieving(studyUID, ErrorRetrieving);
     }
     else
     {
