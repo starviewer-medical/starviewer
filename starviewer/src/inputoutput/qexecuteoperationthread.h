@@ -17,12 +17,20 @@ namespace udg {
 
 class Operation;
 class Status;
+class LocalDatabaseManagerThreaded;
+class PatientFiller;
+class QThreadRunWithExec;
+class StarviewerProcessImageRetrieved;
 
 class QExecuteOperationThread : public QThread
 {
 Q_OBJECT
 
 public:
+
+    ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
+    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace};
+
     /** Constructor de la classe
       */
     QExecuteOperationThread( QObject *parent = 0 );
@@ -62,7 +70,7 @@ signals:
     /** signal que s'emet cap a QueryScreen per indicar que l'estudi s'ha descarregat
      * @param studyUID UID de l'estudi descarregat
      */
-    void setRetrieveFinished( QString studyUID );
+    void retrieveFinished( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produït un error en la descàrrega de l'estudi
      * @param studyUID UID de l'estudi que ha produït l'error
@@ -94,11 +102,8 @@ signals:
      */
     void newOperation( Operation *newOperation );
 
-    ///ha acabat la descàrrega
-    void retrieveFinished();
-
-    ///Signal que s'emet quan s'ha produït un error a l'operació de descàrrega
-    void abort();
+    ///Signal que s'emet quan es produeix un error a l'operació de descàrrega
+    void errorInOperation(QString, QExecuteOperationThread::OperationError);
 
 private:
 
@@ -116,6 +121,9 @@ private:
 
 private:
     bool m_stop;//indica si el thread esta parat
+
+    //Crea les connexions de signals i slots necessaries per a descarregar un estudi
+    void createRetrieveStudyConnections(LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
 };
 
 }

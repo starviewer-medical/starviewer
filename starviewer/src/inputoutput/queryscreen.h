@@ -165,6 +165,9 @@ private slots:
     ///Slot que es dispara quan ha finalitzat el thread que esborrar els estudis vells, aquest slot comprova que no s'hagi produït cap error esborrant els estudis vells
     void deleteOldStudiesThreadFinished();
 
+    ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
+    void showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error);
+
 private:
     enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
 
