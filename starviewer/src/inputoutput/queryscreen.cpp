@@ -1378,7 +1378,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
     switch (error)
     {
         case QExecuteOperationThread::ErrorConnectingPacs :
-            message = tr("Please review the operation state screen, ");
+            message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred connecting to a Pacs while retrieving or storing a study.\n");
             message += tr("\nBe sure that your computer is connected on network, the Pacs parameters are well configured.");
             message += tr("\nIf the problem persist contact with an administrator.");
@@ -1389,21 +1389,21 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             QMessageBox::warning( this , tr( "Starviewer" ) , message );
             break;
         case QExecuteOperationThread::ErrorFreeingSpace :
-            message = tr("Please review the operation state screen, ");
+            message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred freeing space and some operations may have failed.");
             message += tr("\n\nClose all Starviewer windows and try again."
                          "\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         case QExecuteOperationThread::DatabaseError :
-            message = tr("Please review the operation state screen, ");
+            message = tr("Please review the operation list screen, ");
             message += tr("a database error ocurred and some operations may have failed");
             message += tr("\n\nClose all Starviewer windows and try again."
                          "\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         default:
-            message = tr("Please review the operation state screen, ");
+            message = tr("Please review the operation list screen, ");
             message += tr("an unknow error has ocurred");
             message += tr("\n\nClose all Starviewer windows and try again."
                          "\nIf the problem persist contact with an administrator.");
