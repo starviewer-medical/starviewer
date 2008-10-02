@@ -67,6 +67,51 @@ void ViewersLayout::removeLayouts()
     }
 }
 
+void ViewersLayout::restoreLayouts()
+{
+	int i;
+	int numberOfViewers;
+	int column = 1;
+	int row = 0;
+
+	numberOfViewers = m_vectorViewers.size();
+
+	/// Creem els que calguin per ser regular si es que no hi havia cap grid predefinit
+	if( (m_totalColumns == 1) && (m_totalRows == 1) && numberOfViewers > 1)
+	{
+		m_totalColumns = ceil( sqrt( (double)numberOfViewers) );
+		m_totalRows = m_totalColumns;
+		
+		if( (m_totalRows * m_totalColumns) < numberOfViewers )
+		{
+			for( i = 0; i < (numberOfViewers - (m_totalRows * m_totalColumns) ); i++ )
+			{
+				m_vectorViewers.push_back( getNewQ2DViewerWidget() );
+			}
+		}
+	}
+
+	m_viewersLayout->addWidget( m_vectorViewers.value(0), 0, 0 );
+
+	// S'amaguen tots i es deixa el principal, es tornen a posar amb layout
+	for( i = 1; i < m_vectorViewers.size(); i++)
+	{
+		m_vectorViewers.value(i)->hide();
+		m_viewersLayout->addWidget( m_vectorViewers.value(i), row, column );
+
+		column++;
+		if( column >= m_totalColumns)
+		{
+			row++;
+			column = 0;
+		}
+	}
+
+	setViewerSelected ( m_vectorViewers.value( 0 ) );
+	m_rows = 1;
+	m_columns = 1;
+}
+
 Q2DViewerWidget* ViewersLayout::getViewerSelected()
 {
     return m_selectedViewer;
@@ -196,6 +241,11 @@ void ViewersLayout::setGrid( int rows, int columns )
     int windowsToShow = 0;
     int windowsToCreate = 0;
     int windowsToHide = 0;
+	
+	if( !m_isRegular )
+	{
+		restoreLayouts();
+	}
 
     if( rows > m_rows )
     {
@@ -301,6 +351,8 @@ Q2DViewerWidget * ViewersLayout::addViewer( QString position )
     int screen_x = this->width();
     int screen_y = this->height();
 
+	m_rows = 0;
+    m_columns = 0;
     if( m_gridLayout ) removeLayouts();
 
 	if ( m_numberOfVisibleViewers < m_vectorViewers.size() )
