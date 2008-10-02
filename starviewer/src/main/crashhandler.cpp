@@ -116,12 +116,7 @@ CrashHandler::CrashHandler()
         dumpsDir.mkpath( dumpsDir.absolutePath() );
     }
 
-    //FIXME Ara mateix el define no funciona sota linux. Es fa tractament especial.
-#ifndef __linux__
     QString crashReporterPath = QCoreApplication::applicationDirPath() + "/" + STARVIEWER_CRASH_REPORTER_EXE;
-#else
-    QString crashReporterPath = QCoreApplication::applicationDirPath() + "/crashreporter";
-#endif
 
     crashReporterPathByteArray = crashReporterPath.toLocal8Bit();
     const char *crashReporterPathCString = crashReporterPathByteArray.constData();
