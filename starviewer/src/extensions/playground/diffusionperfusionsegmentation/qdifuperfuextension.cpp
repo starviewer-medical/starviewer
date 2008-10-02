@@ -855,7 +855,6 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         if ( !m_perfusion2DView->getRenderer()->HasViewProp( m_perfusionOverlay ) )
             m_perfusion2DView->getRenderer()->AddViewProp( m_perfusionOverlay );
 
-        m_perfusion2DView->updateWindowLevelAnnotation();
         //m_perfusion2DView->setWindowLevel( m_diffusion2DView->getCurrentColorWindow(), m_diffusion2DView->getCurrentColorLevel() );
         m_perfusion2DView->setWindowLevel( 255.0, 0.0);
 
