@@ -74,6 +74,10 @@ private:
 
     void enableObscuranceRendering( bool on );
 
+private slots:
+
+    void render();
+
 private:
     /// El volum d'input
     Volume *m_input;
