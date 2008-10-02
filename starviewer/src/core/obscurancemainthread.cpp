@@ -106,10 +106,7 @@ void ObscuranceMainThread::run()
     // estructures de dades reaprofitables
     QVector<Vector3> lineStarts;
 
-    // càlcul de direccions
-    SphereUniformPointCloudGenerator cloud( 1.0, m_numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
-    cloud.createPOVCloud();
-    const QVector<Vector3> &directions = cloud.getVertices();
+    const QVector<Vector3> directions = getDirections();
     int nDirections = directions.size();
 
     // iterem per les direccions
@@ -285,6 +282,91 @@ void ObscuranceMainThread::getLineStarts( QVector<Vector3> &lineStarts, int dimX
         v.x = qRound( rv.x ); v.y = qRound( rv.y ); v.z = qRound( rv.z );
     }
     DEBUG_LOG( QString( "line starts: %1" ).arg( lineStarts.size() ) );
+}
+
+
+QVector<Vector3> ObscuranceMainThread::getDirections() const
+{
+    if ( m_numberOfDirections >= 0 )
+    {
+        SphereUniformPointCloudGenerator cloud( 1.0, m_numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
+        cloud.createPOVCloud();
+        return cloud.getVertices();
+    }
+    else
+    {
+        QVector<Vector3> directions;
+        const double UNIT = 1.0 / sqrt( 3.0 );
+        const double PHI = ( 1.0 + sqrt( 5.0 ) ) / 2.0;
+        const double INV_PHI = 1.0 / PHI;
+
+        switch ( m_numberOfDirections )
+        {
+            default:
+            case -4:
+                directions << Vector3( UNIT, UNIT, UNIT )
+                           << Vector3( -UNIT, -UNIT, UNIT )
+                           << Vector3( -UNIT, UNIT, -UNIT )
+                           << Vector3( UNIT, -UNIT, -UNIT );
+                break;
+            case -6:
+                directions << Vector3( 1.0, 0.0, 0.0 )
+                           << Vector3( -1.0, 0.0, 0.0 )
+                           << Vector3( 0.0, 1.0, 0.0 )
+                           << Vector3( 0.0, -1.0, 0.0 )
+                           << Vector3( 0.0, 0.0, 1.0 )
+                           << Vector3( 0.0, 0.0, -1.0 );
+                break;
+            case -8:
+                directions << Vector3( UNIT, UNIT, UNIT )
+                           << Vector3( UNIT, UNIT, -UNIT )
+                           << Vector3( UNIT, -UNIT, UNIT )
+                           << Vector3( UNIT, -UNIT, -UNIT )
+                           << Vector3( -UNIT, UNIT, UNIT )
+                           << Vector3( -UNIT, UNIT, -UNIT )
+                           << Vector3( -UNIT, -UNIT, UNIT )
+                           << Vector3( -UNIT, -UNIT, -UNIT );
+                break;
+            case -12:
+                directions << Vector3( 0.0, 1.0, PHI ).normalize()
+                           << Vector3( 0.0, 1.0, -PHI ).normalize()
+                           << Vector3( 0.0, -1.0, PHI ).normalize()
+                           << Vector3( 0.0, -1.0, -PHI ).normalize()
+                           << Vector3( 1.0, PHI, 0.0 ).normalize()
+                           << Vector3( 1.0, -PHI, 0.0 ).normalize()
+                           << Vector3( -1.0, PHI, 0.0 ).normalize()
+                           << Vector3( -1.0, -PHI, 0.0 ).normalize()
+                           << Vector3( PHI, 0.0, 1.0 ).normalize()
+                           << Vector3( PHI, 0.0, -1.0 ).normalize()
+                           << Vector3( -PHI, 0.0, 1.0 ).normalize()
+                           << Vector3( -PHI, 0.0, -1.0 ).normalize();
+                break;
+            case -20:
+                directions << Vector3( UNIT, UNIT, UNIT )
+                           << Vector3( UNIT, UNIT, -UNIT )
+                           << Vector3( UNIT, -UNIT, UNIT )
+                           << Vector3( UNIT, -UNIT, -UNIT )
+                           << Vector3( -UNIT, UNIT, UNIT )
+                           << Vector3( -UNIT, UNIT, -UNIT )
+                           << Vector3( -UNIT, -UNIT, UNIT )
+                           << Vector3( -UNIT, -UNIT, -UNIT )
+                           << Vector3( 0.0, INV_PHI, PHI ).normalize()
+                           << Vector3( 0.0, INV_PHI, -PHI ).normalize()
+                           << Vector3( 0.0, -INV_PHI, PHI ).normalize()
+                           << Vector3( 0.0, -INV_PHI, -PHI ).normalize()
+                           << Vector3( INV_PHI, PHI, 0.0 ).normalize()
+                           << Vector3( INV_PHI, -PHI, 0.0 ).normalize()
+                           << Vector3( -INV_PHI, PHI, 0.0 ).normalize()
+                           << Vector3( -INV_PHI, -PHI, 0.0 ).normalize()
+                           << Vector3( PHI, 0.0, INV_PHI ).normalize()
+                           << Vector3( PHI, 0.0, -INV_PHI ).normalize()
+                           << Vector3( -PHI, 0.0, INV_PHI ).normalize()
+                           << Vector3( -PHI, 0.0, -INV_PHI ).normalize();
+                break;
+        }
+
+        return directions;
+    }
 }
 
 
