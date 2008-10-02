@@ -65,6 +65,9 @@
 #include "vtk4DLinearRegressionGradientEstimator.h"
 #include <vtkEncodedGradientShader.h>
 
+// settings
+#include <QSettings>
+
 namespace udg {
 
 Q3DViewer::Q3DViewer( QWidget *parent )
@@ -727,6 +730,10 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
         m_4DLinearRegressionGradientEstimator->SetInput( m_volumeMapper->GetInput() );  /// \todo hauria de funcionar sense això, però no !?!?!
     }
 
+    QSettings settings;
+    settings.beginGroup( "3DViewer" );
+    settings.beginGroup( "obscurances" );
+
     /// \todo la distància (el segon paràmetre) hauria de ser en funció de la mida del volum
     // el primer paràmetre és el nombre de direccions
     // pot ser >= 0 i llavors es fan 10*4^n+2 direccions (12, 42, 162, 642, ...)
@@ -734,18 +741,32 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     switch ( quality )
     {
         case Minimum:
-            m_obscuranceMainThread = new ObscuranceMainThread( -6, 64.0, ObscuranceMainThread::Distance, ObscuranceMainThread::Density, this );
+            settings.beginGroup( "minimum" );
             break;
         case Low:
-            m_obscuranceMainThread = new ObscuranceMainThread( 0, 64.0, ObscuranceMainThread::SquareRoot, ObscuranceMainThread::OpacitySmooth, this );
+            settings.beginGroup( "low" );
             break;
         case Medium:
-            m_obscuranceMainThread = new ObscuranceMainThread( 1, 64.0, ObscuranceMainThread::SquareRoot, ObscuranceMainThread::OpacitySmooth, this );
-            m_4DLinearRegressionGradientEstimator->SetRadius( 2 );  /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
+            settings.beginGroup( "medium" );
             break;
         default:
             ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( quality ) );
     }
+
+    int numberOfDirections = settings.value( "numberOfDirections" ).toInt();
+    ObscuranceMainThread::Function function = static_cast<ObscuranceMainThread::Function>( settings.value( "function" ).toInt() );
+    ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.value( "variant" ).toInt() );
+    unsigned int gradientRadius = settings.value( "gradientRadius" ).toUInt();
+
+    m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections, 64.0, function, variant, this );
+
+    /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
+    if ( m_4DLinearRegressionGradientEstimator->GetRadius() < gradientRadius )
+        m_4DLinearRegressionGradientEstimator->SetRadius( gradientRadius );
+
+    settings.endGroup();    // qualitat
+    settings.endGroup();    // obscurances
+    settings.endGroup();    // 3DViewer
 
     // Preparem el vector que farem servir, reaprofitant memòria si podem
     vtkImageData *image = m_volumeMapper->GetInput();
