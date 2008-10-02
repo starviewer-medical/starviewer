@@ -560,6 +560,14 @@
           </item>
           <item>
            <widget class="QProgressBar" name="m_obscuranceProgressBar" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>0</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="value" >
              <number>0</number>
             </property>
