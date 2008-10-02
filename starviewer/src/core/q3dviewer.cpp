@@ -728,16 +728,19 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     }
 
     /// \todo la distància (el segon paràmetre) hauria de ser en funció de la mida del volum
+    // el primer paràmetre és el nombre de direccions
+    // pot ser >= 0 i llavors es fan 10*4^n+2 direccions (12, 42, 162, 642, ...)
+    // també pot ser < 0 i llavors es fan -n direccions (valors permesos: -4, -6, -8, -12, -20; amb qualsevol altre s'aplica -4)
     switch ( quality )
     {
         case Minimum:
-            m_obscuranceMainThread = new ObscuranceMainThread( 0, 64.0, ObscuranceMainThread::Distance, ObscuranceMainThread::Density, this );
+            m_obscuranceMainThread = new ObscuranceMainThread( -6, 64.0, ObscuranceMainThread::Distance, ObscuranceMainThread::Density, this );
             break;
         case Low:
-            m_obscuranceMainThread = new ObscuranceMainThread( 1, 64.0, ObscuranceMainThread::SquareRoot, ObscuranceMainThread::OpacitySmooth, this );
+            m_obscuranceMainThread = new ObscuranceMainThread( 0, 64.0, ObscuranceMainThread::SquareRoot, ObscuranceMainThread::OpacitySmooth, this );
             break;
         case Medium:
-            m_obscuranceMainThread = new ObscuranceMainThread( 2, 64.0, ObscuranceMainThread::SquareRoot, ObscuranceMainThread::OpacitySmooth, this );
+            m_obscuranceMainThread = new ObscuranceMainThread( 1, 64.0, ObscuranceMainThread::SquareRoot, ObscuranceMainThread::OpacitySmooth, this );
             m_4DLinearRegressionGradientEstimator->SetRadius( 2 );  /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
             break;
         default:

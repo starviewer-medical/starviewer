@@ -59,6 +59,9 @@ protected:
 private:
 
     static void getLineStarts( QVector<Vector3> &lineStarts, int dimX, int dimY, int dimZ, const Vector3 &forward );
+    QVector<Vector3> getDirections() const;
+
+private:
 
     int m_numberOfDirections;
     double m_maximumDistance;
