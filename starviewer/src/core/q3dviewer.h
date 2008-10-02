@@ -42,7 +42,7 @@ Q_OBJECT
 public:
     enum RenderFunction{ RayCasting, RayCastingShading, RayCastingObscurance, RayCastingShadingObscurance,
                          MIP3D, IsoSurface , Texture2D , Texture3D, Contouring };
-    enum ObscuranceQuality { Minimum, Low, Medium };
+    enum ObscuranceQuality { Low, Medium, High };
 
     Q3DViewer( QWidget *parent = 0 );
     ~Q3DViewer();
