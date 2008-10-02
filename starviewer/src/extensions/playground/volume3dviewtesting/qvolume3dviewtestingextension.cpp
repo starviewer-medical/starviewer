@@ -113,9 +113,9 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerLabel, SLOT( setEnabled(bool) ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( setSpecular(bool) ) );
-    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( render() ) );
+    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), this, SLOT( render() ) );
     connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setSpecularPower(double) ) );
-    connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( render() ) );
+    connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( render() ) );
 
     m_obscuranceOptionsWidget->hide();
     m_obscuranceCheckBox->hide(); m_obscuranceFactorLabel->hide(); m_obscuranceFactorDoubleSpinBox->hide();
@@ -125,9 +125,9 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool ) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( setObscurance(bool) ) );
-    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( render() ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), this, SLOT( render() ) );
     connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setObscuranceFactor(double) ) );
-    connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( render() ) );
+    connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( render() ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -135,7 +135,7 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
     m_input = input;
     m_3DView->setInput( m_input );
     m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
-    m_3DView->render();
+    this->render();
 }
 
 void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
@@ -204,7 +204,7 @@ void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
         m_currentClut = *transferFunction;
         m_3DView->setTransferFunction( transferFunction );
     }
-    m_3DView->render();
+    this->render();
 }
 
 void QVolume3DViewTestingExtension::showClutEditorDialog()
@@ -233,7 +233,7 @@ void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut )
     m_clutPresetsComboBox->setCurrentIndex( m_clutPresetsComboBox->findText( m_currentClut.name() ) );
     connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
     m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
-    m_3DView->render();
+    this->render();
 }
 
 void QVolume3DViewTestingExtension::manageClosedDialog()
@@ -261,6 +261,8 @@ void QVolume3DViewTestingExtension::writeSettings()
 
 void QVolume3DViewTestingExtension::computeOrCancelObscurance()
 {
+    this->setCursor( QCursor(Qt::WaitCursor) );
+
     if ( !m_computingObscurance )   // no s'estan calculant -> comencem
     {
         m_computingObscurance = true;
@@ -286,6 +288,8 @@ void QVolume3DViewTestingExtension::computeOrCancelObscurance()
 
         m_3DView->cancelObscurance();
     }
+
+    this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
 void QVolume3DViewTestingExtension::endComputeObscurance()
@@ -304,6 +308,13 @@ void QVolume3DViewTestingExtension::enableObscuranceRendering( bool on )
     m_obscuranceFactorLabel->setVisible( on );
     m_obscuranceFactorDoubleSpinBox->setVisible( on );
     m_obscuranceProgressBar->setVisible( !on );
+}
+
+void QVolume3DViewTestingExtension::render()
+{
+    this->setCursor( QCursor(Qt::WaitCursor) );
+    m_3DView->render();
+    this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
 }
