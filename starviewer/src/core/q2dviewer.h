@@ -88,9 +88,6 @@ public:
     void resetViewToCoronal();
     void resetViewToSagital();
 
-    /// Actualització d'anotacions vàries
-    void updateWindowLevelAnnotation();
-
     /// ens retorna la vista que tenim en aquells moments del volum
     CameraOrientationType getView() const;
 

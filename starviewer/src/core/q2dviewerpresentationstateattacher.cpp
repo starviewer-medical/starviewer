@@ -287,7 +287,6 @@ void Q2DViewerPresentationStateAttacher::applyGrayscaleTransformPipeline()
     }
 
     m_2DViewer->applyGrayscalePipeline();
-    m_2DViewer->updateWindowLevelAnnotation();
 }
 
 

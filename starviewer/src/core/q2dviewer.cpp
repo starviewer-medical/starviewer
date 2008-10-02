@@ -1695,13 +1695,6 @@ double Q2DViewer::getCurrentImageValue()
     }
 }
 
-void Q2DViewer::updateWindowLevelAnnotation()
-{
-    updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
-    emit windowLevelChanged( m_windowLevelLUTMapper->GetWindow() , m_windowLevelLUTMapper->GetLevel() );
-    updateScalarBar();
-}
-
 Q2DViewer::CameraOrientationType Q2DViewer::getView() const
 {
     return m_lastView;
