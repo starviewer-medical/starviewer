@@ -67,11 +67,16 @@ signals:
 
 protected:
 
+	/// Tractament de l'event de canvi de tamany de la finestra
     void resizeEvent ( QResizeEvent * event );
 
 private:
 
-    Q2DViewerWidget* getNewQ2DViewerWidget();
+    // Obtenir un nou visualitzador
+	Q2DViewerWidget* getNewQ2DViewerWidget();
+
+	// Restaurar els layouts
+	void restoreLayouts();
 
 private slots:
 
