@@ -450,8 +450,7 @@ void Q3DViewer::renderRayCastingObscurance()
     if ( m_volumeRayCastVoxelShaderFunction->IndexOfVoxelShader( m_ambientVoxelShader ) < 0 )
         m_volumeRayCastVoxelShaderFunction->InsertVoxelShader( 0, m_ambientVoxelShader );
 
-
-    m_volumeProperty->SetInterpolationTypeToNearest();
+    m_volumeProperty->SetInterpolationTypeToNearest();  /// \todo Això també hauria d'anar a settings
 
     m_vtkWidget->GetRenderWindow()->Render();
 }
@@ -477,7 +476,7 @@ void Q3DViewer::renderRayCastingShadingObscurance()
                                                                gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
                                                                gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
 
-    m_volumeProperty->SetInterpolationTypeToNearest();
+    m_volumeProperty->SetInterpolationTypeToNearest();  /// \todo Això també hauria d'anar a settings
 
     m_vtkWidget->GetRenderWindow()->Render();
 }
@@ -736,14 +735,14 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
 
     switch ( quality )
     {
-        case Minimum:
-            settings.beginGroup( "minimum" );
-            break;
         case Low:
             settings.beginGroup( "low" );
             break;
         case Medium:
             settings.beginGroup( "medium" );
+            break;
+        case High:
+            settings.beginGroup( "high" );
             break;
         default:
             ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( quality ) );

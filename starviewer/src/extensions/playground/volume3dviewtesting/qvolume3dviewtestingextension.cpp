@@ -274,9 +274,9 @@ void QVolume3DViewTestingExtension::computeOrCancelObscurance()
 
         switch ( m_obscuranceQualityComboBox->currentIndex() )
         {
-            case 0: m_3DView->computeObscurance( Q3DViewer::Minimum ); break;   // mínim
-            case 1: m_3DView->computeObscurance( Q3DViewer::Low ); break;       // baix
-            case 2: m_3DView->computeObscurance( Q3DViewer::Medium ); break;    // mitjà
+            case 0: m_3DView->computeObscurance( Q3DViewer::Low ); break;
+            case 1: m_3DView->computeObscurance( Q3DViewer::Medium ); break;
+            case 2: m_3DView->computeObscurance( Q3DViewer::High ); break;
             default: ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( m_obscuranceQualityComboBox->currentIndex() ) );
         }
     }

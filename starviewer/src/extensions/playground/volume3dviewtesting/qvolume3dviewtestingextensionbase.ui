@@ -534,12 +534,12 @@
              <widget class="QComboBox" name="m_obscuranceQualityComboBox" >
               <item>
                <property name="text" >
-                <string>Fast</string>
+                <string>Low</string>
                </property>
               </item>
               <item>
                <property name="text" >
-                <string>Normal</string>
+                <string>Medium</string>
                </property>
               </item>
               <item>
