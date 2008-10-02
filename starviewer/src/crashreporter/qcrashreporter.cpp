@@ -97,9 +97,9 @@ bool QCrashReporter::restart(const char * path)
         CloseHandle( pi.hThread );
         TerminateProcess( GetCurrentProcess(), 1 );
     }
-     
-    return false
-    */
+    */ 
+    return false;
+    
 #endif // WIN32
 }
 
