@@ -1,5 +1,6 @@
 #include "obscurancemainthread.h"
 
+#include <vtkEncodedGradientEstimator.h>
 #include <vtkImageData.h>
 #include <vtkMultiThreader.h>
 #include <vtkPointData.h>
@@ -79,6 +80,7 @@ void ObscuranceMainThread::run()
 
     vtkVolumeRayCastMapper *mapper = vtkVolumeRayCastMapper::SafeDownCast( m_volume->GetMapper() );
     vtkEncodedGradientEstimator *gradientEstimator = mapper->GetGradientEstimator();
+    gradientEstimator->GetEncodedNormals(); /// \todo fent això aquí crec que va més ràpid, però s'hauria de comprovar i provar també amb l'Update()
 
     // Creem els threads
     int numberOfThreads = vtkMultiThreader::GetGlobalDefaultNumberOfThreads();  /// \todo QThread::idealThreadCount() amb Qt >= 4.3

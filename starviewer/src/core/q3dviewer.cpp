@@ -734,10 +734,6 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     settings.beginGroup( "3DViewer" );
     settings.beginGroup( "obscurances" );
 
-    /// \todo la distància (el segon paràmetre) hauria de ser en funció de la mida del volum
-    // el primer paràmetre és el nombre de direccions
-    // pot ser >= 0 i llavors es fan 10*4^n+2 direccions (12, 42, 162, 642, ...)
-    // també pot ser < 0 i llavors es fan -n direccions (valors permesos: -4, -6, -8, -12, -20; amb qualsevol altre s'aplica -4)
     switch ( quality )
     {
         case Minimum:
@@ -758,6 +754,10 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.value( "variant" ).toInt() );
     unsigned int gradientRadius = settings.value( "gradientRadius" ).toUInt();
 
+    /// \todo la distància (el segon paràmetre) hauria de ser en funció de la mida del volum
+    // el primer paràmetre és el nombre de direccions
+    // pot ser >= 0 i llavors es fan 10*4^n+2 direccions (12, 42, 162, 642, ...)
+    // també pot ser < 0 i llavors es fan -n direccions (valors permesos: -4, -6, -8, -12, -20; amb qualsevol altre s'aplica -4)
     m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections, 64.0, function, variant, this );
 
     /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
@@ -780,8 +780,6 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     m_obscuranceMainThread->setObscurance( m_obscurance, 0 );
 
     render();   // això cal perquè sinó el DirectIllumationVoxelShader produeix artefactes estranys perquè hem canviat el gradient estimator
-
-    m_4DLinearRegressionGradientEstimator->GetEncodedNormals(); /// \todo fent això aquí crec que va més ràpid, però s'hauria de comprovar i provar també amb l'Update()
 
     connect( m_obscuranceMainThread, SIGNAL( progress(int) ), this, SIGNAL( obscuranceProgress(int) ) );
     connect( m_obscuranceMainThread, SIGNAL( computed() ), this, SLOT( endComputeObscurance() ) );
