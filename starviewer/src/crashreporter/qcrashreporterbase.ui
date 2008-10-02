@@ -51,7 +51,7 @@
       <string/>
      </property>
      <property name="pixmap" >
-      <pixmap>../main/images/starviewer.png</pixmap>
+      <pixmap resource="../main/main.qrc" >:/images/starviewer.png</pixmap>
      </property>
      <property name="alignment" >
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -173,6 +173,42 @@
    </item>
   </layout>
  </widget>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../main/main.qrc" />
+  <include location="crashreporter.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>m_sendReportCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_descriptionTextEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>236</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>270</x>
+     <y>305</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_sendReportCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_emailLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>236</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>270</x>
+     <y>465</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

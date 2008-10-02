@@ -21,6 +21,16 @@ Q_OBJECT
 
 public:
     QCrashReporter( const QStringList& argv , QWidget *parent = 0);
+
+public slots:
+    void quitButtonClickedSlot();
+    void restartButtonClickedSlot();
+
+private:
+    static bool restart(const char * path);
+    void sendReport();
+    void maybeSendReport();
+
 };
 
 }
