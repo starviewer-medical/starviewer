@@ -385,8 +385,8 @@ private:
     void updateAnnotationsInformation( AnnotationFlags annotation = Q2DViewer::AllAnnotation );
 
     /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
+	void updatePatientAnnotationInformation();
     void updateSliceAnnotationInformation();
-    void updatePatientAnnotationInformation();
 
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
@@ -526,8 +526,10 @@ protected:
     /// El picker per anotar punts de la imatge
     vtkPropPicker *m_picker;
 
-    /// Annotacions de texte referents a informació de la sèrie (nom de pacient, protocol,descripció de sèrie, data de l'estudi)
-    vtkCornerAnnotation *m_serieInformationAnnotation;
+    /// Annotacions de texte referents a informació de la sèrie 
+	/// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
+	/// i altre informació rellevant ( nº imatge, ww/wl, etc )
+    vtkCornerAnnotation *m_cornerAnnotations;
 
     /// Per controlar l'espaiat en que presentem la imatge
     double m_presentationPixelSpacing[2];
@@ -571,9 +573,6 @@ private:
 
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
-
-    /// Annotació de texte per les llesques
-    vtkCornerAnnotation *m_sliceAnnotation;
 
     /// ampliació tractament dinàmic
     /// Nombre de fases
