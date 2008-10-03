@@ -7,6 +7,10 @@
 
 #include "qcrashreporter.h"
 
+#ifdef WIN32
+    #include <Windows.h>
+#endif
+
 namespace udg {
     
 QCrashReporter::QCrashReporter( const QStringList& args , QWidget *parent )
@@ -68,7 +72,7 @@ bool QCrashReporter::restart(const char * path)
     return true;
 
 #else
-    /*
+    
     //convert path to widechars, which sadly means the path name must be Latin1    
     wchar_t pathWchar[ 256 ];
     char* out = (char*)pathWchar;
@@ -81,7 +85,8 @@ bool QCrashReporter::restart(const char * path)
     
     wchar_t command[MAX_PATH * 3 + 6];
     wcscpy_s( command, pathWchar);
-    
+    wcscat_s( command, L" \"" );
+
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
     
@@ -97,8 +102,8 @@ bool QCrashReporter::restart(const char * path)
         CloseHandle( pi.hThread );
         TerminateProcess( GetCurrentProcess(), 1 );
     }
-    */ 
-    return false;
+     
+    return true;
     
 #endif // WIN32
 }
