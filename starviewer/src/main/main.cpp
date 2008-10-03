@@ -34,17 +34,19 @@ void configureLogging()
         // creem el directori
         logDir.mkpath( QDir::homePath() + "/.starviewer/log/" );
     }
-    // \TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
+    // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
     // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
     QString configurationFile = "/etc/starviewer/log.conf";
     if( ! QFile::exists(configurationFile) )
     {
         configurationFile = QDir::currentPath() + "/log.conf";
     }
+
     if( ! QFile::exists(configurationFile) )
     {
         configurationFile = QDir::currentPath() + "/bin/log.conf";
     }
+
     LOGGER_INIT( configurationFile.toStdString() );
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
 }
