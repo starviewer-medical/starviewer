@@ -63,10 +63,14 @@ bool TemporalDimensionFillerStep::fillIndividually()
         seriesInfo->numberOfImages++;
         if ( !seriesInfo->isCTLocalizer )
         {
-            if ( seriesInfo->firstImagePosition == m_input->getDICOMFile()->getAttributeByName( DCM_ImagePositionPatient ) )
-            {
-                seriesInfo->numberOfPhases++;
-            }
+			QString imagePositionPatient = m_input->getDICOMFile()->getAttributeByName( DCM_ImagePositionPatient);
+			if( !imagePositionPatient.isEmpty() )
+			{
+				if ( seriesInfo->firstImagePosition == imagePositionPatient )
+				{
+					seriesInfo->numberOfPhases++;
+				}
+			}
         }
     }
     else
