@@ -80,7 +80,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_serieInformationAnnotation(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_oldToolManager(0), m_rotateFactor(0), m_sliceAnnotation(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledOldTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_oldToolManager(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledOldTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -116,8 +116,7 @@ Q2DViewer::~Q2DViewer()
     m_patientOrientationTextActor[3]->Delete();
     m_sideRuler->Delete();
     m_bottomRuler->Delete();
-    m_serieInformationAnnotation->Delete();
-    m_sliceAnnotation->Delete();
+    m_cornerAnnotations->Delete();
     m_picker->Delete();
     m_vtkQtConnections->Delete();
     // TODO hem hagut de fer eliminar primer el drawer per davant d'altres objectes
@@ -136,14 +135,10 @@ vtkRenderer *Q2DViewer::getRenderer()
 
 void Q2DViewer::createAnnotations()
 {
-    // contenidor d'anotacions de texte FIXE
-    m_serieInformationAnnotation = vtkCornerAnnotation::New();
-    m_serieInformationAnnotation->GetTextProperty()->SetFontFamilyToArial();
-    m_serieInformationAnnotation->GetTextProperty()->ShadowOff();
-    // anotacions de texte variable (window/level, window size, etc)
-    m_sliceAnnotation = vtkCornerAnnotation::New();
-    m_sliceAnnotation->GetTextProperty()->SetFontFamilyToArial();
-    m_sliceAnnotation->GetTextProperty()->ShadowOff();
+    // contenidor d'anotacions 
+    m_cornerAnnotations = vtkCornerAnnotation::New();
+    m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
+    m_cornerAnnotations->GetTextProperty()->ShadowOff();
     // escala de colors
     createScalarBar();
     // anotacions de l'orientació del pacient
@@ -474,9 +469,17 @@ void Q2DViewer::refreshAnnotations()
         return;
 
     if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
-        m_serieInformationAnnotation->VisibilityOn();
+	{
+        //m_serieInformationAnnotation->VisibilityOn();
+		m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
+        m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
+	}
     else
-        m_serieInformationAnnotation->VisibilityOff();
+	{
+        //m_serieInformationAnnotation->VisibilityOff();
+		m_cornerAnnotations->SetText( 3, "" );
+        m_cornerAnnotations->SetText( 1, "" );
+	}
 
     if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
     {
@@ -506,61 +509,6 @@ void Q2DViewer::refreshAnnotations()
         m_scalarBar->VisibilityOff();
 
 	updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation );
-}
-
-void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
-{
-    Q_ASSERT( m_sliceAnnotation );
-
-    if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // si les annotacions estan habilitades
-    {
-        QString lowerLeftText;
-        if( maxPhase > 1 ) // tenim fases
-        {
-            if( m_slabThickness > 1 )
-            {
-                lowerLeftText = tr("Slice: %1-%2/%3 Phase: %4/%5")
-                        .arg( currentSlice )
-                        .arg( currentSlice+m_slabThickness-1 )
-                        .arg( maxSlice )
-                        .arg( currentPhase )
-                        .arg( maxPhase );
-            }
-            else
-            {
-                lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
-                        .arg( currentSlice )
-                        .arg( maxSlice )
-                        .arg( currentPhase )
-                        .arg( maxPhase );
-            }
-        }
-        else // només llesques
-        {
-            if( m_slabThickness > 1 )
-            {
-                lowerLeftText = tr("Slice: %1-%2/%3")
-                        .arg( currentSlice )
-                        .arg( currentSlice+m_slabThickness-1 )
-                        .arg( maxSlice );
-            }
-            else
-            {
-                lowerLeftText = tr("Slice: %1/%2")
-                        .arg( currentSlice )
-                        .arg( maxSlice );
-            }
-        }
-        //afegim el thickness de la llesca nomes si es > 0mm
-        if ( this->getThickness() > 0.0 )
-            lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness(), 0, 'g', 2 );
-
-        m_sliceAnnotation->SetText( 0 , qPrintable(lowerLeftText) );
-    }
-    else
-    {
-        m_sliceAnnotation->SetText( 0 , "" );
-    }
 }
 
 // TODO potser hauria de ser getCurrentSliceThickness ?
@@ -656,8 +604,7 @@ int Q2DViewer::getMaximumSlice()
 
 void Q2DViewer::addActors()
 {
-    Q_ASSERT( m_serieInformationAnnotation );
-    Q_ASSERT( m_sliceAnnotation );
+    Q_ASSERT( m_cornerAnnotations );
     Q_ASSERT( m_patientOrientationTextActor[0] );
     Q_ASSERT( m_patientOrientationTextActor[1] );
     Q_ASSERT( m_patientOrientationTextActor[2] );
@@ -667,11 +614,8 @@ void Q2DViewer::addActors()
     Q_ASSERT( m_scalarBar );
     Q_ASSERT( m_imageActor );
 
-    // anotacions de texte FIXE
-    this->getRenderer()->AddViewProp( m_serieInformationAnnotation );
-    // anotacions d'slice TODO cal separar-les?
-    this->getRenderer()->AddViewProp( m_sliceAnnotation );
-
+    // anotacions de texte 
+    this->getRenderer()->AddViewProp( m_cornerAnnotations );
     this->getRenderer()->AddViewProp( m_patientOrientationTextActor[0] );
     this->getRenderer()->AddViewProp( m_patientOrientationTextActor[1] );
     this->getRenderer()->AddViewProp( m_patientOrientationTextActor[2] );
@@ -822,6 +766,7 @@ void Q2DViewer::setInput( Volume* volume )
 {
     if( !volume )
         return;
+
 
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if( m_mainVolume )
@@ -1843,26 +1788,11 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
         }
         else
             m_upperLeftText = "";
-        m_sliceAnnotation->SetText( 2 , qPrintable( m_upperLeftText ) );
+        m_cornerAnnotations->SetText( 2 , qPrintable( m_upperLeftText ) );
     }
 
     if( annotation & Q2DViewer::SliceAnnotation )
         this->updateSliceAnnotationInformation();
-}
-
-void Q2DViewer::updateSliceAnnotationInformation()
-{
-    Q_ASSERT( m_sliceAnnotation );
-
-    int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
-    if( m_numberOfPhases > 1 )
-    {
-        this->updateSliceAnnotation( (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
-    }
-    else
-    {
-        this->updateSliceAnnotation( value+1, m_maxSliceValue+1 );
-    }
 }
 
 void Q2DViewer::updatePatientAnnotationInformation()
@@ -1888,14 +1818,84 @@ void Q2DViewer::updatePatientAnnotationInformation()
         if( description != protocolName )
             m_lowerRightText += "\n" + description;
 
-        m_serieInformationAnnotation->SetText( 3, qPrintable( m_upperRightText ) );
-        m_serieInformationAnnotation->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
+        m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
+        m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
     }
     else
     {
         DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte d'informació de pacient");
     }
 
+}
+
+void Q2DViewer::updateSliceAnnotationInformation()
+{
+    Q_ASSERT( m_cornerAnnotations );
+
+    int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
+    if( m_numberOfPhases > 1 )
+    {
+        this->updateSliceAnnotation( (value/m_numberOfPhases) + 1, m_maxSliceValue + 1, m_currentPhase + 1, m_numberOfPhases );
+    }
+    else
+    {
+        this->updateSliceAnnotation( value+1, m_maxSliceValue+1 );
+    }
+}
+
+void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
+{
+    Q_ASSERT( m_cornerAnnotations );
+
+    if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // si les annotacions estan habilitades
+    {
+        QString lowerLeftText;
+        if( maxPhase > 1 ) // tenim fases
+        {
+            if( m_slabThickness > 1 )
+            {
+                lowerLeftText = tr("Slice: %1-%2/%3 Phase: %4/%5")
+                        .arg( currentSlice )
+                        .arg( currentSlice+m_slabThickness-1 )
+                        .arg( maxSlice )
+                        .arg( currentPhase )
+                        .arg( maxPhase );
+            }
+            else
+            {
+                lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
+                        .arg( currentSlice )
+                        .arg( maxSlice )
+                        .arg( currentPhase )
+                        .arg( maxPhase );
+            }
+        }
+        else // només llesques
+        {
+            if( m_slabThickness > 1 )
+            {
+                lowerLeftText = tr("Slice: %1-%2/%3")
+                        .arg( currentSlice )
+                        .arg( currentSlice+m_slabThickness-1 )
+                        .arg( maxSlice );
+            }
+            else
+            {
+                lowerLeftText = tr("Slice: %1/%2")
+                        .arg( currentSlice )
+                        .arg( maxSlice );
+            }
+        }
+        //afegim el thickness de la llesca nomes si es > 0mm
+        if ( this->getThickness() > 0.0 )
+            lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness(), 0, 'g', 2 );
+
+        m_cornerAnnotations->SetText( 0 , qPrintable(lowerLeftText) );
+    }
+    else
+    {
+        m_cornerAnnotations->SetText( 0 , "" );
+    }
 }
 
 void Q2DViewer::updateDisplayExtent()
