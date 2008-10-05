@@ -14,6 +14,9 @@ include(crashhandler.inc)
 win32{
 RC_FILE = starviewer.rc
 }
+mac* {
+    ICON = images/starviewer.icns
+}
 
 include(../extensions.inc)
 
