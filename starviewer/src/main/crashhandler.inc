@@ -5,7 +5,7 @@ SOURCES += crashhandler.cpp
 HEADERS += crashhandler.h
 
 
-mac {
+macx {
     DEFINES += STARVIEWER_CRASH_REPORTER_EXE=\\\"$${TARGET_STARVIEWER_CRASH_REPORTER}.app/Contents/MacOS/$${TARGET_STARVIEWER_CRASH_REPORTER}\\\"
 }
 linux* {
@@ -37,7 +37,7 @@ unix:!linux_x86_64 {
                src_breakpad/common/string_conversion.cc \
 }
 
-mac* {
+macx {
 
     HEADERS += src_breakpad/client/mac/handler/breakpad_exc_server.h \
                src_breakpad/client/mac/handler/breakpad_nlist_64.h \
