@@ -779,11 +779,11 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.value( "variant" ).toInt() );
     unsigned int gradientRadius = settings.value( "gradientRadius" ).toUInt();
 
-    /// \todo la distància (el segon paràmetre) hauria de ser en funció de la mida del volum
+    double distance = m_vtkVolume->GetLength() / 2.0;   /// \todo de moment la meitat de la diagonal, però podria ser una altra funció
     // el primer paràmetre és el nombre de direccions
     // pot ser >= 0 i llavors es fan 10*4^n+2 direccions (12, 42, 162, 642, ...)
     // també pot ser < 0 i llavors es fan -n direccions (valors permesos: -4, -6, -8, -12, -20; amb qualsevol altre s'aplica -4)
-    m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections, 64.0, function, variant, this );
+    m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections, distance, function, variant, this );
 
     /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
     if ( m_4DLinearRegressionGradientEstimator->GetRadius() < gradientRadius )
