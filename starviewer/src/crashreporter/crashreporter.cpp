@@ -14,6 +14,9 @@ int main( int argc, char* argv[] )
 
     QApplication app( argc, argv );
 
+    if ( app.arguments().size() != 3 )
+        return false;
+    
     udg::QCrashReporter reporter( app.arguments() );
     reporter.show();
 

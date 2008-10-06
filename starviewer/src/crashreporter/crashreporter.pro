@@ -5,11 +5,11 @@ TARGET = $${TARGET_STARVIEWER_CRASH_REPORTER}
 
 DESTDIR = ../../bin
 
-mac* {
+macx {
   DESTDIR = $${DESTDIR}/$${TARGET_STARVIEWER}.app/Contents/MacOS
 }
 
-mac* {
+macx {
     DEFINES += STARVIEWER_EXE=\\\"../../../$${TARGET_STARVIEWER}\\\"
 }
 linux* {
@@ -20,13 +20,31 @@ win32 {
 }
 
 FORMS = qcrashreporterbase.ui
-HEADERS = qcrashreporter.h
+HEADERS = qcrashreporter.h \
+          crashreportersender.h 
 SOURCES = crashreporter.cpp \
           qcrashreporter.cpp
 
-RESOURCES = ../main/main.qrc
+INCLUDEPATH += ../main/src_breakpad 
 
-QT += network
+macx {
+    HEADERS += ../main/src_breakpad/common/mac/HTTPMultipartUpload.h
+    SOURCES += crashreportersender_mac.mm \
+               ../main/src_breakpad/common/mac/HTTPMultipartUpload.m
+    ICON = ../main/images/starviewer.icns
+}
+linux* {
+    HEADERS += ../main/src_breakpad/common/linux/http_upload.h
+    SOURCES += crashreportersender_linux.cpp \
+               ../main/src_breakpad/common/linux/http_upload.cc
+}
+win32 {
+    HEADERS += ../main/src_breakpad/common/windows/http_upload.h
+    SOURCES += crashreportersender_windows.cpp \
+               ../main/src_breakpad/common/windows/http_upload.cc
+}
+
+RESOURCES = ../main/main.qrc
 
 include(../corelibsconfiguration.inc)
 include(../compilationtype.inc)

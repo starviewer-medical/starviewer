@@ -5,15 +5,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>541</width>
-    <height>560</height>
+    <width>557</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Starviewer Crash Reporter</string>
   </property>
   <layout class="QGridLayout" >
-   <item row="0" column="0" >
+   <item row="0" column="0" colspan="5" >
     <widget class="QLabel" name="m_titleLabel" >
      <property name="font" >
       <font>
@@ -27,7 +27,7 @@
      </property>
     </widget>
    </item>
-   <item rowspan="2" row="0" column="1" >
+   <item rowspan="2" row="0" column="5" >
     <widget class="QLabel" name="logoLabel" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
@@ -58,7 +58,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
+   <item row="1" column="0" colspan="5" >
     <widget class="QLabel" name="m_informationLabel" >
      <property name="frameShape" >
       <enum>QFrame::NoFrame</enum>
@@ -83,7 +83,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
+   <item row="2" column="0" colspan="5" >
     <widget class="QCheckBox" name="m_sendReportCheckBox" >
      <property name="text" >
       <string>Tell Starviewer about this crash</string>
@@ -93,7 +93,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2" >
+   <item row="3" column="0" colspan="6" >
     <widget class="QTabWidget" name="m_commentsAndProblemDetailsTabWidget" >
      <property name="currentIndex" >
       <number>0</number>
@@ -137,45 +137,54 @@
      </widget>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2" >
-    <layout class="QHBoxLayout" >
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>41</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_quitPushButton" >
-       <property name="text" >
-        <string>Quit Starviewer</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_restartPushButton" >
-       <property name="text" >
-        <string>Restart Starviewer</string>
-       </property>
-       <property name="default" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="m_sendReportLabel" >
+     <property name="text" >
+      <string>Sending report...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QLabel" name="m_sendReportAnimation" >
+     <property name="text" >
+      <string> </string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="3" >
+    <widget class="QPushButton" name="m_quitPushButton" >
+     <property name="text" >
+      <string>Quit Starviewer</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="4" colspan="2" >
+    <widget class="QPushButton" name="m_restartPushButton" >
+     <property name="text" >
+      <string>Restart Starviewer</string>
+     </property>
+     <property name="default" >
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <resources>
   <include location="../main/main.qrc" />
-  <include location="crashreporter.qrc" />
  </resources>
  <connections>
   <connection>
