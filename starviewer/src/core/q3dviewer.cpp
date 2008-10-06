@@ -438,6 +438,7 @@ void Q3DViewer::renderRayCasting()
 {
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOff();
+    m_volumeProperty->SetInterpolationTypeToLinear();
 
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
@@ -448,6 +449,7 @@ void Q3DViewer::renderRayCastingShading()
 {
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOn();
+    m_volumeProperty->SetInterpolationTypeToLinear();
 
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
@@ -459,12 +461,17 @@ void Q3DViewer::renderRayCastingObscurance()
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOff();
 
+    QSettings settings;
+    settings.beginGroup( "3DViewer" );
+    QString interpolation = settings.value( "interpolation" ).toString();
+    settings.endGroup();
+    if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
+    else m_volumeProperty->SetInterpolationTypeToNearest();
+
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastVoxelShaderFunction );
     m_volumeRayCastVoxelShaderFunction->RemoveVoxelShader( 0 );
     if ( m_volumeRayCastVoxelShaderFunction->IndexOfVoxelShader( m_ambientVoxelShader ) < 0 )
         m_volumeRayCastVoxelShaderFunction->InsertVoxelShader( 0, m_ambientVoxelShader );
-
-    m_volumeProperty->SetInterpolationTypeToNearest();  /// \todo Això també hauria d'anar a settings
 
     m_vtkWidget->GetRenderWindow()->Render();
 }
@@ -473,6 +480,13 @@ void Q3DViewer::renderRayCastingShadingObscurance()
 {
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOn();
+
+    QSettings settings;
+    settings.beginGroup( "3DViewer" );
+    QString interpolation = settings.value( "interpolation" ).toString();
+    settings.endGroup();
+    if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
+    else m_volumeProperty->SetInterpolationTypeToNearest();
 
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastVoxelShaderFunction );
     m_volumeRayCastVoxelShaderFunction->RemoveVoxelShader( 0 );
@@ -489,8 +503,6 @@ void Q3DViewer::renderRayCastingShadingObscurance()
     m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
                                                                gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
                                                                gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
-
-    m_volumeProperty->SetInterpolationTypeToNearest();  /// \todo Això també hauria d'anar a settings
 
     m_vtkWidget->GetRenderWindow()->Render();
 }
