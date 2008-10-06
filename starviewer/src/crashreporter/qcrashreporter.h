@@ -27,10 +27,12 @@ public slots:
     void restartButtonClickedSlot();
 
 private:
-    static bool restart(const char * path);
+    bool restart(const char * path);
     void sendReport();
     void maybeSendReport();
 
+private:
+    QString m_minidumpPath;
 };
 
 }

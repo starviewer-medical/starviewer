@@ -6,18 +6,32 @@
  ***************************************************************************/
 
 #include "qcrashreporter.h"
+#include "crashreportersender.h"
+#include <QMovie>
 
 #ifdef WIN32
     #include <Windows.h>
 #endif
 
 namespace udg {
-    
+
 QCrashReporter::QCrashReporter( const QStringList& args , QWidget *parent )
     : QWidget( parent )
 {
+    setWindowIcon(QIcon(":/images/starviewer.png"));
+
     setupUi(this);
     
+    m_minidumpPath = args[1] + "/" + args[2] + ".dmp";
+    
+    QMovie *sendReportAnimation = new QMovie(this);
+    sendReportAnimation->setFileName(":/images/loader.gif");
+    m_sendReportAnimation->setMovie(sendReportAnimation);
+    sendReportAnimation->start();
+    
+    m_sendReportLabel->hide();
+    m_sendReportAnimation->hide();
+
     connect(m_quitPushButton, SIGNAL( clicked() ), this, SLOT( quitButtonClickedSlot() ) );
     connect(m_restartPushButton, SIGNAL( clicked() ), this, SLOT( restartButtonClickedSlot() ) );
 }
@@ -45,13 +59,25 @@ void QCrashReporter::maybeSendReport()
 {
     if ( m_sendReportCheckBox->isChecked() )
     {
+        //m_sendReportAnimation->show();
+        m_sendReportLabel->show();
+        qApp->processEvents();
         sendReport();
     }
 }
 
 void QCrashReporter::sendReport()
 {
-
+    
+    QHash<QString,QString> options;
+    options.insert( "ProductName", "Starviewer" );
+    options.insert( "Email", m_emailLineEdit->text() );
+    options.insert( "Comments", m_descriptionTextEdit->toPlainText() );
+    
+    //CrashReporterSender::sendReport( "", m_minidumpPath, options );
+    
+    m_sendReportAnimation->hide();
+    m_sendReportLabel->hide();
 }
     
 bool QCrashReporter::restart(const char * path)
