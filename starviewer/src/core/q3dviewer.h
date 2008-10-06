@@ -105,6 +105,8 @@ signals:
 
     void obscuranceProgress( int progress );
     void obscuranceComputed();
+    /// Es llança quan les obscurances són cancel·lades pel programa (no per l'usuari).
+    void obscuranceCancelledByProgram();
 
 private:
     /// fa la visualització per raycasting

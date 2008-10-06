@@ -77,6 +77,7 @@ private:
 private slots:
 
     void render();
+    void autoCancelObscurance();
 
 private:
     /// El volum d'input
