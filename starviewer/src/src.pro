@@ -37,4 +37,9 @@ addSubdirs(inputoutput, core)
 addSubdirs(interface, core inputoutput)
 addSubdirs(extensions, core)
 addSubdirs(main, interface extensions)
-addSubdirs(crashreporter)
+
+# En linux 64bits, de moment, breakpad no està suportat, per tant, no compilem res relacionat.
+include(detectlinux64.inc)
+!linux_x86_64 {
+  addSubdirs(crashreporter)
+}
