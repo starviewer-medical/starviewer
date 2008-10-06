@@ -27,9 +27,9 @@ public:
     const char* getCrashReporterPath() const;
 
 private:
-	QByteArray crashReporterPathByteArray;
+    QByteArray crashReporterPathByteArray;
     const char* m_crashReporterPath;
-	google_breakpad::ExceptionHandler *exceptionHandler;
+    google_breakpad::ExceptionHandler *exceptionHandler;
 };
 
 #endif // NO_CRASH_REPORTER
