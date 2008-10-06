@@ -144,7 +144,13 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 Q3DViewer::~Q3DViewer()
 {
     m_renderer->Delete();
-    delete m_obscuranceMainThread;  /// \todo Què fer si està calculant?
+    if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
+    {
+        m_obscuranceMainThread->stop();
+        m_obscuranceMainThread->wait();
+        emit obscuranceCancelledByProgram();
+    }
+    delete m_obscuranceMainThread;
     delete[] m_obscurance;
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
@@ -268,8 +274,16 @@ void Q3DViewer::setInput( Volume* volume )
     m_directIlluminationVoxelShader->setData( data );
     m_obscuranceVoxelShader->setData( data );
 
-    delete m_obscuranceMainThread; m_obscuranceMainThread = 0;  /// \todo Què fer si està calculant?
+    if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
+    {
+        m_obscuranceMainThread->stop();
+        m_obscuranceMainThread->wait();
+        emit obscuranceCancelledByProgram();
+    }
+    delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
     delete[] m_obscurance; m_obscurance = 0;
+
+    render();
 }
 
 void Q3DViewer::render()

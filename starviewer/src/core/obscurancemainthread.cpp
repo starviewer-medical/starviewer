@@ -203,7 +203,11 @@ void ObscuranceMainThread::run()
         delete threads[j];
     }
 
-    if ( m_stopped ) return;    // si han cancel·lat el procés ja podem plegar
+    if ( m_stopped )    // si han cancel·lat el procés ja podem plegar
+    {
+        emit progress( 0 );
+        return;
+    }
 
     if ( !hasColor() )   // obscurances
     {

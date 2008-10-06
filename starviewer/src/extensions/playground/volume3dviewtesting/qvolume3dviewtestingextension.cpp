@@ -122,6 +122,7 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_obscuranceComputeCancelPushButton, SIGNAL( clicked() ), this, SLOT( computeOrCancelObscurance() ) );
     connect( m_3DView, SIGNAL( obscuranceProgress(int) ), m_obscuranceProgressBar, SLOT( setValue(int) ) );
     connect( m_3DView, SIGNAL( obscuranceComputed() ), this, SLOT( endComputeObscurance() ) );
+    connect( m_3DView, SIGNAL( obscuranceCancelledByProgram() ), this, SLOT( autoCancelObscurance() ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool ) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( setObscurance(bool) ) );
@@ -289,6 +290,16 @@ void QVolume3DViewTestingExtension::computeOrCancelObscurance()
         m_3DView->cancelObscurance();
     }
 
+    this->setCursor( QCursor(Qt::ArrowCursor) );
+}
+
+void QVolume3DViewTestingExtension::autoCancelObscurance()
+{
+    Q_ASSERT( m_computingObscurance );
+
+    this->setCursor( QCursor(Qt::WaitCursor) );
+    m_computingObscurance = false;
+    m_obscuranceComputeCancelPushButton->setText( tr("Compute") );
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
