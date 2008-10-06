@@ -19,8 +19,11 @@ INCLUDEPATH += src_breakpad
 
 #Fitxers comuns en les diferents plataformes unix (linux, macx...)
 
-unix {
-	HEADERS += src_breakpad/client/minidump_file_writer.h \
+# Problema de suport de breakpad per linux 64bits
+include(../detectlinux64.inc)
+unix:!linux_x86_64 {
+
+    HEADERS += src_breakpad/client/minidump_file_writer.h \
                src_breakpad/client/minidump_file_writer-inl.h \
                src_breakpad/common/convert_UTF.h \
                src_breakpad/common/string_conversion.h \
@@ -31,11 +34,11 @@ unix {
 
     SOURCES += src_breakpad/common/convert_UTF.c \
                src_breakpad/client/minidump_file_writer.cc \
-			   src_breakpad/common/string_conversion.cc \
+               src_breakpad/common/string_conversion.cc \
 }
 
 mac* {
-    
+
     HEADERS += src_breakpad/client/mac/handler/breakpad_exc_server.h \
                src_breakpad/client/mac/handler/breakpad_nlist_64.h \
                src_breakpad/client/mac/handler/dynamic_images.h \
@@ -47,7 +50,7 @@ mac* {
                src_breakpad/common/mac/macho_utilities.h \
                src_breakpad/common/mac/macho_walker.h \
                src_breakpad/common/mac/string_utilities.h
-    
+
     SOURCES += src_breakpad/client/mac/handler/exception_handler.cc \
                src_breakpad/client/mac/handler/minidump_generator.cc \
                src_breakpad/client/mac/handler/breakpad_exc_server.c \
@@ -63,7 +66,7 @@ mac* {
 }
 
 win32 {
-    
+
     HEADERS += src_breakpad/client/windows/common/auto_critical_section.h \
                src_breakpad/client/windows/common/ipc_protocol.h \
                src_breakpad/client/windows/crash_generation/crash_generation_client.h \
@@ -79,8 +82,8 @@ win32 {
                src_breakpad/common/windows/string_utils.cc
 }
 
-linux* {
-    
+linux*:!linux_x86_64 {
+
     HEADERS += src_breakpad/common/md5.h \ 
                src_breakpad/client/linux/handler/exception_handler.h \
                src_breakpad/client/linux/handler/linux_thread.h \
@@ -93,4 +96,9 @@ linux* {
                src_breakpad/client/linux/handler/minidump_generator.cc \
                src_breakpad/common/linux/file_id.cc \
                src_breakpad/common/linux/guid_creator.cc
+}
+
+# Problema de suport de breakpad per linux 64bits
+linux_x86_64 {
+    DEFINES += NO_CRASH_REPORTER
 }
