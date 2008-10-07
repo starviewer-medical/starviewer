@@ -285,8 +285,8 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
     connect(localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
 
     //Connexions d'abortament
-    connect(this, SIGNAL(errorInOperation(studyUID, OperationError::lastError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
-    connect(this, SIGNAL(errorInOperation(studyUID, OperationError::lastError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 }
 
 void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QExecuteOperationThread::OperationError lastError)
