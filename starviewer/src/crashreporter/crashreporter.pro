@@ -42,6 +42,8 @@ win32 {
     HEADERS += ../main/src_breakpad/common/windows/http_upload.h
     SOURCES += crashreportersender_windows.cpp \
                ../main/src_breakpad/common/windows/http_upload.cc
+               
+    LIBS += -lWinInet
 }
 
 RESOURCES = ../main/main.qrc
