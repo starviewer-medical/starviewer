@@ -12,9 +12,6 @@
 
 namespace udg {
 
-// Fordward Declarations
-class VolumeRepository;
-
 /**
 Mini-aplicació encarregada de permetre carregar un model des del sistema de fitxers al repositori de volums
 
@@ -27,24 +24,15 @@ public:
     AppImportFile(QObject *parent = 0, QString name = 0);
     ~AppImportFile();
 
-    /// Obre el diàleg per poder obrir arxius, retornant true si s'ha obert una imatge, false si no
-    bool open();
+    /// Obre el diàleg per poder obrir arxius
+    void open();
 
     /// Obre el diàleg per poder obrir arxius d'un directori DICOM
-    bool openDirectory();
+    void openDirectory();
     
 signals:
-    /// Signal que s'emet quan s'escull obrir un Key Image Note. Es passa el path d'aquest
-    void openKeyImageNote( const QString & path);
-
-    /// Signal que s'emet quan s'escull obrir un Presentation State. Es passa el path d'aquest
-    void openPresentationState( const QString & path);
-
     /// Senyal que s'emet quan s'han escollit un o més arxius que seran processats externament
     void selectedFiles( QStringList );
-
-private slots:
-    void userCancellation();
     
 private:
     /**
@@ -67,9 +55,6 @@ private:
     
     /// Última Extenció seleccionada per l'usuari
     QString m_lastExtension;
-    
-    ///per controlar si l'usuari cancel·la l'acció d'obrir un fitxer.
-    bool m_userCancellation;
 };
 
 };  //  end  namespace udg
