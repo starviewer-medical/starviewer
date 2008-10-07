@@ -9,6 +9,7 @@
 #include "viewerslayout.h"
 #include "patient.h"
 #include "series.h"
+#include "image.h"
 #include "volume.h"
 #include "q2dviewerwidget.h"
 #include "hangingprotocolsrepository.h"
@@ -17,6 +18,7 @@
 #include "hangingprotocolmask.h"
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
+#include "dicomtagreader.h"
 #include "identifier.h"
 #include "logging.h"
 
@@ -27,6 +29,31 @@ namespace udg {
 HangingProtocolManager::HangingProtocolManager(QObject *parent)
  : QObject( parent )
 {
+	//m_operationsMap.insert("AFAS", 0, 1); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
+	//m_operationsMap.insert("AFPI", 2, 1); m_operationsMap.insert("AFPS", 2, 0); m_operationsMap.insert("AFIA", 3, 0);
+	//m_operationsMap.insert("AFSA", 3, 1); m_operationsMap.insert("AFIP", 1, 0); m_operationsMap.insert("AFSP", 3, 1);
+	
+	//m_operationsMap.insert("AHAI", 0, 1); m_operationsMap.insert("AHPI", 2, 0); m_operationsMap.insert("AHPS", 2, 1);
+	//m_operationsMap.insert("AHIA", 1, 0); m_operationsMap.insert("AHSA", 3, 1);	m_operationsMap.insert("AHIP", 1, 1);
+	//m_operationsMap.insert("AHSP", 3, 0);
+	//
+	//m_operationsMap.insert("PFAI", 2, 1); m_operationsMap.insert("PFAS", 2, 0);	m_operationsMap.insert("PFPS", 0, 1);
+	//m_operationsMap.insert("PFIA", 3, 0); m_operationsMap.insert("PFSA", 1, 1);	m_operationsMap.insert("PFIP", 3, 1);
+	//m_operationsMap.insert("PFSP", 1, 0);
+	//
+	//m_operationsMap.insert("AFAS", 0, 1); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
+	//m_operationsMap.insert("AFPI", 2, 1);
+	//m_operationsMap.insert("AFPS", 2, 0);
+	//m_operationsMap.insert("AFIA", 3, 0);
+	//m_operationsMap.insert("AFSA", 3, 1);
+	//m_operationsMap.insert("AFIP", 1, 0);
+	//m_operationsMap.insert("AFSP", 3, 1);
+	
+
+	//m_operationsMap.insert("",,);
+	//m_operationsMap.insert("",,);
+	//m_operationsMap.insert("",,);
+
 }
 
 
@@ -71,10 +98,12 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
 
 					viewerWidget = layout->addViewer( displaySet->getPosition() );
 					viewerWidget->setInput( serie->getFirstVolume() );
-					
-					applyDisplayTransformations( patient, viewerWidget, displaySet );
+					applyDisplayTransformations( patient, serie, viewerWidget, displaySet);
 
-                    DEBUG_LOG( tr("Image set number : %1, serie: %2, pos: %3").arg( imageSetNumber).arg(serie->getDescription()).arg(displaySet->getPosition()) );
+					if( imageSet->getTypeOfItem() == "image" )
+					{
+						viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
+					}
                 }
 
                 imageSetNumber++;
@@ -114,11 +143,15 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, HangingProtocol
     int numberStudies = patient->getNumberOfStudies();
     int i = 0;
     int j = 0;
+	int imageNumber = 0;
     int numberSeries;
+	int numberImages;
     QList< Study * > listOfStudies = patient->getStudies();
     QList< Series * > listOfSeries;
+	QList< Image * > listOfImages;
     Study * study;
     Series * serie;
+	Image * image;
 
     while (!found && i < numberStudies )
     {
@@ -131,11 +164,35 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, HangingProtocol
         {
             serie = listOfSeries.value( j );
 
-            if( isValidSerie( serie, imageSet ) )
-            {
-                found = true;
-                return serie;
-            }
+			if( imageSet->getTypeOfItem() != "image" )
+			{
+				if( isValidSerie( serie, imageSet ) )
+				{
+					found = true;
+				}
+			}
+			else
+			{
+				imageNumber = 0;
+				listOfImages = serie->getImages();
+				numberImages = listOfImages.size();
+
+				while( !found && imageNumber < numberImages )
+				{
+					image = listOfImages.value( imageNumber );
+					if( isValidImage( image, imageSet ) )
+					{
+						found = true;
+						imageSet->setImageToDisplay( imageNumber );
+					}
+					imageNumber++;
+				}
+				if( !found ) 
+					imageSet->setImageToDisplay( 0 );
+			}
+
+			if( found ) 
+				return serie;
             j++;
         }
         i++;
@@ -146,7 +203,6 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, HangingProtocol
 
 bool HangingProtocolManager::isValidSerie( Series * serie, HangingProtocolImageSet * imageSet )
 {
-
     bool valid = true;
     int i = 0;
     QList< HangingProtocolImageSet::Restriction > listOfRestrictions = imageSet->getRestrictions();
@@ -188,11 +244,69 @@ bool HangingProtocolManager::isValidSerie( Series * serie, HangingProtocolImageS
     return valid;
 }
 
-void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet )
+void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Series * serie, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet )
 {
-	QString patientDisplayOrientation = displaySet->getPatientOrientation();
-	QString patientOrientation = viewer->getViewer()->getInput()->getSeries()->getPatientPosition();
+	QString rowsImage;
+	QString columnsImage;
+	QString rowsDisplay;
+	QString columnsDisplay;
+	QList<QString> listOfDirections;
 
+	QString patientDisplayOrientation = displaySet->getPatientOrientation();
+	QString patientOrientation = (serie->getImages()[0])->getPatientOrientation();
+
+	listOfDirections = patientOrientation.split(",");
+	if( listOfDirections.size() == 2 )
+	{
+		rowsImage = listOfDirections[0];
+		columnsImage = listOfDirections[1];
+	}
+
+	listOfDirections = patientDisplayOrientation.split("/");
+	if( listOfDirections.size() == 2 )
+	{
+		rowsDisplay = listOfDirections[0];
+		columnsDisplay = listOfDirections[1];
+	}
+	
+	if( (rowsImage != "") && (rowsDisplay != "") && ( (rowsImage == "P" && rowsDisplay == "A") || (rowsImage == "A" && rowsDisplay == "P") ) )
+	{
+		viewer->getViewer()->horizontalFlip();
+	}
+
+}
+
+bool HangingProtocolManager::isValidImage( Image * image, HangingProtocolImageSet * imageSet )
+{
+	int numberOfImage = -1;
+	bool valid = true;
+    int i = 0;
+    QList< HangingProtocolImageSet::Restriction > listOfRestrictions = imageSet->getRestrictions();
+    int numberRestrictions = listOfRestrictions.size();
+    HangingProtocolImageSet::Restriction restriction;
+	DICOMTagReader dicomReader;
+
+	bool ok = dicomReader.setFile( image->getPath() );
+	if( ok )
+	{
+		while ( valid && i < numberRestrictions )
+		{
+			restriction = listOfRestrictions.value( i );
+		
+			if( restriction.selectorAttribute == "ViewPosition" )
+			{
+				if( dicomReader.getAttributeByName( DCM_ViewPosition ) != restriction.valueRepresentation )
+					valid = false;
+			}
+			else if( restriction.selectorAttribute == "Laterality" )
+			{
+				if( dicomReader.getAttributeByName( DCM_ImageLaterality ) != restriction.valueRepresentation )
+					valid = false;
+			}
+		i++;
+		}
+	}
+    return valid;
 }
 
 }

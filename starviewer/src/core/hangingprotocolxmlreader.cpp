@@ -166,6 +166,11 @@ HangingProtocolImageSet * HangingProtocolXMLReader::readImageSet( QXmlStreamRead
             restriction = m_restrictionsList.value( reader->text().toString().toInt()-1 );
             imageSet->addRestriction( restriction );
         }
+		else if( reader->name() == "type")
+		{
+			reader->readNext();
+			imageSet->setTypeOfItem( reader->text().toString() );
+		}
         else if( reader->name() == "imageSet" && reader->tokenType() == QXmlStreamReader::EndElement )
         {
             break;
