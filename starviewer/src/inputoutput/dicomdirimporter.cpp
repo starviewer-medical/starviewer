@@ -21,6 +21,7 @@
 #include "errordcmtk.h"
 #include "patientfiller.h"
 #include "dicomtagreader.h"
+#include "localdatabasemanager.h"
 #include "localdatabasemanagerthreaded.h"
 #include "qthreadrunwithexec.h"
 
@@ -66,14 +67,18 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     {
         emit importAborted();
     }
-    
+
     //Esperem que el processat i l'insersió a la base de dades acabin
     fillersThread.wait();
     localDatabaseManagerThreaded.wait();
-    
-    INFO_LOG( "Estudi " + studyUID + " importat" );
 
-    return ok;
+    //Comprovem que s'hagi inserit correctament el nou estudi a la base de dades
+    if (ok && localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok)
+    {
+        INFO_LOG( "Estudi " + studyUID + " importat" );
+        return true;
+    }
+    else return false;
 }
 
 bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
