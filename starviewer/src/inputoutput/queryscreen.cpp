@@ -1024,13 +1024,6 @@ void QueryScreen::studyRetrieveFinished( QString studyUID )
     DicomMask studyMask;
     QList<Patient*> patientList;
 
-    //El signal que desperta aquests slot es fa abans que acabi l'insersió a la base de dades, per això posem aquest sleep per assegurar que s'hagi inserit l'estudi a la bd
-#ifdef _WIN32
-	Sleep(4);
-#else
-	sleep(4);
-#endif
-    
     studyMask.setStudyUID(studyUID);
     patientList = localDatabaseManager.queryPatientStudy(studyMask);
     if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
@@ -1404,14 +1397,14 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             break;
         case QExecuteOperationThread::DatabaseError :
             message = tr("Please review the operation list screen, ");
-            message += tr("a database error ocurred and some operations may have failed");
+            message += tr("a database error ocurred and some operations may have failed.");
             message += tr("\n\nClose all Starviewer windows and try again."
                          "\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         default:
             message = tr("Please review the operation list screen, ");
-            message += tr("an unknow error has ocurred");
+            message += tr("an unknow error has ocurred.");
             message += tr("\n\nClose all Starviewer windows and try again."
                          "\nIf the problem persist contact with an administrator.");
     }
