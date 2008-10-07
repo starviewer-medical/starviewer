@@ -98,21 +98,32 @@ bool MHDFileClassifierStep::classifyFile( QString file )
 
         //TODO faltaria comprovar si tenim algun pacient igual o no? i assignar al mateix estudi o algo semblant? En certa manera si sempre assignem la mateixa informació, posteriorment els pacients que anem creant, ja es fusionaran ells mateixos. Els id's que han de ser diferents haurien de ser els de les series
 
-        // creem el pacient
-        Patient *patient = new Patient;
-        QFileInfo fileInfo(file);
-        patient->setFullName( "MHD File " + fileInfo.fileName() );
-        patient->setID( "MHDPatient" + fileInfo.fileName() );
-        m_input->addPatient( patient );
+        Patient *patient;
+        Study *study;
+        if (m_input->getNumberOfPatients() == 0)
+        {
+            // creem el pacient
+            patient = new Patient;
 
-        // creem l'estudi
-        Study *study = new Study;
-        study->setInstanceUID( "MHDStudy-#123456#" );
-        study->setDate( QDate::currentDate() );
-        study->setTime( QTime::currentTime() );
-        study->setID( "MHDStudy-#123456#" );
-        study->setDescription( "MHD Study" );
-        patient->addStudy( study );
+            patient->setFullName("MHD File ");
+            patient->setID("MHD Patient");
+            
+            m_input->addPatient(patient);
+
+            // creem l'estudi
+            study = new Study;
+            study->setInstanceUID( "MHDStudy-#123456#" );
+            study->setDate( QDate::currentDate() );
+            study->setTime( QTime::currentTime() );
+            study->setID( "MHDStudy-#123456#" );
+            study->setDescription( "MHD Study" );
+            patient->addStudy( study );
+        }
+        else
+        {
+            patient = m_input->getPatient();
+            study = patient->getStudies().first();
+        }
 
         // creem la serie
         Series *series = new Series;
@@ -124,7 +135,9 @@ bool MHDFileClassifierStep::classifyFile( QString file )
         series->setDate( QDate::currentDate() );
         series->setTime( QTime::currentTime() );
 //         series->setPatientPosition(); -> si podem l'hauríem d'obtenir de l'mhd
-        series->setDescription( "MHD Series" );
+        
+        QFileInfo fileInfo(file);
+        series->setDescription( fileInfo.fileName() );
         series->addFilePath( file );
         study->addSeries( series );
 

@@ -30,6 +30,7 @@
 #include "queryscreen.h"
 #include "patientfiller.h"
 #include "patientfillerinput.h"
+#include "mhdfileclassifierstep.h"
 
 namespace udg {
 
@@ -153,10 +154,8 @@ void ExtensionHandler::createConnections()
     connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
 }
 
-void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStudyUID, QString defaultSeriesUID, QString defaultImageInstance )
+void ExtensionHandler::processInput(QStringList inputFiles)
 {
-    Q_UNUSED(defaultImageInstance);
-
     QProgressDialog progressDialog( m_mainApp );
     progressDialog.setModal( true );
     progressDialog.setRange(0, 0);
@@ -165,13 +164,26 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
 
-    PatientFiller patientFiller;
-    connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
 
     qApp->processEvents();
+    QList<Patient*> patientsList;
+    if(inputFiles.first().contains(".mhd"))
+    {
+        PatientFillerInput patientFillerInput;
+        patientFillerInput.setFilesList(inputFiles);
+        MHDFileClassifierStep mhdFileClassiferStep;
+        mhdFileClassiferStep.setInput(&patientFillerInput);
+        mhdFileClassiferStep.fill();
 
-    QList<Patient*> patientsList = patientFiller.processDICOMFileList(inputFiles);
+        patientsList = patientFillerInput.getPatientsList();
+    }
+    else
+    {
+        PatientFiller patientFiller;
+        connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
 
+        patientsList = patientFiller.processDICOMFileList(inputFiles);
+    }
     progressDialog.close();
 
     unsigned int numberOfPatients = patientsList.size();
@@ -191,50 +203,31 @@ void ExtensionHandler::processInput( QStringList inputFiles, QString defaultStud
     {
         DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( patientsList.at(i)->toString() ) );
 
-        // marquem les series seleccionades
-        Study *study = NULL;
-        study = patientsList.at(i)->getStudy( defaultStudyUID );
-        // Si no ens diuen un study seleccionat en seleccionem un nosaltres. Això pot ser perquè l'uid d'estudi sigui d'un altre pacient o perquè l'uid està buit
-        if(!study)
-        {
-            QList<Study *> studyList = patientsList.at(i)->getStudies();
-            if ( !studyList.isEmpty() )
-            {
-                study = studyList.first();
-            }
-        }
-
         bool error = true;
-        if( study )
+        
+        // marquem les series seleccionades
+        QList<Study *> studyList = patientsList.at(i)->getStudies();
+        if ( !studyList.isEmpty() )
         {
-            Series *series = NULL;
-            series = patientsList.at(i)->getSeries( defaultSeriesUID );
-            // si aquest ens "falla" és perquè possiblement l'UID és d'un altre estudi
-            // o perquè l'uid és buit, per tant no tenim cap predilecció i escollim el primer
-            if( !series ) // No tenim cap serie seleccionada, seleccionem per defecte la primera
-            {
-                QList<Series *> seriesList = study->getSeries();
-                if( !seriesList.isEmpty() )
-                {
-                    series = seriesList.first();
-                }
-            }
+            Study *study = studyList.first();
 
-            if (series)
+            QList<Series *> seriesList = study->getSeries();
+            if( !seriesList.isEmpty() )
             {
+                Series *series = seriesList.first();
                 series->select();
                 error = false;
             }
             else
             {
                 ERROR_LOG(patientsList.at(i)->toString());
-                ERROR_LOG("Error carregant aquest pacient. La serie retornada és null. defaultSeriesUID: " + defaultSeriesUID);
+                ERROR_LOG("Error carregant aquest pacient. La serie retornada és null.");
             }
         }
         else
         {
             ERROR_LOG(patientsList.at(i)->toString());
-            ERROR_LOG("Error carregant aquest pacient. L'study retornat és null. defaultStudyUID: " + defaultStudyUID);
+            ERROR_LOG("Error carregant aquest pacient. L'study retornat és null.");
         }
 
         if (!error)
