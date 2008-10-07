@@ -67,9 +67,7 @@ signals:
      */
     void setOperationFinished( QString studyUID );
 
-    /** signal que s'emet cap a QueryScreen per indicar que l'estudi s'ha descarregat
-     * @param studyUID UID de l'estudi descarregat
-     */
+    ///signal que s'emet cap a QueryScreen per indicar que l'estudi s'ha descarregat i s'ha processat
     void retrieveFinished( QString studyUID );
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produït un error en la descàrrega de l'estudi
@@ -104,6 +102,9 @@ signals:
 
     ///Signal que s'emet quan es produeix un error a l'operació de descàrrega
     void errorInOperation(QString, QExecuteOperationThread::OperationError);
+
+    ///Signal que s'emet quan s'han descarregat tots els fitxers d'un estudi
+    void filesRetrieved();
 
 private:
 

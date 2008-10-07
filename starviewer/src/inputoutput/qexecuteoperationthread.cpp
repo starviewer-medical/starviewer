@@ -172,6 +172,14 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         errorRetrieving(studyUID, ErrorRetrieving);
     }
     else
+        emit filesRetrieved();
+
+    //Esperem que el processat i l'insersió a la base de dades acabin
+    fillersThread.wait();
+    localDatabaseManagerThreaded.wait();
+
+    //Comprovem si l'estudi s'ha inserit correctament a la BD
+    if (retState.good() && localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok)
     {
         INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
 
@@ -179,14 +187,10 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         emit retrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
 
         if ( operation.getOperation() == Operation::View )
-        {
             emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
-        }
     }
+    else errorRetrieving(studyUID, DatabaseError);
 
-    //Esperem que el processat i l'insersió a la base de dades acabin
-    fillersThread.wait();
-    localDatabaseManagerThreaded.wait();
 
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID );
@@ -271,7 +275,7 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
 
     //Connexions entre la descarrega i el processat dels fitxers
     connect(starviewerProcessImageRetrieved, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
-    connect(this, SIGNAL( retrieveFinished(QString) ), patientFiller, SLOT( finishDICOMFilesProcess() ));
+    connect(this, SIGNAL( filesRetrieved() ), patientFiller, SLOT( finishDICOMFilesProcess() ));
 
     //Connexió entre el processat i l'insersió al a BD
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( insert(Patient *) ), Qt::DirectConnection);
