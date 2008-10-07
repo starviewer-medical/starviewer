@@ -35,6 +35,9 @@ public:
 
     ~LocalDatabaseManagerThreaded();
 
+    ///Retorna l'ultim error produït en la operació de insert
+    LocalDatabaseManager::LastError getLastError();
+
 protected:
 
     ///Mètode que engegar l'event loop en un nou thread.
