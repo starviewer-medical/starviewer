@@ -46,17 +46,6 @@ public slots:
     void killBill();
 
     /**
-     * Processa un conjunt d'arxius d'input i els processa per decidir què fer amb aquests, com per exemple
-     * crear nous pacient, obrir finestres, afegir les dades al pacient actual, etc
-     * @param inputFiles Els arxius a processar, que poden ser del tipus suportat per l'aplicació o no
-     * @param defaultStudyUID Estudi que es vol visualitzar per defecte
-     * @param defaultSeriesUID Serie que es vol veure per defecte
-     * @param defaultImageInstance Imatge que es vol per defecte
-     */
-    void processInput( QStringList inputFiles, QString defaultStudyUID = QString(), QString  defaultSeriesUID = QString(), QString defaultImageInstance = QString() );
-    void processInput(Patient *patient, const QString &defaultSeriesUID);
-
-    /**
      * Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
      */
     void openDefaultExtension();
@@ -77,6 +66,18 @@ public slots:
     //TODO Semi-xapussa per resoldre el problema de comunicació entre el queryscreen i la seva configuració. Cal fer un disseny de tot això.
     //Veure el signal de qconfigurationdialog configurationChanged
     void updateConfiguration(const QString &configuration);
+
+private slots:
+    /**
+     * Processa un conjunt d'arxius d'input i els processa per decidir què fer amb aquests, com per exemple
+     * crear nous pacient, obrir finestres, afegir les dades al pacient actual, etc
+     * @param inputFiles Els arxius a processar, que poden ser del tipus suportat per l'aplicació o no
+     * @param defaultStudyUID Estudi que es vol visualitzar per defecte
+     * @param defaultSeriesUID Serie que es vol veure per defecte
+     * @param defaultImageInstance Imatge que es vol per defecte
+     */
+    void processInput(QStringList inputFiles);
+    void processInput(Patient *patient, const QString &defaultSeriesUID);
 
 private:
     /// Crea les connexions de signals i slots
