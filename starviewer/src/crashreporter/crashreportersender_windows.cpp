@@ -7,7 +7,6 @@
 
 #include "crashreportersender.h"
 
-#include <Windows.h> // No sé si és necessari
 #include <map>
 #include <string>
 #include "../main/src_breakpad/common/windows/http_upload.h"
@@ -34,9 +33,18 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
                                                             L"upload_file_minidump",
                                                             &reportCode,
                                                             &httpResponse);
-    
+    if (success)
+    {
+        printf("Successfully sent the minidump file.\n");
+    }
+    else
+    {
+        printf("Failed to send minidump: %i\n", httpResponse);
+        printf("Response:\n");
+        printf("%s\n", reportCode.c_str());
+    }
+
     return success;
-    
 }
 
 
