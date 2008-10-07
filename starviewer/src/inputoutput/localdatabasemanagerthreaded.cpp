@@ -28,9 +28,15 @@ LocalDatabaseManagerThreaded::~LocalDatabaseManagerThreaded()
 void LocalDatabaseManagerThreaded::insert(Patient *newPatient)
 {
     m_localDatabaseManager.insert(newPatient);
+
     emit operationFinished(Insert);
 }
-    
+
+LocalDatabaseManager::LastError LocalDatabaseManagerThreaded::getLastError()
+{
+    return m_localDatabaseManager.getLastError();
+}
+
 void LocalDatabaseManagerThreaded::run() 
 {
     exec();
