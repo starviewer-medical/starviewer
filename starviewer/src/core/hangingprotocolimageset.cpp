@@ -39,6 +39,27 @@ QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrict
     return m_listOfRestrictions;
 }
 
+
+void HangingProtocolImageSet::setTypeOfItem( QString type)
+{
+	m_typeOfItem = type;
+}
+
+QString HangingProtocolImageSet::getTypeOfItem()
+{
+	return m_typeOfItem;
+}
+
+void HangingProtocolImageSet::setImageToDisplay( int imageNumber )
+{
+	m_imageToDisplay = imageNumber;
+}
+
+int HangingProtocolImageSet::getImatgeToDisplay()
+{	
+	return m_imageToDisplay;
+}
+
 void HangingProtocolImageSet::show()
 {
     DEBUG_LOG( tr("    Identifier %1\n    List of restrictions:\n").arg(m_identifier) );

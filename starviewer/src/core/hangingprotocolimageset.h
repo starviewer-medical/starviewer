@@ -47,6 +47,18 @@ public:
     /// Obtenir les restriccions
     QList<Restriction> getRestrictions();
 
+	/// Posar el tipus d'element
+	void setTypeOfItem( QString );
+		
+	/// Obtenir el tipus d'element
+	QString getTypeOfItem();
+
+	/// Posar el número de la imatge a mostrar
+	void setImageToDisplay( int imageNumber );
+
+	/// Obtenir el numero de la imatge a mostrar
+	int getImatgeToDisplay();
+
     /// Mètode per mostrar els valors
     void show();
 
@@ -72,6 +84,12 @@ private:
 
     /// Descripcio
     QString m_description;
+
+	/// Per saber si s'ha de tractar a nivell d'imatge o de sèrie. 
+	QString m_typeOfItem;
+
+	/// Número d'imatge a mostrar
+	int m_imageToDisplay;
 
 };
 
