@@ -33,81 +33,36 @@ AppImportFile::~AppImportFile()
 {
 }
 
-bool AppImportFile::open()
+void AppImportFile::open()
 {
-    bool openedImage = false;
-    QStringList filters;
-    
-    m_userCancellation = false;
-    
-    const QString PresentationStateFilter("Presentation State (*)"), KeyImageNoteFilter("Key Image Note (*)");
-    const QString ResultFileFilter("Result (*.res)");
     const QString MetaIOImageFilter("MetaIO Image (*.mhd)"), DICOMImageFilter("DICOM Images (*.dcm)"), AllFilesFilter("All Files (*)");
     QStringList imagesFilter;
     imagesFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
-    filters << PresentationStateFilter << KeyImageNoteFilter << ResultFileFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
 
-    QString fileFilter = MetaIOImageFilter + ";;" + DICOMImageFilter + ";;";
-    fileFilter += PresentationStateFilter + ";;" + KeyImageNoteFilter + ";;" + ResultFileFilter + ";;" + AllFilesFilter;
-
-    QString selectedFilter;
-    QString fileName;
-    QStringList fileNames;
-    
     QFileDialog *openDialog = new QFileDialog(0);
     openDialog->setWindowTitle( tr("Choose a file to open...") );
     openDialog->setDirectory( m_workingDirectory );
-    openDialog->setFilters( filters );
+    openDialog->setFilters( imagesFilter );
     openDialog->selectFilter ( m_lastExtension );
-    openDialog->setFileMode( QFileDialog::ExistingFile );
+    openDialog->setFileMode( QFileDialog::ExistingFiles );
     openDialog->setAcceptMode( QFileDialog::AcceptOpen );
 
-    connect( openDialog, SIGNAL( rejected() ),this, SLOT( userCancellation() ) );
-    
-    if( openDialog->exec() )
+    if( openDialog->exec() == QDialog::Accepted )
     {
-        fileNames = openDialog->selectedFiles();
-        selectedFilter = openDialog->selectedFilter();
-    }
+        QStringList fileNames = openDialog->selectedFiles();
         
-    if ( !m_userCancellation )
-    {
-        fileName = fileNames.first();
+        emit selectedFiles( fileNames );
         
-        INFO_LOG( "S'obre el fitxer: " + fileName + " amb el filtre " + selectedFilter );
-        if (imagesFilter.contains(selectedFilter))
-        {
-            QStringList files;
-            files << fileName;
-            emit selectedFiles( files );
-            openedImage = true;
-        }
-        else if (selectedFilter == KeyImageNoteFilter) // TODO aquest dos els mantenim temporalment,però el que cal és implementar el KINFillerStep i el PresentationStateFiller
-        {
-            emit openKeyImageNote(fileName);
-        }
-        else if (selectedFilter == PresentationStateFilter)
-        {
-            emit openPresentationState(fileName);
-        }
-        else
-        {
-            ERROR_LOG("Cas no tractat al obrir un fitxer");
-        }
-        m_workingDirectory = QFileInfo( fileName ).dir().path();
-        m_lastExtension = selectedFilter;
+        m_workingDirectory = QFileInfo( fileNames.first() ).dir().path();
+        m_lastExtension = openDialog->selectedFilter();
         
         writeSettings();
     }
     delete openDialog;
-    
-    return openedImage;
 }
 
-bool AppImportFile::openDirectory()
+void AppImportFile::openDirectory()
 {
-    bool ok = true;
-
     QString directoryName = QFileDialog::getExistingDirectory( 0 , tr("Choose a directory") , m_workingDicomDirectory , QFileDialog::ShowDirsOnly );
     if ( !directoryName.isEmpty() )
     {
@@ -116,10 +71,6 @@ bool AppImportFile::openDirectory()
         writeSettings();
         INFO_LOG( "S'obre el directori: " + directoryName );
     }
-    else
-        ok = false;
-
-    return ok;
 }
 
 QStringList AppImportFile::generateFilenames( QString dirPath )
@@ -155,11 +106,6 @@ void AppImportFile::writeSettings()
     settings.setValue("workingDicomDirectory", m_workingDicomDirectory );
     settings.setValue("defaultExtension", m_lastExtension );
     settings.endGroup();
-}
-
-void AppImportFile::userCancellation()
-{
-    m_userCancellation = true; 
 }
 
 };  // end namespace udg
