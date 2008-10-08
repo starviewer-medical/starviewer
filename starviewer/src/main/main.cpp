@@ -39,12 +39,7 @@ void configureLogging()
     QString configurationFile = "/etc/starviewer/log.conf";
     if( ! QFile::exists(configurationFile) )
     {
-        configurationFile = QDir::currentPath() + "/log.conf";
-    }
-
-    if( ! QFile::exists(configurationFile) )
-    {
-        configurationFile = QDir::currentPath() + "/bin/log.conf";
+        configurationFile = qApp->applicationDirPath() + "/log.conf";
     }
 
     LOGGER_INIT( configurationFile.toStdString() );
