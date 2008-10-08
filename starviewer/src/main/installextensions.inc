@@ -7,16 +7,14 @@
 include(../extensions.inc)
 
 extensionsFileName = extensions.h
-win32:sharp = $$system(type sharp.txt)  # SuperXapussillaHack(tm)
-unix:sharp = $$system(cat sharp.txt)    # SuperXapussillaHack(tm)
 
 # Funció per afegir una llibreria estàtica com a dependència
 defineReplace(addExtensionInclude) {
     directoryName = $$1
     extensionName = $$2
     exists($$directoryName/$$extensionName) {
-      win32:system(echo $${sharp}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\">>$$extensionsFileName)
-      unix:system(echo \'$${sharp}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\"\'>>$$extensionsFileName)
+      win32:system(echo $${LITERAL_HASH}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\">>$$extensionsFileName)
+      unix:system(echo \'$${LITERAL_HASH}include \"$$directoryName/$$extensionName/$${extensionName}extensionmediator.h\"\'>>$$extensionsFileName)
     }
 
     return(0)
@@ -33,10 +31,10 @@ defineReplace(addExtensionResourcesInit) {
     return(0)
 }
 
-win32:system(echo "$${sharp}ifndef EXTENSIONS_H"> $$extensionsFileName)
-win32:system(echo "$${sharp}define EXTENSIONS_H">> $$extensionsFileName)
-unix:system(echo '"$${sharp}ifndef EXTENSIONS_H"'> $$extensionsFileName)
-unix:system(echo '"$${sharp}define EXTENSIONS_H"'>> $$extensionsFileName)
+win32:system(echo "$${LITERAL_HASH}ifndef EXTENSIONS_H"> $$extensionsFileName)
+win32:system(echo "$${LITERAL_HASH}define EXTENSIONS_H">> $$extensionsFileName)
+unix:system(echo '"$${LITERAL_HASH}ifndef EXTENSIONS_H"'> $$extensionsFileName)
+unix:system(echo '"$${LITERAL_HASH}define EXTENSIONS_H"'>> $$extensionsFileName)
 
 
 # Afegim els include's
@@ -68,5 +66,5 @@ for(extensionName, PLAYGROUND_EXTENSIONS) {
 
 system(echo "}">> $$extensionsFileName)
 
-win32:system(echo "$${sharp}endif" >> $$extensionsFileName)
-unix:system(echo '"$${sharp}endif"' >> $$extensionsFileName)
+win32:system(echo "$${LITERAL_HASH}endif" >> $$extensionsFileName)
+unix:system(echo '"$${LITERAL_HASH}endif"' >> $$extensionsFileName)
