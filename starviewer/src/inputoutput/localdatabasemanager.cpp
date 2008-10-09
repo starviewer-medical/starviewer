@@ -28,10 +28,12 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QStringList>
+#include <QSettings>
 
 namespace udg
 {
-
+//Nom de la llista de QSettings que guardarà els estudis que tenim en aquell moment descarregant
+const QString LocalDatabaseManager::qsettingsRetrievingStudy = "/PACS/RetrievingStudy";
 QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
 
 LocalDatabaseManager::LocalDatabaseManager()
@@ -217,7 +219,6 @@ void LocalDatabaseManager::del(QString studyInstanceToDelete)
 {
     DatabaseConnection *dbConnect = DatabaseConnection::getDatabaseConnection();
     StarviewerSettings settings;
-    DeleteDirectory deleteDirectory;
     DicomMask studyMaskToDelete;
     int status;
 
@@ -262,10 +263,7 @@ void LocalDatabaseManager::del(QString studyInstanceToDelete)
 
     dbConnect->endTransaction();
 
-    if (!deleteDirectory.deleteDirectory(settings.getCacheImagePath() + studyInstanceToDelete, true))
-        m_lastError = LocalDatabaseManager::DeletingFilesError;
-    else
-       m_lastError = LocalDatabaseManager::Ok;
+    deleteStudyFromHardDisk(studyInstanceToDelete);
 }
 
 void LocalDatabaseManager::clear()
@@ -405,6 +403,57 @@ QString LocalDatabaseManager::getStudyPath(QString studyInstanceUID)
 LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
 {
     return m_lastError;
+}
+
+bool LocalDatabaseManager::setStudyRetrieving(QString studyInstanceUID)
+{
+    QSettings qsettings;
+
+    if (!qsettings.contains(qsettingsRetrievingStudy) && !studyInstanceUID.isEmpty())
+    {
+        qsettings.setValue(qsettingsRetrievingStudy, studyInstanceUID);
+        return true;
+    }
+    else return false;
+}
+
+void LocalDatabaseManager::setStudyRetrieveFinished()
+{
+    QSettings qsettings;
+
+    qsettings.remove(qsettingsRetrievingStudy);
+}
+
+void LocalDatabaseManager::checkNoStudiesRetrieving()
+{
+    QSettings qsettings;
+    DeleteDirectory deleteDirectory;
+    QDir directory;
+
+    if (qsettings.contains(qsettingsRetrievingStudy))
+    {
+        QString studyNotFullRetrieved = qsettings.value(qsettingsRetrievingStudy).toString();
+
+        INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la última execució de l'starviewer, per mantenir la integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
+
+        //Es pot donarper si es dona el cas que s'hagués arribat a inserir l'estudi i just abans d'indicar que la descàrrega de l'estudi havia finalitzat a través del mètode setStudyRetrieveFinished, s'hagués tancat l'starviewer per tant el mètode el detectaria com que l'estudi estés a mig descarregar quan realment està descarregat, per això comprovem si l'estudi existeix i si és el cas l'esborrem per deixa la base de dades en un estat consistent
+        DicomMask studyMask;
+        studyMask.setStudyUID(studyNotFullRetrieved);
+
+        if (queryStudy(studyMask).count() > 0)
+        {
+            del(studyNotFullRetrieved);
+        }//No s'ha arribat a inserir a la bd
+        else 
+        {
+            //Comprovem si el directori existeix de l'estudi, per si no s'hagués arribat a baixar cap imatge, el 
+            if (directory.exists(getStudyPath(studyNotFullRetrieved)))
+                deleteStudyFromHardDisk(studyNotFullRetrieved);
+        }
+
+        qsettings.remove(qsettingsRetrievingStudy);
+    }
+    else m_lastError = Ok;
 }
 
 int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, QDate currentDate, QTime currentTime)
@@ -658,6 +707,16 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
     } 
 }
 
+void LocalDatabaseManager::deleteStudyFromHardDisk(QString studyInstanceToDelete)
+{
+    DeleteDirectory deleteDirectory;
+
+    if (!deleteDirectory.deleteDirectory(getStudyPath(studyInstanceToDelete), true))
+        m_lastError = LocalDatabaseManager::DeletingFilesError;
+    else
+       m_lastError = LocalDatabaseManager::Ok;
+}
+
 void LocalDatabaseManager::setLastError(int sqliteLastError)
 {
     //Es tradueixen els errors de Sqlite a errors nostres, per consulta codi d'errors Sqlite http://www.sqlite.org/c3ref/c_abort.html
@@ -705,4 +764,5 @@ qint64 LocalDatabaseManager::getDirectorySize(QString directoryPath)
 
     return directorySize;
 }
+
 }

@@ -75,6 +75,21 @@ public:
 
     LastError getLastError();
 
+    /**Ens permet indicar que tenim un estudi que s'està descarregant, aquest mètode ens permet que en el cas
+      *que l'starviewer tanqui de forma anómala, saber quin estudis s'estava descarregant, per deixar la
+      *base de dades local en un estat consistent.
+      *Atenció! Aquest mètode només permet establir com a Retrieving un estudi a la vegada
+      * @return retorna indicant si s'ha pogut realitzar l'operació amb èxit, si indica fals serà perquè ja hi ha un estudi descarregant
+      */
+    bool setStudyRetrieving(QString studyInstanceUID);
+
+    ///Indiquem que l'estudi que s'havia indicat a través del mètode setStudyRetrieving ja s'ha descarregat
+    void setStudyRetrieveFinished();
+
+    /**Aquest mètode està pensat pel cas de que mentre s'està descarregant un estudi, l'starviewer finalitzi de forma anómala. El mètode comprovarà si teníem estudies en estat de descarregant i si és així esborra les imatges descarregades fins el moment i deixarà la base de dades co
+      */
+    void checkNoStudiesRetrieving();
+
 public slots:
 
     ///Inseriex un nou pacient a la base de dades
@@ -86,6 +101,8 @@ private :
     static QDate LastAccessDateSelectedStudies;
     ///Ens indica l'espai en Mbytes que hem d'alliberar quan no hi ha suficient espai en el disc
     static const quint64 MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk = 2*1024; 
+    ///Conté el nom de la llista de QSettings que guardarà els estudis que tenim en aquell moment descarregant
+    static const QString qsettingsRetrievingStudy;
 
     LastError m_lastError;
 
@@ -121,6 +138,9 @@ private :
 
     ///Esborra estudis  fins alliberar l'espai passat per paràmetre, comença esborrant els estudisque fa més que no es visualitzen
     void freeSpaceDeletingStudies(quint64 MbytesToErase);
+
+    ///Esborra l'estudi del disc dur
+    void deleteStudyFromHardDisk(QString studyInstanceToDelete);
 
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);

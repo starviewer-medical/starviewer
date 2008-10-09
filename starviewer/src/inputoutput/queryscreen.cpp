@@ -52,6 +52,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     initialize();//inicialitzem les variables necessàries
     //connectem signals i slots
     createConnections();
+    //Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent
+    checkDatabaseImageIntegrity();
     //esborrem els estudis vells de la cache
     deleteOldStudies();
     readSettings();
@@ -195,6 +197,16 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
 void QueryScreen::deleteOldStudies()
 {
     m_qdeleteOldStudiesThread.deleteOldStudies();
+}
+
+void QueryScreen::checkDatabaseImageIntegrity()
+{
+    LocalDatabaseManager localDatabaseManager;
+
+    localDatabaseManager.checkNoStudiesRetrieving();
+
+    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        showDatabaseManagerError(localDatabaseManager.getLastError(), tr("Deleting a study not full retrived"));
 }
 
 void QueryScreen::updateOperationsInProgressMessage()

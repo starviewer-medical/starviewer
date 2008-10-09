@@ -222,6 +222,9 @@ private:
     /// esborra els estudis vells de la cache
     void deleteOldStudies();
 
+    ///Es comprova la integritat de la base de dades i les imatges, comprovant que la última vegada l'starviewer no s'hagués tancat amb un estudi a mig baixar, i si és així esborra l'estudi a mig descarregar i deixa la base de dades en un estat integre
+    void checkDatabaseImageIntegrity();
+
     ///En el cas que l'error que se li passa com a paràmetre realment sigui un error, mostrarà un missatge a l'usuari explicant-lo.
     ///Es retorna true en el cas que hi hagi error, false si no n'hi ha.
     bool showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat = "");
