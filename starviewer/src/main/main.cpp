@@ -66,6 +66,31 @@ void initializeTranslations(QApplication &app)
     QString m_defaultLocale = settings.value( "languageLocale", QLocale::system().name() ).toString();
     settings.endGroup();
 
+	// configurem les locales de l'aplicació
+	// TODO ara està simplificat només als idiomes que nosaltres
+	// suportem. Mirar si es pot millorar i fer més genèric
+	QLocale::Language language;
+	QLocale::Country country;
+
+	if( m_defaultLocale.startsWith("en_") )
+		language = QLocale::English;
+	else if( m_defaultLocale.startsWith("es_") )
+		language = QLocale::Spanish;
+	else if( m_defaultLocale.startsWith("ca_") )
+		language = QLocale::Catalan;
+	else
+		language = QLocale::C; // TODO no hauria de ser anglès per defecte?
+
+	if( m_defaultLocale.endsWith("_GB") )
+		country = QLocale::UnitedKingdom;
+	else if( m_defaultLocale.endsWith("_ES") )
+		country = QLocale::Spain;
+	else
+		country = QLocale::AnyCountry; // // TODO no hauria de ser EEUU/UK per defecte?
+
+	// li indiquem la locale corresponent
+	QLocale::setDefault( QLocale( language, country ) );
+
     loadTranslator(app, ":/core/core_" + m_defaultLocale);
     loadTranslator(app, ":/interface/interface_" + m_defaultLocale);
     loadTranslator(app, ":/inputoutput/inputoutput_" + m_defaultLocale);
