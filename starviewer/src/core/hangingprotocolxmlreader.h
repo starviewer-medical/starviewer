@@ -34,6 +34,9 @@ public:
     /// llegeix els hanging protocols del fitxer
     QList<HangingProtocol * > readFile( QString path );
 
+	/// Llegeix directoris i fitxers
+	QList<HangingProtocol * > read( QString path );
+
 private:
 
     /// Llegeix una restriccio
