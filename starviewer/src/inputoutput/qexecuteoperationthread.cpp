@@ -125,6 +125,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
+    localDatabaseManager.setStudyRetrieving(studyUID);
     //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
     emit setOperating( studyUID );
 
@@ -135,6 +136,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         else
             errorRetrieving(studyUID, NoEnoughSpace);
 
+        localDatabaseManager.setStudyRetrieveFinished();
         return;
     }
 
@@ -145,6 +147,8 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         ERROR_LOG( "Error al connectar al pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " + state.text() );
 
         errorRetrieving(studyUID, ErrorConnectingPacs);
+        localDatabaseManager.setStudyRetrieveFinished();
+
         return;
     }
 
@@ -192,6 +196,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     else errorRetrieving(studyUID, DatabaseError);
 
 
+    localDatabaseManager.setStudyRetrieveFinished();
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
     piSingleton->delProcessImage( studyUID );
     delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
