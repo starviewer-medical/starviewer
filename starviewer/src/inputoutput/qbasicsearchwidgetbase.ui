@@ -303,6 +303,9 @@
                     <property name="buttonSymbols" >
                      <enum>QAbstractSpinBox::UpDownArrows</enum>
                     </property>
+                    <property name="calendarPopup" >
+                     <bool>true</bool>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -335,6 +338,9 @@
                       <width>0</width>
                       <height>20</height>
                      </size>
+                    </property>
+                    <property name="calendarPopup" >
+                     <bool>true</bool>
                     </property>
                    </widget>
                   </item>
