@@ -15,6 +15,11 @@
 // Qt's
 #include <QFile>
 #include <QMessageBox>
+#include <QFileInfo>
+#include <QDir>
+#include <QList>
+#include <QFileInfoList>
+
 
 namespace udg {
 
@@ -28,6 +33,45 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 {
 }
 
+QList<HangingProtocol * > HangingProtocolXMLReader::read( QString path )
+{
+	QFileInfo fileToRead( path );
+	QFileInfo file;
+	QList<HangingProtocol * > protocols;
+	QList<HangingProtocol * > directoryProtocols;
+	QFileInfoList entryInfoList;
+	int numberOfFileInfo;
+	int i;
+
+	if( fileToRead.isDir() )
+	{
+		QDir directory( path );
+		entryInfoList = directory.entryInfoList();
+		numberOfFileInfo = entryInfoList.size();
+		
+		for( i = 0; i < numberOfFileInfo; i++)
+		{
+			file = entryInfoList.value( i );
+
+			if( (file.fileName() != ".") && (file.fileName() != "..") )
+			{
+				/*QString absolutePath( file.absolutePath() );
+				absolutePath.append( "/");
+				absolutePath.append( file.fileName() );*/
+				directoryProtocols = read( file.absolutePath().append("/").append(file.fileName()) ); 
+				protocols << directoryProtocols;
+			}
+		}
+	}
+	else
+	{
+		if( fileToRead.suffix() == "xml" )
+		{
+			protocols = readFile( path );
+		}
+	}
+	return protocols;
+}
 
 QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
 {

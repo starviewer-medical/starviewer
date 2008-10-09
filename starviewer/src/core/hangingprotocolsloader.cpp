@@ -40,7 +40,7 @@ void HangingProtocolsLoader::loadDefaults()
     QString path = 0;
     path = systemSettings.value("Hanging-Protocols/path").toString();
     if( path != 0 )
-        loadXMLFile( path );
+        loadXMLFiles( path );
 }
 
 void HangingProtocolsLoader::loadMamoGuell()
@@ -247,17 +247,16 @@ void HangingProtocolsLoader::loadMamoTrueta()
     HangingProtocolsRepository::getRepository()->addItem( protocol2x2 );
 }
 
-bool HangingProtocolsLoader::loadXMLFile( QString filePath )
+bool HangingProtocolsLoader::loadXMLFiles( QString filePath )
 {
-    HangingProtocolXMLReader * xmlReader = new HangingProtocolXMLReader();
-    QList<HangingProtocol * > listHangingProtocols = xmlReader->readFile( filePath );
+	HangingProtocolXMLReader * xmlReader = new HangingProtocolXMLReader();
+	QList<HangingProtocol * > listHangingProtocols = xmlReader->read( filePath );
 
     if( listHangingProtocols.size() > 0 )
     {
         foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
         {
 			HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
-			hangingProtocol->show();
         }
     }
 

@@ -25,8 +25,8 @@ public:
     /// Càrrega de hanging protocols per defecte
     void loadDefaults();
 
-    /// Càrrega des d'un fitxer XML
-    bool loadXMLFile( QString filePath );
+    /// Càrrega des d'un directori de hanging protocols o un fitxer XML
+    bool loadXMLFiles( QString filePath );
 
 private:
 

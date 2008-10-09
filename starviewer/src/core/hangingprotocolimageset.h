@@ -11,6 +11,8 @@
 
 namespace udg {
 
+class Series;
+
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -59,6 +61,12 @@ public:
 	/// Obtenir el numero de la imatge a mostrar
 	int getImatgeToDisplay();
 
+	/// Assignar la serie que es representa
+	void setSeriesToDisplay( Series * series );
+	
+	/// Obtenir la serie que es representa
+	Series * getSeriesToDisplay();
+
     /// Mètode per mostrar els valors
     void show();
 
@@ -87,6 +95,9 @@ private:
 
 	/// Per saber si s'ha de tractar a nivell d'imatge o de sèrie. 
 	QString m_typeOfItem;
+
+	/// Serie que s'ajusta a les restriccions
+	Series * m_serieToDisplay;
 
 	/// Número d'imatge a mostrar
 	int m_imageToDisplay;

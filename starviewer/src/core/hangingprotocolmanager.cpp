@@ -65,51 +65,90 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
 {
     Identifier id;
     HangingProtocol * hangingPotocol;
-    int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
-    int i;
-    int imageSetNumber = 1;
+	HangingProtocol * bestHangingProtocol = NULL;
+	QList<Series *> selectedSeries;
+	QList<Series *> bestSelectedSeries;
+	double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
+	double bestAdjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
+	int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
+    int hangingProtocolNumber;
+    int imageSetNumber;
     HangingProtocolImageSet * imageSet;
     HangingProtocolDisplaySet *displaySet;
     Series * serie;
-    QList<QString> positions;
-    QList<Series *> series;
 	Q2DViewerWidget * viewerWidget;
 
-    for( i = 0; i < numberOfItems; i++)
-    {
-        id.setValue( i );
+	int numberOfSeriesAssigned;
+
+	// Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
+	// Aprofitem per assignar ja les series, per millorar el rendiment
+	for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfItems; hangingProtocolNumber++)
+	{	
+		id.setValue( hangingProtocolNumber );
         hangingPotocol = HangingProtocolsRepository::getRepository()->getItem( id );
+		selectedSeries.clear();
+		numberOfSeriesAssigned = 0;
+		imageSetNumber = 1;
+		serie = NULL;
 
-        if( isValid( hangingPotocol, patient ) )
+		if( isValid( hangingPotocol, patient ) )
         {
-
-            while( imageSetNumber <= hangingPotocol->getNumberOfImageSets() )
+			while( imageSetNumber <= hangingPotocol->getNumberOfImageSets() )
             {
-                /// Busar la sèrie
-                imageSet = hangingPotocol->getImageSet( imageSetNumber );
+				DEBUG_LOG( tr("Agafo image SET") );
+
+				imageSet = hangingPotocol->getImageSet( imageSetNumber );
                 serie = searchSerie( patient, imageSet );
 
                 if( serie)
-                {
-                    displaySet = hangingPotocol->getDisplaySetOfImageSet( imageSet->getIdentifier() );
+				{
+					DEBUG_LOG( tr("TINC SERIE!") );
+					selectedSeries << serie;
+					numberOfSeriesAssigned++;
+				}
+				imageSetNumber++;
+			}
+			adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingPotocol->getNumberOfImageSets();
+			
+			DEBUG_LOG( tr("ADJUSTMENT: %1").arg( adjustmentOfHanging ) );
 
-                    positions << displaySet->getPosition();
-                    series << serie;
+			if( adjustmentOfHanging > bestAdjustmentOfHanging )
+			{
+				bestHangingProtocol = hangingPotocol;
+				bestSelectedSeries.clear();
+				bestSelectedSeries << selectedSeries;
+				bestAdjustmentOfHanging = adjustmentOfHanging;
 
-					viewerWidget = layout->addViewer( displaySet->getPosition() );
-					viewerWidget->setInput( serie->getFirstVolume() );
-					applyDisplayTransformations( patient, serie, viewerWidget, displaySet);
+				if( bestAdjustmentOfHanging == 1.0 )/// No en trobarem cap de millor
+					break;
+			}
+		}
+	}
 
-					if( imageSet->getTypeOfItem() == "image" )
-					{
-						viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
-					}
-                }
+	// Aplicar el hanging protocol trobat, si és que se n'ha trobat algun
+	if( bestHangingProtocol )
+	{
+		imageSetNumber = 1;
+		for( imageSetNumber = 0; imageSetNumber < bestHangingProtocol->getNumberOfImageSets(); imageSetNumber ++)
+		{
+			serie = NULL;
+			imageSet = hangingPotocol->getImageSet( imageSetNumber + 1 ); // Els id's comencen a 1
+			serie = imageSet->getSeriesToDisplay();
+			displaySet = hangingPotocol->getDisplaySetOfImageSet( imageSet->getIdentifier() );
+			viewerWidget = layout->addViewer( displaySet->getPosition() );
+			
+			if( serie ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
+			{			
+				viewerWidget->setInput( serie->getFirstVolume() );
+				applyDisplayTransformations( patient, serie, viewerWidget, displaySet);
 
-                imageSetNumber++;
-            }
-        }
-    }
+				if( imageSet->getTypeOfItem() == "image" )
+				{
+					viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
+				}
+			}
+		}
+	}
 }
 
 bool HangingProtocolManager::isValid( HangingProtocol * protocol, Patient * patient)
@@ -150,7 +189,7 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, HangingProtocol
     QList< Series * > listOfSeries;
 	QList< Image * > listOfImages;
     Study * study;
-    Series * serie;
+    Series * serie = NULL;
 	Image * image;
 
     while (!found && i < numberStudies )
@@ -184,6 +223,7 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, HangingProtocol
 					{
 						found = true;
 						imageSet->setImageToDisplay( imageNumber );
+						imageSet->setSeriesToDisplay( serie );
 					}
 					imageNumber++;
 				}
@@ -237,7 +277,10 @@ bool HangingProtocolManager::isValidSerie( Series * serie, HangingProtocolImageS
         {
             if( serie->getDescription() != restriction.valueRepresentation ) valid = false;
         }
-
+		else if( restriction.selectorAttribute == "PatientOrientation" )
+		{
+		
+		}
         i++;
     }
 
@@ -278,7 +321,6 @@ void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Ser
 
 bool HangingProtocolManager::isValidImage( Image * image, HangingProtocolImageSet * imageSet )
 {
-	int numberOfImage = -1;
 	bool valid = true;
     int i = 0;
     QList< HangingProtocolImageSet::Restriction > listOfRestrictions = imageSet->getRestrictions();
@@ -303,7 +345,14 @@ bool HangingProtocolManager::isValidImage( Image * image, HangingProtocolImageSe
 				if( dicomReader.getAttributeByName( DCM_ImageLaterality ) != restriction.valueRepresentation )
 					valid = false;
 			}
-		i++;
+			else if( restriction.selectorAttribute == "PatientOrientation" )
+			{
+				if( ! dicomReader.getAttributeByName( DCM_PatientOrientation ).contains( restriction.valueRepresentation ) )
+					valid = false;
+
+				DEBUG_LOG( tr("A l'image set %1, vull la restriccio: %2 i és %3, per tant %4").arg(imageSet->getIdentifier()).arg(restriction.valueRepresentation).arg( dicomReader.getAttributeByName( DCM_PatientOrientation ) ).arg( valid ) );
+			}
+			i++;
 		}
 	}
     return valid;

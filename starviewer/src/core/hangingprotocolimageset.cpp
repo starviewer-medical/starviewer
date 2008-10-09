@@ -6,12 +6,14 @@
  ***************************************************************************/
 #include "hangingprotocolimageset.h"
 #include "logging.h"
+#include "series.h"
 
 namespace udg {
 
 HangingProtocolImageSet::HangingProtocolImageSet(QObject *parent)
  : QObject(parent)
 {
+	m_serieToDisplay = NULL;
 }
 
 
@@ -58,6 +60,16 @@ void HangingProtocolImageSet::setImageToDisplay( int imageNumber )
 int HangingProtocolImageSet::getImatgeToDisplay()
 {	
 	return m_imageToDisplay;
+}
+
+void HangingProtocolImageSet::setSeriesToDisplay( Series * series )
+{
+	m_serieToDisplay = series;
+}
+
+Series * HangingProtocolImageSet::getSeriesToDisplay()
+{
+	return m_serieToDisplay;
 }
 
 void HangingProtocolImageSet::show()
