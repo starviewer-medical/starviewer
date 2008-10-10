@@ -151,7 +151,7 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
 
     study->setInstanceUID(reply[0 + row * columns]);
     study->setID(reply[2 + row * columns]);
-    study->setPatientAge(QString(reply[3 + row * columns]).toInt());
+    study->setPatientAge(QString(reply[3 + row * columns]));
     study->setWeight(QString(reply[4 + row * columns]).toDouble());
     study->setHeight(QString(reply[5 + row * columns]).toDouble());
     study->setDate(reply[7 + row * columns]);
@@ -281,7 +281,7 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDa
                                                            "Modalities, Date, Time, AccessionNumber, Description, "
                                                            "ReferringPhysicianName, LastAccessDate, RetrievedDate, "
                                                            "RetrievedTime , State) "
-                                                   "values ('%1', '%2', '%3', %4, %5, %6, '%7', '%8', '%9', '%10', '%11', "
+                                                   "values ('%1', '%2', '%3', '%4', %5, %6, '%7', '%8', '%9', '%10', '%11', "
                                                             "'%12', '%13', '%14', '%15', %16)")
                                     .arg(newStudy->getInstanceUID())
                                     .arg(newStudy->getParentPatient()->getID())
@@ -307,7 +307,7 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, QDate lastAc
 {
     QString updateSentence = QString ("Update Study set PatientID = '%1', " 
                                                        "ID = '%2', " 
-                                                       "PatientAge = %3,"
+                                                       "PatientAge = '%3',"
                                                        "PatientWeigth = %4, "
                                                        "PatientHeigth = %5, "
                                                        "Modalities = '%6', "

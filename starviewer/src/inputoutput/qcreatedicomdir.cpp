@@ -181,7 +181,7 @@ void QCreateDicomdir::addStudy(Study *study)
             Patient *patient = study->getParentPatient();
             item->setText( 0, patient->getFullName() );
             item->setText( 1, patient->getID() );
-            item->setText( 2, study->getPatientAgeAsString() );
+            item->setText( 2, study->getPatientAge() );
             item->setText( 3, study->getDescription() );
             item->setText( 4, study->getModalitiesAsSingleString() );
             item->setText( 5, study->getDate().toString(Qt::ISODate) );

@@ -50,9 +50,8 @@ public:
     QString getDescription() const;
 
     /// Assignar/Obtenir l'edat del pacient
-    void setPatientAge( short int age );
-    short int getPatientAge() const;
-    QString getPatientAgeAsString() const;
+    void setPatientAge( const QString &age );
+    QString getPatientAge() const;
 
     /// Assignar/Obtenir el pes del pacient
     void setWeight( double weight );
@@ -168,7 +167,7 @@ private:
     /// Informació del pacient, relacionada únicament amb aquest estudi. Aquesta és la informació que podem tenir d'un pacient en el moment en el que se li va fer l'estudi. C.7.2.2 Patient Study Module - PS 3.3.
 
     /// edad del pacient. (0010,1010) Tipus 3
-    unsigned short int m_age;
+    QString m_age;
 
     /// Alçada ( en metres ) del pacient (0010,1020) Tipus 3
     double m_height;

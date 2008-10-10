@@ -151,7 +151,7 @@ Study *DICOMFileClassifierFillerStep::createStudy()
     study->setID( m_dicomReader->getAttributeByName( DCM_StudyID ) );
     study->setAccessionNumber( m_dicomReader->getAttributeByName( DCM_AccessionNumber ) );
     study->setDescription( m_dicomReader->getAttributeByName( DCM_StudyDescription ) );
-    study->setPatientAge( m_dicomReader->getAttributeByName( DCM_PatientsAge ).toInt() );
+    study->setPatientAge( m_dicomReader->getAttributeByName( DCM_PatientsAge ) );
     study->setHeight( m_dicomReader->getAttributeByName( DCM_PatientsSize ).toDouble() );
     study->setWeight( m_dicomReader->getAttributeByName( DCM_PatientsWeight ).toDouble() );
 
