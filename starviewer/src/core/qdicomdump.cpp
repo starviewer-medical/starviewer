@@ -105,17 +105,17 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     //Definim  el valor dels tags de Pacient
     m_labelPatientIDValue->setText( currentPatient->getID() );
 
-    if ( currentImage->getParentSeries()->getParentStudy()->getPatientAgeAsString() != "" )
+    if ( !currentImage->getParentSeries()->getParentStudy()->getPatientAge().isEmpty() )
     {
-        m_labelPatientAgeValue->setText( currentImage->getParentSeries()->getParentStudy()->getPatientAgeAsString() );
+        m_labelPatientAgeValue->setText( currentImage->getParentSeries()->getParentStudy()->getPatientAge() );
     }
 
-    if ( currentPatient->getFullName() != "" )
+    if ( !currentPatient->getFullName().isEmpty() )
     {
         m_labelPatientNameValue->setText( currentPatient->getFullName() );
     }
 
-    if ( currentPatient->getSex() != "" )
+	if ( !currentPatient->getSex().isEmpty() )
     {
         m_labelPatientSexValue->setText( currentPatient->getSex() );
     }

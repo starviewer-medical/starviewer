@@ -12,7 +12,7 @@ CREATE TABLE Study
   InstanceUID			TEXT PRIMARY KEY,
   PatientID			TEXT NOT NULL,
   ID				TEXT NOT NULL,
-  PatientAge			INTEGER,
+  PatientAge			TEXT,
   PatientWeigth 		INTEGER,
   PatientHeigth 		INTEGER,
   Modalities			TEXT,

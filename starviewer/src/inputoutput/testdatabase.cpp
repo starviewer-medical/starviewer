@@ -143,7 +143,7 @@ Study* TestDatabase::getStudy()
 
     newStudy->setInstanceUID("1.2");
     newStudy->setID("1");
-    //newStudy->setPatientAge(2);
+    //newStudy->setPatientAge("2");
     //newStudy->setWeight(3.21);
     //newStudy->setHeight(4.321);
     newStudy->setDate("20080706");
@@ -161,7 +161,7 @@ Study* TestDatabase::getStudy2()
 
     newStudy->setInstanceUID("1.3");
     newStudy->setID("2");
-    newStudy->setPatientAge(3);
+    newStudy->setPatientAge("3");
     newStudy->setWeight(4.321);
     newStudy->setHeight(5.4321);
     newStudy->setDate("20080807");

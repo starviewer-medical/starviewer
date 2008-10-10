@@ -177,7 +177,7 @@ void QStudyTreeWidget::insertPatient(Patient *patient)
     item->setIcon(ObjectName, m_closeFolder);
     item->setText(ObjectName, patient->getFullName());
     item->setText(PatientID, patient->getID());
-    item->setText(PatientAge, formatAge(study->getPatientAgeAsString()));
+    item->setText(PatientAge, formatAge(study->getPatientAge()));
     item->setText(Modality, study->getModalitiesAsSingleString());
     item->setText(Description, study->getDescription());
     item->setText(Date, formatDate(study->getDate().toString("yyyyMMdd")));

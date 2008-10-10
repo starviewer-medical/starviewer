@@ -13,7 +13,7 @@
 namespace udg {
 
 Study::Study( Patient *parentPatient, QObject *parent )
- : QObject(parent), m_age(0), m_height(0), m_weight(0), m_parentPatient( parentPatient )
+ : QObject(parent), m_height(0), m_weight(0), m_parentPatient( parentPatient )
 {
 }
 
@@ -71,19 +71,14 @@ QString Study::getDescription() const
     return m_description;
 }
 
-void Study::setPatientAge( short int age )
+void Study::setPatientAge( const QString &age )
 {
     m_age = age;
 }
 
-short int Study::getPatientAge() const
+QString Study::getPatientAge() const
 {
     return m_age;
-}
-
-QString Study::getPatientAgeAsString() const
-{
-    return m_age != 0 ? QString::number(m_age) : "";
 }
 
 void Study::setWeight( double weight )
