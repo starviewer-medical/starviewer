@@ -51,7 +51,6 @@ void WindowLevelTool::handleEvent( unsigned long eventID )
 
 void WindowLevelTool::startWindowLevel()
 {
-    m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
     m_state = WINDOWLEVELING;
     m_initialWindow = m_2DViewer->getCurrentColorWindow();
     m_initialLevel = m_2DViewer->getCurrentColorLevel();
@@ -60,6 +59,7 @@ void WindowLevelTool::startWindowLevel()
 
 void WindowLevelTool::doWindowLevel()
 {
+	m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
     m_2DViewer->getEventPosition( m_windowLevelCurrentPosition );
 
     int *size = m_2DViewer->getRenderWindowSize();

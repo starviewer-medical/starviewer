@@ -84,7 +84,6 @@ void SlicingTool::handleEvent( unsigned long eventID )
 
 void SlicingTool::startSlicing()
 {
-    m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
     m_state = SLICING;
     m_2DViewer->getEventPosition( m_startPosition );
 	// calculem el nombre d'imatges que manipulem
@@ -101,6 +100,7 @@ void SlicingTool::doSlicing()
     if( m_state == SLICING )
     {
 		Q_ASSERT( m_screenSize );
+		m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
         m_currentPosition[1] = m_2DViewer->getEventPositionY();
 
         // increment normalitzat segons la mida de la finestra i el nombre de llesques
