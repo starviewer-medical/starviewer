@@ -65,7 +65,6 @@ void ZoomTool::handleEvent( unsigned long eventID )
 
 void ZoomTool::startZoom()
 {
-    m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
     m_state = ZOOMING;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
@@ -74,6 +73,7 @@ void ZoomTool::doZoom()
 {
     if( m_state == ZOOMING )
     {
+		m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
         double *center = m_viewer->getRenderer()->GetCenter();
         int dy = m_viewer->getEventPositionY() - m_viewer->getLastEventPositionY();
         // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
