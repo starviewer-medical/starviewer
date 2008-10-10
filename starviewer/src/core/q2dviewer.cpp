@@ -1800,14 +1800,16 @@ void Q2DViewer::updatePatientAnnotationInformation()
     if( m_mainVolume )
     {
         // informació fixa
-        m_upperRightText = m_mainVolume->getPatient()->getFullName();
-
-        m_upperRightText += tr("\n%1\n%2\n%3\nAcc:\n%4\n%5")
+        m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:\n%6\n%7\n%8")
                     .arg( m_mainVolume->getSeries()->getInstitutionName() )
+					.arg( m_mainVolume->getPatient()->getFullName() )
+					.arg( m_mainVolume->getStudy()->getPatientAge() )
+                    .arg( m_mainVolume->getPatient()->getSex() )
                     .arg( m_mainVolume->getPatient()->getID() )
                     .arg( m_mainVolume->getStudy()->getAccessionNumber() )
                     .arg( m_mainVolume->getStudy()->getDateAsString() )
-                    .arg( m_mainVolume->getStudy()->getTimeAsString() );
+                    .arg( m_mainVolume->getStudy()->getTimeAsString() ); // TODO seria més correcte mostrar l'hora de la sèrie i inclús de la imatge
+
 
         // Si protocol i descripció coincideixen posarem el contingut de protocol
         // Si són diferents, els fusionarem
