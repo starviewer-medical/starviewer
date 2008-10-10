@@ -107,6 +107,8 @@ signals:
     void obscuranceComputed();
     /// Es llança quan les obscurances són cancel·lades pel programa (no per l'usuari).
     void obscuranceCancelledByProgram();
+    /// Informa del rang de valors del volum quan aquest canvia.
+    void scalarRange( double min, double max );
 
 private:
     /// fa la visualització per raycasting

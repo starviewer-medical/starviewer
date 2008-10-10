@@ -22,7 +22,6 @@ namespace udg {
 class Volume3DViewTesting;
 class Volume;
 class ToolManager;
-class QClutEditorDialog;
 
 /**
  * ...
@@ -46,17 +45,14 @@ public slots:
     /// Aplica una funció de transferència predefinida a la visualització.
     void applyPresetClut( const QString & clutName );
 
-    /// Mostra el diàleg per editar funcions de transferència.
-    void showClutEditorDialog();
-
     /// Aplica la funció de transferència passada a la visualització.
-    void applyClut( const TransferFunction & clut );
-
-    void manageClosedDialog();
+    void applyClut( const TransferFunction & clut, bool preset = false );
 
     /// Comença a calcular les obscurances, i si ja s'estan calculant ho cancel·la.
     void computeOrCancelObscurance();
     void endComputeObscurance();
+
+    void setScalarRange( double min, double max );
 
 private:
     /// posa a punt les tools que es poden fer servir en l'extensió
@@ -78,6 +74,12 @@ private slots:
 
     void render();
     void autoCancelObscurance();
+    void loadClut();
+    void saveClut();
+    void switchEditor();
+    void applyEditorClut();
+    void toggleClutEditor();
+    void hideClutEditor();
 
 private:
     /// El volum d'input
@@ -91,14 +93,14 @@ private:
     /// Mapa entre noms de funcions de transferència i el nom de fitxer corresponent.
     QMap<QString, QString> m_clutNameToFileName;
 
-    /// Editor de cluts.
-    QClutEditorDialog * m_clutEditorDialog;
-
     /// Última clut aplicada.
     TransferFunction m_currentClut;
 
     /// Ens indica si en aquests moments s'estan calculant les obscurances.
     bool m_computingObscurance;
+
+    /// Serà cert abans d'entrar el primer input.
+    bool m_firstInput;
 };
 
 } // end namespace udg

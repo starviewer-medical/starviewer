@@ -9,9 +9,9 @@
 #include "volume.h"
 #include "toolmanager.h"
 #include "transferfunctionio.h"
-#include "qcluteditordialog.h"
 // qt
 #include <QAction>
+#include <QFileDialog>
 #include <QSettings>
 // vtk
 #include <vtkImageData.h>
@@ -28,12 +28,11 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     createConnections();
     readSettings();
 
-    m_clutEditorDialog = 0;
-
-    m_currentClut.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
-    m_currentClut.addPoint( 255.0, QColor( 255, 255, 255, 255 ) );
-
     m_computingObscurance = false;
+
+    m_firstInput = true;
+
+    hideClutEditor();
 }
 
 QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
@@ -105,8 +104,6 @@ void QVolume3DViewTestingExtension::createConnections()
     // actualització del mètode de rendering
     connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
 
-    connect( m_clutEditToolButton, SIGNAL( clicked() ), SLOT( showClutEditorDialog() ) );
-
     // mètodes de rendering
 
     m_shadingOptionsWidget->hide();
@@ -129,14 +126,40 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), this, SLOT( render() ) );
     connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setObscuranceFactor(double) ) );
     connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( render() ) );
+
+    // clut editor
+    connect( m_loadClutPushButton, SIGNAL( clicked() ), SLOT( loadClut() ) );
+    connect( m_saveClutPushButton, SIGNAL( clicked() ), SLOT( saveClut() ) );
+    connect( m_switchEditorPushButton, SIGNAL( clicked() ), SLOT( switchEditor() ) );
+    connect( m_applyPushButton, SIGNAL( clicked() ), SLOT( applyEditorClut() ) );
+
+    connect( m_clutEditToolButton, SIGNAL( clicked() ), SLOT( toggleClutEditor() ) );
+    connect( m_hidePushButton, SIGNAL( clicked() ), SLOT( hideClutEditor() ) );
+
+    // visor 3d
+    connect( m_3DView, SIGNAL( scalarRange(double,double) ), SLOT( setScalarRange(double,double) ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
 {
     m_input = input;
     m_3DView->setInput( m_input );
-    m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
-    this->render();
+
+    applyClut( m_currentClut );
+}
+
+void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
+{
+    unsigned short maximum = static_cast<unsigned short>( qRound( max ) );
+    m_gradientEditor->setMaximum( maximum );
+    m_editorByValues->setMaximum( maximum );
+
+    if ( m_firstInput )
+    {
+        m_currentClut.addPoint( min, QColor( 0, 0, 0, 0 ) );
+        m_currentClut.addPoint( max, QColor( 255, 255, 255, 255 ) );
+        m_firstInput = false;
+    }
 }
 
 void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
@@ -202,49 +225,32 @@ void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
     TransferFunction * transferFunction = TransferFunctionIO::fromFile( m_clutsDir.absoluteFilePath( QDir::toNativeSeparators( fileName ) ) );
     if ( transferFunction )
     {
-        m_currentClut = *transferFunction;
-        m_3DView->setTransferFunction( transferFunction );
+        //m_currentClut = *transferFunction;
+        applyClut( *transferFunction, true );
+        //m_3DView->setTransferFunction( transferFunction );
     }
-    this->render();
+    //this->render();
 }
 
-void QVolume3DViewTestingExtension::showClutEditorDialog()
-{
-    DEBUG_LOG( "showClutEditorDialog()" );
 
-    if ( m_clutEditorDialog ) return;
-
-    m_clutEditorDialog = new QClutEditorDialog( this );
-    m_clutEditorDialog->setCluts( m_clutsDir, m_clutNameToFileName );
-    m_clutEditorDialog->setCurrentClut( m_currentClut );
-    //m_clutEditorDialog->setMaximum( 255 );    // 255 és el valor per defecte
-    m_clutEditorDialog->show();
-
-    connect( m_clutEditorDialog, SIGNAL( clutApplied(const TransferFunction&) ), SLOT( applyClut(const TransferFunction&) ) );
-    connect( m_clutEditorDialog, SIGNAL( rejected() ), SLOT( manageClosedDialog() ) );
-}
-
-void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut )
+void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut, bool preset )
 {
     DEBUG_LOG( "applyClut()" );
 
     m_currentClut = clut;
-    // cal fer el disconnect per evitar un bucle infinit
-    disconnect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
-    m_clutPresetsComboBox->setCurrentIndex( m_clutPresetsComboBox->findText( m_currentClut.name() ) );
-    connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
+    if ( !preset )
+    {
+        // cal fer el disconnect per evitar un bucle infinit
+        disconnect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
+        m_clutPresetsComboBox->setCurrentIndex( -1 );
+        connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
+    }
+    m_gradientEditor->setTransferFunction( m_currentClut );
+    m_editorByValues->setTransferFunction( m_currentClut );
     m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
     this->render();
 }
 
-void QVolume3DViewTestingExtension::manageClosedDialog()
-{
-    DEBUG_LOG( "manageClosedDialog()" );
-
-    m_clutEditorDialog = 0;
-    loadClutPresets();
-    m_clutPresetsComboBox->setCurrentIndex( m_clutPresetsComboBox->findText( m_currentClut.name() ) );
-}
 
 void QVolume3DViewTestingExtension::readSettings()
 {
@@ -327,6 +333,91 @@ void QVolume3DViewTestingExtension::render()
     m_3DView->render();
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
+
+void QVolume3DViewTestingExtension::loadClut()
+{
+    QSettings settings;
+    settings.beginGroup( "Starviewer-App-3DTesting" );
+    QString customClutsDirPath = settings.value( "customClutsDir", QString() ).toString();
+
+    QString transferFunctionFileName =
+            QFileDialog::getOpenFileName( this, tr("Load CLUT"),
+                                          customClutsDirPath, tr("Transfer function files (*.tf);;All files (*)") );
+
+    if ( !transferFunctionFileName.isNull() )
+    {
+        TransferFunction * transferFunction = TransferFunctionIO::fromFile( transferFunctionFileName );
+        QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+        currentEditor->setTransferFunction( *transferFunction );
+        delete transferFunction;
+
+        QFileInfo transferFunctionFileInfo( transferFunctionFileName );
+        settings.setValue( "customClutsDir", transferFunctionFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+void QVolume3DViewTestingExtension::saveClut()
+{
+    QSettings settings;
+    settings.beginGroup( "Starviewer-App-3DTesting" );
+    QString customClutsDirPath = settings.value( "customClutsDir", QString() ).toString();
+
+    QFileDialog saveDialog( this, tr("Save CLUT"), customClutsDirPath, tr("Transfer function files (*.tf);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "tf" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString transferFunctionFileName = saveDialog.selectedFiles().first();
+        QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+        TransferFunctionIO::toFile( transferFunctionFileName, currentEditor->getTransferFunction() );
+
+        QFileInfo transferFunctionFileInfo( transferFunctionFileName );
+        settings.setValue( "customClutsDir", transferFunctionFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+void QVolume3DViewTestingExtension::switchEditor()
+{
+    QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+    const TransferFunction & currentTransferFunction = currentEditor->getTransferFunction();
+    m_editorsStackedWidget->setCurrentIndex( 1 - m_editorsStackedWidget->currentIndex() );
+    currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+    currentEditor->setTransferFunction( currentTransferFunction );
+}
+
+
+void QVolume3DViewTestingExtension::applyEditorClut()
+{
+    QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
+    applyClut( currentEditor->getTransferFunction() );
+}
+
+
+void QVolume3DViewTestingExtension::toggleClutEditor()
+{
+    if ( m_editorSplitter->sizes()[0] == 0 )    // show
+    {
+        m_editorSplitter->setSizes( QList<int>() << 1 << 1 );
+        m_gradientEditor->setTransferFunction( m_currentClut );
+        m_editorByValues->setTransferFunction( m_currentClut );
+    }
+    else    // hide
+        hideClutEditor();
+}
+
+
+void QVolume3DViewTestingExtension::hideClutEditor()
+{
+    m_editorSplitter->setSizes( QList<int>() << 0 << 0 );
+}
+
 
 }
 
