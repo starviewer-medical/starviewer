@@ -264,6 +264,8 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput( Volume* volume )
 {
+    DEBUG_LOG( "setInput" );
+
     m_mainVolume = volume;
 
     if ( rescale() ) m_volumeMapper->SetInput( m_imageCaster->GetOutput() );
@@ -405,6 +407,8 @@ bool Q3DViewer::rescale()
         {
             // cal fer el casting perquè ens arriba com a int
             m_imageCaster->SetInput( image );
+
+            emit scalarRange( min, max );
         }
         else
         {
@@ -424,6 +428,8 @@ bool Q3DViewer::rescale()
             DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
 
             rescaler->Delete();
+
+            emit scalarRange( 0, 255 );
         }
 
         m_imageCaster->SetOutputScalarTypeToUnsignedChar();
