@@ -1777,12 +1777,9 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
         // informació de la finestra
         if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
         {
-            int *size = this->getRenderWindowSize();
-			m_upperLeftText = tr("Image Size: %1 x %2\nView Size: %3 x %4\nWW: %5 WL: %6 ")
+			m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
                 .arg( m_imageSizeInformation[0] )
                 .arg( m_imageSizeInformation[1] )
-                .arg( size[0] )
-                .arg( size[1] )
                 .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
                 .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
         }
@@ -1800,7 +1797,7 @@ void Q2DViewer::updatePatientAnnotationInformation()
     if( m_mainVolume )
     {
         // informació fixa
-        m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:\n%6\n%7\n%8")
+        m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8")
                     .arg( m_mainVolume->getSeries()->getInstitutionName() )
 					.arg( m_mainVolume->getPatient()->getFullName() )
 					.arg( m_mainVolume->getStudy()->getPatientAge() )
