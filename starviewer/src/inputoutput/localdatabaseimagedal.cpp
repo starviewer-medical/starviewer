@@ -87,6 +87,27 @@ QList<Image*> LocalDatabaseImageDAL::query(DicomMask imageMask)
     return imageList;
 }
 
+int LocalDatabaseImageDAL::count(DicomMask imageMaskToCount)
+{
+    int columns , rows;
+    char **reply = NULL , **error = NULL;
+
+    m_dbConnection->getLock();
+
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
+                                      qPrintable(buildSqlSelectCountImages(imageMaskToCount)),
+                                    &reply, &rows, &columns, error);
+    m_dbConnection->releaseLock();
+
+    if (getLastError() != SQLITE_OK)
+    {
+        logError (buildSqlSelectCountImages(imageMaskToCount));
+        return -1;
+    }
+
+    return QString(reply[1]).toInt();
+}
+
 void LocalDatabaseImageDAL::setDatabaseConnection(DatabaseConnection *dbConnect)
 {
     m_dbConnection = dbConnect;
@@ -149,6 +170,18 @@ QString LocalDatabaseImageDAL::buildSqlSelect(DicomMask imageMaskToSelect)
 
     return selectSentence + buildWhereSentence(imageMaskToSelect) + orderSentence;
 }
+
+QString LocalDatabaseImageDAL::buildSqlSelectCountImages(DicomMask imageMaskToSelect)
+{
+    QString selectSentence;
+
+
+    selectSentence = "Select count(*) "
+                     "from Image ";
+
+    return selectSentence + buildWhereSentence(imageMaskToSelect);
+}
+
 
 QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage, int orderNumberInSeries)
 {
