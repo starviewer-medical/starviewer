@@ -44,6 +44,9 @@ public:
     ///Selecciona les imatges que compleixen la màscara, només es té en compte de la màscara el StudyUID, SeriesUID i SOPInstanceUID
     QList<Image*> query(DicomMask imageMaskToSelect);
 
+    ///Compta les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
+    int count(DicomMask imageMaskToCount);
+
     ///Indiquem quina és la connexió a la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
 
@@ -68,6 +71,9 @@ private :
 
     ///Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
     QString buildSqlSelect(DicomMask imageMaskToSelect);
+
+    ///Genera la sentència sql per comptar número d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
+    QString buildSqlSelectCountImages(DicomMask imageMaskToSelect);
 
     ///Genera la sentència sql per inserir la nova imatge a la base de dades
     QString buildSqlInsert(Image *newImage, int OrderNumberInSeries);
