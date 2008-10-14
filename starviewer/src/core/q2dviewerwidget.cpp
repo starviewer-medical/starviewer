@@ -70,9 +70,7 @@ void Q2DViewerWidget::createConnections()
 void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
-    m_2DView->setInput( input );
-    m_synchronizeButton->setEnabled( true );
-    m_slider->setMaximum( m_2DView->getMaximumSlice() );
+	m_2DView->setSeries( input->getSeries() );
 }
 
 void Q2DViewerWidget::updateInput( Volume *input )
