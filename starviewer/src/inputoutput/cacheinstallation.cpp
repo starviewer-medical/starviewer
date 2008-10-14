@@ -132,16 +132,18 @@ bool CacheInstallation::createDatabaseFile()
 {
     QFile sqlTablesScriptFile( ":cache/database.sql" );
     QByteArray sqlTablesScript;
-    DatabaseConnection *DBConnect = DatabaseConnection::getDatabaseConnection();//obrim la bdd
+    DatabaseConnection DBConnect;//obrim la bdd
     int status;
 
     sqlTablesScriptFile.open( QIODevice::ReadOnly ); //obrim el fitxer
 
     sqlTablesScript = sqlTablesScriptFile.read( sqlTablesScriptFile.size() ); //el llegim
 
-    if ( !DBConnect->connected() ) return false;
+    DBConnect.open();
+    if (!DBConnect.connected()) return false;
 
-    status = sqlite3_exec( DBConnect->getConnection() , sqlTablesScript.constData() , 0 , 0 , 0 ); //creem les taules i els registres
+    status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0); //creem les taules i els registres
+    DBConnect.close();
 
     sqlTablesScriptFile.close(); //tanquem el fitxer
 

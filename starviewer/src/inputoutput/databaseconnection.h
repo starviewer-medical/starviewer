@@ -23,12 +23,11 @@ class DatabaseConnection
 {
 public:
 
-    /// Constructor estatic del singleton retorna la referència a la casse
-     static DatabaseConnection* getDatabaseConnection()
-     {
-         static DatabaseConnection database;
-         return &database;
-     }
+    /// Constructor de la classe
+    DatabaseConnection();
+
+    ///destructor de la classe
+    ~DatabaseConnection();
 
      /** Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
       * @param path de la base de dades
@@ -44,6 +43,12 @@ public:
      * @return indica si s'esta connectat a la base de dades
      */
     bool connected();
+
+    ///connecta amb la base de dades segons el path
+    void open();
+
+    /// tanca la connexió de la base de dades*/
+    void close();
 
     /// Demana el candeu per accedir a la base de dades!. S'ha de demanar el candau per poder accedir de manera correcte i segura a la base de dades ja que si hi accedeixen dos objectes, amb la mateixa connexió al mateix temps, donarà error, per això des de la connexió ens hem d'assegurar que només és utilitzada una vegada
     void getLock();
@@ -62,9 +67,6 @@ public:
 
 private :
 
-    /// Constructor de la classe
-    DatabaseConnection();
-
     sqlite3 *m_databaseConnection;
     QSemaphore *m_databaseLock;
     /*Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix 
@@ -72,15 +74,6 @@ private :
     QSemaphore *m_transactionLock;
 
     QString m_databasePath;
-
-    /// tanca la connexió de la base de dades*/
-    void closeDB();
-
-    ////connecta amb la base de dades segons el path
-    void connectDB();
-
-    ///destructor de la classe
-    ~DatabaseConnection();
 };
 };//end namespace
 
