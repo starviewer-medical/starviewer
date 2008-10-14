@@ -213,8 +213,6 @@ void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_workingArea->getViewerSelected()->setInput( m_mainVolume );
-    validePhases();
-    m_cineController->setQViewer( m_workingArea->getViewerSelected()->getViewer() );
     INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 
     /// Aplicació dels hanging protocols
