@@ -28,33 +28,21 @@ LocalDatabaseImageDAL::LocalDatabaseImageDAL()
 
 void LocalDatabaseImageDAL::insert(Image *newImage, int orderNumberInSeries)
 {
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newImage, orderNumberInSeries)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newImage, orderNumberInSeries)); 
 }
 
 void LocalDatabaseImageDAL::del(DicomMask imageMaskToDelete)
 {
-    m_dbConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
-
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(imageMaskToDelete)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(imageMaskToDelete)); 
 }
 
 void LocalDatabaseImageDAL::update(Image *imageToUpdate, int orderNumberInSeries)
 {
-    m_dbConnection->getLock();//nomes un proces a la vegada pot entrar a la cache
-
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(imageToUpdate, orderNumberInSeries)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(imageToUpdate, orderNumberInSeries));
 }
@@ -65,13 +53,9 @@ QList<Image*> LocalDatabaseImageDAL::query(DicomMask imageMask)
     char **reply = NULL , **error = NULL;
     QList<Image*> imageList;
 
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                       qPrintable(buildSqlSelect(imageMask)),
                                     &reply, &rows, &columns, error);
-    m_dbConnection->releaseLock();
-
     if (getLastError() != SQLITE_OK)
     {
         logError (buildSqlSelect(imageMask));
@@ -92,12 +76,9 @@ int LocalDatabaseImageDAL::count(DicomMask imageMaskToCount)
     int columns , rows;
     char **reply = NULL , **error = NULL;
 
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                       qPrintable(buildSqlSelectCountImages(imageMaskToCount)),
                                     &reply, &rows, &columns, error);
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK)
     {
