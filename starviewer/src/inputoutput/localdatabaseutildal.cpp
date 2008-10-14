@@ -25,11 +25,7 @@ void LocalDatabaseUtilDAL::compact()
 
     QString compactSentence = "vacuum";
 
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(compactSentence), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) 
         logError(compactSentence);

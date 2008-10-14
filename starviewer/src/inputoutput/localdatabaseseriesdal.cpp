@@ -23,33 +23,21 @@ LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL()
 
 void LocalDatabaseSeriesDAL::insert(Series *newSeries)
 {
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newSeries)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newSeries));
 }
 
 void LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
 {
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(seriesToUpdate)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(seriesToUpdate));
 }
 
 void LocalDatabaseSeriesDAL::del(DicomMask seriesMaskToDelete)
 {
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlDelete(seriesMaskToDelete)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(seriesMaskToDelete));
 }
@@ -60,12 +48,9 @@ QList<Series*> LocalDatabaseSeriesDAL::query(DicomMask seriesMask)
     char **reply = NULL , **error = NULL;
     QList<Series*> seriesList;
 
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                       qPrintable(buildSqlSelect(seriesMask)),
                                     &reply, &rows, &columns, error);
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK)
     {

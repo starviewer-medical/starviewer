@@ -24,7 +24,6 @@ DatabaseConnection::DatabaseConnection()
     StarviewerSettings settings;
 
     m_databasePath = settings.getDatabasePath();
-    m_databaseLock = new QSemaphore(1);//semafor que controlarà que nomes un thread a la vegada excedeixi a la cache
     m_transactionLock = new QSemaphore(1);
 }
 
@@ -58,10 +57,8 @@ void DatabaseConnection::endTransaction()
 
 void DatabaseConnection::rollbackTransaction()
 {
-    getLock();
     sqlite3_exec(m_databaseConnection, "ROLLBACK TRANSACTION ", 0, 0, 0);
     m_transactionLock->release();
-    releaseLock();
 }
 
 sqlite3* DatabaseConnection::getConnection()
@@ -74,16 +71,6 @@ sqlite3* DatabaseConnection::getConnection()
 bool DatabaseConnection::connected()
 {
     return m_databaseConnection != NULL;
-}
-
-void DatabaseConnection::getLock()
-{
-    m_databaseLock->acquire();
-}
-
-void DatabaseConnection::releaseLock()
-{
-    m_databaseLock->release();
 }
 
 void DatabaseConnection::close()

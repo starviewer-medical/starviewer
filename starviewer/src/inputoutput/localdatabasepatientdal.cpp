@@ -20,33 +20,21 @@ LocalDatabasePatientDAL::LocalDatabasePatientDAL()
 
 void LocalDatabasePatientDAL::insert(Patient *newPatient)
 {
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newPatient)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newPatient));
 }
 
 void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 {
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(patientToUpdate)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(patientToUpdate));
 }
 
 void LocalDatabasePatientDAL::del(DicomMask patientMaskToDelete)
 {
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlDelete(patientMaskToDelete)), 0, 0, 0);
-
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(patientMaskToDelete));
 }
@@ -57,12 +45,9 @@ QList<Patient*> LocalDatabasePatientDAL::query(DicomMask patientMask)
     char **reply = NULL , **error = NULL;
     QList<Patient*> patientList;
 
-    m_dbConnection->getLock();
-
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                       qPrintable(buildSqlSelect(patientMask)),
                                     &reply, &rows, &columns, error);
-    m_dbConnection->releaseLock();
 
     if (getLastError() != SQLITE_OK)
     {

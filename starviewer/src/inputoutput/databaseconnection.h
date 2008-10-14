@@ -50,12 +50,6 @@ public:
     /// tanca la connexió de la base de dades*/
     void close();
 
-    /// Demana el candeu per accedir a la base de dades!. S'ha de demanar el candau per poder accedir de manera correcte i segura a la base de dades ja que si hi accedeixen dos objectes, amb la mateixa connexió al mateix temps, donarà error, per això des de la connexió ens hem d'assegurar que només és utilitzada una vegada
-    void getLock();
-
-    /// Allibera al candau per a que altres processos puguin accedir a la base de dades
-    void releaseLock();
-
     /// Comença/finalitza/Fa rollback una transacció a la base de dades. Només pot haver una transacció a la vegada amb la mateixa connexió, per això aquests mètodes tenen implantat un semàfor, qeu control l'accés a les transaccions
     //TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
     void beginTransaction();
@@ -68,7 +62,6 @@ public:
 private :
 
     sqlite3 *m_databaseConnection;
-    QSemaphore *m_databaseLock;
     /*Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix 
       no per tant per assegurar que no tenim dos transaccions a la vegada implantem aquests semàfor*/
     QSemaphore *m_transactionLock;
