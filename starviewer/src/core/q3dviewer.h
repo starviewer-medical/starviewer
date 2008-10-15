@@ -18,7 +18,7 @@ class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastMapper;
-class vtk4DLinearRegressionGradientEstimator;
+
 
 namespace udg {
 
@@ -31,6 +31,7 @@ class vtkVolumeRayCastVoxelShaderCompositeFunction;
 class AmbientVoxelShader;
 class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
+class vtk4DLinearRegressionGradientEstimator;
 
 /**
 Classe base per als visualitzadors 3D

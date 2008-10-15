@@ -23,6 +23,10 @@
 #include "vtkUnsignedLongArray.h"
 #include "vtkUnsignedShortArray.h"
 
+
+namespace udg {
+
+
 vtkCxxRevisionMacro(vtk4DLinearRegressionGradientEstimator, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtk4DLinearRegressionGradientEstimator);
 
@@ -420,4 +424,7 @@ void vtk4DLinearRegressionGradientEstimator::PrintSelf(ostream& os,
                                                      vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
+}
+
+
 }
