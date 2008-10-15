@@ -22,6 +22,10 @@
 
 #include "vtkEncodedGradientEstimator.h"
 
+
+namespace udg {
+
+
 class vtk4DLinearRegressionGradientEstimator : public vtkEncodedGradientEstimator
 {
 public:
@@ -50,6 +54,9 @@ private:
   // Radi d'aplicació del gradient.
   unsigned int Radius;
 };
+
+
+}
 
 
 #endif
