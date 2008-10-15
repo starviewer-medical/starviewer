@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "q3dviewer.h"
 #include "volume.h"
+#include "image.h"
+#include "imageplane.h"
 #include "logging.h"
 #include "q3dorientationmarker.h"
 #include "transferfunction.h"
@@ -54,6 +56,8 @@
 #include <vtkInteractorObserver.h>
 
 #include <vtkImageViewer.h>
+
+#include <vtkMatrix4x4.h>
 
 // obscurances
 #include "obscurancemainthread.h"
@@ -267,6 +271,27 @@ void Q3DViewer::setInput( Volume* volume )
     DEBUG_LOG( "setInput" );
 
     m_mainVolume = volume;
+
+    // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
+    //\TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet 702)
+    ImagePlane * currentPlane = new ImagePlane();
+    currentPlane->fillFromImage( m_mainVolume->getImage(0,0) ); 
+    double currentPlaneRowVector[3], currentPlaneColumnVector[3];
+    currentPlane->getRowDirectionVector( currentPlaneRowVector );
+    currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
+
+    vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
+    projectionMatrix->Identity();
+    int row;
+    for( row = 0; row < 3; row++ )
+    {
+        projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
+        projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
+    }
+
+    m_vtkVolume->SetUserMatrix(projectionMatrix);
+    delete currentPlane;
+
 
     if ( rescale() ) m_volumeMapper->SetInput( m_imageCaster->GetOutput() );
 
