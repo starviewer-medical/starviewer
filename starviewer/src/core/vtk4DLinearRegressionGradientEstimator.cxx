@@ -95,15 +95,19 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
 
 //     bool zeroPad = estimator->GetZeroPad(); // casting implícit des d'int
 
-    // Precàlcul de distàncies euclidianes
-    int diameter = 2 * radius + 1;
+    // Precàlcul de distàncies euclidianes i offsets dins la màscara
+    int diameter = 2 * radius + 1, diameter2 = diameter * diameter;
     int maskSize = diameter * diameter * diameter;
     float w[maskSize];
+    //int maskOffset[maskSize];
 
-    for ( int ix = -radius, iw = 0; ix <= radius; ix++ )
+    for ( int ix = -radius, im = 0; ix <= radius; ix++ )
         for ( int iy = -radius; iy <= radius; iy++ )
-            for ( int iz = -radius; iz <= radius; iz++, iw++ )
-                w[iw] = sqrt( ix * ix + iy * iy + iz * iz );
+            for ( int iz = -radius; iz <= radius; iz++, im++ )
+            {
+                w[im] = sqrt( ix * ix + iy * iy + iz * iz );
+                //maskOffset[im] = ix * xStep + iy * yStep + iz * zStep;    // amb això va un 11% més lent (???)
+            }
 
     float aspect[3];
     estimator->GetInputAspect( aspect );
@@ -161,25 +165,34 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
                 /// \TODO Optimitzar treient les coses mës enfora encara, precalculant i guardant en taules tot el que es pugui
                 float A = 0.0, B = 0.0, C = 0.0, D = 0.0;
 
-                for ( int ix = -radius, iw = 0; ix <= radius; ix++ )
+                for ( int ix = -radius, im = 0; ix <= radius; ix++ )
                 {
                     int xPix = x + ix;
-                    if ( xPix < 0 || xPix >= size[0] ) continue;    // v = 0
+                    if ( xPix < 0 || xPix >= size[0] )
+                    {
+                        im += diameter2;
+                        continue;    // v = 0
+                    }
                     T *dPtrPixxStep = dPtr + ix * xStep;
 
                     for ( int iy = -radius; iy <= radius; iy++ )
                     {
                         int yPiy = y + iy;
-                        if ( yPiy < 0 || yPiy >= size[1] ) continue;    // v = 0
+                        if ( yPiy < 0 || yPiy >= size[1] )
+                        {
+                            im += diameter;
+                            continue;    // v = 0
+                        }
                         T *dPtrPixxStepPiyyStep = dPtrPixxStep + iy * yStep;
 
-                        for ( int iz = -radius; iz <= radius; iz++, iw++ )
+                        for ( int iz = -radius; iz <= radius; iz++, im++ )
                         {
                             int zPiz = z + iz;
                             if ( zPiz < 0 || zPiz >= size[2] ) continue;    // v = 0
                             // valor del vòxel (no pot ser 0 perquê ja hem fet les comprovacions abans)
                             float v = *( dPtrPixxStepPiyyStep + iz * zStep );
-                            v *= w[iw]; // w[iw] = distància euclidiana
+                            //float v = dPtr[maskOffset[im]];   // d'aquesta manera va més lent (???)
+                            v *= w[im]; // w[iw] = distància euclidiana
                             A += v * ix;
                             B += v * iy;
                             C += v * iz;
@@ -188,11 +201,11 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
                     }
                 }
 
-//                 for ( int ix = -2; ix <= 2; ix++ )
+//                 for ( int ix = -radius; ix <= radius; ix++ )
 //                 {
-//                     for ( int iy = -2; iy <= 2; iy++ )
+//                     for ( int iy = -radius; iy <= radius; iy++ )
 //                     {
-//                         for ( int iz = -2; iz <= 2; iz++ )
+//                         for ( int iz = -radius; iz <= radius; iz++ )
 //                         {
 //                             // distància euclidiana
 //                             float w = sqrt( ix * ix + iy * iy + iz * iz );
