@@ -33,215 +33,204 @@ vtkStandardNewMacro(vtk4DLinearRegressionGradientEstimator);
 // This is the templated function that actually computes the EncodedNormal
 // and the GradientMagnitude
 template <class T>
-void vtkComputeGradients(
-  vtk4DLinearRegressionGradientEstimator *estimator, T *data_ptr,
-  int thread_id, int thread_count, unsigned int radius )
+void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *dataPtr, int threadId, int threadCount, int radius )
 {
-  int                 xstep, ystep, zstep;
-  int                 x, y, z;
-  int                 offset;
-  int                 x_start, x_limit;
-  int                 y_start, y_limit;
-  int                 z_start, z_limit;
-  int                 useClip;
-  int                 *clip;
-  T                   *dptr;
-  unsigned char       *gptr;
-  unsigned short      *nptr;
-  float               n[3], t;
-  float               gvalue;
-  float               zeroNormalThreshold;
-  int                 useBounds;
-  int                 bounds[6];
-  int                 size[3];
-  float               aspect[3];
-  int                 xlow, xhigh;
-  float               scale, bias;
-  int                 computeGradientMagnitudes;
-  vtkDirectionEncoder *direction_encoder;
-  int                 zeroPad;
+    int size[3];
+    estimator->GetInputSize( size );
 
-  estimator->GetInputSize( size );
-  estimator->GetInputAspect( aspect );
-  computeGradientMagnitudes = estimator->GetComputeGradientMagnitudes();
-  scale = estimator->GetGradientMagnitudeScale();
-  bias = estimator->GetGradientMagnitudeBias();
-  zeroPad = estimator->GetZeroPad();
+    int xStart, xLimit, yStart, yLimit, zStart, zLimit;
+    float fThreadCount = threadCount;
 
-  // adjust the aspect
-  aspect[0] = aspect[0] * 2.0;// * estimator->SampleSpacingInVoxels;
-  aspect[1] = aspect[1] * 2.0;// * estimator->SampleSpacingInVoxels;
-  aspect[2] = aspect[2] * 2.0;// * estimator->SampleSpacingInVoxels;
-
-  // Compute steps through the volume in x, y, and z
-  xstep = 1;
-  ystep = size[0];
-  zstep = size[0] * size[1];
-
-  // Multiply by the spacing used for normal estimation
-//   xstep *= estimator->SampleSpacingInVoxels;
-//   ystep *= estimator->SampleSpacingInVoxels;
-//   zstep *= estimator->SampleSpacingInVoxels;
-
-  // Get the length at or below which normals are considered to
-  // be "zero"
-  zeroNormalThreshold = estimator->GetZeroNormalThreshold();
-
-  useBounds = estimator->GetBoundsClip();
-
-  // Compute an offset based on the thread_id. The volume will
-  // be broken into large slabs (thread_count slabs). For this thread
-  // we need to access the correct slab. Also compute the z plane that
-  // this slab starts on, and the z limit of this slab (one past the
-  // end of the slab)
-  if ( useBounds )
+    // Compute an offset based on the threadId. The volume will
+    // be broken into large slabs (threadCount slabs). For this thread
+    // we need to access the correct slab. Also compute the z plane that
+    // this slab starts on, and the z limit of this slab (one past the
+    // end of the slab)
+    if ( estimator->GetBoundsClip() )
     {
-    estimator->GetBounds( bounds );
-    x_start = bounds[0];
-    x_limit = bounds[1]+1;
-    y_start = bounds[2];
-    y_limit = bounds[3]+1;
-    z_start = (int)(( (float)thread_id / (float)thread_count ) *
-                    (float)(bounds[5]-bounds[4]+1) ) + bounds[4];
-    z_limit = (int)(( (float)(thread_id + 1) / (float)thread_count ) *
-                    (float)(bounds[5]-bounds[4]+1) ) + bounds[4];
+        int bounds[6];
+        estimator->GetBounds( bounds );
+        xStart = bounds[0];
+        xLimit = bounds[1] + 1;
+        yStart = bounds[2];
+        yLimit = bounds[3] + 1;
+        zStart = static_cast<int>( ( threadId / fThreadCount ) * ( bounds[5] - bounds[4] + 1 ) ) + bounds[4];
+        zLimit = static_cast<int>( ( ( threadId + 1 ) / fThreadCount ) * ( bounds[5] - bounds[4] + 1 ) ) + bounds[4];
     }
-  else
+    else
     {
-    x_start = 0;
-    x_limit = size[0];
-    y_start = 0;
-    y_limit = size[1];
-    z_start = (int)(( (float)thread_id / (float)thread_count ) *
-                    size[2] );
-    z_limit = (int)(( (float)(thread_id + 1) / (float)thread_count ) *
-                    size[2] );
+        xStart = 0;
+        xLimit = size[0];
+        yStart = 0;
+        yLimit = size[1];
+        zStart = static_cast<int>( ( threadId / fThreadCount ) * size[2] );
+        zLimit = static_cast<int>( ( ( threadId + 1 ) / fThreadCount ) * size[2] );
     }
 
-  // Do final error checking on limits - make sure they are all within bounds
-  // of the scalar input
+    // Do final error checking on limits - make sure they are all within bounds
+    // of the scalar input
+    xStart = xStart < 0 ? 0 : xStart;
+    yStart = yStart < 0 ? 0 : yStart;
+    zStart = zStart < 0 ? 0 : zStart ;
+    xLimit = xLimit > size[0] ? size[0] : xLimit;
+    yLimit = yLimit > size[1] ? size[1] : yLimit;
+    zLimit = zLimit > size[2] ? size[2] : zLimit;
 
-  x_start = (x_start<0)?(0):(x_start);
-  y_start = (y_start<0)?(0):(y_start);
-  z_start = (z_start<0)?(0):(z_start);
+    bool useClip = estimator->GetUseCylinderClip(); // casting implícit des d'int
+    int *clip = estimator->GetCircleLimits();
 
-  x_limit = (x_limit>size[0])?(size[0]):(x_limit);
-  y_limit = (y_limit>size[1])?(size[1]):(y_limit);
-  z_limit = (z_limit>size[2])?(size[2]):(z_limit);
+    unsigned short *normalPtr = estimator->EncodedNormals;
+    unsigned char *gradientPtr = estimator->GradientMagnitudes;
 
+    // Compute steps through the volume in x, y, and z
+    int xStep = 1;
+    int yStep = size[0];
+    int zStep = size[0] * size[1];
 
-  direction_encoder = estimator->GetDirectionEncoder();
+// Això és el que hi havia a l'original (vtkFiniteDifferenceGradientEstimator)
+//     // Multiply by the spacing used for normal estimation
+//     xStep *= estimator->SampleSpacingInVoxels;
+//     yStep *= estimator->SampleSpacingInVoxels;
+//     zStep *= estimator->SampleSpacingInVoxels;
 
-  useClip = estimator->GetUseCylinderClip();
-  clip = estimator->GetCircleLimits();
+//     bool zeroPad = estimator->GetZeroPad(); // casting implícit des d'int
 
-  // Loop through all the data and compute the encoded normal and
-  // gradient magnitude for each scalar location
-  for ( z = z_start; z < z_limit; z++ )
+    float aspect[3];
+    estimator->GetInputAspect( aspect );
+
+    /// \todo Això s'hauria de revisar per saber si està bé
+    ///       SampleSpacingInVoxels és la distància entre les mostres agafades, i nosaltres considerem que és 1
+// Això és el que hi havia a l'original (vtkFiniteDifferenceGradientEstimator)
+//     // adjust the aspect
+//     aspect[0] = aspect[0] * 2.0 * estimator->SampleSpacingInVoxels;
+//     aspect[1] = aspect[1] * 2.0 * estimator->SampleSpacingInVoxels;
+//     aspect[2] = aspect[2] * 2.0 * estimator->SampleSpacingInVoxels;
+
+    // adjust the aspect
+    aspect[0] *= 2.0;
+    aspect[1] *= 2.0;
+    aspect[2] *= 2.0;
+
+    bool computeGradientMagnitudes = estimator->GetComputeGradientMagnitudes(); // casting implícit des d'int
+    float scale = estimator->GetGradientMagnitudeScale();
+    float bias = estimator->GetGradientMagnitudeBias();
+
+    // Get the length at or below which normals are considered to be "zero"
+    float zeroNormalThreshold = estimator->GetZeroNormalThreshold();
+
+    vtkDirectionEncoder *directionEncoder = estimator->GetDirectionEncoder();
+
+    // Loop through all the data and compute the encoded normal and
+    // gradient magnitude for each scalar location
+    for ( int z = zStart; z < zLimit; z++ )
     {
-    for ( y = y_start; y < y_limit; y++ )
-      {
-      if ( useClip )
+        for ( int y = yStart; y < yLimit; y++ )
         {
-        xlow = ((clip[2*y])>x_start)?(clip[2*y]):(x_start);
-        xhigh = ((clip[2*y+1]+1)<x_limit)?(clip[2*y+1]+1):(x_limit);
-        }
-      else
-        {
-        xlow = x_start;
-        xhigh = x_limit;
-        }
-      offset = z * size[0] * size[1] + y * size[0] + xlow;
+            int xLow, xHigh;
 
-      // Set some pointers
-      dptr = data_ptr + offset;
-      nptr = estimator->EncodedNormals + offset;
-      gptr = estimator->GradientMagnitudes + offset;
-
-      for ( x = xlow; x < xhigh; x++ )
-        {
-        /// \TODO Optimitzar treient les coses mës enfora encara, precalculant i guardant en taules tot el que es pugui
-        const int RADIUS = radius;
-        float A = 0.0;
-        float B = 0.0;
-        float C = 0.0;
-        float D = 0.0;
-        for ( int ix = -RADIUS; ix <= RADIUS; ix++ )
-        {
-            int xPix = x + ix;
-            if ( xPix < 0 || xPix >= size[0] ) continue;    // v = 0
-            int ix2 = ix * ix;
-            T * dptrPixxstep = dptr + ix * xstep;
-            for ( int iy = -RADIUS; iy <= RADIUS; iy++ )
+            if ( useClip )
             {
-                int yPiy = y + iy;
-                if ( yPiy < 0 || yPiy >= size[1] ) continue;    // v = 0
-                int ix2Piy2 = ix2 + iy * iy;
-                T * dptrPixxstepPiyystep = dptrPixxstep + iy * ystep;
-                for ( int iz = -RADIUS; iz <= RADIUS; iz++ )
-                {
-                    int zPiz = z + iz;
-                    if ( zPiz < 0 || zPiz >= size[2] ) continue;    // v = 0
-                    // distància euclidiana
-                    float w = sqrt( (double)(ix2Piy2 + iz * iz) );
-                    // valor del vòxel (no pot ser 0 perquê ja hem fet les comprovacions abans)
-                    float v = *( dptrPixxstepPiyystep + iz * zstep );
-                    v *= w;
-                    A += v * ix;
-                    B += v * iy;
-                    C += v * iz;
-                    D += v;
-                }
+                xLow = clip[2 * y] > xStart ? clip[2 * y] : xStart;
+                xHigh = clip[2 * y + 1] + 1 < xLimit ? clip[2 * y + 1] + 1 : xLimit;
             }
-        }
-//         for ( int ix = -2; ix <= 2; ix++ )
-//         {
-//             for ( int iy = -2; iy <= 2; iy++ )
-//             {
-//                 for ( int iz = -2; iz <= 2; iz++ )
+            else
+            {
+                xLow = xStart;
+                xHigh = xLimit;
+            }
+
+            int offset = z * size[0] * size[1] + y * size[0] + xLow;
+
+            // Set some pointers
+            T *dPtr = dataPtr + offset;
+            unsigned short *nPtr = normalPtr + offset;
+            unsigned char *gPtr = gradientPtr + offset;
+
+            for ( int x = xLow; x < xHigh; x++ )
+            {
+                /// \TODO Optimitzar treient les coses mës enfora encara, precalculant i guardant en taules tot el que es pugui
+                float A = 0.0, B = 0.0, C = 0.0, D = 0.0;
+
+                for ( int ix = -radius; ix <= radius; ix++ )
+                {
+                    int xPix = x + ix;
+                    if ( xPix < 0 || xPix >= size[0] ) continue;    // v = 0
+                    int ix2 = ix * ix;
+                    T *dPtrPixxStep = dPtr + ix * xStep;
+
+                    for ( int iy = -radius; iy <= radius; iy++ )
+                    {
+                        int yPiy = y + iy;
+                        if ( yPiy < 0 || yPiy >= size[1] ) continue;    // v = 0
+                        int ix2Piy2 = ix2 + iy * iy;
+                        T *dPtrPixxStepPiyyStep = dPtrPixxStep + iy * yStep;
+
+                        for ( int iz = -radius; iz <= radius; iz++ )
+                        {
+                            int zPiz = z + iz;
+                            if ( zPiz < 0 || zPiz >= size[2] ) continue;    // v = 0
+                            // distància euclidiana
+                            float w = sqrt( ix2Piy2 + iz * iz );
+                            // valor del vòxel (no pot ser 0 perquê ja hem fet les comprovacions abans)
+                            float v = *( dPtrPixxStepPiyyStep + iz * zStep );
+                            v *= w;
+                            A += v * ix;
+                            B += v * iy;
+                            C += v * iz;
+                            D += v;
+                        }
+                    }
+                }
+
+//                 for ( int ix = -2; ix <= 2; ix++ )
 //                 {
-//                     // distància euclidiana
-//                     float w = sqrt( ix * ix + iy * iy + iz * iz );
-//                     // valor del vòxel (si és fora de rang considerem 0)
-//                     float v = ( x + ix < 0 || x + ix >= size[0] ||
-//                                 y + iy < 0 || y + iy >= size[1] ||
-//                                 z + iz < 0 || z + iz >= size[2] ) ? 0.0
-//                             : *( dptr + ix * xstep + iy * ystep + iz * zstep );
-//                     v *= w;
-//                     A += v * ix;
-//                     B += v * iy;
-//                     C += v * iz;
-//                     D += v;
+//                     for ( int iy = -2; iy <= 2; iy++ )
+//                     {
+//                         for ( int iz = -2; iz <= 2; iz++ )
+//                         {
+//                             // distància euclidiana
+//                             float w = sqrt( ix * ix + iy * iy + iz * iz );
+//                             // valor del vòxel (si és fora de rang considerem 0)
+//                             float v = ( x + ix < 0 || x + ix >= size[0] ||
+//                                         y + iy < 0 || y + iy >= size[1] ||
+//                                         z + iz < 0 || z + iz >= size[2] ) ? 0.0
+//                                     : *( dPtr + ix * xStep + iy * yStep + iz * zStep );
+//                             v *= w;
+//                             A += v * ix;
+//                             B += v * iy;
+//                             C += v * iz;
+//                             D += v;
+//                         }
+//                     }
 //                 }
-//             }
-//         }
+
 /*
         // Compute the X component
         if ( x < estimator->SampleSpacingInVoxels )
           {
           if ( zeroPad )
             {
-            n[0] = -((float)*(dptr+xstep));
+            n[0] = -((float)*(dPtr+xStep));
             }
           else
             {
-            n[0] = 2.0*((float)*(dptr) - (float)*(dptr+xstep));
+            n[0] = 2.0*((float)*(dPtr) - (float)*(dPtr+xStep));
             }
           }
         else if ( x >= size[0] - estimator->SampleSpacingInVoxels )
           {
           if ( zeroPad )
             {
-            n[0] =  ((float)*(dptr-xstep));
+            n[0] =  ((float)*(dPtr-xStep));
             }
           else
             {
-            n[0] = 2.0*((float)*(dptr-xstep) - (float)*(dptr));
+            n[0] = 2.0*((float)*(dPtr-xStep) - (float)*(dPtr));
             }
           }
         else
           {
-          n[0] = (float)*(dptr-xstep) - (float)*(dptr+xstep);
+          n[0] = (float)*(dPtr-xStep) - (float)*(dPtr+xStep);
           }
 
         // Compute the Y component
@@ -249,27 +238,27 @@ void vtkComputeGradients(
           {
           if ( zeroPad )
             {
-            n[1] = -((float)*(dptr+ystep));
+            n[1] = -((float)*(dPtr+yStep));
             }
           else
             {
-            n[1] = 2.0*((float)*(dptr) - (float)*(dptr+ystep));
+            n[1] = 2.0*((float)*(dPtr) - (float)*(dPtr+yStep));
             }
           }
         else if ( y >= size[1] - estimator->SampleSpacingInVoxels )
           {
           if ( zeroPad )
             {
-            n[1] =  ((float)*(dptr-ystep));
+            n[1] =  ((float)*(dPtr-yStep));
             }
           else
             {
-            n[1] = 2.0*((float)*(dptr-ystep) - (float)*(dptr));
+            n[1] = 2.0*((float)*(dPtr-yStep) - (float)*(dPtr));
             }
           }
         else
           {
-          n[1] = (float)*(dptr-ystep) - (float)*(dptr+ystep);
+          n[1] = (float)*(dPtr-yStep) - (float)*(dPtr+yStep);
           }
 
         // Compute the Z component
@@ -277,84 +266,68 @@ void vtkComputeGradients(
           {
           if ( zeroPad )
             {
-            n[2] = -((float)*(dptr+zstep));
+            n[2] = -((float)*(dPtr+zStep));
             }
           else
             {
-            n[2] = 2.0*((float)*(dptr) - (float)*(dptr+zstep));
+            n[2] = 2.0*((float)*(dPtr) - (float)*(dPtr+zStep));
             }
           }
         else if ( z >= size[2] - estimator->SampleSpacingInVoxels )
           {
           if ( zeroPad )
             {
-            n[2] =  ((float)*(dptr-zstep));
+            n[2] =  ((float)*(dPtr-zStep));
             }
           else
             {
-            n[2] = 2.0*((float)*(dptr-zstep) - (float)*(dptr));
+            n[2] = 2.0*((float)*(dPtr-zStep) - (float)*(dPtr));
             }
           }
         else
           {
-          n[2] = (float)*(dptr-zstep) - (float)*(dptr+zstep);
+          n[2] = (float)*(dPtr-zStep) - (float)*(dPtr+zStep);
           }
 */
-        n[0] = A;
-        n[1] = B;
-        n[2] = C;
 
-        // Take care of the aspect ratio of the data
-        // Scaling in the vtkVolume is isotropic, so this is the
-        // only place we have to worry about non-isotropic scaling.
-        n[0] /= aspect[0];
-        n[1] /= aspect[1];
-        n[2] /= aspect[2];
+                // Take care of the aspect ratio of the data
+                // Scaling in the vtkVolume is isotropic, so this is the
+                // only place we have to worry about non-isotropic scaling.
+                float normal[3];
+                normal[0] = A / aspect[0];
+                normal[1] = B / aspect[1];
+                normal[2] = C / aspect[2];
 
-        // Compute the gradient magnitude
-        t = sqrt( (double)( n[0]*n[0] +
-                            n[1]*n[1] +
-                            n[2]*n[2] ) );
+                // Compute the gradient magnitude
+                float gradientMagnitude = sqrt( normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2] );
 
-        if ( computeGradientMagnitudes )
-          {
-          // Encode this into an 8 bit value
-          gvalue = (t + bias) * scale;
+                if ( computeGradientMagnitudes )
+                {
+                    // Encode this into an 8 bit value
+                    float gValue = ( gradientMagnitude + bias ) * scale;
 
-          if ( gvalue < 0.0 )
-            {
-            *gptr = 0;
+                    if ( gValue < 0.0 ) *gPtr = 0;
+                    else if ( gValue > 255.0 ) *gPtr = 255;
+                    else *gPtr = static_cast<unsigned char>( gValue );
+
+                    gPtr++;
+                }
+
+                // Normalize the gradient direction
+                if ( gradientMagnitude > zeroNormalThreshold )
+                {
+                    normal[0] /= gradientMagnitude;
+                    normal[1] /= gradientMagnitude;
+                    normal[2] /= gradientMagnitude;
+                }
+                else normal[0] = normal[1] = normal[2] = 0.0;
+
+                // Convert the gradient direction into an encoded index value
+                *nPtr = directionEncoder->GetEncodedDirection( normal );
+                nPtr++;
+                dPtr++;
             }
-          else if ( gvalue > 255.0 )
-            {
-            *gptr = 255;
-            }
-          else
-            {
-            *gptr = (unsigned char) gvalue;
-            }
-          gptr++;
-          }
-
-        // Normalize the gradient direction
-        if ( t > zeroNormalThreshold )
-          {
-          n[0] /= t;
-          n[1] /= t;
-          n[2] /= t;
-          }
-        else
-          {
-          n[0] = n[1] = n[2] = 0.0;
-          }
-
-        // Convert the gradient direction into an encoded index value
-        *nptr = direction_encoder->GetEncodedDirection( n );
-        nptr++;
-        dptr++;
-
         }
-      }
     }
 }
 
