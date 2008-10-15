@@ -95,6 +95,16 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
 
 //     bool zeroPad = estimator->GetZeroPad(); // casting implícit des d'int
 
+    // Precàlcul de distàncies euclidianes
+    int diameter = 2 * radius + 1;
+    int maskSize = diameter * diameter * diameter;
+    float w[maskSize];
+
+    for ( int ix = -radius, iw = 0; ix <= radius; ix++ )
+        for ( int iy = -radius; iy <= radius; iy++ )
+            for ( int iz = -radius; iz <= radius; iz++, iw++ )
+                w[iw] = sqrt( ix * ix + iy * iy + iz * iz );
+
     float aspect[3];
     estimator->GetInputAspect( aspect );
 
@@ -151,29 +161,25 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
                 /// \TODO Optimitzar treient les coses mës enfora encara, precalculant i guardant en taules tot el que es pugui
                 float A = 0.0, B = 0.0, C = 0.0, D = 0.0;
 
-                for ( int ix = -radius; ix <= radius; ix++ )
+                for ( int ix = -radius, iw = 0; ix <= radius; ix++ )
                 {
                     int xPix = x + ix;
                     if ( xPix < 0 || xPix >= size[0] ) continue;    // v = 0
-                    int ix2 = ix * ix;
                     T *dPtrPixxStep = dPtr + ix * xStep;
 
                     for ( int iy = -radius; iy <= radius; iy++ )
                     {
                         int yPiy = y + iy;
                         if ( yPiy < 0 || yPiy >= size[1] ) continue;    // v = 0
-                        int ix2Piy2 = ix2 + iy * iy;
                         T *dPtrPixxStepPiyyStep = dPtrPixxStep + iy * yStep;
 
-                        for ( int iz = -radius; iz <= radius; iz++ )
+                        for ( int iz = -radius; iz <= radius; iz++, iw++ )
                         {
                             int zPiz = z + iz;
                             if ( zPiz < 0 || zPiz >= size[2] ) continue;    // v = 0
-                            // distància euclidiana
-                            float w = sqrt( ix2Piy2 + iz * iz );
                             // valor del vòxel (no pot ser 0 perquê ja hem fet les comprovacions abans)
                             float v = *( dPtrPixxStepPiyyStep + iz * zStep );
-                            v *= w;
+                            v *= w[iw]; // w[iw] = distància euclidiana
                             A += v * ix;
                             B += v * iy;
                             C += v * iz;
