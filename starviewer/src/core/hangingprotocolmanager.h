@@ -8,7 +8,7 @@
 #define UDGHANGINGPROTOCOLMANAGER_H
 
 #include <QObject>
-#include <QMultiMap>
+#include <QMap>
 
 namespace udg {
 
@@ -50,12 +50,12 @@ private:
     bool isValidSerie( Series * serie, HangingProtocolImageSet * imageSet );
 
 	/// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
-	void applyDisplayTransformations( Patient * patient, Series * serie, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet );
+	void applyDisplayTransformations( Patient * patient, Series * serie,  int imageNumber, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet );
 
 private:
 
 	/// Map per guardar les operacions de rotacio i flip per aplicar a les imatges. Valors: String posicions, nombre de rotacions, nombre flips
-	//QMultiMap<QString, int, int> m_operationsMap;
+	QMap<QString, QString> m_operationsMap;
 
 };
 

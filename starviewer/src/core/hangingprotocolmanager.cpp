@@ -29,30 +29,40 @@ namespace udg {
 HangingProtocolManager::HangingProtocolManager(QObject *parent)
  : QObject( parent )
 {
-	//m_operationsMap.insert("AFAS", 0, 1); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
-	//m_operationsMap.insert("AFPI", 2, 1); m_operationsMap.insert("AFPS", 2, 0); m_operationsMap.insert("AFIA", 3, 0);
-	//m_operationsMap.insert("AFSA", 3, 1); m_operationsMap.insert("AFIP", 1, 0); m_operationsMap.insert("AFSP", 3, 1);
+
+	// Mappeig de les operacions per la vista sagital
+	m_operationsMap.insert("A\\F-A\\H", "0,1"); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
+	m_operationsMap.insert("A\\F-P\\F", "2,1"); m_operationsMap.insert("A\\F-P\\H", "2,0"); m_operationsMap.insert("A\\F-I\\A", "3,0");
+	m_operationsMap.insert("A\\F-F\\A", "3,1"); m_operationsMap.insert("A\\F-F\\P", "1,0"); m_operationsMap.insert("A\\F-F\\P", "3,1");
 	
-	//m_operationsMap.insert("AHAI", 0, 1); m_operationsMap.insert("AHPI", 2, 0); m_operationsMap.insert("AHPS", 2, 1);
-	//m_operationsMap.insert("AHIA", 1, 0); m_operationsMap.insert("AHSA", 3, 1);	m_operationsMap.insert("AHIP", 1, 1);
-	//m_operationsMap.insert("AHSP", 3, 0);
-	//
-	//m_operationsMap.insert("PFAI", 2, 1); m_operationsMap.insert("PFAS", 2, 0);	m_operationsMap.insert("PFPS", 0, 1);
-	//m_operationsMap.insert("PFIA", 3, 0); m_operationsMap.insert("PFSA", 1, 1);	m_operationsMap.insert("PFIP", 3, 1);
-	//m_operationsMap.insert("PFSP", 1, 0);
-	//
-	//m_operationsMap.insert("AFAS", 0, 1); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
-	//m_operationsMap.insert("AFPI", 2, 1);
-	//m_operationsMap.insert("AFPS", 2, 0);
-	//m_operationsMap.insert("AFIA", 3, 0);
-	//m_operationsMap.insert("AFSA", 3, 1);
-	//m_operationsMap.insert("AFIP", 1, 0);
-	//m_operationsMap.insert("AFSP", 3, 1);
+	m_operationsMap.insert("A\\H-A\\F", "0,1"); m_operationsMap.insert("A\\H-P\\F", "2,0"); m_operationsMap.insert("A\\H-P\\H", "2,1");
+	m_operationsMap.insert("A\\H-F\\A", "1,0"); m_operationsMap.insert("A\\H-H\\A", "3,1"); m_operationsMap.insert("A\\H-F\\P", "1,1");
+	m_operationsMap.insert("A\\H-H\\P", "3,0");
+	
+	m_operationsMap.insert("P\\F-A\\F", "2,1"); m_operationsMap.insert("P\\F-A\\H", "2,0"); m_operationsMap.insert("P\\F-P\\H", "0,1");
+	m_operationsMap.insert("P\\F-F\\A", "3,0"); m_operationsMap.insert("P\\F-H\\A", "1,1"); m_operationsMap.insert("P\\F-F\\P", "3,1");
+	m_operationsMap.insert("P\\F-H\\P", "1,0");
+	
+	m_operationsMap.insert("P\\H-A\\F", "2,0"); m_operationsMap.insert("P\\H-A\\H", "2,1"); m_operationsMap.insert("P\\H-P\\F", "0,1");
+	m_operationsMap.insert("P\\H-F\\A", "1,1"); m_operationsMap.insert("P\\H-H\\A", "3,0"); m_operationsMap.insert("P\\H-F\\P", "1,0");
+	m_operationsMap.insert("P\\H-H\\P", "3,1");
 	
 
-	//m_operationsMap.insert("",,);
-	//m_operationsMap.insert("",,);
-	//m_operationsMap.insert("",,);
+	m_operationsMap.insert("F\\A-A\\F", "3,1"); m_operationsMap.insert("F\\A-A\\H", "3,0"); m_operationsMap.insert("F\\A-P\\F", "1,0"); 
+	m_operationsMap.insert("F\\A-P\\H", "1,1"); m_operationsMap.insert("F\\A-H\\A", "2,1"); m_operationsMap.insert("F\\A-F\\P", "0,1");
+	m_operationsMap.insert("F\\A-H\\P", "2,0");
+
+	m_operationsMap.insert("H\\A-A\\F", "3,0"); m_operationsMap.insert("H\\A-A\\H", "3,1"); m_operationsMap.insert("H\\A-P\\F", "1,1");
+	m_operationsMap.insert("H\\A-P\\H", "1,0"); m_operationsMap.insert("H\\A-F\\A", "2,1"); m_operationsMap.insert("H\\A-F\\P", "2,0");
+	m_operationsMap.insert("H\\A-H\\P", "0,1");
+
+	m_operationsMap.insert("F\\P-A\\F", "1,0"); m_operationsMap.insert("F\\P-A\\H", "1,1"); m_operationsMap.insert("F\\P-P\\F", "3,1");
+	m_operationsMap.insert("F\\P-P\\H", "3,0"); m_operationsMap.insert("F\\P-F\\A", "0,1"); m_operationsMap.insert("F\\P-H\\A", "2,0");
+	m_operationsMap.insert("F\\P-H\\P", "2,1");
+
+	m_operationsMap.insert("S\\P-A\\F", "3,1"); m_operationsMap.insert("S\\P-A\\H", "1,0"); m_operationsMap.insert("S\\P-P\\F", "3,0");
+	m_operationsMap.insert("S\\P-P\\S", "1,1"); m_operationsMap.insert("S\\P-F\\A", "2,0"); m_operationsMap.insert("S\\P-H\\A", "0,1");
+	m_operationsMap.insert("S\\P-F\\P", "2,1");
 
 }
 
@@ -73,6 +83,7 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
 	int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
     int hangingProtocolNumber;
     int imageSetNumber;
+	int displaySetNumber;
     HangingProtocolImageSet * imageSet;
     HangingProtocolDisplaySet *displaySet;
     Series * serie;
@@ -128,23 +139,28 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
 	// Aplicar el hanging protocol trobat, si és que se n'ha trobat algun
 	if( bestHangingProtocol )
 	{
-		imageSetNumber = 1;
-		for( imageSetNumber = 0; imageSetNumber < bestHangingProtocol->getNumberOfImageSets(); imageSetNumber ++)
+		for( displaySetNumber = 0; displaySetNumber < bestHangingProtocol->getNumberOfDisplaySets(); displaySetNumber ++)
 		{
 			serie = NULL;
-			imageSet = hangingPotocol->getImageSet( imageSetNumber + 1 ); // Els id's comencen a 1
+			//imageSet = hangingPotocol->getImageSet( imageSetNumber + 1 ); // Els id's comencen a 1
+			displaySet = hangingPotocol->getDisplaySet( displaySetNumber + 1 );
+			imageSet = hangingPotocol->getImageSet( displaySet->getImageSetNumber() );
 			serie = imageSet->getSeriesToDisplay();
-			displaySet = hangingPotocol->getDisplaySetOfImageSet( imageSet->getIdentifier() );
+			//displaySet = hangingPotocol->getDisplaySetOfImageSet( imageSet->getIdentifier() );
 			viewerWidget = layout->addViewer( displaySet->getPosition() );
 			
 			if( serie ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
 			{			
 				viewerWidget->setInput( serie->getFirstVolume() );
-				applyDisplayTransformations( patient, serie, viewerWidget, displaySet);
 
 				if( imageSet->getTypeOfItem() == "image" )
 				{
 					viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
+					applyDisplayTransformations( patient, serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+				}
+				else
+				{
+					applyDisplayTransformations( patient, serie, 0, viewerWidget, displaySet);
 				}
 			}
 		}
@@ -287,7 +303,7 @@ bool HangingProtocolManager::isValidSerie( Series * serie, HangingProtocolImageS
     return valid;
 }
 
-void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Series * serie, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet )
+void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Series * serie, int imageNumber, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet )
 {
 	QString rowsImage;
 	QString columnsImage;
@@ -296,7 +312,7 @@ void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Ser
 	QList<QString> listOfDirections;
 
 	QString patientDisplayOrientation = displaySet->getPatientOrientation();
-	QString patientOrientation = (serie->getImages()[0])->getPatientOrientation();
+	/*QString patientOrientation = (serie->getImages()[0])->getPatientOrientation();
 
 	listOfDirections = patientOrientation.split(",");
 	if( listOfDirections.size() == 2 )
@@ -315,8 +331,48 @@ void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Ser
 	if( (rowsImage != "") && (rowsDisplay != "") && ( (rowsImage == "P" && rowsDisplay == "A") || (rowsImage == "A" && rowsDisplay == "P") ) )
 	{
 		viewer->getViewer()->horizontalFlip();
-	}
+	}*/
 
+
+	DICOMTagReader dicomReader;
+	QString patientOrientation = 0;
+	int i;
+	QList<QString> listOfOperations;
+	QString operations = 0;
+	int rotations;
+	int flips;
+
+	bool ok = dicomReader.setFile( serie->getImages()[imageNumber]->getPath() );
+	if( ok && (patientDisplayOrientation != "" ) )
+	{
+		patientOrientation = dicomReader.getAttributeByName( DCM_PatientOrientation );
+		if( patientOrientation != 0 )
+		{
+			patientOrientation.truncate(3);
+			patientOrientation.append("-").append(patientDisplayOrientation);
+			QString mapIndex( patientOrientation );
+			operations = m_operationsMap.value( mapIndex );
+
+			DEBUG_LOG( tr("\n\nVALOR A BUSCAR AL MAP: %1\n\n").arg( mapIndex) );
+
+			if( operations != 0 )
+			{
+				listOfOperations = operations.split(",");
+				rotations = listOfOperations[0].toInt();
+				flips = listOfOperations[1].toInt();
+
+				for( i = 0; i < rotations; i++ ) // Totes les rotacions a realitzar
+				{
+					viewer->getViewer()->rotateClockWise();
+				}
+
+				for( i = 0; i < flips; i++ ) // Totes les rotacions a realitzar
+				{
+					viewer->getViewer()->verticalFlip();
+				}
+			}
+		}
+	}
 }
 
 bool HangingProtocolManager::isValidImage( Image * image, HangingProtocolImageSet * imageSet )
@@ -349,8 +405,6 @@ bool HangingProtocolManager::isValidImage( Image * image, HangingProtocolImageSe
 			{
 				if( ! dicomReader.getAttributeByName( DCM_PatientOrientation ).contains( restriction.valueRepresentation ) )
 					valid = false;
-
-				DEBUG_LOG( tr("A l'image set %1, vull la restriccio: %2 i és %3, per tant %4").arg(imageSet->getIdentifier()).arg(restriction.valueRepresentation).arg( dicomReader.getAttributeByName( DCM_PatientOrientation ) ).arg( valid ) );
 			}
 			i++;
 		}
