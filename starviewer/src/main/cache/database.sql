@@ -58,7 +58,7 @@ CREATE TABLE Image
   SOPInstanceUID		TEXT PRIMARY KEY,
   StudyInstanceUID		TEXT,
   SeriesInstanceUID		TEXT,
-  InstanceNumber		INTEGER,
+  InstanceNumber		TEXT,
   ImageOrientationPatient	TEXT,
   PatientOrientation		TEXT,
   PixelSpacing			TEXT,
