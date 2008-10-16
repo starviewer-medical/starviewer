@@ -66,6 +66,11 @@ int HangingProtocol::getNumberOfImageSets()
     return m_listOfImageSets.size();
 }
 
+int HangingProtocol::getNumberOfDisplaySets()
+{
+    return m_listOfDisplaySets.size();
+}
+
 HangingProtocolImageSet * HangingProtocol::getImageSet( int identificador )
 {
     HangingProtocolImageSet * imageSet = 0;
@@ -84,6 +89,26 @@ HangingProtocolImageSet * HangingProtocol::getImageSet( int identificador )
     }
 
     return imageSet;
+}
+
+HangingProtocolDisplaySet * HangingProtocol::getDisplaySet( int identificador )
+{
+    HangingProtocolDisplaySet * displaySet = 0;
+    bool found = false;
+    int i = 0;
+    int numberOfDisplaySets = m_listOfDisplaySets.size();
+
+    while( !found && i < numberOfDisplaySets )
+    {
+        if( m_listOfDisplaySets.value( i )->getIdentifier() == identificador )
+        {
+            found = true;
+            displaySet = m_listOfDisplaySets.value( i );
+        }
+        i++;
+    }
+
+    return displaySet;
 }
 
 HangingProtocolDisplaySet * HangingProtocol::getDisplaySetOfImageSet( int numberOfImageSet )
