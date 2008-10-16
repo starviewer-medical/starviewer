@@ -98,14 +98,14 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
     // Precàlcul de distàncies euclidianes i offsets dins la màscara
     int diameter = 2 * radius + 1, diameter2 = diameter * diameter;
     int maskSize = diameter * diameter * diameter;
-    float w[maskSize];
+    float *w = new float[maskSize];
     //int maskOffset[maskSize];
 
     for ( int ix = -radius, im = 0; ix <= radius; ix++ )
         for ( int iy = -radius; iy <= radius; iy++ )
             for ( int iz = -radius; iz <= radius; iz++, im++ )
             {
-                w[im] = sqrt( ix * ix + iy * iy + iz * iz );
+                w[im] = sqrt( (float)ix * ix + iy * iy + iz * iz );
                 //maskOffset[im] = ix * xStep + iy * yStep + iz * zStep;    // amb això va un 11% més lent (???)
             }
 
