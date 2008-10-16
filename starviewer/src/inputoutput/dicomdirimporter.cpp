@@ -56,7 +56,7 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     
     localDatabaseManagerThreaded.start();
     fillersThread.start();
-    
+
     bool ok = importStudy( studyUID , seriesUID , sopInstanceUID );
 
     if ( ok )
@@ -150,11 +150,11 @@ bool DICOMDIRImporter::importImage(DICOMImage image)
 
     cacheImagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
 
-    if ( QFile::exists( image.getImagePath() ) )//comprovem si la imatge a importar existeix
+    if (QFile::exists(image.getImagePath()))//comprovem si la imatge a importar existeix
     {
         dicomdirImagePath = image.getImagePath();
     }
-    else if ( QFile::exists( image.getImagePath().toLower() ) )
+    else if (QFile::exists(image.getImagePath().toLower()))
     {
         /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules
            com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre 
@@ -168,18 +168,45 @@ bool DICOMDIRImporter::importImage(DICOMImage image)
         return false;
     }
 
-    if( QFile::copy( dicomdirImagePath , cacheImagePath ) )
+    if(!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
     {
-        DICOMTagReader *dicomTagReader = new DICOMTagReader(cacheImagePath);
-        emit imageImportedToDisk(dicomTagReader);
+        //No s'ha pogut copiar comprovem, si és que el fitxer ja existeix
+        if (QFile::exists(cacheImagePath))
+        {
+            //El fitxer ja existeix l'itentem esborrar
+            if (QFile::remove(cacheImagePath))
+            {
+                //Hem esborrar el fitxer que ja existia, ara l'intentem copiar
+                if(!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
+                {
+                    ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, el fitxer ja existia al destí, s'ha esborrat amb èxit, però alhora de copiar-lo ha fallat l'operació");
+                    return false;
+                }
+            }
+            else 
+            {
+                ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, ja que el fitxer ja existeix al destí, s'ha intentat esborrar el fitxer local però ha fallat, podria ser que no tinguis permisos d'escriptura al direcctori destí");
+                return false;
+            }
+        }
+        else
+        {
+            ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, podria ser que no tinguis permisos en el directori destí");
+            return false;
+        }
     }
-    else
-    {
-        // TODO s'hauria de forçar la sobreescriptura, ara de moment no ho tractem, però la imatge bona hauria de ser la del dicomdir no la de la cache
-        //ERROR_LOG("El fitxer: <" + image.getImagePath() + "> no s'ha pogut copiar a <" + imagePath + ">, podria ser que ja existeix amb aquest mateix nom, o que no tinguis permisos en el directori destí");
-    }
-
     return true;
+}
+
+bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QString localImagePath)
+{
+    if(QFile::copy(dicomdirImagePath, localImagePath))
+    {
+        DICOMTagReader *dicomTagReader = new DICOMTagReader(localImagePath);
+        emit imageImportedToDisk(dicomTagReader);
+        return true;
+    }
+    else return false;
 }
 
 }
