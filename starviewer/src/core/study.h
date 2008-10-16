@@ -61,6 +61,9 @@ public:
     void setHeight( double height );
     double getHeight() const;
 
+    ///Permet afegir una modalitat a l'estudi
+    void addModality(QString modality);
+
     /**
      * Retorna les modalitats que conté l'estudi.
      * @return la llista de modalitats en un string delimitades pel caràcter '/'

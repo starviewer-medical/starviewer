@@ -132,6 +132,7 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     study->setPatientAge(QString(reply[3 + row * columns]));
     study->setWeight(QString(reply[4 + row * columns]).toDouble());
     study->setHeight(QString(reply[5 + row * columns]).toDouble());
+    study->addModality(reply[6 + row * columns]);
     study->setDate(reply[7 + row * columns]);
     study->setTime(reply[8 + row * columns]);
     study->setAccessionNumber(reply[9 + row * columns]);
