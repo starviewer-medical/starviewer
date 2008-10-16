@@ -14,6 +14,7 @@
 #include "patient.h"
 #include "imageplane.h"
 #include "mathtools.h"
+#include "dicomtagreader.h"
 //thickslab
 #include "vtkProjectionImageFilter.h"
 
@@ -470,13 +471,11 @@ void Q2DViewer::refreshAnnotations()
 
     if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
 	{
-        //m_serieInformationAnnotation->VisibilityOn();
 		m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
         m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
 	}
     else
 	{
-        //m_serieInformationAnnotation->VisibilityOff();
 		m_cornerAnnotations->SetText( 3, "" );
         m_cornerAnnotations->SetText( 1, "" );
 	}
@@ -1796,26 +1795,66 @@ void Q2DViewer::updatePatientAnnotationInformation()
 {
     if( m_mainVolume )
     {
+		Patient *patient = m_mainVolume->getPatient();
+		Study *study = m_mainVolume->getStudy();
+		Series *series = m_mainVolume->getSeries();
         // informació fixa
         m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8")
-                    .arg( m_mainVolume->getSeries()->getInstitutionName() )
-					.arg( m_mainVolume->getPatient()->getFullName() )
-					.arg( m_mainVolume->getStudy()->getPatientAge() )
-                    .arg( m_mainVolume->getPatient()->getSex() )
-                    .arg( m_mainVolume->getPatient()->getID() )
-                    .arg( m_mainVolume->getStudy()->getAccessionNumber() )
-                    .arg( m_mainVolume->getStudy()->getDateAsString() )
-                    .arg( m_mainVolume->getStudy()->getTimeAsString() ); // TODO seria més correcte mostrar l'hora de la sèrie i inclús de la imatge
-
-
-        // Si protocol i descripció coincideixen posarem el contingut de protocol
-        // Si són diferents, els fusionarem
-        QString protocolName, description;
-        protocolName = m_mainVolume->getSeries()->getProtocolName();
-        description = m_mainVolume->getSeries()->getDescription();
-        m_lowerRightText = protocolName;
-        if( description != protocolName )
-            m_lowerRightText += "\n" + description;
+                    .arg( series->getInstitutionName() )
+					.arg( patient->getFullName() )
+					.arg( study->getPatientAge() )
+                    .arg( patient->getSex() )
+                    .arg( patient->getID() )
+                    .arg( study->getAccessionNumber() )
+                    .arg( study->getDateAsString() )
+                    .arg( study->getTimeAsString() ); // TODO seria més correcte mostrar l'hora de la sèrie i inclús de la imatge
+	
+		if( series->getModality() == "MG" )
+		{
+			Image *image = getCurrentDisplayedImage();
+			if( image )
+			{
+				DICOMTagReader reader( image->getPath() );
+				m_lowerRightText = reader.getAttributeByName( DCM_ImageLaterality ) + " ";
+				QString projection = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning ).at(0);
+				/// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
+				// TODO tenir-ho carregat en arxius, maps, etc..
+				// TODO fer servir millor els codis en compte dels "code meanings" podria resultar més segur
+				if( projection == "medio-lateral" )
+					m_lowerRightText += "ML";
+				else if( projection == "medio-lateral oblique" )
+					m_lowerRightText += "MLO";
+				else if( projection == "latero-medial" )
+					m_lowerRightText += "LM";
+				else if( projection == "latero-medial oblique" )
+					m_lowerRightText += "LMO";
+				else if( projection == "cranio-caudal" )
+					m_lowerRightText += "CC";
+				else if( projection == "caudo-cranial (from below)" )
+					m_lowerRightText += "FB";
+				else if( projection == "superolateral to inferomedial oblique" )
+					m_lowerRightText += "SIO";
+				else if( projection == "exaggerated cranio-caudal" )
+					m_lowerRightText += "XCC";
+				else if( projection == "cranio-caudal exaggerated laterally" )
+					m_lowerRightText += "XCCL";
+				else if( projection == "cranio-caudal exaggerated medially" )
+					m_lowerRightText += "XCCM";
+			}
+			else
+				m_lowerRightText.clear();
+		}
+		else
+		{
+			// Si protocol i descripció coincideixen posarem el contingut de protocol
+			// Si són diferents, els fusionarem
+			QString protocolName, description;
+			protocolName = m_mainVolume->getSeries()->getProtocolName();
+			description = m_mainVolume->getSeries()->getDescription();
+			m_lowerRightText = protocolName;
+			if( description != protocolName )
+				m_lowerRightText += "\n" + description;
+		}
 
         m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
         m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
@@ -1830,6 +1869,10 @@ void Q2DViewer::updatePatientAnnotationInformation()
 void Q2DViewer::updateSliceAnnotationInformation()
 {
     Q_ASSERT( m_cornerAnnotations );
+	Q_ASSERT( m_mainVolume );
+	
+	if( m_mainVolume->getSeries()->getModality() == "MG" )
+		m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
 
     int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
     if( m_numberOfPhases > 1 )
@@ -1849,11 +1892,28 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
     if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // si les annotacions estan habilitades
     {
         QString lowerLeftText;
+		// TODO ara només tenim en compte de posar l'slice location si estem en la vista "original"
+		if( m_lastView == Q2DViewer::Axial ) 
+		{
+			Image *image = getCurrentDisplayedImage();
+			if( image )
+			{
+				QString location = image->getSliceLocation();
+				if( !location.isEmpty() )
+				{
+					if( location.indexOf('.') != -1 )
+						location = location.left( location.indexOf('.') + 3 );
+					
+					lowerLeftText += tr("Loc: %1\n").arg( location );
+				}
+			}
+		}
+
         if( maxPhase > 1 ) // tenim fases
         {
             if( m_slabThickness > 1 )
             {
-                lowerLeftText = tr("Slice: %1-%2/%3 Phase: %4/%5")
+                lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5")
                         .arg( currentSlice )
                         .arg( currentSlice+m_slabThickness-1 )
                         .arg( maxSlice )
@@ -1862,7 +1922,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
             }
             else
             {
-                lowerLeftText = tr("Slice: %1/%2 Phase: %3/%4")
+                lowerLeftText += tr("Slice: %1/%2 Phase: %3/%4")
                         .arg( currentSlice )
                         .arg( maxSlice )
                         .arg( currentPhase )
@@ -1873,14 +1933,14 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
         {
             if( m_slabThickness > 1 )
             {
-                lowerLeftText = tr("Slice: %1-%2/%3")
+                lowerLeftText += tr("Slice: %1-%2/%3")
                         .arg( currentSlice )
                         .arg( currentSlice+m_slabThickness-1 )
                         .arg( maxSlice );
             }
             else
             {
-                lowerLeftText = tr("Slice: %1/%2")
+                lowerLeftText += tr("Slice: %1/%2")
                         .arg( currentSlice )
                         .arg( maxSlice );
             }
@@ -1940,7 +2000,7 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
     if( enable )
         m_enabledAnnotations = m_enabledAnnotations | annotation;
     else
-        m_enabledAnnotations =  m_enabledAnnotations & ~annotation ;
+        m_enabledAnnotations =  m_enabledAnnotations & ~annotation;
 
     refreshAnnotations();
     this->refresh();
