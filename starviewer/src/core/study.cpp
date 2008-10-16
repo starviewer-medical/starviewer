@@ -101,6 +101,11 @@ double Study::getHeight() const
     return m_height;
 }
 
+void Study::addModality(QString modality)
+{
+    m_modalities << modality;
+}
+
 QString Study::getModalitiesAsSingleString() const
 {
     return m_modalities.join("/");
