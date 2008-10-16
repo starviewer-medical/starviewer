@@ -45,6 +45,9 @@ private:
     bool importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
     bool importImage(DICOMImage image);
+
+    ///Copia al disc dur una imatge del dicomdir
+    bool copyDicomdirImageToLocal(QString dicomdirImagePath, QString localImagePath);
 };
 
 }
