@@ -115,7 +115,8 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
 
     m_patientFillerInput->initializeAllLabels();
 
-    emit progress(m_imageCounter++);
+    m_imageCounter++;
+    emit progress(m_imageCounter);
 }
 
 void PatientFiller::finishDICOMFilesProcess()
