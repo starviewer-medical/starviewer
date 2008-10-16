@@ -93,6 +93,7 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
 //     yStep *= estimator->SampleSpacingInVoxels;
 //     zStep *= estimator->SampleSpacingInVoxels;
 
+    /// \todo El zeroPad s'hauria de fer servir. De moment actuem sempre com si fós cert.
 //     bool zeroPad = estimator->GetZeroPad(); // casting implícit des d'int
 
     // Precàlcul de distàncies euclidianes i offsets dins la màscara
@@ -105,7 +106,7 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
         for ( int iy = -radius; iy <= radius; iy++ )
             for ( int iz = -radius; iz <= radius; iz++, im++ )
             {
-                w[im] = sqrt( (float)ix * ix + iy * iy + iz * iz );
+                w[im] = sqrt( static_cast<float>( ix * ix + iy * iy + iz * iz ) );
                 //maskOffset[im] = ix * xStep + iy * yStep + iz * zStep;    // amb això va un 11% més lent (???)
             }
 
@@ -348,6 +349,8 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
             }
         }
     }
+
+    delete[] w;
 }
 
 // Construct a vtk4DLinearRegressionGradientEstimator
