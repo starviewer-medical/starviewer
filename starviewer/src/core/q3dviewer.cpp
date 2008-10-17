@@ -275,10 +275,13 @@ void Q3DViewer::setInput( Volume* volume )
     // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
     //\TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet 702)
     ImagePlane * currentPlane = new ImagePlane();
-    currentPlane->fillFromImage( m_mainVolume->getImage(0,0) ); 
+    currentPlane->fillFromImage( m_mainVolume->getImage(0,0) );
     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
     currentPlane->getRowDirectionVector( currentPlaneRowVector );
     currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
+
+    DEBUG_LOG( QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
+    DEBUG_LOG( QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
 
     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
     projectionMatrix->Identity();
@@ -473,6 +476,11 @@ void Q3DViewer::renderRayCasting()
 
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction( new TransferFunction( *transferFunction ) );
+    delete transferFunction;
+
     m_vtkWidget->GetRenderWindow()->Render();
 }
 
@@ -483,6 +491,11 @@ void Q3DViewer::renderRayCastingShading()
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
+
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction( new TransferFunction( *transferFunction ) );
+    delete transferFunction;
 
     m_vtkWidget->GetRenderWindow()->Render();
 }
@@ -503,6 +516,11 @@ void Q3DViewer::renderRayCastingObscurance()
     m_volumeRayCastVoxelShaderFunction->RemoveVoxelShader( 0 );
     if ( m_volumeRayCastVoxelShaderFunction->IndexOfVoxelShader( m_ambientVoxelShader ) < 0 )
         m_volumeRayCastVoxelShaderFunction->InsertVoxelShader( 0, m_ambientVoxelShader );
+
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction( new TransferFunction( *transferFunction ) );
+    delete transferFunction;
 
     m_vtkWidget->GetRenderWindow()->Render();
 }
@@ -535,51 +553,60 @@ void Q3DViewer::renderRayCastingShadingObscurance()
                                                                gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
                                                                gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
 
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction( new TransferFunction( *transferFunction ) );
+    delete transferFunction;
+
     m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::renderMIP3D()
 {
-    if( rescale() )
-    {
-        // quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
+    // quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
 //         m_orientationMarker->disable();
-        //================================================================================================
-        // Create a transfer function mapping scalar value to opacity
-        // assignem una rampa d'opacitat total per valors alts i nula per valors petits
-        // després en l'escala de grisos donem un  valor de gris constant ( blanc )
+    //================================================================================================
+    // Create a transfer function mapping scalar value to opacity
+    // assignem una rampa d'opacitat total per valors alts i nula per valors petits
+    // després en l'escala de grisos donem un  valor de gris constant ( blanc )
 
-        //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
+    //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
 
-        // Creem la funció de transferència de l'opacitat
-        m_transferFunction->addPointToOpacity( 20, .0 );
-        m_transferFunction->addPointToOpacity( 255, 1. );
+    // Creem la funció de transferència de l'opacitat
+//     m_transferFunction->addPointToOpacity( 20, .0 );
+//     m_transferFunction->addPointToOpacity( 255, 1. );
+    TransferFunction mipTransferFunction;
+    mipTransferFunction.addPointToOpacity( 20.0, 0.0 );
+    mipTransferFunction.addPointToOpacity( 255.0, 1.0 );
 
-        // Creem la funció de transferència de colors
-        // Create a transfer function mapping scalar value to color (grey)
-        vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
-        grayTransferFunction->AddSegment( 0 , 0.0 , 255 , 1.0 );
+    // Creem la funció de transferència de colors
+    // Create a transfer function mapping scalar value to color (grey)
+    vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
+    grayTransferFunction->AddSegment( 0 , 0.0 , 255 , 1.0 );
 
-        m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
-        m_volumeProperty->SetColor( grayTransferFunction /*m_transferFunction->getColorTransferFunction()*/ );
-        m_volumeProperty->ShadeOff();
+//     m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
+    m_volumeProperty->SetScalarOpacity( mipTransferFunction.getOpacityTransferFunction() );
+    m_volumeProperty->SetColor( grayTransferFunction /*m_transferFunction->getColorTransferFunction()*/ );
+    m_volumeProperty->ShadeOff();
 
-        // creem la funció del raig MIP, en aquest cas maximitzem l'opacitat, si fos Scalar value, ho faria pel valor
-        vtkVolumeRayCastMIPFunction* mipFunction = vtkVolumeRayCastMIPFunction::New();
-        mipFunction->SetMaximizeMethodToOpacity();
+    grayTransferFunction->Delete();
+
+    // creem la funció del raig MIP, en aquest cas maximitzem l'opacitat, si fos Scalar value, ho faria pel valor
+    vtkVolumeRayCastMIPFunction* mipFunction = vtkVolumeRayCastMIPFunction::New();
+    mipFunction->SetMaximizeMethodToOpacity();
 
 //         vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
-        vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
+//     vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
 
-        volumeMapper->SetVolumeRayCastFunction( mipFunction );
-        volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+    m_volumeMapper->SetVolumeRayCastFunction( mipFunction );
+//     volumeMapper->SetInput( m_imageCaster->GetOutput()  );
 //         volumeMapper->SetGradientEstimator( gradientEstimator );
 
-        m_vtkVolume->SetMapper( volumeMapper );
-        m_renderer->Render();
-    }
-    else
-        DEBUG_LOG( "No es pot fer render per MIP, no s'ha proporcionat cap volum d'entrada" );
+//     m_vtkVolume->SetMapper( volumeMapper );
+
+    mipFunction->Delete();
+
+    m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::renderContouring()
