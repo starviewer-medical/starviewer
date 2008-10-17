@@ -1020,8 +1020,8 @@ void QueryScreen::deleteSelectedStudiesInCache()
                     localDatabaseManager.del(studyUID);
                     if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    break;
 
-                    m_studyTreeWidgetCache->removeStudy( studyUID );
                     m_seriesListWidgetCache->clear();
+                    m_studyTreeWidgetCache->removeStudy( studyUID );
                 }
             }
 
