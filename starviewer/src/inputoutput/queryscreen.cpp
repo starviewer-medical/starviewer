@@ -1414,6 +1414,13 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
                          "\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
+       case QExecuteOperationThread::PatientInconsistent :
+            message = tr("Please review the operation list screen, ");
+            message += tr("an error ocurred and some operations may have failed.");
+            message += tr("\nStarviewer has not be capable of read correctly dicom information of the study.");
+            message += tr("\n\nPlease contact with starviewer team");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
         default:
             message = tr("Please review the operation list screen, ");
             message += tr("an unknow error has ocurred.");

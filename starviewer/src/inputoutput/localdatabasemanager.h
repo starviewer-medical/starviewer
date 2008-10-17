@@ -31,7 +31,7 @@ class LocalDatabaseManager : public QObject
 Q_OBJECT
 public:
     ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
-    enum LastError{Ok, DatabaseLocked, DatabaseCorrupted, SyntaxErrorSQL, DeletingFilesError, DatabaseError};
+    enum LastError{Ok, DatabaseLocked, DatabaseCorrupted, SyntaxErrorSQL, DeletingFilesError, DatabaseError,  PatientInconsistent };
 
     ///Constructor de la classe
     LocalDatabaseManager();
