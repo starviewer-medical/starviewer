@@ -1,32 +1,31 @@
+# Fitxer generat pel gestor de qmake de kdevelop. 
+# ------------------------------------------- 
+# Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground
+# L'objectiu Ès un subdirectori del projecte 
 
-# Cal afegir el directori de l'extensi√≥ a la variable SUBDIRS tant si es compila com si no.
-
-SUBDIRS = diffusionperfusionsegmentation \
-          mpr2d \
-          edemasegmentation \
-          landmarkregistration \
-          strokesegmentation \
-          vsireconstruction \
-          glialestimation \
-          optimalviewpoint \
-          rectumsegmentation \
-          volume3dviewtesting \
-          mprcardiac3d \
-          cardiac2dviewer\
-          volumecontourdelimiter \
-          lesionvisualization
-
+SUBDIRS += diffusionperfusionsegmentation \
+           mpr2d \
+           edemasegmentation \
+           landmarkregistration \
+           strokesegmentation \
+           vsireconstruction \
+           glialestimation \
+           optimalviewpoint \
+           rectumsegmentation \
+           volume3dviewtesting \
+           mprcardiac3d \
+           cardiac2dviewer \
+           volumecontourdelimiter \
+           lesionvisualization \
+           experimental3d 
 include(../../extensions.inc)
-
 TEMPLATE = subdirs
-
-for(dir, SUBDIRS) {
-    !exists($$dir) {
-        SUBDIRS -= $$dir
-    }
-    !contains(PLAYGROUND_EXTENSIONS, $$dir) {
-        SUBDIRS -= $$dir
-    }
-}
-
 include(../../compilationtype.inc)
+for(dir, SUBDIRS){
+  !exists($$dir){
+    SUBDIRS -= $$dir
+  }
+  !contains(PLAYGROUND_EXTENSIONS, $$dir){
+    SUBDIRS -= $$dir
+  }
+}

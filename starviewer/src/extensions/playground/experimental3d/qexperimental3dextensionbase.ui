@@ -1,0 +1,214 @@
+<ui version="4.0" >
+ <class>QExperimental3DExtensionBase</class>
+ <widget class="QWidget" name="QExperimental3DExtensionBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>414</height>
+   </rect>
+  </property>
+  <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="m_splitter" >
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="opaqueResize" >
+      <bool>false</bool>
+     </property>
+     <widget class="QTabWidget" name="m_controlsTabWidget" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>3</hsizetype>
+        <vsizetype>7</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="tabPosition" >
+       <enum>QTabWidget::West</enum>
+      </property>
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="m_visualizationTab" >
+       <attribute name="title" >
+        <string>Visualization</string>
+       </attribute>
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="m_backgroundColorPushButton" >
+          <property name="text" >
+           <string>Background color...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="m_interpolationLabel" >
+            <property name="text" >
+             <string>Interpolation</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="m_interpolationComboBox" >
+            <item>
+             <property name="text" >
+              <string>Nearest neighbour</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Linear (interpolate &amp; classify)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Linear (classify &amp; interpolate)</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="m_diffuseCheckBox" >
+          <property name="text" >
+           <string>Diffuse lighting</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="m_specularCheckBox" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="text" >
+           <string>Specular lighting</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="m_specularPowerLabel" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Specular power</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="decimals" >
+             <number>1</number>
+            </property>
+            <property name="maximum" >
+             <double>128.000000000000000</double>
+            </property>
+            <property name="value" >
+             <double>64.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="m_loadTransferFunctionPushButton" >
+            <property name="text" >
+             <string>Load transfer function...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_saveTransferFunctionPushButton" >
+            <property name="text" >
+             <string>Save transfer function...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="udg::QTransferFunctionEditorByValues" native="1" name="m_transferFunctionEditor" />
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_visualizationOkPushButton" >
+          <property name="text" >
+           <string>OK</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="udg::QExperimental3DViewer" native="1" name="m_viewer" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>5</vsizetype>
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::QTransferFunctionEditorByValues</class>
+   <extends>QWidget</extends>
+   <header>qtransferfunctioneditorbyvalues.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QExperimental3DViewer</class>
+   <extends>QWidget</extends>
+   <header>qexperimental3dviewer.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
