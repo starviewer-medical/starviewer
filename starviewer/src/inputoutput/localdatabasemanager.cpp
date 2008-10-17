@@ -62,6 +62,7 @@ void LocalDatabaseManager::insert(Patient *newPatient)
 
     if (newPatient == NULL)
     {
+        ERROR_LOG("No es pot inserir a la base de dades l'estudi que s'ha descarregat, perquè el patient és nul");
         m_lastError = PatientInconsistent;
         return;
     }
