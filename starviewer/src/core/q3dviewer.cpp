@@ -588,6 +588,7 @@ void Q3DViewer::renderMIP3D()
     m_volumeProperty->SetScalarOpacity( mipTransferFunction.getOpacityTransferFunction() );
     m_volumeProperty->SetColor( grayTransferFunction /*m_transferFunction->getColorTransferFunction()*/ );
     m_volumeProperty->ShadeOff();
+    m_volumeProperty->SetInterpolationTypeToLinear();
 
     grayTransferFunction->Delete();
 
