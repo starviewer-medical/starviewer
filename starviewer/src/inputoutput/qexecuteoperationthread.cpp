@@ -193,8 +193,18 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         if ( operation.getOperation() == Operation::View )
             emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
     }
-    else errorRetrieving(studyUID, DatabaseError);
-
+    else
+    {
+        if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::PatientInconsistent)
+        {
+            //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
+            errorRetrieving(studyUID, PatientInconsistent);
+        }
+        else
+        {
+            errorRetrieving(studyUID, DatabaseError);
+        }
+    }
 
     localDatabaseManager.setStudyRetrieveFinished();
     //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada

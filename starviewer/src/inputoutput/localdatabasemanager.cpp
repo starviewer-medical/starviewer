@@ -58,7 +58,13 @@ void LocalDatabaseManager::insert(Patient *newPatient)
     int status = SQLITE_OK;
 
     dbConnect.open();
-    dbConnect.beginTransaction();
+    dbConnect.beginTransaction(); 
+
+    if (newPatient == NULL)
+    {
+        m_lastError = PatientInconsistent;
+        return;
+    }
 
     ///Guardem primer els estudis
     if (newPatient->getStudies().count() > 0)
