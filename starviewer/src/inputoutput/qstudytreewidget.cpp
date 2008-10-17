@@ -89,7 +89,7 @@ int QStudyTreeWidget::getColumnWidth( int columnNumber )
 
 void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
 {
-    m_studyTreeView->clear();
+    clear();
 
     foreach( DICOMStudy study, studyList )
     {
@@ -99,7 +99,7 @@ void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
 
 void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
 {
-    m_studyTreeView->clear();
+    clear();
 
     foreach(Patient *patient, patientList)
     {
@@ -392,6 +392,10 @@ QString QStudyTreeWidget::formatHour(const QString &hour)
 void QStudyTreeWidget::clear()
 {
     m_studyTreeView->clear();
+    //Reinicialitzem variables
+    m_oldCurrentStudyUID = "";
+    m_oldPacsAETitle = "";
+    m_oldCurrentSeriesUID = "";
 }
 
 void QStudyTreeWidget::setSortColumn( int col )
