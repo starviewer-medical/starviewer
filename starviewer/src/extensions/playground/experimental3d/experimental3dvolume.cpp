@@ -1,5 +1,6 @@
 #include "experimental3dvolume.h"
 
+#include <vtkFiniteDifferenceGradientEstimator.h>
 #include <vtkImageCast.h>
 #include <vtkImageData.h>
 #include <vtkImageShiftScale.h>
@@ -11,12 +12,14 @@
 
 #include "transferfunction.h"
 #include "volume.h"
+#include "vtk4DLinearRegressionGradientEstimator.h"
 
 
 namespace udg {
 
 
 Experimental3DVolume::Experimental3DVolume( Volume *volume )
+ : m_finiteDifferenceGradientEstimator( 0 ), m_4DLinearRegressionGradientEstimator( 0 )
 {
     createImage( volume );
     createVolumeRayCastFunction();
@@ -33,6 +36,9 @@ Experimental3DVolume::~Experimental3DVolume()
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
+
+    if ( m_finiteDifferenceGradientEstimator ) m_finiteDifferenceGradientEstimator->Delete();
+    if ( m_4DLinearRegressionGradientEstimator ) m_4DLinearRegressionGradientEstimator->Delete();
 }
 
 
@@ -68,6 +74,31 @@ void Experimental3DVolume::setInterpolation( Interpolation interpolation )
         case LinearClassifyInterpolate:
             m_property->SetInterpolationTypeToLinear();
             m_normalVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+            break;
+    }
+}
+
+
+void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstimator )
+{
+    switch ( gradientEstimator )
+    {
+        case FiniteDifference:
+            if ( !m_finiteDifferenceGradientEstimator )
+                m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
+            m_mapper->SetGradientEstimator( m_finiteDifferenceGradientEstimator );
+            break;
+        case FourDLInearRegression1:
+            if ( !m_4DLinearRegressionGradientEstimator )
+                m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+            m_4DLinearRegressionGradientEstimator->SetRadius( 1 );
+            m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
+            break;
+        case FourDLInearRegression2:
+            if ( !m_4DLinearRegressionGradientEstimator )
+                m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+            m_4DLinearRegressionGradientEstimator->SetRadius( 2 );
+            m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
             break;
     }
 }
