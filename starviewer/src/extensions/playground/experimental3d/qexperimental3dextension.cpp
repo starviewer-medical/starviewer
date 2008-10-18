@@ -127,6 +127,7 @@ void QExperimental3DExtension::saveTransferFunction()
 void QExperimental3DExtension::doVisualization()
 {
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
+    m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
     m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
     m_volume->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
     m_viewer->render();

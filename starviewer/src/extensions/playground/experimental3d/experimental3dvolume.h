@@ -2,6 +2,7 @@
 #define UDGEXPERIMENTAL3DVOLUME_H
 
 
+class vtkFiniteDifferenceGradientEstimator;
 class vtkImageData;
 class vtkVolume;
 class vtkVolumeProperty;
@@ -14,6 +15,7 @@ namespace udg {
 
 class TransferFunction;
 class Volume;
+class vtk4DLinearRegressionGradientEstimator;
 
 
 class Experimental3DVolume {
@@ -22,6 +24,8 @@ public:
 
     /// Tipus d'interpolació.
     enum Interpolation { NearestNeighbour, LinearInterpolateClassify, LinearClassifyInterpolate };
+    /// Estimadors de gradient.
+    enum GradientEstimator { FiniteDifference, FourDLInearRegression1, FourDLInearRegression2 };
 
     Experimental3DVolume( Volume *volume );
     ~Experimental3DVolume();
@@ -35,6 +39,8 @@ public:
 
     /// Estableix el tipus d'interpolació.
     void setInterpolation( Interpolation interpolation );
+    /// Estableix l'estimador de gradient.
+    void setGradientEstimator( GradientEstimator gradientEstimator );
     /// Estableix els paràmetres d'il·luminació.
     void setLighting( bool diffuse, bool specular, double specularPower );
     /// Estableix la funció de transferència.
@@ -79,6 +85,11 @@ private:
 
     /// Volum.
     vtkVolume *m_volume;
+
+    /// Estimador de gradient per diferències finites.
+    vtkFiniteDifferenceGradientEstimator *m_finiteDifferenceGradientEstimator;
+    /// Estimador de gradient per regressió lineal 4D.
+    vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
 
 };
 
