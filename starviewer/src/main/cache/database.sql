@@ -86,13 +86,3 @@ CREATE TABLE Image
 );
 
 CREATE INDEX  IndexImage_StudyInstanceUIDSeriesInstanceUID ON Image (StudyInstanceUID,SeriesInstanceUID); 
-
-
-create table PoolOld
-(
-    Param       VARCHAR2(12) UNIQUE,
-    Space       NUMBER (16)
-);
-
-insert into PoolOld Values ('POOLSIZE',32212254720);
-insert into PoolOld Values ('USED',0);
