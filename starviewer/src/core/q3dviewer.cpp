@@ -474,6 +474,7 @@ void Q3DViewer::renderRayCasting()
     m_volumeProperty->ShadeOff();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
+    m_vtkVolume->SetMapper( m_volumeMapper );
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
     // no funciona sense fer la còpia
@@ -490,6 +491,7 @@ void Q3DViewer::renderRayCastingShading()
     m_volumeProperty->ShadeOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
+    m_vtkVolume->SetMapper( m_volumeMapper );
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
     // no funciona sense fer la còpia
@@ -512,6 +514,7 @@ void Q3DViewer::renderRayCastingObscurance()
     if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
     else m_volumeProperty->SetInterpolationTypeToNearest();
 
+    m_vtkVolume->SetMapper( m_volumeMapper );
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastVoxelShaderFunction );
     m_volumeRayCastVoxelShaderFunction->RemoveVoxelShader( 0 );
     if ( m_volumeRayCastVoxelShaderFunction->IndexOfVoxelShader( m_ambientVoxelShader ) < 0 )
@@ -537,6 +540,7 @@ void Q3DViewer::renderRayCastingShadingObscurance()
     if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
     else m_volumeProperty->SetInterpolationTypeToNearest();
 
+    m_vtkVolume->SetMapper( m_volumeMapper );
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastVoxelShaderFunction );
     m_volumeRayCastVoxelShaderFunction->RemoveVoxelShader( 0 );
     if ( m_volumeRayCastVoxelShaderFunction->IndexOfVoxelShader( m_directIlluminationVoxelShader ) < 0 )
@@ -599,6 +603,7 @@ void Q3DViewer::renderMIP3D()
 //         vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
 //     vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
 
+    m_vtkVolume->SetMapper( m_volumeMapper );
     m_volumeMapper->SetVolumeRayCastFunction( mipFunction );
 //     volumeMapper->SetInput( m_imageCaster->GetOutput()  );
 //         volumeMapper->SetGradientEstimator( gradientEstimator );
@@ -743,19 +748,21 @@ void Q3DViewer::renderTexture2D()
 
 void Q3DViewer::renderTexture3D()
 {
-    if( rescale() )
-    {
-        m_volumeProperty->DisableGradientOpacityOn();
-        m_volumeProperty->ShadeOff();
+    m_volumeProperty->DisableGradientOpacityOn();
+    m_volumeProperty->ShadeOff();   /// \todo amb on també funciona; hauríem de donar l'opció, o deixar-ho sempre a off o sempre a on?
+    m_volumeProperty->SetInterpolationTypeToLinear();
 
-        vtkVolumeTextureMapper3D* volumeMapper = vtkVolumeTextureMapper3D::New();
-        volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+    vtkVolumeTextureMapper3D *volumeMapper = vtkVolumeTextureMapper3D::New();
+    volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+    m_vtkVolume->SetMapper( volumeMapper );
+    volumeMapper->Delete();
 
-        m_vtkVolume->SetMapper( volumeMapper );
-        m_renderer->Render();
-    }
-    else
-        DEBUG_LOG( "No es pot fer render per textures 3D, no s'ha proporcionat cap volum d'entrada" );
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction( new TransferFunction( *transferFunction ) );
+    delete transferFunction;
+
+    m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::resetViewToAxial()
