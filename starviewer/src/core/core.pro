@@ -185,7 +185,8 @@ HEADERS += extensionfactory.h \
            obscurancemainthread.h \
            obscurancethread.h \
            obscurancevoxelshader.h \
-           vtk4DLinearRegressionGradientEstimator.h 
+           vtk4DLinearRegressionGradientEstimator.h \
+           combiningvoxelshader.h 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -336,7 +337,8 @@ SOURCES += extensionmediator.cpp \
            obscurancemainthread.cpp \
            obscurancethread.cpp \
            obscurancevoxelshader.cpp \
-           vtk4DLinearRegressionGradientEstimator.cxx 
+           vtk4DLinearRegressionGradientEstimator.cxx \
+           combiningvoxelshader.cpp 
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
