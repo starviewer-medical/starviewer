@@ -133,6 +133,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_volumeRayCastFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastVoxelShaderFunction = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
     m_volumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastIsosurfaceFunction = vtkVolumeRayCastIsosurfaceFunction::New();
 
     m_firstRender = true;
     m_obscuranceMainThread = 0;
@@ -147,6 +148,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 
 Q3DViewer::~Q3DViewer()
 {
+    /// \todo falta revisar què falta per destruir
     m_renderer->Delete();
     if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
     {
@@ -669,64 +671,51 @@ void Q3DViewer::renderContouring()
 
 void Q3DViewer::renderIsoSurface()
 {
-    if( rescale() )
-    {
-        //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
-        // Create a transfer function mapping scalar value to opacity
-        vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
-        oTFun->AddSegment(10, 0.0, 255, 0.3);
+    //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
+    // Create a transfer function mapping scalar value to opacity
+    vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
+    oTFun->AddSegment(10, 0.0, 255, 0.3);
 
-        vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
-        opacityTransferFunction->AddSegment(  0, 0.0, 128, 1.0);
-        opacityTransferFunction->AddSegment(128, 1.0, 255, 0.0);
+    vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
+    opacityTransferFunction->AddSegment(  0, 0.0, 128, 1.0);
+    opacityTransferFunction->AddSegment(128, 1.0, 255, 0.0);
 
-        // Create a transfer function mapping scalar value to color (grey)
-        vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
-        grayTransferFunction->AddSegment(0, 1.0, 255, 1.0);
+    // Create a transfer function mapping scalar value to color (grey)
+    vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
+    grayTransferFunction->AddSegment(0, 1.0, 255, 1.0);
 
-        // Create a transfer function mapping scalar value to color (color)
-        vtkColorTransferFunction *cTFun = vtkColorTransferFunction::New();
-        cTFun->AddRGBPoint(   0, 1.0, 0.0, 0.0 );
-        cTFun->AddRGBPoint(  64, 1.0, 1.0, 0.0 );
-        cTFun->AddRGBPoint( 128, 0.0, 1.0, 0.0 );
-        cTFun->AddRGBPoint( 192, 0.0, 1.0, 1.0 );
-        cTFun->AddRGBPoint( 255, 0.0, 0.0, 1.0 );
+    // Create a transfer function mapping scalar value to color (color)
+    vtkColorTransferFunction *cTFun = vtkColorTransferFunction::New();
+    cTFun->AddRGBPoint(   0, 1.0, 0.0, 0.0 );
+    cTFun->AddRGBPoint(  64, 1.0, 1.0, 0.0 );
+    cTFun->AddRGBPoint( 128, 0.0, 1.0, 0.0 );
+    cTFun->AddRGBPoint( 192, 0.0, 1.0, 1.0 );
+    cTFun->AddRGBPoint( 255, 0.0, 0.0, 1.0 );
 
-        // Create a transfer function mapping magnitude of gradient to opacity
-        vtkPiecewiseFunction *goTFun = vtkPiecewiseFunction::New();
-        goTFun->AddPoint(   0, 0.0 );
-        goTFun->AddPoint(  30, 0.0 );
-        goTFun->AddPoint(  40, 1.0 );
-        goTFun->AddPoint( 255, 1.0 );
+    // Create a transfer function mapping magnitude of gradient to opacity
+    vtkPiecewiseFunction *goTFun = vtkPiecewiseFunction::New();
+    goTFun->AddPoint(   0, 0.0 );
+    goTFun->AddPoint(  30, 0.0 );
+    goTFun->AddPoint(  40, 1.0 );
+    goTFun->AddPoint( 255, 1.0 );
 
-        m_volumeProperty->ShadeOn();
-        m_volumeProperty->SetAmbient(0.3);
-        m_volumeProperty->SetDiffuse(1.0);
-        m_volumeProperty->SetSpecular(0.2);
-        m_volumeProperty->SetSpecularPower(50.0);
+    m_volumeProperty->ShadeOn();
+    m_volumeProperty->SetAmbient(0.3);
+    m_volumeProperty->SetDiffuse(1.0);
+    m_volumeProperty->SetSpecular(0.2);
+    m_volumeProperty->SetSpecularPower(50.0);
 
-        m_volumeProperty->SetScalarOpacity(oTFun);
-        m_volumeProperty->DisableGradientOpacityOff();
-        m_volumeProperty->SetGradientOpacity( goTFun );
-        m_volumeProperty->SetColor( cTFun );
-//         m_volumeProperty->SetColor( grayTransferFunction );
-        m_volumeProperty->SetInterpolationTypeToLinear(); //prop[index]->SetInterpolationTypeToNearest();
+    m_volumeProperty->SetScalarOpacity(oTFun);
+    m_volumeProperty->DisableGradientOpacityOff();
+    m_volumeProperty->SetGradientOpacity( goTFun );
+    m_volumeProperty->SetColor( cTFun );
+//     m_volumeProperty->SetColor( grayTransferFunction );
+    m_volumeProperty->SetInterpolationTypeToLinear(); //prop[index]->SetInterpolationTypeToNearest();
 
-        // Create an isosurface ray function
-        vtkVolumeRayCastIsosurfaceFunction *isosurfaceFunction = vtkVolumeRayCastIsosurfaceFunction::New();
-        isosurfaceFunction->SetIsoValue(80);
-        vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
+    m_vtkVolume->SetMapper( m_volumeMapper );
+    m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastIsosurfaceFunction );
 
-        vtkVolumeRayCastMapper *volumeMapper = vtkVolumeRayCastMapper::New();
-        volumeMapper->SetVolumeRayCastFunction( isosurfaceFunction );
-        volumeMapper->SetInput( m_imageCaster->GetOutput()  ); // abans inputImage->getVtkData()
-        volumeMapper->SetGradientEstimator( gradientEstimator );
-
-        m_vtkVolume->SetMapper( volumeMapper );
-        m_renderer->Render();
-    }
-    else
-        DEBUG_LOG( "No es pot fer render per IsoSurface, no s'ha proporcionat cap volum d'entrada" );
+    m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::renderTexture2D()
@@ -923,6 +912,11 @@ void Q3DViewer::setObscurance( bool on )
 void Q3DViewer::setObscuranceFactor( double factor )
 {
     m_obscuranceVoxelShader->setFactor( factor );
+}
+
+void Q3DViewer::setIsoValue( int isoValue )
+{
+    m_volumeRayCastIsosurfaceFunction->SetIsoValue( isoValue );
 }
 
 };  // end namespace udg {

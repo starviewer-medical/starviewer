@@ -127,6 +127,10 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setObscuranceFactor(double) ) );
     connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( render() ) );
 
+    m_isosurfaceOptionsWidget->hide();
+    connect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), m_3DView, SLOT( setIsoValue(int) ) );
+    connect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( render() ) );
+
     // clut editor
     connect( m_loadClutPushButton, SIGNAL( clicked() ), SLOT( loadClut() ) );
     connect( m_saveClutPushButton, SIGNAL( clicked() ), SLOT( saveClut() ) );
@@ -168,6 +172,7 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
 
     m_shadingOptionsWidget->hide();
     m_obscuranceOptionsWidget->hide();
+    m_isosurfaceOptionsWidget->hide();
 
     switch( index )
     {
@@ -204,6 +209,8 @@ void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
             break;
 
         case 7:
+            m_isosurfaceOptionsWidget->show();
+            m_3DView->setIsoValue( m_isoValueSpinBox->value() );    // necessari per la primera vegada
             m_3DView->setRenderFunctionToIsoSurface();
             break;
 
