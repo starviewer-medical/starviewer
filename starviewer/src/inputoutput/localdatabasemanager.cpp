@@ -46,7 +46,7 @@ LocalDatabaseManager::LocalDatabaseManager()
     }
 }
 
-void LocalDatabaseManager::insert(Patient *newPatient)
+void LocalDatabaseManager::save(Patient *newPatient)
 {
     Q_ASSERT(newPatient);
 

@@ -28,7 +28,7 @@ Q_OBJECT
 public:
 
     /// Tipus d'operació que serà utilitzat per saber quina operació ha finalitzat.
-    enum OperationType{Insert, Update, Detete};
+    enum OperationType{Save, Detete};
     
     ///Constructor de la classe
     LocalDatabaseManagerThreaded(QObject *parent = 0);
@@ -45,8 +45,8 @@ protected:
 
 public slots:
     
-    ///Inseriex un nou pacient a la base de dades
-    void insert(Patient *newPatient);
+    ///Inseriex un nou pacient a la base de dades, si part o tota la informació d'aquesta pacient ja existeix l'actualitza
+    void save(Patient *newPatient);
 
 signals:
 
