@@ -92,8 +92,8 @@ public:
 
 public slots:
 
-    ///Inseriex un nou pacient a la base de dades
-    void insert(Patient *newPatient);
+    ///Guarda el pacient a la base de dades, si no existeix insereix les dades, i si alguna de les dades ja existeix a la BD l'actualitza
+    void save(Patient *newPatient);
 
 private :
 

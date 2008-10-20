@@ -293,7 +293,7 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
     connect(this, SIGNAL( filesRetrieved() ), patientFiller, SLOT( finishDICOMFilesProcess() ));
 
     //Connexió entre el processat i l'insersió al a BD
-    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( insert(Patient *) ), Qt::DirectConnection);
+    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( save(Patient *) ), Qt::DirectConnection);
 
     //Connexions per finalitzar els threads
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), fillersThread, SLOT( quit() ), Qt::DirectConnection);

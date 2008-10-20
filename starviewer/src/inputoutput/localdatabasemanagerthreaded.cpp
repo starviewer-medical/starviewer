@@ -25,11 +25,11 @@ LocalDatabaseManagerThreaded::~LocalDatabaseManagerThreaded()
         wait();//Hem d'esperar que es mati el thread per poder continuar
     }
 }
-void LocalDatabaseManagerThreaded::insert(Patient *newPatient)
+void LocalDatabaseManagerThreaded::save(Patient *newPatient)
 {
-    m_localDatabaseManager.insert(newPatient);
+    m_localDatabaseManager.save(newPatient);
 
-    emit operationFinished(Insert);
+    emit operationFinished(Save);
 }
 
 LocalDatabaseManager::LastError LocalDatabaseManagerThreaded::getLastError()
