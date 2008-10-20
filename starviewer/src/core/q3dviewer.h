@@ -17,6 +17,7 @@ class vtkInteractorStyle;
 class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
+class vtkVolumeRayCastIsosurfaceFunction;
 class vtkVolumeRayCastMapper;
 
 
@@ -102,6 +103,9 @@ public slots:
     void setObscurance( bool on );
     void setObscuranceFactor( double factor );
 
+    /// Paràmetres d'isosuperfícies.
+    void setIsoValue( int isoValue );
+
 signals:
 
     void obscuranceProgress( int progress );
@@ -175,9 +179,10 @@ private:
     /// Mapper del volum.
     vtkVolumeRayCastMapper *m_volumeMapper;
 
-    /// Funció de ray cast.
+    /// Funcions de ray cast.
     vtkVolumeRayCastCompositeFunction *m_volumeRayCastFunction;
     vtkVolumeRayCastVoxelShaderCompositeFunction *m_volumeRayCastVoxelShaderFunction;
+    vtkVolumeRayCastIsosurfaceFunction *m_volumeRayCastIsosurfaceFunction;
 
     /// Voxel shaders.
     AmbientVoxelShader *m_ambientVoxelShader;
