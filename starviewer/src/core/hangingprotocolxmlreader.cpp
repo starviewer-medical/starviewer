@@ -58,7 +58,7 @@ QList<HangingProtocol * > HangingProtocolXMLReader::read( QString path )
 				/*QString absolutePath( file.absolutePath() );
 				absolutePath.append( "/");
 				absolutePath.append( file.fileName() );*/
-				directoryProtocols = read( file.absolutePath().append("/").append(file.fileName()) ); 
+				directoryProtocols = read( file.absolutePath() + QDir::toNativeSeparators( "/" ) + file.fileName() ); 
 				protocols << directoryProtocols;
 			}
 		}
