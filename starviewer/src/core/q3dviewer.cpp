@@ -731,19 +731,33 @@ void Q3DViewer::renderIsoSurface()
 
 void Q3DViewer::renderTexture2D()
 {
-    if( rescale() )
-    {
-        m_volumeProperty->DisableGradientOpacityOn();
-        m_volumeProperty->ShadeOff();
+    /// \todo Això és massa lent, potser l'hauríem de treure.
+    m_volumeProperty->DisableGradientOpacityOn();
+    m_volumeProperty->ShadeOff();   // off perquè vagi més ràpid
+    m_volumeProperty->SetInterpolationTypeToNearest();  // nearest perquè vagi més ràpid
 
-        vtkVolumeTextureMapper2D* volumeMapper = vtkVolumeTextureMapper2D::New();
-        volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+    vtkVolumeTextureMapper2D *volumeMapper = vtkVolumeTextureMapper2D::New();
 
-        m_vtkVolume->SetMapper( volumeMapper );
-        m_renderer->Render();
-    }
-    else
-        DEBUG_LOG( "No es pot fer render per textures 2D, no s'ha proporcionat cap volum d'entrada" );
+    // target texture size: en teoria com més gran millor
+    // màxim en una Quadro FX 4500 = 4096x4096
+//     volumeMapper->SetTargetTextureSize( 4096, 4096 );
+
+    // max number of planes: This is the maximum number of planes that will be created for texture mapping the volume. If the volume has more
+    // voxels than this along the viewing direction, then planes of the volume will be skipped to ensure that this maximum is not violated. A
+    // skip factor is used, and is incremented until the maximum condition is satisfied.
+    // 128 és el que té millor relació qualitat/preu amb un model determinat a l'ordinador de la uni
+//     volumeMapper->SetMaximumNumberOfPlanes( 128 );
+
+    volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+    m_vtkVolume->SetMapper( volumeMapper );
+    volumeMapper->Delete();
+
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction( new TransferFunction( *transferFunction ) );
+    delete transferFunction;
+
+    m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::renderTexture3D()
