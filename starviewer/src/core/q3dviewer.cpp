@@ -129,19 +129,25 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
     m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
 
+    m_ambientVoxelShader = new AmbientVoxelShader();
+    m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
+    m_obscuranceVoxelShader = new ObscuranceVoxelShader();
+    m_ambientObscuranceVoxelShader = new AmbientObscuranceVoxelShader();
+    m_ambientObscuranceVoxelShader->setVoxelShaders( m_ambientVoxelShader, m_obscuranceVoxelShader );
+
     m_volumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
     m_volumeRayCastFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastVoxelShaderFunction = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
     m_volumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastAmbientObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientObscuranceVoxelShader>::New();
+    m_volumeRayCastAmbientObscuranceFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastAmbientObscuranceFunction->SetVoxelShader( m_ambientObscuranceVoxelShader );
     m_volumeRayCastIsosurfaceFunction = vtkVolumeRayCastIsosurfaceFunction::New();
 
     m_firstRender = true;
     m_obscuranceMainThread = 0;
     m_obscurance = 0;
-
-    m_ambientVoxelShader = new AmbientVoxelShader();
-    m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
-    m_obscuranceVoxelShader = new ObscuranceVoxelShader();
+    m_obscuranceOn = false;
 
     m_4DLinearRegressionGradientEstimator = 0;
 }
@@ -161,6 +167,7 @@ Q3DViewer::~Q3DViewer()
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
     delete m_obscuranceVoxelShader;
+    delete m_ambientObscuranceVoxelShader;
     if ( m_4DLinearRegressionGradientEstimator ) m_4DLinearRegressionGradientEstimator->Delete();
 }
 
@@ -535,10 +542,8 @@ void Q3DViewer::renderRayCastingObscurance()
     else m_volumeProperty->SetInterpolationTypeToNearest();
 
     m_vtkVolume->SetMapper( m_volumeMapper );
-    m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastVoxelShaderFunction );
-    m_volumeRayCastVoxelShaderFunction->RemoveVoxelShader( 0 );
-    if ( m_volumeRayCastVoxelShaderFunction->IndexOfVoxelShader( m_ambientVoxelShader ) < 0 )
-        m_volumeRayCastVoxelShaderFunction->InsertVoxelShader( 0, m_ambientVoxelShader );
+    if ( m_obscuranceOn ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientObscuranceFunction );
+    else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
@@ -946,6 +951,8 @@ void Q3DViewer::endComputeObscurance()
 
 void Q3DViewer::setObscurance( bool on )
 {
+    m_obscuranceOn = on;
+
     if ( on && m_volumeRayCastVoxelShaderFunction->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
     {
         m_volumeRayCastVoxelShaderFunction->AddVoxelShader( m_obscuranceVoxelShader );
@@ -953,8 +960,6 @@ void Q3DViewer::setObscurance( bool on )
     }
     else
         m_volumeRayCastVoxelShaderFunction->RemoveVoxelShader( m_obscuranceVoxelShader );
-
-    m_volumeRayCastVoxelShaderFunction->Print( std::cout );
 }
 
 void Q3DViewer::setObscuranceFactor( double factor )
