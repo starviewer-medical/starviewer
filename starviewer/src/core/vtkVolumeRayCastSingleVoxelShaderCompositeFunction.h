@@ -67,7 +67,11 @@ private:
 
 };
 
+
 }
+
+
+#include "vtkVolumeRayCastSingleVoxelShaderCompositeFunction.cxx"
 
 
 #endif

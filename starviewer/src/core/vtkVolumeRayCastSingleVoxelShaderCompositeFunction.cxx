@@ -1,3 +1,7 @@
+#ifndef UDGVTKVOLUMERAYCASTSINGLEVOXELSHADERCOMPOSITEFUNCTION_CXX
+#define UDGVTKVOLUMERAYCASTSINGLEVOXELSHADERCOMPOSITEFUNCTION_CXX
+
+
 #include "vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h"
 
 #include <vtkObjectFactory.h>
@@ -222,7 +226,7 @@ void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::CastRay( const T *d
 
             if ( !INTERPOLATION )
             {
-                color = m_voxelShader->shade( offset, direction, color );
+                color = m_voxelShader->nvShade( offset, direction, color );
             }
             else if ( CLASSIFY_INTERPOLATE )
             {
@@ -233,14 +237,14 @@ void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::CastRay( const T *d
 
                 for ( int j = 0; j < 8; j++ )
                 {
-                    HdrColor tempColor = m_voxelShader->shade( offsets[j], direction, tempColor );
+                    HdrColor tempColor = m_voxelShader->nvShade( offsets[j], direction, tempColor );
                     tempColor.alpha *= weights[j];
                     color += tempColor.multiplyColorBy( tempColor.alpha );
                 }
             }
             else //if ( !CLASSIFY_INTERPOLATE )
             {
-                color = m_voxelShader->shade( rayPosition, direction, m_interpolator, color );
+                color = m_voxelShader->nvShade( rayPosition, direction, m_interpolator, color );
             }
 
             float opacity = color.alpha, f;
@@ -288,3 +292,6 @@ void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::CastRay( const T *d
 
 
 }
+
+
+#endif
