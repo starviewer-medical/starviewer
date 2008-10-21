@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "fusionvoxelshader.h"
 #include "logging.h"
-#include <iostream.h>
+
 namespace udg {
 
 FusionVoxelShader::FusionVoxelShader()

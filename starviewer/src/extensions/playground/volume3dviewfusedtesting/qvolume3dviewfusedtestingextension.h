@@ -25,7 +25,6 @@ class VtkVolumeProperty;
 class Volume3DFusedViewer;
 class ToolManager;
 class QClutEditorDialog;
-class Volume3DFusedLight;
 
 /**
  * ...

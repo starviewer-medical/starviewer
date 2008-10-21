@@ -7,9 +7,7 @@
 
 #include "qvolume3dviewfusedtestingextension.h"
 #include "volume.h"
-//#include "volume3dfusedvolume.h"
 #include "volume3dfusedviewer.h"
-#include "volume3dfusedlight.h"
 #include "toolmanager.h"
 #include "transferfunctionio.h"
 #include "qcluteditordialog.h"
@@ -29,8 +27,6 @@
 #include <vtkImageCast.h>
 #include <vtkImageShiftScale.h>
 
-#include <stdlib.h>
-#include <iostream.h>
 namespace udg {
 
 QVolume3DViewFusedTestingExtension::QVolume3DViewFusedTestingExtension( QWidget * parent )
@@ -386,7 +382,7 @@ void QVolume3DViewFusedTestingExtension::shadeOff()
 void QVolume3DViewFusedTestingExtension::changeFusionMethod(int method)
 {
 	//this->setCursor( QCursor(Qt::WaitCursor) );
-	cout << method << endl;
+	DEBUG_LOG(method);
     switch( method )
     {
     case 0:
@@ -411,7 +407,6 @@ void QVolume3DViewFusedTestingExtension::changeFusionMethod(int method)
 		m_mode=5;
     break;
     }
-	cout << method << endl;
 
 	//QMessageBox::information(0,"Starviewer", "El mode es: " + m_mode );
 
@@ -472,7 +467,7 @@ void QVolume3DViewFusedTestingExtension::fuseModels2()
 	rescale->Update();
 	m_image=rescale->GetOutput();
 	m_image->Register(0);
-	cout << "image data: " << m_image->GetScalarTypeAsString() << endl;
+	DEBUG_LOG(QString("image data: %1").arg(m_image->GetScalarTypeAsString()));
 	///Extreiem el punter dels valors de propietats
 	m_data=reinterpret_cast<unsigned char*>(m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
 	///Obtenim la mida del "vector" de propietats
@@ -703,13 +698,7 @@ void QVolume3DViewFusedTestingExtension::fuseModels3()
 	//m_volume3DViewFused->getRenderer()->Render();
 	//m_volume3DViewFused->setImage(m_fused->getVtkData());
 	m_maximumValue=range[1];
-	cout << "crido el fusion" << endl;
-	m_volume3DViewFused->fusion(1,range,m_data,m_data2,m_volume3DView->getTransferFunction(),m_volume3DViewSecondary->getTransferFunction());
-	
-	
-	
-	cout << "renderitzem" << endl;
-
+	m_volume3DViewFused->fusion(1, range, m_data, m_data2, m_volume3DView->getTransferFunction(), m_volume3DViewSecondary->getTransferFunction() );
 }
 }
 
