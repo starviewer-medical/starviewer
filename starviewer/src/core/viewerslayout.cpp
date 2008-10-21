@@ -82,9 +82,9 @@ void ViewersLayout::restoreLayouts()
 		m_totalColumns = ceil( sqrt( (double)numberOfViewers) );
 		m_totalRows = m_totalColumns;
 		
-		if( (m_totalRows * m_totalColumns) < numberOfViewers )
+		if( (m_totalRows * m_totalColumns) > numberOfViewers )
 		{
-			for( i = 0; i < (numberOfViewers - (m_totalRows * m_totalColumns) ); i++ )
+			for( i = 0; i < ( (m_totalRows * m_totalColumns) - numberOfViewers ); i++ )
 			{
 				m_vectorViewers.push_back( getNewQ2DViewerWidget() );
 			}
