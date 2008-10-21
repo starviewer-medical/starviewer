@@ -4,46 +4,19 @@
 # Target is an application:  
 
 FORMS += qvolume3dviewfusedtestingextensionbase.ui \
-         qcluteditordialogbase.ui \
-         qtransferfunctioneditorbyvaluesbase.ui \
-         qtransferfunctionintervaleditorbase.ui 
+         qcluteditordialogbase.ui
 HEADERS += volume3dviewfusedtestingextensionmediator.h \
            qvolume3dviewfusedtestingextension.h \
            qcluteditordialog.h \
-           qtransferfunctioneditorbygradient.h \
-           qtransferfunctioneditorbyvalues.h \
-           qtransferfunctioneditor.h \
-           qtransferfunctionintervaleditor.h \
            volume3dfusedviewer.h \
-           volume3dfusedlight.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
            vtkVolumeRayCastCompositeFxFunction.h \
-           ambientvoxelshader.h \
-           contourvoxelshader.h \
-           directilluminationvoxelshader.h \
-           voxelshader.h \
-           hdrcolor.h \
-           trilinearinterpolator.h \
-           vector3.h \
-           vtk4DLinearRegressionGradientEstimator.h \
            fusionvoxelshader.h 
 SOURCES += volume3dviewfusedtestingextensionmediator.cpp \
            qvolume3dviewfusedtestingextension.cpp \
            qcluteditordialog.cpp \
-           qtransferfunctioneditorbygradient.cpp \
-           qtransferfunctioneditorbyvalues.cpp \
-           qtransferfunctioneditor.cpp \
-           qtransferfunctionintervaleditor.cpp \
            volume3dfusedviewer.cpp \
-           volume3dfusedlight.cpp \
-           trilinearinterpolator.cpp \
-           vector3.cpp \
-           ambientvoxelshader.cpp \
-           contourvoxelshader.cpp \
-           directilluminationvoxelshader.cpp \
-           voxelshader.cpp \
            fusionvoxelshader.cpp \
-           vtk4DLinearRegressionGradientEstimator.cxx \
            vtkVolumeRayCastCompositeFxFunction.cxx 
 RESOURCES += volume3dviewfusedtesting.qrc
 include(../../basicconfextensions.inc)
