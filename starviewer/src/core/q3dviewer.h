@@ -31,7 +31,6 @@ class Volume;
 class Q3DOrientationMarker;
 class TransferFunction;
 class ObscuranceMainThread;
-class vtkVolumeRayCastVoxelShaderCompositeFunction;
 class AmbientVoxelShader;
 class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
@@ -188,11 +187,13 @@ private:
     ObscuranceVoxelShader *m_obscuranceVoxelShader;
     typedef CombiningVoxelShader<AmbientVoxelShader, ObscuranceVoxelShader> AmbientObscuranceVoxelShader;
     AmbientObscuranceVoxelShader *m_ambientObscuranceVoxelShader;
+    typedef CombiningVoxelShader<DirectIlluminationVoxelShader, ObscuranceVoxelShader> DirectIlluminationObscuranceVoxelShader;
+    DirectIlluminationObscuranceVoxelShader *m_directIlluminationObscuranceVoxelShader;
 
     /// Funcions de ray cast.
     vtkVolumeRayCastCompositeFunction *m_volumeRayCastFunction;
-    vtkVolumeRayCastVoxelShaderCompositeFunction *m_volumeRayCastVoxelShaderFunction;
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientObscuranceVoxelShader> *m_volumeRayCastAmbientObscuranceFunction;
+    vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationObscuranceVoxelShader> *m_volumeRayCastDirectIlluminationObscuranceFunction;
     vtkVolumeRayCastIsosurfaceFunction *m_volumeRayCastIsosurfaceFunction;
 
     /// La funció de transferència que s'aplica
