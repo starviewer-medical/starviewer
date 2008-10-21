@@ -472,6 +472,12 @@ bool Q3DViewer::rescale()
 
 void Q3DViewer::renderRayCasting()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOff();
     m_volumeProperty->SetInterpolationTypeToLinear();
@@ -489,6 +495,12 @@ void Q3DViewer::renderRayCasting()
 
 void Q3DViewer::renderRayCastingShading()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
@@ -506,6 +518,12 @@ void Q3DViewer::renderRayCastingShading()
 
 void Q3DViewer::renderRayCastingObscurance()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOff();
 
@@ -532,6 +550,12 @@ void Q3DViewer::renderRayCastingObscurance()
 
 void Q3DViewer::renderRayCastingShadingObscurance()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOn();
 
@@ -569,6 +593,12 @@ void Q3DViewer::renderRayCastingShadingObscurance()
 
 void Q3DViewer::renderMIP3D()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     // quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
 //         m_orientationMarker->disable();
     //================================================================================================
@@ -619,17 +649,17 @@ void Q3DViewer::renderMIP3D()
 
 void Q3DViewer::renderContouring()
 {
-    if ( m_mainVolume != 0 )
+    if ( m_renderer->HasViewProp( m_vtkVolume ) )
     {
-        vtkImageShrink3D *m_shrink = vtkImageShrink3D::New();
-        m_shrink->SetInput( m_mainVolume->getVtkData() );
-        vtkImageGaussianSmooth *m_smooth = vtkImageGaussianSmooth::New();
-        m_smooth->SetDimensionality( 3 );
-        m_smooth->SetRadiusFactor( 2 );
-        m_smooth->SetInput( m_shrink->GetOutput() );
+        vtkImageShrink3D *shrink = vtkImageShrink3D::New();
+        shrink->SetInput( m_mainVolume->getVtkData() );
+        vtkImageGaussianSmooth *smooth = vtkImageGaussianSmooth::New();
+        smooth->SetDimensionality( 3 );
+        smooth->SetRadiusFactor( 2 );
+        smooth->SetInput( shrink->GetOutput() );
 
         vtkContourFilter *contour = vtkContourFilter::New();
-        contour->SetInputConnection( m_smooth->GetOutputPort());
+        contour->SetInputConnection( smooth->GetOutputPort());
         contour->GenerateValues( 1, 30, 30);
         contour->ComputeScalarsOff();
         contour->ComputeGradientsOff();
@@ -644,33 +674,39 @@ void Q3DViewer::renderContouring()
         reverse->ReverseCellsOn();
         reverse->ReverseNormalsOn();
 
-        vtkPolyDataMapper *m_polyDataMapper = vtkPolyDataMapper::New();
+        vtkPolyDataMapper *polyDataMapper = vtkPolyDataMapper::New();
 
-        m_polyDataMapper->SetInputConnection( reverse->GetOutputPort() );
-        m_polyDataMapper->ScalarVisibilityOn();
-        m_polyDataMapper->ImmediateModeRenderingOn();
+        polyDataMapper->SetInputConnection( reverse->GetOutputPort() );
+        polyDataMapper->ScalarVisibilityOn();
+        polyDataMapper->ImmediateModeRenderingOn();
 
-        vtkActor *m_3DActor = vtkActor::New();
-        m_3DActor->SetMapper( m_polyDataMapper );
-        m_3DActor->GetProperty()->SetColor(1,0.8,0.81);
+        vtkActor *actor = vtkActor::New();
+        actor->SetMapper( polyDataMapper );
+        actor->GetProperty()->SetColor(1,0.8,0.81);
 
-        m_renderer->AddViewProp( m_3DActor );
-        m_renderer->Render();
+        m_renderer->RemoveViewProp( m_vtkVolume );
+        m_renderer->AddViewProp( actor );
 
         decimator->Delete();
-        m_3DActor->Delete();
-        m_polyDataMapper->Delete();
+        actor->Delete();
+        polyDataMapper->Delete();
         contour->Delete();
-        m_smooth->Delete();
-        m_shrink->Delete();
+        smooth->Delete();
+        shrink->Delete();
         reverse->Delete();
     }
-    else
-        DEBUG_LOG( "No s'ha proporcionat cap volum d'entrada" );
+
+    m_vtkWidget->GetRenderWindow()->Render();
 }
 
 void Q3DViewer::renderIsoSurface()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
     // Create a transfer function mapping scalar value to opacity
     vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
@@ -720,6 +756,12 @@ void Q3DViewer::renderIsoSurface()
 
 void Q3DViewer::renderTexture2D()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     /// \todo Això és massa lent, potser l'hauríem de treure.
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOff();   // off perquè vagi més ràpid
@@ -751,6 +793,12 @@ void Q3DViewer::renderTexture2D()
 
 void Q3DViewer::renderTexture3D()
 {
+    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    {
+        m_renderer->RemoveAllViewProps();
+        m_renderer->AddViewProp( m_vtkVolume );
+    }
+
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->ShadeOff();   /// \todo amb on també funciona; hauríem de donar l'opció, o deixar-ho sempre a off o sempre a on?
     m_volumeProperty->SetInterpolationTypeToLinear();
