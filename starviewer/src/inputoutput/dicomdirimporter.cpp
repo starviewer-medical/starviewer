@@ -202,6 +202,12 @@ bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QStri
 {
     if(QFile::copy(dicomdirImagePath, localImagePath))
     {
+		// donem permisos per si l'arxiu encara és read only al provenir d'un CD
+		if( !QFile::setPermissions( localImagePath, QFile::WriteOther | QFile::ReadOther ) )
+		{
+			WARN_LOG( "No hem pogut canviar els permisos de lectura/escriptura pel fitxer importat [" + localImagePath + "]" );
+		}
+		// TODO perquè cal fer aquest DICOMTagReader? Encara es fa servir la cache de dicom tag reader????
         DICOMTagReader *dicomTagReader = new DICOMTagReader(localImagePath);
         emit imageImportedToDisk(dicomTagReader);
         return true;
