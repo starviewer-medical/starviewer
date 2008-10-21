@@ -31,6 +31,36 @@ void LocalDatabaseUtilDAL::compact()
         logError(compactSentence);
 }
 
+int LocalDatabaseUtilDAL::getDatabaseRevision()
+{
+    int columns , rows;
+    char **reply = NULL , **error = NULL;
+
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetDatabaseRevision()),
+                                    &reply, &rows, &columns, error);
+
+    if (getLastError() != SQLITE_OK)
+    {
+        logError (buildSqlGetDatabaseRevision());
+        return -1;
+    }
+
+    if (rows > 0)
+    {
+        return QString(reply[1]).toInt();
+    }
+    else
+    {
+        //si no trobem la fila amb la revisió de la base de dades retornem -1
+        return -1;
+    }
+}
+
+QString LocalDatabaseUtilDAL::buildSqlGetDatabaseRevision()
+{
+    return "select * from DatabaseRevision";
+}
+
 void LocalDatabaseUtilDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;

@@ -67,6 +67,9 @@ public:
     ///compacta la base de dades
     void compact();
 
+    ///Retorna la revisió de la base de dades, sinó ha trobat de quina revisió és la base de dades retorna -1
+    int getDatabaseRevision();
+
     ///Comprova si hi espai suficient al disc dur per descarregar nous objectes, si no n'hi ha suficient esborra estudis vells per intentar alliberar prou espai per permetre la descàrrega de nous objectes
     bool isEnoughSpace();
 
