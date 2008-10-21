@@ -9,6 +9,9 @@
 
 #include "qviewer.h"
 
+#include "combiningvoxelshader.h"
+#include "vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h"
+
 // FWD declarations
 class vtkRenderer;
 class vtkImageCast;
@@ -179,15 +182,18 @@ private:
     /// Mapper del volum.
     vtkVolumeRayCastMapper *m_volumeMapper;
 
-    /// Funcions de ray cast.
-    vtkVolumeRayCastCompositeFunction *m_volumeRayCastFunction;
-    vtkVolumeRayCastVoxelShaderCompositeFunction *m_volumeRayCastVoxelShaderFunction;
-    vtkVolumeRayCastIsosurfaceFunction *m_volumeRayCastIsosurfaceFunction;
-
     /// Voxel shaders.
     AmbientVoxelShader *m_ambientVoxelShader;
     DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
     ObscuranceVoxelShader *m_obscuranceVoxelShader;
+    typedef CombiningVoxelShader<AmbientVoxelShader, ObscuranceVoxelShader> AmbientObscuranceVoxelShader;
+    AmbientObscuranceVoxelShader *m_ambientObscuranceVoxelShader;
+
+    /// Funcions de ray cast.
+    vtkVolumeRayCastCompositeFunction *m_volumeRayCastFunction;
+    vtkVolumeRayCastVoxelShaderCompositeFunction *m_volumeRayCastVoxelShaderFunction;
+    vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientObscuranceVoxelShader> *m_volumeRayCastAmbientObscuranceFunction;
+    vtkVolumeRayCastIsosurfaceFunction *m_volumeRayCastIsosurfaceFunction;
 
     /// La funció de transferència que s'aplica
     TransferFunction *m_transferFunction;
@@ -200,6 +206,8 @@ private:
 
     /// Vector d'obscurances.
     double *m_obscurance;
+    /// Booleà que indica si les obscurances estan activades.
+    bool m_obscuranceOn;
 
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
     vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
