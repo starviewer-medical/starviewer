@@ -37,6 +37,9 @@ public:
 	/// Posar la posició del pacient
 	void setPatientOrientation( QString string );
 
+	/// Posar la reconstruccio (axial, sagital, coronal)
+	void setReconstruction( QString reconstruction );
+
 	/// Obtenir l'identificador
     int getIdentifier();
 
@@ -51,6 +54,9 @@ public:
 
 	/// Obtenir la posició del pacient
 	QString getPatientOrientation();
+
+	/// Obtenir la reconstruccio
+	QString getReconstruction();
 
     /// Mètode per mostrar els valors
     void show();
@@ -71,6 +77,9 @@ private:
 
 	/// Orientacio del pacient
 	QString m_patientOrientation;
+
+	/// Reconstruccio
+	QString m_reconstruction;
 };
 
 }

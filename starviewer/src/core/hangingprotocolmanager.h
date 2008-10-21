@@ -47,7 +47,7 @@ private:
 	bool isValidImage( Image * image, HangingProtocolImageSet * imageSet );
 
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
-    bool isValidSerie( Series * serie, HangingProtocolImageSet * imageSet );
+    bool isValidSerie( Patient * patient, Series * serie, HangingProtocolImageSet * imageSet );
 
 	/// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
 	void applyDisplayTransformations( Patient * patient, Series * serie,  int imageNumber, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet );

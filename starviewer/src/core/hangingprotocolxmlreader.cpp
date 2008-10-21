@@ -55,9 +55,6 @@ QList<HangingProtocol * > HangingProtocolXMLReader::read( QString path )
 
 			if( (file.fileName() != ".") && (file.fileName() != "..") )
 			{
-				/*QString absolutePath( file.absolutePath() );
-				absolutePath.append( "/");
-				absolutePath.append( file.fileName() );*/
 				directoryProtocols = read( file.absolutePath() + QDir::toNativeSeparators( "/" ) + file.fileName() ); 
 				protocols << directoryProtocols;
 			}
@@ -118,23 +115,23 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
                         hangingProtocol->setNumberOfScreens( reader->text().toString().toInt() );
                         reader->readNext();
                     }
-                    if( reader->name() == "protocol" )
+                    else if( reader->name() == "protocol" )
                     {
                         reader->readNext();
                         protocols << reader->text().toString();
                         reader->readNext();
                     }
-                    if( reader->name() == "restriction")
+                    else if( reader->name() == "restriction")
                     {
                         restriction = readRestriction( reader );
                         m_restrictionsList << restriction;
                     }
-                    if( reader->name() == "imageSet")
+                    else if( reader->name() == "imageSet")
                     {
                         imageSet = readImageSet( reader );
                         hangingProtocol->addImageSet( imageSet );
                     }
-                    if( reader->name() == "displaySet")
+                    else if( reader->name() == "displaySet")
                     {
                         displaySet = readDisplaySet( reader );
                         hangingProtocol->addDisplaySet( displaySet );
@@ -240,16 +237,21 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
             reader->readNext();
             displaySet->setImageSetNumber( reader->text().toString().toInt() );
         }
-        if( reader->name() == "position" )
+        else if( reader->name() == "position" )
         {
             reader->readNext();
             displaySet->setPosition( reader->text().toString() );
         }
-		if( reader->name() == "patientOrientation" )
+		else if( reader->name() == "patientOrientation" )
         {
             reader->readNext();
 			displaySet->setPatientOrientation( reader->text().toString() );
         }
+		else if( reader->name() == "reconstruction" )
+		{
+			reader->readNext();
+			displaySet->setReconstruction( reader->text().toString() );
+		}
         else if( reader->name() == "displaySet" && reader->tokenType() == QXmlStreamReader::EndElement )
         {
             break;

@@ -70,6 +70,16 @@ QString HangingProtocolDisplaySet::getPatientOrientation()
 	return m_patientOrientation;
 }
 
+void HangingProtocolDisplaySet::setReconstruction( QString reconstruction )
+{
+	m_reconstruction = reconstruction;
+}
+
+QString HangingProtocolDisplaySet::getReconstruction()
+{
+	return m_reconstruction;
+}
+
 void HangingProtocolDisplaySet::show()
 {
     DEBUG_LOG( tr("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(m_imageSetNumber).arg(m_position) );
