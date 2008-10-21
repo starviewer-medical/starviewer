@@ -411,6 +411,22 @@ void LocalDatabaseManager::compact()
     dbConnect.close();
 }
 
+int LocalDatabaseManager::getDatabaseRevision()
+{
+    LocalDatabaseUtilDAL utilDAL;
+    DatabaseConnection dbConnect;
+    int databaseRevision;
+
+    dbConnect.open();
+    utilDAL.setDatabaseConnection(&dbConnect);
+    databaseRevision = utilDAL.getDatabaseRevision();
+    setLastError(utilDAL.getLastError());
+
+    dbConnect.close();
+
+    return databaseRevision;
+}
+
 bool LocalDatabaseManager::isEnoughSpace()
 {
     HardDiskInformation hardDiskInformation;

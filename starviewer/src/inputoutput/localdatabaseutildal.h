@@ -24,7 +24,11 @@ public:
 
     LocalDatabaseUtilDAL();
 
+    ///Compacta la BD
     void compact();
+
+    ///retorna la revisió de la BD a la que està connectada, si no troba a quina revisió pertany retorna -1
+    int getDatabaseRevision();
 
     ///Connexió de la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
@@ -37,6 +41,9 @@ private :
     DatabaseConnection *m_dbConnection;
 
     int m_lastSqliteError;
+
+    ///Ens retorna un string amb el select a executar per retorna la revisió de la base de dades sobre la qual estem connectats
+    QString buildSqlGetDatabaseRevision();
 
     ///Ens fa un ErrorLog d'una sentència sql
     void logError(QString sqlSentence);
