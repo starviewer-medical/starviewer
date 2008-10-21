@@ -227,7 +227,7 @@ private slots:
     void slotProgress();
 private:
     /// Tipus d'error que podem tenir
-    enum { NoError = 1, SizeMismatch, InvalidFileName, UnknownError };
+    enum { NoError = 1, SizeMismatch, InvalidFileName, OutOfMemory, UnknownError };
     void inputConstructor();
     void inputDestructor();
     /**
@@ -235,7 +235,7 @@ private:
      * @param fileName
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int openFile( QString fileName );
+    int readSingleFile( QString fileName );
 
     /**
      * Donat un conjunt de fitxers els carrega en una única sèrie/volum
@@ -243,6 +243,9 @@ private:
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
     int readFiles( QStringList filenames );
+
+	/// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
+	int identifyErrorMessage( const QString &errorMessage );
 
 private:
     typedef itk::ImageFileReader< ItkImageType >  ReaderType;

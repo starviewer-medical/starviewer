@@ -97,8 +97,8 @@ Volume::VtkImageTypePointer Volume::getVtkData()
         QStringList fileList = getInputFiles();
         if( !fileList.isEmpty() )
         {
-            // TODO falta control dels errors que pot retornar ( p. exemple size mismatch! )
-            if( this->readFiles( fileList ) == SizeMismatch )
+            // TODO falta control dels errors que pot retornar ( p. exemple OutOfMemory! )
+            if( this->readFiles( fileList ) == OutOfMemory )
             {
                 // TODO què fem?
             }
@@ -582,20 +582,17 @@ void Volume::readDifferentSizeImagesIntoOneVolume( QStringList filenames )
                     .arg( QFileInfo( filenames.at(0) ).dir().path() )
                     .arg( e.GetDescription() )
                     );
-            // llegim el missatge d'error per esbrinar de quin error es tracta
-            QString errorMessage( e.GetDescription() );
-            if( errorMessage.contains("Size mismatch") )
-            {
-                // aquest error no s'hauria de donar, estem llegint imatges una a una
-                errorCode = SizeMismatch;
-            }
+            
+			// llegim el missatge d'error per esbrinar de quin error es tracta
+			errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
         }
         if ( errorCode == NoError )
         {
             itkImage = m_reader->GetOutput();
             m_reader->GetOutput()->DisconnectPipeline();
-
         }
+		// TODO no es fa tractament d'errors!
+
         // Un cop llegit el block, fem el tiling
         tileFilter->PushBackInput( itkImage );
         progressCount += progressIncrement;
@@ -639,7 +636,7 @@ void Volume::inputDestructor()
 //     m_gdcmIO->Delete();
 }
 
-int Volume::openFile( QString fileName )
+int Volume::readSingleFile( QString fileName )
 {
     ProgressCommand::Pointer observer = ProgressCommand::New();
     m_reader->AddObserver( itk::ProgressEvent(), observer );
@@ -658,13 +655,10 @@ int Volume::openFile( QString fileName )
                 .arg( QFileInfo( fileName ).dir().path() )
                 .arg( e.GetDescription() )
                 );
-        // llegim el missatge d'error per esbrinar de quin error es tracta
-        QString errorMessage( e.GetDescription() );
-        if( errorMessage.contains("Size mismatch") )
-        {
-            // aquest error no es pot donar, és un sol fitxer!
-            errorCode = SizeMismatch;
-        }
+		// llegim el missatge d'error per esbrinar de quin error es tracta
+		errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
+        
+		// TODO no sembla gaire correcte aquest "emit progress(100)"
         emit progress( 100 );
     }
     if ( errorCode == NoError )
@@ -672,6 +666,7 @@ int Volume::openFile( QString fileName )
         this->setData( m_reader->GetOutput() );
         emit progress( 100 );
     }
+	// TODO falta tractament d'errors!?
     return errorCode;
 }
 
@@ -711,9 +706,7 @@ int Volume::readFiles( QStringList filenames )
                 .arg( e.GetDescription() )
                 );
             // llegim el missatge d'error per esbrinar de quin error es tracta
-            QString errorMessage( e.GetDescription() );
-            if( errorMessage.contains("Size mismatch") )
-                errorCode = SizeMismatch;
+			errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
         }
         if ( errorCode == NoError )
         {
@@ -726,12 +719,27 @@ int Volume::readFiles( QStringList filenames )
             readDifferentSizeImagesIntoOneVolume( filenames );
             emit progress( 100 );
         }
+		else if( errorCode == OutOfMemory )
+		{
+			ERROR_LOG( "No podem carregar els arxius següents perquè no caben a memòria\n" + filenames.join("\n") );
+			emit progress( 100 );
+		}
     }
     else
     {
-        this->openFile( filenames.at(0) );
+        errorCode = this->readSingleFile( filenames.at(0) );
     }
     return errorCode;
+}
+
+int Volume::identifyErrorMessage( const QString &errorMessage )
+{
+	if( errorMessage.contains("Size mismatch") )
+		return SizeMismatch;
+	else if( errorMessage.contains("Failed to allocate memory for image") )
+		return OutOfMemory;
+	else
+		return NoError;
 }
 
 };
