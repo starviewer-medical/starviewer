@@ -40,6 +40,9 @@ public:
 	/// Posar la reconstruccio (axial, sagital, coronal)
 	void setReconstruction( QString reconstruction );
 
+	/// Posar la fase
+	void setPhase( QString phase );
+
 	/// Obtenir l'identificador
     int getIdentifier();
 
@@ -57,6 +60,9 @@ public:
 
 	/// Obtenir la reconstruccio
 	QString getReconstruction();
+
+	/// Obtenir la fase
+	QString getPhase();
 
     /// Mètode per mostrar els valors
     void show();
@@ -80,6 +86,9 @@ private:
 
 	/// Reconstruccio
 	QString m_reconstruction;
+
+	/// Fase
+	QString m_phase;
 };
 
 }

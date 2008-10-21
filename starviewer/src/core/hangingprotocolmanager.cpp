@@ -64,6 +64,10 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 	m_operationsMap.insert("S\\P-P\\S", "1,1"); m_operationsMap.insert("S\\P-F\\A", "2,0"); m_operationsMap.insert("S\\P-H\\A", "0,1");
 	m_operationsMap.insert("S\\P-F\\P", "2,1");
 
+	// Mappeig de les operacions per la vista axial
+	
+
+
 }
 
 
@@ -304,6 +308,11 @@ bool HangingProtocolManager::isValidSerie( Patient * patient, Series * serie, Ha
 			if( patient->getFullName() != restriction.valueRepresentation )
 				valid = false;
 		}
+		else if( restriction.selectorAttribute == "SeriesNumber" )
+		{
+			if( serie->getSeriesNumber() != restriction.valueRepresentation )
+				valid = false;
+		}
         i++;
     }
 
@@ -371,6 +380,12 @@ void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Ser
 		{
 			DEBUG_LOG( "Field reconstruction have an error" );
 		}
+	}
+
+	QString phase = displaySet->getPhase();
+	if( phase != "" )
+	{
+		viewer->getViewer()->setPhase( phase.toInt() );
 	}
 }
 
