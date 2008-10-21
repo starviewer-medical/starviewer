@@ -9,6 +9,9 @@
 
 const QString StarviewerVersionString("0.6.0");
 
+//Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
+const int StarviewerDatabaseRevisionRequired(3081);
+
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");
 const QString ApplicationNameString("Starviewer");
