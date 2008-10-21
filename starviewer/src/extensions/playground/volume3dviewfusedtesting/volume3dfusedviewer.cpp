@@ -10,8 +10,6 @@
 #include "q3dorientationmarker.h"
 #include "transferfunction.h"
 
-#include <iostream.h>
-
 // include's qt
 #include <QString>
 
@@ -282,7 +280,7 @@ void Volume3DFusedViewer::render()
 {
     if( m_mainVolume )
     {
-		cout << "entra" << endl;
+		DEBUG_LOG("entra");
         switch( m_renderFunction )
         {
         case Contouring:
@@ -430,7 +428,7 @@ bool Volume3DFusedViewer::rescale()
 void Volume3DFusedViewer::fusion( int option, double *range,unsigned char* data1,unsigned char* data2, TransferFunction *transferFunction1, TransferFunction *transferFunction2 )
 {
 	///Metode per fer la fusió de propietats.
-	cout << "entro al fusion" << endl;
+	DEBUG_LOG("entro al fusion");
 
 	if (rescale() )
 	{
@@ -455,7 +453,7 @@ void Volume3DFusedViewer::fusion( int option, double *range,unsigned char* data1
 		m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunctionFx2 );	
 		m_volumeMapper->SetInput( m_imageCaster->GetOutput() );
 	
- 		vtk4DLinearRegressionGradientEstimator *gradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+        vtk4DLinearRegressionGradientEstimator *gradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
  		m_volumeMapper->SetGradientEstimator( gradientEstimator );
 	
 		gradientEstimator->Delete();
@@ -486,7 +484,7 @@ void Volume3DFusedViewer::renderRayCasting()
 
 		if(m_gradient)
 		{
-			cout << "fem servir gradient" << endl;
+			DEBUG_LOG("fem servir gradient");
 	    	vtk4DLinearRegressionGradientEstimator *gradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
 		    m_volumeMapper->SetGradientEstimator( gradientEstimator );	
     		gradientEstimator->Delete();
@@ -497,7 +495,7 @@ void Volume3DFusedViewer::renderRayCasting()
 		m_vtkVolume->SetMapper( m_volumeMapper );
 
         m_renderer->Render();
-		cout << "render" << endl;
+		DEBUG_LOG("render");
 
     }
     else
