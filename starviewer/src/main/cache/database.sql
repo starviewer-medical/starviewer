@@ -9,7 +9,7 @@ CREATE TABLE DatabaseRevision
   Revision INTEGER
 ); 
 
-INSERT INTO DatabaseRevision (Revision) VALUES (3078);
+INSERT INTO DatabaseRevision (Revision) VALUES (3081);
 
 CREATE TABLE Patient
 ( 
