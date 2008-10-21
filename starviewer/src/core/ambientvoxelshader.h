@@ -29,6 +29,10 @@ public:
     virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
     virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const;
+    /// Retorna el color corresponent al vòxel a la posició offset.
+    HdrColor nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
+    /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
+    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const;
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -47,6 +51,18 @@ protected:
 
 inline HdrColor AmbientVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
+    return nvShade( offset, direction, baseColor );
+}
+
+
+inline HdrColor AmbientVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+{
+    return nvShade( position, direction, interpolator, baseColor );
+}
+
+
+inline HdrColor AmbientVoxelShader::nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
+{
     Q_UNUSED( direction );
     Q_UNUSED( baseColor );
 
@@ -57,7 +73,7 @@ inline HdrColor AmbientVoxelShader::shade( int offset, const Vector3 &direction,
 }
 
 
-inline HdrColor AmbientVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+inline HdrColor AmbientVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
 {
     Q_UNUSED( direction );
     Q_UNUSED( baseColor );
