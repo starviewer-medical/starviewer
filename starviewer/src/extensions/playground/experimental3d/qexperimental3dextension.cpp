@@ -48,6 +48,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_diffuseCheckBox, SIGNAL( toggled(bool) ), SLOT( enableSpecularLighting(bool) ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerLabel, SLOT( setEnabled(bool) ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_contourCheckBox, SIGNAL( toggled(bool) ), m_contourDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
     connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
@@ -137,7 +138,9 @@ void QExperimental3DExtension::doVisualization()
 {
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
     m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
+    if ( m_diffuseCheckBox->isChecked() ) m_viewer->updateShadingTable();
     m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
+    m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
     m_volume->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
     m_viewer->render();
 }

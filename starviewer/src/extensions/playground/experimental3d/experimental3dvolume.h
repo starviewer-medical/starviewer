@@ -13,9 +13,13 @@ class vtkVolumeRayCastMapper;
 namespace udg {
 
 
+class AmbientVoxelShader;
+class ContourVoxelShader;
+class DirectIlluminationVoxelShader;
 class TransferFunction;
 class Volume;
 class vtk4DLinearRegressionGradientEstimator;
+class vtkVolumeRayCastVoxelShaderCompositeFunction;
 
 
 class Experimental3DVolume {
@@ -43,6 +47,8 @@ public:
     void setGradientEstimator( GradientEstimator gradientEstimator );
     /// Estableix els paràmetres d'il·luminació.
     void setLighting( bool diffuse, bool specular, double specularPower );
+    /// Estableix els paràmetres del contorn.
+    void setContour( bool on, double threshold );
     /// Estableix la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -50,8 +56,10 @@ private:
 
     /// Crea el model de vòxels de treball.
     void createImage( Volume *volume );
-    /// Crea la volume ray cast function.
-    void createVolumeRayCastFunction();
+    /// Crea les volume ray cast functions.
+    void createVolumeRayCastFunctions();
+    /// Crea els voxel shaders.
+    void createVoxelShaders();
     /// Crea el mapper.
     void createMapper();
     /// Crea la propietat.
@@ -76,6 +84,15 @@ private:
 
     /// Volume ray cast function principal.
     vtkVolumeRayCastCompositeFunction *m_normalVolumeRayCastFunction;
+    /// Volume ray cast function amb shaders.
+    vtkVolumeRayCastVoxelShaderCompositeFunction *m_shaderVolumeRayCastFunction;
+
+    /// Voxel shader d'il·luminació ambient.
+    AmbientVoxelShader *m_ambientVoxelShader;
+    /// Voxel shader d'il·luminació directa (ambient + difusa [+ especular]).
+    DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
+    /// Voxel shader de contorns.
+    ContourVoxelShader *m_contourVoxelShader;
 
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;

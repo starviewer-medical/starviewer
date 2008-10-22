@@ -1,5 +1,6 @@
 #include "experimental3dvolume.h"
 
+#include <vtkEncodedGradientShader.h>
 #include <vtkFiniteDifferenceGradientEstimator.h>
 #include <vtkImageCast.h>
 #include <vtkImageData.h>
@@ -10,9 +11,13 @@
 #include <vtkVolumeRayCastCompositeFunction.h>
 #include <vtkVolumeRayCastMapper.h>
 
+#include "ambientvoxelshader.h"
+#include "contourvoxelshader.h"
+#include "directilluminationvoxelshader.h"
 #include "transferfunction.h"
 #include "volume.h"
 #include "vtk4DLinearRegressionGradientEstimator.h"
+#include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 
 
 namespace udg {
@@ -22,7 +27,8 @@ Experimental3DVolume::Experimental3DVolume( Volume *volume )
  : m_finiteDifferenceGradientEstimator( 0 ), m_4DLinearRegressionGradientEstimator( 0 )
 {
     createImage( volume );
-    createVolumeRayCastFunction();
+    createVolumeRayCastFunctions();
+    createVoxelShaders();
     createMapper();
     createProperty();
     createVolume();
@@ -33,6 +39,10 @@ Experimental3DVolume::~Experimental3DVolume()
 {
     m_image->Delete();
     m_normalVolumeRayCastFunction->Delete();
+    m_shaderVolumeRayCastFunction->Delete();
+    delete m_ambientVoxelShader;
+    delete m_directIlluminationVoxelShader;
+    delete m_contourVoxelShader;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -87,18 +97,21 @@ void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstim
             if ( !m_finiteDifferenceGradientEstimator )
                 m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
             m_mapper->SetGradientEstimator( m_finiteDifferenceGradientEstimator );
+            m_contourVoxelShader->setGradientEstimator( m_finiteDifferenceGradientEstimator );
             break;
         case FourDLInearRegression1:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 1 );
             m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
+            m_contourVoxelShader->setGradientEstimator( m_4DLinearRegressionGradientEstimator );
             break;
         case FourDLInearRegression2:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 2 );
             m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
+            m_contourVoxelShader->setGradientEstimator( m_4DLinearRegressionGradientEstimator );
             break;
     }
 }
@@ -106,11 +119,47 @@ void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstim
 
 void Experimental3DVolume::setLighting( bool diffuse, bool specular, double specularPower )
 {
-    if ( diffuse ) m_property->ShadeOn();
-    else m_property->ShadeOff();
+    m_shaderVolumeRayCastFunction->RemoveVoxelShader( 0 );  // el primer sempre és ambient o il·luminació directa
+
+    if ( diffuse )
+    {
+        m_property->ShadeOn();
+        m_shaderVolumeRayCastFunction->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
+
+        m_directIlluminationVoxelShader->setEncodedNormals( m_mapper->GetGradientEstimator()->GetEncodedNormals() );
+        vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
+        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_volume ),
+                                                                  gradientShader->GetGreenDiffuseShadingTable( m_volume ),
+                                                                  gradientShader->GetBlueDiffuseShadingTable( m_volume ) );
+        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_volume ),
+                                                                   gradientShader->GetGreenSpecularShadingTable( m_volume ),
+                                                                   gradientShader->GetBlueSpecularShadingTable( m_volume ) );
+    }
+    else
+    {
+        m_property->ShadeOff();
+        m_shaderVolumeRayCastFunction->InsertVoxelShader( 0, m_ambientVoxelShader );
+    }
 
     m_property->SetSpecular( specular ? 1.0 : 0.0 );
     m_property->SetSpecularPower( specularPower );
+
+    m_mapper->SetVolumeRayCastFunction( m_normalVolumeRayCastFunction );
+}
+
+
+void Experimental3DVolume::setContour( bool on, double threshold )
+{
+    if ( on )
+    {
+        m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+        m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
+        m_contourVoxelShader->setThreshold( threshold );
+    }
+    else
+    {
+        m_shaderVolumeRayCastFunction->RemoveVoxelShader( m_contourVoxelShader );
+    }
 }
 
 
@@ -118,6 +167,8 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
 {
     m_property->SetColor( transferFunction.getColorTransferFunction() );
     m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
+    m_ambientVoxelShader->setTransferFunction( transferFunction );
+    m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
 }
 
 
@@ -175,9 +226,21 @@ void Experimental3DVolume::createImage( Volume *volume )
 }
 
 
-void Experimental3DVolume::createVolumeRayCastFunction()
+void Experimental3DVolume::createVolumeRayCastFunctions()
 {
     m_normalVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
+    m_shaderVolumeRayCastFunction = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
+}
+
+
+void Experimental3DVolume::createVoxelShaders()
+{
+    m_ambientVoxelShader = new AmbientVoxelShader();
+    m_ambientVoxelShader->setData( m_data );
+    m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
+    m_directIlluminationVoxelShader->setData( m_data );
+    m_contourVoxelShader = new ContourVoxelShader();
+    m_contourVoxelShader->setData( m_data );
 }
 
 
