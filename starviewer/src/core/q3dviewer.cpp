@@ -7,6 +7,7 @@
 #include "q3dviewer.h"
 #include "volume.h"
 #include "image.h"
+#include "series.h"
 #include "imageplane.h"
 #include "logging.h"
 #include "q3dorientationmarker.h"
@@ -152,6 +153,8 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_obscuranceOn = false;
 
     m_4DLinearRegressionGradientEstimator = 0;
+    m_window = 256;
+    m_level=127;
 }
 
 Q3DViewer::~Q3DViewer()
@@ -181,8 +184,60 @@ vtkRenderer *Q3DViewer::getRenderer()
 
 void Q3DViewer::getCurrentWindowLevel( double wl[2] )
 {
-    // TODO estem obligats a implementar-lo. De moment retornem 0,0
-    wl[0] = wl[1] = 0.0;
+    wl[0] = m_window;
+    wl[1] = m_level;
+}
+
+double Q3DViewer::getCurrentColorWindow()
+{
+    if( m_mainVolume )
+    {
+        return m_window;
+    }
+    else
+    {
+        DEBUG_LOG( "::getCurrentColorWindow() : No tenim input " );
+        return 0;
+    }
+}
+
+double Q3DViewer::getCurrentColorLevel()
+{
+    if( m_mainVolume )
+    {
+        return m_level;
+    }
+    else
+    {
+        DEBUG_LOG( "::getCurrentColorLevel() : No tenim input " );
+        return 0;
+    }
+}
+
+void Q3DViewer::setWindowLevel( double window , double level )
+{
+    if( m_mainVolume )
+    {
+        //this->refresh();
+        m_transferFunction->clear();
+        // Opacitat
+        m_transferFunction->addPointToOpacity( level - (window/2.0), .0 );
+        m_transferFunction->addPointToOpacity( level + (window/2.0), .4 );
+        m_transferFunction->addPointToOpacity( level + (window/2.0) + 0.1, .0 );
+        // Colors
+        m_transferFunction->addPointToColorRGB( level - (window/2.0), 0.0, 0.0, 0.0 );
+        m_transferFunction->addPointToColorRGB( level + (window/2.0), 1.0, 1.0, 1.0 );
+
+        m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
+        m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
+           
+        this->render(); 
+        emit windowLevelChanged( window , level );
+    }
+    else
+    {
+        DEBUG_LOG( "::setWindowLevel() : No tenim input " );
+    }
 }
 
 void Q3DViewer::resetView( CameraOrientationType view )
@@ -285,24 +340,55 @@ void Q3DViewer::setInput( Volume* volume )
     m_mainVolume = volume;
 
     // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
-    //\TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet 702)
+    //\TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
     ImagePlane * currentPlane = new ImagePlane();
-    currentPlane->fillFromImage( m_mainVolume->getImage(0,0) );
+    Image *imageReference = m_mainVolume->getSeries()->getImages().at( 0 ); //Sempre penem la primera llesca suposem que és constant
+    currentPlane->fillFromImage( imageReference );
     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
     currentPlane->getRowDirectionVector( currentPlaneRowVector );
     currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
-
-    DEBUG_LOG( QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
-    DEBUG_LOG( QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
+    //En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
+    //currentPlane->getNormalVector( currentPlaneNormalVector );
 
     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
     projectionMatrix->Identity();
     int row;
-    for( row = 0; row < 3; row++ )
+    if(currentPlaneRowVector[0]>currentPlaneRowVector[1] || currentPlaneRowVector[0]>currentPlaneRowVector[2])
     {
-        projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
-        projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
+        //Row = les X -> Column = les Y
+        for( row = 0; row < 3; row++ )
+        {
+            projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
+            projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
+        }
     }
+    else
+    {
+        if(currentPlaneRowVector[1]>currentPlaneRowVector[2])
+        {
+            //Row = les Y -> Column = les Z
+            int row;
+            for( row = 0; row < 3; row++ )
+            {
+                projectionMatrix->SetElement(row,1, (currentPlaneRowVector[ row ]));
+                projectionMatrix->SetElement(row,2, (currentPlaneColumnVector[ row ]));
+            }
+        }
+        else
+        {
+            //Row = les Z -> Column = les X
+            int row;
+            for( row = 0; row < 3; row++ )
+            {
+                projectionMatrix->SetElement(row,2, (currentPlaneRowVector[ row ]));
+                projectionMatrix->SetElement(row,0, (currentPlaneColumnVector[ row ]));
+            }
+        }
+    }
+
+
+    DEBUG_LOG( QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
+    DEBUG_LOG( QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
 
     m_vtkVolume->SetUserMatrix(projectionMatrix);
     delete currentPlane;
@@ -403,11 +489,6 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
                                                                    gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
                                                                    gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
     }
-}
-
-void Q3DViewer::setWindowLevel( double, double )
-{
-    // TODO estem obligats a implementar-lo.
 }
 
 void Q3DViewer::resetOrientation()

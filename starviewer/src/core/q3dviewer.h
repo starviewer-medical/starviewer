@@ -61,7 +61,11 @@ public:
 
     virtual vtkRenderer *getRenderer();
 
+    /// Obté el window level actual de la imatge
+    double getCurrentColorWindow();
+    double getCurrentColorLevel();
     void getCurrentWindowLevel( double wl[2] );
+
     void resetView( CameraOrientationType view );
 
 public slots:
@@ -116,6 +120,8 @@ signals:
     void obscuranceCancelledByProgram();
     /// Informa del rang de valors del volum quan aquest canvia.
     void scalarRange( double min, double max );
+    /// indica el nou window level
+    void windowLevelChanged( double window , double level );
 
 private:
     /// fa la visualització per raycasting
@@ -209,6 +215,10 @@ private:
     double *m_obscurance;
     /// Booleà que indica si les obscurances estan activades.
     bool m_obscuranceOn;
+
+    /// Valors de window i level
+    double m_window;
+    double m_level;
 
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
     vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;

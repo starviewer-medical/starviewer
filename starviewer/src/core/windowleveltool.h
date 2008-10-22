@@ -15,7 +15,8 @@ namespace udg {
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class Q2DViewer;
+//class Q2DViewer;
+class QViewer;
 
 class WindowLevelTool : public Tool
 {
@@ -42,7 +43,8 @@ private slots:
     void endWindowLevel();
 
 private:
-    Q2DViewer *m_2DViewer;
+    //Q2DViewer *m_2DViewer;
+    QViewer *m_2DViewer;
 
     /// valors per controlar el mapeig del window level
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
