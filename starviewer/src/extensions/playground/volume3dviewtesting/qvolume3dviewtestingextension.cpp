@@ -46,6 +46,7 @@ void QVolume3DViewTestingExtension::initializeTools()
     // obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
     m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_panToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
@@ -55,8 +56,12 @@ void QVolume3DViewTestingExtension::initializeTools()
 
     // registrem al manager les tools que van amb el viewer principal
     QStringList toolsList;
-    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool";
+    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "WindowLevelTool";
     m_toolManager->setViewerTools( m_3DView, toolsList );
+
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "Rotate3DTool" << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
 }
 
 void QVolume3DViewTestingExtension::loadClutPresets()
