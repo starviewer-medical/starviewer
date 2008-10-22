@@ -34,6 +34,9 @@ public:
     /// Posa el color de fons a \a color.
     void setBackgroundColor( QColor color );
 
+    /// Actualitza la taula d'ombreig (necessari per fer servir el voxel shader d'il·luminació directa).
+    void updateShadingTable();
+
 public slots:
 
     /// Força l'execució de la visualització.

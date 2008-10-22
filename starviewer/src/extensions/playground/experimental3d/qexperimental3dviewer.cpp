@@ -2,8 +2,11 @@
 
 #include <QVTKWidget.h>
 
+#include <vtkEncodedGradientEstimator.h>
+#include <vtkEncodedGradientShader.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
+#include <vtkVolumeRayCastMapper.h>
 
 #include "experimental3dvolume.h"
 #include "../optimalviewpoint/vtkInteractorStyleSwitchGgg.h"
@@ -67,6 +70,14 @@ void QExperimental3DViewer::setBackgroundColor( QColor color )
 {
     m_renderer->SetBackground( color.redF(), color.greenF(), color.blueF() );
     render();
+}
+
+
+void QExperimental3DViewer::updateShadingTable()
+{
+    vtkVolume *volume = m_volume->getVolume();
+    vtkVolumeRayCastMapper *mapper = vtkVolumeRayCastMapper::SafeDownCast( volume->GetMapper() );
+    mapper->GetGradientShader()->UpdateShadingTable( m_renderer, volume, mapper->GetGradientEstimator() );
 }
 
 
