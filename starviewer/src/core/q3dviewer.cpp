@@ -230,8 +230,8 @@ void Q3DViewer::setWindowLevel( double window , double level )
 
         m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
         m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
-           
-        this->render(); 
+
+        this->render();
         emit windowLevelChanged( window , level );
     }
     else
@@ -352,40 +352,44 @@ void Q3DViewer::setInput( Volume* volume )
 
     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
     projectionMatrix->Identity();
-    int row;
-    if(currentPlaneRowVector[0]>currentPlaneRowVector[1] || currentPlaneRowVector[0]>currentPlaneRowVector[2])
+
+    if ( currentPlaneRowVector[0] != 0.0 || currentPlaneRowVector[1] != 0.0 || currentPlaneRowVector[2] != 0.0 )
     {
-        //Row = les X -> Column = les Y
-        for( row = 0; row < 3; row++ )
+        int row;
+
+        if(currentPlaneRowVector[0]>currentPlaneRowVector[1] || currentPlaneRowVector[0]>currentPlaneRowVector[2])
         {
-            projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
-            projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
-        }
-    }
-    else
-    {
-        if(currentPlaneRowVector[1]>currentPlaneRowVector[2])
-        {
-            //Row = les Y -> Column = les Z
-            int row;
+            //Row = les X -> Column = les Y
             for( row = 0; row < 3; row++ )
             {
-                projectionMatrix->SetElement(row,1, (currentPlaneRowVector[ row ]));
-                projectionMatrix->SetElement(row,2, (currentPlaneColumnVector[ row ]));
+                projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
+                projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
             }
         }
         else
         {
-            //Row = les Z -> Column = les X
-            int row;
-            for( row = 0; row < 3; row++ )
+            if(currentPlaneRowVector[1]>currentPlaneRowVector[2])
             {
-                projectionMatrix->SetElement(row,2, (currentPlaneRowVector[ row ]));
-                projectionMatrix->SetElement(row,0, (currentPlaneColumnVector[ row ]));
+                //Row = les Y -> Column = les Z
+                int row;
+                for( row = 0; row < 3; row++ )
+                {
+                    projectionMatrix->SetElement(row,1, (currentPlaneRowVector[ row ]));
+                    projectionMatrix->SetElement(row,2, (currentPlaneColumnVector[ row ]));
+                }
+            }
+            else
+            {
+                //Row = les Z -> Column = les X
+                int row;
+                for( row = 0; row < 3; row++ )
+                {
+                    projectionMatrix->SetElement(row,2, (currentPlaneRowVector[ row ]));
+                    projectionMatrix->SetElement(row,0, (currentPlaneColumnVector[ row ]));
+                }
             }
         }
     }
-
 
     DEBUG_LOG( QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
     DEBUG_LOG( QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
