@@ -52,10 +52,20 @@ public:
     /// Retorna la funció de transferència llegida des del fitxer anomenat \a fileName. Retorna nul si no es pot llegir el fitxer.
     static TransferFunction * fromFile( const QString & fileName );
 
+    /// Retorna la funció de transferència llegida des del fitxer XML \a file. Retorna nul si no es pot llegir el fitxer.
+    static TransferFunction* fromXmlFile( QFile &file );
+    /// Retorna la funció de transferència llegida des del fitxer XML anomenat \a fileName. Retorna nul si no es pot llegir el fitxer.
+    static TransferFunction* fromXmlFile( const QString &fileName );
+
     /// Escriu la funció de transferència \a transferFunction al fitxer \a file.
     static void toFile( QFile & file, const TransferFunction & transferFunction );
     /// Escriu la funció de transferència \a transferFunction al fitxer anomentat \a fileName.
     static void toFile( const QString & fileName, const TransferFunction & transferFunction );
+
+    /// Escriu la funció de transferència \a transferFunction al fitxer XML \a file.
+    static void toXmlFile( QFile &file, const TransferFunction &transferFunction );
+    /// Escriu la funció de transferència \a transferFunction al fitxer XML anomentat \a fileName.
+    static void toXmlFile( const QString &fileName, const TransferFunction &transferFunction );
 
 private:
 
