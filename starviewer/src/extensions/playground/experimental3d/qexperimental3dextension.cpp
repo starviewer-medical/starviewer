@@ -85,11 +85,15 @@ void QExperimental3DExtension::loadTransferFunction()
 
     QString transferFunctionDir = settings.value( "transferFunctionDir", QString() ).toString();
     QString transferFunctionFileName = QFileDialog::getOpenFileName( this, tr("Load transfer function"), transferFunctionDir,
-                                                                     tr("Transfer function files (*.tf);;All files (*)") );
+                                                                     tr("Transfer function files (*.tf);;XML files (*.xml);;All files (*)") );
 
     if ( !transferFunctionFileName.isNull() )
     {
-        TransferFunction *transferFunction = TransferFunctionIO::fromFile( transferFunctionFileName );
+        TransferFunction *transferFunction;
+
+        if ( transferFunctionFileName.endsWith( ".xml" ) ) transferFunction = TransferFunctionIO::fromXmlFile( transferFunctionFileName );
+        else transferFunction = TransferFunctionIO::fromFile( transferFunctionFileName );
+
         m_transferFunctionEditor->setTransferFunction( *transferFunction );
         delete transferFunction;
 
@@ -107,14 +111,19 @@ void QExperimental3DExtension::saveTransferFunction()
     settings.beginGroup( "Experimental3D" );
 
     QString transferFunctionDir = settings.value( "transferFunctionDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save transfer function"), transferFunctionDir, tr("Transfer function files (*.tf);;All files (*)") );
+    QFileDialog saveDialog( this, tr("Save transfer function"), transferFunctionDir,
+                            tr("Transfer function files (*.tf);;XML files (*.xml);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
     saveDialog.setDefaultSuffix( "tf" );
 
     if ( saveDialog.exec() == QDialog::Accepted )
     {
         QString transferFunctionFileName = saveDialog.selectedFiles().first();
-        TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunctionEditor->getTransferFunction() );
+
+        if ( transferFunctionFileName.endsWith( ".xml" ) )
+            TransferFunctionIO::toXmlFile( transferFunctionFileName, m_transferFunctionEditor->getTransferFunction() );
+        else
+            TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunctionEditor->getTransferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
         settings.setValue( "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
