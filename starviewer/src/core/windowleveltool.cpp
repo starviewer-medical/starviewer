@@ -18,9 +18,10 @@ WindowLevelTool::WindowLevelTool( QViewer *viewer, QObject *parent )  : Tool( vi
 {
     m_state = NONE;
     m_toolName = "WindowLevelTool";
-    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    //m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    m_2DViewer = viewer;
     // ens assegurem que desde la creació tenim un viewer vàlid
-    Q_ASSERT( m_2DViewer );
+    //Q_ASSERT( m_2DViewer );
 }
 
 WindowLevelTool::~WindowLevelTool()
@@ -52,8 +53,10 @@ void WindowLevelTool::handleEvent( unsigned long eventID )
 void WindowLevelTool::startWindowLevel()
 {
     m_state = WINDOWLEVELING;
-    m_initialWindow = m_2DViewer->getCurrentColorWindow();
-    m_initialLevel = m_2DViewer->getCurrentColorLevel();
+    double wl[2];
+    m_2DViewer->getCurrentWindowLevel(wl);
+    m_initialWindow = wl[0];
+    m_initialLevel = wl[1];
     m_2DViewer->getEventPosition( m_windowLevelStartPosition );
 }
 
