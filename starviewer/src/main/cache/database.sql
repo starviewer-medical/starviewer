@@ -9,7 +9,7 @@ CREATE TABLE DatabaseRevision
   Revision TEXT
 ); 
 
-INSERT INTO DatabaseRevision (Revision) VALUES ('$Rev');
+INSERT INTO DatabaseRevision (Revision) VALUES ('$Rev$');
 
 CREATE TABLE Patient
 ( 
