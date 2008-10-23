@@ -180,9 +180,7 @@ void Experimental3DVolume::createImage( Volume *volume )
     imageCast->SetOutputScalarTypeToInt();
     imageCast->Update();
 
-    vtkImageData *inputImage = imageCast->GetOutput();
-
-    double *range = inputImage->GetScalarRange();
+    double *range = imageCast->GetOutput()->GetScalarRange();
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "original range: min = %1, max = %2" ).arg( min ).arg( max ) );
 
@@ -202,8 +200,10 @@ void Experimental3DVolume::createImage( Volume *volume )
         double shift = -min;
         double slope = 255.0 / ( max - min );
 
+        imageCast->GetOutput()->ReleaseDataFlagOn();    // necessari per alliberar memòria intermitja que ja no necessitem
+
         vtkImageShiftScale *imageShiftScale = vtkImageShiftScale::New();
-        imageShiftScale->SetInput( inputImage );
+        imageShiftScale->SetInput( imageCast->GetOutput() );
         imageShiftScale->SetShift( shift );
         imageShiftScale->SetScale( slope );
         imageShiftScale->SetOutputScalarTypeToUnsignedChar();
