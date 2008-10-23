@@ -32,8 +32,8 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 
 	// Mappeig de les operacions per la vista sagital
 	m_operationsMap.insert("A\\F-A\\H", "0,1"); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
-	m_operationsMap.insert("A\\F-P\\F", "2,1"); m_operationsMap.insert("A\\F-P\\H", "2,0"); m_operationsMap.insert("A\\F-I\\A", "3,0");
-	m_operationsMap.insert("A\\F-F\\A", "3,1"); m_operationsMap.insert("A\\F-F\\P", "1,0"); m_operationsMap.insert("A\\F-F\\P", "3,1");
+	m_operationsMap.insert("A\\F-P\\F", "2,1"); m_operationsMap.insert("A\\F-P\\H", "2,0"); m_operationsMap.insert("A\\F-H\\A", "1,0");
+	m_operationsMap.insert("A\\F-F\\A", "3,1"); m_operationsMap.insert("A\\F-F\\P", "3,0"); m_operationsMap.insert("A\\F-H\\P", "1,1");
 	
 	m_operationsMap.insert("A\\H-A\\F", "0,1"); m_operationsMap.insert("A\\H-P\\F", "2,0"); m_operationsMap.insert("A\\H-P\\H", "2,1");
 	m_operationsMap.insert("A\\H-F\\A", "1,0"); m_operationsMap.insert("A\\H-H\\A", "3,1"); m_operationsMap.insert("A\\H-F\\P", "1,1");
@@ -47,7 +47,6 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 	m_operationsMap.insert("P\\H-F\\A", "1,1"); m_operationsMap.insert("P\\H-H\\A", "3,0"); m_operationsMap.insert("P\\H-F\\P", "1,0");
 	m_operationsMap.insert("P\\H-H\\P", "3,1");
 	
-
 	m_operationsMap.insert("F\\A-A\\F", "3,1"); m_operationsMap.insert("F\\A-A\\H", "3,0"); m_operationsMap.insert("F\\A-P\\F", "1,0"); 
 	m_operationsMap.insert("F\\A-P\\H", "1,1"); m_operationsMap.insert("F\\A-H\\A", "2,1"); m_operationsMap.insert("F\\A-F\\P", "0,1");
 	m_operationsMap.insert("F\\A-H\\P", "2,0");
@@ -65,8 +64,37 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 	m_operationsMap.insert("S\\P-F\\P", "2,1");
 
 	// Mappeig de les operacions per la vista axial
-	
+	m_operationsMap.insert("A\\R-A\\L", "0,1");	m_operationsMap.insert("A\\R-P\\R", "2,1");	m_operationsMap.insert("A\\R-P\\L", "2,0");
+	m_operationsMap.insert("A\\R-R\\A", "3,1");	m_operationsMap.insert("A\\R-L\\A", "1,0");	m_operationsMap.insert("A\\R-R\\P", "3,0");
+	m_operationsMap.insert("A\\R-L\\P", "1,1");
 
+	m_operationsMap.insert("A\\L-A\\R", "0,1");	m_operationsMap.insert("A\\L-P\\R", "2,0");	m_operationsMap.insert("A\\L-P\\L", "2,1");
+	m_operationsMap.insert("A\\L-R\\A", "1,0");	m_operationsMap.insert("A\\L-L\\A", "3,1");	m_operationsMap.insert("A\\L-R\\P", "1,1");
+	m_operationsMap.insert("A\\L-L\\P", "3,0");
+
+	m_operationsMap.insert("P\\R-A\\R", "2,1");	m_operationsMap.insert("P\\R-A\\L", "2,0");	m_operationsMap.insert("P\\R-P\\L", "0,1");
+	m_operationsMap.insert("P\\R-R\\A", "3,0");	m_operationsMap.insert("P\\R-L\\A", "1,1");	m_operationsMap.insert("P\\R-R\\P", "3,1");
+	m_operationsMap.insert("P\\R-L\\P", "1,0");
+
+	m_operationsMap.insert("P\\L-A\\R", "2,0");	m_operationsMap.insert("P\\L-A\\L", "2,1");	m_operationsMap.insert("P\\L-P\\R", "0,1");
+	m_operationsMap.insert("P\\L-R\\A", "1,1");	m_operationsMap.insert("P\\L-L\\A", "3,0");	m_operationsMap.insert("P\\L-R\\P", "1,0");
+	m_operationsMap.insert("P\\L-L\\P", "3,1");
+
+	m_operationsMap.insert("R\\A-A\\R", "3,1");	m_operationsMap.insert("R\\A-A\\L", "3,0");	m_operationsMap.insert("R\\A-P\\R", "1,0");
+	m_operationsMap.insert("R\\A-P\\L", "1,1");	m_operationsMap.insert("R\\A-L\\A", "2,1");	m_operationsMap.insert("R\\A-R\\P", "0,1");
+	m_operationsMap.insert("R\\A-L\\P", "2,0");
+
+	m_operationsMap.insert("L\\A-A\\R", "3,0");	m_operationsMap.insert("L\\A-A\\L", "3,1");	m_operationsMap.insert("L\\A-P\\R", "1,1");
+	m_operationsMap.insert("L\\A-P\\L", "1,0");	m_operationsMap.insert("L\\A-R\\A", "2,1");	m_operationsMap.insert("L\\A-R\\P", "2,0");
+	m_operationsMap.insert("L\\A-L\\P", "0,1");
+
+	m_operationsMap.insert("R\\P-A\\R", "1,0");	m_operationsMap.insert("R\\P-A\\L", "1,1");	m_operationsMap.insert("R\\P-P\\R", "3,1");
+	m_operationsMap.insert("R\\P-P\\L", "3,0");	m_operationsMap.insert("R\\P-R\\A", "0,1");	m_operationsMap.insert("R\\P-L\\A", "2,0");
+	m_operationsMap.insert("R\\P-L\\P", "2,1");
+
+	m_operationsMap.insert("L\\P-A\\R", "1,1");	m_operationsMap.insert("L\\P-A\\L", "1,0");	m_operationsMap.insert("L\\P-P\\R", "3,0");
+	m_operationsMap.insert("L\\P-P\\L", "3,1");	m_operationsMap.insert("L\\P-R\\A", "2,0");	m_operationsMap.insert("L\\P-L\\A", "0,1");
+	m_operationsMap.insert("L\\P-R\\P", "2,1");
 
 }
 
