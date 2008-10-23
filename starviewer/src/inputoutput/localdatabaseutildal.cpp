@@ -7,6 +7,7 @@
 
 #include <sqlite3.h>
 #include <QString>
+#include <QRegExp>
 
 #include "localdatabaseutildal.h"
 #include "databaseconnection.h"
@@ -47,7 +48,17 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
 
     if (rows > 0)
     {
-        return QString(reply[1]).toInt();
+        QRegExp rexRevisionDatabase("\\d+");//La Revisió es guarda en el format $Revision \d+ $, nosaltres només volem el número per això busquem el \d+
+        int pos = rexRevisionDatabase.indexIn(reply[1]);
+
+        if (pos > -1)
+        {
+            return rexRevisionDatabase.cap(0).toInt();
+        }
+        else
+        {
+            return -1;
+        }
     }
     else
     {
