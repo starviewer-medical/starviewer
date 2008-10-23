@@ -44,8 +44,11 @@ public:
      */
     bool existsDatabaseFile();
 
-    /// reinstal·lar la base de dades
+    ///reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local
     bool reinstallDatabaseFile();
+
+    ///Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
+    bool updateDatabaseRevision();
 
     ///destructor de la classe
     ~CacheInstallation();
@@ -66,7 +69,6 @@ private :
      * @return indica si s'ha pogut crear la base de dades
      */
     bool createDatabaseFile();
-
 };
 }//end namespace udg
 

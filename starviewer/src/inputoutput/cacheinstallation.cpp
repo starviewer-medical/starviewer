@@ -14,6 +14,7 @@
 #include "starviewersettings.h"
 #include "databaseconnection.h"
 #include "logging.h"
+#include "deletedirectory.h"
 
 namespace udg {
 
@@ -159,26 +160,37 @@ bool CacheInstallation::createDatabaseFile()
 	}
 }
 
-bool CacheInstallation:: reinstallDatabaseFile()
+bool CacheInstallation::reinstallDatabaseFile()
 {
     QDir databaseFile;
     StarviewerSettings settings;
+    DeleteDirectory deleteDirectory;
 
     //si existeix l'esborrem
-    if ( existsDatabaseFile() )
+    if (existsDatabaseFile())
     {
         QFile databaseFile;
-        databaseFile.remove( settings.getDatabasePath() );
+        databaseFile.remove(settings.getDatabasePath());
     }
 
     //si no existeix el directori de la base de dades el creem
-    if ( !existsDatabasePath() )
+    if (!existsDatabasePath())
     {
         createDatabaseDir();
     }
     createDatabaseFile();
 
+    //Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les
+    deleteDirectory.deleteDirectory(settings.getCacheImagePath(), false);
+
     return existsDatabaseFile();
+}
+
+bool CacheInstallation::updateDatabaseRevision()
+{
+    /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
+     *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
+    return reinstallDatabaseFile();
 }
 
 CacheInstallation::~CacheInstallation()
