@@ -2,6 +2,7 @@
 #define UDGEXPERIMENTAL3DVOLUME_H
 
 
+class vtkEncodedGradientEstimator;
 class vtkFiniteDifferenceGradientEstimator;
 class vtkImageData;
 class vtkVolume;
@@ -66,6 +67,8 @@ private:
     void createProperty();
     /// Crea el volum.
     void createVolume();
+    /// Retorna l'estimador de gradient actual.
+    vtkEncodedGradientEstimator* gradientEstimator() const;
 
 private:
 
@@ -103,6 +106,8 @@ private:
     /// Volum.
     vtkVolume *m_volume;
 
+    /// Tipus d'estimador de gradient actual.
+    GradientEstimator m_gradientEstimator;
     /// Estimador de gradient per diferències finites.
     vtkFiniteDifferenceGradientEstimator *m_finiteDifferenceGradientEstimator;
     /// Estimador de gradient per regressió lineal 4D.

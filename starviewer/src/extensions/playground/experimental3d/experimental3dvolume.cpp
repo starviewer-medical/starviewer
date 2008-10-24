@@ -90,27 +90,26 @@ void Experimental3DVolume::setInterpolation( Interpolation interpolation )
 
 void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstimator )
 {
+    m_gradientEstimator = gradientEstimator;
+
     switch ( gradientEstimator )
     {
         case FiniteDifference:
             if ( !m_finiteDifferenceGradientEstimator )
                 m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
             m_mapper->SetGradientEstimator( m_finiteDifferenceGradientEstimator );
-            m_contourVoxelShader->setGradientEstimator( m_finiteDifferenceGradientEstimator );  /// \todo Fent això forcem el càlcul del gradient -> ho hem d'evitar
             break;
         case FourDLInearRegression1:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 1 );
             m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
-            m_contourVoxelShader->setGradientEstimator( m_4DLinearRegressionGradientEstimator );
             break;
         case FourDLInearRegression2:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 2 );
             m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
-            m_contourVoxelShader->setGradientEstimator( m_4DLinearRegressionGradientEstimator );
             break;
     }
 }
@@ -153,6 +152,7 @@ void Experimental3DVolume::setContour( bool on, double threshold )
     {
         m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
         m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
+        m_contourVoxelShader->setGradientEstimator( gradientEstimator() );
         m_contourVoxelShader->setThreshold( threshold );
     }
     else
@@ -253,6 +253,20 @@ void Experimental3DVolume::createVolume()
     // Centrem el volum a (0,0,0)
     double *center = m_volume->GetCenter();
     m_volume->AddPosition( -center[0], -center[1], -center[2] );
+}
+
+
+vtkEncodedGradientEstimator* Experimental3DVolume::gradientEstimator() const
+{
+    switch ( m_gradientEstimator )
+    {
+        case FiniteDifference:
+        default:
+            return m_finiteDifferenceGradientEstimator;
+        case FourDLInearRegression1:
+        case FourDLInearRegression2:
+            return m_4DLinearRegressionGradientEstimator;
+    }
 }
 
 
