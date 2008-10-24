@@ -45,6 +45,15 @@ private slots:
     /// Fa la visualització amb les opcions seleccionades.
     void doVisualization();
 
+    /// Posa els paràmetres de la càmera actuals als spinboxs corresponents.
+    void getCamera();
+    /// Assigna els paràmetres de la càmera d'acord amb els spinboxs corresponents.
+    void setCamera();
+    /// Càrrega els paràmetres de la càmera des d'un fitxer.
+    void loadCamera();
+    /// Desa els paràmetres de la càmera a un fitxer.
+    void saveCamera();
+
 private:
 
     Experimental3DVolume *m_volume; // el destruirà el visor
