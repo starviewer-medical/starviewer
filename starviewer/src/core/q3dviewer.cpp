@@ -552,6 +552,8 @@ bool Q3DViewer::rescale()
             double *newRange = rescaler->GetOutput()->GetScalarRange();
             DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
 
+            rescaler->GetOutput()->ReleaseDataFlagOn();    // necessari per alliberar memòria intermitja que ja no necessitem
+
             rescaler->Delete();
 
             emit scalarRange( 0, 255 );
