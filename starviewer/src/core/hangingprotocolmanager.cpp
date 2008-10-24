@@ -103,10 +103,10 @@ HangingProtocolManager::~HangingProtocolManager()
 {
 }
 
-void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * layout, Patient * patient)
+bool HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * layout, Patient * patient)
 {
 	Identifier id;
-    HangingProtocol * hangingPotocol;
+    HangingProtocol * hangingProtocol;
 	HangingProtocol * bestHangingProtocol = NULL;
 	QList<Series *> selectedSeries;
 	QList<Series *> bestSelectedSeries;
@@ -128,37 +128,34 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
 	for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfItems; hangingProtocolNumber++)
 	{	
 		id.setValue( hangingProtocolNumber );
-        hangingPotocol = HangingProtocolsRepository::getRepository()->getItem( id );
+        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
 		selectedSeries.clear();
 		numberOfSeriesAssigned = 0;
 		imageSetNumber = 1;
-		serie = NULL;
+		serie = 0;
 
-		if( isValid( hangingPotocol, patient ) )
+		if( isValid( hangingProtocol, patient ) )
         {
-			while( imageSetNumber <= hangingPotocol->getNumberOfImageSets() )
+			while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
             {
-				imageSet = hangingPotocol->getImageSet( imageSetNumber );
+				imageSet = hangingProtocol->getImageSet( imageSetNumber );
                 serie = searchSerie( patient, imageSet );
 
-				if( serie )
+				if( serie != 0 )
 				{
 					selectedSeries << serie;
 					numberOfSeriesAssigned++;
 				}
 				imageSetNumber++;
 			}
-			adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingPotocol->getNumberOfImageSets();
+			adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
-			if( adjustmentOfHanging > bestAdjustmentOfHanging )
+			if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol > bestHangingProtocol) )
 			{
-				bestHangingProtocol = hangingPotocol;
+				bestHangingProtocol = hangingProtocol;
 				bestSelectedSeries.clear();
 				bestSelectedSeries << selectedSeries;
 				bestAdjustmentOfHanging = adjustmentOfHanging;
-
-				if( bestAdjustmentOfHanging == 1.0 )/// No en trobarem cap de millor
-					break;
 			}
 		}
 	}
@@ -169,27 +166,33 @@ void HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout * 
 		for( displaySetNumber = 0; displaySetNumber < bestHangingProtocol->getNumberOfDisplaySets(); displaySetNumber ++)
 		{
 			serie = 0;
-			displaySet = hangingPotocol->getDisplaySet( displaySetNumber + 1 );
-			imageSet = hangingPotocol->getImageSet( displaySet->getImageSetNumber() );
+			displaySet = bestHangingProtocol->getDisplaySet( displaySetNumber + 1 );
+			imageSet = bestHangingProtocol->getImageSet( displaySet->getImageSetNumber() );
 			serie = imageSet->getSeriesToDisplay();
 			viewerWidget = layout->addViewer( displaySet->getPosition() );
 			
 			if( serie != 0 ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
 			{			
-				viewerWidget->setInput( serie->getFirstVolume() );
+				if( serie->getFirstVolume())
+				{
+					viewerWidget->setInput( serie->getFirstVolume() );
 				
-				if( imageSet->getTypeOfItem() == "image" )
-				{
-					viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
-					applyDisplayTransformations( patient, serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
-				}
-				else
-				{
-					applyDisplayTransformations( patient, serie, 0, viewerWidget, displaySet);
+					if( imageSet->getTypeOfItem() == "image" )
+					{
+						viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
+						applyDisplayTransformations( patient, serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+					}
+					else
+					{
+						applyDisplayTransformations( patient, serie, 0, viewerWidget, displaySet);
+					}
 				}
 			}
 		}
+		return true;
 	}
+
+	return false;
 }
 
 bool HangingProtocolManager::isValid( HangingProtocol * protocol, Patient * patient)
@@ -281,6 +284,7 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, HangingProtocol
         i++;
     }
 
+	imageSet->setSeriesToDisplay( 0 );//Important, no hi posem cap serie!
     return 0;
 }
 
@@ -292,6 +296,8 @@ bool HangingProtocolManager::isValidSerie( Patient * patient, Series * serie, Ha
     int numberRestrictions = listOfRestrictions.size();
     HangingProtocolImageSet::Restriction restriction;
 	DICOMTagReader dicomReader;
+
+	valid = (serie->getModality() != "PR"); // Els presentation states per defecte no es mostren
 
     while ( valid && i < numberRestrictions )
     {
@@ -406,7 +412,7 @@ void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Ser
 		}
 		else
 		{
-			DEBUG_LOG( "Field reconstruction have an error" );
+			DEBUG_LOG( "Field reconstruction in XML hanging protocol has an error" );
 		}
 	}
 
@@ -453,5 +459,7 @@ bool HangingProtocolManager::isValidImage( Image * image, HangingProtocolImageSe
 	}
     return valid;
 }
+
+
 
 }

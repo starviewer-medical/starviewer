@@ -33,7 +33,7 @@ public:
 
     ~HangingProtocolManager();
 
-    void searchAndApplyBestHangingProtocol( ViewersLayout * layout, Patient * patient);
+    bool searchAndApplyBestHangingProtocol( ViewersLayout * layout, Patient * patient);
 
 private:
 

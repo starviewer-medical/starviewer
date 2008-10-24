@@ -68,6 +68,10 @@ public:
 
     /// Mètode per mostrar els valors
     void show();
+
+	/// Mètode per comparar hanging protocols
+	bool operator >( HangingProtocol * hangingToCompare );
+
 private:
 
     /// Nom del hanging protocol
