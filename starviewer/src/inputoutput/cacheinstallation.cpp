@@ -15,6 +15,8 @@
 #include "databaseconnection.h"
 #include "logging.h"
 #include "deletedirectory.h"
+#include "localdatabasemanager.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -44,6 +46,7 @@ bool CacheInstallation::checkInstallationCacheImagePath()
 bool CacheInstallation::checkInstallationCacheDatabase()
 {
     StarviewerSettings settings;
+    LocalDatabaseManager localDatabaseManager;
 
     if ( !existsDatabasePath() )
     {
@@ -62,9 +65,17 @@ bool CacheInstallation::checkInstallationCacheDatabase()
             return false;
         }
     }
+    else
+    {
+        if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
+        {
+            INFO_LOG("La revisió actual de la base de dades és " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versió d'Starviewer és necessària la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedirà a actualitzar la base de dades");
+            updateDatabaseRevision();
+        }
+    }
 
     INFO_LOG( "Estat de la base de dades correcte " );
-    INFO_LOG( "Base de dades utilitzada : " + settings.getDatabasePath() );
+    INFO_LOG( "Base de dades utilitzada : " + settings.getDatabasePath() + " revisió " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
     return true;
 }
 
@@ -189,8 +200,13 @@ bool CacheInstallation::reinstallDatabaseFile()
 bool CacheInstallation::updateDatabaseRevision()
 {
     /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
-     *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
-    return reinstallDatabaseFile();
+        *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
+     if  (!reinstallDatabaseFile())
+    {
+        ERROR_LOG("HA FALLAT L'ACTUALITZACIÓ DE LA BASE DE DADES");
+        return false;
+    }
+    else return true;
 }
 
 CacheInstallation::~CacheInstallation()
