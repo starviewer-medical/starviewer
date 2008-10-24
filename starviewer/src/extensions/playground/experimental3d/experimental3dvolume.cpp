@@ -2,7 +2,6 @@
 
 #include <vtkEncodedGradientShader.h>
 #include <vtkFiniteDifferenceGradientEstimator.h>
-#include <vtkImageCast.h>
 #include <vtkImageData.h>
 #include <vtkImageShiftScale.h>
 #include <vtkPointData.h>
@@ -97,7 +96,7 @@ void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstim
             if ( !m_finiteDifferenceGradientEstimator )
                 m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
             m_mapper->SetGradientEstimator( m_finiteDifferenceGradientEstimator );
-            m_contourVoxelShader->setGradientEstimator( m_finiteDifferenceGradientEstimator );
+            m_contourVoxelShader->setGradientEstimator( m_finiteDifferenceGradientEstimator );  /// \todo Fent això forcem el càlcul del gradient -> ho hem d'evitar
             break;
         case FourDLInearRegression1:
             if ( !m_4DLinearRegressionGradientEstimator )
@@ -174,55 +173,42 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
 
 void Experimental3DVolume::createImage( Volume *volume )
 {
-    // fem un casting a int perquè a vegades hi ha problemes amb l'scalar range
-    vtkImageCast *imageCast = vtkImageCast::New();
-    imageCast->SetInput( volume->getVtkData() );
-    imageCast->SetOutputScalarTypeToInt();
-    imageCast->Update();
+    // sembla que el volum arriba sempre com a short
+    // normalment els volums aprofiten només 12 bits com a màxim, per tant no hi hauria d'haver problema
+    vtkImageData *inputImage = volume->getVtkData();
 
-    double *range = imageCast->GetOutput()->GetScalarRange();
+    double *range = inputImage->GetScalarRange();
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "original range: min = %1, max = %2" ).arg( min ).arg( max ) );
 
+    // fem servir directament un vtkImageShiftScale, que permet fer castings també
+    vtkImageShiftScale *imageShiftScale = vtkImageShiftScale::New();
+    imageShiftScale->SetInput( volume->getVtkData() );
+    imageShiftScale->SetOutputScalarTypeToUnsignedChar();
+
     if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
     {
-        // cal fer el casting perquè ens arriba com a int
-        imageCast->SetOutputScalarTypeToUnsignedChar();
-        imageCast->Update();
-
-        m_image = imageCast->GetOutput(); m_image->Register( 0 );   // el register és necessari (comprovat)
-
         m_rangeMin = static_cast<unsigned char>( qRound( min ) );
         m_rangeMax = static_cast<unsigned char>( qRound( max ) );
     }
-    else
+    else    // si està fora del rang cal scalar i desplaçar
     {
         double shift = -min;
-        double slope = 255.0 / ( max - min );
+        double scale = 255.0 / ( max - min );
 
-        imageCast->GetOutput()->ReleaseDataFlagOn();    // necessari per alliberar memòria intermitja que ja no necessitem
-
-        vtkImageShiftScale *imageShiftScale = vtkImageShiftScale::New();
-        imageShiftScale->SetInput( imageCast->GetOutput() );
         imageShiftScale->SetShift( shift );
-        imageShiftScale->SetScale( slope );
-        imageShiftScale->SetOutputScalarTypeToUnsignedChar();
-        imageShiftScale->ClampOverflowOn();
-        imageShiftScale->Update();
-
-        m_image = imageShiftScale->GetOutput(); m_image->Register( 0 ); // el register és necessari (comprovat)
-        imageShiftScale->Delete();
+        imageShiftScale->SetScale( scale );
 
         m_rangeMin = 0; m_rangeMax = 255;
-
-        double *newRange = m_image->GetScalarRange();
-        DEBUG_LOG( QString( "new range: min = %1, max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
     }
 
-    imageCast->Delete();
+    imageShiftScale->Update();
 
+    m_image = imageShiftScale->GetOutput(); m_image->Register( 0 ); // el register és necessari (comprovat)
     m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
+
+    imageShiftScale->Delete();
 }
 
 
