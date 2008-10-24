@@ -2,6 +2,7 @@
 
 #include <QVTKWidget.h>
 
+#include <vtkCamera.h>
 #include <vtkEncodedGradientEstimator.h>
 #include <vtkEncodedGradientShader.h>
 #include <vtkRenderWindow.h>
@@ -9,6 +10,7 @@
 #include <vtkVolumeRayCastMapper.h>
 
 #include "experimental3dvolume.h"
+#include "vector3.h"
 #include "../optimalviewpoint/vtkInteractorStyleSwitchGgg.h"
 
 
@@ -78,6 +80,26 @@ void QExperimental3DViewer::updateShadingTable()
     vtkVolume *volume = m_volume->getVolume();
     vtkVolumeRayCastMapper *mapper = vtkVolumeRayCastMapper::SafeDownCast( volume->GetMapper() );
     mapper->GetGradientShader()->UpdateShadingTable( m_renderer, volume, mapper->GetGradientEstimator() );
+}
+
+
+void QExperimental3DViewer::getCamera( Vector3 &position, Vector3 &focus, Vector3 &up )
+{
+    vtkCamera *camera = m_renderer->GetActiveCamera();
+    camera->GetPosition( position.x, position.y, position.z );
+    camera->GetFocalPoint( focus.x, focus.y, focus.z );
+    camera->GetViewUp( up.x, up.y, up.z );
+}
+
+
+void QExperimental3DViewer::setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up )
+{
+    vtkCamera *camera = m_renderer->GetActiveCamera();
+    camera->SetPosition( position.x, position.y, position.z );
+    camera->SetFocalPoint( focus.x, focus.y, focus.z );
+    camera->SetViewUp( up.x, up.y, up.z );
+    m_renderer->ResetCameraClippingRange();
+    render();
 }
 
 

@@ -9,6 +9,7 @@ namespace udg {
 
 
 class Experimental3DVolume;
+class Vector3;
 
 
 class QExperimental3DViewer : public QViewer {
@@ -36,6 +37,11 @@ public:
 
     /// Actualitza la taula d'ombreig (necessari per fer servir el voxel shader d'il·luminació directa).
     void updateShadingTable();
+
+    /// Retorna els paràmetres de la càmera.
+    void getCamera( Vector3 &position, Vector3 &focus, Vector3 &up );
+    /// Estableix els paràmetres de la càmera.
+    void setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up );
 
 public slots:
 
