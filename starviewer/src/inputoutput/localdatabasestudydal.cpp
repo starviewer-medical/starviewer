@@ -126,13 +126,13 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
 {
     QString studyInstanceUID;
     Study *study = new Study();
+    QStringList modalities;
 
     study->setInstanceUID(reply[0 + row * columns]);
     study->setID(reply[2 + row * columns]);
     study->setPatientAge(QString(reply[3 + row * columns]));
     study->setWeight(QString(reply[4 + row * columns]).toDouble());
     study->setHeight(QString(reply[5 + row * columns]).toDouble());
-    study->addModality(reply[6 + row * columns]);
     study->setDate(reply[7 + row * columns]);
     study->setTime(reply[8 + row * columns]);
     study->setAccessionNumber(reply[9 + row * columns]);
@@ -140,6 +140,13 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     study->setReferringPhysiciansName(reply[11 + row * columns]);
     study->setRetrievedDate(QDate().fromString(reply[13 + row * columns], "yyyyMMdd"));
     study->setRetrievedTime(QTime().fromString(reply[14 + row * columns], "hhmmss"));
+
+    //Afegim la modalitat que estan separades per "/"
+    modalities = QString(reply[6 + row * columns]).split("/");
+    foreach(QString modality, modalities)
+    {
+        study->addModality(modality);
+    }
 
     return study;
 }
