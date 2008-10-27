@@ -53,6 +53,10 @@ private slots:
     void loadCamera();
     /// Desa els paràmetres de la càmera a un fitxer.
     void saveCamera();
+    /// Estableix el nombre de punts de vista.
+    void setNumberOfViewpoints( int numberOfViewpoints );
+    /// Situa la càmera al punt de vista seleccionat.
+    void setViewpoint();
 
 private:
 

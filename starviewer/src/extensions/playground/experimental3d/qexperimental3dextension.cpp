@@ -10,6 +10,7 @@
 #include "logging.h"
 #include "transferfunctionio.h"
 #include "vector3.h"
+#include "viewpointgenerator.h"
 
 
 namespace udg {
@@ -62,6 +63,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_cameraSetPushButton, SIGNAL( clicked() ), SLOT( setCamera() ) );
     connect( m_cameraLoadPushButton, SIGNAL( clicked() ), SLOT( loadCamera() ) );
     connect( m_cameraSavePushButton, SIGNAL( clicked() ), SLOT( saveCamera() ) );
+    connect( m_cameraViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setNumberOfViewpoints(int) ) );
+    connect( m_viewpointPushButton, SIGNAL( clicked() ), SLOT( setViewpoint() ) );
 }
 
 
@@ -300,6 +303,46 @@ void QExperimental3DExtension::saveCamera()
     }
 
     settings.endGroup();
+}
+
+
+void QExperimental3DExtension::setNumberOfViewpoints( int numberOfViewpoints )
+{
+    m_viewpointSpinBox->setMaximum( numberOfViewpoints );
+}
+
+
+void QExperimental3DExtension::setViewpoint()
+{
+    Vector3 position, focus, up;
+    m_viewer->getCamera( position, focus, up );
+
+    float distance = position.length();
+
+    ViewpointGenerator viewpointGenerator;
+
+    if ( m_cameraViewpointDistributionWidget->isUniform() )
+    {
+        switch ( m_cameraViewpointDistributionWidget->numberOfViewpoints() )
+        {
+            case 4: viewpointGenerator.setToUniform4( distance ); break;
+            case 6: viewpointGenerator.setToUniform6( distance ); break;
+            case 8: viewpointGenerator.setToUniform8( distance ); break;
+            case 12: viewpointGenerator.setToUniform12( distance ); break;
+            case 20: viewpointGenerator.setToUniform20( distance ); break;
+            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_cameraViewpointDistributionWidget->numberOfViewpoints() ) ) );
+        }
+    }
+    else viewpointGenerator.setToQuasiUniform( m_cameraViewpointDistributionWidget->recursionLevel(), distance );
+
+    position = viewpointGenerator.viewpoint( m_viewpointSpinBox->value() - 1 );
+    focus = Vector3( 0.0, 0.0, 0.0 );
+    up = Vector3( 0.0, 1.0, 0.0 );
+
+    Vector3 position2 = position;
+    if ( qAbs( position2.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
+
+    m_viewer->setCamera( position, focus, up );
 }
 
 
