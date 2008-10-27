@@ -62,7 +62,7 @@ public:
     double getHeight() const;
 
     ///Permet afegir una modalitat a l'estudi
-    void addModality(QString modality);
+    void addModality(const QString &modality);
 
     /**
      * Retorna les modalitats que conté l'estudi.
