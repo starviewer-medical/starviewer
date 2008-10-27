@@ -25,7 +25,7 @@ public:
     /// Retorna el nombre de punts de vista seleccionat.
     unsigned int numberOfViewpoints() const;
     /// Retorna el nivell de recursió seleccionat.
-    unsigned int recursionLevel() const;
+    int recursionLevel() const;
 
 signals:
 
