@@ -101,7 +101,7 @@ double Study::getHeight() const
     return m_height;
 }
 
-void Study::addModality(QString modality)
+void Study::addModality(const QString &modality)
 {
     m_modalities << modality;
 }
