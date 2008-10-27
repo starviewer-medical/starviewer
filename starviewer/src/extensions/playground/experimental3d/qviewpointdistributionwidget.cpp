@@ -33,7 +33,7 @@ unsigned int QViewpointDistributionWidget::numberOfViewpoints() const
 }
 
 
-unsigned int QViewpointDistributionWidget::recursionLevel() const
+int QViewpointDistributionWidget::recursionLevel() const
 {
     return m_quasiUniformRecursionLevelSpinBox->value();
 }
