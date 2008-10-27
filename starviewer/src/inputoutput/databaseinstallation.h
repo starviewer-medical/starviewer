@@ -4,30 +4,30 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGCACHEINSTALLATION_H
-#define UDGCACHEINSTALLATION_H
+#ifndef UDGDATABASEINSTALLATION_H
+#define UDGDATABASEINSTALLATION_H
 
 namespace udg {
 
 /** Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que l'aplicacio pugui funcionar correctament
  *	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
  */
-class CacheInstallation
+class DatabaseInstallation
 {
 public:
 
     /// Constructor de la classe
-    CacheInstallation();
+    DatabaseInstallation();
 
     /** Comprova que el directori on es guarden les imatges descarregades existeixi si no l'intenta crear
      * @return indicat si el directori existeix o no
      */
-    bool checkInstallationCacheImagePath();
+    bool checkInstallationDatabaseImagePath();
 
     /** Comprova que el directori on es guarda la base dades i la base de dades existeixin sinó l'intenta crear
      * @return indica si la base de dades existeix
      */
-    bool checkInstallationCacheDatabase();
+    bool checkInstallationDatabase();
 
     /** Comprova si existeix el directori de la base de dades
      * @return indica si el directori existeix
@@ -37,7 +37,7 @@ public:
     /** Comprova si existeix el directori on es guarden les imatges descarregades
      * @return indica si el directori existeix
      */
-    bool existsCacheImagePath();
+    bool existsDatabaseImagePath();
 
     /** Comprova si existeix el fitxer de la base de dades
      * @return indica si el directori existeix
@@ -51,14 +51,14 @@ public:
     bool updateDatabaseRevision();
 
     ///destructor de la classe
-    ~CacheInstallation();
+    ~DatabaseInstallation();
 
 private :
 
     /** Crea el directori per guardar les imatges de la cache
      * @return indica si s'ha pogut crear el directori
      */
-    bool createCacheImageDir();
+    bool createDatabaseImageDir();
 
     /** Crea el directori per guardar la base de dades
      * @return indica si s'ha pogut crear el directori

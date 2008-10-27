@@ -34,7 +34,6 @@ HEADERS += databaseconnection.h \
            qquerystudythread.h \
            operation.h \
            queueoperationlist.h \
-           cacheinstallation.h \
            qexecuteoperationthread.h \
            converttodicomdir.h \
            convertdicomtolittleendian.h \
@@ -66,7 +65,8 @@ HEADERS += databaseconnection.h \
  testdatabase.h \
  qdeleteoldstudiesthread.h \
  localdatabasemanagerthreaded.h \
- qthreadrunwithexec.h
+ qthreadrunwithexec.h \
+ databaseinstallation.h
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -85,7 +85,6 @@ SOURCES += databaseconnection.cpp \
            qquerystudythread.cpp \
            operation.cpp \
            queueoperationlist.cpp \
-           cacheinstallation.cpp \
            qexecuteoperationthread.cpp \
            converttodicomdir.cpp \
            convertdicomtolittleendian.cpp \
@@ -115,7 +114,8 @@ SOURCES += databaseconnection.cpp \
  localdatabaseutildal.cpp \
  testdatabase.cpp \
  qdeleteoldstudiesthread.cpp \
- localdatabasemanagerthreaded.cpp
+ localdatabasemanagerthreaded.cpp \
+ databaseinstallation.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
