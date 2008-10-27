@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "cacheinstallation.h"
+#include "databaseinstallation.h"
 
 #include <QDir>
 #include <QFile>
@@ -20,17 +20,17 @@
 
 namespace udg {
 
-CacheInstallation::CacheInstallation()
+DatabaseInstallation::DatabaseInstallation()
 {
 }
 
-bool CacheInstallation::checkInstallationCacheImagePath()
+bool DatabaseInstallation::checkInstallationDatabaseImagePath()
 {
     StarviewerSettings settings;
 
-    if ( !existsCacheImagePath() )
+    if ( !existsDatabaseImagePath() )
     {
-        if ( !createCacheImageDir() )
+        if ( !createDatabaseImageDir() )
         {
             ERROR_LOG( "Error el path de la cache d'imatges no s'ha pogut crear " + settings.getCacheImagePath() );
             return false;
@@ -43,7 +43,7 @@ bool CacheInstallation::checkInstallationCacheImagePath()
     return true;
 }
 
-bool CacheInstallation::checkInstallationCacheDatabase()
+bool DatabaseInstallation::checkInstallationDatabase()
 {
     StarviewerSettings settings;
     LocalDatabaseManager localDatabaseManager;
@@ -79,7 +79,7 @@ bool CacheInstallation::checkInstallationCacheDatabase()
     return true;
 }
 
-bool CacheInstallation::existsCacheImagePath()
+bool DatabaseInstallation::existsDatabaseImagePath()
 {
     StarviewerSettings settings;
     QDir cacheImageDir;
@@ -87,7 +87,7 @@ bool CacheInstallation::existsCacheImagePath()
     return cacheImageDir.exists( settings.getCacheImagePath() );
 }
 
-bool CacheInstallation::existsDatabasePath()
+bool DatabaseInstallation::existsDatabasePath()
 {
     StarviewerSettings settings;
     QDir databaseDir;
@@ -95,7 +95,7 @@ bool CacheInstallation::existsDatabasePath()
     return databaseDir.exists( settings.getDatabasePath() );
 }
 
-bool CacheInstallation::existsDatabaseFile()
+bool DatabaseInstallation::existsDatabaseFile()
 {
     StarviewerSettings settings;
     QFile databaseFile;
@@ -103,7 +103,7 @@ bool CacheInstallation::existsDatabaseFile()
     return databaseFile.exists( settings.getDatabasePath() );
 }
 
-bool CacheInstallation::createCacheImageDir()
+bool DatabaseInstallation::createDatabaseImageDir()
 {
     StarviewerSettings settings;
     QDir cacheImageDir;
@@ -120,7 +120,7 @@ bool CacheInstallation::createCacheImageDir()
     }
 }
 
-bool CacheInstallation::createDatabaseDir()
+bool DatabaseInstallation::createDatabaseDir()
 {
     StarviewerSettings settings;
     QDir databaseDir;
@@ -140,7 +140,7 @@ bool CacheInstallation::createDatabaseDir()
     }
 }
 
-bool CacheInstallation::createDatabaseFile()
+bool DatabaseInstallation::createDatabaseFile()
 {
     QFile sqlTablesScriptFile( ":cache/database.sql" );
     QByteArray sqlTablesScript;
@@ -171,7 +171,7 @@ bool CacheInstallation::createDatabaseFile()
 	}
 }
 
-bool CacheInstallation::reinstallDatabaseFile()
+bool DatabaseInstallation::reinstallDatabaseFile()
 {
     QDir databaseFile;
     StarviewerSettings settings;
@@ -197,7 +197,7 @@ bool CacheInstallation::reinstallDatabaseFile()
     return existsDatabaseFile();
 }
 
-bool CacheInstallation::updateDatabaseRevision()
+bool DatabaseInstallation::updateDatabaseRevision()
 {
     /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
         *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
@@ -209,7 +209,7 @@ bool CacheInstallation::updateDatabaseRevision()
     else return true;
 }
 
-CacheInstallation::~CacheInstallation()
+DatabaseInstallation::~DatabaseInstallation()
 {
 
 }

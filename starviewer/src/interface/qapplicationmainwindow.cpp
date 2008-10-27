@@ -25,7 +25,7 @@
 #include "hangingprotocolsloader.h"
 
 // Mini - aplicacions
-#include "cacheinstallation.h"
+#include "databaseinstallation.h"
 
 #include "extensionfactory.h"
 #include "extensionmediatorfactory.h"
@@ -41,9 +41,9 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     m_extensionWorkspace = new ExtensionWorkspace( this );
     this->setCentralWidget( m_extensionWorkspace );
 
-    CacheInstallation cacheInstallation;
-    cacheInstallation.checkInstallationCacheImagePath();
-    cacheInstallation.checkInstallationCacheDatabase();
+    DatabaseInstallation databaseInstallation;
+    databaseInstallation.checkInstallationDatabaseImagePath();
+    databaseInstallation.checkInstallationDatabase();
 
     m_extensionHandler = new ExtensionHandler( this );
 
