@@ -23,15 +23,12 @@ public:
     /// Constructor de la classe
     DatabaseInstallation();
 
-    /** Comprova que el directori on es guarden les imatges descarregades existeixi si no l'intenta crear
-     * @return indicat si el directori existeix o no
-     */
-    bool checkInstallationDatabaseImagePath();
-
-    /** Comprova que el directori on es guarda la base dades i la base de dades existeixin sinó l'intenta crear
+    /** Comprova que el directori on es guarda la base dades, les imatges i la base de dades existeixin sinó l'intenta crear.
+     * També comprova que la base de dades estigui en la revisió que necessita la compilació actual de l'starviewer i sinó la
+     * intenta actualitzar
      * @return indica si la base de dades existeix
      */
-    bool checkInstallationDatabase();
+    bool checkStarviewerDatabase();
 
     /** Comprova si existeix el directori de la base de dades
      * @return indica si el directori existeix
@@ -41,7 +38,7 @@ public:
     /** Comprova si existeix el directori on es guarden les imatges descarregades
      * @return indica si el directori existeix
      */
-    bool existsDatabaseImagePath();
+    bool existsLocalImagePath();
 
     /** Comprova si existeix el fitxer de la base de dades
      * @return indica si el directori existeix
@@ -66,15 +63,26 @@ private :
 
     QProgressDialog *m_qprogressDialog;
 
+   /** Comprova que el directori on es guarden les imatges descarregades existeixi si no l'intenta crear
+     * @return indicat si el directori existeix o no
+     */
+    bool checkLocalImagePath();
+
+    ///Comprova que existeix el path de la base de dades i sinó existeix el crea
+    bool checkDatabasePath();
+
+    ///Comprova si la revisió de la base de dades és la necessària per l'actual compilació de l'starviewer i sinó l'intenta actualitzar
+    bool checkDatabaseRevision();
+
     /** Crea el directori per guardar les imatges de la cache
      * @return indica si s'ha pogut crear el directori
      */
-    bool createDatabaseImageDir();
+    bool createLocalImageDir();
 
     /** Crea el directori per guardar la base de dades
      * @return indica si s'ha pogut crear el directori
      */
-    bool createDatabaseDir();
+    bool createDatabaseDirectory();
 
     /** Crea la base de dades
      * @return indica si s'ha pogut crear la base de dades
