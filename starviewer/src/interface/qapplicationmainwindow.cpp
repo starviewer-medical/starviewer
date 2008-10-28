@@ -42,8 +42,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     this->setCentralWidget( m_extensionWorkspace );
 
     DatabaseInstallation databaseInstallation;
-    databaseInstallation.checkInstallationDatabaseImagePath();
-    databaseInstallation.checkInstallationDatabase();
+    databaseInstallation.checkStarviewerDatabase();
 
     m_extensionHandler = new ExtensionHandler( this );
 

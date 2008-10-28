@@ -24,151 +24,81 @@ DatabaseInstallation::DatabaseInstallation()
 {
 }
 
-bool DatabaseInstallation::checkInstallationDatabaseImagePath()
-{
-    StarviewerSettings settings;
-
-    if ( !existsDatabaseImagePath() )
-    {
-        if ( !createDatabaseImageDir() )
-        {
-            ERROR_LOG( "Error el path de la cache d'imatges no s'ha pogut crear " + settings.getCacheImagePath() );
-            return false;
-        }
-    }
-
-    INFO_LOG( "Estat de la cache d'imatges correcte " );
-    INFO_LOG( "Cache d'imatges utilitzada : " + settings.getCacheImagePath() );
-
-    return true;
-}
-
-bool DatabaseInstallation::checkInstallationDatabase()
+bool DatabaseInstallation::checkStarviewerDatabase()
 {
     StarviewerSettings settings;
     LocalDatabaseManager localDatabaseManager;
 
-    if ( !existsDatabasePath() )
-    {
-        if ( !createDatabaseDir() )
-        {
-            ERROR_LOG( "Error el path de la base de dades no s'ha pogut crear " + settings.getDatabasePath() );
-            return false;
-        }
-    }
+    //Comprovem que existeix el path on s'importen les imatges, sinó existeix l'intentarà crear
+    if (!checkLocalImagePath()) return false;
 
-    if ( !existsDatabaseFile() )
+    //Comprovem que existeix el path on es guarda la base de dades, sinó existeix l'intentarà crear
+    if (!checkDatabasePath()) return false;
+
+    if (!existsDatabaseFile())
     {
-        if ( !createDatabaseFile() )
+        if (!createDatabaseFile())
         {
-            ERROR_LOG( "Error no s'ha pogut crear la base de dades a " + settings.getDatabasePath() );
+            ERROR_LOG("Error no s'ha pogut crear la base de dades a " + settings.getDatabasePath());
             return false;
         }
     }
     else
     {
-        if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
-        {
-            INFO_LOG("La revisió actual de la base de dades és " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versió d'Starviewer és necessària la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedirà a actualitzar la base de dades");
-            updateDatabaseRevision();
-        }
+        checkDatabaseRevision();
     }
 
-    INFO_LOG( "Estat de la base de dades correcte " );
-    INFO_LOG( "Base de dades utilitzada : " + settings.getDatabasePath() + " revisió " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
+    INFO_LOG("Estat de la base de dades correcte ");
+    INFO_LOG("Base de dades utilitzada : " + settings.getDatabasePath() + " revisió " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
     return true;
 }
 
-bool DatabaseInstallation::existsDatabaseImagePath()
+bool DatabaseInstallation::checkLocalImagePath()
 {
     StarviewerSettings settings;
-    QDir cacheImageDir;
 
-    return cacheImageDir.exists( settings.getCacheImagePath() );
+    if (!existsLocalImagePath())
+    {
+        if (!createLocalImageDir())
+        {
+            ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + settings.getCacheImagePath());
+            return false;
+        }
+    }
+
+    INFO_LOG("Estat de la cache d'imatges correcte ");
+    INFO_LOG("Cache d'imatges utilitzada : " + settings.getCacheImagePath());
+
+    return true;
 }
 
-bool DatabaseInstallation::existsDatabasePath()
+bool DatabaseInstallation::checkDatabasePath()
 {
     StarviewerSettings settings;
-    QDir databaseDir;
 
-    return databaseDir.exists( settings.getDatabasePath() );
+    if (!existsDatabasePath())
+    {
+        if (!createDatabaseDirectory())
+        {
+            ERROR_LOG("Error el path de la base de dades no s'ha pogut crear " + settings.getDatabasePath());
+            return false;
+        }
+    }
+
+    return true;
 }
 
-bool DatabaseInstallation::existsDatabaseFile()
+bool DatabaseInstallation::checkDatabaseRevision()
 {
-    StarviewerSettings settings;
-    QFile databaseFile;
+    LocalDatabaseManager localDatabaseManager;
 
-    return databaseFile.exists( settings.getDatabasePath() );
-}
-
-bool DatabaseInstallation::createDatabaseImageDir()
-{
-    StarviewerSettings settings;
-    QDir cacheImageDir;
-
-    if ( cacheImageDir.mkpath( settings.getCacheImagePath() ) )
+    if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
     {
-		INFO_LOG( "S'ha creat el directori de la cache d'imatges " + settings.getCacheImagePath() );
-        return true;
+        INFO_LOG("La revisió actual de la base de dades és " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versió d'Starviewer és necessària la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedirà a actualitzar la base de dades");
+
+        return updateDatabaseRevision();
     }
-    else
-    {
-        ERROR_LOG( "No s'ha pogut crear el directori de la cache d'imatges " + settings.getCacheImagePath() );
-        return false;
-    }
-}
-
-bool DatabaseInstallation::createDatabaseDir()
-{
-    StarviewerSettings settings;
-    QDir databaseDir;
-
-    QFileInfo databaseFilePath( settings.getDatabasePath() );
-    QString databasePath = databaseFilePath.path();
-
-    if ( databaseDir.mkpath( databasePath ) )
-    {
-        INFO_LOG( "S'ha creat el directori de la base de dades " + databasePath );
-        return true;
-    }
-    else
-    {
-        ERROR_LOG( "No s'ha pogut crear el directori de la base de dades " + databasePath );
-        return false;
-    }
-}
-
-bool DatabaseInstallation::createDatabaseFile()
-{
-    QFile sqlTablesScriptFile( ":cache/database.sql" );
-    QByteArray sqlTablesScript;
-    DatabaseConnection DBConnect;//obrim la bdd
-    int status;
-
-    sqlTablesScriptFile.open( QIODevice::ReadOnly ); //obrim el fitxer
-
-    sqlTablesScript = sqlTablesScriptFile.read( sqlTablesScriptFile.size() ); //el llegim
-
-    DBConnect.open();
-    if (!DBConnect.connected()) return false;
-
-    status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0); //creem les taules i els registres
-    DBConnect.close();
-
-    sqlTablesScriptFile.close(); //tanquem el fitxer
-
-    if ( status == 0 )
-    {
-		INFO_LOG( "S'ha creat correctament la base de dades" );
-        return true;
-    }
-    else
- 	{
-		ERROR_LOG( "No s'ha pogut crear la base de dades" );
-		return false;
-	}
+    else return true;
 }
 
 bool DatabaseInstallation::reinstallDatabaseFile()
@@ -187,7 +117,7 @@ bool DatabaseInstallation::reinstallDatabaseFile()
     //si no existeix el directori de la base de dades el creem
     if (!existsDatabasePath())
     {
-        createDatabaseDir();
+        createDatabaseDirectory();
     }
     createDatabaseFile();
 
@@ -221,6 +151,98 @@ bool DatabaseInstallation::updateDatabaseRevision()
     return status;
 }
 
+bool DatabaseInstallation::existsLocalImagePath()
+{
+    StarviewerSettings settings;
+    QDir cacheImageDir;
+
+    return cacheImageDir.exists(settings.getCacheImagePath());
+}
+
+bool DatabaseInstallation::existsDatabasePath()
+{
+    StarviewerSettings settings;
+    QDir databaseDir;
+
+    return databaseDir.exists(settings.getDatabasePath());
+}
+
+bool DatabaseInstallation::existsDatabaseFile()
+{
+    StarviewerSettings settings;
+    QFile databaseFile;
+
+    return databaseFile.exists(settings.getDatabasePath());
+}
+
+bool DatabaseInstallation::createLocalImageDir()
+{
+    StarviewerSettings settings;
+    QDir cacheImageDir;
+
+    if (cacheImageDir.mkpath(settings.getCacheImagePath()))
+    {
+        INFO_LOG("S'ha creat el directori de la cache d'imatges " + settings.getCacheImagePath());
+        return true;
+    }
+    else
+    {
+        ERROR_LOG("No s'ha pogut crear el directori de la cache d'imatges " + settings.getCacheImagePath());
+        return false;
+    }
+}
+
+bool DatabaseInstallation::createDatabaseDirectory()
+{
+    StarviewerSettings settings;
+    QDir databaseDir;
+
+    QFileInfo databaseFilePath(settings.getDatabasePath());
+    QString databasePath = databaseFilePath.path();
+
+    if (databaseDir.mkpath(databasePath))
+    {
+        INFO_LOG("S'ha creat el directori de la base de dades " + databasePath);
+        return true;
+    }
+    else
+    {
+        ERROR_LOG("No s'ha pogut crear el directori de la base de dades " + databasePath);
+        return false;
+    }
+}
+
+bool DatabaseInstallation::createDatabaseFile()
+{
+    QFile sqlTablesScriptFile(":cache/database.sql");
+    QByteArray sqlTablesScript;
+    DatabaseConnection DBConnect;//obrim la bdd
+    int status;
+
+    sqlTablesScriptFile.open(QIODevice::ReadOnly); //obrim el fitxer
+
+    sqlTablesScript = sqlTablesScriptFile.read(sqlTablesScriptFile.size()); //el llegim
+
+    DBConnect.open();
+    if (!DBConnect.connected()) return false;
+
+    status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0); //creem les taules i els registres
+    DBConnect.close();
+
+    sqlTablesScriptFile.close(); //tanquem el fitxer
+
+    if (status == 0)
+    {
+        INFO_LOG("S'ha creat correctament la base de dades");
+        return true;
+    }
+    else
+    {
+        ERROR_LOG("No s'ha pogut crear la base de dades");
+        return false;
+    }
+}
+
 void DatabaseInstallation::setValueProgressBar()
 {
     m_qprogressDialog->setValue(m_qprogressDialog->value() + 1);
@@ -228,7 +250,6 @@ void DatabaseInstallation::setValueProgressBar()
 
 DatabaseInstallation::~DatabaseInstallation()
 {
-
 }
 
 }
