@@ -427,6 +427,22 @@ int LocalDatabaseManager::getDatabaseRevision()
     return databaseRevision;
 }
 
+bool LocalDatabaseManager::isDatabaseCorrupted()
+{
+    LocalDatabaseUtilDAL utilDAL;
+    DatabaseConnection dbConnect;
+    bool databaseCorrupted;
+
+    dbConnect.open();
+    utilDAL.setDatabaseConnection(&dbConnect);
+    databaseCorrupted = utilDAL.isDatabaseCorrupted();
+    setLastError(utilDAL.getLastError());
+
+    dbConnect.close();
+
+    return databaseCorrupted;
+}
+
 bool LocalDatabaseManager::isEnoughSpace()
 {
     HardDiskInformation hardDiskInformation;

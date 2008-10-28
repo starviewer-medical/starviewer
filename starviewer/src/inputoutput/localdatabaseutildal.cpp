@@ -67,6 +67,41 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
     }
 }
 
+bool LocalDatabaseUtilDAL::isDatabaseCorrupted()
+{
+    int columns , rows;
+    char **reply = NULL , **error = NULL;
+    bool databaseCorrupted = true;
+
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), "PRAGMA integrity_check",
+                                    &reply, &rows, &columns, error);
+
+    if (rows > 0)
+    {
+        if (QString(reply[1]) == "ok")
+        {
+            //Si s'ha retornat ok vol dir que la base de dades no està corrupte
+            databaseCorrupted = false;
+        }
+        else
+        {
+            ERROR_LOG("BASE DE DADES CORRUPTE, S'HAN TROBAT ELS SEGÜENTS ERRORS :");
+            //guardem al log els errors de la base de dades, comencem a partir de 1 perquè ignorem la capçalera
+            for (int index = 1; index <= rows; index++)
+            {
+                ERROR_LOG(reply[index]);
+            }
+        }
+    }
+    else
+    {
+        //Si no ha retornat files possiblement es tracta d'un fitxer que no és una base de dades sqlite
+        ERROR_LOG("BASE DE DADES CORRUPTE, SEMBLA QUE EL FITXER NO ES UN BASE DE DADES SQLITE");
+    }
+
+    return databaseCorrupted;
+}
+
 QString LocalDatabaseUtilDAL::buildSqlGetDatabaseRevision()
 {
     return "select * from DatabaseRevision";
