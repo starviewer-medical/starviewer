@@ -226,7 +226,6 @@ void Experimental3DVolume::createVoxelShaders()
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
     m_directIlluminationVoxelShader->setData( m_data );
     m_contourVoxelShader = new ContourVoxelShader();
-    m_contourVoxelShader->setData( m_data );
 }
 
 

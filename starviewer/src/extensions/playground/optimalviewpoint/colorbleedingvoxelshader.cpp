@@ -36,7 +36,6 @@ HdrColor ColorBleedingVoxelShader::shade( int offset, const Vector3 &direction, 
 {
     Q_UNUSED( direction );
 
-    Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( m_colorBleeding );
 
     if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
@@ -53,7 +52,6 @@ HdrColor ColorBleedingVoxelShader::shade( const Vector3 &position, const Vector3
     Q_UNUSED( direction );
 
     Q_CHECK_PTR( interpolator );
-    Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( m_colorBleeding );
 
     if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;

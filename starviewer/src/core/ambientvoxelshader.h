@@ -22,6 +22,8 @@ public:
     AmbientVoxelShader();
     virtual ~AmbientVoxelShader();
 
+    /// Assigna el volum de dades.
+    void setData( const unsigned char *data );
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -43,6 +45,7 @@ protected:
 
     static const unsigned int AMBIENT_COLORS_TABLE_SIZE = 256;
 
+    const unsigned char *m_data;
     TransferFunction m_transferFunction;
     HdrColor m_ambientColors[AMBIENT_COLORS_TABLE_SIZE];
 

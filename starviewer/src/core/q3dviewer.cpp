@@ -404,7 +404,6 @@ void Q3DViewer::setInput( Volume* volume )
     unsigned char *data = reinterpret_cast<unsigned char*>( image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_ambientVoxelShader->setData( data );
     m_directIlluminationVoxelShader->setData( data );
-    m_obscuranceVoxelShader->setData( data );
 
     if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
     {
