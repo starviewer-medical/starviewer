@@ -4,12 +4,13 @@
 
 #include "qviewer.h"
 
+#include "vector3.h"
+
 
 namespace udg {
 
 
 class Experimental3DVolume;
-class Vector3;
 
 
 class QExperimental3DViewer : public QViewer {

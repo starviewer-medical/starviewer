@@ -4,11 +4,10 @@
 
 #include <QVector>
 
+#include "vector3.h"
+
 
 namespace udg {
-
-
-class Vector3;
 
 
 /**

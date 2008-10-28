@@ -15,6 +15,7 @@
 #include <QVector>
 
 #include "transferfunction.h"
+#include "vector3.h"
 
 
 class vtkCamera;
@@ -55,7 +56,6 @@ namespace udg {
 class OptimalViewpointVolume;
 class OptimalViewpointPlane;
 class OptimalViewpointParameters;
-class Vector3;
 
 /**
  * Aquesta classe encapsula el mètode de visualització del Punt de Vista Òptim
@@ -69,7 +69,7 @@ class OptimalViewpoint : public QObject {
     Q_OBJECT
 
 public:
-    
+
     //typedef QPair<qreal, QColor> QGradientStop;       // a <QGradient>
     //typedef QVector<QGradientStop> QGradientStops;    // a <QGradient>
 //     typedef QGradientStops TransferFunction;                                // funció de transferència per un volum d'un mirall
