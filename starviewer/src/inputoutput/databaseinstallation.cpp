@@ -175,7 +175,7 @@ bool DatabaseInstallation::reinstallDatabaseFile()
 {
     QDir databaseFile;
     StarviewerSettings settings;
-    DeleteDirectory deleteDirectory;
+    DeleteDirectory *deleteDirectory = new DeleteDirectory();
 
     //si existeix l'esborrem
     if (existsDatabaseFile())
@@ -191,22 +191,39 @@ bool DatabaseInstallation::reinstallDatabaseFile()
     }
     createDatabaseFile();
 
-    //Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les
-    deleteDirectory.deleteDirectory(settings.getCacheImagePath(), false);
+    //Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les, i per cada directori esborrat movem la barra de progrés
+    connect(deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
+    deleteDirectory->deleteDirectory(settings.getCacheImagePath(), false);
+    delete deleteDirectory;
 
     return existsDatabaseFile();
 }
 
 bool DatabaseInstallation::updateDatabaseRevision()
 {
+    bool status;
+
+    //Creem barra de progrés per donar feedback
+    m_qprogressDialog = new QProgressDialog(tr ("Updating database"), "", 0, 0);
+    m_qprogressDialog->setValue(1);
+
     /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
-        *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
-     if  (!reinstallDatabaseFile())
+     *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
+    status = reinstallDatabaseFile();
+
+    if (!status)
     {
         ERROR_LOG("HA FALLAT L'ACTUALITZACIÓ DE LA BASE DE DADES");
-        return false;
     }
-    else return true;
+
+    m_qprogressDialog->close();
+
+    return status;
+}
+
+void DatabaseInstallation::setValueProgressBar()
+{
+    m_qprogressDialog->setValue(m_qprogressDialog->value() + 1);
 }
 
 DatabaseInstallation::~DatabaseInstallation()
