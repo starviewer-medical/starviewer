@@ -7,13 +7,17 @@
 #ifndef UDGDATABASEINSTALLATION_H
 #define UDGDATABASEINSTALLATION_H
 
+#include <QObject>
+#include <QProgressDialog>
+
 namespace udg {
 
 /** Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que l'aplicacio pugui funcionar correctament
  *	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
  */
-class DatabaseInstallation
+class DatabaseInstallation : public QObject
 {
+Q_OBJECT
 public:
 
     /// Constructor de la classe
@@ -53,7 +57,14 @@ public:
     ///destructor de la classe
     ~DatabaseInstallation();
 
+private slots:
+
+    ///Fa avançar la barra de progrés
+    void setValueProgressBar();
+
 private :
+
+    QProgressDialog *m_qprogressDialog;
 
     /** Crea el directori per guardar les imatges de la cache
      * @return indica si s'ha pogut crear el directori

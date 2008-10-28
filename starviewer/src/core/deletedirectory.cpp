@@ -8,6 +8,7 @@
 #include <QString>
 #include <QFile>
 #include <QDir>
+#include <QCoreApplication>
 
 #include "deletedirectory.h"
 #include "logging.h"
@@ -58,6 +59,8 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
         {
             absoluteDirectoryPath = directoryPath + "/" + (*it);
             if ( !deleteDirectory( absoluteDirectoryPath , true ) ) return false; //invoquem el mateix mètode per a que esborri el subdirectori ( recursivitat )
+            emit directoryDeleted();
+            QCoreApplication::processEvents();
         }
     }
 

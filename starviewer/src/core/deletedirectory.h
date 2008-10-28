@@ -7,6 +7,8 @@
 #ifndef UDGDELETEDIRECTORY_H
 #define UDGDELETEDIRECTORY_H
 
+#include <QObject>
+
 class QString;
 
 namespace udg {
@@ -14,7 +16,9 @@ namespace udg {
 /** Aquesta classe, esborra tot els fitxers i subdirectoris que contingui un directori
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class DeleteDirectory{
+class DeleteDirectory : public QObject
+{
+Q_OBJECT
 public:
 
     DeleteDirectory();
@@ -27,6 +31,10 @@ public:
     bool deleteDirectory( QString directoryPath , bool deleteRootDirectory );
 
     ~DeleteDirectory();
+
+signals:
+
+    void directoryDeleted();
 
 };
 
