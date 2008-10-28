@@ -69,9 +69,8 @@ inline HdrColor AmbientVoxelShader::nvShade( int offset, const Vector3 &directio
     Q_UNUSED( direction );
     Q_UNUSED( baseColor );
 
-    Q_CHECK_PTR( m_data );
+    Q_ASSERT( m_data );
 
-    //return m_transferFunction.get( m_data[offset] );
     return m_ambientColors[m_data[offset]];
 }
 
@@ -81,8 +80,8 @@ inline HdrColor AmbientVoxelShader::nvShade( const Vector3 &position, const Vect
     Q_UNUSED( direction );
     Q_UNUSED( baseColor );
 
-    Q_CHECK_PTR( interpolator );
-    Q_CHECK_PTR( m_data );
+    Q_ASSERT( interpolator );
+    Q_ASSERT( m_data );
 
     int offsets[8];
     double weights[8];
@@ -90,7 +89,6 @@ inline HdrColor AmbientVoxelShader::nvShade( const Vector3 &position, const Vect
 
     double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
 
-    //return m_transferFunction.get( value );
     return m_ambientColors[static_cast<int>(value)];
 }
 
