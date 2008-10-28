@@ -44,7 +44,6 @@ HdrColor SaliencyVoxelShader::shade( int offset, const Vector3 &direction, const
 {
     Q_UNUSED( direction );
 
-    Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( m_saliency );
 
     if ( baseColor.isTransparent() ) return baseColor;
@@ -65,7 +64,6 @@ HdrColor SaliencyVoxelShader::shade( const Vector3 &position, const Vector3 &dir
     Q_UNUSED( direction );
 
     Q_CHECK_PTR( interpolator );
-    Q_CHECK_PTR( m_data );
     Q_CHECK_PTR( m_saliency );
 
     if ( baseColor.isTransparent() ) return baseColor;

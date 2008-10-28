@@ -231,7 +231,14 @@ void OptimalViewpointVolume::setShade( bool on )
         m_volumeRayCastFunctionFx2->RemoveVoxelShader( 0 );
         m_volumeRayCastFunctionFx2->InsertVoxelShader( 0, m_directIlluminationVoxelShader );
         vtkEncodedGradientEstimator *gradientEstimator = m_mapper->GetGradientEstimator();
+
+        QTime t;
+        t.start();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+        int elapsed = t.elapsed();
+        DEBUG_LOG( QString( "Gradient time: %1 s" ).arg( elapsed / 1000.0 ) );
+        INFO_LOG( QString( "Gradient time: %1 s" ).arg( elapsed / 1000.0 ) );
+
         vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
         gradientShader->UpdateShadingTable( m_renderer, m_volume, gradientEstimator );
         m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_volume ),
@@ -240,6 +247,19 @@ void OptimalViewpointVolume::setShade( bool on )
         m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_volume ),
                                                                    gradientShader->GetGreenSpecularShadingTable( m_volume ),
                                                                    gradientShader->GetBlueSpecularShadingTable( m_volume ) );
+
+        /*unsigned short *normals = m_mapper->GetGradientEstimator()->GetEncodedNormals();
+
+        QFile gradientFile( QDir::tempPath().append( QString( "/gradient.dat" ) ) );
+        if ( gradientFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QDataStream out( &gradientFile );
+            for ( int i = 0; i < m_dataSize; ++i )
+            {
+                out << normals[i];
+            }
+            gradientFile.close();
+        }*/
     }
     else
     {
@@ -323,13 +343,9 @@ void OptimalViewpointVolume::createVoxelShaders()
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
     m_directIlluminationVoxelShader->setData( m_data );
     m_contourVoxelShader = new ContourVoxelShader();
-    m_contourVoxelShader->setData( m_data );
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
-    m_obscuranceVoxelShader->setData( m_data );
     m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
-    m_colorBleedingVoxelShader->setData( m_data );
     m_saliencyVoxelShader = new SaliencyVoxelShader();
-    m_saliencyVoxelShader->setData( m_data );
 }
 
 

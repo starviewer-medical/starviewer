@@ -5,13 +5,19 @@ namespace udg {
 
 
 AmbientVoxelShader::AmbientVoxelShader()
-    : VoxelShader()
+ : VoxelShader(), m_data( 0 )
 {
 }
 
 
 AmbientVoxelShader::~AmbientVoxelShader()
 {
+}
+
+
+void AmbientVoxelShader::setData( const unsigned char *data )
+{
+    m_data = data;
 }
 
 
