@@ -46,7 +46,7 @@ public:
     bool existsDatabaseFile();
 
     ///reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local
-    bool reinstallDatabaseFile();
+    bool reinstallDatabase();
 
     ///Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
     bool updateDatabaseRevision();
@@ -73,6 +73,9 @@ private :
 
     ///Comprova si la revisió de la base de dades és la necessària per l'actual compilació de l'starviewer i sinó l'intenta actualitzar
     bool checkDatabaseRevision();
+
+    ///Intenta reparar la base dedades, sinó ho aconseguei la reinstal·la
+    bool repairDatabase();
 
     /** Crea el directori per guardar les imatges de la cache
      * @return indica si s'ha pogut crear el directori
