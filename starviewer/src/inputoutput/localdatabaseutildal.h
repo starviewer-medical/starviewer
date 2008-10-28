@@ -33,6 +33,9 @@ public:
     ///Connexió de la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
 
+    ///Comprova si la base de dades està corrumpuda
+    bool isDatabaseCorrupted();
+
     ///Retorna l'estat de la última operació realitzada
     int getLastError();
 
