@@ -7,7 +7,6 @@
 #include <vtkDirectionEncoder.h>
 
 #include "trilinearinterpolator.h"
-#include "vector3.h"
 
 
 class vtkEncodedGradientEstimator;
@@ -17,7 +16,7 @@ namespace udg {
 
 
 /**
- * És un voxel shader que pinta un contorn negre en funcio d'un paràmetre.
+ * És un voxel shader que pinta un contorn negre en funció d'un paràmetre.
  */
 class ContourVoxelShader : public VoxelShader {
 
@@ -65,8 +64,8 @@ inline HdrColor ContourVoxelShader::shade( const Vector3 &position, const Vector
 
 inline HdrColor ContourVoxelShader::nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
-    Q_CHECK_PTR( m_encodedNormals );
-    Q_CHECK_PTR( m_directionEncoder );
+    Q_ASSERT( m_encodedNormals );
+    Q_ASSERT( m_directionEncoder );
 
     if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 
@@ -82,9 +81,9 @@ inline HdrColor ContourVoxelShader::nvShade( int offset, const Vector3 &directio
 
 inline HdrColor ContourVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
 {
-    Q_CHECK_PTR( interpolator );
-    Q_CHECK_PTR( m_encodedNormals );
-    Q_CHECK_PTR( m_directionEncoder );
+    Q_ASSERT( interpolator );
+    Q_ASSERT( m_encodedNormals );
+    Q_ASSERT( m_directionEncoder );
 
     if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 

@@ -59,10 +59,10 @@ inline HdrColor DirectIlluminationVoxelShader::shade( const Vector3 &position, c
 
 inline HdrColor DirectIlluminationVoxelShader::nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
 {
-    Q_CHECK_PTR( m_data );
-    Q_CHECK_PTR( m_encodedNormals );
-    Q_CHECK_PTR( m_redDiffuseShadingTable ); Q_CHECK_PTR( m_greenDiffuseShadingTable ); Q_CHECK_PTR( m_blueDiffuseShadingTable );
-    Q_CHECK_PTR( m_redSpecularShadingTable ); Q_CHECK_PTR( m_greenSpecularShadingTable ); Q_CHECK_PTR( m_blueSpecularShadingTable );
+    Q_ASSERT( m_data );
+    Q_ASSERT( m_encodedNormals );
+    Q_ASSERT( m_redDiffuseShadingTable ); Q_ASSERT( m_greenDiffuseShadingTable ); Q_ASSERT( m_blueDiffuseShadingTable );
+    Q_ASSERT( m_redSpecularShadingTable ); Q_ASSERT( m_greenSpecularShadingTable ); Q_ASSERT( m_blueSpecularShadingTable );
 
     HdrColor color = AmbientVoxelShader::shade( offset, direction, baseColor );
 
@@ -82,11 +82,11 @@ inline HdrColor DirectIlluminationVoxelShader::nvShade( const Vector3 &position,
     Q_UNUSED( direction );
     Q_UNUSED( baseColor );
 
-    Q_CHECK_PTR( interpolator );
-    Q_CHECK_PTR( m_data );
-    Q_CHECK_PTR( m_encodedNormals );
-    Q_CHECK_PTR( m_redDiffuseShadingTable ); Q_CHECK_PTR( m_greenDiffuseShadingTable ); Q_CHECK_PTR( m_blueDiffuseShadingTable );
-    Q_CHECK_PTR( m_redSpecularShadingTable ); Q_CHECK_PTR( m_greenSpecularShadingTable ); Q_CHECK_PTR( m_blueSpecularShadingTable );
+    Q_ASSERT( interpolator );
+    Q_ASSERT( m_data );
+    Q_ASSERT( m_encodedNormals );
+    Q_ASSERT( m_redDiffuseShadingTable ); Q_ASSERT( m_greenDiffuseShadingTable ); Q_ASSERT( m_blueDiffuseShadingTable );
+    Q_ASSERT( m_redSpecularShadingTable ); Q_ASSERT( m_greenSpecularShadingTable ); Q_ASSERT( m_blueSpecularShadingTable );
 
     int offsets[8];
     double weights[8];

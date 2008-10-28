@@ -5,7 +5,6 @@
 #include "voxelshader.h"
 
 #include "trilinearinterpolator.h"
-#include "vector3.h"
 
 
 namespace udg {
