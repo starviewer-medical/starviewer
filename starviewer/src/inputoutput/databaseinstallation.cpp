@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QFile>
 #include <QString>
+#include <QMessageBox>
 #include <sqlite3.h>
 
 #include "starviewersettings.h"
@@ -22,6 +23,7 @@ namespace udg {
 
 DatabaseInstallation::DatabaseInstallation()
 {
+    m_qprogressDialog = NULL;
 }
 
 bool DatabaseInstallation::checkStarviewerDatabase()
@@ -31,9 +33,6 @@ bool DatabaseInstallation::checkStarviewerDatabase()
 
     //Comprovem que existeix el path on s'importen les imatges, sinó existeix l'intentarà crear
     if (!checkLocalImagePath()) return false;
-
-    //Comprovem que existeix el path on es guarda la base de dades, sinó existeix l'intentarà crear
-    if (!checkDatabasePath()) return false;
 
     if (!existsDatabaseFile())
     {
@@ -45,6 +44,15 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     }
     else
     {
+        if (localDatabaseManager.isDatabaseCorrupted())
+        {
+            if (!repairDatabase())
+            {
+                ERROR_LOG("NO S'HA POGUT REPARAR LA BASE DE DADES");
+                return false;
+            }
+        }
+
         checkDatabaseRevision();
     }
 
@@ -101,30 +109,53 @@ bool DatabaseInstallation::checkDatabaseRevision()
     else return true;
 }
 
-bool DatabaseInstallation::reinstallDatabaseFile()
+bool DatabaseInstallation::repairDatabase()
+{
+    LocalDatabaseManager localDatabaseManager;
+    QMessageBox::critical(0, tr("Starviewer"), tr("Starviewer database is corrupted.\n\nStarviewer will try to repair it."));
+
+    //La única manera d'intentar reparar la base de dades és compactar la base de dades
+    localDatabaseManager.compact();
+    if (localDatabaseManager.isDatabaseCorrupted())
+    {
+        //Si la base de dades continua corrupte l'hem de reinstal·lar
+        QMessageBox::critical(0, tr("Starviewer"), tr("Starviewer can't repair database.\n\nDatabase will be reinstalled. All local studies retrieved and imported will be lost."));
+        return reinstallDatabase();
+    }
+    else
+    {
+        return true;
+    }
+}
+
+bool DatabaseInstallation::reinstallDatabase()
 {
     QDir databaseFile;
     StarviewerSettings settings;
     DeleteDirectory *deleteDirectory = new DeleteDirectory();
 
-    //si existeix l'esborrem
+    if (m_qprogressDialog == NULL)
+    {
+        //Si nó existeix creem barra de progrés per donar feedback
+        m_qprogressDialog = new QProgressDialog(tr ("Reinstalling database"), "", 0, 0);
+        m_qprogressDialog->setValue(1);
+    }
+
+    //si existeix l'esborrem la base de dades
     if (existsDatabaseFile())
     {
         QFile databaseFile;
         databaseFile.remove(settings.getDatabasePath());
     }
 
-    //si no existeix el directori de la base de dades el creem
-    if (!existsDatabasePath())
-    {
-        createDatabaseDirectory();
-    }
     createDatabaseFile();
 
     //Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les, i per cada directori esborrat movem la barra de progrés
     connect(deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
     deleteDirectory->deleteDirectory(settings.getCacheImagePath(), false);
     delete deleteDirectory;
+
+    m_qprogressDialog->close();
 
     return existsDatabaseFile();
 }
@@ -139,14 +170,12 @@ bool DatabaseInstallation::updateDatabaseRevision()
 
     /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
      *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
-    status = reinstallDatabaseFile();
+    status = reinstallDatabase();
 
     if (!status)
     {
         ERROR_LOG("HA FALLAT L'ACTUALITZACIÓ DE LA BASE DE DADES");
     }
-
-    m_qprogressDialog->close();
 
     return status;
 }
@@ -218,6 +247,9 @@ bool DatabaseInstallation::createDatabaseFile()
     QByteArray sqlTablesScript;
     DatabaseConnection DBConnect;//obrim la bdd
     int status;
+
+    //Comprovem que existeixi el path on s'ha de crear la base de dades, sinó el crea
+    if (!checkDatabasePath()) return false;
 
     sqlTablesScriptFile.open(QIODevice::ReadOnly); //obrim el fitxer
 
