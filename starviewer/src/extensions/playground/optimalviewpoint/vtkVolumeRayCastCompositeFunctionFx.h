@@ -18,7 +18,7 @@
 // vtkVolumeRayCastCompositeFunctionFx is a ray function that can be used
 // within a vtkVolumeRayCastMapper. This function performs compositing along
 // the ray according to the properties stored in the vtkVolumeProperty for
-// the volume. 
+// the volume.
 
 // .SECTION See Also
 // vtkVolumeRayCastMapper vtkVolumeProperty vtkVolume
@@ -28,12 +28,11 @@
 
 #include "vtkVolumeRayCastFunction.h"
 
+#include "vector3.h"
+
 #define VTK_COMPOSITE_CLASSIFY_FIRST 0
 #define VTK_COMPOSITE_INTERPOLATE_FIRST 1
 
-namespace udg {
-class Vector3;
-}
 
 class vtkVolumeRayCastCompositeFunctionFx : public vtkVolumeRayCastFunction
 {
@@ -49,7 +48,7 @@ public:
   vtkGetMacro(CompositeMethod,int);
   void SetCompositeMethodToInterpolateFirst()
     {this->SetCompositeMethod(VTK_COMPOSITE_INTERPOLATE_FIRST);}
-  void SetCompositeMethodToClassifyFirst() 
+  void SetCompositeMethodToClassifyFirst()
     {this->SetCompositeMethod(VTK_COMPOSITE_CLASSIFY_FIRST);}
   const char *GetCompositeMethodAsString(void);
 
@@ -112,7 +111,7 @@ protected:
                                    vtkVolumeRayCastStaticInfo *staticInfo,
                                    vtkVolumeRayCastMapper *mapper );
 //ETX
-  
+
   int           CompositeMethod;
 private:
   vtkVolumeRayCastCompositeFunctionFx(const vtkVolumeRayCastCompositeFunctionFx&);  // Not implemented.

@@ -7,15 +7,13 @@
 #include <QVector>
 
 #include "transferfunction.h"
+#include "vector3.h"
 
 
 class vtkVolume;
 
 
 namespace udg {
-
-
-class Vector3;
 
 
 /**

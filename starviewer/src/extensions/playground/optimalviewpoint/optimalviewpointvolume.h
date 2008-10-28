@@ -19,6 +19,7 @@
 #include <vtkMultiThreader.h>
 
 #include "transferfunction.h"
+#include "vector3.h"
 
 
 class vtkImageData;
@@ -40,7 +41,6 @@ class ContourVoxelShader;
 class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
 class SaliencyVoxelShader;
-class Vector3;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
 
 

@@ -3,13 +3,13 @@
 
 
 #include "hdrcolor.h"
+#include "vector3.h"
 
 
 namespace udg {
 
 
 class TrilinearInterpolator;
-class Vector3;
 
 
 /**

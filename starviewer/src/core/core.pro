@@ -332,7 +332,6 @@ SOURCES += extensionmediator.cpp \
            directilluminationvoxelshader.cpp \
            voxelshader.cpp \
            trilinearinterpolator.cpp \
-           vector3.cpp \
            vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
            sphereuniformpointcloudgenerator.cpp \
            obscurancemainthread.cpp \
