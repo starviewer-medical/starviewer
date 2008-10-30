@@ -32,14 +32,14 @@ void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(patientToUpdate));
 }
 
-void LocalDatabasePatientDAL::del(DicomMask patientMaskToDelete)
+void LocalDatabasePatientDAL::del(const DicomMask &patientMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlDelete(patientMaskToDelete)), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(patientMaskToDelete));
 }
 
-QList<Patient*> LocalDatabasePatientDAL::query(DicomMask patientMask)
+QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -86,7 +86,7 @@ Patient* LocalDatabasePatientDAL::fillPatient(char **reply, int row, int columns
     return patient;
 }
 
-QString LocalDatabasePatientDAL::buildSqlSelect(DicomMask patientMaskToSelect)
+QString LocalDatabasePatientDAL::buildSqlSelect(const DicomMask &patientMaskToSelect)
 {
     QString selectSentence, whereSentence;
 
@@ -124,7 +124,7 @@ QString LocalDatabasePatientDAL::buildSqlUpdate(Patient *patientToUpdate)
     return updateSentence;
 }
 
-QString LocalDatabasePatientDAL::buildSqlDelete(DicomMask patientMaskToDelete)
+QString LocalDatabasePatientDAL::buildSqlDelete(const DicomMask &patientMaskToDelete)
 {
     QString deleteSentence, whereSentence = "";
 
@@ -135,7 +135,7 @@ QString LocalDatabasePatientDAL::buildSqlDelete(DicomMask patientMaskToDelete)
     return deleteSentence + whereSentence;
 }
 
-void LocalDatabasePatientDAL::logError(QString sqlSentence)
+void LocalDatabasePatientDAL::logError(const QString &sqlSentence)
 {
     QString errorNumber;
 

@@ -32,10 +32,10 @@ public:
     void update(Patient *patientToUpdate);
 
     ///Esborra els estudis pacients que compleixen amb els criteris de la màscara, només té en compte el Patient Id
-    void del(DicomMask patientMaskToDelete);
+    void del(const DicomMask &patientMaskToDelete);
 
     ///Cerca els pacients que compleixen amb els criteris de la màscara de cerca, només té en compte el Patient Id
-    QList<Patient*> query(DicomMask patientMaskToQuery);
+    QList<Patient*> query(const DicomMask &patientMaskToQuery);
 
     ///Connexió de la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
@@ -56,16 +56,16 @@ private :
     QString buildSqlUpdate(Patient *patientToUpdate);
 
     ///Construeix la setència per fer select de pacients a partir de la màscara, només té en compte el PatientID 
-    QString buildSqlSelect(DicomMask patientMaskToSelect);
+    QString buildSqlSelect(const DicomMask &patientMaskToSelect);
 
     ///Construeix la setència per esborrar pacients a partir de la màscara, només té en compte el Patient Id
-    QString buildSqlDelete(DicomMask patientMaskToDelete);
+    QString buildSqlDelete(const DicomMask &patientMaskToDelete);
 
     ///Emplena un l'objecte series de la fila passada per paràmetre
     Patient* fillPatient(char **reply, int row, int columns);
 
     ///Ens fa un ErrorLog d'una sentència sql
-    void logError(QString sqlSentence);
+    void logError(const QString &sqlSentence);
 
 };
 }

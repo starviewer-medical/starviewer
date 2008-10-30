@@ -36,16 +36,16 @@ public:
     void insert(Image *newImage, int orderNumberInSeries);
 
     /// Esborra les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    void del(DicomMask imageMaskToDelete);
+    void del(const DicomMask &imageMaskToDelete);
 
     ///Actualitza la imatge passada per paràmetre
     void update(Image *imageToUpdate, int orderNumberInSeries);
 
     ///Selecciona les imatges que compleixen la màscara, només es té en compte de la màscara el StudyUID, SeriesUID i SOPInstanceUID
-    QList<Image*> query(DicomMask imageMaskToSelect);
+    QList<Image*> query(const DicomMask &imageMaskToSelect);
 
     ///Compta les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    int count(DicomMask imageMaskToCount);
+    int count(const DicomMask &imageMaskToCount);
 
     ///Indiquem quina és la connexió a la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
@@ -70,10 +70,10 @@ private :
     Image *fillImage(char **reply, int row, int columns);
 
     ///Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
-    QString buildSqlSelect(DicomMask imageMaskToSelect);
+    QString buildSqlSelect(const DicomMask &imageMaskToSelect);
 
     ///Genera la sentència sql per comptar número d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
-    QString buildSqlSelectCountImages(DicomMask imageMaskToSelect);
+    QString buildSqlSelectCountImages(const DicomMask &imageMaskToSelect);
 
     ///Genera la sentència sql per inserir la nova imatge a la base de dades
     QString buildSqlInsert(Image *newImage, int OrderNumberInSeries);
@@ -82,25 +82,25 @@ private :
     QString buildSqlUpdate(Image *imageToUpdate, int OrderNumberInSeries);
 
     ///Genera la sentencia Sql per esborrar Imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
-    QString buildSqlDelete(DicomMask imageMaskToDelete);
+    QString buildSqlDelete(const DicomMask &imageMaskToDelete);
 
     ///Genera la sentència del where a partir de la màscara tenint en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
-    QString buildWhereSentence(DicomMask imageMask);
+    QString buildWhereSentence(const DicomMask &imageMask);
 
     ///Retorna el Pixel Spacing en format d'string separat per "\\"
     QString getPixelSpacingAsQString(Image *newImage);
     ///Retorna el Pixel spacing en format de double
-    double* getPixelSpacingAsDouble(QString pixelSpacing);
+    double* getPixelSpacingAsDouble(const QString &pixelSpacing);
 
     ///Retorna l'ImageOrientationPatient en format d'string separat per "\\";
     QString getImageOrientationPatientAsQString(Image *newImage);
     ///Retorna l'ImageOrientationPatient  en format de double
-    double* getImageOrientationPatientAsDouble(QString ImageOrientationPatient);
+    double* getImageOrientationPatientAsDouble(const QString &ImageOrientationPatient);
 
     ///Retorna l'imagePatientPosition en format d'string separat per "\\";
     QString getPatientPositionAsQString(Image *newImage);
     ///Retorna el Patient Position en format double
-    double* getPatientPositionAsDouble(QString patientPosition);
+    double* getPatientPositionAsDouble(const QString &patientPosition);
 
     ///Retorna el WindowWidth en format d'string separats per "\\";
     QString getWindowWidthAsQString(Image *newImage);
@@ -112,13 +112,13 @@ private :
     QString getWindowLevelExplanationAsQString(Image *newImage);
 
     ///Retorna el WindowLevelExplanation en una llista d'strings
-    QStringList getWindowLevelExplanationAsQStringList(QString explanationList);
+    QStringList getWindowLevelExplanationAsQStringList(const QString &explanationList);
 
     ///Emplena el windowlevel de la imatge
-    void setWindowLevel(Image *selectedImage, QString windowLevelWidth, QString windowLevelCenter);
+    void setWindowLevel(Image *selectedImage, const QString &windowLevelWidth, const QString &windowLevelCenter);
 
     ///Ens fa un ErrorLog d'una sentència sql
-    void logError(QString sqlSentence);
+    void logError(const QString &sqlSentence);
 };
 
 }

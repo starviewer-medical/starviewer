@@ -97,7 +97,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
     setLastError(status);
 }
 
-QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
+QList<Patient*> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabasePatientDAL patientDAL;
@@ -113,7 +113,7 @@ QList<Patient*> LocalDatabaseManager::queryPatient(DicomMask patientMaskToQuery)
     return queryResult;
 }
 
-QList<Patient*> LocalDatabaseManager::queryPatientStudy(DicomMask patientStudyMaskToQuery)
+QList<Patient*> LocalDatabaseManager::queryPatientStudy(const DicomMask &patientStudyMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseStudyDAL studyDAL;
@@ -129,7 +129,7 @@ QList<Patient*> LocalDatabaseManager::queryPatientStudy(DicomMask patientStudyMa
     return queryResult;
 }
 
-QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
+QList<Study*> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseStudyDAL studyDAL;
@@ -145,7 +145,7 @@ QList<Study*> LocalDatabaseManager::queryStudy(DicomMask studyMaskToQuery)
     return queryResult;
 }
 
-QList<Series*> LocalDatabaseManager::querySeries(DicomMask seriesMaskToQuery)
+QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseSeriesDAL seriesDAL;
@@ -161,7 +161,7 @@ QList<Series*> LocalDatabaseManager::querySeries(DicomMask seriesMaskToQuery)
     return queryResult;
 }
 
-QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
+QList<Image*> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseImageDAL imageDAL;
@@ -177,7 +177,7 @@ QList<Image*> LocalDatabaseManager::queryImage(DicomMask imageMaskToQuery)
     return queryResult;
 }
 
-Patient* LocalDatabaseManager::retrieve(DicomMask maskToRetrieve)
+Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 {
     LocalDatabaseStudyDAL studyDAL;
     LocalDatabaseSeriesDAL seriesDAL;
@@ -250,7 +250,7 @@ Patient* LocalDatabaseManager::retrieve(DicomMask maskToRetrieve)
     return retrievedPatient;
 }
 
-void LocalDatabaseManager::del(QString studyInstanceToDelete)
+void LocalDatabaseManager::del(const QString &studyInstanceToDelete)
 {
     DatabaseConnection dbConnect;
     StarviewerSettings settings;
@@ -480,7 +480,7 @@ bool LocalDatabaseManager::isEnoughSpace()
     return true;
 }
 
-QString LocalDatabaseManager::getStudyPath(QString studyInstanceUID)
+QString LocalDatabaseManager::getStudyPath(const QString &studyInstanceUID)
 {
     StarviewerSettings settings;
 
@@ -492,7 +492,7 @@ LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
     return m_lastError;
 }
 
-bool LocalDatabaseManager::setStudyRetrieving(QString studyInstanceUID)
+bool LocalDatabaseManager::setStudyRetrieving(const QString &studyInstanceUID)
 {
     QSettings qsettings;
 
@@ -543,7 +543,7 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
     else m_lastError = Ok;
 }
 
-int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, QDate currentDate, QTime currentTime)
+int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
 {
     int status = SQLITE_OK;
 
@@ -568,7 +568,7 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
     return status;
 }
 
-int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, QDate currentDate, QTime currentTime)
+int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
 {
     int status = SQLITE_OK;
 
@@ -593,7 +593,7 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series
     return status;
 }
 
-int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, QDate currentDate, QTime currentTime)
+int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
 {
     int imageOrderInSeries = 0;
     int status = SQLITE_OK;
@@ -607,7 +607,7 @@ int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*
 
         if (status != SQLITE_OK) 
             return status;
-        
+
         imageOrderInSeries++;
     }
 
@@ -681,7 +681,7 @@ void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
     }
 }
 
-int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL;
     QList<Patient*> patientList;
@@ -719,7 +719,7 @@ int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, Dicom
     else return localDatabaseStudyDAL.getLastError();
 }
 
-int LocalDatabaseManager::delPatient(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+int LocalDatabaseManager::delPatient(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabasePatientDAL localDatabasePatientDAL;
 
@@ -729,7 +729,7 @@ int LocalDatabaseManager::delPatient(DatabaseConnection *dbConnect, DicomMask ma
     return localDatabasePatientDAL.getLastError();
 }
 
-int LocalDatabaseManager::delStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+int LocalDatabaseManager::delStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL;
 
@@ -739,7 +739,7 @@ int LocalDatabaseManager::delStudy(DatabaseConnection *dbConnect, DicomMask mask
     return localDatabaseStudyDAL.getLastError();
 }
 
-int LocalDatabaseManager::delSeries(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+int LocalDatabaseManager::delSeries(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseSeriesDAL localDatabaseSeriesDAL;
 
@@ -749,7 +749,7 @@ int LocalDatabaseManager::delSeries(DatabaseConnection *dbConnect, DicomMask mas
     return localDatabaseSeriesDAL.getLastError();
 }
 
-int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, DicomMask maskToDelete)
+int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseImageDAL localDatabaseImageDAL;
 
@@ -794,7 +794,7 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
     } 
 }
 
-void LocalDatabaseManager::deleteStudyFromHardDisk(QString studyInstanceToDelete)
+void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceToDelete)
 {
     DeleteDirectory deleteDirectory;
 
@@ -828,7 +828,7 @@ void LocalDatabaseManager::setLastError(int sqliteLastError)
     else m_lastError = DatabaseError;
 }
 
-qint64 LocalDatabaseManager::getDirectorySize(QString directoryPath)
+qint64 LocalDatabaseManager::getDirectorySize(const QString &directoryPath)
 {
     QDir directory(directoryPath);
     QFileInfoList fileInfoList;

@@ -33,10 +33,10 @@ public:
     void update(Series *seriesToUpdate);
 
     ///Esborra les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
-    void del(DicomMask seriesMaskToDelete);
+    void del(const DicomMask &seriesMaskToDelete);
 
     ///Cerca les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
-    QList<Series*> query(DicomMask seriesMaskToQuery);
+    QList<Series*> query(const DicomMask &seriesMaskToQuery);
 
     ///Connexió de la base de dades a utilitzar
     void setDatabaseConnection(DatabaseConnection *dbConnection);
@@ -57,19 +57,19 @@ private:
     QString buildSqlUpdate(Series *seriesToUpdate);
 
     ///Construeix la setència per fer select de sèries a partir de la màscara, només té en compte el StudyUID, i SeriesUID
-    QString buildSqlSelect(DicomMask seriesMaskToSelect);
+    QString buildSqlSelect(const DicomMask &seriesMaskToSelect);
 
     ///Construeix la setència per esborrar sèries a partir de la màscara, només té en compte el StudyUID, i SeriesUID
-    QString buildSqlDelete(DicomMask seriesMaskToDelete);
+    QString buildSqlDelete(const DicomMask &seriesMaskToDelete);
 
     ///Construeix la sentència del where tenint en compte la màscara, només té en compte el StudyUID, i SeriesUID
-    QString buildWhereSentence(DicomMask seriesMask);
+    QString buildWhereSentence(const DicomMask &seriesMask);
 
     ///Emplena un l'objecte series de la fila passada per paràmetre
     Series* fillSeries(char **reply, int row, int columns);
 
     ///Ens fa un ErrorLog d'una sentència sql
-    void logError(QString sqlSentence);
+    void logError(const QString &sqlSentence);
 };
 
 }

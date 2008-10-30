@@ -32,7 +32,7 @@ public:
      /** Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
       * @param path de la base de dades
       */
-    void setDatabasePath(QString);
+    void setDatabasePath(const QString &databasePath);
 
     /** Retorna la connexió a la base de dades
      * @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte

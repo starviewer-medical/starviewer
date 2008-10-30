@@ -20,28 +20,28 @@ LocalDatabaseStudyDAL::LocalDatabaseStudyDAL()
 {
 }
 
-void LocalDatabaseStudyDAL::insert(Study *newStudy, QDate lastAccessDate)
+void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 {
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newStudy, lastAccessDate)), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newStudy, lastAccessDate));
 }
 
-void LocalDatabaseStudyDAL::update(Study *studyToUpdate, QDate lastAccessDate)
+void LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccessDate)
 {
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(studyToUpdate, lastAccessDate)), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(studyToUpdate, lastAccessDate));
 }
 
-void LocalDatabaseStudyDAL::del(DicomMask studyMaskToDelete)
+void LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlDelete(studyMaskToDelete)), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(studyMaskToDelete));
 }
 
-QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
+QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -66,7 +66,7 @@ QList<Study*> LocalDatabaseStudyDAL::query(DicomMask studyMask, QDate lastAccess
     return studyList;
 }
 
-QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(DicomMask patientStudyMaskToQuery, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
+QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -93,7 +93,7 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(DicomMask patientStudyM
     return patientList;
 }
 
-int LocalDatabaseStudyDAL::countHowManyStudiesHaveAPatient(QString patientID)
+int LocalDatabaseStudyDAL::countHowManyStudiesHaveAPatient(const QString &patientID)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -163,7 +163,7 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
     return patient;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
+QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)
 {
     QString selectSentence, whereSentence, orderSentence;
 
@@ -199,7 +199,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(DicomMask studyMaskToSelect, QDate
     return selectSentence + whereSentence + orderSentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToSelect, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
+QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)
 {
     QString selectSentence, whereSentence, orderBySentence;
 
@@ -250,7 +250,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(DicomMask studyMaskToS
     return selectSentence + whereSentence + orderBySentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlCountHowManyStudiesHaveAPatient(QString patientID)
+QString LocalDatabaseStudyDAL::buildSqlCountHowManyStudiesHaveAPatient(const QString &patientID)
 {
     QString selectSentence = QString ("Select count(*) "
                                       " From Patient, Study "
@@ -261,7 +261,7 @@ QString LocalDatabaseStudyDAL::buildSqlCountHowManyStudiesHaveAPatient(QString p
     return selectSentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDate)
+QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, const QDate &lastAcessDate)
 {
     QString insertSentence = QString ("Insert into Study   (InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, "
                                                            "Modalities, Date, Time, AccessionNumber, Description, "
@@ -289,7 +289,7 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, QDate lastAcessDa
     return insertSentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, QDate lastAccessDate)
+QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate &lastAccessDate)
 {
     QString updateSentence = QString ("Update Study set PatientID = '%1', " 
                                                        "ID = '%2', " 
@@ -327,7 +327,7 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, QDate lastAc
     return updateSentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlDelete(DicomMask studyMaskToDelete)
+QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete)
 {
     QString deleteSentence, whereSentence = "";
 
@@ -338,7 +338,7 @@ QString LocalDatabaseStudyDAL::buildSqlDelete(DicomMask studyMaskToDelete)
     return deleteSentence + whereSentence;
 }
 
-void LocalDatabaseStudyDAL::logError(QString sqlSentence)
+void LocalDatabaseStudyDAL::logError(const QString &sqlSentence)
 {
     QString errorNumber;
 

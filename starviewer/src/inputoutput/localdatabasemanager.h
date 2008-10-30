@@ -37,26 +37,26 @@ public:
     LocalDatabaseManager();
 
     ///Ens retorna els pacients que compleixen amb els criteris de la màscara, només es té en compte el patientID
-    QList<Patient*> queryPatient(DicomMask patientMaskToQuery);
+    QList<Patient*> queryPatient(const DicomMask &patientMaskToQuery);
 
     ///Ens retorna els estudis que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID
-    QList<Study*> queryStudy(DicomMask studyMaskToQuery);
+    QList<Study*> queryStudy(const DicomMask &studyMaskToQuery);
 
     ///Ens retorna les series que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID i SeriesUID 
-    QList<Series*> querySeries(DicomMask seriesMaskToQuery);
+    QList<Series*> querySeries(const DicomMask &seriesMaskToQuery);
 
     ///Ens retorna les imatges que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    QList<Image*> queryImage(DicomMask imageMaskToQuery);
+    QList<Image*> queryImage(const DicomMask &imageMaskToQuery);
 
     ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
     ///Retorna l'estructura omplerta fins al nivell d'study (no omple ni les sèries ni les imatges).
-    QList<Patient*> queryPatientStudy(DicomMask patientStudyMaskToQuery);
+    QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery);
 
     ///Retorna tota l'estructura Patient,Study,Series,Image, de l'estudi que compleix amb el criteri de cerca, té en compte el Study InstanceUID, el SeriesInstanceUID i el SOP Instance UID
-    Patient* retrieve(DicomMask maskToRetrieve);
+    Patient* retrieve(const DicomMask &maskToRetrieve);
 
     ///Esborra de la base de dades i del disc l'estudi passat per paràmetre
-    void del(QString studyInstanceUIDToDelete);
+    void del(const QString &studyInstanceUIDToDelete);
 
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
@@ -77,7 +77,7 @@ public:
     bool isEnoughSpace();
 
     ///Donat un study instance UID ens indica a quin ha de ser el directori de l'estudi
-    QString getStudyPath(QString studyInstanceUID);
+    QString getStudyPath(const QString &studyInstanceUID);
 
     LastError getLastError();
 
@@ -87,7 +87,7 @@ public:
       *Atenció! Aquest mètode només permet establir com a Retrieving un estudi a la vegada
       * @return retorna indicant si s'ha pogut realitzar l'operació amb èxit, si indica fals serà perquè ja hi ha un estudi descarregant
       */
-    bool setStudyRetrieving(QString studyInstanceUID);
+    bool setStudyRetrieving(const QString &studyInstanceUID);
 
     ///Indiquem que l'estudi que s'havia indicat a través del mètode setStudyRetrieving ja s'ha descarregat
     void setStudyRetrieveFinished();
@@ -113,11 +113,11 @@ private :
     LastError m_lastError;
 
     ///Guarda a la base de dades la llista d'estudis passada per paràmetre, si algun dels estudis ja existeix actualitza la info
-    int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, QDate currentDate, QTime currentTime);
+    int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime);
     ///Guarda a la base de dades la llista de series passada per paràmetre, si alguna de les series ja existeix actualitza la info
-    int saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, QDate currentDate, QTime currentTime);
+    int saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime);
     ///Guarda a la base de dades la llista d'imatges passada per paràmetre, si alguna de les imatges ja existeix actualitza la info
-    int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave,QDate currentDate, QTime currentTime);
+    int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime);
 
     ///Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
     int savePatient(DatabaseConnection *dbConnect, Patient *patientToSave);
@@ -129,15 +129,15 @@ private :
     int saveImage(DatabaseConnection *dbConnect, Image *imageToSave, int imageOrderInSeries);
 
     ///Esborra el pacient que compleixi amb la màscara a esborrar. A la màscara hem d'indicar el UID de l'estudi a esborrar i comprova si el pacient el qual pertany l'estudi té més d'un estudi, si és així no l'esborrar, si només en té un l'esborra
-    int delPatientOfStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    int delPatientOfStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra el pacient que compleix la màscara passada per paràmetre, només es té en compte el patientID
-    int delPatient(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    int delPatient(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra el l'estudi que compleixi amb la màscara a esborrar
-    int delStudy(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    int delStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra la serie que compleixi amb la màscara a esborrar
-    int delSeries(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    int delSeries(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra la imatge que compleixi amb la màscara a esborrar
-    int delImage(DatabaseConnection *dbConnect, DicomMask maskToDelete);
+    int delImage(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
 
     ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);
@@ -146,14 +146,14 @@ private :
     void freeSpaceDeletingStudies(quint64 MbytesToErase);
 
     ///Esborra l'estudi del disc dur
-    void deleteStudyFromHardDisk(QString studyInstanceToDelete);
+    void deleteStudyFromHardDisk(const QString &studyInstanceToDelete);
 
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);
 
     //TODO Aquest mètode s'hauria de traslladar a una classe genèrica
     ///Retorna el que ocupa en bytes el directori
-    qint64 getDirectorySize(QString directoryPath);
+    qint64 getDirectorySize(const QString &directoryPath);
 
 };
 

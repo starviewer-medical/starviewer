@@ -35,14 +35,14 @@ void LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(seriesToUpdate));
 }
 
-void LocalDatabaseSeriesDAL::del(DicomMask seriesMaskToDelete)
+void LocalDatabaseSeriesDAL::del(const DicomMask &seriesMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlDelete(seriesMaskToDelete)), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(seriesMaskToDelete));
 }
 
-QList<Series*> LocalDatabaseSeriesDAL::query(DicomMask seriesMask)
+QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -108,7 +108,7 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
     return series;
 }
 
-QString LocalDatabaseSeriesDAL::buildSqlSelect(DicomMask seriesMaskToSelect)
+QString LocalDatabaseSeriesDAL::buildSqlSelect(const DicomMask &seriesMaskToSelect)
 {
     QString selectSentence = "Select InstanceUID, StudyInstanceUID, Number, Modality, Date, Time, InstitutionName, "
                                     "PatientPosition, ProtocolName, Description, FrameOfReferenceUID, PositionReferenceIndicator, "
@@ -198,12 +198,12 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
     return updateSentence;
 }
 
-QString LocalDatabaseSeriesDAL::buildSqlDelete(DicomMask seriesMaskToDelete)
+QString LocalDatabaseSeriesDAL::buildSqlDelete(const DicomMask &seriesMaskToDelete)
 {
     return "Delete From Series " + buildWhereSentence(seriesMaskToDelete);
 }
 
-QString LocalDatabaseSeriesDAL::buildWhereSentence(DicomMask seriesMask)
+QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
 {
     QString whereSentence = "";
 
@@ -223,7 +223,7 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(DicomMask seriesMask)
     return whereSentence;
 }
 
-void LocalDatabaseSeriesDAL::logError(QString sqlSentence)
+void LocalDatabaseSeriesDAL::logError(const QString &sqlSentence)
 {
     QString errorNumber;
 
