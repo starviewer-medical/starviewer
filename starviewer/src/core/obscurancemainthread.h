@@ -6,8 +6,8 @@
 
 #include <QVector>
 
+#include "obscurance.h"
 #include "transferfunction.h"
-#include "vector3.h"
 
 
 class vtkVolume;
@@ -38,8 +38,9 @@ public:
     bool hasColor() const;
     void setVolume( vtkVolume *volume );
     void setTransferFunction( const TransferFunction &transferFunction );
-    void setObscurance( double *obscurance, Vector3 *colorBleeding );
     void setSaliency( const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh );
+
+    Obscurance* getObscurance() const;
 
 public slots:
 
@@ -67,8 +68,7 @@ private:
     Variant m_variant;
     vtkVolume *m_volume;
     TransferFunction m_transferFunction;
-    double *m_obscurance;
-    Vector3 *m_colorBleeding;
+    Obscurance *m_obscurance;
     const double *m_saliency;
     double m_fxSaliencyA, m_fxSaliencyB;
     double m_fxSaliencyLow, m_fxSaliencyHigh;

@@ -18,7 +18,7 @@ ObscuranceVoxelShader::~ObscuranceVoxelShader()
 }
 
 
-void ObscuranceVoxelShader::setObscurance( const double *obscurance )
+void ObscuranceVoxelShader::setObscurance( const Obscurance *obscurance )
 {
     m_obscurance = obscurance;
 }

@@ -4,6 +4,7 @@
 
 #include "voxelshader.h"
 
+#include "obscurance.h"
 #include "trilinearinterpolator.h"
 #include "vector3.h"
 
@@ -22,7 +23,7 @@ public:
     virtual ~ObscuranceVoxelShader();
 
     /// Assigna l'array d'obscurances.
-    void setObscurance( const double *obscurance );
+    void setObscurance( const Obscurance *obscurance );
     /// Assigna el factor pel qual es multipliquen les obscurances.
     void setFactor( double factor );
     /// Assigna els filtres d'obscurances: per sota de \a low es considera 0 i per sobre de \a high es considera 1.
@@ -41,7 +42,7 @@ public:
 
 protected:
 
-    const double *m_obscurance;
+    const Obscurance *m_obscurance;
     double m_factor;
     double m_lowFilter, m_highFilter;
 
@@ -68,7 +69,7 @@ inline HdrColor ObscuranceVoxelShader::nvShade( int offset, const Vector3 &direc
 
     if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 
-    double obscurance = m_obscurance[offset];
+    double obscurance = m_obscurance->obscurance( offset );
     if ( obscurance < m_lowFilter ) obscurance = 0.0;
     else if ( obscurance > m_highFilter ) obscurance = 1.0;
     obscurance *= m_factor;
@@ -93,7 +94,11 @@ inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, const V
     double weights[8];
     interpolator->getOffsetsAndWeights( position, offsets, weights );
 
-    double obscurance = TrilinearInterpolator::interpolate<double>( m_obscurance, offsets, weights );
+    double obscurance;
+    if ( m_obscurance->isDoublePrecision() )
+        obscurance = TrilinearInterpolator::interpolate<double>( m_obscurance->doubleObscurance(), offsets, weights );
+    else
+        obscurance = TrilinearInterpolator::interpolate<float>( m_obscurance->floatObscurance(), offsets, weights );
     if ( obscurance < m_lowFilter ) obscurance = 0.0;
     else if ( obscurance > m_highFilter ) obscurance = 1.0;
     obscurance *= m_factor;

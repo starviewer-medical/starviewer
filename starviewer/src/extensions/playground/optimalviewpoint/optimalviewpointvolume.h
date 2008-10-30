@@ -42,6 +42,8 @@ class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
 class SaliencyVoxelShader;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
+class ObscuranceMainThread;
+class Obscurance;
 
 
 /**
@@ -280,9 +282,8 @@ private:
     /// Variant de les obscurances que s'ha calculat o carregat.
     int m_obscuranceVariant;
     /// Vector d'obscurances.
-    double *m_obscurance;
-    /// Vector de color bleeding.
-    Vector3 *m_colorBleeding;
+    Obscurance *m_obscurance;
+    ObscuranceMainThread *m_obscuranceMainThread;
 
 
 

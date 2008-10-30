@@ -20,7 +20,7 @@ ObscuranceMainThread::ObscuranceMainThread( int numberOfDirections, double maxim
     : QThread(parent),
       m_numberOfDirections( numberOfDirections ), m_maximumDistance( maximumDistance ), m_function( function ), m_variant( variant ),
       m_volume( 0 ),
-      m_obscurance( 0 ), m_colorBleeding( 0 )
+      m_obscurance( 0 )
 {
 }
 
@@ -49,13 +49,6 @@ void ObscuranceMainThread::setTransferFunction( const TransferFunction &transfer
 }
 
 
-void ObscuranceMainThread::setObscurance( double *obscurance, Vector3 *colorBleeding )
-{
-    m_obscurance = obscurance;
-    m_colorBleeding = colorBleeding;
-}
-
-
 void ObscuranceMainThread::setSaliency( const double *saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh )
 {
     m_saliency = saliency;
@@ -66,9 +59,16 @@ void ObscuranceMainThread::setSaliency( const double *saliency, double fxSalienc
 }
 
 
+Obscurance* ObscuranceMainThread::getObscurance() const
+{
+    return m_obscurance;
+}
+
+
 void ObscuranceMainThread::stop()
 {
     m_stopped = true;
+    delete m_obscurance; m_obscurance = 0;
 }
 
 
@@ -95,12 +95,14 @@ void ObscuranceMainThread::run()
     int increments[3];
     image->GetIncrements( increments );
 
+    m_obscurance = new Obscurance( dataSize, hasColor() );
+
     for ( int i = 0; i < numberOfThreads; i++ )
     {
         ObscuranceThread * thread = new ObscuranceThread( i, numberOfThreads, m_transferFunction );
         thread->setGradientEstimator( gradientEstimator );
         thread->setData( data, dataSize, dimensions, increments );
-        thread->setObscuranceParameters( m_maximumDistance, m_function, m_variant, m_obscurance, m_colorBleeding );
+        thread->setObscuranceParameters( m_maximumDistance, m_function, m_variant, m_obscurance );
         thread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
         threads[i] = thread;
     }
@@ -209,30 +211,7 @@ void ObscuranceMainThread::run()
         return;
     }
 
-    if ( !hasColor() )   // obscurances
-    {
-        double maximumObscurance = 0.0;
-
-        for ( int i = 0; i < dataSize; i++ )
-        {
-            if ( m_obscurance[i] > maximumObscurance ) maximumObscurance = m_obscurance[i];
-        }
-
-        for ( int i = 0; i < dataSize; i++ ) m_obscurance[i] /= maximumObscurance;
-    }
-    else    // color bleeding
-    {
-        double maximumObscurance = 0.0;
-
-        for ( int i = 0; i < dataSize; i++ )
-        {
-            if ( m_colorBleeding[i].x > maximumObscurance ) maximumObscurance = m_colorBleeding[i].x;
-            if ( m_colorBleeding[i].y > maximumObscurance ) maximumObscurance = m_colorBleeding[i].y;
-            if ( m_colorBleeding[i].z > maximumObscurance ) maximumObscurance = m_colorBleeding[i].z;
-        }
-
-        for ( int i = 0; i < dataSize; i++ ) m_colorBleeding[i] /= maximumObscurance;
-    }
+    m_obscurance->normalize();
 
     emit computed();
 }

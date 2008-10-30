@@ -58,6 +58,7 @@
 #include "saliencyvoxelshader.h"
 #include "colorbleedingvoxelshader.h"
 #include "obscurancemainthread.h"
+#include "obscurance.h"
 
 
 namespace udg {
@@ -76,7 +77,7 @@ OptimalViewpointVolume::OptimalViewpointVolume( vtkImageData *image, QObject *pa
     createVolume();
 
     m_obscurance = 0;
-    m_colorBleeding = 0;
+    m_obscuranceMainThread = 0;
 
 
 
@@ -119,8 +120,8 @@ OptimalViewpointVolume::~OptimalViewpointVolume()
 
     m_volume->Delete();
 
-    delete [] m_obscurance;
-    delete [] m_colorBleeding;
+    delete m_obscurance;
+    delete m_obscuranceMainThread;
     delete [] m_saliency;
 }
 
@@ -425,7 +426,7 @@ double OptimalViewpointVolume::getSampleDistance() const
 
 
 
-void OptimalViewpointVolume::handle( int rayId, int offset )
+void OptimalViewpointVolume::handle( int /*rayId*/, int /*offset*/ )
 {
     //emit visited( rayId, *(m_labeledData + offset) );
 }
@@ -989,7 +990,7 @@ void OptimalViewpointVolume::computeSaliency()
     if ( !m_obscurance ) return;
 
     vtkDoubleArray * obscuranceArray = vtkDoubleArray::New();
-    obscuranceArray->SetArray( m_obscurance, m_dataSize, 1 );
+    obscuranceArray->SetArray( m_obscurance->doubleObscurance(), m_dataSize, 1 );
 
     vtkImageData * obscuranceData = vtkImageData::New();
     obscuranceData->CopyStructure( m_image );
@@ -1138,33 +1139,19 @@ void OptimalViewpointVolume::computeObscurances( int numberOfDirections, double 
 {
     m_obscuranceVariant = variant;
 
-    ObscuranceMainThread *obscuranceMainThread = new ObscuranceMainThread( numberOfDirections, maximumDistance, static_cast<ObscuranceMainThread::Function>( function ), static_cast<ObscuranceMainThread::Variant>( variant ), this );
+    delete m_obscuranceMainThread;
+    m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections, maximumDistance, static_cast<ObscuranceMainThread::Function>( function ), static_cast<ObscuranceMainThread::Variant>( variant ), this );
 
     // Guardem en un booleà si treballem amb color o sense
-    bool color = obscuranceMainThread->hasColor();
+    bool color = m_obscuranceMainThread->hasColor();
 
-    // Preparem el vector que farem servir, reaprofitant memòria si podem
-    if ( !color )   // obscurances
-    {
-        delete m_colorBleeding; m_colorBleeding = 0;
-        if ( !m_obscurance ) m_obscurance = new double[m_dataSize];
-        for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] = 0.0;
-    }
-    else    // color bleeding
-    {
-        delete m_obscurance; m_obscurance = 0;
-        if ( !m_colorBleeding ) m_colorBleeding = new Vector3[m_dataSize];
-        else for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] = Vector3();
-    }
+    m_obscuranceMainThread->setVolume( m_volume );
+    m_obscuranceMainThread->setTransferFunction( m_transferFunction );
+    m_obscuranceMainThread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
 
-    obscuranceMainThread->setVolume( m_volume );
-    obscuranceMainThread->setTransferFunction( m_transferFunction );
-    obscuranceMainThread->setObscurance( m_obscurance, m_colorBleeding );
-    obscuranceMainThread->setSaliency( m_saliency, m_fxSaliencyA, m_fxSaliencyB, m_fxSaliencyLow, m_fxSaliencyHigh );
-
-    connect( obscuranceMainThread, SIGNAL( progress(int) ), this, SLOT( showObscuranceProgress(int) ) );
-    connect( obscuranceMainThread, SIGNAL( computed() ), this, SLOT( endComputeObscurances() ) );
-    obscuranceMainThread->start();
+    connect( m_obscuranceMainThread, SIGNAL( progress(int) ), this, SLOT( showObscuranceProgress(int) ) );
+    connect( m_obscuranceMainThread, SIGNAL( computed() ), this, SLOT( endComputeObscurances() ) );
+    m_obscuranceMainThread->start();
 }
 
 
@@ -1176,6 +1163,8 @@ void OptimalViewpointVolume::showObscuranceProgress( int percent )
 
 void OptimalViewpointVolume::endComputeObscurances()
 {
+    delete m_obscurance; m_obscurance = m_obscuranceMainThread->getObscurance();
+
     if ( m_obscuranceVariant < ObscuranceMainThread::OpacityColorBleeding ) // obscurances
     {
         {   // guardar obscurances a fitxer
@@ -1187,7 +1176,7 @@ void OptimalViewpointVolume::endComputeObscurances()
                 QDataStream out( &outFile );
                 for ( int i = 0; i < m_dataSize; ++i )
                 {
-                    uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( m_obscurance[i] * 255.0 ) ) : 0;
+                    uchar value = m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) ? static_cast<uchar>( qRound( m_obscurance->obscurance(i) * 255.0 ) ) : 0;
                     out << value;
     //                 out << gradientMagnitudes[i];
     //                 float * uGradient = directionEncoder->GetDecodedGradient( encodedNormals[i] );
@@ -1211,21 +1200,12 @@ void OptimalViewpointVolume::endComputeObscurances()
                 outFileMhd.close();
             }
 
-            QFile obscurancesFile( QDir::tempPath().append( QString( "/obscurance.dat" ) ) );
-            if ( obscurancesFile.open( QFile::WriteOnly | QFile::Truncate ) )
-            {
-                QDataStream out( &obscurancesFile );
-                for ( int i = 0; i < m_dataSize; ++i )
-                {
-                    out << m_obscurance[i];
-                }
-                obscurancesFile.close();
-            }
+            m_obscurance->save( QDir::tempPath().append( "/obscurance.dat" ) );
         }
 
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
-        m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionFx->SetObscurance( m_obscurance->doubleObscurance() );
         m_volumeRayCastFunctionFx->SetColor( false );
 
         m_obscuranceVoxelShader->setObscurance( m_obscurance );
@@ -1272,7 +1252,7 @@ void OptimalViewpointVolume::endComputeObscurances()
                     uchar value = 0;
                     if ( m_data[i] > 0 && ( density || m_transferFunction.getOpacity( m_data[i] ) > 0 ) )
                     {
-                        Vector3 color = 3.0 * m_colorBleeding[i];
+                        Vector3 color = 3.0 * m_obscurance->colorBleeding(i);
                         value += static_cast<uchar>( qRound( color.x ) ) << 4;
                         value += static_cast<uchar>( qRound( color.y ) ) << 2;
                         value += static_cast<uchar>( qRound( color.z ) );
@@ -1303,24 +1283,15 @@ void OptimalViewpointVolume::endComputeObscurances()
                 outFileMhd.close();
             }
 
-            QFile colorBleedingFile( QDir::tempPath().append( QString( "/colorbleeding.dat" ) ) );
-            if ( colorBleedingFile.open( QFile::WriteOnly | QFile::Truncate ) )
-            {
-                QDataStream out( &colorBleedingFile );
-                for ( int i = 0; i < m_dataSize; ++i )
-                {
-                    out << m_colorBleeding[i].x << m_colorBleeding[i].y << m_colorBleeding[i].z;
-                }
-                colorBleedingFile.close();
-            }
+            m_obscurance->save( QDir::tempPath().append( "/colorbleeding.dat" ) );
         }
 
     //     for ( int i = 0; i < m_dataSize; ++i ) m_obscurance[i] *= 1.272;    // raó àuria
 
-        m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionFx->SetColorBleeding( m_obscurance->doubleColorBleeding() );
         m_volumeRayCastFunctionFx->SetColor( true );
 
-        m_colorBleedingVoxelShader->setColorBleeding( m_colorBleeding );
+        m_colorBleedingVoxelShader->setColorBleeding( m_obscurance->doubleColorBleeding() );
 
         if ( m_renderWithObscurances )
         {
@@ -1353,22 +1324,13 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
 
     QDataStream in( &obscurancesFile );
 
+    delete m_obscurance;
+    m_obscurance = new Obscurance( m_dataSize, color );
+    m_obscurance->load( obscurancesFileName );
+
     if ( !color )   // obscurances
     {
-        delete m_colorBleeding; m_colorBleeding = 0;
-        if ( !m_obscurance ) m_obscurance = new double[m_dataSize];
-        for ( int i = 0; i < m_dataSize; i++ ) m_obscurance[i] = 0.0;
-
-        for ( int i = 0; i < m_dataSize; i++ )
-        {
-            if ( in.atEnd() ) {
-                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
-                return false;
-            }
-            else in >> m_obscurance[i];
-        }
-
-        m_volumeRayCastFunctionFx->SetObscurance( m_obscurance );
+        m_volumeRayCastFunctionFx->SetObscurance( m_obscurance->doubleObscurance() );
         m_volumeRayCastFunctionFx->SetColor( false );
 
         m_obscuranceVoxelShader->setObscurance( m_obscurance );
@@ -1393,35 +1355,10 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
     }
     else    // color bleeding
     {
-        delete m_obscurance; m_obscurance = 0;
-        if ( !m_colorBleeding ) m_colorBleeding = new Vector3[m_dataSize];
-        else for ( int i = 0; i < m_dataSize; i++ ) m_colorBleeding[i] = Vector3();
-
-        for ( int i = 0; i < m_dataSize; i++ )
-        {
-            Vector3 colorBleeding;
-            if ( in.atEnd() ) {
-                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
-                return false;
-            }
-            else in >> colorBleeding.x;
-            if ( in.atEnd() ) {
-                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
-                return false;
-            }
-            else in >> colorBleeding.y;
-            if ( in.atEnd() ) {
-                ERROR_LOG( QString( "Not enough data in file " ).append( obscurancesFileName ) );
-                return false;
-            }
-            else in >> colorBleeding.z;
-            m_colorBleeding[i] = colorBleeding;
-        }
-
-        m_volumeRayCastFunctionFx->SetColorBleeding( m_colorBleeding );
+        m_volumeRayCastFunctionFx->SetColorBleeding( m_obscurance->doubleColorBleeding() );
         m_volumeRayCastFunctionFx->SetColor( true );
 
-        m_colorBleedingVoxelShader->setColorBleeding( m_colorBleeding );
+        m_colorBleedingVoxelShader->setColorBleeding( m_obscurance->doubleColorBleeding() );
 
         if ( m_renderWithObscurances )
         {

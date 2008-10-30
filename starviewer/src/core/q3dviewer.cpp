@@ -168,7 +168,7 @@ Q3DViewer::~Q3DViewer()
         emit obscuranceCancelledByProgram();
     }
     delete m_obscuranceMainThread;
-    delete[] m_obscurance;
+    delete m_obscurance;
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
     delete m_obscuranceVoxelShader;
@@ -412,7 +412,7 @@ void Q3DViewer::setInput( Volume* volume )
         emit obscuranceCancelledByProgram();
     }
     delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
-    delete[] m_obscurance; m_obscurance = 0;
+    delete m_obscurance; m_obscurance = 0;
 
     render();
 }
@@ -1002,16 +1002,8 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     settings.endGroup();    // obscurances
     settings.endGroup();    // 3DViewer
 
-    // Preparem el vector que farem servir, reaprofitant memòria si podem
-    vtkImageData *image = m_volumeMapper->GetInput();
-    int dataSize = image->GetPointData()->GetScalars()->GetSize();
-
-    if ( !m_obscurance ) m_obscurance = new double[dataSize];
-    for ( int i = 0; i < dataSize; i++ ) m_obscurance[i] = 0.0;
-
     m_obscuranceMainThread->setVolume( m_vtkVolume );
     m_obscuranceMainThread->setTransferFunction( *m_transferFunction );
-    m_obscuranceMainThread->setObscurance( m_obscurance, 0 );
 
     render();   // això cal perquè sinó el DirectIllumationVoxelShader produeix artefactes estranys perquè hem canviat el gradient estimator
 
@@ -1031,6 +1023,7 @@ void Q3DViewer::endComputeObscurance()
 {
     Q_ASSERT( m_obscuranceMainThread );
 
+    m_obscurance = m_obscuranceMainThread->getObscurance();
     m_obscuranceVoxelShader->setObscurance( m_obscurance );
 
     emit obscuranceComputed();
