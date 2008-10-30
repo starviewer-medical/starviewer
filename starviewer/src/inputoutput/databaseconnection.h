@@ -56,9 +56,6 @@ public:
     void endTransaction();
     void rollbackTransaction();
 
-    ///Construeix l'estat de la base de dades en funció del valor que ha retornat la operació
-    Status databaseStatus( int state );
-
 private :
 
     sqlite3 *m_databaseConnection;
