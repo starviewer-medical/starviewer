@@ -72,6 +72,10 @@ public:
     /// Assignar/Obtenir la posició de la imatge.
     void setImagePositionPatient( double position[3] );
     const double *getImagePositionPatient() const;
+	/// Mètode per obtenir la normal del pla de la imatge. 
+	/// Equivalent a demanar getImagePostionPatient() i quedar-nos 
+	/// amb els tres últims valors (índexs 6,7,8)
+	void getImagePlaneNormal( double normal[3] );
 
     /// Assignar/Obtenir els samples per pixel
     void setSamplesPerPixel( int samples );

@@ -12,6 +12,7 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
+#include "mathtools.h"
 
 namespace udg {
 
@@ -112,22 +113,81 @@ void OrderImagesFillerStep::processSeries( Series *series )
 
 void OrderImagesFillerStep::processImage( Image *image )
 {
-    const double *imageOrientation = image->getImageOrientationPatient();
-    QString imageOrientationString;
-    for( int i = 0 ; i < 6 ; i++ )
-    {
-        imageOrientationString += QString("%1\\").arg(imageOrientation[i]);
-    }
+	// obtenim el vector normal del pla, que ens determina també a quin "stack" pertany la imatge
+	double planeNormalVector[3];
+	image->getImagePlaneNormal( planeNormalVector );
+	// el passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
+	QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[6]).arg(planeNormalVector[7]).arg(planeNormalVector[8]);
 
     QMap< double , QMap< int , Image* > * > * imagePositionSet;
     QMap< int , Image* > * instanceNumberSet;
 
     double distance = this->distance(image);
 
-    // Inserir la image a la llista
-    if ( m_orderedImageSet->contains( imageOrientationString ) )
-    {
-        imagePositionSet = m_orderedImageSet->value( imageOrientationString );
+	// primer busquem quina és la key (normal del pla) més semblant de totes les que hi ha
+	// cada key és la normal de cada pla guardat com a string. 
+	// En cas que tinguem diferents normals, indicaria que tenim per exemple, diferents stacks en el mateix volum
+	QStringList planeNormals = m_orderedImageSet->uniqueKeys();
+
+	// aquest bucle serveix per trobar si la normal de la nova imatge 
+	// coincideix amb alguna normal de les imatges ja processada
+	QString keyPlaneNormal;
+	foreach( QString normal, planeNormals )
+	{
+		if( normal == planeNormalString )
+		{
+			// la normal d'aquest pla ja existeix ( cas més típic )
+			keyPlaneNormal = normal;
+			break;
+		}
+		else // les normals són diferents, comprovar si ho són completament o no
+		{
+			if( normal.isEmpty() )
+			{
+				keyPlaneNormal = planeNormalString;
+				break;
+			}
+			else
+			{
+				// tot i que siguin diferents, pot ser que siguin gairebé iguals
+				// llavors cal comprovar que de fet són prou diferents
+				// ja que d'avegades només hi ha petites imprecisions simplement
+				double normalVector[3];
+				QStringList normalSplitted = normal.split("\\");
+				normalVector[0] = normalSplitted.at(0).toDouble();
+				normalVector[1] = normalSplitted.at(1).toDouble();
+				normalVector[2] = normalSplitted.at(2).toDouble();
+
+				double angle = MathTools::angleInDegrees( normalVector, planeNormalVector );
+				if( angle < 1.0 )
+				{
+					// si l'angle entre les normals
+					// està dins d'un threshold, 
+					// les podem considerar iguals
+					// TODO definir millor aquest threshold
+					keyPlaneNormal = normal;
+					break;
+				}
+			}
+		}
+	}
+	// ara cal inserir la imatge a la llista ordenada
+	// si no hem posat cap valor, vol dir que la normal és nova i no existia fins el moment
+	if( keyPlaneNormal.isEmpty() )
+	{
+		// assignem la clau
+		keyPlaneNormal = planeNormalString;
+		// ara cal inserir la nova clau
+		instanceNumberSet = new QMap< int , Image* >();
+        instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
+
+        imagePositionSet = new QMap< double , QMap< int , Image* > * >();
+        imagePositionSet->insert( distance, instanceNumberSet );
+		m_orderedImageSet->insert( keyPlaneNormal, imagePositionSet );
+	}
+	else // la normal ja existia [ m_orderedImageSet->contains( keyPlaneNormal ) == true ], per tant només cal actualitzar l'estructura
+	{
+		imagePositionSet = m_orderedImageSet->value( keyPlaneNormal );
         if ( imagePositionSet->contains( distance ) )
         {
             // Hi ha series on les imatges comparteixen el mateix instance number.
@@ -140,17 +200,7 @@ void OrderImagesFillerStep::processImage( Image *image )
             instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
             imagePositionSet->insert( distance, instanceNumberSet );
         }
-    }
-    else
-    {
-        instanceNumberSet = new QMap< int , Image* >();
-        instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
-
-        imagePositionSet = new QMap< double , QMap< int , Image* > * >();
-        imagePositionSet->insert( distance, instanceNumberSet );
-
-        m_orderedImageSet->insert( imageOrientationString, imagePositionSet );
-    }
+	}
 }
 
 void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
@@ -198,13 +248,10 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
 double OrderImagesFillerStep::distance( Image *image )
 {
     //Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
-    double distance = 0;
-    const double *imageOrientation = image->getImageOrientationPatient();
+    double distance = .0;
     const double *imagePosition = image->getImagePositionPatient();
     double normal[3];
-    normal[0] = imageOrientation[1]*imageOrientation[5] - imageOrientation[2]*imageOrientation[4];
-    normal[1] = imageOrientation[2]*imageOrientation[3] - imageOrientation[0]*imageOrientation[5];
-    normal[2] = imageOrientation[0]*imageOrientation[4] - imageOrientation[1]*imageOrientation[3];
+    image->getImagePlaneNormal( normal );
 
     for ( int i = 0; i < 3; i++ )
     {
