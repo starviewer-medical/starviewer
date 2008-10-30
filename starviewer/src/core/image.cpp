@@ -154,6 +154,13 @@ const double *Image::getImagePositionPatient() const
     return m_imagePositionPatient;
 }
 
+void Image::getImagePlaneNormal( double normal[3] )
+{
+	normal[0] = m_imageOrientationPatient[6];
+	normal[1] = m_imageOrientationPatient[7];
+	normal[2] = m_imageOrientationPatient[8];
+}
+
 void Image::setSamplesPerPixel( int samples )
 {
     m_samplesPerPixel = samples;
