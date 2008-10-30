@@ -26,6 +26,9 @@ class vtkEncodedGradientEstimator;
 namespace udg {
 
 
+class Obscurance;
+
+
 /**
  * Thread que implementa els mètodes de càlcul d'obscurances.
  *
@@ -43,7 +46,7 @@ public:
     /// Assigna l'estimador del gradient, d'on es treuran les normals.
     void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
     void setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] );
-    void setObscuranceParameters( double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction, ObscuranceMainThread::Variant obscuranceVariant, double * obscurance, Vector3 * colorBleeding );
+    void setObscuranceParameters( double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction, ObscuranceMainThread::Variant obscuranceVariant, Obscurance *obscurance );
     void setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh );
     void setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta );
 
@@ -79,8 +82,7 @@ private:
     double m_obscuranceMaximumDistance;
     Function m_obscuranceFunction;
     Variant m_obscuranceVariant;
-    double * m_obscurance;
-    Vector3 * m_colorBleeding;
+    Obscurance *m_obscurance;
     const double * m_saliency;
     double m_fxSaliencyA, m_fxSaliencyB;
     double m_fxSaliencyLow, m_fxSaliencyHigh;

@@ -21,6 +21,8 @@ class TVector3 {
 public:
 
     TVector3( T x = 0.0, T y = 0.0, T z = 0.0 );
+    template <class C>
+    TVector3( const TVector3<C> &v );
 
     /// Retorna el mòdul del vector.
     T length() const;
@@ -74,6 +76,14 @@ public:
 template <class T>
 inline TVector3<T>::TVector3( T aX, T aY, T aZ )
  : x( aX ), y( aY ), z( aZ )
+{
+}
+
+
+template <class T>
+template <class C>
+inline TVector3<T>::TVector3( const TVector3<C> &v )
+ : x( v.x ), y( v.y ), z( v.z )
 {
 }
 

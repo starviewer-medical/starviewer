@@ -17,6 +17,7 @@
 
 #include "logging.h"
 #include "mathtools.h"
+#include "obscurance.h"
 
 
 namespace udg {
@@ -26,7 +27,7 @@ ObscuranceThread::ObscuranceThread( int id, int numberOfThreads, const TransferF
     : QThread(parent),
       m_id( id ), m_numberOfThreads( numberOfThreads ),
       m_transferFunction( transferFunction ),
-      m_obscurance( 0 ), m_colorBleeding( 0 ), m_saliency( 0 )
+      m_obscurance( 0 ), m_saliency( 0 )
 {
 }
 
@@ -52,13 +53,12 @@ void ObscuranceThread::setData( const uchar * data, int dataSize, const int dime
 }
 
 
-void ObscuranceThread::setObscuranceParameters( double obscuranceMaximumDistance, Function obscuranceFunction, Variant obscuranceVariant, double * obscurance, Vector3 * colorBleeding )
+void ObscuranceThread::setObscuranceParameters( double obscuranceMaximumDistance, Function obscuranceFunction, Variant obscuranceVariant, Obscurance *obscurance )
 {
     m_obscuranceMaximumDistance = obscuranceMaximumDistance;
     m_obscuranceFunction = obscuranceFunction;
     m_obscuranceVariant = obscuranceVariant;
     m_obscurance = obscurance;
-    m_colorBleeding = colorBleeding;
 }
 
 
@@ -109,6 +109,7 @@ void ObscuranceThread::runDensity() // optimitzat
     int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
     QStack< QPair<uchar,Vector3> > unresolvedVoxels;
+    unresolvedVoxels.reserve( dimX );   // amb això assegurem que tenim la capacitat necessària en el cas pitjor
 
     const uchar * dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
@@ -119,6 +120,8 @@ void ObscuranceThread::runDensity() // optimitzat
         Vector3 rv = m_lineStarts.at( j );
         Voxel v = { qRound( rv.x ), qRound( rv.y ), qRound( rv.z ) };
         Q_ASSERT( unresolvedVoxels.isEmpty() );
+//         if ( unresolvedVoxels.capacity() < dimX ) std::cout << "perdem capacitat!!!!" << std::endl; // hi ha pèrdua de capacitat = COST!!!
+                                                                                                    // provar alternatives al pop
 
         // iterar per la línia
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
@@ -138,7 +141,8 @@ void ObscuranceThread::runDensity() // optimitzat
 
                 if ( cos < 0.0 )
                 {
-                    m_obscurance[uIndex] += -cos * obscurance( ( rv - ru ).length() );
+                    if ( m_obscurance->isDoublePrecision() )
+                    m_obscurance->addObscurance( uIndex, -cos * obscurance( ( rv - ru ).length() ) );
                 }
             }
 
@@ -161,7 +165,7 @@ void ObscuranceThread::runDensity() // optimitzat
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
     }
@@ -230,7 +234,7 @@ void ObscuranceThread::runDensitySmooth()
                     double cos = uNormal * m_direction;
                     if ( cos < 0.0 )
                     {
-                        m_obscurance[uIndex] += -cos * obscurance( distance );
+                        m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -268,7 +272,7 @@ void ObscuranceThread::runDensitySmooth()
                 double cos = uNormal * m_direction;
                 if ( cos < 0.0 )
                 {
-                    m_obscurance[uIndex] += -cos * obscurance( distance );
+                    m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                 }
             }
 
@@ -291,7 +295,7 @@ void ObscuranceThread::runDensitySmooth()
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
 
@@ -307,7 +311,7 @@ void ObscuranceThread::runDensitySmooth()
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
     }
@@ -353,7 +357,7 @@ void ObscuranceThread::runOpacity()
                 if ( cos < 0.0 )
                 {
                     double distance = ( rv - ru ).length();
-                    m_obscurance[uIndex] += -cos * obscurance( distance );
+                    m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                 }
             }
 
@@ -376,7 +380,7 @@ void ObscuranceThread::runOpacity()
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
     }
@@ -446,7 +450,7 @@ void ObscuranceThread::runOpacitySmooth()
                     double cos = uNormal * m_direction;
                     if ( cos < 0.0 )
                     {
-                        m_obscurance[uIndex] += -cos * obscurance( distance );
+                        m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -484,7 +488,7 @@ void ObscuranceThread::runOpacitySmooth()
                 double cos = uNormal * m_direction;
                 if ( cos < 0.0 )
                 {
-                    m_obscurance[uIndex] += -cos * obscurance( distance );
+                    m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                 }
             }
 
@@ -507,7 +511,7 @@ void ObscuranceThread::runOpacitySmooth()
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
 
@@ -523,7 +527,7 @@ void ObscuranceThread::runOpacitySmooth()
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
     }
@@ -569,7 +573,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
                 if ( cos < 0.0 )
                 {
                     double distance = ( rv - ru ).length();
-                    m_obscurance[uIndex] += -cos * obscurance( distance );
+                    m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                 }
             }
 
@@ -592,7 +596,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
     }
@@ -668,7 +672,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
                     double cos = uNormal * m_direction;
                     if ( cos < 0.0 )
                     {
-                        m_obscurance[uIndex] += -cos * obscurance( distance );
+                        m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -706,7 +710,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
                 double cos = uNormal * m_direction;
                 if ( cos < 0.0 )
                 {
-                    m_obscurance[uIndex] += -cos * obscurance( distance );
+                    m_obscurance->addObscurance( uIndex, -cos * obscurance( distance ) );
                 }
             }
 
@@ -729,7 +733,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
 
@@ -745,7 +749,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_obscurance[uIndex] -= cos;
+                m_obscurance->addObscurance( uIndex, -cos );
             }
         }
     }
@@ -819,7 +823,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
                     double cos = uNormal * m_direction;
                     if ( cos < 0.0 )
                     {
-                        m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
+                        m_obscurance->addColorBleeding( uIndex, -cos * obscurance( distance ) * vColorVector );
                     }
 
                     itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
@@ -857,7 +861,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
                 double cos = uNormal * m_direction;
                 if ( cos < 0.0 )
                 {
-                    m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
+                    m_obscurance->addColorBleeding( uIndex, -cos * obscurance( distance ) * vColorVector );
                 }
             }
 
@@ -880,7 +884,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
+                m_obscurance->addColorBleeding( uIndex, -cos * AMBIENT_COLOR );
             }
         }
 
@@ -896,7 +900,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
             double cos = uNormal * m_direction;
             if ( cos < 0.0 )
             {
-                m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
+                m_obscurance->addColorBleeding( uIndex, -cos * AMBIENT_COLOR );
             }
         }
     }
@@ -956,7 +960,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                         const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
                         const double cos = uNormal * m_direction;
 
-                        if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
+                        if ( cos < 0.0 ) m_obscurance->addColorBleeding( uIndex, -cos * obscurance( distance ) * vColorVector );
 
                         itPostponedVoxels = postponedVoxels.erase( itPostponedVoxels );
 
@@ -982,7 +986,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
                     const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
                     const double cos = uNormal * m_direction;
 
-                    if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * obscurance( distance ) * vColorVector;
+                    if ( cos < 0.0 ) m_obscurance->addColorBleeding( uIndex, -cos * obscurance( distance ) * vColorVector );
                 }
                 else    // ru no és tapat -> el posposem
                 {
@@ -1007,7 +1011,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
             const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
             const double cos = uNormal * m_direction;
 
-            if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
+            if ( cos < 0.0 ) m_obscurance->addColorBleeding( uIndex, -cos * AMBIENT_COLOR );
         }
 
         while ( !unresolvedVoxels.isEmpty() )
@@ -1020,7 +1024,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
             const Vector3 uNormal( uGradient[0], uGradient[1], uGradient[2] );
             const double cos = uNormal * m_direction;
 
-            if ( cos < 0.0 ) m_colorBleeding[uIndex] += -cos * AMBIENT_COLOR;
+            if ( cos < 0.0 ) m_obscurance->addColorBleeding( uIndex, -cos * AMBIENT_COLOR );
         }
     }
 }

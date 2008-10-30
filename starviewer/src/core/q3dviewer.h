@@ -35,6 +35,7 @@ class AmbientVoxelShader;
 class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
 class vtk4DLinearRegressionGradientEstimator;
+class Obscurance;
 
 /**
 Classe base per als visualitzadors 3D
@@ -211,8 +212,8 @@ private:
     /// Thread de control del càlcul d'obscurances.
     ObscuranceMainThread *m_obscuranceMainThread;
 
-    /// Vector d'obscurances.
-    double *m_obscurance;
+    /// Obscurances.
+    Obscurance *m_obscurance;
     /// Booleà que indica si les obscurances estan activades.
     bool m_obscuranceOn;
 
