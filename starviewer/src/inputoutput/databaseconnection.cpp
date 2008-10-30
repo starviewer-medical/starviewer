@@ -27,7 +27,7 @@ DatabaseConnection::DatabaseConnection()
     m_transactionLock = new QSemaphore(1);
 }
 
-void DatabaseConnection::setDatabasePath( QString path )
+void DatabaseConnection::setDatabasePath(const QString &path)
 {
     m_databasePath = path;
 }

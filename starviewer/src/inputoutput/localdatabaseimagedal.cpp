@@ -33,7 +33,7 @@ void LocalDatabaseImageDAL::insert(Image *newImage, int orderNumberInSeries)
     if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newImage, orderNumberInSeries)); 
 }
 
-void LocalDatabaseImageDAL::del(DicomMask imageMaskToDelete)
+void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 {
     m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(imageMaskToDelete)), 0, 0, 0);
 
@@ -47,7 +47,7 @@ void LocalDatabaseImageDAL::update(Image *imageToUpdate, int orderNumberInSeries
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(imageToUpdate, orderNumberInSeries));
 }
 
-QList<Image*> LocalDatabaseImageDAL::query(DicomMask imageMask)
+QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -71,7 +71,7 @@ QList<Image*> LocalDatabaseImageDAL::query(DicomMask imageMask)
     return imageList;
 }
 
-int LocalDatabaseImageDAL::count(DicomMask imageMaskToCount)
+int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
@@ -133,7 +133,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     return image;
 }
 
-QString LocalDatabaseImageDAL::buildSqlSelect(DicomMask imageMaskToSelect)
+QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect)
 {
     QString selectSentence, orderSentence;
 
@@ -152,10 +152,9 @@ QString LocalDatabaseImageDAL::buildSqlSelect(DicomMask imageMaskToSelect)
     return selectSentence + buildWhereSentence(imageMaskToSelect) + orderSentence;
 }
 
-QString LocalDatabaseImageDAL::buildSqlSelectCountImages(DicomMask imageMaskToSelect)
+QString LocalDatabaseImageDAL::buildSqlSelectCountImages(const DicomMask &imageMaskToSelect)
 {
     QString selectSentence;
-
 
     selectSentence = "Select count(*) "
                      "from Image ";
@@ -275,12 +274,12 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
     return updateSentence;
 }
 
-QString LocalDatabaseImageDAL::buildSqlDelete(DicomMask imageMaskToDelete)
+QString LocalDatabaseImageDAL::buildSqlDelete(const DicomMask &imageMaskToDelete)
 {
     return "delete from Image " + buildWhereSentence(imageMaskToDelete);
 }
 
-QString LocalDatabaseImageDAL::buildWhereSentence(DicomMask imageMask)
+QString LocalDatabaseImageDAL::buildWhereSentence(const DicomMask &imageMask)
 {
     QString whereSentence = "";
 
@@ -320,7 +319,7 @@ QString LocalDatabaseImageDAL::getPixelSpacingAsQString(Image *newImage)
     return imagePixelSpacing;
 }
 
-double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(QString pixelSpacing)
+double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(const QString &pixelSpacing)
 {
     QStringList list = pixelSpacing.split( "\\" );
 
@@ -338,7 +337,7 @@ double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(QString pixelSpacing)
     return m_pixelSpacing;
 }
 
-double* LocalDatabaseImageDAL::getImageOrientationPatientAsDouble(QString ImageOrientationPatient)
+double* LocalDatabaseImageDAL::getImageOrientationPatientAsDouble(const QString &ImageOrientationPatient)
 {
     QStringList list = ImageOrientationPatient.split( "\\" );
 
@@ -367,7 +366,7 @@ QString LocalDatabaseImageDAL::getImageOrientationPatientAsQString(Image *newIma
     return ImageOrientationPatient;
 }
 
-double* LocalDatabaseImageDAL::getPatientPositionAsDouble(QString patientPosition)
+double* LocalDatabaseImageDAL::getPatientPositionAsDouble(const QString &patientPosition)
 {
     QStringList list = patientPosition.split( "\\" );
 
@@ -429,13 +428,13 @@ QString LocalDatabaseImageDAL::getWindowLevelExplanationAsQString(Image *newImag
     return windowLevelExplanation.left(windowLevelExplanation.length() -1); //treiem l'últim "\\" afegit
 }
 
-QStringList LocalDatabaseImageDAL::getWindowLevelExplanationAsQStringList(QString explanationList)
+QStringList LocalDatabaseImageDAL::getWindowLevelExplanationAsQStringList(const QString &explanationList)
 {
     return explanationList.split("\\");
 }
 
 
-void LocalDatabaseImageDAL::setWindowLevel(Image *selectedImage, QString windowLevelWidth, QString windowLevelCenter)
+void LocalDatabaseImageDAL::setWindowLevel(Image *selectedImage, const QString &windowLevelWidth, const QString &windowLevelCenter)
 {
     QStringList listWindowLevelWidth = windowLevelWidth.split("\\"), listWindowLevelCenter = windowLevelCenter.split("\\");
 
@@ -448,7 +447,7 @@ void LocalDatabaseImageDAL::setWindowLevel(Image *selectedImage, QString windowL
     }
 }
 
-void LocalDatabaseImageDAL::logError(QString sqlSentence)
+void LocalDatabaseImageDAL::logError(const QString &sqlSentence)
 {
     QString errorNumber;
 
