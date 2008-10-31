@@ -96,29 +96,32 @@ QString Image::getOrientationLabel()
     QString label;
 
     QStringList axisList = m_patientOrientation.split(",");
+	// comprovem si tenim les annotacions esperades
+	if( axisList.count() >= 2 )
+	{
+		QString rowAxis = axisList.at(0);
+		QString columnAxis = axisList.at(1);
 
-    QString rowAxis = axisList.at(0);
-    QString columnAxis = axisList.at(1);
-
-    if( !rowAxis.isEmpty() && !columnAxis.isEmpty() )
-    {
-        if( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")) )
-            label="AXIAL";
-        else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")) )
-            label="AXIAL";
-        else if ( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("S") || columnAxis.startsWith("I")) )
-            label="CORONAL";
-        else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("S") || rowAxis.startsWith("I")) )
-            label="CORONAL";
-        else if( (rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("S") || columnAxis.startsWith("I")) )
-            label="SAGITAL";
-        else if( (columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("S") || rowAxis.startsWith("I")) )
-            label="SAGITAL";
-    }
-    else
-    {
-        label="OBLIQUE";
-    }
+		if( !rowAxis.isEmpty() && !columnAxis.isEmpty() )
+		{
+			if( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")) )
+				label="AXIAL";
+			else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")) )
+				label="AXIAL";
+			else if ( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("S") || columnAxis.startsWith("I")) )
+				label="CORONAL";
+			else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("S") || rowAxis.startsWith("I")) )
+				label="CORONAL";
+			else if( (rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("S") || columnAxis.startsWith("I")) )
+				label="SAGITAL";
+			else if( (columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("S") || rowAxis.startsWith("I")) )
+				label="SAGITAL";
+		}
+		else
+		{
+			label="OBLIQUE";
+		}
+	}
 
     return label;
 }
