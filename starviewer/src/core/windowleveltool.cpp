@@ -16,14 +16,13 @@
 
 namespace udg {
 
-WindowLevelTool::WindowLevelTool( QViewer *viewer, QObject *parent )  : Tool( viewer, parent )
+WindowLevelTool::WindowLevelTool( QViewer *viewer, QObject *parent )  
+: Tool( viewer, parent )
 {
     m_state = NONE;
     m_toolName = "WindowLevelTool";
-    //m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
-    m_2DViewer = viewer;
     // ens assegurem que desde la creació tenim un viewer vàlid
-    //Q_ASSERT( m_2DViewer );
+    Q_ASSERT( m_viewer );
 }
 
 WindowLevelTool::~WindowLevelTool()
@@ -56,19 +55,19 @@ void WindowLevelTool::startWindowLevel()
 {
     m_state = WINDOWLEVELING;
     double wl[2];
-    m_2DViewer->getCurrentWindowLevel(wl);
+    m_viewer->getCurrentWindowLevel(wl);
     m_initialWindow = wl[0];
     m_initialLevel = wl[1];
-    m_2DViewer->getEventPosition( m_windowLevelStartPosition );
+    m_viewer->getEventPosition( m_windowLevelStartPosition );
 	m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
 
 void WindowLevelTool::doWindowLevel()
 {
 	m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
-    m_2DViewer->getEventPosition( m_windowLevelCurrentPosition );
+    m_viewer->getEventPosition( m_windowLevelCurrentPosition );
 
-    int *size = m_2DViewer->getRenderWindowSize();
+    int *size = m_viewer->getRenderWindowSize();
     double window = m_initialWindow;
     double level = m_initialLevel;
 
@@ -118,7 +117,7 @@ void WindowLevelTool::doWindowLevel()
     {
         newLevel = 0.01 * ( newLevel < 0 ? -1 : 1 );
     }
-    m_2DViewer->getWindowLevelData()->setCustomWindowLevel( newWindow , newLevel );
+    m_viewer->getWindowLevelData()->setCustomWindowLevel( newWindow , newLevel );
 }
 
 void WindowLevelTool::endWindowLevel()
