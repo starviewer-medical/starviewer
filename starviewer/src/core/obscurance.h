@@ -50,10 +50,10 @@ public:
     /// Afegeix color bleeding a la posició \a i (independent de la precisió).
     void addColorBleeding( int i, const Vector3 &colorBleeding );
 
-    /// Carrega les obscurances des d'un fitxer.
-    void load( const QString &fileName );
-    /// Desa les obscurances a un fitxer.
-    void save( const QString &fileName ) const;
+    /// Carrega les obscurances des d'un fitxer. Retorna cert si tot va bé i fals si hi ha error.
+    bool load( const QString &fileName );
+    /// Desa les obscurances a un fitxer. Retorna cert si tot va bé i fals si hi ha error.
+    bool save( const QString &fileName ) const;
 
 private:
 

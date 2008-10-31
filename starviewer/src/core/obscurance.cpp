@@ -68,14 +68,14 @@ void Obscurance::normalize()
 }
 
 
-void Obscurance::load( const QString &fileName )
+bool Obscurance::load( const QString &fileName )
 {
     QFile file( fileName );
 
     if ( !file.open( QFile::ReadOnly ) )
     {
         ERROR_LOG( "No es pot llegir el fitxer " + fileName );
-        return;
+        return false;
     }
 
     QDataStream in( &file );
@@ -88,7 +88,7 @@ void Obscurance::load( const QString &fileName )
             {
                 ERROR_LOG( "No hi ha prou dades al fitxer " + fileName );
                 file.close();
-                return;
+                return false;
             }
             else if ( m_doublePrecision ) in >> m_doubleObscurance[i];
             else in >> m_floatObscurance[i];
@@ -104,7 +104,7 @@ void Obscurance::load( const QString &fileName )
             {
                 ERROR_LOG( "No hi ha prou dades al fitxer " + fileName );
                 file.close();
-                return;
+                return false;
             }
             else if ( m_doublePrecision ) in >> m_doubleColorBleeding[i].x;
             else in >> m_floatColorBleeding[i].x;
@@ -113,7 +113,7 @@ void Obscurance::load( const QString &fileName )
             {
                 ERROR_LOG( "No hi ha prou dades al fitxer " + fileName );
                 file.close();
-                return;
+                return false;
             }
             else if ( m_doublePrecision ) in >> m_doubleColorBleeding[i].y;
             else in >> m_floatColorBleeding[i].y;
@@ -122,7 +122,7 @@ void Obscurance::load( const QString &fileName )
             {
                 ERROR_LOG( "No hi ha prou dades al fitxer " + fileName );
                 file.close();
-                return;
+                return false;
             }
             else if ( m_doublePrecision ) in >> m_doubleColorBleeding[i].z;
             else in >> m_floatColorBleeding[i].z;
@@ -132,17 +132,19 @@ void Obscurance::load( const QString &fileName )
     }
 
     file.close();
+
+    return true;
 }
 
 
-void Obscurance::save( const QString &fileName ) const
+bool Obscurance::save( const QString &fileName ) const
 {
     QFile file( fileName );
 
     if ( !file.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         ERROR_LOG( "No es pot escriure el fitxer " + fileName );
-        return;
+        return false;
     }
 
     QDataStream out( &file );
@@ -165,6 +167,8 @@ void Obscurance::save( const QString &fileName ) const
     }
 
     file.close();
+
+    return true;
 }
 
 
