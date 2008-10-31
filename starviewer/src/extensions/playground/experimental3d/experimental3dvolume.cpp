@@ -104,18 +104,21 @@ void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstim
             if ( !m_finiteDifferenceGradientEstimator )
                 m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
             m_mapper->SetGradientEstimator( m_finiteDifferenceGradientEstimator );
+            m_finiteDifferenceGradientEstimator->SetInput( m_image );
             break;
         case FourDLInearRegression1:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 1 );
             m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
+            m_4DLinearRegressionGradientEstimator->SetInput( m_image );
             break;
         case FourDLInearRegression2:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 2 );
             m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
+            m_4DLinearRegressionGradientEstimator->SetInput( m_image );
             break;
     }
 }
