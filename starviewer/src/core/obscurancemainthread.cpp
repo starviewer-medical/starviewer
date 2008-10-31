@@ -9,8 +9,8 @@
 
 #include "logging.h"
 #include "obscurancethread.h"
-#include "sphereuniformpointcloudgenerator.h"
 #include "vector3.h"
+#include "viewpointgenerator.h"
 
 
 namespace udg {
@@ -272,86 +272,23 @@ void ObscuranceMainThread::getLineStarts( QVector<Vector3> &lineStarts, int dimX
 
 QVector<Vector3> ObscuranceMainThread::getDirections() const
 {
-    if ( m_numberOfDirections >= 0 )
-    {
-        SphereUniformPointCloudGenerator cloud( 1.0, m_numberOfDirections );    // 0 -> 12 dir, 1 -> 42 dir, 2 -> 162 dir
-        cloud.createPOVCloud();
-        return cloud.getVertices();
-    }
+    ViewpointGenerator viewpointGenerator;
+
+    if ( m_numberOfDirections >= 0 ) viewpointGenerator.setToQuasiUniform( m_numberOfDirections );
     else
     {
-        QVector<Vector3> directions;
-        const double UNIT = 1.0 / sqrt( 3.0 );
-        const double PHI = ( 1.0 + sqrt( 5.0 ) ) / 2.0;
-        const double INV_PHI = 1.0 / PHI;
-
         switch ( m_numberOfDirections )
         {
             default:
-            case -4:
-                directions << Vector3( UNIT, UNIT, UNIT )
-                           << Vector3( -UNIT, -UNIT, UNIT )
-                           << Vector3( -UNIT, UNIT, -UNIT )
-                           << Vector3( UNIT, -UNIT, -UNIT );
-                break;
-            case -6:
-                directions << Vector3( 1.0, 0.0, 0.0 )
-                           << Vector3( -1.0, 0.0, 0.0 )
-                           << Vector3( 0.0, 1.0, 0.0 )
-                           << Vector3( 0.0, -1.0, 0.0 )
-                           << Vector3( 0.0, 0.0, 1.0 )
-                           << Vector3( 0.0, 0.0, -1.0 );
-                break;
-            case -8:
-                directions << Vector3( UNIT, UNIT, UNIT )
-                           << Vector3( UNIT, UNIT, -UNIT )
-                           << Vector3( UNIT, -UNIT, UNIT )
-                           << Vector3( UNIT, -UNIT, -UNIT )
-                           << Vector3( -UNIT, UNIT, UNIT )
-                           << Vector3( -UNIT, UNIT, -UNIT )
-                           << Vector3( -UNIT, -UNIT, UNIT )
-                           << Vector3( -UNIT, -UNIT, -UNIT );
-                break;
-            case -12:
-                directions << Vector3( 0.0, 1.0, PHI ).normalize()
-                           << Vector3( 0.0, 1.0, -PHI ).normalize()
-                           << Vector3( 0.0, -1.0, PHI ).normalize()
-                           << Vector3( 0.0, -1.0, -PHI ).normalize()
-                           << Vector3( 1.0, PHI, 0.0 ).normalize()
-                           << Vector3( 1.0, -PHI, 0.0 ).normalize()
-                           << Vector3( -1.0, PHI, 0.0 ).normalize()
-                           << Vector3( -1.0, -PHI, 0.0 ).normalize()
-                           << Vector3( PHI, 0.0, 1.0 ).normalize()
-                           << Vector3( PHI, 0.0, -1.0 ).normalize()
-                           << Vector3( -PHI, 0.0, 1.0 ).normalize()
-                           << Vector3( -PHI, 0.0, -1.0 ).normalize();
-                break;
-            case -20:
-                directions << Vector3( UNIT, UNIT, UNIT )
-                           << Vector3( UNIT, UNIT, -UNIT )
-                           << Vector3( UNIT, -UNIT, UNIT )
-                           << Vector3( UNIT, -UNIT, -UNIT )
-                           << Vector3( -UNIT, UNIT, UNIT )
-                           << Vector3( -UNIT, UNIT, -UNIT )
-                           << Vector3( -UNIT, -UNIT, UNIT )
-                           << Vector3( -UNIT, -UNIT, -UNIT )
-                           << Vector3( 0.0, INV_PHI, PHI ).normalize()
-                           << Vector3( 0.0, INV_PHI, -PHI ).normalize()
-                           << Vector3( 0.0, -INV_PHI, PHI ).normalize()
-                           << Vector3( 0.0, -INV_PHI, -PHI ).normalize()
-                           << Vector3( INV_PHI, PHI, 0.0 ).normalize()
-                           << Vector3( INV_PHI, -PHI, 0.0 ).normalize()
-                           << Vector3( -INV_PHI, PHI, 0.0 ).normalize()
-                           << Vector3( -INV_PHI, -PHI, 0.0 ).normalize()
-                           << Vector3( PHI, 0.0, INV_PHI ).normalize()
-                           << Vector3( PHI, 0.0, -INV_PHI ).normalize()
-                           << Vector3( -PHI, 0.0, INV_PHI ).normalize()
-                           << Vector3( -PHI, 0.0, -INV_PHI ).normalize();
-                break;
+            case -4: viewpointGenerator.setToUniform4(); break;
+            case -6: viewpointGenerator.setToUniform6(); break;
+            case -8: viewpointGenerator.setToUniform8(); break;
+            case -12: viewpointGenerator.setToUniform12(); break;
+            case -20: viewpointGenerator.setToUniform20(); break;
         }
-
-        return directions;
     }
+
+    return viewpointGenerator.viewpoints();
 }
 
 

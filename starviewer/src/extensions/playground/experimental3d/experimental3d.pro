@@ -9,13 +9,11 @@ HEADERS += experimental3dextensionmediator.h \
            qexperimental3dextension.h \
            qexperimental3dviewer.h \
            experimental3dvolume.h \
-           qviewpointdistributionwidget.h \
-           viewpointgenerator.h 
+           qviewpointdistributionwidget.h 
 SOURCES += experimental3dextensionmediator.cpp \
            qexperimental3dextension.cpp \
            qexperimental3dviewer.cpp \
            experimental3dvolume.cpp \
-           qviewpointdistributionwidget.cpp \
-           viewpointgenerator.cpp 
+           qviewpointdistributionwidget.cpp 
 RESOURCES += experimental3d.qrc
 include(../../basicconfextensions.inc)
