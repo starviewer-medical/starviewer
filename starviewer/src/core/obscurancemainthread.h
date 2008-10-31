@@ -32,7 +32,7 @@ public:
     /// Variants de les obscurances.
     enum Variant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacitySaliency, OpacitySmoothSaliency, OpacityColorBleeding, OpacitySmoothColorBleeding };
 
-    ObscuranceMainThread( int numberOfDirections, double maximumDistance, Function function, Variant variant, QObject *parent = 0 );
+    ObscuranceMainThread( int numberOfDirections, double maximumDistance, Function function, Variant variant, bool doublePrecision = true, QObject *parent = 0 );
     virtual ~ObscuranceMainThread();
 
     bool hasColor() const;
@@ -66,6 +66,7 @@ private:
     double m_maximumDistance;
     Function m_function;
     Variant m_variant;
+    bool m_doublePrecision;
     vtkVolume *m_volume;
     TransferFunction m_transferFunction;
     Obscurance *m_obscurance;
