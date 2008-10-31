@@ -78,7 +78,6 @@ HEADERS += extensionfactory.h \
            patientfillerstep.h \
            patientfillerinput.h \
            dicomfileclassifierfillerstep.h \
-           ctfillerstep.h \
            imagefillerstep.h \
            presentationstatefillerstep.h \
            extensioncontext.h \
@@ -238,7 +237,6 @@ SOURCES += extensionmediator.cpp \
            patientfillerstep.cpp \
            patientfillerinput.cpp \
            dicomfileclassifierfillerstep.cpp \
-           ctfillerstep.cpp \
            imagefillerstep.cpp \
            presentationstatefillerstep.cpp \
            extensioncontext.cpp \
