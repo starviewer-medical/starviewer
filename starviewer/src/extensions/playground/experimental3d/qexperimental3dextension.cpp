@@ -455,10 +455,12 @@ void QExperimental3DExtension::loadObscurance()
                                                            this );
 
         m_obscurance = new Obscurance( m_volume->getSize(), m_obscuranceMainThread->hasColor() );
-        m_obscurance->load( obscuranceFileName );
+        bool ok = m_obscurance->load( obscuranceFileName );
 
         delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
-        m_obscuranceSavePushButton->setEnabled( true );
+
+        if ( ok ) m_obscuranceSavePushButton->setEnabled( true );
+        else QMessageBox::warning( this, tr("Can't load obscurance"), QString( tr("Can't load obscurance from file ") ) + obscuranceFileName );
 
         QFileInfo obscuranceFileInfo( obscuranceFileName );
         settings.setValue( "obscuranceDir", obscuranceFileInfo.absolutePath() );
@@ -481,7 +483,9 @@ void QExperimental3DExtension::saveObscurance()
     if ( saveDialog.exec() == QDialog::Accepted )
     {
         QString obscuranceFileName = saveDialog.selectedFiles().first();
-        m_obscurance->save( obscuranceFileName );
+
+        if ( !m_obscurance->save( obscuranceFileName ) )
+            QMessageBox::warning( this, tr("Can't save obscurance"), QString( tr("Can't save obscurance to file ") ) + obscuranceFileName );
 
         QFileInfo obscuranceFileInfo( obscuranceFileName );
         settings.setValue( "obscuranceDir", obscuranceFileInfo.absolutePath() );
