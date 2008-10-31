@@ -11,6 +11,8 @@
 
 #include <vtkCommand.h>
 #include <vtkRenderer.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderWindow.h>
 
 namespace udg {
 
@@ -58,6 +60,7 @@ void WindowLevelTool::startWindowLevel()
     m_initialWindow = wl[0];
     m_initialLevel = wl[1];
     m_2DViewer->getEventPosition( m_windowLevelStartPosition );
+	m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
 
 void WindowLevelTool::doWindowLevel()
@@ -122,6 +125,8 @@ void WindowLevelTool::endWindowLevel()
 {
     m_viewer->setCursor( Qt::ArrowCursor );
     m_state = NONE;
+	m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
+	m_viewer->refresh(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
 }
 
 }
