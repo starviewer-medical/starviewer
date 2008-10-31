@@ -68,7 +68,6 @@ Obscurance* ObscuranceMainThread::getObscurance() const
 void ObscuranceMainThread::stop()
 {
     m_stopped = true;
-    delete m_obscurance; m_obscurance = 0;
 }
 
 
@@ -208,6 +207,7 @@ void ObscuranceMainThread::run()
     if ( m_stopped )    // si han cancel·lat el procés ja podem plegar
     {
         emit progress( 0 );
+        delete m_obscurance; m_obscurance = 0;
         return;
     }
 
