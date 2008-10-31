@@ -16,11 +16,12 @@
 namespace udg {
 
 
-ObscuranceMainThread::ObscuranceMainThread( int numberOfDirections, double maximumDistance, Function function, Variant variant, QObject *parent )
-    : QThread(parent),
-      m_numberOfDirections( numberOfDirections ), m_maximumDistance( maximumDistance ), m_function( function ), m_variant( variant ),
-      m_volume( 0 ),
-      m_obscurance( 0 )
+ObscuranceMainThread::ObscuranceMainThread( int numberOfDirections, double maximumDistance, Function function, Variant variant, bool doublePrecision, QObject *parent )
+ : QThread( parent ),
+   m_numberOfDirections( numberOfDirections ), m_maximumDistance( maximumDistance ), m_function( function ), m_variant( variant ),
+   m_doublePrecision( doublePrecision ),
+   m_volume( 0 ),
+   m_obscurance( 0 )
 {
 }
 
@@ -94,7 +95,7 @@ void ObscuranceMainThread::run()
     int increments[3];
     image->GetIncrements( increments );
 
-    m_obscurance = new Obscurance( dataSize, hasColor() );
+    m_obscurance = new Obscurance( dataSize, hasColor(), m_doublePrecision );
 
     for ( int i = 0; i < numberOfThreads; i++ )
     {

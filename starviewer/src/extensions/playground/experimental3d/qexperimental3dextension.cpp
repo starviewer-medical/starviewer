@@ -383,6 +383,7 @@ void QExperimental3DExtension::computeCancelObscurance()
                                                            m_obscuranceMaximumDistanceDoubleSpinBox->value(),
                                                            static_cast<ObscuranceMainThread::Function>( m_obscuranceFunctionComboBox->currentIndex() ),
                                                            static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ),
+                                                           true,
                                                            this );
         m_obscuranceMainThread->setVolume( m_volume->getVolume() );
         m_obscuranceMainThread->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
@@ -452,6 +453,7 @@ void QExperimental3DExtension::loadObscurance()
                                                            m_obscuranceMaximumDistanceDoubleSpinBox->value(),
                                                            static_cast<ObscuranceMainThread::Function>( m_obscuranceFunctionComboBox->currentIndex() ),
                                                            static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ),
+                                                           true,
                                                            this );
 
         m_obscurance = new Obscurance( m_volume->getSize(), m_obscuranceMainThread->hasColor() );
