@@ -9,6 +9,8 @@ namespace udg {
 
 
 class Experimental3DVolume;
+class Obscurance;
+class ObscuranceMainThread;
 class Volume;
 
 
@@ -49,7 +51,7 @@ private slots:
     void getCamera();
     /// Assigna els paràmetres de la càmera d'acord amb els spinboxs corresponents.
     void setCamera();
-    /// Càrrega els paràmetres de la càmera des d'un fitxer.
+    /// Carrega els paràmetres de la càmera des d'un fitxer.
     void loadCamera();
     /// Desa els paràmetres de la càmera a un fitxer.
     void saveCamera();
@@ -58,9 +60,24 @@ private slots:
     /// Situa la càmera al punt de vista seleccionat.
     void setViewpoint();
 
+    /// Comença el càlcul de les obscurances si no s'estan calculant i el cancel·la si s'estan calculant.
+    void computeCancelObscurance();
+    /// Fa el que cal quan s'acaba el càlcul de les obscurances correctament.
+    void endComputeObscurance();
+    /// Fa el que cal quan s'acaba el càlcul de les obscurances cancel·lat.
+    void endCancelObscurance();
+    /// Carrega les obscurances des d'un fitxer.
+    void loadObscurance();
+    /// Desa les obscurances a un fitxer.
+    void saveObscurance();
+
 private:
 
     Experimental3DVolume *m_volume; // el destruirà el visor
+
+    bool m_computingObscurance;
+    ObscuranceMainThread *m_obscuranceMainThread;
+    Obscurance *m_obscurance;
 
 };
 

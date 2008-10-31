@@ -69,6 +69,12 @@ unsigned char Experimental3DVolume::getRangeMax() const
 }
 
 
+unsigned int Experimental3DVolume::getSize() const
+{
+    return m_dataSize;
+}
+
+
 void Experimental3DVolume::setInterpolation( Interpolation interpolation )
 {
     switch ( interpolation )
