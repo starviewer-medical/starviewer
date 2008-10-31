@@ -45,17 +45,17 @@ void ZoomTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::MouseWheelForwardEvent:
-        m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
+		startZoom();
         // \TODO es podria afegir una variable membre 'm_factor' per poder controlar desde fora com de ràpid és l'augment o disminució del zoom
         m_viewer->zoom( pow((double)1.1, 2.0) );
-        m_viewer->setCursor( Qt::ArrowCursor );
+		endZoom();
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
-        m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
+		startZoom();
         // \TODO es podria afegir una variable membre 'm_factor' per poder controlar desde fora com de ràpid és l'augment o disminució del zoom
         m_viewer->zoom( pow((double)1.1, -2.0) );
-        m_viewer->setCursor( Qt::ArrowCursor );
+		endZoom();
     break;
 
     default:
@@ -87,6 +87,7 @@ void ZoomTool::endZoom()
     m_viewer->setCursor( Qt::ArrowCursor );
     m_state = NONE;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
+	m_viewer->refresh(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
 }
 
 }
