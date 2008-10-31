@@ -41,6 +41,8 @@ public:
     unsigned char getRangeMin() const;
     /// Retorna el valor de propietat màxim.
     unsigned char getRangeMax() const;
+    /// Retorna la mida (nombre de vòxels) del volum.
+    unsigned int getSize() const;
 
     /// Estableix el tipus d'interpolació.
     void setInterpolation( Interpolation interpolation );

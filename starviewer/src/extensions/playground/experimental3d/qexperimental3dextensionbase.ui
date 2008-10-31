@@ -523,6 +523,218 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="m_obscuranceTab" >
+       <attribute name="title" >
+        <string>Obscurance</string>
+       </attribute>
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="udg::QViewpointDistributionWidget" native="1" name="m_obscuranceViewpointDistributionWidget" />
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="m_obscuranceMaximumDistanceLabel" >
+            <property name="text" >
+             <string>Maximum distance</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="m_obscuranceMaximumDistanceDoubleSpinBox" >
+            <property name="maximum" >
+             <double>512.000000000000000</double>
+            </property>
+            <property name="value" >
+             <double>64.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="m_obscuranceFunctionLabel" >
+            <property name="text" >
+             <string>Function</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="m_obscuranceFunctionComboBox" >
+            <item>
+             <property name="text" >
+              <string>Constant 0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Distance</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Square root</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Exponential</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Exponential (normalized)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Cube root</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="m_obscuranceVariantLabel" >
+            <property name="text" >
+             <string>Variant</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="m_obscuranceVariantComboBox" >
+            <item>
+             <property name="text" >
+              <string>Density</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Density smooth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Opacity</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Opacity smooth</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Opacity saliency</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Opacity smooth saliency</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Opacity color bleeding</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>Opacity smooth color bleeding</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_obscurancePushButton" >
+          <property name="text" >
+           <string>Compute obscurance</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QProgressBar" name="m_obscuranceProgressBar" >
+          <property name="value" >
+           <number>0</number>
+          </property>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="m_obscuranceLoadPushButton" >
+            <property name="text" >
+             <string>Load obscurance...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_obscuranceSavePushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Save obscurance...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="udg::QExperimental3DViewer" native="1" name="m_viewer" >
       <property name="sizePolicy" >
@@ -540,6 +752,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>udg::QExperimental3DViewer</class>
+   <extends>QWidget</extends>
+   <header>qexperimental3dviewer.h</header>
+  </customwidget>
+  <customwidget>
    <class>udg::QTransferFunctionEditorByValues</class>
    <extends>QWidget</extends>
    <header>qtransferfunctioneditorbyvalues.h</header>
@@ -548,11 +765,6 @@
    <class>udg::QViewpointDistributionWidget</class>
    <extends>QWidget</extends>
    <header>qviewpointdistributionwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>udg::QExperimental3DViewer</class>
-   <extends>QWidget</extends>
-   <header>qexperimental3dviewer.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

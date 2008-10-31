@@ -8,6 +8,7 @@
 
 #include "experimental3dvolume.h"
 #include "logging.h"
+#include "obscurancemainthread.h"
 #include "transferfunctionio.h"
 #include "vector3.h"
 #include "viewpointgenerator.h"
@@ -17,7 +18,9 @@ namespace udg {
 
 
 QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
- : QWidget( parent ), m_volume( 0 )
+ : QWidget( parent ),
+   m_volume( 0 ),
+   m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 )
 {
     setupUi( this );
 
@@ -27,6 +30,14 @@ QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
 
 QExperimental3DExtension::~QExperimental3DExtension()
 {
+    if ( m_computingObscurance )
+    {
+        m_obscuranceMainThread->stop();
+        m_obscuranceMainThread->wait();
+    }
+
+    delete m_obscuranceMainThread;
+    delete m_obscurance;
 }
 
 
@@ -65,6 +76,11 @@ void QExperimental3DExtension::createConnections()
     connect( m_cameraSavePushButton, SIGNAL( clicked() ), SLOT( saveCamera() ) );
     connect( m_cameraViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setNumberOfViewpoints(int) ) );
     connect( m_viewpointPushButton, SIGNAL( clicked() ), SLOT( setViewpoint() ) );
+
+    // obscurances
+    connect( m_obscurancePushButton, SIGNAL( clicked() ), SLOT( computeCancelObscurance() ) );
+    connect( m_obscuranceLoadPushButton, SIGNAL( clicked() ), SLOT( loadObscurance() ) );
+    connect( m_obscuranceSavePushButton, SIGNAL( clicked() ), SLOT( saveObscurance() ) );
 }
 
 
@@ -343,6 +359,135 @@ void QExperimental3DExtension::setViewpoint()
     if ( qAbs( position2.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
 
     m_viewer->setCamera( position, focus, up );
+}
+
+
+void QExperimental3DExtension::computeCancelObscurance()
+{
+    if ( !m_computingObscurance )
+    {
+        m_computingObscurance = true;
+
+        // si s'estan aplicant obscurances desactivar-les i inhabilitar-les
+
+        delete m_obscuranceMainThread;          // esborrem el thread d'abans
+        delete m_obscurance; m_obscurance = 0;  // esborrem l'obscurança d'abans
+
+        int numberOfDirections;
+        if ( m_obscuranceViewpointDistributionWidget->isUniform() )
+            numberOfDirections = -m_obscuranceViewpointDistributionWidget->numberOfViewpoints();
+        else
+            numberOfDirections = m_obscuranceViewpointDistributionWidget->recursionLevel();
+
+        m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections,
+                                                           m_obscuranceMaximumDistanceDoubleSpinBox->value(),
+                                                           static_cast<ObscuranceMainThread::Function>( m_obscuranceFunctionComboBox->currentIndex() ),
+                                                           static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ),
+                                                           this );
+        m_obscuranceMainThread->setVolume( m_volume->getVolume() );
+        m_obscuranceMainThread->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
+
+        m_obscurancePushButton->setText( tr("Cancel obscurance") );
+        m_obscuranceProgressBar->setValue( 0 );
+        connect( m_obscuranceMainThread, SIGNAL( progress(int) ), m_obscuranceProgressBar, SLOT( setValue(int) ) );
+        connect( m_obscuranceMainThread, SIGNAL( computed() ), SLOT( endComputeObscurance() ) );
+        m_obscuranceLoadPushButton->setEnabled( false );
+        m_obscuranceSavePushButton->setEnabled( false );
+
+        m_obscuranceMainThread->start();
+    }
+    else
+    {
+        m_obscuranceMainThread->stop();
+        connect( m_obscuranceMainThread, SIGNAL( finished() ), SLOT( endCancelObscurance() ) );
+
+        m_obscurancePushButton->setText( tr("Cancelling obscurance...") );
+        m_obscurancePushButton->setEnabled( false );
+    }
+}
+
+
+void QExperimental3DExtension::endComputeObscurance()
+{
+    m_computingObscurance = false;
+
+    m_obscurance = m_obscuranceMainThread->getObscurance();
+    m_obscurancePushButton->setText( tr("Compute obscurance") );
+    m_obscuranceLoadPushButton->setEnabled( true );
+    m_obscuranceSavePushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::endCancelObscurance()
+{
+    m_computingObscurance = false;
+
+    m_obscurancePushButton->setText( tr("Compute obscurance") );
+    m_obscurancePushButton->setEnabled( true );
+    m_obscuranceLoadPushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::loadObscurance()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString obscuranceDir = settings.value( "obscuranceDir", QString() ).toString();
+    QString obscuranceFileName = QFileDialog::getOpenFileName( this, tr("Load obscurance"), obscuranceDir,
+                                                               tr("Data files (*.dat);;All files (*)") );
+
+    if ( !obscuranceFileName.isNull() )
+    {
+        delete m_obscuranceMainThread;
+        delete m_obscurance;
+
+        int numberOfDirections;
+        if ( m_obscuranceViewpointDistributionWidget->isUniform() )
+            numberOfDirections = -m_obscuranceViewpointDistributionWidget->numberOfViewpoints();
+        else
+            numberOfDirections = m_obscuranceViewpointDistributionWidget->recursionLevel();
+
+        m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections,
+                                                           m_obscuranceMaximumDistanceDoubleSpinBox->value(),
+                                                           static_cast<ObscuranceMainThread::Function>( m_obscuranceFunctionComboBox->currentIndex() ),
+                                                           static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ),
+                                                           this );
+
+        m_obscurance = new Obscurance( m_volume->getSize(), m_obscuranceMainThread->hasColor() );
+        m_obscurance->load( obscuranceFileName );
+
+        delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
+        m_obscuranceSavePushButton->setEnabled( true );
+
+        QFileInfo obscuranceFileInfo( obscuranceFileName );
+        settings.setValue( "obscuranceDir", obscuranceFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveObscurance()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString obscuranceDir = settings.value( "obscuranceDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save obscurance"), obscuranceDir, tr("Data files (*.dat);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString obscuranceFileName = saveDialog.selectedFiles().first();
+        m_obscurance->save( obscuranceFileName );
+
+        QFileInfo obscuranceFileInfo( obscuranceFileName );
+        settings.setValue( "obscuranceDir", obscuranceFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
 }
 
 
