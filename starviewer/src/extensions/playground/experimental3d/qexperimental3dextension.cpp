@@ -383,7 +383,7 @@ void QExperimental3DExtension::computeCancelObscurance()
                                                            m_obscuranceMaximumDistanceDoubleSpinBox->value(),
                                                            static_cast<ObscuranceMainThread::Function>( m_obscuranceFunctionComboBox->currentIndex() ),
                                                            static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ),
-                                                           true,
+                                                           m_obscuranceDoublePrecisionRadioButton->isChecked(),
                                                            this );
         m_obscuranceMainThread->setVolume( m_volume->getVolume() );
         m_obscuranceMainThread->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
@@ -453,7 +453,7 @@ void QExperimental3DExtension::loadObscurance()
                                                            m_obscuranceMaximumDistanceDoubleSpinBox->value(),
                                                            static_cast<ObscuranceMainThread::Function>( m_obscuranceFunctionComboBox->currentIndex() ),
                                                            static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ),
-                                                           true,
+                                                           m_obscuranceDoublePrecisionRadioButton->isChecked(),
                                                            this );
 
         m_obscurance = new Obscurance( m_volume->getSize(), m_obscuranceMainThread->hasColor() );
@@ -462,7 +462,11 @@ void QExperimental3DExtension::loadObscurance()
         delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
 
         if ( ok ) m_obscuranceSavePushButton->setEnabled( true );
-        else QMessageBox::warning( this, tr("Can't load obscurance"), QString( tr("Can't load obscurance from file ") ) + obscuranceFileName );
+        else
+        {
+            m_obscuranceSavePushButton->setEnabled( false );
+            QMessageBox::warning( this, tr("Can't load obscurance"), QString( tr("Can't load obscurance from file ") ) + obscuranceFileName );
+        }
 
         QFileInfo obscuranceFileInfo( obscuranceFileName );
         settings.setValue( "obscuranceDir", obscuranceFileInfo.absolutePath() );
