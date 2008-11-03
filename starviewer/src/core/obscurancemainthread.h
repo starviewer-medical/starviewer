@@ -32,6 +32,8 @@ public:
     /// Variants de les obscurances.
     enum Variant { Density, DensitySmooth, Opacity, OpacitySmooth, OpacitySaliency, OpacitySmoothSaliency, OpacityColorBleeding, OpacitySmoothColorBleeding };
 
+    static bool hasColor( Variant variant );
+
     ObscuranceMainThread( int numberOfDirections, double maximumDistance, Function function, Variant variant, bool doublePrecision = true, QObject *parent = 0 );
     virtual ~ObscuranceMainThread();
 
