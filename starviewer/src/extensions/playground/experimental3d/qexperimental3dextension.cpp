@@ -461,27 +461,10 @@ void QExperimental3DExtension::loadObscurance()
 
     if ( !obscuranceFileName.isNull() )
     {
-        delete m_obscuranceMainThread;
         delete m_obscurance;
 
-        int numberOfDirections;
-        if ( m_obscuranceViewpointDistributionWidget->isUniform() )
-            numberOfDirections = -m_obscuranceViewpointDistributionWidget->numberOfViewpoints();
-        else
-            numberOfDirections = m_obscuranceViewpointDistributionWidget->recursionLevel();
-
-        m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections,
-                                                           m_obscuranceMaximumDistanceDoubleSpinBox->value(),
-                                                           static_cast<ObscuranceMainThread::Function>( m_obscuranceFunctionComboBox->currentIndex() ),
-                                                           static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ),
-                                                           m_obscuranceDoublePrecisionRadioButton->isChecked(),
-                                                           this );
-
-        /// \todo Creem un thread només per saber si té color --> molt lleig
-        m_obscurance = new Obscurance( m_volume->getSize(), m_obscuranceMainThread->hasColor() );
+        m_obscurance = new Obscurance( m_volume->getSize(), ObscuranceMainThread::hasColor( static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ) ) );
         bool ok = m_obscurance->load( obscuranceFileName );
-
-        delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
 
         if ( ok )
         {
