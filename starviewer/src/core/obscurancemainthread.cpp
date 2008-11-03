@@ -16,6 +16,12 @@
 namespace udg {
 
 
+bool ObscuranceMainThread::hasColor( Variant variant )
+{
+    return variant >= OpacityColorBleeding;
+}
+
+
 ObscuranceMainThread::ObscuranceMainThread( int numberOfDirections, double maximumDistance, Function function, Variant variant, bool doublePrecision, QObject *parent )
  : QThread( parent ),
    m_numberOfDirections( numberOfDirections ), m_maximumDistance( maximumDistance ), m_function( function ), m_variant( variant ),
@@ -34,7 +40,7 @@ ObscuranceMainThread::~ObscuranceMainThread()
 
 bool ObscuranceMainThread::hasColor() const
 {
-    return m_variant >= OpacityColorBleeding;
+    return hasColor( m_variant );
 }
 
 
