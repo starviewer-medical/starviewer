@@ -51,12 +51,9 @@ private:
 
     /// metode per calcular la mitjana de gris de la regio del polyline
     double computeGrayMean();
-    double computeGrayMeanAxial();
-    double computeGrayMeanSagittal();
-    double computeGrayMeanCoronal();
-    
+     
     /// calcula el voxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
-	Volume::VoxelType getGrayValue( double *coords, double spacing0, double spacing1, double spacing2 );
+	Volume::VoxelType getGrayValue( double *coords );
     
 private:
     /// Viewer 2D sobre el qual treballem
