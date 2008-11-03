@@ -15,8 +15,11 @@ namespace udg {
 
 
 class AmbientVoxelShader;
+class ColorBleedingVoxelShader;
 class ContourVoxelShader;
 class DirectIlluminationVoxelShader;
+class Obscurance;
+class ObscuranceVoxelShader;
 class TransferFunction;
 class Volume;
 class vtk4DLinearRegressionGradientEstimator;
@@ -52,6 +55,8 @@ public:
     void setLighting( bool diffuse, bool specular, double specularPower );
     /// Estableix els paràmetres del contorn.
     void setContour( bool on, double threshold );
+    /// Estableix els paràmetres de les obscurances.
+    void setObscurance( bool on, Obscurance *obscurance, double factor, double filterLow, double filterHigh );
     /// Estableix la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -98,6 +103,10 @@ private:
     DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
     /// Voxel shader de contorns.
     ContourVoxelShader *m_contourVoxelShader;
+    /// Voxel shader d'obscurances.
+    ObscuranceVoxelShader *m_obscuranceVoxelShader;
+    /// Voxel shader de color bleeding.
+    ColorBleedingVoxelShader *m_colorBleedingVoxelShader;
 
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;
