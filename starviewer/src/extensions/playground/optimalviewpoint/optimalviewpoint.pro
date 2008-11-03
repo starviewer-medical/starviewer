@@ -24,7 +24,6 @@ HEADERS += doublehistogram.h \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
            saliencyvoxelshader.h \
-           colorbleedingvoxelshader.h \
            vtkInteractorStyleFasterTrackballActor.h 
 SOURCES += doublehistogram.cpp \
            histogram.cpp \
@@ -44,7 +43,6 @@ SOURCES += doublehistogram.cpp \
            vtkVolumeRayCastCompositeFunctionViewpointSaliency.cxx \
            vtkVolumeRayCastCompositeFunctionFx.cxx \
            saliencyvoxelshader.cpp \
-           colorbleedingvoxelshader.cpp \
            vtkInteractorStyleFasterTrackballActor.cxx 
 RESOURCES += optimalviewpoint.qrc
 include(../../basicconfextensions.inc)
