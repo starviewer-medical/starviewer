@@ -56,7 +56,7 @@
 #include "contourvoxelshader.h"
 #include "obscurancevoxelshader.h"
 #include "saliencyvoxelshader.h"
-#include "colorbleedingvoxelshader.h"
+#include "../experimental3d/colorbleedingvoxelshader.h"
 #include "obscurancemainthread.h"
 #include "obscurance.h"
 

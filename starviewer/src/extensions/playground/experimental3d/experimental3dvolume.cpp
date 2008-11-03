@@ -11,7 +11,7 @@
 #include <vtkVolumeRayCastMapper.h>
 
 #include "ambientvoxelshader.h"
-#include "../optimalviewpoint/colorbleedingvoxelshader.h"
+#include "colorbleedingvoxelshader.h"
 #include "contourvoxelshader.h"
 #include "directilluminationvoxelshader.h"
 #include "obscurance.h"
