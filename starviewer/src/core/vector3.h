@@ -29,6 +29,10 @@ public:
     /// Normalitza el vector i el retorna per referència.
     TVector3<T>& normalize();
 
+    /// Operador d'assignació.
+    template <class C>
+    TVector3<T>& operator =( const TVector3<C> &v );
+
     /// Retorna una còpia del vector.
     TVector3<T> operator +() const;
     /// Retorna el vector negat.
@@ -100,6 +104,15 @@ inline TVector3<T>& TVector3<T>::normalize()
 {
     T length = this->length();
     x /= length; y /= length; z /= length;
+    return *this;
+}
+
+
+template <class T>
+template <class C>
+inline TVector3<T>& TVector3<T>::operator =( const TVector3<C> &v )
+{
+    x = v.x; y = v.y; z = v.z;
     return *this;
 }
 
