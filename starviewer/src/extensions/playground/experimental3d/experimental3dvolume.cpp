@@ -11,8 +11,11 @@
 #include <vtkVolumeRayCastMapper.h>
 
 #include "ambientvoxelshader.h"
+#include "../optimalviewpoint/colorbleedingvoxelshader.h"
 #include "contourvoxelshader.h"
 #include "directilluminationvoxelshader.h"
+#include "obscurance.h"
+#include "obscurancevoxelshader.h"
 #include "transferfunction.h"
 #include "volume.h"
 #include "vtk4DLinearRegressionGradientEstimator.h"
@@ -42,6 +45,8 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
     delete m_contourVoxelShader;
+    delete m_obscuranceVoxelShader;
+    delete m_colorBleedingVoxelShader;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -160,13 +165,46 @@ void Experimental3DVolume::setContour( bool on, double threshold )
     if ( on )
     {
         m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
-        m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
+        if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_contourVoxelShader ) < 0 )
+            m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
         m_contourVoxelShader->setGradientEstimator( gradientEstimator() );
         m_contourVoxelShader->setThreshold( threshold );
     }
     else
     {
         m_shaderVolumeRayCastFunction->RemoveVoxelShader( m_contourVoxelShader );
+    }
+}
+
+
+void Experimental3DVolume::setObscurance( bool on, Obscurance *obscurance, double factor, double filterLow, double filterHigh )
+{
+    if ( on )
+    {
+        m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+
+        if ( !obscurance->hasColor() )
+        {
+            m_shaderVolumeRayCastFunction->RemoveVoxelShader( m_colorBleedingVoxelShader );
+            if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_obscuranceVoxelShader ) < 0 )
+                m_shaderVolumeRayCastFunction->AddVoxelShader( m_obscuranceVoxelShader );
+            m_obscuranceVoxelShader->setObscurance( obscurance );
+            m_obscuranceVoxelShader->setFactor( factor );
+            m_obscuranceVoxelShader->setFilters( filterLow, filterHigh );
+        }
+        else
+        {
+            m_shaderVolumeRayCastFunction->RemoveVoxelShader( m_obscuranceVoxelShader );
+            if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorBleedingVoxelShader ) < 0 )
+                m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorBleedingVoxelShader );
+            m_colorBleedingVoxelShader->setColorBleeding( obscurance );
+            m_colorBleedingVoxelShader->setFactor( factor );
+        }
+    }
+    else
+    {
+        m_shaderVolumeRayCastFunction->RemoveVoxelShader( m_obscuranceVoxelShader );
+        m_shaderVolumeRayCastFunction->RemoveVoxelShader( m_colorBleedingVoxelShader );
     }
 }
 
@@ -235,6 +273,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
     m_directIlluminationVoxelShader->setData( m_data );
     m_contourVoxelShader = new ContourVoxelShader();
+    m_obscuranceVoxelShader = new ObscuranceVoxelShader();
+    m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
 }
 
 

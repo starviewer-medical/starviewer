@@ -68,6 +68,12 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
     connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterLowLabel, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterLowDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighLabel, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighDoubleSpinBox, SLOT( setEnabled(bool) ) );
 
     // càmera
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
@@ -170,6 +176,8 @@ void QExperimental3DExtension::doVisualization()
     if ( m_diffuseCheckBox->isChecked() ) m_viewer->updateShadingTable();
     m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
     m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
+    m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(),
+                             m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
     m_volume->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
     m_viewer->render();
 }
@@ -368,7 +376,12 @@ void QExperimental3DExtension::computeCancelObscurance()
     {
         m_computingObscurance = true;
 
-        // si s'estan aplicant obscurances desactivar-les i inhabilitar-les
+        if ( m_obscuranceCheckBox->isChecked() )
+        {
+            m_obscuranceCheckBox->setChecked( false );
+            m_volume->setObscurance( false, 0, 1.0, 0.0, 1.0 );
+            m_viewer->render();
+        }
 
         delete m_obscuranceMainThread;          // esborrem el thread d'abans
         delete m_obscurance; m_obscurance = 0;  // esborrem l'obscurança d'abans
@@ -416,6 +429,7 @@ void QExperimental3DExtension::endComputeObscurance()
     m_obscurancePushButton->setText( tr("Compute obscurance") );
     m_obscuranceLoadPushButton->setEnabled( true );
     m_obscuranceSavePushButton->setEnabled( true );
+    m_obscuranceCheckBox->setEnabled( true );
 }
 
 
@@ -431,6 +445,13 @@ void QExperimental3DExtension::endCancelObscurance()
 
 void QExperimental3DExtension::loadObscurance()
 {
+    if ( m_obscuranceCheckBox->isChecked() )
+    {
+        m_obscuranceCheckBox->setChecked( false );
+        m_volume->setObscurance( false, 0, 1.0, 0.0, 1.0 );
+        m_viewer->render();
+    }
+
     QSettings settings;
     settings.beginGroup( "Experimental3D" );
 
@@ -456,12 +477,17 @@ void QExperimental3DExtension::loadObscurance()
                                                            m_obscuranceDoublePrecisionRadioButton->isChecked(),
                                                            this );
 
+        /// \todo Creem un thread només per saber si té color --> molt lleig
         m_obscurance = new Obscurance( m_volume->getSize(), m_obscuranceMainThread->hasColor() );
         bool ok = m_obscurance->load( obscuranceFileName );
 
         delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
 
-        if ( ok ) m_obscuranceSavePushButton->setEnabled( true );
+        if ( ok )
+        {
+            m_obscuranceSavePushButton->setEnabled( true );
+            m_obscuranceCheckBox->setEnabled( true );
+        }
         else
         {
             m_obscuranceSavePushButton->setEnabled( false );

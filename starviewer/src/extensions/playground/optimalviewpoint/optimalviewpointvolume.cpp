@@ -876,7 +876,7 @@ void OptimalViewpointVolume::generateAdjustedTransferFunction( const QVector< un
 
 
 
-void OptimalViewpointVolume::setComputing( bool on )
+void OptimalViewpointVolume::setComputing( bool /*on*/ )
 {
 //    m_planeVolumeRayCastFunction->setComputing( on );
 }
@@ -1291,7 +1291,7 @@ void OptimalViewpointVolume::endComputeObscurances()
         m_volumeRayCastFunctionFx->SetColorBleeding( m_obscurance->doubleColorBleeding() );
         m_volumeRayCastFunctionFx->SetColor( true );
 
-        m_colorBleedingVoxelShader->setColorBleeding( m_obscurance->doubleColorBleeding() );
+        m_colorBleedingVoxelShader->setColorBleeding( m_obscurance );
 
         if ( m_renderWithObscurances )
         {
@@ -1358,7 +1358,7 @@ bool OptimalViewpointVolume::loadObscurances( const QString & obscurancesFileNam
         m_volumeRayCastFunctionFx->SetColorBleeding( m_obscurance->doubleColorBleeding() );
         m_volumeRayCastFunctionFx->SetColor( true );
 
-        m_colorBleedingVoxelShader->setColorBleeding( m_obscurance->doubleColorBleeding() );
+        m_colorBleedingVoxelShader->setColorBleeding( m_obscurance );
 
         if ( m_renderWithObscurances )
         {
