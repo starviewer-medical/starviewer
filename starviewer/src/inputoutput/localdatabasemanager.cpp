@@ -48,8 +48,6 @@ LocalDatabaseManager::LocalDatabaseManager()
 
 void LocalDatabaseManager::save(Patient *newPatient)
 {
-    Q_ASSERT(newPatient);
-
     DeleteDirectory delDirectory;
     StarviewerSettings settings;
     QDate currentDate = QDate::currentDate();
