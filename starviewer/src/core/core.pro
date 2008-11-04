@@ -92,7 +92,6 @@ HEADERS += extensionfactory.h \
            patientbrowsermenubasicitem.h \
            patientbrowsermenuextendeditem.h \
            patientbrowsermenulist.h \
-           referencelinesfillerstep.h \
            colorpalette.h \
            qcustomwindowleveldialog.h \
            qwindowlevelcombobox.h \
@@ -251,7 +250,6 @@ SOURCES += extensionmediator.cpp \
            patientbrowsermenubasicitem.cpp \
            patientbrowsermenuextendeditem.cpp \
            patientbrowsermenulist.cpp \
-           referencelinesfillerstep.cpp \
            colorpalette.cpp \
            qcustomwindowleveldialog.cpp \
            qwindowlevelcombobox.cpp \
