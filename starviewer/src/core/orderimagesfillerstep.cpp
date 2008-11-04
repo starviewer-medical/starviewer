@@ -28,7 +28,7 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
     QMap< int , Image* > * instanceNumberSet;
     QMap< double , QMap< int , Image* >* >* imagePositionSet;
     QMap< QString, QMap< double , QMap< int , Image* >* >* > *lastOrderedImageSet;
-    
+
     foreach ( Series * key , OrderImagesInternalInfo.keys() )
     {
         lastOrderedImageSet = OrderImagesInternalInfo.take(key);
@@ -68,7 +68,7 @@ bool OrderImagesFillerStep::fill()
     return ok;
 }
 
-bool OrderImagesFillerStep::fillIndividually() 
+bool OrderImagesFillerStep::fillIndividually()
 {
 
     if ( OrderImagesInternalInfo.contains( m_input->getCurrentSeries() ) )
@@ -117,7 +117,7 @@ void OrderImagesFillerStep::processImage( Image *image )
 	double planeNormalVector[3];
 	image->getImagePlaneNormal( planeNormalVector );
 	// el passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
-	QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[6]).arg(planeNormalVector[7]).arg(planeNormalVector[8]);
+	QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0],0,'f',5).arg(planeNormalVector[1],0,'f',5).arg(planeNormalVector[2],0,'f',5);
 
     QMap< double , QMap< int , Image* > * > * imagePositionSet;
     QMap< int , Image* > * instanceNumberSet;
@@ -125,11 +125,11 @@ void OrderImagesFillerStep::processImage( Image *image )
     double distance = this->distance(image);
 
 	// primer busquem quina és la key (normal del pla) més semblant de totes les que hi ha
-	// cada key és la normal de cada pla guardat com a string. 
+	// cada key és la normal de cada pla guardat com a string.
 	// En cas que tinguem diferents normals, indicaria que tenim per exemple, diferents stacks en el mateix volum
 	QStringList planeNormals = m_orderedImageSet->uniqueKeys();
 
-	// aquest bucle serveix per trobar si la normal de la nova imatge 
+	// aquest bucle serveix per trobar si la normal de la nova imatge
 	// coincideix amb alguna normal de les imatges ja processada
 	QString keyPlaneNormal;
 	foreach( QString normal, planeNormals )
@@ -162,7 +162,7 @@ void OrderImagesFillerStep::processImage( Image *image )
 				if( angle < 1.0 )
 				{
 					// si l'angle entre les normals
-					// està dins d'un threshold, 
+					// està dins d'un threshold,
 					// les podem considerar iguals
 					// TODO definir millor aquest threshold
 					keyPlaneNormal = normal;
@@ -249,7 +249,9 @@ double OrderImagesFillerStep::distance( Image *image )
 {
     //Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
     double distance = .0;
+    // origen del pla
     const double *imagePosition = image->getImagePositionPatient();
+    // normal del pla sobre la qual projectarem l'origen
     double normal[3];
     image->getImagePlaneNormal( normal );
 
