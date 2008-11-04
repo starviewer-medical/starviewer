@@ -15,16 +15,16 @@
 #include "dicomtagreader.h"
 
 // TODO Include's temporals mentre no tenim un registre:
-#include "keyimagenotefillerstep.h"
 #include "imagefillerstep.h"
 #include "dicomfileclassifierfillerstep.h"
-#include "presentationstatefillerstep.h"
 #include "temporaldimensionfillerstep.h"
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
-// TODO de moment deixem fora el ReferenceLinesFillerStep perquè
-// encara no fem ús de la informació que recopila
-// #include "referencelinesfillerstep.h"
+// TODO encara no hi ha suport a KINs i Presentation States, per tant
+// fins que no tinguem suport i implementem correctament els respectius 
+// filler steps no caldrà afegir-los dins del pipeline
+//#include "keyimagenotefillerstep.h"
+//#include "presentationstatefillerstep.h"
 
 namespace udg {
 
@@ -53,16 +53,16 @@ bool patientFillerMorePriorityFirst(const PatientFillerStep *s1, const PatientFi
 
 void PatientFiller::registerSteps()
 {
-    m_registeredSteps.append(new KeyImageNoteFillerStep() );
     m_registeredSteps.append(new ImageFillerStep() );
     m_registeredSteps.append(new DICOMFileClassifierFillerStep() );
-    m_registeredSteps.append(new PresentationStateFillerStep() );
     m_registeredSteps.append(new TemporalDimensionFillerStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
     m_registeredSteps.append(new OrderImagesFillerStep() );
-    // TODO de moment deixem fora el ReferenceLinesFillerStep perquè
-    // encara no fem ús de la informació que recopila
-    //m_registeredSteps.append(new ReferenceLinesFillerStep() );
+	// TODO encara no hi ha suport a KINs i Presentation States, per tant
+	// fins que no tinguem suport i implementem correctament els respectius 
+	// filler steps no caldrà afegir-los dins del pipeline
+	//m_registeredSteps.append(new KeyImageNoteFillerStep() );
+	//m_registeredSteps.append(new PresentationStateFillerStep() );
 }
 
 void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
