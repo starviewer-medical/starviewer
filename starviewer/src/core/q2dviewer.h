@@ -135,7 +135,6 @@ public:
 
     /// Mètodes de conveniència pels presentation state
     void setModalityRescale( vtkImageShiftScale *rescale );
-    vtkImageActor *getImageActor();
 
     /**
      * Ens retorna el drawer per poder pintar-hi primitives

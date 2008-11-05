@@ -623,7 +623,7 @@ void Q2DViewer::addActors()
     this->getRenderer()->AddViewProp( m_bottomRuler );
     this->getRenderer()->AddViewProp( m_scalarBar );
     m_imageRenderer->AddViewProp( m_imageActor );
-    // TODO colocar aix`o en un lloc mes adient
+    // TODO colocar això en un lloc mes adient
     m_imageRenderer->GetActiveCamera()->ParallelProjectionOn();
 }
 
@@ -1270,11 +1270,6 @@ void Q2DViewer::resetWindowLevelToDefault()
 void Q2DViewer::setModalityRescale( vtkImageShiftScale *rescale )
 {
     m_modalityLUTRescale = rescale;
-}
-
-vtkImageActor *Q2DViewer::getImageActor()
-{
-    return m_imageActor;
 }
 
 void Q2DViewer::setPixelAspectRatio( double ratio )
@@ -1970,6 +1965,9 @@ void Q2DViewer::updateDisplayExtent()
     if( !input )
         return;
 
+	//TODO potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
+	// és qui coneix com es guarda la informació de la imatge, ja que si canviem la manera
+	// de guardar les phases, això ja no ens valdria
     // thick slab
     int sliceValue;
     if( isThickSlabActive() )
