@@ -154,9 +154,19 @@ QList< double > TransferFunction::getColorPoints() const
     return m_color.keys();
 }
 
+QMap< double, QColor > TransferFunction::getColorMap() const
+{
+    return m_color;
+}
+
 QList< double > TransferFunction::getOpacityPoints() const
 {
     return m_opacity.keys();
+}
+
+QMap< double, double > TransferFunction::getOpacityMap() const
+{
+    return m_opacity;
 }
 
 vtkColorTransferFunction * TransferFunction::getColorTransferFunction() const
@@ -203,6 +213,16 @@ vtkPiecewiseFunction * TransferFunction::getOpacityTransferFunction() const
     }
 
     return m_opacityTransferFunction;
+}
+
+bool TransferFunction::setNewRange(double min, double max)
+{
+    double range[2];
+    range[0]=min;
+    range[1]=max;
+    if(  !m_colorTransferFunction->AdjustRange(range)) return false; 
+    if(!m_opacityTransferFunction->AdjustRange(range)) return false;
+    return true; 
 }
 
 void TransferFunction::print() const
