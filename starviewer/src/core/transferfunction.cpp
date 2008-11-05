@@ -215,14 +215,45 @@ vtkPiecewiseFunction * TransferFunction::getOpacityTransferFunction() const
     return m_opacityTransferFunction;
 }
 
-bool TransferFunction::setNewRange(double min, double max)
+bool TransferFunction::setNewRange( double min, double max )
 {
-    double range[2];
-    range[0]=min;
-    range[1]=max;
-    if(  !m_colorTransferFunction->AdjustRange(range)) return false; 
-    if(!m_opacityTransferFunction->AdjustRange(range)) return false;
-    return true; 
+    // Primer afegim els extrems. Si ja existeixen es quedarà igual.
+    this->addPoint( min, this->get( min ) );
+    this->addPoint( max, this->get( max ) );
+
+    // Després eliminem els punts fora del rang.
+
+    QMutableMapIterator<double, QColor> itc( m_color );
+    while ( itc.hasNext() )
+    {
+        itc.next();
+        if ( itc.key() < min ) this->removePointFromColor( itc.key() );
+        else break;
+    }
+    itc.toBack();
+    while ( itc.hasPrevious() )
+    {
+        itc.previous();
+        if ( itc.key() > max ) this->removePointFromColor( itc.key() );
+        else break;
+    }
+
+    QMutableMapIterator<double, double> ito( m_opacity );
+    while ( ito.hasNext() )
+    {
+        ito.next();
+        if ( ito.key() < min ) this->removePointFromOpacity( ito.key() );
+        else break;
+    }
+    ito.toBack();
+    while ( ito.hasPrevious() )
+    {
+        ito.previous();
+        if ( ito.key() > max ) this->removePointFromOpacity( ito.key() );
+        else break;
+    }
+
+    m_changed = m_colorChanged = m_opacityChanged = true;
 }
 
 void TransferFunction::print() const
