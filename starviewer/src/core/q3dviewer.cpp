@@ -75,7 +75,7 @@
 namespace udg {
 
 Q3DViewer::Q3DViewer( QWidget *parent )
- : QViewer( parent ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0)
+ : QViewer( parent ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0), m_newTransferFunction(0)
 {
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();
@@ -153,8 +153,8 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_obscuranceOn = false;
 
     m_4DLinearRegressionGradientEstimator = 0;
-    m_window = 256;
-    m_level=127;
+    m_window = 80;
+    m_level = 40;
 }
 
 Q3DViewer::~Q3DViewer()
@@ -218,21 +218,91 @@ void Q3DViewer::setWindowLevel( double window , double level )
 {
     if( m_mainVolume )
     {
-        //this->refresh();
-        m_transferFunction->clear();
-        // Opacitat
-        m_transferFunction->addPointToOpacity( level - (window/2.0), .0 );
-        m_transferFunction->addPointToOpacity( level + (window/2.0), .4 );
-        m_transferFunction->addPointToOpacity( level + (window/2.0) + 0.1, .0 );
-        // Colors
-        m_transferFunction->addPointToColorRGB( level - (window/2.0), 0.0, 0.0, 0.0 );
-        m_transferFunction->addPointToColorRGB( level + (window/2.0), 1.0, 1.0, 1.0 );
+        m_window = window;
+        m_level = level;
+        double lowLevel  = level - (window/2.0);
+        double highLevel = level + (window/2.0);
+        //DEBUG_LOG( QString( "Q3DViewer: new ww = %1, new wl = %2, shift = %3, lowlev = %4, highlev = %5" ).arg( window ).arg( level ).arg( m_shift ).arg( lowLevel ).arg( highLevel ) );
 
-        m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
-        m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
+        double newScale = m_window / m_range;
+        double newShift = m_level - (m_window/2);
+        QMap<double,QColor> newColorMap;
+        QMap<double,QColor> colorMap = m_newTransferFunction->getColorMap();
+        QMap< double, QColor >::iterator itColor;
+    
+        itColor = colorMap.begin();
+    
+        while ( itColor != colorMap.end() )
+        {
+            newColorMap.insert( newScale*itColor.key() + newShift, itColor.value() );
+            itColor++;
+        }
+    
+        QMap<double,double> newOpacityMap;
+        QMap<double,double> opacityMap = m_newTransferFunction->getOpacityMap();
+        QMap< double, double >::iterator itOpacity;
+    
+        itOpacity = opacityMap.begin();
+    
+        while ( itOpacity != opacityMap.end() )
+        {
+            newOpacityMap.insert( newScale*itOpacity.key() + newShift, itOpacity.value() );
+            itOpacity++;
+        }
+    
+        m_transferFunction->clear();
+        
+        int key;
+        bool pointInZero = false;
+        bool pointInRange = false;
+        itColor = newColorMap.begin();
+    
+        while ( itColor != newColorMap.end() )
+        {
+            if(itColor.key()<=0)
+            {
+                key = 0;
+                pointInZero = true;
+            }else if(itColor.key()> m_range)
+            {
+                key = m_range;
+                pointInRange = true;
+            }else 
+            {
+                key = itColor.key();
+            }
+            m_transferFunction->addPointToColor( key, itColor.value() );
+            itColor++;
+        }
+        
+        itOpacity = newOpacityMap.begin();
+    
+        while ( itOpacity != newOpacityMap.end() )
+        {
+            if(itOpacity.key()<0)
+            {
+                key = 0;
+                pointInZero = true;
+            }else if(itOpacity.key()> m_range)
+            {
+                key = m_range;
+                pointInRange = true;
+            }else 
+            {
+                key = itOpacity.key();
+            }
+            m_transferFunction->addPointToOpacity( key, itOpacity.value() );
+            itOpacity++;
+        }
+        
+        m_transferFunction->setNewRange(0, m_range);
+        
+        if(!pointInZero)  m_transferFunction->addPointToOpacity( 0, 0.0 );
+        if(!pointInRange) m_transferFunction->addPointToOpacity( m_range, 0.0 );
 
         this->render();
         emit windowLevelChanged( window , level );
+        emit transferFunctionChanged ();
     }
     else
     {
@@ -494,6 +564,15 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
     }
 }
 
+void Q3DViewer::setNewTransferFunction( )
+{
+    if(m_newTransferFunction) delete m_newTransferFunction;
+
+    m_newTransferFunction = new TransferFunction(*m_transferFunction);
+    m_window = m_range;
+    m_level = m_range/2.0;
+}
+
 void Q3DViewer::resetOrientation()
 {
     switch( m_currentOrientation )
@@ -525,7 +604,11 @@ bool Q3DViewer::rescale()
         vtkImageData *image = m_mainVolume->getVtkData();
         double *range = image->GetScalarRange();
         double min = range[0], max = range[1];
-        DEBUG_LOG( QString( "Q3DViewer: m_mainVolume scalar range: min = %1, max = %2" ).arg( min ).arg( max ) );
+        m_range = max - min; 
+        m_shift = - min; 
+        m_window = m_range;
+        m_level = (m_range/2.0); //Sabem que el mínim és 0
+        DEBUG_LOG( QString( "Q3DViewer: m_mainVolume scalar range: min = %1, max = %2, range = %3, shift = %4" ).arg( min ).arg( max ).arg( m_range ).arg( m_shift ) );
 
         if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
         {
@@ -537,29 +620,34 @@ bool Q3DViewer::rescale()
         else
         {
             double shift = -min;
-            double slope = 255.0 / ( max - min );
+            //double slope = 255.0 / ( max - min );
+            double slope = 1.0;
 
             vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
             rescaler->SetInput( image );
             rescaler->SetShift( shift );
             rescaler->SetScale( slope );
-            rescaler->SetOutputScalarTypeToUnsignedChar();
+            //Ho psoem en unsigned short per tal de mantenir tota la informació
+            //Desavantatge: ocupa més memòria
+            //rescaler->SetOutputScalarTypeToUnsignedChar();
+            rescaler->SetOutputScalarTypeToUnsignedShort();
             rescaler->ClampOverflowOn();
             rescaler->Update();
             m_imageCaster->SetInput( rescaler->GetOutput() );
 
-            double *newRange = rescaler->GetOutput()->GetScalarRange();
-            DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
 
             rescaler->GetOutput()->ReleaseDataFlagOn();    // necessari per alliberar memòria intermitja que ja no necessitem
 
             rescaler->Delete();
 
-            emit scalarRange( 0, 255 );
+            emit scalarRange( 0, m_range );
         }
 
-        m_imageCaster->SetOutputScalarTypeToUnsignedChar();
+        //m_imageCaster->SetOutputScalarTypeToUnsignedChar();
+        m_imageCaster->SetOutputScalarTypeToUnsignedShort();
         m_imageCaster->Update();
+            double *newRange = m_imageCaster->GetOutput()->GetScalarRange();
+            DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
 
         return true;
     }

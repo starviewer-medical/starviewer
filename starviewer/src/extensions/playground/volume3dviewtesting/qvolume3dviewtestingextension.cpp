@@ -145,6 +145,9 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_clutEditToolButton, SIGNAL( clicked() ), SLOT( toggleClutEditor() ) );
     connect( m_hidePushButton, SIGNAL( clicked() ), SLOT( hideClutEditor() ) );
 
+    connect( m_3DView, SIGNAL( transferFunctionChanged () ), SLOT( changeViewerTransferFunction() ) );
+    connect( this, SIGNAL( newTransferFunction () ), m_3DView, SLOT( setNewTransferFunction() ) );
+
     // visor 3d
     connect( m_3DView, SIGNAL( scalarRange(double,double) ), SLOT( setScalarRange(double,double) ) );
 }
@@ -168,6 +171,7 @@ void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
         m_currentClut.addPoint( min, QColor( 0, 0, 0, 0 ) );
         m_currentClut.addPoint( max, QColor( 255, 255, 255, 255 ) );
         m_firstInput = false;
+        emit newTransferFunction ();
     }
 }
 
@@ -260,9 +264,16 @@ void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut, bo
     m_gradientEditor->setTransferFunction( m_currentClut );
     m_editorByValues->setTransferFunction( m_currentClut );
     m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
+    emit newTransferFunction();
     this->render();
 }
 
+void QVolume3DViewTestingExtension::changeViewerTransferFunction( )
+{
+    //Actualitzem l'editor de cluts quan es canvia per la funció pel w/l del visor
+    m_gradientEditor->setTransferFunction( *(m_3DView->getTransferFunction()) );
+    m_editorByValues->setTransferFunction( *(m_3DView->getTransferFunction()) );
+}
 
 void QVolume3DViewTestingExtension::readSettings()
 {
@@ -362,6 +373,7 @@ void QVolume3DViewTestingExtension::loadClut()
         QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
         currentEditor->setTransferFunction( *transferFunction );
         delete transferFunction;
+        emit newTransferFunction();
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
         settings.setValue( "customClutsDir", transferFunctionFileInfo.absolutePath() );

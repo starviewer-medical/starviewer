@@ -80,6 +80,11 @@ private slots:
     void applyEditorClut();
     void toggleClutEditor();
     void hideClutEditor();
+    void changeViewerTransferFunction();
+
+signals:
+
+    void newTransferFunction();
 
 private:
     /// El volum d'input

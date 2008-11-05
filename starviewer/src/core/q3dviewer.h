@@ -96,7 +96,9 @@ public slots:
 
     /// Li assignem la funció de transferència que volem aplicar
     void setTransferFunction( TransferFunction *transferFunction );
+    TransferFunction * getTransferFunction( ){return m_transferFunction;}
     void setWindowLevel( double window , double level );
+    void setNewTransferFunction( );
 
     /// Paràmetres d'especularitat
     void setSpecular( bool on );
@@ -123,6 +125,7 @@ signals:
     void scalarRange( double min, double max );
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
+    void transferFunctionChanged ();
 
 private:
     /// fa la visualització per raycasting
@@ -205,6 +208,7 @@ private:
 
     /// La funció de transferència que s'aplica
     TransferFunction *m_transferFunction;
+    TransferFunction *m_newTransferFunction;
 
     /// Booleà per saber si estem fent el primer render (per reiniciar l'orientació).
     bool m_firstRender;
@@ -220,6 +224,8 @@ private:
     /// Valors de window i level
     double m_window;
     double m_level;
+    double m_range;
+    double m_shift;
 
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
     vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;

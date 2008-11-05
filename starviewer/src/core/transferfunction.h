@@ -96,15 +96,20 @@ public:
 
     /// Retorna els punts x de color. Per accedir al valor d'un punt cal cridar getColor( x ).
     QList< double > getColorPoints() const;
+    QMap< double, QColor > getColorMap() const;
 
     /// Retorna els punts x d'opacitat. Per accedir al valor d'un punt cal cridar getOpacity( x ).
     QList< double > getOpacityPoints() const;
+    QMap< double, double > getOpacityMap() const;
 
     /// Retorna la funció de transferència de color en format VTK.
     vtkColorTransferFunction * getColorTransferFunction() const;
 
     /// Retorna la funció de transferència d'opacitat en format VTK.
     vtkPiecewiseFunction * getOpacityTransferFunction() const;
+
+    /// Estableix un nou rang.
+    bool setNewRange(double min, double max);
 
     /// Escriu la funció de transferència a la sortida estàndard (per a debug).
     void print() const;
