@@ -250,7 +250,10 @@ void Q2DViewerPresentationStateAttacher::applyShutterTransformation()
     vtkImageData *output = shutter->getOutput();
     if( output )
     {
-        m_2DViewer->getImageActor()->SetInput( output );
+		// TODO això ho hauria de fer el propi Q2DViewer de
+		// forma transparent
+        //m_2DViewer->getImageActor()->SetInput( output );
+		DEBUG_LOG("*************** applyShutterTransform() : Pendent d'implementar!");
     }
 }
 
