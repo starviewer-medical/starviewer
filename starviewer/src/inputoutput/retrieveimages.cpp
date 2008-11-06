@@ -182,8 +182,9 @@ void RetrieveImages::storeSCPCallback(
         */
         if ( (imageDataSet) && ( *imageDataSet ) )
         {
+            QString imageFilenameToSave = getCompositeInstanceFileName(*imageDataSet);
+
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
-            DICOMTagReader *dicomTagReader = new DICOMTagReader(cbdata->imageFileName, new DcmDataset((**imageDataSet)));
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();//proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
             DICOMImage retrievedImage( * imageDataSet );
 
@@ -193,13 +194,15 @@ void RetrieveImages::storeSCPCallback(
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
-            if ( save(cbdata, dicomTagReader).bad() )
+            if ( save(cbdata, imageFilenameToSave).bad() )
             {
                 piSingleton->setError( retrievedImage.getStudyUID() );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
             }
 
             m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
+
+            DICOMTagReader *dicomTagReader = new DICOMTagReader(imageFilenameToSave, new DcmDataset((**imageDataSet)));
 
             /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in
             * the request.
@@ -242,7 +245,7 @@ void RetrieveImages::storeSCPCallback(
     return;
 }
 
-OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, DICOMTagReader *dicomTagReader)
+OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, QString imageFileNameToSave)
 {
     OFBool opt_useMetaheader = OFTrue;
     E_EncodingType    opt_sequenceType = EET_ExplicitLength;
@@ -256,7 +259,7 @@ OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, DICOMTagR
     if (xfer == EXS_Unknown) xfer = storeCallbackData->dcmff->getDataset()->getOriginalXfer();
 
     return storeCallbackData->dcmff->saveFile(
-            qPrintable( QDir::toNativeSeparators( getCompositeInstancePath(dicomTagReader) + "/" + storeCallbackData->imageFileName) ),
+            qPrintable(QDir::toNativeSeparators(imageFileNameToSave)),
             xfer, opt_sequenceType, opt_groupLength, opt_paddingType, (Uint32)opt_filepad, (Uint32)opt_itempad, !opt_useMetaheader );
 }
 
@@ -419,22 +422,28 @@ Status RetrieveImages::retrieve()
     return state;
 }
 
-QString RetrieveImages::getCompositeInstancePath(DICOMTagReader *dicomTagReader)
+QString RetrieveImages::getCompositeInstanceFileName(DcmDataset *imageDataset)
 {
     QString studyPath, seriesPath;
     StarviewerSettings settings;
     QDir directory;
+    const char *text;
 
-    studyPath = settings.getCacheImagePath() + dicomTagReader->getAttributeByName(DCM_StudyInstanceUID);
+    imageDataset->findAndGetString(DCM_StudyInstanceUID, text, false);
+    studyPath = settings.getCacheImagePath() + text;
 
     //comprovem, si el directori de l'estudi ja està creat
     if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
 
-    seriesPath = studyPath + "/" + dicomTagReader->getAttributeByName(DCM_SeriesInstanceUID);
+    imageDataset->findAndGetString( DCM_SeriesInstanceUID , text , false );
+    seriesPath = studyPath + "/" + text;
 
     //comprovem, si el directori de la sèrie ja està creat, sinó el creem
     if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
-    return seriesPath;
+
+    imageDataset->findAndGetString( DCM_SOPInstanceUID , text , false );
+
+    return seriesPath + "/" + text;
 }
 
 }

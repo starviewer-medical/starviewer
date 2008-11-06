@@ -148,6 +148,9 @@ private :
     ///Esborra l'estudi del disc dur
     void deleteStudyFromHardDisk(const QString &studyInstanceToDelete);
 
+    ///Crea i guarda el thumbnails de les sèries de l'estudi al directori on estan guardades les imatges de cada serie
+    void createSeriesThumbnails(Study *studyToGenerateSeriesThumbnails);
+
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);
 

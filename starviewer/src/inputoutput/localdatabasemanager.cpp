@@ -92,6 +92,11 @@ void LocalDatabaseManager::save(Patient *newPatient)
 
     dbConnect.close();
 
+    foreach(Study *study, newPatient->getStudies())
+    {
+        createSeriesThumbnails(study);
+    }
+
     setLastError(status);
 }
 
@@ -800,6 +805,18 @@ void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceT
         m_lastError = LocalDatabaseManager::DeletingFilesError;
     else
        m_lastError = LocalDatabaseManager::Ok;
+}
+
+void LocalDatabaseManager::createSeriesThumbnails(Study *studyToGenerateSeriesThumbnails)
+{
+    QString seriesPath, studyPath = getStudyPath(studyToGenerateSeriesThumbnails->getInstanceUID());
+
+    foreach(Series *series, studyToGenerateSeriesThumbnails->getSeries())
+    {
+        seriesPath = studyPath + "/" + series->getInstanceUID();
+        DEBUG_LOG("INTENTARE GENERAR THUMBNAIL");
+        series->getThumbnail().save(seriesPath + "/thumbnail", "PNG");
+    }
 }
 
 void LocalDatabaseManager::setLastError(int sqliteLastError)
