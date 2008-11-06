@@ -735,6 +735,9 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
+     <property name="opaqueResize">
+      <bool>false</bool>
+     </property>
      <widget class="QWidget" name="" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
