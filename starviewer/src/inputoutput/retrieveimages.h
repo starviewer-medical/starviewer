@@ -104,10 +104,10 @@ private:
     static void subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_Association **subAssoc );
 
     ///Guarda una composite instance descarregada
-    static OFCondition save(StoreCallbackData *storeCallbackData, DICOMTagReader * dataset);
+    static OFCondition save(StoreCallbackData *storeCallbackData, QString imageFileNameToSave);
 
-    ///Retorna el path del directori on s'ha de guardar la composite instance descarregada, si el directori on s'ha de guardar no existeix el crea
-    static QString getCompositeInstancePath(DICOMTagReader *dicomTagReader);
+    ///Retorna el nom del fitxer amb que s'ha de guardar l'objecte descarregat, composa el path on s'ha de guardar + el nom del fitxer, si el path on s'ha de guardar la imatge no existeix el crea
+    static QString getCompositeInstanceFileName(DcmDataset *imageDataset);
 };
 };
 #endif
