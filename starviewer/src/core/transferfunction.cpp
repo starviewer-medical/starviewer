@@ -254,6 +254,8 @@ bool TransferFunction::setNewRange( double min, double max )
     }
 
     m_changed = m_colorChanged = m_opacityChanged = true;
+
+	return true;
 }
 
 void TransferFunction::print() const
