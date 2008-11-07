@@ -136,7 +136,7 @@ vtkRenderer *Q2DViewer::getRenderer()
 
 void Q2DViewer::createAnnotations()
 {
-    // contenidor d'anotacions 
+    // contenidor d'anotacions
     m_cornerAnnotations = vtkCornerAnnotation::New();
     m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
     m_cornerAnnotations->GetTextProperty()->ShadowOff();
@@ -613,7 +613,7 @@ void Q2DViewer::addActors()
     Q_ASSERT( m_scalarBar );
     Q_ASSERT( m_imageActor );
 
-    // anotacions de texte 
+    // anotacions de texte
     this->getRenderer()->AddViewProp( m_cornerAnnotations );
     this->getRenderer()->AddViewProp( m_patientOrientationTextActor[0] );
     this->getRenderer()->AddViewProp( m_patientOrientationTextActor[1] );
@@ -812,7 +812,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_thickSlabProjectionFilter->SetInput( m_mainVolume->getVtkData() );
     m_thickSlabProjectionFilter->SetProjectionDimension( m_lastView );
     m_thickSlabProjectionFilter->SetAccumulatorType( (AccumulatorFactory::AccumulatorType) m_slabProjectionMode );
-    m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice );
+    m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
     m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
     m_thickSlabProjectionFilter->SetStep( m_numberOfPhases );
 
@@ -1122,9 +1122,11 @@ void Q2DViewer::setSlice( int value )
         this->checkAndUpdateSliceValue( value );
         if( isThickSlabActive() )
         {
-            m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice );
+            m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
             // TODO cal actualitzar aquest valor?
             m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
+            m_thickSlabProjectionFilter->Print( std::cout );
+            std::cout << "-------" << std::endl;
             //si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
@@ -1148,6 +1150,10 @@ void Q2DViewer::setPhase( int value )
             value = m_numberOfPhases - 1;
 
         m_currentPhase = value;
+        if( isThickSlabActive() )
+        {
+            m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
+        }
         this->updateDisplayExtent();
 		updateSliceAnnotationInformation();
         emit phaseChanged( m_currentPhase );
@@ -1803,7 +1809,7 @@ void Q2DViewer::updatePatientAnnotationInformation()
                     .arg( study->getAccessionNumber() )
                     .arg( study->getDateAsString() )
                     .arg( study->getTimeAsString() ); // TODO seria més correcte mostrar l'hora de la sèrie i inclús de la imatge
-	
+
 		if( series->getModality() == "MG" )
 		{
 			m_lowerRightText.clear();
@@ -1834,7 +1840,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
 {
     Q_ASSERT( m_cornerAnnotations );
 	Q_ASSERT( m_mainVolume );
-	
+
 	if( m_mainVolume->getSeries()->getModality() == "MG" )
 	{
 		m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
@@ -1893,7 +1899,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
     {
         QString lowerLeftText;
 		// TODO ara només tenim en compte de posar l'slice location si estem en la vista "original"
-		if( m_lastView == Q2DViewer::Axial ) 
+		if( m_lastView == Q2DViewer::Axial )
 		{
 			Image *image = getCurrentDisplayedImage();
 			if( image )
@@ -1903,7 +1909,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
 				{
 					if( location.indexOf('.') != -1 )
 						location = location.left( location.indexOf('.') + 3 );
-					
+
 					lowerLeftText += tr("Loc: %1\n").arg( location );
 				}
 			}
@@ -2210,7 +2216,7 @@ void Q2DViewer::setSlabThickness( int thickness )
 
     if( isThickSlabActive() )
     {
-        m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice );
+        m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
         m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
         updateDisplayExtent();
         updateSliceAnnotationInformation();
