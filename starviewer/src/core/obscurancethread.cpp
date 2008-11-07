@@ -44,7 +44,7 @@ void ObscuranceThread::setGradientEstimator( vtkEncodedGradientEstimator *gradie
 }
 
 
-void ObscuranceThread::setData( const uchar * data, int dataSize, const int dimensions[3], const int increments[3] )
+void ObscuranceThread::setData( const ushort *data, int dataSize, const int dimensions[3], const int increments[3] )
 {
     m_data = data;
     m_dataSize = dataSize;
@@ -108,10 +108,10 @@ void ObscuranceThread::runDensity() // optimitzat
     int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
     int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
-    QStack< QPair<uchar,Vector3> > unresolvedVoxels;
+    QStack< QPair<ushort,Vector3> > unresolvedVoxels;
     unresolvedVoxels.reserve( dimX );   // amb això assegurem que tenim la capacitat necessària en el cas pitjor
 
-    const uchar * dataPtr = m_data + m_startDelta;
+    const ushort *dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -127,7 +127,7 @@ void ObscuranceThread::runDensity() // optimitzat
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
         {
             // tractar el vòxel
-            uchar value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+            ushort value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
 
             while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= value )
             {
@@ -179,10 +179,10 @@ void ObscuranceThread::runDensitySmooth()
     int dimX = m_dimensions[x], dimY = m_dimensions[y], dimZ = m_dimensions[z];
     int incX = sX * m_increments[x], incY = sY * m_increments[y], incZ = sZ * m_increments[z];
 
-    QStack< QPair<uchar,Vector3> > unresolvedVoxels;
-    QLinkedList< QPair<uchar,Vector3> > postponedVoxels;
+    QStack< QPair<ushort,Vector3> > unresolvedVoxels;
+    QLinkedList< QPair<ushort,Vector3> > postponedVoxels;
 
-    const unsigned char * dataPtr = m_data + m_startDelta;
+    const unsigned short * dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -197,10 +197,10 @@ void ObscuranceThread::runDensitySmooth()
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
         {
             // tractar el vòxel
-            unsigned char value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+            unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
 
-            QLinkedList< QPair<uchar,Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
-            QLinkedList< QPair<uchar,Vector3> >::iterator itPostponedVoxelsEnd = postponedVoxels.end();
+            QLinkedList< QPair<ushort,Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
+            QLinkedList< QPair<ushort,Vector3> >::iterator itPostponedVoxelsEnd = postponedVoxels.end();
 
             while ( itPostponedVoxels != itPostponedVoxelsEnd )
             {
@@ -244,7 +244,7 @@ void ObscuranceThread::runDensitySmooth()
 
             while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= value )
             {
-                QPair<uchar,Vector3> uPair = unresolvedVoxels.pop();
+                QPair<ushort,Vector3> uPair = unresolvedVoxels.pop();
                 Vector3 ru = uPair.second;
                 Voxel u = { qRound( ru.x ), qRound( ru.y ), qRound( ru.z ) };
 
@@ -327,7 +327,7 @@ void ObscuranceThread::runOpacity()
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
 
-    const unsigned char * dataPtr = m_data + m_startDelta;
+    const unsigned short * dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -341,7 +341,7 @@ void ObscuranceThread::runOpacity()
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
         {
             // tractar el vòxel
-            unsigned char value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+            unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity( value );
 
             while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= opacity )
@@ -397,7 +397,7 @@ void ObscuranceThread::runOpacitySmooth()
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
 
-    const unsigned char * dataPtr = m_data + m_startDelta;
+    const unsigned short * dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -412,7 +412,7 @@ void ObscuranceThread::runOpacitySmooth()
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
         {
             // tractar el vòxel
-            unsigned char value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+            unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity( value );
 
             QLinkedList< QPair<double,Vector3> >::iterator itPostponedVoxels = postponedVoxels.begin();
@@ -543,7 +543,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
 
     QStack< QPair<double,Vector3> > unresolvedVoxels;
 
-    const unsigned char * dataPtr = m_data + m_startDelta;
+    const unsigned short * dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -557,7 +557,7 @@ void ObscuranceThread::runOpacitySaliency()    // = runOpacity() (de moment)
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
         {
             // tractar el vòxel
-            unsigned char value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+            unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity( value );
 
             while ( !unresolvedVoxels.isEmpty() && unresolvedVoxels.top().first <= opacity )
@@ -614,7 +614,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
 
-    const unsigned char * dataPtr = m_data + m_startDelta;
+    const unsigned short * dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -630,7 +630,7 @@ void ObscuranceThread::runOpacitySmoothSaliency()
         {
             // tractar el vòxel
             int vIndex = v.x * incX + v.y * incY + v.z * incZ;  // índex de v (sense el delta)
-            unsigned char value = dataPtr[vIndex];
+            unsigned short value = dataPtr[vIndex];
             double opacity = m_transferFunction.getOpacity( value );
             double fxSaliency = 1.0 + m_saliency[m_startDelta + vIndex] * ( m_fxSaliencyA + m_fxSaliencyB ) - m_fxSaliencyA;
             if ( fxSaliency < m_fxSaliencyLow ) fxSaliency = minFxSaliency;
@@ -768,7 +768,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
 
-    const unsigned char * dataPtr = m_data + m_startDelta;
+    const unsigned short * dataPtr = m_data + m_startDelta;
     int nLineStarts = m_lineStarts.size();
 
     // iterar per cada línia
@@ -783,7 +783,7 @@ void ObscuranceThread::runOpacityColorBleeding()    /// \todo encara és smooth
         while ( v.x < dimX && v.y < dimY && v.z < dimZ )
         {
             // tractar el vòxel
-            unsigned char value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
+            unsigned short value = dataPtr[v.x * incX + v.y * incY + v.z * incZ];
             double opacity = m_transferFunction.getOpacity( value );
             QColor vColor = m_transferFunction.getColor( value );
             Vector3 vColorVector( vColor.redF(), vColor.greenF(), vColor.blueF() );
@@ -919,7 +919,7 @@ void ObscuranceThread::runOpacitySmoothColorBleeding()
     QStack< QPair<double,Vector3> > unresolvedVoxels;
     QLinkedList< QPair<double,Vector3> > postponedVoxels;
 
-    const unsigned char *dataPtr = m_data + m_startDelta;
+    const unsigned short *dataPtr = m_data + m_startDelta;
     const int nLineStarts = m_lineStarts.size();
 
     // u és el tapat, v és el que tapa
