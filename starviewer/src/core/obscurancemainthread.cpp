@@ -94,7 +94,7 @@ void ObscuranceMainThread::run()
 
     // variables necessàries
     vtkImageData *image = mapper->GetInput();
-    unsigned char *data = reinterpret_cast<unsigned char*>( image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    unsigned short *data = reinterpret_cast<unsigned short*>( image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     int dataSize = image->GetPointData()->GetScalars()->GetSize();
     int dimensions[3];
     image->GetDimensions( dimensions );
