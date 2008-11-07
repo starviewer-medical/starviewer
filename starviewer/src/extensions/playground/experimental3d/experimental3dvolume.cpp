@@ -62,13 +62,13 @@ vtkVolume* Experimental3DVolume::getVolume() const
 }
 
 
-unsigned char Experimental3DVolume::getRangeMin() const
+unsigned short Experimental3DVolume::getRangeMin() const
 {
     return m_rangeMin;
 }
 
 
-unsigned char Experimental3DVolume::getRangeMax() const
+unsigned short Experimental3DVolume::getRangeMax() const
 {
     return m_rangeMax;
 }
@@ -228,31 +228,19 @@ void Experimental3DVolume::createImage( Volume *volume )
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "original range: min = %1, max = %2" ).arg( min ).arg( max ) );
 
+    double shift = -min;
+
     // fem servir directament un vtkImageShiftScale, que permet fer castings també
     vtkImageShiftScale *imageShiftScale = vtkImageShiftScale::New();
     imageShiftScale->SetInput( volume->getVtkData() );
-    imageShiftScale->SetOutputScalarTypeToUnsignedChar();
-
-    if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
-    {
-        m_rangeMin = static_cast<unsigned char>( qRound( min ) );
-        m_rangeMax = static_cast<unsigned char>( qRound( max ) );
-    }
-    else    // si està fora del rang cal scalar i desplaçar
-    {
-        double shift = -min;
-        double scale = 255.0 / ( max - min );
-
-        imageShiftScale->SetShift( shift );
-        imageShiftScale->SetScale( scale );
-
-        m_rangeMin = 0; m_rangeMax = 255;
-    }
-
+    imageShiftScale->SetOutputScalarTypeToUnsignedShort();
+    imageShiftScale->SetShift( shift );
     imageShiftScale->Update();
 
+    m_rangeMin = 0; m_rangeMax = static_cast<unsigned short>( max + shift );
+
     m_image = imageShiftScale->GetOutput(); m_image->Register( 0 ); // el register és necessari (comprovat)
-    m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_data = reinterpret_cast<unsigned short*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
 
     imageShiftScale->Delete();
@@ -269,9 +257,9 @@ void Experimental3DVolume::createVolumeRayCastFunctions()
 void Experimental3DVolume::createVoxelShaders()
 {
     m_ambientVoxelShader = new AmbientVoxelShader();
-    m_ambientVoxelShader->setData( m_data );
+    m_ambientVoxelShader->setData( m_data, m_rangeMax );
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
-    m_directIlluminationVoxelShader->setData( m_data );
+    m_directIlluminationVoxelShader->setData( m_data, m_rangeMax );
     m_contourVoxelShader = new ContourVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();

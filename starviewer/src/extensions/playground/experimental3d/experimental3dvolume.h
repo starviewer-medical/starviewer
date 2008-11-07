@@ -41,9 +41,9 @@ public:
     /// Retorna el vtkVolume.
     vtkVolume* getVolume() const;
     /// Retorna el valor de propietat mínim.
-    unsigned char getRangeMin() const;
+    unsigned short getRangeMin() const;
     /// Retorna el valor de propietat màxim.
-    unsigned char getRangeMax() const;
+    unsigned short getRangeMax() const;
     /// Retorna la mida (nombre de vòxels) del volum.
     unsigned int getSize() const;
 
@@ -83,12 +83,12 @@ private:
     vtkImageData *m_image;
 
     /// Valor de propietat mínim.
-    unsigned char m_rangeMin;
+    unsigned short m_rangeMin;
     /// Valor de propietat màxim.
-    unsigned char m_rangeMax;
+    unsigned short m_rangeMax;
 
     /// Dades del model de vòxels principal
-    unsigned char *m_data;
+    unsigned short *m_data;
     /// Mida de les dades.
     unsigned int m_dataSize;
 

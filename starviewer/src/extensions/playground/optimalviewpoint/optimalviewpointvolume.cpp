@@ -289,48 +289,30 @@ void OptimalViewpointVolume::createImages( vtkImageData *image )
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "[OVV] min = %1, max = %2" ).arg( min ).arg( max ) );
 
-    if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
-    {
-        // cal fer el casting perquè ens arriba com a int
-        vtkImageCast *caster = vtkImageCast::New();
-        caster->SetInput( image );
-        caster->SetOutputScalarTypeToUnsignedChar();
-        caster->Update();
+    double shift = -min;
 
-        m_image = caster->GetOutput(); m_image->Register( 0 );  // el register és necessari (comprovat)
-        caster->Delete();
+    vtkImageShiftScale *shifter = vtkImageShiftScale::New();
+    shifter->SetInput( image );
+    shifter->SetShift( shift );
+    shifter->SetScale( 1 );
+    shifter->SetOutputScalarTypeToUnsignedChar();
+    shifter->ClampOverflowOn();
+    shifter->Update();
 
-        m_rangeMin = static_cast<unsigned char>( qRound( min ) );
-        m_rangeMax = static_cast<unsigned char>( qRound( max ) );
-    }
-    else
-    {
-        double shift = -min;
-        double slope = 255.0 / ( max - min );
+    m_image = shifter->GetOutput(); m_image->Register( 0 ); // el register és necessari (comprovat)
+    shifter->Delete();
 
-        vtkImageShiftScale *shifter = vtkImageShiftScale::New();
-        shifter->SetInput( image );
-        shifter->SetShift( shift );
-        shifter->SetScale( slope );
-        shifter->SetOutputScalarTypeToUnsignedChar();
-        shifter->ClampOverflowOn();
-        shifter->Update();
+    m_rangeMin = 0; m_rangeMax = static_cast<unsigned short>( max + shift );
 
-        m_image = shifter->GetOutput(); m_image->Register( 0 ); // el register és necessari (comprovat)
-        shifter->Delete();
-
-        m_rangeMin = 0; m_rangeMax = 255;
-
-        double *newRange = m_image->GetScalarRange();
-        DEBUG_LOG( QString( "[OVV] new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
-    }
+    double *newRange = m_image->GetScalarRange();
+    DEBUG_LOG( QString( "[OVV] new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
 
     m_labeledImage = 0;
 
     m_clusterImage = 0;
     m_clusterFirstSlice = 0; m_clusterLastSlice = 65535;
 
-    m_data = reinterpret_cast<unsigned char*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_data = reinterpret_cast<unsigned short*>( m_image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_labeledData = 0;
 
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
@@ -340,9 +322,9 @@ void OptimalViewpointVolume::createImages( vtkImageData *image )
 void OptimalViewpointVolume::createVoxelShaders()
 {
     m_ambientVoxelShader = new AmbientVoxelShader();
-    m_ambientVoxelShader->setData( m_data );
+    m_ambientVoxelShader->setData( m_data, m_rangeMax );
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
-    m_directIlluminationVoxelShader->setData( m_data );
+    m_directIlluminationVoxelShader->setData( m_data, m_rangeMax );
     m_contourVoxelShader = new ContourVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
@@ -763,7 +745,7 @@ unsigned char OptimalViewpointVolume::segmentateVolume( unsigned short iteration
 
 
 
-
+/// \warning Això és molt probable que no funcioni pel canvia d'unsigned char a unsigned short!
 void OptimalViewpointVolume::labelize( const QVector< unsigned char > & limits )
 {
     if ( !m_labeledData )
@@ -772,11 +754,11 @@ void OptimalViewpointVolume::labelize( const QVector< unsigned char > & limits )
     }
 
 
-    unsigned char * fixIt = m_data;
+    unsigned short * fixIt = m_data;
 //    IteratorType grounIt(GrounImage, GrounImage->GetBufferedRegion());
     unsigned char * segIt = m_labeledData;
 //     unsigned char * seg2It = m_segmentedData;    // ja no cal
-    unsigned char * fixItEnd = m_data + m_dataSize;
+    unsigned short * fixItEnd = m_data + m_dataSize;
 
 //     int cont = 0;
 
