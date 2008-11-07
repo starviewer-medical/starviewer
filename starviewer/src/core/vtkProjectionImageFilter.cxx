@@ -61,6 +61,8 @@ void vtkProjectionImageFilter::PrintSelf(ostream& os, vtkIndent indent)
     os << indent << "FirstSlice: " << FirstSlice << "\n";
     os << indent << "NumberOfSlicesToProject: " << NumberOfSlicesToProject << "\n";
     os << indent << "Step: " << Step << "\n";
+
+    os << std::flush;
 }
 
 
@@ -78,11 +80,18 @@ int vtkProjectionImageFilter::RequestInformation (
 
     inInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),extent);
 
+    DEBUG_LOG( QString( "inWholeExtent: %1 %2 %3 %4 %5 %6" ).arg(extent[0]).arg(extent[1]).arg(extent[2]).arg(extent[3]).arg(extent[4]).arg(extent[5]) );
+
     // \TODO aquí hi hauria d'anar un 0 per la versió final
-    extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = FirstSlice;
+//     extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = FirstSlice;
+    extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = FirstSlice / Step;    // First = llesca * nFases + fase
+                                                                                            // nFases = Step
+                                                                                            // First / Step = llesca :)
 //     extent[2*ProjectionDimension] = extent[2*ProjectionDimension+1] = 0;
 
     outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(),extent,6);
+
+    DEBUG_LOG( QString( "outWholeExtent: %1 %2 %3 %4 %5 %6" ).arg(extent[0]).arg(extent[1]).arg(extent[2]).arg(extent[3]).arg(extent[4]).arg(extent[5]) );
 
     return 1;
 }
@@ -98,7 +107,12 @@ int vtkProjectionImageFilter::RequestUpdateExtent(
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
 
     inInfo->Get(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), wholeExtent);
+
+    DEBUG_LOG( QString( "inWholeExtent: %1 %2 %3 %4 %5 %6" ).arg(wholeExtent[0]).arg(wholeExtent[1]).arg(wholeExtent[2]).arg(wholeExtent[3]).arg(wholeExtent[4]).arg(wholeExtent[5]) );
+
     outInfo->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), updateExtent);
+
+    DEBUG_LOG( QString( "outUpdateExtent: %1 %2 %3 %4 %5 %6" ).arg(updateExtent[0]).arg(updateExtent[1]).arg(updateExtent[2]).arg(updateExtent[3]).arg(updateExtent[4]).arg(updateExtent[5]) );
 
     // TODO veure això de l'extent
     updateExtent[2*ProjectionDimension] = FirstSlice;
@@ -107,6 +121,8 @@ int vtkProjectionImageFilter::RequestUpdateExtent(
 //     updateExtent[2*ProjectionDimension+1] = 0;
 
     inInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), updateExtent, 6);
+
+    DEBUG_LOG( QString( "inUpdateExtent: %1 %2 %3 %4 %5 %6" ).arg(updateExtent[0]).arg(updateExtent[1]).arg(updateExtent[2]).arg(updateExtent[3]).arg(updateExtent[4]).arg(updateExtent[5]) );
 
     return 1;
 }
@@ -138,9 +154,9 @@ void vtkProjectionImageFilterExecute(vtkProjectionImageFilter *self,
     inMin1 = inExt[2*i1]; inMax1 = inExt[2*i1+1];
     inMinA = inExt[2*iA]; inMaxA = inExt[2*iA+1];
 
-//     DEBUG_LOG( QString( "inMin0 = %1, inMax0 = %2" ).arg( inMin0 ).arg( inMax0 ) );
-//     DEBUG_LOG( QString( "inMin1 = %1, inMax1 = %2" ).arg( inMin1 ).arg( inMax1 ) );
-//     DEBUG_LOG( QString( "inMinA = %1, inMaxA = %2" ).arg( inMinA ).arg( inMaxA ) );
+    DEBUG_LOG( QString( "inMin0 = %1, inMax0 = %2" ).arg( inMin0 ).arg( inMax0 ) );
+    DEBUG_LOG( QString( "inMin1 = %1, inMax1 = %2" ).arg( inMin1 ).arg( inMax1 ) );
+    DEBUG_LOG( QString( "inMinA = %1, inMaxA = %2" ).arg( inMinA ).arg( inMaxA ) );
     /*
     switch (projectionDimension)
     {
@@ -179,9 +195,13 @@ void vtkProjectionImageFilterExecute(vtkProjectionImageFilter *self,
 
     vtkIdType inInc0, inInc1, inIncA, outInc0, outInc1;
     inInc0 = inIncs[i0]; inInc1 = inIncs[i1]; inIncA = inIncs[iA];
+    DEBUG_LOG( QString( "inInc0 = %1" ).arg( inInc0 ) );
+    DEBUG_LOG( QString( "inInc1 = %1" ).arg( inInc1 ) );
+    DEBUG_LOG( QString( "inIncA = %1" ).arg( inIncA ) );
     outInc0 = outIncs[i0]; outInc1 = outIncs[i1];
 
     int step = self->GetStep();
+    DEBUG_LOG( QString( "step = %1" ).arg( step ) );
     unsigned long projectionSize = self->GetNumberOfSlicesToProject();
 
     // instantiate the accumulator
@@ -206,7 +226,7 @@ void vtkProjectionImageFilterExecute(vtkProjectionImageFilter *self,
             for ( int inIdxA = inMinA; inIdxA <= inMaxA && !self->AbortExecute; inIdxA += step )
             {
                 accumulator->accumulate( *inPtrA );
-                inPtrA += step * inIncA;
+                inPtrA += (step * inIncA);
             }
 
             *outPtr1 = accumulator->getValue();
@@ -228,10 +248,27 @@ void vtkProjectionImageFilter::ThreadedRequestData(vtkInformation *vtkNotUsed(re
                                                    vtkImageData ***inData, vtkImageData **outData,
                                                    int outExt[6], int id)
 {
-    void *inPtr = inData[0][0]->GetScalarPointerForExtent(outExt);
+    DEBUG_LOG( QString( "outExt: %1 %2 %3 %4 %5 %6" ).arg(outExt[0]).arg(outExt[1]).arg(outExt[2]).arg(outExt[3]).arg(outExt[4]).arg(outExt[5]) );
     void *outPtr = outData[0]->GetScalarPointerForExtent(outExt);
+    void *outPtr0 = outData[0]->GetScalarPointer();
+    int out1_0 = (int)outPtr - (int)outPtr0;
+    DEBUG_LOG( QString( "outPtr - outPtr0 = %1" ).arg( out1_0 ) );
 
     int inExt[6];
+    inputVector[0]->GetInformationObject(0)->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), inExt);
+    DEBUG_LOG( QString( "inExt: %1 %2 %3 %4 %5 %6" ).arg(inExt[0]).arg(inExt[1]).arg(inExt[2]).arg(inExt[3]).arg(inExt[4]).arg(inExt[5]) );
+
+    /// \warning Això funciona amb 2 nuclis, però amb més no ho sé!!!!!!!!!!!!!!!!
+    /// \warning Copiem la X i la Y de l'outExt
+    inExt[0] = outExt[0]; inExt[1] = outExt[1];
+    inExt[2] = outExt[2]; inExt[3] = outExt[3];
+
+    void *inPtr = inData[0][0]->GetScalarPointerForExtent(inExt);
+    void *inPtr0 = inData[0][0]->GetScalarPointer();
+    int in1_0 = (int)inPtr - (int)inPtr0;
+    DEBUG_LOG( QString( "inPtr - inPtr0 = %1" ).arg( in1_0 ) );
+
+    /// \warning Restaurem el valor original
     inputVector[0]->GetInformationObject(0)->Get(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), inExt);
 
     // this filter expects the output type to be same as input
