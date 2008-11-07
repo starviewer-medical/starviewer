@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>QPacsListBase</class>
  <widget class="QWidget" name="QPacsListBase" >
   <property name="geometry" >
@@ -24,6 +21,70 @@
    </property>
    <item row="0" column="0" >
     <widget class="QTreeWidget" name="m_PacsTreeView" >
+     <property name="palette" >
+      <palette>
+       <active>
+        <colorrole role="Highlight" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>49</red>
+           <green>106</green>
+           <blue>197</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="HighlightedText" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="Highlight" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>49</red>
+           <green>106</green>
+           <blue>197</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="HighlightedText" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="Highlight" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>49</red>
+           <green>106</green>
+           <blue>197</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="HighlightedText" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
      <property name="alternatingRowColors" >
       <bool>true</bool>
      </property>
@@ -64,7 +125,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
  <resources/>
  <connections/>
 </ui>
