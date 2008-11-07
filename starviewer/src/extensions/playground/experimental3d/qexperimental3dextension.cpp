@@ -383,6 +383,8 @@ void QExperimental3DExtension::computeCancelObscurance()
             m_viewer->render();
         }
 
+        m_obscuranceCheckBox->setEnabled( false );
+
         delete m_obscuranceMainThread;          // esborrem el thread d'abans
         delete m_obscurance; m_obscurance = 0;  // esborrem l'obscurança d'abans
 
@@ -445,13 +447,6 @@ void QExperimental3DExtension::endCancelObscurance()
 
 void QExperimental3DExtension::loadObscurance()
 {
-    if ( m_obscuranceCheckBox->isChecked() )
-    {
-        m_obscuranceCheckBox->setChecked( false );
-        m_volume->setObscurance( false, 0, 1.0, 0.0, 1.0 );
-        m_viewer->render();
-    }
-
     QSettings settings;
     settings.beginGroup( "Experimental3D" );
 
@@ -461,9 +456,18 @@ void QExperimental3DExtension::loadObscurance()
 
     if ( !obscuranceFileName.isNull() )
     {
+        if ( m_obscuranceCheckBox->isChecked() )
+        {
+            m_obscuranceCheckBox->setChecked( false );
+            m_volume->setObscurance( false, 0, 1.0, 0.0, 1.0 );
+            m_viewer->render();
+        }
+
+        m_obscuranceCheckBox->setEnabled( false );
+
         delete m_obscurance;
 
-        m_obscurance = new Obscurance( m_volume->getSize(), ObscuranceMainThread::hasColor( static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ) ) );
+        m_obscurance = new Obscurance( m_volume->getSize(), ObscuranceMainThread::hasColor( static_cast<ObscuranceMainThread::Variant>( m_obscuranceVariantComboBox->currentIndex() ) ), m_obscuranceDoublePrecisionRadioButton->isChecked() );
         bool ok = m_obscurance->load( obscuranceFileName );
 
         if ( ok )
