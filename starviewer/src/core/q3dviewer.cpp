@@ -468,10 +468,9 @@ void Q3DViewer::setInput( Volume* volume )
 
     if ( rescale() ) m_volumeMapper->SetInput( m_imageData );
 
-    vtkImageData *image = m_volumeMapper->GetInput();
-    unsigned char *data = reinterpret_cast<unsigned char*>( image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-    m_ambientVoxelShader->setData( data );
-    m_directIlluminationVoxelShader->setData( data );
+    unsigned short *data = reinterpret_cast<unsigned short*>( m_imageData->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
+    m_ambientVoxelShader->setData( data, m_range );
+    m_directIlluminationVoxelShader->setData( data, m_range );
 
     if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
     {

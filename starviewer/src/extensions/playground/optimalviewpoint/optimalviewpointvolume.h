@@ -233,10 +233,10 @@ private:
     unsigned short m_clusterFirstSlice, m_clusterLastSlice;
 
     /// Valors de propietat mínim i màxim del volum.
-    unsigned char m_rangeMin, m_rangeMax;
+    unsigned short m_rangeMin, m_rangeMax;
 
     /// Array dels valors principals.
-    unsigned char *m_data;
+    unsigned short *m_data;
     /// Array dels valors etiquetats.
     unsigned char *m_labeledData;
     /// Mida dels arrays de valors.
