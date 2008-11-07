@@ -49,7 +49,6 @@
 #include <vtkColorTransferFunction.h>
 #include <vtkPiecewiseFunction.h>
 // Casting
-#include <vtkImageCast.h>
 #include <vtkImageShiftScale.h>
 
 // interacció
@@ -75,7 +74,7 @@
 namespace udg {
 
 Q3DViewer::Q3DViewer( QWidget *parent )
- : QViewer( parent ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0), m_newTransferFunction(0)
+ : QViewer( parent ), m_imageData( 0 ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0), m_newTransferFunction(0)
 {
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();
@@ -86,7 +85,6 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 
     m_renderFunction = RayCasting; // per defecte
 
-    m_imageCaster = vtkImageCast::New();
     m_currentOrientation = Axial;
     m_orientationMarker = new Q3DOrientationMarker( this->getInteractor() );
 
@@ -220,8 +218,8 @@ void Q3DViewer::setWindowLevel( double window , double level )
     {
         m_window = window;
         m_level = level;
-        double lowLevel  = level - (window/2.0);
-        double highLevel = level + (window/2.0);
+//         double lowLevel  = level - (window/2.0);
+//         double highLevel = level + (window/2.0);
         //DEBUG_LOG( QString( "Q3DViewer: new ww = %1, new wl = %2, shift = %3, lowlev = %4, highlev = %5" ).arg( window ).arg( level ).arg( m_shift ).arg( lowLevel ).arg( highLevel ) );
 
         double newScale = m_window / m_range;
@@ -229,34 +227,34 @@ void Q3DViewer::setWindowLevel( double window , double level )
         QMap<double,QColor> newColorMap;
         QMap<double,QColor> colorMap = m_newTransferFunction->getColorMap();
         QMap< double, QColor >::iterator itColor;
-    
+
         itColor = colorMap.begin();
-    
+
         while ( itColor != colorMap.end() )
         {
             newColorMap.insert( newScale*itColor.key() + newShift, itColor.value() );
             itColor++;
         }
-    
+
         QMap<double,double> newOpacityMap;
         QMap<double,double> opacityMap = m_newTransferFunction->getOpacityMap();
         QMap< double, double >::iterator itOpacity;
-    
+
         itOpacity = opacityMap.begin();
-    
+
         while ( itOpacity != opacityMap.end() )
         {
             newOpacityMap.insert( newScale*itOpacity.key() + newShift, itOpacity.value() );
             itOpacity++;
         }
-    
+
         m_transferFunction->clear();
-        
-        int key;
+
+        double key;
         bool pointInZero = false;
         bool pointInRange = false;
         itColor = newColorMap.begin();
-    
+
         while ( itColor != newColorMap.end() )
         {
             if(itColor.key()<=0)
@@ -267,16 +265,16 @@ void Q3DViewer::setWindowLevel( double window , double level )
             {
                 key = m_range;
                 pointInRange = true;
-            }else 
+            }else
             {
                 key = itColor.key();
             }
             m_transferFunction->addPointToColor( key, itColor.value() );
             itColor++;
         }
-        
+
         itOpacity = newOpacityMap.begin();
-    
+
         while ( itOpacity != newOpacityMap.end() )
         {
             if(itOpacity.key()<0)
@@ -287,16 +285,16 @@ void Q3DViewer::setWindowLevel( double window , double level )
             {
                 key = m_range;
                 pointInRange = true;
-            }else 
+            }else
             {
                 key = itOpacity.key();
             }
             m_transferFunction->addPointToOpacity( key, itOpacity.value() );
             itOpacity++;
         }
-        
+
         m_transferFunction->setNewRange(0, m_range);
-        
+
         if(!pointInZero)  m_transferFunction->addPointToOpacity( 0, 0.0 );
         if(!pointInRange) m_transferFunction->addPointToOpacity( m_range, 0.0 );
 
@@ -468,7 +466,7 @@ void Q3DViewer::setInput( Volume* volume )
     delete currentPlane;
 
 
-    if ( rescale() ) m_volumeMapper->SetInput( m_imageCaster->GetOutput() );
+    if ( rescale() ) m_volumeMapper->SetInput( m_imageData );
 
     vtkImageData *image = m_volumeMapper->GetInput();
     unsigned char *data = reinterpret_cast<unsigned char*>( image->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
@@ -596,7 +594,7 @@ void Q3DViewer::resetOrientation()
     }
 }
 
-// reescalem entre 0 i 255 si el rang és més gran (el que passarà normalment); sinó el deixem igual
+// Desplacem les dades de manera que el mínim sigui 0 i ho convertim a un unsigned short, perquè el ray casting no accepta signed short.
 bool Q3DViewer::rescale()
 {
     if ( m_mainVolume )
@@ -604,50 +602,30 @@ bool Q3DViewer::rescale()
         vtkImageData *image = m_mainVolume->getVtkData();
         double *range = image->GetScalarRange();
         double min = range[0], max = range[1];
-        m_range = max - min; 
-        m_shift = - min; 
+        m_range = max - min;
+        m_shift = -min;
         m_window = m_range;
         m_level = (m_range/2.0); //Sabem que el mínim és 0
         DEBUG_LOG( QString( "Q3DViewer: m_mainVolume scalar range: min = %1, max = %2, range = %3, shift = %4" ).arg( min ).arg( max ).arg( m_range ).arg( m_shift ) );
 
-        if ( min >= 0.0 && max <= 255.0 )   // si ja està dins del rang que volem només cal fer un cast
-        {
-            // cal fer el casting perquè ens arriba com a int
-            m_imageCaster->SetInput( image );
+        vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
+        rescaler->SetInput( image );
+        rescaler->SetShift( m_shift );
+//         rescaler->SetScale( 1.0 );   // per defecte
+        //Ho psoem en unsigned short per tal de mantenir tota la informació
+        //Desavantatge: ocupa més memòria
+        rescaler->SetOutputScalarTypeToUnsignedShort();
+        rescaler->ClampOverflowOn();
+        rescaler->Update();
 
-            emit scalarRange( min, max );
-        }
-        else
-        {
-            double shift = -min;
-            //double slope = 255.0 / ( max - min );
-            double slope = 1.0;
+        m_imageData = rescaler->GetOutput(); m_imageData->Register( 0 );
 
-            vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
-            rescaler->SetInput( image );
-            rescaler->SetShift( shift );
-            rescaler->SetScale( slope );
-            //Ho psoem en unsigned short per tal de mantenir tota la informació
-            //Desavantatge: ocupa més memòria
-            //rescaler->SetOutputScalarTypeToUnsignedChar();
-            rescaler->SetOutputScalarTypeToUnsignedShort();
-            rescaler->ClampOverflowOn();
-            rescaler->Update();
-            m_imageCaster->SetInput( rescaler->GetOutput() );
+        rescaler->Delete();
 
+        emit scalarRange( 0, m_range );
 
-            rescaler->GetOutput()->ReleaseDataFlagOn();    // necessari per alliberar memòria intermitja que ja no necessitem
-
-            rescaler->Delete();
-
-            emit scalarRange( 0, m_range );
-        }
-
-        //m_imageCaster->SetOutputScalarTypeToUnsignedChar();
-        m_imageCaster->SetOutputScalarTypeToUnsignedShort();
-        m_imageCaster->Update();
-            double *newRange = m_imageCaster->GetOutput()->GetScalarRange();
-            DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
+        double *newRange = m_imageData->GetScalarRange();
+        DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
 
         return true;
     }
@@ -959,7 +937,7 @@ void Q3DViewer::renderTexture2D()
     // 128 és el que té millor relació qualitat/preu amb un model determinat a l'ordinador de la uni
 //     volumeMapper->SetMaximumNumberOfPlanes( 128 );
 
-    volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+    volumeMapper->SetInput( m_imageData );
     m_vtkVolume->SetMapper( volumeMapper );
     volumeMapper->Delete();
 
@@ -984,7 +962,7 @@ void Q3DViewer::renderTexture3D()
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     vtkVolumeTextureMapper3D *volumeMapper = vtkVolumeTextureMapper3D::New();
-    volumeMapper->SetInput( m_imageCaster->GetOutput()  );
+    volumeMapper->SetInput( m_imageData );
     m_vtkVolume->SetMapper( volumeMapper );
     volumeMapper->Delete();
 

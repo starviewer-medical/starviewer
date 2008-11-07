@@ -14,7 +14,7 @@
 
 // FWD declarations
 class vtkRenderer;
-class vtkImageCast;
+class vtkImageData;
 class vtkRenderWindowInteractor;
 class vtkInteractorStyle;
 class vtkVolume;
@@ -176,8 +176,8 @@ protected:
     RenderFunction m_renderFunction;
 
 private:
-    /// el caster de les imatges
-    vtkImageCast* m_imageCaster;
+    /// La imatge d'entrada dels mappers.
+    vtkImageData *m_imageData;
 
     /// Widget per veure la orientació en 3D
     Q3DOrientationMarker *m_orientationMarker;
