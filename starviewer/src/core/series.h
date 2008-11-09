@@ -209,7 +209,10 @@ public:
     QString toString(bool verbose = false);
 
     /// Obté la imatge de previsualització de la sèrie. Serà la imatge del mig.
-    QPixmap getThumbnail() const;
+    QPixmap getThumbnail();
+
+    ///Permet establir quin és el thumbnail de la sèrie
+    void setThumbnail(QPixmap seriesThumbnail);
 
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
@@ -310,6 +313,8 @@ private:
     QDate m_retrievedDate;
     QTime m_retrieveTime;
 
+    ///Guarda el thumbnail de la sèrie
+    QPixmap m_seriesThumbnail;
 };
 
 }

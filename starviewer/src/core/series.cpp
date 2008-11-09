@@ -9,6 +9,7 @@
 #include "image.h"
 #include "logging.h"
 #include "volumerepository.h"
+#include "thumbnailcreator.h"
 
 #include <QStringList>
 #include <QPainter>
@@ -16,7 +17,7 @@
 namespace udg {
 
 Series::Series(QObject *parent)
- : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1)
+ : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1), m_seriesThumbnail(NULL)
 {
 }
 
@@ -425,35 +426,20 @@ void Series::setSelectStatus( bool select )
     m_selected = select;
 }
 
-QPixmap Series::getThumbnail() const
+QPixmap Series::getThumbnail()
 {
-    QPixmap thumb;
-
-    if( m_modality == "KO" )
-        thumb.load(":/images/kinThumbnail.png");
-    else if( m_modality == "PR" )
-        thumb.load(":/images/presentationStateThumbnail.png");
-    else if( m_modality == "SR" )
-        thumb.load(":/images/structuredReportThumbnail.png");
-    else
+    if (m_seriesThumbnail.isNull())
     {
-        int images = getImages().size();
-        if( images > 0 )
-            thumb = getImages()[ images / 2 ]->getThumbnail();
-        else
-        {
-            // si la sèrie no conté imatges en el thumbnail ho indicarem
-            QPixmap pixmap(100,100);
-            pixmap.fill(Qt::black);
-
-            QPainter painter(&pixmap);
-            painter.setPen(Qt::white);
-            painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, tr("No Images Available"));
-            thumb = pixmap;
-        }
+        ThumbnailCreator thumbnailCreator;
+        m_seriesThumbnail = QPixmap::fromImage(thumbnailCreator.getThumbnail(this));
     }
 
-    return thumb;
+    return m_seriesThumbnail;
+}
+
+void Series::setThumbnail(QPixmap seriesThumbnail)
+{
+    m_seriesThumbnail = seriesThumbnail;
 }
 
 void Series::setNumberOfPhases( int phases )

@@ -22,6 +22,7 @@
 #include "deletedirectory.h"
 #include "starviewersettings.h"
 #include "harddiskinformation.h"
+#include "thumbnailcreator.h"
 
 #include <QDate>
 #include <QTime>
@@ -29,6 +30,7 @@
 #include <QDir>
 #include <QStringList>
 #include <QSettings>
+#include <QPixmap>
 
 namespace udg
 {
@@ -161,6 +163,9 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
 
     dbConnect.close();
 
+    //Carreguem els thumbnails de les series consultades
+    loadSeriesThumbnail(seriesMaskToQuery.getStudyUID(), queryResult);
+
     return queryResult;
 }
 
@@ -249,6 +254,12 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     setLastError(studyDAL.getLastError());
 
     dbConnect.close();
+
+    //carreguem els thumbnails dels estudis
+    foreach(Study *study, retrievedPatient->getStudies())
+    {
+        loadSeriesThumbnail(study->getInstanceUID(), study->getSeries());
+    }
 
     return retrievedPatient;
 }
@@ -809,13 +820,27 @@ void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceT
 
 void LocalDatabaseManager::createSeriesThumbnails(Study *studyToGenerateSeriesThumbnails)
 {
-    QString seriesPath, studyPath = getStudyPath(studyToGenerateSeriesThumbnails->getInstanceUID());
+    ThumbnailCreator thumbnailCreator;
 
     foreach(Series *series, studyToGenerateSeriesThumbnails->getSeries())
     {
-        seriesPath = studyPath + "/" + series->getInstanceUID();
-        DEBUG_LOG("INTENTARE GENERAR THUMBNAIL");
-        series->getThumbnail().save(seriesPath + "/thumbnail", "PNG");
+        thumbnailCreator.getThumbnail(series).save(getSeriesThumbnailPath(studyToGenerateSeriesThumbnails->getInstanceUID(), series), "PGM");
+    }
+}
+
+void LocalDatabaseManager::loadSeriesThumbnail(QString studyInstanceUID, QList<Series*> seriesList)
+{
+    QString thumbnailPath;
+
+    foreach(Series *series, seriesList)
+    {
+        thumbnailPath = getSeriesThumbnailPath(studyInstanceUID, series);
+        QFileInfo thumbnailFile(thumbnailPath);
+
+        if (thumbnailFile.exists())
+        {
+            series->setThumbnail(QPixmap(thumbnailPath));
+        }
     }
 }
 
@@ -867,5 +892,9 @@ qint64 LocalDatabaseManager::getDirectorySize(const QString &directoryPath)
     return directorySize;
 }
 
+QString LocalDatabaseManager::getSeriesThumbnailPath(QString studyInstanceUID, Series *series)
+{
+    return getStudyPath(studyInstanceUID) + "/" + series->getInstanceUID() + "/thumbnail.pgm";
 }
-// 
+
+}

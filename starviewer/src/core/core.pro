@@ -187,7 +187,8 @@ HEADERS += extensionfactory.h \
            combiningvoxelshader.h \
            vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h \
            obscurance.h \
-           viewpointgenerator.h 
+           viewpointgenerator.h \
+           thumbnailcreator.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -339,7 +340,8 @@ SOURCES += extensionmediator.cpp \
            combiningvoxelshader.cpp \
            vtkVolumeRayCastSingleVoxelShaderCompositeFunction.cxx \
            obscurance.cpp \
-           viewpointgenerator.cpp 
+           viewpointgenerator.cpp  \
+           thumbnailcreator.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
