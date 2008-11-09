@@ -185,11 +185,6 @@ void QueryScreen::setSeriesToSeriesListWidgetCache()
 
     foreach(Series* series, seriesList)
     {
-        mask.setSeriesUID(series->getInstanceUID());
-
-        series->setImages(localDatabaseManager.queryImage(mask));
-        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
-
         m_seriesListWidgetCache->insertSeries(studyInstanceUID, series);
     }
 }

@@ -161,6 +161,8 @@ public:
      * @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
      */
     int getNumberOfImages();
+    ///Especificia el número d'imatges
+    void setNumberOfImages(int numberOfImages);
 
     /// Indica si una sèrie té imatges
     bool hasImages() const;
@@ -312,6 +314,9 @@ private:
     ///Data en que la sèrie s'ha descarregat a la base de dades local
     QDate m_retrievedDate;
     QTime m_retrieveTime;
+
+    ///Número d'imatges de la sèrie
+    int m_numberOfImages;
 
     ///Guarda el thumbnail de la sèrie
     QPixmap m_seriesThumbnail;
