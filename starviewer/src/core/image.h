@@ -12,7 +12,6 @@
 #include <QList>
 #include <QPair>
 #include <QStringList>
-#include <QImage>
 #include <QPixmap>
 
 namespace udg {
@@ -165,14 +164,6 @@ public:
      */
     QPixmap getThumbnail(int resolution = 100);
 
-    /**
-     * Mètode encarregat de fer el thumbnail de la imatge. Es retorna a partir d'un QImage de manera que es pugui generar en
-     * threads que no siguin el del GUI.
-     * \TODO Aquest mètode hauria de desaparèixer, ara es manté ja que es necessita per crear les previsualitzacions del queryscreen.
-     * @return Un QImage amb la imatge del thumbnail
-     */
-    QImage createThumbnail(int resolution = 128);
-
 private:
     /// Atributs DICOM
 
@@ -265,7 +256,7 @@ private:
     QList<Image *> m_referencedImageSequence;
 
     /// Cache de la imatge de previsualització
-    QImage m_thumbnail;
+    QPixmap m_thumbnail;
 };
 
 }
