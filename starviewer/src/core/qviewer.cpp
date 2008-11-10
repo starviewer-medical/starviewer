@@ -535,13 +535,17 @@ void QViewer::updateWindowLevelData()
         return;
 
     m_windowLevelData->removePresetsFromGroup( WindowLevelPresetsToolData::FileDefined );
-    int wlCount = m_mainVolume->getImages().at(0)->getNumberOfWindowLevels();
+	// agafem el window level de la imatge central per evitar problemes 
+	// de que tinguem diferents windows levels a cada imatge i el de la 
+	// primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
+	int index = m_mainVolume->getSeries()->getNumberOfImages() / 2;
+    int wlCount = m_mainVolume->getImages().at( index )->getNumberOfWindowLevels();
     if( wlCount )
     {
         for( int i = 0; i < wlCount; i++ )
         {
-            QPair<double, double> windowLevel = m_mainVolume->getImages().at(0)->getWindowLevel( i );
-            QString description = m_mainVolume->getImages().at(0)->getWindowLevelExplanation( i );
+            QPair<double, double> windowLevel = m_mainVolume->getImages().at(index)->getWindowLevel( i );
+            QString description = m_mainVolume->getImages().at(index)->getWindowLevelExplanation( i );
             if( description.isEmpty() )
             {
                 description = tr("Default %1").arg(i);

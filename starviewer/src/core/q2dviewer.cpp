@@ -766,7 +766,6 @@ void Q2DViewer::setInput( Volume* volume )
     if( !volume )
         return;
 
-
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if( m_mainVolume )
         m_drawer->removeAllPrimitives();
@@ -781,10 +780,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_firstSlabSlice = 0;
     m_lastSlabSlice = 0;
     m_thickSlabActive = false;
-    // obtenim valors de gris i aquestes coses
-    // aquí es crea tot el pieline del visualitzador
-    this->computeInputGrayscalePipeline();
-    this->applyGrayscalePipeline();
+
 
     int extent[6];
     double origin[3], spacing[3];
@@ -807,6 +803,10 @@ void Q2DViewer::setInput( Volume* volume )
         m_blender->Delete();
         m_blender = 0;
     }
+	// obtenim valors de gris i aquestes coses
+    // aquí es crea tot el pieline del visualitzador
+    this->computeInputGrayscalePipeline();
+    this->applyGrayscalePipeline();
 
     // Preparem el thickSlab // TODO cada cop que fem setInput resetejem els valors per defecte??
     m_thickSlabProjectionFilter->SetInput( m_mainVolume->getVtkData() );
@@ -1904,14 +1904,14 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
 			Image *image = getCurrentDisplayedImage();
 			if( image )
 			{
-				QString location = image->getSliceLocation();
-				if( !location.isEmpty() )
-				{
-					if( location.indexOf('.') != -1 )
-						location = location.left( location.indexOf('.') + 3 );
+                QString location = image->getSliceLocation();
+                if( !location.isEmpty() )
+                {
+                    if( location.indexOf('.') != -1 )
+                        location = location.left( location.indexOf('.') + 3 );
 
-					lowerLeftText += tr("Loc: %1\n").arg( location );
-				}
+                    lowerLeftText += tr("Loc: %1\n").arg( location );
+                }
 			}
 		}
 
@@ -2311,34 +2311,7 @@ void Q2DViewer::computeVOILUT()
     }
     else
     {
-        // només mirem el del nostre propi volum
-
-        if( m_mainVolume->getImages().at(0)->getNumberOfWindowLevels() > 0 )
-        {
-            // Encara que en tingui més d'un window level, agafarem el primer i prou. Si n'hi ha més s'escolliran desde l'extensió adequada
-            m_defaultWindow = m_mainVolume->getImages().at(0)->getWindowLevel().first;
-            m_defaultLevel = m_mainVolume->getImages().at(0)->getWindowLevel().second;
-            if( m_defaultWindow == 0.0 && m_defaultLevel == 0.0 )
-            {
-                double *range = m_mainVolume->getVtkData()->GetScalarRange();
-                m_defaultWindow = range[1] - range[0];
-                m_defaultLevel = (m_defaultWindow / 2.) + range[0];
-            }
-            DEBUG_LOG( QString("Image VOI Adjustment: Window: %1, Level: %2")
-                .arg( m_defaultWindow )
-                .arg( m_defaultLevel )
-                );
-        }
-        else
-        {
-            // ajustar un al rang de dades adequat
-            m_defaultWindow = fabs( m_modalityRange[1] - m_modalityRange[0] );
-            m_defaultLevel = ( m_modalityRange[1] + m_modalityRange[0] )/ 2.0;
-            DEBUG_LOG( QString("No Image VOI Adjustment, creating a nice and automatic one: Window: %1, Level: %2")
-            .arg( m_defaultWindow )
-            .arg( m_defaultLevel )
-            );
-        }
+		updateWindowLevelData();
     }
 }
 
