@@ -34,6 +34,7 @@
 // extra per INPUT
 #include <QFileInfo>
 #include <QDir>
+#include <QMessageBox>
 
 namespace udg {
 
@@ -100,7 +101,22 @@ Volume::VtkImageTypePointer Volume::getVtkData()
             // TODO falta control dels errors que pot retornar ( p. exemple OutOfMemory! )
             if( this->readFiles( fileList ) == OutOfMemory )
             {
-                // TODO què fem?
+                // Creem un objecte vtkImageData "neutre"
+				m_imageDataVTK = vtkImageData::New();
+				// Inicialitzem les dades
+				m_imageDataVTK->SetOrigin( .0, .0, .0 );
+				m_imageDataVTK->SetSpacing( 1., 1., 1. );
+				m_imageDataVTK->SetDimensions( 10, 10, 1 );
+				m_imageDataVTK->SetWholeExtent( 0, 9, 0, 9, 0, 0 );
+				m_imageDataVTK->SetScalarTypeToShort();
+				m_imageDataVTK->SetNumberOfScalarComponents(1);
+				m_imageDataVTK->AllocateScalars();
+				// ATENCIÓ memset posa el valor (segon paràmetre) interpretat com
+				// unsigned char i el nombre de blocs de memòria són indicats en bytes, 
+				// per això multipliquem per 2
+				memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
+				m_dataLoaded = true;
+				QMessageBox::warning( 0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened Starviewer windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.") );
             }
         }
         /* TODO Descomentar per llegir amb classes DICOMImageReader
@@ -494,8 +510,7 @@ void Volume::allocateImageData()
     m_imageDataVTK->SetSpacing( spacing );
     m_imageDataVTK->SetDimensions( m_imageSet.at(0)->getRows(), m_imageSet.at(0)->getColumns(), m_imageSet.size() );
     //\TODO de moment assumim que sempre seran ints i ho mapejem així,potser més endavant podria canviar, però és el tipus que tenim fixat desde les itk
-//     m_imageDataVTK->SetScalarTypeToShort();
-    m_imageDataVTK->SetScalarTypeToInt();
+    m_imageDataVTK->SetScalarTypeToShort();
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
 }
