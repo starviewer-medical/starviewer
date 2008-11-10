@@ -481,6 +481,8 @@ void Q3DViewer::setInput( Volume* volume )
     delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
     delete m_obscurance; m_obscurance = 0;
 
+    m_firstRender = true;
+
     render();
 }
 
