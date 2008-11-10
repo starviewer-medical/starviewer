@@ -114,9 +114,10 @@ void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
     action = m_contextMenuQStudyTreeWidgetCache.addAction( tr( "Send to DICOMDIR List" ) , this , SLOT( convertToDicomdir() ) , tr( "Ctrl+M" ) );
     (void) new QShortcut( action->shortcut() , this , SLOT( convertToDicomdir() ) );
 
-    action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/store.png") , tr( "Store to PACS" ) , this , SLOT( storeStudiesToPacs() ) , tr( "Ctrl+S" ) );
+    //TODO: No funciona correctament el store al PACS per això ho deixem comentat per a que en les pròximes release no aparegui en el menú aquesta opció
+    /*action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/store.png") , tr( "Store to PACS" ) , this , SLOT( storeStudiesToPacs() ) , tr( "Ctrl+S" ) );
     (void) new QShortcut( action->shortcut() , this , SLOT( storeStudiesToPacs() ) );
-
+    */
     m_studyTreeWidgetCache->setContextMenu( & m_contextMenuQStudyTreeWidgetCache );//Especifiquem que és el menú per la cache
 }
 
