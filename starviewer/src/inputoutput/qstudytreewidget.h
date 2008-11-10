@@ -99,20 +99,15 @@ public:
      */
     void insertImageList( QList<DICOMImage> imageList );
 
+    /** Insereix una image a la sèrie que està seleccionada
+     * @param image imatge a afegir
+     */
+    void insertImage(DICOMImage* image);
+
     /** Insereix una llista d'imatges a la sèrie seleccionada actualment
      * @param imageList llista d'imatges afegir a la sèrie
      */
     void insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList);
-
-    /** Insereix una image a la sèrie que està seleccionada
-     * @param image imatge a afegir
-     */
-    void insertImage( DICOMImage *image );
-
-    /** Insereix una image a la sèrie que està seleccionada
-     * @param image imatge a afegir
-     */
-    void insertImage(QString studyInstanceUID, QString seriesInstanceUID, Image* image);
 
     /** removes study from the list
      * @param esbora l'estudi amb StudyUID de la llista
@@ -235,7 +230,7 @@ private slots :
 
 private:
     /// crea les connexions dels signals i slots
-    void createConnections( );
+    void createConnections();
 
     /** formata l'edat per mostrar per pantalla
      * @param edat
@@ -258,6 +253,9 @@ private:
      * @param AETitle AEtitle de la màquina on està l'estudi
      */
     QTreeWidgetItem* getStudyItem( QString studyUID , QString AETitle );
+
+    ///Retorna l'Objecte QTtreeWidgeItem que és de l'estudi, series i pacs passat per paràmetre
+    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID, QString AETitle);
 
 private:
     /// Menu contextual
