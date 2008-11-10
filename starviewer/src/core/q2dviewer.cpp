@@ -781,7 +781,6 @@ void Q2DViewer::setInput( Volume* volume )
     m_lastSlabSlice = 0;
     m_thickSlabActive = false;
 
-
     int extent[6];
     double origin[3], spacing[3];
     m_mainVolume->getOrigin( origin );
@@ -816,7 +815,7 @@ void Q2DViewer::setInput( Volume* volume )
     m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
     m_thickSlabProjectionFilter->SetStep( m_numberOfPhases );
 
-    updateDisplayExtent(); // TODO BUG sino fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
+	updateDisplayExtent(); // TODO BUG sino fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
     resetViewToAxial();
 
     updatePatientAnnotationInformation();
@@ -1122,11 +1121,9 @@ void Q2DViewer::setSlice( int value )
         this->checkAndUpdateSliceValue( value );
         if( isThickSlabActive() )
         {
-            m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
+			m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
             // TODO cal actualitzar aquest valor?
             m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
-            m_thickSlabProjectionFilter->Print( std::cout );
-            std::cout << "-------" << std::endl;
             //si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
@@ -1904,14 +1901,20 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
 			Image *image = getCurrentDisplayedImage();
 			if( image )
 			{
-                QString location = image->getSliceLocation();
-                if( !location.isEmpty() )
-                {
-                    if( location.indexOf('.') != -1 )
-                        location = location.left( location.indexOf('.') + 3 );
-
-                    lowerLeftText += tr("Loc: %1\n").arg( location );
-                }
+				QString location = image->getSliceLocation();
+				if( !location.isEmpty() )
+				{
+					lowerLeftText = tr("Loc: %1").arg( location.toDouble(), 0, 'f', 2 );
+					if( isThickSlabActive() )
+					{
+						Image *secondImage = m_mainVolume->getSeries()->getImageByIndex( ((m_currentSlice + m_slabThickness-1) * m_numberOfPhases) + m_currentPhase );
+						if( secondImage )
+						{
+							lowerLeftText += tr("-%1").arg( secondImage->getSliceLocation().toDouble(), 0, 'f', 2 );
+						}
+					}
+					lowerLeftText += "\n";
+				}
 			}
 		}
 
@@ -1953,7 +1956,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
         }
         //afegim el thickness de la llesca nomes si es > 0mm
         if ( this->getThickness() > 0.0 )
-            lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness(), 0, 'g', 2 );
+            lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness(), 0, 'f', 2 );
 
         m_cornerAnnotations->SetText( 0 , qPrintable(lowerLeftText) );
     }
