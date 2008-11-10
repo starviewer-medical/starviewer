@@ -442,6 +442,18 @@ QPixmap Series::getThumbnail()
     return m_seriesThumbnail;
 }
 
+
+Image *Series::getImageByIndex( int index )
+{
+	Image *resultImage = 0;
+	if( index >= 0 && index < m_imageSet.count() ) // està dins del rang
+	{
+		resultImage = m_imageSet.at( index );
+	}
+
+	return resultImage;
+}
+
 void Series::setThumbnail(QPixmap seriesThumbnail)
 {
     m_seriesThumbnail = seriesThumbnail;

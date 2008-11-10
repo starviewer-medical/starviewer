@@ -213,6 +213,11 @@ public:
     /// Obté la imatge de previsualització de la sèrie. Serà la imatge del mig.
     QPixmap getThumbnail();
 
+	/// Mètode temporal per obtenir la Image segons com està ordenada a la llista
+	/// Si l'índex que donem està fora de rang, es retorna una imatge nul·la
+	/// TODO això no ens assegura que obtenim la imatge que suposadament volem
+	Image *getImageByIndex( int index );
+
     ///Permet establir quin és el thumbnail de la sèrie
     void setThumbnail(QPixmap seriesThumbnail);
 
