@@ -17,7 +17,7 @@
 namespace udg {
 
 Series::Series(QObject *parent)
- : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1), m_numberOfImages(0), m_seriesThumbnail(NULL)
+ : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1), m_numberOfImages(0)
 {
 }
 
@@ -373,7 +373,7 @@ void Series::removeFilePath(QString filePath)
 QStringList Series::getFilesPathList()
 {
    QList<QString> list = m_filesPathList.toList();
-   qSort(list); 
+   qSort(list);
    return list;
 }
 
