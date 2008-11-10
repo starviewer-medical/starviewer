@@ -904,11 +904,15 @@ void QueryScreen::deleteOldStudiesThreadFinished()
     showDatabaseManagerError(m_qdeleteOldStudiesThread.getLastError(), tr("deleting old studies"));
 }
 
-void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source )
+void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesUID, QString defaultSOPInstanceUID, QString source)
 {
-    if( studiesUIDList.isEmpty() )
+    DicomMask patientToProcessMask;
+    Patient *patient;
+    QTime time;
+
+    if(studiesUIDList.isEmpty())
     {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select at least one study to view" ) );
+        QMessageBox::warning(this, tr( "Starviewer" ), tr("Select at least one study to view"));
         return;
     }
 
@@ -918,36 +922,34 @@ void QueryScreen::loadStudies( QStringList studiesUIDList, QString defaultSeries
         m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
 
-    DicomMask patientToProcessMask;
-    Patient *patient;
-
-    QTime time;
-    //TODO: Què passa si seleccionem més d'un pacient???? hem de tractar el cas a l'extensionhandler i/o passar una llista de pacients.
-    patientToProcessMask.setStudyUID(studiesUIDList.first());
-    if( source == "Cache" )
+    //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
+    foreach(QString studyInstanceUIDSelected, studiesUIDList)
     {
-        LocalDatabaseManager localDatabaseManager;
-
-        time.start();
-        patient = localDatabaseManager.retrieve(patientToProcessMask);
-
-        DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
-
-        if(showDatabaseManagerError(localDatabaseManager.getLastError()))
+        patientToProcessMask.setStudyUID(studyInstanceUIDSelected);
+        if( source == "Cache" )
         {
-            return;
+            LocalDatabaseManager localDatabaseManager;
+
+            time.start();
+            patient = localDatabaseManager.retrieve(patientToProcessMask);
+
+            DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
+
+            if(showDatabaseManagerError(localDatabaseManager.getLastError()))
+            {
+                return;
+            }
         }
-    }
-    else if(source == "DICOMDIR")
-    {
-        time.start();
-        patient = m_readDicomdir.retrieve(patientToProcessMask);
-        DEBUG_LOG( QString("Llegir del DICOMDIR directament (sense importar) ha trigat: %1 ").arg( time.elapsed() ));
-    }
+        else if(source == "DICOMDIR")
+        {
+            time.start();
+            patient = m_readDicomdir.retrieve(patientToProcessMask);
+            DEBUG_LOG( QString("Llegir del DICOMDIR directament (sense importar) ha trigat: %1 ").arg( time.elapsed() ));
+        }
 
-    DEBUG_LOG("Fem emit de selectedPatient");
-    emit selectedPatient(patient, defaultSeriesUID);
-
+        DEBUG_LOG("Fem emit de selectedPatient");
+        emit selectedPatient(patient, defaultSeriesUID);
+    }
     DEBUG_LOG("Acabem loadStudies");
 }
 
