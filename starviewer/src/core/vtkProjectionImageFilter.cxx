@@ -259,9 +259,9 @@ void vtkProjectionImageFilter::ThreadedRequestData(vtkInformation *vtkNotUsed(re
     DEBUG_LOG( QString( "inExt: %1 %2 %3 %4 %5 %6" ).arg(inExt[0]).arg(inExt[1]).arg(inExt[2]).arg(inExt[3]).arg(inExt[4]).arg(inExt[5]) );
 
     /// \warning Això funciona amb 2 nuclis, però amb més no ho sé!!!!!!!!!!!!!!!!
-    /// \warning Copiem la X i la Y de l'outExt
-    inExt[0] = outExt[0]; inExt[1] = outExt[1];
-    inExt[2] = outExt[2]; inExt[3] = outExt[3];
+    unsigned int iA = ProjectionDimension, i0 = (iA + 1) % 3, i1 = (iA + 2) % 3;
+    inExt[2*i0] = outExt[2*i0]; inExt[2*i0+1] = outExt[2*i0+1];
+    inExt[2*i1] = outExt[2*i1]; inExt[2*i1+1] = outExt[2*i1+1];
 
     void *inPtr = inData[0][0]->GetScalarPointerForExtent(inExt);
     void *inPtr0 = inData[0][0]->GetScalarPointer();
