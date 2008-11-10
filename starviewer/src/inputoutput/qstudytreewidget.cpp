@@ -299,69 +299,41 @@ void QStudyTreeWidget::insertImageList( QList<DICOMImage> imageList )
 
 void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList)
 {
-    foreach(Image *image, imageList)
+    QTreeWidgetItem *newImageItem, *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, "");
+
+    if (seriesItem != NULL)
     {
-         insertImage(studyInstanceUID, seriesInstanceUID, image);
+        foreach(Image *image, imageList)
+        {
+            newImageItem = new QTreeWidgetItem(seriesItem);
+
+            newImageItem->setIcon(ObjectName, m_iconSeries);
+            newImageItem->setText(ObjectName, tr("Image %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+            newImageItem->setText(PACSAETitle, "");
+            newImageItem->setText(UID, image->getSOPInstanceUID());
+            newImageItem->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
+        }
     }
+    else DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
 }
 
 void QStudyTreeWidget::insertImage( DICOMImage * image )
 {
-    QTreeWidgetItem* studyItem, *item;
-    bool stop = false;
-    int index = 0;
-    QString imageNumber;
+    QTreeWidgetItem *newImageItem, *seriesItem = getSeriesQTreeWidgetItem(image->getStudyUID(), image->getSeriesUID(), image->getPacsAETitle());
 
-    studyItem = getStudyItem( image->getStudyUID() , image->getPacsAETitle() );
-
-    while ( !stop && index < studyItem->childCount() )//cerquem la sèrie de la que depen la imatge
+    if (seriesItem != NULL)
     {
-        if ( studyItem->child( index )->text( UID ) == image->getSeriesUID() )
-        {
-            stop = true;
-        }
-        else index++;
+        newImageItem = new QTreeWidgetItem(seriesItem);
+
+        newImageItem->setIcon( ObjectName, m_iconSeries );
+
+        newImageItem->setText(ObjectName, tr( "Image %1" ).arg(paddingLeft(QString().setNum(image->getImageNumber()), 4 ) ) );//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+        newImageItem->setText( PACSAETitle , image->getPacsAETitle() );
+        newImageItem->setText( UID , image->getSOPInstanceUID() );
+        newImageItem->setText( Type, "IMAGE" ); //indiquem que es tracta d'una imatge
     }
+    else DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
 
-    item = new QTreeWidgetItem( studyItem->child( index ) );
-
-    item->setIcon( ObjectName, m_iconSeries );
-
-    imageNumber.setNum( image->getImageNumber() , 10 );
-    item->setText( ObjectName , tr( "Image %1" ).arg( paddingLeft( imageNumber , 4 ) ) );//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-
-    item->setText( PACSAETitle , image->getPacsAETitle() );
-    item->setText( UID , image->getSOPInstanceUID() );
-    item->setText( Type, "IMAGE" ); //indiquem que es tracta d'una imatge
-}
-
-void QStudyTreeWidget::insertImage(QString studyInstanceUID, QString seriesInstanceUID, Image *image)
-{
-    QTreeWidgetItem* studyItem, *item;
-    bool stop = false;
-    int index = 0;
-    QString imageNumber;
-
-    studyItem = getStudyItem(studyInstanceUID, ""/*image->getPacsAETitle()*/);
-
-    while (!stop && index < studyItem->childCount())//cerquem la sèrie de la que depen la imatge
-    {
-        if (studyItem->child(index)->text(UID) == seriesInstanceUID)
-        {
-            stop = true;
-        }
-        else index++;
-    }
-
-    item = new QTreeWidgetItem(studyItem->child(index));
-
-    item->setIcon(ObjectName, m_iconSeries);
-
-    item->setText(ObjectName, tr("Image %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-
-    item->setText(PACSAETitle, "");
-    item->setText(UID, image->getSOPInstanceUID());
-    item->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
 }
 
 QString QStudyTreeWidget::formatAge( const QString age )
@@ -532,6 +504,26 @@ QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( QString studyUID , QString AET
     }
     else return NULL;
 }
+
+QTreeWidgetItem*  QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID, QString AETitle)
+{
+    QTreeWidgetItem* studyItem, *item = NULL;
+    int index = 0;
+
+    studyItem = getStudyItem(studyInstanceUID, AETitle);
+
+    while (item == NULL && index < studyItem->childCount())//cerquem la sèrie de la que depen la imatge
+    {
+        if (studyItem->child(index)->text(UID) == seriesInstanceUID)
+        {
+            item = studyItem->child(index);
+        }
+        else index++;
+    }
+
+    return item;
+}
+
 
 QString QStudyTreeWidget::getCurrentImageUID()
 {
