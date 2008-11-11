@@ -5,8 +5,10 @@
 
 FORMS += qvolume3dviewtestingextensionbase.ui 
 HEADERS += volume3dviewtestingextensionmediator.h \
-           qvolume3dviewtestingextension.h 
+           qvolume3dviewtestingextension.h \
+           renderingstyle.h 
 SOURCES += volume3dviewtestingextensionmediator.cpp \
-           qvolume3dviewtestingextension.cpp 
+           qvolume3dviewtestingextension.cpp \
+           renderingstyle.cpp 
 RESOURCES += volume3dviewtesting.qrc
 include(../../basicconfextensions.inc)

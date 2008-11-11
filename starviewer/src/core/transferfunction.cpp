@@ -7,6 +7,8 @@
 #include "transferfunction.h"
 #include "logging.h"
 
+#include <QVariant>
+
 // vtk
 #include <vtkColorTransferFunction.h>
 #include <vtkPiecewiseFunction.h>
@@ -295,6 +297,58 @@ TransferFunction & TransferFunction::operator =( const TransferFunction & transf
 bool TransferFunction::operator ==( const TransferFunction & transferFunction ) const
 {
     return m_name == transferFunction.m_name && m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;
+}
+
+QVariant TransferFunction::toVariant() const
+{
+    QMap<QString, QVariant> color;
+    QMapIterator<double, QColor> itc( m_color );
+    while ( itc.hasNext() )
+    {
+        itc.next();
+        color[QString::number( itc.key() )] = itc.value().rgba();
+    }
+
+    QMap<QString, QVariant> opacity;
+    QMapIterator<double, double> ito( m_opacity );
+    while ( ito.hasNext() )
+    {
+        ito.next();
+        opacity[QString::number( ito.key() )] = ito.value();
+    }
+
+    QMap<QString, QVariant> map;
+    map["name"] = m_name;
+    map["color"] = color;
+    map["opacity"] = opacity;
+
+    return map;
+}
+
+TransferFunction TransferFunction::fromVariant( const QVariant &variant )
+{
+    TransferFunction transferFunction;
+    QMap<QString, QVariant> map = variant.toMap();
+
+    transferFunction.setName( map["name"].toString() );
+
+    QMap<QString, QVariant> color = map["color"].toMap();
+    QMapIterator<QString, QVariant> itc( color );
+    while ( itc.hasNext() )
+    {
+        itc.next();
+        transferFunction.addPointToColor( itc.key().toDouble(), itc.value().toUInt() );
+    }
+
+    QMap<QString, QVariant> opacity = map["opacity"].toMap();
+    QMapIterator<QString, QVariant> ito( opacity );
+    while ( ito.hasNext() )
+    {
+        ito.next();
+        transferFunction.addPointToOpacity( ito.key().toDouble(), ito.value().toDouble() );
+    }
+
+    return transferFunction;
 }
 
 }
