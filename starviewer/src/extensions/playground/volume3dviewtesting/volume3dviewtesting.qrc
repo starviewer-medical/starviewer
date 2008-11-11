@@ -1,6 +1,8 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource prefix="/extensions/Volume3DViewTestingExtension/" >
+<RCC>
+    <qresource prefix="/extensions/Volume3DViewTestingExtension" >
+        <file>renderingstyles/rs1.png</file>
+        <file>renderingstyles/rs2.png</file>
+        <file>renderingstyles/wholebody_fullrange.xml</file>
         <file>translations_ca_ES.qm</file>
         <file>translations_en_GB.qm</file>
         <file>translations_es_ES.qm</file>

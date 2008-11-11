@@ -350,9 +350,36 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="QLabel" name="label" >
-             <property name="text" >
-              <string>Presets</string>
+            <widget class="QListView" name="m_renderingStyleListView" >
+             <property name="maximumSize" >
+              <size>
+               <width>16777215</width>
+               <height>94</height>
+              </size>
+             </property>
+             <property name="editTriggers" >
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="movement" >
+              <enum>QListView::Static</enum>
+             </property>
+             <property name="iconSize" >
+              <size>
+               <width>64</width>
+               <height>64</height>
+              </size>
+             </property>
+             <property name="resizeMode" >
+              <enum>QListView::Adjust</enum>
+             </property>
+             <property name="spacing" >
+              <number>4</number>
+             </property>
+             <property name="viewMode" >
+              <enum>QListView::IconMode</enum>
+             </property>
+             <property name="uniformItemSizes" >
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -386,22 +413,6 @@
         </layout>
        </item>
        <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLabel" name="label_3" >
          <property name="sizePolicy" >
           <sizepolicy>
@@ -412,306 +423,7 @@
           </sizepolicy>
          </property>
          <property name="text" >
-          <string>CLUT</string>
-         </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item>
-        <widget class="QComboBox" name="m_renderingMethodComboBox" >
-         <item>
-          <property name="text" >
-           <string>Ray Casting</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Ray Casting with Shading</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Ray Casting with Obscurances</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Ray Casting with Shading and Obscurances</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>MIP</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Texture 3D</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Texture 2D</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Iso Surface</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Contouring</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" native="1" name="m_shadingOptionsWidget" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>4</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item>
-           <widget class="QCheckBox" name="m_specularCheckBox" >
-            <property name="text" >
-             <string>Specular</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="m_specularPowerLabel" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Specular power</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="decimals" >
-             <number>1</number>
-            </property>
-            <property name="maximum" >
-             <double>128.000000000000000</double>
-            </property>
-            <property name="value" >
-             <double>64.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" native="1" name="m_obscuranceOptionsWidget" >
-         <layout class="QVBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="m_obscuranceQualityLabel" >
-              <property name="text" >
-               <string>Obscurance quality</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="m_obscuranceQualityComboBox" >
-              <item>
-               <property name="text" >
-                <string>Low</string>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>Medium</string>
-               </property>
-              </item>
-              <item>
-               <property name="text" >
-                <string>High</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="m_obscuranceComputeCancelPushButton" >
-              <property name="text" >
-               <string>Compute</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QProgressBar" name="m_obscuranceProgressBar" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="value" >
-             <number>0</number>
-            </property>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>6</number>
-            </property>
-            <item>
-             <widget class="QCheckBox" name="m_obscuranceCheckBox" >
-              <property name="text" >
-               <string>Obscurance</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="m_obscuranceFactorLabel" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="text" >
-               <string>Brightness</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="m_obscuranceFactorDoubleSpinBox" >
-              <property name="enabled" >
-               <bool>false</bool>
-              </property>
-              <property name="maximum" >
-               <double>2.000000000000000</double>
-              </property>
-              <property name="singleStep" >
-               <double>0.100000000000000</double>
-              </property>
-              <property name="value" >
-               <double>1.300000000000000</double>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" native="1" name="m_isosurfaceOptionsWidget" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>4</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QHBoxLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="m_isoValueLabel" >
-            <property name="text" >
-             <string>Iso-value</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="m_isoValueSpinBox" >
-            <property name="maximum" >
-             <number>255</number>
-            </property>
-            <property name="value" >
-             <number>127</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_7" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text" >
-          <string>Rendering Method</string>
+          <string>Rendering style</string>
          </property>
          <property name="alignment" >
           <set>Qt::AlignCenter</set>
@@ -746,6 +458,304 @@
        <property name="spacing" >
         <number>6</number>
        </property>
+       <item>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" >
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <property name="spacing" >
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="m_renderingMethodLabel" >
+             <property name="text" >
+              <string>Rendering Method</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="m_renderingMethodComboBox" >
+             <item>
+              <property name="text" >
+               <string>Ray Casting</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Ray Casting with Shading</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Ray Casting with Obscurances</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Ray Casting with Shading and Obscurances</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>MIP</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Texture 3D</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Texture 2D</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Iso Surface</string>
+              </property>
+             </item>
+             <item>
+              <property name="text" >
+               <string>Contouring</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QWidget" native="1" name="m_shadingOptionsWidget" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>5</hsizetype>
+             <vsizetype>4</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="m_specularCheckBox" >
+              <property name="text" >
+               <string>Specular</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_specularPowerLabel" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="text" >
+               <string>Specular power</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
+              <property name="decimals" >
+               <number>1</number>
+              </property>
+              <property name="maximum" >
+               <double>128.000000000000000</double>
+              </property>
+              <property name="value" >
+               <double>64.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" native="1" name="m_obscuranceOptionsWidget" >
+           <layout class="QVBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="m_obscuranceQualityLabel" >
+                <property name="text" >
+                 <string>Obscurance quality</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="m_obscuranceQualityComboBox" >
+                <item>
+                 <property name="text" >
+                  <string>Low</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>Medium</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text" >
+                  <string>High</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="m_obscuranceComputeCancelPushButton" >
+                <property name="text" >
+                 <string>Compute</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="m_obscuranceProgressBar" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>5</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="value" >
+               <number>0</number>
+              </property>
+              <property name="orientation" >
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" >
+              <property name="margin" >
+               <number>0</number>
+              </property>
+              <property name="spacing" >
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QCheckBox" name="m_obscuranceCheckBox" >
+                <property name="text" >
+                 <string>Obscurance</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="m_obscuranceFactorLabel" >
+                <property name="enabled" >
+                 <bool>false</bool>
+                </property>
+                <property name="text" >
+                 <string>Brightness</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="m_obscuranceFactorDoubleSpinBox" >
+                <property name="enabled" >
+                 <bool>false</bool>
+                </property>
+                <property name="maximum" >
+                 <double>2.000000000000000</double>
+                </property>
+                <property name="singleStep" >
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value" >
+                 <double>1.300000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" native="1" name="m_isosurfaceOptionsWidget" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>5</hsizetype>
+             <vsizetype>4</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="m_isoValueLabel" >
+              <property name="text" >
+               <string>Iso-value</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="m_isoValueSpinBox" >
+              <property name="maximum" >
+               <number>255</number>
+              </property>
+              <property name="value" >
+               <number>127</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>20</width>
+             <height>0</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
        <item>
         <layout class="QHBoxLayout" >
          <property name="margin" >
@@ -859,6 +869,7 @@
  </customwidgets>
  <resources>
   <include location="../../../main/main.qrc" />
+  <include location="volume3dviewtesting.qrc"/>
  </resources>
  <connections/>
 </ui>

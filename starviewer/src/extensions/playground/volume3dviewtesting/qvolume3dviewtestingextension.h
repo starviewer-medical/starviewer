@@ -16,6 +16,8 @@
 #include "transferfunction.h"
 
 class QAction;
+class QModelIndex;
+class QStandardItemModel;
 
 namespace udg {
 
@@ -61,6 +63,9 @@ private:
     /// Obté la llista de funcions de transferència predefinides.
     void loadClutPresets();
 
+    /// Carrega els estils de rendering predefinits.
+    void loadRenderingStyles();
+
     /// Estableix les connexions de signals i slots
     void createConnections();
 
@@ -81,6 +86,7 @@ private slots:
     void toggleClutEditor();
     void hideClutEditor();
     void changeViewerTransferFunction();
+    void applyRenderingStyle( const QModelIndex &index );
 
 signals:
 
@@ -106,6 +112,9 @@ private:
 
     /// Serà cert abans d'entrar el primer input.
     bool m_firstInput;
+
+    /// Model que guarda els estils de rendering.
+    QStandardItemModel *m_renderingStyleModel;
 };
 
 } // end namespace udg

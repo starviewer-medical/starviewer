@@ -9,10 +9,12 @@
 #include "volume.h"
 #include "toolmanager.h"
 #include "transferfunctionio.h"
+#include "renderingstyle.h"
 // qt
 #include <QAction>
 #include <QFileDialog>
 #include <QSettings>
+#include <QStandardItemModel>
 // vtk
 #include <vtkImageData.h>
 
@@ -25,6 +27,7 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
 
     initializeTools();
     loadClutPresets();
+    loadRenderingStyles();
     createConnections();
     readSettings();
 
@@ -99,6 +102,33 @@ void QVolume3DViewTestingExtension::loadClutPresets()
     connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
 }
 
+void QVolume3DViewTestingExtension::loadRenderingStyles()
+{
+    m_renderingStyleModel = new QStandardItemModel( this );
+
+    // Per la primera versió creem tot això a pèl.
+    // Per cada estil creem un item i li assignem unes dades que seran les que es faran servir a l'hora d'aplicar-lo.
+    QStandardItem *item;
+    RenderingStyle renderingStyle;
+    TransferFunction *transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/wholebody_fullrange.xml" );
+
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs1.png" ), tr("Style 1") );
+    renderingStyle.diffuseLighting = false;
+    renderingStyle.transferFunction = *transferFunction;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs2.png" ), tr("Style 2") );
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = true;
+    renderingStyle.specularPower = 64.0;
+    renderingStyle.transferFunction = *transferFunction;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
+    m_renderingStyleListView->setModel( m_renderingStyleModel );
+}
+
 void QVolume3DViewTestingExtension::createConnections()
 {
     // orientacions axial,sagital i coronal
@@ -107,7 +137,7 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToCoronal() ) );
 
     // actualització del mètode de rendering
-    connect( m_renderingMethodComboBox, SIGNAL( activated(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
+    connect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
 
     // mètodes de rendering
 
@@ -150,6 +180,9 @@ void QVolume3DViewTestingExtension::createConnections()
 
     // visor 3d
     connect( m_3DView, SIGNAL( scalarRange(double,double) ), SLOT( setScalarRange(double,double) ) );
+
+    // rendering styles
+    connect( m_renderingStyleListView, SIGNAL( activated(const QModelIndex&) ), SLOT( applyRenderingStyle(const QModelIndex&) ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -440,6 +473,23 @@ void QVolume3DViewTestingExtension::toggleClutEditor()
 void QVolume3DViewTestingExtension::hideClutEditor()
 {
     m_editorSplitter->setSizes( QList<int>() << 0 << 0 );
+}
+
+
+void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &index )
+{
+    QStandardItem *item = m_renderingStyleModel->itemFromIndex( index );
+    RenderingStyle renderingStyle = RenderingStyle::fromVariant( item->data() );
+
+    m_renderingMethodComboBox->setCurrentIndex( renderingStyle.diffuseLighting ? 1 : 0 );
+
+    if ( renderingStyle.diffuseLighting )
+    {
+        m_specularCheckBox->setChecked( renderingStyle.specularLighting );
+        if ( renderingStyle.specularLighting ) m_specularPowerDoubleSpinBox->setValue( renderingStyle.specularPower );
+    }
+
+    applyClut( renderingStyle.transferFunction );
 }
 
 

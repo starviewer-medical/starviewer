@@ -119,6 +119,9 @@ public:
     TransferFunction & operator =( const TransferFunction & transferFunction );
     bool operator ==( const TransferFunction & transferFunction ) const;
 
+    QVariant toVariant() const;
+    static TransferFunction fromVariant( const QVariant &variant );
+
 private:
     /// Nom de la funció de transferència.
     QString m_name;
