@@ -359,6 +359,7 @@ void Q2DViewerExtension::setPatient( Patient *patient )
 void Q2DViewerExtension::updateVolumeLoadProgressNotification(int progress)
 {
     m_progressDialog->setValue(progress);
+    qApp->processEvents();
 }
 
 void Q2DViewerExtension::createProgressDialog()
