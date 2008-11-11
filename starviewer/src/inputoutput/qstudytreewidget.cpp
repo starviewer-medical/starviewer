@@ -209,10 +209,14 @@ void QStudyTreeWidget::insertSeriesList( QList<DICOMSeries> seriesList )
 
 void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*> seriesList)
 {
+    QTreeWidgetItem *studyItem = getStudyItem(studyInstanceUID, "" /*serie->getPacsAETitle()*/ );
+    QList<QTreeWidgetItem*> qTreeWidgetItemSeriesList;
+
     foreach(Series *series, seriesList)
     {
-         insertSeries(studyInstanceUID, series);
+        qTreeWidgetItemSeriesList.append(fillSeries(series));
     }
+    studyItem->addChildren(qTreeWidgetItemSeriesList);
 }
 
 void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
@@ -252,41 +256,40 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
     expandableItem->setText( Type , "EXPANDABLE_ITEM" );
 }
 
-void QStudyTreeWidget::insertSeries(QString studyIstanceUID, Series *series)
+QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
 {
-    QTreeWidgetItem *item, *studyItem , *expandableItem;
+    QTreeWidgetItem *seriesItem = new QTreeWidgetItem(), *expandableItem = new QTreeWidgetItem();
 
-    studyItem = getStudyItem(studyIstanceUID, "" /*serie->getPacsAETitle()*/ );
-    item = new QTreeWidgetItem(studyItem);
-    expandableItem = new QTreeWidgetItem(item);
-
-    item->setIcon(ObjectName, m_iconSeries);
+    seriesItem->setIcon(ObjectName, m_iconSeries);
     //Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-    item->setText(ObjectName, tr("Series %1").arg(paddingLeft(series->getSeriesNumber() , 4)));
-    item->setText(Modality, series->getModality());
+    seriesItem->setText(ObjectName, tr("Series %1").arg(paddingLeft(series->getSeriesNumber() , 4)));
+    seriesItem->setText(Modality, series->getModality());
 
-    item->setText(Description, series->getDescription().simplified());//treiem els espaics en blanc del davant i darrera
+    seriesItem->setText(Description, series->getDescription().simplified());//treiem els espaics en blanc del davant i darrera
 
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
-    if (!series->getDateAsString().isEmpty()) item->setText(Date, formatDate(series->getDate().toString("yyyyMMdd")));
+    if (!series->getDateAsString().isEmpty()) seriesItem->setText(Date, formatDate(series->getDate().toString("yyyyMMdd")));
 
-    if (!series->getTimeAsString().isEmpty()) item->setText(Time , formatHour(series->getTime().toString("hhmmss")));
+    if (!series->getTimeAsString().isEmpty()) seriesItem->setText(Time , formatHour(series->getTime().toString("hhmmss")));
 
-    item->setText(PACSAETitle, ""/*serie->getPacsAETitle()*/);
-    item->setText(UID, series->getInstanceUID());
-    item->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
+    seriesItem->setText(PACSAETitle, ""/*serie->getPacsAETitle()*/);
+    seriesItem->setText(UID, series->getInstanceUID());
+    seriesItem->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
 
-    item->setText(ProtocolName , series->getProtocolName());
-    item->setText(PPStartDate , "");
-    item->setText(PPStartTime , "");
-    item->setText(ReqProcID , "");
-    item->setText(SchedProcStep , "");
+    seriesItem->setText(ProtocolName , series->getProtocolName());
+    seriesItem->setText(PPStartDate , "");
+    seriesItem->setText(PPStartTime , "");
+    seriesItem->setText(ReqProcID , "");
+    seriesItem->setText(SchedProcStep , "");
 
     /* degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
-       una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
-       consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
-     */
+    una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+    consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
+    */
     expandableItem->setText(Type, "EXPANDABLE_ITEM");
+    seriesItem->addChild(expandableItem);
+
+    return seriesItem;
 }
 
 void QStudyTreeWidget::insertImageList( QList<DICOMImage> imageList )
@@ -300,19 +303,23 @@ void QStudyTreeWidget::insertImageList( QList<DICOMImage> imageList )
 void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList)
 {
     QTreeWidgetItem *newImageItem, *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, "");
+    QList<QTreeWidgetItem*> qTreeWidgetItemImageList;
 
     if (seriesItem != NULL)
     {
         foreach(Image *image, imageList)
         {
-            newImageItem = new QTreeWidgetItem(seriesItem);
+            newImageItem = new QTreeWidgetItem();
 
             newImageItem->setIcon(ObjectName, m_iconSeries);
             newImageItem->setText(ObjectName, tr("Image %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
             newImageItem->setText(PACSAETitle, "");
             newImageItem->setText(UID, image->getSOPInstanceUID());
             newImageItem->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
+            qTreeWidgetItemImageList.append(newImageItem);
         }
+        //Afegim la llista d'imatges
+        seriesItem->addChildren(qTreeWidgetItemImageList);
     }
     else DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
 }
