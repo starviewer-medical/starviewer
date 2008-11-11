@@ -20,8 +20,8 @@ QThickSlabWidget::QThickSlabWidget(QWidget *parent)
     QStringList items;
     items << tr("Disabled") << tr("MIP") << tr("MinIP") << tr("Average");
     m_projectionModeComboBox->addItems( items );
-	m_slabThicknessSlider->setEnabled( false );
-	m_slabThicknessLabel->setEnabled( false );
+    m_slabThicknessSlider->setEnabled( false );
+    m_slabThicknessLabel->setEnabled( false );
 }
 
 QThickSlabWidget::~QThickSlabWidget()
