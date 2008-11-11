@@ -132,6 +132,7 @@ void SlicingTool::inputChanged( Volume *input )
     Q_UNUSED(input);
     m_slicingMode = SliceMode;
     m_mouseMovement = false;
+    m_state = NONE;
 }
 
 bool SlicingTool::currentInputHasPhases()
