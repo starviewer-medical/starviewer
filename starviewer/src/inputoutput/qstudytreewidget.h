@@ -89,11 +89,6 @@ public:
      */
     void insertSeries(DICOMSeries *serie);
 
-    /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
-     *@param informació de la serie
-     */
-    void insertSeries(QString studyIstanceUID, Series *serie);
-
     /** Insereix una llista d'imatges a la sèrie seleccionada actualment
      * @param imageList llista d'imatges afegir a la sèrie
      */
@@ -279,6 +274,11 @@ private:
 
     ///Afegeix espais a l'esquerre del text fins arribar l'allargada passada per paràmetre
     QString paddingLeft( QString text , int length );
+
+    /**Dona una sèrie emplena un QTreeWidgetItem en format sèrie
+     *@param informació de la serie
+     */
+    QTreeWidgetItem *fillSeries(Series *serie);
 };
 
 }; // end namespace
