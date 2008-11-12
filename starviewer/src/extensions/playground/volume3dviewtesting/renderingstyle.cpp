@@ -14,6 +14,9 @@ QVariant RenderingStyle::toVariant() const
     map["specularLighting"] = specularLighting;
     map["specularPower"] = specularPower;
     map["transferFunction"] = transferFunction.toVariant();
+    map["obscurance"] = obscurance;
+    map["obscuranceQuality"] = obscuranceQuality;
+    map["obscuranceFactor"] = obscuranceFactor;
 
     return map;
 }
@@ -29,6 +32,9 @@ RenderingStyle RenderingStyle::fromVariant( const QVariant &variant )
     renderingStyle.specularLighting = map["specularLighting"].toBool();
     renderingStyle.specularPower = map["specularPower"].toDouble();
     renderingStyle.transferFunction = TransferFunction::fromVariant( map["transferFunction"] );
+    renderingStyle.obscurance = map["obscurance"].toBool();
+    renderingStyle.obscuranceQuality = static_cast<ObscuranceQuality>( map["obscuranceQuality"].toInt() );
+    renderingStyle.obscuranceFactor = map["obscuranceFactor"].toDouble();
 
     return renderingStyle;
 }

@@ -658,7 +658,7 @@ void Q3DViewer::renderRayCastingObscurance()
     }
     else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
-    if ( m_volumeProperty->GetShade() )
+    if ( m_obscuranceOn && m_volumeProperty->GetShade() )
     {
         vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );

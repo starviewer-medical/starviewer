@@ -16,6 +16,7 @@ class RenderingStyle {
 public:
 
     enum Method { RayCasting, Texture3D, Texture2D, MIP, IsoSurface, Contouring };
+    enum ObscuranceQuality { Low, Medium, High };
 
     QVariant toVariant() const;
     static RenderingStyle fromVariant( const QVariant &variant );
@@ -26,6 +27,9 @@ public:
     bool specularLighting;
     double specularPower;
     TransferFunction transferFunction;
+    bool obscurance;
+    ObscuranceQuality obscuranceQuality;
+    double obscuranceFactor;
 
 };
 

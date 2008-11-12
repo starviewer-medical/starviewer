@@ -30,6 +30,8 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     loadRenderingStyles();
     createConnections();
     readSettings();
+    updateUiForRenderingMethod( m_renderingMethodComboBox->currentIndex() );
+    m_obscuranceCheckBox->hide(); m_obscuranceFactorLabel->hide(); m_obscuranceFactorDoubleSpinBox->hide();
 
     m_computingObscurance = false;
 
@@ -116,6 +118,7 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = false;
     renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
@@ -125,6 +128,19 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
     renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.obscurance = false;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs3.png" ), tr("Style 3") );
+    renderingStyle.method = RenderingStyle::RayCasting;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = true;
+    renderingStyle.specularPower = 64.0;
+    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.obscurance = true;
+    renderingStyle.obscuranceQuality = RenderingStyle::Low;
+    renderingStyle.obscuranceFactor = 2.0;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
@@ -148,20 +164,13 @@ void QVolume3DViewTestingExtension::createConnections()
 
     enableAutoUpdate();
 
-    m_obscuranceOptionsWidget->hide();
-    m_obscuranceCheckBox->hide(); m_obscuranceFactorLabel->hide(); m_obscuranceFactorDoubleSpinBox->hide();
     connect( m_obscuranceComputeCancelPushButton, SIGNAL( clicked() ), this, SLOT( computeOrCancelObscurance() ) );
     connect( m_3DView, SIGNAL( obscuranceProgress(int) ), m_obscuranceProgressBar, SLOT( setValue(int) ) );
     connect( m_3DView, SIGNAL( obscuranceComputed() ), this, SLOT( endComputeObscurance() ) );
     connect( m_3DView, SIGNAL( obscuranceCancelledByProgram() ), this, SLOT( autoCancelObscurance() ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool ) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( setObscurance(bool) ) );
-    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), this, SLOT( render() ) );
-    connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setObscuranceFactor(double) ) );
-    connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( render() ) );
 
-    m_isosurfaceOptionsWidget->hide();
     connect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), m_3DView, SLOT( setIsoValue(int) ) );
     connect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( render() ) );
 
@@ -314,6 +323,7 @@ void QVolume3DViewTestingExtension::endComputeObscurance()
     m_computingObscurance = false;
     m_obscuranceComputeCancelPushButton->setText( tr("Compute") );
     enableObscuranceRendering( true );
+    m_obscuranceCheckBox->setChecked( true );   // les activem automàticament quan acaba el càlcul
 }
 
 void QVolume3DViewTestingExtension::enableObscuranceRendering( bool on )
@@ -431,7 +441,8 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
     switch ( renderingStyle.method )
     {
         case RenderingStyle::RayCasting:
-            m_renderingMethodComboBox->setCurrentIndex( 0 );
+            m_renderingMethodComboBox->setCurrentIndex( renderingStyle.obscurance ? 1 : 0 );
+            applyClut( renderingStyle.transferFunction );
             m_shadingCheckBox->setChecked( renderingStyle.diffuseLighting );
 
             if ( renderingStyle.diffuseLighting )
@@ -440,14 +451,29 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
                 if ( renderingStyle.specularLighting ) m_specularPowerDoubleSpinBox->setValue( renderingStyle.specularPower );
             }
 
+            if ( renderingStyle.obscurance )
+            {
+                if ( !m_computingObscurance )   // si s'estan calculant no toquem res
+                {
+                    /// \todo fer una comprovació més ben feta (amb un booleà)
+                    if ( !m_obscuranceCheckBox->isVisible() ) // si no hi ha obscurances calcular-les
+                    {
+                        m_obscuranceQualityComboBox->setCurrentIndex( static_cast<int>( renderingStyle.obscuranceQuality ) );
+                        m_obscuranceComputeCancelPushButton->click();
+                    }
+                    else // altrament aplicar-les i ja està
+                        m_obscuranceCheckBox->setChecked( true );
+                }
+
+                m_obscuranceFactorDoubleSpinBox->setValue( renderingStyle.obscuranceFactor );
+            }
+
             break;
 
         default:
             enableAutoUpdate();
             return;
     }
-
-    applyClut( renderingStyle.transferFunction );
 
     updateView();
     enableAutoUpdate();
@@ -530,6 +556,8 @@ void QVolume3DViewTestingExtension::updateView()
     m_3DView->setShading( m_shadingCheckBox->isChecked() );
     m_3DView->setSpecular( m_specularCheckBox->isChecked() );
     m_3DView->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
+    m_3DView->setObscurance( m_obscuranceCheckBox->isChecked() );
+    m_3DView->setObscuranceFactor( m_obscuranceFactorDoubleSpinBox->value() );
 
     m_3DView->render();
 
@@ -546,6 +574,10 @@ void QVolume3DViewTestingExtension::enableAutoUpdate()
     connect( m_shadingCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
     connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
+
+    // obscurances
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
+    connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
 }
 
 
@@ -558,6 +590,10 @@ void QVolume3DViewTestingExtension::disableAutoUpdate()
     disconnect( m_shadingCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
     disconnect( m_specularCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
     disconnect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
+
+    // obscurances
+    disconnect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
+    disconnect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
 }
 
 
