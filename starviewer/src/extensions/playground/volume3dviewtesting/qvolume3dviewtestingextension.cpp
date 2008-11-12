@@ -172,7 +172,7 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_switchEditorPushButton, SIGNAL( clicked() ), SLOT( switchEditor() ) );
     connect( m_applyPushButton, SIGNAL( clicked() ), SLOT( applyEditorClut() ) );
 
-    connect( m_clutEditToolButton, SIGNAL( clicked() ), SLOT( toggleClutEditor() ) );
+    connect( m_customStyleToolButton, SIGNAL( clicked() ), SLOT( toggleClutEditor() ) );
     connect( m_hidePushButton, SIGNAL( clicked() ), SLOT( hideClutEditor() ) );
 
     connect( m_3DView, SIGNAL( transferFunctionChanged () ), SLOT( changeViewerTransferFunction() ) );
