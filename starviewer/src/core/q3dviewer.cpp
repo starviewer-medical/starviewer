@@ -325,19 +325,9 @@ void Q3DViewer::setRenderFunctionToRayCasting()
     m_renderFunction = RayCasting;
 }
 
-void Q3DViewer::setRenderFunctionToRayCastingShading()
-{
-    m_renderFunction = RayCastingShading;
-}
-
 void Q3DViewer::setRenderFunctionToRayCastingObscurance()
 {
     m_renderFunction = RayCastingObscurance;
-}
-
-void Q3DViewer::setRenderFunctionToRayCastingShadingObscurance()
-{
-    m_renderFunction = RayCastingShadingObscurance;
 }
 
 void Q3DViewer::setRenderFunctionToContouring()
@@ -373,14 +363,8 @@ QString Q3DViewer::getRenderFunctionAsString()
     case RayCasting:
         result = "RayCasting";
     break;
-    case RayCastingShading:
-        result = "RayCastingShading";
-    break;
     case RayCastingObscurance:
         result = "RayCastingObscurance";
-    break;
-    case RayCastingShadingObscurance:
-        result = "RayCastingShadingObscurance";
     break;
     case MIP3D:
         result = "MIP 3D";
@@ -469,8 +453,8 @@ void Q3DViewer::setInput( Volume* volume )
     if ( rescale() ) m_volumeMapper->SetInput( m_imageData );
 
     unsigned short *data = reinterpret_cast<unsigned short*>( m_imageData->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-    m_ambientVoxelShader->setData( data, m_range );
-    m_directIlluminationVoxelShader->setData( data, m_range );
+    m_ambientVoxelShader->setData( data, static_cast<unsigned short>( m_range ) );
+    m_directIlluminationVoxelShader->setData( data, static_cast<unsigned short>( m_range ) );
 
     if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
     {
@@ -498,14 +482,8 @@ void Q3DViewer::render()
         case RayCasting:
             renderRayCasting();
         break;
-        case RayCastingShading:
-            renderRayCastingShading();
-        break;
         case RayCastingObscurance:
             renderRayCastingObscurance();
-        break;
-        case RayCastingShadingObscurance:
-            renderRayCastingShadingObscurance();
         break;
         case MIP3D:
             renderMIP3D();
@@ -548,7 +526,7 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
     m_ambientVoxelShader->setTransferFunction( *m_transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( *m_transferFunction );
 
-    if ( m_renderFunction == RayCastingShadingObscurance )
+    if ( m_renderFunction == RayCastingObscurance && m_volumeProperty->GetShade() )
     {
         vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
@@ -642,30 +620,6 @@ void Q3DViewer::renderRayCasting()
     }
 
     m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->ShadeOff();
-    m_volumeProperty->SetInterpolationTypeToLinear();
-
-    m_vtkVolume->SetMapper( m_volumeMapper );
-    m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
-
-    // no funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction( new TransferFunction( *transferFunction ) );
-    delete transferFunction;
-
-    m_vtkWidget->GetRenderWindow()->Render();
-}
-
-void Q3DViewer::renderRayCastingShading()
-{
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
-    {
-        m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
-    }
-
-    m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->ShadeOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     m_vtkVolume->SetMapper( m_volumeMapper );
@@ -688,7 +642,6 @@ void Q3DViewer::renderRayCastingObscurance()
     }
 
     m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->ShadeOff();
 
     QSettings settings;
     settings.beginGroup( "3DViewer" );
@@ -698,49 +651,26 @@ void Q3DViewer::renderRayCastingObscurance()
     else m_volumeProperty->SetInterpolationTypeToNearest();
 
     m_vtkVolume->SetMapper( m_volumeMapper );
-    if ( m_obscuranceOn ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientObscuranceFunction );
-    else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
-
-    // no funciona sense fer la còpia
-    TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction( new TransferFunction( *transferFunction ) );
-    delete transferFunction;
-
-    m_vtkWidget->GetRenderWindow()->Render();
-}
-
-void Q3DViewer::renderRayCastingShadingObscurance()
-{
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    if ( m_obscuranceOn )
     {
-        m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
+        if ( m_volumeProperty->GetShade() ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationObscuranceFunction );
+        else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientObscuranceFunction );
     }
-
-    m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->ShadeOn();
-
-    QSettings settings;
-    settings.beginGroup( "3DViewer" );
-    QString interpolation = settings.value( "interpolation" ).toString();
-    settings.endGroup();
-    if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
-    else m_volumeProperty->SetInterpolationTypeToNearest();
-
-    m_vtkVolume->SetMapper( m_volumeMapper );
-    if ( m_obscuranceOn ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationObscuranceFunction );
     else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
-    vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
-    m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
-    vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
-    gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
-    m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
-                                                              gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
-                                                              gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
-    m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
-                                                               gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
-                                                               gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+    if ( m_volumeProperty->GetShade() )
+    {
+        vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
+        m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+        vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
+        gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
+        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
+                                                                  gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
+                                                                  gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
+        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
+                                                                   gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
+                                                                   gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+    }
 
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
@@ -959,7 +889,6 @@ void Q3DViewer::renderTexture3D()
     }
 
     m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->ShadeOff();   /// \todo amb on també funciona; hauríem de donar l'opció, o deixar-ho sempre a off o sempre a on?
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     vtkVolumeTextureMapper3D *volumeMapper = vtkVolumeTextureMapper3D::New();
@@ -1006,6 +935,11 @@ void Q3DViewer::orientationMarkerOn()
 void Q3DViewer::orientationMarkerOff()
 {
     this->enableOrientationMarker( false );
+}
+
+void Q3DViewer::setShading( bool on )
+{
+    on ? m_volumeProperty->ShadeOn() : m_volumeProperty->ShadeOff();
 }
 
 void Q3DViewer::setSpecular( bool on )

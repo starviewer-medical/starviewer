@@ -139,17 +139,14 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToCoronal() ) );
 
     // actualització del mètode de rendering
-    connect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), SLOT( updateRenderingMethodFromCombo(int) ) );
+    connect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateUiForRenderingMethod(int) ) );
 
-    // mètodes de rendering
-
-    m_shadingOptionsWidget->hide();
+    // shading
+    connect( m_shadingCheckBox, SIGNAL( toggled(bool) ), m_specularCheckBox, SLOT( setEnabled(bool) ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerLabel, SLOT( setEnabled(bool) ) );
     connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_3DView, SLOT( setSpecular(bool) ) );
-    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), this, SLOT( render() ) );
-    connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), m_3DView, SLOT( setSpecularPower(double) ) );
-    connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( render() ) );
+
+    enableAutoUpdate();
 
     m_obscuranceOptionsWidget->hide();
     m_obscuranceCheckBox->hide(); m_obscuranceFactorLabel->hide(); m_obscuranceFactorDoubleSpinBox->hide();
@@ -210,63 +207,6 @@ void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
     }
 }
 
-void QVolume3DViewTestingExtension::updateRenderingMethodFromCombo( int index )
-{
-    this->setCursor( QCursor(Qt::WaitCursor) );
-
-    m_shadingOptionsWidget->hide();
-    m_obscuranceOptionsWidget->hide();
-    m_isosurfaceOptionsWidget->hide();
-
-    switch( index )
-    {
-        case 0:
-            m_3DView->setRenderFunctionToRayCasting();
-            break;
-
-        case 1:
-            m_shadingOptionsWidget->show();
-            m_3DView->setRenderFunctionToRayCastingShading();
-            break;
-
-        case 2:
-            m_obscuranceOptionsWidget->show();
-            m_3DView->setRenderFunctionToRayCastingObscurance();
-            break;
-
-        case 3:
-            m_shadingOptionsWidget->show();
-            m_obscuranceOptionsWidget->show();
-            m_3DView->setRenderFunctionToRayCastingShadingObscurance();
-            break;
-
-        case 4:
-            m_3DView->setRenderFunctionToMIP3D();
-            break;
-
-        case 5:
-            m_3DView->setRenderFunctionToTexture3D();
-            break;
-
-        case 6:
-            m_3DView->setRenderFunctionToTexture2D();
-            break;
-
-        case 7:
-            m_isosurfaceOptionsWidget->show();
-            m_3DView->setIsoValue( m_isoValueSpinBox->value() );    // necessari per la primera vegada
-            m_3DView->setRenderFunctionToIsoSurface();
-            break;
-
-        case 8:
-            m_3DView->setRenderFunctionToContouring();
-            break;
-    }
-
-    m_3DView->render();
-
-    this->setCursor( QCursor(Qt::ArrowCursor) );
-}
 
 void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
 {
@@ -480,14 +420,16 @@ void QVolume3DViewTestingExtension::hideClutEditor()
 
 void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &index )
 {
+    disableAutoUpdate();
+
     QStandardItem *item = m_renderingStyleModel->itemFromIndex( index );
     RenderingStyle renderingStyle = RenderingStyle::fromVariant( item->data() );
 
     switch ( renderingStyle.method )
     {
         case RenderingStyle::RayCasting:
-            if ( renderingStyle.diffuseLighting ) m_renderingMethodComboBox->setCurrentIndex( 1 );
-            else m_renderingMethodComboBox->setCurrentIndex( 0 );
+            m_renderingMethodComboBox->setCurrentIndex( 0 );
+            m_shadingCheckBox->setChecked( renderingStyle.diffuseLighting );
 
             if ( renderingStyle.diffuseLighting )
             {
@@ -498,12 +440,122 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
             break;
 
         default:
+            enableAutoUpdate();
             return;
     }
 
     applyClut( renderingStyle.transferFunction );
+
+    updateView();
+    enableAutoUpdate();
+}
+
+
+void QVolume3DViewTestingExtension::updateUiForRenderingMethod( int index )
+{
+    m_shadingOptionsWidget->hide();
+    m_obscuranceOptionsWidget->hide();
+    m_isosurfaceOptionsWidget->hide();
+
+    switch( index )
+    {
+        case 0: // ray casting
+            m_shadingOptionsWidget->show();
+            break;
+
+        case 1: // ray casting + obscurances
+            m_shadingOptionsWidget->show();
+            m_obscuranceOptionsWidget->show();
+            break;
+
+        case 2: // mip
+            break;
+
+        case 3: // textures 3d
+            m_shadingOptionsWidget->show();
+            break;
+
+        case 4: // textures 2d
+            break;
+
+        case 5: // isosuperfícies
+            m_isosurfaceOptionsWidget->show();
+            break;
+
+        case 6: // contouring
+            break;
+    }
+}
+
+
+void QVolume3DViewTestingExtension::updateView()
+{
+    this->setCursor( QCursor(Qt::WaitCursor) );
+
+    switch( m_renderingMethodComboBox->currentIndex() )
+    {
+        case 0:
+            m_3DView->setRenderFunctionToRayCasting();
+            break;
+
+        case 1:
+            m_3DView->setRenderFunctionToRayCastingObscurance();
+            break;
+
+        case 2:
+            m_3DView->setRenderFunctionToMIP3D();
+            break;
+
+        case 3:
+            m_3DView->setRenderFunctionToTexture3D();
+            break;
+
+        case 4:
+            m_3DView->setRenderFunctionToTexture2D();
+            break;
+
+        case 5:
+            m_3DView->setIsoValue( m_isoValueSpinBox->value() );    // necessari per la primera vegada
+            m_3DView->setRenderFunctionToIsoSurface();
+            break;
+
+        case 6:
+            m_3DView->setRenderFunctionToContouring();
+            break;
+    }
+
+    m_3DView->setShading( m_shadingCheckBox->isChecked() );
+    m_3DView->setSpecular( m_specularCheckBox->isChecked() );
+    m_3DView->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
+
+    m_3DView->render();
+
+    this->setCursor( QCursor(Qt::ArrowCursor) );
+}
+
+
+void QVolume3DViewTestingExtension::enableAutoUpdate()
+{
+    // actualització del mètode de rendering
+    connect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateView() ) );
+
+    // shading
+    connect( m_shadingCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
+    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
+    connect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
+}
+
+
+void QVolume3DViewTestingExtension::disableAutoUpdate()
+{
+    // actualització del mètode de rendering
+    disconnect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateView() ) );
+
+    // shading
+    disconnect( m_shadingCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
+    disconnect( m_specularCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
+    disconnect( m_specularPowerDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
 }
 
 
 }
-
