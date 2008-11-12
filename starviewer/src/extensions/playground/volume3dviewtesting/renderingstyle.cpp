@@ -9,6 +9,7 @@ namespace udg {
 QVariant RenderingStyle::toVariant() const
 {
     QMap<QString, QVariant> map;
+    map["method"] = method;
     map["diffuseLighting"] = diffuseLighting;
     map["specularLighting"] = specularLighting;
     map["specularPower"] = specularPower;
@@ -23,6 +24,7 @@ RenderingStyle RenderingStyle::fromVariant( const QVariant &variant )
     RenderingStyle renderingStyle;
     QMap<QString, QVariant> map = variant.toMap();
 
+    renderingStyle.method = static_cast<Method>( map["method"].toInt() );
     renderingStyle.diffuseLighting = map["diffuseLighting"].toBool();
     renderingStyle.specularLighting = map["specularLighting"].toBool();
     renderingStyle.specularPower = map["specularPower"].toDouble();

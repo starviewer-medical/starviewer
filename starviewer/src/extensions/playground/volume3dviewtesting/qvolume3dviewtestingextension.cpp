@@ -113,12 +113,14 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     TransferFunction *transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/wholebody_fullrange.xml" );
 
     item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs1.png" ), tr("Style 1") );
+    renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = false;
     renderingStyle.transferFunction = *transferFunction;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
     item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs2.png" ), tr("Style 2") );
+    renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
@@ -481,12 +483,22 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
     QStandardItem *item = m_renderingStyleModel->itemFromIndex( index );
     RenderingStyle renderingStyle = RenderingStyle::fromVariant( item->data() );
 
-    m_renderingMethodComboBox->setCurrentIndex( renderingStyle.diffuseLighting ? 1 : 0 );
-
-    if ( renderingStyle.diffuseLighting )
+    switch ( renderingStyle.method )
     {
-        m_specularCheckBox->setChecked( renderingStyle.specularLighting );
-        if ( renderingStyle.specularLighting ) m_specularPowerDoubleSpinBox->setValue( renderingStyle.specularPower );
+        case RenderingStyle::RayCasting:
+            if ( renderingStyle.diffuseLighting ) m_renderingMethodComboBox->setCurrentIndex( 1 );
+            else m_renderingMethodComboBox->setCurrentIndex( 0 );
+
+            if ( renderingStyle.diffuseLighting )
+            {
+                m_specularCheckBox->setChecked( renderingStyle.specularLighting );
+                if ( renderingStyle.specularLighting ) m_specularPowerDoubleSpinBox->setValue( renderingStyle.specularPower );
+            }
+
+            break;
+
+        default:
+            return;
     }
 
     applyClut( renderingStyle.transferFunction );
