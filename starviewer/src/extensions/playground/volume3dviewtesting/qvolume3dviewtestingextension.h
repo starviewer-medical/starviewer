@@ -41,8 +41,6 @@ public:
     void setInput( Volume * input );
 
 public slots:
-    /// Actualitza el mètode de rendering que s'aplica al volum segons el que s'ha escollit al combo box
-    void updateRenderingMethodFromCombo( int index );
 
     /// Aplica una funció de transferència predefinida a la visualització.
     void applyPresetClut( const QString & clutName );
@@ -55,6 +53,11 @@ public slots:
     void endComputeObscurance();
 
     void setScalarRange( double min, double max );
+
+    void updateUiForRenderingMethod( int index );
+
+    /// Actualitza la vista d'acord amb tots els paràmetres actuals de la interfície.
+    void updateView();
 
 private:
     /// posa a punt les tools que es poden fer servir en l'extensió
@@ -74,6 +77,11 @@ private:
     void writeSettings();
 
     void enableObscuranceRendering( bool on );
+
+    /// Fa que es cridi updateView() quan canvia qualsevol element de la interfície.
+    void enableAutoUpdate();
+    /// Fa que no es cridi updateView() quan canvia qualsevol element de la interfície.
+    void disableAutoUpdate();
 
 private slots:
 

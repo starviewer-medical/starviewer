@@ -45,7 +45,7 @@ Classe base per als visualitzadors 3D
 class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
-    enum RenderFunction{ RayCasting, RayCastingShading, RayCastingObscurance, RayCastingShadingObscurance,
+    enum RenderFunction{ RayCasting, RayCastingObscurance,
                          MIP3D, IsoSurface , Texture2D , Texture3D, Contouring };
     enum ObscuranceQuality { Low, Medium, High };
 
@@ -73,9 +73,7 @@ public slots:
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function);
     void setRenderFunctionToRayCasting();
-    void setRenderFunctionToRayCastingShading();
     void setRenderFunctionToRayCastingObscurance();
-    void setRenderFunctionToRayCastingShadingObscurance();
     void setRenderFunctionToMIP3D();
     void setRenderFunctionToIsoSurface();
     void setRenderFunctionToTexture2D();
@@ -100,7 +98,8 @@ public slots:
     void setWindowLevel( double window , double level );
     void setNewTransferFunction( );
 
-    /// Paràmetres d'especularitat
+    /// Paràmetres d'il·luminació.
+    void setShading( bool on );
     void setSpecular( bool on );
     void setSpecularPower( double power );
 
@@ -131,14 +130,8 @@ private:
     /// fa la visualització per raycasting
     void renderRayCasting();
 
-    /// fa la visualització per raycasting amb shading (i opcionalment especularitat)
-    void renderRayCastingShading();
-
     /// fa la visualització per raycasting amb obscurances
     void renderRayCastingObscurance();
-
-    /// fa la visualització per raycasting amb shading (i opcionalment especularitat) i obscurances
-    void renderRayCastingShadingObscurance();
 
     /// fa la visualització per contouring
     void renderContouring();

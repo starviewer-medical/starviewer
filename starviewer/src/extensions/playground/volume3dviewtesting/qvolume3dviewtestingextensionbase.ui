@@ -477,17 +477,7 @@
              </item>
              <item>
               <property name="text" >
-               <string>Ray Casting with Shading</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
                <string>Ray Casting with Obscurances</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Ray Casting with Shading and Obscurances</string>
               </property>
              </item>
              <item>
@@ -537,7 +527,17 @@
              <number>6</number>
             </property>
             <item>
+             <widget class="QCheckBox" name="m_shadingCheckBox" >
+              <property name="text" >
+               <string>Shading</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="m_specularCheckBox" >
+              <property name="enabled" >
+               <bool>false</bool>
+              </property>
               <property name="text" >
                <string>Specular</string>
               </property>
