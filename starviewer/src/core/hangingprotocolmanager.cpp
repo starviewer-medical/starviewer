@@ -357,12 +357,8 @@ void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Ser
 {
 	DICOMTagReader dicomReader;
 	QString patientOrientation = 0;
-	int i;
 	QList<QString> listOfOperations;
 	QString operations = 0;
-	int rotations;
-	int flips;
-
 	QString patientDisplayOrientation = displaySet->getPatientOrientation();
 
 	bool ok = dicomReader.setFile( serie->getImages()[imageNumber]->getPath() );
@@ -379,18 +375,11 @@ void HangingProtocolManager::applyDisplayTransformations( Patient * patient, Ser
 			if( operations != 0 )
 			{
 				listOfOperations = operations.split(",");
-				rotations = listOfOperations[0].toInt();
-				flips = listOfOperations[1].toInt();
-
-				for( i = 0; i < rotations; i++ ) // Totes les rotacions a realitzar
-				{
-					viewer->getViewer()->rotateClockWise();
-				}
-
-				for( i = 0; i < flips; i++ ) // Totes les rotacions a realitzar
-				{
-					viewer->getViewer()->verticalFlip();
-				}
+                // apliquem les trasnformacions d'imatge necessàries 
+                // per visualitzar correctament la imatge
+                viewer->getViewer()->rotateClockWise( listOfOperations[0].toInt() ); // apliquem el nombre de rotacions
+                if( listOfOperations[1].toInt() )
+                    viewer->getViewer()->verticalFlip(); // apliquem el flip vertical si cal
 			}
 		}
 	}
