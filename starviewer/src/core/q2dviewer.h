@@ -296,10 +296,12 @@ public slots:
     void setSeedPosition( double pos[3] );
 
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
-    void rotateClockWise();
+    /// tantes "times" com li indiquem, per defecte sempre serà 1 "time"
+    void rotateClockWise( int times = 1 );
 
     /// Aplica una rotació de 90 graus en el sentit contrari a les agulles del rellotge
-    void rotateCounterClockWise();
+    /// tantes "times" com li indiquem, per defecte sempre serà 1 "time"
+    void rotateCounterClockWise( int times = 1 );
 
     /// Aplica una rotació absoluta de (90º * factor) mod 360 sobre la imatge. Per tant es fa la rotació com si la imatge estigués amb una rotació inicial de 0º
     void setRotationFactor( int factor );

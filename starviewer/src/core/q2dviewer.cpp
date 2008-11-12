@@ -308,28 +308,29 @@ void Q2DViewer::updateScalarBar()
     vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetLevel( m_windowLevelLUTMapper->GetLevel() );
 }
 
-void Q2DViewer::rotateClockWise()
+void Q2DViewer::rotateClockWise( int times )
 {
     if( m_isImageFlipped )
     {
-        m_rotateFactor = (m_rotateFactor-1) % 4 ;
+        m_rotateFactor = (m_rotateFactor-times) % 4 ;
     }
     else
     {
-        m_rotateFactor = (m_rotateFactor+1) % 4 ;
+        m_rotateFactor = (m_rotateFactor+times) % 4 ;
     }
     updateCamera();
 }
 
-void Q2DViewer::rotateCounterClockWise()
+void Q2DViewer::rotateCounterClockWise( int times )
 {
+    times += 3;
     if( m_isImageFlipped )
     {
-        m_rotateFactor = (m_rotateFactor-3) % 4 ;
+        m_rotateFactor = (m_rotateFactor-times) % 4 ;
     }
     else
     {
-        m_rotateFactor = (m_rotateFactor+3) % 4 ;
+        m_rotateFactor = (m_rotateFactor+times) % 4 ;
     }
     updateCamera();
 }
@@ -769,6 +770,8 @@ void Q2DViewer::setInput( Volume* volume )
     //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if( m_mainVolume )
         m_drawer->removeAllPrimitives();
+
+    // TODO caldria fer netejar? bloquejar? per tal que quedi en negre mentres es carrega el nou volum?
 
     m_mainVolume = volume;
     m_currentSlice = 0;
