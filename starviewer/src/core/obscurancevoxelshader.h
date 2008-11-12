@@ -65,7 +65,7 @@ inline HdrColor ObscuranceVoxelShader::nvShade( int offset, const Vector3 &direc
 {
     Q_UNUSED( direction );
 
-    Q_CHECK_PTR( m_obscurance );
+    Q_ASSERT( m_obscurance );
 
     if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 
@@ -85,8 +85,8 @@ inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, const V
 {
     Q_UNUSED( direction );
 
-    Q_CHECK_PTR( interpolator );
-    Q_CHECK_PTR( m_obscurance );
+    Q_ASSERT( interpolator );
+    Q_ASSERT( m_obscurance );
 
     if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 
