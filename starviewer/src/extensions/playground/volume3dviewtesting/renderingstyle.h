@@ -15,10 +15,13 @@ class RenderingStyle {
 
 public:
 
+    enum Method { RayCasting, Texture3D, Texture2D, MIP, IsoSurface, Contouring };
+
     QVariant toVariant() const;
     static RenderingStyle fromVariant( const QVariant &variant );
 
     // Atributs públics
+    Method method;
     bool diffuseLighting;
     bool specularLighting;
     double specularPower;
