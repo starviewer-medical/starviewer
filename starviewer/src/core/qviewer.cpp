@@ -550,11 +550,11 @@ void QViewer::updateWindowLevelData()
             {
                 description = tr("Default %1").arg(i);
             }
-            if( windowLevel.first == 0.0 && windowLevel.second == 0.0 )
+            if( windowLevel.first == 0.0 || windowLevel.second == 0.0 )
             {
                 double *range = m_mainVolume->getVtkData()->GetScalarRange();
                 double window = range[1] - range[0];
-                double level = (m_defaultWindow / 2.) + range[0];
+                double level = (range[1] / 2.) + range[0];
                 m_windowLevelData->addPreset( description, window, level, WindowLevelPresetsToolData::FileDefined );
             }
             else
