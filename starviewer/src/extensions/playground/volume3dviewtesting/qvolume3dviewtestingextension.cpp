@@ -190,6 +190,7 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
     m_3DView->setInput( m_input );
 
     applyClut( m_currentClut );
+    this->render();
 }
 
 void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
@@ -218,6 +219,7 @@ void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
     {
         //m_currentClut = *transferFunction;
         applyClut( *transferFunction, true );
+        this->render();
         //m_3DView->setTransferFunction( transferFunction );
     }
     //this->render();
@@ -240,7 +242,7 @@ void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut, bo
     m_editorByValues->setTransferFunction( m_currentClut );
     m_3DView->setTransferFunction( new TransferFunction( m_currentClut ) );
     emit newTransferFunction();
-    this->render();
+//     this->render();
 }
 
 void QVolume3DViewTestingExtension::changeViewerTransferFunction( )
@@ -396,6 +398,7 @@ void QVolume3DViewTestingExtension::applyEditorClut()
 {
     QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
     applyClut( currentEditor->getTransferFunction() );
+    this->render();
 }
 
 
