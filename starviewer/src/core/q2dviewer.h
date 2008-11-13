@@ -479,6 +479,12 @@ private:
     ///  Valida el valor d'slice donat i actualitza les variables membres pertinents, com m_currentSlice o m_firstSlabSlice
     void checkAndUpdateSliceValue( int value );
 
+    /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
+    /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
+    /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
+    /// Si tenim una imatge axial pura la llista seria R,S,L,I (Right, Superior, Left, Inferior )
+    QVector<QString> getCurrentDisplayedImageOrientationLabels();
+
 private slots:
     /// Actualitza les transformacions de càmera ( de moment rotació i flip )
     void updateCamera();
