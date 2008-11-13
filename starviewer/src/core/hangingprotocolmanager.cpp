@@ -352,33 +352,11 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
 
 void HangingProtocolManager::applyDisplayTransformations( Patient *patient, Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
 {
+    // TODO el paràmetre patient no cal, s'hauria d'eliminar si no és que sigui necesari per alguna raó
     DICOMTagReader dicomReader;
-    QString patientOrientation;
-    QList<QString> listOfOperations;
-    QString operations;
-    QString patientDisplayOrientation = displaySet->getPatientOrientation();
-
-    bool ok = dicomReader.setFile( serie->getImages()[imageNumber]->getPath() );
-    if( ok && !patientDisplayOrientation.isEmpty() )
+    if( dicomReader.setFile( serie->getImages()[imageNumber]->getPath() ) )
     {
-        patientOrientation = dicomReader.getAttributeByName( DCM_PatientOrientation );
-        if( !patientOrientation.isEmpty() )
-        {
-            patientOrientation.truncate(3);
-            patientOrientation += "-" + patientDisplayOrientation;
-            QString mapIndex( patientOrientation );
-            operations = m_operationsMap.value( mapIndex );
-
-            if( !operations.isEmpty() )
-            {
-                listOfOperations = operations.split(",");
-                // apliquem les transformacions d'imatge necessàries 
-                // per visualitzar correctament la imatge
-                viewer->getViewer()->rotateClockWise( listOfOperations[0].toInt() ); // apliquem el nombre de rotacions
-                if( listOfOperations[1].toInt() )
-                    viewer->getViewer()->verticalFlip(); // apliquem el flip vertical si cal
-            }
-        }
+        applyDesiredDisplayOrientation( dicomReader.getAttributeByName( DCM_PatientOrientation ), displaySet->getPatientOrientation(), viewer->getViewer() );
     }
 
     QString reconstruction = displaySet->getReconstruction();
@@ -406,6 +384,28 @@ void HangingProtocolManager::applyDisplayTransformations( Patient *patient, Seri
     if( !phase.isEmpty() )
     {
 	    viewer->getViewer()->setPhase( phase.toInt() );
+    }
+}
+
+void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer)
+{
+    if( !currentOrientation.isEmpty() && !desiredOrientation.isEmpty() )
+    {
+        // TODO al tanto, patient orientation podria tenir més d'una lletra per row! 
+        // per exemple RA\AL en un tall que sigui oblicu
+        // per evitar això agafarem
+        QString mapIndex = currentOrientation.trimmed() + "-" + desiredOrientation;
+        QString operations = m_operationsMap.value( mapIndex );
+
+        if( !operations.isEmpty() )
+        {
+            QStringList listOfOperations = operations.split(",");
+            // apliquem les transformacions d'imatge necessàries 
+            // per visualitzar correctament la imatge
+            viewer->rotateClockWise( listOfOperations[0].toInt() ); // apliquem el nombre de rotacions
+            if( listOfOperations[1].toInt() )
+                viewer->verticalFlip(); // apliquem el flip vertical si cal
+        }
     }
 }
 

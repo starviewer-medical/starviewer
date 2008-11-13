@@ -28,13 +28,13 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
 //
     // \TODO se suposa que aquesta orientació és correcta si estem veient el volum en axial. Caldria mirar el sistema de com posar les etiquetes correctament, automàticament a partir per exemple del tag dicom o deixar-ho en mans de la classe que ho faci servir i proporcionar mètodes d'aquesta classe per posar les etiquetes correctament
     m_cubeActor = vtkAnnotatedCubeActor::New();
-    this->setOrientationText( "L","R","P","A","S","I" );
+    this->setOrientationText( "L","R","P","A","H","F" );
 //     m_cubeActor->SetXPlusFaceText("L");
 //     m_cubeActor->SetXMinusFaceText("R");
 //     m_cubeActor->SetYPlusFaceText("P");
 //     m_cubeActor->SetYMinusFaceText("A");
-//     m_cubeActor->SetZPlusFaceText("S");
-//     m_cubeActor->SetZMinusFaceText("I");
+//     m_cubeActor->SetZPlusFaceText("H");
+//     m_cubeActor->SetZMinusFaceText("F");
     m_cubeActor->SetXFaceTextRotation( 90 );
     m_cubeActor->SetYFaceTextRotation( 180 );
     m_cubeActor->SetZFaceTextRotation( -90 );
@@ -77,10 +77,10 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
 
     vtkAxesActor *axes = vtkAxesActor::New();
     axes->SetShaftTypeToCylinder();
-    // \TODO podríem aplicar una rotació als eixos perquè les anotacions es veiessin en un sistema de mà-esquerra (rai) en comptes de mà-dreta (lps)
-    axes->SetXAxisLabelText( qPrintable( tr("l") ) );
-    axes->SetYAxisLabelText( qPrintable( tr("p") ) );
-    axes->SetZAxisLabelText( qPrintable( tr("s") ) );
+    // \TODO podríem aplicar una rotació als eixos perquè les anotacions es veiessin en un sistema de mà-esquerra (raf) en comptes de mà-dreta (lph)
+    axes->SetXAxisLabelText( qPrintable( tr("L") ) );
+    axes->SetYAxisLabelText( qPrintable( tr("P") ) );
+    axes->SetZAxisLabelText( qPrintable( tr("H") ) );
     axes->SetTotalLength( 1.5 , 1.5 ,  1.5 );
 
     vtkTextProperty *textProp = vtkTextProperty::New();

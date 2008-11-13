@@ -409,7 +409,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels()
     index = ( index >= m_mainVolume->getImages().size() ) ? 0 : index;
     QString orientation = m_mainVolume->getImages().at(index)->getPatientOrientation();
     // tenim les orientacions originals de la imatge en una llista
-    QStringList list = orientation.split(",");
+    QStringList list = orientation.split("\\");
 
     bool ok = false;
     switch( list.size() )
@@ -663,10 +663,6 @@ QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
             oppositeLabel += "P";
         else if( label.at( i ) == 'P' )
             oppositeLabel += "A";
-        else if( label.at( i ) == 'S' )
-            oppositeLabel += "I";
-        else if( label.at( i ) == 'I' )
-            oppositeLabel += "S";
         else if( label.at( i ) == 'H' )
             oppositeLabel += "F";
         else if( label.at( i ) == 'F' )
@@ -1860,46 +1856,48 @@ void Q2DViewer::updatePatientAnnotationInformation()
 void Q2DViewer::updateSliceAnnotationInformation()
 {
     Q_ASSERT( m_cornerAnnotations );
-	Q_ASSERT( m_mainVolume );
+    Q_ASSERT( m_mainVolume );
 
-	if( m_mainVolume->getSeries()->getModality() == "MG" )
-	{
-		m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
-		Image *image = getCurrentDisplayedImage();
-		if( image )
-		{
-			DICOMTagReader reader( image->getPath() );
-			m_lowerRightText = reader.getAttributeByName( DCM_ImageLaterality ) + " ";
-			QString projection = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning ).at(0);
-			/// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
-			// TODO tenir-ho carregat en arxius, maps, etc..
-			// TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
-			if( projection == "medio-lateral" )
-				m_lowerRightText += "ML";
-			else if( projection == "medio-lateral oblique" )
-				m_lowerRightText += "MLO";
-			else if( projection == "latero-medial" )
-				m_lowerRightText += "LM";
-			else if( projection == "latero-medial oblique" )
-				m_lowerRightText += "LMO";
-			else if( projection == "cranio-caudal" )
-				m_lowerRightText += "CC";
-			else if( projection == "caudo-cranial (from below)" )
-				m_lowerRightText += "FB";
-			else if( projection == "superolateral to inferomedial oblique" )
-				m_lowerRightText += "SIO";
-			else if( projection == "exaggerated cranio-caudal" )
-				m_lowerRightText += "XCC";
-			else if( projection == "cranio-caudal exaggerated laterally" )
-				m_lowerRightText += "XCCL";
-			else if( projection == "cranio-caudal exaggerated medially" )
-				m_lowerRightText += "XCCM";
-		}
-		else
-			m_lowerRightText.clear();
+    if( m_mainVolume->getSeries()->getModality() == "MG" )
+    {
+        m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
+        Image *image = getCurrentDisplayedImage();
+        if( image )
+        {
+            DICOMTagReader reader( image->getPath() );
+            QString laterality = reader.getAttributeByName( DCM_ImageLaterality );
 
-		m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
-	}
+            m_lowerRightText = laterality + " ";
+            QString projection = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning ).at(0);
+            /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
+            // TODO tenir-ho carregat en arxius, maps, etc..
+            // TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
+            if( projection == "medio-lateral" )
+                m_lowerRightText += "ML";
+            else if( projection == "medio-lateral oblique" )
+                m_lowerRightText += "MLO";
+            else if( projection == "latero-medial" )
+                m_lowerRightText += "LM";
+            else if( projection == "latero-medial oblique" )
+                m_lowerRightText += "LMO";
+            else if( projection == "cranio-caudal" )
+                m_lowerRightText += "CC";
+            else if( projection == "caudo-cranial (from below)" )
+                m_lowerRightText += "FB";
+            else if( projection == "superolateral to inferomedial oblique" )
+                m_lowerRightText += "SIO";
+            else if( projection == "exaggerated cranio-caudal" )
+                m_lowerRightText += "XCC";
+            else if( projection == "cranio-caudal exaggerated laterally" )
+                m_lowerRightText += "XCCL";
+            else if( projection == "cranio-caudal exaggerated medially" )
+                m_lowerRightText += "XCCM";
+        }
+        else
+            m_lowerRightText.clear();
+
+        m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
+    }
 
     int value = m_currentSlice*m_numberOfPhases + m_currentPhase;
     if( m_numberOfPhases > 1 )
