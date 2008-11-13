@@ -703,17 +703,16 @@ void Q3DViewer::renderMIP3D()
 //     m_transferFunction->addPointToOpacity( 255, 1. );
     TransferFunction mipTransferFunction;
     mipTransferFunction.addPointToOpacity( 20.0, 0.0 );
-    mipTransferFunction.addPointToOpacity( 255.0, 1.0 );
+    mipTransferFunction.addPointToOpacity( m_range, 1.0 );
 
     // Creem la funció de transferència de colors
     // Create a transfer function mapping scalar value to color (grey)
     vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
-    grayTransferFunction->AddSegment( 0 , 0.0 , 255 , 1.0 );
+    grayTransferFunction->AddSegment( 0 , 0.0 , m_range , 1.0 );
 
 //     m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
     m_volumeProperty->SetScalarOpacity( mipTransferFunction.getOpacityTransferFunction() );
     m_volumeProperty->SetColor( grayTransferFunction /*m_transferFunction->getColorTransferFunction()*/ );
-    m_volumeProperty->ShadeOff();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     grayTransferFunction->Delete();
