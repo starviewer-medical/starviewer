@@ -132,6 +132,9 @@ private:
     /// Inicialitza les QActions
     void createActions();
 
+    ///Ens amaga els controls que mostren la mida del dicomdir, de manera temporal no es mostarà la mida del dicomdir perquè no es calcula correctament
+    void hideDicomdirSize();
+
 private slots:
     /// Es passa per paràmetre l'identificador del dispositiu i es fan les pertinents accions
     void deviceChanged( int value );
