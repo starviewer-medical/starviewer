@@ -159,6 +159,11 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs6.png" ), tr("Style 6") );
+    renderingStyle.method = RenderingStyle::MIP;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
     m_renderingStyleListView->setModel( m_renderingStyleModel );
 }
 
@@ -491,6 +496,10 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
                 m_obscuranceFactorDoubleSpinBox->setValue( renderingStyle.obscuranceFactor );
             }
 
+            break;
+
+        case RenderingStyle::MIP:
+            m_renderingMethodComboBox->setCurrentIndex( 2 );
             break;
 
         default:
