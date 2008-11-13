@@ -1,0 +1,25 @@
+<transferfunction version="0" >
+ <name>wholebody_fullrange_blanc</name>
+ <color>
+  <point g="1" value="0" r="1" b="1" />
+  <point g="1" value="964" r="1" b="1" />
+  <point g="1" value="1043" r="1" b="1" />
+  <point g="1" value="1108" r="1" b="1" />
+  <point g="1" value="1156" r="1" b="1" />
+  <point g="1" value="1212" r="1" b="1" />
+  <point g="1" value="1333" r="1" b="1" />
+  <point g="1" value="1542" r="1" b="1" />
+  <point g="1" value="4095" r="1" b="1" />
+ </color>
+ <opacity>
+  <point value="0" a="0" />
+  <point value="964" a="0" />
+  <point value="1043" a="0" />
+  <point value="1108" a="0" />
+  <point value="1156" a="0.2745098039215687" />
+  <point value="1212" a="0.2745098039215687" />
+  <point value="1333" a="0.1294117647058824" />
+  <point value="1542" a="0.2509803921568627" />
+  <point value="4095" a="0.2509803921568627" />
+ </opacity>
+</transferfunction>

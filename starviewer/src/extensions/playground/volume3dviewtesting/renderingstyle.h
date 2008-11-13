@@ -27,6 +27,8 @@ public:
     bool specularLighting;
     double specularPower;
     TransferFunction transferFunction;
+    bool contour;
+    double contourThreshold;
     bool obscurance;
     ObscuranceQuality obscuranceQuality;
     double obscuranceFactor;
