@@ -393,8 +393,10 @@ void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &curre
     {
         // TODO al tanto, patient orientation podria tenir més d'una lletra per row! 
         // per exemple RA\AL en un tall que sigui oblicu
-        // per evitar això agafarem
-        QString mapIndex = currentOrientation.trimmed() + "-" + desiredOrientation;
+        // per evitar això i no fer una llista enorme de transformacions, 
+        // agafarem només la primera lletra del row i de la columna
+        QStringList rowColumn = currentOrientation.split("\\");
+        QString mapIndex = rowColumn.at(0).left(1) + "\\" + rowColumn.at(1).left(1) + "-" + desiredOrientation;
         QString operations = m_operationsMap.value( mapIndex );
 
         if( !operations.isEmpty() )
