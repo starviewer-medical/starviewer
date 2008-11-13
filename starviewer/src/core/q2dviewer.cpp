@@ -310,6 +310,10 @@ void Q2DViewer::updateScalarBar()
 
 void Q2DViewer::rotateClockWise( int times )
 {
+    // almenys ha de ser 1 ( +90º )
+    if( times <= 0 )
+        return;
+
     if( m_isImageFlipped )
     {
         m_rotateFactor = (m_rotateFactor-times) % 4 ;
@@ -323,6 +327,10 @@ void Q2DViewer::rotateClockWise( int times )
 
 void Q2DViewer::rotateCounterClockWise( int times )
 {
+    // almenys ha de ser 1 ( +90º )
+    if( times <= 0 )
+        return;
+
     times += 3;
     if( m_isImageFlipped )
     {
@@ -1852,7 +1860,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
 			QString projection = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning ).at(0);
 			/// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
 			// TODO tenir-ho carregat en arxius, maps, etc..
-			// TODO fer servir millor els codis en compte dels "code meanings" podria resultar més segur
+			// TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
 			if( projection == "medio-lateral" )
 				m_lowerRightText += "ML";
 			else if( projection == "medio-lateral oblique" )
