@@ -1006,8 +1006,6 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     m_obscuranceMainThread->setVolume( m_vtkVolume );
     m_obscuranceMainThread->setTransferFunction( *m_transferFunction );
 
-    render();   // això cal perquè sinó el DirectIllumationVoxelShader produeix artefactes estranys perquè hem canviat el gradient estimator
-
     connect( m_obscuranceMainThread, SIGNAL( progress(int) ), this, SIGNAL( obscuranceProgress(int) ) );
     connect( m_obscuranceMainThread, SIGNAL( computed() ), this, SLOT( endComputeObscurance() ) );
     m_obscuranceMainThread->start();
