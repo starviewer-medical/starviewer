@@ -642,13 +642,14 @@ void Q3DViewer::renderRayCastingObscurance()
     }
 
     m_volumeProperty->DisableGradientOpacityOn();
+    m_volumeProperty->SetInterpolationTypeToLinear();
 
-    QSettings settings;
-    settings.beginGroup( "3DViewer" );
-    QString interpolation = settings.value( "interpolation" ).toString();
-    settings.endGroup();
-    if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
-    else m_volumeProperty->SetInterpolationTypeToNearest();
+//     QSettings settings;
+//     settings.beginGroup( "3DViewer" );
+//     QString interpolation = settings.value( "interpolation" ).toString();
+//     settings.endGroup();
+//     if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
+//     else m_volumeProperty->SetInterpolationTypeToNearest();
 
     m_vtkVolume->SetMapper( m_volumeMapper );
     if ( m_obscuranceOn )
