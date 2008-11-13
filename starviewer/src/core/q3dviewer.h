@@ -36,6 +36,7 @@ class DirectIlluminationVoxelShader;
 class ObscuranceVoxelShader;
 class vtk4DLinearRegressionGradientEstimator;
 class Obscurance;
+class ContourVoxelShader;
 
 /**
 Classe base per als visualitzadors 3D
@@ -102,6 +103,10 @@ public slots:
     void setShading( bool on );
     void setSpecular( bool on );
     void setSpecularPower( double power );
+
+    /// Paràmetres de contorns.
+    void setContour( bool on );
+    void setContourThreshold( double threshold );
 
     /// Càlcul d'obscurances.
     void computeObscurance( ObscuranceQuality quality );
@@ -187,16 +192,29 @@ private:
     /// Voxel shaders.
     AmbientVoxelShader *m_ambientVoxelShader;
     DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
+    ContourVoxelShader *m_contourVoxelShader;
+    typedef CombiningVoxelShader<AmbientVoxelShader, ContourVoxelShader> AmbientContourVoxelShader;
+    AmbientContourVoxelShader *m_ambientContourVoxelShader;
+    typedef CombiningVoxelShader<DirectIlluminationVoxelShader, ContourVoxelShader> DirectIlluminationContourVoxelShader;
+    DirectIlluminationContourVoxelShader *m_directIlluminationContourVoxelShader;
     ObscuranceVoxelShader *m_obscuranceVoxelShader;
     typedef CombiningVoxelShader<AmbientVoxelShader, ObscuranceVoxelShader> AmbientObscuranceVoxelShader;
     AmbientObscuranceVoxelShader *m_ambientObscuranceVoxelShader;
     typedef CombiningVoxelShader<DirectIlluminationVoxelShader, ObscuranceVoxelShader> DirectIlluminationObscuranceVoxelShader;
     DirectIlluminationObscuranceVoxelShader *m_directIlluminationObscuranceVoxelShader;
+    typedef CombiningVoxelShader<AmbientContourVoxelShader, ObscuranceVoxelShader> AmbientContourObscuranceVoxelShader;
+    AmbientContourObscuranceVoxelShader *m_ambientContourObscuranceVoxelShader;
+    typedef CombiningVoxelShader<DirectIlluminationContourVoxelShader, ObscuranceVoxelShader> DirectIlluminationContourObscuranceVoxelShader;
+    DirectIlluminationContourObscuranceVoxelShader *m_directIlluminationContourObscuranceVoxelShader;
 
     /// Funcions de ray cast.
     vtkVolumeRayCastCompositeFunction *m_volumeRayCastFunction;
+    vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourVoxelShader> *m_volumeRayCastAmbientContourFunction;
+    vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourVoxelShader> *m_volumeRayCastDirectIlluminationContourFunction;
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientObscuranceVoxelShader> *m_volumeRayCastAmbientObscuranceFunction;
     vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationObscuranceVoxelShader> *m_volumeRayCastDirectIlluminationObscuranceFunction;
+    vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourObscuranceVoxelShader> *m_volumeRayCastAmbientContourObscuranceFunction;
+    vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourObscuranceVoxelShader> *m_volumeRayCastDirectIlluminationContourObscuranceFunction;
     vtkVolumeRayCastIsosurfaceFunction *m_volumeRayCastIsosurfaceFunction;
 
     /// La funció de transferència que s'aplica
@@ -208,6 +226,9 @@ private:
 
     /// Thread de control del càlcul d'obscurances.
     ObscuranceMainThread *m_obscuranceMainThread;
+
+    /// Booleà que indica si els contorns estan activats.
+    bool m_contourOn;
 
     /// Obscurances.
     Obscurance *m_obscurance;

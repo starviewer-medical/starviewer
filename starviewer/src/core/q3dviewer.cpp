@@ -65,6 +65,7 @@
 #include "ambientvoxelshader.h"
 #include "directilluminationvoxelshader.h"
 #include "obscurancevoxelshader.h"
+#include "contourvoxelshader.h"
 #include "vtk4DLinearRegressionGradientEstimator.h"
 #include <vtkEncodedGradientShader.h>
 
@@ -129,21 +130,44 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 
     m_ambientVoxelShader = new AmbientVoxelShader();
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
+    m_contourVoxelShader = new ContourVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
+    m_ambientContourVoxelShader = new AmbientContourVoxelShader();
+    m_ambientContourVoxelShader->setVoxelShaders( m_ambientVoxelShader, m_contourVoxelShader );
+    m_directIlluminationContourVoxelShader = new DirectIlluminationContourVoxelShader();
+    m_directIlluminationContourVoxelShader->setVoxelShaders( m_directIlluminationVoxelShader, m_contourVoxelShader );
     m_ambientObscuranceVoxelShader = new AmbientObscuranceVoxelShader();
     m_ambientObscuranceVoxelShader->setVoxelShaders( m_ambientVoxelShader, m_obscuranceVoxelShader );
     m_directIlluminationObscuranceVoxelShader = new DirectIlluminationObscuranceVoxelShader();
     m_directIlluminationObscuranceVoxelShader->setVoxelShaders( m_directIlluminationVoxelShader, m_obscuranceVoxelShader );
+    m_ambientContourObscuranceVoxelShader = new AmbientContourObscuranceVoxelShader();
+    m_ambientContourObscuranceVoxelShader->setVoxelShaders( m_ambientContourVoxelShader, m_obscuranceVoxelShader );
+    m_directIlluminationContourObscuranceVoxelShader = new DirectIlluminationContourObscuranceVoxelShader();
+    m_directIlluminationContourObscuranceVoxelShader->setVoxelShaders( m_directIlluminationContourVoxelShader, m_obscuranceVoxelShader );
 
     m_volumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
     m_volumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastAmbientContourFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourVoxelShader>::New();
+    m_volumeRayCastAmbientContourFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastAmbientContourFunction->SetVoxelShader( m_ambientContourVoxelShader );
+    m_volumeRayCastDirectIlluminationContourFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourVoxelShader>::New();
+    m_volumeRayCastDirectIlluminationContourFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastDirectIlluminationContourFunction->SetVoxelShader( m_directIlluminationContourVoxelShader );
     m_volumeRayCastAmbientObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientObscuranceVoxelShader>::New();
     m_volumeRayCastAmbientObscuranceFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastAmbientObscuranceFunction->SetVoxelShader( m_ambientObscuranceVoxelShader );
     m_volumeRayCastDirectIlluminationObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationObscuranceVoxelShader>::New();
     m_volumeRayCastDirectIlluminationObscuranceFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastDirectIlluminationObscuranceFunction->SetVoxelShader( m_directIlluminationObscuranceVoxelShader );
+    m_volumeRayCastAmbientContourObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourObscuranceVoxelShader>::New();
+    m_volumeRayCastAmbientContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastAmbientContourObscuranceFunction->SetVoxelShader( m_ambientContourObscuranceVoxelShader );
+    m_volumeRayCastDirectIlluminationContourObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourObscuranceVoxelShader>::New();
+    m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
+    m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetVoxelShader( m_directIlluminationContourObscuranceVoxelShader );
     m_volumeRayCastIsosurfaceFunction = vtkVolumeRayCastIsosurfaceFunction::New();
+
+    m_contourOn = false;
 
     m_firstRender = true;
     m_obscuranceMainThread = 0;
@@ -169,9 +193,14 @@ Q3DViewer::~Q3DViewer()
     delete m_obscurance;
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
+    delete m_contourVoxelShader;
     delete m_obscuranceVoxelShader;
+    delete m_ambientContourVoxelShader;
+    delete m_directIlluminationContourVoxelShader;
     delete m_ambientObscuranceVoxelShader;
     delete m_directIlluminationObscuranceVoxelShader;
+    delete m_ambientContourObscuranceVoxelShader;
+    delete m_directIlluminationContourObscuranceVoxelShader;
     if ( m_4DLinearRegressionGradientEstimator ) m_4DLinearRegressionGradientEstimator->Delete();
 }
 
@@ -526,7 +555,7 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
     m_ambientVoxelShader->setTransferFunction( *m_transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( *m_transferFunction );
 
-    if ( m_renderFunction == RayCastingObscurance && m_volumeProperty->GetShade() )
+    if ( m_volumeProperty->GetShade() )
     {
         vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
@@ -623,7 +652,27 @@ void Q3DViewer::renderRayCasting()
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     m_vtkVolume->SetMapper( m_volumeMapper );
-    m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
+
+    if ( m_contourOn )
+    {
+        if ( m_volumeProperty->GetShade() ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationContourFunction );
+        else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientContourFunction );
+    }
+    else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
+
+    if ( m_contourOn && m_volumeProperty->GetShade() )
+    {
+        vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
+        m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+        vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
+        gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
+        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
+                                                                  gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
+                                                                  gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
+        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
+                                                                   gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
+                                                                   gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+    }
 
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
@@ -654,12 +703,29 @@ void Q3DViewer::renderRayCastingObscurance()
     m_vtkVolume->SetMapper( m_volumeMapper );
     if ( m_obscuranceOn )
     {
-        if ( m_volumeProperty->GetShade() ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationObscuranceFunction );
-        else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientObscuranceFunction );
+        if ( m_contourOn )
+        {
+            if ( m_volumeProperty->GetShade() )
+                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationContourObscuranceFunction );
+            else
+                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientContourObscuranceFunction );
+        }
+        else
+        {
+            if ( m_volumeProperty->GetShade() )
+                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationObscuranceFunction );
+            else
+                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientObscuranceFunction );
+        }
+    }
+    else if ( m_contourOn )
+    {
+        if ( m_volumeProperty->GetShade() ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationContourFunction );
+        else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientContourFunction );
     }
     else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
 
-    if ( m_obscuranceOn && m_volumeProperty->GetShade() )
+    if ( ( m_contourOn || m_obscuranceOn ) && m_volumeProperty->GetShade() )
     {
         vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
         m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
@@ -1008,6 +1074,15 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     connect( m_obscuranceMainThread, SIGNAL( progress(int) ), this, SIGNAL( obscuranceProgress(int) ) );
     connect( m_obscuranceMainThread, SIGNAL( computed() ), this, SLOT( endComputeObscurance() ) );
     m_obscuranceMainThread->start();
+
+    // perquè el DirectIlluminationVoxelShader tingui les noves normals
+    // no funciona sense fer la còpia
+    TransferFunction *transferFunction = m_transferFunction;
+    setTransferFunction( new TransferFunction( *transferFunction ) );
+    delete transferFunction;
+
+    // perquè el ContourVoxelShader tingui les noves normals
+    setContour( m_contourOn );
 }
 
 void Q3DViewer::cancelObscurance()
@@ -1035,6 +1110,18 @@ void Q3DViewer::setObscurance( bool on )
 void Q3DViewer::setObscuranceFactor( double factor )
 {
     m_obscuranceVoxelShader->setFactor( factor );
+}
+
+void Q3DViewer::setContour( bool on )
+{
+    m_contourOn = on;
+
+    if ( on ) m_contourVoxelShader->setGradientEstimator( m_volumeMapper->GetGradientEstimator() );
+}
+
+void Q3DViewer::setContourThreshold( double threshold )
+{
+    m_contourVoxelShader->setThreshold( threshold );
 }
 
 void Q3DViewer::setIsoValue( int isoValue )
