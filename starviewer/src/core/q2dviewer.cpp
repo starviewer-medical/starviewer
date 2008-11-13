@@ -399,9 +399,8 @@ void Q2DViewer::setPresentationLUT( vtkWindowLevelLookupTable *lut )
     m_presentationLut = lut;
 }
 
-void Q2DViewer::mapOrientationStringToAnnotation()
+QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels()
 {
-    //\TODO Cal comprovar que els flips siguin correctes
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
     // això es fa per si tenim un mhd que realment només té un arxiu (imatge) però té més llesques
     // TODO caldria millorar l'accés a les imatges a partir del volum, per no haver de fer aquestes filigranes
@@ -409,6 +408,7 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     // i no ens retorna la llista d'imatges a saco
     index = ( index >= m_mainVolume->getImages().size() ) ? 0 : index;
     QString orientation = m_mainVolume->getImages().at(index)->getPatientOrientation();
+    // tenim les orientacions originals de la imatge en una llista
     QStringList list = orientation.split(",");
 
     bool ok = false;
@@ -424,16 +424,18 @@ void Q2DViewer::mapOrientationStringToAnnotation()
         break;
     }
 
+    QVector<QString> labelsVector(4);
+    // ara caldrà posar, en funció de les rotacions, flips i vista, les etiquetes en l'ordre adequat
     if( ok )
     {
-        int index = 4-m_rotateFactor;
-        // 0:Esquerra , 1:Abaix , 2:Dreta , 3:A dalt
+        int index = 4+m_rotateFactor;
+        // 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
         if( m_lastView == Axial )
         {
-            m_patientOrientationTextActor[ (0 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
-            m_patientOrientationTextActor[ (2 + index) % 4 ]->SetInput( qPrintable( list.at(0) ) );
-            m_patientOrientationTextActor[ (1 + index) % 4 ]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[ (3 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
+            labelsVector[ (0 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(0) ); // esquerra
+            labelsVector[ (2 + index) % 4 ] = list.at(0); // dreta
+            labelsVector[ (1 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(1) ); // a dalt
+            labelsVector[ (3 + index) % 4 ] = list.at(1); // a baix
         }
         else if( m_lastView == Sagital )
         {
@@ -442,10 +444,10 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             if( m_isImageFlipped )
                 index -= 2;
 
-            m_patientOrientationTextActor[ (0 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(1) ) ) );
-            m_patientOrientationTextActor[ (2 + index) % 4 ]->SetInput( qPrintable( list.at(1) ) );
-            m_patientOrientationTextActor[ (1 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
-            m_patientOrientationTextActor[ (3 + index) % 4 ]->SetInput( qPrintable( list.at(2) ) );
+            labelsVector[ (0 + index) % 4 ] =  this->getOppositeOrientationLabel( list.at(1) ); // esquerra
+            labelsVector[ (2 + index) % 4 ] =  list.at(1); // dreta
+            labelsVector[ (1 + index) % 4 ] =  list.at(2); // a dalt
+            labelsVector[ (3 + index) % 4 ] =  this->getOppositeOrientationLabel( list.at(2) ); // a baix
         }
         else if( m_lastView == Coronal )
         {
@@ -454,23 +456,34 @@ void Q2DViewer::mapOrientationStringToAnnotation()
             if( m_isImageFlipped )
                 index -= 2;
 
-            m_patientOrientationTextActor[ (0 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(0) ) ) );
-            m_patientOrientationTextActor[ (2 + index) % 4 ]->SetInput( qPrintable( list.at(0) ) );
-            m_patientOrientationTextActor[ (1 + index) % 4 ]->SetInput( qPrintable( this->getOppositeOrientationLabel( list.at(2) ) ) );
-            m_patientOrientationTextActor[ (3 + index) % 4 ]->SetInput( qPrintable( list.at(2) ) );
+            labelsVector[ (0 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(0) ); // esquerra
+            labelsVector[ (2 + index) % 4 ] = list.at(0); // dreta
+            labelsVector[ (1 + index) % 4 ] = list.at(2); // a dalt
+            labelsVector[ (3 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(2) ); // a baix
         }
         if( m_isImageFlipped )
         {
-            // llavors caldrà intercanviar esquerra per dreta
-            QString swap( m_patientOrientationTextActor[0]->GetInput() );
-            m_patientOrientationTextActor[0]->SetInput( m_patientOrientationTextActor[2]->GetInput() );
-            m_patientOrientationTextActor[2]->SetInput( qPrintable( swap ) );
+            qSwap( labelsVector[0], labelsVector[2] );
         }
     }
     else
     {
-        DEBUG_LOG("L'orientació del pacient conte un nombre incorrecte d'elements:[" + QString::number(list.size()) + "]. No s'aplicaran annotacions de referència sobre la imatge");
+        DEBUG_LOG("L'orientació del pacient conté un nombre incorrecte d'elements:[" + QString::number(list.size()) + "]. No s'aplicaran annotacions de referència sobre la imatge");
     }
+    return labelsVector;
+}
+
+void Q2DViewer::mapOrientationStringToAnnotation()
+{
+    // obtenim els labels que estem veient en aquest moment
+    QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
+
+    // text actor -> 0:Esquerra, 1:Abaix , 2:Dreta, 3:A dalt
+    // labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
+    m_patientOrientationTextActor[0]->SetInput( qPrintable( labels[0] ) );
+    m_patientOrientationTextActor[1]->SetInput( qPrintable( labels[3] ) );
+    m_patientOrientationTextActor[2]->SetInput( qPrintable( labels[2] ) );
+    m_patientOrientationTextActor[3]->SetInput( qPrintable( labels[1] ) );
 }
 
 void Q2DViewer::refreshAnnotations()
