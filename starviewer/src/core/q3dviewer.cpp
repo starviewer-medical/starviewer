@@ -799,23 +799,23 @@ void Q3DViewer::renderIsoSurface()
     //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
     // Create a transfer function mapping scalar value to opacity
     vtkPiecewiseFunction *oTFun = vtkPiecewiseFunction::New();
-    oTFun->AddSegment(10, 0.0, 255, 0.3);
+    oTFun->AddSegment(0.0, 0.0, m_range, 0.3);
 
-    vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
-    opacityTransferFunction->AddSegment(  0, 0.0, 128, 1.0);
-    opacityTransferFunction->AddSegment(128, 1.0, 255, 0.0);
+//     vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
+//     opacityTransferFunction->AddSegment(  0, 0.0, 128, 1.0);
+//     opacityTransferFunction->AddSegment(128, 1.0, 255, 0.0);
 
     // Create a transfer function mapping scalar value to color (grey)
-    vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
-    grayTransferFunction->AddSegment(0, 1.0, 255, 1.0);
+//     vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
+//     grayTransferFunction->AddSegment(0, 1.0, 255, 1.0);
 
     // Create a transfer function mapping scalar value to color (color)
     vtkColorTransferFunction *cTFun = vtkColorTransferFunction::New();
-    cTFun->AddRGBPoint(   0, 1.0, 0.0, 0.0 );
-    cTFun->AddRGBPoint(  64, 1.0, 1.0, 0.0 );
-    cTFun->AddRGBPoint( 128, 0.0, 1.0, 0.0 );
-    cTFun->AddRGBPoint( 192, 0.0, 1.0, 1.0 );
-    cTFun->AddRGBPoint( 255, 0.0, 0.0, 1.0 );
+    cTFun->AddRGBPoint(            0.0, 1.0, 0.0, 0.0 );
+    cTFun->AddRGBPoint( 0.25 * m_range, 1.0, 1.0, 0.0 );
+    cTFun->AddRGBPoint( 0.50 * m_range, 0.0, 1.0, 0.0 );
+    cTFun->AddRGBPoint( 0.75 * m_range, 0.0, 1.0, 1.0 );
+    cTFun->AddRGBPoint(        m_range, 0.0, 0.0, 1.0 );
 
     // Create a transfer function mapping magnitude of gradient to opacity
     vtkPiecewiseFunction *goTFun = vtkPiecewiseFunction::New();

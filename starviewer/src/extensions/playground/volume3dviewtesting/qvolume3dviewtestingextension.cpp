@@ -227,6 +227,7 @@ void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
     unsigned short maximum = static_cast<unsigned short>( qRound( max ) );
     m_gradientEditor->setMaximum( maximum );
     m_editorByValues->setMaximum( maximum );
+    m_isoValueSpinBox->setMaximum( maximum );
 
     if ( m_firstInput )
     {
