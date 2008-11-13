@@ -170,6 +170,11 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs8.png" ), tr("Style 8") );
+    renderingStyle.method = RenderingStyle::Contouring;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
     m_renderingStyleListView->setModel( m_renderingStyleModel );
 }
 
@@ -509,6 +514,10 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
         case RenderingStyle::IsoSurface:
             m_renderingMethodComboBox->setCurrentIndex( 5 );
             m_isoValueSpinBox->setValue( renderingStyle.isoValue );
+            break;
+
+        case RenderingStyle::Contouring:
+            m_renderingMethodComboBox->setCurrentIndex( 6 );
             break;
 
         default:
