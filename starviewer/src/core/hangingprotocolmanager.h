@@ -33,24 +33,24 @@ public:
 
     ~HangingProtocolManager();
 
-    bool searchAndApplyBestHangingProtocol( ViewersLayout * layout, Patient * patient);
+    bool searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
 
 private:
 
     /// Mira si el protocol es pot aplicar al pacient
-    bool isValid( HangingProtocol * protocol, Patient * patient);
+    bool isValid( HangingProtocol *protocol, Patient *patient);
 
     /// Buscar la sèrie corresponent a l'image set definit
-    Series * searchSerie( Patient * patient, HangingProtocolImageSet * imageSet );
+    Series *searchSerie( Patient *patient, HangingProtocolImageSet *imageSet );
 
 	/// Cert si la imatge compleix les restriccions
-	bool isValidImage( Image * image, HangingProtocolImageSet * imageSet );
+	bool isValidImage( Image *image, HangingProtocolImageSet *imageSet );
 
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
-    bool isValidSerie( Patient * patient, Series * serie, HangingProtocolImageSet * imageSet );
+    bool isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet );
 
 	/// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
-	void applyDisplayTransformations( Patient * patient, Series * serie,  int imageNumber, Q2DViewerWidget * viewer, HangingProtocolDisplaySet * displaySet );
+	void applyDisplayTransformations( Patient *patient, Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
 
 private:
 
