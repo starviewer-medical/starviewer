@@ -20,6 +20,7 @@ class Patient;
 class Series;
 class Image;
 class Q2DViewerWidget;
+class Q2DViewer;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -35,8 +36,15 @@ public:
 
     bool searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
 
-private:
+    /// TODO Mètode públic temporal per poder aplicar les transformacions desitjades per un viewer
+    /// es fa especialment per no haver de fer noves classes ni duplicar el mapa de transdormacions
+    /// i per poder aplicar-ho ràpidament sobre mamo. S'ha de plantejar bé on hauria d'anar tot això
+    /// Donada la orientació actual i la desitjada, aplica sobre el viewer donat les transformacions pertinents
+    /// El format de les orientacions és el mateix que el del DICOM, 2 strings separats per "\", 
+    /// el primer indica la direcció de les rows i el segon la direcció de les columnes
+    void applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer);
 
+private:
     /// Mira si el protocol es pot aplicar al pacient
     bool isValid( HangingProtocol *protocol, Patient *patient);
 

@@ -180,8 +180,8 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
             // cerquem l'string amb la orientació del pacient
             value = dicomReader->getAttributeByName( DCM_PatientOrientation );
             if( !value.isEmpty() )
-                image->setPatientOrientation( value.replace( QString("\\") , QString(",") ).replace( QString("F") , QString("I") ).replace( QString("H") , QString("I") ) );
-            else // si no tenim aquest valor, el calculem a partir dels direction cosines
+                image->setPatientOrientation( value );
+            else  // si no tenim aquest valor, el calculem a partir dels direction cosines
             {
                 // I ara ens disposem a crear l'string amb l'orientació del pacient
                 double *orientation = (double *)image->getImageOrientationPatient();
@@ -195,9 +195,9 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
                 QString patientOrientationString;
                 // \TODO potser el delimitador hauria de ser '\' en comptes de ','
                 patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
-                patientOrientationString += ",";
+                patientOrientationString += "\\";
                 patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
-                patientOrientationString += ",";
+                patientOrientationString += "\\";
                 patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
                 image->setPatientOrientation( patientOrientationString );
             }
@@ -208,12 +208,10 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
              * Això fa que el tag PatientOrientation no s'ompli.El PatientOrientation es necessari en cas que no hi hagi
              * ImageOrientationPatient i ImagePositionPatient.
              */
-            // \TODO Part afegida per sortir del pas. S'hauria de refer aquesta part tenint mes en compte la dependencia de tags. Els
-            // replace serveixen perque l'aplicacio funcioni, ja que ara no es preveu que els valors estiguin separts per '\' sino per ','.
-
+            // \TODO Part afegida per sortir del pas. S'hauria de refer aquesta part tenint mes en compte la dependencia de tags
             value = dicomReader->getAttributeByName( DCM_PatientOrientation );
             if( !value.isEmpty() )
-                image->setPatientOrientation( value.replace( QString("\\") , QString(",") ).replace( QString("F") , QString("I") ).replace( QString("H") , QString("S") ) );
+                image->setPatientOrientation( value );
             else
                 DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + modality + "]");
         }
@@ -258,21 +256,10 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         int frames = dicomReader->getAttributeByName( DCM_NumberOfFrames ).toInt();
         image->setNumberOfFrames( frames ? frames : 1 );
 
-/*      // S'ha comentat perquè actualment no es fa servir.
-        if (dicomReader->getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs ).count() > 0)
-        {//Comprovem si tenim la informació dins la seqüència d'exposició, ja el DCM_ExposureInmAs és de tipus 1 si existeix la seqüència Exposure, que conté informació sobre l'exposició del pacient
-            image->setMilliAmpersSecond( dicomReader->getSequenceAttributeByName( DCM_CTExposureSequence , DCM_ExposureInmAs )[0].toDouble() );//Accedim a la posició 0 per llegir el valor de MiliAmpers
-        }
-        else if (dicomReader->tagExists( DCM_Exposure ))
-        {//si no existeix al seqüència provem amb el camp DCM_Exposure que conté l'exposició en mAs
-            image->setMilliAmpersSecond( dicomReader->getAttributeByName( DCM_Exposure ).toDouble() );
-        }
-*/
         if (dicomReader->tagExists( DCM_SliceLocation ))
         {
             image->setSliceLocation( dicomReader->getAttributeByName( DCM_SliceLocation ) );
         }
-
     }
     else
     {
@@ -290,7 +277,7 @@ QString ImageFillerStep::mapDirectionCosinesToOrientationString( double vector[3
 
     char orientationX = vector[0] < 0 ? 'R' : 'L';
     char orientationY = vector[1] < 0 ? 'A' : 'P';
-    char orientationZ = vector[2] < 0 ? 'I' : 'S';
+    char orientationZ = vector[2] < 0 ? 'F' : 'H';
 
     double absX = fabs( vector[0] );
     double absY = fabs( vector[1] );
