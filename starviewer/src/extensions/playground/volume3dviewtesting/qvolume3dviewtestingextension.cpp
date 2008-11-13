@@ -144,6 +144,14 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs4.png" ), tr("Style 4") );
+    renderingStyle.method = RenderingStyle::Texture3D;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = false;
+    renderingStyle.transferFunction = *transferFunction;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
     m_renderingStyleListView->setModel( m_renderingStyleModel );
 }
 
@@ -466,6 +474,19 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
                 }
 
                 m_obscuranceFactorDoubleSpinBox->setValue( renderingStyle.obscuranceFactor );
+            }
+
+            break;
+
+        case RenderingStyle::Texture3D:
+            m_renderingMethodComboBox->setCurrentIndex( 3 );
+            applyClut( renderingStyle.transferFunction );
+            m_shadingCheckBox->setChecked( renderingStyle.diffuseLighting );
+
+            if ( renderingStyle.diffuseLighting )
+            {
+                m_specularCheckBox->setChecked( renderingStyle.specularLighting );
+                if ( renderingStyle.specularLighting ) m_specularPowerDoubleSpinBox->setValue( renderingStyle.specularPower );
             }
 
             break;
