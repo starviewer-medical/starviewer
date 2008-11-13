@@ -853,7 +853,6 @@ void Q3DViewer::renderTexture2D()
 
     /// \todo Això és massa lent, potser l'hauríem de treure.
     m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->ShadeOff();   // off perquè vagi més ràpid
     m_volumeProperty->SetInterpolationTypeToNearest();  // nearest perquè vagi més ràpid
 
     vtkVolumeTextureMapper2D *volumeMapper = vtkVolumeTextureMapper2D::New();

@@ -505,6 +505,7 @@ void QVolume3DViewTestingExtension::updateUiForRenderingMethod( int index )
             break;
 
         case 4: // textures 2d
+            m_shadingOptionsWidget->show();
             break;
 
         case 5: // isosuperfícies
