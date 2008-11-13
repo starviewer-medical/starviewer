@@ -30,6 +30,7 @@ public:
     bool obscurance;
     ObscuranceQuality obscuranceQuality;
     double obscuranceFactor;
+    double isoValue;
 
 };
 

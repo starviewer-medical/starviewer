@@ -164,6 +164,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs7.png" ), tr("Style 7") );
+    renderingStyle.method = RenderingStyle::IsoSurface;
+    renderingStyle.isoValue = 1200.0;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
     m_renderingStyleListView->setModel( m_renderingStyleModel );
 }
 
@@ -190,9 +196,6 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_3DView, SIGNAL( obscuranceCancelledByProgram() ), this, SLOT( autoCancelObscurance() ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool ) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-
-    connect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), m_3DView, SLOT( setIsoValue(int) ) );
-    connect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( render() ) );
 
     // clut editor
     connect( m_loadClutPushButton, SIGNAL( clicked() ), SLOT( loadClut() ) );
@@ -503,6 +506,11 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
             m_renderingMethodComboBox->setCurrentIndex( 2 );
             break;
 
+        case RenderingStyle::IsoSurface:
+            m_renderingMethodComboBox->setCurrentIndex( 5 );
+            m_isoValueSpinBox->setValue( renderingStyle.isoValue );
+            break;
+
         default:
             enableAutoUpdate();
             return;
@@ -592,6 +600,7 @@ void QVolume3DViewTestingExtension::updateView()
     m_3DView->setSpecularPower( m_specularPowerDoubleSpinBox->value() );
     m_3DView->setObscurance( m_obscuranceCheckBox->isChecked() );
     m_3DView->setObscuranceFactor( m_obscuranceFactorDoubleSpinBox->value() );
+    m_3DView->setIsoValue( m_isoValueSpinBox->value() );
 
     m_3DView->render();
 
@@ -612,6 +621,9 @@ void QVolume3DViewTestingExtension::enableAutoUpdate()
     // obscurances
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
     connect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
+
+    // isosuperfícies
+    connect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( updateView() ) );
 }
 
 
@@ -628,6 +640,9 @@ void QVolume3DViewTestingExtension::disableAutoUpdate()
     // obscurances
     disconnect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), this, SLOT( updateView() ) );
     disconnect( m_obscuranceFactorDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( updateView() ) );
+
+    // isosuperfícies
+    disconnect( m_isoValueSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( updateView() ) );
 }
 
 

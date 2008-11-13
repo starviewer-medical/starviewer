@@ -17,6 +17,7 @@ QVariant RenderingStyle::toVariant() const
     map["obscurance"] = obscurance;
     map["obscuranceQuality"] = obscuranceQuality;
     map["obscuranceFactor"] = obscuranceFactor;
+    map["isoValue"] = isoValue;
 
     return map;
 }
@@ -35,6 +36,7 @@ RenderingStyle RenderingStyle::fromVariant( const QVariant &variant )
     renderingStyle.obscurance = map["obscurance"].toBool();
     renderingStyle.obscuranceQuality = static_cast<ObscuranceQuality>( map["obscuranceQuality"].toInt() );
     renderingStyle.obscuranceFactor = map["obscuranceFactor"].toDouble();
+    renderingStyle.isoValue = map["isoValue"].toDouble();
 
     return renderingStyle;
 }
