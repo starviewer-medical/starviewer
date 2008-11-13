@@ -152,6 +152,13 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs5.png" ), tr("Style 5") );
+    renderingStyle.method = RenderingStyle::Texture2D;
+    renderingStyle.diffuseLighting = false;
+    renderingStyle.transferFunction = *transferFunction;
+    item->setData( renderingStyle.toVariant() );
+    m_renderingStyleModel->appendRow( item );
+
     m_renderingStyleListView->setModel( m_renderingStyleModel );
 }
 
@@ -449,7 +456,15 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
     switch ( renderingStyle.method )
     {
         case RenderingStyle::RayCasting:
-            m_renderingMethodComboBox->setCurrentIndex( renderingStyle.obscurance ? 1 : 0 );
+        case RenderingStyle::Texture3D:
+        case RenderingStyle::Texture2D:
+            if ( renderingStyle.method == RenderingStyle::RayCasting )
+                m_renderingMethodComboBox->setCurrentIndex( renderingStyle.obscurance ? 1 : 0 );
+            else if ( renderingStyle.method == RenderingStyle::Texture3D )
+                m_renderingMethodComboBox->setCurrentIndex( 3 );
+            else
+                m_renderingMethodComboBox->setCurrentIndex( 4 );
+
             applyClut( renderingStyle.transferFunction );
             m_shadingCheckBox->setChecked( renderingStyle.diffuseLighting );
 
@@ -459,7 +474,7 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
                 if ( renderingStyle.specularLighting ) m_specularPowerDoubleSpinBox->setValue( renderingStyle.specularPower );
             }
 
-            if ( renderingStyle.obscurance )
+            if ( renderingStyle.method == RenderingStyle::RayCasting && renderingStyle.obscurance )
             {
                 if ( !m_computingObscurance )   // si s'estan calculant no toquem res
                 {
@@ -474,19 +489,6 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
                 }
 
                 m_obscuranceFactorDoubleSpinBox->setValue( renderingStyle.obscuranceFactor );
-            }
-
-            break;
-
-        case RenderingStyle::Texture3D:
-            m_renderingMethodComboBox->setCurrentIndex( 3 );
-            applyClut( renderingStyle.transferFunction );
-            m_shadingCheckBox->setChecked( renderingStyle.diffuseLighting );
-
-            if ( renderingStyle.diffuseLighting )
-            {
-                m_specularCheckBox->setChecked( renderingStyle.specularLighting );
-                if ( renderingStyle.specularLighting ) m_specularPowerDoubleSpinBox->setValue( renderingStyle.specularPower );
             }
 
             break;
