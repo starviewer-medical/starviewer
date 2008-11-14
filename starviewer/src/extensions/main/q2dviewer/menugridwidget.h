@@ -12,6 +12,7 @@
 // FWD declarations
 class QWidget;
 class QGridLayout;
+class QGroupBox;
 class Math;
 
 namespace udg {
@@ -24,6 +25,7 @@ Classe que representa el menu desplegable per seleccionar el grid, amb opcions d
 
 // FWD declarations
 class ItemMenu;
+class HangingProtocol;
 
 class MenuGridWidget : public QWidget {
 Q_OBJECT
@@ -59,16 +61,17 @@ signals:
     
     /// Emet que s'ha escollit un grid
     void selectedGrid( int , int );
+	void selectedGrid( int );
 
 protected:
 
     /// Mètode que crea una icona de rows x columns
     ItemMenu * createIcon( int rows, int columns );
 
-protected:
+	/// Mètode que crea una icona segons un hanging protocol
+	ItemMenu * createIcon( HangingProtocol * hangingProtocol, int hangingProtocolNumber );
 
-    /// Widget on posarem tots els items
-    QWidget * m_predefinedGrids;
+protected:
 
     /// Nombre de columnes a mostrar
     int m_maxColumns;
@@ -81,6 +84,11 @@ protected:
 
     /// Llista dels items
     QList<ItemMenu *> * m_itemList;
+
+    /// Agrupament del menu
+    QGroupBox * m_predefinedGridBox;
+    QGroupBox * m_hangingProtocolBox;
+    QGroupBox * m_tableGridBox;
 };
 
 }

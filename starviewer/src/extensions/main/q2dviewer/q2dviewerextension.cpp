@@ -190,6 +190,7 @@ void Q2DViewerExtension::createConnections()
 
     // Connexions del menu
     connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea , SLOT( setGrid( int, int ) ) );
+	connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int ) ), this, SLOT( setHangingProtocol( int ) ) );
     connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea, SLOT( setGrid( int, int ) ) );
 
     // EXTRA!!!!!\TODO es temporal
@@ -584,4 +585,10 @@ void Q2DViewerExtension::disableSynchronization()
     }
 }
 
+void Q2DViewerExtension::setHangingProtocol( int hangingProtocolNumber )
+{
+	/// Aplicació dels hanging protocols
+    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+	hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
+}
 }

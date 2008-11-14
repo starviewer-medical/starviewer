@@ -83,4 +83,15 @@ void ItemMenu::setSelected( bool option )
     }
 }
 
+
+void ItemMenu::setData( QString data )
+{ 
+	m_data = data;
+}
+
+QString ItemMenu::getData( )
+{ 
+	return m_data; 
+}
+
 }

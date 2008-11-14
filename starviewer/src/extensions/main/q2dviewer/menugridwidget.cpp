@@ -10,25 +10,27 @@
 #include "itemmenu.h"
 #include "logging.h"
 #include "math.h"
+#include "hangingprotocolsrepository.h"
+#include "hangingprotocol.h"
+#include "hangingprotocoldisplayset.h"
 #include <QFrame>
 #include <QPalette>
 #include <QMouseEvent>
 #include <QGridLayout>
 #include <QLabel>
+#include <QGroupBox>
+#include <QSpacerItem>
 
 namespace udg {
 
 MenuGridWidget::MenuGridWidget( QWidget *parent )
  : QWidget( parent )
 {
-    m_predefinedGrids = new QWidget( this );
-    m_predefinedGrids->setGeometry(QRect(0, 10, 271, 181));
-
     setWindowFlags(Qt::Popup);
-    m_maxColumns = 4;
+    m_maxColumns = 5;
     m_maxElements = 16;
 
-    m_gridLayout = new QGridLayout( m_predefinedGrids );
+    m_gridLayout = new QGridLayout( this );
     m_gridLayout->setSpacing( 6 );
     m_gridLayout->setMargin( 6 );
 
@@ -55,18 +57,29 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
     int positionRow = 0;
     int positionColumn = 0;
 
+    m_predefinedGridBox = new QGroupBox( this );
+    m_predefinedGridBox->setAlignment(Qt::AlignRight);
+    m_predefinedGridBox->setTitle( "Predefined grids " );
+    m_gridLayout->addWidget( m_predefinedGridBox, 0, 0, 1, 1 );
+    QGridLayout * gridLayoutPredefined = new QGridLayout( m_predefinedGridBox );
+    QSpacerItem * spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    gridLayoutPredefined->addItem(spacerItem, 0, m_maxColumns, 1, 1);
+
     dropContent();
 
-    if( listPredefinedGridsList.size() >= m_maxColumns ) width = 70 * m_maxColumns;
+	int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
+    int numberOfItems = listPredefinedGridsList.size() + numberOfHangingProtocols;
+
+	if( numberOfItems >= m_maxColumns ) width = 70 * m_maxColumns + ( m_gridLayout->margin()*2 );
     else
     {
-        width = 70 * listPredefinedGridsList.size();
+        width = 70 * numberOfItems + ( m_gridLayout->margin()*2 );
     }
 
-    height = 100 *  ( ceil ( listPredefinedGridsList.size()/( m_maxColumns*1.0 ) ) );
+	height = 86 *  ( ceil ( numberOfItems/(m_maxColumns*1.0 ) ) );
 
-    m_predefinedGrids->resize( width, height );
-    this->resize( width, height+10 );
+    m_predefinedGridBox->resize( width, height );
+    this->resize( width+6, height+6 );
 
     for( numberPredefined = 0; numberPredefined < listPredefinedGridsList.size(); numberPredefined++ )
     {
@@ -74,16 +87,47 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
         rows = values.value( 0 ).toInt();
         columns = values.value( 1 ).toInt();
         icon = createIcon( rows, columns );
-        m_gridLayout->addWidget( icon, positionRow, positionColumn );
+        gridLayoutPredefined->addWidget( icon, positionRow, positionColumn );
         m_itemList->push_back( icon );
         positionColumn ++;
 
         if( positionColumn == m_maxColumns )
         {
             positionColumn = 0;
-            positionRow ++;
+            positionRow++;
         }
     }
+
+    // Creació de hanging protocols
+	int hangingProtocolNumber;
+	Identifier id;
+	HangingProtocol * hangingProtocol;
+    m_hangingProtocolBox = new QGroupBox( this );
+    m_hangingProtocolBox->setTitle( "Hanging Protocols");
+    m_hangingProtocolBox->setAlignment(Qt::AlignRight);
+    m_gridLayout->addWidget( m_hangingProtocolBox, 1, 0, 1, 1 );
+    QGridLayout * gridLayoutHanging = new QGridLayout( m_hangingProtocolBox );
+    positionRow = 0;
+    positionColumn = 0;
+
+	for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
+	{	
+		id.setValue( hangingProtocolNumber );
+        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
+		icon = createIcon( hangingProtocol, hangingProtocolNumber );
+		
+		gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
+        m_itemList->push_back( icon );
+        positionColumn ++;
+
+        if( positionColumn == m_maxColumns )
+        {
+            positionColumn = 0;
+            positionRow++;
+        }
+	}
+    if ( numberOfHangingProtocols == 0 ) 
+           m_hangingProtocolBox->hide();
 }
 
 void MenuGridWidget::createPredefinedGrids( int numSeries )
@@ -118,11 +162,60 @@ void MenuGridWidget::createPredefinedGrids( int numSeries )
     createPredefinedGrids( m_predefinedGridsList );
 }
 
+ItemMenu * MenuGridWidget::createIcon( HangingProtocol * hangingProtocol, int hangingProtocolNumber )
+{
+    HangingProtocolDisplaySet * displaySet;
+	int displaySetNumber;
+	ItemMenu * icon = new ItemMenu( this );
+	icon->setData( QString( tr( "%1" ).arg( hangingProtocolNumber ) ) );
+	QStringList listOfPositions;
+	double x1;
+	double x2;
+	double y1;
+	double y2;
+	GridIcon* newIcon;
+
+    icon->setGeometry( 0, 0, 64, 80 ); 
+	icon->setMaximumWidth( 64 );
+	icon->setMinimumWidth( 64 );
+	icon->setMinimumHeight( 80 );
+	icon->setMaximumHeight( 80 );
+    icon->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
+
+	QLabel * sizeText = new QLabel( icon );
+    sizeText->setText( hangingProtocol->getName() );
+    sizeText->setAlignment( Qt::AlignHCenter );
+    sizeText->setGeometry( 0, 64, 64, 80 );
+
+	for( displaySetNumber = 1; displaySetNumber <= hangingProtocol->getNumberOfDisplaySets(); displaySetNumber++ )
+	{
+		displaySet = hangingProtocol->getDisplaySet( displaySetNumber );
+		newIcon = new GridIcon( icon );
+
+		listOfPositions = displaySet->getPosition().split("\\");
+		x1 = listOfPositions.value( 0 ).toDouble();
+		y1 = listOfPositions.value( 1 ).toDouble();
+		x2 = listOfPositions.value( 2 ).toDouble();
+		y2 = listOfPositions.value( 3 ).toDouble();
+
+		newIcon->setGeometry( x1*64, (1-y1)*64, ((x2-x1)*64), (y1-y2)*64 );
+		newIcon->show();
+	}
+
+	icon->show();
+    connect( icon , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
+    return icon;
+}
+
 ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
 {
     ItemMenu * icon = new ItemMenu( this );
-    icon->setData( new QString( tr( "%1,%2" ).arg( rows ).arg( columns ) ) );
-    icon->setGeometry ( 0, 0, 32, 32 );
+    icon->setData( QString( tr( "%1,%2" ).arg( rows ).arg( columns ) ) );
+    icon->setGeometry ( 0, 0, 64, 80 );
+	icon->setMaximumWidth( 64 );
+	icon->setMinimumWidth( 64 );
+	icon->setMinimumHeight( 80 );
+	icon->setMaximumHeight( 80 );
     icon->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
 
     int numberRows;
@@ -169,11 +262,20 @@ void MenuGridWidget::setMaxElements( int elements )
 void MenuGridWidget::emitSelected( ItemMenu * selected )
 {
 
-    QStringList values = ( selected->getData() )->split( "," );
-    int rows = values.value( 0 ).toInt();
-    int columns = values.value( 1 ).toInt();
+	if( selected->getData().contains(",") )// És un grid regular
+	{
+		QStringList values = ( selected->getData() ).split( "," );
+		int rows = values.value( 0 ).toInt();
+		int columns = values.value( 1 ).toInt();
 
-    emit selectedGrid( rows, columns );
+		emit selectedGrid( rows, columns );
+	}
+	else // És un grid de hanging protocol
+	{
+		int i;
+		i = selected->getData().toInt();
+		emit selectedGrid( selected->getData().toInt() );
+	}
     hide();
 
 }

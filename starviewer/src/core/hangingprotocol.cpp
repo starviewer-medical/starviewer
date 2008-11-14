@@ -26,6 +26,16 @@ HangingProtocol::~HangingProtocol()
 {
 }
 
+void HangingProtocol::setName( QString name )
+{
+    m_name = name;
+}
+
+QString HangingProtocol::getName()
+{
+    return m_name;
+}
+
 HangingProtocolLayout * HangingProtocol::getHangingProtocolLayout()
 {
     return m_layout;
