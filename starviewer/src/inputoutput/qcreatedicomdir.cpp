@@ -652,7 +652,17 @@ void QCreateDicomdir::deviceChanged( int index )
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
             m_stackedWidget->setCurrentIndex(0);
-            int maximumCapacity = (m_currentDevice == CreateDicomdir::CdRom) ? m_cdRomSizeMb : m_dvdRomSizeMb;
+            int maximumCapacity;
+
+            if (m_currentDevice == CreateDicomdir::CdRom) 
+            {
+                maximumCapacity = m_cdRomSizeMb;
+            }
+            else
+            {
+                maximumCapacity = m_dvdRomSizeMb;
+            }
+
 /*          TODO: No comprovem la mida del dicomdir
             if( sizeInMB < maximumCapacity )
             {
