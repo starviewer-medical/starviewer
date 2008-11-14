@@ -669,8 +669,7 @@ void QCreateDicomdir::deviceChanged( int index )
                 //if( sizeInMB < m_dvdRomSizeMb )
                 //{
                    // m_progressBarOcupat->setMaximum( m_dvdRomSizeMb );
-                    
- = m_dvdRomSizeBytes; //convertim a bytes capacitat dvd
+                    m_DiskSpaceBytes = m_dvdRomSizeBytes; //convertim a bytes capacitat dvd
                     //m_progressBarOcupat->repaint();
                 /*}
                 else
