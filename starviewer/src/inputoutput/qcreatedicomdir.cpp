@@ -650,33 +650,24 @@ void QCreateDicomdir::deviceChanged( int index )
             m_DiskSpaceBytes = m_hardDiskSizeBytes;
             break;
         case CreateDicomdir::CdRom:
-                m_stackedWidget->setCurrentIndex(0);
-                //TODO: No comprovem la mida del dicomdir
-                //if( sizeInMB < m_cdRomSizeMb )
-                //{
-                //    m_progressBarOcupat->setMaximum( m_cdRomSizeMb );
-                    m_DiskSpaceBytes = m_cdRomSizeBytes; // convertim a bytes capacaticat cd
-                 //   m_progressBarOcupat->repaint();
-                /*}
-                else
-                {
-                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is 700 Mb" ) );
-                }*/
-                break;
         case CreateDicomdir::DvdRom:
-                m_stackedWidget->setCurrentIndex(0);
-                //TODO:No comprovem mida del dicomdir
-                //if( sizeInMB < m_dvdRomSizeMb )
-                //{
-                   // m_progressBarOcupat->setMaximum( m_dvdRomSizeMb );
-                    m_DiskSpaceBytes = m_dvdRomSizeBytes; //convertim a bytes capacitat dvd
-                    //m_progressBarOcupat->repaint();
-                /*}
-                else
-                {
-                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a dvd is 4800 Mb" ) );
-                }*/
-                break;
+            m_stackedWidget->setCurrentIndex(0);
+            int maximumCapacity = (m_currentDevice == CreateDicomdir::CdRom) ? m_cdRomSizeMb : m_dvdRomSizeMb;
+/*          TODO: No comprovem la mida del dicomdir
+            if( sizeInMB < maximumCapacity )
+            {
+                m_progressBarOcupat->setMaximum( maximumCapacity );
+*/
+                m_DiskSpaceBytes = maximumCapacity; // convertim a bytes capacaticat cd/dvd
+/*              
+                m_progressBarOcupat->repaint();
+          }
+            else
+            {
+                QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
+            }
+*/
+            break;
     }
 
     /*if ( sizeInMB < m_progressBarOcupat->maximum() )
