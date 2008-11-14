@@ -94,6 +94,9 @@ public slots:
     /// Desactiva l'eina de sincronització.
     void disableSynchronization();
 
+	// Apilicar un hanging protocol
+	void setHangingProtocol( int hangingProtocolNumber );
+
 private:
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
     void createActions();

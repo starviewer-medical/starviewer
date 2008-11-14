@@ -65,6 +65,8 @@ void ViewersLayout::removeLayouts()
     {
         m_viewersLayout->removeWidget( m_vectorViewers.value( i ) );
     }
+	m_positionsList.clear();
+	m_numberOfVisibleViewers = 0;
 }
 
 void ViewersLayout::restoreLayouts()
@@ -100,7 +102,7 @@ void ViewersLayout::restoreLayouts()
 		m_viewersLayout->addWidget( m_vectorViewers.value(i), row, column );
 
 		column++;
-		if( column >= m_totalColumns)
+		if( column >= m_totalColumns )
 		{
 			row++;
 			column = 0;
@@ -236,7 +238,6 @@ void ViewersLayout::removeRows( int rows )
 
 void ViewersLayout::setGrid( int rows, int columns )
 {
-
     // Mirem si les tenim amagades i mostrem totes les necessaries
     int windowsToShow = 0;
     int windowsToCreate = 0;
@@ -353,7 +354,7 @@ Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 
 	m_rows = 0;
     m_columns = 0;
-    if( m_gridLayout ) removeLayouts();
+    if( m_isRegular ) removeLayouts();
 
 	if ( m_numberOfVisibleViewers < m_vectorViewers.size() )
 	{
@@ -371,7 +372,7 @@ Q2DViewerWidget * ViewersLayout::addViewer( QString position )
     x2 = listOfPositions.value( 2 ).toDouble();
     y2 = listOfPositions.value( 3 ).toDouble();
     newViewer->setGeometry( x1*screen_x, (1-y1)*screen_y, ((x2-x1)*screen_x), (y1-y2)*screen_y );
-
+	newViewer->show();
 	m_numberOfVisibleViewers++;
 
     emit viewerAdded( newViewer );

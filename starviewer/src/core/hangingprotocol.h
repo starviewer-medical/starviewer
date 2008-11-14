@@ -27,6 +27,9 @@ public:
 
     ~HangingProtocol();
 
+    /// Posar el nom al hanging protocol
+    void setName( QString name );
+
     /// Definició dels diferents nivells que pot tenir un Hanging Protocol
     enum HangingProtocolLevel { MANUFACTURER, SITE, USER_GROUP, SINGLE_USER };
 
@@ -50,6 +53,9 @@ public:
 
     /// Afegeix un display set
     void addDisplaySet ( HangingProtocolDisplaySet * displaySet );
+
+    /// Obtenir el nom del hanging protocol
+    QString getName();
 
     /// Obté el nombre total d'image sets
     int getNumberOfImageSets();

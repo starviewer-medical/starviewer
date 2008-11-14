@@ -193,6 +193,49 @@ bool HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *l
     return false;
 }
 
+void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
+{
+	Identifier id;
+	HangingProtocol * hangingProtocol;
+	int displaySetNumber;
+	Series * serie;
+	Q2DViewerWidget * viewerWidget;
+	HangingProtocolImageSet * imageSet;
+	HangingProtocolDisplaySet * displaySet;
+
+	id.setValue( hangingProtocolNumber );
+    hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
+	displaySetNumber = hangingProtocol->getNumberOfDisplaySets();
+	layout->setGrid(1,1);
+
+	for( displaySetNumber = 0; displaySetNumber < hangingProtocol->getNumberOfDisplaySets(); displaySetNumber ++)
+	{
+		serie = 0;
+		displaySet = hangingProtocol->getDisplaySet( displaySetNumber + 1 );
+		imageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
+		serie = imageSet->getSeriesToDisplay();
+		viewerWidget = layout->addViewer( displaySet->getPosition() );
+		
+		if( serie != 0 ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
+		{			
+			if( serie->getFirstVolume())
+			{
+				viewerWidget->setInput( serie->getFirstVolume() );
+			
+				if( imageSet->getTypeOfItem() == "image" )
+				{
+					viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
+					applyDisplayTransformations( patient, serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+				}
+				else
+				{
+					applyDisplayTransformations( patient, serie, 0, viewerWidget, displaySet);
+				}
+			}
+		}
+	}
+}
+
 bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patient)
 {
     bool valid = false;

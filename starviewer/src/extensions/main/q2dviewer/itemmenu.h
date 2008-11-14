@@ -31,10 +31,10 @@ public:
     ~ItemMenu();
 
     /// Posar una dada
-    void setData( QString * data ){ m_data = data; }
+    void setData( QString data );
 
     /// Obtenir les dades
-    QString * getData( ){ return m_data; }
+    QString getData( );
 
     /// Mètode per fixar que les caselles es quedin seleccionades o es deseleccionin al marxar el mouse
     void setFixed( bool option );
@@ -58,7 +58,7 @@ protected:
 protected:
 
     /// Dades que pot guardar el widget
-    QString * m_data;
+    QString m_data;
 
     /// Atribut que informa si s'ha de quedar seleccionat o s'ha de deseleccionar
     bool m_fixed;

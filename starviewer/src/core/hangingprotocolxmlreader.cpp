@@ -96,8 +96,6 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
 
         if( reader->tokenType() == QXmlStreamReader::StartElement )
         {
-            DEBUG_LOG( tr("name: %1").arg(reader->name().toString()) );
-
             if( reader->name() == "hangingProtocol")
             {
                 hangingProtocol = new HangingProtocol();
@@ -109,7 +107,13 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
                     reader->readNext();
                     reader->readNext();
 
-                    if( reader->name() == "numberScreens" )
+                    if( reader->name() == "hangingProtocolName" )
+                    {
+                        reader->readNext();
+                        hangingProtocol->setName( reader->text().toString() );
+                        reader->readNext();
+                    }
+                    else if( reader->name() == "numberScreens" )
                     {
                         reader->readNext();
                         hangingProtocol->setNumberOfScreens( reader->text().toString().toInt() );

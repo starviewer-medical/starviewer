@@ -34,7 +34,11 @@ public:
 
     ~HangingProtocolManager();
 
+	/// Buscar i aplicar el millor hanging protocol
     bool searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
+
+	// Aplicar un hanging protocol concret
+	void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );
 
     /// TODO Mètode públic temporal per poder aplicar les transformacions desitjades per un viewer
     /// es fa especialment per no haver de fer noves classes ni duplicar el mapa de transdormacions
