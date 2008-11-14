@@ -81,6 +81,16 @@ void DatabaseConnection::close()
     }
 }
 
+QString DatabaseConnection::getLastErrorMessage()
+{
+    return sqlite3_errmsg(m_databaseConnection);
+}
+
+int DatabaseConnection::getLastErrorCode()
+{
+    return sqlite3_errcode(m_databaseConnection); 
+}
+
 DatabaseConnection::~DatabaseConnection()
 {
     if (connected())

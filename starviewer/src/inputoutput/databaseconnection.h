@@ -50,6 +50,12 @@ public:
     /// tanca la connexió de la base de dades*/
     void close();
 
+    ///Retorna l'últim missatge d'error produït a la base de dades
+    QString getLastErrorMessage();
+
+    ///Retorna l'últim codi d'error produït a la base de dades
+    int getLastErrorCode();
+
     /// Comença/finalitza/Fa rollback una transacció a la base de dades. Només pot haver una transacció a la vegada amb la mateixa connexió, per això aquests mètodes tenen implantat un semàfor, qeu control l'accés a les transaccions
     //TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
     void beginTransaction();

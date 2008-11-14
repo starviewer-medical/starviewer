@@ -340,10 +340,11 @@ QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete
 
 void LocalDatabaseStudyDAL::logError(const QString &sqlSentence)
 {
-    QString errorNumber;
-
-    errorNumber = errorNumber.setNum(getLastError(), 10);
-    ERROR_LOG("S'ha produït l'error: " + errorNumber + " al executar la següent sentència sql " + sqlSentence);
+        //Ingnorem l'error de clau duplicada
+    if (getLastError() != SQLITE_CONSTRAINT)
+    {
+        ERROR_LOG("S'ha produït l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la següent sentència sql " + sqlSentence);
+    }
 }
 
 }
