@@ -86,9 +86,9 @@ protected:
     QList<ItemMenu *> * m_itemList;
 
     /// Agrupament del menu
-    QGroupBox * m_predefinedGridBox;
-    QGroupBox * m_hangingProtocolBox;
-    QGroupBox * m_tableGridBox;
+    QWidget * m_predefinedGridWidget;
+    QWidget * m_hangingProtocolWidget;
+    QWidget * m_tableGridWidget;
 };
 
 }

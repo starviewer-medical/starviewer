@@ -57,14 +57,28 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
     int positionRow = 0;
     int positionColumn = 0;
 
-    m_predefinedGridBox = new QGroupBox( this );
-    m_predefinedGridBox->setAlignment(Qt::AlignRight);
-    m_predefinedGridBox->setTitle( "Predefined grids " );
-    m_gridLayout->addWidget( m_predefinedGridBox, 0, 0, 1, 1 );
-    QGridLayout * gridLayoutPredefined = new QGridLayout( m_predefinedGridBox );
-    QSpacerItem * spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    gridLayoutPredefined->addItem(spacerItem, 0, m_maxColumns, 1, 1);
+    m_predefinedGridWidget = new QWidget( this );
+    QGridLayout * gridLayoutPredefined = new QGridLayout();
+    gridLayoutPredefined->setSpacing( 6 );
+    gridLayoutPredefined->setMargin( 6 );
+    QSpacerItem * spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
+ 	gridLayoutPredefined->addItem(spacerItem, 0, m_maxColumns, 1, 1);
 
+    QFrame * line_predefined = new QFrame(this);
+    line_predefined->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    line_predefined->setFrameShape(QFrame::HLine);
+    line_predefined->setFrameShadow(QFrame::Sunken);
+    QLabel * label_predefined = new QLabel(this);
+    label_predefined->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    label_predefined->setText("Grid layouts");
+    QHBoxLayout * hboxLayout_predefined = new QHBoxLayout();
+    hboxLayout_predefined->setMargin( 0 );
+    hboxLayout_predefined->setSpacing( 6 );
+    hboxLayout_predefined->addWidget(line_predefined);
+    hboxLayout_predefined->addWidget(label_predefined);
+    
+    m_gridLayout->addLayout( hboxLayout_predefined, 0, 0, 1, 1 );
+    m_gridLayout->addLayout( gridLayoutPredefined, 1, 0, 1, 1);
     dropContent();
 
 	int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
@@ -78,7 +92,7 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 
 	height = 86 *  ( ceil ( numberOfItems/(m_maxColumns*1.0 ) ) );
 
-    m_predefinedGridBox->resize( width, height );
+    m_predefinedGridWidget->resize( width, height );
     this->resize( width+6, height+6 );
 
     for( numberPredefined = 0; numberPredefined < listPredefinedGridsList.size(); numberPredefined++ )
@@ -98,17 +112,35 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
         }
     }
 
-    // Creació de hanging protocols
+    // Creació de menu per hanging protocols
 	int hangingProtocolNumber;
 	Identifier id;
 	HangingProtocol * hangingProtocol;
-    m_hangingProtocolBox = new QGroupBox( this );
-    m_hangingProtocolBox->setTitle( "Hanging Protocols");
-    m_hangingProtocolBox->setAlignment(Qt::AlignRight);
-    m_gridLayout->addWidget( m_hangingProtocolBox, 1, 0, 1, 1 );
-    QGridLayout * gridLayoutHanging = new QGridLayout( m_hangingProtocolBox );
     positionRow = 0;
     positionColumn = 0;
+
+    m_hangingProtocolWidget = new QWidget( this );
+    QGridLayout * gridLayoutHanging = new QGridLayout();
+    gridLayoutHanging->setSpacing( 6 );
+    gridLayoutHanging->setMargin( 6 );
+    QSpacerItem * spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
+    gridLayoutPredefined->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
+
+    QFrame * line_hanging = new QFrame(this);
+    line_hanging->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    line_hanging->setFrameShape(QFrame::HLine);
+    line_hanging->setFrameShadow(QFrame::Sunken);
+    QLabel * label_hanging = new QLabel(this);
+    label_hanging->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    label_hanging->setText("Hanging protocols");
+    QHBoxLayout * hboxLayout_hanging = new QHBoxLayout();
+    hboxLayout_hanging->setMargin( 0 );
+    hboxLayout_hanging->setSpacing( 6 );
+    hboxLayout_hanging->addWidget(line_hanging);
+    hboxLayout_hanging->addWidget(label_hanging);
+    
+    m_gridLayout->addLayout( hboxLayout_hanging, 2, 0, 1, 1 );
+    m_gridLayout->addLayout( gridLayoutHanging, 3, 0, 1, 1);
 
 	for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
 	{	
@@ -127,7 +159,7 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
         }
 	}
     if ( numberOfHangingProtocols == 0 ) 
-           m_hangingProtocolBox->hide();
+           m_hangingProtocolWidget->hide();
 }
 
 void MenuGridWidget::createPredefinedGrids( int numSeries )
@@ -228,7 +260,7 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
 
     QGridLayout * gridLayout = new QGridLayout();
     gridLayout->setSpacing( 0 );
-    gridLayout->setMargin( 2 );
+    gridLayout->setMargin( 0 );
 
     QGridLayout * verticalLayout = new QGridLayout( icon );
     verticalLayout->setSpacing( 0 );
