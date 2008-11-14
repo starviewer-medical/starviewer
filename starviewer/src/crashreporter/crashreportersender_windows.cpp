@@ -25,23 +25,23 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
     }
     
     // Enviem el report
-    std::wstring reportCode;
-    int httpResponse = 0;
+    std::wstring responseBody;
+    int responseCode = 0;
     bool success = google_breakpad::HTTPUpload::SendRequest(url.toStdWString(),
                                                             parameters,
                                                             minidumpPath.toStdWString(),
                                                             L"upload_file_minidump",
-                                                            &reportCode,
-                                                            &httpResponse);
+                                                            &responseBody,
+                                                            &responseCode);
     if (success)
     {
         printf("Successfully sent the minidump file.\n");
     }
     else
     {
-        printf("Failed to send minidump: %i\n", httpResponse);
+        printf("Failed to send minidump: %i\n", responseCode);
         printf("Response:\n");
-        printf("%s\n", reportCode.c_str());
+        printf("%s\n", responseBody.c_str());
     }
 
     return success;
