@@ -63,16 +63,16 @@ public:
      */
     void insertStudyList( QList<DICOMStudy> studyList );
 
-    ///Mostrar els estudis passats per paràmetres (Els pacients passats per paràmetre ha de contenir un estudi)
+    ///Mostrar els estudis passats per paràmetres (Els pacients passats per paràmetre ha de contenir només un estudi)
     void insertPatientList(QList<Patient*> patientList);
+
+    ///Insereix el pacient al QStudyTreeWiget
+    void insertPatient(Patient* patient);
 
     /** Inseriex la informació d'un estudi
      * @param Dades de l'estudi
      */
     void insertStudy( DICOMStudy * );
-
-    ///Mostra la informació del pacient (El pacient passat per paràmetre ha de contenir un estudi)
-    void insertPatient(Patient *);
 
     /** Insereix un llista de sèries a l'estudi seleccionat actualment
      * @param seriesList series afegir
@@ -279,6 +279,9 @@ private:
      *@param informació de la serie
      */
     QTreeWidgetItem *fillSeries(Series *serie);
+
+    ///Emplena un QTreeWidget amb la informació de pacient i estudi
+    QTreeWidgetItem* fillPatient(Patient *);
 };
 
 }; // end namespace

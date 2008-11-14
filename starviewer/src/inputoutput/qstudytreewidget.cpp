@@ -25,6 +25,7 @@
 #include <QString>
 #include <QDate>
 #include <QList>
+#include <QHash>
 
 
 #include "qstudytreewidget.h"
@@ -99,14 +100,38 @@ void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
 
 void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
 {
+    QHash<QString,QTreeWidgetItem*> qTreeWidgetItemHashTable;
     clear();
 
     foreach(Patient *patient, patientList)
     {
-        insertPatient(patient);
+        if (patient->getNumberOfStudies() > 0)
+        {
+            if (!qTreeWidgetItemHashTable.contains(patient->getStudies().at(0)->getInstanceUID()))
+            {
+                //Comprovem que no tinguem l'estudi duplicat
+                qTreeWidgetItemHashTable.insert(patient->getStudies().at(0)->getInstanceUID(), fillPatient(patient));
+            }
+        }
     }
+
+    m_studyTreeView->addTopLevelItems(qTreeWidgetItemHashTable.values());
+    m_studyTreeView->clearSelection();
 }
 
+void QStudyTreeWidget::insertPatient(Patient* patient)
+{
+    if (patient->getNumberOfStudies() > 0)
+    {
+        if (getStudyItem(patient->getStudies().at(0)->getInstanceUID(), "") != NULL)
+        {
+            //si l'estudi ja hi existeix a StudyTreeView l'esborrem
+            removeStudy(patient->getStudies().at(0)->getInstanceUID()); 
+        }
+        m_studyTreeView->addTopLevelItem(fillPatient(patient));
+        m_studyTreeView->clearSelection();
+    }
+}
 
 void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
@@ -159,20 +184,11 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
     m_studyTreeView->clearSelection();
 }
 
-void QStudyTreeWidget::insertPatient(Patient *patient)
+QTreeWidgetItem* QStudyTreeWidget::fillPatient(Patient *patient)
 {
-    Study *study;
-    if (patient->getStudies().count() != 1) return;
+    QTreeWidgetItem *item = new QTreeWidgetItem(), *expandableItem = new QTreeWidgetItem(); 
 
-    study = patient->getStudies().at(0);
-
-    if (getStudyItem(study->getInstanceUID() , "" /*study->getPacsAETitle()*/) != NULL)
-        removeStudy(study->getInstanceUID()); //si l'estudi ja hi existeix a StudyTreeView l'esborrem
-
-    /*Des de qt 4.3 s'ha detectat que si abans es fa el new, i després es fa el remove al cap d'unes quantes repeticions d'aquest mètode al fer el new QTreeWidgetItem s'acaba donant un segmentation fault, per això s'ha de canviar l'ordre i primer fer el 
-    remove study, i llavors el new QTreeWidgetItem*/
-    QTreeWidgetItem* item = new QTreeWidgetItem( m_studyTreeView );
-    QTreeWidgetItem* expandableItem = new QTreeWidgetItem( item );
+    Study *study = patient->getStudies().at(0);
 
     item->setIcon(ObjectName, m_closeFolder);
     item->setText(ObjectName, patient->getFullName());
@@ -194,9 +210,11 @@ void QStudyTreeWidget::insertPatient(Patient *patient)
        una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
        consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
      */
-    expandableItem->setText( Type , "EXPANDABLE_ITEM" );
+    expandableItem->setText(Type, "EXPANDABLE_ITEM");
 
-    m_studyTreeView->clearSelection();
+    item->addChild(expandableItem);
+
+    return item;
 }
 
 void QStudyTreeWidget::insertSeriesList( QList<DICOMSeries> seriesList )
