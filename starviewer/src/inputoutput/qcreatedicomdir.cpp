@@ -281,6 +281,11 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                 break;
         }
     }
+    else if (!dicomdirPathIsEmpty(dicomdirPath))
+    {
+        QMessageBox::information(this, tr("Starviewer"), tr("The destination directory is not empty, please choose an empty directory"));
+        return;
+    }
     else
     {   //el directori no és un dicomdir
         if ( !directoryDicomdirPath.exists() )//si el directori no existiex, preguntem si el vol crear
@@ -611,6 +616,13 @@ void QCreateDicomdir::showDatabaseErrorMessage( const Status &state )
     {
         QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code()) );
     }
+}
+
+bool QCreateDicomdir::dicomdirPathIsEmpty(QString dicomdirPath)
+{
+    QDir dir(dicomdirPath);
+
+    return dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).count() == 0;//llista de fitxers del directori
 }
 
 bool QCreateDicomdir::dicomdirPathIsADicomdir( QString dicomdirPath )
