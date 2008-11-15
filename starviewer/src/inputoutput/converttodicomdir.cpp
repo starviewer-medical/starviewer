@@ -232,7 +232,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
     /*Creem el directori de l'estudi on es mourà un estudi seleccionat per convertir a dicomdir*/
     QDir studyDir;
     QChar fillChar = '0';
-    QString studyName = QString( "/STU%1" ).arg( m_study , 5 , 10 , fillChar );
+    QString studyName = QString("/STU%1").arg(m_study, 5, 10, fillChar);
     Status state;
 
     m_study++;
@@ -240,13 +240,16 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
 
     //Creem el directori on es guardar l'estudi en format DicomDir
     m_dicomDirStudyPath = m_dicomdirPatientPath + studyName;
-    studyDir.mkdir( m_dicomDirStudyPath );
+    studyDir.mkdir(m_dicomDirStudyPath);
 
-    foreach(Series *series, study->getSeries() ) //per cada sèrie de l'estudi, creem el directori de la sèrie
+    foreach(Series *series, study->getSeries()) //per cada sèrie de l'estudi, creem el directori de la sèrie
     {
-        state = copySeriesToDicomdirPath( series );
+        if (series->getNumberOfImages() > 0)
+        {
+            state = copySeriesToDicomdirPath(series);
 
-        if ( !state.good() ) break;
+            if (!state.good()) break;
+        }
     }
 
     return state;
