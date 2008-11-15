@@ -104,6 +104,9 @@ private:
      */
     void createDicomdirOnHardDiskOrFlashMemories();
 
+    ///Comprova que el directori sigui buit
+    bool dicomdirPathIsEmpty(QString dicomdirPath);
+
     /** Comprova si aquest directori ja és un dicomdir
      * dicomdir a comprova sir és un directori
      */
