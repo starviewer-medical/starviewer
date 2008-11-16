@@ -24,6 +24,7 @@ class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
 class ToolManager;
 class ToolConfiguration;
+class HangingProtocol;
 //Estructura pacient
 class Patient;
 //Visualitzador
@@ -209,6 +210,9 @@ private:
 
     /// Visualitzador actual seleccionat
     Q2DViewerWidget * m_viewer;
+
+	/// Llista de hanging protocols aplicables
+	QList<HangingProtocol * > m_hangingCandidates;
 
 };
 

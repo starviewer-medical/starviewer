@@ -255,8 +255,9 @@ bool HangingProtocolsLoader::loadXMLFiles( QString filePath )
     if( listHangingProtocols.size() > 0 )
     {
         foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
-        {
-			HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
+		{
+			Identifier id = HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
+			hangingProtocol->setIdentifier( id.getValue() );
         }
     }
 

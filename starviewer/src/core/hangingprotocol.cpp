@@ -168,6 +168,16 @@ void HangingProtocol::show()
     }
 }
 
+void HangingProtocol::setIdentifier( int id )
+{
+	m_identifier = id;
+}
+
+int HangingProtocol::getIdentifier()
+{
+	return m_identifier;
+}
+
 bool HangingProtocol::operator >( HangingProtocol * hangingToCompare )
 {
 	int i;

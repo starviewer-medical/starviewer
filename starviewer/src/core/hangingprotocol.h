@@ -75,21 +75,37 @@ public:
     /// Mètode per mostrar els valors
     void show();
 
+	/// Posar l'identificador al hanging protocol
+	void setIdentifier( int id );
+
+	/// Obtenir l'identificador del hanging protocol
+	int getIdentifier();
+
 	/// Mètode per comparar hanging protocols
 	bool operator >( HangingProtocol * hangingToCompare );
 
 private:
 
+	/// Identificador
+	int m_identifier;
+
     /// Nom del hanging protocol
     QString m_name;
+
     /// Descripció del hanging protocol
     QString m_description;
+
     /// Nivell del hanging protocol
     HangingProtocolLevel m_level;
+
     /// Creador del hanging protocol
     QString m_creator;
+
     /// Data i hora de creació del hanging protocol
     QString m_dateTime;
+
+	/// Saber si es candidat
+	bool m_candidate;
 
     /// Definició de layouts
     HangingProtocolLayout * m_layout;
