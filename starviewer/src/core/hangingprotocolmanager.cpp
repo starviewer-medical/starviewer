@@ -102,7 +102,7 @@ HangingProtocolManager::~HangingProtocolManager()
 {
 }
 
-bool HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient)
+QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient)
 {
     Identifier id;
     HangingProtocol *hangingProtocol;
@@ -119,6 +119,7 @@ bool HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *l
     HangingProtocolDisplaySet *displaySet;
     Series *serie;
     Q2DViewerWidget *viewerWidget;
+	QList<HangingProtocol * > candidates;
 
     int numberOfSeriesAssigned;
 
@@ -156,6 +157,10 @@ bool HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *l
                 bestSelectedSeries << selectedSeries;
                 bestAdjustmentOfHanging = adjustmentOfHanging;
             }
+			if( adjustmentOfHanging > 0 )
+			{
+				candidates << hangingProtocol;
+			}
         }
     }
 
@@ -187,10 +192,10 @@ bool HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *l
                 }
             }
         }
-        return true;
+        return candidates;
     }
 
-    return false;
+    return candidates;
 }
 
 void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
@@ -202,6 +207,7 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 	Q2DViewerWidget * viewerWidget;
 	HangingProtocolImageSet * imageSet;
 	HangingProtocolDisplaySet * displaySet;
+
 
 	id.setValue( hangingProtocolNumber );
     hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );

@@ -217,12 +217,14 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     /// Aplicació dels hanging protocols
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-	bool existHanging = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
+	m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
 
-	if( !existHanging )
+	if( m_hangingCandidates.size() == 0 )
 	{
 		m_workingArea->getViewerSelected()->setInput( m_mainVolume );
 	}
+
+	m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
 }
 
 void Q2DViewerExtension::resetViewToAxial()

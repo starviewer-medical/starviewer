@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QList>
 
 namespace udg {
 
@@ -35,7 +36,7 @@ public:
     ~HangingProtocolManager();
 
 	/// Buscar i aplicar el millor hanging protocol
-    bool searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
+    QList<HangingProtocol * > searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
 
 	// Aplicar un hanging protocol concret
 	void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );

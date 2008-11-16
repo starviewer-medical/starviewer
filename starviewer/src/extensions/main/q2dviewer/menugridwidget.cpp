@@ -10,7 +10,6 @@
 #include "itemmenu.h"
 #include "logging.h"
 #include "math.h"
-#include "hangingprotocolsrepository.h"
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
 #include <QFrame>
@@ -81,19 +80,22 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
     m_gridLayout->addLayout( gridLayoutPredefined, 1, 0, 1, 1);
     dropContent();
 
-	int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
-    int numberOfItems = listPredefinedGridsList.size() + numberOfHangingProtocols;
+	int numberOfHangingProtocols = m_hangingItems.size();
+    int numberOfPredefinedItems = listPredefinedGridsList.size();
 
-	if( numberOfItems >= m_maxColumns ) width = 70 * m_maxColumns + ( m_gridLayout->margin()*2 );
+	if( numberOfPredefinedItems >= m_maxColumns )
+	{
+		width = 70 * m_maxColumns + ( m_gridLayout->margin()*2 );
+	}
     else
     {
-        width = 70 * numberOfItems + ( m_gridLayout->margin()*2 );
+        width = 70 * numberOfPredefinedItems + ( m_gridLayout->margin()*2 );
     }
 
-	height = 86 *  ( ceil ( numberOfItems/(m_maxColumns*1.0 ) ) );
+	height = 86 *  ( ceil ( numberOfPredefinedItems/(m_maxColumns*1.0 ) ) );
 
     m_predefinedGridWidget->resize( width, height );
-    this->resize( width+6, height+6 );
+	this->resize( width+6, height+6 );
 
     for( numberPredefined = 0; numberPredefined < listPredefinedGridsList.size(); numberPredefined++ )
     {
@@ -113,11 +115,9 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
     }
 
     // Creació de menu per hanging protocols
-
 	if( numberOfHangingProtocols > 0 )
 	{
 		int hangingProtocolNumber;
-		Identifier id;
 		HangingProtocol * hangingProtocol;
 		positionRow = 0;
 		positionColumn = 0;
@@ -127,7 +127,7 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 		gridLayoutHanging->setSpacing( 6 );
 		gridLayoutHanging->setMargin( 6 );
 		QSpacerItem * spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
-		gridLayoutPredefined->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
+		gridLayoutHanging->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
 
 		QFrame * line_hanging = new QFrame(this);
 		line_hanging->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
@@ -147,9 +147,8 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 
 		for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
 		{	
-			id.setValue( hangingProtocolNumber );
-			hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
-			icon = createIcon( hangingProtocol, hangingProtocolNumber );
+			hangingProtocol = m_hangingItems.value( hangingProtocolNumber );
+			icon = createIcon( hangingProtocol );
 			
 			gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
 			m_itemList->push_back( icon );
@@ -196,12 +195,12 @@ void MenuGridWidget::createPredefinedGrids( int numSeries )
     createPredefinedGrids( m_predefinedGridsList );
 }
 
-ItemMenu * MenuGridWidget::createIcon( HangingProtocol * hangingProtocol, int hangingProtocolNumber )
+ItemMenu * MenuGridWidget::createIcon( HangingProtocol * hangingProtocol )
 {
     HangingProtocolDisplaySet * displaySet;
 	int displaySetNumber;
 	ItemMenu * icon = new ItemMenu( this );
-	icon->setData( QString( tr( "%1" ).arg( hangingProtocolNumber ) ) );
+	icon->setData( QString( tr( "%1" ).arg( hangingProtocol->getIdentifier() ) ) );
 	QStringList listOfPositions;
 	double x1;
 	double x2;
@@ -328,5 +327,10 @@ void MenuGridWidget::dropContent()
     m_itemList->clear();
 }
 
+void MenuGridWidget::setHangingItems( QList<HangingProtocol *> listOfCandidates )
+{
+	m_hangingItems.clear();
+	m_hangingItems = listOfCandidates;
+}
 
 }

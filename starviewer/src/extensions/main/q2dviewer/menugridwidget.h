@@ -52,6 +52,9 @@ public:
     /// Elimina tot el contingut del widget
     void dropContent();
 
+	/// Posa els hanging protocols que ha de representar el menú
+	void setHangingItems( QList<HangingProtocol *> listOfCandidates );
+
 public slots:
 
     /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
@@ -69,7 +72,7 @@ protected:
     ItemMenu * createIcon( int rows, int columns );
 
 	/// Mètode que crea una icona segons un hanging protocol
-	ItemMenu * createIcon( HangingProtocol * hangingProtocol, int hangingProtocolNumber );
+	ItemMenu * createIcon( HangingProtocol * hangingProtocol );
 
 protected:
 
@@ -89,6 +92,8 @@ protected:
     QWidget * m_predefinedGridWidget;
     QWidget * m_hangingProtocolWidget;
     QWidget * m_tableGridWidget;
+
+	QList< HangingProtocol * > m_hangingItems;
 };
 
 }
