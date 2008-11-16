@@ -113,53 +113,55 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
     }
 
     // Creació de menu per hanging protocols
-	int hangingProtocolNumber;
-	Identifier id;
-	HangingProtocol * hangingProtocol;
-    positionRow = 0;
-    positionColumn = 0;
 
-    m_hangingProtocolWidget = new QWidget( this );
-    QGridLayout * gridLayoutHanging = new QGridLayout();
-    gridLayoutHanging->setSpacing( 6 );
-    gridLayoutHanging->setMargin( 6 );
-    QSpacerItem * spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
-    gridLayoutPredefined->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
+	if( numberOfHangingProtocols > 0 )
+	{
+		int hangingProtocolNumber;
+		Identifier id;
+		HangingProtocol * hangingProtocol;
+		positionRow = 0;
+		positionColumn = 0;
 
-    QFrame * line_hanging = new QFrame(this);
-    line_hanging->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    line_hanging->setFrameShape(QFrame::HLine);
-    line_hanging->setFrameShadow(QFrame::Sunken);
-    QLabel * label_hanging = new QLabel(this);
-    label_hanging->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-    label_hanging->setText("Hanging protocols");
-    QHBoxLayout * hboxLayout_hanging = new QHBoxLayout();
-    hboxLayout_hanging->setMargin( 0 );
-    hboxLayout_hanging->setSpacing( 6 );
-    hboxLayout_hanging->addWidget(line_hanging);
-    hboxLayout_hanging->addWidget(label_hanging);
-    
-    m_gridLayout->addLayout( hboxLayout_hanging, 2, 0, 1, 1 );
-    m_gridLayout->addLayout( gridLayoutHanging, 3, 0, 1, 1);
+		m_hangingProtocolWidget = new QWidget( this );
+		QGridLayout * gridLayoutHanging = new QGridLayout();
+		gridLayoutHanging->setSpacing( 6 );
+		gridLayoutHanging->setMargin( 6 );
+		QSpacerItem * spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
+		gridLayoutPredefined->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
 
-	for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
-	{	
-		id.setValue( hangingProtocolNumber );
-        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
-		icon = createIcon( hangingProtocol, hangingProtocolNumber );
-		
-		gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
-        m_itemList->push_back( icon );
-        positionColumn ++;
+		QFrame * line_hanging = new QFrame(this);
+		line_hanging->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+		line_hanging->setFrameShape(QFrame::HLine);
+		line_hanging->setFrameShadow(QFrame::Sunken);
+		QLabel * label_hanging = new QLabel(this);
+		label_hanging->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+		label_hanging->setText("Hanging protocols");
+		QHBoxLayout * hboxLayout_hanging = new QHBoxLayout();
+		hboxLayout_hanging->setMargin( 0 );
+		hboxLayout_hanging->setSpacing( 6 );
+		hboxLayout_hanging->addWidget(line_hanging);
+		hboxLayout_hanging->addWidget(label_hanging);
+	    
+		m_gridLayout->addLayout( hboxLayout_hanging, 2, 0, 1, 1 );
+		m_gridLayout->addLayout( gridLayoutHanging, 3, 0, 1, 1);
 
-        if( positionColumn == m_maxColumns )
-        {
-            positionColumn = 0;
-            positionRow++;
-        }
+		for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
+		{	
+			id.setValue( hangingProtocolNumber );
+			hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
+			icon = createIcon( hangingProtocol, hangingProtocolNumber );
+			
+			gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
+			m_itemList->push_back( icon );
+			positionColumn ++;
+
+			if( positionColumn == m_maxColumns )
+			{
+				positionColumn = 0;
+				positionRow++;
+			}
+		}
 	}
-    if ( numberOfHangingProtocols == 0 ) 
-           m_hangingProtocolWidget->hide();
 }
 
 void MenuGridWidget::createPredefinedGrids( int numSeries )
