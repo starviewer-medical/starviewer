@@ -466,7 +466,7 @@ void QVolume3DViewTestingExtension::applyEditorClut()
 
 void QVolume3DViewTestingExtension::toggleClutEditor()
 {
-    if ( m_editorSplitter->sizes()[0] == 0 )    // show
+    if ( m_editorSplitter->sizes()[1] == 0 )    // show
     {
         m_editorSplitter->setSizes( QList<int>() << 1 << 1 );
         m_gradientEditor->setTransferFunction( m_currentClut );
