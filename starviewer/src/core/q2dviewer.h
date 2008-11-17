@@ -44,6 +44,8 @@ class Drawer;
 class Q2DViewerToolManager;
 class OldTool;
 class ImagePlane;
+// TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
+class HangingProtocolManager;
 
 /**
 
@@ -344,6 +346,12 @@ public slots:
      */
     void enableThickSlab( bool enable = true );
 
+    /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
+    /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
+    /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
+    /// Si tenim una imatge axial pura la llista seria R,H,L,F (Right, Head, Left, Feet )
+    QVector<QString> getCurrentDisplayedImageOrientationLabels();
+
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
@@ -479,12 +487,6 @@ private:
     ///  Valida el valor d'slice donat i actualitza les variables membres pertinents, com m_currentSlice o m_firstSlabSlice
     void checkAndUpdateSliceValue( int value );
 
-    /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
-    /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
-    /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
-    /// Si tenim una imatge axial pura la llista seria R,S,L,I (Right, Superior, Left, Inferior )
-    QVector<QString> getCurrentDisplayedImageOrientationLabels();
-
 private slots:
     /// Actualitza les transformacions de càmera ( de moment rotació i flip )
     void updateCamera();
@@ -533,9 +535,9 @@ protected:
     /// El picker per anotar punts de la imatge
     vtkPropPicker *m_picker;
 
-    /// Annotacions de texte referents a informació de la sèrie 
-	/// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
-	/// i altre informació rellevant ( nº imatge, ww/wl, etc )
+    /// Annotacions de texte referents a informació de la sèrie
+    /// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
+    /// i altre informació rellevant ( nº imatge, ww/wl, etc )
     vtkCornerAnnotation *m_cornerAnnotations;
 
     /// Per controlar l'espaiat en que presentem la imatge
@@ -628,6 +630,9 @@ private:
 
     /// Indica quin tipus de projecció apliquem sobre l'slab
     int m_slabProjectionMode;
+
+    // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
+    HangingProtocolManager *m_hangingProtocolManager;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
