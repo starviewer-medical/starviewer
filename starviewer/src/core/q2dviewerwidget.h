@@ -85,6 +85,10 @@ private slots:
     /// actualitza correctament el valor de l'slider quan hi ha thick slab
     void updateSlider();
 
+    /// actualitza el valor de l'etiqueta que ens indica quina 
+    /// projecció del pla estem veient
+	void updateProjectionLabel();
+
 private:
     /// El volum principal
     Volume *m_mainVolume;

@@ -7,8 +7,9 @@
 #include "q2dviewerwidget.h"
 #include "volume.h"
 #include "logging.h"
-
 #include "series.h"
+#include "image.h"
+
 #include <QAction>
 #include <QPalette>
 
@@ -30,6 +31,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_synchronizeButton->setEnabled( false );
 
     createConnections();
+    m_viewText->setText( QString() );
 }
 
 Q2DViewerWidget::~Q2DViewerWidget()
@@ -55,6 +57,7 @@ void Q2DViewerWidget::createConnections()
 {
     connect( m_slider, SIGNAL( actionTriggered(int) ), SLOT( updateViewerSliceAccordingToSliderAction(int) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
+    connect( m_2DView , SIGNAL( sliceChanged( int ) ) , SLOT( updateProjectionLabel() ) );
 
     // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider, el viewer es marqui com a seleccionat
     connect( m_slider, SIGNAL( sliderPressed() ), SLOT( emitSelectedViewer() ));
@@ -67,10 +70,20 @@ void Q2DViewerWidget::createConnections()
     connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), SLOT( emitSynchronize() ) );
 }
 
+void Q2DViewerWidget::updateProjectionLabel()
+{
+	if( m_mainVolume )
+	{
+        QVector<QString> labels = m_2DView->getCurrentDisplayedImageOrientationLabels();
+        m_viewText->setText( Image::getProjectionLabelFromPlaneOrientation( labels[0]+"\\"+labels[1] ) );
+	}
+}
+
 void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
-	m_2DView->setSeries( input->getSeries() );
+    m_2DView->setSeries( input->getSeries() );
+    updateProjectionLabel();
 }
 
 void Q2DViewerWidget::updateInput( Volume *input )
@@ -93,8 +106,7 @@ void Q2DViewerWidget::emitSelectedViewer()
 }
 
 void Q2DViewerWidget::resetViewToAxial()
-{
-    m_viewText->setText( tr("XY : Axial") );
+{   
     m_2DView->resetViewToAxial();
 
     m_slider->setMaximum( m_2DView->getMaximumSlice() );
@@ -105,7 +117,6 @@ void Q2DViewerWidget::resetViewToAxial()
 
 void Q2DViewerWidget::resetViewToSagital()
 {
-    m_viewText->setText( tr( "XY : Sagital" ) );
     m_2DView->resetViewToSagital();
 
     m_slider->setMaximum( m_2DView->getMaximumSlice() );
@@ -116,7 +127,6 @@ void Q2DViewerWidget::resetViewToSagital()
 
 void Q2DViewerWidget::resetViewToCoronal()
 {
-    m_viewText->setText( tr( "XY : Coronal" ) );
     m_2DView->resetViewToCoronal();
 
     m_slider->setMaximum( m_2DView->getMaximumSlice() );
@@ -127,10 +137,10 @@ void Q2DViewerWidget::resetViewToCoronal()
 
 void Q2DViewerWidget::setSelected( bool option )
 {
-	// per defecte li donem l'aspecte de background que té l'aplicació en general
-	// TODO podríem tenir a nivell d'aplicació centralitzat el tema de
-	// gestió de les diferents paletes de l'aplicació
-	QBrush brush = QApplication::palette().window();
+    // per defecte li donem l'aspecte de background que té l'aplicació en general
+    // TODO podríem tenir a nivell d'aplicació centralitzat el tema de
+    // gestió de les diferents paletes de l'aplicació
+    QBrush brush = QApplication::palette().window();
     if( option )
     {
 		// si seleccionem el widget, li canviem el color de fons
