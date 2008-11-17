@@ -82,10 +82,25 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
         y = screen_y - widgetIdealSize.height() - 5;
     }
 
+    // HACK si no mostrem l'"Aditional info" abans
+    // que el "browser list" després no processa els events
+    // correctament i quan seleccionem una sèrie no arriba
+    // el signal enlloc i no es pot seleccionar cap sèrie
+    // relacionat amb el ticket #555
+    // Això només passa amb qt 4.3, amb qt 4.2 no tenim aquest 
+    // problema. Amb qt 4.2 podem fer show en l'ordre que volguem
+    // El que fem per evitar flickering és mostrar-lo sota mateix
+    // del "browser list" i així no es nota tant
+    if ( QT_VERSION >= 0x040300 ) // Amb qt 4.3 
+    {
+        m_patientAdditionalInfo->move( x, y );
+        m_patientAdditionalInfo->show();
+    }
+    // FI HACK
     //moure la finestra del menu al punt que toca
     m_patientBrowserList->move(x, y);
     m_patientBrowserList->show();
-
+    
     QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
     m_patientAdditionalInfo->resize( patientAdditionalInfoSize );
 
@@ -99,8 +114,12 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
         x =  m_patientBrowserList->x() + m_patientBrowserList->width();
     }
     m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
-    m_patientAdditionalInfo->show();
-    m_patientBrowserList->show();
+    // HACK
+    if ( QT_VERSION < 0x040300 ) // Amb qt 4.2
+    {
+        m_patientAdditionalInfo->show();
+    }
+    // FI HACK
 }
 
 bool PatientBrowserMenu::eventFilter(QObject *watched, QEvent *event)
