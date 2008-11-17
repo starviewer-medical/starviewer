@@ -542,7 +542,7 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
 
         case RenderingStyle::IsoSurface:
             m_renderingMethodComboBox->setCurrentIndex( 5 );
-            m_isoValueSpinBox->setValue( renderingStyle.isoValue );
+            m_isoValueSpinBox->setValue( static_cast<int>( qRound( renderingStyle.isoValue ) ) );
             break;
 
         case RenderingStyle::Contouring:
