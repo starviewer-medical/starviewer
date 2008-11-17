@@ -133,7 +133,8 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordD
     m_progress = new QProgressDialog( tr( "Creating Dicomdir..." ) , "" , 0 , imageNumberTotal + 1 );
     m_progress->setMinimumDuration( 0 );
     m_progress->setCancelButton( 0 );
-
+    m_progress->setModal(true);
+    
     //copiem les imatges dels estudis seleccionats al directori desti
     state = copyStudiesToDicomdirPath(studyList);
 
@@ -167,12 +168,14 @@ Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, CreateDicomdir::
     {
         createDicomdir.setStrictMode( false );
         state = createDicomdir.create( dicomdirPath );
-
         if ( state.good() )
         {
             return stateNotDicomConformance.setStatus("Alguna de les imatges no complia l'estàndard DICOM" , false , 4001 );
         }
     }
+
+    //Hem assignat com a valor de progressbar Numero Imatges +1, el +1 és el pas de convertir els fitxers a dicomdir
+    m_progress->setValue(m_progress->value() +1);
 
     return state;
 }
@@ -299,8 +302,8 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
     //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
     state = convertDicom.convert(imageInputPath, imageOutputPath );
 
-     m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
-     m_progress->repaint();
+    m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
+    m_progress->repaint();
 
     return state;
 }
