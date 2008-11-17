@@ -404,8 +404,9 @@ void HangingProtocolManager::applyDisplayTransformations( Patient *patient, Seri
     // TODO el paràmetre patient no cal, s'hauria d'eliminar si no és que sigui necesari per alguna raó
     DICOMTagReader dicomReader;
     if( dicomReader.setFile( serie->getImages()[imageNumber]->getPath() ) )
-    {
-        applyDesiredDisplayOrientation( dicomReader.getAttributeByName( DCM_PatientOrientation ), displaySet->getPatientOrientation(), viewer->getViewer() );
+    {//dicomReader.getAttributeByName( DCM_PatientOrientation )
+        QVector<QString> labels = viewer->getViewer()->getCurrentDisplayedImageOrientationLabels();
+        applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3], displaySet->getPatientOrientation(), viewer->getViewer() );
     }
 
     QString reconstruction = displaySet->getReconstruction();

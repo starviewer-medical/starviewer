@@ -15,6 +15,8 @@
 #include "imageplane.h"
 #include "mathtools.h"
 #include "dicomtagreader.h"
+// TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
+#include "hangingprotocolmanager.h"
 //thickslab
 #include "vtkProjectionImageFilter.h"
 
@@ -106,6 +108,9 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
+
+    // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
+    m_hangingProtocolManager = new HangingProtocolManager(this);
 }
 
 Q2DViewer::~Q2DViewer()
@@ -1866,32 +1871,58 @@ void Q2DViewer::updateSliceAnnotationInformation()
         {
             DICOMTagReader reader( image->getPath() );
             QString laterality = reader.getAttributeByName( DCM_ImageLaterality );
+            QString desiredOrientation;
 
-            m_lowerRightText = laterality + " ";
             QString projection = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning ).at(0);
             /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
             // TODO tenir-ho carregat en arxius, maps, etc..
             // TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
             if( projection == "medio-lateral" )
-                m_lowerRightText += "ML";
+                projection = "ML";
             else if( projection == "medio-lateral oblique" )
-                m_lowerRightText += "MLO";
+                projection = "MLO";
             else if( projection == "latero-medial" )
-                m_lowerRightText += "LM";
+                projection = "LM";
             else if( projection == "latero-medial oblique" )
-                m_lowerRightText += "LMO";
+                projection = "LMO";
             else if( projection == "cranio-caudal" )
-                m_lowerRightText += "CC";
+                projection = "CC";
             else if( projection == "caudo-cranial (from below)" )
-                m_lowerRightText += "FB";
+                projection = "FB";
             else if( projection == "superolateral to inferomedial oblique" )
-                m_lowerRightText += "SIO";
+                projection = "SIO";
             else if( projection == "exaggerated cranio-caudal" )
-                m_lowerRightText += "XCC";
+                projection = "XCC";
             else if( projection == "cranio-caudal exaggerated laterally" )
-                m_lowerRightText += "XCCL";
+                projection = "XCCL";
             else if( projection == "cranio-caudal exaggerated medially" )
-                m_lowerRightText += "XCCM";
+                projection = "XCCM";
+
+            // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
+            // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
+            if( projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB" )
+            {
+                if( laterality == "L" )
+                    desiredOrientation = "A\\R";
+                else if( laterality == "R" )
+                    desiredOrientation = "P\\L";
+            }
+            else if( projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO" )
+            {
+                if( laterality == "L" )
+                    desiredOrientation = "A\\F";
+                else if( laterality == "R" )
+                    desiredOrientation = "P\\F";
+            }
+            else
+            {
+                DEBUG_LOG("Projecció no tractada! :: " + projection );
+            }
+
+            m_lowerRightText = laterality + " " + projection;
+            // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
+            QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
+            m_hangingProtocolManager->applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3] , desiredOrientation, this);
         }
         else
             m_lowerRightText.clear();
