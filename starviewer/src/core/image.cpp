@@ -89,37 +89,7 @@ QString Image::getPatientOrientation() const
 
 QString Image::getOrientationLabel()
 {
-    QString label;
-
-    QStringList axisList = m_patientOrientation.split("\\");
-    // comprovem si tenim les annotacions esperades
-    if( axisList.count() >= 2 )
-    {
-        QString rowAxis = axisList.at(0);
-        QString columnAxis = axisList.at(1);
-
-        if( !rowAxis.isEmpty() && !columnAxis.isEmpty() )
-        {
-            if( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")) )
-                label="AXIAL";
-            else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")) )
-                label="AXIAL";
-            else if ( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")) )
-                label="CORONAL";
-            else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")) )
-                label="CORONAL";
-            else if( (rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")) )
-                label="SAGITAL";
-            else if( (columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")) )
-                label="SAGITAL";
-        }
-        else
-        {
-            label="OBLIQUE";
-        }
-    }
-
-    return label;
+    return getProjectionLabelFromPlaneOrientation( m_patientOrientation );
 }
 
 void Image::setPixelSpacing( double x, double y )
@@ -403,6 +373,41 @@ QPixmap Image::getThumbnail(int resolution)
         m_thumbnail = QPixmap::fromImage(thumbnailCreator.getThumbnail(this, resolution));
     }
     return m_thumbnail;
+}
+
+QString Image::getProjectionLabelFromPlaneOrientation( const QString &orientation )
+{
+    QString label;
+
+    QStringList axisList = orientation.split("\\");
+    // comprovem si tenim les annotacions esperades
+    if( axisList.count() >= 2 )
+    {
+        QString rowAxis = axisList.at(0);
+        QString columnAxis = axisList.at(1);
+
+        if( !rowAxis.isEmpty() && !columnAxis.isEmpty() )
+        {
+            if( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")) )
+                label="AXIAL";
+            else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")) )
+                label="AXIAL";
+            else if ( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")) )
+                label="CORONAL";
+            else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")) )
+                label="CORONAL";
+            else if( (rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")) )
+                label="SAGITAL";
+            else if( (columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")) )
+                label="SAGITAL";
+        }
+        else
+        {
+            label="OBLIQUE";
+        }
+    }
+
+    return label;
 }
 
 }

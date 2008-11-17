@@ -164,6 +164,8 @@ public:
      */
     QPixmap getThumbnail(int resolution = 100);
 
+    static QString getProjectionLabelFromPlaneOrientation( const QString &orientation );
+
 private:
     /// Atributs DICOM
 
