@@ -10,35 +10,29 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
      <item>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
-        <number>6</number>
+        <number>14</number>
        </property>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QToolButton" name="m_axialOrientationButton" >
@@ -127,27 +121,9 @@
         </layout>
        </item>
        <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLabel" name="label_2" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -160,23 +136,45 @@
          </property>
         </widget>
        </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>148</width>
+           <height>41</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </item>
      <item>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
-        <number>6</number>
+        <number>14</number>
        </property>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QToolButton" name="m_zoomToolButton" >
@@ -290,27 +288,9 @@
         </layout>
        </item>
        <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType" >
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLabel" name="label_5" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
+          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -323,24 +303,28 @@
          </property>
         </widget>
        </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>31</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
+      <layout class="QHBoxLayout" >
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>6</number>
-         </property>
+        <layout class="QVBoxLayout" >
          <item>
           <widget class="QListView" name="m_renderingStyleListView" >
            <property name="maximumSize" >
@@ -352,14 +336,14 @@
            <property name="editTriggers" >
             <set>QAbstractItemView::NoEditTriggers</set>
            </property>
-           <property name="movement" >
-            <enum>QListView::Static</enum>
-           </property>
            <property name="iconSize" >
             <size>
              <width>96</width>
              <height>96</height>
             </size>
+           </property>
+           <property name="movement" >
+            <enum>QListView::Static</enum>
            </property>
            <property name="resizeMode" >
             <enum>QListView::Adjust</enum>
@@ -373,44 +357,45 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="m_customStyleToolButton" >
+          <widget class="QLabel" name="label_3" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text" >
-            <string>Custom style</string>
+            <string>Rendering style</string>
            </property>
-           <property name="icon" >
-            <iconset resource="../../../main/main.qrc" >:/images/clutEdit.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="toolButtonStyle" >
-            <enum>Qt::ToolButtonTextUnderIcon</enum>
-           </property>
-           <property name="autoRaise" >
-            <bool>true</bool>
+           <property name="alignment" >
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_3" >
-         <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>0</vsizetype>
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+        <widget class="QToolButton" name="m_customStyleToolButton" >
          <property name="text" >
-          <string>Rendering style</string>
+          <string>Custom style</string>
          </property>
-         <property name="alignment" >
-          <set>Qt::AlignCenter</set>
+         <property name="icon" >
+          <iconset resource="../../../main/main.qrc" >:/images/clutEdit.png</iconset>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -421,9 +406,7 @@
    <item>
     <widget class="QSplitter" name="m_editorSplitter" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>5</vsizetype>
+      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>1</verstretch>
       </sizepolicy>
@@ -431,42 +414,67 @@
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="opaqueResize">
+     <property name="opaqueResize" >
       <bool>false</bool>
      </property>
      <widget class="udg::Q3DViewer" native="1" name="m_3DView" >
       <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>7</vsizetype>
+       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
         <horstretch>1</horstretch>
         <verstretch>1</verstretch>
        </sizepolicy>
       </property>
      </widget>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
        </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
        <item>
         <layout class="QVBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
          </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
          <item>
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="m_renderingMethodLabel" >
@@ -519,19 +527,26 @@
          <item>
           <widget class="QWidget" native="1" name="m_shadingOptionsWidget" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>4</vsizetype>
+            <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QCheckBox" name="m_shadingCheckBox" >
@@ -582,19 +597,26 @@
          <item>
           <widget class="QWidget" native="1" name="m_contourOptionsWidget" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>4</vsizetype>
+            <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QCheckBox" name="m_contourCheckBox" >
@@ -622,10 +644,10 @@
                <number>2</number>
               </property>
               <property name="maximum" >
-               <double>1</double>
+               <double>1.000000000000000</double>
               </property>
               <property name="singleStep" >
-               <double>0.1</double>
+               <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
@@ -635,19 +657,37 @@
          <item>
           <widget class="QWidget" native="1" name="m_obscuranceOptionsWidget" >
            <layout class="QVBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
             </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
-              </property>
               <property name="spacing" >
                <number>6</number>
+              </property>
+              <property name="leftMargin" >
+               <number>0</number>
+              </property>
+              <property name="topMargin" >
+               <number>0</number>
+              </property>
+              <property name="rightMargin" >
+               <number>0</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>0</number>
               </property>
               <item>
                <widget class="QLabel" name="m_obscuranceQualityLabel" >
@@ -687,9 +727,7 @@
             <item>
              <widget class="QProgressBar" name="m_obscuranceProgressBar" >
               <property name="sizePolicy" >
-               <sizepolicy>
-                <hsizetype>5</hsizetype>
-                <vsizetype>0</vsizetype>
+               <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
@@ -704,11 +742,20 @@
             </item>
             <item>
              <layout class="QHBoxLayout" >
-              <property name="margin" >
-               <number>0</number>
-              </property>
               <property name="spacing" >
                <number>6</number>
+              </property>
+              <property name="leftMargin" >
+               <number>0</number>
+              </property>
+              <property name="topMargin" >
+               <number>0</number>
+              </property>
+              <property name="rightMargin" >
+               <number>0</number>
+              </property>
+              <property name="bottomMargin" >
+               <number>0</number>
               </property>
               <item>
                <widget class="QCheckBox" name="m_obscuranceCheckBox" >
@@ -751,19 +798,26 @@
          <item>
           <widget class="QWidget" native="1" name="m_isosurfaceOptionsWidget" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>4</vsizetype>
+            <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <layout class="QHBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
             <property name="spacing" >
              <number>6</number>
+            </property>
+            <property name="leftMargin" >
+             <number>0</number>
+            </property>
+            <property name="topMargin" >
+             <number>0</number>
+            </property>
+            <property name="rightMargin" >
+             <number>0</number>
+            </property>
+            <property name="bottomMargin" >
+             <number>0</number>
             </property>
             <item>
              <widget class="QLabel" name="m_isoValueLabel" >
@@ -808,11 +862,20 @@
        </item>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QPushButton" name="m_loadClutPushButton" >
@@ -846,9 +909,7 @@
        <item>
         <widget class="QStackedWidget" name="m_editorsStackedWidget" >
          <property name="sizePolicy" >
-          <sizepolicy>
-           <hsizetype>5</hsizetype>
-           <vsizetype>5</vsizetype>
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
            <horstretch>0</horstretch>
            <verstretch>1</verstretch>
           </sizepolicy>
@@ -856,29 +917,44 @@
          <property name="currentIndex" >
           <number>0</number>
          </property>
-         <widget class="udg::QTransferFunctionEditorByGradient" native="1" name="m_gradientEditor" />
-         <widget class="udg::QTransferFunctionEditorByValues" native="1" name="m_editorByValues" />
+         <widget class="udg::QTransferFunctionEditorByGradient" name="m_gradientEditor" />
+         <widget class="udg::QTransferFunctionEditorByValues" name="m_editorByValues" />
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout">
-         <property name="margin" >
-          <number>0</number>
-         </property>
+        <layout class="QHBoxLayout" >
          <property name="spacing" >
           <number>6</number>
          </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
          <item>
-          <widget class="QPushButton" name="m_applyPushButton">
-           <property name="text" >
-            <string>Apply</string>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
            </property>
-          </widget>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="m_hidePushButton">
+          <widget class="QPushButton" name="m_applyPushButton" >
            <property name="text" >
-            <string>Hide</string>
+            <string>Apply</string>
            </property>
           </widget>
          </item>
@@ -909,7 +985,7 @@
  </customwidgets>
  <resources>
   <include location="../../../main/main.qrc" />
-  <include location="volume3dviewtesting.qrc"/>
+  <include location="volume3dviewtesting.qrc" />
  </resources>
  <connections/>
 </ui>

@@ -232,7 +232,6 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_applyPushButton, SIGNAL( clicked() ), SLOT( applyEditorClut() ) );
 
     connect( m_customStyleToolButton, SIGNAL( clicked() ), SLOT( toggleClutEditor() ) );
-    connect( m_hidePushButton, SIGNAL( clicked() ), SLOT( hideClutEditor() ) );
 
     connect( m_3DView, SIGNAL( transferFunctionChanged () ), SLOT( changeViewerTransferFunction() ) );
     connect( this, SIGNAL( newTransferFunction () ), m_3DView, SLOT( setNewTransferFunction() ) );
@@ -242,6 +241,8 @@ void QVolume3DViewTestingExtension::createConnections()
 
     // rendering styles
     connect( m_renderingStyleListView, SIGNAL( activated(const QModelIndex&) ), SLOT( applyRenderingStyle(const QModelIndex&) ) );
+
+    connect(m_editorSplitter, SIGNAL( splitterMoved(int, int)), SLOT( setCustomStyleButtonStateBySplitter() ));
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -482,6 +483,10 @@ void QVolume3DViewTestingExtension::hideClutEditor()
     m_editorSplitter->setSizes( QList<int>() << 0 << 0 );
 }
 
+void QVolume3DViewTestingExtension::setCustomStyleButtonStateBySplitter()
+{
+    m_customStyleToolButton->setChecked( m_editorSplitter->sizes()[1] != 0 );
+}
 
 void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &index )
 {
@@ -557,7 +562,6 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
     updateView();
     enableAutoUpdate();
 }
-
 
 void QVolume3DViewTestingExtension::updateUiForRenderingMethod( int index )
 {

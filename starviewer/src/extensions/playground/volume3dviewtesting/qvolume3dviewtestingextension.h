@@ -59,6 +59,10 @@ public slots:
     /// Actualitza la vista d'acord amb tots els paràmetres actuals de la interfície.
     void updateView();
 
+signals:
+
+    void newTransferFunction();
+
 private:
     /// posa a punt les tools que es poden fer servir en l'extensió
     void initializeTools();
@@ -93,12 +97,10 @@ private slots:
     void applyEditorClut();
     void toggleClutEditor();
     void hideClutEditor();
+    /// Canvia l'estat del botó del custom style depenent de si s'està mostrant o no l'editor en aquell moment.
+    void setCustomStyleButtonStateBySplitter();
     void changeViewerTransferFunction();
     void applyRenderingStyle( const QModelIndex &index );
-
-signals:
-
-    void newTransferFunction();
 
 private:
     /// El volum d'input
