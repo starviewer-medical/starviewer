@@ -625,11 +625,28 @@ bool QCreateDicomdir::dicomdirPathIsEmpty(QString dicomdirPath)
     return dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).count() == 0;//llista de fitxers del directori
 }
 
-bool QCreateDicomdir::dicomdirPathIsADicomdir( QString dicomdirPath )
+bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
 {
-    QFile dicomdirFile;
+    QDir dir(dicomdirPath);
+    QStringList fileList = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot); 
 
-    return dicomdirFile.exists( dicomdirPath + "/DICOMDIR" );
+    //És un directori dicomdir creat per l'starviewer quan només conté un fitxer anomenat DICOMDIR i un directori anomenat DICOM
+    if (fileList.count() == 1)
+    {
+        if (fileList.contains("DICOM", Qt::CaseInsensitive)) 
+        {
+            //si conté directori anomenat dicom
+            fileList = dir.entryList(QDir::Files);
+            if (fileList.count() == 1) 
+            {
+                //si conté un fitxer anomenat dicomdir
+                return fileList.contains("DICOMDIR", Qt::CaseInsensitive);
+            }
+            else return false;
+        }
+        else return false;
+    }
+    else return false;
 }
 
 void QCreateDicomdir::saveColumnsWidth()
