@@ -138,6 +138,7 @@ bool DatabaseInstallation::reinstallDatabase()
     {
         //Si nó existeix creem barra de progrés per donar feedback
         m_qprogressDialog = new QProgressDialog(tr ("Reinstalling database"), "", 0, 0);
+        m_qprogressDialog->setCancelButton(0);
         m_qprogressDialog->setValue(1);
     }
 
@@ -166,6 +167,7 @@ bool DatabaseInstallation::updateDatabaseRevision()
 
     //Creem barra de progrés per donar feedback
     m_qprogressDialog = new QProgressDialog(tr ("Updating database"), "", 0, 0);
+    m_qprogressDialog->setCancelButton(0);
     m_qprogressDialog->setValue(1);
 
     /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
