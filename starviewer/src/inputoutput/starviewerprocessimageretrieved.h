@@ -8,6 +8,7 @@
 #define UDGSTARVIEWERPROCESSIMAGERETRIEVED_H
 
 #include <QObject>
+#include <QStringList>
 
 #include "processimage.h"
 
@@ -36,12 +37,16 @@ public:
 signals:
     ///signal que s'ement quant s'ha descarregat un fitxer
     void fileRetrieved(DICOMTagReader *dicomTagReader);
+    void seriesRetrieved(QString studyInstanceUID);
 
 private:
     /// Indica que s'ha produit algun error intentant guardar alguna de les imatges al disc dur
     void setError();
 
 private:
+
+    QString m_seriesInstanceUIDLastImageRetrieved, m_studyInstanceUIDRetrieved;
+    QStringList m_seriesInstanceUIDListRetrieved;
 
     bool m_error;
 

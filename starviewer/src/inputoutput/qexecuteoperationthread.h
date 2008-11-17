@@ -106,6 +106,11 @@ signals:
     ///Signal que s'emet quan s'han descarregat tots els fitxers d'un estudi
     void filesRetrieved();
 
+private slots:
+
+    ///Slot que fa un signal conforme s'ha descarregat una sèrie de l'estudi passat per paràmetre
+    void seriesRetrieved(QString studyInstanceUID);
+
 private:
 
     /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar

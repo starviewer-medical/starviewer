@@ -292,6 +292,8 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
     connect(starviewerProcessImageRetrieved, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
     connect(this, SIGNAL( filesRetrieved() ), patientFiller, SLOT( finishDICOMFilesProcess() ));
 
+    connect(starviewerProcessImageRetrieved, SIGNAL(seriesRetrieved(QString)), this, SLOT (seriesRetrieved(QString)));
+
     //Connexió entre el processat i l'insersió al a BD
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( save(Patient *) ), Qt::DirectConnection);
 
@@ -315,5 +317,9 @@ void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QExecute
     deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
 }
 
+void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)
+{
+    emit seriesCommit(studyInstanceUID);
+}
 
 }
