@@ -61,7 +61,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_sliceTableGrid = new TableMenu();
     m_dicomDumpCurrentDisplayedImage = new QDicomDump();
 
-    createProgressDialog();
     readSettings();
     createActions();
     createConnections();
@@ -347,33 +346,6 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient( Patient *patient )
 {
     m_patient = patient;
-    foreach( Study *study, m_patient->getStudies() )
-    {
-        foreach( Series *series, study->getSeries() )
-        {
-            foreach( Volume *volume, series->getVolumesList() )
-            {
-                connect( volume, SIGNAL(progress(int)), SLOT( updateVolumeLoadProgressNotification(int) ) );
-            }
-        }
-    }
-}
-
-void Q2DViewerExtension::updateVolumeLoadProgressNotification(int progress)
-{
-    m_progressDialog->setValue(progress);
-    qApp->processEvents();
-}
-
-void Q2DViewerExtension::createProgressDialog()
-{
-    m_progressDialog = new QProgressDialog( this );
-    m_progressDialog->setModal( false );
-    m_progressDialog->setRange( 0 , 100 );
-    m_progressDialog->setMinimumDuration( 0 );
-    m_progressDialog->setWindowTitle( tr("Loading") );
-    m_progressDialog->setLabelText( tr("Loading data, please wait...") );
-    m_progressDialog->setCancelButton( 0 );
 }
 
 void Q2DViewerExtension::initializeTools()

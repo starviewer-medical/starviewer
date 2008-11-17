@@ -12,8 +12,6 @@
 #include "patient.h"
 #include "extensioncontext.h"
 
-class QProgressDialog;
-
 namespace udg {
 
 // Fordward Declarations

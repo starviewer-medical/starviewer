@@ -12,7 +12,6 @@
 
 // FWD declarations
 class QAction;
-class QProgressDialog;
 
 namespace udg {
 
@@ -109,8 +108,6 @@ private:
     void readSettings();
     void writeSettings();
 
-    void createProgressDialog();
-
     /**
      * Inicialitza les tools que tindrà l'extensió
      */
@@ -131,13 +128,6 @@ private slots:
     void rotateCounterClockWise();
     void horizontalFlip();
     void verticalFlip();
-
-    /**
-     * Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
-     * com per exemple un QProgressDialog o en un label
-     * @param progress valor del progrés de càrrega
-     */
-    void updateVolumeLoadProgressNotification(int progress);
 
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
@@ -199,8 +189,6 @@ private:
     /// Menús per seleccionar el grid de les llesques d'una serie ( predefinits + taula )
     MenuGridWidget *m_predefinedSlicesGrid;
     TableMenu *m_sliceTableGrid;
-
-    QProgressDialog *m_progressDialog;
 
     /// ToolManager per configurar l'entorn deToolConfiguration * configuration = getConfiguration();
     ToolManager *m_toolManager;
