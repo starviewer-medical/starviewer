@@ -17,6 +17,7 @@ class QMenu;
 class QCloseEvent;
 class QSignalMapper;
 class QLabel;
+class QProgressDialog;
 
 namespace udg{
 // Forward declarations
@@ -60,6 +61,9 @@ public:
     /// Mètode que retorna el workspace a on poder afegir extensions
     ExtensionWorkspace* getExtensionWorkspace();
 
+    /// Connecta els volums d'un pacient al mètode que notifica la càrrega de volums
+    void connectPatientVolumesToNotifier( Patient *patient );
+
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
     virtual void closeEvent(QCloseEvent *event);
@@ -98,6 +102,14 @@ private:
     void updateBetaVersionTextPosition();
 
 private slots:
+
+    /**
+     * Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
+     * com per exemple un QProgressDialog o en un label
+     * @param progress valor del progrés de càrrega
+     */
+    void updateVolumeLoadProgressNotification(int progress);
+
     /// Mostra el diàleg on s'explica que és una versió beta.
     void showBetaVersionDialog();
 
@@ -159,6 +171,9 @@ private:
     Patient *m_patient;
 
     bool m_isBetaVersion;
+
+    /// Progress dialog per mostrar el progrés de càrrega dels volums
+    QProgressDialog *m_progressDialog;
 };
 
 }; // fi namespace udg

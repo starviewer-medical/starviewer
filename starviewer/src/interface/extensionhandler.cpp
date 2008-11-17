@@ -204,7 +204,7 @@ void ExtensionHandler::processInput(QStringList inputFiles)
         DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( patientsList.at(i)->toString() ) );
 
         bool error = true;
-        
+
         // marquem les series seleccionades
         QList<Study *> studyList = patientsList.at(i)->getStudies();
         if ( !studyList.isEmpty() )
@@ -335,6 +335,7 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
     else if( ( m_mainApp->getCurrentPatient()->compareTo( patient ) == Patient::SamePatients ))
     {
         *(m_mainApp->getCurrentPatient()) += *patient;
+        m_mainApp->connectPatientVolumesToNotifier(patient);
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
 
         //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte

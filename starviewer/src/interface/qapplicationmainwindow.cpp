@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QLocale>
+#include <QProgressDialog>
 
 // els nostres widgets/elements de la plataforma
 #include "qapplicationmainwindow.h"
@@ -23,7 +24,7 @@
 #include "patient.h"
 #include "qconfigurationdialog.h"
 #include "hangingprotocolsloader.h"
-
+#include "volume.h"
 // Mini - aplicacions
 #include "databaseinstallation.h"
 
@@ -60,6 +61,15 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     /// Càrrega dels hanging protocols
     HangingProtocolsLoader * hangingProtocolsLoader = new HangingProtocolsLoader();
     hangingProtocolsLoader->loadDefaults();
+
+    // creem el progress dialog que notificarà la càrrega de volums
+    m_progressDialog = new QProgressDialog( this );
+    m_progressDialog->setModal( false );
+    m_progressDialog->setRange( 0 , 100 );
+    m_progressDialog->setMinimumDuration( 0 );
+    m_progressDialog->setWindowTitle( tr("Loading") );
+    m_progressDialog->setLabelText( tr("Loading data, please wait...") );
+    m_progressDialog->setCancelButton( 0 );
 
 #ifdef BETA_VERSION
     markAsBetaVersion();
@@ -342,6 +352,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
     }
 
     m_patient = patient;
+    connectPatientVolumesToNotifier(patient);
 
     this->setWindowTitle( m_patient->getID() + " : " + m_patient->getFullName() );
     enableExtensions();
@@ -467,6 +478,26 @@ void QApplicationMainWindow::readSettings()
 
     this->restoreGeometry(settings.value("geometry").toByteArray());
 
+}
+
+void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
+{
+    foreach( Study *study, patient->getStudies() )
+    {
+        foreach( Series *series, study->getSeries() )
+        {
+            foreach( Volume *volume, series->getVolumesList() )
+            {
+                connect( volume, SIGNAL(progress(int)), SLOT( updateVolumeLoadProgressNotification(int) ) );
+            }
+        }
+    }
+}
+
+void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
+{
+    m_progressDialog->setValue(progress);
+    qApp->processEvents();
 }
 
 }; // end namespace udg
