@@ -69,11 +69,6 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
         screen_y = qApp->desktop()->availableGeometry( point ).height();
     }
 
-    if ( QT_VERSION >= 0x040300 ) // Amb qt 4.3
-    {
-        m_patientAdditionalInfo->show();
-    }
-
     m_patientBrowserList->setSelectedSerie( serieUID );
     QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 
