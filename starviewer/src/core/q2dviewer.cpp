@@ -2228,6 +2228,7 @@ void Q2DViewer::setSlabThickness( int thickness )
         setupDefaultPipeline();
         m_thickSlabActive = false;
         updateDisplayExtent();
+        updateSliceAnnotationInformation();
         this->refresh();
     }
     if ( m_slabThickness > 1 && !isThickSlabActive() ) // la comprovacio es per constuir el pipeline nomes el primer cop
