@@ -390,7 +390,7 @@ void QExperimental3DExtension::computeCancelObscurance()
 
         int numberOfDirections;
         if ( m_obscuranceViewpointDistributionWidget->isUniform() )
-            numberOfDirections = -m_obscuranceViewpointDistributionWidget->numberOfViewpoints();
+            numberOfDirections = -1 * m_obscuranceViewpointDistributionWidget->numberOfViewpoints();
         else
             numberOfDirections = m_obscuranceViewpointDistributionWidget->recursionLevel();
 
