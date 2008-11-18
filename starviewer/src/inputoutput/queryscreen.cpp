@@ -296,6 +296,9 @@ void QueryScreen::createConnections()
 
     //Connecta amb el signal que indica que ha finalitza el thread d'esborrar els estudis vells
     connect(&m_qdeleteOldStudiesThread, SIGNAL(finished()), SLOT(deleteOldStudiesThreadFinished()));
+
+    // connectem el botó per obrir DICOMDIR
+    connect( m_openDICOMDIRToolButton, SIGNAL( clicked() ), SLOT( openDicomdir() ) );
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)
