@@ -114,23 +114,25 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     RenderingStyle renderingStyle;
     TransferFunction *transferFunction;
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/spine2.png" ), tr("Spine 2") );
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/spine2.png" ), tr("Spine") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
     transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/spine2.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    delete transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs2.png" ), tr("Style 2") );
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/thorax1.png" ), tr("Thorax") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/thorax1.xml" );
     renderingStyle.transferFunction = *transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;

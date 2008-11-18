@@ -1,0 +1,23 @@
+<transferfunction version="0" >
+ <name>Thorax 1</name>
+ <color>
+  <point g="0.1372549019607843" value="0" r="1" b="0.1725490196078431" />
+  <point g="0.1372549019607843" value="1000" r="1" b="0.1725490196078431" />
+  <point g="0.1372549019607843" value="1187" r="1" b="0.1725490196078431" />
+  <point g="0.3529411764705883" value="1191" r="1" b="0.1686274509803922" />
+  <point g="0.6392156862745098" value="1242" r="1" b="0.1137254901960784" />
+  <point g="1" value="1469" r="1" b="1" />
+  <point g="1" value="2479" r="1" b="1" />
+  <point g="1" value="3808" r="1" b="1" />
+ </color>
+ <opacity>
+  <point value="0" a="0" />
+  <point value="1000" a="0" />
+  <point value="1187" a="0" />
+  <point value="1191" a="0.1686274509803922" />
+  <point value="1242" a="0.4196078431372549" />
+  <point value="1469" a="0.5725490196078431" />
+  <point value="2479" a="0.8745098039215686" />
+  <point value="3808" a="0.8823529411764706" />
+ </opacity>
+</transferfunction>
