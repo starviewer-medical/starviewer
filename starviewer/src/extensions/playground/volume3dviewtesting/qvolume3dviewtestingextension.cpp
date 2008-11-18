@@ -112,11 +112,14 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     // Per cada estil creem un item i li assignem unes dades que seran les que es faran servir a l'hora d'aplicar-lo.
     QStandardItem *item;
     RenderingStyle renderingStyle;
-    TransferFunction *transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/wholebody_fullrange.xml" );
+    TransferFunction *transferFunction;
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs1.png" ), tr("Style 1") );
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/spine2.png" ), tr("Spine 2") );
     renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = false;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = true;
+    renderingStyle.specularPower = 64.0;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/spine2.xml" );
     renderingStyle.transferFunction = *transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;
