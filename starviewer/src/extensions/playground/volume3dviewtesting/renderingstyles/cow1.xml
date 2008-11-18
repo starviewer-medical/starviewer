@@ -1,0 +1,20 @@
+<transferfunction version="0" >
+ <name>Cow 1</name>
+ <color>
+  <point g="0.3882352941176471" value="0" r="1" b="0.007843137254901961" />
+  <point g="0.3882352941176471" value="1000" r="1" b="0.007843137254901961" />
+  <point g="0.3882352941176471" value="1113" r="1" b="0.007843137254901961" />
+  <point g="0.8666666666666667" value="1284" r="1" b="0.6" />
+  <point g="1" value="1663" r="1" b="1" />
+  <point g="1" value="3390" r="1" b="1" />
+ </color>
+ <opacity>
+  <point value="0" a="0" />
+  <point value="1000" a="0" />
+  <point value="1113" a="0.0196078431372549" />
+  <point value="1175" a="0.5529411764705883" />
+  <point value="1284" a="0.788235294117647" />
+  <point value="1663" a="0.7647058823529411" />
+  <point value="3390" a="0.7098039215686275" />
+ </opacity>
+</transferfunction>
