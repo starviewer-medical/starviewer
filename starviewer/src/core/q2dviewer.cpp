@@ -1218,7 +1218,30 @@ void Q2DViewer::resizeEvent( QResizeEvent *vtkNotUsed(resize) )
         // l'única info que cal actualitzar és la mida de finestra/viewport
         updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
         updateRulers();
+
+        double bounds[6];
+        switch( m_lastView )
+        {
+            case Axial:
+                // ajustem la imatge al viewport
+                m_imageActor->GetBounds( bounds );
+                scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
+            break;
+
+            case Sagital:
+                // ajustem la imatge al viewport
+                m_imageActor->GetBounds( bounds );
+                scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
+            break;
+            case Coronal:
+                // ajustem la imatge al viewport
+                m_imageActor->GetBounds( bounds );
+                scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
+            break;
+        }
+
     }
+
 }
 
 void Q2DViewer::setWindowLevel( double window , double level )
