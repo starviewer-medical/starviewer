@@ -147,16 +147,20 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     renderingStyle.specularPower = 64.0;
     transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/pelvis2.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    delete transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs4.png" ), tr("Style 4") );
-    renderingStyle.method = RenderingStyle::Texture3D;
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/cow1.png" ), tr("Cow") );
+    renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = false;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/cow1.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.contour = false;
+    renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
