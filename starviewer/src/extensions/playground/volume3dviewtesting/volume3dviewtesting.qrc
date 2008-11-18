@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/extensions/Volume3DViewTestingExtension" >
+        <file>renderingstyles/pelvis2.png</file>
+        <file>renderingstyles/pelvis2.xml</file>
         <file>renderingstyles/rs1.png</file>
         <file>renderingstyles/rs2.png</file>
         <file>renderingstyles/rs3.png</file>
