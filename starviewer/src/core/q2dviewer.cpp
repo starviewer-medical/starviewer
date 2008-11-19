@@ -179,6 +179,7 @@ void Q2DViewer::createOrientationAnnotations()
     m_patientOrientationTextActor[2]->SetPosition( 0.99 , 0.5 );
 
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
+    m_patientOrientationTextActor[3]->GetTextProperty()->SetVerticalJustificationToTop();
     m_patientOrientationTextActor[3]->SetPosition( 0.5 , 0.99 );
 }
 
