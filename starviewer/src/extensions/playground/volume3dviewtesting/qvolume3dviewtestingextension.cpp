@@ -185,14 +185,20 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     renderingStyle.specularPower = 64.0;
     transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bones4.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    delete transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs7.png" ), tr("Style 7") );
-    renderingStyle.method = RenderingStyle::IsoSurface;
-    renderingStyle.isoValue = 1200.0;
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bonehires.png" ), tr("Bone (hi-res)") );
+    renderingStyle.method = RenderingStyle::RayCasting;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = false;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bonehires.xml" );
+    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.contour = false;
+    renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 

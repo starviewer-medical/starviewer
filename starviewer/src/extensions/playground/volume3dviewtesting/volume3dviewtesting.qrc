@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/extensions/Volume3DViewTestingExtension" >
+        <file>renderingstyles/bonehires.png</file>
+        <file>renderingstyles/bonehires.xml</file>
         <file>renderingstyles/bones4.png</file>
         <file>renderingstyles/bones4.xml</file>
         <file>renderingstyles/carotids2.png</file>
@@ -8,20 +10,12 @@
         <file>renderingstyles/cow1.xml</file>
         <file>renderingstyles/pelvis2.png</file>
         <file>renderingstyles/pelvis2.xml</file>
-        <file>renderingstyles/rs1.png</file>
-        <file>renderingstyles/rs2.png</file>
-        <file>renderingstyles/rs3.png</file>
-        <file>renderingstyles/rs4.png</file>
-        <file>renderingstyles/rs5.png</file>
-        <file>renderingstyles/rs6.png</file>
-        <file>renderingstyles/rs7.png</file>
         <file>renderingstyles/rs8.png</file>
         <file>renderingstyles/rs9.png</file>
         <file>renderingstyles/spine2.png</file>
         <file>renderingstyles/spine2.xml</file>
         <file>renderingstyles/thorax1.png</file>
         <file>renderingstyles/thorax1.xml</file>
-        <file>renderingstyles/wholebody_fullrange.xml</file>
         <file>renderingstyles/wholebody_fullrange_blanc.xml</file>
         <file>translations_ca_ES.qm</file>
         <file>translations_en_GB.qm</file>
