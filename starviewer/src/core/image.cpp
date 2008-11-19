@@ -378,13 +378,13 @@ QPixmap Image::getThumbnail(int resolution)
 QString Image::getProjectionLabelFromPlaneOrientation( const QString &orientation )
 {
     QString label;
-
+    
     QStringList axisList = orientation.split("\\");
     // comprovem si tenim les annotacions esperades
     if( axisList.count() >= 2 )
     {
-        QString rowAxis = axisList.at(0);
-        QString columnAxis = axisList.at(1);
+        QString rowAxis = axisList.at(0).trimmed();
+        QString columnAxis = axisList.at(1).trimmed();
 
         if( !rowAxis.isEmpty() && !columnAxis.isEmpty() )
         {
@@ -400,10 +400,12 @@ QString Image::getProjectionLabelFromPlaneOrientation( const QString &orientatio
                 label="SAGITAL";
             else if( (columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")) )
                 label="SAGITAL";
+            else
+                label="OBLIQUE";
         }
         else
         {
-            label="OBLIQUE";
+            label="N/A";
         }
     }
 

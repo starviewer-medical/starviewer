@@ -56,7 +56,7 @@ public:
      /**
      * A partir dels eixos de la imatge, ens diu en un string quina és
      * la orientació de la imatge
-     * @return Els valors podran ser AXIAL, SAGITAL, CORONAL o OBLIQUE
+     * @return Els valors podran ser AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A (not available)
      */
     QString getOrientationLabel();
 
