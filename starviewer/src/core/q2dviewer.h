@@ -350,7 +350,11 @@ public slots:
     /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
     /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
     /// Si tenim una imatge axial pura la llista seria R,H,L,F (Right, Head, Left, Feet )
-    QVector<QString> getCurrentDisplayedImageOrientationLabels();
+    QVector<QString> getCurrentDisplayedImageOrientationLabels() const;
+
+    /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
+    /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
+    QString getCurrentPlaneProjectionLabel() const;
 
 signals:
     /// envia la nova llesca en la que ens trobem
