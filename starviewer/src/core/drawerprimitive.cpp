@@ -11,7 +11,7 @@
 namespace udg {
 
 DrawerPrimitive::DrawerPrimitive(QObject *parent)
- : QObject(parent), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(Qt::green), m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0), m_modified(false), m_referenceCount(0)
+ : QObject(parent), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(QColor(255,165,0)), m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(1.0), m_opacity(1.0), m_modified(false), m_referenceCount(0)
 {
     connect( this, SIGNAL(changed()), SLOT(setModified()) );
 }
