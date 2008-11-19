@@ -159,15 +159,21 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     renderingStyle.specularLighting = false;
     transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/cow1.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    delete transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs5.png" ), tr("Style 5") );
-    renderingStyle.method = RenderingStyle::Texture2D;
-    renderingStyle.diffuseLighting = false;
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/carotids2.png" ), tr("Carotids") );
+    renderingStyle.method = RenderingStyle::RayCasting;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = true;
+    renderingStyle.specularPower = 64.0;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/carotids2.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.contour = false;
+    renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
