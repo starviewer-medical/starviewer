@@ -172,13 +172,21 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     renderingStyle.specularPower = 64.0;
     transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/carotids2.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    delete transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs6.png" ), tr("Style 6") );
-    renderingStyle.method = RenderingStyle::MIP;
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bones4.png" ), tr("Bones") );
+    renderingStyle.method = RenderingStyle::RayCasting;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = true;
+    renderingStyle.specularPower = 64.0;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bones4.xml" );
+    renderingStyle.transferFunction = *transferFunction;
+    renderingStyle.contour = false;
+    renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
