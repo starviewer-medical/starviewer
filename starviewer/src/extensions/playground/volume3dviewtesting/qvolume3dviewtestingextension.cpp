@@ -197,17 +197,25 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     renderingStyle.specularLighting = false;
     transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bonehires.xml" );
     renderingStyle.transferFunction = *transferFunction;
+    delete transferFunction;
     renderingStyle.contour = false;
     renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs8.png" ), tr("Style 8") );
-    renderingStyle.method = RenderingStyle::Contouring;
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenbones.png" ), tr("Abdomen bones") );
+    renderingStyle.method = RenderingStyle::RayCasting;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = true;
+    renderingStyle.specularPower = 64.0;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenbones.xml" );
+    renderingStyle.transferFunction = *transferFunction;
+    delete transferFunction;
+    renderingStyle.contour = false;
+    renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    delete transferFunction;
     transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/wholebody_fullrange_blanc.xml" );
 
     item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs9.png" ), tr("Style 9") );
