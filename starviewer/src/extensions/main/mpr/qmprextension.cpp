@@ -344,11 +344,9 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     case vtkCommand::LeftButtonReleaseEvent:
         if ( m_state == PUSHING )
             releasePushAxialViewAxisActor();
-        else
-        {
-            if( m_state != NONE )
-                releaseAxialViewAxisActor();
-        }
+        else if( m_state != NONE )
+            releaseAxialViewAxisActor();
+
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -384,11 +382,9 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
     case vtkCommand::LeftButtonReleaseEvent:
         if ( m_state == PUSHING )
             releasePushSagitalViewAxisActor();
-        else
-        {
-            if( m_state != NONE )
-                releaseSagitalViewAxisActor();
-        }
+        else if( m_state != NONE )
+            releaseSagitalViewAxisActor();
+
     break;
 
     case vtkCommand::MouseMoveEvent:
