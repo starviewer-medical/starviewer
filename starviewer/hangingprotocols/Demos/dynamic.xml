@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Dynamic">
+<hangingProtocolName>Dynamic</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<protocol>MR</protocol>
+<restriction identifier="1">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>PatientName</selectorAttribute>
+<valueRepresentation>DYNAMIC</valueRepresentation>
+</restriction>
+<restriction identifier="2">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>SeriesNumber</selectorAttribute>
+<valueRepresentation>901</valueRepresentation>
+</restriction>
+<imageSet identifier="1">
+<restriction>1</restriction>
+<restriction>2</restriction>
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\0.5\0.5</position>
+<phase>0</phase>
+</displaySet>
+<displaySet identifier="2">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\1.0\1.0\0.5</position>
+<phase>1</phase>
+</displaySet>
+<displaySet identifier="3">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\0.5\0.5\0.0</position>
+<phase>2</phase>
+</displaySet>
+<displaySet identifier="4">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\0.5\1.0\0.0</position>
+<phase>3</phase>
+</displaySet>
+</hangingProtocol>
