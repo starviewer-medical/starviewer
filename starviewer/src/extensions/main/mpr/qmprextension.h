@@ -174,6 +174,9 @@ private slots:
      */
     void showViewerInformation( bool show );
 
+    /// Actualitza l'etiqueta de la projecció que hi ha al viewer "Axial"
+    void updateProjectionLabel();
+
 private:
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;
