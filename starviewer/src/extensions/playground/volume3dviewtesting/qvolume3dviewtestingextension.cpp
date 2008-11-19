@@ -216,19 +216,18 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/wholebody_fullrange_blanc.xml" );
-
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/rs9.png" ), tr("Style 9") );
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenrunoff1.png" ), tr("Abdomen run-off") );
     renderingStyle.method = RenderingStyle::RayCasting;
-    renderingStyle.diffuseLighting = false;
+    renderingStyle.diffuseLighting = true;
+    renderingStyle.specularLighting = true;
+    renderingStyle.specularPower = 64.0;
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenrunoff1.xml" );
     renderingStyle.transferFunction = *transferFunction;
-    renderingStyle.contour = true;
-    renderingStyle.contourThreshold = 0.5;
+    delete transferFunction;
+    renderingStyle.contour = false;
     renderingStyle.obscurance = false;
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
-
-    delete transferFunction;
 
     m_renderingStyleListView->setModel( m_renderingStyleModel );
 }
