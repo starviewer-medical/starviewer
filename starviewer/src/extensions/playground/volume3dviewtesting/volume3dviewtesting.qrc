@@ -2,6 +2,8 @@
     <qresource prefix="/extensions/Volume3DViewTestingExtension" >
         <file>renderingstyles/abdomenbones.png</file>
         <file>renderingstyles/abdomenbones.xml</file>
+        <file>renderingstyles/abdomenrunoff1.png</file>
+        <file>renderingstyles/abdomenrunoff1.xml</file>
         <file>renderingstyles/bonehires.png</file>
         <file>renderingstyles/bonehires.xml</file>
         <file>renderingstyles/bones4.png</file>
