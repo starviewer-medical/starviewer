@@ -17,7 +17,6 @@
 #include "drawer.h"
 
 // qt
-#include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
 #include <QSettings>
 #include <QTextStream>
@@ -61,11 +60,15 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     initializeTools();
 
     m_thickSlab = 0.0;
+
+    //TODO ocultem botons que no son del tot necessaris o que no es faran servir
     m_thickSlabLabel->setVisible(false);
     m_thickSlabSlider->setVisible(false);
     m_thickSlabSpinBox->setVisible(false);
     m_mipToolButton->setVisible(false);
     m_rotate3DToolButton->setVisible(false);
+    m_windowLevelToolButton->setVisible(false);
+    m_moveToolButton->setVisible(false);
 }
 
 QMPRExtension::~QMPRExtension()
@@ -224,12 +227,11 @@ void QMPRExtension::initializeDefaultTools()
 void QMPRExtension::createConnections()
 {
     // conectem els sliders i demés visors
-    // aquests tres connects es podrien resumir en un private slot : on_m_axialXXXX_valueChanged( int ) i aprofitaríem les característiques de l'auto connection
-    connect( m_axialSlider , SIGNAL( valueChanged(int) ) , m_axialSpinBox , SLOT( setValue(int) ) );
-    connect( m_axialSpinBox , SIGNAL( valueChanged(int) ) , m_axial2DView , SLOT( setSlice(int) ) );
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
+    connect( m_axialSlider , SIGNAL( valueChanged(int) ) , m_axial2DView, SLOT( setSlice(int) ) );
 
     connect( m_axial2DView, SIGNAL( sliceChanged(int) ), SLOT( axialSliceUpdated(int) ) );
+    connect( m_axial2DView, SIGNAL( sliceChanged( int ) ), SLOT( updateProjectionLabel() ) );
 
     // gestionen els events de les finestres per poder manipular els plans
     connect( m_axial2DView, SIGNAL( eventReceived(unsigned long) ), SLOT( handleAxialViewEvents( unsigned long ) ) );
@@ -267,6 +269,11 @@ void QMPRExtension::showViewerInformation( bool show )
         Q2DViewer::WindowInformationAnnotation | Q2DViewer::RulersAnnotation |
         Q2DViewer::AcquisitionInformationAnnotation
         , show );
+}
+
+void QMPRExtension::updateProjectionLabel()
+{
+    m_projectionLabel->setText( m_axial2DView->getCurrentPlaneProjectionLabel() );
 }
 
 void QMPRExtension::switchHorizontalLayout()
@@ -820,9 +827,6 @@ void QMPRExtension::setInput( Volume *input )
     m_axial2DView->resetViewToAxial();
     int extent[6];
     m_volume->getWholeExtent( extent );
-    // refrescar el controls
-    m_axialSpinBox->setMinimum( extent[4] );
-    m_axialSpinBox->setMaximum( extent[5] );
     m_axialSlider->setMaximum(  extent[5] );
 
     double maxThickSlab = sqrt( (m_axialSpacing[0]*extent[1]) * (m_axialSpacing[0]*extent[1]) + (m_axialSpacing[1]*extent[3]) * (m_axialSpacing[1]*extent[3]) + (m_axialSpacing[2]*extent[5]) * (m_axialSpacing[2]*extent[5]) );

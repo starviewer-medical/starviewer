@@ -72,11 +72,7 @@ void Q2DViewerWidget::createConnections()
 
 void Q2DViewerWidget::updateProjectionLabel()
 {
-	if( m_mainVolume )
-	{
-        QVector<QString> labels = m_2DView->getCurrentDisplayedImageOrientationLabels();
-        m_viewText->setText( Image::getProjectionLabelFromPlaneOrientation( labels[0]+"\\"+labels[1] ) );
-	}
+    m_viewText->setText( m_2DView->getCurrentPlaneProjectionLabel() );
 }
 
 void Q2DViewerWidget::setInput( Volume *input )

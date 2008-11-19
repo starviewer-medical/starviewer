@@ -405,7 +405,7 @@ void Q2DViewer::setPresentationLUT( vtkWindowLevelLookupTable *lut )
     m_presentationLut = lut;
 }
 
-QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels()
+QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
 {
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
     // això es fa per si tenim un mhd que realment només té un arxiu (imatge) però té més llesques
@@ -477,6 +477,12 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels()
         DEBUG_LOG("L'orientació del pacient conté un nombre incorrecte d'elements:[" + QString::number(list.size()) + "]. No s'aplicaran annotacions de referència sobre la imatge");
     }
     return labelsVector;
+}
+
+QString Q2DViewer::getCurrentPlaneProjectionLabel() const
+{
+    QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
+    return Image::getProjectionLabelFromPlaneOrientation( labels[0]+"\\"+labels[1] );
 }
 
 void Q2DViewer::mapOrientationStringToAnnotation()
