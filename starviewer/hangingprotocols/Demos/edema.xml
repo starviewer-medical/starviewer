@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Edema">
+<hangingProtocolName>Edema</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<protocol>CT</protocol>
+<restriction identifier="1">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>PatientName</selectorAttribute>
+<valueRepresentation>EDEMA</valueRepresentation>
+</restriction>
+<restriction identifier="1">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>ScanOptions</selectorAttribute>
+<valueRepresentation>AXIAL</valueRepresentation>
+</restriction>
+<imageSet identifier="1">
+<restriction>1</restriction>
+<restriction>2</restriction>
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\1.0\1.0\0.0</position>
+<reconstruction>AXIAL</reconstruction>
+</displaySet>
+<displaySet identifier="2">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\0.5\0.5\0.0</position>
+<reconstruction>SAGITAL</reconstruction>
+</displaySet>
+<displaySet identifier="3">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\0.5\0.5</position>
+<reconstruction>CORONAL</reconstruction>
+</displaySet>
+</hangingProtocol>
