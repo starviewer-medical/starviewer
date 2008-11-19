@@ -346,6 +346,26 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient( Patient *patient )
 {
     m_patient = patient;
+    // ara és super txapussa i només mirarà el primer estudi
+    foreach( Study *study, m_patient->getStudies() )
+    {
+        if( study->getModalities().contains("MG") || study->getModalities().contains("CR") )
+        {
+            m_slicingToolButton->defaultAction()->toggle();
+            m_zoomToolButton->defaultAction()->trigger();
+            m_flipVerticalToolButton->setVisible(true);
+            m_flipHorizontalToolButton->setVisible(true);
+            m_cineController->setVisible(false);
+        }
+        else
+        {
+            m_slicingToolButton->defaultAction()->trigger();
+            m_flipVerticalToolButton->setVisible(false);
+            m_flipHorizontalToolButton->setVisible(false);
+            m_cineController->setVisible(true);
+        }
+        break;
+    }
 }
 
 void Q2DViewerExtension::initializeTools()
