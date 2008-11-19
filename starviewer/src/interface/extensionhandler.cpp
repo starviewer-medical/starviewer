@@ -53,7 +53,7 @@ ExtensionHandler::~ExtensionHandler()
     // Si és la última finestra oberta, hem de tancar la queryscreen
     if (m_mainApp->getCountQApplicationMainWindow() == 1)
     {
-        QueryScreenSingleton::instance()->close();
+        delete QueryScreenSingleton::instance();
     }
 }
 
