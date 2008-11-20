@@ -1,5 +1,5 @@
 <transferfunction version="0" >
- <name>Pelvis 2</name>
+ <name>Pelvis</name>
  <color>
   <point g="0.4549019607843137" value="0" r="1" b="0.4549019607843137" />
   <point g="0.4549019607843137" value="1000" r="1" b="0.4549019607843137" />

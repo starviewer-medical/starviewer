@@ -191,7 +191,7 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bonehires.png" ), tr("Bone (hi-res)") );
+    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bonehires.png" ), tr("Bones 2") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = false;

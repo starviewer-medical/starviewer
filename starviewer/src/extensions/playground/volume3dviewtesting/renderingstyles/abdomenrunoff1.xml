@@ -1,5 +1,5 @@
 <transferfunction version="0" >
- <name>Abdomen run-off 1</name>
+ <name>Abdomen run-off</name>
  <color>
   <point g="0.1372549019607843" value="0" r="1" b="0.1725490196078431" />
   <point g="0.1372549019607843" value="1074" r="1" b="0.1725490196078431" />

@@ -1,5 +1,5 @@
 <transferfunction version="0" >
- <name>Cow 1</name>
+ <name>Cow</name>
  <color>
   <point g="0.3882352941176471" value="0" r="1" b="0.007843137254901961" />
   <point g="0.3882352941176471" value="1000" r="1" b="0.007843137254901961" />
