@@ -416,7 +416,7 @@ void QCreateDicomdir::examineDicomdirPath()
     {
         if ( !dlg->selectedFiles().empty() ) 
         {
-            m_lineEditDicomdirPath->setText( dlg->selectedFiles().takeFirst() );
+            m_lineEditDicomdirPath->setText(QDir::toNativeSeparators(dlg->selectedFiles().takeFirst()));
         }
     }
 
