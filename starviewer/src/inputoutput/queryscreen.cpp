@@ -1016,8 +1016,6 @@ void QueryScreen::deleteSelectedStudiesInCache()
                 }
                 else
                 {
-                    INFO_LOG( "S'esborra de la cache l'estudi " + studyUID );
-
                     localDatabaseManager.del(studyUID);
                     if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    break;
 

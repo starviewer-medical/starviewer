@@ -293,10 +293,13 @@ void LocalDatabaseManager::del(const QString &studyInstanceToDelete)
     DicomMask studyMaskToDelete;
     int status;
 
+    INFO_LOG("S'esborrarà de la base de dades l'estudi: " + studyInstanceToDelete);
+
     if (studyInstanceToDelete.isEmpty())
         return;
     else
         studyMaskToDelete.setStudyUID(studyInstanceToDelete);
+
 
     dbConnect.open();
     dbConnect.beginTransaction();
