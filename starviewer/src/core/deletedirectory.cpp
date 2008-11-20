@@ -47,6 +47,7 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
             absoluteFilePath = directoryPath + "/" + (*it);
             if ( !fileToDelete.remove (absoluteFilePath ) )  //esborrem el fitxer
             {
+                ERROR_LOG("NO S'HA POGUT ESBORRAR EL FITXER " + absoluteFilePath);            
                 return false;
             }
         }
@@ -68,6 +69,7 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
     {
         if ( !directoryToDelete.rmdir( directoryPath ) ) //esborra el directori arrel
         {
+            ERROR_LOG("NO S'HA POGUT ESBORRAR EL DIRECTORI " + directoryPath);
             return false;
         }
     }
