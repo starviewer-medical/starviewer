@@ -15,57 +15,32 @@
 </restriction>
 <restriction identifier="3">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>ViewPosition</selectorAttribute>
-<valueRepresentation>CC</valueRepresentation>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>cranio-caudal</valueRepresentation>
 </restriction>
 <restriction identifier="4">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>ViewPosition</selectorAttribute>
-<valueRepresentation>MLO</valueRepresentation>
-</restriction>
-<restriction identifier="5">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>BodyPartExamined</selectorAttribute>
-<valueRepresentation>BREAST</valueRepresentation>
-</restriction>
-<restriction identifier="6">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>PatientOrientation</selectorAttribute>
-<valueRepresentation>P\F</valueRepresentation>
-</restriction>
-<restriction identifier="7">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>PatientOrientation</selectorAttribute>
-<valueRepresentation>P\F</valueRepresentation>
-</restriction>
-<restriction identifier="8">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>PatientOrientation</selectorAttribute>
-<valueRepresentation>P\L</valueRepresentation>
-</restriction>
-<restriction identifier="9">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>PatientOrientation</selectorAttribute>
-<valueRepresentation>P\R</valueRepresentation>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>medio-lateral</valueRepresentation>
 </restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
-<restriction>6</restriction>
+<restriction>4</restriction>
 <type>image</type>
 </imageSet>
 <imageSet identifier="2">
 <restriction>2</restriction>
-<restriction>7</restriction>
+<restriction>4</restriction>
 <type>image</type>
 </imageSet>
 <imageSet identifier="3">
 <restriction>1</restriction>
-<restriction>8</restriction>
+<restriction>3</restriction>
 <type>image</type>
 </imageSet>
 <imageSet identifier="4">
 <restriction>2</restriction>
-<restriction>9</restriction>
+<restriction>3</restriction>
 <type>image</type>
 </imageSet>
 <displaySet identifier="1">
