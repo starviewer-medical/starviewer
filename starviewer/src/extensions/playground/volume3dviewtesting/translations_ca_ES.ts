@@ -1,69 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<context>
-    <name>QClutEditorDialogBase</name>
-    <message>
-        <location filename="qcluteditordialogbase.ui" line="13"/>
-        <source>CLUT editor</source>
-        <translation>Editor de CLUT</translation>
-    </message>
-    <message>
-        <location filename="qcluteditordialogbase.ui" line="39"/>
-        <source>Load transfer function</source>
-        <translation>Carregar una funció de transferència</translation>
-    </message>
-    <message>
-        <location filename="qcluteditordialogbase.ui" line="42"/>
-        <source>Load...</source>
-        <translation>Carregar...</translation>
-    </message>
-    <message>
-        <location filename="qcluteditordialogbase.ui" line="49"/>
-        <source>Save transfer function</source>
-        <translation>Guardar la funció de transferència</translation>
-    </message>
-    <message>
-        <location filename="qcluteditordialogbase.ui" line="52"/>
-        <source>Save...</source>
-        <translation>Guardar...</translation>
-    </message>
-    <message>
-        <location filename="qcluteditordialogbase.ui" line="59"/>
-        <source>Switch editor</source>
-        <translation>Canviar editor</translation>
-    </message>
-</context>
-<context>
-    <name>QTransferFunctionEditorByValuesBase</name>
-    <message>
-        <location filename="../../../core/qtransferfunctioneditorbyvaluesbase.ui" line="50"/>
-        <source>Add</source>
-        <translation>Afegir</translation>
-    </message>
-    <message>
-        <location filename="../../../core/qtransferfunctioneditorbyvaluesbase.ui" line="57"/>
-        <source>Remove</source>
-        <translation>Eliminar</translation>
-    </message>
-    <message>
-        <location filename="../../../core/qtransferfunctioneditorbyvaluesbase.ui" line="30"/>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-</context>
-<context>
-    <name>QTransferFunctionIntervalEditorBase</name>
-    <message>
-        <location filename="../../../core/qtransferfunctionintervaleditorbase.ui" line="55"/>
-        <source>Select color...</source>
-        <translation>Seleccina un color...</translation>
-    </message>
-    <message>
-        <location filename="../../../core/qtransferfunctionintervaleditorbase.ui" line="22"/>
-        <source>Interval</source>
-        <translation>Interval</translation>
-    </message>
-</context>
+<defaultcodec></defaultcodec>
 <context>
     <name>QVolume3DViewTestingExtensionBase</name>
     <message>
@@ -92,90 +29,247 @@
         <translation>Rotació</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="240"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="265"/>
         <source>Pan</source>
         <translation>Moure</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="452"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="475"/>
         <source>Rendering Method</source>
         <translation>Mètode de renderització</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="408"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="483"/>
         <source>Ray Casting</source>
         <translation>Ray Casting</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="413"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="493"/>
         <source>MIP</source>
         <translation>MIP</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="418"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="498"/>
         <source>Texture 3D</source>
         <translation>Textura 3D</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="423"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="503"/>
         <source>Texture 2D</source>
         <translation>Textura 2D</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="428"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="508"/>
         <source>Iso Surface</source>
         <translation>Iso superfície</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="156"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="140"/>
         <source>Orientation</source>
         <translation>Orientació</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="294"/>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="301"/>
         <source>Mouse Function</source>
         <translation>Funció del mouse</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="330"/>
-        <source>Presets</source>
-        <translation>Per defecte</translation>
-    </message>
-    <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="342"/>
-        <source>Edit CLUT</source>
-        <translation>Editor de CLUT</translation>
-    </message>
-    <message>
-        <location filename="qvolume3dviewtestingextensionbase.ui" line="382"/>
-        <source>CLUT</source>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="240"/>
+        <source>W/L</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="384"/>
+        <source>Rendering style</source>
+        <translation>Estil de Rendering</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="396"/>
+        <source>Custom style</source>
+        <translation>Estil a mida</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="488"/>
+        <source>Ray Casting with Obscurances</source>
+        <translation>Rays Casting amb Obscurances</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="513"/>
+        <source>Contouring</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="540"/>
+        <source>Shading</source>
+        <translation>Ombrejat</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="550"/>
+        <source>Specular</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="560"/>
+        <source>Specular power</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="603"/>
+        <source>Contour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="613"/>
+        <source>Threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="656"/>
+        <source>Obscurance quality</source>
+        <translation>Qualitat de l&apos;obscurança</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="664"/>
+        <source>Low</source>
+        <translation>Baixa</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="669"/>
+        <source>Medium</source>
+        <translation>Mitjana</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="674"/>
+        <source>High</source>
+        <translation>Alta</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="682"/>
+        <source>Compute</source>
+        <translation>Calcular</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="717"/>
+        <source>Obscurance</source>
+        <translation>Obscurança</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="727"/>
+        <source>Brightness</source>
+        <translation>Brillantor</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="772"/>
+        <source>Iso-value</source>
+        <translation>Valor</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="821"/>
+        <source>Load transfer function</source>
+        <translation>Carregar una funció de transferència</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="824"/>
+        <source>Load...</source>
+        <translation>Carregar...</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="831"/>
+        <source>Save transfer function</source>
+        <translation>Guardar la funció de transferència</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="834"/>
+        <source>Save...</source>
+        <translation>Guardar...</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="841"/>
+        <source>Switch editor</source>
+        <translation>Canviar editor</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextensionbase.ui" line="888"/>
+        <source>Apply</source>
+        <translation>Aplicar</translation>
     </message>
 </context>
 <context>
-    <name>udg::QClutEditorDialog</name>
+    <name>udg::QVolume3DViewTestingExtension</name>
     <message>
-        <location filename="qcluteditordialog.cpp" line="78"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="117"/>
+        <source>Spine</source>
+        <translation>Columna</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="130"/>
+        <source>Thorax</source>
+        <translation>Tòrax</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="143"/>
+        <source>Pelvis</source>
+        <translation>Pelvis</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="156"/>
+        <source>Circle of Willis</source>
+        <translation>Cercle de Willis</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="168"/>
+        <source>Carotids</source>
+        <translation>Caròtides</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="181"/>
+        <source>Bones</source>
+        <translation>Ossos</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="194"/>
+        <source>Bones 2</source>
+        <translation>Ossos 2</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="206"/>
+        <source>Abdomen bones</source>
+        <translation>Ossos abdominals</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="219"/>
+        <source>Abdomen run-off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="232"/>
+        <source>Abdomen slab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="390"/>
+        <source>Cancel</source>
+        <translation>Cancel·lar</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="426"/>
+        <source>Compute</source>
+        <translation>Calcular</translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewtestingextension.cpp" line="456"/>
         <source>Load CLUT</source>
         <translation>Carregar CLUT</translation>
     </message>
     <message>
-        <location filename="qcluteditordialog.cpp" line="102"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="481"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation>Fitxers de funcions de transferència (*.tf);;Tots els fitxers(*)</translation>
     </message>
     <message>
-        <location filename="qcluteditordialog.cpp" line="102"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="481"/>
         <source>Save CLUT</source>
         <translation>Guardar CLUT</translation>
-    </message>
-</context>
-<context>
-    <name>udg::QTransferFunctionEditorByGradient</name>
-    <message>
-        <location filename="../../../core/qtransferfunctioneditorbygradient.cpp" line="57"/>
-        <source>Name</source>
-        <translation>Nom</translation>
     </message>
 </context>
 <context>
