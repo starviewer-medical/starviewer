@@ -7,7 +7,7 @@
 #ifndef UDG_STARVIEWER_APPLICATION
 #define UDG_STARVIEWER_APPLICATION
 
-const QString StarviewerVersionString("0.6.0");
+const QString StarviewerVersionString("0.7.0.devel");
 
 //Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
 const int StarviewerDatabaseRevisionRequired(3095);
