@@ -82,7 +82,7 @@ public:
 	int getIdentifier();
 
 	/// Mètode per comparar hanging protocols
-	bool operator >( HangingProtocol * hangingToCompare );
+	bool gratherThan( HangingProtocol * hangingToCompare );
 
 private:
 
