@@ -178,13 +178,15 @@ int HangingProtocol::getIdentifier()
 	return m_identifier;
 }
 
-bool HangingProtocol::operator >( HangingProtocol * hangingToCompare )
+bool HangingProtocol::gratherThan( HangingProtocol * hangingToCompare )
 {
 	int i;
 	bool hasViewWithPatientOrientation_1 = false;
 	bool hasViewWithPatientOrientation_2 = false;
 	bool hasReconstruction_1 = false;
 	bool hasReconstruction_2 = false;
+
+    if( hangingToCompare == NULL ) return true;
 
 	if( this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets() )
 		return ( this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets() );

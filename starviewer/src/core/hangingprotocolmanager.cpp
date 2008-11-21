@@ -150,7 +150,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
             }
             adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
-            if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol > bestHangingProtocol) )
+            if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->gratherThan(bestHangingProtocol) ) )
             {
                 bestHangingProtocol = hangingProtocol;
                 bestSelectedSeries.clear();
@@ -489,6 +489,11 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             else if( restriction.selectorAttribute == "PatientOrientation" )
             {
                 if( ! dicomReader.getAttributeByName( DCM_PatientOrientation ).contains( restriction.valueRepresentation ) )
+                    valid = false;
+            }
+            else if( restriction.selectorAttribute == "CodeMeaning" )
+            {
+                if( ! dicomReader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning ).at(0).contains( restriction.valueRepresentation ) )
                     valid = false;
             }
             i++;
