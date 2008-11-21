@@ -14,11 +14,9 @@ HangingProtocolDisplaySet::HangingProtocolDisplaySet(QObject *parent)
 {
 }
 
-
 HangingProtocolDisplaySet::~HangingProtocolDisplaySet()
 {
 }
-
 
 void HangingProtocolDisplaySet::setIdentifier( int identifier )
 {
@@ -92,7 +90,7 @@ QString HangingProtocolDisplaySet::getPhase()
 
 void HangingProtocolDisplaySet::show()
 {
-    DEBUG_LOG( tr("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(m_imageSetNumber).arg(m_position) );
-
+    DEBUG_LOG( QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(m_imageSetNumber).arg(m_position) );
 }
+
 }
