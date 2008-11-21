@@ -7,6 +7,7 @@
 
 #include "qcrashreporter.h"
 #include "crashreportersender.h"
+#include "../core/starviewerapplication.h"
 #include <QMovie>
 
 #ifdef WIN32
@@ -59,7 +60,7 @@ void QCrashReporter::maybeSendReport()
 {
     if ( m_sendReportCheckBox->isChecked() )
     {
-        //m_sendReportAnimation->show();
+        m_sendReportAnimation->show();
         m_sendReportLabel->show();
         qApp->processEvents();
         sendReport();
@@ -73,9 +74,13 @@ void QCrashReporter::sendReport()
     options.insert( "ProductName", "Starviewer" );
     options.insert( "Email", m_emailLineEdit->text() );
     options.insert( "Comments", m_descriptionTextEdit->toPlainText() );
-    
-    //CrashReporterSender::sendReport( "", m_minidumpPath, options );
-    
+    options.insert( "Version", StarviewerVersionString );
+
+    // Enviem el report només en cas de release.
+#ifdef QT_NO_DEBUG
+    CrashReporterSender::sendReport("http://trueta.udg.edu/crashreporter/report/", m_minidumpPath, options);
+#endif
+
     m_sendReportAnimation->hide();
     m_sendReportLabel->hide();
 }
