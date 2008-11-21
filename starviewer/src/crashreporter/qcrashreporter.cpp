@@ -71,10 +71,10 @@ void QCrashReporter::sendReport()
 {
     
     QHash<QString,QString> options;
-    options.insert( "ProductName", "Starviewer" );
+    options.insert( "ProductName", ApplicationNameString );
+    options.insert( "Version", StarviewerVersionString );
     options.insert( "Email", m_emailLineEdit->text() );
     options.insert( "Comments", m_descriptionTextEdit->toPlainText() );
-    options.insert( "Version", StarviewerVersionString );
 
     // Enviem el report només en cas de release.
 #ifdef QT_NO_DEBUG
