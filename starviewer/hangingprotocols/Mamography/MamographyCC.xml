@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="MamographyTruetaMLO">
-<hangingProtocolName>MLO</hangingProtocolName>
+<hangingProtocol name="MamographyCC">
+<hangingProtocolName>CC</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <protocol>MG</protocol>
 <restriction identifier="1">
@@ -15,13 +15,8 @@
 </restriction>
 <restriction identifier="3">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>PatientOrientation</selectorAttribute>
-<valueRepresentation>P\F</valueRepresentation>
-</restriction>
-<restriction identifier="4">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>PatientOrientation</selectorAttribute>
-<valueRepresentation>A\F</valueRepresentation>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>cranio-caudal</valueRepresentation>
 </restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
@@ -30,7 +25,7 @@
 </imageSet>
 <imageSet identifier="2">
 <restriction>2</restriction>
-<restriction>4</restriction>
+<restriction>3</restriction>
 <type>image</type>
 </imageSet>
 <displaySet identifier="1">
@@ -40,5 +35,6 @@
 <displaySet identifier="2">
 <imageSetNumber>2</imageSetNumber>
 <position>0.5\1.0\1.0\0.0</position>
+<patientOrientation>A\R</patientOrientation>
 </displaySet>
 </hangingProtocol>
