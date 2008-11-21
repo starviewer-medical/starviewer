@@ -278,7 +278,6 @@ QString Image::getWindowLevelExplanation( int index ) const
         return m_windowLevelExplanationList.at(index);
     else
     {
-        DEBUG_LOG("Index out of range");
         return QString();
     }
 }
