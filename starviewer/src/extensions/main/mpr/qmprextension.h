@@ -136,8 +136,8 @@ private slots:
     void handleAxialViewEvents( unsigned long eventID );
     void handleSagitalViewEvents( unsigned long eventID );
 
-    /// s'encarreguen de moure les llesques dels plans
-    void detectAxialViewAxisActor();
+    /// detecten si algun dels plans s'han seleccionat per l'usuari
+    bool detectAxialViewAxisActor();
     void releaseAxialViewAxisActor();
 
     void detectSagitalViewAxisActor();
@@ -147,7 +147,6 @@ private slots:
     void rotateSagitalViewAxisActor(); // void rotateAxisActor( double x , double y );
 
     /// s'encarreguen de moure les llesques dels plans
-    void detectPushAxialViewAxisActor();
     void releasePushAxialViewAxisActor();
 
     void detectPushSagitalViewAxisActor();
