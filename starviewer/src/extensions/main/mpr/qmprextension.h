@@ -138,19 +138,16 @@ private slots:
 
     /// detecten si algun dels plans s'han seleccionat per l'usuari
     bool detectAxialViewAxisActor();
-    void releaseAxialViewAxisActor();
-
     void detectSagitalViewAxisActor();
+    void detectPushSagitalViewAxisActor();
+
+    /// Alliberen el pla que es tenia com a seleccionat
+    /// per a manipular
+    void releaseAxialViewAxisActor();
     void releaseSagitalViewAxisActor();
 
     void rotateAxialViewAxisActor(); // void moveAxialViewAxisActor( double x , double y );
     void rotateSagitalViewAxisActor(); // void rotateAxisActor( double x , double y );
-
-    /// s'encarreguen de moure les llesques dels plans
-    void releasePushAxialViewAxisActor();
-
-    void detectPushSagitalViewAxisActor();
-    void releasePushSagitalViewAxisActor();
 
     void pushAxialViewAxisActor(); // void pushAxisActor( double x , double y );
     void pushSagitalViewAxialAxisActor(); // void pushAxialActor( double x , double y );
