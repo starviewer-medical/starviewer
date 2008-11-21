@@ -28,7 +28,6 @@ HangingProtocolXMLReader::HangingProtocolXMLReader(QObject *parent)
 {
 }
 
-
 HangingProtocolXMLReader::~HangingProtocolXMLReader()
 {
 }
@@ -151,7 +150,7 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
         }
 
         if (reader->hasError()) {
-            DEBUG_LOG( tr("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg( reader->lineNumber() ).arg( reader->columnNumber() ).arg(path).arg( reader->errorString()).arg( reader->error()) );
+            DEBUG_LOG( QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg( reader->lineNumber() ).arg( reader->columnNumber() ).arg(path).arg( reader->errorString()).arg( reader->error()) );
         }
     }
 

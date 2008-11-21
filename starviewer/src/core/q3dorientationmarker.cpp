@@ -78,9 +78,9 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
     vtkAxesActor *axes = vtkAxesActor::New();
     axes->SetShaftTypeToCylinder();
     // \TODO podríem aplicar una rotació als eixos perquè les anotacions es veiessin en un sistema de mà-esquerra (raf) en comptes de mà-dreta (lph)
-    axes->SetXAxisLabelText( qPrintable( tr("L") ) );
-    axes->SetYAxisLabelText( qPrintable( tr("P") ) );
-    axes->SetZAxisLabelText( qPrintable( tr("H") ) );
+    axes->SetXAxisLabelText( "L" );
+    axes->SetYAxisLabelText( "P" );
+    axes->SetZAxisLabelText( "H" );
     axes->SetTotalLength( 1.5 , 1.5 ,  1.5 );
 
     vtkTextProperty *textProp = vtkTextProperty::New();
