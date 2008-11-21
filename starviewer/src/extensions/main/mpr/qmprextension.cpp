@@ -335,10 +335,13 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
-        if ( m_axial2DView->getInteractor()->GetControlKey() )
-            detectPushAxialViewAxisActor();
-        else
-            detectAxialViewAxisActor();
+        if( detectAxialViewAxisActor() )
+        {
+            if ( m_axial2DView->getInteractor()->GetControlKey() )
+                m_state = PUSHING;
+            else
+                m_state = ROTATING;
+        }
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
@@ -408,8 +411,9 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
     }
 }
 
-void QMPRExtension::detectAxialViewAxisActor()
+bool QMPRExtension::detectAxialViewAxisActor()
 {
+    bool picked = false;
     // obtenim el punt que s'ha clicat \TODO unificar aquesta operació en un sol mètode privat o fer un mètode d'accès directament del propi viewer per obtenir les coordenades de món actuals on es troba el cursor
     int xy[2];
     m_axial2DView->getEventPosition( xy );
@@ -448,8 +452,9 @@ void QMPRExtension::detectAxialViewAxisActor()
         m_toolManager->disableAllToolsTemporarily();
         m_initialPickX = toWorld[0];
         m_initialPickY = toWorld[1];
-        m_state = ROTATING;
+        picked = true;
     }
+    return picked;
 }
 
 void QMPRExtension::rotateAxialViewAxisActor()
@@ -610,49 +615,6 @@ void QMPRExtension::getRotationAxis( vtkPlaneSource *plane , double axis[3] )
     axis[0] = plane->GetPoint2()[0] - plane->GetOrigin()[0];
     axis[1] = plane->GetPoint2()[1] - plane->GetOrigin()[1];
     axis[2] = plane->GetPoint2()[2] - plane->GetOrigin()[2];
-}
-
-void QMPRExtension::detectPushAxialViewAxisActor()
-{
-    // obtenim el punt que s'ha clicat
-    int xy[2];
-    m_axial2DView->getEventPosition( xy );
-    double toWorld[4];
-    m_axial2DView->computeDisplayToWorld( m_axial2DView->getRenderer() , xy[0], xy[0] , 0 , toWorld );
-
-    // detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
-    double point[3] = { toWorld[0] , toWorld[1] , 0.0 };
-    double *r1 , *r2;
-    double distanceToCoronal , distanceToSagital;
-
-    r1 = m_coronalOverAxialIntersectionAxis->GetPositionCoordinate()->GetValue();
-    r2 = m_coronalOverAxialIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
-
-    r1 = m_sagitalOverAxialAxisActor->GetPositionCoordinate()->GetValue();
-    r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
-    distanceToSagital = vtkLine::DistanceToLine( point , r1 , r2 );
-
-    // donem una "tolerància" mínima
-    if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
-    {
-        this->setCursor( QCursor( Qt::OpenHandCursor ) );
-        //desactivem les tools perquè no facin interferència
-        m_toolManager->disableAllToolsTemporarily();
-        if( distanceToCoronal < distanceToSagital )
-        {
-            m_pickedActorPlaneSource = m_coronalPlaneSource;
-            m_pickedActorReslice = m_coronalReslice;
-        }
-        else
-        {
-            m_pickedActorPlaneSource = m_sagitalPlaneSource;
-            m_pickedActorReslice = m_sagitalReslice;
-        }
-        m_state = PUSHING;
-        m_initialPickX = toWorld[0];
-        m_initialPickY = toWorld[1];
-    }
 }
 
 void QMPRExtension::pushSagitalViewCoronalAxisActor()
