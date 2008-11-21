@@ -345,11 +345,8 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        if ( m_state == PUSHING )
-            releasePushAxialViewAxisActor();
-        else if( m_state != NONE )
+        if( m_state != NONE )
             releaseAxialViewAxisActor();
-
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -383,11 +380,8 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
     break;
 
     case vtkCommand::LeftButtonReleaseEvent:
-        if ( m_state == PUSHING )
-            releasePushSagitalViewAxisActor();
-        else if( m_state != NONE )
+        if( m_state != NONE )
             releaseSagitalViewAxisActor();
-
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -501,6 +495,8 @@ void QMPRExtension::releaseAxialViewAxisActor()
     if( m_pickedActorReslice )
     {
         m_pickedActorReslice->SetInterpolationModeToCubic();
+        // TODO no seria millor un restoreOverrideCursor?
+        this->setCursor( QCursor( Qt::ArrowCursor ) );
         if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
         {
             m_sagital2DView->refresh();
@@ -509,11 +505,11 @@ void QMPRExtension::releaseAxialViewAxisActor()
         {
             m_coronal2DView->refresh();
         }
-        // reactivem les tools
-        m_toolManager->undoDisableAllToolsTemporarily();
         m_state = NONE;
         m_pickedActorReslice = 0;
         m_pickedActorPlaneSource = 0;
+        // reactivem les tools
+        m_toolManager->undoDisableAllToolsTemporarily();
     }
 }
 
@@ -597,6 +593,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
 {
     if( m_pickedActorReslice )
     {
+        this->setCursor( QCursor( Qt::ArrowCursor ) );
         m_pickedActorReslice->SetInterpolationModeToCubic();
         m_coronal2DView->refresh();
         m_state = NONE;
@@ -665,27 +662,6 @@ void QMPRExtension::pushAxialViewAxisActor()
     m_initialPickY = toWorld[1];
 }
 
-void QMPRExtension::releasePushAxialViewAxisActor()
-{
-    if( m_pickedActorPlaneSource )
-    {
-        this->setCursor( QCursor( Qt::ArrowCursor ) );
-        if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
-        {
-            m_sagital2DView->refresh();
-        }
-        else
-        {
-            m_coronal2DView->refresh();
-        }
-        m_state = NONE;
-        m_pickedActorPlaneSource = 0;
-        m_pickedActorReslice = 0;
-        //activem les tools
-        m_toolManager->undoDisableAllToolsTemporarily();
-    }
-}
-
 void QMPRExtension::detectPushSagitalViewAxisActor()
 {
     // obtenim el punt que s'ha clicat
@@ -744,16 +720,6 @@ void QMPRExtension::pushSagitalViewAxialAxisActor()
 
     m_initialPickX = toWorld[0];
     m_initialPickY = toWorld[1];
-}
-
-void QMPRExtension::releasePushSagitalViewAxisActor()
-{
-    m_coronal2DView->refresh();
-    m_pickedActorPlaneSource = 0;
-    m_pickedActorReslice = 0;
-    this->setCursor( QCursor( Qt::ArrowCursor ) );
-    m_toolManager->undoDisableAllToolsTemporarily();
-    m_state = NONE;
 }
 
 void QMPRExtension::setInput( Volume *input )
