@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1">
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="thumbnailcreator.cpp" line="59"/>
+        <source>No Images Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="thumbnailcreator.cpp" line="159"/>
+        <source>Preview image not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QTransferFunctionEditorByValuesBase</name>
     <message>
         <location filename="qtransferfunctioneditorbyvaluesbase.ui" line="30"/>
@@ -34,7 +47,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="406"/>
+        <location filename="angletool.cpp" line="401"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -53,10 +66,16 @@
     </message>
 </context>
 <context>
-    <name>udg::Image</name>
+    <name>udg::HangingProtocolXMLReader</name>
     <message>
-        <location filename="image.cpp" line="880"/>
-        <source>Preview image not available</source>
+        <location filename="hangingprotocolxmlreader.cpp" line="83"/>
+        <source>Hanging protocol XML File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="hangingprotocolxmlreader.cpp" line="85"/>
+        <source>Cannot read file %1:
+%2.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -87,7 +106,7 @@
 <context>
     <name>udg::PatientBrowserMenuList</name>
     <message>
-        <location filename="patientbrowsermenulist.cpp" line="53"/>
+        <location filename="patientbrowsermenulist.cpp" line="55"/>
         <source>Study %1 : %2 [%3] %4</source>
         <translation type="unfinished"></translation>
     </message>
@@ -118,13 +137,13 @@
 <context>
     <name>udg::PolylineROITool</name>
     <message>
-        <location filename="polylineroitool.cpp" line="652"/>
+        <location filename="polylineroitool.cpp" line="392"/>
         <source>Area: %1 mm2
 Mean: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="polylineroitool.cpp" line="648"/>
+        <location filename="polylineroitool.cpp" line="388"/>
         <source>Area: %1 px2
 Mean: %2</source>
         <translation type="unfinished"></translation>
@@ -133,64 +152,85 @@ Mean: %2</source>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2437"/>
-        <source>
-%1
-%2
-%3
-Acc:
-%4
-%5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="2348"/>
-        <source>Image Size: %1 x %2
-View Size: %3 x %4
-WW: %5 WL: %6 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="670"/>
+        <location filename="q2dviewer.cpp" line="2018"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="688"/>
+        <location filename="q2dviewer.cpp" line="2036"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="661"/>
+        <location filename="q2dviewer.cpp" line="2009"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="681"/>
+        <location filename="q2dviewer.cpp" line="2029"/>
         <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="694"/>
+        <location filename="q2dviewer.cpp" line="2042"/>
         <source> Thickness: %1 mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewer.cpp" line="1833"/>
+        <source>%1 x %2
+WW: %5 WL: %6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewer.cpp" line="1856"/>
+        <source>%1
+%2
+%3 %4 %5
+Acc:%6
+%7
+%8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewer.cpp" line="1990"/>
+        <source>Loc: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewer.cpp" line="1996"/>
+        <source>-%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>udg::Q3DOrientationMarker</name>
+    <name>udg::Q2DViewerWidget</name>
     <message>
-        <location filename="q3dorientationmarker.cpp" line="81"/>
-        <source>l</source>
+        <location filename="q2dviewerwidget.cpp" line="26"/>
+        <source>Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dorientationmarker.cpp" line="82"/>
-        <source>p</source>
+        <location filename="q2dviewerwidget.cpp" line="27"/>
+        <source>Enable/Disable Synchronize tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerWidgetBase</name>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="13"/>
+        <source>ViewerWidget</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dorientationmarker.cpp" line="83"/>
-        <source>s</source>
+        <location filename="q2dviewerwidgetbase.ui" line="42"/>
+        <source>XY : Axial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="65"/>
+        <source>...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -304,7 +344,7 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QDicomDumpCTHelixWidget</name>
     <message>
-        <location filename="qdicomdumpcthelixwidget.cpp" line="139"/>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="138"/>
         <source> mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -324,17 +364,17 @@ WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpcthelixwidget.cpp" line="129"/>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="124"/>
         <source> KV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpcthelixwidget.cpp" line="135"/>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="129"/>
         <source> mA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpcthelixwidget.cpp" line="140"/>
+        <location filename="qdicomdumpcthelixwidget.cpp" line="133"/>
         <source> x </source>
         <translation type="unfinished"></translation>
     </message>
@@ -450,7 +490,7 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QDicomDumpCTLocalizerWidget</name>
     <message>
-        <location filename="qdicomdumpctlocalizerwidget.cpp" line="78"/>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="106"/>
         <source> mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -460,17 +500,17 @@ WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctlocalizerwidget.cpp" line="96"/>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="91"/>
         <source> x </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctlocalizerwidget.cpp" line="100"/>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="95"/>
         <source> KV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctlocalizerwidget.cpp" line="106"/>
+        <location filename="qdicomdumpctlocalizerwidget.cpp" line="100"/>
         <source> mA</source>
         <translation type="unfinished"></translation>
     </message>
@@ -556,7 +596,7 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QDicomDumpCTWidget</name>
     <message>
-        <location filename="qdicomdumpctwidget.cpp" line="144"/>
+        <location filename="qdicomdumpctwidget.cpp" line="143"/>
         <source> mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -566,27 +606,27 @@ WW: %5 WL: %6 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctwidget.cpp" line="114"/>
+        <location filename="qdicomdumpctwidget.cpp" line="109"/>
         <source> s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctwidget.cpp" line="119"/>
+        <location filename="qdicomdumpctwidget.cpp" line="114"/>
         <source> degrees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctwidget.cpp" line="134"/>
+        <location filename="qdicomdumpctwidget.cpp" line="129"/>
         <source> KV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctwidget.cpp" line="140"/>
+        <location filename="qdicomdumpctwidget.cpp" line="134"/>
         <source> mA</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpctwidget.cpp" line="145"/>
+        <location filename="qdicomdumpctwidget.cpp" line="138"/>
         <source> x </source>
         <translation type="unfinished"></translation>
     </message>
@@ -707,22 +747,22 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QDicomDumpMRWidget</name>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="116"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="120"/>
         <source> mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="63"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="68"/>
         <source> %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="78"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="83"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="83"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="87"/>
         <source> degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -828,17 +868,17 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QLogViewer</name>
     <message>
-        <location filename="qlogviewer.cpp" line="37"/>
+        <location filename="qlogviewer.cpp" line="41"/>
         <source>ERROR: No Log file found!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlogviewer.cpp" line="55"/>
+        <location filename="qlogviewer.cpp" line="59"/>
         <source>Save as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlogviewer.cpp" line="55"/>
+        <location filename="qlogviewer.cpp" line="59"/>
         <source>Log Files (*.log)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -869,7 +909,7 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QThickSlabWidget</name>
     <message>
-        <location filename="qthickslabwidget.cpp" line="79"/>
+        <location filename="qthickslabwidget.cpp" line="81"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -913,22 +953,22 @@ WW: %5 WL: %6 </source>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="455"/>
+        <location filename="qviewer.cpp" line="476"/>
         <source>Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="455"/>
+        <location filename="qviewer.cpp" line="476"/>
         <source>The selected item is not a valid image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="527"/>
+        <location filename="qviewer.cpp" line="551"/>
         <source>Default %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="549"/>
+        <location filename="qviewer.cpp" line="573"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -994,14 +1034,6 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="screenshottool.cpp" line="114"/>
         <source>This file already exists. Do you want to replace it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::Series</name>
-    <message>
-        <location filename="series.cpp" line="456"/>
-        <source>No Images Available</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1308,6 +1340,19 @@ WW: %5 WL: %6 </source>
     <message>
         <location filename="toolsactionfactory.cpp" line="108"/>
         <source>Enable/Disable Angle tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::Volume</name>
+    <message>
+        <location filename="volume.cpp" line="119"/>
+        <source>Out of memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="119"/>
+        <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened Starviewer windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
