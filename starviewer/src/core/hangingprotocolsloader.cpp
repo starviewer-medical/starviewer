@@ -20,6 +20,9 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QSettings>
+#include <QApplication>
+#include <QDir>
+
 namespace udg {
 
 HangingProtocolsLoader::HangingProtocolsLoader(QObject *parent)
@@ -36,11 +39,23 @@ HangingProtocolsLoader::~HangingProtocolsLoader()
 
 void HangingProtocolsLoader::loadDefaults()
 {
+    /// Hanging protocols definits per defecte, agafa el directori de l'executable
+    QString defaultPath = QDir::toNativeSeparators( qApp->applicationDirPath().append( "/" ).append("hangingProtocols").append( "/" ) );
+    if( ! QFile::exists(defaultPath) )
+    {
+        /// Mode desenvolupament
+        defaultPath = QDir::toNativeSeparators( qApp->applicationDirPath().append( "/../" ).append("hangingProtocols").append( "/" ) );
+    }
+
+    if( defaultPath != 0 )
+        loadXMLFiles( defaultPath );
+
+    /// Hanging protocols definits per l'usuari
     QSettings systemSettings;
-    QString path = 0;
-    path = systemSettings.value("Hanging-Protocols/path").toString();
-    if( path != 0 )
-        loadXMLFiles( path );
+    QString userPath = systemSettings.value("Hanging-Protocols/path").toString(); // s'ha de guardar a documents and settings/hanging
+
+    if( userPath != 0 )
+        loadXMLFiles( userPath );
 }
 
 void HangingProtocolsLoader::loadMamoGuell()
