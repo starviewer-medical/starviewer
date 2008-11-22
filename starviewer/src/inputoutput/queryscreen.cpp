@@ -202,7 +202,7 @@ void QueryScreen::checkDatabaseImageIntegrity()
     localDatabaseManager.checkNoStudiesRetrieving();
 
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-        showDatabaseManagerError(localDatabaseManager.getLastError(), tr("Deleting a study not full retrived"));
+        showDatabaseManagerError(localDatabaseManager.getLastError(), tr("deleting a study not full retrived"));
 }
 
 void QueryScreen::updateOperationsInProgressMessage()
@@ -1340,31 +1340,31 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
             return false;
 
         case LocalDatabaseManager::DatabaseLocked:
-            message += tr("The Cache is blocked by another Starviewer window."
-                         "\nTry to close all the others Starviewer windows and try again."
+            message += tr("The database is blocked by another Starviewer window."
+                         "\nClose all the others Starviewer windows and try again."
                          "\n\nIf you want to open different Starviewer's windows always choose the 'New' option from the File menu.");
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
             message += tr("Starviewer database is corrupted."
-                         "\nTry to close all Starviewer windows and try again."
-                         "\n\nIf the problem persist contact with an administrator");
+                         "\nClose all Starviewer windows and try again."
+                         "\n\nIf the problem persist contact with an administrator.");
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
-            message += tr("Starviewer Database manager error."
-                         "\nTry to close all Starviewer windows and try again."
-                         "\n\nIf the problem persist contact with an administrator");
+            message += tr("Starviewer database syntax error."
+                         "\nClose all Starviewer windows and try again."
+                         "\n\nIf the problem persist contact with an administrator.");
             break;
         case LocalDatabaseManager::DatabaseError:
             message += tr("An internal error occurs with Starviewer database."
-                         "\nTry to close all Starviewer windows and try again."
-                         "\n\nIf the problem persist contact with an administrator");
+                         "\nClose all Starviewer windows and try again."
+                         "\n\nIf the problem persist contact with an administrator.");
             break;
         case LocalDatabaseManager::DeletingFilesError:
             message += tr("Some files can not be delete."
                          "\nThese have to be delete manually.");
             break;
         default:
-            message = tr("An unknow error has ocurred");
+            message = tr("An unknow error has ocurred.");
             break;
     }
 
@@ -1384,14 +1384,14 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
         case QExecuteOperationThread::ErrorConnectingPacs :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred connecting to a Pacs while retrieving or storing a study.\n");
-            message += tr("\nBe sure that your computer is connected on network, the Pacs parameters are well configured.");
+            message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         case QExecuteOperationThread::ErrorRetrieving :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred retrieving a study.\n");
-            message += tr("\nBe sure that your computer is connected on network, the Pacs parameters are well configured.");
+            message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
@@ -1417,7 +1417,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred and some operations may have failed.");
             message += tr("\nStarviewer has not be capable of read correctly dicom information of the study.");
-            message += tr("\n\nPlease contact with starviewer team");
+            message += tr("\n\nPlease contact with Starviewer team.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         default:
