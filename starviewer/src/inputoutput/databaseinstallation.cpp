@@ -119,7 +119,7 @@ bool DatabaseInstallation::repairDatabase()
     if (localDatabaseManager.isDatabaseCorrupted())
     {
         //Si la base de dades continua corrupte l'hem de reinstal·lar
-        QMessageBox::critical(0, tr("Starviewer"), tr("Starviewer can't repair database.\n\nDatabase will be reinstalled. All local studies retrieved and imported will be lost."));
+        QMessageBox::critical(0, tr("Starviewer"), tr("Starviewer can't repair database.\n\nDatabase will be reinstalled. All local studies retrieved and imported will be deleted."));
         return reinstallDatabase();
     }
     else

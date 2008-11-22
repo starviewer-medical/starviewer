@@ -479,7 +479,7 @@ bool QConfigurationScreen::validateChanges()
     {
         if (m_textMinimumSpaceRequiredToRetrieve->text().toUInt() < 1)
         {
-            QMessageBox::warning(this, tr("Starviewer"), tr("At least 1 GByte of free space is necessary"));
+            QMessageBox::warning(this, tr("Starviewer"), tr("At least 1 GByte of free space is necessary."));
             return false;
         }
     }
@@ -639,7 +639,7 @@ void QConfigurationScreen::deleteStudies()
         {
             Status state;
             state.setStatus(tr("The cache cannot be delete, an unknown error has ocurred."
-                               "\n Try to close all Starviewer windows and try again."
+                               "\nTry to close all Starviewer windows and try again."
                                "\n\nIf the problem persist contact with an administrator."), false, -1);
             showDatabaseErrorMessage( state );
         }
@@ -650,7 +650,7 @@ void QConfigurationScreen::deleteStudies()
 
 void QConfigurationScreen::compactCache()
 {
-    INFO_LOG( "Compactacio de la cache" );
+    INFO_LOG( "Compactacio de la base de dades" );
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -662,7 +662,7 @@ void QConfigurationScreen::compactCache()
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
     {
         Status state;
-        state.setStatus(tr("The cache cannot be delete, an unknown error has ocurred."
+        state.setStatus(tr("The database cannot be compacted, an unknown error has ocurred."
                 "\n Try to close all Starviewer windows and try again."
                 "\n\nIf the problem persist contact with an administrator."), false, -1);
         showDatabaseErrorMessage( state );
