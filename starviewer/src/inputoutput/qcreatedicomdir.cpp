@@ -112,10 +112,6 @@ void QCreateDicomdir::createActions()
     m_devicesActionGroup->addAction( m_dvdromAction );
     m_devicesActionGroup->addAction( m_hardDiskAction );
     m_devicesActionGroup->addAction( m_pendriveAction );
-
-    // primer activem el CD com a dispositiu per defecte
-    m_cdromAction->trigger();
-    m_DiskSpaceBytes = m_cdRomSizeBytes;//per defecte a disk space li donem la mida del cd, pq és l'opció activada per defecte
 }
 
 void QCreateDicomdir::createConnections()
