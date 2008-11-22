@@ -55,6 +55,10 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     //TODO:De manera temporal no es mostra la mida del dicomdir perquè no la sabem calcular correctament quan tenim imatges descarregades amb la transfer syntax JpegLossLess
     hideDicomdirSize();
+
+    //Per defecte creem els dicomdir al discdur
+    m_hardDiskDeviceToolButton->setChecked(true);
+    deviceChanged(CreateDicomdir::HardDisk);
 }
 
 QCreateDicomdir::~QCreateDicomdir()
