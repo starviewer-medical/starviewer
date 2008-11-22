@@ -57,8 +57,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     hideDicomdirSize();
 
     //Per defecte creem els dicomdir al discdur
-    m_hardDiskDeviceToolButton->setChecked(true);
-    deviceChanged(CreateDicomdir::HardDisk);
+    m_hardDiskAction->trigger();
 }
 
 QCreateDicomdir::~QCreateDicomdir()
@@ -736,11 +735,7 @@ void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
                                 "then copy the directory where you have created it to a cd/dvd using a burning cd/dvd software."));
 
     //Marquem la opció de crear el dicomdir al disc dur
-    m_hardDiskDeviceToolButton->setChecked(true);
-    deviceChanged(CreateDicomdir::HardDisk);
-
-    m_dvdromDeviceToolButton->setChecked(false);
-    m_cdromDeviceToolButton->setChecked(false);
+    m_hardDiskAction->trigger();
 }
 
 }
