@@ -820,179 +820,186 @@ If the problem persist contact with an administrator.</source>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="617"/>
+        <location filename="qcreatedicomdir.cpp" line="732"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="296"/>
+        <location filename="qcreatedicomdir.cpp" line="295"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="296"/>
+        <location filename="qcreatedicomdir.cpp" line="295"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="294"/>
+        <location filename="qcreatedicomdir.cpp" line="293"/>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="301"/>
+        <location filename="qcreatedicomdir.cpp" line="300"/>
         <source>Can&apos;t create the directory. Please check users permissions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="453"/>
+        <location filename="qcreatedicomdir.cpp" line="452"/>
         <source>Please select a study to remove of the list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="70"/>
+        <location filename="qcreatedicomdir.cpp" line="73"/>
         <source>CD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="71"/>
+        <location filename="qcreatedicomdir.cpp" line="74"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="79"/>
+        <location filename="qcreatedicomdir.cpp" line="82"/>
         <source>DVD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="80"/>
+        <location filename="qcreatedicomdir.cpp" line="83"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="88"/>
+        <location filename="qcreatedicomdir.cpp" line="91"/>
         <source>Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="89"/>
+        <location filename="qcreatedicomdir.cpp" line="92"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="97"/>
+        <location filename="qcreatedicomdir.cpp" line="100"/>
         <source>Pen Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="98"/>
+        <location filename="qcreatedicomdir.cpp" line="101"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="197"/>
+        <location filename="qcreatedicomdir.cpp" line="196"/>
         <source>The study already exists in the DICOMDIR list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="242"/>
+        <location filename="qcreatedicomdir.cpp" line="241"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="271"/>
+        <location filename="qcreatedicomdir.cpp" line="270"/>
         <source>Create DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="272"/>
+        <location filename="qcreatedicomdir.cpp" line="271"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="295"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="326"/>
+        <location filename="qcreatedicomdir.cpp" line="325"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="410"/>
+        <location filename="qcreatedicomdir.cpp" line="409"/>
         <source>DICOMDIR Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="476"/>
+        <location filename="qcreatedicomdir.cpp" line="475"/>
         <source>Creating DICOMDIR Image...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="262"/>
+        <location filename="qcreatedicomdir.cpp" line="261"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="336"/>
+        <location filename="qcreatedicomdir.cpp" line="335"/>
         <source>Please, first select the studies you want to create a DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="354"/>
+        <location filename="qcreatedicomdir.cpp" line="353"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="359"/>
+        <location filename="qcreatedicomdir.cpp" line="358"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="617"/>
+        <location filename="qcreatedicomdir.cpp" line="616"/>
         <source>
 Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="534"/>
+        <location filename="qcreatedicomdir.cpp" line="533"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="538"/>
+        <location filename="qcreatedicomdir.cpp" line="537"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="546"/>
+        <location filename="qcreatedicomdir.cpp" line="545"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="550"/>
+        <location filename="qcreatedicomdir.cpp" line="549"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="560"/>
+        <location filename="qcreatedicomdir.cpp" line="559"/>
         <source>DICOMDIR Creation Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="560"/>
+        <location filename="qcreatedicomdir.cpp" line="559"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="560"/>
+        <location filename="qcreatedicomdir.cpp" line="559"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="286"/>
+        <location filename="qcreatedicomdir.cpp" line="285"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="735"/>
+        <source>The creation of dicomdir on cd/dvd in Windows is desactivated.
+
+To create a cd/dvd with a Dicomdir, you have to create first the Dicomdir on your hard disk and then copy the directory where you have created it to a cd/dvd using a burning cd/dvd software.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
