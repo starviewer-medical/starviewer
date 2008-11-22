@@ -72,6 +72,9 @@
 // settings
 #include <QSettings>
 
+// avortar render
+#include "abortrendercommand.h"
+
 namespace udg {
 
 Q3DViewer::Q3DViewer( QWidget *parent )
@@ -83,6 +86,11 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_vtkWidget->setAutomaticImageCacheEnabled( true );
     this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
+
+    // avortar render
+    AbortRenderCommand *abortRenderCommand = AbortRenderCommand::New();
+    m_vtkWidget->GetRenderWindow()->AddObserver( vtkCommand::AbortCheckEvent, abortRenderCommand );
+    abortRenderCommand->Delete();
 
     m_renderFunction = RayCasting; // per defecte
 

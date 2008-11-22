@@ -188,7 +188,8 @@ HEADERS += extensionfactory.h \
            vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h \
            obscurance.h \
            viewpointgenerator.h \
-           thumbnailcreator.h
+           thumbnailcreator.h \
+ abortrendercommand.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -341,7 +342,8 @@ SOURCES += extensionmediator.cpp \
            vtkVolumeRayCastSingleVoxelShaderCompositeFunction.cxx \
            obscurance.cpp \
            viewpointgenerator.cpp  \
-           thumbnailcreator.cpp
+           thumbnailcreator.cpp \
+ abortrendercommand.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
