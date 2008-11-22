@@ -63,7 +63,7 @@ private:
     bool isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet );
 
 	/// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
-	void applyDisplayTransformations( Patient *patient, Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
+	void applyDisplayTransformations( Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
 
 private:
 
