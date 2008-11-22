@@ -680,32 +680,36 @@ void QCreateDicomdir::deviceChanged( int index )
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
-            m_stackedWidget->setCurrentIndex(0);
-            int maximumCapacity;
+            #ifdef _WIN32
+                dvdCdDicomdirDesactivatedOnWindows();
+            #else
+                m_stackedWidget->setCurrentIndex(0);
+                int maximumCapacity;
 
-            if (m_currentDevice == CreateDicomdir::CdRom) 
-            {
-                maximumCapacity = m_cdRomSizeMb;
-            }
-            else
-            {
-                maximumCapacity = m_dvdRomSizeMb;
-            }
+                if (m_currentDevice == CreateDicomdir::CdRom) 
+                {
+                    maximumCapacity = m_cdRomSizeMb;
+                }
+                else
+                {
+                    maximumCapacity = m_dvdRomSizeMb;
+                }
 
-/*          TODO: No comprovem la mida del dicomdir
-            if( sizeInMB < maximumCapacity )
-            {
-                m_progressBarOcupat->setMaximum( maximumCapacity );
+/*              TODO: No comprovem la mida del dicomdir
+                if( sizeInMB < maximumCapacity )
+                {
+                    m_progressBarOcupat->setMaximum( maximumCapacity );
 */
-                m_DiskSpaceBytes = maximumCapacity; // convertim a bytes capacaticat cd/dvd
+                    m_DiskSpaceBytes = maximumCapacity; // convertim a bytes capacaticat cd/dvd
 /*              
-                m_progressBarOcupat->repaint();
-          }
-            else
-            {
-                QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
-            }
+                    m_progressBarOcupat->repaint();
+              }
+                else
+                {
+                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
+                }
 */
+            #endif
             break;
     }
 
@@ -715,12 +719,28 @@ void QCreateDicomdir::deviceChanged( int index )
         m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );*/
 }
 
+
 void QCreateDicomdir::hideDicomdirSize()
 {
     m_progressBarOcupat->setVisible(false);
     m_dicomdirSizeOnDiskLabel->setVisible(false);
     m_labelMbCdDvdOcupat->setVisible(false);
     m_DICOMDIRUsedSpaceLabel->setVisible(false);
+}
+
+void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
+{
+    QMessageBox::information(this, tr("Starviewer"), 
+                             tr("The creation of dicomdir on cd/dvd in Windows is desactivated.\n\n"
+                                "To create a cd/dvd with a Dicomdir, you have to create first the Dicomdir on your hard disk and "
+                                "then copy the directory where you have created it to a cd/dvd using a burning cd/dvd software."));
+
+    //Marquem la opció de crear el dicomdir al disc dur
+    m_hardDiskDeviceToolButton->setChecked(true);
+    deviceChanged(CreateDicomdir::HardDisk);
+
+    m_dvdromDeviceToolButton->setChecked(false);
+    m_cdromDeviceToolButton->setChecked(false);
 }
 
 }
