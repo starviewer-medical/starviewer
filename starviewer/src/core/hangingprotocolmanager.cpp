@@ -183,11 +183,11 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                     if( imageSet->getTypeOfItem() == "image" )
                     {
                         viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
-                        applyDisplayTransformations( patient, serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+                        applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
                     }
                     else
                     {
-                        applyDisplayTransformations( patient, serie, 0, viewerWidget, displaySet);
+                        applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
                     }
                 }
             }
@@ -231,11 +231,11 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 				if( imageSet->getTypeOfItem() == "image" )
 				{
 					viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
-					applyDisplayTransformations( patient, serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+					applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
 				}
 				else
 				{
-					applyDisplayTransformations( patient, serie, 0, viewerWidget, displaySet);
+					applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
 				}
 			}
 		}
@@ -399,7 +399,7 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
     return valid;
 }
 
-void HangingProtocolManager::applyDisplayTransformations( Patient *patient, Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
+void HangingProtocolManager::applyDisplayTransformations( Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
 {
     // TODO el paràmetre patient no cal, s'hauria d'eliminar si no és que sigui necesari per alguna raó
     DICOMTagReader dicomReader;
@@ -478,12 +478,17 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             restriction = listOfRestrictions.value( i );
             if( restriction.selectorAttribute == "ViewPosition" )
             {
-                if( dicomReader.getAttributeByName( DCM_ViewPosition ) != restriction.valueRepresentation )
+				if( ! dicomReader.getAttributeByName( DCM_ViewPosition ).contains( restriction.valueRepresentation) )
                     valid = false;
             }
-            else if( restriction.selectorAttribute == "Laterality" )
+            else if( restriction.selectorAttribute == "ImageLaterality" )
             {
                 if( dicomReader.getAttributeByName( DCM_ImageLaterality ) != restriction.valueRepresentation )
+                    valid = false;
+            }
+			else if( restriction.selectorAttribute == "Laterality" )
+            {
+                if( dicomReader.getAttributeByName( DCM_Laterality ) != restriction.valueRepresentation )
                     valid = false;
             }
             else if( restriction.selectorAttribute == "PatientOrientation" )
