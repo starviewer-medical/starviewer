@@ -1,0 +1,19 @@
+<transferfunction version="0" >
+ <name>Bones</name>
+ <color>
+  <point g="0.2980392156862745" value="0" r="1" b="0.2156862745098039" />
+  <point g="0.2980392156862745" value="1260" r="1" b="0.2156862745098039" />
+  <point g="0.2980392156862745" value="1311" r="1" b="0.2156862745098039" />
+  <point g="0.8196078431372549" value="1559" r="1" b="0.4196078431372549" />
+  <point g="1" value="1793" r="1" b="1" />
+  <point g="1" value="4095" r="1" b="1" />
+ </color>
+ <opacity>
+  <point value="0" a="0" />
+  <point value="1260" a="0" />
+  <point value="1311" a="0.1450980392156863" />
+  <point value="1559" a="0.3725490196078431" />
+  <point value="1793" a="0.7254901960784313" />
+  <point value="4095" a="0.5176470588235295" />
+ </opacity>
+</transferfunction>

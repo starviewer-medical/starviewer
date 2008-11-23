@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/extensions/Volume3DViewTestingExtension" >
+        <file>renderingstyles/abdomenbones.png</file>
+        <file>renderingstyles/abdomenbones.xml</file>
+        <file>renderingstyles/abdomenrunoff1.png</file>
+        <file>renderingstyles/abdomenrunoff1.xml</file>
+        <file>renderingstyles/abdomenslab.png</file>
+        <file>renderingstyles/abdomenslab.xml</file>
+        <file>renderingstyles/bonehires.png</file>
+        <file>renderingstyles/bonehires.xml</file>
+        <file>renderingstyles/bones4.png</file>
+        <file>renderingstyles/bones4.xml</file>
+        <file>renderingstyles/carotids2.png</file>
+        <file>renderingstyles/carotids2.xml</file>
+        <file>renderingstyles/cow1.png</file>
+        <file>renderingstyles/cow1.xml</file>
+        <file>renderingstyles/pelvis2.png</file>
+        <file>renderingstyles/pelvis2.xml</file>
+        <file>renderingstyles/spine2.png</file>
+        <file>renderingstyles/spine2.xml</file>
+        <file>renderingstyles/thorax1.png</file>
+        <file>renderingstyles/thorax1.xml</file>
+        <file>translations_ca_ES.qm</file>
+        <file>translations_en_GB.qm</file>
+        <file>translations_es_ES.qm</file>
+    </qresource>
+</RCC>

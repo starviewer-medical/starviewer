@@ -1,0 +1,696 @@
+<ui version="4.0" >
+ <class>QVolume3DViewFusedTestingExtensionBase</class>
+ <widget class="QWidget" name="QVolume3DViewFusedTestingExtensionBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>894</width>
+    <height>848</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="m_openSecondaryButton" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="acceptDrops" >
+          <bool>false</bool>
+         </property>
+         <property name="autoFillBackground" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Open Secondary</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_applyFusionButton" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="acceptDrops" >
+          <bool>false</bool>
+         </property>
+         <property name="autoFillBackground" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Apply Fusion</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="m_fusionMethodComboBox" >
+         <item>
+          <property name="text" >
+           <string>Property Fusion 1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Property Fusion 2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>P &amp; G Fusion 1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>P &amp; G Fusion 2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Color Fusion</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Fused Model</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="m_axialOrientationButton" >
+           <property name="text" >
+            <string>Axial</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/axial.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>false</bool>
+           </property>
+           <property name="checked" >
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_sagitalOrientationButton" >
+           <property name="text" >
+            <string>Sagital</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/sagital.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>false</bool>
+           </property>
+           <property name="checked" >
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_coronalOrientationButton" >
+           <property name="text" >
+            <string>Coronal</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/coronal.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>false</bool>
+           </property>
+           <property name="checked" >
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>5</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Orientation</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="m_zoomToolButton" >
+           <property name="text" >
+            <string>Zoom</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/zoom.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="checked" >
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_rotate3DToolButton" >
+           <property name="text" >
+            <string>Rotate</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/rotate3d.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="checked" >
+            <bool>true</bool>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_panToolButton" >
+           <property name="text" >
+            <string>Pan</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/move.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable" >
+            <bool>true</bool>
+           </property>
+           <property name="checked" >
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>5</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>0</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Mouse Function</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="m_clutEditToolButton" >
+           <property name="text" >
+            <string>Edit CLUT</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/clutEdit.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_clutEditToolButton_2" >
+           <property name="text" >
+            <string>Edit CLUT</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/clutEdit.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_FusedClutEditToolButton" >
+           <property name="text" >
+            <string>Edit Fused CLUT</string>
+           </property>
+           <property name="icon" >
+            <iconset resource="../../../main/main.qrc" >:/images/clutEdit.png</iconset>
+           </property>
+           <property name="iconSize" >
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle" >
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise" >
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType" >
+            <enum>QSizePolicy::Minimum</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>71</width>
+             <height>16</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3" >
+           <property name="text" >
+            <string>CLUT</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>16</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QComboBox" name="m_renderingMethodComboBox" >
+         <property name="maximumSize" >
+          <size>
+           <width>100</width>
+           <height>22</height>
+          </size>
+         </property>
+         <item>
+          <property name="text" >
+           <string>Ray Casting</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Contouring</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Texture 3D</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Iso Surface</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType" >
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>91</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>Rendering Method</string>
+         </property>
+         <property name="alignment" >
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="udg::Volume3DFusedViewer" native="1" name="m_volume3DView" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>7</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>350</width>
+           <height>350</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>300</width>
+           <height>1900000</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="udg::Volume3DFusedViewer" native="1" name="m_volume3DViewSecondary" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>7</hsizetype>
+           <vsizetype>7</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize" >
+          <size>
+           <width>350</width>
+           <height>350</height>
+          </size>
+         </property>
+         <property name="maximumSize" >
+          <size>
+           <width>300</width>
+           <height>1900000</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="udg::Volume3DFusedViewer" native="1" name="m_volume3DViewFused" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>7</hsizetype>
+         <vsizetype>7</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>500</width>
+         <height>700</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::Volume3DFusedViewer</class>
+   <extends>QWidget</extends>
+   <header>volume3dfusedviewer.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../main/main.qrc" />
+ </resources>
+ <connections/>
+</ui>

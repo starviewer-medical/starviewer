@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Description>
+   <Project>Starviewer</Project>
+   <LineLength>81</LineLength>
+   <EndOfFileNewLine>true</EndOfFileNewLine>
+   <Tabs>0</Tabs>
+   <DeclarationOrder>
+      <public>0</public>
+      <protected>1</protected>
+      <private>2</private>
+   </DeclarationOrder>
+   <Indent>
+      <type>SPACE</type>
+      <size>4</size>
+      <noHeader>true</noHeader>
+      <allowBlockLine>true</allowBlockLine>
+   </Indent>
+   <Namespace>udg</Namespace>
+   <InternalVariables>
+      <regex>m_[a-zA-Z0-9]</regex>
+      <alignment>0</alignment>
+   </InternalVariables>
+   <NameOfClass>
+      <name>[NameOfClass]</name>
+      <regex>[a-zA-Z0-9]</regex>
+   </NameOfClass>
+   <EmptyLines>3</EmptyLines>
+   <Operator>
+      <spaceBefore>1</spaceBefore>
+      <spaceAfter>1</spaceAfter>
+   </Operator>
+   <ErrorThreshold>10</ErrorThreshold>
+</Description>

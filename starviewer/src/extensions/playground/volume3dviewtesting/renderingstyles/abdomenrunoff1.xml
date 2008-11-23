@@ -1,0 +1,22 @@
+<transferfunction version="0" >
+ <name>Abdomen run-off</name>
+ <color>
+  <point g="0.1372549019607843" value="0" r="1" b="0.1725490196078431" />
+  <point g="0.1372549019607843" value="1074" r="1" b="0.1725490196078431" />
+  <point g="0.1725490196078431" value="1137" r="1" b="0.1725490196078431" />
+  <point g="1" value="1334" r="1" b="1" />
+  <point g="1" value="1625" r="1" b="1" />
+  <point g="1" value="1902" r="1" b="1" />
+  <point g="1" value="4095" r="1" b="1" />
+ </color>
+ <opacity>
+  <point value="0" a="0" />
+  <point value="1074" a="0" />
+  <point value="1105" a="0" />
+  <point value="1137" a="0.1647058823529412" />
+  <point value="1334" a="0.4431372549019608" />
+  <point value="1625" a="0.8862745098039215" />
+  <point value="1902" a="1" />
+  <point value="4095" a="1" />
+ </opacity>
+</transferfunction>

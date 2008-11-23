@@ -1,0 +1,158 @@
+<ui version="4.0" >
+ <class>QViewpointDistributionWidgetBase</class>
+ <widget class="QWidget" name="QViewpointDistributionWidgetBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>224</width>
+    <height>108</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QRadioButton" name="m_uniformRadioButton" >
+     <property name="text" >
+      <string>Uniform viewpoints</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_uniformNumberOfViewpointsLabel" >
+       <property name="text" >
+        <string>Number of viewpoints</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="m_uniformNumberOfViewpointsComboBox" >
+       <item>
+        <property name="text" >
+         <string>4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>8</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>12</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>20</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="m_quasiUniformRadioButton" >
+     <property name="text" >
+      <string>Quasi-uniform viewpoints</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_quasiUniformRecursionLevelLabel" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
+       <property name="text" >
+        <string>Recursion level</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="m_quasiUniformRecursionLevelSpinBox" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
+       <property name="maximum" >
+        <number>3</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_quasiUniformNumberOfViewpointsLabel" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
+       <property name="text" >
+        <string>12 viewpoints</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
