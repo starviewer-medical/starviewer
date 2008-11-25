@@ -15,8 +15,11 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QStandardItemModel>
+#include <QTimer>
 // vtk
 #include <vtkImageData.h>
+#include <vtkRenderWindow.h>            // actualització ràpida
+#include <vtkRenderWindowInteractor.h>  // actualització ràpida
 
 namespace udg {
 
@@ -24,6 +27,11 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
  : QWidget( parent )
 {
     setupUi( this );
+
+    // creem el temporitzador (s'ha de fer abans del createConnections())
+    m_timer = new QTimer( this );
+    m_timer->setSingleShot( true );
+    m_timer->setInterval( 1000 );   /// \todo Poso 1000 ms arbitràriament.
 
     initializeTools();
     loadClutPresets();
@@ -292,6 +300,9 @@ void QVolume3DViewTestingExtension::createConnections()
     connect( m_renderingStyleListView, SIGNAL( activated(const QModelIndex&) ), SLOT( applyRenderingStyle(const QModelIndex&) ) );
 
     connect(m_editorSplitter, SIGNAL( splitterMoved(int, int)), SLOT( setCustomStyleButtonStateBySplitter() ));
+
+    // temporitzador
+    connect( m_timer, SIGNAL( timeout() ), SLOT( render() ) );
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -608,7 +619,7 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
             return;
     }
 
-    updateView();
+    updateView( false );
     enableAutoUpdate();
 }
 
@@ -653,8 +664,10 @@ void QVolume3DViewTestingExtension::updateUiForRenderingMethod( int index )
 }
 
 
-void QVolume3DViewTestingExtension::updateView()
+void QVolume3DViewTestingExtension::updateView( bool fast )
 {
+    m_timer->stop();
+
     this->setCursor( QCursor(Qt::WaitCursor) );
 
     switch( m_renderingMethodComboBox->currentIndex() )
@@ -698,7 +711,15 @@ void QVolume3DViewTestingExtension::updateView()
     m_3DView->setObscuranceFactor( m_obscuranceFactorDoubleSpinBox->value() );
     m_3DView->setIsoValue( m_isoValueSpinBox->value() );
 
+    if ( fast )
+    {
+        m_timer->start();   /// \todo Ara ho fem abans del render. Caldria comprovar en sistemes lents si és millor abans o després.
+        m_3DView->getRenderWindow()->SetDesiredUpdateRate( m_3DView->getInteractor()->GetDesiredUpdateRate() );
+    }
+
     m_3DView->render();
+
+    if ( fast ) m_3DView->getRenderWindow()->SetDesiredUpdateRate( m_3DView->getInteractor()->GetStillUpdateRate() );
 
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
