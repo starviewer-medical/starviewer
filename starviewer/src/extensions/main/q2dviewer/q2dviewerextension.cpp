@@ -211,19 +211,21 @@ void Q2DViewerExtension::createConnections()
 
 void Q2DViewerExtension::setInput( Volume *input )
 {
-	m_mainVolume = input;
-	INFO_LOG("Q2DViewerExtension: Donem l'input principal");
+    m_mainVolume = input;
+    INFO_LOG("Q2DViewerExtension: Donem l'input principal");
 
     /// Aplicació dels hanging protocols
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+
+    QApplication::setOverrideCursor( Qt::WaitCursor );
 	m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
+    QApplication::restoreOverrideCursor();
 
-	if( m_hangingCandidates.size() == 0 )
-	{
-		m_workingArea->getViewerSelected()->setInput( m_mainVolume );
-	}
-
-	m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
+    if( m_hangingCandidates.size() == 0 )
+    {
+        m_workingArea->getViewerSelected()->setInput( m_mainVolume );
+    }
+    m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
 }
 
 void Q2DViewerExtension::resetViewToAxial()
