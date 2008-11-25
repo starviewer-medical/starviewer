@@ -57,7 +57,7 @@ public slots:
     void updateUiForRenderingMethod( int index );
 
     /// Actualitza la vista d'acord amb tots els paràmetres actuals de la interfície.
-    void updateView();
+    void updateView( bool fast = true );
 
 signals:
 
@@ -125,6 +125,9 @@ private:
 
     /// Model que guarda els estils de rendering.
     QStandardItemModel *m_renderingStyleModel;
+
+    /// Temporitzador que serveix per fer renderings amb qualitat després d'un rendering ràpid.
+    QTimer *m_timer;
 };
 
 } // end namespace udg
