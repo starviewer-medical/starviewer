@@ -5,12 +5,12 @@
 <protocol>MG</protocol>
 <restriction identifier="1">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>Laterality</selectorAttribute>
+<selectorAttribute>ImageLaterality</selectorAttribute>
 <valueRepresentation>R</valueRepresentation>
 </restriction>
 <restriction identifier="2">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>Laterality</selectorAttribute>
+<selectorAttribute>ImageLaterality</selectorAttribute>
 <valueRepresentation>L</valueRepresentation>
 </restriction>
 <restriction identifier="3">
