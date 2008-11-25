@@ -9,6 +9,7 @@
 #include <vtkRenderer.h>
 #include <vtkVolumeRayCastMapper.h>
 
+#include "abortrendercommand.h"
 #include "experimental3dvolume.h"
 #include "vector3.h"
 #include "../optimalviewpoint/vtkInteractorStyleSwitchGgg.h"
@@ -30,6 +31,11 @@ QExperimental3DViewer::QExperimental3DViewer( QWidget *parent )
 
     m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
     m_vtkWidget->setAutomaticImageCacheEnabled( true );
+
+    // avortar render
+    AbortRenderCommand *abortRenderCommand = AbortRenderCommand::New();
+    m_vtkWidget->GetRenderWindow()->AddObserver( vtkCommand::AbortCheckEvent, abortRenderCommand );
+    abortRenderCommand->Delete();
 }
 
 
