@@ -5,14 +5,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
-    <height>626</height>
+    <width>644</width>
+    <height>613</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" >
+  <layout class="QVBoxLayout" >
    <property name="margin" >
     <number>9</number>
    </property>
@@ -334,7 +334,39 @@
          </layout>
         </item>
         <item>
+         <widget class="QLabel" name="m_aifLabel" >
+          <property name="text" >
+           <string>Aif signal:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="udg::ShadeWidget" name="m_AIFView" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>13</hsizetype>
+            <vsizetype>13</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>150</width>
+            <height>100</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label" >
+          <property name="text" >
+           <string>Mouse signal:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="udg::ShadeWidget" name="m_mouseTrackingView" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>13</hsizetype>

@@ -28,7 +28,7 @@ namespace udg {
 class Volume;
 class ToolsActionFactory;
 class ToolManager;
-class Drawer;
+class DrawerPoint;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -79,7 +79,7 @@ private slots:
     void changeMap( int value );
 
      /// gestiona els events del m_2DView
-    void vsiEventHandler( unsigned long id );
+    void eventHandler( unsigned long id );
 
     ///connecta amb el canvi de window level
     void createColorMap( double window, double level );
@@ -90,6 +90,9 @@ private slots:
     ///aplica un filtre al mapa
     void applyFilterMapImage( );
 
+    /// gestiona els events del moviment del cursor
+    void paintCursorSignal( );
+
     /// gestiona els events del botó esquerre
     void leftButtonEventHandler();
 
@@ -98,21 +101,14 @@ private slots:
 
     /// Visualitza el menú que permet escollir la sèrie del DSC
     void contextMenuDSCRelease();
-    void contextMenuSEPreRelease();
-    void contextMenuSEPostRelease();
     void contextMenuEvent(QContextMenuEvent *event);
     void setSeries(Series *series);
 
 
 private:
-    enum VSIImage{ DSC , SEPre, SEPost };
-    int m_imageVSItype;
-
     /// El volum principal
     Volume *m_mainVolume;
     Volume *m_DSCVolume;
-    Volume *m_SEPreVolume;
-    Volume *m_SEPostVolume;
     Volume* m_map0Volume;
     Volume* m_map1Volume;
     Volume* m_map2Volume;
@@ -158,8 +154,9 @@ private:
 
     double reg_fact, reg_exp;
 
-    Drawer* m_drawer;
-
+    DrawerPoint* m_aifDrawPoint;
+    int m_aifIndex[3];
+    int m_aifSlice;
 };
 
 } // end namespace udg

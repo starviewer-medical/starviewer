@@ -32,6 +32,8 @@ public:
     void setPosition( double point[3] );
     void setPosition( QVector<double> point );
 
+    void setSphereRadius( double r) {m_sphereRadius=r;}
+
     vtkProp *getAsVtkProp();
 
     ///mira si està dins dels límits que marquen els punts
