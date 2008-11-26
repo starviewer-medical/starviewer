@@ -47,9 +47,8 @@ private:
     typedef itk::Image<bool, 3> BoolImageType;
     typedef itk::Image<double, 3> DoubleImageType;
     typedef itk::Image<double, 4> DoubleTemporalImageType;
-    static const double TE = 25.0;
-    static const double TR = 1.5;
-    static const double PI = 3.14159265358979323846;
+    static const double TE;
+    static const double TR;
 
     /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
     void createActions();

@@ -18,6 +18,7 @@
 #include "drawer.h"
 #include "drawerpoint.h"
 #include "hoverpoints.h"
+#include "mathtools.h" // pel PI
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -36,13 +37,10 @@
 #include <QFile>
 #include <QMultiMap>
 #include <QTextStream>
-
 // VTK
 #include <vtkCommand.h>
 #include <vtkLookupTable.h>
 #include <vtkImageMapToWindowLevelColors.h>
-
-
 // ITK
 #include <itkImage.h>
 #include <itkImageFileWriter.h>
@@ -51,16 +49,16 @@
 #include "itkMinimumMaximumImageCalculator.h"
 #include <itkVnlFFTRealToComplexConjugateImageFilter.h>
 #include <itkVnlFFTComplexConjugateToRealImageFilter.h>
-
 //Fourier Transform
 //#include <fftw3.h>
 //#include <complex>
-//#include <cmath>
-
-
-
+#include <cmath> // pel ceil
 
 namespace udg {
+
+// definició de constants
+const double QPerfusionMapReconstructionExtension::TE = 25.0;
+const double QPerfusionMapReconstructionExtension::TR = 1.5;
 
 QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_SEPreVolume(0), m_SEPostVolume(0), m_map0Volume(0), m_map1Volume(0), m_map2Volume(0), m_isLeftButtonPressed(false), reg_fact(1.0), reg_exp(2.0)
@@ -997,8 +995,7 @@ void QPerfusionMapReconstructionExtension::deconvolve( QVector<double> tissue, Q
         }
         else
         {
-            num3.real() = 0.0;
-            num3.imag() = 0.0;
+            num3 = complexd( 0.0, 0.0 );
             fftResidualIter.Set(num3);
         }
         ++fftTissueIter;
@@ -1085,9 +1082,9 @@ void QPerfusionMapReconstructionExtension::getOmega()
     int i, index;
     double  omega_max;
 
-    omega_max = PI; // divide omega by Delta t for scaling according to sampling
+    omega_max = MathTools::PI; // divide omega by Delta t for scaling according to sampling
 
-    index = round(aif.size()/2)+1;
+    index = static_cast<int>( ceil(aif.size()/2.0) ) + 1;
 
     for(i=0; i<index; i++)
     {
