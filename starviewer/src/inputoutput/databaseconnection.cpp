@@ -20,6 +20,7 @@
 namespace udg {
 
 DatabaseConnection::DatabaseConnection()
+    : m_databaseConnection(NULL)
 {
     StarviewerSettings settings;
 
@@ -78,6 +79,7 @@ void DatabaseConnection::close()
     if ( connected() )
     {
         sqlite3_close( m_databaseConnection );
+        m_databaseConnection = NULL;
     }
 }
 
@@ -93,8 +95,7 @@ int DatabaseConnection::getLastErrorCode()
 
 DatabaseConnection::~DatabaseConnection()
 {
-    if (connected())
-        close();
+    close();
 }
 
 };
