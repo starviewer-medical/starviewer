@@ -102,21 +102,21 @@ Volume::VtkImageTypePointer Volume::getVtkData()
             if( this->readFiles( fileList ) == OutOfMemory )
             {
                 // Creem un objecte vtkImageData "neutre"
-				m_imageDataVTK = vtkImageData::New();
-				// Inicialitzem les dades
-				m_imageDataVTK->SetOrigin( .0, .0, .0 );
-				m_imageDataVTK->SetSpacing( 1., 1., 1. );
-				m_imageDataVTK->SetDimensions( 10, 10, 1 );
-				m_imageDataVTK->SetWholeExtent( 0, 9, 0, 9, 0, 0 );
-				m_imageDataVTK->SetScalarTypeToShort();
-				m_imageDataVTK->SetNumberOfScalarComponents(1);
-				m_imageDataVTK->AllocateScalars();
-				// ATENCIÓ memset posa el valor (segon paràmetre) interpretat com
-				// unsigned char i el nombre de blocs de memòria són indicats en bytes, 
-				// per això multipliquem per 2
-				memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
-				m_dataLoaded = true;
-				QMessageBox::warning( 0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened Starviewer windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.") );
+                m_imageDataVTK = vtkImageData::New();
+                // Inicialitzem les dades
+                m_imageDataVTK->SetOrigin( .0, .0, .0 );
+                m_imageDataVTK->SetSpacing( 1., 1., 1. );
+                m_imageDataVTK->SetDimensions( 10, 10, 1 );
+                m_imageDataVTK->SetWholeExtent( 0, 9, 0, 9, 0, 0 );
+                m_imageDataVTK->SetScalarTypeToShort();
+                m_imageDataVTK->SetNumberOfScalarComponents(1);
+                m_imageDataVTK->AllocateScalars();
+                // ATENCIÓ memset posa el valor (segon paràmetre) interpretat com
+                // unsigned char i el nombre de blocs de memòria són indicats en bytes, 
+                // per això multipliquem per 2
+                memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
+                m_dataLoaded = true;
+                QMessageBox::warning( 0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened Starviewer windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.") );
             }
         }
         /* TODO Descomentar per llegir amb classes DICOMImageReader
@@ -615,16 +615,16 @@ void Volume::readDifferentSizeImagesIntoOneVolume( QStringList filenames )
                     .arg( QFileInfo( filenames.at(0) ).dir().path() )
                     .arg( e.GetDescription() )
                     );
-            
-			// llegim el missatge d'error per esbrinar de quin error es tracta
-			errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
+
+            // llegim el missatge d'error per esbrinar de quin error es tracta
+            errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
         }
         if ( errorCode == NoError )
         {
             itkImage = m_reader->GetOutput();
             m_reader->GetOutput()->DisconnectPipeline();
         }
-		// TODO no es fa tractament d'errors!
+        // TODO no es fa tractament d'errors!
 
         // Un cop llegit el block, fem el tiling
         tileFilter->PushBackInput( itkImage );
@@ -688,10 +688,10 @@ int Volume::readSingleFile( QString fileName )
                 .arg( QFileInfo( fileName ).dir().path() )
                 .arg( e.GetDescription() )
                 );
-		// llegim el missatge d'error per esbrinar de quin error es tracta
-		errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
-        
-		// TODO no sembla gaire correcte aquest "emit progress(100)"
+        // llegim el missatge d'error per esbrinar de quin error es tracta
+        errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
+
+        // TODO no sembla gaire correcte aquest "emit progress(100)"
         emit progress( 100 );
     }
     if ( errorCode == NoError )
@@ -699,7 +699,7 @@ int Volume::readSingleFile( QString fileName )
         this->setData( m_reader->GetOutput() );
         emit progress( 100 );
     }
-	// TODO falta tractament d'errors!?
+    // TODO falta tractament d'errors!?
     return errorCode;
 }
 
@@ -739,7 +739,7 @@ int Volume::readFiles( QStringList filenames )
                 .arg( e.GetDescription() )
                 );
             // llegim el missatge d'error per esbrinar de quin error es tracta
-			errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
+            errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
         }
         if ( errorCode == NoError )
         {
@@ -752,11 +752,11 @@ int Volume::readFiles( QStringList filenames )
             readDifferentSizeImagesIntoOneVolume( filenames );
             emit progress( 100 );
         }
-		else if( errorCode == OutOfMemory )
-		{
-			ERROR_LOG( "No podem carregar els arxius següents perquè no caben a memòria\n" + filenames.join("\n") );
-			emit progress( 100 );
-		}
+        else if( errorCode == OutOfMemory )
+        {
+            ERROR_LOG( "No podem carregar els arxius següents perquè no caben a memòria\n" + filenames.join("\n") );
+            emit progress( 100 );
+        }
     }
     else
     {
@@ -767,12 +767,12 @@ int Volume::readFiles( QStringList filenames )
 
 int Volume::identifyErrorMessage( const QString &errorMessage )
 {
-	if( errorMessage.contains("Size mismatch") )
-		return SizeMismatch;
-	else if( errorMessage.contains("Failed to allocate memory for image") )
-		return OutOfMemory;
-	else
-		return NoError;
+    if( errorMessage.contains("Size mismatch") )
+        return SizeMismatch;
+    else if( errorMessage.contains("Failed to allocate memory for image") )
+        return OutOfMemory;
+    else
+        return NoError;
 }
 
 };
