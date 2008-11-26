@@ -498,7 +498,8 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             }
             else if( restriction.selectorAttribute == "CodeMeaning" )
             {
-                if( ! dicomReader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning ).at(0).contains( restriction.valueRepresentation ) )
+                QStringList tagValue =  dicomReader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
+                if( tagValue.isEmpty() || !( tagValue.at(0).contains( restriction.valueRepresentation ) ) )
                     valid = false;
             }
             i++;
