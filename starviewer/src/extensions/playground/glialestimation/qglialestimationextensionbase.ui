@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>722</width>
-    <height>525</height>
+    <height>576</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -155,6 +155,16 @@
             </property>
            </widget>
           </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
           <item>
            <widget class="QToolButton" name="m_rotateClockWiseToolButton" >
             <property name="text" >

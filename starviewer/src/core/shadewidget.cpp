@@ -37,6 +37,31 @@
 namespace udg {
 
 
+ShadeWidget::ShadeWidget(QWidget *parent)
+    : QWidget(parent), m_shade_type(BlackShade), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
+{
+    // Checkers background
+    setAttribute(Qt::WA_NoBackground);
+
+    QPolygonF points;
+    points << QPointF(0, sizeHint().height())
+           << QPointF(sizeHint().width(), 0);
+
+    m_hoverPoints = new HoverPoints(this, HoverPoints::NoShape);
+    m_hoverPoints->setConnectionType(HoverPoints::LineConnection);
+    m_hoverPoints->setPoints(points);
+    m_hoverPoints->setPointLock(0, HoverPoints::LockToLeft);
+    m_hoverPoints->setPointLock(1, HoverPoints::LockToRight);
+    m_hoverPoints->setSortType(HoverPoints::XSort);
+
+    resize(QSize(150, 100));
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+
+    connect(m_hoverPoints, SIGNAL(pointsChanged(const QPolygonF &)), this, SIGNAL(colorsChanged()));
+}
+
+
+
 ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
     : QWidget(parent), m_shade_type(type), m_alpha_gradient(QLinearGradient(0, 0, 0, 0))
 {
@@ -68,6 +93,8 @@ ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
     m_hoverPoints->setPoints(points);
     m_hoverPoints->setPointLock(0, HoverPoints::LockToLeft);
     m_hoverPoints->setPointLock(1, HoverPoints::LockToRight);
+/*std::cout<<"left: "<<HoverPoints::LockToLeft<<std::endl;
+std::cout<<"right: "<<HoverPoints::LockToRight<<std::endl;*/
     m_hoverPoints->setSortType(HoverPoints::XSort);
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -79,6 +106,12 @@ ShadeWidget::ShadeWidget(ShadeType type, QWidget *parent)
 QPolygonF ShadeWidget::points() const
 {
     return m_hoverPoints->points();
+}
+
+void ShadeWidget::setPoints(QPolygonF p)
+{
+    m_hoverPoints->setPoints(p);
+    update();
 }
 
 
@@ -155,8 +188,10 @@ void ShadeWidget::generateShade()
                 shade.setColorAt(0, Qt::red);
             else if (m_shade_type == GreenShade)
                 shade.setColorAt(0, Qt::green);
-            else
+            else if (m_shade_type == BlueShade)
                 shade.setColorAt(0, Qt::blue);
+            else 
+                shade.setColorAt(0, Qt::black);
 
             QPainter p(&m_shade);
             p.fillRect(rect(), shade);

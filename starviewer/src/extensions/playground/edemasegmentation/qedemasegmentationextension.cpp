@@ -294,7 +294,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_2DView->setInput( m_mainVolume );
     m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
-    m_2DView->resetWindowLevelToDefault();
+    //m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
 
     int* dim;
@@ -484,7 +484,7 @@ void QEdemaSegmentationExtension::applyMethod( )
     m_lesionViewAction->setEnabled( true );
     m_lesionViewAction->trigger( );
     this->viewLesionOverlay();
-    //m_2DView->refresh();
+    m_2DView->refresh();
     QApplication::restoreOverrideCursor();
     DEBUG_LOG("Fi apply method!!");
  }

@@ -66,6 +66,8 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
     createConnections();
     readSettings();
 
+    m_perfusion2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
+
     // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
     m_toolManager = new ToolManager(this);
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
@@ -237,6 +239,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
 //     connect( m_strokeVolumeUpdatePushButton, SIGNAL( clicked() ), SLOT( updateStrokeVolume() ) );
 
     connect( m_ventriclesApplyPushButton, SIGNAL( clicked() ), SLOT( applyVentriclesMethod() ) );
+    //connect( m_ventriclesLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( applyVentriclesMethod(int) ) );
 
     connect( m_applyRegistrationPushButton, SIGNAL( clicked() ), SLOT( applyRegistration() ) );
 
@@ -375,7 +378,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_diffusion2DView->setInput( m_diffusionMainVolume );
     m_diffusion2DView->resetView( Q2DViewer::Axial );
-    m_diffusion2DView->resetWindowLevelToDefault();
+    //m_diffusion2DView->resetWindowLevelToDefault();
     m_diffusion2DView->render();
 
     connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
@@ -722,6 +725,28 @@ void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
     m_diffusionOpacitySlider->setEnabled( true );
 }
 
+void QDifuPerfuSegmentationExtension::applyVentriclesMethod(int a)
+{
+    if ( !m_ventriclesMaskVolume ) m_ventriclesMaskVolume = new Volume();
+
+    vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
+    imageThreshold->SetInput( m_diffusionMainVolume->getVtkData() );
+    imageThreshold->ThresholdBetween( m_ventriclesLowerValueSlider->value(), m_diffusionMaxValue );
+    // Inverse mask --> we want < lower or > upper
+    imageThreshold->SetInValue( m_diffusionMinValue );
+    imageThreshold->SetOutValue( m_diffusionMaxValue );
+    imageThreshold->Update();
+
+    m_ventriclesMaskVolume->setData( imageThreshold->GetOutput() );
+
+    m_ventriclesViewAction->setEnabled( true );
+    m_ventriclesViewAction->trigger();
+    this->viewVentriclesOverlay();
+
+    m_diffusionOpacityLabel->setEnabled( true );
+    m_diffusionOpacitySlider->setEnabled( true );
+}
+
 void QDifuPerfuSegmentationExtension::applyRegistration()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -787,7 +812,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         if ( !m_perfusionRescaledVolume ) m_perfusionRescaledVolume = new Volume();
 
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_perfusionRescaledVolume->setImages( m_perfusionInputVolume->getImages() );
+        //m_perfusionRescaledVolume->setImages( m_perfusionInputVolume->getImages() );
+        m_perfusionRescaledVolume->setImages( m_diffusionInputVolume->getPhaseImages( m_selectedDiffusionImageSpinBox->value() ) );
 
         m_perfusionRescaledVolume->setData( rescalerPerfusion->GetOutput() );
 
@@ -800,11 +826,11 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         if ( !m_diffusionRescaledVolume ) m_diffusionRescaledVolume = new Volume();
 
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_diffusionRescaledVolume->setImages( m_diffusionInputVolume->getImages() );
+        m_diffusionRescaledVolume->setImages( m_diffusionInputVolume->getPhaseImages( m_selectedDiffusionImageSpinBox->value() ) );
         m_diffusionRescaledVolume->setData( rescalerDiffusion->GetOutput() );
 
         m_perfusion2DView->setInput( m_perfusionRescaledVolume );
-        m_perfusion2DView->resetWindowLevelToDefault();
+        //m_perfusion2DView->resetWindowLevelToDefault();
 
         m_perfusionSliceSlider->setMinimum( 0 );
         m_perfusionSliceSlider->setMaximum( m_perfusionRescaledVolume->getDimensions()[2] -1  );
@@ -925,7 +951,8 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 
     m_blackpointEstimatedVolume = new Volume();
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_blackpointEstimatedVolume->setImages( m_perfusionInputVolume->getImages() );
+    //m_blackpointEstimatedVolume->setImages( m_perfusionInputVolume->getImages() );
+    m_blackpointEstimatedVolume->setImages( m_diffusionInputVolume->getPhaseImages( m_selectedDiffusionImageSpinBox->value() ) );
 
     m_blackpointEstimatedVolume->setData( perfuEstimatorImageResult );
 
@@ -980,7 +1007,7 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
 
     delete m_penombraMaskVolume;
     m_penombraMaskVolume = new Volume();
-    m_penombraMaskVolume->setImages( m_perfusionInputVolume->getImages() );
+    m_penombraMaskVolume->setImages( m_diffusionInputVolume->getPhaseImages( m_selectedDiffusionImageSpinBox->value() ) );
     m_penombraMaskVolume->setData( penombraMask );
 
     vtkImageCast * imageCast = vtkImageCast::New();
@@ -1605,6 +1632,19 @@ void QDifuPerfuSegmentationExtension::viewVentriclesOverlay()
     }
 }
 
+void QDifuPerfuSegmentationExtension::viewVentriclesOverlay(int a)
+{
+    std::cout<<"veiwVentricles "<<a<<std::endl;
+    if(m_ventriclesMaskVolume != 0)
+    {
+        m_activedMaskVolume = m_ventriclesMaskVolume;
+        m_diffusion2DView->setOverlayToBlend();
+        m_diffusion2DView->setOpacityOverlay(((double)m_diffusionOpacitySlider->value())/100.0);
+        m_diffusion2DView->setOverlayInput(m_ventriclesMaskVolume);
+        m_diffusion2DView->refresh();
+    }
+}
+
 void QDifuPerfuSegmentationExtension::moveViewerSplitterToLeft(  )
 {
     DEBUG_LOG("Move L");
@@ -1652,6 +1692,7 @@ void QDifuPerfuSegmentationExtension::synchronizeSlices( bool sync )
 void QDifuPerfuSegmentationExtension::setPerfusionSlice( int slice )
 {
     if ( m_perfusionOverlay ) m_perfusionOverlay->SetZSlice( slice );
+    m_perfusion2DView->refresh();
 }
 
 void QDifuPerfuSegmentationExtension::computePenombraVolume( const QString & name)

@@ -158,7 +158,7 @@ void QStrokeSegmentationExtension::setInput( Volume *input )
     m_2DView->setInput( m_mainVolume );
     m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
-    m_2DView->resetWindowLevelToDefault();
+    //m_2DView->resetWindowLevelToDefault();
 
     int* dim;
     dim = m_mainVolume->getDimensions();
