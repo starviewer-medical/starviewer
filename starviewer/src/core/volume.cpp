@@ -229,6 +229,24 @@ Volume *Volume::getPhaseVolume( int index )
     return result;
 }
 
+QList<Image *> Volume::getPhaseImages( int index )
+{
+    int phases = this->getSeries()->getNumberOfPhases();
+    QList<Image *> phaseImages;
+    if( index >= 0 && index < phases )
+    {
+        int slices = this->getSeries()->getNumberOfSlicesPerPhase();
+        int currentImageIndex = index;
+        QList<Image *> seriesImages = this->getSeries()->getImages();
+        for( int i = 0; i < slices; i++ )
+        {
+            phaseImages << seriesImages.at( currentImageIndex );
+            currentImageIndex += phases;
+        }
+    }
+    return phaseImages;
+}
+
 Volume *Volume::getSubVolume( int index  )
 {
     int slices = this->getSeries()->getNumberOfSlicesPerPhase();

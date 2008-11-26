@@ -112,6 +112,7 @@ public:
     void setNumberOfPhases( int phases );
     int getNumberOfPhases() const;
     Volume *getPhaseVolume( int index );
+    QList<Image *> getPhaseImages( int index );
 
     /// TODO: Repassar: això no hauria d'anar així.
     /// Retorna un nou Volume on la Data és només del sub volume indicat
