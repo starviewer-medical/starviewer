@@ -15,7 +15,7 @@
 namespace udg {
 
 Drawer::Drawer( Q2DViewer *viewer, QObject *parent )
- : QObject(parent)
+ : QObject(parent), m_currentPlane(0), m_currentSlice(0)
 {
     m_2DViewer = viewer;
     connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(refresh()) );
