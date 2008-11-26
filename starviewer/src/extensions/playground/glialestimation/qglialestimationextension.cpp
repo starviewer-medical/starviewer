@@ -434,7 +434,7 @@ void QGlialEstimationExtension::computeTTP( )
     m_2DView_2->setInput( m_mapVolume );
     m_2DView_2->resetView( Q2DViewer::Axial );
     m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
-    m_2DView_2->resetWindowLevelToDefault();
+    //m_2DView_2->resetWindowLevelToDefault();
 
     int* ext= m_mapVolume->getWholeExtent();
     //std::cout<<"["<<ext[0]<<","<<ext[1]<<";"<<ext[2]<<","<<ext[3]<<";"<<ext[4]<<","<<ext[5]<<"]"<<std::endl;

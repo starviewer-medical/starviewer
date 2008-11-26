@@ -46,7 +46,8 @@ class HoverPoints : public QObject
 public:
     enum PointShape {
         CircleShape,
-        RectangleShape
+        RectangleShape,
+        NoShape
     };
 
     enum LockType {

@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground
-# L'objectiu és un subdirectori del projecte 
+# L'objectiu ï¿½s un subdirectori del projecte 
 
 SUBDIRS += diffusionperfusionsegmentation \
            mpr2d \
@@ -9,6 +9,7 @@ SUBDIRS += diffusionperfusionsegmentation \
            landmarkregistration \
            strokesegmentation \
            vsireconstruction \
+           perfusionmapreconstruction \
            glialestimation \
            optimalviewpoint \
            rectumsegmentation \

@@ -7,6 +7,7 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         landmarkregistration \
                         strokesegmentation \
                         vsireconstruction \
+                        perfusionmapreconstruction \
                         glialestimation \
                         optimalviewpoint \
                         rectumsegmentation \

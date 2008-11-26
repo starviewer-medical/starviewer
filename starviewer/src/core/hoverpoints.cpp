@@ -86,9 +86,16 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
                 for (int i=0; i<m_points.size(); ++i) {
                     QPainterPath path;
                     if (m_shape == CircleShape)
+                    {
                         path.addEllipse(pointBoundingRect(i));
+                    }
                     else
-                        path.addRect(pointBoundingRect(i));
+                    {
+                        if (m_shape == RectangleShape)
+                        {
+                            path.addRect(pointBoundingRect(i));
+                        }
+                    }
 
                     if (path.contains(clickPos)) {
                         index = i;
@@ -243,9 +250,16 @@ void HoverPoints::paintPoints()
     for (int i=0; i<m_points.size(); ++i) {
         QRectF bounds = pointBoundingRect(i);
         if (m_shape == CircleShape)
+        {
             p.drawEllipse(bounds);
+        }
         else
-            p.drawRect(bounds);
+        {
+            if (m_shape == RectangleShape)
+            {
+                p.drawRect(bounds);
+            }
+        }
     }
 }
 

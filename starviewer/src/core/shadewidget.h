@@ -51,9 +51,11 @@ public:
         RedShade,
         GreenShade,
         BlueShade,
+        BlackShade,
         ARGBShade
     };
 
+    ShadeWidget(QWidget *parent);
     ShadeWidget(ShadeType type, QWidget *parent);
 
     void setGradientStops(const QGradientStops &stops);
@@ -62,6 +64,7 @@ public:
 
     QSize sizeHint() const { return QSize(150, 40); }
     QPolygonF points() const;
+    void setPoints(QPolygonF p);
 
     HoverPoints *hoverPoints() const { return m_hoverPoints; }
 
