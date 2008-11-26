@@ -61,7 +61,7 @@ const double QPerfusionMapReconstructionExtension::TE = 25.0;
 const double QPerfusionMapReconstructionExtension::TR = 1.5;
 
 QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWidget *parent )
- : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_SEPreVolume(0), m_SEPostVolume(0), m_map0Volume(0), m_map1Volume(0), m_map2Volume(0), m_isLeftButtonPressed(false), reg_fact(1.0), reg_exp(2.0)
+ : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_map0Volume(0), m_map1Volume(0), m_map2Volume(0), m_isLeftButtonPressed(false), reg_fact(1.0), reg_exp(2.0), m_aifDrawPoint(0)
 {
     setupUi( this );
 
@@ -140,7 +140,7 @@ void QPerfusionMapReconstructionExtension::createActions()
 
 void QPerfusionMapReconstructionExtension::createConnections()
 {
-  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( vsiEventHandler(unsigned long) ) );
+  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( eventHandler(unsigned long) ) );
   connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
   connect( m_2DView, SIGNAL( sliceChanged(int) ) , m_sliceViewSlider , SLOT( setValue(int) ) );
   connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
@@ -165,33 +165,53 @@ void QPerfusionMapReconstructionExtension::setInput( Volume *input )
 
 void QPerfusionMapReconstructionExtension::changeMap( int value )
 {
+    //Com que al fer un setInput hem destruit tots els draws del viewer, hem de tornar a reservar memòria
+    m_aifDrawPoint = new DrawerPoint();
+    double pos[3];
+
     switch(value)
     {
     case 0:     //CBV
+        m_2DView->getDrawer()->removeAllPrimitives();
         m_2DView->setInput( m_map0Volume );
-        m_2DView->resetView( Q2DViewer::Axial );
-        m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
-        m_2DView->resetWindowLevelToDefault();
         this->createColorMap(cbvImage, m_2DView);
-        break;
+        // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
+        pos[0] = m_aifIndex[0]*m_map0Volume->getSpacing()[0] + m_map0Volume->getOrigin()[0];
+        pos[1] = m_aifIndex[1]*m_map0Volume->getSpacing()[1] + m_map0Volume->getOrigin()[1];
+        pos[2] = m_aifIndex[2]*m_map0Volume->getSpacing()[2] + m_map0Volume->getOrigin()[2];
+       break;
     case 1:     //CBF
+        m_2DView->getDrawer()->removeAllPrimitives();
         m_2DView->setInput( m_map2Volume );
-        m_2DView->resetView( Q2DViewer::Axial );
-        m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
-        m_2DView->resetWindowLevelToDefault();
         this->createColorMap(cbfImage, m_2DView);
+        // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
+        pos[0] = m_aifIndex[0]*m_map2Volume->getSpacing()[0] + m_map2Volume->getOrigin()[0];
+        pos[1] = m_aifIndex[1]*m_map2Volume->getSpacing()[1] + m_map2Volume->getOrigin()[1];
+        pos[2] = m_aifIndex[2]*m_map2Volume->getSpacing()[2] + m_map2Volume->getOrigin()[2];
         break;
     case 2:     //MTT
+        m_2DView->getDrawer()->removeAllPrimitives();
         m_2DView->setInput( m_map1Volume );
-        m_2DView->resetView( Q2DViewer::Axial );
-        m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
-        m_2DView->resetWindowLevelToDefault();
         this->createColorMap(mttImage, m_2DView);
+        // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
+        pos[0] = m_aifIndex[0]*m_map1Volume->getSpacing()[0] + m_map1Volume->getOrigin()[0];
+        pos[1] = m_aifIndex[1]*m_map1Volume->getSpacing()[1] + m_map1Volume->getOrigin()[1];
+        pos[2] = m_aifIndex[2]*m_map1Volume->getSpacing()[2] + m_map1Volume->getOrigin()[2];
         break;
     default:
         break;
     }
+
+    m_aifDrawPoint->setPosition(pos);
+    /*std::cout<<"Pos: ["<<pos[0]<<","<<pos[1]<<","<<pos[2]<<"]"<<std::endl;
+    std::cout<<"Index: ["<<m_aifIndex[0]<<","<<m_aifIndex[1]<<","<<m_aifIndex[2]<<"]"<<m_aifSlice<<std::endl;
+    std::cout<<m_aifDrawPoint<<std::endl;
+    std::cout<<m_2DView->getView()<<std::endl;
+    */
+    //m_2DView->getDrawer()->draw(m_aifDrawPoint, m_2DView->getView(), m_aifSlice);
+    //m_2DView->getDrawer()->refresh();
 }
+
 void QPerfusionMapReconstructionExtension::computePerfusionMap( )
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -582,20 +602,12 @@ void QPerfusionMapReconstructionExtension::findAIF( )
     index[0] = minposm2 % iend;
     index[1] = (int)(minposm2/iend) % jend;
     index[2] = (int)(minposm2/(iend*jend));
+    m_aifIndex[0] = index[0];
+    m_aifIndex[1] = index[1];
+    m_aifIndex[2] = index[2];
+    m_aifSlice = index[2];
 
     m_m0aif = m0Image->GetPixel(index);
-
-/*    std::cout<<"init draw"<<std::endl;
-    DrawerPoint* drawPoint = new DrawerPoint();
-    double pos[3];
-    pos[0]=index[0]*m_DSCVolume->getSpacing()[0] +m_DSCVolume->getOrigin()[0];
-    pos[1]=index[1]*m_DSCVolume->getSpacing()[1] +m_DSCVolume->getOrigin()[1];
-    pos[2]=index[2]*m_DSCVolume->getSpacing()[2] +m_DSCVolume->getOrigin()[2];
-    drawPoint->setPosition(pos);
-    std::cout<<"done setPosition"<<std::endl;
-
-    m_2DView->getDrawer()->draw(drawPoint, QViewer::AxialPlane, index[2]);
-  */
 
     DoubleTemporalImageType::IndexType indexTemp;
     indexTemp[1] = index[0];
@@ -621,7 +633,7 @@ void QPerfusionMapReconstructionExtension::findAIF( )
         p << QPointF(t*m_AIFView->size().width()/(tend),(deltaRImage->GetPixel(indexTemp)-minp)*m_AIFView->size().height()/(maxp-minp));
     }
     m_AIFView->setPoints(p);
-    p = m_AIFView->points();
+
     this->fftAIF();
     this->getOmega();
 }
@@ -778,6 +790,15 @@ void QPerfusionMapReconstructionExtension::computePerfusion( )
         break;
     }
 
+    if(!m_aifDrawPoint) m_aifDrawPoint = new DrawerPoint();
+    double pos[3];
+    pos[0] = m_aifIndex[0]*m_map0Volume->getSpacing()[0] + m_map0Volume->getOrigin()[0];
+    pos[1] = m_aifIndex[1]*m_map0Volume->getSpacing()[1] + m_map0Volume->getOrigin()[1];
+    pos[2] = m_aifIndex[2]*m_map0Volume->getSpacing()[2] + m_map0Volume->getOrigin()[2];
+    m_aifDrawPoint->setPosition(pos);
+
+    //m_2DView->getDrawer()->draw(m_aifDrawPoint, m_2DView->getView(), m_aifSlice);
+
     time2 += time.elapsed();
 
     DEBUG_LOG(QString( "-- TEMPS COMPUTANT Perfusion : %1ms " ).arg( time1 ) );
@@ -858,8 +879,8 @@ void QPerfusionMapReconstructionExtension::fftAIF( )
         }
     catch( itk::ExceptionObject & excp )
         {
-        std::cerr << "Error: " << std::endl;
-        std::cerr << excp << std::endl;
+        //std::cerr << "Error: " << std::endl;
+        //std::cerr << excp << std::endl;
         return;
         }
 
@@ -966,8 +987,8 @@ void QPerfusionMapReconstructionExtension::deconvolve( QVector<double> tissue, Q
         }
     catch( itk::ExceptionObject & excp )
         {
-        std::cerr << "Error: " << std::endl;
-        std::cerr << excp << std::endl;
+        //std::cerr << "Error: " << std::endl;
+        //std::cerr << excp << std::endl;
         return;
         }
 
@@ -1012,8 +1033,8 @@ void QPerfusionMapReconstructionExtension::deconvolve( QVector<double> tissue, Q
         }
     catch( itk::ExceptionObject & excp )
         {
-        std::cerr << "Error: " << std::endl;
-        std::cerr << excp << std::endl;
+        //std::cerr << "Error: " << std::endl;
+        //std::cerr << excp << std::endl;
         return;
         }
 
@@ -1798,8 +1819,8 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         }
         catch( itk::ExceptionObject & excep )
         {
-            std::cerr << "Exception caught !" << std::endl;
-            std::cerr << excep << std::endl;
+            //std::cerr << "Exception caught !" << std::endl;
+            //std::cerr << excep << std::endl;
         }
 
         typedef itk::ImageRegionIterator<Volume::ItkImageType> Iterator;
@@ -1865,12 +1886,12 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
 
 }
 
-void QPerfusionMapReconstructionExtension::vsiEventHandler( unsigned long id )
+void QPerfusionMapReconstructionExtension::eventHandler( unsigned long id )
 {
     switch( id )
     {
     case vtkCommand::MouseMoveEvent:
-        //setPaintCursor();
+        paintCursorSignal();
     break;
 
     case vtkCommand::LeftButtonPressEvent:
@@ -1888,6 +1909,46 @@ void QPerfusionMapReconstructionExtension::vsiEventHandler( unsigned long id )
     break;
     }
 
+}
+
+void QPerfusionMapReconstructionExtension::paintCursorSignal( )
+{
+    if(m_map0Volume)    //Si hi ha alguna cosa al volum
+    {
+        double pos[3];
+        m_2DView->getCurrentCursorPosition(pos);
+        if(pos[0] != -1 && pos[1] != -1 && pos[2] != -1 )
+        {
+            int index[3];
+            index[0] = (pos[0]- m_map0Volume->getOrigin()[0])/m_map0Volume->getSpacing()[0];
+            index[1] = (pos[1]- m_map0Volume->getOrigin()[1])/m_map0Volume->getSpacing()[1];
+            index[2] = m_2DView->getCurrentSlice();
+            DoubleTemporalImageType::IndexType indexTemp;
+            indexTemp[1] = index[0];
+            indexTemp[2] = index[1];
+            indexTemp[3] = index[2];
+            int t, tend = m_DSCVolume->getNumberOfPhases();
+            QVector<double> signal(tend);
+            QPolygonF p;
+        
+            double minp = 100000.0;
+            double maxp = -100000.0;
+        
+            for (t=0;t<tend;t++)
+            {
+                indexTemp[0] = t;
+                signal[t] = deltaRImage->GetPixel(indexTemp);
+                if(signal[t]>maxp) maxp = aif[t];
+                if(signal[t]<minp) minp = aif[t];
+            }
+            for (t=0;t<tend;t++)
+            {
+                indexTemp[0] = t;
+                p << QPointF(t*m_mouseTrackingView->size().width()/(tend),(signal[t]-minp)*m_mouseTrackingView->size().height()/(maxp-minp));
+            }
+            m_mouseTrackingView->setPoints(p);
+        }
+    }    
 }
 
 void QPerfusionMapReconstructionExtension::leftButtonEventHandler( )
@@ -1915,43 +1976,6 @@ void QPerfusionMapReconstructionExtension::contextMenuDSCRelease()
     // map to global
     //QPoint globalPoint = this->mapToGlobal( point );
 //     emit showContextMenu( globalPoint );
-    m_imageVSItype = QPerfusionMapReconstructionExtension::DSC;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
-}
-
-void QPerfusionMapReconstructionExtension::contextMenuSEPreRelease()
-{
-    // Extret dels exemples de vtkEventQtSlotConnect
-
-    // Obtenim la posició de l'event
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
-    // map to global
-    //QPoint globalPoint = this->mapToGlobal( point );
-//     emit showContextMenu( globalPoint );
-    m_imageVSItype = QPerfusionMapReconstructionExtension::SEPre;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
-}
-
-void QPerfusionMapReconstructionExtension::contextMenuSEPostRelease()
-{
-    // Extret dels exemples de vtkEventQtSlotConnect
-
-    // Obtenim la posició de l'event
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
-    // map to global
-    //QPoint globalPoint = this->mapToGlobal( point );
-//     emit showContextMenu( globalPoint );
-    m_imageVSItype = QPerfusionMapReconstructionExtension::SEPost;
 
     this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
 }
@@ -1983,17 +2007,9 @@ void QPerfusionMapReconstructionExtension::setSeries(Series *series)
     }
     else
     {
-        switch(m_imageVSItype)
-        {
-        case DSC:
-            m_DSCLineEdit->clear();
-            m_DSCLineEdit->insert(series->getDescription());
-            m_DSCVolume = series->getFirstVolume();
-            break;
-        default:
-            DEBUG_LOG("No existeix aquest tipus d'imatge!!");
-            break;
-        }
+        m_DSCLineEdit->clear();
+        m_DSCLineEdit->insert(series->getDescription());
+        m_DSCVolume = series->getFirstVolume();
     }
 }
 
@@ -2007,7 +2023,7 @@ bool QPerfusionMapReconstructionExtension::findProbableSeries( )
         foreach( Series *series, study->getSeries() )
         {
             //DEBUG_LOG(series->getDescription());
-            if(series->getDescription().contains("DSC", Qt::CaseInsensitive) && series->getFirstVolume()) // && slicesDSC < series->getFirstVolume()->getDimensions()[3])
+            if((series->getDescription().contains("DSC", Qt::CaseInsensitive) || series->getDescription().contains("#PERFUSION", Qt::CaseInsensitive)) && series->getFirstVolume()) // && slicesDSC < series->getFirstVolume()->getDimensions()[3])
             {
                 m_DSCLineEdit->clear();
                 m_DSCLineEdit->insert(series->getDescription());
