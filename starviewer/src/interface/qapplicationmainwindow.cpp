@@ -500,6 +500,11 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
     // ser "concurrents" carregant sèries i ens pot ocasionar problemes
     // per tant primer cal solucionar la "concurrència" per poder posar això en marxa
     //qApp->processEvents();
+    // HACK això només ho fem perquè la barra de progrés no es quedi
+    // penjada. Això passava si interactuàvem ( o s'intentava, de fet )
+    // mentres es mostrava la barra de progrés de càrrega
+    if( progress >= 99 )
+        qApp->processEvents();
 }
 
 }; // end namespace udg
