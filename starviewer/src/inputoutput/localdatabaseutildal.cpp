@@ -18,6 +18,7 @@ namespace udg {
 LocalDatabaseUtilDAL::LocalDatabaseUtilDAL() 
 : m_dbConnection(0)
 {
+    m_lastSqliteError = SQLITE_OK;
 }
 
 void LocalDatabaseUtilDAL::compact()

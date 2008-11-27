@@ -16,6 +16,7 @@ namespace udg {
 
 LocalDatabasePatientDAL::LocalDatabasePatientDAL()
 {
+    m_lastSqliteError = SQLITE_OK;
 }
 
 void LocalDatabasePatientDAL::insert(Patient *newPatient)

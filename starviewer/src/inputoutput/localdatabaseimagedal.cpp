@@ -24,6 +24,7 @@ namespace udg {
 
 LocalDatabaseImageDAL::LocalDatabaseImageDAL()
 {
+    m_lastSqliteError = SQLITE_OK;
 }
 
 void LocalDatabaseImageDAL::insert(Image *newImage, int orderNumberInSeries)

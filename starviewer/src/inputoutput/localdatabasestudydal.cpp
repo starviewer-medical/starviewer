@@ -18,6 +18,7 @@ namespace udg {
 
 LocalDatabaseStudyDAL::LocalDatabaseStudyDAL()
 {
+    m_lastSqliteError = SQLITE_OK;
 }
 
 void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
