@@ -64,6 +64,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
     {
         ERROR_LOG("No es pot inserir a la base de dades l'estudi que s'ha descarregat, perquè el patient és nul");
         m_lastError = PatientInconsistent;
+        dbConnect.close();
         return;
     }
 
@@ -167,6 +168,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
     if (seriesDAL.getLastError() != SQLITE_OK)
     {
         setLastError(seriesDAL.getLastError());
+        dbConnect.close();
         return queryResult;
     }
 
