@@ -19,6 +19,7 @@ namespace udg {
 
 LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL()
 {
+    m_lastSqliteError = SQLITE_OK;
 }
 
 void LocalDatabaseSeriesDAL::insert(Series *newSeries)
