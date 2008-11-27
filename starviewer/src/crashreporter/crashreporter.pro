@@ -25,6 +25,10 @@ HEADERS = qcrashreporter.h \
 SOURCES = crashreporter.cpp \
           qcrashreporter.cpp
 
+TRANSLATIONS += crashreporter_ca_ES.ts \
+                crashreporter_es_ES.ts \
+                crashreporter_en_GB.ts 
+                
 INCLUDEPATH += ../main/src_breakpad 
 
 macx {
