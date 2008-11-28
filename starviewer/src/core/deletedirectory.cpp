@@ -39,6 +39,12 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
 
     directory.setPath( directoryPath );
 
+	//Si el directori no existeix sortim
+	if (!directory.exists())
+	{
+		return true;
+	}
+
     filesList =  directory.entryList( QDir::Files );//llista de fitxers del directori
     for ( QStringList::Iterator it = filesList.begin(); it != filesList.end(); ++it )//per cada fitxer
     {
