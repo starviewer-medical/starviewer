@@ -200,6 +200,9 @@ signals :
     ///signal que s'emet quan s'ha fet un doble click a una imatge
     void imageDoubleClicked();
 
+	///signal que s'emet quan es passa de tenir un item seleccionat a no tenir-ne cap de seleccionat
+	void notCurrentItemSelected();
+
 public slots:
     /** Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
      * @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget

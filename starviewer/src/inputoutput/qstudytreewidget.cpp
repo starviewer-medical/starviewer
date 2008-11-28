@@ -649,6 +649,7 @@ void QStudyTreeWidget::currentItemChanged( QTreeWidgetItem * current, QTreeWidge
 
         emit( currentImageChanged() ); //sempre que canviem d'element segur que canviem d'imatge
     }
+	else emit notCurrentItemSelected(); //cas en que no hi cap item seleccionat
 }
 
 void QStudyTreeWidget::itemExpanded( QTreeWidgetItem *itemExpanded )
