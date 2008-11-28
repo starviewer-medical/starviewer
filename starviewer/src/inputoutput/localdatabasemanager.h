@@ -96,6 +96,11 @@ public:
       */
     void checkNoStudiesRetrieving();
 
+signals:
+
+	///Aquest signal s'emet per indicar que un estudi serà borrat de la base de dades per alliberar espai
+	void studyWillBeDeleted(const QString &studyInstanceUID);
+
 public slots:
 
     ///Guarda el pacient a la base de dades, si no existeix insereix les dades, i si alguna de les dades ja existeix a la BD l'actualitza

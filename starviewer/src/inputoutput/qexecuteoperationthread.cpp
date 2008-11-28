@@ -125,6 +125,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
+	//creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
+    createRetrieveStudyConnections(&localDatabaseManager, &localDatabaseManagerThreaded, &patientFiller, &fillersThread, sProcessImg);
+
     localDatabaseManager.setStudyRetrieving(studyUID);
     //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
     emit setOperating( studyUID );
@@ -160,9 +163,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
     piSingleton->addNewProcessImage(studyUID, sProcessImg);
-
-    //creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
-    createRetrieveStudyConnections(&localDatabaseManagerThreaded, &patientFiller, &fillersThread, sProcessImg);
 
     localDatabaseManagerThreaded.start();
     fillersThread.start();
@@ -284,7 +284,7 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     }
 }
 
-void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved)
+void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved)
 {
     connect(patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
 
@@ -304,6 +304,9 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
     //Connexions d'abortament
     connect(this, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
     connect(this, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
+
+	//Connexió que s'esborrarà un estudi per alliberar espai
+	connect(localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
 }
 
 void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QExecuteOperationThread::OperationError lastError)
@@ -320,6 +323,11 @@ void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QExecute
 void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)
 {
     emit seriesCommit(studyInstanceUID);
+}
+
+void QExecuteOperationThread::studyWillBeDeletedSlot(QString studyInstanceUID)
+{
+	emit studyWillBeDeleted(studyInstanceUID);
 }
 
 }

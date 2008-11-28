@@ -21,6 +21,7 @@ class LocalDatabaseManagerThreaded;
 class PatientFiller;
 class QThreadRunWithExec;
 class StarviewerProcessImageRetrieved;
+class LocalDatabaseManager;
 
 class QExecuteOperationThread : public QThread
 {
@@ -106,10 +107,16 @@ signals:
     ///Signal que s'emet quan s'han descarregat tots els fitxers d'un estudi
     void filesRetrieved();
 
+	///Signal que s'emet per indicar que un estudi serà esborrat de la base de dades perquè no es disposa de prou espai
+	void studyWillBeDeleted(QString studyInstanceUID);
+
 private slots:
 
     ///Slot que fa un signal conforme s'ha descarregat una sèrie de l'estudi passat per paràmetre
     void seriesRetrieved(QString studyInstanceUID);
+
+	///emet el signa del que un estudi serà esborrar studyWillBeDeleted
+	void studyWillBeDeletedSlot(QString studyInstanceUID);
 
 private:
 
@@ -129,7 +136,7 @@ private:
     bool m_stop;//indica si el thread esta parat
 
     //Crea les connexions de signals i slots necessaries per a descarregar un estudi
-    void createRetrieveStudyConnections(LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
+    void createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
 
     ///Si es produeix un error emet un signal amb l'error i esborra el directori de l'estudi per si s'hagués pogut descarregar alguna imatge
     void errorRetrieving(QString studyInstanceUID, QExecuteOperationThread::OperationError lastError);

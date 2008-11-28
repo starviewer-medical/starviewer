@@ -276,6 +276,7 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int)), m_operationStateScreen, SLOT( setRetrievedImagesToCurrentProcessingStudy(int) ));
     connect( &m_qexecuteOperationThread, SIGNAL( seriesCommit( QString ) ), m_operationStateScreen, SLOT(  seriesCommit( QString ) ) );
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation( Operation * ) ), m_operationStateScreen, SLOT(  insertNewOperation( Operation *) ) );
+    connect(&m_qexecuteOperationThread, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
 
     // Label d'informació (cutre-xapussa)
     connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT( updateOperationsInProgressMessage()));
@@ -1312,6 +1313,11 @@ int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QStr
     }
 
     return index < m_studyListQueriedPacs.count() ? index : -1;
+}
+
+void QueryScreen::studyWillBeDeletedSlot(QString studyInstanceUID)
+{
+	m_studyTreeWidgetCache->removeStudy(studyInstanceUID);
 }
 
 QString QueryScreen::buildQueryParametersString(DicomMask mask)
