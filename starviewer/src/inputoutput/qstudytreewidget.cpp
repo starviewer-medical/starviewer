@@ -590,12 +590,14 @@ void QStudyTreeWidget::removeStudy( QString studyUID )
 {
     QList<QTreeWidgetItem *> qStudyList( m_studyTreeView->findItems( studyUID , Qt::MatchExactly, UID ) );
     QTreeWidgetItem *item;
-
+	
     for ( int i = 0; i < qStudyList.count(); i++ )
     {
         item = qStudyList.at( i );
         delete item;
     }
+
+	m_studyTreeView->clearSelection();
 }
 
 void QStudyTreeWidget::setCurrentSeries( QString seriesUID )
@@ -655,7 +657,6 @@ void QStudyTreeWidget::itemExpanded( QTreeWidgetItem *itemExpanded )
      * que es faci això, per aquest motiu en cas d'un signal de collapse o expand, el que fem és comprovar si per aquell item s'acaba
      *de fer doble click, si és així anul·lem l'acció de col·lapsar o expandir
      */
-
     if ( m_doubleClickedItemUID != itemExpanded->text( UID ) )
     {
         /* Com que inserim un item en blanc per simular fills dels estudis i de les sèries cada vegada que ens fan un expand hem d'eliminar l'item en blanc i
@@ -668,8 +669,8 @@ void QStudyTreeWidget::itemExpanded( QTreeWidgetItem *itemExpanded )
 
         if ( isItemStudy( itemExpanded ) )
         {
+			itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
             emit ( studyExpanded( itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
-            itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
         }
         else if ( isItemSeries( itemExpanded ) ) emit( seriesExpanded( itemExpanded->parent()->text( UID ) , itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
 
