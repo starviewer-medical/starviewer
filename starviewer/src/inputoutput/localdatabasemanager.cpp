@@ -216,7 +216,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     LocalDatabaseImageDAL imageDAL;
     QList<Patient*> patientList;
     QList<Series*> seriesList;
-    Patient *retrievedPatient;
+    Patient *retrievedPatient = NULL;
     Study *retrievedStudy;
     DicomMask maskImagesToRetrieve;
     DatabaseConnection dbConnect;
