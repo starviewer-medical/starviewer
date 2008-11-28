@@ -301,8 +301,7 @@ void LocalDatabaseManager::del(const QString &studyInstanceToDelete)
         return;
     else
         studyMaskToDelete.setStudyUID(studyInstanceToDelete);
-
-
+	
     dbConnect.open();
     dbConnect.beginTransaction();
 
@@ -344,7 +343,6 @@ void LocalDatabaseManager::del(const QString &studyInstanceToDelete)
 
     dbConnect.endTransaction();
     dbConnect.close();
-
     deleteStudyFromHardDisk(studyInstanceToDelete);
 }
 
@@ -817,16 +815,16 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
     while (index < studyListToDelete.count() && MbytesErased < MbytesToErase)
     {
         studyToDelete = studyListToDelete.at(index);
-        MbytesErased += getDirectorySize(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
 
+		emit studyWillBeDeleted(studyToDelete->getInstanceUID());
+        MbytesErased += getDirectorySize(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
+		
         del(studyToDelete->getInstanceUID());
         if (getLastError() != LocalDatabaseManager::Ok)
             break;
 
         index++;
     }
-
-    INFO_LOG("S'han alliberat " + QString().setNum(MbytesErased, 10) + " Mb");
 
     ///Esborrem els estudis de la memòria
     foreach(Study *study, studyListToDelete)

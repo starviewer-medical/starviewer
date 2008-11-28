@@ -168,6 +168,9 @@ private slots:
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error);
 
+	///S'executa quan un estudi serà esborrat de la bd per alliberar espai, aquest mètode esborra l'estudi del QStudyTreeWidget de la bd local
+	void studyWillBeDeletedSlot(QString studyInstanceUID);
+
 private:
     enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
 
