@@ -47,18 +47,18 @@ void DatabaseConnection::open()
 void DatabaseConnection::beginTransaction()
 {
     m_transactionLock->acquire();
-    sqlite3_exec(m_databaseConnection, "BEGIN TRANSACTION", 0 , 0 , 0);
+    sqlite3_exec(m_databaseConnection, "BEGIN IMMEDIATE", 0 , 0 , 0);
 }
 
 void DatabaseConnection::endTransaction()
 {
-    sqlite3_exec(m_databaseConnection, "END TRANSACTION", 0 , 0 , 0);
+    sqlite3_exec(m_databaseConnection, "END", 0 , 0 , 0);
     m_transactionLock->release();
 }
 
 void DatabaseConnection::rollbackTransaction()
 {
-    sqlite3_exec(m_databaseConnection, "ROLLBACK TRANSACTION ", 0, 0, 0);
+    sqlite3_exec(m_databaseConnection, "ROLLBACK", 0, 0, 0);
     m_transactionLock->release();
 }
 
