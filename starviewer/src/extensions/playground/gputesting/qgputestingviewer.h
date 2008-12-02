@@ -37,6 +37,10 @@ protected:
 
 private:
 
+    /// Comprova si hi ha algun error d'OpenGL.
+    void checkGLError( bool alert = false );
+
+    /// Crea la textura 3D del volum.
     void createVolumeTexture();
     void createFramebufferObject();
     void loadShaders();
@@ -56,9 +60,10 @@ private:
 
 
 
-
+    /// Volum a visualitzar.
     Volume *m_volume;
 
+    /// Textura 3D del volum.
     GLuint m_volumeTexture;
 
     GLhandleARB m_shaderProgram;
