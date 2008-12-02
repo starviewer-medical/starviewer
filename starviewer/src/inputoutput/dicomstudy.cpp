@@ -65,10 +65,6 @@ DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
     studyDcmDataset->findAndGetString( DCM_ModalitiesInStudy, text , false );
     if ( text != NULL ) setStudyModality( text );
 
-    //set PACS AE Title Called
-    studyDcmDataset->findAndGetString( DCM_RetrieveAETitle , text , false );
-    if ( text != NULL ) setPacsAETitle( text );
-
     studyDcmDataset->findAndGetString( DCM_ReferringPhysiciansName , text , false );
     if ( text != NULL ) setReferringPhysiciansName( QString::fromLatin1( text ) );
 }
@@ -84,7 +80,7 @@ bool DICOMStudy::operator < ( DICOMStudy a )
 
 bool DICOMStudy::operator == ( DICOMStudy compareStudy )
 {
-    return getStudyUID() == compareStudy.getStudyUID() && getPacsAETitle() == compareStudy.getPacsAETitle();
+    return getStudyUID() == compareStudy.getStudyUID() && getPacsId() == compareStudy.getPacsId();
 }
 
 /**********************************************************************************************************************/
@@ -154,11 +150,6 @@ void DICOMStudy::setInstitutionName( QString institution )
 void DICOMStudy::setAccessionNumber( QString accession )
 {
     m_accessionNumber = accession;
-}
-
-void DICOMStudy::setPacsAETitle( QString title )
-{
-    m_pacsAETitle = title;
 }
 
 void DICOMStudy::setAbsPath( QString path )
@@ -240,11 +231,6 @@ QString DICOMStudy::getAccessionNumber()
     return m_accessionNumber;
 }
 
-QString DICOMStudy::getPacsAETitle()
-{
-    return m_pacsAETitle;
-}
-
 QString DICOMStudy::getReferringPhysiciansName()
 {
     return m_referringPhysiciansName;
@@ -253,6 +239,16 @@ QString DICOMStudy::getReferringPhysiciansName()
 QString DICOMStudy::getAbsPath()
 {
     return m_absPath;
+}
+
+void DICOMStudy::setPacsId(QString pacsId)
+{
+    m_pacsId = pacsId;
+}
+
+QString DICOMStudy::getPacsId()
+{
+    return m_pacsId;
 }
 
 }

@@ -47,7 +47,7 @@ public:
 
     /** Estableix la connexió a utilitzar per comunicar-se amb el PACS
       */
-    void setConnection( PacsConnection connection );
+    void setConnection(QString pacsID, PacsConnection connection);
 
     /** màscara dicom a cercar
      * @param mask màscara
@@ -69,6 +69,9 @@ private:
     QList<DICOMStudy> m_studiesList;
     QList<DICOMSeries> m_seriesList;
     QList<DICOMImage> m_imageList;
+
+    ///Guarda el Id del pacs al qual fem la query
+    QString m_pacsID;
 
     //fa el query al pacs
     Status query();

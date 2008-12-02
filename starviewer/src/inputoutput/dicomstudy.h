@@ -96,11 +96,6 @@ public:
      */
     void setAccessionNumber( QString );
 
-    /** This action set Pacs AE Title
-     * @param CAlled PACS AE Title
-     */
-    void setPacsAETitle( QString );
-
     /** Set the absolute path of the study
      * @param path de l'estudi
      */
@@ -176,11 +171,6 @@ public:
      */
     QString getAccessionNumber();
 
-    /** This function get the AETitels of the study's PACS
-     *              @return  AETitle
-     */
-    QString getPacsAETitle();
-
     /** This function get the absolut path of the study, if the study is in the local disk
      *              @return  absolut path of the study,
      */
@@ -190,6 +180,11 @@ public:
      * @return referringPhysiciansName
      */
     QString getReferringPhysiciansName();
+
+    ///Estableix/Retorna l'id del pacs al qual pertany l'estudi
+    QString getPacsId();
+    void setPacsId(QString pacsId);
+
 
  private :
 
@@ -209,7 +204,7 @@ public:
 
     QString m_institutionName;
 
-    QString m_pacsAETitle;
+    QString m_pacsId;
     QString m_absPath;
     QString m_referringPhysiciansName;
 };

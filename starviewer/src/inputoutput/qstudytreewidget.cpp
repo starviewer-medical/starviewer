@@ -49,7 +49,7 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     setupUi( this );
 
     //la columna de UID AETITLE,type, Image Number i Protocol Name les fem invisibles
-    m_studyTreeView->setColumnHidden( PACSAETitle, true );
+    m_studyTreeView->setColumnHidden( PACSId, true );
 
     // m_studyTreeView->setColumnHidden( UID, true );
 
@@ -135,8 +135,8 @@ void QStudyTreeWidget::insertPatient(Patient* patient)
 
 void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 {
-    if ( getStudyItem( study->getStudyUID() , study->getPacsAETitle() ) != NULL )
-        removeStudy( study->getStudyUID() ); //si l'estudi ja hi existeix a StudyTreeView l'esborrem
+    if (getStudyItem(study->getStudyUID(), study->getPacsId()) != NULL)
+        removeStudy(study->getStudyUID()); //si l'estudi ja hi existeix a StudyTreeView l'esborrem
 
     /*Des de qt 4.3 s'ha detectat que si abans es fa el new, i després es fa el remove al cap d'unes quantes repeticions d'aquest mètode al fer el new QTreeWidgetItem s'acaba donant un segmentation fault, per això s'ha de canviar l'ordre i primer fer el 
     remove study, i llavors el new QTreeWidgetItem*/
@@ -155,22 +155,22 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
 
     if ( study->getInstitutionName().isEmpty() ) //si la informació ve buida l'anem a buscar a la bdd local
     {
-        if ( m_oldPacsAETitle != study->getPacsAETitle() ) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
+        if (m_oldPacsId != study->getPacsId()) //comparem que no sigui el mateix pacs que l'anterior, si es el mateix tenim la informacio guardada
         {//si es un pacs diferent busquem la informacio
             PacsListDB pacsList;
             PacsParameters pacs;
 
-            pacs = pacsList.queryPacs( study->getPacsAETitle() );
-            item->setText( Institution, pacs.getInstitution() );
+            pacs = pacsList.queryPacs(study->getPacsId());
+            item->setText(Institution, pacs.getInstitution());
             m_OldInstitution = pacs.getInstitution();
-            m_oldPacsAETitle = study->getPacsAETitle();
+            m_oldPacsId = study->getPacsId();
         }
         else item->setText( Institution , m_OldInstitution );
     }
     else item->setText( Institution , study->getInstitutionName() );
 
     item->setText( AccNumber , study->getAccessionNumber() );
-    item->setText( PACSAETitle , study->getPacsAETitle() );
+    item->setText( PACSId , study->getPacsId() );
     item->setText( UID , study->getStudyUID() );
     item->setText( Type , "STUDY" );//indiquem de que es tracta d'un estudi
     item->setText( RefPhysName , study->getReferringPhysiciansName() );
@@ -201,7 +201,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillPatient(Patient *patient)
     item->setText(StudyID, tr("Study %1").arg(study->getID()));
 
     item->setText( AccNumber, study->getAccessionNumber());
-    //item->setText( PACSAETitle, study->getPacsAETitle() );
+    //item->setText( PACSId, study->getPacsId() );
     item->setText(UID, study->getInstanceUID());
     item->setText(Type , "STUDY");//indiquem de que es tracta d'un estudi
     item->setText(RefPhysName, study->getReferringPhysiciansName());
@@ -227,7 +227,7 @@ void QStudyTreeWidget::insertSeriesList( QList<DICOMSeries> seriesList )
 
 void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*> seriesList)
 {
-    QTreeWidgetItem *studyItem = getStudyItem(studyInstanceUID, "" /*serie->getPacsAETitle()*/ );
+    QTreeWidgetItem *studyItem = getStudyItem(studyInstanceUID, "" /*serie->getPacsId()*/ );
     QList<QTreeWidgetItem*> qTreeWidgetItemSeriesList;
 
     foreach(Series *series, seriesList)
@@ -241,7 +241,7 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
 {
     QTreeWidgetItem *item, *studyItem , *expandableItem;
 
-    studyItem = getStudyItem( serie->getStudyUID() , serie->getPacsAETitle() );
+    studyItem = getStudyItem(serie->getStudyUID(), serie->getPacsId());
     item = new QTreeWidgetItem( studyItem );
     expandableItem = new QTreeWidgetItem( item );
 
@@ -257,7 +257,7 @@ void QStudyTreeWidget::insertSeries( DICOMSeries *serie )
 
     if ( !serie->getSeriesTime().isEmpty() ) item->setText( Time , formatHour(serie->getSeriesTime() ) );
 
-    item->setText( PACSAETitle, serie->getPacsAETitle() );
+    item->setText( PACSId, serie->getPacsId() );
     item->setText( UID , serie->getSeriesUID() );
     item->setText( Type , "SERIES" ); //indiquem que es tracta d'una sèrie
 
@@ -290,7 +290,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
 
     if (!series->getTimeAsString().isEmpty()) seriesItem->setText(Time , formatHour(series->getTime().toString("hhmmss")));
 
-    seriesItem->setText(PACSAETitle, ""/*serie->getPacsAETitle()*/);
+    seriesItem->setText(PACSId, ""/*serie->getPacsId()*/);
     seriesItem->setText(UID, series->getInstanceUID());
     seriesItem->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
 
@@ -331,7 +331,7 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
 
             newImageItem->setIcon(ObjectName, m_iconSeries);
             newImageItem->setText(ObjectName, tr("Image %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-            newImageItem->setText(PACSAETitle, "");
+            newImageItem->setText(PACSId, "");
             newImageItem->setText(UID, image->getSOPInstanceUID());
             newImageItem->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
             qTreeWidgetItemImageList.append(newImageItem);
@@ -344,7 +344,7 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
 
 void QStudyTreeWidget::insertImage( DICOMImage * image )
 {
-    QTreeWidgetItem *newImageItem, *seriesItem = getSeriesQTreeWidgetItem(image->getStudyUID(), image->getSeriesUID(), image->getPacsAETitle());
+    QTreeWidgetItem *newImageItem, *seriesItem = getSeriesQTreeWidgetItem(image->getStudyUID(), image->getSeriesUID(), image->getPacsId());
 
     if (seriesItem != NULL)
     {
@@ -353,7 +353,7 @@ void QStudyTreeWidget::insertImage( DICOMImage * image )
         newImageItem->setIcon( ObjectName, m_iconSeries );
 
         newImageItem->setText(ObjectName, tr( "Image %1" ).arg(paddingLeft(QString().setNum(image->getImageNumber()), 4 ) ) );//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-        newImageItem->setText( PACSAETitle , image->getPacsAETitle() );
+        newImageItem->setText( PACSId , image->getPacsId());
         newImageItem->setText( UID , image->getSOPInstanceUID() );
         newImageItem->setText( Type, "IMAGE" ); //indiquem que es tracta d'una imatge
     }
@@ -391,7 +391,7 @@ void QStudyTreeWidget::clear()
     m_studyTreeView->clear();
     //Reinicialitzem variables
     m_oldCurrentStudyUID = "";
-    m_oldPacsAETitle = "";
+    m_oldPacsId = "";
     m_oldCurrentSeriesUID = "";
 }
 
@@ -507,7 +507,7 @@ QString QStudyTreeWidget::getCurrentSeriesUID()
     else return "";
 }
 
-QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( QString studyUID , QString AETitle )
+QTreeWidgetItem*  QStudyTreeWidget::getStudyItem(QString studyUID, QString pacsId)
 {
     int index = 0;
     bool stop = false;
@@ -516,7 +516,7 @@ QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( QString studyUID , QString AET
 
     while ( !stop && index < qStudyList.count() )
     {
-        if ( qStudyList.at( index )->text( PACSAETitle ) == AETitle )
+        if (qStudyList.at(index)->text(PACSId) ==  pacsId)
         {
             stop = true;
         }
@@ -530,12 +530,12 @@ QTreeWidgetItem*  QStudyTreeWidget::getStudyItem( QString studyUID , QString AET
     else return NULL;
 }
 
-QTreeWidgetItem*  QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID, QString AETitle)
+QTreeWidgetItem*  QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID, QString pacsId)
 {
     QTreeWidgetItem* studyItem, *item = NULL;
     int index = 0;
 
-    studyItem = getStudyItem(studyInstanceUID, AETitle);
+    studyItem = getStudyItem(studyInstanceUID, pacsId);
 
     while (item == NULL && index < studyItem->childCount())//cerquem la sèrie de la que depen la imatge
     {
@@ -565,9 +565,10 @@ QString QStudyTreeWidget::getCurrentImageUID()
     return result;
 }
 
-QString QStudyTreeWidget::getStudyPACSAETitleFromSelectedItems( QString studyUID )
+QString QStudyTreeWidget::getStudyPACSIdFromSelectedItems( QString studyUID )
 {
-    QString result;
+    QString pacsId = "";
+
     QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
     foreach( QTreeWidgetItem *item, selectedItems )
     {
@@ -579,11 +580,11 @@ QString QStudyTreeWidget::getStudyPACSAETitleFromSelectedItems( QString studyUID
 
         if (studyItem->text(UID) == studyUID)
         {
-            result = item->text(PACSAETitle);
+            pacsId = item->text(PACSId);
             break;
         }
     }
-    return result;
+    return pacsId;
 }
 
 void QStudyTreeWidget::removeStudy( QString studyUID )
@@ -671,9 +672,9 @@ void QStudyTreeWidget::itemExpanded( QTreeWidgetItem *itemExpanded )
         if ( isItemStudy( itemExpanded ) )
         {
 			itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
-            emit ( studyExpanded( itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
+            emit (studyExpanded(itemExpanded->text(UID), itemExpanded->text(PACSId)));
         }
-        else if ( isItemSeries( itemExpanded ) ) emit( seriesExpanded( itemExpanded->parent()->text( UID ) , itemExpanded->text( UID ) , itemExpanded->text( PACSAETitle ) ) );
+        else if (isItemSeries(itemExpanded)) emit(seriesExpanded(itemExpanded->parent()->text(UID ), itemExpanded->text(UID), itemExpanded->text(PACSId)));
 
         m_doubleClickedItemUID = "";
     }
@@ -752,4 +753,5 @@ QString QStudyTreeWidget::paddingLeft( QString text, int length )
 
     return paddedText;
 }
+
 };

@@ -63,12 +63,12 @@ signals:
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
      * @param  pacsID del pacs amb que s'ha produit error
      */
-    void errorConnectingPacs( int );
+    void errorConnectingPacs( QString );
 
     /** signal que s'envia per indicar que hi hagut un error cercant al PACS
      * @param ID del pacs que ha produit l'error
      */
-    void errorQueringStudiesPacs( int pacsID );
+    void errorQueringStudiesPacs( QString pacsID );
 
 public slots:
 

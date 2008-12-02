@@ -87,11 +87,6 @@ class DICOMSeries
      */
     void setSeriesPath( QString );
 
-    /** Estableix a quin PACS pertany la sèrie
-     * @param AEtitle AeTitle del pacs la que pertany la sèrie
-     */
-    void setPacsAETitle( QString AETitle );
-
     /** Estableix el número d'imatges que conté la serie, respecte el directori on es troben els estudis
      * @param Número d'imatges
      */
@@ -177,11 +172,6 @@ class DICOMSeries
      */
     int         getImageNumber();
 
-    /** retorna el AETitle del PACS al que pertany la serie
-     * @return AETitle del Pacs
-     */
-    QString getPacsAETitle();
-
     /** retorna el Requested ProcedureID
      * @return Requested ProcedureID
      */
@@ -202,6 +192,10 @@ class DICOMSeries
      */
     QString getPPStartTime();
 
+    ///Estableix/Retorna l'id del pacs al qual pertany l'estudi
+    QString getPacsId();
+    void setPacsId(QString pacsId);
+
  private :
 
     QString m_seriesUID;
@@ -215,12 +209,12 @@ class DICOMSeries
     QString m_operatorName;
     QString m_bodyPartExaminated;
     QString m_seriesPath; //path relatiu, dins el directori on es guarden els estudis, no ha de ser path abosut, per exemple /STU00000/SER00001
-    int         m_imageNumber;
-    QString m_seriesAETitlePACS;
+    int     m_imageNumber;
     QString m_requestedProcedureID;
     QString m_scheduledProcedureStepID;
     QString m_ppsStartDate;
     QString m_ppsStartTime;
+    QString m_pacsId;
 };
 };
 #endif

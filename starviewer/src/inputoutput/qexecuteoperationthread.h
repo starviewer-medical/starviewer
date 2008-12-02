@@ -94,7 +94,7 @@ signals:
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
      * @param  pacsID del pacs amb que s'ha produit error
      */
-    void errorConnectingPacs( int );
+    void errorConnectingPacs( QString );
 
     /** signal que s'emet quan s'enqua una nova operació
      * @param newOperation operació encuada
@@ -107,8 +107,8 @@ signals:
     ///Signal que s'emet quan s'han descarregat tots els fitxers d'un estudi
     void filesRetrieved();
 
-	///Signal que s'emet per indicar que un estudi serà esborrat de la base de dades perquè no es disposa de prou espai
-	void studyWillBeDeleted(QString studyInstanceUID);
+    ///Signal que s'emet per indicar que un estudi serà esborrat de la base de dades perquè no es disposa de prou espai
+    void studyWillBeDeleted(QString studyInstanceUID);
 
 private slots:
 

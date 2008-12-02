@@ -52,7 +52,7 @@ void QQueryStudyThread::run()
         //creem l'objecte fer la query
         QueryPacs queryPacsStudy;
 
-        queryPacsStudy.setConnection( serverSCP.getConnection() );
+        queryPacsStudy.setConnection(m_param.getPacsID(), serverSCP.getConnection());
         //busquem els estudis
         state = queryPacsStudy.query( m_mask );
 

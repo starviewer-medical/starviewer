@@ -63,11 +63,6 @@ public:
      */
     void setImageSize (int);
 
-    /** estableix el PACS al que pertany l'estudi
-     * @param AETitle AETitle al que pertany la imatge
-     */
-    void setPacsAETitle( QString AETitle );
-
     /** Retorna el UID de la Imatge
      * @return  UID de la imatge
      */
@@ -103,10 +98,10 @@ public:
      */
     int getImageSize() const;
 
-    /** retorna el AETitle de la imatge
-     * @return AETitle de la imatge
-     */
-    QString getPacsAETitle() const;
+    ///Estableix/Retorna l'id del pacs al qual pertany l'estudi
+    QString getPacsId();
+    void setPacsId(QString pacsId);
+
 
 private:
     //variables que guarden la informació de la imatge
@@ -115,7 +110,7 @@ private:
     QString m_imagePath;
     QString m_studyUID;
     QString m_imageName;
-    QString m_pacsAETitle;
+    QString m_pacsId;
     int m_imageNumber;
     int m_imageSize;
 

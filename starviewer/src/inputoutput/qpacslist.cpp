@@ -22,7 +22,8 @@ QPacsList::QPacsList( QWidget *parent )
 {
     setupUi( this );
 
-    m_PacsTreeView->setColumnHidden( 3 , true ); //La columna default està amagada
+    m_PacsTreeView->setColumnHidden(0, true); //la columna PacsId està amagada
+    m_PacsTreeView->setColumnHidden(4, true); //La columna default està amagada
 
     refresh();
 }
@@ -44,10 +45,11 @@ void QPacsList::refresh()
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
 
-        item->setText( 0 , pacs.getAEPacs() );
-        item->setText( 1 , pacs.getInstitution() );
-        item->setText( 2 , pacs.getDescription() );
-        item->setText( 3 , pacs.getDefault() );
+        item->setText(0, pacs.getPacsID());
+        item->setText(1, pacs.getAEPacs());
+        item->setText(2, pacs.getInstitution());
+        item->setText(3, pacs.getDescription());
+        item->setText(4, pacs.getDefault());
     }
 
     setSelectedDefaultPacs();
@@ -61,7 +63,7 @@ void QPacsList::setSelectedDefaultPacs()
     for  (int i = 0; i < qPacsList.count(); i++ )
     {
         item = qPacsList.at( i );
-        if ( item->text(3) == "S" )
+        if ( item->text(4) == "S" )
         {
             m_PacsTreeView->setItemSelected( item,true );
         }
@@ -83,7 +85,7 @@ QList<PacsParameters> QPacsList::getSelectedPacs()
         item = qPacsList.at( i );
         PacsParameters pacs;
 
-        pacs = pacsListDB.queryPacs( item->text(0) ); //fem el query per cercar la informació del PACS
+        pacs = pacsListDB.queryPacs(item->text(0)); //fem el query per cercar la informació del PACS
 
         pacs.setAELocal( settings.getAETitleMachine() );
         //emplenem amb les dades del registre el timeout

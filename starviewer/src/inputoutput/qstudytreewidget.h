@@ -51,7 +51,7 @@ Q_OBJECT
 public:
     //Object Name s'utilitza per guardar El NomPacient, Serie + Identificador Sèrie i Imatge + Identificador Image
     enum ColumnIndex{ ObjectName = 0, PatientID = 1, PatientAge = 2, Description = 3, Modality = 4, Date = 5, Time = 6,
-    PACSAETitle = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
+    PACSId = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
     RefPhysName = 14, PPStartDate = 15, PPStartTime = 16, ReqProcID = 17, SchedProcStep = 18
     };
 
@@ -117,9 +117,9 @@ public:
     /**
      * Cerca l'AETitle del PACS de l'estudi indicat dins dels estudis seleccionats a la llista
      * @param studyUID uid de l'estudi que volem saber l'AETitle
-     * @return Retorna l'AETitle de l'estudi indicat, sempre que aquest estigui dins dels seleccionats
+     * @return Retorna el pacsId de l'estudi indicat, sempre que aquest estigui dins dels seleccionats
      */
-    QString getStudyPACSAETitleFromSelectedItems( QString studyUID );
+    QString getStudyPACSIdFromSelectedItems(QString studyUID);
 
     /** Retorna el UID Study de l'estudi seleccionat
      * @return UID de l'estudi seleccionat
@@ -186,10 +186,10 @@ signals :
     void currentImageChanged();
 
     ///signal que s'emet quan es fa expandir un estudi
-    void studyExpanded( QString studyUID , QString pacsAETitle );
+    void studyExpanded(QString studyUID, QString pacsId);
 
     ///signal que s'emet qua es fa expandir una series
-    void seriesExpanded(QString studyUID , QString seriesUID , QString pacsAETitle );
+    void seriesExpanded(QString studyUID, QString seriesUID, QString pacsId);
 
     ///signal que s'emet quan s'ha fet un doble click a un estudi
     void studyDoubleClicked();
@@ -248,19 +248,20 @@ private:
     /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
      * un mateix estudi pot estar a més d'un PACS
      * @param studyUID uid de l'estudi a cercar
-     * @param AETitle AEtitle de la màquina on està l'estudi
+     * @param AETitle id del Pacs on està l'estudi
      */
-    QTreeWidgetItem* getStudyItem( QString studyUID , QString AETitle );
+    QTreeWidgetItem* getStudyItem(QString studyUID, QString pacsId);
 
     ///Retorna l'Objecte QTtreeWidgeItem que és de l'estudi, series i pacs passat per paràmetre
-    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID, QString AETitle);
+    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID, QString pacsId);
 
 private:
     /// Menu contextual
     QMenu *m_contextMenu;
 
     /// strings per guardar valors de l'anterior element
-    QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_oldPacsAETitle , m_OldInstitution;
+    QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_OldInstitution;
+    QString m_oldPacsId;
 
     QString m_doubleClickedItemUID;
 
@@ -285,6 +286,7 @@ private:
 
     ///Emplena un QTreeWidget amb la informació de pacient i estudi
     QTreeWidgetItem* fillPatient(Patient *);
+
 };
 
 }; // end namespace

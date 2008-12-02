@@ -60,9 +60,6 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
     seriesDataset->findAndGetString( DCM_OperatorsName , text , false );
     if ( text != NULL ) setOperatorName( QString::fromLatin1( text ) );
 
-    seriesDataset->findAndGetString( DCM_RetrieveAETitle , text , false );
-    if ( text != NULL ) setPacsAETitle( text );
-
     DcmSequenceOfItems *requestAttributesSequence;
     seriesDataset->findAndGetSequence( DCM_RequestAttributesSequence , requestAttributesSequence , false );
     if ( requestAttributesSequence != NULL )
@@ -162,11 +159,6 @@ void DICOMSeries::setSeriesPath( QString path )
 void DICOMSeries::setImageNumber( int iNumber )
 {
     m_imageNumber = iNumber;
-}
-
-void DICOMSeries::setPacsAETitle( QString AETitlePACS )
-{
-    m_seriesAETitlePACS = AETitlePACS;
 }
 
 void DICOMSeries::setRequestedProcedureID( QString requestedProcedureID )
@@ -273,9 +265,14 @@ QString DICOMSeries::getPPStartTime()
     return m_ppsStartTime;
 }
 
-QString DICOMSeries::getPacsAETitle()
+void DICOMSeries::setPacsId(QString pacsId)
 {
-    return m_seriesAETitlePACS;
+    m_pacsId = pacsId;
+}
+
+QString DICOMSeries::getPacsId()
+{
+    return m_pacsId;
 }
 
 }

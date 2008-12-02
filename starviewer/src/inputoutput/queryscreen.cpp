@@ -287,8 +287,8 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ), SLOT( updateOperationsInProgressMessage() ));
 
     //connect tracta els errors de connexió al PACS
-    connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( int ) ), SLOT( errorConnectingPacs( int ) ) );
-    connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( int ) ), SLOT( errorQueringStudiesPacs( int ) ) );
+    connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
+    connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
     connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QExecuteOperationThread::OperationError)));
@@ -376,11 +376,11 @@ void QueryScreen::searchStudy()
     }
 }
 
-PacsServer QueryScreen::getPacsServerByAETitle(QString AETitlePACS)
+PacsServer QueryScreen::getPacsServerByPacsID(QString pacsID)
 {
     PacsParameters pacsParameters;
     PacsListDB pacsListDB;
-    pacsParameters = pacsListDB.queryPacs(AETitlePACS);//cerquem els paràmetres del Pacs al qual s'han de cercar les dades
+    pacsParameters = pacsListDB.queryPacs(pacsID);//cerquem els paràmetres del Pacs 
 
     StarviewerSettings settings;
     pacsParameters.setAELocal( settings.getAETitleMachine() ); //especifiquem el nostres AE
@@ -527,7 +527,6 @@ void QueryScreen::queryStudy( QString source )
         }
         else if( source == "DICOMDIR" )
         {
-            m_studyTreeWidgetDicomdir->clear();
             m_studyTreeWidgetDicomdir->insertStudyList( studyListResultQuery );
             m_studyTreeWidgetDicomdir->setSortColumn( QStudyTreeWidget::ObjectName );//ordenem pel nom
         }
@@ -535,7 +534,7 @@ void QueryScreen::queryStudy( QString source )
     }
 }
 
-void QueryScreen::expandStudy( QString studyUID , QString pacsAETitle )
+void QueryScreen::expandStudy( QString studyUID , QString pacsId )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -545,7 +544,7 @@ void QueryScreen::expandStudy( QString studyUID , QString pacsAETitle )
             querySeries( studyUID, "Cache" );
             break;
         case 1 :  //si estem la pestanya del PACS fem query al Pacs
-            querySeriesPacs(studyUID, pacsAETitle);
+            querySeriesPacs(studyUID, pacsId);
             break;
         case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
             querySeries( studyUID, "DICOMDIR" );
@@ -556,7 +555,7 @@ void QueryScreen::expandStudy( QString studyUID , QString pacsAETitle )
 }
 
 /* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
-void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString pacsAETitle )
+void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString pacsId)
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -567,7 +566,7 @@ void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString p
             break;
 
         case 1 :  //si estem la pestanya del PACS fem query al Pacs
-            queryImagePacs( studyUID , seriesUID , pacsAETitle );
+            queryImagePacs( studyUID , seriesUID , pacsId);
             break;
 
         case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
@@ -578,36 +577,38 @@ void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString p
     QApplication::restoreOverrideCursor();
 }
 
-void QueryScreen::querySeriesPacs(QString studyUID , QString pacsAETitle)
+void QueryScreen::querySeriesPacs(QString studyUID, QString pacsID)
 {
     DICOMSeries serie;
     Status state;
-    QString text;
+    QString text, pacsDescription;
     QueryPacs querySeriesPacs;
 
-    INFO_LOG( "Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsAETitle );
+    PacsServer pacsServer = getPacsServerByPacsID(pacsID);
+    pacsDescription = pacsServer.getPacs().getAEPacs() + " Institució" + pacsServer.getPacs().getInstitution()  + " IP:" + pacsServer.getPacs().getPacsAddress(); 
 
-    PacsServer pacsServer = getPacsServerByAETitle(pacsAETitle);
+    INFO_LOG("Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsDescription);
 
-    state = pacsServer.connect(PacsServer::query,PacsServer::seriesLevel);
+
+    state = pacsServer.connect(PacsServer::query, PacsServer::seriesLevel);
     if ( !state.good() )
     {
         //Error al connectar
-        ERROR_LOG( "Error al connectar al pacs " + pacsAETitle + ". PACS ERROR : " + state.text() );
-        errorConnectingPacs ( pacsServer.getPacs().getPacsID() );
+        ERROR_LOG( "Error al connectar al pacs " + pacsDescription + ". PACS ERROR : " + state.text() );
+        errorConnectingPacs (pacsID);
         return;
     }
 
-    querySeriesPacs.setConnection( pacsServer.getConnection() );
+    querySeriesPacs.setConnection(pacsID, pacsServer.getConnection());
     state = querySeriesPacs.query( buildSeriesDicomMask( studyUID ) );
     pacsServer.disconnect();
 
     if ( !state.good() )
     {
         //Error a la query
-        ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les sèries al PACS " + pacsAETitle + ". PACS ERROR : " + state.text() );
+        ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les sèries al PACS " + pacsDescription + ". PACS ERROR : " + state.text() );
 
-        text = tr( "Error! Can't query series to PACS named %1" ).arg( pacsAETitle );
+        text = tr( "Error! Can't query series to PACS named %1" ).arg( pacsDescription );
         QMessageBox::warning( this , tr( "Starviewer" ) , text );
         return;
     }
@@ -660,44 +661,45 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         m_studyTreeWidgetDicomdir->insertSeriesList( seriesListQueryResults );//inserim la informació de la sèrie al llistat
 }
 
-void QueryScreen::queryImagePacs( QString studyUID , QString seriesUID , QString AETitlePACS )
+void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pacsID)
 {
     DICOMSeries serie;
     Status state;
-    QString text;
+    QString text, pacsDescription;
     QueryPacs queryImages;
     DicomMask dicomMask;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    INFO_LOG( "Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + AETitlePACS );
+    PacsServer pacsServer = getPacsServerByPacsID(pacsID);
+    pacsDescription = pacsServer.getPacs().getAEPacs() + " Institució" + pacsServer.getPacs().getInstitution()  + " IP:" + pacsServer.getPacs().getPacsAddress(); 
+
+    INFO_LOG("Cercant informacio de les imatges de l'estudi" + studyUID + " serie " + seriesUID + " del PACS " + pacsDescription);
 
     dicomMask.setStudyUID( studyUID );
     dicomMask.setSeriesUID( seriesUID );
     dicomMask.setImageNumber( "" );
     dicomMask.setSOPInstanceUID( "" );
 
-    PacsServer pacsServer = getPacsServerByAETitle(AETitlePACS);
-
     state = pacsServer.connect(PacsServer::query,PacsServer::imageLevel);
     if ( !state.good() )
     {   //Error al connectar
         QApplication::restoreOverrideCursor();
-        ERROR_LOG( "Error al connectar al pacs " + AETitlePACS + ". PACS ERROR : " + state.text() );
-        errorConnectingPacs ( pacsServer.getPacs().getPacsID() );
+        ERROR_LOG( "Error al connectar al pacs " + pacsDescription + ". PACS ERROR : " + state.text() );
+        errorConnectingPacs (pacsID);
         return;
     }
 
-    queryImages.setConnection( pacsServer.getConnection() );
+    queryImages.setConnection(pacsID, pacsServer.getConnection());
 
     state = queryImages.query( dicomMask );
     if ( !state.good() )
     {
         //Error a la query
         QApplication::restoreOverrideCursor();
-        ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les images al PACS " + AETitlePACS + ". PACS ERROR : " + state.text() );
+        ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les images al PACS " + pacsDescription + ". PACS ERROR : " + state.text() );
 
-        text = tr( "Error! Can't query images to PACS named %1 " ).arg(AETitlePACS);
+        text = tr( "Error! Can't query images to PACS named %1 " ).arg(pacsDescription);
         QMessageBox::warning( this , tr( "Starviewer" ) , text );
         return;
     }
@@ -783,12 +785,12 @@ void QueryScreen::retrievePacs( bool view )
         QString defaultSeriesUID;
         Operation operation;
         PacsParameters pacs;
-        QString pacsAETitle;
+        QString pacsId;
 
         //Busquem en quina posició de la llista on guardem els estudis trobats al PACS en quina posició està per poder-lo recuperar 
         //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
-        int indexStudyInList = getStudyPositionInStudyListQueriedPacs( currentStudyUID , 
-        m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedItems( currentStudyUID ) );
+        int indexStudyInList = getStudyPositionInStudyListQueriedPacs(currentStudyUID, 
+        m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID));
 
         //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
         if ( indexStudyInList == -1 ) 
@@ -801,7 +803,7 @@ void QueryScreen::retrievePacs( bool view )
         {
             DICOMStudy studyToRetrieve =  m_studyListQueriedPacs.value( indexStudyInList );
 
-            pacsAETitle = m_studyTreeWidgetPacs->getStudyPACSAETitleFromSelectedItems(currentStudyUID);
+            pacsId = m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID);
 
             mask.setStudyUID( currentStudyUID );//definim la màscara per descarregar l'estudi
 
@@ -816,7 +818,7 @@ void QueryScreen::retrievePacs( bool view )
 
             //busquem els paràmetres del pacs del qual volem descarregar l'estudi
             PacsListDB pacsListDB;
-            pacs = pacsListDB.queryPacs(pacsAETitle);
+            pacs = pacsListDB.queryPacs(pacsId);
 
             //emplanem els parametres amb dades del starviewersettings
             pacs.setAELocal( settings.getAETitleMachine() );
@@ -954,10 +956,8 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
             DEBUG_LOG( QString("Llegir del DICOMDIR directament (sense importar) ha trigat: %1 ").arg( time.elapsed() ));
         }
 
-        DEBUG_LOG("Fem emit de selectedPatient");
         emit selectedPatient(patient, defaultSeriesUID);
     }
-    DEBUG_LOG("Acabem loadStudies");
 }
 
 void QueryScreen::importDicomdir()
@@ -1233,7 +1233,7 @@ void QueryScreen::storeStudiesToPacs()
 
             delete patient;
             //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-            pacs = pacsListDB.queryPacs( selectedPacsList.value(0).getAEPacs() );
+            pacs = pacsListDB.queryPacs(selectedPacsList.value(0).getPacsID());
             storeStudyOperation.setPacsParameters( pacs );
 
             m_qexecuteOperationThread.queueOperation( storeStudyOperation );
@@ -1248,7 +1248,7 @@ void QueryScreen::storeStudiesToPacs()
     QApplication::restoreOverrideCursor();
 }
 
-void QueryScreen::errorConnectingPacs( int IDPacs )
+void QueryScreen::errorConnectingPacs( QString IDPacs )
 {
     PacsListDB pacsListDB;
     PacsParameters errorPacs;
@@ -1264,7 +1264,7 @@ void QueryScreen::errorConnectingPacs( int IDPacs )
     QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
 }
 
-void QueryScreen::errorQueringStudiesPacs( int PacsID )
+void QueryScreen::errorQueringStudiesPacs(QString PacsID)
 {
     PacsListDB pacsListDB;
     PacsParameters errorPacs;
@@ -1301,7 +1301,7 @@ DicomMask QueryScreen::buildDicomMask()
     return m_qbasicSearchWidget->buildDicomMask() + m_qadvancedSearchWidget->buildDicomMask();
 }
 
-int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle )
+int QueryScreen::getStudyPositionInStudyListQueriedPacs(QString studyUID, QString pacsId)
 {
     int index = 0;
     bool studyUIDisTheSame = false , pacsAETitleIsTheSame = false;
@@ -1309,7 +1309,7 @@ int QueryScreen::getStudyPositionInStudyListQueriedPacs( QString studyUID , QStr
     while ( index < m_studyListQueriedPacs.count() && ( !studyUIDisTheSame || !pacsAETitleIsTheSame ) )
     {
         studyUIDisTheSame = m_studyListQueriedPacs.value( index ).getStudyUID() == studyUID;
-        pacsAETitleIsTheSame = m_studyListQueriedPacs.value( index ).getPacsAETitle() == pacsAETitle;
+        pacsAETitleIsTheSame = m_studyListQueriedPacs.value( index ).getPacsId() == pacsId;
 
         if (!studyUIDisTheSame || !pacsAETitleIsTheSame ) index++;
     }
