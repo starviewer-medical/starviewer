@@ -27,7 +27,7 @@ PacsListDB::~PacsListDB()
 
 bool PacsListDB::insertPacs(const PacsParameters &pacs)
 {
-    if( !this->existPacsByAETitle(pacs.getAEPacs()) )
+    if(!this->existPacs(pacs))
     {
         QList<PacsParameters> pacsList = getConfiguredPacsList();
         pacsList.append(pacs);
@@ -71,13 +71,15 @@ PacsParameters PacsListDB::queryPacs(QString pacsIDString)
     return pacs;
 }
 
-bool PacsListDB::existPacsByAETitle(const QString &pacsAETitle )
+bool PacsListDB::existPacs(const PacsParameters &pacs)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
 
     foreach(PacsParameters pacsParameters, pacsList)
     {
-        if ( pacsParameters.getAEPacs() == pacsAETitle )
+        if (pacsParameters.getAEPacs() == pacs.getAEPacs() && 
+            pacsParameters.getPacsPort() == pacs.getPacsPort() &&
+            pacsParameters.getPacsAddress() == pacs.getPacsAddress())
         {
             return true;
         }
