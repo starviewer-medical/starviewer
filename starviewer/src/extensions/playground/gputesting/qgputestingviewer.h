@@ -37,11 +37,14 @@ protected:
 
 private:
 
+    static const GLsizei FRAMEBUFFER_SIZE = 2048;
+
     /// Comprova si hi ha algun error d'OpenGL.
     void checkGLError( bool alert = false );
 
     /// Crea la textura 3D del volum.
     void createVolumeTexture();
+    /// Crea el framebuffer object.
     void createFramebufferObject();
     void loadShaders();
     void drawCube();
@@ -50,12 +53,9 @@ private:
 
     void enableRenderbuffers();
     void disableRenderbuffers();
-    void renderBackface();
     // this method is used to draw the front and backside of the volume
     void drawQuads( float x, float y, float z );
     void vertex( float x, float y, float z );
-    void raycastingPass();
-    void renderBufferToScreen();
 
 
 
@@ -66,13 +66,17 @@ private:
     /// Textura 3D del volum.
     GLuint m_volumeTexture;
 
+    /// Framebuffer object on farem el render de la primera passada per pintar les cares del darrere.
+    GLuint m_framebufferObject;
+    /// Textura on es guarda el que es pinta al framebuffer object.
+    GLuint m_framebufferTexture;
+
     GLhandleARB m_shaderProgram;
     GLint m_texUniform;
     GLint m_volumeTexUniform;
     GLint m_stepSizeUniform;
 
-    GLuint m_framebufferObject;
-    GLuint m_backfaceBuffer;
+
 
     GLuint m_framebuffer;
     GLuint m_finalImage;
