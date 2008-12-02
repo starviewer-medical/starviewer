@@ -59,8 +59,8 @@ public:
 
 private:
 
-    ///Ens indica si un Pacs ja està donat d'alta a partir del seu AETitle
-    bool existPacsByAETitle(const QString &pacsAETitle );
+    ///Ens indica si un Pacs ja està donat d'alta a partir del seu AETitle, IP i port
+    bool existPacs(const PacsParameters &pacsAETitle );
 
     ///Mètode que s'ha de fer servir sempre que es vulgui accedir a la llista de pacs configurats.
     ///S'encarrega d'omplir la llista en el cas que no s'hagi fet prèviament.

@@ -210,7 +210,7 @@ void QConfigurationScreen::addPacs()
 
         if ( !pacsList.insertPacs(pacs) )
         {
-            QMessageBox::warning(this, tr("Starviewer"), tr("AETitle %1 exists").arg( pacs.getAEPacs() ));
+            QMessageBox::warning(this, tr("Starviewer"), tr("This pacs already exists"));
         }
         else
         {
