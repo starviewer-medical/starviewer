@@ -102,6 +102,11 @@
      </property>
      <column>
       <property name="text" >
+       <string>PacsId</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
        <string>Pacs</string>
       </property>
      </column>

@@ -21,9 +21,10 @@ namespace udg{
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 
-void QueryPacs::setConnection( PacsConnection connection )
+void QueryPacs::setConnection(QString pacsID, PacsConnection connection)
 {
     m_assoc = connection.getPacsConnection();
+    m_pacsID = pacsID;
 }
 
 void QueryPacs::foundMatchCallback(
@@ -127,8 +128,7 @@ void QueryPacs::addStudy( DcmDataset *responsePacs )
 {
     DICOMStudy dicomStudy( responsePacs );
 
-    ///Alguns pacs no retornen a quin pacs pertany l'estudi, nosaltres per defecte hi posem el nom del pacs al que hem fer la query
-    if ( dicomStudy.getPacsAETitle().isEmpty() ) dicomStudy.setPacsAETitle( m_assoc->params->DULparams.calledAPTitle );
+    dicomStudy.setPacsId(m_pacsID);
 
     if ( !m_studiesList.contains( dicomStudy ) ) m_studiesList.append( dicomStudy );
 }
@@ -137,12 +137,18 @@ void QueryPacs::addSeries( DcmDataset * responsePacs )
 {
     DICOMSeries dicomSeries( responsePacs );
 
+    dicomSeries.setPacsId(m_pacsID);
+
     if ( !m_seriesList.contains( dicomSeries) ) m_seriesList.append( dicomSeries );
 }
 
 void QueryPacs::addImage( DcmDataset * responsePacs )
 {
-    m_imageList.append( DICOMImage( responsePacs ) );
+    DICOMImage dicomImage(responsePacs);
+
+    dicomImage.setPacsId(m_pacsID);
+
+    m_imageList.append(dicomImage);
 }
 
 QList<DICOMStudy> QueryPacs::getQueryResultsAsStudyList()

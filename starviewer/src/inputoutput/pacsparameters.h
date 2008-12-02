@@ -76,8 +76,8 @@ public:
     int getTimeOut() const;
 
     /// Assigna/Retorna l'id del PACS, aquest és un camp clau per diferenciar els PACS que l'assigna l'aplicacio.
-    void setPacsID(int ID);
-    int getPacsID() const;
+    void setPacsID(QString ID);
+    QString getPacsID() const;
 
     bool operator ==(const PacsParameters &parameters);
 
@@ -93,7 +93,7 @@ private:
     QString m_pacsInstitution;
     QString m_pacsLocation;
     QString m_pacsIsDefault;
-    int m_pacsID;
+    QString m_pacsID;
     int m_connectionTimeOutInMilliseconds;
 };
 

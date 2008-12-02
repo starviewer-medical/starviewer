@@ -75,14 +75,14 @@ private slots:
      * @param studyUID UID de l'estidi
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void expandStudy( QString studyUID , QString pacsAETitle );
+    void expandStudy( QString studyUID , QString pacsId);
 
     /** Busca la informació d'una sèrie
      * @param studyUID UID de l'estidi
      * @param seriesUID
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void expandSeries( QString , QString , QString );
+    void expandSeries( QString , QString , QString pacsId );
 
     /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
      * @param index del tab al que s'ha canviat
@@ -113,12 +113,12 @@ private slots:
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al connectar amb el pacs
      * @param pacsID ID del pacs a la base de ades local
      */
-    void errorConnectingPacs( int pacsID );
+    void errorConnectingPacs(QString pacsID);
 
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al fer una query d'estudis amb el pacs
      * @param id del PACS
      */
-    void errorQueringStudiesPacs( int );
+    void errorQueringStudiesPacs( QString );
 
     /** Slot que s'activa quant s'ha descarregat un estudi, prove de la classe QExecuteOperationThread
      * @param studyUID UID de l'estudi descarregat
@@ -139,7 +139,7 @@ private slots:
      * @param SeriesUID  uid de la sèrie
      * @param PacsAETitle AETitle del PACS a buscar la sèrie
      */
-    void queryImagePacs( QString StudyUID , QString SeriesUID , QString PacsAETitle );
+    void queryImagePacs(QString StudyUID, QString SeriesUID, QString pacsID);
 
     /** Cerca les imatges d'una sèrie a la font indicada (Cache,DICOMDIR)
      * @param studyUID uid de l'estudi
@@ -214,7 +214,7 @@ private:
      * @param studyUID UID de l'estidi
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void querySeriesPacs(QString studyUID, QString pacsAETitle);
+    void querySeriesPacs(QString studyUID, QString pacsID);
 
     /** Cerca les sèries d'un estudi a la font indicada (Cache,DICOMDIR)
      * @param studyUID UID de l'estudi a cercar
@@ -253,14 +253,14 @@ private:
     QString buildQueryParametersString(DicomMask mask);
 
     ///Ens indica en en quina posició es troba dins la llista dels estudis trobats a la última query del PACS l'estudi amb l'UID passat per paràmetre i l'AETitle del PACS passat per paràmetre
-    int getStudyPositionInStudyListQueriedPacs( QString studyUID , QString pacsAETitle );
+    int getStudyPositionInStudyListQueriedPacs(QString studyUID, QString pacsId);
 
     /** Donat un AETitle busca les dades del PACS a la configuració i prepara un objecte PACSERVER, per poder
      * connectar al PACS
      * @param AETitlePACS Aetitle del PACS a connectar
      * @return Objecte ParcsServer a punt per connectar amb el PACS
      */
-    PacsServer getPacsServerByAETitle(QString AETitlePACS);
+    PacsServer getPacsServerByPacsID(QString pacsID);
 
     /**
      * Llegeix i aplica dades de configuració

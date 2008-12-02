@@ -35,10 +35,6 @@ DICOMImage::DICOMImage(DcmDataset *imageDataset)
     }
     //TODO mirar perquè posem un número d'imatge per defecte si no el tenen
     else setImageNumber( 99999 ); //algunes imatges no tenen número d'imatge per defecte els hi posem aquest
-
-    imageDataset->findAndGetString( DCM_RetrieveAETitle , text , false );
-    if ( text != NULL ) setPacsAETitle( text );
-
 }
 
 DICOMImage::~DICOMImage()
@@ -81,11 +77,6 @@ void DICOMImage::setImageSize( int bytes )
     m_imageSize = bytes;
 }
 
-void DICOMImage::setPacsAETitle( QString AETitle )
-{
-    m_pacsAETitle = AETitle;
-}
-
 QString DICOMImage::getSOPInstanceUID() const
 {
     return m_SoPUID;
@@ -121,9 +112,14 @@ int DICOMImage::getImageSize() const
     return m_imageSize;
 }
 
-QString DICOMImage::getPacsAETitle() const
+void DICOMImage::setPacsId(QString pacsId)
 {
-    return m_pacsAETitle;
+    m_pacsId = pacsId;
+}
+
+QString DICOMImage::getPacsId()
+{
+    return m_pacsId;
 }
 
 };

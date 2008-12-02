@@ -37,7 +37,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
     setupUi( this );
     fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats
 
-    m_selectedPacsID = -1;
+    m_selectedPacsID = "";
 
     loadCacheDefaults();
     loadPacsDefaults();
@@ -123,7 +123,9 @@ void QConfigurationScreen::setWidthColumns()
 {
     StarviewerSettings settings;
 
-    for ( int index = 0; index < m_PacsTreeView->columnCount(); index++ )
+    m_PacsTreeView->setColumnHidden(0, true); //La columna pacsID està amagada
+
+    for ( int index = 1; index < m_PacsTreeView->columnCount(); index++ )
     {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
             m_PacsTreeView->header()->resizeSection( index ,settings.getQConfigurationPacsDeviceColumnWidth(  index ) );
     }
@@ -182,7 +184,7 @@ void QConfigurationScreen:: clear()
     m_textLocation->clear();
     m_textDescription->clear();
     m_checkDefault->setChecked( false );
-    m_selectedPacsID = -1;
+    m_selectedPacsID = "";
 }
 
 void QConfigurationScreen::addPacs()
@@ -227,7 +229,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 
     if ( selectedItem != NULL )
     {
-        selectedPacs = pacsListDB.queryPacs( selectedItem->text(0) );// selectedItem->text(0) --> AETitle del pacs seleccionat al TreeWidget
+        selectedPacs = pacsListDB.queryPacs(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
 
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAEPacs() );
@@ -243,7 +245,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
         }
         else m_checkDefault->setChecked( false );
     }
-    else m_selectedPacsID = -1;
+    else m_selectedPacsID = "";
 }
 
 void QConfigurationScreen::updatePacs()
@@ -251,7 +253,7 @@ void QConfigurationScreen::updatePacs()
     PacsParameters pacs;
     PacsListDB pacsList;
 
-    if ( m_selectedPacsID == -1 )
+    if ( m_selectedPacsID == "" )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a PACS to update" ) );
         return;
@@ -287,7 +289,7 @@ void QConfigurationScreen::deletePacs()
 {
     PacsListDB pacsList;
 
-    if ( m_selectedPacsID == -1 )
+    if ( m_selectedPacsID == "" )
     {
         QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a PACS to delete" ) );
         return;
@@ -315,18 +317,19 @@ void QConfigurationScreen::fillPacsListView()
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
 
-        item->setText( 0 , pacs.getAEPacs() );
-        item->setText( 1 , pacs.getPacsAddress() );
-        item->setText( 2 , pacs.getPacsPort() );
-        item->setText( 3 , pacs.getInstitution() );
-        item->setText( 4 , pacs.getLocation() );
-        item->setText( 5 , pacs.getDescription() );
+        item->setText(0, pacs.getPacsID());
+        item->setText(1, pacs.getAEPacs());
+        item->setText(2, pacs.getPacsAddress());
+        item->setText(3, pacs.getPacsPort());
+        item->setText(4, pacs.getInstitution());
+        item->setText(5, pacs.getLocation());
+        item->setText(6, pacs.getDescription());
 
-        if ( pacs.getDefault() == "S" )
+        if (pacs.getDefault() == "S")
         {
-            item->setText( 6 , tr( "Yes" ) );
+            item->setText(7, tr("Yes"));
         }
-        else item->setText( 6 , tr( "No" ) );
+        else item->setText(7, tr("No"));
     }
 }
 

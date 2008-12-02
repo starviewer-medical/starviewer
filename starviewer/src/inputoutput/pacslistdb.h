@@ -49,19 +49,13 @@ public:
     /** Es donarà de baixa el Pacs. No es dona de baixa físicament, sinó que es posa en estat donat de baixa
      * @param  Objecte pacsID del pacs a donar de baixa
      */
-    void deletePacs(int pacsID);
+    bool deletePacs(QString pacsID);
 
     /** Cerca la informació d'un pacs en concret.
      * @param Conté la informació del pacs cercat
      * @param pacs a cercar
      */
-    PacsParameters queryPacs(QString AETitle);
-
-    /** Cerca la informació d'un pacs en concret.
-     * @param Conté la informació del pacs cercat
-     * @param pacs a cercar
-     */
-    PacsParameters queryPacs(int pacsID);
+    PacsParameters queryPacs(QString pacsID);
 
 private:
 

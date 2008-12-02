@@ -43,7 +43,7 @@ void PacsListDB::updatePacs(const PacsParameters &pacsToUpdate)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
 
-    pacsList[pacsToUpdate.getPacsID()] = pacsToUpdate;
+    pacsList[pacsToUpdate.getPacsID().toInt()] = pacsToUpdate;
 
     this->saveConfiguredPacsListToDisk(pacsList);
 }
@@ -53,25 +53,22 @@ QList<PacsParameters> PacsListDB::queryPacsList()
     return getConfiguredPacsList();
 }
 
-PacsParameters PacsListDB::queryPacs(QString AETitle)
+PacsParameters PacsListDB::queryPacs(QString pacsIDString)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
+    bool ok = false;
+    int pacsID = pacsIDString.toInt(&ok);
+    PacsParameters pacs;
 
-    foreach(PacsParameters pacsParameters, pacsList)
+    if (ok)
     {
-        if ( pacsParameters.getAEPacs() == AETitle )
+        if (pacsID < pacsList.count()) 
         {
-            return pacsParameters;
+            pacs = pacsList.at(pacsID);
         }
     }
 
-    return PacsParameters();
-}
-
-PacsParameters PacsListDB::queryPacs(int pacsID)
-{
-    QList<PacsParameters> pacsList = getConfiguredPacsList();
-    return pacsList.at(pacsID);
+    return pacs;
 }
 
 bool PacsListDB::existPacsByAETitle(const QString &pacsAETitle )
@@ -89,13 +86,18 @@ bool PacsListDB::existPacsByAETitle(const QString &pacsAETitle )
     return false;
 }
 
-void PacsListDB::deletePacs(int pacsID)
+bool PacsListDB::deletePacs(QString pacsIDString)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
+    bool ok = false;
+    int pacsID = pacsIDString.toInt(&ok);
+
+    if (!ok) return false;
 
     pacsList.removeAt(pacsID);
-
     this->saveConfiguredPacsListToDisk(pacsList);
+
+    return true;
 }
 
 QList<PacsParameters> PacsListDB::getConfiguredPacsList()
@@ -141,7 +143,7 @@ PacsParameters PacsListDB::fillPacs(const QSettings &settings)
 {
     PacsParameters pacsParameters;
 
-    pacsParameters.setPacsID( settings.value("ID" ).toInt() );
+    pacsParameters.setPacsID( settings.value("ID" ).toString() );
     pacsParameters.setAEPacs( settings.value("AETitle" ).toString() );
     pacsParameters.setPacsPort( settings.value("PacsPort" ).toString() );
     pacsParameters.setLocation( settings.value("Location" ).toString() );

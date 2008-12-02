@@ -60,8 +60,8 @@ Status MultipleQueryStudy::StartQueries()
         //aquest signal ha de ser QDirectConnection, pq sera el propi thread qui executara l'slot d'alliberar un recurs del semafor, si fos queued, hauria de ser el pare qui respongues al signal, pero com estaria fent el sem_wait no respondria mai! i tindríem deadlock
         connect(thread, SIGNAL( finished() ), this, SLOT( threadFinished() ), Qt::DirectConnection);
 
-        connect(thread, SIGNAL( errorConnectingPacs(int) ), this, SIGNAL( errorConnectingPacs(int) ));
-        connect(thread, SIGNAL( errorQueringStudiesPacs(int) ), this, SIGNAL( errorQueringStudiesPacs(int) ));
+        connect(thread, SIGNAL( errorConnectingPacs(QString) ), this, SIGNAL( errorConnectingPacs(QString) ));
+        connect(thread, SIGNAL( errorQueringStudiesPacs(QString) ), this, SIGNAL( errorQueringStudiesPacs(QString) ));
         m_semaphoreActiveThreads->acquire();//Demanem recurs, hi ha un maxim de threads limitat
 
         thread->queryStudy( pacsToQuery , m_searchMask );
