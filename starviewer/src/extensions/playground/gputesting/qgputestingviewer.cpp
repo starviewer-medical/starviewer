@@ -24,6 +24,7 @@ QGpuTestingViewer::~QGpuTestingViewer()
     glDeleteTextures( 1, &m_volumeTexture );
     glDeleteFramebuffersEXT( 1, &m_framebufferObject );
     glDeleteTextures( 1, &m_framebufferTexture );
+    glDeleteObjectARB( m_shaderProgram );
 }
 
 
@@ -205,11 +206,11 @@ void QGpuTestingViewer::paintGL()
 
     glActiveTexture( GL_TEXTURE0 ); // 1?
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
-    glUniform1iARB( m_texUniform, 0 );  // 1?
+    glUniform1iARB( m_framebufferTextureUniform, 0 );  // 1?
 
     glActiveTexture( GL_TEXTURE1 ); // 2?
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
-    glUniform1iARB( m_volumeTexture, 1 );  // 2?
+    glUniform1iARB( m_volumeTextureUniform, 1 );  // 2?
 
     glEnable( GL_CULL_FACE );
     glCullFace( GL_BACK );
@@ -336,75 +337,76 @@ void QGpuTestingViewer::createFramebufferObject()
     GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
     if ( status == GL_FRAMEBUFFER_COMPLETE_EXT ) DEBUG_LOG( "framebuffer ok :D" );
     else DEBUG_LOG( "framebuffer ko :( " + QString::number( status, 16 ) );
+
     checkGLError();
 }
 
 
 void QGpuTestingViewer::loadShaders()
 {
-    if ( !m_shaderProgram )
+    GLhandleARB vertexShaderObject = glCreateShaderObjectARB( GL_VERTEX_SHADER_ARB );
+    GLhandleARB fragmentShaderObject = glCreateShaderObjectARB( GL_FRAGMENT_SHADER_ARB );
+
+    QByteArray vertexShaderSourceBytes, fragmentShaderSourceBytes;
+
+    QFile vertexShaderSourceFile( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
+
+    if ( vertexShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
     {
-//         QDir shaderDir( "/scratch/starviewer/src/extensions/playground/gputesting/shaders" );
-//         QString shaderDirPath = shaderDir.path() + "/";
-
-        GLhandleARB vertexShaderObject = glCreateShaderObjectARB( GL_VERTEX_SHADER_ARB );
-        GLhandleARB fragmentShaderObject = glCreateShaderObjectARB( GL_FRAGMENT_SHADER_ARB );
-        QByteArray vertexShaderSourceBytes, fragmentShaderSourceBytes;
-
-        QFile vertexShaderSourceFile( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
-
-        if ( vertexShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
-        {
-            QTextStream vertexShaderSourceTextStream( &vertexShaderSourceFile );
-            vertexShaderSourceBytes = vertexShaderSourceTextStream.readAll().toLocal8Bit();
-            vertexShaderSourceFile.close();
-        }
-        else
-        {
-            std::cerr << "Error obrint el fitxer del vertex shader" << std::endl;
-            return;
-        }
-
-        QFile fragmentShaderSourceFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
-
-        if ( fragmentShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
-        {
-            QTextStream fragmentShaderSourceTextStream( &fragmentShaderSourceFile );
-            fragmentShaderSourceBytes = fragmentShaderSourceTextStream.readAll().toLocal8Bit();
-            fragmentShaderSourceFile.close();
-        }
-        else
-        {
-            std::cerr << "Error obrint el fitxer del fragment shader" << std::endl;
-            return;
-        }
-
-        const char *vertexShaderSource = vertexShaderSourceBytes.constData();
-        const char *fragmentShaderSource = fragmentShaderSourceBytes.constData();
-
-        glShaderSourceARB( vertexShaderObject, 1, &vertexShaderSource, 0 );
-        glShaderSourceARB( fragmentShaderObject, 1, &fragmentShaderSource, 0 );
-        glCompileShaderARB( vertexShaderObject );
-        glCompileShaderARB( fragmentShaderObject );
-
-        m_shaderProgram = glCreateProgramObjectARB();
-        glAttachObjectARB( m_shaderProgram, vertexShaderObject );
-        glAttachObjectARB( m_shaderProgram, fragmentShaderObject );
-        glLinkProgramARB( m_shaderProgram );
-
-        const unsigned short ERROR_LENGTH = 512;
-        char errors[ERROR_LENGTH];
-        glGetInfoLogARB( vertexShaderObject, ERROR_LENGTH, 0, errors );
-        std::cerr << errors << std::endl;
-        glGetInfoLogARB( fragmentShaderObject, ERROR_LENGTH, 0, errors );
-        std::cerr << errors << std::endl;
-        glGetInfoLogARB( m_shaderProgram, ERROR_LENGTH, 0, errors );
-        std::cerr << errors << std::endl;
-
-        m_texUniform = glGetUniformLocationARB( m_shaderProgram, "tex" );
-        m_volumeTexUniform = glGetUniformLocationARB( m_shaderProgram, "volume_tex" );
-        m_stepSizeUniform = glGetUniformLocationARB( m_shaderProgram, "stepsize" );
+        QTextStream vertexShaderSourceTextStream( &vertexShaderSourceFile );
+        vertexShaderSourceBytes = vertexShaderSourceTextStream.readAll().toLocal8Bit();
+        vertexShaderSourceFile.close();
     }
+    else
+    {
+        DEBUG_LOG( "Error obrint el fitxer del vertex shader" );
+        return;
+    }
+
+    QFile fragmentShaderSourceFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+
+    if ( fragmentShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
+    {
+        QTextStream fragmentShaderSourceTextStream( &fragmentShaderSourceFile );
+        fragmentShaderSourceBytes = fragmentShaderSourceTextStream.readAll().toLocal8Bit();
+        fragmentShaderSourceFile.close();
+    }
+    else
+    {
+        DEBUG_LOG( "Error obrint el fitxer del fragment shader" );
+        return;
+    }
+
+    const char *vertexShaderSource = vertexShaderSourceBytes.constData();
+    const char *fragmentShaderSource = fragmentShaderSourceBytes.constData();
+
+    glShaderSourceARB( vertexShaderObject, 1, &vertexShaderSource, 0 );
+    glShaderSourceARB( fragmentShaderObject, 1, &fragmentShaderSource, 0 );
+    glCompileShaderARB( vertexShaderObject );
+    glCompileShaderARB( fragmentShaderObject );
+
+    m_shaderProgram = glCreateProgramObjectARB();
+    glAttachObjectARB( m_shaderProgram, vertexShaderObject );
+    glAttachObjectARB( m_shaderProgram, fragmentShaderObject );
+    glLinkProgramARB( m_shaderProgram );
+
+    const int MAX_ERROR_LENGTH = 512;
+    int errorLength;
+    char errors[MAX_ERROR_LENGTH];
+
+    glGetInfoLogARB( vertexShaderObject, MAX_ERROR_LENGTH, &errorLength, errors );
+    if ( errorLength > 0 ) DEBUG_LOG( errors );
+    glGetInfoLogARB( fragmentShaderObject, MAX_ERROR_LENGTH, &errorLength, errors );
+    if ( errorLength > 0 ) DEBUG_LOG( errors );
+    glGetInfoLogARB( m_shaderProgram, MAX_ERROR_LENGTH, &errorLength, errors );
+    if ( errorLength > 0 ) DEBUG_LOG( errors );
+
+    m_framebufferTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uFramebufferTexture" );
+    if ( m_framebufferTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
+    m_volumeTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uVolumeTexture" );
+    if ( m_volumeTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
+
+    checkGLError();
 }
 
 
@@ -449,19 +451,6 @@ void QGpuTestingViewer::drawCube()
         glColor3f( 1, 0, 1 ); glVertex3f( 1, 0, 1 );
     }
     glEnd();
-}
-
-
-void QGpuTestingViewer::enableRenderbuffers()
-{
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebuffer );
-    glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_renderbuffer );
-}
-
-
-void QGpuTestingViewer::disableRenderbuffers()
-{
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
 }
 
 

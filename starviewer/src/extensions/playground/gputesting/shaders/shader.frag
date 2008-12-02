@@ -1,5 +1,5 @@
-uniform sampler2D tex;
-uniform sampler3D volume_tex;
+uniform sampler2D uFramebufferTexture;
+uniform sampler3D uVolumeTexture;
 uniform float stepsize;
 
 // IN.TexCoord -> gl_TexCoord[0]
@@ -10,7 +10,7 @@ void main()
 {
     vec2 texc = ((gl_TexCoord[2].xy / gl_TexCoord[2].w) + 1.0) / 2.0;   // find the right place to lookup in the backside buffer
     vec4 start = gl_TexCoord[0];                                        // the start position of the ray is stored in the texturecoordinate
-    vec4 back_position = texture2D(tex, texc);
+    vec4 back_position = texture2D(uFramebufferTexture, texc);
     vec3 dir = back_position.xyz - start.xyz;
     float len = length(dir);
     vec3 norm_dir = normalize(dir);
@@ -30,7 +30,7 @@ void main()
 
     for(i = 0; i < 450; i++)
     {
-        color_sample = texture3D(volume_tex, vec);
+        color_sample = texture3D(uVolumeTexture, vec);
         if (color_sample.r > maxColorSample.r) maxColorSample = color_sample;
 //         found = found && color_sample.r == color_sample.g && color_sample.g == color_sample.b && color_sample.b == color_sample.a;  // no
         found = found || color_sample.r > 0.0;
