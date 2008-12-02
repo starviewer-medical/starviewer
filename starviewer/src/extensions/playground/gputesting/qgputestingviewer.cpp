@@ -14,7 +14,7 @@ namespace udg {
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
- : QGLWidget( parent ), m_volume( 0 ), m_volumeTexture( 0 ), m_shaderProgram( 0 ), m_framebufferObject( 0 )
+ : QGLWidget( parent ), m_volume( 0 ), m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 )
 {
 }
 
@@ -22,7 +22,8 @@ QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
 QGpuTestingViewer::~QGpuTestingViewer()
 {
     glDeleteTextures( 1, &m_volumeTexture );
-    glDeleteFramebuffersEXT( 1, &m_framebufferObject ); // segurament també s'haurà de fer el mateix per les textures
+    glDeleteFramebuffersEXT( 1, &m_framebufferObject );
+    glDeleteTextures( 1, &m_framebufferTexture );
 }
 
 
@@ -131,7 +132,7 @@ void QGpuTestingViewer::paintGL()
 {
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
     glPushAttrib( GL_VIEWPORT_BIT );
-    glViewport( 0, 0, 1024, 1024 );
+    glViewport( 0, 0, FRAMEBUFFER_SIZE, FRAMEBUFFER_SIZE );
     //resizeGL( 512, 512 );
 
     /////////////
@@ -160,7 +161,7 @@ void QGpuTestingViewer::paintGL()
 ///////////////////////////////////////////////////////////////////////////
 /*
     glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, m_backfaceBuffer );
+    glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
     //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_NONE );
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -203,7 +204,7 @@ void QGpuTestingViewer::paintGL()
     gluLookAt( 2, 2, 2, 0.5, 0.5, 0.5, 0.0, 1.0, 0.0 );
 
     glActiveTexture( GL_TEXTURE0 ); // 1?
-    glBindTexture( GL_TEXTURE_2D, m_backfaceBuffer );
+    glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
     glUniform1iARB( m_texUniform, 0 );  // 1?
 
     glActiveTexture( GL_TEXTURE1 ); // 2?
@@ -319,20 +320,23 @@ void QGpuTestingViewer::createFramebufferObject()
 {
     glGenFramebuffersEXT( 1, &m_framebufferObject );
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
+    checkGLError();
 
-    glGenTextures( 1, &m_backfaceBuffer );
-    glBindTexture( GL_TEXTURE_2D, m_backfaceBuffer );
+    glGenTextures( 1, &m_framebufferTexture );
+    glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, 1024, 1024, 0, GL_RGBA, GL_FLOAT, 0 );
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_backfaceBuffer, 0 );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, FRAMEBUFFER_SIZE, FRAMEBUFFER_SIZE, 0, GL_RGBA, GL_FLOAT, 0 );
+    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_framebufferTexture, 0 );
+    checkGLError();
 
     GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
-    if ( status == GL_FRAMEBUFFER_COMPLETE_EXT ) std::cout << "bé :D" << std::endl;
-    else std::cout << "malament :( " << status << std::endl;
+    if ( status == GL_FRAMEBUFFER_COMPLETE_EXT ) DEBUG_LOG( "framebuffer ok :D" );
+    else DEBUG_LOG( "framebuffer ko :( " + QString::number( status, 16 ) );
+    checkGLError();
 }
 
 
@@ -461,20 +465,6 @@ void QGpuTestingViewer::disableRenderbuffers()
 }
 
 
-void QGpuTestingViewer::renderBackface()
-{
-    //glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_backfaceBuffer, 0 );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    glEnable( GL_CULL_FACE );
-    glCullFace( GL_FRONT );
-    drawQuads( 1.0, 1.0, 1.0 );
-    glDisable( GL_CULL_FACE );
-
-    glBindTexture( GL_TEXTURE_2D, m_backfaceBuffer );
-    glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, 512, 512 );
-}
-
-
 // this method is used to draw the front and backside of the volume
 void QGpuTestingViewer::drawQuads( float x, float y, float z )
 {
@@ -529,61 +519,6 @@ void QGpuTestingViewer::vertex( float x, float y, float z )
     glColor3f(x,y,z);
     glMultiTexCoord3fARB(GL_TEXTURE1_ARB, x, y, z);
     glVertex3f(x,y,z);
-}
-
-
-void QGpuTestingViewer::raycastingPass()
-{
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_finalImage, 0 );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    glUseProgramObjectARB( m_shaderProgram );
-    glUniform1fARB( m_stepSizeUniform, 1.0 / 50.0 );
-    glActiveTexture( GL_TEXTURE0 ); // 1?
-    glBindTexture( GL_TEXTURE_2D, m_backfaceBuffer );
-    glUniform1iARB( m_texUniform, 0 );  // 1?
-    glActiveTexture( GL_TEXTURE1 ); // 2?
-    glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
-    glUniform1iARB( m_volumeTexture, 1 );  // 2?
-    glEnable( GL_CULL_FACE );
-    glCullFace( GL_BACK );
-    drawQuads( 1.0, 1.0, 1.0 );
-    glDisable( GL_CULL_FACE );
-    glUseProgramObjectARB( 0 );
-}
-
-
-void QGpuTestingViewer::renderBufferToScreen()
-{
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    glLoadIdentity();
-    glEnable( GL_TEXTURE_2D );
-
-    //if(toggle_visuals)
-        //glBindTexture( GL_TEXTURE_2D, m_finalImage );
-    //else
-        glBindTexture(GL_TEXTURE_2D,m_backfaceBuffer);
-
-    // reshapeOrtho()
-    glViewport(0, 0, width(), height());
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    //gluOrtho2D(0, 1, 0, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    //draw_fullscreen_quad();
-    glDisable(GL_DEPTH_TEST);
-    glBegin( GL_QUADS );
-    {
-        glTexCoord2f( 0.0f, 1.0f ); glVertex2f( -1.0f, 1.0f );
-        glTexCoord2f( 0.0f, 0.0f ); glVertex2f( -1.0f, -1.0f );
-        glTexCoord2f( 1.0f, 0.0f ); glVertex2f( 1.0f, -1.0f );
-        glTexCoord2f( 1.0f, 1.0f ); glVertex2f( 1.0f, 1.0f );
-    }
-    glEnd();
-    glEnable(GL_DEPTH_TEST);
-
-    glDisable(GL_TEXTURE_2D);
 }
 
 
