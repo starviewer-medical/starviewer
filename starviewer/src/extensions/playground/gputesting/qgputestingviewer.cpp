@@ -7,8 +7,6 @@
 #include <QMessageBox>
 #include <QTextStream>
 
-#include <vtkPointData.h>
-
 #include "volume.h"
 
 
@@ -23,6 +21,7 @@ QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
 
 QGpuTestingViewer::~QGpuTestingViewer()
 {
+    glDeleteTextures( 1, &m_volumeTexture );
     glDeleteFramebuffersEXT( 1, &m_framebufferObject ); // segurament també s'haurà de fer el mateix per les textures
 }
 
@@ -57,6 +56,7 @@ void QGpuTestingViewer::initializeGL()
         QMessageBox::warning( this, tr("Non-supported extensions"),
                               tr("The GPU testing extension won't work as expected because your system doesn't support the following OpenGL extensions:") + "\n" + nonSupportedExtensions.trimmed() );
 
+    // Color i profunditat inicials
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
     glClearDepth( 1.0 );
 
@@ -269,36 +269,49 @@ void QGpuTestingViewer::paintGL()
 }
 
 
+void QGpuTestingViewer::checkGLError( bool alert )
+{
+    GLenum error = glGetError();
+
+    if ( error != GL_NO_ERROR )
+    {
+        QString errorString( reinterpret_cast<const char*>( gluErrorString( error ) ) );
+        DEBUG_LOG( errorString );
+        if ( alert ) QMessageBox::warning( this, tr("OpenGL error"), errorString );
+    }
+}
+
+
 void QGpuTestingViewer::createVolumeTexture()
 {
-    int *dimensions = m_volume->getDimensions();
-    double *range = m_volume->getVtkData()->GetScalarRange();
-    float min = range[0], max = range[1];
-    float shift = -min;
-    float scale = 1.0 / ( max - min );
-    int size = m_volume->getVtkData()->GetPointData()->GetScalars()->GetSize();
-    short *data = reinterpret_cast<short*>( m_volume->getVtkData()->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-    float *newData = new float[size];
-    for ( int i = 0; i < size; i++ ) newData[i] = ( data[i] + shift ) * scale;
+    // Primer passem el volum a reals i escalat entre 0 i 1
 
-//     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-//     glPixelStorei( GL_UNPACK_SWAP_BYTES, GL_TRUE );
-    // color1 = color0 * scale + bias = (color0 + bias/scale) * scale = (color0 + shift) * scale
-//     GLfloat scale = 1.0 / ( max - min );
-    // crea l'id de la textura
+    vtkImageData *imageData = m_volume->getVtkData();
+    double *range = imageData->GetScalarRange();
+    float min = range[0], max = range[1];
+    float shift = -min, scale = 1.0 / ( max - min );
+    int size = imageData->GetNumberOfPoints();
+    short *data = reinterpret_cast<short*>( imageData->GetScalarPointer() );
+    float *floatData = new float[size];
+
+    for ( int i = 0; i < size; i++ ) floatData[i] = ( data[i] + shift ) * scale;
+
+    // Després creem la textura 3D
+
+    int *dimensions = m_volume->getDimensions();
+
     glGenTextures( 1, &m_volumeTexture );
-    // treballem amb m_volumeTexture, que és una textura 3d
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
-    glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER );
-    // el segon paràmetre és el lod
-    // el seté és el border
-    glTexImage3D( GL_TEXTURE_3D, 0, GL_INTENSITY16F_ARB, dimensions[0], dimensions[1], dimensions[2], 0, GL_RED, GL_FLOAT, newData );
-    delete[] newData;
+    glTexImage3D( GL_TEXTURE_3D, 0, GL_INTENSITY16F_ARB, dimensions[0], dimensions[1], dimensions[2], 0, GL_RED, GL_FLOAT, floatData );
+    checkGLError( true );
+
+    delete[] floatData;
 }
 
 
