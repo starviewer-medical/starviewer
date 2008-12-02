@@ -11,6 +11,9 @@ namespace udg {
 class Volume;
 
 
+/**
+ * Visualitzador amb GPU. Fa tota la feina necessària per visualitzar un volum donat amb la GPU.
+ */
 class QGpuTestingViewer : public QGLWidget {
 
     Q_OBJECT
@@ -20,12 +23,16 @@ public:
     QGpuTestingViewer( QWidget *parent = 0 );
     ~QGpuTestingViewer();
 
+    /// Assigna el volum a visualitzar. Un cop assignat un volum no es pot canviar.
     void setVolume( Volume *volume );
 
 protected:
 
+    /// Fa les inicialitzacions necessàries abans de començar a visualitzar amb OpenGL.
     virtual void initializeGL();
+    /// Ajusta el viewport i la projecció quan canvia la mida del visualitzador.
     virtual void resizeGL( int width, int height );
+    /// Fa la visualització amb OpenGL.
     virtual void paintGL();
 
 private:
