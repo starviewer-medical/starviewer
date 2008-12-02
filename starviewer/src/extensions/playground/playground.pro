@@ -1,7 +1,7 @@
-# Fitxer generat pel gestor de qmake de kdevelop. 
-# ------------------------------------------- 
+# Fitxer generat pel gestor de qmake de kdevelop.
+# -------------------------------------------
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground
-# L'objectiu �s un subdirectori del projecte 
+# L'objectiu �s un subdirectori del projecte
 
 SUBDIRS += diffusionperfusionsegmentation \
            mpr2d \
@@ -18,7 +18,8 @@ SUBDIRS += diffusionperfusionsegmentation \
            cardiac2dviewer \
            volumecontourdelimiter \
            lesionvisualization \
-           experimental3d 
+           experimental3d \
+           gputesting
 include(../../extensions.inc)
 TEMPLATE = subdirs
 include(../../compilationtype.inc)

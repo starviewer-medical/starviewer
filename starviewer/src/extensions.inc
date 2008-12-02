@@ -16,7 +16,8 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         cardiac2dviewer \
                         volumecontourdelimiter \
                         lesionvisualization \
-                        experimental3d
+                        experimental3d \
+                        gputesting
 
 #CONTRIB_EXTENSIONS =
 

@@ -58,7 +58,7 @@ DUMMY = $$addLibraryDependency(.., inputoutput)
 DUMMY = $$addLibraryDependency(.., core)
 
 win32{
-  LIBS += -ladvapi32 
+  LIBS += -ladvapi32
 }
 
 include(../corelibsconfiguration.inc)
@@ -72,4 +72,4 @@ CONFIG -= staticlib
 
 include(installextensions.inc)
 
-QT += xml
+QT += xml opengl
