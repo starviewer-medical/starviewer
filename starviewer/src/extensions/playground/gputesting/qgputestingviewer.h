@@ -46,13 +46,12 @@ private:
     void createVolumeTexture();
     /// Crea el framebuffer object.
     void createFramebufferObject();
+    /// Carrega els shaders.
     void loadShaders();
     void drawCube();
 
 
 
-    void enableRenderbuffers();
-    void disableRenderbuffers();
     // this method is used to draw the front and backside of the volume
     void drawQuads( float x, float y, float z );
     void vertex( float x, float y, float z );
@@ -71,16 +70,12 @@ private:
     /// Textura on es guarda el que es pinta al framebuffer object.
     GLuint m_framebufferTexture;
 
+    /// Combinació de shaders que s'aplicarà.
     GLhandleARB m_shaderProgram;
-    GLint m_texUniform;
-    GLint m_volumeTexUniform;
-    GLint m_stepSizeUniform;
-
-
-
-    GLuint m_framebuffer;
-    GLuint m_finalImage;
-    GLuint m_renderbuffer;
+    /// Uniform per la textura del framebuffer.
+    GLint m_framebufferTextureUniform;
+    /// Uniform per la textura del volum.
+    GLint m_volumeTextureUniform;
 
 };
 
