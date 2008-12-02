@@ -3,12 +3,12 @@
 
 #include "qgputestingviewer.h"
 
-#include <QDir>
+#include <QFile>
+#include <QMessageBox>
 #include <QTextStream>
 
 #include <vtkPointData.h>
 
-#include "vector3.h"    // ..........
 #include "volume.h"
 
 
@@ -27,9 +27,9 @@ QGpuTestingViewer::~QGpuTestingViewer()
 }
 
 
+// es crida abans de l'initializeGL
 void QGpuTestingViewer::setVolume( Volume *volume )
 {
-    DEBUG_LOG( "setVolume" );
     m_volume = volume;
 }
 
@@ -37,23 +37,25 @@ void QGpuTestingViewer::setVolume( Volume *volume )
 void QGpuTestingViewer::initializeGL()
 {
     // Comprovació de les extensions
+
+    const QString requiredExtensions[] = { "GL_ARB_multitexture", "GL_ARB_fragment_shader", "GL_ARB_vertex_shader", "GL_ARB_shader_objects",
+                                           "GL_ARB_shading_language_100", "GL_ARB_vertex_buffer_object", "GL_EXT_framebuffer_object" };
+    QString nonSupportedExtensions;
     QString extensions( reinterpret_cast<const char*>( glGetString( GL_EXTENSIONS ) ) );
-    if ( extensions.contains( "GL_EXT_framebuffer_object" ) ) DEBUG_LOG( "framebuffer object ok :)" );
-    else DEBUG_LOG( "framebuffer object ko :(" );
-    if ( extensions.contains( "GL_EXT_renderbuffer_object" ) ) DEBUG_LOG( "renderbuffer object ok :)" );
-    else DEBUG_LOG( "renderbuffer object ko :(" );
-    if ( extensions.contains( "GL_ARB_vertex_buffer_object" ) ) DEBUG_LOG( "vertex buffer object ok :)" );
-    else DEBUG_LOG( "vertex buffer object ko :(" );
-    if ( extensions.contains( "GL_ARB_multitexture" ) ) DEBUG_LOG( "multitexture ok :)" );
-    else DEBUG_LOG( "multitexture ko :(" );
-    if ( extensions.contains( "GL_ARB_fragment_shader" ) ) DEBUG_LOG( "fragment shader ok :)" );
-    else DEBUG_LOG( "fragment shader ko :(" );
-    if ( extensions.contains( "GL_ARB_vertex_shader" ) ) DEBUG_LOG( "vertex shader ok :)" );
-    else DEBUG_LOG( "vertex shader ko :(" );
-    if ( extensions.contains( "GL_ARB_shader_objects" ) ) DEBUG_LOG( "shader objects ok :)" );
-    else DEBUG_LOG( "shader objects ko :(" );
-    if ( extensions.contains( "GL_ARB_shading_language_100" ) ) DEBUG_LOG( "GLSL ok :)" );
-    else DEBUG_LOG( "GLSL ko :(" );
+
+    for ( int i = 0; i < 7; i++ )
+    {
+        if ( extensions.contains( requiredExtensions[i] ) ) DEBUG_LOG( requiredExtensions[i] + " ok :)" );
+        else
+        {
+            DEBUG_LOG( requiredExtensions[i]  + " ko :(" );
+            nonSupportedExtensions += requiredExtensions[i] + "\n";
+        }
+    }
+
+    if ( !nonSupportedExtensions.isNull() )
+        QMessageBox::warning( this, tr("Non-supported extensions"),
+                              tr("The GPU testing extension won't work as expected because your system doesn't support the following OpenGL extensions:") + "\n" + nonSupportedExtensions.trimmed() );
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
     glClearDepth( 1.0 );
