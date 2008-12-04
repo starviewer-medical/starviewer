@@ -299,6 +299,9 @@ protected:
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
 
+    /// Escollir si hi ha activat el renderitzat del viewer
+    bool m_isRefreshActive;
+
 private:
     /// Indica si el viewer és actiu o no
     bool m_isActive;
