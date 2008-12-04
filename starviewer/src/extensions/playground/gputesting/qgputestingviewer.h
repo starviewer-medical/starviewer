@@ -48,16 +48,9 @@ private:
     void createFramebufferObject();
     /// Carrega els shaders.
     void loadShaders();
+
+    /// Dibuixa un cub de mida mida 1.
     void drawCube();
-
-
-
-    // this method is used to draw the front and backside of the volume
-    void drawQuads( float x, float y, float z );
-    void vertex( float x, float y, float z );
-
-
-
 
     /// Volum a visualitzar.
     Volume *m_volume;

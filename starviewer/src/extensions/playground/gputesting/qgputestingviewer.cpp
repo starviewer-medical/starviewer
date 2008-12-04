@@ -66,53 +66,8 @@ void QGpuTestingViewer::initializeGL()
     createFramebufferObject();
     loadShaders();
 
-//     glEnable( GL_CULL_FACE );
-/*
-    // tot això pot ser necessari pels shaders (falta comprovar-ho individualment)
-    glEnable( GL_COLOR_MATERIAL );
-    glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-//     glEnable( GL_CULL_FACE );
-    glEnable( GL_DEPTH_TEST );
-    glEnable( GL_LIGHTING );
-    glShadeModel( GL_SMOOTH );
-    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );*/
-
-    /*
-    loadShaders();
-//     setupParallaxScene();
-*/
-    // Create the to FBO's one for the backside of the volumecube and one for the finalimage rendering
-    /*glGenFramebuffersEXT( 1, &m_framebuffer );
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebuffer );
-
-    glGenTextures( 1, &m_backfaceBuffer );
-    glBindTexture( GL_TEXTURE_2D, m_backfaceBuffer );
-    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, 512, 512, 0, GL_RGBA, GL_FLOAT, 0 );
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_backfaceBuffer, 0 );
-
-    glGenTextures( 1, &m_finalImage );
-    glBindTexture( GL_TEXTURE_2D, m_finalImage );
-    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, 512, 512, 0, GL_RGBA, GL_FLOAT, 0 );
-
-    glGenRenderbuffersEXT( 1, &m_renderbuffer );
-    glBindRenderbufferEXT( GL_RENDERBUFFER_EXT, m_renderbuffer );
-    glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, 512, 512 );
-    glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, m_renderbuffer );
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
-
-    GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
-    if ( status == GL_FRAMEBUFFER_COMPLETE_EXT ) std::cout << "bé :D" << std::endl;
-    else std::cout << "malament :( " << status << std::endl;*/
+    glEnable( GL_CULL_FACE );
+    glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
 }
 
 
@@ -125,18 +80,20 @@ void QGpuTestingViewer::resizeGL( int width, int height )
 
     if ( height == 0 ) height = 1;
 
+    /// \todo el zNear i el zFar haurien de ser ser en funció de la posició de la càmera, per agafar sempre la mida justa del volum
     gluPerspective( 90, static_cast<GLdouble>( width ) / static_cast<GLdouble>( height ), 1, 1000 );
 }
 
 
 void QGpuTestingViewer::paintGL()
 {
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
-    glPushAttrib( GL_VIEWPORT_BIT );
-    glViewport( 0, 0, FRAMEBUFFER_SIZE, FRAMEBUFFER_SIZE );
-    //resizeGL( 512, 512 );
+    // Primer pintem les cares del darrere al framebuffer
 
-    /////////////
+    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
+
+    glPushAttrib( GL_VIEWPORT_BIT );                        // guardem el viewport actual
+    glViewport( 0, 0, FRAMEBUFFER_SIZE, FRAMEBUFFER_SIZE ); // viewport a la mida de la textura del framebuffer
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     glMatrixMode( GL_MODELVIEW );
@@ -144,57 +101,15 @@ void QGpuTestingViewer::paintGL()
 
     gluLookAt( 2, 2, 2, 0.5, 0.5, 0.5, 0.0, 1.0, 0.0 );
 
-    // dibuixem només les cares del darrere
-    glEnable( GL_CULL_FACE );
     glCullFace( GL_FRONT );
-    drawCube();
-    glDisable( GL_CULL_FACE );
-    ////////////
 
-    glPopAttrib();
+    drawCube();
+
+    glPopAttrib();                                          // restauremm el viewport d'abans
+
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
 
-
-
-/////////////////////////////////////////////////////////////////////////////
-
-
-///////////////////////////////////////////////////////////////////////////
-/*
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
-    //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE_ARB, GL_NONE );
-
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glViewport( 0, 0, width(), height() );
-
-    glMatrixMode( GL_PROJECTION );
-    glPushMatrix();
-    glLoadIdentity();
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-
-    glBegin( GL_QUADS );
-    {
-        glTexCoord2f( 0.0f, 1.0f ); glVertex2f( -1.0f, 1.0f );
-        glTexCoord2f( 0.0f, 0.0f ); glVertex2f( -1.0f, -1.0f );
-        glTexCoord2f( 1.0f, 0.0f ); glVertex2f( 1.0f, -1.0f );
-        glTexCoord2f( 1.0f, 1.0f ); glVertex2f( 1.0f, 1.0f );
-    }
-    glEnd();
-
-    glMatrixMode( GL_PROJECTION );
-    glPopMatrix();
-    glMatrixMode( GL_MODELVIEW );
-
-    glDisable( GL_TEXTURE_2D );
-*/
-//////////////////////////////////////////////////////////////////////////
-
-
-
+    // Després pintem les cares del davant amb els shaders
 
     glUseProgramObjectARB( m_shaderProgram );
 
@@ -202,72 +117,22 @@ void QGpuTestingViewer::paintGL()
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
+
     gluLookAt( 2, 2, 2, 0.5, 0.5, 0.5, 0.0, 1.0, 0.0 );
 
-    glActiveTexture( GL_TEXTURE0 ); // 1?
+    glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
-    glUniform1iARB( m_framebufferTextureUniform, 0 );  // 1?
+    glUniform1iARB( m_framebufferTextureUniform, 0 );
 
-    glActiveTexture( GL_TEXTURE1 ); // 2?
+    glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
-    glUniform1iARB( m_volumeTextureUniform, 1 );  // 2?
+    glUniform1iARB( m_volumeTextureUniform, 1 );
 
-    glEnable( GL_CULL_FACE );
     glCullFace( GL_BACK );
 
     drawCube();
 
-    glDisable( GL_CULL_FACE );
-
     glUseProgramObjectARB( 0 );
-
-
-
-
-
-
-
-//     enableRenderbuffers();
-/*
-    glLoadIdentity();
-    glTranslatef( 0, 0, -2.25 );
-    glRotatef( rotate, 0, 1, 1 );
-    glTranslatef( -0.5, -0.5, -0.5 );   // center the texturecube
-
-    renderBackface();
-    //raycastingPass();
-
-//     disableRenderbuffers();
-
-    renderBufferToScreen();*/
-/*
-    glBegin( GL_TRIANGLE_STRIP );
-    {
-        glColor3f( 1.0f, 1.0f, 1.0f );
-        glNormal3f( 0.0f, 0.0f, 1.0f );
-        glVertex3f( -100, 990, 24 );
-        glVertex3f( -197, -100, -49 );
-        glVertex3f( 100, -290, -99 );
-        glVertex3f( 184, 139, 229 );
-    }
-    glEnd();*/
-
-/*
-    // shader on
-    glUseProgramObjectARB( m_shaderProgram );
-
-    glBegin( GL_TRIANGLE_STRIP );
-    {
-        glNormal3f( 0.0f, 0.0f, 1.0f );
-        glVertex3f( -100, 990, 24 );
-        glVertex3f( -197, -100, -49 );
-        glVertex3f( 100, -290, -99 );
-        glVertex3f( 184, 139, 229 );
-    }
-    glEnd();
-
-    // shader off
-    glUseProgramObjectARB( 0 );*/
 }
 
 
@@ -451,63 +316,6 @@ void QGpuTestingViewer::drawCube()
         glColor3f( 1, 0, 1 ); glVertex3f( 1, 0, 1 );
     }
     glEnd();
-}
-
-
-// this method is used to draw the front and backside of the volume
-void QGpuTestingViewer::drawQuads( float x, float y, float z )
-{
-    glBegin( GL_QUADS );
-    /* Back side */
-    glNormal3f(0.0, 0.0, -1.0);
-    vertex(0.0, 0.0, 0.0);
-    vertex(0.0, y, 0.0);
-    vertex(x, y, 0.0);
-    vertex(x, 0.0, 0.0);
-
-    /* Front side */
-    glNormal3f(0.0, 0.0, 1.0);
-    vertex(0.0, 0.0, z);
-    vertex(x, 0.0, z);
-    vertex(x, y, z);
-    vertex(0.0, y, z);
-
-    /* Top side */
-    glNormal3f(0.0, 1.0, 0.0);
-    vertex(0.0, y, 0.0);
-    vertex(0.0, y, z);
-    vertex(x, y, z);
-    vertex(x, y, 0.0);
-
-    /* Bottom side */
-    glNormal3f(0.0, -1.0, 0.0);
-    vertex(0.0, 0.0, 0.0);
-    vertex(x, 0.0, 0.0);
-    vertex(x, 0.0, z);
-    vertex(0.0, 0.0, z);
-
-    /* Left side */
-    glNormal3f(-1.0, 0.0, 0.0);
-    vertex(0.0, 0.0, 0.0);
-    vertex(0.0, 0.0, z);
-    vertex(0.0, y, z);
-    vertex(0.0, y, 0.0);
-
-    /* Right side */
-    glNormal3f(1.0, 0.0, 0.0);
-    vertex(x, 0.0, 0.0);
-    vertex(x, y, 0.0);
-    vertex(x, y, z);
-    vertex(x, 0.0, z);
-    glEnd();
-}
-
-
-void QGpuTestingViewer::vertex( float x, float y, float z )
-{
-    glColor3f(x,y,z);
-    glMultiTexCoord3fARB(GL_TEXTURE1_ARB, x, y, z);
-    glVertex3f(x,y,z);
 }
 
 
