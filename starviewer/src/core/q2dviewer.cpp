@@ -85,6 +85,7 @@ namespace udg {
 Q2DViewer::Q2DViewer( QWidget *parent )
 : QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_oldToolManager(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledOldTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
+
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
@@ -800,8 +801,11 @@ void Q2DViewer::setInput( Volume* volume )
     if( m_mainVolume )
         m_drawer->removeAllPrimitives();
 
-    // TODO caldria fer netejar? bloquejar? per tal que quedi en negre mentres es carrega el nou volum?
+    // HACK
+    // Desactivem el refresh per tal de millorar l'eficiencia del setInput ja que altrament es renderitza multiples vegades
+    this->m_isRefreshActive = false;
 
+    // TODO caldria fer netejar? bloquejar? per tal que quedi en negre mentres es carrega el nou volum?
     m_mainVolume = volume;
     m_currentSlice = 0;
     m_currentPhase = 0;
@@ -858,6 +862,10 @@ void Q2DViewer::setInput( Volume* volume )
     // \TODO això no sabem si serà del tot necessari
     //     m_picker->PickFromListOn();
     //     m_picker->AddPickList( m_imageActor );
+
+    // HACK
+    // S'activa el refresh per tal de que es renderitzi el visualitzador
+    this->m_isRefreshActive = true;
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )

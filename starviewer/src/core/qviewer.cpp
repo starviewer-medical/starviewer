@@ -46,6 +46,8 @@ QViewer::QViewer( QWidget *parent )
     vtkObject::GlobalWarningDisplayOff();
 #endif
 
+    m_isRefreshActive = true;
+
     m_vtkWidget = new QVTKWidget( this );
     m_vtkWidget->setFocusPolicy( Qt::WheelFocus );
 
@@ -276,7 +278,10 @@ bool QViewer::saveGrabbedViews( QString baseName , FileType extension )
 
 void QViewer::refresh()
 {
-    this->getInteractor()->Render();
+    if( m_isRefreshActive )
+    {
+        this->getInteractor()->Render();
+    }
 }
 
 void QViewer::zoom( double factor )
