@@ -32,34 +32,22 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
 {
     Status state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
-    if ( !state.good() ) return false;
-    
+    if (!state.good()) return false;
+
     LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
     PatientFiller patientFiller;
     QThreadRunWithExec fillersThread;
-    patientFiller.moveToThread( &fillersThread );
-    
-    //Connexions entre la descarrega i el processat dels fitxers
-    connect(this, SIGNAL( imageImportedToDisk(DICOMTagReader*) ), &patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
-    connect(this, SIGNAL( importFinished() ), &patientFiller, SLOT( finishDICOMFilesProcess() ));
-    
-    //Connexió entre el processat i l'insersió al a BD
-    connect(&patientFiller, SIGNAL( patientProcessed(Patient*) ), &localDatabaseManagerThreaded, SLOT( save(Patient*) ), Qt::DirectConnection);
-    
-    //Connexions per finalitzar els threads
-    connect(&patientFiller, SIGNAL( patientProcessed(Patient*) ), &fillersThread, SLOT( quit() ), Qt::DirectConnection);
-    connect(&localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection);
+    patientFiller.moveToThread(&fillersThread);
 
-    //Connexions d'abortament
-    connect(this, SIGNAL( importAborted() ), &fillersThread, SLOT( quit() ), Qt::DirectConnection );
-    connect(this, SIGNAL( importAborted() ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
-    
+    //Creem les connexions necessàries per importar dicomdirs
+    createConnections(&patientFiller, &localDatabaseManagerThreaded, &fillersThread);
+
     localDatabaseManagerThreaded.start();
     fillersThread.start();
 
-    bool ok = importStudy( studyUID , seriesUID , sopInstanceUID );
+    bool ok = importStudy(studyUID, seriesUID, sopInstanceUID);
 
-    if ( ok )
+    if (ok)
     {
         emit importFinished();
     }
@@ -213,6 +201,24 @@ bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QStri
         return true;
     }
     else return false;
+}
+
+void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, QThreadRunWithExec *fillersThread)
+{
+    //Connexions entre la descarrega i el processat dels fitxers
+    connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
+    connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
+
+    //Connexió entre el processat i l'insersió al a BD
+    connect(patientFiller, SIGNAL(patientProcessed(Patient*)), localDatabaseManagerThreaded, SLOT(save(Patient*)), Qt::DirectConnection);
+
+    //Connexions per finalitzar els threads
+    connect(patientFiller, SIGNAL(patientProcessed(Patient*)), fillersThread, SLOT(quit()), Qt::DirectConnection);
+    connect(localDatabaseManagerThreaded, SIGNAL(operationFinished(LocalDatabaseManagerThreaded::OperationType)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
+
+    //Connexions d'abortament
+    connect(this, SIGNAL(importAborted()), fillersThread, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(importAborted()), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 }
 
 }
