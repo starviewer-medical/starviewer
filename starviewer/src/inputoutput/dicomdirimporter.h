@@ -17,6 +17,9 @@ namespace udg {
 
 class DICOMImage;
 class DICOMTagReader;
+class PatientFiller;
+class LocalDatabaseManagerThreaded;
+class QThreadRunWithExec;
 
 /** Aquesta classe permet importar un dicomdir a la nostra base de dades.
     Només suporta importar dades d'un sol pacient a cada crida, per tant,
@@ -39,6 +42,9 @@ signals:
 
 private:
     DICOMDIRReader m_readDicomdir;
+
+    ///crea les connexions necessàries per importar dicomdir
+    void createConnections(PatientFiller *patientFiller, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, QThreadRunWithExec *fillersThread); 
 
     bool importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
