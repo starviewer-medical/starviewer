@@ -29,6 +29,7 @@ class Volume;
 class ToolsActionFactory;
 class ToolManager;
 class DrawerPoint;
+class PerfusionMapCalculatorMainThread;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -67,15 +68,7 @@ private:
 private slots:
 
     void computePerfusionMap( );
-    void computeDeltaR( );
-    void computeMoments( );
-    //Xapussa: posem directament el tipus dels voxels del Volume
-    void computeMomentsVoxel( QVector<double> v, double &m0, double &m1, double &m2);
-    void findAIF( );
-    void fftAIF( );
-    void getOmega( );
-    void computePerfusion( );
-    void deconvolve( QVector<double> tissue, QVector<double>& residuefunc);
+    void paintMap( );
     void changeMap( int value );
 
      /// gestiona els events del m_2DView
@@ -109,9 +102,6 @@ private:
     /// El volum principal
     Volume *m_mainVolume;
     Volume *m_DSCVolume;
-    Volume* m_map0Volume;
-    Volume* m_map1Volume;
-    Volume* m_map2Volume;
 
     bool m_isLeftButtonPressed;
 
@@ -134,25 +124,8 @@ private:
     /// Tool manager
     ToolManager *m_toolManager;
 
-    BoolImageType::Pointer checkImage;
-
-    DoubleTemporalImageType::Pointer deltaRImage;
-    //DoubleImageType::Pointer deltaRImage;
-
-    DoubleImageType::Pointer m0Image;
-    DoubleImageType::Pointer m1Image;
-    DoubleImageType::Pointer m2Image;
-    DoubleImageType::Pointer cbfImage;
-    DoubleImageType::Pointer cbvImage;
-    DoubleImageType::Pointer mttImage;
-
-    QVector<double> aif;
-    double m_m0aif;
-    QVector<double> fftaifreal;
-    QVector<double> fftaifimag;
-    QVector<double> omega;
-
-    double reg_fact, reg_exp;
+    ///Calculadora de mapes de perfusió
+    PerfusionMapCalculatorMainThread* m_mapCalculator;
 
     DrawerPoint* m_aifDrawPoint;
     int m_aifIndex[3];
