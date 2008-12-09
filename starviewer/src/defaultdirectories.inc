@@ -54,3 +54,16 @@ isEmpty(LOG4CXXINCLUDEDIR){
     unix:LOG4CXXINCLUDEDIR = /usr/include/log4cxx
     win32:LOG4CXXINCLUDEDIR = C:\log4cxx\include
 }
+
+# GLEW Libraries
+
+GLEWLIBDIR = $$(GLEWLIBDIR)
+isEmpty(GLEWLIBDIR){
+    unix:GLEWLIBDIR = /usr/lib
+    win32:GLEWLIBDIR = C:\glew\lib
+}
+GLEWINCLUDEDIR = $$(GLEWINCLUDEDIR)
+isEmpty(GLEWINCLUDEDIR){
+    unix:GLEWINCLUDEDIR = /usr/include/GL
+    win32:GLEWINCLUDEDIR = C:\glew\include\GL
+}

@@ -1,3 +1,16 @@
+// per fer-ho amb les proporcions correctes:
+// - fer el paral·lelepípede de la mida adequada -> canviar els vèrtexs
+// - mantenir els colors com fins ara -> la interpolació ens donarà les coordenades de textura
+// - start_coord serà el color d'aquesta segona passada
+// - end_coord serà el color del backbuffer al pìxel actual
+// - necessitem dimX, dimY, dimZ com a uniforms (vec3)
+// - escalem start_coord i end_coord amb dims per saber els punts amb mides reals
+// - calculem la direcció i el pas amb aquestes mides reals
+// - escalem el pas entre 0 i 1 en cada dimensió
+// - ...
+// - PROFIT!!!
+
+
 uniform sampler2D uFramebufferTexture;
 uniform sampler3D uVolumeTexture;
 uniform float stepsize;
