@@ -963,31 +963,33 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
 void QueryScreen::importDicomdir()
 {
     DICOMDIRImporter importDicom;
-    int failedStudies = 0;
 
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 //     importDicom.import( m_readDicomdir.getDicomdirPath() , m_studyTreeWidgetDicomdir->getSelectedStudyUID() , m_studyTreeWidgetDicomdir->getSelectedSeriesUID() ,  m_studyTreeWidgetDicomdir->getSelectedImageUID() );
     // TODO ara només permetrem importar estudis sencers
-    foreach( QString studyUID, m_studyTreeWidgetDicomdir->getSelectedStudiesUID() )
+    foreach(QString studyUID, m_studyTreeWidgetDicomdir->getSelectedStudiesUID())
     {
-        if ( !importDicom.import(m_readDicomdir.getDicomdirFilePath(), studyUID, QString(), QString() ) )
+        importDicom.import(m_readDicomdir.getDicomdirFilePath(), studyUID, QString(), QString());
+        if (importDicom.getLastError() != DICOMDIRImporter::Ok)
         {
-            failedStudies++;
+            //S'ha produït un error
+            QApplication::restoreOverrideCursor();
+            showDICOMDIRImporterError(studyUID, importDicom.getLastError());
+            QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+            if (importDicom.getLastError() != DICOMDIRImporter::PatientInconsistent &&
+                importDicom.getLastError() != DICOMDIRImporter::DicomdirInconsistent)
+            {
+                //Si es produeix qualsevol dels altres errors parem d'importar estudis, perquè segurament les següents importacions també fallaran
+                break;
+            }
         }
     }
 
     queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
 
     QApplication::restoreOverrideCursor();
-
-    if ( failedStudies > 0 ) //si ha fallat algun estudi
-    {
-        if ( failedStudies == m_studyTreeWidgetDicomdir->getSelectedStudiesUID().count() ) //si han fallat tots els estudis
-            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error: Can't import selected studies" ) );
-        else
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error: Some studies can't be imported" ) );
-    }
 }
 
 void QueryScreen::deleteSelectedStudiesInCache()
@@ -1434,8 +1436,61 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message += tr("\n\nClose all Starviewer windows and try again."
                          "\nIf the problem persist contact with an administrator.");
     }
-
-    
 }
+
+void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRImporter::DICOMDIRImporterError error)
+{
+    QString message;
+
+    message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
+
+    switch (error)
+    {
+        case DICOMDIRImporter::ErrorOpeningDicomdir :
+            message += tr("the dicomdir could not be opened. Be sure that the dicomdir path is correct.\n");
+            message += tr("\n\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        case DICOMDIRImporter::ErrorCopyingFiles :
+            message += tr("some files could not be imported. Be sure that you have user permissions on the starviewer cache directory");
+            message += tr("\n\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        case DICOMDIRImporter::NoEnoughSpace :
+            message = tr("There is not enough space to retreive studies, please free space.");
+            QMessageBox::warning( this , tr( "Starviewer" ) , message );
+            break;
+        case DICOMDIRImporter::ErrorFreeingSpace :
+            message += tr("an error has ocurred freeing space, some studies can't be imported.");
+            message += tr("\n\nClose all Starviewer windows and try again."
+                         "\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        case DICOMDIRImporter::DatabaseError :
+            message += tr("a database error has ocurred, some studies can't be imported.");
+            message += tr("\n\nClose all Starviewer windows and try again."
+                         "\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+       case DICOMDIRImporter::PatientInconsistent :
+            message += tr("starviewer has not been capable of read correctly dicom information of the study.");
+            message += tr("\n\nPlease contact with Starviewer team.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+       case DICOMDIRImporter::DicomdirInconsistent :
+            message += tr("has ocurred an error. This dicomdir is inconsistent, can't be imported.");
+            message += tr("\n\nPlease contact with Starviewer team.");
+            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+      case DICOMDIRImporter::Ok :
+            break;
+        default:
+            message = tr("Please review the operation list screen, ");
+            message += tr("An unknow error has ocurred.");
+            message += tr("\n\nClose all Starviewer windows and try again."
+                         "\nIf the problem persist contact with an administrator.");
+    }
+}
+
 };
 

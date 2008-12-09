@@ -28,11 +28,16 @@
 namespace udg
 {
 
-bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
+void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
+    m_lastError = Ok;
     Status state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
-    if (!state.good()) return false;
+    if (!state.good()) 
+    {
+        m_lastError = ErrorOpeningDicomdir;
+        return;
+    }
 
     LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
     PatientFiller patientFiller;
@@ -45,9 +50,9 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     localDatabaseManagerThreaded.start();
     fillersThread.start();
 
-    bool ok = importStudy(studyUID, seriesUID, sopInstanceUID);
+    importStudy(studyUID, seriesUID, sopInstanceUID);
 
-    if (ok)
+    if (getLastError() == Ok)
     {
         emit importFinished();
     }
@@ -61,15 +66,18 @@ bool DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     localDatabaseManagerThreaded.wait();
 
     //Comprovem que s'hagi inserit correctament el nou estudi a la base de dades
-    if (ok && localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok)
+    if (getLastError() == Ok)
     {
-        INFO_LOG( "Estudi " + studyUID + " importat" );
-        return true;
+        if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok)
+        {
+            INFO_LOG( "Estudi " + studyUID + " importat" );
+            m_lastError = Ok;
+        }
+        else m_lastError = DatabaseError;
     }
-    else return false;
 }
 
-bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
+void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     DicomMask mask;
     QList<DICOMStudy> studyListToImport;
@@ -87,29 +95,34 @@ bool DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
     m_readDicomdir.readStudies( studyListToImport , mask );
 
-    if (studyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
+    if (!studyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
     {
-        ERROR_LOG( "No s'han trobat estudis per importar" );
-        return false;
+        study = studyListToImport.value(0);
+        study.setAbsPath( studyPath );
+
+        m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
+
+        if ( seriesListToImport.isEmpty() )
+        {
+            ERROR_LOG ( "No s'han trobat series per l'estudi" );
+            m_lastError = DicomdirInconsistent;
+            return;
+        }
+
+        foreach(DICOMSeries seriesToImport, seriesListToImport)
+        {
+            importSeries(studyUID, seriesToImport.getSeriesUID(), sopInstanceUID);
+            if (getLastError() != Ok) break;
+        }
     }
-
-    study = studyListToImport.value(0);
-    study.setAbsPath( studyPath );
-
-    m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
-
-    if ( seriesListToImport.isEmpty() ) ERROR_LOG ( "No s'han trobat series per l'estudi" );
-
-
-    foreach(DICOMSeries seriesToImport, seriesListToImport)
+    else 
     {
-        if ( !importSeries(studyUID, seriesToImport.getSeriesUID(), sopInstanceUID) ) return false;
+        ERROR_LOG("No s'ha trobat estudi per importar");
+        m_lastError = DicomdirInconsistent;
     }
-
-    return true;
 }
 
-bool DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
+void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     QList<DICOMImage> imageListToImport;
     QString seriesPath;
@@ -121,17 +134,21 @@ bool DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString
 
     m_readDicomdir.readImages( seriesUID , sopInstanceUID , imageListToImport );
 
-    if ( imageListToImport.isEmpty() ) ERROR_LOG ( "No s'han trobat imatges per la serie" );
+    if ( imageListToImport.isEmpty() )
+    {
+        ERROR_LOG ( "No s'han trobat imatges per la serie" );
+        m_lastError = DicomdirInconsistent;
+        return;
+    }
 
     foreach(DICOMImage imageToImport, imageListToImport)
     {
-        if ( !importImage(imageToImport) ) return false;
+        importImage(imageToImport);
+        if (getLastError() != Ok) break;
     }
-
-    return true;
 }
 
-bool DICOMDIRImporter::importImage(DICOMImage image)
+void DICOMDIRImporter::importImage(DICOMImage image)
 {
     QString cacheImagePath, dicomdirImagePath;
     StarviewerSettings starviewerSettings;
@@ -153,7 +170,8 @@ bool DICOMDIRImporter::importImage(DICOMImage image)
     else
     {
         ERROR_LOG("Dicomdir inconsistent: La imatge [" + image.getImagePath() + "] no existeix" );
-        return false;
+        m_lastError = DicomdirInconsistent;
+        return;
     }
 
     if(!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
@@ -168,22 +186,21 @@ bool DICOMDIRImporter::importImage(DICOMImage image)
                 if(!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
                 {
                     ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, el fitxer ja existia al destí, s'ha esborrat amb èxit, però alhora de copiar-lo ha fallat l'operació");
-                    return false;
+                    m_lastError = ErrorCopyingFiles;
                 }
             }
             else 
             {
                 ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, ja que el fitxer ja existeix al destí, s'ha intentat esborrar el fitxer local però ha fallat, podria ser que no tinguis permisos d'escriptura al direcctori destí");
-                return false;
+                m_lastError = ErrorCopyingFiles;
             }
         }
         else
         {
             ERROR_LOG("El fitxer: <" + dicomdirImagePath + "> no s'ha pogut copiar a <" + cacheImagePath + ">, podria ser que no tinguis permisos en el directori destí");
-            return false;
+            m_lastError = ErrorCopyingFiles;
         }
     }
-    return true;
 }
 
 bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QString localImagePath)
@@ -219,6 +236,11 @@ void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalData
     //Connexions d'abortament
     connect(this, SIGNAL(importAborted()), fillersThread, SLOT(quit()), Qt::DirectConnection);
     connect(this, SIGNAL(importAborted()), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
+}
+
+DICOMDIRImporter::DICOMDIRImporterError DICOMDIRImporter::getLastError()
+{
+    return m_lastError;
 }
 
 }
