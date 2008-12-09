@@ -987,7 +987,10 @@ void QueryScreen::importDicomdir()
         }
     }
 
-    queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
+    if (importDicom.getLastError() == DICOMDIRImporter::Ok)
+    {
+        queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
+    }
 
     QApplication::restoreOverrideCursor();
 }

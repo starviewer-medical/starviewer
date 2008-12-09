@@ -31,6 +31,24 @@ namespace udg
 void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     m_lastError = Ok;
+    LocalDatabaseManager localDatabaseManager;
+    LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
+    PatientFiller patientFiller;
+    QThreadRunWithExec fillersThread;
+
+    //Comprovem si hi ha suficient espai lliure per importar l'estudi
+    if (!localDatabaseManager.isEnoughSpace())
+    {
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+        {
+            m_lastError = ErrorFreeingSpace;
+        }
+        else m_lastError = NoEnoughSpace;
+
+        return;
+    }
+
+    //obrim el dicomdir
     Status state = m_readDicomdir.open( QDir::toNativeSeparators( dicomdirPath ) );
 
     if (!state.good()) 
@@ -39,9 +57,6 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         return;
     }
 
-    LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
-    PatientFiller patientFiller;
-    QThreadRunWithExec fillersThread;
     patientFiller.moveToThread(&fillersThread);
 
     //Creem les connexions necessàries per importar dicomdirs
