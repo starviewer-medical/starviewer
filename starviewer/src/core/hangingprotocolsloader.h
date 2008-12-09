@@ -28,13 +28,6 @@ public:
     /// Càrrega des d'un directori de hanging protocols o un fitxer XML
     bool loadXMLFiles( QString filePath );
 
-private:
-
-    /// Crea un hanging protocol per les mamografies del CAC Güell
-    void loadMamoGuell();
-
-    /// Crea un hanging protocol per la mamografia del Treta
-    void loadMamoTrueta();
 };
 
 }
