@@ -1,6 +1,7 @@
 #include "qgputestingviewer.h"
 
 #include <QFile>
+#include <QKeyEvent>
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QTextStream>
@@ -12,10 +13,14 @@
 namespace udg {
 
 
+const float QGpuTestingViewer::KEYBOARD_CAMERA_INCREMENT = 10.0f;
+
+
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
  : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ),
    m_shaderProgram( 0 ), m_camera( 0 )
 {
+    setFocusPolicy( Qt::WheelFocus );
 }
 
 
@@ -36,6 +41,22 @@ QGpuTestingViewer::~QGpuTestingViewer()
 void QGpuTestingViewer::setVolume( Volume *volume )
 {
     m_volume = volume;
+}
+
+
+void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
+{
+    switch ( event->key() )
+    {
+        case Qt::Key_Left: m_camera->rotateSmoothly( KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
+        case Qt::Key_Right: m_camera->rotateSmoothly( -KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
+        case Qt::Key_Up: m_camera->rotateSmoothly( 0.0f, KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
+        case Qt::Key_Down: m_camera->rotateSmoothly( 0.0f, -KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
+        case Qt::Key_R: resetCamera(); break;
+        default: QWidget::keyPressEvent( event ); return;
+    }
+
+    updateGL();
 }
 
 
@@ -188,10 +209,15 @@ void QGpuTestingViewer::checkGLError( bool alert )
 
 void QGpuTestingViewer::createCamera()
 {
+    m_camera = new Camera();
+    resetCamera();
+}
+
+
+void QGpuTestingViewer::resetCamera()
+{
     const Vector3 EYE( 0.5, 0.5, 3.0 );
     const Vector3 TARGET( 0.5, 0.5, 0.5 );
-
-    m_camera = new Camera();
 
     m_camera->setBehavior( Camera::CAMERA_BEHAVIOR_ORBIT );
     m_camera->setPreferTargetYAxisOrbiting( false );
