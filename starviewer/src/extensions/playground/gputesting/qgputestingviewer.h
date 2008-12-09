@@ -30,6 +30,9 @@ public:
 
 protected:
 
+    static const float KEYBOARD_CAMERA_INCREMENT;
+
+    virtual void keyPressEvent( QKeyEvent *event );
     virtual void mousePressEvent( QMouseEvent *event );
     virtual void mouseMoveEvent( QMouseEvent *event );
 
@@ -49,6 +52,8 @@ private:
 
     /// Crea la càmera.
     void createCamera();
+    /// Reinicia la càmera.
+    void resetCamera();
     /// Crea la textura 3D del volum.
     void createVolumeTexture();
     /// Crea el framebuffer object.
