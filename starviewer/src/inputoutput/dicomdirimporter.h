@@ -30,8 +30,14 @@ class DICOMDIRImporter : QObject {
     Q_OBJECT
 
 public:
+
+    enum DICOMDIRImporterError {Ok, DatabaseError, NoEnoughSpace, ErrorFreeingSpace, ErrorCopyingFiles, PatientInconsistent, ErrorOpeningDicomdir, DicomdirInconsistent};
+
     ///Importa les dades del dicomdir que es trova a dicomdirPath que pertanyen a l'study amb UID studyUID
-    bool import( QString dicomdirPath, QString studyUID, QString seriesUID, QString imageUID );
+    void import( QString dicomdirPath, QString studyUID, QString seriesUID, QString imageUID );
+
+    ///Retorna l'últim error produït al importar el dicomdir
+    DICOMDIRImporterError getLastError();
 
 signals:
     ///Senyal que ens indica que s'ha importat una imatge a disc. Quan s'emet aquest senyal encara no s'ha guardat a la bd.
@@ -42,15 +48,16 @@ signals:
 
 private:
     DICOMDIRReader m_readDicomdir;
+    DICOMDIRImporterError m_lastError;
 
     ///crea les connexions necessàries per importar dicomdir
     void createConnections(PatientFiller *patientFiller, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, QThreadRunWithExec *fillersThread); 
 
-    bool importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID);
+    void importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
-    bool importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID);
+    void importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
-    bool importImage(DICOMImage image);
+    void importImage(DICOMImage image);
 
     ///Copia al disc dur una imatge del dicomdir
     bool copyDicomdirImageToLocal(QString dicomdirImagePath, QString localImagePath);
