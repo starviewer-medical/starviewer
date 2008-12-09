@@ -1,12 +1,11 @@
-// necessari pels shaders
-#define GL_GLEXT_PROTOTYPES
-
 #include "qgputestingviewer.h"
 
 #include <QFile>
 #include <QMessageBox>
+#include <QMouseEvent>
 #include <QTextStream>
 
+#include "camera.h"
 #include "volume.h"
 
 
@@ -14,17 +13,22 @@ namespace udg {
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
- : QGLWidget( parent ), m_volume( 0 ), m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 )
+ : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ),
+   m_shaderProgram( 0 ), m_camera( 0 )
 {
 }
 
 
 QGpuTestingViewer::~QGpuTestingViewer()
 {
-    glDeleteTextures( 1, &m_volumeTexture );
-    glDeleteFramebuffersEXT( 1, &m_framebufferObject );
-    glDeleteTextures( 1, &m_framebufferTexture );
-    glDeleteObjectARB( m_shaderProgram );
+    if ( m_extensions )
+    {
+        delete m_camera;
+        glDeleteTextures( 1, &m_volumeTexture );
+        glDeleteFramebuffersEXT( 1, &m_framebufferObject );
+        glDeleteTextures( 1, &m_framebufferTexture );
+        glDeleteObjectARB( m_shaderProgram );
+    }
 }
 
 
@@ -35,36 +39,64 @@ void QGpuTestingViewer::setVolume( Volume *volume )
 }
 
 
+void QGpuTestingViewer::mousePressEvent( QMouseEvent *event )
+{
+    m_lastX = event->x(); m_lastY = event->y();
+}
+
+
+void QGpuTestingViewer::mouseMoveEvent( QMouseEvent *event )
+{
+    int dx = event->x() - m_lastX;
+    int dy = event->y() - m_lastY;
+
+    m_camera->rotateSmoothly( -dx, -dy, 0.0f );
+
+    m_lastX = event->x(); m_lastY = event->y();
+
+    updateGL();
+}
+
+
 void QGpuTestingViewer::initializeGL()
 {
-    // Comprovació de les extensions
+    GLenum glew = glewInit();
 
-    const QString requiredExtensions[] = { "GL_ARB_multitexture", "GL_ARB_fragment_shader", "GL_ARB_vertex_shader", "GL_ARB_shader_objects",
-                                           "GL_ARB_shading_language_100", "GL_ARB_vertex_buffer_object", "GL_EXT_framebuffer_object" };
-    QString nonSupportedExtensions;
-    QString extensions( reinterpret_cast<const char*>( glGetString( GL_EXTENSIONS ) ) );
-
-    for ( int i = 0; i < 7; i++ )
+    if ( glew == GLEW_OK )
     {
-        if ( extensions.contains( requiredExtensions[i] ) ) DEBUG_LOG( requiredExtensions[i] + " ok :)" );
+        // Comprovació de les extensions
+
+        QString nonSupportedExtensions;
+
+        if ( !GLEW_ARB_multitexture ) nonSupportedExtensions += "GL_ARB_multitexture\n";
+        if ( !GLEW_ARB_vertex_shader ) nonSupportedExtensions += "GL_ARB_vertex_shader\n";
+        if ( !GLEW_ARB_fragment_shader ) nonSupportedExtensions += "GL_ARB_fragment_shader\n";
+        if ( !GLEW_ARB_shader_objects ) nonSupportedExtensions += "GL_ARB_shader_objects\n";
+        if ( !GLEW_ARB_shading_language_100 ) nonSupportedExtensions += "GL_ARB_shading_language_100\n";
+        if ( !GLEW_ARB_vertex_buffer_object ) nonSupportedExtensions += "GL_ARB_vertex_buffer_object\n";
+        if ( !GLEW_EXT_framebuffer_object ) nonSupportedExtensions += "GL_EXT_framebuffer_object\n";
+
+        if ( nonSupportedExtensions.isNull() ) m_extensions = true;
         else
         {
-            DEBUG_LOG( requiredExtensions[i]  + " ko :(" );
-            nonSupportedExtensions += requiredExtensions[i] + "\n";
+            DEBUG_LOG( "Extensions no suportades:\n" + nonSupportedExtensions.trimmed() );
+            QMessageBox::warning( this, tr("Non-supported extensions"),
+                                  tr("The GPU testing extension won't work as expected because your system doesn't support the following OpenGL extensions:") + "\n" + nonSupportedExtensions.trimmed() );
         }
     }
-
-    if ( !nonSupportedExtensions.isNull() )
-        QMessageBox::warning( this, tr("Non-supported extensions"),
-                              tr("The GPU testing extension won't work as expected because your system doesn't support the following OpenGL extensions:") + "\n" + nonSupportedExtensions.trimmed() );
+    else DEBUG_LOG( QString( "Ha fallat el glewInit() amb l'error: %1" ).arg( reinterpret_cast<const char*>( glewGetErrorString( glew ) ) ) );
 
     // Color i profunditat inicials
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
     glClearDepth( 1.0 );
 
-    createVolumeTexture();
-    createFramebufferObject();
-    loadShaders();
+    if ( m_extensions )
+    {
+        createCamera();
+        createVolumeTexture();
+        createFramebufferObject();
+        loadShaders();
+    }
 
     glEnable( GL_CULL_FACE );
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
@@ -75,18 +107,25 @@ void QGpuTestingViewer::resizeGL( int width, int height )
 {
     glViewport( 0, 0, width, height );
 
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-
     if ( height == 0 ) height = 1;
 
     /// \todo el zNear i el zFar haurien de ser ser en funció de la posició de la càmera, per agafar sempre la mida justa del volum
-    gluPerspective( 90, static_cast<GLdouble>( width ) / static_cast<GLdouble>( height ), 1, 1000 );
+    m_camera->perspective( 90.0f, static_cast<float>( width ) / static_cast<float>( height ), 1.0f, 1000.0f );
+
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    glMultMatrixf( &( m_camera->getProjectionMatrix()[0][0] ) );
 }
 
 
 void QGpuTestingViewer::paintGL()
 {
+    if ( !m_extensions )
+    {
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        return;
+    }
+
     // Primer pintem les cares del darrere al framebuffer
 
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
@@ -96,16 +135,15 @@ void QGpuTestingViewer::paintGL()
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-    gluLookAt( 2, 2, 2, 0.5, 0.5, 0.5, 0.0, 1.0, 0.0 );
+    glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
 
     glCullFace( GL_FRONT );
 
     drawCube();
 
-    glPopAttrib();                                          // restauremm el viewport d'abans
+    glPopAttrib();                                          // restaurem el viewport d'abans
 
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
 
@@ -115,10 +153,9 @@ void QGpuTestingViewer::paintGL()
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-    gluLookAt( 2, 2, 2, 0.5, 0.5, 0.5, 0.0, 1.0, 0.0 );
+    glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
@@ -146,6 +183,21 @@ void QGpuTestingViewer::checkGLError( bool alert )
         DEBUG_LOG( errorString );
         if ( alert ) QMessageBox::warning( this, tr("OpenGL error"), errorString );
     }
+}
+
+
+void QGpuTestingViewer::createCamera()
+{
+    const Vector3 EYE( 0.5, 0.5, 3.0 );
+    const Vector3 TARGET( 0.5, 0.5, 0.5 );
+
+    m_camera = new Camera();
+
+    m_camera->setBehavior( Camera::CAMERA_BEHAVIOR_ORBIT );
+    m_camera->setPreferTargetYAxisOrbiting( false );
+    m_camera->setOrbitOffsetDistance( ( EYE - TARGET ).length() );  // ha de ser la distància inicial entre la càmera i l'objectiu
+
+    m_camera->lookAt( EYE, TARGET, Vector3( 0.0, 1.0, 0.0 ) );  // posició inicial
 }
 
 

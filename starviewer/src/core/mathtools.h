@@ -91,6 +91,23 @@ static double getDistance3D( const double firstPoint[3], const double secondPoin
 
 /// ens retorna el valor truncat
 static double trunc( double x);
+
+/// Determines whether the two floating-point values f1 and f2 are close enough together that they can be considered equal.
+inline static bool closeEnough(float f1, float f2)
+{
+    return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon();
+}
+
+inline static float degreesToRadians(float degrees)
+{
+    return (degrees * PI) / 180.0f;
+}
+
+inline static float radiansToDegrees(float radians)
+{
+    return (radians * 180.0f) / PI;
+}
+
 };
 
 } // end namespace udg

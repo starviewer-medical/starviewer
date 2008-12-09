@@ -2,12 +2,14 @@
 #define UDGQGPUTESTINGVIEWER_H
 
 
+#include <GL/glew.h>    // s'ha de posar aquí, abans del QGLWidget, que és el que inclou GL/gl.h
 #include <QGLWidget>
 
 
 namespace udg {
 
 
+class Camera;
 class Volume;
 
 
@@ -28,6 +30,9 @@ public:
 
 protected:
 
+    virtual void mousePressEvent( QMouseEvent *event );
+    virtual void mouseMoveEvent( QMouseEvent *event );
+
     /// Fa les inicialitzacions necessàries abans de començar a visualitzar amb OpenGL.
     virtual void initializeGL();
     /// Ajusta el viewport i la projecció quan canvia la mida del visualitzador.
@@ -42,6 +47,8 @@ private:
     /// Comprova si hi ha algun error d'OpenGL.
     void checkGLError( bool alert = false );
 
+    /// Crea la càmera.
+    void createCamera();
     /// Crea la textura 3D del volum.
     void createVolumeTexture();
     /// Crea el framebuffer object.
@@ -51,6 +58,9 @@ private:
 
     /// Dibuixa un cub de mida mida 1.
     void drawCube();
+
+    /// Cert si es suporten totes les extensions necessàries.
+    bool m_extensions;
 
     /// Volum a visualitzar.
     Volume *m_volume;
@@ -69,6 +79,10 @@ private:
     GLint m_framebufferTextureUniform;
     /// Uniform per la textura del volum.
     GLint m_volumeTextureUniform;
+
+    Camera *m_camera;
+
+    int m_lastX, m_lastY;
 
 };
 

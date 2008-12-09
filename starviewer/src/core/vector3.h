@@ -20,12 +20,22 @@ class TVector3 {
 
 public:
 
+    /// Retorna el producte escalar dels vectors.
+    static T dot( const TVector3<T> &v1, const TVector3<T> &v2 );
+    /// Retorna el producte vectorial dels vectors.
+    static TVector3<T> cross( const TVector3<T> &v1, const TVector3<T> &v2 );
+
     TVector3( T x = 0.0, T y = 0.0, T z = 0.0 );
     template <class C>
     TVector3( const TVector3<C> &v );
 
+    /// Assigna els components del vector.
+    void set( T x, T y, T z );
+
     /// Retorna el mòdul del vector.
     T length() const;
+    /// Retorna el mòdul al quadrat del vector.
+    T lengthSquared() const;
     /// Normalitza el vector i el retorna per referència.
     TVector3<T>& normalize();
 
@@ -78,6 +88,20 @@ public:
 
 
 template <class T>
+inline T TVector3<T>::dot( const TVector3<T> &v1, const TVector3<T> &v2 )
+{
+    return v1 * v2;
+}
+
+
+template <class T>
+inline TVector3<T> TVector3<T>::cross( const TVector3<T> &v1, const TVector3<T> &v2 )
+{
+    return v1 ^ v2;
+}
+
+
+template <class T>
 inline TVector3<T>::TVector3( T aX, T aY, T aZ )
  : x( aX ), y( aY ), z( aZ )
 {
@@ -93,9 +117,23 @@ inline TVector3<T>::TVector3( const TVector3<C> &v )
 
 
 template <class T>
+inline void TVector3<T>::set( T x, T y, T z )
+{
+    this->x = x; this->y = y; this->z = z;
+}
+
+
+template <class T>
 inline T TVector3<T>::length() const
 {
     return sqrt( x * x + y * y + z * z );
+}
+
+
+template <class T>
+inline T TVector3<T>::lengthSquared() const
+{
+    return x * x + y * y + z * z;
 }
 
 
