@@ -16,8 +16,12 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         cardiac2dviewer \
                         volumecontourdelimiter \
                         lesionvisualization \
-                        experimental3d \
-                        gputesting
+                        experimental3d
+
+# Només per sistemes no windows. Temporal mentre no s'empaqueta GLEW per windows
+!win32{
+    PLAYGROUND_EXTENSIONS += gputesting
+}
 
 #CONTRIB_EXTENSIONS =
 
