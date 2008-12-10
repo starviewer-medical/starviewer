@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 #include <QTextStream>
+#include <QWheelEvent>
 
 #include "camera.h"
 #include "volume.h"
@@ -14,6 +15,8 @@ namespace udg {
 
 
 const float QGpuTestingViewer::KEYBOARD_CAMERA_INCREMENT = 10.0f;
+const float QGpuTestingViewer::KEYBOARD_ZOOM_INCREMENT = 1.0f;
+const float QGpuTestingViewer::WHEEL_ZOOM_SCALE = 1.0 / 120.0f;
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
@@ -53,6 +56,8 @@ void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Right: m_camera->rotateSmoothly( -KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
         case Qt::Key_Up: m_camera->rotateSmoothly( 0.0f, KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
         case Qt::Key_Down: m_camera->rotateSmoothly( 0.0f, -KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
+        case Qt::Key_Plus: m_camera->zoom( -KEYBOARD_ZOOM_INCREMENT, 1.0f, 1000.0f ); break;
+        case Qt::Key_Minus: m_camera->zoom( KEYBOARD_ZOOM_INCREMENT, 1.0f, 1000.0f ); break;
         case Qt::Key_R: resetCamera(); break;
         default: QWidget::keyPressEvent( event ); return;
     }
@@ -76,6 +81,13 @@ void QGpuTestingViewer::mouseMoveEvent( QMouseEvent *event )
 
     m_lastX = event->x(); m_lastY = event->y();
 
+    updateGL();
+}
+
+
+void QGpuTestingViewer::wheelEvent( QWheelEvent *event )
+{
+    m_camera->zoom( -WHEEL_ZOOM_SCALE * event->delta(), 1.0f, 1000.0f );
     updateGL();
 }
 
