@@ -33,6 +33,7 @@ protected:
     virtual void keyPressEvent( QKeyEvent *event );
     virtual void mousePressEvent( QMouseEvent *event );
     virtual void mouseMoveEvent( QMouseEvent *event );
+    virtual void wheelEvent( QWheelEvent *event );
 
     /// Fa les inicialitzacions necessàries abans de començar a visualitzar amb OpenGL.
     virtual void initializeGL();
@@ -53,6 +54,8 @@ private:
 
     static const GLsizei FRAMEBUFFER_SIZE = 2048;
     static const float KEYBOARD_CAMERA_INCREMENT;
+    static const float KEYBOARD_ZOOM_INCREMENT;
+    static const float WHEEL_ZOOM_SCALE;
 
     /// Comprova si hi ha algun error d'OpenGL.
     void checkGLError( bool alert = false );
