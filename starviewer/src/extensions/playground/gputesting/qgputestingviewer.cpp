@@ -128,6 +128,8 @@ void QGpuTestingViewer::resizeGL( int width, int height )
 {
     glViewport( 0, 0, width, height );
 
+    if ( !m_extensions ) return;
+
     if ( height == 0 ) height = 1;
 
     /// \todo el zNear i el zFar haurien de ser ser en funció de la posició de la càmera, per agafar sempre la mida justa del volum
