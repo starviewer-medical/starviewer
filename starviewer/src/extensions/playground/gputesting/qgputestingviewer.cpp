@@ -198,6 +198,9 @@ void QGpuTestingViewer::paintGL()
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
     glUniform1iARB( m_framebufferTextureUniform, 0 );
 
+    int *dimensions = m_volume->getDimensions();
+    glUniform3fARB( m_dimensionsUniform, dimensions[0], dimensions[1], dimensions[2] );
+
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
     glUniform1iARB( m_volumeTextureUniform, 1 );
@@ -232,55 +235,59 @@ void QGpuTestingViewer::createCamera()
 
 void QGpuTestingViewer::resetCamera()
 {
-    const Vector3 EYE( 0.5, 0.5, 3.0 );
-    const Vector3 TARGET( 0.5, 0.5, 0.5 );
+    const Vector3 EYE( 0.0, 0.0, 2.0 * m_volume->getDimensions()[2] );
 
     m_camera->setBehavior( Camera::CAMERA_BEHAVIOR_ORBIT );
     m_camera->setPreferTargetYAxisOrbiting( false );
-    m_camera->setOrbitOffsetDistance( ( EYE - TARGET ).length() );  // ha de ser la distància inicial entre la càmera i l'objectiu
+    m_camera->setOrbitOffsetDistance( EYE.length() );   // ha de ser la distància inicial entre la càmera i l'objectiu
 
-    m_camera->lookAt( EYE, TARGET, Vector3( 0.0, 1.0, 0.0 ) );  // posició inicial
+    m_camera->lookAt( EYE, Vector3(), Vector3( 0.0, 1.0, 0.0 ) );   // posició inicial
 }
 
 
 void QGpuTestingViewer::createVertexBufferObject()
 {
+    int *dimensions = m_volume->getDimensions();
+    GLfloat x = dimensions[0] / 2.0f, y = dimensions[1] / 2.0f, z = dimensions[2] / 2.0f;
+
     VertexBufferObjectData data[24] =   // 4 vèrtexs/cara * 6 cares
-    {   //  nx     ny     nz   |   r      g      b    |   x      y      z
-        { -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f },
-        { -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f },
-        { -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,  1.0f,    0.0f,  1.0f,  1.0f },
-        { -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f },
+    {   //  nx     ny     nz   |   r      g      b    |  x   y   z
+        { -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f,   -x, -y, -z },
+        { -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,  1.0f,   -x, -y, +z },
+        { -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,  1.0f,   -x, +y, +z },
+        { -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,  0.0f,   -x, +y, -z },
 
-        {  0.0f,  0.0f, -1.0f,    0.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f },
-        {  0.0f,  0.0f, -1.0f,    0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f },
-        {  0.0f,  0.0f, -1.0f,    1.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f },
-        {  0.0f,  0.0f, -1.0f,    1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f },
+        {  0.0f,  0.0f, -1.0f,    0.0f,  0.0f,  0.0f,   -x, -y, -z },
+        {  0.0f,  0.0f, -1.0f,    0.0f,  1.0f,  0.0f,   -x, +y, -z },
+        {  0.0f,  0.0f, -1.0f,    1.0f,  1.0f,  0.0f,   +x, +y, -z },
+        {  0.0f,  0.0f, -1.0f,    1.0f,  0.0f,  0.0f,   +x, -y, -z },
 
-        {  0.0f, -1.0f,  0.0f,    0.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f },
-        {  0.0f, -1.0f,  0.0f,    1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f },
-        {  0.0f, -1.0f,  0.0f,    1.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f },
-        {  0.0f, -1.0f,  0.0f,    0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f },
+        {  0.0f, -1.0f,  0.0f,    0.0f,  0.0f,  0.0f,   -x, -y, -z },
+        {  0.0f, -1.0f,  0.0f,    1.0f,  0.0f,  0.0f,   +x, -y, -z },
+        {  0.0f, -1.0f,  0.0f,    1.0f,  0.0f,  1.0f,   +x, -y, +z },
+        {  0.0f, -1.0f,  0.0f,    0.0f,  0.0f,  1.0f,   -x, -y, +z },
 
-        {  0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f },
-        {  0.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f },
-        {  0.0f,  0.0f,  1.0f,    1.0f,  1.0f,  1.0f,    1.0f,  1.0f,  1.0f },
-        {  0.0f,  0.0f,  1.0f,    0.0f,  1.0f,  1.0f,    0.0f,  1.0f,  1.0f },
+        {  0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f,   -x, -y, +z },
+        {  0.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f,   +x, -y, +z },
+        {  0.0f,  0.0f,  1.0f,    1.0f,  1.0f,  1.0f,   +x, +y, +z },
+        {  0.0f,  0.0f,  1.0f,    0.0f,  1.0f,  1.0f,   -x, +y, +z },
 
-        {  0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f },
-        {  0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  1.0f,    0.0f,  1.0f,  1.0f },
-        {  0.0f,  1.0f,  0.0f,    1.0f,  1.0f,  1.0f,    1.0f,  1.0f,  1.0f },
-        {  0.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f },
+        {  0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f,   -x, +y, -z },
+        {  0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  1.0f,   -x, +y, +z },
+        {  0.0f,  1.0f,  0.0f,    1.0f,  1.0f,  1.0f,   +x, +y, +z },
+        {  0.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f,   +x, +y, -z },
 
-        {  1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f },
-        {  1.0f,  0.0f,  0.0f,    1.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f },
-        {  1.0f,  0.0f,  0.0f,    1.0f,  1.0f,  1.0f,    1.0f,  1.0f,  1.0f },
-        {  1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f }
+        {  1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f,   +x, -y, -z },
+        {  1.0f,  0.0f,  0.0f,    1.0f,  1.0f,  0.0f,   +x, +y, -z },
+        {  1.0f,  0.0f,  0.0f,    1.0f,  1.0f,  1.0f,   +x, +y, +z },
+        {  1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  1.0f,   +x, -y, +z }
     };
 
     glGenBuffersARB( 1, &m_vertexBufferObject );
     glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_vertexBufferObject );
     glBufferDataARB( GL_ARRAY_BUFFER_ARB, 24 * sizeof( VertexBufferObjectData ), data, GL_STATIC_DRAW_ARB );
+
+    checkGLError();
 }
 
 
@@ -364,6 +371,7 @@ void QGpuTestingViewer::loadShaders()
     }
 
     QFile fragmentShaderSourceFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+    //QFile fragmentShaderSourceFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
 
     if ( fragmentShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
     {
@@ -401,6 +409,8 @@ void QGpuTestingViewer::loadShaders()
     glGetInfoLogARB( m_shaderProgram, MAX_ERROR_LENGTH, &errorLength, errors );
     if ( errorLength > 0 ) DEBUG_LOG( errors );
 
+    m_dimensionsUniform = glGetUniformLocationARB( m_shaderProgram, "uDimensions" );
+    if ( m_dimensionsUniform < 0 ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
     m_framebufferTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uFramebufferTexture" );
     if ( m_framebufferTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
     m_volumeTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uVolumeTexture" );
