@@ -30,8 +30,6 @@ public:
 
 protected:
 
-    static const float KEYBOARD_CAMERA_INCREMENT;
-
     virtual void keyPressEvent( QKeyEvent *event );
     virtual void mousePressEvent( QMouseEvent *event );
     virtual void mouseMoveEvent( QMouseEvent *event );
@@ -45,7 +43,16 @@ protected:
 
 private:
 
+    /// Estructura de les dades al vertex buffer object
+    struct VertexBufferObjectData
+    {
+        GLfloat nx, ny, nz; // normal
+        GLfloat r, g, b;    // color
+        GLfloat x, y, z;    // vertex
+    };
+
     static const GLsizei FRAMEBUFFER_SIZE = 2048;
+    static const float KEYBOARD_CAMERA_INCREMENT;
 
     /// Comprova si hi ha algun error d'OpenGL.
     void checkGLError( bool alert = false );
@@ -54,6 +61,8 @@ private:
     void createCamera();
     /// Reinicia la càmera.
     void resetCamera();
+    /// Crea el vertex buffer object del cub.
+    void createVertexBufferObject();
     /// Crea la textura 3D del volum.
     void createVolumeTexture();
     /// Crea el framebuffer object.
@@ -70,6 +79,12 @@ private:
     /// Volum a visualitzar.
     Volume *m_volume;
 
+    /// La càmera.
+    Camera *m_camera;
+
+    /// Vertex buffer object per guardar els vèrtexs i atributs del cub.
+    GLuint m_vertexBufferObject;
+
     /// Textura 3D del volum.
     GLuint m_volumeTexture;
 
@@ -84,8 +99,6 @@ private:
     GLint m_framebufferTextureUniform;
     /// Uniform per la textura del volum.
     GLint m_volumeTextureUniform;
-
-    Camera *m_camera;
 
     int m_lastX, m_lastY;
 
