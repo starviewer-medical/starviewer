@@ -98,6 +98,8 @@ private:
 
     /// Combinació de shaders que s'aplicarà.
     GLhandleARB m_shaderProgram;
+    /// Uniform per les dimensions del volum.
+    GLint m_dimensionsUniform;
     /// Uniform per la textura del framebuffer.
     GLint m_framebufferTextureUniform;
     /// Uniform per la textura del volum.
