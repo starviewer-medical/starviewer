@@ -17,8 +17,8 @@ const float QGpuTestingViewer::KEYBOARD_CAMERA_INCREMENT = 10.0f;
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
- : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ),
-   m_shaderProgram( 0 ), m_camera( 0 )
+ : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_vertexBufferObject( 0 ), m_volumeTexture( 0 ),
+   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 )
 {
     setFocusPolicy( Qt::WheelFocus );
 }
@@ -29,6 +29,7 @@ QGpuTestingViewer::~QGpuTestingViewer()
     if ( m_extensions )
     {
         delete m_camera;
+        glDeleteBuffersARB( 1, &m_vertexBufferObject );
         glDeleteTextures( 1, &m_volumeTexture );
         glDeleteFramebuffersEXT( 1, &m_framebufferObject );
         glDeleteTextures( 1, &m_framebufferTexture );
@@ -114,6 +115,7 @@ void QGpuTestingViewer::initializeGL()
     if ( m_extensions )
     {
         createCamera();
+        createVertexBufferObject();
         createVolumeTexture();
         createFramebufferObject();
         loadShaders();
@@ -226,6 +228,47 @@ void QGpuTestingViewer::resetCamera()
     m_camera->setOrbitOffsetDistance( ( EYE - TARGET ).length() );  // ha de ser la distància inicial entre la càmera i l'objectiu
 
     m_camera->lookAt( EYE, TARGET, Vector3( 0.0, 1.0, 0.0 ) );  // posició inicial
+}
+
+
+void QGpuTestingViewer::createVertexBufferObject()
+{
+    VertexBufferObjectData data[24] =   // 4 vèrtexs/cara * 6 cares
+    {   //  nx     ny     nz   |   r      g      b    |   x      y      z
+        { -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f },
+        { -1.0f,  0.0f,  0.0f,    0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f },
+        { -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,  1.0f,    0.0f,  1.0f,  1.0f },
+        { -1.0f,  0.0f,  0.0f,    0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f },
+
+        {  0.0f,  0.0f, -1.0f,    0.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f },
+        {  0.0f,  0.0f, -1.0f,    0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f },
+        {  0.0f,  0.0f, -1.0f,    1.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f },
+        {  0.0f,  0.0f, -1.0f,    1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f },
+
+        {  0.0f, -1.0f,  0.0f,    0.0f,  0.0f,  0.0f,    0.0f,  0.0f,  0.0f },
+        {  0.0f, -1.0f,  0.0f,    1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f },
+        {  0.0f, -1.0f,  0.0f,    1.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f },
+        {  0.0f, -1.0f,  0.0f,    0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f },
+
+        {  0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f,    0.0f,  0.0f,  1.0f },
+        {  0.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f },
+        {  0.0f,  0.0f,  1.0f,    1.0f,  1.0f,  1.0f,    1.0f,  1.0f,  1.0f },
+        {  0.0f,  0.0f,  1.0f,    0.0f,  1.0f,  1.0f,    0.0f,  1.0f,  1.0f },
+
+        {  0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  0.0f },
+        {  0.0f,  1.0f,  0.0f,    0.0f,  1.0f,  1.0f,    0.0f,  1.0f,  1.0f },
+        {  0.0f,  1.0f,  0.0f,    1.0f,  1.0f,  1.0f,    1.0f,  1.0f,  1.0f },
+        {  0.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f },
+
+        {  1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  0.0f },
+        {  1.0f,  0.0f,  0.0f,    1.0f,  1.0f,  0.0f,    1.0f,  1.0f,  0.0f },
+        {  1.0f,  0.0f,  0.0f,    1.0f,  1.0f,  1.0f,    1.0f,  1.0f,  1.0f },
+        {  1.0f,  0.0f,  0.0f,    1.0f,  0.0f,  1.0f,    1.0f,  0.0f,  1.0f }
+    };
+
+    glGenBuffersARB( 1, &m_vertexBufferObject );
+    glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_vertexBufferObject );
+    glBufferDataARB( GL_ARRAY_BUFFER_ARB, 24 * sizeof( VertexBufferObjectData ), data, GL_STATIC_DRAW_ARB );
 }
 
 
@@ -357,45 +400,21 @@ void QGpuTestingViewer::loadShaders()
 
 void QGpuTestingViewer::drawCube()
 {
-    glBegin( GL_QUADS );
-    {
-        glNormal3f( -1, 0, 0 );
-        glColor3f( 0, 0, 0 ); glVertex3f( 0, 0, 0 );
-        glColor3f( 0, 0, 1 ); glVertex3f( 0, 0, 1 );
-        glColor3f( 0, 1, 1 ); glVertex3f( 0, 1, 1 );
-        glColor3f( 0, 1, 0 ); glVertex3f( 0, 1, 0 );
+    glEnable( GL_NORMAL_ARRAY );
+    glEnable( GL_COLOR_ARRAY );
+    glEnable( GL_VERTEX_ARRAY );
 
-        glNormal3f( 0, 0, -1 );
-        glColor3f( 0, 0, 0 ); glVertex3f( 0, 0, 0 );
-        glColor3f( 0, 1, 0 ); glVertex3f( 0, 1, 0 );
-        glColor3f( 1, 1, 0 ); glVertex3f( 1, 1, 0 );
-        glColor3f( 1, 0, 0 ); glVertex3f( 1, 0, 0 );
+    glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_vertexBufferObject );
 
-        glNormal3f( 0, -1, 0 );
-        glColor3f( 0, 0, 0 ); glVertex3f( 0, 0, 0 );
-        glColor3f( 1, 0, 0 ); glVertex3f( 1, 0, 0 );
-        glColor3f( 1, 0, 1 ); glVertex3f( 1, 0, 1 );
-        glColor3f( 0, 0, 1 ); glVertex3f( 0, 0, 1 );
+    glNormalPointer( GL_FLOAT, sizeof( VertexBufferObjectData ), 0 );
+    glColorPointer( 3, GL_FLOAT, sizeof( VertexBufferObjectData ), reinterpret_cast<const GLvoid*>( 3 * sizeof( GLfloat ) ) );
+    glVertexPointer( 3, GL_FLOAT, sizeof( VertexBufferObjectData ), reinterpret_cast<const GLvoid*>( 6 * sizeof( GLfloat ) ) );
 
-        glNormal3f( 0, 0, 1 );
-        glColor3f( 0, 0, 1 ); glVertex3f( 0, 0, 1 );
-        glColor3f( 1, 0, 1 ); glVertex3f( 1, 0, 1 );
-        glColor3f( 1, 1, 1 ); glVertex3f( 1, 1, 1 );
-        glColor3f( 0, 1, 1 ); glVertex3f( 0, 1, 1 );
+    glDrawArrays( GL_QUADS, 0, 24 );    // 24 = 4 vèrtexs/cara * 6 cares
 
-        glNormal3f( 0, 1, 0 );
-        glColor3f( 0, 1, 0 ); glVertex3f( 0, 1, 0 );
-        glColor3f( 0, 1, 1 ); glVertex3f( 0, 1, 1 );
-        glColor3f( 1, 1, 1 ); glVertex3f( 1, 1, 1 );
-        glColor3f( 1, 1, 0 ); glVertex3f( 1, 1, 0 );
-
-        glNormal3f( 1, 0, 0 );
-        glColor3f( 1, 0, 0 ); glVertex3f( 1, 0, 0 );
-        glColor3f( 1, 1, 0 ); glVertex3f( 1, 1, 0 );
-        glColor3f( 1, 1, 1 ); glVertex3f( 1, 1, 1 );
-        glColor3f( 1, 0, 1 ); glVertex3f( 1, 0, 1 );
-    }
-    glEnd();
+    glDisable( GL_NORMAL_ARRAY );
+    glDisable( GL_COLOR_ARRAY );
+    glDisable( GL_VERTEX_ARRAY );
 }
 
 
