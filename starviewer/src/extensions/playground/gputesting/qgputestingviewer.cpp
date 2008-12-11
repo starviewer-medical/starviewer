@@ -111,6 +111,7 @@ void QGpuTestingViewer::initializeGL()
         QString nonSupportedExtensions;
 
         if ( !GLEW_ARB_multitexture ) nonSupportedExtensions += "GL_ARB_multitexture\n";
+        if ( !GLEW_ARB_texture_non_power_of_two ) nonSupportedExtensions += "GL_ARB_texture_non_power_of_two\n";
         if ( !GLEW_ARB_vertex_shader ) nonSupportedExtensions += "GL_ARB_vertex_shader\n";
         if ( !GLEW_ARB_fragment_shader ) nonSupportedExtensions += "GL_ARB_fragment_shader\n";
         if ( !GLEW_ARB_shader_objects ) nonSupportedExtensions += "GL_ARB_shader_objects\n";
@@ -152,17 +153,8 @@ void QGpuTestingViewer::resizeGL( int width, int height )
 
     if ( !m_extensions ) return;
 
-    if ( height == 0 ) height = 1;
-
-    float cameraDistance = m_camera->getPosition().length();
-    float zNear = cameraDistance - m_diagonalLength / 2.0f;
-    float zFar = cameraDistance + m_diagonalLength / 2.0f;
-
-    m_camera->perspective( 90.0f, static_cast<float>( width ) / static_cast<float>( height ), zNear, zFar );
-
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    glMultMatrixf( &( m_camera->getProjectionMatrix()[0][0] ) );
+    recreateFramebufferTexture();
+    adjustProjection();
 }
 
 
@@ -174,14 +166,11 @@ void QGpuTestingViewer::paintGL()
         return;
     }
 
-    resizeGL( width(), height() );
+    adjustProjection();
 
     // Primer pintem les cares del darrere al framebuffer
 
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
-
-    glPushAttrib( GL_VIEWPORT_BIT );                        // guardem el viewport actual
-    glViewport( 0, 0, FRAMEBUFFER_SIZE, FRAMEBUFFER_SIZE ); // viewport a la mida de la textura del framebuffer
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -192,8 +181,6 @@ void QGpuTestingViewer::paintGL()
     glCullFace( GL_FRONT );
 
     drawCube();
-
-    glPopAttrib();                                          // restaurem el viewport d'abans
 
     glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
 
@@ -338,8 +325,15 @@ void QGpuTestingViewer::createVolumeTexture()
 void QGpuTestingViewer::createFramebufferObject()
 {
     glGenFramebuffersEXT( 1, &m_framebufferObject );
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
     checkGLError();
+
+    createFramebufferTexture();
+}
+
+
+void QGpuTestingViewer::createFramebufferTexture()
+{
+    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
 
     glGenTextures( 1, &m_framebufferTexture );
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
@@ -348,7 +342,7 @@ void QGpuTestingViewer::createFramebufferObject()
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, FRAMEBUFFER_SIZE, FRAMEBUFFER_SIZE, 0, GL_RGBA, GL_FLOAT, 0 );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, width(), height(), 0, GL_RGBA, GL_FLOAT, 0 );
     glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_framebufferTexture, 0 );
     checkGLError();
 
@@ -357,6 +351,13 @@ void QGpuTestingViewer::createFramebufferObject()
     else DEBUG_LOG( "framebuffer ko :( " + QString::number( status, 16 ) );
 
     checkGLError();
+}
+
+
+void QGpuTestingViewer::recreateFramebufferTexture()
+{
+    glDeleteTextures( 1, &m_framebufferTexture );
+    createFramebufferTexture();
 }
 
 
@@ -428,6 +429,24 @@ void QGpuTestingViewer::loadShaders()
     if ( m_volumeTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
 
     checkGLError();
+}
+
+
+void QGpuTestingViewer::adjustProjection()
+{
+    int width = this->width(), height = this->height();
+
+    if ( height == 0 ) height = 1;
+
+    float cameraDistance = m_camera->getPosition().length();
+    float zNear = cameraDistance - m_diagonalLength / 2.0f;
+    float zFar = cameraDistance + m_diagonalLength / 2.0f;
+
+    m_camera->perspective( 90.0f, static_cast<float>( width ) / static_cast<float>( height ), zNear, zFar );
+
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    glMultMatrixf( &( m_camera->getProjectionMatrix()[0][0] ) );
 }
 
 

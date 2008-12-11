@@ -52,10 +52,8 @@ private:
         GLfloat x, y, z;    // vertex
     };
 
-    static const GLsizei FRAMEBUFFER_SIZE = 2048;
     static const float KEYBOARD_CAMERA_INCREMENT;
     static const float MAX_CAMERA_DISTANCE_FACTOR;
-    static const float WHEEL_ZOOM_SCALE;
 
     /// Comprova si hi ha algun error d'OpenGL.
     void checkGLError( bool alert = false );
@@ -70,9 +68,15 @@ private:
     void createVolumeTexture();
     /// Crea el framebuffer object.
     void createFramebufferObject();
+    /// Crea la texturea del framebuffer.
+    void createFramebufferTexture();
+    /// Destrueix la textura anterior del framebuffer i en crea una de nova.
+    void recreateFramebufferTexture();
     /// Carrega els shaders.
     void loadShaders();
 
+    /// Ajusta la projecció segons la mida de la finestra i la posició de la càmera.
+    void adjustProjection();
     /// Dibuixa un cub de mida mida 1.
     void drawCube();
 
