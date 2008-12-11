@@ -2,6 +2,8 @@ uniform sampler2D uFramebufferTexture;
 uniform vec3 uDimensions;
 uniform sampler3D uVolumeTexture;
 
+// gl_TexCoord[0] és la posició del vèrtex
+
 void main()
 {
     const float STEP_SIZE = 1.0;

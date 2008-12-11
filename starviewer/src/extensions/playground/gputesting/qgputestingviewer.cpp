@@ -15,8 +15,7 @@ namespace udg {
 
 
 const float QGpuTestingViewer::KEYBOARD_CAMERA_INCREMENT = 10.0f;
-const float QGpuTestingViewer::KEYBOARD_ZOOM_INCREMENT = 1.0f;
-const float QGpuTestingViewer::WHEEL_ZOOM_SCALE = 1.0 / 120.0f;
+const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
@@ -45,6 +44,14 @@ QGpuTestingViewer::~QGpuTestingViewer()
 void QGpuTestingViewer::setVolume( Volume *volume )
 {
     m_volume = volume;
+
+    int *dimensions = volume->getDimensions();
+    m_dimX = dimensions[0]; m_dimY = dimensions[1]; m_dimZ = dimensions[2];
+    m_biggestDimension = qMax( qMax( m_dimX, m_dimY ), m_dimZ );
+    m_diagonalLength = Vector3( m_dimX, m_dimY, m_dimZ ).length();
+
+    m_keyboardZoomIncrement = 0.1f * m_diagonalLength;
+    m_wheelZoomScale = m_diagonalLength / 720.f;
 }
 
 
@@ -56,8 +63,8 @@ void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Right: m_camera->rotateSmoothly( -KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
         case Qt::Key_Up: m_camera->rotateSmoothly( 0.0f, KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
         case Qt::Key_Down: m_camera->rotateSmoothly( 0.0f, -KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
-        case Qt::Key_Plus: m_camera->zoom( -KEYBOARD_ZOOM_INCREMENT, 1.0f, 1000.0f ); break;
-        case Qt::Key_Minus: m_camera->zoom( KEYBOARD_ZOOM_INCREMENT, 1.0f, 1000.0f ); break;
+        case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_biggestDimension, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
+        case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_biggestDimension, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
         case Qt::Key_R: resetCamera(); break;
         default: QWidget::keyPressEvent( event ); return;
     }
@@ -87,7 +94,7 @@ void QGpuTestingViewer::mouseMoveEvent( QMouseEvent *event )
 
 void QGpuTestingViewer::wheelEvent( QWheelEvent *event )
 {
-    m_camera->zoom( -WHEEL_ZOOM_SCALE * event->delta(), 1.0f, 1000.0f );
+    m_camera->zoom( -m_wheelZoomScale * event->delta(), m_biggestDimension, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR );
     updateGL();
 }
 
@@ -146,8 +153,11 @@ void QGpuTestingViewer::resizeGL( int width, int height )
 
     if ( height == 0 ) height = 1;
 
-    /// \todo el zNear i el zFar haurien de ser ser en funció de la posició de la càmera, per agafar sempre la mida justa del volum
-    m_camera->perspective( 90.0f, static_cast<float>( width ) / static_cast<float>( height ), 1.0f, 1000.0f );
+    float cameraDistance = m_camera->getPosition().length();
+    float zNear = cameraDistance - m_diagonalLength / 2.0f;
+    float zFar = cameraDistance + m_diagonalLength / 2.0f;
+
+    m_camera->perspective( 90.0f, static_cast<float>( width ) / static_cast<float>( height ), zNear, zFar );
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
@@ -162,6 +172,8 @@ void QGpuTestingViewer::paintGL()
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         return;
     }
+
+    resizeGL( width(), height() );
 
     // Primer pintem les cares del darrere al framebuffer
 
@@ -198,8 +210,7 @@ void QGpuTestingViewer::paintGL()
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
     glUniform1iARB( m_framebufferTextureUniform, 0 );
 
-    int *dimensions = m_volume->getDimensions();
-    glUniform3fARB( m_dimensionsUniform, dimensions[0], dimensions[1], dimensions[2] );
+    glUniform3fARB( m_dimensionsUniform, m_dimX, m_dimY, m_dimZ );
 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
@@ -235,7 +246,7 @@ void QGpuTestingViewer::createCamera()
 
 void QGpuTestingViewer::resetCamera()
 {
-    const Vector3 EYE( 0.0, 0.0, 2.0 * m_volume->getDimensions()[2] );
+    const Vector3 EYE( 0.0, 0.0, 2.0 * m_biggestDimension );
 
     m_camera->setBehavior( Camera::CAMERA_BEHAVIOR_ORBIT );
     m_camera->setPreferTargetYAxisOrbiting( false );
@@ -247,8 +258,7 @@ void QGpuTestingViewer::resetCamera()
 
 void QGpuTestingViewer::createVertexBufferObject()
 {
-    int *dimensions = m_volume->getDimensions();
-    GLfloat x = dimensions[0] / 2.0f, y = dimensions[1] / 2.0f, z = dimensions[2] / 2.0f;
+    GLfloat x = m_dimX / 2.0f, y = m_dimY / 2.0f, z = m_dimZ / 2.0f;
 
     VertexBufferObjectData data[24] =   // 4 vèrtexs/cara * 6 cares
     {   //  nx     ny     nz   |   r      g      b    |  x   y   z
@@ -307,8 +317,6 @@ void QGpuTestingViewer::createVolumeTexture()
 
     // Després creem la textura 3D
 
-    int *dimensions = m_volume->getDimensions();
-
     glGenTextures( 1, &m_volumeTexture );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
@@ -317,7 +325,7 @@ void QGpuTestingViewer::createVolumeTexture()
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER );
-    glTexImage3D( GL_TEXTURE_3D, 0, GL_INTENSITY16F_ARB, dimensions[0], dimensions[1], dimensions[2], 0, GL_RED, GL_FLOAT, floatData );
+    glTexImage3D( GL_TEXTURE_3D, 0, GL_INTENSITY16F_ARB, m_dimX, m_dimY, m_dimZ, 0, GL_RED, GL_FLOAT, floatData );
     checkGLError( true );
 
     delete[] floatData;
