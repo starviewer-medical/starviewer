@@ -36,6 +36,12 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     PatientFiller patientFiller;
     QThreadRunWithExec fillersThread;
 
+    m_qprogressDialog = new QProgressDialog("","", 0, 0);
+    m_qprogressDialog->setCancelButton(0);
+    m_qprogressDialog->setValue(1);
+    m_qprogressDialog->setMinimumDuration(0);
+    m_qprogressDialog->setModal(true);
+
     //Comprovem si hi ha suficient espai lliure per importar l'estudi
     if (!localDatabaseManager.isEnoughSpace())
     {
@@ -90,6 +96,8 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         }
         else m_lastError = DatabaseError;
     }
+
+    m_qprogressDialog->close();
 }
 
 void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
@@ -114,6 +122,8 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
     {
         study = studyListToImport.value(0);
         study.setAbsPath( studyPath );
+
+        m_qprogressDialog->setLabelText(tr("Importing study of ") + study.getPatientName());
 
         m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
 
@@ -230,6 +240,9 @@ bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QStri
         // TODO perquè cal fer aquest DICOMTagReader? Encara es fa servir la cache de dicom tag reader????
         DICOMTagReader *dicomTagReader = new DICOMTagReader(localImagePath);
         emit imageImportedToDisk(dicomTagReader);
+
+        m_qprogressDialog->setValue(m_qprogressDialog->value() + 1);
+
         return true;
     }
     else return false;

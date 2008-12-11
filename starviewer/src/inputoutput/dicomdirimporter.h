@@ -10,6 +10,7 @@
 #include <QObject>
 
 #include "dicomdirreader.h"
+#include <QProgressDialog>
 
 class QString;
 
@@ -49,6 +50,7 @@ signals:
 private:
     DICOMDIRReader m_readDicomdir;
     DICOMDIRImporterError m_lastError;
+    QProgressDialog *m_qprogressDialog;
 
     ///crea les connexions necessàries per importar dicomdir
     void createConnections(PatientFiller *patientFiller, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, QThreadRunWithExec *fillersThread); 
