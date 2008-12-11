@@ -54,7 +54,7 @@ private:
 
     static const GLsizei FRAMEBUFFER_SIZE = 2048;
     static const float KEYBOARD_CAMERA_INCREMENT;
-    static const float KEYBOARD_ZOOM_INCREMENT;
+    static const float MAX_CAMERA_DISTANCE_FACTOR;
     static const float WHEEL_ZOOM_SCALE;
 
     /// Comprova si hi ha algun error d'OpenGL.
@@ -76,14 +76,26 @@ private:
     /// Dibuixa un cub de mida mida 1.
     void drawCube();
 
+private:
+
     /// Cert si es suporten totes les extensions necessàries.
     bool m_extensions;
 
     /// Volum a visualitzar.
     Volume *m_volume;
+    /// Dimensions del volum.
+    int m_dimX, m_dimY, m_dimZ;
+    /// Mida de la dimensió més gran del volum.
+    int m_biggestDimension;
+    /// Longitud de la diagonal del volum.
+    float m_diagonalLength;
 
     /// La càmera.
     Camera *m_camera;
+    /// Increments del zoom amb el teclat.
+    float m_keyboardZoomIncrement;
+    /// Escala que s'aplica a la rodeta per fer zoom.
+    float m_wheelZoomScale;
 
     /// Vertex buffer object per guardar els vèrtexs i atributs del cub.
     GLuint m_vertexBufferObject;
