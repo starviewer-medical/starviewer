@@ -46,7 +46,8 @@ void QGpuTestingViewer::setVolume( Volume *volume )
     m_volume = volume;
 
     int *dimensions = volume->getDimensions();
-    m_dimX = dimensions[0]; m_dimY = dimensions[1]; m_dimZ = dimensions[2];
+    double *spacing = volume->getSpacing();
+    m_dimX = dimensions[0] * spacing[0]; m_dimY = dimensions[1] * spacing[1]; m_dimZ = dimensions[2] * spacing[2];
     m_biggestDimension = qMax( qMax( m_dimX, m_dimY ), m_dimZ );
     m_diagonalLength = Vector3( m_dimX, m_dimY, m_dimZ ).length();
 
@@ -184,7 +185,7 @@ void QGpuTestingViewer::paintGL()
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
 
@@ -202,7 +203,7 @@ void QGpuTestingViewer::paintGL()
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
 
@@ -317,6 +318,8 @@ void QGpuTestingViewer::createVolumeTexture()
 
     // Després creem la textura 3D
 
+    int *dimensions = m_volume->getDimensions();
+
     glGenTextures( 1, &m_volumeTexture );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
@@ -325,7 +328,7 @@ void QGpuTestingViewer::createVolumeTexture()
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
     glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER );
-    glTexImage3D( GL_TEXTURE_3D, 0, GL_INTENSITY16F_ARB, m_dimX, m_dimY, m_dimZ, 0, GL_RED, GL_FLOAT, floatData );
+    glTexImage3D( GL_TEXTURE_3D, 0, GL_INTENSITY16F_ARB, dimensions[0], dimensions[1], dimensions[2], 0, GL_RED, GL_FLOAT, floatData );
     checkGLError( true );
 
     delete[] floatData;
