@@ -24,6 +24,7 @@
 #include "localdatabasemanager.h"
 #include "localdatabasemanagerthreaded.h"
 #include "qthreadrunwithexec.h"
+#include "deletedirectory.h"
 
 namespace udg
 {
@@ -86,15 +87,24 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     fillersThread.wait();
     localDatabaseManagerThreaded.wait();
 
-    //Comprovem que s'hagi inserit correctament el nou estudi a la base de dades
-    if (getLastError() == Ok)
+    //Comprovem que s'hagi importat correctament el nou estudi 
+    if (getLastError() != Ok)
     {
+        deleteFailedImportedStudy(studyUID); // si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
+    }
+    else
+    {
+        //Comprovem que s'hagi inserit correctament el nou estudi a la base de dades
         if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok)
         {
             INFO_LOG( "Estudi " + studyUID + " importat" );
             m_lastError = Ok;
         }
-        else m_lastError = DatabaseError;
+        else 
+        {
+            m_lastError = DatabaseError;
+            deleteFailedImportedStudy(studyUID); // si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
+        }
     }
 
     m_qprogressDialog->close();
@@ -264,6 +274,15 @@ void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalData
     //Connexions d'abortament
     connect(this, SIGNAL(importAborted()), fillersThread, SLOT(quit()), Qt::DirectConnection);
     connect(this, SIGNAL(importAborted()), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
+}
+
+void DICOMDIRImporter::deleteFailedImportedStudy(QString studyInstanceUID)
+{
+    DeleteDirectory delDirectory;
+    LocalDatabaseManager localDatabaseManager;
+
+    INFO_LOG("S'esborrarà de la caché les imatges importades de l'estudi " + studyInstanceUID + " ja que la seva importació ha fallat");
+    delDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
 }
 
 DICOMDIRImporter::DICOMDIRImporterError DICOMDIRImporter::getLastError()
