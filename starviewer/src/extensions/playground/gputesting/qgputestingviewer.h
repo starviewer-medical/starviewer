@@ -83,11 +83,11 @@ private:
 
     /// Volum a visualitzar.
     Volume *m_volume;
-    /// Dimensions del volum.
-    int m_dimX, m_dimY, m_dimZ;
-    /// Mida de la dimensió més gran del volum.
-    int m_biggestDimension;
-    /// Longitud de la diagonal del volum.
+    /// Dimensions del volum multiplicades per l'espaiat.
+    float m_dimX, m_dimY, m_dimZ;
+    /// Mida de la dimensió multiplicada per l'espaiat més gran del volum.
+    float m_biggestDimension;
+    /// Longitud de la diagonal del volum segons les dimensions multiplicades per l'espaiat.
     float m_diagonalLength;
 
     /// La càmera.
