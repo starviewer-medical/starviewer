@@ -62,7 +62,7 @@ private:
     void createCamera();
     /// Reinicia la càmera.
     void resetCamera();
-    /// Crea el vertex buffer object del cub.
+    /// Crea el vertex buffer object amb els vèrtexs del volum.
     void createVertexBufferObject();
     /// Crea la textura 3D del volum.
     void createVolumeTexture();
@@ -77,8 +77,12 @@ private:
 
     /// Ajusta la projecció segons la mida de la finestra i la posició de la càmera.
     void adjustProjection();
-    /// Dibuixa un cub de mida mida 1.
-    void drawCube();
+    /// Primera passada per dibuixar: pinta les cares del darrere al framebuffer.
+    void firstPass();
+    /// Segona passada per dibuixar: pinta les cares del davant mitjançant els shaders.
+    void secondPass();
+    /// Dibuixa el contingut del vertex buffer object.
+    void drawVertexBufferObject();
 
 private:
 

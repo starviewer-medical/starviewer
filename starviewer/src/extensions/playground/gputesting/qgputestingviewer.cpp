@@ -169,46 +169,10 @@ void QGpuTestingViewer::paintGL()
     adjustProjection();
 
     // Primer pintem les cares del darrere al framebuffer
-
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
-
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
-
-    glCullFace( GL_FRONT );
-
-    drawCube();
-
-    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
+    firstPass();
 
     // Després pintem les cares del davant amb els shaders
-
-    glUseProgramObjectARB( m_shaderProgram );
-
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
-
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
-    glUniform1iARB( m_framebufferTextureUniform, 0 );
-
-    glUniform3fARB( m_dimensionsUniform, m_dimX, m_dimY, m_dimZ );
-
-    glActiveTexture( GL_TEXTURE1 );
-    glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
-    glUniform1iARB( m_volumeTextureUniform, 1 );
-
-    glCullFace( GL_BACK );
-
-    drawCube();
-
-    glUseProgramObjectARB( 0 );
+    secondPass();
 }
 
 
@@ -450,7 +414,53 @@ void QGpuTestingViewer::adjustProjection()
 }
 
 
-void QGpuTestingViewer::drawCube()
+void QGpuTestingViewer::firstPass()
+{
+    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, m_framebufferObject );
+
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+    glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
+
+    glCullFace( GL_FRONT );
+
+    drawVertexBufferObject();
+
+    glBindFramebufferEXT( GL_FRAMEBUFFER_EXT, 0 );
+}
+
+
+void QGpuTestingViewer::secondPass()
+{
+    glUseProgramObjectARB( m_shaderProgram );
+
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+    glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
+
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
+    glUniform1iARB( m_framebufferTextureUniform, 0 );
+
+    glUniform3fARB( m_dimensionsUniform, m_dimX, m_dimY, m_dimZ );
+
+    glActiveTexture( GL_TEXTURE1 );
+    glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
+    glUniform1iARB( m_volumeTextureUniform, 1 );
+
+    glCullFace( GL_BACK );
+
+    drawVertexBufferObject();
+
+    glUseProgramObjectARB( 0 );
+}
+
+
+void QGpuTestingViewer::drawVertexBufferObject()
 {
     glEnable( GL_NORMAL_ARRAY );
     glEnable( GL_COLOR_ARRAY );
