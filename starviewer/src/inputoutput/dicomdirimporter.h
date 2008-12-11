@@ -61,6 +61,9 @@ private:
 
     void importImage(DICOMImage image);
 
+    ///S'esborra de la caché les imatges que s'han importat en local d'un estudi que ha fallat la importació
+    void deleteFailedImportedStudy(QString studyInstanceUID);
+
     ///Copia al disc dur una imatge del dicomdir
     bool copyDicomdirImageToLocal(QString dicomdirImagePath, QString localImagePath);
 };
