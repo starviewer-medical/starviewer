@@ -1,23 +1,6 @@
-// per fer-ho amb les proporcions correctes:
-// * fer el paral·lelepípede de la mida adequada -> canviar els vèrtexs
-// * mantenir els colors com fins ara -> la interpolació ens donarà les coordenades de textura
-// * start_coord serà el color d'aquesta segona passada
-// * end_coord serà el color del backbuffer al pìxel actual
-// * necessitem dimX, dimY, dimZ com a uniforms (vec3)
-// * escalem start_coord i end_coord amb dims per saber els punts amb mides reals
-// - calculem la direcció i el pas amb aquestes mides reals
-// - escalem el pas entre 0 i 1 en cada dimensió
-// - ...
-// - PROFIT!!!
-
-
 uniform sampler2D uFramebufferTexture;
 uniform vec3 uDimensions;
 uniform sampler3D uVolumeTexture;
-
-// IN.TexCoord -> gl_TexCoord[0]
-// IN.Color -> gl_TexCoord[1]
-// IN.Pos -> gl_TexCoord[2]
 
 void main()
 {
@@ -25,7 +8,7 @@ void main()
     const float OPAQUE_ALPHA = 0.9;
 
     vec3 startCoord = gl_Color.rgb;
-    vec2 framebufferCoord = ((gl_TexCoord[2].xy / gl_TexCoord[2].w) + 1.0) / 2.0;   // no sé ben bé d'on baixa això però funciona
+    vec2 framebufferCoord = ((gl_TexCoord[0].xy / gl_TexCoord[0].w) + 1.0) / 2.0;   // no sé ben bé d'on baixa això però funciona
     vec3 endCoord = texture2D(uFramebufferTexture, framebufferCoord).rgb;
     vec3 startPoint = startCoord * uDimensions;
     vec3 endPoint = endCoord * uDimensions;
