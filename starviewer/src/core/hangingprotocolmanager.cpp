@@ -167,6 +167,8 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     // Aplicar el hanging protocol trobat, si és que se n'ha trobat algun
     if( bestHangingProtocol )
     {
+        DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
+
         for( displaySetNumber = 0; displaySetNumber < bestHangingProtocol->getNumberOfDisplaySets(); displaySetNumber ++)
         {
             serie = 0;
@@ -180,6 +182,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                 if( serie->getFirstVolume())
                 {
                     viewerWidget->setInput( serie->getFirstVolume() );
+                    qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
                     if( imageSet->getTypeOfItem() == "image" )
                     {
                         viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
@@ -194,7 +197,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
         }
         return candidates;
     }
-
     return candidates;
 }
 
@@ -366,8 +368,9 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
         }
         else if( restriction.selectorAttribute == "SeriesDescription" )
         {
-			if( ! serie->getDescription().contains( restriction.valueRepresentation ) )
-				valid = false;
+            bool contains = serie->getDescription().contains( restriction.valueRepresentation, Qt::CaseInsensitive );
+            bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NO_MATCH );
+            valid = contains ^ match;
         }
         else if( restriction.selectorAttribute == "ScanOptions" )
         {
@@ -501,6 +504,13 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
                 QStringList tagValue =  dicomReader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
                 if( tagValue.isEmpty() || !( tagValue.at(0).contains( restriction.valueRepresentation ) ) )
                     valid = false;
+            }
+            else if( restriction.selectorAttribute == "ImageType" )
+            {
+                QString imageType = dicomReader.getAttributeByName( DCM_ImageType );
+                bool isLocalyzer = imageType.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
+                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NO_MATCH );
+                valid = isLocalyzer ^ match;
             }
             i++;
         }
