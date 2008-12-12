@@ -161,6 +161,9 @@ public:
      */
     void setWindowLevelData( WindowLevelPresetsToolData *windowLevelData );
 
+    // Activar o desactivar el refresh automatic
+    void automaticRefresh( bool enable );
+
 public slots:
     /// Gestiona els events que rep de la finestra
     virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );

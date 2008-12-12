@@ -635,4 +635,8 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
+void QViewer::automaticRefresh( bool enable )
+{
+    m_isRefreshActive = enable;
+}
 };  // end namespace udg
