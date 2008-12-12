@@ -63,6 +63,7 @@ void QOperationStateScreen::setWidthColumns()
 
 void QOperationStateScreen::insertNewOperation( Operation *operation )
 {
+    QTreeWidgetItem* item = new QTreeWidgetItem();
     QTime time = QTime::currentTime();
     QString name, operationNumber;
     QDate date = QDate::currentDate();
@@ -70,9 +71,6 @@ void QOperationStateScreen::insertNewOperation( Operation *operation )
     deleteStudy( operation->getStudyUID() ); //si l'estudi ja existeix a la llista l'esborrem
     name.insert( 0 , operation->getPatientName() );
     name.replace( "^" ,", ");
-
-    //s'ha de posar després del deleteStudy, ja que si l'estudi existeix i s'esborra, però abans s'ha fet el new QTreeWidgetItem des de Qt 4.3 es dona segmentation fault
-    QTreeWidgetItem* item = new QTreeWidgetItem( m_treeRetrieveStudy );
 
     item->setText( 0 , tr( "PENDING" ) );
 
@@ -92,6 +90,8 @@ void QOperationStateScreen::insertNewOperation( Operation *operation )
     item->setText( 9 , operation->getStudyUID() );
     operationNumber.setNum( operation->getOperation() , 10 );
     item->setText( 10 , operationNumber ); // indica el tipus d'operació
+
+    m_treeRetrieveStudy->addTopLevelItem(item);
 }
 
 
@@ -112,19 +112,11 @@ void QOperationStateScreen::clearList()
 
 void QOperationStateScreen::deleteStudy( QString studyUID )
 {
-    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
-    QTreeWidgetItem *item;
-    int i = 0;
+    QList<QTreeWidgetItem *> qTreeWidgetItemsToDelete( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
 
-    while ( i < qRetrieveList.count() )
+    foreach(QTreeWidgetItem *itemToDelete, qTreeWidgetItemsToDelete)
     {
-        item = qRetrieveList.at( i );
-        if ( item->text(9) == studyUID )
-        {
-            delete item;
-            break;
-        }
-        i++;
+        m_treeRetrieveStudy->invisibleRootItem()->removeChild(itemToDelete);
     }
 }
 
