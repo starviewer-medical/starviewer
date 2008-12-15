@@ -35,7 +35,7 @@ public:
        * que retorna de la llista
        *         @return operacio que té més prioritat dins la cua
        */
-     Operation getMaximumPriorityOperation();
+     Operation takeMaximumPriorityOperation();
 
      /** Indica si la cua està buida
        *        @return boolea que indica si la cua esta buida
