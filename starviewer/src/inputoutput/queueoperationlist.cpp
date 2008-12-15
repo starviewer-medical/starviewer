@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "queueoperationlist.h"
 #include <QtAlgorithms>
-#include "logging.h"
 
 namespace udg {
 
