@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "queueoperationlist.h"
 #include <QtAlgorithms>
+#include "logging.h"
 
 namespace udg {
 
@@ -29,45 +30,37 @@ QueueOperationList * QueueOperationList::getQueueOperationList()
 
 void QueueOperationList::insertOperation(Operation operation )
 {
-    bool ok = true;
-    foreach( Operation operationItem, m_queueOperationList )
+    if (!m_queueOperationList.contains(operation))
     {
-        if( operation == operationItem )
-        {
-            ok = false;
-            break;
-        }
-    }
-    if( ok )
         m_queueOperationList << operation;
+    }
 }
 
-Operation QueueOperationList::getMaximumPriorityOperation()
+Operation QueueOperationList::takeMaximumPriorityOperation()
 {
-    //s'ordena la llista
-    Operation ope;
-    int maxPriorityOperation = 1000, positionMaxPriorityOperation = 0;
-
-    //s'agafa la primera operacio i l'esborra
-    for (int i = 0;i<m_queueOperationList.count();i++)
-    {
-        ope = m_queueOperationList.at(i);
-
-        if (ope.getPriority() < maxPriorityOperation)
-        {
-            maxPriorityOperation = ope.getPriority();
-            positionMaxPriorityOperation = i;
-        }
-    }
+    Operation operationMaxPriority, operationAtIndex;
+    int positionMaxPriorityOperation = 0;
 
     if (!m_queueOperationList.isEmpty())
     {
-        ope = m_queueOperationList.at(positionMaxPriorityOperation);
-        m_queueOperationList.removeAt(positionMaxPriorityOperation);
+        operationMaxPriority = m_queueOperationList.at(positionMaxPriorityOperation);
+
+        for (int index = 1; index < m_queueOperationList.count(); index++)
+        {
+            operationAtIndex = m_queueOperationList.at(index);
+
+            if (operationAtIndex.getPriority() < operationMaxPriority.getPriority())
+            {
+                //la operació és més prioritària
+                operationMaxPriority = operationAtIndex;
+                positionMaxPriorityOperation = index;
+            }
+        }
+
+        m_queueOperationList.removeAt(positionMaxPriorityOperation);//treiem l'operació de màxim prioritat de la llista
     }
 
-    return ope;
-
+    return operationMaxPriority;
 }
 
 

@@ -83,13 +83,11 @@ void QExecuteOperationThread::run()
 
     QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
 
-    //creem les connexions amb l'objecte QRetrieveScreen, per indicar descarregues
-
     while (!m_stop)
     {
         Operation operation;
 
-        operation = queueOperationList->getMaximumPriorityOperation();
+        operation = queueOperationList->takeMaximumPriorityOperation();
 
         switch (operation.getOperation())
         {
