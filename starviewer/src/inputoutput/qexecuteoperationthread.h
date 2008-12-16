@@ -9,13 +9,16 @@
 
 #include <QThread>
 
+#include "operation.h"
+
+class QSemaphore;
+
 namespace udg {
 
 /** Aquest classe, s'encarrega d'anar executant objectes Operation. (operacions que s'han de dur a terme). Aquesta classe crea un thread quan hi ha alguna operacio i les executa. A més també utilitza una cua, on es van guardant totes les operation pendents d'executar
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class Operation;
 class Status;
 class LocalDatabaseManagerThreaded;
 class PatientFiller;
@@ -70,6 +73,9 @@ signals:
 
     ///signal que s'emet cap a QueryScreen per indicar que l'estudi s'ha descarregat i s'ha processat
     void retrieveFinished( QString studyUID );
+
+    ///Indiquem que la operació serà cancel·lada
+    void setCancelledOperation(QString studyInstanceUID);
 
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produït un error en la descàrrega de l'estudi
      * @param studyUID UID de l'estudi que ha produït l'error
@@ -135,9 +141,13 @@ private:
 private:
     bool m_stoppedThread;//indica si el thread esta parat
     QList <Operation> m_queueOperationList;
+    QSemaphore *m_qsemaphoreQueueOperationList; //controla l'accés a la QueueOperationList
 
     ///Retorna la pròxima operacio de més prioritat pedent d'executar, si hi ha dos que tenen la mateixa prioritat retorna la que porta més temps a la cua
     Operation takeMaximumPriorityOperation();
+
+    ///Cancel·la les operacions pendents del tipus passat per paràmetre
+    void cancelAllPendingOperations(Operation::OperationAction cancelPendingOperations);
 
     //Crea les connexions de signals i slots necessaries per a descarregar un estudi
     void createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);

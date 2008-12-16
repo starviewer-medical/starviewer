@@ -66,12 +66,15 @@ public slots :
     /** S'invoca quant es produeix algun error durant el processament de l'operació
      * @param studyUID UID de l'estudi descarregat
      */
-	void setErrorOperation( QString studyUID );
+    void setErrorOperation( QString studyUID );
 
     /** S'invoca quan es comença l'operació d'un estudi, per indicar-ho a la llista que aquell estudi ha començat l'operació
      * @param  UID de l'estudi que es comença l'operació
      */
-	void setOperating( QString );
+    void setOperating( QString );
+
+    ///Indica l'estat de cancel·lada a una operació
+    void setCancelledOperation(QString studyInstanceUID);
 
     /// Neteja la llista d'estudis excepte dels que s'estant descarregant en aquells moments
     void clearList();

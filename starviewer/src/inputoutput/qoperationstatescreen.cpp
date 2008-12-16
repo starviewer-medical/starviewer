@@ -225,6 +225,20 @@ void QOperationStateScreen::setErrorOperation( QString studyUID )
     m_treeRetrieveStudy->repaint();
 }
 
+void QOperationStateScreen::setCancelledOperation(QString studyInstanceUID)
+{
+    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems(studyInstanceUID, Qt::MatchExactly, 9));
+    QTreeWidgetItem *item;
+
+    if (!qRetrieveList.isEmpty())
+    {
+        item = qRetrieveList.at(0);
+        item->setText(0, tr("CANCELLED"));
+    }
+
+    m_treeRetrieveStudy->repaint();
+}
+
 void QOperationStateScreen::saveColumnsWidth()
 {
     StarviewerSettings settings;
@@ -247,7 +261,7 @@ QOperationStateScreen::~QOperationStateScreen()
 
 bool QOperationStateScreen::isOperationFinalized(const QString &message)
 {
-    return  message == tr("RETRIEVED") || message == tr("STORED") || message == tr("ERROR");
+    return  message == tr("RETRIEVED") || message == tr("STORED") || message == tr("ERROR") || message == tr("CANCELLED");
 }
 
 };
