@@ -222,54 +222,74 @@ void QViewer::computeWorldToDisplay( vtkRenderer *renderer , double x , double y
     }
 }
 
-bool QViewer::saveGrabbedViews( QString baseName , FileType extension )
+bool QViewer::saveGrabbedViews( const QString &baseName , FileType extension )
 {
     if( !m_grabList.empty() )
     {
         vtkImageWriter *writer;
-        QString fileType;
+        QString fileExtension;
         switch( extension )
         {
         case PNG:
             writer = vtkPNGWriter::New();
-            fileType = "png";
+            fileExtension = "png";
         break;
 
         case JPEG:
             writer = vtkJPEGWriter::New();
-            fileType = "jpg";
+            fileExtension = "jpg";
         break;
 
         // \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
         case TIFF:
             writer = vtkTIFFWriter::New();
-            fileType = "tif";
+            fileExtension = "tif";
         break;
 
         case PNM:
             writer = vtkPNMWriter::New();
-            fileType = "pnm";
+            fileExtension = "pnm";
         break;
 
         case BMP:
             writer = vtkBMPWriter::New();
-            fileType = "bmp";
+            fileExtension = "bmp";
         break;
 
         case DICOM:
+            // TODO a suportar
+            DEBUG_LOG("El format DICOM encara no està suportat per guardar imatges");
         break;
 
         case META:
+            // TODO a suportar
+            DEBUG_LOG("El format META encara no està suportat per guardar imatges");
         break;
         }
-        int i = 0;
-        foreach( vtkImageData *image, m_grabList )
+        int count = m_grabList.count();
+        if( count == 1 )
         {
-            writer->SetInput( image );
-            writer->SetFileName( qPrintable( QString("%1-%2.%3").arg( baseName ).arg( i ).arg( fileType ) ) );
+            // només grabem una sola imatge
+            writer->SetInput( m_grabList.at(0) );
+            writer->SetFileName( qPrintable( QString("%1.%2").arg( baseName ).arg( fileExtension ) ) );
             writer->Write();
-            i++;
         }
+        else if( count > 1 )
+        {
+            // tenim més d'una imatge, per tant li afegim 
+            // un índex adicional per cada imatge automàticament
+            int i = 0;
+            int padding = QString::number( count ).size();
+            foreach( vtkImageData *image, m_grabList )
+            {
+                writer->SetInput( image );
+                writer->SetFileName( qPrintable( QString("%1-%2.%3").arg( baseName ).arg( i, padding, 10, QChar('0') ).arg( fileExtension ) ) );
+                writer->Write();
+                i++;
+            }
+        }
+        // buidem la llista
+        m_grabList.clear();
         return true;
     }
     else
