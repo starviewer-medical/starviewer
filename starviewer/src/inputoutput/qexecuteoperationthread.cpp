@@ -34,13 +34,13 @@
 
 namespace udg {
 
-QSemaphore m_semaphor(1);//controlar l'acces a la variable m_stop
+QSemaphore m_semaphor(1);//controlar l'acces a la variable m_stoppedThread
 
 //constructor
 QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
  : QThread(parent)
 {
-     m_stop = true;
+     m_stoppedThread = true;
 
     //Registrem aquest tipus per poder-ne fer signals
     qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationError");
@@ -66,10 +66,10 @@ void QExecuteOperationThread::queueOperation(Operation operation)
         m_queueOperationList << operation;
     }
 
-    //la variable m_stop controla si el thread està engegat o parat!
-    if(m_stop = true)
+    //la variable m_stoppedThread controla si el thread està engegat o parat!
+    if(m_stoppedThread = true)
     {   //si parat l'engeguem
-        m_stop = false;
+        m_stoppedThread = false;
         start();
     }
 
@@ -81,7 +81,7 @@ void QExecuteOperationThread::run()
 {
     INFO_LOG("Iniciant thread que executa operacions");
 
-    while (!m_stop)
+    while (!m_stoppedThread)
     {
         Operation operation;
 
@@ -100,7 +100,7 @@ void QExecuteOperationThread::run()
 
         //comprovem si hem de parar
         m_semaphor.acquire();
-        m_stop = m_queueOperationList.isEmpty();
+        m_stoppedThread = m_queueOperationList.isEmpty();
         m_semaphor.release();
     }
     INFO_LOG("Finalitzant thread que executa operacions");
