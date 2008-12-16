@@ -66,10 +66,12 @@ void QVolume3DViewTestingExtension::initializeTools()
     m_zoomToolButton->defaultAction()->trigger();
     m_panToolButton->defaultAction()->trigger();
     m_rotate3DToolButton->defaultAction()->trigger();
+    // afegim eina d'screen-shot TODO cal posar botó a la interfície???
+    m_toolManager->getToolAction("ScreenShotTool")->trigger();
 
     // registrem al manager les tools que van amb el viewer principal
     QStringList toolsList;
-    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "WindowLevelTool";
+    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "WindowLevelTool" << "ScreenShotTool";
     m_toolManager->setViewerTools( m_3DView, toolsList );
 
     QStringList rightButtonExclusiveTools;
