@@ -33,7 +33,6 @@ HEADERS += databaseconnection.h \
            multiplequerystudy.h \
            qquerystudythread.h \
            operation.h \
-           queueoperationlist.h \
            qexecuteoperationthread.h \
            converttodicomdir.h \
            convertdicomtolittleendian.h \
@@ -84,7 +83,6 @@ SOURCES += databaseconnection.cpp \
            multiplequerystudy.cpp \
            qquerystudythread.cpp \
            operation.cpp \
-           queueoperationlist.cpp \
            qexecuteoperationthread.cpp \
            converttodicomdir.cpp \
            convertdicomtolittleendian.cpp \

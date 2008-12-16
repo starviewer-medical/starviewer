@@ -133,7 +133,11 @@ private:
     void moveStudy( Operation operation );
 
 private:
-    bool m_stop;//indica si el thread esta parat
+    bool m_stoppedThread;//indica si el thread esta parat
+    QList <Operation> m_queueOperationList;
+
+    ///Retorna la pròxima operacio de més prioritat pedent d'executar, si hi ha dos que tenen la mateixa prioritat retorna la que porta més temps a la cua
+    Operation takeMaximumPriorityOperation();
 
     //Crea les connexions de signals i slots necessaries per a descarregar un estudi
     void createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
