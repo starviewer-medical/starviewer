@@ -279,12 +279,14 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( seriesCommit( QString ) ), m_operationStateScreen, SLOT(  seriesCommit( QString ) ) );
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation( Operation * ) ), m_operationStateScreen, SLOT(  insertNewOperation( Operation *) ) );
     connect(&m_qexecuteOperationThread, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
+    connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), m_operationStateScreen, SLOT(setCancelledOperation(QString)));
 
     // Label d'informació (cutre-xapussa)
     connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT( updateOperationsInProgressMessage()));
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ), SLOT( updateOperationsInProgressMessage() ));
+    connect( &m_qexecuteOperationThread, SIGNAL( setCancelledOperation(QString) ), SLOT( updateOperationsInProgressMessage() ));
 
     //connect tracta els errors de connexió al PACS
     connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
@@ -1407,6 +1409,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             break;
         case QExecuteOperationThread::NoEnoughSpace :
             message = tr("There is not enough space to retreive studies, please free space.");
+            message += tr("\nAll pending retrieve operations will be cancelled.");
             QMessageBox::warning( this , tr( "Starviewer" ) , message );
             break;
         case QExecuteOperationThread::ErrorFreeingSpace :

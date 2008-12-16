@@ -12,7 +12,6 @@
 #include "qexecuteoperationthread.h"
 #include "pacsserver.h"
 #include "retrieveimages.h"
-#include "operation.h"
 #include "processimagesingleton.h"
 #include "starviewerprocessimageretrieved.h"
 #include "starviewerprocessimagestored.h"
@@ -40,7 +39,8 @@ QSemaphore m_semaphor(1);//controlar l'acces a la variable m_stoppedThread
 QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
  : QThread(parent)
 {
-     m_stoppedThread = true;
+    m_stoppedThread = true;
+    m_qsemaphoreQueueOperationList = new QSemaphore(1);
 
     //Registrem aquest tipus per poder-ne fer signals
     qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationError");
@@ -57,14 +57,18 @@ QExecuteOperationThread::~QExecuteOperationThread()
 
 void QExecuteOperationThread::queueOperation(Operation operation)
 {
-    emit newOperation( &operation );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operació, i la mostri per pantalla
-
-    m_semaphor.acquire();
+    m_qsemaphoreQueueOperationList->acquire();
 
     if (!m_queueOperationList.contains(operation))//Comprovem que la mateixa operació no estigui pendent ja de ser executada
     {
         m_queueOperationList << operation;
     }
+
+    m_qsemaphoreQueueOperationList->release();
+
+    emit newOperation( &operation );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operació, i la mostri per pantalla
+
+    m_semaphor.acquire();
 
     //la variable m_stoppedThread controla si el thread està engegat o parat!
     if(m_stoppedThread = true)
@@ -121,7 +125,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsParameters().getAEPacs() ) );
 
-	//creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
+    //creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
     createRetrieveStudyConnections(&localDatabaseManager, &localDatabaseManagerThreaded, &patientFiller, &fillersThread, sProcessImg);
 
     localDatabaseManager.setStudyRetrieving(studyUID);
@@ -130,10 +134,14 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     if (!localDatabaseManager.isEnoughSpace())
     {
-        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
-            errorRetrieving(studyUID, ErrorFreeingSpace);
-        else
+        if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
+        {
+            //si no hi ha prou espai cancel·lem les operacions de descàrrega
             errorRetrieving(studyUID, NoEnoughSpace);
+            cancelAllPendingOperations(Operation::Retrieve);
+            cancelAllPendingOperations(Operation::View);
+        }
+        else errorRetrieving(studyUID, ErrorFreeingSpace);
 
         localDatabaseManager.setStudyRetrieveFinished();
         return;
@@ -285,6 +293,8 @@ Operation QExecuteOperationThread::takeMaximumPriorityOperation()
     Operation operationMaxPriority, operationAtIndex;
     int positionMaxPriorityOperation = 0;
 
+    m_qsemaphoreQueueOperationList->acquire();
+
     if (!m_queueOperationList.isEmpty())
     {
         operationMaxPriority = m_queueOperationList.at(positionMaxPriorityOperation);
@@ -304,7 +314,37 @@ Operation QExecuteOperationThread::takeMaximumPriorityOperation()
         m_queueOperationList.removeAt(positionMaxPriorityOperation);//treiem l'operació de màxim prioritat de la llista
     }
 
+    m_qsemaphoreQueueOperationList->release();
+
     return operationMaxPriority;
+}
+
+void QExecuteOperationThread::cancelAllPendingOperations(Operation::OperationAction operationActionToCancel)
+{
+    Operation operationAtIndex;
+    QList<Operation> operationsNotCancelled;
+
+    m_qsemaphoreQueueOperationList->acquire();
+
+    for (int index = 0; index < m_queueOperationList.count(); index++)
+    {
+        operationAtIndex = m_queueOperationList.at(index);
+
+        if (operationActionToCancel == operationAtIndex.getOperation())
+        {
+            emit setCancelledOperation(operationAtIndex.getStudyUID());
+        }
+        else
+        {
+            //L'operació no queda cancel·lada l'afegim a la llista de no cancel·lades
+            operationsNotCancelled.append(operationAtIndex);
+        }
+    }
+
+    m_queueOperationList.clear();
+    m_queueOperationList = operationsNotCancelled;
+
+    m_qsemaphoreQueueOperationList->release();
 }
 
 void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved)
@@ -350,7 +390,7 @@ void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)
 
 void QExecuteOperationThread::studyWillBeDeletedSlot(QString studyInstanceUID)
 {
-	emit studyWillBeDeleted(studyInstanceUID);
+    emit studyWillBeDeleted(studyInstanceUID);
 }
 
 }
