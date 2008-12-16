@@ -397,7 +397,7 @@ void Q2DViewerExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "ScreenShotTool"<< "AngleTool" << "Cursor3DTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "Cursor3DTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -412,6 +412,7 @@ void Q2DViewerExtension::initializeTools()
     m_slicingToolButton->defaultAction()->trigger();
     m_translateToolButton->defaultAction()->trigger();
     m_windowLevelToolButton->defaultAction()->trigger();
+    m_screenShotToolButton->defaultAction()->trigger();
 
     // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
     m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );

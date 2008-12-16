@@ -6,43 +6,34 @@
  ***************************************************************************/
 #include "screenshottool.h"
 #include "qviewer.h"
-#include "q3dmprviewer.h"
+#include "q2dviewer.h"
 #include "logging.h"
 // definicions globals d'aplicació
 #include "starviewerapplication.h"
-
+// vtk
 #include <vtkCommand.h>
-#include <vtkWindowToImageFilter.h>
-#include <vtkRenderWindow.h>
-#include <vtkImageData.h>
-#include <vtkPNGWriter.h>
-#include <vtkJPEGWriter.h>
-#include <vtkBMPWriter.h>
-
+#include <vtkRenderWindowInteractor.h>
+// Qt
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
 #include <QString>
+#include <QApplication> // pel "wait cursor"
 
 namespace udg {
+
+const QString ScreenShotTool::PngFileFilter = tr("PNG (*.png)");
+const QString ScreenShotTool::JpegFileFilter = tr("Jpeg (*.jpg)");
+const QString ScreenShotTool::BmpFileFilter = tr("BMP (*.bmp)");
 
 ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer,parent)
 {
     m_toolName = "ScreenShotTool";
     readSettings();
-
-    m_windowToImageFilter = vtkWindowToImageFilter::New();
-    if( viewer )
-    {
-        m_renderWindow = viewer->getRenderWindow();
-        if( !m_renderWindow )
-            DEBUG_LOG( "La vtkRenderWindow és NUL·LA!" );
-        m_windowToImageFilter->SetInput( m_renderWindow );
-    }
-    else
+    m_fileExtensionFilters << PngFileFilter << JpegFileFilter << BmpFileFilter;
+    if( !viewer )
         DEBUG_LOG( "El viewer proporcionat és NUL!" );
-
 }
 
 ScreenShotTool::~ScreenShotTool()
@@ -54,21 +45,43 @@ void ScreenShotTool::handleEvent( unsigned long eventID )
 {
     switch( eventID )
     {
-    case vtkCommand::LeftButtonPressEvent:
-        this->screenShot();
+    case vtkCommand::KeyPressEvent:
+    {
+        int key = m_viewer->getInteractor()->GetKeyCode();
+        // TODO cal mirar quina és la manera adequada de com gestionar el Ctrl+tecla amb vtk
+        // CTRL+s = key code 19
+        // CTRL+a = key code 1
+        switch( key )
+        {
+        case 19: // Ctrl+s, "single shot"
+            this->screenShot();
+        break;
+
+        case 1: // Ctrl+a, "multiple shot"
+            this->screenShot(false);
+        break;
+        }
+    }
     break;
     }
 }
 
-void ScreenShotTool::screenShot()
+void ScreenShotTool::screenShot( bool singleShot )
 {
+    readSettings();
+    
+    
+    
+
     QFileDialog *saveAsDialog = new QFileDialog(0);
-    saveAsDialog->setWindowTitle( tr("Save screenshot as...") );
+    if( singleShot )
+        saveAsDialog->setWindowTitle( tr("Save single screenshot as...") );
+    else
+        saveAsDialog->setWindowTitle( tr("Save multiple screenshots as...") );
+
     saveAsDialog->setDirectory( m_lastScreenShotPath );
-    QStringList filters;
-    filters << tr("PNG (*.png)") << tr("Jpeg (*.jpg)") << tr("BMP (*.bmp)");
-    saveAsDialog->setFilters( filters );
-    saveAsDialog->selectFilter ( m_lastScreenShotExtension );
+    saveAsDialog->setFilters( m_fileExtensionFilters );
+    saveAsDialog->selectFilter ( m_lastScreenShotExtensionFilter );
     saveAsDialog->setFileMode( QFileDialog::AnyFile );
     saveAsDialog->setAcceptMode( QFileDialog::AcceptSave );
     saveAsDialog->selectFile( compoundSelectedName() );
@@ -79,7 +92,7 @@ void ScreenShotTool::screenShot()
     int overWrite = 0;
     QString fileName;
 
-    connect( saveAsDialog, SIGNAL( rejected() ),this, SLOT( userCancellation() ) );
+    connect( saveAsDialog, SIGNAL( rejected() ), SLOT( userCancellation() ) );
 
     do
     {
@@ -120,50 +133,68 @@ void ScreenShotTool::screenShot()
 
     if ( overWrite == 0 && !m_userCancellation )
     {
-        vtkImageWriter *imageWriter;
-        QString pattern( ("%s.") );
-        if( selectedFilter == tr("PNG (*.png)") )
+        QViewer::FileType fileExtension;
+        if( selectedFilter == PngFileFilter )
         {
-            imageWriter = vtkPNGWriter::New();
-            pattern += "png";
-            m_lastScreenShotExtension = tr("PNG (*.png)");
+            fileExtension = QViewer::PNG;
+            m_lastScreenShotExtensionFilter = PngFileFilter;
         }
-        else if( selectedFilter == tr("Jpeg (*.jpg)") )
+        else if( selectedFilter == JpegFileFilter )
         {
-            imageWriter = vtkJPEGWriter::New();
-            pattern += "jpg";
-            m_lastScreenShotExtension = tr("Jpeg (*.jpg)");
+            fileExtension = QViewer::JPEG;
+            m_lastScreenShotExtensionFilter = JpegFileFilter;
         }
-        else if( selectedFilter == tr("BMP (*.bmp)") )
+        else if( selectedFilter == BmpFileFilter )
         {
-            imageWriter = vtkBMPWriter::New();
-            pattern += "bmp";
-            m_lastScreenShotExtension = tr("BMP (*.bmp)");
+            fileExtension = QViewer::BMP;
+            m_lastScreenShotExtensionFilter = BmpFileFilter;
         }
         else
         {
             DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
             return;
         }
-
-
-
-        m_windowToImageFilter->Update();
-        m_windowToImageFilter->Modified();
-        vtkImageData *image = m_windowToImageFilter->GetOutput();
-
-        imageWriter->SetInput( image );
-        imageWriter->SetFilePrefix( qPrintable( fileName ) );
-        imageWriter->SetFilePattern( qPrintable( pattern ) );
-        imageWriter->Write();
+        if( singleShot )
+        {
+            m_viewer->grabCurrentView();
+        }
+        else
+        {
+            Q2DViewer *viewer2D = dynamic_cast< Q2DViewer * >( m_viewer );
+            if( viewer2D )
+            {
+                // tenim un  Q2DViewer, llavors podem guardar totes les imatges
+                int max = viewer2D->getMaximumSlice();
+                // guardem la llesca actual per restaurar
+                int currentSlice = viewer2D->getCurrentSlice();
+                QApplication::setOverrideCursor( Qt::WaitCursor );
+                // recorrem totes les imatges i en fem captura
+                for( int i = 0; i < max; i++ )
+                {
+                    viewer2D->setSlice(i);
+                    viewer2D->grabCurrentView();
+                }
+                viewer2D->setSlice( currentSlice );
+            }
+            else // tenim un visor que no és 2D, per tant fem un "single shot"
+            {
+                m_viewer->grabCurrentView();
+            }
+        }
+        // guardem totes les imatges capturades
+        m_viewer->saveGrabbedViews( fileName, fileExtension );
+        QApplication::restoreOverrideCursor();
 
         //guardem el nom de l'ultim fitxer
         m_lastScreenShotName = QFileInfo(fileName).fileName();
     }
+    writeSettings();
 }
 
 QString ScreenShotTool::compoundSelectedName()
 {
+    // TODO això estaria millor si es fes amb la classe QRegExp,
+    // produint un codi molt més net i clar
     QString compoundFile = "";
 
     if ( !m_lastScreenShotName.isEmpty() )
@@ -199,7 +230,7 @@ void ScreenShotTool::readSettings()
     QSettings settings;
     settings.beginGroup("ScreenshotTool");
     m_lastScreenShotPath = settings.value( "defaultSaveFolder", QDir::homePath() ).toString();
-    m_lastScreenShotExtension = settings.value( "defaultSaveExtension", "PNG (*.png)" ).toString();
+    m_lastScreenShotExtensionFilter = settings.value( "defaultSaveExtension", PngFileFilter ).toString();
     m_lastScreenShotName = settings.value( "defaultSaveName", "" ).toString();
     settings.endGroup();
 }
@@ -209,7 +240,7 @@ void ScreenShotTool::writeSettings()
     QSettings settings;
     settings.beginGroup("ScreenshotTool");
     settings.setValue("defaultSaveFolder", m_lastScreenShotPath );
-    settings.setValue("defaultSaveExtension", m_lastScreenShotExtension );
+    settings.setValue("defaultSaveExtension", m_lastScreenShotExtensionFilter );
     settings.setValue("defaultSaveName", m_lastScreenShotName );
     settings.endGroup();
 }
