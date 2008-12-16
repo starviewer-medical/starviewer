@@ -7,9 +7,9 @@
 #include "rotate3dtool.h"
 #include "logging.h"
 #include "qviewer.h"
-
-#include <vtkInteractorStyleImage.h>
+//vtk
 #include <vtkInteractorStyle.h>
+#include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
 namespace udg {
@@ -50,39 +50,55 @@ void Rotate3DTool::handleEvent( unsigned long eventID )
 
 void Rotate3DTool::startRotate3D()
 {
-    if( m_interactorStyle )
+    Q_ASSERT( m_interactorStyle );
+    
+    if( m_viewer->getInteractor()->GetControlKey() )
     {
-        m_state = ROTATING;
-        m_interactorStyle->StartRotate();
+        m_state = SPINNING;
+        // TODO podria ser que volguéssim posar-li una icona diferent per quan fem SPIN
+        m_viewer->setCursor( QCursor(QPixmap(":/images/rotate3d.png")) );
+        m_interactorStyle->StartSpin();
     }
     else
-        DEBUG_LOG( "::startRotate3D(): L'interactor Style és buit!" );
+    {
+        m_state = ROTATING;
+        m_viewer->setCursor( QCursor(QPixmap(":/images/rotate3d.png")) );
+        m_interactorStyle->StartRotate();
+    }
 }
 
 void Rotate3DTool::doRotate3D()
 {
-    if( m_interactorStyle )
+    Q_ASSERT( m_interactorStyle );
+    
+    switch( m_state )
     {
-        if( m_state == ROTATING )
-        {
-            m_viewer->setCursor( QCursor(QPixmap(":/images/rotate3d.png")) );
-            m_interactorStyle->Rotate();
-        }
+    case ROTATING:        
+        m_interactorStyle->Rotate();
+    break;
+    
+    case SPINNING:
+        m_interactorStyle->Spin();
+    break;
     }
-    else
-        DEBUG_LOG( "::doRotate3D(): L'interactor Style és buit!" );
-
 }
 
 void Rotate3DTool::endRotate3D()
 {
-    if( m_interactorStyle )
+    Q_ASSERT( m_interactorStyle );
+    
+    m_viewer->setCursor( Qt::ArrowCursor );
+    switch( m_state )
     {
-        m_viewer->setCursor( Qt::ArrowCursor );
-        m_state = NONE;
+    case ROTATING:
         m_interactorStyle->EndRotate();
+    break;
+
+    case SPINNING:
+        m_interactorStyle->EndSpin();
+    break;
     }
-    else
-        DEBUG_LOG( "::endRotate3D(): L'interactor Style és buit!" );
+    m_state = NONE;
 }
+
 }
