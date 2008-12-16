@@ -13,7 +13,6 @@
 #include "pacsserver.h"
 #include "retrieveimages.h"
 #include "operation.h"
-#include "queueoperationlist.h"
 #include "processimagesingleton.h"
 #include "starviewerprocessimageretrieved.h"
 #include "starviewerprocessimagestored.h"
@@ -58,15 +57,16 @@ QExecuteOperationThread::~QExecuteOperationThread()
 
 void QExecuteOperationThread::queueOperation(Operation operation)
 {
-    QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
-
     emit newOperation( &operation );//emitim una senyal per a que la qretrieveScreen sapiga que s'ha demanat una nova operació, i la mostri per pantalla
 
     m_semaphor.acquire();
 
-    //la variable m_stop controla si el thread està engegat o parat!
-    queueOperationList->insertOperation(operation);
+    if (!m_queueOperationList.contains(operation))//Comprovem que la mateixa operació no estigui pendent ja de ser executada
+    {
+        m_queueOperationList << operation;
+    }
 
+    //la variable m_stop controla si el thread està engegat o parat!
     if(m_stop = true)
     {   //si parat l'engeguem
         m_stop = false;
@@ -81,13 +81,11 @@ void QExecuteOperationThread::run()
 {
     INFO_LOG("Iniciant thread que executa operacions");
 
-    QueueOperationList *queueOperationList = QueueOperationList::getQueueOperationList();
-
     while (!m_stop)
     {
         Operation operation;
 
-        operation = queueOperationList->takeMaximumPriorityOperation();
+        operation = takeMaximumPriorityOperation();
 
         switch (operation.getOperation())
         {
@@ -102,7 +100,7 @@ void QExecuteOperationThread::run()
 
         //comprovem si hem de parar
         m_semaphor.acquire();
-        m_stop = queueOperationList->isEmpty();
+        m_stop = m_queueOperationList.isEmpty();
         m_semaphor.release();
     }
     INFO_LOG("Finalitzant thread que executa operacions");
@@ -280,6 +278,33 @@ void QExecuteOperationThread::moveStudy( Operation operation )
         emit setErrorOperation( operation.getStudyUID() );
         ERROR_LOG( "S'ha produit un error intentant guardar l'estudi : " + state.text() );
     }
+}
+
+Operation QExecuteOperationThread::takeMaximumPriorityOperation()
+{
+    Operation operationMaxPriority, operationAtIndex;
+    int positionMaxPriorityOperation = 0;
+
+    if (!m_queueOperationList.isEmpty())
+    {
+        operationMaxPriority = m_queueOperationList.at(positionMaxPriorityOperation);
+
+        for (int index = 1; index < m_queueOperationList.count(); index++)
+        {
+            operationAtIndex = m_queueOperationList.at(index);
+
+            if (operationAtIndex.getPriority() < operationMaxPriority.getPriority())
+            {
+                //la operació és més prioritària
+                operationMaxPriority = operationAtIndex;
+                positionMaxPriorityOperation = index;
+            }
+        }
+
+        m_queueOperationList.removeAt(positionMaxPriorityOperation);//treiem l'operació de màxim prioritat de la llista
+    }
+
+    return operationMaxPriority;
 }
 
 void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved)
