@@ -9,7 +9,7 @@
 
 #include "tool.h"
 
-#include <QStringlist>
+#include <QStringList>
 
 class QString;
 
@@ -55,9 +55,9 @@ private slots:
     
 private:
     /// constants
-    static const QString ScreenShotTool::PngFileFilter;
-    static const QString ScreenShotTool::JpegFileFilter;
-    static const QString ScreenShotTool::BmpFileFilter;
+    static const QString PngFileFilter;
+    static const QString JpegFileFilter;
+    static const QString BmpFileFilter;
 
     ///path de l'última imatge guardada
     QString m_lastScreenShotPath;
