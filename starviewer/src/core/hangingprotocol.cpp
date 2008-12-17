@@ -188,10 +188,10 @@ bool HangingProtocol::gratherThan( HangingProtocol * hangingToCompare )
 
     if( hangingToCompare == NULL ) return true;
 
-	if( this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets() )
-		return ( this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets() );
-	else if( this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets() )
+	if( this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets() )
 		return ( this->getNumberOfDisplaySets() > hangingToCompare->getNumberOfDisplaySets() );
+    else if( this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets() )
+		return ( this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets() );
 	else
 	{
 		i = 1;
