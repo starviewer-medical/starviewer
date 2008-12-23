@@ -1390,6 +1390,7 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
 void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error)
 {
     QString message;
+    StarviewerSettings settings;
 
     switch (error)
     {
@@ -1403,9 +1404,14 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
         case QExecuteOperationThread::ErrorRetrieving :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred retrieving a study.\n");
-            message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
+            message += tr("\nPacs doesn't respond correclty, be sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            break;
+        case QExecuteOperationThread::MoveDestinationAETileUnknow :
+            message = tr("Please review the operation list screen, the PACS doesn't recognize your AETitle %1 and some studies can't be retrieved.").arg(settings.getAETitleMachine());
+            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
+            QMessageBox::warning( this , tr( "Starviewer" ) , message );
             break;
         case QExecuteOperationThread::NoEnoughSpace :
             message = tr("There is not enough space to retreive studies, please free space.");

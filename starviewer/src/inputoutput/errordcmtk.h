@@ -26,5 +26,9 @@ namespace udg{
     const OFConditionConst DcmtkMaskInsertTagError( 0 , 1127 , OF_error , "Error inserting tag in Mask" );
 
     const OFConditionConst DcmtkCanNotConnectError( 0 , 1200 , OF_error , "Can't connect" );
+
+    const OFConditionConst DcmtkMoveDestionationUnknow(0, 1300, OF_error, "Move destination unknow");
+
+    const OFConditionConst DcmtkMovescuUnknowError(0, 1301, OF_error, "Movescu unknow error");
 }; //end namespace
 #endif

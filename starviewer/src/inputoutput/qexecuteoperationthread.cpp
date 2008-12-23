@@ -175,38 +175,38 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     if (!retState.good())
     {
-        ERROR_LOG( "S'ha produit algun error durant la descàrrega de l'estudi " + studyUID + " del pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " +retState.text() );
-
-        errorRetrieving(studyUID, ErrorRetrieving);
+        if (retState.code() == 1300)
+        {
+            errorRetrieving(studyUID, MoveDestinationAETileUnknow);
+        }
+        else errorRetrieving(studyUID, ErrorRetrieving);
     }
-    else
-        emit filesRetrieved();
+    else emit filesRetrieved();
 
     //Esperem que el processat i l'insersió a la base de dades acabin
     fillersThread.wait();
     localDatabaseManagerThreaded.wait();
 
-    //Comprovem si l'estudi s'ha inserit correctament a la BD
-    if (retState.good() && localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok)
+    if (retState.good()) //Si l'estudi s'ha descarregat comprovem que no s'hagi produït cap error al inserir-lo a la base de dades
     {
-        INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
-
-        emit setOperationFinished( studyUID );// descarregat a QOperationStateScreen
-        emit retrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
-
-        if ( operation.getOperation() == Operation::View )
-            emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
-    }
-    else
-    {
-        if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::PatientInconsistent)
+        if ( localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok) //Comprovem si l'estudi s'ha inserit correctament a la BD
         {
-            //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
-            errorRetrieving(studyUID, PatientInconsistent);
+            INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsParameters().getAEPacs() );
+
+            emit setOperationFinished( studyUID );// descarregat a QOperationStateScreen
+            emit retrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
+
+            if ( operation.getOperation() == Operation::View )
+                emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
         }
         else
         {
-            errorRetrieving(studyUID, DatabaseError);
+            if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::PatientInconsistent)
+            {
+                //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
+                errorRetrieving(studyUID, PatientInconsistent);
+            }
+            else errorRetrieving(studyUID, DatabaseError);
         }
     }
 
