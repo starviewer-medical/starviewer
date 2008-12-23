@@ -404,6 +404,26 @@ Status RetrieveImages::retrieve()
         m_net , subOpCallback , NULL ,
         &rsp , &statusDetail , &rspIds );
 
+    //el rsp.DimseStatus conté el valor del tag 0000,0900 que indica l'status de les operacions amb el Pacs
+    if (rsp.DimseStatus != STATUS_Success)
+    {
+        const char *text;
+        if (rsp.DimseStatus == STATUS_MOVE_Failed_MoveDestinationUnknown)
+        {
+            //El PACS no té registrat el nostre AETitle
+            statusDetail->findAndGetString(DCM_ErrorComment, text, false); 
+            ERROR_LOG("No s'ha pogut descarregar els objectes DICOM, el PACS no te registrat aquest AETITLE :" + QString(text));
+            state.setStatus(DcmtkMoveDestionationUnknow);
+        }
+        else 
+        {
+            //S'ha produït un error no controla, per més detall sobre els errors consulta el PS 3.4 C.4.2.1.5
+            ERROR_LOG("s'ha produit un error no controlat al intentar descarregar l'estudi, error:" + QString(DU_cfindStatusString(rsp.DimseStatus)));  //DU_cfindStatusString funció dcmtk que tradueix el codi d'error a un string comprensible
+            state.setStatus(DcmtkMovescuUnknowError);
+        }
+    }
+    else state.setStatus(cond);
+
     /* dump status detail information if there is some */
     if ( statusDetail != NULL )
     {
@@ -416,8 +436,6 @@ Status RetrieveImages::retrieve()
     DEBUG_LOG(QString( "TEMPS PROCESSANT IMATGE PER LA BASE DE DADES: %1ms " ).arg( m_timeProcessDatabase ) );
 
     if ( rspIds != NULL ) delete rspIds;
-
-    state.setStatus( cond );
 
     return state;
 }
