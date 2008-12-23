@@ -1409,8 +1409,9 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         case QExecuteOperationThread::MoveDestinationAETileUnknow :
-            message = tr("Please review the operation list screen, the PACS doesn't recognize your AETitle %1 and some studies can't be retrieved.").arg(settings.getAETitleMachine());
-            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
+            message = tr("Please review the operation list screen, ");
+            message += tr("the Pacs doesn't recognize your computer's AETitle %1, some studies can't be retrieved.").arg(settings.getAETitleMachine());
+            message += tr("\n\nContact with an administrador to register your computer to the Pacs.");
             QMessageBox::warning( this , tr( "Starviewer" ) , message );
             break;
         case QExecuteOperationThread::NoEnoughSpace :
@@ -1436,7 +1437,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred and some operations may have failed.");
             message += tr("\nStarviewer has not be capable of read correctly dicom information of the study.");
-            message += tr("\n\nPlease contact with Starviewer team.");
+            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with Starviewer team.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         default:
@@ -1461,7 +1462,7 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
         case DICOMDIRImporter::ErrorCopyingFiles :
-            message += tr("some files could not be imported. Be sure that you have user permissions on the starviewer cache directory");
+            message += tr("some files could not be imported. Be sure that you have write permissions on the Starviewer cache directory.");
             message += tr("\n\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
@@ -1482,8 +1483,8 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
        case DICOMDIRImporter::PatientInconsistent :
-            message += tr("starviewer has not been capable of read correctly dicom information of the study.");
-            message += tr("\n\nPlease contact with Starviewer team.");
+            message += tr("the study can't be imported, because Starviewer has not been capable of read correctly dicom information of the study.");
+            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with Starviewer team.");
             QMessageBox::critical( this , tr( "Starviewer" ) , message );
             break;
        case DICOMDIRImporter::DicomdirInconsistent :
