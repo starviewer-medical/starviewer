@@ -292,6 +292,20 @@ DcmDataset* DicomMask::getDicomMask()
 {
     DcmDataset *maskDcmDataset = new DcmDataset();
 
+    /*Especifiquem que per defecte l'Specific character set utilitzat serà ISO_IR 100, és a dir Latin 1, ja que els PACS 
+     que utilitza l'IDI utilitzen aquesta codificació (és el que suporta dcm4chee), a més amb Latin1 és la codificació que utilitzen
+     la majoria de països europeus. Per dubtes consultar C.12.1.1.2 on s'especifiquen quins Specific characters set, també és important
+     consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta */
+
+    DcmElement *elemSpecificCharacterSet = newDicomElement(DCM_SpecificCharacterSet);
+    elemSpecificCharacterSet->putString("ISO_IR 100"); //ISO_IR 100 és Latin1
+    maskDcmDataset->insert(elemSpecificCharacterSet, OFTrue);
+
+    /*Especifiquem a quin nivell es fa el QueryRetrieve, a través del mètode getQueryRetrieveLevel, que ens retorna el nivell en funció dels camps de la màscara*/
+    DcmElement *elem = newDicomElement(DCM_QueryRetrieveLevel);
+    elem->putString(qPrintable(getQueryRetrieveLevel()));
+    maskDcmDataset->insert(elem , OFTrue);
+
     if (!getPatientId().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_PatientID);
@@ -472,11 +486,6 @@ DcmDataset* DicomMask::getDicomMask()
         elem->putString(qPrintable(getImageNumber()));
         maskDcmDataset->insert(elem , OFTrue);
     }
-
-    /*Especifiquem a quin nivell es fa el QueryRetrieve, a través del mètode getQueryRetrieveLevel, que ens retorna el nivell en funció dels camps de la màscara*/
-    DcmElement *elem = newDicomElement(DCM_QueryRetrieveLevel);
-    elem->putString(qPrintable(getQueryRetrieveLevel()));
-    maskDcmDataset->insert(elem , OFTrue);
 
     return maskDcmDataset;
 }
