@@ -1782,7 +1782,7 @@ El Pacs no ha respòs de forma esperada, assegureu-vos que el vostre ordinador e
 Contact with an administrador to register your computer to the Pacs.</source>
         <translation>
 
-Contacteu amb un administrador per registre el vostre ordinador al Pacs.</translation>
+Contacteu amb un administrador per registrar el vostre ordinador al Pacs.</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="1455"/>
