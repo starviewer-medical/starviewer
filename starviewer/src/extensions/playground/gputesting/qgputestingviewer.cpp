@@ -15,6 +15,7 @@ namespace udg {
 
 
 const float QGpuTestingViewer::KEYBOARD_CAMERA_INCREMENT = 10.0f;
+const float QGpuTestingViewer::MIN_CAMERA_DISTANCE_FACTOR = 0.6f;
 const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 
@@ -90,8 +91,8 @@ void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Right: m_camera->rotateSmoothly( -KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
         case Qt::Key_Up: m_camera->rotateSmoothly( 0.0f, KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
         case Qt::Key_Down: m_camera->rotateSmoothly( 0.0f, -KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
-        case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_biggestDimension, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
-        case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_biggestDimension, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
+        case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
+        case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
         case Qt::Key_R: resetCamera(); break;
         default: QWidget::keyPressEvent( event ); return;
     }
@@ -121,7 +122,7 @@ void QGpuTestingViewer::mouseMoveEvent( QMouseEvent *event )
 
 void QGpuTestingViewer::wheelEvent( QWheelEvent *event )
 {
-    m_camera->zoom( -m_wheelZoomScale * event->delta(), m_biggestDimension, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR );
+    m_camera->zoom( -m_wheelZoomScale * event->delta(), m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR );
     updateGL();
 }
 
@@ -226,7 +227,7 @@ void QGpuTestingViewer::createCamera()
 
 void QGpuTestingViewer::resetCamera()
 {
-    const Vector3 EYE( 0.0, 0.0, 2.0 * m_biggestDimension );
+    const Vector3 EYE( 0.0, 0.0, m_biggestDimension );
 
     m_camera->setBehavior( Camera::CAMERA_BEHAVIOR_ORBIT );
     m_camera->setPreferTargetYAxisOrbiting( false );

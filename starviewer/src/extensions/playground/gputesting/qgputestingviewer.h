@@ -62,6 +62,7 @@ private:
     };
 
     static const float KEYBOARD_CAMERA_INCREMENT;
+    static const float MIN_CAMERA_DISTANCE_FACTOR;
     static const float MAX_CAMERA_DISTANCE_FACTOR;
     static const int TRANSFER_FUNCTION_TEXTURE_SIZE = 4096;
 
