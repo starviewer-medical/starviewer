@@ -26,6 +26,16 @@ public:
     /// Assigna el volum d'entrada.
     void setInput( Volume *input );
 
+private:
+
+    /// Crea les connexions de signals i slots.
+    void createConnections();
+
+private slots:
+
+    /// Obre un diàleg per triar el color de fons.
+    void chooseBackgroundColor();
+
 };
 
 

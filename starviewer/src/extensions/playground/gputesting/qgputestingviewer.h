@@ -28,6 +28,11 @@ public:
     /// Assigna el volum a visualitzar. Un cop assignat un volum no es pot canviar.
     void setVolume( Volume *volume );
 
+    /// Retorna el color de fons.
+    const QColor& backgroundColor() const;
+    /// Assigna el color de fons.
+    void setBackgroundColor( const QColor &backgroundColor );
+
 protected:
 
     virtual void keyPressEvent( QKeyEvent *event );
@@ -104,6 +109,8 @@ private:
     float m_keyboardZoomIncrement;
     /// Escala que s'aplica a la rodeta per fer zoom.
     float m_wheelZoomScale;
+    /// Última posició del ratolí.
+    int m_lastX, m_lastY;
 
     /// Vertex buffer object per guardar els vèrtexs i atributs del cub.
     GLuint m_vertexBufferObject;
@@ -118,6 +125,8 @@ private:
 
     /// Combinació de shaders que s'aplicarà.
     GLhandleARB m_shaderProgram;
+    /// Uniform pel color de fons.
+    GLint m_backgroundColorUniform;
     /// Uniform per les dimensions del volum.
     GLint m_dimensionsUniform;
     /// Uniform per la textura del framebuffer.
@@ -125,7 +134,8 @@ private:
     /// Uniform per la textura del volum.
     GLint m_volumeTextureUniform;
 
-    int m_lastX, m_lastY;
+    /// Color de fons.
+    QColor m_backgroundColor;
 
 };
 
