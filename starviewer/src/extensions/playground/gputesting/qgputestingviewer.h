@@ -5,6 +5,8 @@
 #include <GL/glew.h>    // s'ha de posar aquí, abans del QGLWidget, que és el que inclou GL/gl.h
 #include <QGLWidget>
 
+#include "transferfunction.h"
+
 
 namespace udg {
 
@@ -32,6 +34,8 @@ public:
     const QColor& backgroundColor() const;
     /// Assigna el color de fons.
     void setBackgroundColor( const QColor &backgroundColor );
+    /// Assigna la funció de transferència.
+    void setTransferFunction( const TransferFunction &transferFunction );
 
 protected:
 
@@ -59,6 +63,7 @@ private:
 
     static const float KEYBOARD_CAMERA_INCREMENT;
     static const float MAX_CAMERA_DISTANCE_FACTOR;
+    static const int TRANSFER_FUNCTION_TEXTURE_SIZE = 4096;
 
     /// Comprova si hi ha algun error d'OpenGL.
     void checkGLError( bool alert = false );
@@ -73,12 +78,16 @@ private:
     void createVolumeTexture();
     /// Crea el framebuffer object.
     void createFramebufferObject();
-    /// Crea la texturea del framebuffer.
+    /// Crea la textura del framebuffer.
     void createFramebufferTexture();
     /// Destrueix la textura anterior del framebuffer i en crea una de nova.
     void recreateFramebufferTexture();
     /// Carrega els shaders.
     void loadShaders();
+    /// Crea la textura de la funció de transferència.
+    void createTransferFunctionTexture();
+    /// Actualitza la textura de la funció de transferència amb la funció actual.
+    void updateTransferFunctionTexture();
 
     /// Ajusta la projecció segons la mida de la finestra i la posició de la càmera.
     void adjustProjection();
@@ -133,9 +142,15 @@ private:
     GLint m_framebufferTextureUniform;
     /// Uniform per la textura del volum.
     GLint m_volumeTextureUniform;
+    /// Uniform per la textura de la funció de transferència.
+    GLint m_transferFunctionTextureUniform;
 
     /// Color de fons.
     QColor m_backgroundColor;
+    /// Funció de transferència.
+    TransferFunction m_transferFunction;
+    /// Textura de la funció de transferència.
+    GLuint m_transferFunctionTexture;
 
 };
 

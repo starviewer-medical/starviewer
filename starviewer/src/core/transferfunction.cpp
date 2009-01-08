@@ -351,4 +351,15 @@ TransferFunction TransferFunction::fromVariant( const QVariant &variant )
     return transferFunction;
 }
 
+TransferFunction TransferFunction::to01( double minimum, double maximum ) const
+{
+    double shift = -minimum, scale = 1.0 / ( maximum - minimum );
+    TransferFunction transferFunction01;
+    QList<double> points = this->getPoints();
+
+    foreach ( double x, points ) transferFunction01.addPoint( ( x + shift ) * scale, this->get( x ) );
+
+    return transferFunction01;
+}
+
 }

@@ -20,9 +20,13 @@ const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
  : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_vertexBufferObject( 0 ), m_volumeTexture( 0 ),
-   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 ), m_backgroundColor( Qt::transparent )
+   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 ), m_backgroundColor( Qt::transparent ),
+   m_transferFunctionTexture( 0 )
 {
     setFocusPolicy( Qt::WheelFocus );
+
+    m_transferFunction.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
+    m_transferFunction.addPoint( 1.0, QColor( 255, 255, 255, 255 ) );
 }
 
 
@@ -36,6 +40,7 @@ QGpuTestingViewer::~QGpuTestingViewer()
         glDeleteFramebuffersEXT( 1, &m_framebufferObject );
         glDeleteTextures( 1, &m_framebufferTexture );
         glDeleteObjectARB( m_shaderProgram );
+        glDeleteTextures( 1, &m_transferFunctionTexture );
     }
 }
 
@@ -67,6 +72,13 @@ void QGpuTestingViewer::setBackgroundColor( const QColor &backgroundColor )
     m_backgroundColor = backgroundColor;
     m_backgroundColor.setAlpha( 0 );
     qglClearColor( m_backgroundColor );
+}
+
+
+void QGpuTestingViewer::setTransferFunction( const TransferFunction &transferFunction )
+{
+    m_transferFunction = transferFunction;
+    updateTransferFunctionTexture();
 }
 
 
@@ -154,6 +166,8 @@ void QGpuTestingViewer::initializeGL()
         createVolumeTexture();
         createFramebufferObject();
         loadShaders();
+        createTransferFunctionTexture();
+        updateTransferFunctionTexture();
     }
 
     glEnable( GL_CULL_FACE );
@@ -407,7 +421,41 @@ void QGpuTestingViewer::loadShaders()
     if ( m_framebufferTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
     m_volumeTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uVolumeTexture" );
     if ( m_volumeTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
+    m_transferFunctionTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uTransferFunctionTexture" );
+    if ( m_transferFunctionTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el transfer function texture uniform" );
 
+    checkGLError();
+}
+
+
+void QGpuTestingViewer::createTransferFunctionTexture()
+{
+    glGenTextures( 1, &m_transferFunctionTexture );
+    glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
+    glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
+    checkGLError();
+}
+
+
+void QGpuTestingViewer::updateTransferFunctionTexture()
+{
+    struct { GLubyte r, g, b, a; } pixels[TRANSFER_FUNCTION_TEXTURE_SIZE];
+    double scale = 1.0 / ( TRANSFER_FUNCTION_TEXTURE_SIZE - 1 );
+
+    for ( int i = 0; i < TRANSFER_FUNCTION_TEXTURE_SIZE; i++ )
+    {
+        QColor color = m_transferFunction.get( i * scale );
+        pixels[i].r = color.red();
+        pixels[i].g = color.green();
+        pixels[i].b = color.blue();
+        pixels[i].a = color.alpha();
+    }
+
+    glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
+    glTexImage1D( GL_TEXTURE_1D, 0, GL_RGBA, TRANSFER_FUNCTION_TEXTURE_SIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     checkGLError();
 }
 
@@ -469,6 +517,10 @@ void QGpuTestingViewer::secondPass()
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
     glUniform1iARB( m_volumeTextureUniform, 1 );
+
+    glActiveTexture( GL_TEXTURE2 );
+    glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
+    glUniform1iARB( m_transferFunctionTextureUniform, 2 );
 
     glCullFace( GL_BACK );
 
