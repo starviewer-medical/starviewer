@@ -35,6 +35,11 @@ private slots:
 
     /// Obre un diàleg per triar el color de fons.
     void chooseBackgroundColor();
+    /// Obre un diàleg per carregar una funció de transferència.
+    void loadTransferFunction();
+    /// Obre un diàleg per desar una funció de transferència.
+    void saveTransferFunction();
+    /// Fa la visualització amb les opcions seleccionades.
     /// Fa la visualització.
     void doVisualization();
 
