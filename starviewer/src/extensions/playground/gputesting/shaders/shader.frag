@@ -1,3 +1,4 @@
+uniform vec3 uBackgroundColor;
 uniform sampler2D uFramebufferTexture;
 uniform vec3 uDimensions;
 uniform sampler3D uVolumeTexture;
@@ -35,6 +36,8 @@ void main()
 
         if (any(lessThan(coord, vec3(0.0))) || any(greaterThan(coord, vec3(1.0)))) break;
     }
+
+    if (color.a < OPAQUE_ALPHA) color.rgb += uBackgroundColor * remainingOpacity;
 
     gl_FragColor = color;
 }

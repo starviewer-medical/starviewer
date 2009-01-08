@@ -20,7 +20,7 @@ const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
  : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_vertexBufferObject( 0 ), m_volumeTexture( 0 ),
-   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 )
+   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 ), m_backgroundColor( Qt::transparent )
 {
     setFocusPolicy( Qt::WheelFocus );
 }
@@ -53,6 +53,20 @@ void QGpuTestingViewer::setVolume( Volume *volume )
 
     m_keyboardZoomIncrement = 0.1f * m_diagonalLength;
     m_wheelZoomScale = m_diagonalLength / 720.f;
+}
+
+
+const QColor& QGpuTestingViewer::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+
+void QGpuTestingViewer::setBackgroundColor( const QColor &backgroundColor )
+{
+    m_backgroundColor = backgroundColor;
+    m_backgroundColor.setAlpha( 0 );
+    qglClearColor( m_backgroundColor );
 }
 
 
@@ -130,7 +144,7 @@ void QGpuTestingViewer::initializeGL()
     else DEBUG_LOG( QString( "Ha fallat el glewInit() amb l'error: %1" ).arg( reinterpret_cast<const char*>( glewGetErrorString( glew ) ) ) );
 
     // Color i profunditat inicials
-    glClearColor( 0.0, 0.0, 0.0, 0.0 );
+    qglClearColor( m_backgroundColor );
     glClearDepth( 1.0 );
 
     if ( m_extensions )
@@ -385,6 +399,8 @@ void QGpuTestingViewer::loadShaders()
     glGetInfoLogARB( m_shaderProgram, MAX_ERROR_LENGTH, &errorLength, errors );
     if ( errorLength > 0 ) DEBUG_LOG( errors );
 
+    m_backgroundColorUniform = glGetUniformLocationARB( m_shaderProgram, "uBackgroundColor" );
+    if ( m_backgroundColorUniform < 0 ) DEBUG_LOG( "Error en obtenir el background color uniform" );
     m_dimensionsUniform = glGetUniformLocationARB( m_shaderProgram, "uDimensions" );
     if ( m_dimensionsUniform < 0 ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
     m_framebufferTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uFramebufferTexture" );
@@ -441,6 +457,8 @@ void QGpuTestingViewer::secondPass()
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
+
+    glUniform3fARB( m_backgroundColorUniform, m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
