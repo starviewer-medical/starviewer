@@ -533,9 +533,9 @@ void QGpuTestingViewer::secondPass()
 
 void QGpuTestingViewer::drawVertexBufferObject()
 {
-    glEnable( GL_NORMAL_ARRAY );
-    glEnable( GL_COLOR_ARRAY );
-    glEnable( GL_VERTEX_ARRAY );
+    glEnableClientState( GL_NORMAL_ARRAY );
+    glEnableClientState( GL_COLOR_ARRAY );
+    glEnableClientState( GL_VERTEX_ARRAY );
 
     glBindBufferARB( GL_ARRAY_BUFFER_ARB, m_vertexBufferObject );
 
@@ -545,9 +545,9 @@ void QGpuTestingViewer::drawVertexBufferObject()
 
     glDrawArrays( GL_QUADS, 0, 24 );    // 24 = 4 vèrtexs/cara * 6 cares
 
-    glDisable( GL_NORMAL_ARRAY );
-    glDisable( GL_COLOR_ARRAY );
-    glDisable( GL_VERTEX_ARRAY );
+    glDisableClientState( GL_NORMAL_ARRAY );
+    glDisableClientState( GL_COLOR_ARRAY );
+    glDisableClientState( GL_VERTEX_ARRAY );
 }
 
 
