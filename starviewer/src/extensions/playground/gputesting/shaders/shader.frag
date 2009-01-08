@@ -2,6 +2,7 @@ uniform vec3 uBackgroundColor;
 uniform sampler2D uFramebufferTexture;
 uniform vec3 uDimensions;
 uniform sampler3D uVolumeTexture;
+uniform sampler1D uTransferFunctionTexture;
 
 // gl_TexCoord[0] és la posició del vèrtex
 
@@ -25,7 +26,8 @@ void main()
 
     for (int i = 0; i < 512; i++)
     {
-        vec4 colorSample = texture3D(uVolumeTexture, coord);
+        vec4 intensitySample = texture3D(uVolumeTexture, coord);
+        vec4 colorSample = texture1D(uTransferFunctionTexture, intensitySample.r);
         color.rgb += colorSample.rgb * colorSample.a * remainingOpacity;
         remainingOpacity *= 1.0 - colorSample.a;
         color.a = 1.0 - remainingOpacity;

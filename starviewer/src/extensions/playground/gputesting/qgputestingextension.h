@@ -35,6 +35,8 @@ private slots:
 
     /// Obre un diàleg per triar el color de fons.
     void chooseBackgroundColor();
+    /// Fa la visualització.
+    void doVisualization();
 
 };
 

@@ -122,6 +122,9 @@ public:
     QVariant toVariant() const;
     static TransferFunction fromVariant( const QVariant &variant );
 
+    /// Crea una nova funció de transferència resultat de passar aquesta a un rang [0, 1] des de [minimum, maximum].
+    TransferFunction to01( double minimum, double maximum ) const;
+
 private:
     /// Nom de la funció de transferència.
     QString m_name;
