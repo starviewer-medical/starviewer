@@ -292,10 +292,12 @@ DcmDataset* DicomMask::getDicomMask()
 {
     DcmDataset *maskDcmDataset = new DcmDataset();
 
-    /*Especifiquem que per defecte l'Specific character set utilitzat serà ISO_IR 100, és a dir Latin 1, ja que els PACS 
+    /*Especifiquem que per defecte l'Specific character set utilitzat per fer les consultes cap al PACS serà ISO_IR 100, és a dir Latin 1, ja que els PACS 
      que utilitza l'IDI utilitzen aquesta codificació (és el que suporta dcm4chee), a més amb Latin1 és la codificació que utilitzen
      la majoria de països europeus. Per dubtes consultar C.12.1.1.2 on s'especifiquen quins Specific characters set, també és important
-     consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta */
+     consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta. Com que el character set és Latin1 haurem d
+     transformar tots el tags dicom que siguin string (SH, LO, ST, PN, LT, UT) a Latin1
+*/
 
     DcmElement *elemSpecificCharacterSet = newDicomElement(DCM_SpecificCharacterSet);
     elemSpecificCharacterSet->putString("ISO_IR 100"); //ISO_IR 100 és Latin1
@@ -309,14 +311,14 @@ DcmDataset* DicomMask::getDicomMask()
     if (!getPatientId().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_PatientID);
-        elem->putString(qPrintable(getPatientId()));
+        elem->putString(getPatientId().toLatin1().data());
         maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getPatientName().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_PatientsName);
-        elem->putString(qPrintable(getPatientName()));
+        elem->putString(getPatientName().toLatin1().data());
         maskDcmDataset->insert(elem, OFTrue);
     }
 
@@ -344,14 +346,14 @@ DcmDataset* DicomMask::getDicomMask()
     if (!getStudyId().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyID);
-        elem->putString(qPrintable(getStudyId()));
+        elem->putString(getStudyId().toLatin1().data());
         maskDcmDataset->insert(elem , OFTrue);
     }
 
     if (!getStudyDescription().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyDescription);
-        elem->putString(qPrintable(getStudyDescription()));
+        elem->putString(getStudyDescription().toLatin1().data());
         maskDcmDataset->insert(elem , OFTrue);
     }
 
@@ -379,14 +381,14 @@ DcmDataset* DicomMask::getDicomMask()
     if (!getAccessionNumber().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_AccessionNumber);
-        elem->putString(qPrintable(getAccessionNumber()));
+        elem->putString(getAccessionNumber().toLatin1().data());
         maskDcmDataset->insert(elem , OFTrue);
     }
 
     if (!getReferringPhysiciansName().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_ReferringPhysiciansName);
-        elem->putString(qPrintable(getReferringPhysiciansName()));
+        elem->putString(getReferringPhysiciansName().toLatin1().data());
         maskDcmDataset->insert(elem , OFTrue);
     }
 
@@ -428,14 +430,14 @@ DcmDataset* DicomMask::getDicomMask()
     if (!getSeriesDescription().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SeriesDescription);
-        elem->putString(qPrintable(getSeriesDescription()));
+        elem->putString(getSeriesDescription().toLatin1().data());
         maskDcmDataset->insert(elem , OFTrue);
     }
 
     if (!getSeriesProtocolName().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_ProtocolName);
-        elem->putString(qPrintable(getSeriesProtocolName()));
+        elem->putString(getSeriesProtocolName().toLatin1().data());
         maskDcmDataset->insert(elem , OFTrue);
     }
 
@@ -451,9 +453,9 @@ DcmDataset* DicomMask::getDicomMask()
         DcmSequenceOfItems *requestedAttributeSequence = new DcmSequenceOfItems(DCM_RequestAttributesSequence);
 
         DcmItem *requestedAttributeSequenceItem = new DcmItem(DCM_Item);
-        requestedAttributeSequenceItem->putAndInsertString(DCM_RequestedProcedureID, qPrintable(getRequestedProcedureID()));
+        requestedAttributeSequenceItem->putAndInsertString(DCM_RequestedProcedureID, getRequestedProcedureID().toLatin1().data());
 
-        requestedAttributeSequenceItem->putAndInsertString(DCM_ScheduledProcedureStepID, qPrintable(getScheduledProcedureStepID()));
+        requestedAttributeSequenceItem->putAndInsertString(DCM_ScheduledProcedureStepID, getScheduledProcedureStepID().toLatin1().data());
 
         requestedAttributeSequence->insert(requestedAttributeSequenceItem);
         maskDcmDataset->insert(requestedAttributeSequence, OFTrue);
