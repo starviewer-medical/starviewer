@@ -23,7 +23,7 @@ DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
 
     //set Patient's Id
     studyDcmDataset->findAndGetString( DCM_PatientID , text , false );
-    if ( text != NULL ) setPatientId( text );
+    if ( text != NULL ) setPatientId(QString::fromLatin1(text));
 
     //set Patient's Sex
     studyDcmDataset->findAndGetString( DCM_PatientsSex , text , false );
@@ -63,7 +63,7 @@ DICOMStudy::DICOMStudy( DcmDataset * studyDcmDataset )
 
     //set DICOMStudy Modality
     studyDcmDataset->findAndGetString( DCM_ModalitiesInStudy, text , false );
-    if ( text != NULL ) setStudyModality( text );
+    if ( text != NULL ) setStudyModality(QString::fromLatin1(text));
 
     studyDcmDataset->findAndGetString( DCM_ReferringPhysiciansName , text , false );
     if ( text != NULL ) setReferringPhysiciansName( QString::fromLatin1( text ) );
