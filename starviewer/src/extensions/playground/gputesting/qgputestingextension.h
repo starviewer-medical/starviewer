@@ -43,6 +43,16 @@ private slots:
     /// Fa la visualització.
     void doVisualization();
 
+    /// Posa els paràmetres de la càmera actuals als spinboxs corresponents.
+    void getCamera();
+    /// Assigna els paràmetres de la càmera d'acord amb els spinboxs corresponents.
+    void setCamera();
+    /// Carrega els paràmetres de la càmera des d'un fitxer.
+    void loadCamera();
+    /// Desa els paràmetres de la càmera a un fitxer.
+    void saveCamera();
+    /// Estableix el nombre de punts de vista.
+
 };
 
 

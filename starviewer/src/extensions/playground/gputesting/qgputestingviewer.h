@@ -6,6 +6,7 @@
 #include <QGLWidget>
 
 #include "transferfunction.h"
+#include "vector3.h"
 
 
 namespace udg {
@@ -36,6 +37,11 @@ public:
     void setBackgroundColor( const QColor &backgroundColor );
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
+
+    /// Retorna els paràmetres de la càmera.
+    void getCamera( Vector3 &position, Vector3 &focus, Vector3 &up ) const;
+    /// Assigna els paràmetres de la càmera.
+    void setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up );
 
 protected:
 
