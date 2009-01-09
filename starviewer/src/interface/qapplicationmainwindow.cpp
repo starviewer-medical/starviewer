@@ -424,8 +424,7 @@ void QApplicationMainWindow::about()
                " multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and"
                " Maximum Intensity Projection(MIP)."
                "<p align='justify'>%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing"
-               " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.").arg(ApplicationNameString)
-               );
+               " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.").arg(ApplicationNameString);
 #endif
 
     aboutMessage += tr("<p>Version: %1 </p>").arg( StarviewerVersionString );
