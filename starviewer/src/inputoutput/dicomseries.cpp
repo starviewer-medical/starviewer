@@ -37,7 +37,7 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
     }
     //set series modality
     seriesDataset->findAndGetString( DCM_Modality , text , false );
-    if ( text != NULL ) setSeriesModality( text );
+    if ( text != NULL ) setSeriesModality(QString::fromLatin1(text));
 
     //set series time
     seriesDataset->findAndGetString( DCM_SeriesTime ,text , false );
@@ -67,10 +67,10 @@ DICOMSeries::DICOMSeries(DcmDataset *seriesDataset)
         DcmItem * itemsSequence = requestAttributesSequence->getItem( 0 );
 
         itemsSequence->findAndGetString( DCM_ScheduledProcedureStepID , text , false );
-        if ( text != NULL ) setScheduledProcedureStepID( text );
+        if ( text != NULL ) setScheduledProcedureStepID(QString::fromLatin1(text));
 
         itemsSequence->findAndGetString( DCM_RequestedProcedureID , text , false );
-        if ( text != NULL )  setRequestedProcedureID( text );
+        if ( text != NULL )  setRequestedProcedureID(QString::fromLatin1(text));
     }
 
     seriesDataset->findAndGetString( DCM_PerformedProcedureStepStartDate , text , false );
