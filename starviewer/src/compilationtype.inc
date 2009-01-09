@@ -14,3 +14,10 @@ win32 {
 		CONFIG += console
 	}
 }
+	
+# Definim variable per construir versió lite en temps de compilació
+lite_version:DEFINES += STARVIEWER_LITE
+
+
+
+
