@@ -29,3 +29,11 @@ MAIN_EXTENSIONS = mpr \
                   mpr3d \
                   mpr3d2d \
                   q2dviewer
+
+#
+# En cas que fem un build de la versió "lite" només tindrem l'estensió 2D i prou
+#
+lite_version {
+	PLAYGROUND_EXTENSIONS = ''
+	MAIN_EXTENSIONS = q2dviewer	
+}
