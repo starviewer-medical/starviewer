@@ -83,6 +83,22 @@ void QGpuTestingViewer::setTransferFunction( const TransferFunction &transferFun
 }
 
 
+void QGpuTestingViewer::getCamera( Vector3 &position, Vector3 &focus, Vector3 &up ) const
+{
+    position = m_camera->getPosition();
+    focus = position + m_camera->getViewDirection() * m_camera->getOrbitOffsetDistance();
+    up = m_camera->getYAxis();
+}
+
+
+
+void QGpuTestingViewer::setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up )
+{
+    m_camera->lookAt( position, focus, up );
+    updateGL();
+}
+
+
 void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
 {
     switch ( event->key() )
