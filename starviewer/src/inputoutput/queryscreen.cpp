@@ -36,6 +36,7 @@
 #include "patient.h"
 #include "testdatabase.h"
 #include "testdicomobjects.h"
+#include "starviewerapplication.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -407,7 +408,7 @@ void QueryScreen::queryStudyPacs()
 
     if (selectedPacsList.isEmpty()) //es comprova que hi hagi pacs seleccionats
     {
-        QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Please select a PACS to query" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Please select a PACS to query" ) );
         return;
     }
 
@@ -417,7 +418,7 @@ void QueryScreen::queryStudyPacs()
     bool stopQuery = false;
     if ( searchMask.isAHeavyQuery() )
     {
-        QMessageBox::StandardButton response = QMessageBox::question(this, tr("Starviewer"),
+        QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
                                                                      tr("This query can take a long time.\nDo you want continue?"),
                                                                      QMessageBox::Yes | QMessageBox::No,
                                                                      QMessageBox::No);
@@ -434,7 +435,7 @@ void QueryScreen::queryStudyPacs()
         {
             m_studyTreeWidgetPacs->clear();
             QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , tr( "Starviewer" ) , tr( "ERROR QUERING!." ) );
+            QMessageBox::information( this , ApplicationNameString , tr( "ERROR QUERING!." ) );
             return;
         }
 
@@ -442,7 +443,7 @@ void QueryScreen::queryStudyPacs()
         {
             m_studyTreeWidgetPacs->clear();
             QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
+            QMessageBox::information( this , ApplicationNameString , tr( "No study match found." ) );
             return;
         }
 
@@ -483,12 +484,12 @@ void QueryScreen::queryStudy( QString source )
             QApplication::restoreOverrideCursor();
             if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
             {
-                QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error, not opened Dicomdir" ) );
+                QMessageBox::warning( this , ApplicationNameString , tr( "Error, not opened Dicomdir" ) );
                 ERROR_LOG( "No s'ha obert cap directori dicomdir " + state.text() );
             }
             else
             {
-                QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error quering in dicomdir" ) );
+                QMessageBox::warning( this , ApplicationNameString , tr( "Error quering in dicomdir" ) );
                 ERROR_LOG( "Error cercant estudis al dicomdir " + state.text() );
             }
             return;
@@ -518,7 +519,7 @@ void QueryScreen::queryStudy( QString source )
             m_studyTreeWidgetDicomdir->clear();
 
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No study match found." ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "No study match found." ) );
     }
     else
     {
@@ -611,13 +612,13 @@ void QueryScreen::querySeriesPacs(QString studyUID, QString pacsID)
         ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les sèries al PACS " + pacsDescription + ". PACS ERROR : " + state.text() );
 
         text = tr( "Error! Can't query series to PACS named %1" ).arg( pacsDescription );
-        QMessageBox::warning( this , tr( "Starviewer" ) , text );
+        QMessageBox::warning( this , ApplicationNameString , text );
         return;
     }
 
     if ( querySeriesPacs.getQueryResultsAsSeriesList().isEmpty() )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "No series match for this study.\n" ) );
         return;
     }
 
@@ -651,7 +652,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
 
     if ( seriesListQueryResults.isEmpty() && seriesList.isEmpty() )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No series match for this study.\n" ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "No series match for this study.\n" ) );
         return;
     }
 
@@ -702,7 +703,7 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
         ERROR_LOG( "QueryScreen::QueryPacs : Error cercant les images al PACS " + pacsDescription + ". PACS ERROR : " + state.text() );
 
         text = tr( "Error! Can't query images to PACS named %1 " ).arg(pacsDescription);
-        QMessageBox::warning( this , tr( "Starviewer" ) , text );
+        QMessageBox::warning( this , ApplicationNameString , text );
         return;
     }
 
@@ -711,7 +712,7 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
     if ( queryImages.getQueryResultsAsImageList().isEmpty() )
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this series.\n" ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "No images match for this series.\n" ) );
         return;
     }
 
@@ -753,7 +754,7 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
 
     if (imageListQueryResults.isEmpty() && imageList.isEmpty())
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No images match for this study.\n" ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "No images match for this study.\n" ) );
         return;
     }
 
@@ -772,9 +773,9 @@ void QueryScreen::retrievePacs( bool view )
     {
         QApplication::restoreOverrideCursor();
         if( view )
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to view " ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Select a study to view " ) );
         else
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Select a study to download " ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Select a study to download " ) );
 
         return;
     }
@@ -799,7 +800,7 @@ void QueryScreen::retrievePacs( bool view )
         {   //Es comprova que existeixi l'estudi a la llista d'estudis de la última query que s'ha fet al PACS
             //TODO Arreglar missatge d'error
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Internal Error : " ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Internal Error : " ) );
         }
         else
         {
@@ -923,7 +924,7 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
 
     if(studiesUIDList.isEmpty())
     {
-        QMessageBox::warning(this, tr( "Starviewer" ), tr("Select at least one study to view"));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view"));
         return;
     }
 
@@ -999,11 +1000,11 @@ void QueryScreen::deleteSelectedStudiesInCache()
     QStringList studiesList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     if( studiesList.isEmpty() )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please select at least one study to delete" ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "Please select at least one study to delete" ) );
     }
     else
     {
-        QMessageBox::StandardButton response = QMessageBox::question(this, tr( "Starviewer" ),
+        QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
                                                                            tr( "Are you sure you want to delete the selected Studies?" ),
                                                                            QMessageBox::Yes | QMessageBox::No,
                                                                            QMessageBox::No);
@@ -1018,7 +1019,7 @@ void QueryScreen::deleteSelectedStudiesInCache()
             {
                 if( m_qcreateDicomdir->studyExists( studyUID ) )
                 {
-                    QMessageBox::warning( this , tr( "Starviewer" ) ,
+                    QMessageBox::warning( this , ApplicationNameString ,
                     tr( "The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first." ).arg(studyUID) );
                 }
                 else
@@ -1167,7 +1168,7 @@ void QueryScreen::openDicomdir()
 
         if ( !state.good() )
         {
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "Error openning dicomdir" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Error openning dicomdir" ) );
             ERROR_LOG( "Error al obrir el dicomdir " + dicomdirPath + state.text() );
         }
         else
@@ -1197,7 +1198,7 @@ void QueryScreen::storeStudiesToPacs()
     if(selectedPacsList.size() == 0)
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, tr("Starviewer"), tr("You have to select a PACS to store the study in") );
+        QMessageBox::warning(this, ApplicationNameString, tr("You have to select a PACS to store the study in") );
     }
     else if(selectedPacsList.size() == 1)
     {
@@ -1246,7 +1247,7 @@ void QueryScreen::storeStudiesToPacs()
     else
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, tr("Starviewer"), tr("The studies can only be stored to one PACS") );
+        QMessageBox::warning(this, ApplicationNameString, tr("The studies can only be stored to one PACS") );
     }
 
     QApplication::restoreOverrideCursor();
@@ -1265,7 +1266,7 @@ void QueryScreen::errorConnectingPacs( QString IDPacs )
         .arg( errorPacs.getInstitution()
     );
 
-    QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
+    QMessageBox::critical( this , ApplicationNameString , errorMessage );
 }
 
 void QueryScreen::errorQueringStudiesPacs(QString PacsID)
@@ -1280,7 +1281,7 @@ void QueryScreen::errorQueringStudiesPacs(QString PacsID)
         .arg( errorPacs.getInstitution()
     );
 
-    QMessageBox::critical( this , tr( "Starviewer" ) , errorMessage );
+    QMessageBox::critical( this , ApplicationNameString , errorMessage );
 }
 
 DicomMask QueryScreen::buildSeriesDicomMask( QString studyUID )
@@ -1352,24 +1353,24 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
             return false;
 
         case LocalDatabaseManager::DatabaseLocked:
-            message += tr("The database is blocked by another Starviewer window."
-                         "\nClose all the others Starviewer windows and try again."
-                         "\n\nIf you want to open different Starviewer's windows always choose the 'New' option from the File menu.");
+            message += tr("The database is blocked by another %1 window."
+                         "\nClose all the others %1 windows and try again."
+                         "\n\nIf you want to open different %1's windows always choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
-            message += tr("Starviewer database is corrupted."
-                         "\nClose all Starviewer windows and try again."
-                         "\n\nIf the problem persist contact with an administrator.");
+            message += tr("%1 database is corrupted."
+                         "\nClose all %1 windows and try again."
+                         "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
-            message += tr("Starviewer database syntax error."
-                         "\nClose all Starviewer windows and try again."
-                         "\n\nIf the problem persist contact with an administrator.");
+            message += tr("%1 database syntax error."
+                         "\nClose all %1 windows and try again."
+                         "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseError:
-            message += tr("An internal error occurs with Starviewer database."
-                         "\nClose all Starviewer windows and try again."
-                         "\n\nIf the problem persist contact with an administrator.");
+            message += tr("An internal error occurs with %1 database."
+                         "\nClose all %1 windows and try again."
+                         "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DeletingFilesError:
             message += tr("Some files can not be delete."
@@ -1382,7 +1383,7 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
 
     QApplication::restoreOverrideCursor();
 
-    QMessageBox::critical( this , tr( "Starviewer" ) , message );
+    QMessageBox::critical( this , ApplicationNameString , message );
 
     return true;
 }
@@ -1399,52 +1400,52 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message += tr("an error ocurred connecting to a Pacs while retrieving or storing a study.\n");
             message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::ErrorRetrieving :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred retrieving a study.\n");
             message += tr("\nPacs doesn't respond correclty, be sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::MoveDestinationAETileUnknow :
             message = tr("Please review the operation list screen, ");
             message += tr("the Pacs doesn't recognize your computer's AETitle %1, some studies can't be retrieved.").arg(settings.getAETitleMachine());
             message += tr("\n\nContact with an administrador to register your computer to the Pacs.");
-            QMessageBox::warning( this , tr( "Starviewer" ) , message );
+            QMessageBox::warning( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::NoEnoughSpace :
             message = tr("There is not enough space to retreive studies, please free space.");
             message += tr("\nAll pending retrieve operations will be cancelled.");
-            QMessageBox::warning( this , tr( "Starviewer" ) , message );
+            QMessageBox::warning( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::ErrorFreeingSpace :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred freeing space and some operations may have failed.");
-            message += tr("\n\nClose all Starviewer windows and try again."
-                         "\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            message += tr("\n\nClose all %1 windows and try again."
+                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::DatabaseError :
             message = tr("Please review the operation list screen, ");
             message += tr("a database error ocurred and some operations may have failed.");
-            message += tr("\n\nClose all Starviewer windows and try again."
-                         "\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            message += tr("\n\nClose all %1 windows and try again."
+                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case QExecuteOperationThread::PatientInconsistent :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred and some operations may have failed.");
-            message += tr("\nStarviewer has not be capable of read correctly dicom information of the study.");
-            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with Starviewer team.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            message += tr("\n%1 has not be capable of read correctly dicom information of the study.").arg(ApplicationNameString);
+            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
         default:
             message = tr("Please review the operation list screen, ");
             message += tr("an unknow error has ocurred.");
-            message += tr("\n\nClose all Starviewer windows and try again."
-                         "\nIf the problem persist contact with an administrator.");
+            message += tr("\n\nClose all %1 windows and try again."
+                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
     }
 }
 
@@ -1459,46 +1460,46 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
         case DICOMDIRImporter::ErrorOpeningDicomdir :
             message += tr("the dicomdir could not be opened. Be sure that the dicomdir path is correct.\n");
             message += tr("\n\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::ErrorCopyingFiles :
-            message += tr("some files could not be imported. Be sure that you have write permissions on the Starviewer cache directory.");
+            message += tr("some files could not be imported. Be sure that you have write permissions on the %1 cache directory.").arg(ApplicationNameString);
             message += tr("\n\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::NoEnoughSpace :
             message = tr("There is not enough space to retreive studies, please free space.");
-            QMessageBox::warning( this , tr( "Starviewer" ) , message );
+            QMessageBox::warning( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::ErrorFreeingSpace :
             message += tr("an error has ocurred freeing space, some studies can't be imported.");
-            message += tr("\n\nClose all Starviewer windows and try again."
-                         "\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            message += tr("\n\nClose all %1 windows and try again."
+                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::DatabaseError :
             message += tr("a database error has ocurred, some studies can't be imported.");
-            message += tr("\n\nClose all Starviewer windows and try again."
-                         "\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            message += tr("\n\nClose all %1 windows and try again."
+                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case DICOMDIRImporter::PatientInconsistent :
-            message += tr("the study can't be imported, because Starviewer has not been capable of read correctly dicom information of the study.");
-            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with Starviewer team.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            message += tr("the study can't be imported, because %1 has not been capable of read correctly dicom information of the study.").arg(ApplicationNameString);
+            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case DICOMDIRImporter::DicomdirInconsistent :
             message += tr("has ocurred an error. This dicomdir is inconsistent, can't be imported.");
-            message += tr("\n\nPlease contact with Starviewer team.");
-            QMessageBox::critical( this , tr( "Starviewer" ) , message );
+            message += tr("\n\nPlease contact with %1 team.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
             break;
       case DICOMDIRImporter::Ok :
             break;
         default:
             message = tr("Please review the operation list screen, ");
             message += tr("An unknow error has ocurred.");
-            message += tr("\n\nClose all Starviewer windows and try again."
-                         "\nIf the problem persist contact with an administrator.");
+            message += tr("\n\nClose all %1 windows and try again."
+                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
     }
 }
 

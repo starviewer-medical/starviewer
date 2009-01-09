@@ -7,6 +7,7 @@
 #include "q2dviewerextensionmediator.h"
 
 #include "extensioncontext.h"
+#include "starviewerapplication.h"
 // QT
 #include <QMessageBox>
 
@@ -38,7 +39,7 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const E
     q2dviewerExtension->setPatient( extensionContext.getPatient() );
     Volume *input = extensionContext.getDefaultVolume();
     if( !input )
-        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+        QMessageBox::information(0,ApplicationNameString, tr("The selected item is not an image") );
     else
         q2dviewerExtension->setInput( input );
 

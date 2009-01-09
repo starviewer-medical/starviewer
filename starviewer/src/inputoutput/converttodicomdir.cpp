@@ -345,7 +345,7 @@ void ConvertToDicomdir::createReadmeTxt()
         out << "\n" << "\n";
     }
 
-    out << "The dicomdir has been generated with Starviewer Version " << StarviewerVersionString << "\n";
+    out << "The dicomdir has been generated with " << ApplicationNameString << " Version " << StarviewerVersionString << "\n";
     out << "E-mail contact : " << OrganizationEmailString << "\n";
 
     file.close();
