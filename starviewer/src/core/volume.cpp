@@ -12,6 +12,7 @@
 #include "dicomimagereaderdcmtk.h"
 #include "dicomimagereaderitkgdcm.h"
 #include "mathtools.h"
+#include "starviewerapplication.h"
 
 // VTK
 #include <vtkImageData.h>
@@ -116,7 +117,7 @@ Volume::VtkImageTypePointer Volume::getVtkData()
                 // per això multipliquem per 2
                 memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
                 m_dataLoaded = true;
-                QMessageBox::warning( 0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened Starviewer windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.") );
+                QMessageBox::warning( 0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg( ApplicationNameString ) );
             }
         }
         /* TODO Descomentar per llegir amb classes DICOMImageReader

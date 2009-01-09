@@ -14,7 +14,13 @@ const int StarviewerDatabaseRevisionRequired(3095);
 
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");
-const QString ApplicationNameString("Starviewer");
+
+#ifdef STARVIEWER_LITE
+    const QString ApplicationNameString("Starviewer Lite");
+#else
+    const QString ApplicationNameString("Starviewer");
+#endif
+
 const QString OrganizationEmailString("starviewer@ima.udg.edu");
 
 #endif

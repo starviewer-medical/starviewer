@@ -102,7 +102,7 @@ bool DatabaseInstallation::checkDatabaseRevision()
 
     if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
     {
-        INFO_LOG("La revisió actual de la base de dades és " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versió d'Starviewer és necessària la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedirà a actualitzar la base de dades");
+        INFO_LOG("La revisió actual de la base de dades és " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versió d'" + ApplicationNameString + " és necessària la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedirà a actualitzar la base de dades");
 
         return updateDatabaseRevision();
     }
@@ -112,14 +112,14 @@ bool DatabaseInstallation::checkDatabaseRevision()
 bool DatabaseInstallation::repairDatabase()
 {
     LocalDatabaseManager localDatabaseManager;
-    QMessageBox::critical(0, tr("Starviewer"), tr("Starviewer database is corrupted.\n\nStarviewer will try to repair it."));
+    QMessageBox::critical(0, ApplicationNameString, tr("%1 database is corrupted.\n\n%1 will try to repair it.").arg(ApplicationNameString) );
 
     //La única manera d'intentar reparar la base de dades és compactar la base de dades
     localDatabaseManager.compact();
     if (localDatabaseManager.isDatabaseCorrupted())
     {
         //Si la base de dades continua corrupte l'hem de reinstal·lar
-        QMessageBox::critical(0, tr("Starviewer"), tr("Starviewer can't repair database.\n\nDatabase will be reinstalled. All local studies retrieved and imported will be deleted."));
+        QMessageBox::critical(0, ApplicationNameString, tr("%1 can't repair database.\n\nDatabase will be reinstalled. All local studies retrieved and imported will be deleted.").arg(ApplicationNameString) );
         return reinstallDatabase();
     }
     else

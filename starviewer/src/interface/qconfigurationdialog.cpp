@@ -7,6 +7,7 @@
 #include "qconfigurationdialog.h"
 
 #include "qconfigurationscreen.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -14,6 +15,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
  : QDialog(parent, f)
 {
     setupUi(this);
+    setWindowTitle( tr("%1 Configuration").arg( ApplicationNameString ) );
     setWindowFlags( (this->windowFlags() | Qt::WindowMaximizeButtonHint)  ^ Qt::WindowContextHelpButtonHint  );
     QConfigurationScreen *screen = new QConfigurationScreen(this);
     this->addConfigurationWidget(screen, "PACS", AdvancedConfiguration);

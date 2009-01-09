@@ -30,6 +30,7 @@
 #include "harddiskinformation.h"
 #include "deletedirectory.h"
 #include "starviewersettings.h"
+#include "starviewerapplication.h"
 #include "study.h"
 #include "patient.h"
 
@@ -173,7 +174,7 @@ void QCreateDicomdir::addStudy(Study *study)
         /*if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , tr( "Starviewer" ) , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
         }
         else
         {*/   //afegim la informació de l'estudi a la llista
@@ -193,7 +194,7 @@ void QCreateDicomdir::addStudy(Study *study)
 
         QApplication::restoreOverrideCursor();
     }
-    else QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The study already exists in the DICOMDIR list" ) );
+    else QMessageBox::warning( this , ApplicationNameString , tr( "The study already exists in the DICOMDIR list" ) );
 }
 
 void QCreateDicomdir::createDicomdir()
@@ -238,7 +239,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
     if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
     {
-        QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the temporary directory to create DICOMDIR. Please check users permission" ) );
+        QMessageBox::critical( this , ApplicationNameString , tr( "Can't create the temporary directory to create DICOMDIR. Please check users permission" ) );
         ERROR_LOG( "Error al crear directori " + dicomdirPath );
         return state.setStatus( "Can't create temporary DICOMDIR", false , 3002 );
     }
@@ -258,7 +259,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     if ( m_lineEditDicomdirPath->text().length() == 0 )
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "No directory specified to create the DICOMDIR" ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "No directory specified to create the DICOMDIR" ) );
         return;
     }
 
@@ -282,7 +283,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
     }
     else if (!dicomdirPathIsEmpty(dicomdirPath))
     {
-        QMessageBox::information(this, tr("Starviewer"), tr("The destination directory is not empty, please choose an empty directory."));
+        QMessageBox::information(this, ApplicationNameString, tr("The destination directory is not empty, please choose an empty directory."));
         return;
     }
     else
@@ -297,7 +298,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                     case 0:
                         if ( !directoryDicomdirPath.mkpath( dicomdirPath ) )
                         {
-                            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Can't create the directory. Please check users permissions." ) );
+                            QMessageBox::critical( this , ApplicationNameString , tr( "Can't create the directory. Please check users permissions." ) );
                             ERROR_LOG( "Error al crear directori " + dicomdirPath );
                         }
                         break;
@@ -322,7 +323,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Not enough free space to create DICOMDIR. Please free space." ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "Not enough free space to create DICOMDIR. Please free space." ) );
         ERROR_LOG( "Error al crear el DICOMDIR, no hi ha suficient espai al disc ERROR : " + state.text() );
         return state.setStatus( "Not enough space to create DICOMDIR", false , 3000 );
     }
@@ -332,7 +333,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( dicomdirStudiesList.count() == 0 ) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
-        QMessageBox::information( this , tr( "Starviewer" ) , tr( "Please, first select the studies you want to create a DICOMDIR." ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "Please, first select the studies you want to create a DICOMDIR." ) );
         return state.setStatus( "No study selected to create the DICOMDIR", false , 3001 );
     }
 
@@ -350,12 +351,12 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         if ( state.code() == 4001 ) //alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , tr( "Starviewer" ), tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
+            QMessageBox::information( this , ApplicationNameString, tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
             QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
         }
         else
         {
-            QMessageBox::critical( this , tr( "Starviewer" ) , tr( "Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty." ).arg( m_lineEditDicomdirPath->text() ) );
+            QMessageBox::critical( this , ApplicationNameString , tr( "Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty." ).arg( m_lineEditDicomdirPath->text() ) );
             ERROR_LOG( "Error al crear el DICOMDIR ERROR : " + state.text() );
             return state;
         }
@@ -449,7 +450,7 @@ void QCreateDicomdir::removeSelectedStudy()
         }
         QApplication::restoreOverrideCursor();
     }
-    else QMessageBox::information(this, tr("Starviewer"), tr("Please select a study to remove of the list."));
+    else QMessageBox::information(this, ApplicationNameString, tr("Please select a study to remove of the list."));
 }
 
 bool QCreateDicomdir::studyExists( QString studyUID )
@@ -613,7 +614,7 @@ void QCreateDicomdir::showDatabaseErrorMessage( const Status &state )
 {
     if( !state.good() )
     {
-        QMessageBox::critical( this , tr( "Starviewer" ) , state.text() + tr("\nError Number: %1").arg(state.code()) );
+        QMessageBox::critical( this , ApplicationNameString , state.text() + tr("\nError Number: %1").arg(state.code()) );
     }
 }
 
@@ -705,7 +706,7 @@ void QCreateDicomdir::deviceChanged( int index )
               }
                 else
                 {
-                    QMessageBox::warning( this , tr( "Starviewer" ) , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
+                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
                 }
 */
             #endif
@@ -729,7 +730,7 @@ void QCreateDicomdir::hideDicomdirSize()
 
 void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
 {
-    QMessageBox::information(this, tr("Starviewer"), 
+    QMessageBox::information(this, ApplicationNameString, 
                              tr("The creation of dicomdir on cd/dvd in Windows is desactivated.\n\n"
                                 "To create a cd/dvd with a Dicomdir, you have to create first the Dicomdir on your hard disk and "
                                 "then copy the directory where you have created it to a cd/dvd using a burning cd/dvd software."));

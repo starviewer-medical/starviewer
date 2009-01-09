@@ -20,6 +20,7 @@
 #include "extensionfactory.h"
 #include "extensioncontext.h"
 #include "singleton.h"
+#include "starviewerapplication.h"
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
@@ -190,7 +191,7 @@ void ExtensionHandler::processInput(QStringList inputFiles)
 
     if (numberOfPatients == 0)
     {
-        QMessageBox::critical(0, tr("Starviewer"), tr("Sorry, it seems that there is no patient data we can load."));
+        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, it seems that there is no patient data we can load."));
         ERROR_LOG("Error fent el fill de patientFiller. Ha retornat 0 pacients.");
         return;
     }
@@ -259,7 +260,7 @@ void ExtensionHandler::processInput(QStringList inputFiles)
                 patientsWithError += "- " + patientsList.at(i)->getFullName() + "; ID: " + patientsList.at(i)->getID() + "<br>";
             }
         }
-        QMessageBox::critical(0, tr("Starviewer"), tr("Sorry, an error ocurred while loading the data of patients:<br> %1").arg(patientsWithError) );
+        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, an error ocurred while loading the data of patients:<br> %1").arg(patientsWithError) );
     }
 
     // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim

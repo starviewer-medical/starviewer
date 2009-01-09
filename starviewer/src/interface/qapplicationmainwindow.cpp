@@ -56,7 +56,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     readSettings();
     // icona de l'aplicació
     this->setWindowIcon( QIcon(":/images/starviewer.png") );
-    this->setWindowTitle( tr("Starviewer") );
+    this->setWindowTitle( ApplicationNameString );
 
     /// Càrrega dels hanging protocols
     HangingProtocolsLoader * hangingProtocolsLoader = new HangingProtocolsLoader();
@@ -192,7 +192,7 @@ void QApplicationMainWindow::createActions()
 
     m_configurationAction = new QAction(this);
     m_configurationAction->setText(tr("&Configuration..."));
-    m_configurationAction->setStatusTip(tr("Modify Starviewer configuration"));
+    m_configurationAction->setStatusTip(tr("Modify %1 configuration").arg(ApplicationNameString));
     m_configurationAction->setIcon( QIcon(":/images/preferences.png") );
     connect(m_configurationAction, SIGNAL(triggered()), SLOT(showConfigurationDialog()));
 }
@@ -407,21 +407,30 @@ void QApplicationMainWindow::resizeEvent(QResizeEvent *event)
 
 void QApplicationMainWindow::about()
 {
-    QMessageBox::about(this, tr("About Starviewer"),
-            tr("<h2>Starviewer</h2>"
-               "<p>Copyright &copy; 2005-2008 Graphics & Imaging Laboratory (GILab), Girona"
-               "<p align='justify'>Starviewer is an image processing software dedicated to DICOM images produced by medical equipment (MRI,"
-               " CT, PET, PET-CT...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is "
-               "fully compliant with the DICOM standard for image comunication and image file formats. Starviewer is able to receive images "
+    QString aboutMessage = tr("<h2>%1</h2>"
+        "<p>Copyright &copy; 2005-2009 Graphics & Imaging Laboratory (GILab), Girona" 
+        "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
+        " CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is "
+        "fully compliant with the DICOM standard for image comunication and image file formats." ).arg(ApplicationNameString);
+    // TODO repassar els textos de l'about
+#ifdef STARVIEWER_LITE
+    aboutMessage += tr("<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
+               " multidimensional images").arg(ApplicationNameString);
+#else
+    aboutMessage = tr("%1 is able to receive images "
                "transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, "
                "STORE SCU - Service Class User, and Query/Retrieve)."
-               "<p align='justify'>Starviewer has been specifically designed for navigation and visualization of multimodality and"
+               "<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
                " multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and"
                " Maximum Intensity Projection(MIP)."
-               "<p align='justify'>Starviewer is at the same time a DICOM PACS workstation for medical imaging and an image processing"
-               " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging."
-               "<p>Version: %1 </p>").arg( StarviewerVersionString )
+               "<p align='justify'>%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing"
+               " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.").arg(ApplicationNameString)
                );
+#endif
+
+    aboutMessage += tr("<p>Version: %1 </p>").arg( StarviewerVersionString );
+
+    QMessageBox::about(this, tr("About %1").arg(ApplicationNameString), aboutMessage );        
 }
 
 void QApplicationMainWindow::writeSettings()
@@ -473,10 +482,9 @@ void QApplicationMainWindow::readSettings()
     QSettings settings;
 
     if (!settings.contains("geometry"))
-	this->showMaximized();
-
-    this->restoreGeometry(settings.value("geometry").toByteArray());
-
+        this->showMaximized();
+    else
+        this->restoreGeometry(settings.value("geometry").toByteArray());
 }
 
 void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
