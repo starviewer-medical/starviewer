@@ -39,12 +39,32 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 {
     setupUi( this );
 
-    //TODO ocultem botons que no son del tot necessaris o que no es faran servir
-    m_rotateCounterClockWiseToolButton->setVisible( false );
+#ifdef STARVIEWER_LITE
+    
+    m_polylineButton->hide();
+    m_angleToolButton->hide();
+    m_axialViewToolButton->hide();
+    m_coronalViewToolButton->hide();
+    m_sagitalViewToolButton->hide();
+    label_2->hide();
+    label_4->hide();
+    m_thickSlabWidget->hide();
+    m_referenceLinesToolButton->hide();
+    m_cursor3DToolButton->hide();
+    m_flipHorizontalToolButton->setVisible(true);
+    m_flipVerticalToolButton->setVisible(true);
+
+#else
+
     m_flipVerticalToolButton->setVisible( false );
     m_flipHorizontalToolButton->setVisible( false );
+
+#endif
+
+    //TODO ocultem botons que no son del tot necessaris o que no es faran servir
     m_windowLevelToolButton->setVisible(false);
     m_translateToolButton->setVisible(false);
+    m_rotateCounterClockWiseToolButton->setVisible( false );
 
     // TODO deshabilitem els presentation states fins la release en què es tornin a habilitar
     m_presentationStateSwitchToolButton->setVisible(false);
@@ -362,8 +382,6 @@ void Q2DViewerExtension::setPatient( Patient *patient )
         else
         {
             m_slicingToolButton->defaultAction()->trigger();
-            m_flipVerticalToolButton->setVisible(false);
-            m_flipHorizontalToolButton->setVisible(false);
             m_cineController->setVisible(true);
         }
         break;
