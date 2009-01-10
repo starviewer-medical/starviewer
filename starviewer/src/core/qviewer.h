@@ -200,8 +200,9 @@ public slots:
 
     void setSeries(Series *series);
 
-    /// Obté el window/level per defecte
-    void getDefaultWindowLevel( double wl[2] );
+    /// Obté el window/level per defecte. Si no se n'especifica cap amb setDefaultWindowLevel
+    /// agafa un window/level que permeti veure correctament el Volum.
+    void getDefaultWindowLevel( double windowLevel[2] );
 
     // TODO convertir en mètode virtual pur?
     // TODO Si tenim un getDefaultWindowLevel = per tothom, el mateix hauria d'haver per aquest mètode
@@ -307,6 +308,8 @@ protected:
 private:
     /// Indica si el viewer és actiu o no
     bool m_isActive;
+    /// Indica si s'ha definit o no un window level per defecte
+    bool m_hasDefaultWindowLevelDefined;
 };
 
 };  //  end  namespace udg {
