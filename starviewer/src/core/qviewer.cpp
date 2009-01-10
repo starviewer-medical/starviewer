@@ -38,7 +38,8 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isActive(false)
+ : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isActive(false),
+   m_hasDefaultWindowLevelDefined(false)
 {
     //TODO: De moment es desactiven els warnings en release i windows perquè no apareixi la finestra vtkOutputWindow
     //      però la solució bona és que els viewers no donin warnings.
@@ -510,14 +511,22 @@ void QViewer::setSeries(Series *series)
     }
 }
 
-void QViewer::getDefaultWindowLevel( double wl[2] )
+void QViewer::getDefaultWindowLevel( double windowLevel[2] )
 {
-    wl[0] = m_defaultWindow;
-    wl[1] = m_defaultLevel;
-    if( !m_mainVolume )
+    if (!m_hasDefaultWindowLevelDefined)
     {
-        DEBUG_LOG( "::getDefaultWindowLevel() : No tenim input " );
+        if (m_mainVolume)
+        {
+            double *range = m_mainVolume->getVtkData()->GetScalarRange();
+            this->setDefaultWindowLevel(range[1] - range[0], (range[1] / 2.) + range[0]);
+        }
+        else
+        {
+            DEBUG_LOG( "QViewer::getDefaultWindowLevel() : No tenim input" );
+        }
     }
+    windowLevel[0] = m_defaultWindow;
+    windowLevel[1] = m_defaultLevel;
 }
 
 void QViewer::enableContextMenu()
@@ -534,6 +543,7 @@ void QViewer::setDefaultWindowLevel( double window, double level )
 {
     m_defaultWindow = window;
     m_defaultLevel = level;
+    m_hasDefaultWindowLevelDefined = true;
 }
 
 void QViewer::resetWindowLevelToDefault()
@@ -564,13 +574,18 @@ void QViewer::updateWindowLevelData()
     if( !m_mainVolume )
         return;
 
+    const QString DefaultWindowLevelName =  tr("Default");
+
     m_windowLevelData->removePresetsFromGroup( WindowLevelPresetsToolData::FileDefined );
-	// agafem el window level de la imatge central per evitar problemes 
-	// de que tinguem diferents windows levels a cada imatge i el de la 
-	// primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
-	int index = m_mainVolume->getImages().count()/2;
+
+    // agafem el window level de la imatge central per evitar problemes
+    // de que tinguem diferents windows levels a cada imatge i el de la
+    // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
+    int index = m_mainVolume->getImages().count()/2;
+
     int wlCount = m_mainVolume->getImages().at( index )->getNumberOfWindowLevels();
-    if( wlCount )
+
+    if( wlCount > 0)
     {
         for( int i = 0; i < wlCount; i++ )
         {
@@ -580,12 +595,12 @@ void QViewer::updateWindowLevelData()
             {
                 description = tr("Default %1").arg(i);
             }
+
             if( windowLevel.first == 0.0 || windowLevel.second == 0.0 )
             {
-                double *range = m_mainVolume->getVtkData()->GetScalarRange();
-                double window = range[1] - range[0];
-                double level = (range[1] / 2.) + range[0];
-                m_windowLevelData->addPreset( description, window, level, WindowLevelPresetsToolData::FileDefined );
+                double windowLevel[2];
+                this->getDefaultWindowLevel(windowLevel);
+                m_windowLevelData->addPreset( description, windowLevel[0], windowLevel[1], WindowLevelPresetsToolData::FileDefined );
             }
             else
             {
@@ -597,10 +612,10 @@ void QViewer::updateWindowLevelData()
     }
     else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
     {
-        double wl[2];
-        this->getDefaultWindowLevel( wl );
-        m_windowLevelData->addPreset( tr("Default"), wl[0], wl[1], WindowLevelPresetsToolData::FileDefined );
-        m_windowLevelData->activatePreset( tr("Default") );
+        double windowLevel[2];
+        this->getDefaultWindowLevel( windowLevel );
+        m_windowLevelData->addPreset( DefaultWindowLevelName, windowLevel[0], windowLevel[1], WindowLevelPresetsToolData::FileDefined );
+        m_windowLevelData->activatePreset(DefaultWindowLevelName);
     }
 }
 
