@@ -292,7 +292,6 @@ public slots:
     void removeAnnotation( AnnotationFlags annotation );
 
     void setWindowLevel(double window, double level);
-    void resetWindowLevelToDefault();
 
     /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
     void setSeedPosition( double pos[3] );
