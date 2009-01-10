@@ -232,8 +232,7 @@ public slots:
     virtual void setWindowLevel( double window , double level ) = 0;
 
     /// Reseteja el window level al que tingui per defecte el volum
-    // TODO convertir en mètode virtual pur?
-    virtual void resetWindowLevelToDefault(){};
+    virtual void resetWindowLevelToDefault();
 
 signals:
     /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre

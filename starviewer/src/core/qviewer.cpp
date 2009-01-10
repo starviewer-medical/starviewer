@@ -536,6 +536,11 @@ void QViewer::setDefaultWindowLevel( double window, double level )
     m_defaultLevel = level;
 }
 
+void QViewer::resetWindowLevelToDefault()
+{
+    this->setWindowLevel(m_defaultWindow, m_defaultLevel);
+}
+
 void QViewer::contextMenuRelease()
 {
     // Extret dels exemples de vtkEventQtSlotConnect

@@ -377,18 +377,6 @@ void Q3DMPRViewer::setWindowLevel( double window , double level )
     }
 }
 
-void Q3DMPRViewer::resetWindowLevelToDefault()
-{
-    if( m_mainVolume )
-    {
-        m_axialImagePlaneWidget->SetWindowLevel( m_defaultWindow , m_defaultLevel );
-    }
-    else
-    {
-        DEBUG_LOG("Intentant posar un window level sense donar un input abans");
-    }
-}
-
 void Q3DMPRViewer::enableOutline( bool enable )
 {
     m_isOutlineEnabled = enable;

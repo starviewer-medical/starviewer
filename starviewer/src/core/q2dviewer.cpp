@@ -1325,14 +1325,6 @@ int Q2DViewer::getCurrentPhase() const
     return m_currentPhase;
 }
 
-void Q2DViewer::resetWindowLevelToDefault()
-{
-    // això ens dóna un level/level "maco" per defecte
-    // situem el level al mig i donem un window complet de tot el rang
-    //\TODO aquí caldria tenir en compte el default del presentation state actual si l'hi ha
-    this->setWindowLevel( m_defaultWindow, m_defaultLevel );
-}
-
 void Q2DViewer::setModalityRescale( vtkImageShiftScale *rescale )
 {
     m_modalityLUTRescale = rescale;

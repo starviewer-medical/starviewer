@@ -89,7 +89,6 @@ public slots:
     virtual void resetPlanes();
 
     void setWindowLevel( double window , double level );
-    void resetWindowLevelToDefault();
 
     /// mètodes per controlar la visibilitat de l'outline
     void enableOutline( bool enable );
