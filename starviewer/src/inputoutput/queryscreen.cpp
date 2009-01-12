@@ -60,6 +60,15 @@ QueryScreen::QueryScreen( QWidget *parent )
     readSettings();
     //fem que per defecte mostri els estudis de la cache
     queryStudy("Cache");
+
+    // Configuració per Starviewer Lite
+#ifdef STARVIEWER_LITE
+    m_showPACSNodesToolButton->hide();
+    m_operationListToolButton->hide();
+    m_createDICOMDIRToolButton->hide();
+    m_advancedSearchToolButton->hide();
+    m_tab->removeTab(1); // tab de "PACS" fora
+#endif
 }
 
 QueryScreen::~QueryScreen()
