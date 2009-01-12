@@ -552,13 +552,13 @@ void QueryScreen::expandStudy( QString studyUID , QString pacsId )
 
     switch ( m_tab->currentIndex() )
     {
-        case 0 : // si estem a la pestanya de la cache
+        case LocalDataBaseTab : // si estem a la pestanya de la cache
             querySeries( studyUID, "Cache" );
             break;
-        case 1 :  //si estem la pestanya del PACS fem query al Pacs
+        case PACSQueryTab :  //si estem la pestanya del PACS fem query al Pacs
             querySeriesPacs(studyUID, pacsId);
             break;
-        case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
+        case DICOMDIRTab : //si estem a la pestanya del dicomdir, fem query al dicomdir
             querySeries( studyUID, "DICOMDIR" );
             break;
     }
@@ -573,15 +573,15 @@ void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString p
 
     switch ( m_tab->currentIndex() )
     {
-        case 0 : // si estem a la pestanya de la cache
+        case LocalDataBaseTab : // si estem a la pestanya de la cache
             queryImage( studyUID , seriesUID, "Cache" );
             break;
 
-        case 1 :  //si estem la pestanya del PACS fem query al Pacs
+        case PACSQueryTab :  //si estem la pestanya del PACS fem query al Pacs
             queryImagePacs( studyUID , seriesUID , pacsId);
             break;
 
-        case 2 : //si estem a la pestanya del dicomdir, fem query al dicomdir
+        case DICOMDIRTab : //si estem a la pestanya del dicomdir, fem query al dicomdir
             queryImage( studyUID , seriesUID, "DICOMDIR" );
             break;
     }
@@ -895,15 +895,15 @@ void QueryScreen::view()
 {
     switch ( m_tab->currentIndex() )
     {
-        case 0 :
+        case LocalDataBaseTab :
             loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getCurrentSeriesUID(), m_studyTreeWidgetCache->getCurrentImageUID(), "Cache" );
             break;
 
-        case 1 :
+        case PACSQueryTab :
             retrievePacs( true );
            break;
 
-        case 2 :
+        case DICOMDIRTab :
             loadStudies( m_studyTreeWidgetDicomdir->getSelectedStudiesUID(), m_studyTreeWidgetDicomdir->getCurrentSeriesUID(), m_studyTreeWidgetDicomdir->getCurrentImageUID(), "DICOMDIR" );
             break;
 
@@ -1185,7 +1185,7 @@ void QueryScreen::openDicomdir()
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
             settings.setLastOpenedDICOMDIRPath( QFileInfo(dicomdirPath).dir().path() );
             this->bringToFront();
-            m_tab->setCurrentIndex( 2 ); // mostre el tab del dicomdir
+            m_tab->setCurrentIndex( DICOMDIRTab ); // mostre el tab del dicomdir
         }
 
         clearTexts();//Netegem el filtre de cerca al obrir el dicomdir
