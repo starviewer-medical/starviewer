@@ -1,3 +1,11 @@
+// TODO
+// - Calcular el gradient i guardar-lo -> frambebuffer 3D, llesca a llesca
+// - Classe shader o semblant per agrupar les referències i els uniforms.
+// - Alguna tecla Fn que recarregui els shaders.
+
+
+
+
 #include "qgputestingviewer.h"
 
 #include <QFile>
@@ -8,6 +16,7 @@
 #include <QWheelEvent>
 
 #include "camera.h"
+#include "shader.h"
 #include "volume.h"
 
 
@@ -21,8 +30,7 @@ const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
  : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_vertexBufferObject( 0 ), m_volumeTexture( 0 ),
-   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shaderProgram( 0 ), m_backgroundColor( Qt::transparent ),
-   m_transferFunctionTexture( 0 )
+   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shader( 0 ), m_backgroundColor( Qt::transparent ), m_transferFunctionTexture( 0 )
 {
     setFocusPolicy( Qt::WheelFocus );
 
@@ -40,7 +48,7 @@ QGpuTestingViewer::~QGpuTestingViewer()
         glDeleteTextures( 1, &m_volumeTexture );
         glDeleteFramebuffersEXT( 1, &m_framebufferObject );
         glDeleteTextures( 1, &m_framebufferTexture );
-        glDeleteObjectARB( m_shaderProgram );
+        delete m_shader;
         glDeleteTextures( 1, &m_transferFunctionTexture );
     }
 }
@@ -372,74 +380,19 @@ void QGpuTestingViewer::recreateFramebufferTexture()
 
 void QGpuTestingViewer::loadShaders()
 {
-    GLhandleARB vertexShaderObject = glCreateShaderObjectARB( GL_VERTEX_SHADER_ARB );
-    GLhandleARB fragmentShaderObject = glCreateShaderObjectARB( GL_FRAGMENT_SHADER_ARB );
+    m_shader = new Shader( ":/extensions/GpuTestingExtension/shaders/shader.vert", ":/extensions/GpuTestingExtension/shaders/shader.frag" );
 
-    QByteArray vertexShaderSourceBytes, fragmentShaderSourceBytes;
-
-    QFile vertexShaderSourceFile( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
-
-    if ( vertexShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
+    if ( !m_shader->isValid() )
     {
-        QTextStream vertexShaderSourceTextStream( &vertexShaderSourceFile );
-        vertexShaderSourceBytes = vertexShaderSourceTextStream.readAll().toLocal8Bit();
-        vertexShaderSourceFile.close();
-    }
-    else
-    {
-        DEBUG_LOG( "Error obrint el fitxer del vertex shader" );
+        DEBUG_LOG( "Hi ha hagut algun problema en crear el shader" );
         return;
     }
 
-    QFile fragmentShaderSourceFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
-    //QFile fragmentShaderSourceFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
-
-    if ( fragmentShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
-    {
-        QTextStream fragmentShaderSourceTextStream( &fragmentShaderSourceFile );
-        fragmentShaderSourceBytes = fragmentShaderSourceTextStream.readAll().toLocal8Bit();
-        fragmentShaderSourceFile.close();
-    }
-    else
-    {
-        DEBUG_LOG( "Error obrint el fitxer del fragment shader" );
-        return;
-    }
-
-    const char *vertexShaderSource = vertexShaderSourceBytes.constData();
-    const char *fragmentShaderSource = fragmentShaderSourceBytes.constData();
-
-    glShaderSourceARB( vertexShaderObject, 1, &vertexShaderSource, 0 );
-    glShaderSourceARB( fragmentShaderObject, 1, &fragmentShaderSource, 0 );
-    glCompileShaderARB( vertexShaderObject );
-    glCompileShaderARB( fragmentShaderObject );
-
-    m_shaderProgram = glCreateProgramObjectARB();
-    glAttachObjectARB( m_shaderProgram, vertexShaderObject );
-    glAttachObjectARB( m_shaderProgram, fragmentShaderObject );
-    glLinkProgramARB( m_shaderProgram );
-
-    const int MAX_ERROR_LENGTH = 512;
-    int errorLength;
-    char errors[MAX_ERROR_LENGTH];
-
-    glGetInfoLogARB( vertexShaderObject, MAX_ERROR_LENGTH, &errorLength, errors );
-    if ( errorLength > 0 ) DEBUG_LOG( errors );
-    glGetInfoLogARB( fragmentShaderObject, MAX_ERROR_LENGTH, &errorLength, errors );
-    if ( errorLength > 0 ) DEBUG_LOG( errors );
-    glGetInfoLogARB( m_shaderProgram, MAX_ERROR_LENGTH, &errorLength, errors );
-    if ( errorLength > 0 ) DEBUG_LOG( errors );
-
-    m_backgroundColorUniform = glGetUniformLocationARB( m_shaderProgram, "uBackgroundColor" );
-    if ( m_backgroundColorUniform < 0 ) DEBUG_LOG( "Error en obtenir el background color uniform" );
-    m_dimensionsUniform = glGetUniformLocationARB( m_shaderProgram, "uDimensions" );
-    if ( m_dimensionsUniform < 0 ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
-    m_framebufferTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uFramebufferTexture" );
-    if ( m_framebufferTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
-    m_volumeTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uVolumeTexture" );
-    if ( m_volumeTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
-    m_transferFunctionTextureUniform = glGetUniformLocationARB( m_shaderProgram, "uTransferFunctionTexture" );
-    if ( m_transferFunctionTextureUniform < 0 ) DEBUG_LOG( "Error en obtenir el transfer function texture uniform" );
+    if ( !m_shader->initUniform( "uBackgroundColor" ) ) DEBUG_LOG( "Error en obtenir el background color uniform" );
+    if ( !m_shader->initUniform( "uDimensions" ) ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
+    if ( !m_shader->initUniform( "uFramebufferTexture" ) ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
+    if ( !m_shader->initUniform( "uVolumeTexture" ) ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
+    if ( !m_shader->initUniform( "uTransferFunctionTexture" ) ) DEBUG_LOG( "Error en obtenir el transfer function texture uniform" );
 
     checkGLError();
 }
@@ -515,7 +468,7 @@ void QGpuTestingViewer::firstPass()
 
 void QGpuTestingViewer::secondPass()
 {
-    glUseProgramObjectARB( m_shaderProgram );
+    glUseProgramObjectARB( m_shader->programObject() );
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -523,21 +476,21 @@ void QGpuTestingViewer::secondPass()
     glLoadIdentity();
     glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
 
-    glUniform3fARB( m_backgroundColorUniform, m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
+    glUniform3fARB( m_shader->uniform( "uBackgroundColor" ), m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
-    glUniform1iARB( m_framebufferTextureUniform, 0 );
+    glUniform1iARB( m_shader->uniform( "uFramebufferTexture" ), 0 );
 
-    glUniform3fARB( m_dimensionsUniform, m_dimX, m_dimY, m_dimZ );
+    glUniform3fARB( m_shader->uniform( "uDimensions" ), m_dimX, m_dimY, m_dimZ );
 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
-    glUniform1iARB( m_volumeTextureUniform, 1 );
+    glUniform1iARB( m_shader->uniform( "uVolumeTexture" ), 1 );
 
     glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
-    glUniform1iARB( m_transferFunctionTextureUniform, 2 );
+    glUniform1iARB( m_shader->uniform( "uTransferFunctionTexture" ), 2 );
 
     glCullFace( GL_BACK );
 

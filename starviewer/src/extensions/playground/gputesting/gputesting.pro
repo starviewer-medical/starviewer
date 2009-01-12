@@ -10,14 +10,16 @@ HEADERS += gputestingextensionmediator.h \
            camera.h \
            quaternion.h \
            matrix3.h \
-           matrix4.h 
+           matrix4.h \
+           shader.h 
 SOURCES += gputestingextensionmediator.cpp \
            qgputestingextension.cpp \
            qgputestingviewer.cpp \
            camera.cpp \
            quaternion.cpp \
            matrix3.cpp \
-           matrix4.cpp 
+           matrix4.cpp \
+           shader.cpp 
 RESOURCES = gputesting.qrc
 QT += opengl
 LIBS += -lGLEW
