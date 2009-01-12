@@ -13,8 +13,9 @@ FORMS += qconfigurationscreenbase.ui \
          qcreatedicomdirbase.ui \
          qoperationstatescreenbase.ui \
          queryscreenbase.ui \
- qadvancedsearchwidgetbase.ui \
- qbasicsearchwidgetbase.ui
+         qadvancedsearchwidgetbase.ui \
+         qbasicsearchwidgetbase.ui \
+         qlocaldatabaseconfigurationscreenbase.ui
 HEADERS += databaseconnection.h \
            dicomimage.h \
            pacsconnection.h \
@@ -52,20 +53,22 @@ HEADERS += databaseconnection.h \
            qoperationstatescreen.h \
            queryscreen.h \
  	   errordcmtk.h \
- qadvancedsearchwidget.h \
- qbasicsearchwidget.h \
- localdatabasemanager.h \
- localdatabaseimagedal.h \
- testdicomobjects.h \
- localdatabaseseriesdal.h \
- localdatabasestudydal.h \
- localdatabasepatientdal.h \
- localdatabaseutildal.h \
- testdatabase.h \
- qdeleteoldstudiesthread.h \
- localdatabasemanagerthreaded.h \
- qthreadrunwithexec.h \
- databaseinstallation.h
+           qadvancedsearchwidget.h \
+           qbasicsearchwidget.h \
+           localdatabasemanager.h \
+           localdatabaseimagedal.h \
+           testdicomobjects.h \
+           localdatabaseseriesdal.h \
+           localdatabasestudydal.h \
+           localdatabasepatientdal.h \
+           localdatabaseutildal.h \
+           testdatabase.h \
+           qdeleteoldstudiesthread.h \
+           localdatabasemanagerthreaded.h \
+           qthreadrunwithexec.h \
+           databaseinstallation.h \
+           qlocaldatabaseconfigurationscreen.h
+
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
            pacsconnection.cpp \
@@ -101,19 +104,20 @@ SOURCES += databaseconnection.cpp \
            qcreatedicomdir.cpp \
            qoperationstatescreen.cpp \
            queryscreen.cpp \
- qadvancedsearchwidget.cpp \
- qbasicsearchwidget.cpp \
- localdatabasemanager.cpp \
- localdatabaseimagedal.cpp \
- testdicomobjects.cpp \
- localdatabaseseriesdal.cpp \
- localdatabasestudydal.cpp \
- localdatabasepatientdal.cpp \
- localdatabaseutildal.cpp \
- testdatabase.cpp \
- qdeleteoldstudiesthread.cpp \
- localdatabasemanagerthreaded.cpp \
- databaseinstallation.cpp
+           qadvancedsearchwidget.cpp \
+           qbasicsearchwidget.cpp \
+           localdatabasemanager.cpp \
+           localdatabaseimagedal.cpp \
+           testdicomobjects.cpp \
+           localdatabaseseriesdal.cpp \
+           localdatabasestudydal.cpp \
+           localdatabasepatientdal.cpp \
+           localdatabaseutildal.cpp \
+           testdatabase.cpp \
+           qdeleteoldstudiesthread.cpp \
+           localdatabasemanagerthreaded.cpp \
+           databaseinstallation.cpp \
+           qlocaldatabaseconfigurationscreen.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
