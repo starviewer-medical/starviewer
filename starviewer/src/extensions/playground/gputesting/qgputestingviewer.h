@@ -13,6 +13,7 @@ namespace udg {
 
 
 class Camera;
+class Shader;
 class Volume;
 
 
@@ -139,18 +140,8 @@ private:
     /// Textura on es guarda el que es pinta al framebuffer object.
     GLuint m_framebufferTexture;
 
-    /// Combinació de shaders que s'aplicarà.
-    GLhandleARB m_shaderProgram;
-    /// Uniform pel color de fons.
-    GLint m_backgroundColorUniform;
-    /// Uniform per les dimensions del volum.
-    GLint m_dimensionsUniform;
-    /// Uniform per la textura del framebuffer.
-    GLint m_framebufferTextureUniform;
-    /// Uniform per la textura del volum.
-    GLint m_volumeTextureUniform;
-    /// Uniform per la textura de la funció de transferència.
-    GLint m_transferFunctionTextureUniform;
+    /// Shader que s'aplicarà.
+    Shader *m_shader;
 
     /// Color de fons.
     QColor m_backgroundColor;
