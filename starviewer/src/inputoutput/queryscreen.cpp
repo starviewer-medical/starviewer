@@ -372,7 +372,6 @@ void QueryScreen::bringToFront()
 
 void QueryScreen::searchStudy()
 {
-    DEBUG_LOG(m_tab->currentWidget()->objectName());
     switch ( m_tab->currentIndex() )
     {
         case LocalDataBaseTab:
