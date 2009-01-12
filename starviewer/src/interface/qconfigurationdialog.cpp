@@ -6,7 +6,11 @@
  ***************************************************************************/
 #include "qconfigurationdialog.h"
 
+#ifndef STARVIEWER_LITE
 #include "qconfigurationscreen.h"
+#endif
+
+#include "qlocaldatabaseconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -17,17 +21,25 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     setupUi(this);
     setWindowTitle( tr("%1 Configuration").arg( ApplicationNameString ) );
     setWindowFlags( (this->windowFlags() | Qt::WindowMaximizeButtonHint)  ^ Qt::WindowContextHelpButtonHint  );
-    QConfigurationScreen *screen = new QConfigurationScreen(this);
-    this->addConfigurationWidget(screen, "PACS", AdvancedConfiguration);
 
-    connect(screen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
+#ifndef STARVIEWER_LITE // no mostrem configuració del PACS
+    QConfigurationScreen *pacsConfigurationScreen = new QConfigurationScreen(this);
+    this->addConfigurationWidget(pacsConfigurationScreen, tr("PACS"), AdvancedConfiguration);
+    connect(pacsConfigurationScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
+    connect(m_okButton , SIGNAL(clicked()), pacsConfigurationScreen, SLOT(applyChanges()));
+#endif
+
+    // configuracions de la base de dades local
+    QLocalDatabaseConfigurationScreen *localDatabaseScreen = new QLocalDatabaseConfigurationScreen(this);
+    this->addConfigurationWidget(localDatabaseScreen, tr("Local Database"), AdvancedConfiguration);
+    connect(localDatabaseScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
+    connect(m_okButton , SIGNAL(clicked()), localDatabaseScreen, SLOT(applyChanges()));
+
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
-    connect(m_okButton , SIGNAL(clicked()), screen, SLOT(applyChanges()));
 
     m_optionsList->setCurrentRow(0);
     m_viewAdvancedOptions->setCheckState(Qt::Checked);
 }
-
 
 QConfigurationDialog::~QConfigurationDialog()
 {
