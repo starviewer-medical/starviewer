@@ -176,7 +176,12 @@ private slots:
     void studyWillBeDeletedSlot(QString studyInstanceUID);
 
 private:
-    enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
+
+    #ifdef STARVIEWER_LITE //Al fer remove de la pestanya del pacs es canvia el index de cada tab, per això hem de redefinir-lo pel cas de StarviewerLite
+        enum TabType{ PACSQueryTab = -1, LocalDataBaseTab = 0, DICOMDIRTab = 1 };
+    #else 
+        enum TabType{ LocalDataBaseTab = 0, PACSQueryTab = 1, DICOMDIRTab = 2 };
+    #endif
 
     ///Connecta els signals i slots pertinents
     void createConnections();
