@@ -151,7 +151,7 @@ void QueryScreen::CreateContextMenuQStudyTreeWidgetDicomdir()
     action = m_contextMenuQStudyTreeWidgetDicomdir.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
     (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
 
-    action = m_contextMenuQStudyTreeWidgetDicomdir.addAction( QIcon(":/images/retrieve.png") , tr("&Retrieve") , this , SLOT( importDicomdir() ) , tr("Ctrl+R") );
+    action = m_contextMenuQStudyTreeWidgetDicomdir.addAction( QIcon(":/images/retrieve.png") , tr("&Import") , this , SLOT( importDicomdir() ) , tr("Ctrl+R") );
     (void) new QShortcut( action->shortcut() , this , SLOT( retrieve() ) );
 
     m_studyTreeWidgetDicomdir->setContextMenu( & m_contextMenuQStudyTreeWidgetDicomdir ); //Especifiquem que es el menu del dicomdir
@@ -494,7 +494,7 @@ void QueryScreen::queryStudy( QString source )
             QApplication::restoreOverrideCursor();
             if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
             {
-                QMessageBox::warning( this , ApplicationNameString , tr( "Error, not opened Dicomdir" ) );
+                QMessageBox::warning( this , ApplicationNameString , tr( "To search you have to open a dicomdir" ) );
                 ERROR_LOG( "No s'ha obert cap directori dicomdir " + state.text() );
             }
             else

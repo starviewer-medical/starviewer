@@ -432,7 +432,7 @@
          <item>
           <widget class="QToolButton" name="m_retrieveButtonDICOMDIR" >
            <property name="text" >
-            <string>Retrieve</string>
+            <string>Import</string>
            </property>
            <property name="icon" >
             <iconset resource="../main/main.qrc" >:/images/retrieve.png</iconset>
