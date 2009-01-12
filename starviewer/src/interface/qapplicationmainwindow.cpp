@@ -115,10 +115,17 @@ void QApplicationMainWindow::createActions()
     connect( m_openDirAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
     m_pacsAction = new QAction( this );
+#ifdef STARVIEWER_LITE // el menú "PACS" es dirà "Exams"
+    m_pacsAction->setText(tr("&Exams...") );
+    m_pacsAction->setShortcut( tr("Ctrl+E") );
+    m_pacsAction->setStatusTip( tr("Browse exams") );
+#else
     m_pacsAction->setText(tr("&PACS...") );
     m_pacsAction->setShortcut( tr("Ctrl+P") );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
-    m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") );
+#endif
+    // TODO potser almenys per la versió Lite caldria canviar la icona
+    m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") ); 
     m_signalMapper->setMapping( m_pacsAction , 7 );
     connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 
@@ -235,6 +242,9 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu->addAction( m_closeAction );
     m_fileMenu->addAction( m_exitAction );
 
+#ifdef STARVIEWER_LITE
+    //no afegim els menús de visualització
+#else
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
 
@@ -242,6 +252,7 @@ void QApplicationMainWindow::createMenus()
     {
         m_visualizationMenu->addAction(action);
     }
+#endif
 
     // Menú tools
     m_toolsMenu = menuBar()->addMenu( tr("&Tools") );
