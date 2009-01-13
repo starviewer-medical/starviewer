@@ -1,6 +1,5 @@
 #include "shader.h"
 
-#include <QByteArray>
 #include <QFile>
 #include <QTextStream>
 
@@ -10,87 +9,53 @@
 namespace udg {
 
 
-Shader::Shader( const QString &vertexShaderSourceFileName, const QString &fragmentShaderSourceFileName )
- : m_programObject( 0 ), m_valid( true )
+Shader::Shader()
+ : m_valid( false )
 {
-    GLhandleARB vertexShaderObject = glCreateShaderObjectARB( GL_VERTEX_SHADER_ARB );
-    GLhandleARB fragmentShaderObject = glCreateShaderObjectARB( GL_FRAGMENT_SHADER_ARB );
-
-    QByteArray vertexShaderSourceBytes, fragmentShaderSourceBytes;
-
-    QFile vertexShaderSourceFile( vertexShaderSourceFileName );
-
-    if ( vertexShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
-    {
-        QTextStream vertexShaderSourceTextStream( &vertexShaderSourceFile );
-        vertexShaderSourceBytes = vertexShaderSourceTextStream.readAll().toLocal8Bit();
-        vertexShaderSourceFile.close();
-    }
-    else
-    {
-        DEBUG_LOG( QString( "Error obrint el fitxer del vertex shader: %1" ).arg( vertexShaderSourceFileName ) );
-        m_valid = false;
-        return;
-    }
-
-    QFile fragmentShaderSourceFile( fragmentShaderSourceFileName );
-
-    if ( fragmentShaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
-    {
-        QTextStream fragmentShaderSourceTextStream( &fragmentShaderSourceFile );
-        fragmentShaderSourceBytes = fragmentShaderSourceTextStream.readAll().toLocal8Bit();
-        fragmentShaderSourceFile.close();
-    }
-    else
-    {
-        DEBUG_LOG( QString( "Error obrint el fitxer del fragment shader: %1" ).arg( fragmentShaderSourceFileName ) );
-        m_valid = false;
-        return;
-    }
-
-    const char *vertexShaderSource = vertexShaderSourceBytes.constData();
-    const char *fragmentShaderSource = fragmentShaderSourceBytes.constData();
-
-    glShaderSourceARB( vertexShaderObject, 1, &vertexShaderSource, 0 );
-    glShaderSourceARB( fragmentShaderObject, 1, &fragmentShaderSource, 0 );
-    glCompileShaderARB( vertexShaderObject );
-    glCompileShaderARB( fragmentShaderObject );
-
     m_programObject = glCreateProgramObjectARB();
-    glAttachObjectARB( m_programObject, vertexShaderObject );
-    glAttachObjectARB( m_programObject, fragmentShaderObject );
-    glLinkProgramARB( m_programObject );
-
-    const int MAX_ERROR_LENGTH = 512;
-    int errorLength;
-    char errors[MAX_ERROR_LENGTH];
-
-    glGetInfoLogARB( vertexShaderObject, MAX_ERROR_LENGTH, &errorLength, errors );
-    if ( errorLength > 0 )
-    {
-        DEBUG_LOG( errors );
-        m_valid = false;
-    }
-
-    glGetInfoLogARB( fragmentShaderObject, MAX_ERROR_LENGTH, &errorLength, errors );
-    if ( errorLength > 0 )
-    {
-        DEBUG_LOG( errors );
-        m_valid = false;
-    }
-
-    glGetInfoLogARB( m_programObject, MAX_ERROR_LENGTH, &errorLength, errors );
-    if ( errorLength > 0 )
-    {
-        DEBUG_LOG( errors );
-        m_valid = false;
-    }
 }
 
 
 Shader::~Shader()
 {
     glDeleteObjectARB( m_programObject );
+}
+
+
+void Shader::addVertexShader( const QString &fileName )
+{
+    GLhandleARB shader = addShader( fileName, GL_VERTEX_SHADER_ARB );
+    if ( shader > 0 ) m_vertexShaders << shader;
+}
+
+
+void Shader::clearVertexShaders()
+{
+    foreach ( GLhandleARB vertexShader, m_vertexShaders ) glDetachObjectARB( m_programObject, vertexShader );
+
+    m_vertexShaders.clear();
+}
+
+
+void Shader::addFragmentShader( const QString &fileName )
+{
+    GLhandleARB shader = addShader( fileName, GL_FRAGMENT_SHADER_ARB );
+    if ( shader > 0 ) m_fragmentShaders << shader;
+}
+
+
+void Shader::clearFragmentShaders()
+{
+    foreach ( GLhandleARB fragmentShader, m_fragmentShaders ) glDetachObjectARB( m_programObject, fragmentShader );
+
+    m_fragmentShaders.clear();
+}
+
+
+void Shader::link()
+{
+    glLinkProgramARB( m_programObject );
+    m_valid = !printInfoLog( m_programObject );
 }
 
 
@@ -121,11 +86,50 @@ bool Shader::initUniform( const QString &uniformName )
 }
 
 
-GLint Shader::uniform( const QString &uniformName ) const
+GLhandleARB Shader::addShader( const QString &fileName, GLenum type )
 {
-    if ( !m_valid || !m_uniforms.contains( uniformName ) ) return -1;
+    QFile shaderSourceFile( fileName );
 
-    return m_uniforms.value( uniformName );
+    if ( !shaderSourceFile.open( QFile::ReadOnly | QFile::Text ) )
+    {
+        DEBUG_LOG( QString( "Error obrint el fitxer del shader: %1" ).arg( fileName ) );
+        return 0;
+    }
+
+    QTextStream shaderSourceTextStream( &shaderSourceFile );
+    const char *shaderSource = qPrintable( shaderSourceTextStream.readAll() );
+
+    GLhandleARB shaderObject = glCreateShaderObjectARB( type );
+    glShaderSourceARB( shaderObject, 1, &shaderSource, 0 );
+    glCompileShaderARB( shaderObject );
+    glAttachObjectARB( m_programObject, shaderObject );
+    glDeleteObjectARB( shaderObject );
+
+    shaderSourceFile.close();
+
+    printInfoLog( shaderObject );
+    printInfoLog( m_programObject );
+
+    return shaderObject;
+}
+
+
+bool Shader::printInfoLog( GLhandleARB object ) const
+{
+    int infoLogLength;
+
+    glGetObjectParameterivARB( object, GL_OBJECT_INFO_LOG_LENGTH_ARB, &infoLogLength);  // infoLogLength inclou el \0 final
+
+    if ( infoLogLength > 0 )
+    {
+        char *infoLog = new char[infoLogLength];
+        int length;
+        glGetInfoLogARB( object, infoLogLength, &length, infoLog ); // length és la llargada del missatge net
+        if ( length > 0 ) DEBUG_LOG( infoLog );
+        delete[] infoLog;
+        return length > 0;
+    }
+    else return false;
 }
 
 
