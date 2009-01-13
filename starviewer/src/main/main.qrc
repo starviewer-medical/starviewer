@@ -35,6 +35,8 @@
         <file>images/dvd.png</file>
         <file>images/eraser.png</file>
         <file>images/eraser2.png</file>
+        <file>images/erasercursor.png</file>
+        <file>images/eraseregioncursor.png</file>
         <file>images/exit.png</file>
         <file>images/fileclose.png</file>
         <file>images/flipHorizontal.png</file>
@@ -62,6 +64,7 @@
         <file>images/pacsServer.png</file>
         <file>images/pause.png</file>
         <file>images/pencil.png</file>
+        <file>images/pencilcursor.png</file>
         <file>images/photo.png</file>
         <file>images/play.png</file>
         <file>images/polyline.png</file>
@@ -84,6 +87,7 @@
         <file>images/sequenceEnd.png</file>
         <file>images/series.png</file>
         <file>images/singleView.png</file>
+        <file>images/slicecursor.png</file>
         <file>images/slicing.png</file>
         <file>images/small-warning.png</file>
         <file>images/splash.png</file>

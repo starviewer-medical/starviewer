@@ -922,6 +922,28 @@ void Q2DViewer::setOverlayInput( Volume* volume )
     }
 }
 
+void Q2DViewer::isOverlayModified( )
+{
+    switch( m_overlay )
+    {
+    case None:
+    break;
+
+    case CheckerBoard:
+    break;
+
+    case Blend:
+        // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
+        m_blender->Modified();
+        m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
+
+    break;
+
+    case RectilinearWipe:
+    break;
+    }
+}
+
 void Q2DViewer::setOpacityOverlay ( double op )
 {
     m_opacityOverlay=op;
