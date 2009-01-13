@@ -380,7 +380,10 @@ void QGpuTestingViewer::recreateFramebufferTexture()
 
 void QGpuTestingViewer::loadShaders()
 {
-    m_shader = new Shader( ":/extensions/GpuTestingExtension/shaders/shader.vert", ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+    m_shader = new Shader();
+    m_shader->addVertexShader( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
+    m_shader->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+    m_shader->link();
 
     if ( !m_shader->isValid() )
     {
