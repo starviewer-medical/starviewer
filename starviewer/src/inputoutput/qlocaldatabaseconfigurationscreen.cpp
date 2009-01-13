@@ -249,6 +249,7 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
                                "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
             showDatabaseErrorMessage( state );
         }
+        else QMessageBox::information( this, ApplicationNameString, "All studies has been deleted successfully");
 
         emit configurationChanged("Pacs/CacheCleared");
     }
@@ -273,6 +274,7 @@ void QLocalDatabaseConfigurationScreen::compactCache()
                 "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
         showDatabaseErrorMessage( state );
     }
+    else QMessageBox::information( this, ApplicationNameString, "Starviewer database has been compacted successfully");
 }
 
 void QLocalDatabaseConfigurationScreen::cacheImagePathEditingFinish()
