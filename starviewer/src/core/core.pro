@@ -48,8 +48,6 @@ HEADERS += extensionfactory.h \
            patient.h \
            series.h \
            study.h \
-           parameters.h \
-           qinputparameters.h \
            oldtool.h \
            output.h \
            q3dorientationmarker.h \
@@ -210,8 +208,6 @@ SOURCES += extensionmediator.cpp \
            patient.cpp \
            series.cpp \
            study.cpp \
-           parameters.cpp \
-           qinputparameters.cpp \
            oldtool.cpp \
            output.cpp \
            q3dorientationmarker.cpp \

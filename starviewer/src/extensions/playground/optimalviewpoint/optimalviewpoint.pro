@@ -6,7 +6,9 @@
 FORMS += optimalviewpointinputparametersformbase.ui \
          qoptimalviewpointextensionbase.ui \
          qshowhidewidgetbase.ui 
-HEADERS += doublehistogram.h \
+HEADERS += qinputparameters.h \
+		   parameters.h \
+		   doublehistogram.h \
            histogram.h \
            optimalviewpoint.h \
            optimalviewpointinputparametersform.h \
@@ -25,7 +27,9 @@ HEADERS += doublehistogram.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
            saliencyvoxelshader.h \
            vtkInteractorStyleFasterTrackballActor.h 
-SOURCES += doublehistogram.cpp \
+SOURCES += qinputparameters.cpp \
+		   parameters.cpp \
+		   doublehistogram.cpp \
            histogram.cpp \
            optimalviewpoint.cpp \
            optimalviewpointinputparametersform.cpp \
