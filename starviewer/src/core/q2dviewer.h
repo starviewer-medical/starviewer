@@ -96,6 +96,12 @@ public:
     /// Afegim el volum solapat
     void setOverlayInput( Volume* volume );
 
+    /// Afegim el volum solapat
+    Volume* getOverlayInput( void ) { return m_overlayVolume; }
+
+    /// Diem al viewer que s'ha modificat l'overlay per tal que refresqui correctament
+    void isOverlayModified( );
+
     /// Canviem l'opacitat del volum solapat
     void setOpacityOverlay ( double op );
 

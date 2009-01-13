@@ -26,6 +26,7 @@
 #include "erasertool.h"
 #include "cursor3dtool.h"
 #include "angletool.h"
+#include "editortool.h"
 
 #include <QAction>
 
@@ -110,6 +111,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "AngleTool" )
     {
         tool = new AngleTool( viewer );
+    }
+    else if( toolName == "EditorTool" )
+    {
+        tool = new EditorTool( viewer );
     }
     else
     {
@@ -227,6 +232,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Angle") );
         toolAction->setStatusTip( tr("Enable/Disable angle tool") );
         toolAction->setIcon( QIcon(":/images/angle.png") );
+    }
+    else if( toolName == "EditorTool" )
+    {
+        toolAction->setText( tr("Editor") );
+        toolAction->setStatusTip( tr("Enable/Disable editor tool") );
+        toolAction->setIcon( QIcon(":/images/pencil.png") );
     }
     else
     {
