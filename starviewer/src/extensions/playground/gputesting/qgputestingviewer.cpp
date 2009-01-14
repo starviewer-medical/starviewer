@@ -409,11 +409,11 @@ void QGpuTestingViewer::loadShaders()
 
     delete m_gpuProgram;
     m_gpuProgram = new GpuProgram();
-    m_gpuProgram->addVertexShader( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
-    m_gpuProgram->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
-    //m_gpuProgram->addFragmentShader( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
-    m_gpuProgram->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/ambientshader.frag" );
-    //m_gpuProgram->addFragmentShader( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/ambientshader.frag" );
+    m_gpuProgram->addVertexShaderFile( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
+    m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+    //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
+    m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/ambientshader.frag" );
+    //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/ambientshader.frag" );
     m_gpuProgram->link();
 
     if ( !m_gpuProgram->isValid() )

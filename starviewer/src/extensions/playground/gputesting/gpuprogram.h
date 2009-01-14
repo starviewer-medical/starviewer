@@ -24,9 +24,11 @@ public:
     GpuProgram();
     ~GpuProgram();
 
-    void addVertexShader( const QString &fileName );
+    void addVertexShaderFile( const QString &fileName );
+    void addVertexShader( const QString &code );
     void clearVertexShaders();
-    void addFragmentShader( const QString &fileName );
+    void addFragmentShaderFile( const QString &fileName );
+    void addFragmentShader( const QString &code );
     void clearFragmentShaders();
     void link();
 
@@ -37,7 +39,8 @@ public:
 
 private:
 
-    GLhandleARB addShader( const QString &fileName, GLenum type );
+    GLhandleARB addShaderFile( const QString &fileName, GLenum type );
+    GLhandleARB addShader( const QString &code, GLenum type );
     /// Si l'infolog no és buit, el printa i retorna cert; altrament no printa res i retorna fals.
     bool printInfoLog( GLhandleARB object ) const;
 

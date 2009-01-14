@@ -22,9 +22,16 @@ GpuProgram::~GpuProgram()
 }
 
 
-void GpuProgram::addVertexShader( const QString &fileName )
+void GpuProgram::addVertexShaderFile( const QString &fileName )
 {
-    GLhandleARB shader = addShader( fileName, GL_VERTEX_SHADER_ARB );
+    GLhandleARB shader = addShaderFile( fileName, GL_VERTEX_SHADER_ARB );
+    if ( shader > 0 ) m_vertexShaders << shader;
+}
+
+
+void GpuProgram::addVertexShader( const QString &code )
+{
+    GLhandleARB shader = addShader( code, GL_VERTEX_SHADER_ARB );
     if ( shader > 0 ) m_vertexShaders << shader;
 }
 
@@ -37,9 +44,16 @@ void GpuProgram::clearVertexShaders()
 }
 
 
-void GpuProgram::addFragmentShader( const QString &fileName )
+void GpuProgram::addFragmentShaderFile( const QString &fileName )
 {
-    GLhandleARB shader = addShader( fileName, GL_FRAGMENT_SHADER_ARB );
+    GLhandleARB shader = addShaderFile( fileName, GL_FRAGMENT_SHADER_ARB );
+    if ( shader > 0 ) m_fragmentShaders << shader;
+}
+
+
+void GpuProgram::addFragmentShader( const QString &code )
+{
+    GLhandleARB shader = addShader( code, GL_FRAGMENT_SHADER_ARB );
     if ( shader > 0 ) m_fragmentShaders << shader;
 }
 
@@ -86,7 +100,7 @@ bool GpuProgram::initUniform( const QString &uniformName )
 }
 
 
-GLhandleARB GpuProgram::addShader( const QString &fileName, GLenum type )
+GLhandleARB GpuProgram::addShaderFile( const QString &fileName, GLenum type )
 {
     QFile shaderSourceFile( fileName );
 
@@ -97,7 +111,19 @@ GLhandleARB GpuProgram::addShader( const QString &fileName, GLenum type )
     }
 
     QTextStream shaderSourceTextStream( &shaderSourceFile );
-    const char *shaderSource = qPrintable( shaderSourceTextStream.readAll() );
+    QString code = shaderSourceTextStream.readAll();
+    GLhandleARB shaderObject = addShader( code, type );
+    shaderSourceFile.close();
+
+    return shaderObject;
+}
+
+
+GLhandleARB GpuProgram::addShader( const QString &code, GLenum type )
+{
+    //DEBUG_LOG( code );
+
+    const char *shaderSource = qPrintable( code );
 
     GLhandleARB shaderObject = glCreateShaderObjectARB( type );
     glShaderSourceARB( shaderObject, 1, &shaderSource, 0 );
@@ -105,9 +131,9 @@ GLhandleARB GpuProgram::addShader( const QString &fileName, GLenum type )
     glAttachObjectARB( m_programObject, shaderObject );
     glDeleteObjectARB( shaderObject );
 
-    shaderSourceFile.close();
-
+    DEBUG_LOG( "info shader" );
     printInfoLog( shaderObject );
+    DEBUG_LOG( "info program" );
     printInfoLog( m_programObject );
 
     return shaderObject;
