@@ -117,6 +117,7 @@ void QGpuTestingViewer::getCamera( Vector3 &position, Vector3 &focus, Vector3 &u
 void QGpuTestingViewer::setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up )
 {
     m_camera->lookAt( position, focus, up );
+    m_camera->setOrbitOffsetDistance( ( position - focus ).length() );
     updateGL();
 }
 
