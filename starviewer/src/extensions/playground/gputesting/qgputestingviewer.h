@@ -13,7 +13,7 @@ namespace udg {
 
 
 class Camera;
-class Shader;
+class GpuProgram;
 class Volume;
 
 
@@ -141,7 +141,7 @@ private:
     GLuint m_framebufferTexture;
 
     /// Shader que s'aplicarà.
-    Shader *m_shader;
+    GpuProgram *m_gpuProgram;
 
     /// Color de fons.
     QColor m_backgroundColor;

@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "gpuprogram.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -9,27 +9,27 @@
 namespace udg {
 
 
-Shader::Shader()
+GpuProgram::GpuProgram()
  : m_valid( false )
 {
     m_programObject = glCreateProgramObjectARB();
 }
 
 
-Shader::~Shader()
+GpuProgram::~GpuProgram()
 {
     glDeleteObjectARB( m_programObject );
 }
 
 
-void Shader::addVertexShader( const QString &fileName )
+void GpuProgram::addVertexShader( const QString &fileName )
 {
     GLhandleARB shader = addShader( fileName, GL_VERTEX_SHADER_ARB );
     if ( shader > 0 ) m_vertexShaders << shader;
 }
 
 
-void Shader::clearVertexShaders()
+void GpuProgram::clearVertexShaders()
 {
     foreach ( GLhandleARB vertexShader, m_vertexShaders ) glDetachObjectARB( m_programObject, vertexShader );
 
@@ -37,14 +37,14 @@ void Shader::clearVertexShaders()
 }
 
 
-void Shader::addFragmentShader( const QString &fileName )
+void GpuProgram::addFragmentShader( const QString &fileName )
 {
     GLhandleARB shader = addShader( fileName, GL_FRAGMENT_SHADER_ARB );
     if ( shader > 0 ) m_fragmentShaders << shader;
 }
 
 
-void Shader::clearFragmentShaders()
+void GpuProgram::clearFragmentShaders()
 {
     foreach ( GLhandleARB fragmentShader, m_fragmentShaders ) glDetachObjectARB( m_programObject, fragmentShader );
 
@@ -52,26 +52,26 @@ void Shader::clearFragmentShaders()
 }
 
 
-void Shader::link()
+void GpuProgram::link()
 {
     glLinkProgramARB( m_programObject );
     m_valid = !printInfoLog( m_programObject );
 }
 
 
-GLhandleARB Shader::programObject() const
+GLhandleARB GpuProgram::programObject() const
 {
     return m_programObject;
 }
 
 
-bool Shader::isValid() const
+bool GpuProgram::isValid() const
 {
     return m_valid;
 }
 
 
-bool Shader::initUniform( const QString &uniformName )
+bool GpuProgram::initUniform( const QString &uniformName )
 {
     if ( !m_valid ) return false;
     if ( m_uniforms.contains( uniformName ) ) return false;
@@ -86,7 +86,7 @@ bool Shader::initUniform( const QString &uniformName )
 }
 
 
-GLhandleARB Shader::addShader( const QString &fileName, GLenum type )
+GLhandleARB GpuProgram::addShader( const QString &fileName, GLenum type )
 {
     QFile shaderSourceFile( fileName );
 
@@ -114,7 +114,7 @@ GLhandleARB Shader::addShader( const QString &fileName, GLenum type )
 }
 
 
-bool Shader::printInfoLog( GLhandleARB object ) const
+bool GpuProgram::printInfoLog( GLhandleARB object ) const
 {
     int infoLogLength;
 

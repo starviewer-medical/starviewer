@@ -1,7 +1,16 @@
 // TODO
 // - Calcular el gradient i guardar-lo -> frambebuffer 3D, llesca a llesca
-// - Classe shader o semblant per agrupar les referències i els uniforms.
 // - Alguna tecla Fn que recarregui els shaders.
+// - Per combinar shaders:
+//   · shader bàsic de ray casting que cridi un mètode shade(...) que retorni el color del voxel
+//   · aquest shade(...) s'implementarà en un altre fitxer o passant-li directament l'string depenent de les necessitats;
+//     hauria de ser un mètode que crides "shades" més específics i els combinés; per exemple:
+//     * vec4 shade(...) { return shadeAmbient(...); }
+//     * vec4 shade(...) { return shadeObscurance(shadeDiffuse(...),...); }
+//       ...
+//   · cadascun d'aquests "shades" més específics estaria implementat al seu propi fitxer
+//   · al final, al Shader se li haurien d'afegir tots els fragment shaders que calguessin per tenir totes les funcions necessàries definides;
+//     exemple: bàsic + shade combinatori + shades específics utilitzats pel combinatori
 
 
 
@@ -16,7 +25,7 @@
 #include <QWheelEvent>
 
 #include "camera.h"
-#include "shader.h"
+#include "gpuprogram.h"
 #include "volume.h"
 
 
@@ -30,7 +39,7 @@ const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
  : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_vertexBufferObject( 0 ), m_volumeTexture( 0 ),
-   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_shader( 0 ), m_backgroundColor( Qt::transparent ), m_transferFunctionTexture( 0 )
+   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_gpuProgram( 0 ), m_backgroundColor( Qt::transparent ), m_transferFunctionTexture( 0 )
 {
     setFocusPolicy( Qt::WheelFocus );
 
@@ -48,7 +57,7 @@ QGpuTestingViewer::~QGpuTestingViewer()
         glDeleteTextures( 1, &m_volumeTexture );
         glDeleteFramebuffersEXT( 1, &m_framebufferObject );
         glDeleteTextures( 1, &m_framebufferTexture );
-        delete m_shader;
+        delete m_gpuProgram;
         glDeleteTextures( 1, &m_transferFunctionTexture );
     }
 }
@@ -380,22 +389,22 @@ void QGpuTestingViewer::recreateFramebufferTexture()
 
 void QGpuTestingViewer::loadShaders()
 {
-    m_shader = new Shader();
-    m_shader->addVertexShader( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
-    m_shader->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
-    m_shader->link();
+    m_gpuProgram = new GpuProgram();
+    m_gpuProgram->addVertexShader( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
+    m_gpuProgram->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+    m_gpuProgram->link();
 
-    if ( !m_shader->isValid() )
+    if ( !m_gpuProgram->isValid() )
     {
         DEBUG_LOG( "Hi ha hagut algun problema en crear el shader" );
         return;
     }
 
-    if ( !m_shader->initUniform( "uBackgroundColor" ) ) DEBUG_LOG( "Error en obtenir el background color uniform" );
-    if ( !m_shader->initUniform( "uDimensions" ) ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
-    if ( !m_shader->initUniform( "uFramebufferTexture" ) ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
-    if ( !m_shader->initUniform( "uVolumeTexture" ) ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
-    if ( !m_shader->initUniform( "uTransferFunctionTexture" ) ) DEBUG_LOG( "Error en obtenir el transfer function texture uniform" );
+    if ( !m_gpuProgram->initUniform( "uBackgroundColor" ) ) DEBUG_LOG( "Error en obtenir el background color uniform" );
+    if ( !m_gpuProgram->initUniform( "uDimensions" ) ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
+    if ( !m_gpuProgram->initUniform( "uFramebufferTexture" ) ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
+    if ( !m_gpuProgram->initUniform( "uVolumeTexture" ) ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
+    if ( !m_gpuProgram->initUniform( "uTransferFunctionTexture" ) ) DEBUG_LOG( "Error en obtenir el transfer function texture uniform" );
 
     checkGLError();
 }
@@ -471,7 +480,7 @@ void QGpuTestingViewer::firstPass()
 
 void QGpuTestingViewer::secondPass()
 {
-    glUseProgramObjectARB( m_shader->programObject() );
+    glUseProgramObjectARB( m_gpuProgram->programObject() );
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -479,21 +488,21 @@ void QGpuTestingViewer::secondPass()
     glLoadIdentity();
     glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
 
-    glUniform3fARB( m_shader->uniform( "uBackgroundColor" ), m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
+    glUniform3fARB( m_gpuProgram->uniform( "uBackgroundColor" ), m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
-    glUniform1iARB( m_shader->uniform( "uFramebufferTexture" ), 0 );
+    glUniform1iARB( m_gpuProgram->uniform( "uFramebufferTexture" ), 0 );
 
-    glUniform3fARB( m_shader->uniform( "uDimensions" ), m_dimX, m_dimY, m_dimZ );
+    glUniform3fARB( m_gpuProgram->uniform( "uDimensions" ), m_dimX, m_dimY, m_dimZ );
 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
-    glUniform1iARB( m_shader->uniform( "uVolumeTexture" ), 1 );
+    glUniform1iARB( m_gpuProgram->uniform( "uVolumeTexture" ), 1 );
 
     glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
-    glUniform1iARB( m_shader->uniform( "uTransferFunctionTexture" ), 2 );
+    glUniform1iARB( m_gpuProgram->uniform( "uTransferFunctionTexture" ), 2 );
 
     glCullFace( GL_BACK );
 

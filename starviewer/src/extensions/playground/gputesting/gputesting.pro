@@ -11,7 +11,7 @@ HEADERS += gputestingextensionmediator.h \
            quaternion.h \
            matrix3.h \
            matrix4.h \
-           shader.h 
+           gpuprogram.h 
 SOURCES += gputestingextensionmediator.cpp \
            qgputestingextension.cpp \
            qgputestingviewer.cpp \
@@ -19,7 +19,7 @@ SOURCES += gputestingextensionmediator.cpp \
            quaternion.cpp \
            matrix3.cpp \
            matrix4.cpp \
-           shader.cpp 
+           gpuprogram.cpp 
 RESOURCES = gputesting.qrc
 QT += opengl
 LIBS += -lGLEW

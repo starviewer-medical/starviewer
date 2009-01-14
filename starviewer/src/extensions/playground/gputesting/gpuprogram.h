@@ -1,5 +1,5 @@
-#ifndef UDGSHADER_H
-#define UDGSHADER_H
+#ifndef UDGGPUPROGRAM_H
+#define UDGGPUPROGRAM_H
 
 
 #include <GL/glew.h>
@@ -17,12 +17,12 @@ namespace udg {
  *
  * \warning S'ha de fer servir des d'un punter sempre, perquè sinó es destruiria la referència al program object.
  */
-class Shader {
+class GpuProgram {
 
 public:
 
-    Shader();
-    ~Shader();
+    GpuProgram();
+    ~GpuProgram();
 
     void addVertexShader( const QString &fileName );
     void clearVertexShaders();
@@ -50,7 +50,7 @@ private:
 };
 
 
-inline GLint Shader::uniform( const QString &uniformName ) const
+inline GLint GpuProgram::uniform( const QString &uniformName ) const
 {
     return m_uniforms.value( uniformName );
 }
