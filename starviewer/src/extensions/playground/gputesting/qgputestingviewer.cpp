@@ -405,11 +405,15 @@ void QGpuTestingViewer::loadShaders()
 {
     if ( !m_extensions ) return;
 
+    DEBUG_LOG( "loadShaders()" );
+
     delete m_gpuProgram;
     m_gpuProgram = new GpuProgram();
     m_gpuProgram->addVertexShader( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
     m_gpuProgram->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
     //m_gpuProgram->addFragmentShader( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
+    m_gpuProgram->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/ambientshader.frag" );
+    //m_gpuProgram->addFragmentShader( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/ambientshader.frag" );
     m_gpuProgram->link();
 
     if ( !m_gpuProgram->isValid() )
@@ -421,9 +425,9 @@ void QGpuTestingViewer::loadShaders()
     if ( !m_gpuProgram->initUniform( "uFramebufferTexture" ) ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
     if ( !m_gpuProgram->initUniform( "uDimensions" ) ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
     if ( !m_gpuProgram->initUniform( "uRayStep" ) ) DEBUG_LOG( "Error en obtenir el ray step uniform" );
+    if ( !m_gpuProgram->initUniform( "uBackgroundColor" ) ) DEBUG_LOG( "Error en obtenir el background color uniform" );
     if ( !m_gpuProgram->initUniform( "uVolumeTexture" ) ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
     if ( !m_gpuProgram->initUniform( "uTransferFunctionTexture" ) ) DEBUG_LOG( "Error en obtenir el transfer function texture uniform" );
-    if ( !m_gpuProgram->initUniform( "uBackgroundColor" ) ) DEBUG_LOG( "Error en obtenir el background color uniform" );
 
     checkGLError();
 }
@@ -515,6 +519,8 @@ void QGpuTestingViewer::secondPass()
 
     glUniform1fARB( m_gpuProgram->uniform( "uRayStep" ), m_rayStep );
 
+    glUniform3fARB( m_gpuProgram->uniform( "uBackgroundColor" ), m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
+
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
     glUniform1iARB( m_gpuProgram->uniform( "uVolumeTexture" ), 1 );
@@ -522,8 +528,6 @@ void QGpuTestingViewer::secondPass()
     glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
     glUniform1iARB( m_gpuProgram->uniform( "uTransferFunctionTexture" ), 2 );
-
-    glUniform3fARB( m_gpuProgram->uniform( "uBackgroundColor" ), m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
 
     glCullFace( GL_BACK );
 
