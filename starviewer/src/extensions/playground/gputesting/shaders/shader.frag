@@ -1,14 +1,14 @@
-uniform vec3 uBackgroundColor;
 uniform sampler2D uFramebufferTexture;
 uniform vec3 uDimensions;
+uniform float uRayStep;
 uniform sampler3D uVolumeTexture;
 uniform sampler1D uTransferFunctionTexture;
+uniform vec3 uBackgroundColor;
 
 // gl_TexCoord[0] és la posició del vèrtex
 
 void main()
 {
-    const float STEP_SIZE = 1.0;
     const float OPAQUE_ALPHA = 0.9;
 
     vec3 startCoord = gl_Color.rgb;
@@ -17,7 +17,7 @@ void main()
     vec3 startPoint = startCoord * uDimensions;
     vec3 endPoint = endCoord * uDimensions;
     vec3 direction = normalize(endPoint - startPoint);
-    vec3 pointStep = direction * STEP_SIZE;
+    vec3 pointStep = direction * uRayStep;
     vec3 coordStep = pointStep / uDimensions;
 
     vec4 color = vec4(0.0);

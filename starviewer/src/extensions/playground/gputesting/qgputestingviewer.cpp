@@ -1,6 +1,5 @@
 // TODO
 // - Calcular el gradient i guardar-lo -> frambebuffer 3D, llesca a llesca
-// - Alguna tecla Fn que recarregui els shaders.
 // - Per combinar shaders:
 //   · shader bàsic de ray casting que cridi un mètode shade(...) que retorni el color del voxel
 //   · aquest shade(...) s'implementarà en un altre fitxer o passant-li directament l'string depenent de les necessitats;
@@ -33,13 +32,13 @@ namespace udg {
 
 
 const float QGpuTestingViewer::KEYBOARD_CAMERA_INCREMENT = 10.0f;
-const float QGpuTestingViewer::MIN_CAMERA_DISTANCE_FACTOR = 0.6f;
 const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
  : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_vertexBufferObject( 0 ), m_volumeTexture( 0 ),
-   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_gpuProgram( 0 ), m_backgroundColor( Qt::transparent ), m_transferFunctionTexture( 0 )
+   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_gpuProgram( 0 ), m_backgroundColor( Qt::transparent ), m_rayStep( 1.0 ),
+   m_transferFunctionTexture( 0 )
 {
     setFocusPolicy( Qt::WheelFocus );
 
@@ -93,6 +92,12 @@ void QGpuTestingViewer::setBackgroundColor( const QColor &backgroundColor )
 }
 
 
+void QGpuTestingViewer::setRayStep( double rayStep )
+{
+    m_rayStep = rayStep;
+}
+
+
 void QGpuTestingViewer::setTransferFunction( const TransferFunction &transferFunction )
 {
     m_transferFunction = transferFunction;
@@ -124,8 +129,8 @@ void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Right: m_camera->rotateSmoothly( -KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
         case Qt::Key_Up: m_camera->rotateSmoothly( 0.0f, KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
         case Qt::Key_Down: m_camera->rotateSmoothly( 0.0f, -KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
-        case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
-        case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
+        case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
+        case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
         case Qt::Key_R: resetCamera(); break;
         case Qt::Key_F10: loadShaders(); break;
         default: QWidget::keyPressEvent( event ); return;
@@ -156,7 +161,7 @@ void QGpuTestingViewer::mouseMoveEvent( QMouseEvent *event )
 
 void QGpuTestingViewer::wheelEvent( QWheelEvent *event )
 {
-    m_camera->zoom( -m_wheelZoomScale * event->delta(), m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR );
+    m_camera->zoom( -m_wheelZoomScale * event->delta(), m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR );
     updateGL();
 }
 
@@ -405,11 +410,12 @@ void QGpuTestingViewer::loadShaders()
         return;
     }
 
-    if ( !m_gpuProgram->initUniform( "uBackgroundColor" ) ) DEBUG_LOG( "Error en obtenir el background color uniform" );
-    if ( !m_gpuProgram->initUniform( "uDimensions" ) ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
     if ( !m_gpuProgram->initUniform( "uFramebufferTexture" ) ) DEBUG_LOG( "Error en obtenir el framebuffer texture uniform" );
+    if ( !m_gpuProgram->initUniform( "uDimensions" ) ) DEBUG_LOG( "Error en obtenir el dimensions uniform" );
+    if ( !m_gpuProgram->initUniform( "uRayStep" ) ) DEBUG_LOG( "Error en obtenir el ray step uniform" );
     if ( !m_gpuProgram->initUniform( "uVolumeTexture" ) ) DEBUG_LOG( "Error en obtenir el volume texture uniform" );
     if ( !m_gpuProgram->initUniform( "uTransferFunctionTexture" ) ) DEBUG_LOG( "Error en obtenir el transfer function texture uniform" );
+    if ( !m_gpuProgram->initUniform( "uBackgroundColor" ) ) DEBUG_LOG( "Error en obtenir el background color uniform" );
 
     checkGLError();
 }
@@ -493,13 +499,13 @@ void QGpuTestingViewer::secondPass()
     glLoadIdentity();
     glMultMatrixf( &( m_camera->getViewMatrix()[0][0] ) );
 
-    glUniform3fARB( m_gpuProgram->uniform( "uBackgroundColor" ), m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
-
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, m_framebufferTexture );
     glUniform1iARB( m_gpuProgram->uniform( "uFramebufferTexture" ), 0 );
 
     glUniform3fARB( m_gpuProgram->uniform( "uDimensions" ), m_dimX, m_dimY, m_dimZ );
+
+    glUniform1fARB( m_gpuProgram->uniform( "uRayStep" ), m_rayStep );
 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_3D, m_volumeTexture );
@@ -508,6 +514,8 @@ void QGpuTestingViewer::secondPass()
     glActiveTexture( GL_TEXTURE2 );
     glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
     glUniform1iARB( m_gpuProgram->uniform( "uTransferFunctionTexture" ), 2 );
+
+    glUniform3fARB( m_gpuProgram->uniform( "uBackgroundColor" ), m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF() );
 
     glCullFace( GL_BACK );
 
