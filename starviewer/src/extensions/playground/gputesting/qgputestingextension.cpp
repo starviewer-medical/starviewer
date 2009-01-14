@@ -127,6 +127,7 @@ void QGpuTestingExtension::saveTransferFunction()
 
 void QGpuTestingExtension::doVisualization()
 {
+    m_viewer->setRayStep( m_rayStepDoubleSpinBox->value() );
     m_viewer->setTransferFunction( m_transferFunctionEditor->getTransferFunction().to01( 0.0, m_transferFunctionEditor->maximum() ) );
     m_viewer->updateGL();
 }

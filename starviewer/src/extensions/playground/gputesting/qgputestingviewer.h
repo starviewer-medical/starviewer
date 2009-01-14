@@ -36,6 +36,8 @@ public:
     const QColor& backgroundColor() const;
     /// Assigna el color de fons.
     void setBackgroundColor( const QColor &backgroundColor );
+    /// Assigna la distància que avança un raig a cada pas.
+    void setRayStep( double rayStep );
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -69,7 +71,6 @@ private:
     };
 
     static const float KEYBOARD_CAMERA_INCREMENT;
-    static const float MIN_CAMERA_DISTANCE_FACTOR;
     static const float MAX_CAMERA_DISTANCE_FACTOR;
     static const int TRANSFER_FUNCTION_TEXTURE_SIZE = 4096;
 
@@ -145,6 +146,8 @@ private:
 
     /// Color de fons.
     QColor m_backgroundColor;
+    /// Distància que avança un raig a cada pas.
+    double m_rayStep;
     /// Funció de transferència.
     TransferFunction m_transferFunction;
     /// Textura de la funció de transferència.
