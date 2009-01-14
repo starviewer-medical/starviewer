@@ -36,9 +36,9 @@ const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
- : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_vertexBufferObject( 0 ), m_volumeTexture( 0 ),
-   m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_gpuProgram( 0 ), m_backgroundColor( Qt::transparent ), m_rayStep( 1.0 ),
-   m_transferFunctionTexture( 0 )
+ : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_fieldOfView( 30.0 ), m_vertexBufferObject( 0 ),
+   m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_gpuProgram( 0 ), m_backgroundColor( Qt::transparent ),
+   m_rayStep( 1.0 ), m_transferFunctionTexture( 0 )
 {
     setFocusPolicy( Qt::WheelFocus );
 
@@ -92,7 +92,7 @@ void QGpuTestingViewer::setBackgroundColor( const QColor &backgroundColor )
 }
 
 
-void QGpuTestingViewer::setRayStep( double rayStep )
+void QGpuTestingViewer::setRayStep( float rayStep )
 {
     m_rayStep = rayStep;
 }
@@ -117,6 +117,13 @@ void QGpuTestingViewer::getCamera( Vector3 &position, Vector3 &focus, Vector3 &u
 void QGpuTestingViewer::setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up )
 {
     m_camera->lookAt( position, focus, up );
+    updateGL();
+}
+
+
+void QGpuTestingViewer::setFieldOfView( int fieldOfView )
+{
+    m_fieldOfView = fieldOfView;
     updateGL();
 }
 
@@ -266,7 +273,7 @@ void QGpuTestingViewer::createCamera()
 
 void QGpuTestingViewer::resetCamera()
 {
-    const Vector3 EYE( 0.0, 0.0, m_biggestDimension );
+    const Vector3 EYE( 0.0, 0.0, 2.0f * m_biggestDimension );
 
     m_camera->setBehavior( Camera::CAMERA_BEHAVIOR_ORBIT );
     m_camera->setPreferTargetYAxisOrbiting( false );
@@ -463,7 +470,7 @@ void QGpuTestingViewer::adjustProjection()
     float zNear = cameraDistance - m_diagonalLength / 2.0f;
     float zFar = cameraDistance + m_diagonalLength / 2.0f;
 
-    m_camera->perspective( 90.0f, static_cast<float>( width ) / static_cast<float>( height ), zNear, zFar );
+    m_camera->perspective( m_fieldOfView, static_cast<float>( width ) / static_cast<float>( height ), zNear, zFar );
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();

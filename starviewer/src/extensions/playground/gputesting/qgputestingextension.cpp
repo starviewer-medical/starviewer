@@ -56,6 +56,7 @@ void QGpuTestingExtension::createConnections()
     connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
 
     // càmera
+    connect( m_fieldOfViewSpinBox, SIGNAL( valueChanged(int) ), m_viewer, SLOT( setFieldOfView(int) ) );
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
     connect( m_cameraSetPushButton, SIGNAL( clicked() ), SLOT( setCamera() ) );
     connect( m_cameraLoadPushButton, SIGNAL( clicked() ), SLOT( loadCamera() ) );
