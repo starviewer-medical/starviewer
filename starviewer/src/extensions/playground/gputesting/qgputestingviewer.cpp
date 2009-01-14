@@ -127,6 +127,7 @@ void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
         case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_biggestDimension * MIN_CAMERA_DISTANCE_FACTOR, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
         case Qt::Key_R: resetCamera(); break;
+        case Qt::Key_F10: loadShaders(); break;
         default: QWidget::keyPressEvent( event ); return;
     }
 
@@ -389,9 +390,13 @@ void QGpuTestingViewer::recreateFramebufferTexture()
 
 void QGpuTestingViewer::loadShaders()
 {
+    if ( !m_extensions ) return;
+
+    delete m_gpuProgram;
     m_gpuProgram = new GpuProgram();
     m_gpuProgram->addVertexShader( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
     m_gpuProgram->addFragmentShader( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+    //m_gpuProgram->addFragmentShader( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
     m_gpuProgram->link();
 
     if ( !m_gpuProgram->isValid() )
