@@ -37,7 +37,7 @@ public:
     /// Assigna el color de fons.
     void setBackgroundColor( const QColor &backgroundColor );
     /// Assigna la distància que avança un raig a cada pas.
-    void setRayStep( double rayStep );
+    void setRayStep( float rayStep );
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -45,6 +45,11 @@ public:
     void getCamera( Vector3 &position, Vector3 &focus, Vector3 &up ) const;
     /// Assigna els paràmetres de la càmera.
     void setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up );
+
+public slots:
+
+    /// Assigna l'obertura de la càmera.
+    void setFieldOfView( int fieldOfView );
 
 protected:
 
@@ -123,6 +128,8 @@ private:
 
     /// La càmera.
     Camera *m_camera;
+    /// Obertura de la càmera.
+    float m_fieldOfView;
     /// Increments del zoom amb el teclat.
     float m_keyboardZoomIncrement;
     /// Escala que s'aplica a la rodeta per fer zoom.
@@ -147,7 +154,7 @@ private:
     /// Color de fons.
     QColor m_backgroundColor;
     /// Distància que avança un raig a cada pas.
-    double m_rayStep;
+    float m_rayStep;
     /// Funció de transferència.
     TransferFunction m_transferFunction;
     /// Textura de la funció de transferència.
