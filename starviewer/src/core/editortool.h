@@ -34,6 +34,11 @@ public:
 
     void handleEvent( unsigned long eventID );
 
+    /**
+     * Retorna les dades de la tool
+     */
+    ToolData* getToolData() const;
+
 //private slots:
 
 private:
@@ -120,7 +125,6 @@ private:
      */
     void initialize();
 
-
 private:
 
     /// Ens guardem aquest punter per ser més còmode
@@ -133,6 +137,7 @@ private:
     ///Mida de la tool
     int m_editorSize;
     vtkActor *m_squareActor;
+    //\TODO:Aquesta variable no caldria, ja que hauria d'estar només al ToolData
     int m_volumeCont;
     EditorToolData* m_myData;
     int m_insideValue;

@@ -389,6 +389,9 @@ signals:
      */
     void slabThicknessChanged(int thickness);
 
+    /// Senyal que s'envia quan ha canviat l'overlay
+    void overlayChanged();
+
 protected:
     /// Processem l'event de resize de la finestra Qt
     virtual void resizeEvent( QResizeEvent* resize );

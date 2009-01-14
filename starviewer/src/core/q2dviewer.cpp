@@ -817,6 +817,26 @@ void Q2DViewer::setInput( Volume* volume )
     m_lastSlabSlice = 0;
     m_thickSlabActive = false;
 
+    // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
+    //No s'aplica perquè afectaria al cursor3D entre d'altres
+//     ImagePlane * currentPlane = new ImagePlane();
+//     currentPlane->fillFromImage( m_mainVolume->getImage(0,0) ); 
+//     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
+//     currentPlane->getRowDirectionVector( currentPlaneRowVector );
+//     currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
+//     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
+//     projectionMatrix->Identity();
+//     int row;
+//     for( row = 0; row < 3; row++ )
+//     {
+//         projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
+//         projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
+//     }
+// 
+//     m_imageActor->SetUserMatrix(projectionMatrix);
+//     delete currentPlane;
+
+
     int extent[6];
     double origin[3], spacing[3];
     m_mainVolume->getOrigin( origin );
@@ -908,6 +928,7 @@ void Q2DViewer::setOverlayInput( Volume* volume )
         // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
         m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
+        emit overlayChanged();
 
     break;
 
@@ -936,7 +957,7 @@ void Q2DViewer::isOverlayModified( )
         // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
         m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
-
+        emit overlayChanged();
     break;
 
     case RectilinearWipe:
