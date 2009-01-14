@@ -34,6 +34,9 @@ public:
     ///funcio manejadora dels events passats.
     void handleEvent( long unsigned eventID );
 
+    /// Retorna les dades pròpies de la seed
+    ToolData *getToolData() const;
+
 private:
     /// Posem la llavor
     void setSeed( );
@@ -43,9 +46,6 @@ private:
 
     /// Atura l'estat de seeding
     void endSeeding();
-
-    /// Retorna les dades pròpies de la seed
-    ToolData *getToolData() const;
 
 private:
     /// Viewer 2D sobre el qual treballem

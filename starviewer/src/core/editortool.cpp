@@ -74,11 +74,6 @@ void EditorTool::initialize(  )
         m_volumeCont = 0;
         m_2DViewer->getOverlayInput()->getWholeExtent(ext);
     
-        if(m_2DViewer->getOverlayInput()->getVtkData()->GetScalarType()!=6)
-        {
-            DEBUG_LOG( QString("Compte!!! Mask Vtk Data Type != INT (%1)").arg( m_2DViewer->getOverlayInput()->getVtkData()->GetScalarTypeAsString() ) );
-        }
-    
         Volume::VoxelType *value = m_2DViewer->getOverlayInput()->getScalarPointer();
         for(i=ext[0];i<=ext[1];i++)
         {
@@ -163,6 +158,8 @@ void EditorTool::increaseState()
     case Erase:
         m_editorState = EraseRegion;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/eraseregioncursor.png") ) );
+        m_squareActor->VisibilityOff();
+        m_2DViewer->refresh();
     break;
     case EraseRegion:
         m_editorState = EraseSlice;
@@ -171,6 +168,8 @@ void EditorTool::increaseState()
     case EraseSlice:
         m_editorState = Paint;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
+        m_squareActor->VisibilityOn();
+        m_2DViewer->refresh();
     break;
     default:
     break;
@@ -184,6 +183,8 @@ void EditorTool::decreaseState()
     case EraseRegion:
         m_editorState = Erase;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/erasercursor.png") ) );
+        m_squareActor->VisibilityOn();
+        m_2DViewer->refresh();
     break;
     case EraseSlice:
         m_editorState = EraseRegion;
@@ -192,6 +193,8 @@ void EditorTool::decreaseState()
     case Paint:
         m_editorState = EraseSlice;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/slicecursor.png") ) );
+        m_squareActor->VisibilityOff();
+        m_2DViewer->refresh();
     break;
     case Erase:
         m_editorState = Paint;
@@ -475,6 +478,11 @@ void EditorTool::decreaseEditorSize()
         m_editorSize--;
         this->setPaintCursor();
     }
+}
+
+ToolData *EditorTool::getToolData() const
+{
+    return m_myData;
 }
 
 }
