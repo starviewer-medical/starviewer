@@ -38,6 +38,8 @@ public:
     void setBackgroundColor( const QColor &backgroundColor );
     /// Assigna la distància que avança un raig a cada pas.
     void setRayStep( float rayStep );
+    /// Estableix els paràmetres d'il·luminació.
+    void setLighting( bool diffuse, bool specular, float specularPower );
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -74,6 +76,9 @@ private:
         GLfloat r, g, b;    // color
         GLfloat x, y, z;    // vertex
     };
+
+    /// Tipus d'il·luminació.
+    enum Lighting { Ambient, Diffuse, DiffuseSpecular };
 
     static const float KEYBOARD_CAMERA_INCREMENT;
     static const float MAX_CAMERA_DISTANCE_FACTOR;
@@ -150,11 +155,17 @@ private:
 
     /// Shader que s'aplicarà.
     GpuProgram *m_gpuProgram;
+    /// Si es cert es recarregaran els shaders abans de dibuixar.
+    bool m_reloadShaders;
 
     /// Color de fons.
     QColor m_backgroundColor;
     /// Distància que avança un raig a cada pas.
     float m_rayStep;
+    /// Tipus d'il·luminació que s'aplicarà.
+    Lighting m_lighting;
+    /// Exponent de l'especularitat.
+    float m_specularPower;
     /// Funció de transferència.
     TransferFunction m_transferFunction;
     /// Textura de la funció de transferència.
