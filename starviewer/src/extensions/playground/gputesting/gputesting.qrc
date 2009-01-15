@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/extensions/GpuTestingExtension/" >
     <file>translations_ca_ES.qm</file>
+    <file>shaders/diffuseshader.frag</file>
     <file>translations_en_GB.qm</file>
     <file>translations_es_ES.qm</file>
     <file>shaders/shader.frag</file>

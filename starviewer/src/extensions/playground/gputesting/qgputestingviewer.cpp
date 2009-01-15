@@ -37,8 +37,8 @@ const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
  : QGLWidget( parent ), m_extensions( false ), m_volume( 0 ), m_camera( 0 ), m_fieldOfView( 30.0 ), m_vertexBufferObject( 0 ),
-   m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_gpuProgram( 0 ), m_backgroundColor( Qt::transparent ),
-   m_rayStep( 1.0 ), m_transferFunctionTexture( 0 )
+   m_volumeTexture( 0 ), m_framebufferObject( 0 ), m_framebufferTexture( 0 ), m_gpuProgram( 0 ), m_reloadShaders( false ),
+   m_backgroundColor( Qt::transparent ), m_rayStep( 1.0 ), m_lighting( Ambient ), m_specularPower( 64.0f ), m_transferFunctionTexture( 0 )
 {
     setFocusPolicy( Qt::WheelFocus );
 
@@ -95,6 +95,24 @@ void QGpuTestingViewer::setBackgroundColor( const QColor &backgroundColor )
 void QGpuTestingViewer::setRayStep( float rayStep )
 {
     m_rayStep = rayStep;
+}
+
+
+void QGpuTestingViewer::setLighting( bool diffuse, bool specular, float specularPower )
+{
+    Lighting lighting;
+
+    if ( !diffuse ) lighting = Ambient;
+    else if ( !specular ) lighting = Diffuse;
+    else lighting = DiffuseSpecular;
+
+    if ( m_lighting != lighting )
+    {
+        m_lighting = lighting;
+        m_reloadShaders = true;
+    }
+
+    m_specularPower = specularPower;
 }
 
 
@@ -412,9 +430,22 @@ void QGpuTestingViewer::loadShaders()
     m_gpuProgram->addVertexShaderFile( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
     m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
     //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
-    m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/ambientshader.frag" );
-    //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/ambientshader.frag" );
-    m_gpuProgram->addFragmentShader( "vec4 ambientShade(vec3 coord);vec4 shade(vec3 coord){return ambientShade(coord);}" );
+
+    if ( m_lighting == Ambient )
+    {
+        m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/ambientshader.frag" );
+        //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/ambientshader.frag" );
+        m_gpuProgram->addFragmentShader( "vec4 ambientShade(vec3);"
+                                         "vec4 shade(vec3 coord,vec3 u,vec3 d){return ambientShade(coord);}" );
+    }
+    else
+    {
+        m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/diffuseshader.frag" );
+        //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/diffuseshader.frag" );
+        m_gpuProgram->addFragmentShader( "vec4 diffuseShade(vec3,vec3,vec3);"
+                                         "vec4 shade(vec3 coord,vec3 unit,vec3 direction){return diffuseShade(coord,unit,direction);}" );
+    }
+
     m_gpuProgram->link();
 
     if ( !m_gpuProgram->isValid() )
@@ -504,6 +535,12 @@ void QGpuTestingViewer::firstPass()
 
 void QGpuTestingViewer::secondPass()
 {
+    if ( m_reloadShaders )
+    {
+        loadShaders();
+        m_reloadShaders = false;
+    }
+
     glUseProgramObjectARB( m_gpuProgram->programObject() );
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

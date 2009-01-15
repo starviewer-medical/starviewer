@@ -5,8 +5,11 @@ uniform vec3 uBackgroundColor;
 
 // gl_TexCoord[0] és la posició del vèrtex
 
-// Retorna un color RGBA a partir d'una coordenada.
-vec4 shade(vec3 coord);
+// Retorna el color RGBA del vòxel.
+// coord és la coordenada actual
+// unit és el vector que proporciola mida d'un vòxel respecte el volum
+// direction és la direcció del raig
+vec4 shade(vec3 coord, vec3 unit, vec3 direction);
 
 void main()
 {
@@ -20,6 +23,7 @@ void main()
     vec3 direction = normalize(endPoint - startPoint);
     vec3 pointStep = direction * uRayStep;
     vec3 coordStep = pointStep / uDimensions;
+    vec3 unit = 1.0 / uDimensions;
 
     vec4 color = vec4(0.0);
     float remainingOpacity = 1.0;
@@ -27,7 +31,7 @@ void main()
 
     for (int i = 0; i < 512; i++)
     {
-        vec4 colorSample = shade(coord);
+        vec4 colorSample = shade(coord, unit, direction);
         color.rgb += colorSample.rgb * colorSample.a * remainingOpacity;
         remainingOpacity *= 1.0 - colorSample.a;
         color.a = 1.0 - remainingOpacity;
