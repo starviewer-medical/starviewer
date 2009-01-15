@@ -1,5 +1,6 @@
 #include "gpuprogram.h"
 
+#include <QByteArray>
 #include <QFile>
 #include <QTextStream>
 
@@ -121,9 +122,10 @@ GLhandleARB GpuProgram::addShaderFile( const QString &fileName, GLenum type )
 
 GLhandleARB GpuProgram::addShader( const QString &code, GLenum type )
 {
-    //DEBUG_LOG( code );
+    DEBUG_LOG( "addShader()" );
 
-    const char *shaderSource = qPrintable( code );
+    QByteArray byteArray = code.toLocal8Bit();
+    const char *shaderSource = byteArray.constData();
 
     GLhandleARB shaderObject = glCreateShaderObjectARB( type );
     glShaderSourceARB( shaderObject, 1, &shaderSource, 0 );
