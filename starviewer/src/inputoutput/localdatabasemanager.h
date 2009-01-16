@@ -119,6 +119,9 @@ private :
 
     LastError m_lastError;
 
+    ///Ens retorna els estudis que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID ordenats per LastAccessDate de forma creixen
+    QList<Study*> queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery);
+
     ///Guarda a la base de dades la llista d'estudis passada per paràmetre, si algun dels estudis ja existeix actualitza la info
     int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime);
     ///Guarda a la base de dades la llista de series passada per paràmetre, si alguna de les series ja existeix actualitza la info
