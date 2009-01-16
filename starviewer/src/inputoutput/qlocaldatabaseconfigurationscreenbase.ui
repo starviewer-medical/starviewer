@@ -569,15 +569,18 @@
  <layoutdefault spacing="6" margin="11" />
  <tabstops>
   <tabstop>m_textDatabaseRoot</tabstop>
+  <tabstop>m_buttonExaminateDataBase</tabstop>
   <tabstop>m_textCacheImagePath</tabstop>
-  <tabstop>m_textMaximumDaysNotViewed</tabstop>
+  <tabstop>m_buttonExaminateCacheImage</tabstop>
   <tabstop>m_textMinimumSpaceRequiredToRetrieve</tabstop>
+  <tabstop>m_checkBoxDeletedOldStudies</tabstop>
+  <tabstop>m_textMaximumDaysNotViewed</tabstop>
+  <tabstop>m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable</tabstop>
+  <tabstop>m_textSpaceToFreeIfNotEnoughSpaceAvailable</tabstop>
+  <tabstop>m_buttonApplyCache</tabstop>
   <tabstop>m_buttonCreateDatabase</tabstop>
   <tabstop>m_buttonCompactDatabase</tabstop>
   <tabstop>m_buttonDeleteStudies</tabstop>
-  <tabstop>m_buttonApplyCache</tabstop>
-  <tabstop>m_buttonExaminateDataBase</tabstop>
-  <tabstop>m_buttonExaminateCacheImage</tabstop>
  </tabstops>
  <resources>
   <include location="../main/main.qrc" />
