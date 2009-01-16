@@ -42,10 +42,16 @@ LocalDatabaseManager::LocalDatabaseManager()
 {
     StarviewerSettings settings;
 
-    if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
+    /* Comprovem si està activada la opció de configuració que indica si s'ha d'esborrar automàticament els estudis vells, sinó
+       està activada, construim una data nul·la perquè no s'ha de tenir en compte alhora de fer las cerques*/
+    if (settings.getDeleteOldStudiesHasNotViewedInDays())
     {
-        LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getMaximumDaysNotViewedStudy().toInt(NULL, 10));
+        if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
+        {
+            LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getMaximumDaysNotViewedStudy().toInt(NULL, 10));
+        }
     }
+    else LocalDatabaseManager::LastAccessDateSelectedStudies = QDate();
 }
 
 void LocalDatabaseManager::save(Patient *newPatient)
@@ -406,12 +412,14 @@ void LocalDatabaseManager::clear()
 
 void LocalDatabaseManager::deleteOldStudies()
 {
-    QDate lastDateViewedMinimum;
     StarviewerSettings settings;
     DicomMask oldStudiesMask;
     QList<Study*> studyListToDelete;
     LocalDatabaseStudyDAL studyDAL;
     DatabaseConnection dbConnect;
+
+    //Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
+    if (!settings.getDeleteOldStudiesHasNotViewedInDays()) return;
 
     dbConnect.open();
     studyDAL.setDatabaseConnection(&dbConnect);
@@ -482,38 +490,44 @@ bool LocalDatabaseManager::isDatabaseCorrupted()
     return databaseCorrupted;
 }
 
-bool LocalDatabaseManager::isEnoughSpace()
+bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
 {
     HardDiskInformation hardDiskInformation;
     StarviewerSettings settings;
     quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());
     quint64 minimumSpaceRequired = quint64(settings.getMinimumSpaceRequiredToRetrieveInMbytes());
     quint64 MbytesToFree;
+    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk =  settings.getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable() * 1024;
+
+    m_lastError = Ok;
 
     if (freeSpaceInHardDisk < minimumSpaceRequired)
     {
-        INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb) " +
-                 "s'intentarà esborrar estudis vells per alliberar suficient espai");
+        INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb) ");
 
-        //No hi ha suficient espai indiquem quina és la quantitat de Mb d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
-        MbytesToFree = (minimumSpaceRequired - freeSpaceInHardDisk) + MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk;
-
-        freeSpaceDeletingStudies(MbytesToFree);
-        if (getLastError() != LocalDatabaseManager::Ok)
+        if (settings.getDeleteOldStudiesIfNotEnoughSpaceAvailable())
         {
-            ERROR_LOG("S'ha produït un error intentant alliberar espai");
-            return false;
-        }
+            INFO_LOG("s'intentarà esborrar estudis vells per alliberar suficient espai");
 
-        freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());//Tornem a consultar l'espai lliure
+            //No hi ha suficient espai indiquem quina és la quantitat de Mb d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
+            MbytesToFree = (minimumSpaceRequired - freeSpaceInHardDisk) + MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk;
 
-        if (freeSpaceInHardDisk < minimumSpaceRequired)
-        {
-            INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb)");
-            return false;
+            freeSpaceDeletingStudies(MbytesToFree);
+            if (getLastError() != LocalDatabaseManager::Ok)
+            {
+                ERROR_LOG("S'ha produït un error intentant alliberar espai");
+                return false;
+            }
+
+            //Tornem a consultar l'espai lliure
+            if (hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath()) < minimumSpaceRequired)
+            {
+                INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb)");
+                return false;
+            }
+            else return true;
         }
-        else
-            return true;
+        else return false;
     }
 
     return true;
@@ -800,7 +814,6 @@ int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, const DicomMas
 
 void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
 {
-    QDate lastDateViewedMinimum;
     StarviewerSettings settings;
     DicomMask oldStudiesMask;
     QList<Study*> studyListToDelete;

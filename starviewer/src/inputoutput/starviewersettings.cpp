@@ -21,7 +21,10 @@
 #endif
 
 const QString databaseRootKey("/cache/sdatabasePath" ); //indica on es troba la bd
+const QString deleteOldStudiesHasNotViewedInDays("cache/deleteOldStudiesHasNotViewedInDays");
+const QString deleteOldStudiesIfNotEnoughSpaceAvailable("cache/deleteOldStudiesIfNotEnoughSpaceAvailable");
 const QString minimumSpaceRequiredToRetrieveInGbytesKey("/cache/minimumSpaceRequiredToRetrieveInGbytes" );
+const QString GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable("/cache/GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable");
 const QString cacheImagePathKey("/cache/imagePath" );
 const QString AETitleMachineKey("/pacsparam/AETitle" );
 const QString localPortKey("/pacsparam/localPort" );
@@ -70,6 +73,21 @@ void StarviewerSettings::setCacheImagePath( QString path )
     m_starviewerSettings.setValue( GroupSettingsName + cacheImagePathKey , QDir::fromNativeSeparators( path ) );
 }
 
+void StarviewerSettings::setDeleteOldStudiesHasNotViewedInDays(bool deleteOldStudies)
+{
+    m_starviewerSettings.setValue(GroupSettingsName + deleteOldStudiesHasNotViewedInDays, deleteOldStudies);
+}
+
+void StarviewerSettings::setDeleteOldStudiesIfNotEnoughSpaceAvailable(bool deletedOldStudiesIfNotEnoughSpaceAvailable)
+{
+    m_starviewerSettings.setValue(GroupSettingsName + deleteOldStudiesIfNotEnoughSpaceAvailable, deletedOldStudiesIfNotEnoughSpaceAvailable);
+}
+
+void StarviewerSettings::setGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable(uint GbytesToDeleteOfStudies)
+{
+    m_starviewerSettings.setValue(GroupSettingsName + GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable, GbytesToDeleteOfStudies);
+}
+
 void StarviewerSettings::setMinimumSpaceRequiredToRetrieveInGbytes(uint minimumSpaceRequired)
 {
     m_starviewerSettings.setValue(GroupSettingsName + minimumSpaceRequiredToRetrieveInGbytesKey, QString().setNum(minimumSpaceRequired));
@@ -91,6 +109,21 @@ QString StarviewerSettings::getDatabasePath()
     return QDir::toNativeSeparators( m_starviewerSettings.value( GroupSettingsName + databaseRootKey , defaultDir ).toString() );
 }
 
+bool StarviewerSettings::getDeleteOldStudiesHasNotViewedInDays()
+{
+    return m_starviewerSettings.value(GroupSettingsName + deleteOldStudiesHasNotViewedInDays, true).toBool();
+}
+
+bool StarviewerSettings::getDeleteOldStudiesIfNotEnoughSpaceAvailable()
+{
+    return m_starviewerSettings.value(GroupSettingsName + deleteOldStudiesIfNotEnoughSpaceAvailable, true).toBool();
+}
+
+uint StarviewerSettings::getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable()
+{
+    return m_starviewerSettings.value(GroupSettingsName + GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable, 2).toUInt();
+}
+
 uint StarviewerSettings::getMinimumSpaceRequiredToRetrieveInGbytes()
 {
     return m_starviewerSettings.value(GroupSettingsName + minimumSpaceRequiredToRetrieveInGbytesKey, "5").toString().toUInt();
@@ -100,7 +133,6 @@ uint StarviewerSettings::getMinimumSpaceRequiredToRetrieveInMbytes()
 {
     return m_starviewerSettings.value(GroupSettingsName + minimumSpaceRequiredToRetrieveInGbytesKey, "5").toString().toUInt() * 1024;
 }
-
 
 QString StarviewerSettings::getCacheImagePath()
 {
