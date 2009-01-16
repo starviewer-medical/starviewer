@@ -57,7 +57,10 @@ void QLocalDatabaseConfigurationScreen::createConnections()
     connect( m_textMinimumSpaceRequiredToRetrieve, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textDatabaseRoot, SIGNAL( textChanged(const QString &) ), SLOT ( configurationChangedDatabaseRoot() ) );
     connect( m_textMaximumDaysNotViewed, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
-
+    connect(m_textSpaceToFreeIfNotEnoughSpaceAvailable, SIGNAL(textChanged(const QString &)), SLOT(enableApplyButtons()));
+    connect(m_checkBoxDeletedOldStudies, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
+    connect(m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable, SIGNAL(toggled(bool)), SLOT(enableApplyButtons()));
+    
     //mateniment base de dades
     connect( m_buttonDeleteStudies , SIGNAL( clicked() ), SLOT( deleteStudies() ) );
     connect( m_buttonCompactDatabase , SIGNAL( clicked() ), SLOT( compactCache() ) );
@@ -78,8 +81,15 @@ void QLocalDatabaseConfigurationScreen::loadCacheDefaults()
 
     m_textDatabaseRoot->setText(settings.getDatabasePath());
     m_textCacheImagePath->setText(settings.getCacheImagePath());
-    m_textMaximumDaysNotViewed->setText(settings.getMaximumDaysNotViewedStudy());
+
     m_textMinimumSpaceRequiredToRetrieve->setText(QString().setNum(settings.getMinimumSpaceRequiredToRetrieveInGbytes()));
+    m_textMaximumDaysNotViewed->setText(settings.getMaximumDaysNotViewedStudy());
+    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setText(QString().setNum(settings.getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable()));
+    m_textMaximumDaysNotViewed->setEnabled(settings.getDeleteOldStudiesHasNotViewedInDays());
+    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setEnabled(settings.getDeleteOldStudiesIfNotEnoughSpaceAvailable());
+    m_checkBoxDeletedOldStudies->setChecked(settings.getDeleteOldStudiesHasNotViewedInDays());
+    m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->setChecked(settings.getDeleteOldStudiesIfNotEnoughSpaceAvailable());
+    
 }
 
 bool QLocalDatabaseConfigurationScreen::validateChanges()
@@ -220,6 +230,15 @@ void QLocalDatabaseConfigurationScreen::applyChangesCache()
         INFO_LOG( "Es modificarà el nombre maxim de dies d'un estudi a la cache" + m_textMaximumDaysNotViewed->text() );
         settings.setMaximumDaysNotViewedStudy( m_textMaximumDaysNotViewed->text() );
     }
+
+    if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->isModified())
+    {
+        INFO_LOG("Es modificarà el Gbytes a alliberar quan no hi ha suficent espai per descarregar nous estudis" + m_textSpaceToFreeIfNotEnoughSpaceAvailable->text() );
+        settings.setGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable(m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt());
+    }
+
+    settings.setDeleteOldStudiesHasNotViewedInDays(m_checkBoxDeletedOldStudies->isChecked());
+    settings.setDeleteOldStudiesIfNotEnoughSpaceAvailable(m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->isChecked());
 
     m_buttonApplyCache->setEnabled( false );
 }

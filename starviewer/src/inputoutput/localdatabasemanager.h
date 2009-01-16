@@ -61,7 +61,9 @@ public:
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
 
-    ///Esborra els estudis vells que fa que superen el temps màxim que poden estar a la base de dades sense ser visualitzats
+    /**Esborra els estudis vells que fa que superen el temps màxim que poden estar a la base de dades sense ser visualitzats,
+      *Si la opció de configuració d'esborrar els estudis vells que no han estat visualitzats en un determinat número de dies no està
+      *activada aquest mètode no farà res*/
     void deleteOldStudies();
 
     ///compacta la base de dades
@@ -73,8 +75,10 @@ public:
     ///Ens indica si la base de dades està corrupte
     bool isDatabaseCorrupted();
 
-    ///Comprova si hi espai suficient al disc dur per descarregar nous objectes, si no n'hi ha suficient esborra estudis vells per intentar alliberar prou espai per permetre la descàrrega de nous objectes
-    bool isEnoughSpace();
+    /**Comprova si es disposa d'espai suficient al disc dur per descarregar nous objectes. Si la opció de configuració d'esborrar 
+      *estudis automàticament està activada intentarà esborrar estudis vells tant Gb d'estudis vell com s'hagi especificat a la configuració
+      *per tal d'alliberar suficient espai per permetre noves descàrregues*/
+    bool thereIsAvailableSpaceOnHardDisk();
 
     ///Donat un study instance UID ens indica a quin ha de ser el directori de l'estudi
     QString getStudyPath(const QString &studyInstanceUID);
@@ -110,8 +114,6 @@ private :
 
     ///Guardem a partir de quina data de lastAccessDate cerquem els estudis, d'aquesta manera sabem quins estudis vells s'han d'esborrar, quins hem de mostrar al fer cerques, i evitem incoherències, com la que podria ser que al cercar estudis en una mateixa sessió de l'apliació a les 23:59,o a les 0:01 de l'endemà donint resultats diferents, perquè hi han estudis que passen a ser considerats estudis vells. D'aquesta manera en tota la vida de l'aplicació mantenim el mateix criteri de data per establir si un estudi es vell o no i s'ha de mostrar a les cerques.
     static QDate LastAccessDateSelectedStudies;
-    ///Ens indica l'espai en Mbytes que hem d'alliberar quan no hi ha suficient espai en el disc
-    static const quint64 MbytesToEraseWhereNotEnoughSpaceRequiredInHardDisk = 2*1024; 
     ///Conté el nom de la llista de QSettings que guardarà els estudis que tenim en aquell moment descarregant
     static const QString qsettingsRetrievingStudy;
 

@@ -132,7 +132,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
     emit setOperating( studyUID );
 
-    if (!localDatabaseManager.isEnoughSpace())
+    if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
     {
         if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
         {

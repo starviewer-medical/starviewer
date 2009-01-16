@@ -40,6 +40,21 @@ public:
 	 */
     void setCacheImagePath( QString );
 
+    /**Permet indicar si s'han d'esborrar o no els estudis que no han estat visualitzats uns determinats passat un determinats dies.
+      *El número de dies s'especifica a través del mètode setMaximumDaysNotViewedStudy
+      */
+    void setDeleteOldStudiesHasNotViewedInDays(bool deleteOldStudies);
+
+    /**Permet indicar si s'ha d'alliberar espai de forma automàtica esborrant estudis vells quan no hi ha suficient 
+      *espai lliure per més descàrregues/importacions
+      */
+    void setDeleteOldStudiesIfNotEnoughSpaceAvailable(bool deletedOldStudiesIfNotEnoughSpaceAvailable);
+
+    /** Permet Indicar el Gbytes d'objectes dicom que s'han d'esborrar en cas que no hi hagi suficient espai per noves
+      * descàrregues/importacions
+      */
+    void setGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable(uint minimumSpaceRequired);
+
 	/** Estableix el número de dies màxim que un estudi pot estar a la cache sense ser vist ,  a partir d'aquest número de dies l'estudi és esborrat
 	 * @param número maxim de dies
 	 */
@@ -49,6 +64,15 @@ public:
 	 * @return retorna el path de la base de dades
 	 */
     QString getDatabasePath();
+
+    ///retorna si s'han d'esborrar els estudis que no han estat visualitzats en un determinat número de dies    
+    bool getDeleteOldStudiesHasNotViewedInDays();
+
+    ///retorna si s'han d'esborrar estudis vell si no hi ha suficient espai per descarregar/importar nous estudis
+    bool getDeleteOldStudiesIfNotEnoughSpaceAvailable();
+
+    ///Retorna el Gbytes a esborrar d'objectes dicom di no hi ha suficent espai per descarregar-ne/importar-ne de nous
+    uint getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable();
 
     ///Retorna l'espai mínim necessari en Gbytes al disc dur per poder descàrregar objectes dicom
     uint getMinimumSpaceRequiredToRetrieveInGbytes();

@@ -44,7 +44,7 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     m_qprogressDialog->setModal(true);
 
     //Comprovem si hi ha suficient espai lliure per importar l'estudi
-    if (!localDatabaseManager.isEnoughSpace())
+    if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
     {
         if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
         {
