@@ -42,6 +42,30 @@ void LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
     if (getLastError() != SQLITE_OK) logError(buildSqlDelete(studyMaskToDelete));
 }
 
+QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
+{
+    int columns , rows;
+    char **reply = NULL , **error = NULL;
+    QList<Study*> studyList;
+    QString sqlSentence = buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor) + " Order by LastAccessDate";
+
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(sqlSentence), &reply, &rows, &columns, error);
+
+    if (getLastError() != SQLITE_OK)
+    {
+        logError (sqlSentence);
+        return studyList;
+    }
+
+    //index = 1 ignorem les capçaleres
+    for (int index = 1; index <= rows ; index++)
+    {
+        studyList.append(fillStudy(reply, index, columns));
+    }
+
+    return studyList;
+}
+
 QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
     int columns , rows;
@@ -166,7 +190,7 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 
 QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)
 {
-    QString selectSentence, whereSentence, orderSentence;
+    QString selectSentence, whereSentence;
 
     selectSentence = "Select InstanceUID, PatientID, ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
                             "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, "
@@ -194,10 +218,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
         whereSentence += QString(" '%1' <= LastAccessDate ").arg(lastAccessDateEqualOrMajor.toString("yyyyMMdd"));
     }
 
-
-    orderSentence = " Order by LastAccessDate";
-
-    return selectSentence + whereSentence + orderSentence;
+    return selectSentence + whereSentence;
 }
 
 QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)

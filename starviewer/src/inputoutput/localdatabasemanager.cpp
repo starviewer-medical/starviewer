@@ -157,6 +157,22 @@ QList<Study*> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery
     return queryResult;
 }
 
+QList<Study*> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery)
+{
+    DatabaseConnection dbConnect;
+    LocalDatabaseStudyDAL studyDAL;
+    QList<Study*> queryResult;
+
+    dbConnect.open();
+    studyDAL.setDatabaseConnection(&dbConnect);
+    queryResult = studyDAL.queryOrderByLastAccessDate(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
+    setLastError(studyDAL.getLastError());
+
+    dbConnect.close();
+
+    return queryResult;
+}
+
 QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQuery)
 {
     DatabaseConnection dbConnect;
@@ -821,7 +837,7 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
     quint64 MbytesErased = 0;
     int index = 0;
 
-    studyListToDelete = queryStudy(oldStudiesMask);
+    studyListToDelete = queryStudyOrderByLastAccessDate(oldStudiesMask);
     if (getLastError() != LocalDatabaseManager::Ok)
         return;
 

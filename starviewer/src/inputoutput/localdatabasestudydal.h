@@ -33,6 +33,9 @@ public:
     ///Esborra els estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     void del(const DicomMask &studyMaskToDelete);
 
+    ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID, retorna els estudis ordenats per LastAccessDate de manera creixent
+    QList<Study*> queryOrderByLastAccessDate(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate() );
+
     ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     QList<Study*> query(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate() );
 
