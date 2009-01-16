@@ -73,6 +73,8 @@ void QLocalDatabaseConfigurationScreen::configureInputValidator()
 {
     m_textMaximumDaysNotViewed->setValidator( new QIntValidator(0, 9999, m_textMaximumDaysNotViewed) );
     m_textMinimumSpaceRequiredToRetrieve->setValidator( new QIntValidator(0, 999, m_textMinimumSpaceRequiredToRetrieve) );
+    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setValidator(new QIntValidator(0, 9999, m_textMaximumDaysNotViewed));
+    
 }
 
 void QLocalDatabaseConfigurationScreen::loadCacheDefaults()
@@ -95,6 +97,8 @@ void QLocalDatabaseConfigurationScreen::loadCacheDefaults()
 bool QLocalDatabaseConfigurationScreen::validateChanges()
 {
     QDir dir;
+    bool valid = true;
+    QString messageBoxText = tr("Some configuration options are not valid : \n");
 
     if ( m_textDatabaseRoot->isModified() )
     {
@@ -133,12 +137,32 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
     {
         if (m_textMinimumSpaceRequiredToRetrieve->text().toUInt() < 1)
         {
-            QMessageBox::warning(this, ApplicationNameString, tr("At least 1 GByte of free space is necessary."));
-            return false;
+            messageBoxText += tr("\n- At least 1 GByte of free space in harddisk is necessary to retrieve/import new studies.");
+            valid = false;
         }
     }
 
-    return true;
+    if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->isModified())
+    {
+        if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt() < 1)
+        {
+            messageBoxText += tr("\n- At least 1 GByte of studies have to be delete when there is not enough space to retrieve/import new studies.");
+            valid = false;
+        }
+    }
+
+    if (m_textMaximumDaysNotViewed->isModified())
+    {
+        if (m_textMaximumDaysNotViewed->text().toUInt() < 1)
+        {
+            messageBoxText += tr("\n- Can't delete studies not viewed last 0 days, at least has to be studies not viewed last 1 day.");
+            valid = false;
+        }
+    }
+
+    if (!valid) QMessageBox::information(this, ApplicationNameString, messageBoxText);
+
+    return valid;
 }
 
 bool QLocalDatabaseConfigurationScreen::applyChanges()

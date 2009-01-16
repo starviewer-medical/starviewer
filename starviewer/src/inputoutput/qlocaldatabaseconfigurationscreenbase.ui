@@ -413,7 +413,7 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable" >
        <property name="text" >
-        <string>Where there isn't enough free space to retrieve or import new studies free up</string>
+        <string>When there isn't enough free space to retrieve or import new studies delete old studies until get</string>
        </property>
       </widget>
      </item>
@@ -436,7 +436,7 @@
      <item>
       <widget class="QLabel" name="label_4" >
        <property name="text" >
-        <string>Gb deleting old studies.</string>
+        <string>Gb of free space for starviewer.</string>
        </property>
       </widget>
      </item>
