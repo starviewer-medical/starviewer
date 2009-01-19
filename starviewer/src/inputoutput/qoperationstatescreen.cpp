@@ -117,7 +117,6 @@ void QOperationStateScreen::deleteStudy( QString studyUID )
     foreach(QTreeWidgetItem *itemToDelete, qTreeWidgetItemsToDelete)
     {
         m_treeRetrieveStudy->invisibleRootItem()->takeChild( m_treeRetrieveStudy->invisibleRootItem()->indexOfChild(itemToDelete) );
-        delete itemToDelete;
     }
 }
 
