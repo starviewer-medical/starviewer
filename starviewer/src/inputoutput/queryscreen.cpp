@@ -1006,9 +1006,9 @@ void QueryScreen::importDicomdir()
         }
     }
 
-    queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
+	QApplication::restoreOverrideCursor();
 
-    QApplication::restoreOverrideCursor();
+    queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
 }
 
 void QueryScreen::deleteSelectedStudiesInCache()
