@@ -37,12 +37,6 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     PatientFiller patientFiller;
     QThreadRunWithExec fillersThread;
 
-    m_qprogressDialog = new QProgressDialog("","", 0, 0);
-    m_qprogressDialog->setCancelButton(0);
-    m_qprogressDialog->setValue(1);
-    m_qprogressDialog->setMinimumDuration(0);
-    m_qprogressDialog->setModal(true);
-
     //Comprovem si hi ha suficient espai lliure per importar l'estudi
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
     {
@@ -63,6 +57,12 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         m_lastError = ErrorOpeningDicomdir;
         return;
     }
+
+    m_qprogressDialog = new QProgressDialog("","", 0, 0);
+    m_qprogressDialog->setCancelButton(0);
+    m_qprogressDialog->setValue(1);
+    m_qprogressDialog->setMinimumDuration(0);
+    m_qprogressDialog->setModal(true);
 
     patientFiller.moveToThread(&fillersThread);
 
