@@ -12,6 +12,7 @@
 #include "transferfunctionio.h"
 #include "vector3.h"
 #include "viewpointgenerator.h"
+#include "volumereslicer.h"
 
 
 namespace udg {
@@ -87,6 +88,10 @@ void QExperimental3DExtension::createConnections()
     connect( m_obscurancePushButton, SIGNAL( clicked() ), SLOT( computeCancelObscurance() ) );
     connect( m_obscuranceLoadPushButton, SIGNAL( clicked() ), SLOT( loadObscurance() ) );
     connect( m_obscuranceSavePushButton, SIGNAL( clicked() ), SLOT( saveObscurance() ) );
+
+    // SMI
+    connect( m_smiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setNumberOfSmiViewpoints(int) ) );
+    connect( m_smiPushButton, SIGNAL( clicked() ), SLOT( computeSmi() ) );
 }
 
 
@@ -511,6 +516,62 @@ void QExperimental3DExtension::saveObscurance()
     }
 
     settings.endGroup();
+}
+
+
+void QExperimental3DExtension::setNumberOfSmiViewpoints( int numberOfViewpoints )
+{
+    m_smiViewpointSpinBox->setMaximum( numberOfViewpoints );
+}
+
+
+void QExperimental3DExtension::computeSmi()
+{
+    ViewpointGenerator viewpointGenerator;
+
+    if ( m_smiViewpointDistributionWidget->isUniform() )
+    {
+        switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
+        {
+            case 4: viewpointGenerator.setToUniform4(); break;
+            case 6: viewpointGenerator.setToUniform6(); break;
+            case 8: viewpointGenerator.setToUniform8(); break;
+            case 12: viewpointGenerator.setToUniform12(); break;
+            case 20: viewpointGenerator.setToUniform20(); break;
+            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+        }
+    }
+    else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
+
+    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+    int i0, i1;
+
+    if ( m_smiViewpointSpinBox->value() == 0 )  // tots
+    {
+        i0 = 0; i1 = viewpoints.size();
+    }
+    else    // un en concret
+    {
+        i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
+    }
+
+    for ( int i = i0; i < i1; i++ )
+    {
+        const Vector3 &viewpoint = viewpoints.at( i );
+
+        VolumeReslicer volumeReslicer( i + 1 );
+        volumeReslicer.setInput( m_volume->getImage() );
+
+        Vector3 position( viewpoint );
+        Vector3 up( 0.0, 1.0, 0.0 );
+        if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
+        volumeReslicer.setViewpoint( viewpoint, up );
+
+        volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
+        volumeReslicer.reslice();
+
+        volumeReslicer.computeSmi();
+    }
 }
 
 

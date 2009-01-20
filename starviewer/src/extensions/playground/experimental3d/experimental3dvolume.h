@@ -38,6 +38,8 @@ public:
     Experimental3DVolume( Volume *volume );
     ~Experimental3DVolume();
 
+    /// Retorna el model de vòxels principal.
+    vtkImageData* getImage() const;
     /// Retorna el vtkVolume.
     vtkVolume* getVolume() const;
     /// Retorna el valor de propietat mínim.
