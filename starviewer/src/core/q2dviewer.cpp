@@ -85,7 +85,6 @@ namespace udg {
 Q2DViewer::Q2DViewer( QWidget *parent )
 : QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_oldToolManager(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledOldTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
-
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
     m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
@@ -116,6 +115,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
 Q2DViewer::~Q2DViewer()
 {
+    // Fem delete de tots els objectes vtk dels que hem fet un ::New()
     m_scalarBar->Delete();
     m_patientOrientationTextActor[0]->Delete();
     m_patientOrientationTextActor[1]->Delete();
@@ -126,6 +126,23 @@ Q2DViewer::~Q2DViewer()
     m_cornerAnnotations->Delete();
     m_picker->Delete();
     m_vtkQtConnections->Delete();
+    m_imageActor->Delete();
+    m_imageRenderer->Delete();
+    m_interactorStyle->Delete();
+    m_anchoredRulerCoordinates->Delete();
+    m_windowLevelLUTMapper->Delete();
+    m_thickSlabProjectionFilter->Delete();
+    // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
+    if( m_blender )
+        m_blender->Delete();
+    if( m_modalityLUTRescale )
+        m_modalityLUTRescale->Delete();
+    if( m_modalityLut )
+        m_modalityLut->Delete();
+    if( m_windowLevelLut )
+        m_windowLevelLut->Delete();
+    if( m_presentationLut )
+        m_presentationLut->Delete();
     // TODO hem hagut de fer eliminar primer el drawer per davant d'altres objectes
     // per solucionar el ticket #539, però això denota que hi ha algun problema de
     // disseny que fa que no sigui prou robust. L'ordre en que s'esborren els objectes

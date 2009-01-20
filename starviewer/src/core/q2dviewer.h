@@ -511,9 +511,6 @@ private slots:
     void setupThickSlabPipeline();
 
 protected:
-    /// Connector d'events vtk i slots qt
-    vtkEventQtSlotConnect *m_vtkQtConnections;
-
     /// Renderer principal. S'encarrega de pintar la imatge
     vtkRenderer *m_imageRenderer;
 
@@ -569,7 +566,7 @@ private:
     QString m_patientOrientationText[4];
 
     /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
-    vtkAxisActor2D *m_sideRuler , *m_bottomRuler;
+    vtkAxisActor2D *m_sideRuler, *m_bottomRuler;
 
     /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
     vtkCoordinate *m_anchoredRulerCoordinates;
