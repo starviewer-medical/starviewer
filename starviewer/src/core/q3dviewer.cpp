@@ -83,6 +83,8 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
     m_renderer = vtkRenderer::New();
     m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
+    m_renderer->Delete();
+	
     m_vtkWidget->setAutomaticImageCacheEnabled( true );
     this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
@@ -190,7 +192,6 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 Q3DViewer::~Q3DViewer()
 {
     /// \todo falta revisar què falta per destruir
-    m_renderer->Delete();
     if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
     {
         m_obscuranceMainThread->stop();
@@ -209,7 +210,21 @@ Q3DViewer::~Q3DViewer()
     delete m_directIlluminationObscuranceVoxelShader;
     delete m_ambientContourObscuranceVoxelShader;
     delete m_directIlluminationContourObscuranceVoxelShader;
-    if ( m_4DLinearRegressionGradientEstimator ) m_4DLinearRegressionGradientEstimator->Delete();
+    // eliminem tots els elements vtk creats
+    if ( m_4DLinearRegressionGradientEstimator ) 
+        m_4DLinearRegressionGradientEstimator->Delete();
+    m_imageData->Delete();
+    m_vtkVolume->Delete();
+    m_volumeProperty->Delete();
+    m_volumeMapper->Delete();
+    m_volumeRayCastFunction->Delete();
+    m_volumeRayCastAmbientContourFunction->Delete();
+    m_volumeRayCastDirectIlluminationContourFunction->Delete();
+    m_volumeRayCastAmbientObscuranceFunction->Delete();
+    m_volumeRayCastDirectIlluminationObscuranceFunction->Delete();
+    m_volumeRayCastAmbientContourObscuranceFunction->Delete();
+    m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
+    m_volumeRayCastIsosurfaceFunction->Delete();
 }
 
 vtkRenderer *Q3DViewer::getRenderer()
