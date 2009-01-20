@@ -56,6 +56,12 @@ Experimental3DVolume::~Experimental3DVolume()
 }
 
 
+vtkImageData* Experimental3DVolume::getImage() const
+{
+    return m_image;
+}
+
+
 vtkVolume* Experimental3DVolume::getVolume() const
 {
     return m_volume;

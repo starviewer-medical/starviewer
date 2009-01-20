@@ -71,6 +71,11 @@ private slots:
     /// Desa les obscurances a un fitxer.
     void saveObscurance();
 
+    /// Estableix el nombre de punts de vista de l'SMI.
+    void setNumberOfSmiViewpoints( int numberOfViewpoints );
+    /// Calcula l'SMI amb el/s punt/s de vista seleccionat/s.
+    void computeSmi();
+
 private:
 
     Experimental3DVolume *m_volume; // el destruirà el visor
