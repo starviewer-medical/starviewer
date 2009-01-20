@@ -168,8 +168,7 @@ void EditorTool::increaseState()
     case EraseSlice:
         m_editorState = Paint;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
-        m_squareActor->VisibilityOn();
-        m_2DViewer->refresh();
+        this->setPaintCursor();
     break;
     default:
     break;
@@ -183,8 +182,7 @@ void EditorTool::decreaseState()
     case EraseRegion:
         m_editorState = Erase;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/erasercursor.png") ) );
-        m_squareActor->VisibilityOn();
-        m_2DViewer->refresh();
+        this->setPaintCursor();
     break;
     case EraseSlice:
         m_editorState = EraseRegion;
@@ -318,10 +316,10 @@ void EditorTool::setPaintCursor()
   
         m_squareActor->SetMapper( squareMapper );
   
+        m_squareActor->VisibilityOn();
+  
         m_2DViewer->getRenderer()->AddViewProp( m_squareActor );
         m_2DViewer->refresh();
-  
-        m_squareActor->VisibilityOn();
   
         squareMapper->Delete();
         points->Delete();
