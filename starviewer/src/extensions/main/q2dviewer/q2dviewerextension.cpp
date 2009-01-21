@@ -35,7 +35,7 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
- : QWidget( parent ), m_presentationStateAttacher(0), m_viewer(0)
+ : QWidget( parent ), m_presentationStateAttacher(0), m_lastSelectedViewer(0)
 {
     setupUi( this );
 
@@ -89,9 +89,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
-
-    activateNewViewer( m_workingArea->getViewerSelected() );
-    changeSelectedViewer( m_workingArea->getViewerSelected() );
 
     //TODO "Xapussa" del ticket #599 per tal de crear el perfil per CR o MG
     if( m_profile == "ProfileOnlyCR")
@@ -216,9 +213,6 @@ void Q2DViewerExtension::createConnections()
     // enable/disable presentation states
     connect( m_presentationStateAction, SIGNAL( toggled(bool) ), SLOT( enablePresentationState(bool) ) );
 
-    // Connexions necessaries pel primer visualitzador
-    connect( m_workingArea->getViewerSelected()->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
-
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
 
@@ -238,13 +232,15 @@ void Q2DViewerExtension::setInput( Volume *input )
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
-	m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
+    m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
     QApplication::restoreOverrideCursor();
 
     if( m_hangingCandidates.size() == 0 )
     {
-        m_workingArea->getViewerSelected()->setInput( m_mainVolume );
+        Q2DViewerWidget *viewerWidget = m_workingArea->addViewer( "0.0\\1.0\\1.0\\0.0" );
+        viewerWidget->setInput( m_mainVolume );
     }
+    m_workingArea->setViewerSelected( m_workingArea->getViewerWidget(0) );
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
 }
 
@@ -450,7 +446,6 @@ void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 
 void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
 {
-
      // i si cal, activem les annotacions
     if( m_viewerInformationToolButton->isChecked() )
         newViewerWidget->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
@@ -462,41 +457,37 @@ void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
     initializeDefaultTools( newViewerWidget->getViewer() );
 }
 
-void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget * viewerWidget )
+void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
 {
     if( !viewerWidget )
     {
         DEBUG_LOG("El Viewer donat és NUL!");
         return;
     }
-
-    if ( viewerWidget != m_viewer )
+    if ( viewerWidget != m_lastSelectedViewer )
     {
         ///TODO canviar aquestes connexions i desconnexions per dos mètodes el qual
         /// enviin el senyal al visualitzador que toca.
-        if( m_viewer )
+        if( m_lastSelectedViewer )
         {
-//             disconnect( m_predefinedSlicesGrid , SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
-//             disconnect( m_sliceTableGrid , SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
-            disconnect( m_viewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
-            disconnect( m_viewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
+            disconnect( m_lastSelectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
+            disconnect( m_lastSelectedViewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
         }
-        m_viewer = viewerWidget;
+        m_lastSelectedViewer = viewerWidget;
+        Q2DViewer *selected2DViewer = viewerWidget->getViewer();
+        
         validePhases();
-
-//         connect( m_predefinedSlicesGrid, SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
-//         connect( m_sliceTableGrid, SIGNAL( selectedGrid( int , int ) ) , m_workingArea->getViewerSelected()->getViewer(), SLOT( setGrid( int, int ) ) );
-        connect( m_viewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
-        connect( m_viewer->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
+        connect( viewerWidget->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
+        connect( viewerWidget->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
 
         // TODO potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
         // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
-        m_windowLevelComboBox->setPresetsData( m_viewer->getViewer()->getWindowLevelData() );
-        m_windowLevelComboBox->selectPreset( m_viewer->getViewer()->getWindowLevelData()->getCurrentPreset() );
+        m_windowLevelComboBox->setPresetsData( selected2DViewer->getWindowLevelData() );
+        m_windowLevelComboBox->selectPreset( selected2DViewer->getWindowLevelData()->getCurrentPreset() );
 
-        m_cineController->setQViewer( m_viewer->getViewer() );
-        m_thickSlabWidget->link( m_viewer->getViewer() );
-        updateDICOMInformationButton( m_viewer->getViewer()->getView() );
+        m_cineController->setQViewer( selected2DViewer );
+        m_thickSlabWidget->link( selected2DViewer );
+        updateDICOMInformationButton( selected2DViewer->getView() );
     }
 }
 
@@ -602,8 +593,9 @@ void Q2DViewerExtension::disableSynchronization()
 
 void Q2DViewerExtension::setHangingProtocol( int hangingProtocolNumber )
 {
-	/// Aplicació dels hanging protocols
+    /// Aplicació dels hanging protocols
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-	hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
+    hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
 }
+
 }

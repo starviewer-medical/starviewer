@@ -142,10 +142,10 @@ private slots:
     void synchronization( Q2DViewerWidget *, bool );
 
     /// Mètode que tracta el nou visualitzador afegit
-    void activateNewViewer( Q2DViewerWidget * newViewerWidget );
+    void activateNewViewer( Q2DViewerWidget *newViewerWidget );
 
     /// Mètode que tracta el canvi de visualitzador seleccionat
-    void changeSelectedViewer( Q2DViewerWidget * viewerWidget );
+    void changeSelectedViewer( Q2DViewerWidget *viewerWidget );
 
 private:
     /// El volum principal
@@ -196,11 +196,11 @@ private:
     ///Perfil a mostrar la interficie
     QString m_profile;
 
-    /// Visualitzador actual seleccionat
-    Q2DViewerWidget * m_viewer;
+    /// ültim visualitzador seleccionat
+    Q2DViewerWidget *m_lastSelectedViewer;
 
-	/// Llista de hanging protocols aplicables
-	QList<HangingProtocol * > m_hangingCandidates;
+    /// Llista de hanging protocols aplicables
+    QList<HangingProtocol * > m_hangingCandidates;
 
 };
 

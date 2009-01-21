@@ -25,7 +25,6 @@ Q_OBJECT
 public:
 
     ViewersLayout(QWidget *parent = 0);
-
     ~ViewersLayout();
 
     /// Obtenir el visualitzador seleccionat
@@ -38,7 +37,6 @@ public:
     Q2DViewerWidget * getViewerWidget( int number );
 
 public slots:
-
     ///Canviar el nombre de files i columnes
     void addColumns( int columns = 1 );
     void addRows(  int rows = 1 );
@@ -54,8 +52,10 @@ public slots:
     /// Afegeix un nou visualitzador
     Q2DViewerWidget * addViewer( QString position );
 
-signals:
+    /// Posem el widget seleccionat com a actual
+    void setViewerSelected( Q2DViewerWidget *viewer );
 
+signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
     void viewerAdded( Q2DViewerWidget * );
 
@@ -66,12 +66,10 @@ signals:
     void viewerSelectedChanged( Q2DViewerWidget * );
 
 protected:
-
 	/// Tractament de l'event de canvi de tamany de la finestra
     void resizeEvent ( QResizeEvent * event );
 
 private:
-
     // Obtenir un nou visualitzador
 	Q2DViewerWidget* getNewQ2DViewerWidget();
 
@@ -79,18 +77,13 @@ private:
 	void restoreLayouts();
 
 private slots:
-
     /// Inicialitza els layouts
     void initLayouts();
 
     /// Elimina els layouts
     void removeLayouts();
 
-    /// Posem el widget seleccionat com a actual
-    void setViewerSelected( Q2DViewerWidget *viewer );
-
 private:
-
     ///Widget contenidor general
     QWidget * m_workingArea;
 
