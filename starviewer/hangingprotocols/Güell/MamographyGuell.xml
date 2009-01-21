@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangingProtocol name="MamographyGuell">
-<hangingProtocolName>Mamography</hangingProtocolName>
+<hangingProtocolName>MamographyG</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <protocol>CR</protocol>
 <restriction identifier="1">
