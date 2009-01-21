@@ -6,62 +6,62 @@
  ***************************************************************************/
 
 
-#include "histogram.h"
+#include "oldhistogram.h"
 
 
 namespace udg {
 
 
-Histogram::Histogram()
+OldHistogram::OldHistogram()
 {
     m_count = 0;
 }
 
 
-Histogram::Histogram( int size )
+OldHistogram::OldHistogram( int size )
 {
     m_histogram.resize( size );
     m_count = 0;
 }
 
 
-Histogram::~Histogram()
+OldHistogram::~OldHistogram()
 {
 }
 
 
-int Histogram::size() const
+int OldHistogram::size() const
 {
     return m_histogram.size();
 }
 
 
-void Histogram::setSize( int size )
+void OldHistogram::setSize( int size )
 {
     m_histogram.resize( size );
 }
 
 
-QVectorIterator<quint64 > * Histogram::getIterator() const
+QVectorIterator<quint64 > * OldHistogram::getIterator() const
 {
     return new QVectorIterator<quint64>( m_histogram );
 }
 
 
-quint64 Histogram::count() const
+quint64 OldHistogram::count() const
 {
     return m_count;
 }
 
 
-void Histogram::reset()
+void OldHistogram::reset()
 {
     m_histogram.fill( 0 );
     m_count = 0;
 }
 
 
-void Histogram::combineWith( const Histogram & histogram )
+void OldHistogram::combineWith( const OldHistogram & histogram )
 {
     int otherSize = histogram.size();
 
@@ -75,7 +75,7 @@ void Histogram::combineWith( const Histogram & histogram )
 }
 
 
-void Histogram::substract( const Histogram & histogram )
+void OldHistogram::substract( const OldHistogram & histogram )
 {
     int size = qMin( this->size(), histogram.size() );
 

@@ -6,8 +6,8 @@
  ***************************************************************************/
 
 
-#ifndef UDGHISTOGRAM_H
-#define UDGHISTOGRAM_H
+#ifndef UDGOLDHISTOGRAM_H
+#define UDGOLDHISTOGRAM_H
 
 
 #include <QVector>
@@ -26,15 +26,15 @@ namespace udg {
  *
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class Histogram {
+class OldHistogram {
 
 public:
 
     /// Constructor. Crea un histograma buit i de mida 0.
-    Histogram();
+    OldHistogram();
     /// Constructor. Crea un histograma buit i de mida \p size.
-    Histogram( int size );
-    ~Histogram();
+    OldHistogram( int size );
+    ~OldHistogram();
 
     /// Retorna la mida de l'histograma.
     int size() const;
@@ -66,9 +66,9 @@ public:
      * Combina aquest histograma amb \p histogram. S'agafa la mida del més gros
      * i es sumen tots els comptadors dels dos histogrames.
      */
-    void combineWith( const Histogram & histogram );
+    void combineWith( const OldHistogram & histogram );
     /// Resta \p histogram d'aquest histograma. Es resten tots els comptadors.
-    void substract( const Histogram & histogram );
+    void substract( const OldHistogram & histogram );
 
 private:
 
@@ -80,14 +80,14 @@ private:
 };
 
 
-inline void Histogram::add( int value )
+inline void OldHistogram::add( int value )
 {
     m_histogram[value]++;
     m_count++;
 }
 
 
-inline void Histogram::substract( int value )
+inline void OldHistogram::substract( int value )
 {
     m_histogram[value]--;
     m_count--;

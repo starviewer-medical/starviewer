@@ -22,7 +22,7 @@
 #include <QTextStream>
 
 #include "doublehistogram.h"
-#include "histogram.h"
+#include "oldhistogram.h"
 #include "logging.h"
 
 
@@ -262,7 +262,7 @@ void Slicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 {
     DEBUG_LOG( "[*SMI*] ------------------ computeSmi 0 ------------------ " );
     // Primer una passada per tenir un histograma independent de les llesques
-    Histogram oneHistogram( m_nLabels ); // to rule them all
+    OldHistogram oneHistogram( m_nLabels ); // to rule them all
     for ( unsigned int i = 0; i < m_reslicedDataSize; i++ )
     {
         unsigned char value = m_reslicedData[i];
@@ -286,7 +286,7 @@ void Slicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     m_smi.clear();
     for ( unsigned int i = 0; i < m_sliceCount; i++ )  // iterem sobre les llesques
     {
-        Histogram histogram( m_nLabels );
+        OldHistogram histogram( m_nLabels );
         unsigned char * slice = m_reslicedData + i * m_sliceSize;   // començament de la llesca
         for ( unsigned int j = 0; j < m_sliceSize; j++ )    // iterem sobre la llesca actual
         {
@@ -533,8 +533,8 @@ double Slicer::mutualInformation( const unsigned char * sliceX, const unsigned c
     // H(X,Y) = -\sum_{x,y} p_{x,y} \log_2(p_{x,y})
     // I(X;Y) = \sum_{y \in Y} \sum_{x \in X} p(x,y) \log{ \left( \frac{p(x,y)}{p(x)\,p(y)} \right) }
     // I(X;Y) = H(X) + H(Y) - H(X,Y)
-    Histogram histogramX( m_nLabels ), histogramY( m_nLabels ); // histogrames individuals
-    Histogram jointHistogram( m_nLabels * m_nLabels );  // joint histogram (2d)
+    OldHistogram histogramX( m_nLabels ), histogramY( m_nLabels ); // histogrames individuals
+    OldHistogram jointHistogram( m_nLabels * m_nLabels );  // joint histogram (2d)
                                                         // indexation is valueX + m_nLabels * valueY
 
     for ( unsigned int j = 0; j < m_sliceSize; j++ )
@@ -598,8 +598,8 @@ double Slicer::similarity( const unsigned char * sliceX, const unsigned char * s
     // H(X,Y) = -\sum_{x,y} p_{x,y} \log_2(p_{x,y})
     // I(X;Y) = \sum_{y \in Y} \sum_{x \in X} p(x,y) \log{ \left( \frac{p(x,y)}{p(x)\,p(y)} \right) }
     // I(X;Y) = H(X) + H(Y) - H(X,Y)
-    Histogram histogramX( m_nLabels ), histogramY( m_nLabels ); // individual histograms
-    Histogram jointHistogram( m_nLabels * m_nLabels );  // joint histogram (2d)
+    OldHistogram histogramX( m_nLabels ), histogramY( m_nLabels ); // individual histograms
+    OldHistogram jointHistogram( m_nLabels * m_nLabels );  // joint histogram (2d)
                                                         // indexation is valueX + m_nLabels * valueY
 
     for ( unsigned int j = 0; j < m_sliceSize; j++ )

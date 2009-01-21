@@ -36,7 +36,7 @@ namespace udg {
 
 
 
-class Histogram;
+class OldHistogram;
 class OptimalViewpointPlaneHelper;
 class OptimalViewpointVolume;
 
@@ -138,8 +138,8 @@ private:
 //     QHash< int, std::deque< unsigned char > > * m_lastLValuesPerRay;
 //     std::deque<unsigned char> * m_lastLValues;
     QMutex m_mutex;
-    QHash< int, Histogram > m_histogramL_1PerThread;
-    QHash< int, Histogram > m_histogramLPerThread;
+    QHash< int, OldHistogram > m_histogramL_1PerThread;
+    QHash< int, OldHistogram > m_histogramLPerThread;
     QHash< int, std::deque< unsigned char > > m_lastLValuesPerThread;
 
     double m_hx;
