@@ -17,12 +17,7 @@ namespace udg {
 
 ViewersLayout::ViewersLayout(QWidget *parent) : QWidget(parent), m_selectedViewer(0)
 {
-    this->setViewerSelected( this->getNewQ2DViewerWidget() );
-    m_vectorViewers.push_back( m_selectedViewer );
-    m_selectedViewer->setSelected( true );
-	
-	m_numberOfVisibleViewers = 0;
-
+    m_numberOfVisibleViewers = 0;
     initLayouts();
 }
 
@@ -46,14 +41,12 @@ void ViewersLayout::initLayouts()
     m_viewersLayout->setSpacing(0);
     m_viewersLayout->setMargin(0);
 
-    m_viewersLayout->addWidget( m_selectedViewer, 0, 0 );
     m_gridLayout->addLayout( m_viewersLayout, 0, 0 );
 
     this->setLayout(m_gridLayout);
     m_gridLayout->update();
 
     m_isRegular = true;
-
 }
 
 void ViewersLayout::removeLayouts()
@@ -342,7 +335,6 @@ void ViewersLayout::setGrid( QList<QString> positionsList )
 
 Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 {
-
     Q2DViewerWidget *newViewer;
     QStringList listOfPositions;
     double x1;
