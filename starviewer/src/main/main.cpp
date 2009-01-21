@@ -155,7 +155,13 @@ int main(int argc, char *argv[])
     // registrem els codecs decompressors JPEG
     DJDecoderRegistration::registerCodecs();
 
-    QSplashScreen *splash = new QSplashScreen( QPixmap(":/images/splash.png") );
+    QPixmap splashPixmap;
+#ifdef STARVIEWER_LITE
+    splashPixmap.load(":/images/splashLite.png");
+#else
+    splashPixmap.load(":/images/splash.png");
+#endif
+    QSplashScreen *splash = new QSplashScreen( splashPixmap );
     splash->show();
 
     udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
