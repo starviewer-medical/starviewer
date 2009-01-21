@@ -11,6 +11,7 @@
 #include <vtkMatrix4x4.h>
 
 #include "histogram.h"
+#include "informationtheory.h"
 #include "logging.h"
 
 
@@ -163,20 +164,19 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 {
     DEBUG_LOG( "SMI: primer pas" );
     // Primer una passada per tenir un histograma independent de les llesques
-    Histogram oneHistogram( m_nLabels ); // to rule them all
+    Histogram oneHistogram( m_nLabels );    // to rule them all
     for ( int i = 0; i < m_reslicedDataSize; i++ )
     {
         unsigned short value = m_reslicedData[i];
         if ( value > 0 )    // no comptem cap background
             oneHistogram.add( value );
     }
-    QVector<double> p_o_;
+    QVector<double> valueProbabilities( m_nLabels );    // vector de probabilitats p(o)
     double oneCount = oneHistogram.count();
     DEBUG_LOG( QString( "SMI: one count = %1" ).arg( oneCount ) );
     for ( int i = 0; i < m_nLabels; i++ )
     {
-        double d = oneHistogram[i] / oneCount;
-        p_o_.append( d );
+        valueProbabilities[i] = oneHistogram[i] / oneCount;
     }
 
     DEBUG_LOG( "SMI: segon pas" );
@@ -192,18 +192,14 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
             if ( value > 0 )    // no comptem cap background
                 histogram.add( value );
         }
-
-        double I_s_O_ = 0.0;
+        QVector<double> valueProbabilitiesInSlice( m_nLabels ); // vector de probabilitats p(o|s)
         double count = histogram.count();
-        unsigned short o = 0;
-        for ( int j = 0; j < m_nLabels; j++ )
+        for ( int i = 0; i < m_nLabels; i++ )
         {
-            double p_o_s_ = histogram[j] / count;
-            if ( p_o_s_ > 0.0 ) I_s_O_ += p_o_s_ * log( p_o_s_ / p_o_[o] );
-            o++;
+            valueProbabilitiesInSlice[i] = histogram[i] / count;
         }
-        I_s_O_ /= log( 2.0 );
-        m_smi.append( I_s_O_ );
+
+        m_smi.append( InformationTheory::xMutualInformation( valueProbabilitiesInSlice, valueProbabilities ) );
     }
 
     // Printar resultats i guardar-los en un fitxer

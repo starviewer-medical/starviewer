@@ -12,7 +12,8 @@ HEADERS += experimental3dextensionmediator.h \
            qviewpointdistributionwidget.h \
            colorbleedingvoxelshader.h \
            volumereslicer.h \
-           histogram.h 
+           histogram.h \
+           informationtheory.h 
 SOURCES += experimental3dextensionmediator.cpp \
            qexperimental3dextension.cpp \
            qexperimental3dviewer.cpp \
@@ -20,6 +21,7 @@ SOURCES += experimental3dextensionmediator.cpp \
            qviewpointdistributionwidget.cpp \
            colorbleedingvoxelshader.cpp \
            volumereslicer.cpp \
-           histogram.cpp 
+           histogram.cpp \
+           informationtheory.cpp 
 RESOURCES += experimental3d.qrc
 include(../../basicconfextensions.inc)
