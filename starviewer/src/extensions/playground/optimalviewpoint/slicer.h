@@ -14,7 +14,7 @@
 #include <QVector>
 
 #include "vector3.h"
-#include "histogram.h"
+#include "oldhistogram.h"
 
 
 class vtkImageData;
@@ -121,8 +121,8 @@ private:
     struct Partition
     {
         Group g1, g2;
-        Histogram g1Histogram, g2Histogram;
-        Histogram jointHistogram;
+        OldHistogram g1Histogram, g2Histogram;
+        OldHistogram jointHistogram;
     };
 
     /// Finds minimum extent in direction 0 and stores results in min0 and max0.

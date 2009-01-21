@@ -10,7 +10,7 @@
 #include <vtkImageReslice.h>
 #include <vtkMatrix4x4.h>
 
-#include "../optimalviewpoint/histogram.h"
+#include "../optimalviewpoint/oldhistogram.h"
 #include "logging.h"
 
 
@@ -163,7 +163,7 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 {
     DEBUG_LOG( "SMI: primer pas" );
     // Primer una passada per tenir un histograma independent de les llesques
-    Histogram oneHistogram( m_nLabels ); // to rule them all
+    OldHistogram oneHistogram( m_nLabels ); // to rule them all
     for ( int i = 0; i < m_reslicedDataSize; i++ )
     {
         unsigned short value = m_reslicedData[i];
@@ -186,7 +186,7 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     m_smi.clear();
     for ( int i = 0; i < m_sliceCount; i++ )    // iterem sobre les llesques
     {
-        Histogram histogram( m_nLabels );
+        OldHistogram histogram( m_nLabels );
         unsigned short *slice = m_reslicedData + i * m_sliceSize;   // començament de la llesca
         for ( int j = 0; j < m_sliceSize; j++ ) // iterem sobre la llesca actual
         {

@@ -23,7 +23,7 @@
 #include <vtkMultiThreader.h>
 
 #include "optimalviewpointplanehelper.h"
-#include "histogram.h"
+#include "oldhistogram.h"
 #include "optimalviewpointvolume.h"
 #include "slicer.h"
 #include <vtkPointData.h>
@@ -253,8 +253,8 @@ void OptimalViewpointPlane::endEntropyComputing()
         m_compute = false;
         m_computing = false;
 
-        Histogram histogramL_1;
-        QHashIterator< int, Histogram > itHistogramL_1PerThread( m_histogramL_1PerThread );
+        OldHistogram histogramL_1;
+        QHashIterator< int, OldHistogram > itHistogramL_1PerThread( m_histogramL_1PerThread );
         histogramL_1 = itHistogramL_1PerThread.next().value();
         while ( itHistogramL_1PerThread.hasNext() )
         {
@@ -271,8 +271,8 @@ void OptimalViewpointPlane::endEntropyComputing()
         H_XL_1_ /= log( 2.0 );
         delete itHistogramL_1;
 
-        Histogram histogramL;
-        QHashIterator< int, Histogram > itHistogramLPerThread( m_histogramLPerThread );
+        OldHistogram histogramL;
+        QHashIterator< int, OldHistogram > itHistogramLPerThread( m_histogramLPerThread );
         histogramL = itHistogramLPerThread.next().value();
         while ( itHistogramLPerThread.hasNext() )
         {
@@ -368,8 +368,8 @@ void OptimalViewpointPlane::compute( int threadId, unsigned char value )
         {
             m_mutex.lock();
             m_lastLValuesPerThread[threadId];
-            m_histogramL_1PerThread[threadId] = Histogram( m_histogramL_1Size );
-            m_histogramLPerThread[threadId] = Histogram( m_histogramLSize );
+            m_histogramL_1PerThread[threadId] = OldHistogram( m_histogramL_1Size );
+            m_histogramLPerThread[threadId] = OldHistogram( m_histogramLSize );
 
             // per comptar els canvis //////////////////////////////////////////
             m_lastValuePerThread[threadId] = m_N;   // m_N és més gran que qualsevol valor que pugui arribar
