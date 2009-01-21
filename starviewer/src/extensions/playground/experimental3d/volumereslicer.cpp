@@ -10,7 +10,7 @@
 #include <vtkImageReslice.h>
 #include <vtkMatrix4x4.h>
 
-#include "../optimalviewpoint/oldhistogram.h"
+#include "histogram.h"
 #include "logging.h"
 
 
@@ -163,7 +163,7 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 {
     DEBUG_LOG( "SMI: primer pas" );
     // Primer una passada per tenir un histograma independent de les llesques
-    OldHistogram oneHistogram( m_nLabels ); // to rule them all
+    Histogram oneHistogram( m_nLabels ); // to rule them all
     for ( int i = 0; i < m_reslicedDataSize; i++ )
     {
         unsigned short value = m_reslicedData[i];
@@ -173,20 +173,18 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     QVector<double> p_o_;
     double oneCount = oneHistogram.count();
     DEBUG_LOG( QString( "SMI: one count = %1" ).arg( oneCount ) );
-    QVectorIterator<quint64> *itOneHistogram = oneHistogram.getIterator();
-    while ( itOneHistogram->hasNext() )
+    for ( int i = 0; i < m_nLabels; i++ )
     {
-        double d = itOneHistogram->next() / oneCount;
+        double d = oneHistogram[i] / oneCount;
         p_o_.append( d );
     }
-    delete itOneHistogram;
 
     DEBUG_LOG( "SMI: segon pas" );
     // Després les passades per tenir els histogrames per llesca i fer els càlculs finals
     m_smi.clear();
     for ( int i = 0; i < m_sliceCount; i++ )    // iterem sobre les llesques
     {
-        OldHistogram histogram( m_nLabels );
+        Histogram histogram( m_nLabels );
         unsigned short *slice = m_reslicedData + i * m_sliceSize;   // començament de la llesca
         for ( int j = 0; j < m_sliceSize; j++ ) // iterem sobre la llesca actual
         {
@@ -197,16 +195,14 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 
         double I_s_O_ = 0.0;
         double count = histogram.count();
-        QVectorIterator<quint64> *itHistogram = histogram.getIterator();
         unsigned short o = 0;
-        while ( itHistogram->hasNext() )
+        for ( int j = 0; j < m_nLabels; j++ )
         {
-            double p_o_s_ = itHistogram->next() / count;
+            double p_o_s_ = histogram[j] / count;
             if ( p_o_s_ > 0.0 ) I_s_O_ += p_o_s_ * log( p_o_s_ / p_o_[o] );
             o++;
         }
         I_s_O_ /= log( 2.0 );
-        delete itHistogram;
         m_smi.append( I_s_O_ );
     }
 
