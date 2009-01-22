@@ -929,6 +929,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="m_sliceUnstabilitiesPushButton" >
+          <property name="text" >
+           <string>Compute slice unstabilities</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer" >
           <property name="orientation" >
            <enum>Qt::Vertical</enum>

@@ -162,6 +162,8 @@ void VolumeReslicer::reslice( bool saveMhd, bool doClip )
 
 void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 {
+    if ( m_slices.isEmpty() ) createSlices();
+
     DEBUG_LOG( "SMI: primer pas" );
     // Primer una passada per tenir un histograma independent de les llesques
     Histogram oneHistogram( m_nLabels );    // to rule them all
@@ -180,26 +182,11 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     }
 
     DEBUG_LOG( "SMI: segon pas" );
-    // Després les passades per tenir els histogrames per llesca i fer els càlculs finals
-    m_smi.clear();
+    // Després fem els càlculs finals
+    m_smi.resize( m_sliceCount );
     for ( int i = 0; i < m_sliceCount; i++ )    // iterem sobre les llesques
     {
-        Histogram histogram( m_nLabels );
-        unsigned short *slice = m_reslicedData + i * m_sliceSize;   // començament de la llesca
-        for ( int j = 0; j < m_sliceSize; j++ ) // iterem sobre la llesca actual
-        {
-            unsigned short value = slice[j];
-            if ( value > 0 )    // no comptem cap background
-                histogram.add( value );
-        }
-        QVector<double> valueProbabilitiesInSlice( m_nLabels ); // vector de probabilitats p(o|s)
-        double count = histogram.count();
-        for ( int i = 0; i < m_nLabels; i++ )
-        {
-            valueProbabilitiesInSlice[i] = histogram[i] / count;
-        }
-
-        m_smi.append( InformationTheory::kullbackLeiblerDivergence( valueProbabilitiesInSlice, valueProbabilities ) );
+        m_smi[i] = InformationTheory::kullbackLeiblerDivergence( m_slices[i].probabilities, valueProbabilities );
     }
 
     // Printar resultats i guardar-los en un fitxer
@@ -207,10 +194,36 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         QTextStream out( &outFile );
-        for ( int i = 0; i < m_smi.size(); i++ )
+        for ( int i = 0; i < m_sliceCount; i++ )
         {
             DEBUG_LOG( QString( "SMI: SMI[%1] = %2" ).arg( i ).arg( m_smi[i] ) );
             out << "SMI[" << i << "] = " << m_smi[i] << "\n";
+        }
+        outFile.close();
+    }
+}
+
+
+void VolumeReslicer::computeSliceUnstabilities()   /// \todo Fer-ho més eficient!!!
+{
+    if ( m_slices.isEmpty() ) createSlices();
+
+    m_sliceUnstabilities.resize( m_sliceCount );
+
+    for ( int i = 0; i < m_sliceCount; i++ )    // iterem sobre les llesques
+    {
+        m_sliceUnstabilities[i] = sliceUnstability( i );
+    }
+
+    // Printar resultats i guardar-los en un fitxer
+    QFile outFile( QDir::tempPath().append( QString( "/sliceUnstabilities%1.txt" ).arg( m_id ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        for ( int i = 0; i < m_sliceCount; i++ )
+        {
+            DEBUG_LOG( QString( "SU: U[%1] = %2" ).arg( i ).arg( m_sliceUnstabilities[i] ) );
+            out << "U[" << i << "] = " << m_sliceUnstabilities[i] << "\n";
         }
         outFile.close();
     }
@@ -261,6 +274,63 @@ void VolumeReslicer::findExtent( const unsigned short *data, int dim0, int dim1,
         if ( !found ) i0--;
     }
     if ( found ) max0 = i0;
+}
+
+
+void VolumeReslicer::createSlices()
+{
+    m_slices.resize( m_sliceCount );
+
+    for ( int i = 0; i < m_sliceCount; i++ )
+    {
+        m_slices[i].data = m_reslicedData + i * m_sliceSize;
+
+        Histogram histogram( m_nLabels );
+        for ( int j = 0; j < m_sliceSize; j++ )
+        {
+            if ( m_slices[i].data[j] > 0 ) histogram.add( m_slices[i].data[j] );
+        }
+
+        m_slices[i].volume = histogram.count();
+
+        double count = histogram.count();
+        m_slices[i].probabilities.resize( m_nLabels );
+        for ( int j = 0; j < m_nLabels; j++ ) m_slices[i].probabilities[j] = histogram[j] / count;
+    }
+}
+
+
+// D(si,sj) = JSD(p(si)/p(ŝ), p(sj)/p(ŝ); p(O|si), p(O|sj))
+double VolumeReslicer::sliceDissimilarity( int slice1, int slice2 ) const
+{
+    Q_ASSERT( slice1 >= 0 && slice1 < m_sliceCount );
+    Q_ASSERT( slice2 >= 0 && slice2 < m_sliceCount );
+    Q_ASSERT( !m_slices.isEmpty() );
+
+    const Slice &s1 = m_slices[slice1];
+    const Slice &s2 = m_slices[slice2];
+    double volume1 = s1.volume;
+    double volume2 = s2.volume;
+    double totalVolume = volume1 + volume2;
+    double pi1 = volume1 / totalVolume;
+    double pi2 = volume2 / totalVolume;
+
+    return InformationTheory::jensenShannonDivergence( pi1, pi2, s1.probabilities, s2.probabilities );
+}
+
+
+// U(s_i) = ( D(s_i, s_i-1) + D(s_i, s_i+1) ) / 2
+double VolumeReslicer::sliceUnstability( int slice ) const
+{
+    Q_ASSERT( slice >= 0 && slice < m_sliceCount );
+    Q_ASSERT( !m_slices.isEmpty() );
+
+    if ( slice == 0 )   // un extrem
+        return sliceDissimilarity( slice, slice + 1 );
+    else if ( slice == m_sliceCount - 1 )   // l'altre extrem
+        return sliceDissimilarity( slice, slice - 1 );
+    else    // general
+        return ( sliceDissimilarity( slice, slice - 1 ) + sliceDissimilarity( slice, slice + 1 ) ) / 2.0;
 }
 
 
