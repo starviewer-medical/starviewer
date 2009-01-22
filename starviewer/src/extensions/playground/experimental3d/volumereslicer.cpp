@@ -199,7 +199,7 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
             valueProbabilitiesInSlice[i] = histogram[i] / count;
         }
 
-        m_smi.append( InformationTheory::xMutualInformation( valueProbabilitiesInSlice, valueProbabilities ) );
+        m_smi.append( InformationTheory::kullbackLeiblerDivergence( valueProbabilitiesInSlice, valueProbabilities ) );
     }
 
     // Printar resultats i guardar-los en un fitxer
