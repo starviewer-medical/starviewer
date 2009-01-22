@@ -68,6 +68,19 @@ double InformationTheory::kullbackLeiblerDivergence( const QVector<double> &prob
 }
 
 
+// JSD(pi1,pi2; P1,P2) = H(pi1*P1 + pi2*P2) - ( pi1 * H(P1) + pi2 * H(P2) )
+double InformationTheory::jensenShannonDivergence( double pi1, double pi2, const QVector<double> &probabilitiesP1, const QVector<double> &probabilitiesP2 )
+{
+    int size = probabilitiesP1.size();
+    QVector<double> probabilitiesMix( size );
+
+    for ( int i = 0; i < size; i++ )
+        probabilitiesMix[i] = pi1 * probabilitiesP1.at( i ) + pi2 * probabilitiesP2.at( i );
+
+    return entropy( probabilitiesMix ) - ( pi1 * entropy( probabilitiesP1 ) + pi2 * entropy( probabilitiesP2 ) );
+}
+
+
 InformationTheory::InformationTheory()
 {
 }
