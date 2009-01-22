@@ -45,26 +45,26 @@ double InformationTheory::entropy( const Histogram &histogram )
 }
 
 
-// I(x,Y) = sum[0,ny)( p(y|x) log ( p(y|x) / p(y) ) )
-double InformationTheory::xMutualInformation( const QVector<double> &probabilities_yIx, const QVector<double> &probabilities_y )
+// D_KL(P||Q) = sum[0,n)( P(i) log ( P(i) / Q(i) ) )
+double InformationTheory::kullbackLeiblerDivergence( const QVector<double> &probabilitiesP, const QVector<double> &probabilitiesQ )
 {
-    int size = probabilities_y.size();
-    double xMutualInformation = 0.0;
+    int size = probabilitiesP.size();
+    double kullbackLeiblerDivergence = 0.0;
 
     for ( int i = 0; i < size; i++ )
     {
-        double p_yIx = probabilities_yIx.at( i );
+        double p = probabilitiesP.at( i );
 
-        if ( p_yIx > 0.0 )
+        if ( p > 0.0 )
         {
-            double p_y = probabilities_y.at( i );
-            xMutualInformation += p_yIx * log( p_yIx / p_y );
+            double q = probabilitiesQ.at( i );
+            kullbackLeiblerDivergence += p * log( p / q );
         }
     }
 
-    xMutualInformation /= log( 2.0 );
+    kullbackLeiblerDivergence /= log( 2.0 );
 
-    return xMutualInformation;
+    return kullbackLeiblerDivergence;
 }
 
 

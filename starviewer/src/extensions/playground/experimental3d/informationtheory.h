@@ -29,12 +29,10 @@ public:
      */
     static double entropy( const Histogram &histogram );
     /**
-     * Retorna I(x,Y), on x és un valor de la variable aleatòria X, i Y és una altra variable aleatòria.
-     * \p probabilities_yIx és el vector de probabilitats p(y|x).
-     * \p probabilities_y és el vector de probabilitats p(y).
-     * I(x,Y) = sum[0,ny)( p(y|x) log ( p(y|x) / p(y) ) )
+     * Retorna la divergència de Kullback-Leibler entre les distribucions de probabilitat P i Q, amb les probabilitats definides a \p probabilitiesP i \p probabilitiesQ.
+     * D_KL(P||Q) = sum[0,n)( P(i) log ( P(i) / Q(i) ) )
      */
-    static double xMutualInformation( const QVector<double> &probabilities_yIx, const QVector<double> &probabilities_y );
+    static double kullbackLeiblerDivergence( const QVector<double> &probabilitiesP, const QVector<double> &probabilitiesQ );
 
 private:
 
