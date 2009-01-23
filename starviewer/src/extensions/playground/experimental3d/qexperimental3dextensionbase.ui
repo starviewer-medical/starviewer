@@ -936,6 +936,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="m_pmiPushButton" >
+          <property name="text" >
+           <string>Compute PMI</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer" >
           <property name="orientation" >
            <enum>Qt::Vertical</enum>

@@ -37,6 +37,8 @@ public:
     void computeSmi();
     /// Calcula la inestabilitat de cada llesca. Escriu els resultats per pantalla i en un fitxer anomenat sliceUnstabilitiesID.txt al directori temporal.
     void computeSliceUnstabilities();
+    /// Calcula la mesura PMI (Property Mutual Information). Escriu els resultats per pantalla i en un fitxer anomenat pmiID.txt al directori temporal.
+    void computePmi();
 
 private:
 
@@ -45,6 +47,12 @@ private:
         const unsigned short *data;
         unsigned int volume;
         QVector<double> probabilities;
+    };
+
+    struct Property
+    {
+        unsigned int volume;
+        QVector<double> sliceProbabilities;
     };
 
     /// Finds minimum extent in direction 0 and stores results in min0 and max0.
@@ -79,12 +87,17 @@ private:
 
     /// Vector de llesques.
     QVector<Slice> m_slices;
+    /// Vector de valors de propietat.
+    QVector<Property> m_properties;
 
     /// SMI per cada llesca.
     QVector<double> m_smi;  // Slice Mutual Information
 
     /// Inestabilitat de cada llesca.
     QVector<double> m_sliceUnstabilities;
+
+    /// PMI per cada llesca.
+    QVector<double> m_pmi;  // Property Mutual Information
 
 };
 
