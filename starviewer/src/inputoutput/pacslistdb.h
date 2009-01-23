@@ -41,6 +41,9 @@ public:
      */
     QList<PacsParameters> queryPacsList();
 
+    ///Retorna una llista amb tots els Pacs que l'usuari té assenyalats el paràmetre Default a true, són els pacs que l'usuari té marcats per cercar per defecte al consultar estudis
+    QList<PacsParameters> queryDefaultPacs();
+
     /** Permet actualitzar la informació d'un pacs, el PacsID camp clau no es pot canviar!
      * @param Objecte PAcsParameters ambles noves dades del PACS
      */
