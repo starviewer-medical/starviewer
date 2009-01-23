@@ -53,6 +53,24 @@ QList<PacsParameters> PacsListDB::queryPacsList()
     return getConfiguredPacsList();
 }
 
+QList<PacsParameters> PacsListDB::queryDefaultPacs()
+{
+    QList<PacsParameters> defaultPacs;
+    QSettings settings;
+    int size = settings.beginReadArray(PacsListConfigurationSectionName);
+
+    for(int i = 0; i < size; ++i)
+    {
+        settings.setArrayIndex(i);
+        PacsParameters pacs = fillPacs(settings);
+        if (pacs.getDefault() == "S") defaultPacs.append(pacs);
+    }
+    settings.endArray();
+
+    return defaultPacs;
+}
+
+
 PacsParameters PacsListDB::queryPacs(QString pacsIDString)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
