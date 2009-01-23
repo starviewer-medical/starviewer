@@ -23,9 +23,9 @@ GpuProgram::~GpuProgram()
 }
 
 
-void GpuProgram::addVertexShaderFile( const QString &fileName )
+void GpuProgram::addVertexShaderFromFile( const QString &fileName )
 {
-    GLhandleARB shader = addShaderFile( fileName, GL_VERTEX_SHADER_ARB );
+    GLhandleARB shader = addShaderFromFile( fileName, GL_VERTEX_SHADER_ARB );
     if ( shader > 0 ) m_vertexShaders << shader;
 }
 
@@ -45,9 +45,9 @@ void GpuProgram::clearVertexShaders()
 }
 
 
-void GpuProgram::addFragmentShaderFile( const QString &fileName )
+void GpuProgram::addFragmentShaderFromFile( const QString &fileName )
 {
-    GLhandleARB shader = addShaderFile( fileName, GL_FRAGMENT_SHADER_ARB );
+    GLhandleARB shader = addShaderFromFile( fileName, GL_FRAGMENT_SHADER_ARB );
     if ( shader > 0 ) m_fragmentShaders << shader;
 }
 
@@ -74,34 +74,28 @@ void GpuProgram::link()
 }
 
 
-GLhandleARB GpuProgram::programObject() const
-{
-    return m_programObject;
-}
-
-
 bool GpuProgram::isValid() const
 {
     return m_valid;
 }
 
 
-bool GpuProgram::initUniform( const QString &uniformName )
+bool GpuProgram::initUniform( const QString &name )
 {
     if ( !m_valid ) return false;
-    if ( m_uniforms.contains( uniformName ) ) return false;
+    if ( m_uniforms.contains( name ) ) return false;
 
-    GLint uniform = glGetUniformLocationARB( m_programObject, qPrintable( uniformName ) );
+    GLint uniform = glGetUniformLocationARB( m_programObject, qPrintable( name ) );
 
     if ( uniform < 0 ) return false;
 
-    m_uniforms[uniformName] = uniform;
+    m_uniforms[name] = uniform;
 
     return true;
 }
 
 
-GLhandleARB GpuProgram::addShaderFile( const QString &fileName, GLenum type )
+GLhandleARB GpuProgram::addShaderFromFile( const QString &fileName, GLenum type )
 {
     QFile shaderSourceFile( fileName );
 
