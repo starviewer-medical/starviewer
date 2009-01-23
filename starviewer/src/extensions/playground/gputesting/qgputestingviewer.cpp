@@ -427,21 +427,21 @@ void QGpuTestingViewer::loadShaders()
 
     delete m_gpuProgram;
     m_gpuProgram = new GpuProgram();
-    m_gpuProgram->addVertexShaderFile( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
-    m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
-    //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
+    m_gpuProgram->addVertexShaderFromFile( ":/extensions/GpuTestingExtension/shaders/shader.vert" );
+    m_gpuProgram->addFragmentShaderFromFile( ":/extensions/GpuTestingExtension/shaders/shader.frag" );
+    //m_gpuProgram->addFragmentShaderFromFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/shader.frag" );
 
     if ( m_lighting == Ambient )
     {
-        m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/ambientshader.frag" );
-        //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/ambientshader.frag" );
+        m_gpuProgram->addFragmentShaderFromFile( ":/extensions/GpuTestingExtension/shaders/ambientshader.frag" );
+        //m_gpuProgram->addFragmentShaderFromFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/ambientshader.frag" );
         m_gpuProgram->addFragmentShader( "vec4 ambientShade(vec3);"
                                          "vec4 shade(vec3 coord,vec3 u,vec3 d){return ambientShade(coord);}" );
     }
     else
     {
-        m_gpuProgram->addFragmentShaderFile( ":/extensions/GpuTestingExtension/shaders/diffuseshader.frag" );
-        //m_gpuProgram->addFragmentShaderFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/diffuseshader.frag" );
+        m_gpuProgram->addFragmentShaderFromFile( ":/extensions/GpuTestingExtension/shaders/diffuseshader.frag" );
+        //m_gpuProgram->addFragmentShaderFromFile( "/scratch/starviewer/src/extensions/playground/gputesting/shaders/diffuseshader.frag" );
         m_gpuProgram->addFragmentShader( "vec4 diffuseShade(vec3,vec3,vec3);"
                                          "vec4 shade(vec3 coord,vec3 unit,vec3 direction){return diffuseShade(coord,unit,direction);}" );
     }
