@@ -73,10 +73,12 @@ private slots:
 
     /// Estableix el nombre de punts de vista de l'SMI.
     void setNumberOfSmiViewpoints( int numberOfViewpoints );
-    /// Calcula l'SMI amb el/s punt/s de vista seleccionat/s.
+    /// Calcula les SMI amb el/s punt/s de vista seleccionat/s.
     void computeSmi();
     /// Calcula les inestabilitats de les llesques.
     void computeSliceUnstabilities();
+    /// Calcula les PMI amb el/s punt/s de vista seleccionat/s.
+    void computePmi();
 
 private:
 

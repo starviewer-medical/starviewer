@@ -230,6 +230,44 @@ void VolumeReslicer::computeSliceUnstabilities()   /// \todo Fer-ho més eficien
 }
 
 
+void VolumeReslicer::computePmi()   /// \todo Fer-ho més eficient!!!
+{
+    if ( m_slices.isEmpty() ) createSlices();
+
+    DEBUG_LOG( "PMI: primer pas" );
+    // Primer hem de calcular la probabilitat de cada llesca -> volume de la llesca dividit pel volum total
+    unsigned int totalVolume = 0;
+    for ( int i = 0; i < m_sliceCount; i++ ) totalVolume += m_slices[i].volume;
+    QVector<double> sliceProbabilities( m_sliceCount ); // vector de probabilitats p(s)
+    double dTotalVolume = totalVolume;
+    for ( int i = 0; i < m_sliceCount; i++ )
+    {
+        sliceProbabilities[i] = m_slices[i].volume / dTotalVolume;
+    }
+
+    DEBUG_LOG( "PMI: segon pas" );
+    // Després fem els càlculs finals
+    m_pmi.resize( m_nLabels );
+    for ( int i = 0; i < m_nLabels; i++ )   // iterem sobre els valors de propietat
+    {
+        m_pmi[i] = InformationTheory::kullbackLeiblerDivergence( m_properties[i].sliceProbabilities, sliceProbabilities );
+    }
+
+    // Printar resultats i guardar-los en un fitxer
+    QFile outFile( QDir::tempPath().append( QString( "/pmi%1.txt" ).arg( m_id ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        for ( int i = 0; i < m_nLabels; i++ )
+        {
+            DEBUG_LOG( QString( "PMI: PMI[%1] = %2" ).arg( i ).arg( m_pmi[i] ) );
+            out << "PMI[" << i << "] = " << m_pmi[i] << "\n";
+        }
+        outFile.close();
+    }
+}
+
+
 void VolumeReslicer::findExtent( const unsigned short *data, int dim0, int dim1, int dim2, int inc0, int inc1, int inc2, int &min0, int &max0 )
 {
     int i0, i1, i2;
@@ -280,6 +318,10 @@ void VolumeReslicer::findExtent( const unsigned short *data, int dim0, int dim1,
 void VolumeReslicer::createSlices()
 {
     m_slices.resize( m_sliceCount );
+    m_properties.resize( m_nLabels );
+
+    QVector<Histogram> propertyHistograms( m_nLabels );
+    for ( int i = 0; i < m_nLabels; i++ ) propertyHistograms[i].setSize( m_sliceCount );
 
     for ( int i = 0; i < m_sliceCount; i++ )
     {
@@ -288,7 +330,12 @@ void VolumeReslicer::createSlices()
         Histogram histogram( m_nLabels );
         for ( int j = 0; j < m_sliceSize; j++ )
         {
-            if ( m_slices[i].data[j] > 0 ) histogram.add( m_slices[i].data[j] );
+            if ( m_slices[i].data[j] > 0 )
+            {
+                unsigned short value = m_slices[i].data[j];
+                histogram.add( value );
+                propertyHistograms[value].add( i );
+            }
         }
 
         m_slices[i].volume = histogram.count();
@@ -296,6 +343,15 @@ void VolumeReslicer::createSlices()
         double count = histogram.count();
         m_slices[i].probabilities.resize( m_nLabels );
         for ( int j = 0; j < m_nLabels; j++ ) m_slices[i].probabilities[j] = histogram[j] / count;
+    }
+
+    for ( int i = 0; i < m_nLabels; i++ )
+    {
+        m_properties[i].volume = propertyHistograms[i].count();
+
+        double count = propertyHistograms[i].count();
+        m_properties[i].sliceProbabilities.resize( m_sliceCount );
+        for ( int j = 0; j < m_sliceCount; j++ ) m_properties[i].sliceProbabilities[j] = propertyHistograms[i][j] / count;
     }
 }
 
