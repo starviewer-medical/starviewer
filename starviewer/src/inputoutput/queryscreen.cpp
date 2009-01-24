@@ -1219,6 +1219,7 @@ void QueryScreen::storeStudiesToPacs()
     QList<PacsParameters> selectedPacsList;
     QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    StarviewerSettings settings;
 
     selectedPacsList = m_PACSNodes->getSelectedPacs(); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
@@ -1266,6 +1267,8 @@ void QueryScreen::storeStudiesToPacs()
             delete patient;
             //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
             pacs = pacsListDB.queryPacs(selectedPacsList.value(0).getPacsID());
+            pacs.setAELocal(settings.getAETitleMachine());
+            pacs.setTimeOut(settings.getTimeout().toInt());
             storeStudyOperation.setPacsParameters( pacs );
 
             m_qexecuteOperationThread.queueOperation( storeStudyOperation );
