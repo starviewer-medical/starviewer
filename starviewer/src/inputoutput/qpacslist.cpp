@@ -87,9 +87,6 @@ QList<PacsParameters> QPacsList::getSelectedPacs()
 
         pacs = pacsListDB.queryPacs(item->text(0)); //fem el query per cercar la informació del PACS
 
-        pacs.setAELocal( settings.getAETitleMachine() );
-        //emplenem amb les dades del registre el timeout
-        pacs.setTimeOut( settings.getTimeout().toInt( NULL , 10 ) );
         selectedPacsList.append( pacs ); //inserim a la llista
     }
 
