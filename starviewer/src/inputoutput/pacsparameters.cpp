@@ -9,7 +9,7 @@ PacsParameters::PacsParameters(const QString &address, const QString &port, cons
     m_pacsPort = port;
     m_myAETitle = myAEtitle;
     m_pacsAETitle = remoteServerAEtitle;
-    m_connectionTimeOutInMilliseconds = 15000; //establim que per defecte el timeout és de 15000 ms
+    m_connectionTimeOut = 15; //establim que per defecte el timeout és de 15 ms
     m_pacsID = "";
 }
 
@@ -110,12 +110,12 @@ QString PacsParameters::getDefault() const
 
 void PacsParameters::setTimeOut(int timeoutInSeconds)
 {
-    m_connectionTimeOutInMilliseconds = timeoutInSeconds * 1000; //convertim a ms
+    m_connectionTimeOut = timeoutInSeconds; //convertim a ms
 }
 
 int PacsParameters::getTimeOut() const
 {
-    return m_connectionTimeOutInMilliseconds;
+    return m_connectionTimeOut;
 }
 
 void PacsParameters::setPacsID(QString ID)
@@ -141,7 +141,7 @@ bool PacsParameters::operator ==(const PacsParameters &parameters)
         && m_pacsIsDefault == parameters.m_pacsIsDefault
         && m_pacsLocation == parameters.m_pacsLocation
         && m_pacsID == parameters.m_pacsID
-        && m_connectionTimeOutInMilliseconds == parameters.m_connectionTimeOutInMilliseconds;
+        && m_connectionTimeOut == parameters.m_connectionTimeOut;
 }
 
 }
