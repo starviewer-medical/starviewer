@@ -179,7 +179,7 @@ QString StarviewerSettings::getAETitleMachine()
 
 QString StarviewerSettings::getTimeout()
 {
-    return m_starviewerSettings.value( GroupSettingsName + timeoutPacsKey , "20000" ).toString();
+    return m_starviewerSettings.value( GroupSettingsName + timeoutPacsKey , "20" ).toString();
 }
 
 QString StarviewerSettings::getLocalPort()

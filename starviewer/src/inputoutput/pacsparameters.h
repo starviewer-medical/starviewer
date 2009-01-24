@@ -94,7 +94,7 @@ private:
     QString m_pacsLocation;
     QString m_pacsIsDefault;
     QString m_pacsID;
-    int m_connectionTimeOutInMilliseconds;
+    int m_connectionTimeOut;
 };
 
 };
