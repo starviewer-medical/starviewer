@@ -414,9 +414,6 @@ PacsServer QueryScreen::getPacsServerByPacsID(QString pacsID)
 void QueryScreen::queryStudyPacs()
 {
     QList<PacsParameters> selectedPacsList;
-    PacsParameters pa;
-    QString result;
-    StarviewerSettings settings;
 
     INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
 
@@ -428,10 +425,9 @@ void QueryScreen::queryStudyPacs()
         return;
     }
 
-    multipleQueryStudy.setPacsList( selectedPacsList ); //indiquem a quins Pacs Cercar
-
     DicomMask searchMask = buildDicomMask();
     bool stopQuery = false;
+
     if ( searchMask.isAHeavyQuery() )
     {
         QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
@@ -440,18 +436,18 @@ void QueryScreen::queryStudyPacs()
                                                                      QMessageBox::No);
         stopQuery = (response == QMessageBox::No);
     }
+
     if( !stopQuery )
     {
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-        multipleQueryStudy.setMask( searchMask ); //assignem la mascara
 
-        Status queryStatus = multipleQueryStudy.StartQueries();
+        Status queryStatus = queryMultiplePacs(searchMask, selectedPacsList, &multipleQueryStudy);
 
         if( !queryStatus.good() )  //no fem la query
         {
             m_studyTreeWidgetPacs->clear();
             QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , ApplicationNameString , tr( "ERROR QUERING!." ) );
+            QMessageBox::information( this , ApplicationNameString , tr( "An error has produced while querying. Repeat the query, if the problem persist contact with an administrator," ) );
             return;
         }
 
@@ -472,6 +468,25 @@ void QueryScreen::queryStudyPacs()
 
         QApplication::restoreOverrideCursor();
     }
+}
+
+Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
+{
+    QList<PacsParameters> filledPacsParameters;
+    StarviewerSettings settings;
+
+    //TODO PacsParameters no hauria de contenir el AETitle i el timeout
+    //Hem d'afegir a les dades de pacs parameters el nostre aetitle i timeout
+    foreach(PacsParameters pacs, listPacsToQuery)
+    {
+        pacs.setAELocal(settings.getAETitleMachine());
+        pacs.setTimeOut(settings.getTimeout().toInt());
+        filledPacsParameters.append(pacs);
+    }
+
+    multipleQueryStudy->setMask( searchMask ); //assignem la mascara
+    multipleQueryStudy->setPacsList(filledPacsParameters);
+    return multipleQueryStudy->StartQueries();
 }
 
 void QueryScreen::queryStudy( QString source )

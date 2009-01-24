@@ -216,6 +216,9 @@ private:
     /// Cerca als pacs seleccionats
     void queryStudyPacs();
 
+    ///Cerca els estudis que compleixen la màscara de cerca als pacs passats per paràmetre
+    Status queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
+
     /**
      * Cerca un estudi a la font indicada (Cache,DICOMDIR)
      * @param source la font que volem interrogar
