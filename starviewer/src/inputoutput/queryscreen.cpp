@@ -737,9 +737,52 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
     QApplication::restoreOverrideCursor();
 }
 
-void QueryScreen::retrieve()
+void QueryScreen::retrieve(bool view)
 {
-    retrievePacs( false );
+    QStringList selectedStudiesUIDList = m_studyTreeWidgetPacs->getSelectedStudiesUID();
+
+    if( selectedStudiesUIDList.isEmpty() )
+    {
+        QApplication::restoreOverrideCursor();
+        if( view )
+            QMessageBox::warning( this , ApplicationNameString , tr( "Select a study to view " ) );
+        else
+            QMessageBox::warning( this , ApplicationNameString , tr( "Select a study to download " ) );
+
+        return;
+    }
+
+    foreach( QString currentStudyUID, selectedStudiesUIDList)
+    {
+        DicomMask maskStudyToRetrieve;
+
+        //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
+        //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
+        int indexStudyInList = getStudyPositionInStudyListQueriedPacs(currentStudyUID, 
+        m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID)); 
+
+        //Es comprova que existeixi l'estudi a la llista d'estudis de la última query que s'ha fet al PACS
+        if ( indexStudyInList == -1 ) 
+        {
+            QApplication::restoreOverrideCursor();
+            QMessageBox::warning(this , ApplicationNameString, tr("Internal can't find which pacs belong the study with study uid %1 to retreive.").arg(currentStudyUID));
+        }
+        else
+        {
+            maskStudyToRetrieve.setStudyUID(currentStudyUID);
+
+            // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
+            // per tant si seleccionem més d'una sèrie/imatge només s'en baixarà una
+            // Caldria fer possible que es baixi tants com en seleccionem
+            if ( !m_studyTreeWidgetPacs->getCurrentSeriesUID().isEmpty() )
+                maskStudyToRetrieve.setSeriesUID( m_studyTreeWidgetPacs->getCurrentSeriesUID() );
+
+            if ( !m_studyTreeWidgetPacs->getCurrentImageUID().isEmpty() )
+                maskStudyToRetrieve.setSOPInstanceUID( m_studyTreeWidgetPacs->getCurrentImageUID() );
+
+            retrieveFromPacs(view, m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID), maskStudyToRetrieve, m_studyListQueriedPacs.value(indexStudyInList));
+        }
+    }
 }
 
 void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID, QString source)
@@ -780,92 +823,45 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
         m_studyTreeWidgetDicomdir->insertImageList( imageListQueryResults );//inserim la informació de la sèrie al llistat
 }
 
-void QueryScreen::retrievePacs( bool view )
+void QueryScreen::retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, DICOMStudy studyToRetrieve)
 {
+    StarviewerSettings settings;
+    QString defaultSeriesUID;
+    Operation operation;
+    PacsParameters pacs;
+
     QApplication::setOverrideCursor( QCursor ( Qt::WaitCursor ) );
 
-    QStringList selectedStudiesUIDList = m_studyTreeWidgetPacs->getSelectedStudiesUID();
-    if( selectedStudiesUIDList.isEmpty() )
+    //busquem els paràmetres del pacs del qual volem descarregar l'estudi
+    PacsListDB pacsListDB;
+    pacs = pacsListDB.queryPacs(pacsIdToRetrieve);
+
+    //emplanem els parametres locals per conenctar amb el pacs amb dades del starviewersettings
+    pacs.setAELocal( settings.getAETitleMachine() );
+    pacs.setTimeOut( settings.getTimeout().toInt( NULL, 10 ) );
+    pacs.setLocalPort( settings.getLocalPort() );
+
+    //definim l'operació
+    operation.setPacsParameters( pacs );
+    operation.setDicomMask(maskStudyToRetrieve);
+    if ( view )
     {
-        QApplication::restoreOverrideCursor();
-        if( view )
-            QMessageBox::warning( this , ApplicationNameString , tr( "Select a study to view " ) );
-        else
-            QMessageBox::warning( this , ApplicationNameString , tr( "Select a study to download " ) );
-
-        return;
+        operation.setOperation( Operation::View );
+        operation.setPriority( Operation::Medium );//Té priorita mitjà per passar al davant de les operacions de Retrieve
     }
-
-    StarviewerSettings settings;
-
-    foreach( QString currentStudyUID, selectedStudiesUIDList )
+    else
     {
-        DicomMask mask;
-        QString defaultSeriesUID;
-        Operation operation;
-        PacsParameters pacs;
-        QString pacsId;
-
-        //Busquem en quina posició de la llista on guardem els estudis trobats al PACS en quina posició està per poder-lo recuperar 
-        //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
-        int indexStudyInList = getStudyPositionInStudyListQueriedPacs(currentStudyUID, 
-        m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID));
-
-        //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
-        if ( indexStudyInList == -1 ) 
-        {   //Es comprova que existeixi l'estudi a la llista d'estudis de la última query que s'ha fet al PACS
-            //TODO Arreglar missatge d'error
-            QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , ApplicationNameString , tr( "Internal Error : " ) );
-        }
-        else
-        {
-            DICOMStudy studyToRetrieve =  m_studyListQueriedPacs.value( indexStudyInList );
-
-            pacsId = m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID);
-
-            mask.setStudyUID( currentStudyUID );//definim la màscara per descarregar l'estudi
-
-            // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
-            // per tant si seleccionem més d'una sèrie/imatge només s'en baixarà una
-            // Caldria fer possible que es baixi tants com en seleccionem
-            if ( !m_studyTreeWidgetPacs->getCurrentSeriesUID().isEmpty() )
-                mask.setSeriesUID( m_studyTreeWidgetPacs->getCurrentSeriesUID() );
-
-            if ( !m_studyTreeWidgetPacs->getCurrentImageUID().isEmpty() )
-                mask.setSOPInstanceUID( m_studyTreeWidgetPacs->getCurrentImageUID() );
-
-            //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-            PacsListDB pacsListDB;
-            pacs = pacsListDB.queryPacs(pacsId);
-
-            //emplanem els parametres amb dades del starviewersettings
-            pacs.setAELocal( settings.getAETitleMachine() );
-            pacs.setTimeOut( settings.getTimeout().toInt( NULL, 10 ) );
-            pacs.setLocalPort( settings.getLocalPort() );
-
-            //definim l'operacio
-            operation.setPacsParameters( pacs );
-            operation.setDicomMask( mask );
-            if ( view )
-            {
-                operation.setOperation( Operation::View );
-                operation.setPriority( Operation::Medium );//Té priorita mitjà per passar al davant de les operacions de Retrieve
-            }
-            else
-            {
-                operation.setOperation( Operation::Retrieve );
-                operation.setPriority( Operation::Low );
-            }
-            //emplenem les dades de l'operació
-            operation.setPatientName( studyToRetrieve.getPatientName() );
-            operation.setPatientID( studyToRetrieve.getPatientId() );
-            operation.setStudyID( studyToRetrieve.getStudyId() );
-            operation.setStudyUID( studyToRetrieve.getStudyUID() );
-
-            m_qexecuteOperationThread.queueOperation( operation );
-        }
+        operation.setOperation( Operation::Retrieve );
+        operation.setPriority( Operation::Low );
     }
+    //emplenem les dades de l'operació
+    operation.setPatientName( studyToRetrieve.getPatientName() );
+    operation.setPatientID( studyToRetrieve.getPatientId() );
+    operation.setStudyID( studyToRetrieve.getStudyId() );
+    operation.setStudyUID( studyToRetrieve.getStudyUID() );
+
+    m_qexecuteOperationThread.queueOperation( operation );
+
     QApplication::restoreOverrideCursor();
 }
 
@@ -907,7 +903,7 @@ void QueryScreen::view()
             break;
 
         case PACSQueryTab :
-            retrievePacs( true );
+            retrieve(true);
            break;
 
         case DICOMDIRTab :

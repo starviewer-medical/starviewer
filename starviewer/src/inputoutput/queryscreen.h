@@ -93,7 +93,7 @@ private slots:
     /** Aquest mètode s'encarrega de començar la descarrega d'un estudi, estableix la màscara, insereix l'estudi i la sèria a la caché, ademés de crear el thread per continuar amb la descàrrega de l'estdui
      * @param view boolea que indica si després de la descarrega s'ha de visualitzar l'estudi
      */
-    void retrieve();
+    void retrieve(bool view = false);
 
     ///importa el dicomdir a la nostra base de ades
     void importDicomdir();
@@ -200,8 +200,11 @@ private:
 
     /** Descarrega una estudi del pacs
      * @param indica si l'estudi s'ha de visualitzar
+     * @param pacsIdToRetrieve indica l'id del Pacs del qual s'ha de descarregar l'estudi
+     * @param maskStudyToRetrieve la màscara dels objectes a descarregar
+     * @param studyToRetrieve L'estudi al qual pertanyen els objectes ad escarregar
      */
-    void retrievePacs( bool view );
+    void retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask mask, DICOMStudy studyToRetrieve);
 
     /**
      * Donada una llista de uid's d'estudi, procedeix a carregar-los desde la font indicada (Cache,DICOMDIR)
