@@ -306,8 +306,8 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( setCancelledOperation(QString) ), SLOT( updateOperationsInProgressMessage() ));
 
     //connect tracta els errors de connexió al PACS
-    connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
-    connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
+    connect ( &m_multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
+    connect ( &m_multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
     connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QExecuteOperationThread::OperationError)));
@@ -441,7 +441,7 @@ void QueryScreen::queryStudyPacs()
     {
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-        Status queryStatus = queryMultiplePacs(searchMask, selectedPacsList, &multipleQueryStudy);
+        Status queryStatus = queryMultiplePacs(searchMask, selectedPacsList, &m_multipleQueryStudy);
 
         if( !queryStatus.good() )  //no fem la query
         {
@@ -451,7 +451,7 @@ void QueryScreen::queryStudyPacs()
             return;
         }
 
-        if ( multipleQueryStudy.getStudyList().isEmpty() )
+        if (m_multipleQueryStudy.getStudyList().isEmpty() )
         {
             m_studyTreeWidgetPacs->clear();
             QApplication::restoreOverrideCursor();
@@ -459,11 +459,11 @@ void QueryScreen::queryStudyPacs()
             return;
         }
 
-        m_studyListQueriedPacs = multipleQueryStudy.getStudyList(); //Guardem una còpia en local de la llista d'estudis trobats al PACS
+        m_studyListQueriedPacs = m_multipleQueryStudy.getStudyList(); //Guardem una còpia en local de la llista d'estudis trobats al PACS
 
-        m_studyTreeWidgetPacs->insertStudyList( multipleQueryStudy.getStudyList() ); //fem que es visualitzi l'studyView seleccionat
-        m_studyTreeWidgetPacs->insertSeriesList( multipleQueryStudy.getSeriesList() );
-        m_studyTreeWidgetPacs->insertImageList( multipleQueryStudy.getImageList() );
+        m_studyTreeWidgetPacs->insertStudyList( m_multipleQueryStudy.getStudyList() ); //fem que es visualitzi l'studyView seleccionat
+        m_studyTreeWidgetPacs->insertSeriesList( m_multipleQueryStudy.getSeriesList() );
+        m_studyTreeWidgetPacs->insertImageList( m_multipleQueryStudy.getImageList() );
         m_studyTreeWidgetPacs->setSortColumn( QStudyTreeWidget::ObjectName );
 
         QApplication::restoreOverrideCursor();
