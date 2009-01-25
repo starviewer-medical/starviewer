@@ -302,7 +302,7 @@ struct retrieveParameters
     ProcessImageSingleton *m_processImageSingleton;
 
     /// Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
-    MultipleQueryStudy multipleQueryStudy;
+    MultipleQueryStudy m_multipleQueryStudy;
 
     /// conté la informació del dicomdir obert en aquests instants
     DICOMDIRReader m_readDicomdir;
