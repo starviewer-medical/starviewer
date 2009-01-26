@@ -571,7 +571,7 @@ void QExperimental3DExtension::computeSmi()
         volumeReslicer.setViewpoint( viewpoint, up );
 
         volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice();
+        volumeReslicer.reslice( true, true, 64 );
 
         volumeReslicer.computeSmi();
     }
@@ -621,7 +621,7 @@ void QExperimental3DExtension::computeSliceUnstabilities()
         volumeReslicer.setViewpoint( viewpoint, up );
 
         volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice();
+        volumeReslicer.reslice( true, true, 64 );
 
         volumeReslicer.computeSliceUnstabilities();
     }
@@ -671,7 +671,7 @@ void QExperimental3DExtension::computePmi()
         volumeReslicer.setViewpoint( viewpoint, up );
 
         volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice();
+        volumeReslicer.reslice( true, true, 64 );
 
         volumeReslicer.computePmi();
     }
@@ -721,7 +721,7 @@ void QExperimental3DExtension::computePropertySaliencies()
         volumeReslicer.setViewpoint( viewpoint, up );
 
         volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice();
+        volumeReslicer.reslice( true, true, 64 );
 
         volumeReslicer.computePropertySaliencies();
     }
