@@ -1356,6 +1356,8 @@ void QueryScreen::studyWillBeDeletedSlot(QString studyInstanceUID)
     m_studyTreeWidgetCache->removeStudy(studyInstanceUID);
 }
 
+#if QT_VERSION >= 0x040300
+
 void QueryScreen::processRISRequest(QString request)
 {
     ParseXmlRisPIERRequest parseXmlRisPIERRequest;
@@ -1369,6 +1371,8 @@ void QueryScreen::processRISRequest(QString request)
     }
     else retrieveStudyFromRISRequest(maskRisRequest); //Ara per ara la única petició que rebrem serà la de descàrrega d'un estudi
 }
+
+#endif
 
 void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
 {
