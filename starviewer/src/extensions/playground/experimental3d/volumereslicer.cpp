@@ -9,6 +9,7 @@
 #include <vtkImageData.h>
 #include <vtkImageReslice.h>
 #include <vtkMatrix4x4.h>
+#include <vtkPointData.h>
 
 #include "histogram.h"
 #include "informationtheory.h"
@@ -68,7 +69,7 @@ void VolumeReslicer::setSpacing( double xSpacing, double ySpacing, double zSpaci
 }
 
 
-void VolumeReslicer::reslice( bool saveMhd, bool doClip )
+void VolumeReslicer::reslice( bool saveMhd, bool doClip, int maxRange )
 {
     DEBUG_LOG( "reslice" );
 
@@ -111,35 +112,6 @@ void VolumeReslicer::reslice( bool saveMhd, bool doClip )
     if ( doClip ) clip->ClipDataOn();
     clip->Update();
 
-    if ( saveMhd )
-    {
-        // Save resliced image to file
-        vtkImageData *clipped = clip->GetOutput();
-        unsigned short *clippedData = reinterpret_cast<unsigned short*>( clipped->GetScalarPointer() );
-        int size = clipped->GetNumberOfPoints();
-        QFile outFile( QDir::tempPath().append( QString( "/resliced%1.raw" ).arg( m_id ) ) );
-        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-        {
-            QDataStream out( &outFile );
-            for ( int i = 0; i < size; i++ ) out << clippedData[i];
-            outFile.close();
-        }
-        QFile outFileMhd( QDir::tempPath().append( QString( "/resliced%1.mhd" ).arg( m_id ) ) );
-        if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
-        {
-            QTextStream out( &outFileMhd );
-            out << "NDims = 3\n";
-            int dimSize[3];
-            clipped->GetDimensions( dimSize );
-            out << "DimSize = " << dimSize[0] << " " << dimSize[1] << " " << dimSize[2] << "\n";
-            out << "ElementSpacing = " << m_xSpacing << " " << m_ySpacing << " " << m_zSpacing << "\n";
-            out << "ElementType = MET_USHORT\n";
-            out << "ElementByteOrderMSB = True\n";
-            out << "ElementDataFile = resliced" << m_id << ".raw";
-            outFileMhd.close();
-        }
-    }
-
     // Get some data about resliced image
     m_reslicedImage = clip->GetOutput(); m_reslicedImage->Register( 0 );
     m_reslicedData = reinterpret_cast<unsigned short*>( m_reslicedImage->GetScalarPointer() );
@@ -148,13 +120,49 @@ void VolumeReslicer::reslice( bool saveMhd, bool doClip )
     m_sliceSize = dimensions[0] * dimensions[1];
     m_sliceCount = dimensions[2];
     double *range = m_reslicedImage->GetScalarRange();
-    unsigned short min = static_cast<unsigned short>( qRound( range[0] ) );
+    unsigned short min = static_cast<unsigned short>( qRound( range[0] ) ); // sempre serà 0 amb la implementació actual
     unsigned short max = static_cast<unsigned short>( qRound( range[1] ) );
+
+    // si limitem el rang (maxRange > 0) llavors maxRange ha de ser >= max
+    if ( maxRange > 0 && max >= maxRange )
+    {
+        int max1 = max + 1;
+
+        for ( int i = 0; i < m_reslicedDataSize; i++ ) m_reslicedData[i] = m_reslicedData[i] * maxRange / max1;
+
+        max = maxRange - 1;
+        m_reslicedImage->GetPointData()->GetScalars()->Modified();  // perquè s'actualitzi l'scalar range
+    }
+
     m_nLabels = max - min + 1;
 
     // Destroy created objects
     reslice->Delete();
     clip->Delete();
+
+    if ( saveMhd )
+    {
+        // Save resliced image to file
+        QFile outFile( QDir::tempPath().append( QString( "/resliced%1.raw" ).arg( m_id ) ) );
+        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QDataStream out( &outFile );
+            for ( int i = 0; i < m_reslicedDataSize; i++ ) out << m_reslicedData[i];
+            outFile.close();
+        }
+        QFile outFileMhd( QDir::tempPath().append( QString( "/resliced%1.mhd" ).arg( m_id ) ) );
+        if ( outFileMhd.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFileMhd );
+            out << "NDims = 3\n";
+            out << "DimSize = " << dimensions[0] << " " << dimensions[1] << " " << dimensions[2] << "\n";
+            out << "ElementSpacing = " << m_xSpacing << " " << m_ySpacing << " " << m_zSpacing << "\n";
+            out << "ElementType = MET_USHORT\n";
+            out << "ElementByteOrderMSB = True\n";
+            out << "ElementDataFile = resliced" << m_id << ".raw";
+            outFileMhd.close();
+        }
+    }
 
     DEBUG_LOG( "end reslice" );
 }

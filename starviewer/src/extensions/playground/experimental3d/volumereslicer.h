@@ -30,8 +30,8 @@ public:
     void setInput( vtkImageData *input );
     void setViewpoint( const Vector3 &viewpoint, const Vector3 &up );
     void setSpacing( double xSpacing, double ySpacing, double zSpacing );
-    // saveMhd -> guardar el nou volum en mhd; doClip -> retallar les llesques que només són fons
-    void reslice( bool saveMhd = true, bool doClip = true );
+    // saveMhd -> guardar el nou volum en mhd; doClip -> retallar les llesques que només són fons; maxRange -> nombre màxim de valors de propietat (si és 0 es manté el que hi hagi)
+    void reslice( bool saveMhd = true, bool doClip = true, int maxRange = 0 );
 
     /// Calcula la mesura SMI (Slice Mutual Information). Escriu els resultats per pantalla i en un fitxer anomenat smiID.txt al directori temporal.
     void computeSmi();
@@ -91,7 +91,7 @@ private:
     double m_xSpacing, m_ySpacing, m_zSpacing;
 
     vtkImageData *m_reslicedImage;
-    const unsigned short *m_reslicedData;
+    unsigned short *m_reslicedData;
     int m_reslicedDataSize;
     int m_sliceSize;
     int m_sliceCount;
