@@ -48,7 +48,7 @@ private :
 
     bool m_errorParsing;
 
-    ///parseja el tag Msg del Xml i retorna la DicomMask amb el accession number que ens han enviat en el Xml
+    ///parseja el tag Msg del Xml i retorna la DicomMask amb el accession number que ens han enviat el RIS en el Xml i indicant que cal retorni els camps Study Id, Study UID, Patient Id, Patient Name i PAtient ID al fer la query a un PACS amb aquesta màscara 
     void parseTagMsg(QXmlStreamReader *xmlReader, DicomMask *mask);
 
     ///parseja el tag Param del Xml i retorna la DicomMask amb el accession number que ens han enviat en el Xml

@@ -15,6 +15,7 @@
 #include "dicomseries.h"
 #include "dicomimage.h"
 #include "errordcmtk.h"
+#include "logging.h"
 
 namespace udg{
 
@@ -130,6 +131,7 @@ void QueryPacs::addStudy( DcmDataset *responsePacs )
 
     dicomStudy.setPacsId(m_pacsID);
 
+    DEBUG_LOG("PACS UID DICOM Study" + dicomStudy.getStudyUID());
     if ( !m_studiesList.contains( dicomStudy ) ) m_studiesList.append( dicomStudy );
 }
 
