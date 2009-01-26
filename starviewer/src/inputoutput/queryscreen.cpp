@@ -37,6 +37,7 @@
 #include "testdatabase.h"
 #include "testdicomobjects.h"
 #include "starviewerapplication.h"
+#include "parsexmlrispierrequest.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -379,7 +380,7 @@ void QueryScreen::bringToFront()
 
 void QueryScreen::searchStudy()
 {
-    switch ( m_tab->currentIndex() )
+    /*switch ( m_tab->currentIndex() )
     {
         case LocalDataBaseTab:
             queryStudy("Cache");
@@ -392,7 +393,9 @@ void QueryScreen::searchStudy()
         case DICOMDIRTab:
             queryStudy("DICOMDIR");
             break;
-    }
+    }*/
+
+    processRISRequest("<?xml version='1.0' encoding='UTF-8'?><Msg Name='OpenStudies'><Param Name='AccessionNumber'>2051421</Param></Msg>");
 }
 
 PacsServer QueryScreen::getPacsServerByPacsID(QString pacsID)
@@ -431,9 +434,7 @@ void QueryScreen::queryStudyPacs()
     if ( searchMask.isAHeavyQuery() )
     {
         QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                                                                     tr("This query can take a long time.\nDo you want continue?"),
-                                                                     QMessageBox::Yes | QMessageBox::No,
-                                                                     QMessageBox::No);
+                                                                     tr("This query can take a long time.\nDo you want continue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
         stopQuery = (response == QMessageBox::No);
     }
 
@@ -1354,7 +1355,56 @@ int QueryScreen::getStudyPositionInStudyListQueriedPacs(QString studyUID, QStrin
 
 void QueryScreen::studyWillBeDeletedSlot(QString studyInstanceUID)
 {
-	m_studyTreeWidgetCache->removeStudy(studyInstanceUID);
+    m_studyTreeWidgetCache->removeStudy(studyInstanceUID);
+}
+
+void QueryScreen::processRISRequest(QString request)
+{
+    ParseXmlRisPIERRequest parseXmlRisPIERRequest;
+    DicomMask maskRisRequest;
+
+    maskRisRequest = parseXmlRisPIERRequest.parseXml(request);
+
+    if (parseXmlRisPIERRequest.error())
+    {
+        QMessageBox::critical(this , ApplicationNameString , "Starviewer can't process correctly the RIS request");
+    }
+    else retrieveStudyFromRISRequest(maskRisRequest); //Ara per ara la única petició que rebrem serà la de descàrrega d'un estudi
+}
+
+void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
+{
+    MultipleQueryStudy multipleQueryStudy;
+    DicomMask maskStudyToRetrieve;
+
+    QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr("Starviewer has recieved from RIS a request to retrieve the study with accession number %1.\n\nDo you want to retrieve ?").arg(maskRisRequest.getAccessionNumber()), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+    if (response == QMessageBox::Yes)
+    {
+        Status state = queryMultiplePacs(maskRisRequest, PacsListDB().queryDefaultPacs(), &multipleQueryStudy);
+
+        //Fem els connects per tracta els possibles errors que es poden donar
+        connect ( &m_multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
+        connect ( &m_multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
+
+        if (!state.good())
+        {
+            QMessageBox::critical(this , ApplicationNameString , "An error ocurred querying default pacs, can't process the RIS request");
+            return;
+        }
+
+        if (multipleQueryStudy.getStudyList().isEmpty())
+        {
+            QMessageBox::information(this , ApplicationNameString , "Starviewer hasn't found the Study with accession number " + maskRisRequest.getAccessionNumber());
+            return;
+        }
+
+        foreach (DICOMStudy study, multipleQueryStudy.getStudyList())
+        {
+            maskStudyToRetrieve.setStudyUID(study.getStudyUID());
+            retrieveFromPacs(true, study.getPacsId(), maskStudyToRetrieve, study);
+        }
+    }
 }
 
 QString QueryScreen::buildQueryParametersString(DicomMask mask)

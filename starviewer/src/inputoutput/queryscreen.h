@@ -175,6 +175,13 @@ private slots:
     ///S'executa quan un estudi serà esborrat de la bd per alliberar espai, aquest mètode esborra l'estudi del QStudyTreeWidget de la bd local
     void studyWillBeDeletedSlot(QString studyInstanceUID);
 
+    ///Processa la petició del RIS, i fa les accions pertinents en funció del tipus de sol·licitud
+    void processRISRequest(QString request);
+
+    ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
+    void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
+
+
 private:
 
     #ifdef STARVIEWER_LITE //Al fer remove de la pestanya del pacs es canvia el index de cada tab, per això hem de redefinir-lo pel cas de StarviewerLite
