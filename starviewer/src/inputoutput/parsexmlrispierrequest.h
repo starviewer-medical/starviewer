@@ -54,6 +54,9 @@ private :
     ///parseja el tag Param del Xml i retorna la DicomMask amb el accession number que ens han enviat en el Xml
     void parseTagParam(QXmlStreamReader *xmlReader, DicomMask *mask);
 
+    ///Degut al fet que perquè el Pacs ens retorni un determinar tag, li hem d'enviar aquell tag amb cadena buida quan fem la petició "", en aquest mètode donem valor de cadena buida a tots aquells camps que volem que ens retorni el PACS quan fer la cerca de l'estudi demanat pel RIS. Aquests tags són PatientName, PatientId, StudyUID, StudyID, els tags més bàsics per tenir informació
+    void buildBasicDicomMask(DicomMask *mask);
+
     ///Indiquem que s'ha produït un error al parsejar el Xml
     void setErrorParsing(bool errorParsing);
 

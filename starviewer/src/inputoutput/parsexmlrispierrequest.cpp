@@ -24,6 +24,8 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
 {
     DicomMask mask;
 
+    buildBasicDicomMask(&mask);//Construïm la dicomMask indicant quins tags ens ha de retornar el PACS quan li fem la consulta
+
     QXmlStreamReader *xmlReader = new QXmlStreamReader(xmlRisPIERRequest);
 
     setErrorParsing(true);//Inicialment indiquem error al parsejar, si trobem els valors esperats indicarem que no hi ha error
@@ -126,6 +128,14 @@ void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMas
         ERROR_LOG("El xml conté un paràmetre que no tractem" + xmlReader->attributes().value("Name").toString());
         xmlReader->readNext();
     }
+}
+
+void ParseXmlRisPIERRequest::buildBasicDicomMask(DicomMask *mask)
+{
+    mask->setStudyUID("");
+    mask->setStudyId("");
+    mask->setPatientName("");
+    mask->setPatientId("");
 }
 
 void ParseXmlRisPIERRequest::setErrorParsing(bool errorParsing)
