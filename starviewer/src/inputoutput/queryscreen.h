@@ -181,10 +181,6 @@ private slots:
 
     #endif
 
-    ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
-    void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
-
-
 private:
 
     #ifdef STARVIEWER_LITE //Al fer remove de la pestanya del pacs es canvia el index de cada tab, per això hem de redefinir-lo pel cas de StarviewerLite
@@ -286,6 +282,9 @@ private:
      * @return Objecte ParcsServer a punt per connectar amb el PACS
      */
     PacsServer getPacsServerByPacsID(QString pacsID);
+
+    ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
+    void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
 
     /**
      * Llegeix i aplica dades de configuració
