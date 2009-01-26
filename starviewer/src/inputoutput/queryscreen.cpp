@@ -380,7 +380,7 @@ void QueryScreen::bringToFront()
 
 void QueryScreen::searchStudy()
 {
-    /*switch ( m_tab->currentIndex() )
+    switch ( m_tab->currentIndex() )
     {
         case LocalDataBaseTab:
             queryStudy("Cache");
@@ -393,9 +393,7 @@ void QueryScreen::searchStudy()
         case DICOMDIRTab:
             queryStudy("DICOMDIR");
             break;
-    }*/
-
-    processRISRequest("<?xml version='1.0' encoding='UTF-8'?><Msg Name='OpenStudies'><Param Name='AccessionNumber'>2051421</Param></Msg>");
+    }
 }
 
 PacsServer QueryScreen::getPacsServerByPacsID(QString pacsID)
