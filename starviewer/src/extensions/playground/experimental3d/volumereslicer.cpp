@@ -232,7 +232,7 @@ void VolumeReslicer::computeSliceUnstabilities()   /// \todo Fer-ho més eficien
 
 void VolumeReslicer::computePmi()   /// \todo Fer-ho més eficient!!!
 {
-    if ( m_slices.isEmpty() ) createSlices();
+    if ( m_properties.isEmpty() ) createSlices();
 
     DEBUG_LOG( "PMI: primer pas" );
     // Primer hem de calcular la probabilitat de cada llesca -> volume de la llesca dividit pel volum total
@@ -262,6 +262,32 @@ void VolumeReslicer::computePmi()   /// \todo Fer-ho més eficient!!!
         {
             DEBUG_LOG( QString( "PMI: PMI[%1] = %2" ).arg( i ).arg( m_pmi[i] ) );
             out << "PMI[" << i << "] = " << m_pmi[i] << "\n";
+        }
+        outFile.close();
+    }
+}
+
+
+void VolumeReslicer::computePropertySaliencies()    /// \todo Fer-ho més eficient!!!
+{
+    if ( m_properties.isEmpty() ) createSlices();
+
+    m_propertySaliencies.resize( m_nLabels );
+
+    for ( int i = 0; i < m_nLabels; i++ )   // iterem sobre els valors de propietat
+    {
+        m_propertySaliencies[i] = propertySaliency( i );
+    }
+
+    // Printar resultats i guardar-los en un fitxer
+    QFile outFile( QDir::tempPath().append( QString( "/propertySaliencies%1.txt" ).arg( m_id ) ) );
+    if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        QTextStream out( &outFile );
+        for ( int i = 0; i < m_nLabels; i++ )
+        {
+            DEBUG_LOG( QString( "PS: S[%1] = %2" ).arg( i ).arg( m_propertySaliencies[i] ) );
+            out << "S[" << i << "] = " << m_propertySaliencies[i] << "\n";
         }
         outFile.close();
     }
@@ -339,19 +365,25 @@ void VolumeReslicer::createSlices()
         }
 
         m_slices[i].volume = histogram.count();
+        m_slices[i].probabilities.resize( m_nLabels );  // això inicialitza les probabilitats a 0.0
 
-        double count = histogram.count();
-        m_slices[i].probabilities.resize( m_nLabels );
-        for ( int j = 0; j < m_nLabels; j++ ) m_slices[i].probabilities[j] = histogram[j] / count;
+        if ( histogram.count() > 0 )
+        {
+            double count = histogram.count();
+            for ( int j = 0; j < m_nLabels; j++ ) m_slices[i].probabilities[j] = histogram[j] / count;
+        }
     }
 
     for ( int i = 0; i < m_nLabels; i++ )
     {
         m_properties[i].volume = propertyHistograms[i].count();
+        m_properties[i].sliceProbabilities.resize( m_sliceCount );  // això inicialitza les probabilitats a 0.0
 
-        double count = propertyHistograms[i].count();
-        m_properties[i].sliceProbabilities.resize( m_sliceCount );
-        for ( int j = 0; j < m_sliceCount; j++ ) m_properties[i].sliceProbabilities[j] = propertyHistograms[i][j] / count;
+        if ( propertyHistograms[i].count() > 0 )
+        {
+            double count = propertyHistograms[i].count();
+            for ( int j = 0; j < m_sliceCount; j++ ) m_properties[i].sliceProbabilities[j] = propertyHistograms[i][j] / count;
+        }
     }
 }
 
@@ -368,8 +400,17 @@ double VolumeReslicer::sliceDissimilarity( int slice1, int slice2 ) const
     double volume1 = s1.volume;
     double volume2 = s2.volume;
     double totalVolume = volume1 + volume2;
-    double pi1 = volume1 / totalVolume;
-    double pi2 = volume2 / totalVolume;
+    double pi1, pi2;
+
+    if ( totalVolume > 0.0 )
+    {
+        pi1 = volume1 / totalVolume;
+        pi2 = volume2 / totalVolume;
+    }
+    else
+    {
+        pi1 = pi2 = 0.0;
+    }
 
     return InformationTheory::jensenShannonDivergence( pi1, pi2, s1.probabilities, s2.probabilities );
 }
@@ -387,6 +428,49 @@ double VolumeReslicer::sliceUnstability( int slice ) const
         return sliceDissimilarity( slice, slice - 1 );
     else    // general
         return ( sliceDissimilarity( slice, slice - 1 ) + sliceDissimilarity( slice, slice + 1 ) ) / 2.0;
+}
+
+
+// D(oi,oj) = JSD(p(oi)/p(ô), p(oj)/p(ô); p(S|oi), p(S|oj))
+double VolumeReslicer::propertyDissimilarity( int property1, int property2 ) const
+{
+    Q_ASSERT( property1 >= 0 && property1 < m_nLabels );
+    Q_ASSERT( property2 >= 0 && property2 < m_nLabels );
+    Q_ASSERT( !m_properties.isEmpty() );
+
+    const Property &p1 = m_properties[property1];
+    const Property &p2 = m_properties[property2];
+    double volume1 = p1.volume;
+    double volume2 = p2.volume;
+    double totalVolume = volume1 + volume2;
+    double pi1, pi2;
+
+    if ( totalVolume > 0.0 )
+    {
+        pi1 = volume1 / totalVolume;
+        pi2 = volume2 / totalVolume;
+    }
+    else
+    {
+        pi1 = pi2 = 0.0;
+    }
+
+    return InformationTheory::jensenShannonDivergence( pi1, pi2, p1.sliceProbabilities, p2.sliceProbabilities );
+}
+
+
+// S(o_i) = ( D(o_i, o_i-1) + D(o_i, o_i+1) ) / 2
+double VolumeReslicer::propertySaliency( int property ) const
+{
+    Q_ASSERT( property >= 0 && property < m_nLabels );
+    Q_ASSERT( !m_properties.isEmpty() );
+
+    if ( property == 0 )    // un extrem
+        return propertyDissimilarity( property, property + 1 );
+    else if ( property == m_nLabels - 1 )   // l'altre extrem
+        return propertyDissimilarity( property, property - 1 );
+    else    // general
+        return ( propertyDissimilarity( property, property - 1 ) + propertyDissimilarity( property, property + 1 ) ) / 2.0;
 }
 
 

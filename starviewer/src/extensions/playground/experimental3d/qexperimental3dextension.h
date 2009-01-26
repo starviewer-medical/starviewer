@@ -79,6 +79,8 @@ private slots:
     void computeSliceUnstabilities();
     /// Calcula les PMI amb el/s punt/s de vista seleccionat/s.
     void computePmi();
+    /// Calcula les saliencies dels valors de propietat.
+    void computePropertySaliencies();
 
 private:
 

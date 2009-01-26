@@ -39,6 +39,8 @@ public:
     void computeSliceUnstabilities();
     /// Calcula la mesura PMI (Property Mutual Information). Escriu els resultats per pantalla i en un fitxer anomenat pmiID.txt al directori temporal.
     void computePmi();
+    /// Calcula la saliency de cada valor de propietat. Escriu els resultats per pantalla i en un fitxer anomenat propertySalienciesID.txt al directori temporal.
+    void computePropertySaliencies();
 
 private:
 
@@ -70,6 +72,16 @@ private:
      * U(s_i) = ( D(s_i, s_i-1) + D(s_i, s_i+1) ) / 2
      */
     double sliceUnstability( int slice ) const;
+    /**
+     * Retorna la dissimilaritat entre dos valors de propietat.
+     * D(oi,oj) = JSD(p(oi)/p(ô), p(oj)/p(ô); p(S|oi), p(S|oj))
+     */
+    double propertyDissimilarity( int property1, int property2 ) const;
+    /**
+     * Retorna la saliency d'un valor de propietat.
+     * S(o_i) = ( D(o_i, o_i-1) + D(o_i, o_i+1) ) / 2
+     */
+    double propertySaliency( int property ) const;
 
 private:
 
@@ -98,6 +110,9 @@ private:
 
     /// PMI per cada llesca.
     QVector<double> m_pmi;  // Property Mutual Information
+
+    /// Saliency de cada valor de propietat
+    QVector<double> m_propertySaliencies;
 
 };
 
