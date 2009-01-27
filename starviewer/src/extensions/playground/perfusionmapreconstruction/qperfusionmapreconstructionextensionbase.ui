@@ -6,13 +6,13 @@
     <x>0</x>
     <y>0</y>
     <width>644</width>
-    <height>613</height>
+    <height>681</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QHBoxLayout" >
    <property name="margin" >
     <number>9</number>
    </property>
@@ -352,8 +352,8 @@
           </property>
           <property name="minimumSize" >
            <size>
-            <width>150</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
            </size>
           </property>
          </widget>
@@ -377,8 +377,32 @@
           </property>
           <property name="minimumSize" >
            <size>
-            <width>150</width>
-            <height>100</height>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="udg::QGraphicPlotWidget" native="1" name="m_graphicplot" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>13</hsizetype>
+            <vsizetype>13</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
            </size>
           </property>
          </widget>
@@ -463,6 +487,11 @@
    <class>udg::ShadeWidget</class>
    <extends>QGraphicsView</extends>
    <header>shadewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QGraphicPlotWidget</class>
+   <extends>QWidget</extends>
+   <header>qgraphicplotwidget.h</header>
   </customwidget>
   <customwidget>
    <class>udg::Q2DViewer</class>

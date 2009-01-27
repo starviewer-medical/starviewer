@@ -19,7 +19,7 @@ class Volume;
 /**
  * Thread principal per al càlcul d'obscurances. Controla els altres threads.
  */
-class PerfusionMapCalculatorMainThread : public QThread {
+class PerfusionMapCalculatorMainThread : public QObject {
 
     Q_OBJECT
 
@@ -46,15 +46,15 @@ public:
 public slots:
 
     void stop();
+    void run();
 
 signals:
 
     void progress( int percent );
     void computed();
 
-protected:
+//protected:
 
-    virtual void run();
 
 private:
     static const double TE;
