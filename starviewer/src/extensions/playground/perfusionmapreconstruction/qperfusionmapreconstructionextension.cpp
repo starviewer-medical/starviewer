@@ -20,6 +20,7 @@
 #include "drawerpoint.h"
 #include "hoverpoints.h"
 #include "mathtools.h" // pel PI
+#include "qgraphicplotwidget.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -62,7 +63,7 @@ const double QPerfusionMapReconstructionExtension::TE = 25.0;
 const double QPerfusionMapReconstructionExtension::TR = 1.5;
 
 QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWidget *parent )
- : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_isLeftButtonPressed(false), m_aifDrawPoint(0), m_mapCalculator(0)
+ : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_isLeftButtonPressed(false), m_mapCalculator(0), m_aifDrawPoint(0)
 {
     setupUi( this );
 
@@ -72,6 +73,19 @@ QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWid
     createConnections();
     readSettings();
 
+    int t,tend=60;
+    m_graphicplot->setMaxX((double)(tend-1));
+    m_graphicplot->setMinX(0.0);
+    m_graphicplot->setTitle("DeltaR signal");
+    QVector<double> signal(tend);
+    for (t=0;t<tend;t++)
+    {
+        signal[t]=0.0;
+    }
+    //Empirical values
+    m_graphicplot->setMaxY(1.0);
+    m_graphicplot->setMinY(-1.0);
+    m_graphicplot->setData(signal);
 }
 
 QPerfusionMapReconstructionExtension::~QPerfusionMapReconstructionExtension()
@@ -219,7 +233,16 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_mapCalculator->setDSCVolume(m_DSCVolume);
-    m_mapCalculator->start();
+    m_mapCalculator->run();
+
+/*    itk::MinimumMaximumImageCalculator< DoubleImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< DoubleImageType >::New();
+    minmaxCalc->SetImage(m_mapCalculator->getCBVImage());
+    minmaxCalc->SetRegion(m_mapCalculator->getCBVImage()->GetRequestedRegion());
+    minmaxCalc->Compute();
+    m_graphicplot->setMaxY(minmaxCalc->GetMaximum());
+    m_graphicplot->setMinY(minmaxCalc->GetMinimum());
+    std::cout<<"Max = "<<minmaxCalc->GetMaximum()<<", min = "<<minmaxCalc->GetMinimum()<<std::endl;*/
+
     QApplication::restoreOverrideCursor();
 }
 
@@ -231,7 +254,7 @@ void QPerfusionMapReconstructionExtension::paintMap( )
     case 0:     //CBV
         m_2DView->setInput( m_mapCalculator->getCBVVolume() );
         m_2DView->resetView( Q2DViewer::Axial );
-        m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
+        m_2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
         this->createColorMap(m_mapCalculator->getCBVImage(), m_2DView);
         break;
     case 1:     //CBF
@@ -314,8 +337,8 @@ void QPerfusionMapReconstructionExtension::createColorMap( )
     mapHueLut->SetAlphaRange( 1.0, 1.0 );
     mapHueLut->SetRampToLinear();
     mapHueLut->ForceBuild();    //effective built
-    int nvalues=mapHueLut->GetNumberOfTableValues();
-    /*double* tvalue= new double[4];
+    /*int nvalues=mapHueLut->GetNumberOfTableValues();
+    double* tvalue= new double[4];
     for(int i=0;i<((threshold*nvalues)/255);i++)
     {
         tvalue=mapHueLut->GetTableValue(i);
@@ -330,7 +353,7 @@ void QPerfusionMapReconstructionExtension::createColorMap( )
     vtkUnsignedCharArray * table = mapHueLut->GetTable();
     unsigned char tuple[4] = { 0, 0, 0, 0 };
     table->SetTupleValue( 0, tuple );
-    unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
+    unsigned char tuple2[4] = { 1, 1, 1, 1 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple2 );
 
     m_2DView->getWindowLevelMapper()->SetLookupTable( mapHueLut );
@@ -392,8 +415,8 @@ void QPerfusionMapReconstructionExtension::createColorMap( double window, double
     mapHueLut->SetAlphaRange( 1.0, 1.0 );
     mapHueLut->SetRampToLinear();
     mapHueLut->ForceBuild();    //effective built
-    int nvalues=mapHueLut->GetNumberOfTableValues();
-    /*double* tvalue= new double[4];
+    /*int nvalues=mapHueLut->GetNumberOfTableValues();
+    double* tvalue= new double[4];
     for(int i=0;i<((threshold*nvalues)/255);i++)
     {
         tvalue=mapHueLut->GetTableValue(i);
@@ -474,7 +497,6 @@ void QPerfusionMapReconstructionExtension::createColorMap(DoubleImageType::Point
     mapHueLut->SetAlphaRange( 1.0, 1.0 );
     mapHueLut->SetRampToLinear();
     mapHueLut->ForceBuild();    //effective built
-    int nvalues=mapHueLut->GetNumberOfTableValues();
     mapHueLut->Build();    //effective built
 
     vtkUnsignedCharArray * table = mapHueLut->GetTable();
@@ -549,7 +571,6 @@ void QPerfusionMapReconstructionExtension::createColorMap(Volume::ItkImageType::
     mapHueLut->SetAlphaRange( 1.0, 1.0 );
     mapHueLut->SetRampToLinear();
     mapHueLut->ForceBuild();    //effective built
-    int nvalues=mapHueLut->GetNumberOfTableValues();
     mapHueLut->Build();    //effective built
 
     vtkUnsignedCharArray * table = mapHueLut->GetTable();
@@ -837,121 +858,6 @@ void QPerfusionMapReconstructionExtension::getPerfusionColormapTable( vtkUnsigne
 
 }
 
-/*void  QPerfusionMapReconstructionExtension::applyFilterMapImage( )
-{
-    typedef   float           InternalPixelType;
-    typedef itk::Image< InternalPixelType, 3 >  InternalImageType;
-
-    typedef itk::CastImageFilter< Volume::ItkImageType, InternalImageType >                     InputCastingFilterType;
-    typedef itk::CastImageFilter< InternalImageType, Volume::ItkImageType >                      OutputCastingFilterType;
-
-    typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >      CurvatureFlowImageFilterType;
-
-    if(m_map0Volume != 0)
-    {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-
-        Volume::ItkImageType::RegionType region;
-        Volume::ItkImageType::IndexType start;
-        start[0]=0;
-        start[1]=0;
-        start[2]=0;
-        std::cout<<"Init Filter Volume"<<std::endl;
-        Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
-        size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
-        region.SetSize(size);
-        region.SetIndex(start);
-        Volume::ItkImageType::Pointer auxImage = Volume::ItkImageType::New();
-        auxImage->SetRegions( region );
-        auxImage->Allocate();
-
-
-        InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
-        OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
-        CurvatureFlowImageFilterType::Pointer smoothing = CurvatureFlowImageFilterType::New();
-
-        incaster->SetInput( m_map0Volume->getItkData() );
-        smoothing->SetInput( incaster->GetOutput() );
-        outcaster->SetInput( smoothing->GetOutput() );
-
-        smoothing->SetNumberOfIterations( 5 );
-        smoothing->SetTimeStep( 0.0625 );
-
-        try
-        {
-            outcaster->Update();
-        }
-        catch( itk::ExceptionObject & excep )
-        {
-            std::cerr << "Exception caught !" << std::endl;
-            std::cerr << excep << std::endl;
-        }
-
-        typedef itk::ImageRegionIterator<Volume::ItkImageType> Iterator;
-        Iterator outIter( outcaster->GetOutput(), outcaster->GetOutput()->GetBufferedRegion() );
-        Iterator auxIter( auxImage, auxImage->GetBufferedRegion() );
-        outIter.GoToBegin();
-        auxIter.GoToBegin();
-        unsigned int i,j,k;
-        for (k=0;k<size[2];k++)
-        {
-            for (j=0;j<size[1];j++)
-            {
-                for (i=0;i<size[0];i++)
-                {
-                    auxIter.Set(outIter.Get());
-                    ++auxIter;
-                    ++outIter;
-                }
-            }
-        }
-        //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        //output->setImages( m_Volume->getImages() );
-//         std::cout<<"Init Saving Volume"<<std::endl;
-//         typedef itk::ImageFileWriter <Volume::ItkImageType> writerType;
-//         writerType::Pointer mapWriter3 = writerType::New();
-//         mapWriter3->SetFileName("filteredImage.mhd");
-//         mapWriter3->SetInput(outcaster->GetOutput() );
-//         mapWriter3->Update();
-//         writerType::Pointer mapWriter2 = writerType::New();
-//         mapWriter2->SetFileName("originalImage.mhd");
-//         mapWriter2->SetInput(m_mapVolume->getItkData() );
-//         mapWriter2->Update();
-
-        //auxImage = outcaster->GetOutput();
-        if(m_map0Volume!=0)
-        {
-            delete m_map0Volume;
-        }
-        std::cout<<"Init SetData Volume"<<std::endl;
-        m_map0Volume = new Volume();
-        m_map0Volume->setImages( m_DSCVolume->getPhaseVolume(0)->getImages() );
-        std::cout<<"SetData Volume"<<std::endl;
-        try
-        {
-//           m_mapVolume->setData( outcaster->GetOutput() );
-           m_map0Volume->setData( auxImage );
-        }
-        catch( itk::ExceptionObject & excep )
-        {
-            std::cerr << "Exception caught !" << std::endl;
-            std::cerr << excep << std::endl;
-        }
-        std::cout<<"End SetData Volume"<<std::endl;
-        //m_mapVolume->getVtkData()->Update();
-        m_2DView->setInput( m_map0Volume );
-        //m_2DView->resetView( Q2DViewer::Axial );
-        //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
-        std::cout<<"Init Colormap"<<std::endl;
-        this->createColorMap( );
-        m_2DView->setSlice( m_sliceViewSlider->value() );
-        QApplication::restoreOverrideCursor();
-        std::cout<<"End Filter Volume"<<std::endl;
-
-    }
-
-}*/
-
 void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
 {
     typedef   float           InternalPixelType;
@@ -1100,8 +1006,8 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
         if(pos[0] != -1 && pos[1] != -1 && pos[2] != -1 )
         {
             int index[3];
-            index[0] = (pos[0]- cbvMapVolume->getOrigin()[0])/cbvMapVolume->getSpacing()[0];
-            index[1] = (pos[1]- cbvMapVolume->getOrigin()[1])/cbvMapVolume->getSpacing()[1];
+            index[0] = (int)((pos[0]- cbvMapVolume->getOrigin()[0])/cbvMapVolume->getSpacing()[0]);
+            index[1] = (int)((pos[1]- cbvMapVolume->getOrigin()[1])/cbvMapVolume->getSpacing()[1]);
             index[2] = m_2DView->getCurrentSlice();
             DoubleTemporalImageType::IndexType indexTemp;
             indexTemp[1] = index[0];
@@ -1120,7 +1026,12 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
                 signal[t] = signalImage->GetPixel(indexTemp);
                 if(signal[t]>maxsig) maxsig = signal[t];
                 if(signal[t]<minsig) minsig = signal[t];
-            }
+           }
+
+            //Empirical values
+            m_graphicplot->setMaxY(0.05);
+            m_graphicplot->setMinY(-0.01);
+            m_graphicplot->setData(signal);
 
             for (t=0;t<tend;t++)
             {
