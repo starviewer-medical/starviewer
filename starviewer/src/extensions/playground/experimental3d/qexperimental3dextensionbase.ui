@@ -922,6 +922,13 @@
          </layout>
         </item>
         <item>
+         <widget class="QCheckBox" name="m_smiDefaultAxisCheckBox" >
+          <property name="text" >
+           <string>Default axis</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="m_smiPushButton" >
           <property name="text" >
            <string>Compute SMI</string>
