@@ -1190,8 +1190,9 @@ void QueryScreen::openDicomdir()
         if ( !dlg->selectedFiles().empty() )
             dicomdirPath = dlg->selectedFiles().takeFirst();
 
+        QApplication::setOverrideCursor( Qt::WaitCursor );
         state = m_readDicomdir.open ( dicomdirPath );//Obrim el dicomdir
-
+        QApplication::restoreOverrideCursor();
         if ( !state.good() )
         {
             QMessageBox::warning( this , ApplicationNameString , tr( "Error openning dicomdir" ) );
