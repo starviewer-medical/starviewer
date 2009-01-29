@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "viewpointgenerator.h"
+
 
 namespace udg {
 
@@ -36,6 +38,28 @@ unsigned int QViewpointDistributionWidget::numberOfViewpoints() const
 int QViewpointDistributionWidget::recursionLevel() const
 {
     return m_quasiUniformRecursionLevelSpinBox->value();
+}
+
+
+QVector<Vector3> QViewpointDistributionWidget::viewpoints() const
+{
+    ViewpointGenerator viewpointGenerator;
+
+    if ( isUniform() )
+    {
+        switch ( numberOfViewpoints() )
+        {
+            case 4: viewpointGenerator.setToUniform4(); break;
+            case 6: viewpointGenerator.setToUniform6(); break;
+            case 8: viewpointGenerator.setToUniform8(); break;
+            case 12: viewpointGenerator.setToUniform12(); break;
+            case 20: viewpointGenerator.setToUniform20(); break;
+            default: Q_ASSERT_X( false, "viewpoints", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( numberOfViewpoints() ) ) );
+        }
+    }
+    else viewpointGenerator.setToQuasiUniform( recursionLevel() );
+
+    return viewpointGenerator.viewpoints();
 }
 
 
