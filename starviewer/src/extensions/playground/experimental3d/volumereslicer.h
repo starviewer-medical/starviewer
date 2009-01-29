@@ -32,6 +32,8 @@ public:
     void setSpacing( double xSpacing, double ySpacing, double zSpacing );
     // saveMhd -> guardar el nou volum en mhd; doClip -> retallar les llesques que només són fons; maxRange -> nombre màxim de valors de propietat (si és 0 es manté el que hi hagi)
     void reslice( bool saveMhd = true, bool doClip = true, int maxRange = 0 );
+    /// Es guarda el volum original, sense modificar-lo.
+    void noReslice();
 
     /// Calcula la mesura SMI (Slice Mutual Information). Escriu els resultats per pantalla i en un fitxer anomenat smiID.txt al directori temporal.
     void computeSmi();

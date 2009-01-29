@@ -168,6 +168,30 @@ void VolumeReslicer::reslice( bool saveMhd, bool doClip, int maxRange )
 }
 
 
+void VolumeReslicer::noReslice()
+{
+    DEBUG_LOG( "noReslice" );
+
+    Q_ASSERT( m_input );
+
+    // Get some data about resliced image
+    m_reslicedImage = m_input; m_reslicedImage->Register( 0 );
+    m_reslicedData = reinterpret_cast<unsigned short*>( m_reslicedImage->GetScalarPointer() );
+    m_reslicedDataSize = m_reslicedImage->GetNumberOfPoints();
+    int *dimensions = m_reslicedImage->GetDimensions();
+    m_sliceSize = dimensions[0] * dimensions[1];
+    m_sliceCount = dimensions[2];
+    double *spacing = m_reslicedImage->GetSpacing();
+    m_xSpacing = spacing[0]; m_ySpacing = spacing[1]; m_zSpacing = spacing[2];
+    double *range = m_reslicedImage->GetScalarRange();
+    unsigned short min = static_cast<unsigned short>( qRound( range[0] ) ); // sempre serà 0 amb la implementació actual
+    unsigned short max = static_cast<unsigned short>( qRound( range[1] ) );
+    m_nLabels = max - min + 1;
+
+    DEBUG_LOG( "end noReslice" );
+}
+
+
 void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 {
     if ( m_slices.isEmpty() ) createSlices();

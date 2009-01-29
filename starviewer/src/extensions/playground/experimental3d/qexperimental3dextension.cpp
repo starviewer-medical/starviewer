@@ -91,6 +91,9 @@ void QExperimental3DExtension::createConnections()
 
     // SMI
     connect( m_smiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setNumberOfSmiViewpoints(int) ) );
+    connect( m_smiDefaultAxisCheckBox, SIGNAL( toggled(bool) ), m_smiViewpointDistributionWidget, SLOT( setDisabled(bool) ) );
+    connect( m_smiDefaultAxisCheckBox, SIGNAL( toggled(bool) ), m_smiViewpointLabel, SLOT( setDisabled(bool) ) );
+    connect( m_smiDefaultAxisCheckBox, SIGNAL( toggled(bool) ), m_smiViewpointSpinBox, SLOT( setDisabled(bool) ) );
     connect( m_smiPushButton, SIGNAL( clicked() ), SLOT( computeSmi() ) );
     connect( m_sliceUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeSliceUnstabilities() ) );
     connect( m_pmiPushButton, SIGNAL( clicked() ), SLOT( computePmi() ) );
@@ -530,200 +533,240 @@ void QExperimental3DExtension::setNumberOfSmiViewpoints( int numberOfViewpoints 
 
 void QExperimental3DExtension::computeSmi()
 {
-    ViewpointGenerator viewpointGenerator;
-
-    if ( m_smiViewpointDistributionWidget->isUniform() )
+    if ( m_smiDefaultAxisCheckBox->isChecked() )
     {
-        switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-        {
-            case 4: viewpointGenerator.setToUniform4(); break;
-            case 6: viewpointGenerator.setToUniform6(); break;
-            case 8: viewpointGenerator.setToUniform8(); break;
-            case 12: viewpointGenerator.setToUniform12(); break;
-            case 20: viewpointGenerator.setToUniform20(); break;
-            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-        }
-    }
-    else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
-    int i0, i1;
-
-    if ( m_smiViewpointSpinBox->value() == 0 )  // tots
-    {
-        i0 = 0; i1 = viewpoints.size();
-    }
-    else    // un en concret
-    {
-        i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
-    }
-
-    for ( int i = i0; i < i1; i++ )
-    {
-        const Vector3 &viewpoint = viewpoints.at( i );
-
-        VolumeReslicer volumeReslicer( i + 1 );
+        VolumeReslicer volumeReslicer;
         volumeReslicer.setInput( m_volume->getImage() );
-
-        Vector3 position( viewpoint );
-        Vector3 up( 0.0, 1.0, 0.0 );
-        if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
-        volumeReslicer.setViewpoint( viewpoint, up );
-
-        volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice( true, true, 64 );
-
+        volumeReslicer.noReslice();
         volumeReslicer.computeSmi();
+    }
+    else
+    {
+        ViewpointGenerator viewpointGenerator;
+
+        if ( m_smiViewpointDistributionWidget->isUniform() )
+        {
+            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
+            {
+                case 4: viewpointGenerator.setToUniform4(); break;
+                case 6: viewpointGenerator.setToUniform6(); break;
+                case 8: viewpointGenerator.setToUniform8(); break;
+                case 12: viewpointGenerator.setToUniform12(); break;
+                case 20: viewpointGenerator.setToUniform20(); break;
+                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+            }
+        }
+        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
+
+        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        int i0, i1;
+
+        if ( m_smiViewpointSpinBox->value() == 0 )  // tots
+        {
+            i0 = 0; i1 = viewpoints.size();
+        }
+        else    // un en concret
+        {
+            i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
+        }
+
+        for ( int i = i0; i < i1; i++ )
+        {
+            const Vector3 &viewpoint = viewpoints.at( i );
+
+            VolumeReslicer volumeReslicer( i + 1 );
+            volumeReslicer.setInput( m_volume->getImage() );
+
+            Vector3 position( viewpoint );
+            Vector3 up( 0.0, 1.0, 0.0 );
+            if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
+            volumeReslicer.setViewpoint( viewpoint, up );
+
+            volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
+            volumeReslicer.reslice();
+
+            volumeReslicer.computeSmi();
+        }
     }
 }
 
 
 void QExperimental3DExtension::computeSliceUnstabilities()
 {
-    ViewpointGenerator viewpointGenerator;
-
-    if ( m_smiViewpointDistributionWidget->isUniform() )
+    if ( m_smiDefaultAxisCheckBox->isChecked() )
     {
-        switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-        {
-            case 4: viewpointGenerator.setToUniform4(); break;
-            case 6: viewpointGenerator.setToUniform6(); break;
-            case 8: viewpointGenerator.setToUniform8(); break;
-            case 12: viewpointGenerator.setToUniform12(); break;
-            case 20: viewpointGenerator.setToUniform20(); break;
-            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-        }
-    }
-    else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
-    int i0, i1;
-
-    if ( m_smiViewpointSpinBox->value() == 0 )  // tots
-    {
-        i0 = 0; i1 = viewpoints.size();
-    }
-    else    // un en concret
-    {
-        i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
-    }
-
-    for ( int i = i0; i < i1; i++ )
-    {
-        const Vector3 &viewpoint = viewpoints.at( i );
-
-        VolumeReslicer volumeReslicer( i + 1 );
+        VolumeReslicer volumeReslicer;
         volumeReslicer.setInput( m_volume->getImage() );
-
-        Vector3 position( viewpoint );
-        Vector3 up( 0.0, 1.0, 0.0 );
-        if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
-        volumeReslicer.setViewpoint( viewpoint, up );
-
-        volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice( true, true, 64 );
-
+        volumeReslicer.noReslice();
         volumeReslicer.computeSliceUnstabilities();
+    }
+    else
+    {
+        ViewpointGenerator viewpointGenerator;
+
+        if ( m_smiViewpointDistributionWidget->isUniform() )
+        {
+            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
+            {
+                case 4: viewpointGenerator.setToUniform4(); break;
+                case 6: viewpointGenerator.setToUniform6(); break;
+                case 8: viewpointGenerator.setToUniform8(); break;
+                case 12: viewpointGenerator.setToUniform12(); break;
+                case 20: viewpointGenerator.setToUniform20(); break;
+                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+            }
+        }
+        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
+
+        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        int i0, i1;
+
+        if ( m_smiViewpointSpinBox->value() == 0 )  // tots
+        {
+            i0 = 0; i1 = viewpoints.size();
+        }
+        else    // un en concret
+        {
+            i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
+        }
+
+        for ( int i = i0; i < i1; i++ )
+        {
+            const Vector3 &viewpoint = viewpoints.at( i );
+
+            VolumeReslicer volumeReslicer( i + 1 );
+            volumeReslicer.setInput( m_volume->getImage() );
+
+            Vector3 position( viewpoint );
+            Vector3 up( 0.0, 1.0, 0.0 );
+            if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
+            volumeReslicer.setViewpoint( viewpoint, up );
+
+            volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
+            volumeReslicer.reslice();
+
+            volumeReslicer.computeSliceUnstabilities();
+        }
     }
 }
 
 
 void QExperimental3DExtension::computePmi()
 {
-    ViewpointGenerator viewpointGenerator;
-
-    if ( m_smiViewpointDistributionWidget->isUniform() )
+    if ( m_smiDefaultAxisCheckBox->isChecked() )
     {
-        switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-        {
-            case 4: viewpointGenerator.setToUniform4(); break;
-            case 6: viewpointGenerator.setToUniform6(); break;
-            case 8: viewpointGenerator.setToUniform8(); break;
-            case 12: viewpointGenerator.setToUniform12(); break;
-            case 20: viewpointGenerator.setToUniform20(); break;
-            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-        }
-    }
-    else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
-    int i0, i1;
-
-    if ( m_smiViewpointSpinBox->value() == 0 )  // tots
-    {
-        i0 = 0; i1 = viewpoints.size();
-    }
-    else    // un en concret
-    {
-        i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
-    }
-
-    for ( int i = i0; i < i1; i++ )
-    {
-        const Vector3 &viewpoint = viewpoints.at( i );
-
-        VolumeReslicer volumeReslicer( i + 1 );
+        VolumeReslicer volumeReslicer;
         volumeReslicer.setInput( m_volume->getImage() );
-
-        Vector3 position( viewpoint );
-        Vector3 up( 0.0, 1.0, 0.0 );
-        if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
-        volumeReslicer.setViewpoint( viewpoint, up );
-
-        volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice( true, true, 64 );
-
+        volumeReslicer.noReslice();
         volumeReslicer.computePmi();
+    }
+    else
+    {
+        ViewpointGenerator viewpointGenerator;
+
+        if ( m_smiViewpointDistributionWidget->isUniform() )
+        {
+            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
+            {
+                case 4: viewpointGenerator.setToUniform4(); break;
+                case 6: viewpointGenerator.setToUniform6(); break;
+                case 8: viewpointGenerator.setToUniform8(); break;
+                case 12: viewpointGenerator.setToUniform12(); break;
+                case 20: viewpointGenerator.setToUniform20(); break;
+                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+            }
+        }
+        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
+
+        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        int i0, i1;
+
+        if ( m_smiViewpointSpinBox->value() == 0 )  // tots
+        {
+            i0 = 0; i1 = viewpoints.size();
+        }
+        else    // un en concret
+        {
+            i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
+        }
+
+        for ( int i = i0; i < i1; i++ )
+        {
+            const Vector3 &viewpoint = viewpoints.at( i );
+
+            VolumeReslicer volumeReslicer( i + 1 );
+            volumeReslicer.setInput( m_volume->getImage() );
+
+            Vector3 position( viewpoint );
+            Vector3 up( 0.0, 1.0, 0.0 );
+            if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
+            volumeReslicer.setViewpoint( viewpoint, up );
+
+            volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
+            volumeReslicer.reslice();
+
+            volumeReslicer.computePmi();
+        }
     }
 }
 
 
 void QExperimental3DExtension::computePropertySaliencies()
 {
-    ViewpointGenerator viewpointGenerator;
-
-    if ( m_smiViewpointDistributionWidget->isUniform() )
+    if ( m_smiDefaultAxisCheckBox->isChecked() )
     {
-        switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-        {
-            case 4: viewpointGenerator.setToUniform4(); break;
-            case 6: viewpointGenerator.setToUniform6(); break;
-            case 8: viewpointGenerator.setToUniform8(); break;
-            case 12: viewpointGenerator.setToUniform12(); break;
-            case 20: viewpointGenerator.setToUniform20(); break;
-            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-        }
-    }
-    else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
-    int i0, i1;
-
-    if ( m_smiViewpointSpinBox->value() == 0 )  // tots
-    {
-        i0 = 0; i1 = viewpoints.size();
-    }
-    else    // un en concret
-    {
-        i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
-    }
-
-    for ( int i = i0; i < i1; i++ )
-    {
-        const Vector3 &viewpoint = viewpoints.at( i );
-
-        VolumeReslicer volumeReslicer( i + 1 );
+        VolumeReslicer volumeReslicer;
         volumeReslicer.setInput( m_volume->getImage() );
-
-        Vector3 position( viewpoint );
-        Vector3 up( 0.0, 1.0, 0.0 );
-        if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
-        volumeReslicer.setViewpoint( viewpoint, up );
-
-        volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
-        volumeReslicer.reslice( true, true, 64 );
-
+        volumeReslicer.noReslice();
         volumeReslicer.computePropertySaliencies();
+    }
+    else
+    {
+        ViewpointGenerator viewpointGenerator;
+
+        if ( m_smiViewpointDistributionWidget->isUniform() )
+        {
+            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
+            {
+                case 4: viewpointGenerator.setToUniform4(); break;
+                case 6: viewpointGenerator.setToUniform6(); break;
+                case 8: viewpointGenerator.setToUniform8(); break;
+                case 12: viewpointGenerator.setToUniform12(); break;
+                case 20: viewpointGenerator.setToUniform20(); break;
+                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+            }
+        }
+        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
+
+        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        int i0, i1;
+
+        if ( m_smiViewpointSpinBox->value() == 0 )  // tots
+        {
+            i0 = 0; i1 = viewpoints.size();
+        }
+        else    // un en concret
+        {
+            i0 = m_smiViewpointSpinBox->value() - 1; i1 = i0 + 1;
+        }
+
+        for ( int i = i0; i < i1; i++ )
+        {
+            const Vector3 &viewpoint = viewpoints.at( i );
+
+            VolumeReslicer volumeReslicer( i + 1 );
+            volumeReslicer.setInput( m_volume->getImage() );
+
+            Vector3 position( viewpoint );
+            Vector3 up( 0.0, 1.0, 0.0 );
+            if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
+            volumeReslicer.setViewpoint( viewpoint, up );
+
+            volumeReslicer.setSpacing( 1.0, 1.0, 1.0 );
+            volumeReslicer.reslice();
+
+            volumeReslicer.computePropertySaliencies();
+        }
     }
 }
 
