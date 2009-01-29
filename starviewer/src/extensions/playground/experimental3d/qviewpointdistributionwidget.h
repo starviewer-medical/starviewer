@@ -4,6 +4,10 @@
 
 #include "ui_qviewpointdistributionwidgetbase.h"
 
+#include <QVector>
+
+#include "vector3.h"
+
 
 namespace udg {
 
@@ -26,6 +30,8 @@ public:
     unsigned int numberOfViewpoints() const;
     /// Retorna el nivell de recursió seleccionat.
     int recursionLevel() const;
+    /// Retorna la llista de punts de vista d'acord amb les opcions seleccionades.
+    QVector<Vector3> viewpoints() const;
 
 signals:
 
