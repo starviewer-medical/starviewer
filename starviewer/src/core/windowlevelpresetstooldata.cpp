@@ -15,6 +15,7 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
 {
     // Per defecte afegirem els window levels predeterminats estàndar.
     // TODO Més endavant aquests valors podrien estar continguts en algun determinat fitxer amb un format definit
+    addPreset( tr("CT Head"), 80, 40, StandardPresets );
     addPreset( tr("CT Bone"), 2000, 500, StandardPresets );
     addPreset( tr("CT Lung"), 1500, -650, StandardPresets );
     addPreset( tr("CT Soft Tissues, Non Contrast"), 400, 40, StandardPresets );
