@@ -542,23 +542,7 @@ void QExperimental3DExtension::computeSmi()
     }
     else
     {
-        ViewpointGenerator viewpointGenerator;
-
-        if ( m_smiViewpointDistributionWidget->isUniform() )
-        {
-            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-            {
-                case 4: viewpointGenerator.setToUniform4(); break;
-                case 6: viewpointGenerator.setToUniform6(); break;
-                case 8: viewpointGenerator.setToUniform8(); break;
-                case 12: viewpointGenerator.setToUniform12(); break;
-                case 20: viewpointGenerator.setToUniform20(); break;
-                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-            }
-        }
-        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        QVector<Vector3> viewpoints = m_smiViewpointDistributionWidget->viewpoints();
         int i0, i1;
 
         if ( m_smiViewpointSpinBox->value() == 0 )  // tots
@@ -602,23 +586,7 @@ void QExperimental3DExtension::computeSliceUnstabilities()
     }
     else
     {
-        ViewpointGenerator viewpointGenerator;
-
-        if ( m_smiViewpointDistributionWidget->isUniform() )
-        {
-            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-            {
-                case 4: viewpointGenerator.setToUniform4(); break;
-                case 6: viewpointGenerator.setToUniform6(); break;
-                case 8: viewpointGenerator.setToUniform8(); break;
-                case 12: viewpointGenerator.setToUniform12(); break;
-                case 20: viewpointGenerator.setToUniform20(); break;
-                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-            }
-        }
-        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        QVector<Vector3> viewpoints = m_smiViewpointDistributionWidget->viewpoints();
         int i0, i1;
 
         if ( m_smiViewpointSpinBox->value() == 0 )  // tots
@@ -662,23 +630,7 @@ void QExperimental3DExtension::computePmi()
     }
     else
     {
-        ViewpointGenerator viewpointGenerator;
-
-        if ( m_smiViewpointDistributionWidget->isUniform() )
-        {
-            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-            {
-                case 4: viewpointGenerator.setToUniform4(); break;
-                case 6: viewpointGenerator.setToUniform6(); break;
-                case 8: viewpointGenerator.setToUniform8(); break;
-                case 12: viewpointGenerator.setToUniform12(); break;
-                case 20: viewpointGenerator.setToUniform20(); break;
-                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-            }
-        }
-        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        QVector<Vector3> viewpoints = m_smiViewpointDistributionWidget->viewpoints();
         int i0, i1;
 
         if ( m_smiViewpointSpinBox->value() == 0 )  // tots
@@ -722,23 +674,7 @@ void QExperimental3DExtension::computePropertySaliencies()
     }
     else
     {
-        ViewpointGenerator viewpointGenerator;
-
-        if ( m_smiViewpointDistributionWidget->isUniform() )
-        {
-            switch ( m_smiViewpointDistributionWidget->numberOfViewpoints() )
-            {
-                case 4: viewpointGenerator.setToUniform4(); break;
-                case 6: viewpointGenerator.setToUniform6(); break;
-                case 8: viewpointGenerator.setToUniform8(); break;
-                case 12: viewpointGenerator.setToUniform12(); break;
-                case 20: viewpointGenerator.setToUniform20(); break;
-                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_smiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-            }
-        }
-        else viewpointGenerator.setToQuasiUniform( m_smiViewpointDistributionWidget->recursionLevel() );
-
-        QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+        QVector<Vector3> viewpoints = m_smiViewpointDistributionWidget->viewpoints();
         int i0, i1;
 
         if ( m_smiViewpointSpinBox->value() == 0 )  // tots
