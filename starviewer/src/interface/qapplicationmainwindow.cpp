@@ -61,6 +61,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     /// Càrrega dels hanging protocols
     HangingProtocolsLoader * hangingProtocolsLoader = new HangingProtocolsLoader();
     hangingProtocolsLoader->loadDefaults();
+	delete hangingProtocolsLoader;
 
     // creem el progress dialog que notificarà la càrrega de volums
     m_progressDialog = new QProgressDialog( this );

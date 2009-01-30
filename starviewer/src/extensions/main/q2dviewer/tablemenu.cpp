@@ -14,12 +14,11 @@
 
 namespace udg {
 
-TableMenu::TableMenu()
- : QWidget()
+TableMenu::TableMenu( QWidget *parent )
+ : QWidget(parent)
 {
     setWindowFlags(Qt::Popup);
 
-    m_itemList = new QList<ItemMenu *>();
     QGridLayout * verticalLayout = new QGridLayout( this );
     m_gridLayout = new QGridLayout( );
     m_information = new QLabel( );
@@ -47,7 +46,7 @@ void TableMenu::initializeTable()
     firstItem->setMaximumSize( 30, 30 );
     firstItem->setData( QString( tr("%1,%2").arg( m_rows ).arg( m_columns ) ) );
     firstItem->setFixed( true );
-    m_itemList->insert( 0, firstItem );
+    m_itemList.insert( 0, firstItem );
     m_gridLayout->addWidget( firstItem, m_columns, m_rows );
     connect( firstItem , SIGNAL( isActive( ItemMenu * ) ) , this , SLOT( verifySelected( ItemMenu * ) ) );
     connect( firstItem , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
@@ -77,7 +76,7 @@ void TableMenu::addColumn()
         newItem->setMaximumSize( 30, 30 );
         newItem->setFixed( true );
         m_gridLayout->addWidget( newItem, numRow, m_columns );
-        m_itemList->insert( ((m_columns+1)*numRow + m_columns), newItem );
+        m_itemList.insert( ((m_columns+1)*numRow + m_columns), newItem );
         newItem->show();//TODO Necessari al passar a qt 4.3
         connect( newItem , SIGNAL( isActive( ItemMenu * ) ) , this , SLOT( verifySelected( ItemMenu * ) ) );
         connect( newItem , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
@@ -100,7 +99,7 @@ void TableMenu::addRow()
         newItem->setMaximumSize( 30, 30 );
         newItem->setFixed( true );
         m_gridLayout->addWidget( newItem, m_rows, numColumn );
-        m_itemList->insert( (m_rows*(m_columns+1) + numColumn), newItem );
+        m_itemList.insert( (m_rows*(m_columns+1) + numColumn), newItem );
         newItem->show();//TODO Necessari al passar a qt 4.3
         connect( newItem , SIGNAL( isActive( ItemMenu * ) ) , this , SLOT( verifySelected( ItemMenu * ) ) );
         connect( newItem , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
@@ -125,7 +124,7 @@ void TableMenu::verifySelected( ItemMenu * selected )
     {
         for( numColumn = 0; numColumn < m_columns; numColumn++ )
         {
-            item = m_itemList->value( numRow*(m_columns+1) + numColumn );
+            item = m_itemList.value( numRow*(m_columns+1) + numColumn );
 
             if( numRow <= rows && numColumn <= columns )
             {
@@ -175,14 +174,14 @@ void TableMenu::dropTable()
     int i;
     ItemMenu * item;
 
-    for( i = 0; i < m_itemList->size(); i++ )
+    for( i = 0; i < m_itemList.size(); i++ )
     {
-        item = m_itemList->value( i );
+        item = m_itemList.value( i );
         m_gridLayout->removeWidget( item );
         delete item;
     }
 
-    m_itemList->clear();
+    m_itemList.clear();
 }
 
 void TableMenu::mouseMoveEvent ( QMouseEvent * event )

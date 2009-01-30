@@ -13,7 +13,6 @@
 class QWidget;
 class QGridLayout;
 class QGroupBox;
-class Math;
 
 namespace udg {
 
@@ -27,7 +26,7 @@ Classe que representa el menu desplegable per seleccionar el grid, amb opcions d
 class ItemMenu;
 class HangingProtocol;
 
-class MenuGridWidget : public QWidget {
+class MenuGridWidget: public QWidget {
 Q_OBJECT
 public:
     MenuGridWidget( QWidget *parent = 0 );
@@ -83,15 +82,15 @@ protected:
     int m_maxElements;
 
     /// Grid per mostrar els elements predefinits
-    QGridLayout * m_gridLayout;
+    QGridLayout *m_gridLayout;
 
     /// Llista dels items
-    QList<ItemMenu *> * m_itemList;
+    QList<ItemMenu *> m_itemList;
 
     /// Agrupament del menu
-    QWidget * m_predefinedGridWidget;
-    QWidget * m_hangingProtocolWidget;
-    QWidget * m_tableGridWidget;
+    QWidget *m_predefinedGridWidget;
+    QWidget *m_hangingProtocolWidget;
+    QWidget *m_tableGridWidget;
 
 	QList< HangingProtocol * > m_hangingItems;
 };
