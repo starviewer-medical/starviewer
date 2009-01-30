@@ -68,7 +68,9 @@ HEADERS += databaseconnection.h \
            qthreadrunwithexec.h \
            databaseinstallation.h \
            qlocaldatabaseconfigurationscreen.h \
- parsexmlrispierrequest.h
+           parsexmlrispierrequest.h \
+           listenrisrequest.h \
+           processrisrequestthread.h
 
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
@@ -119,7 +121,9 @@ SOURCES += databaseconnection.cpp \
            localdatabasemanagerthreaded.cpp \
            databaseinstallation.cpp \
            qlocaldatabaseconfigurationscreen.cpp \
- parsexmlrispierrequest.cpp
+           parsexmlrispierrequest.cpp \
+           listenrisrequest.cpp \
+           processrisrequestthread.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
@@ -135,5 +139,5 @@ include(../dcmtk.inc)
 include(../log4cxx.inc)
 include(../compilationtype.inc)
 
-QT += xml
+QT += xml network
 

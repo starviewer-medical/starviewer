@@ -16,6 +16,7 @@
 #include "localdatabasemanager.h"
 #include "qdeleteoldstudiesthread.h"
 #include "dicomdirimporter.h"
+#include "listenrisrequest.h"
 
 namespace udg {
 
@@ -175,11 +176,9 @@ private slots:
     ///S'executa quan un estudi serà esborrat de la bd per alliberar espai, aquest mètode esborra l'estudi del QStudyTreeWidget de la bd local
     void studyWillBeDeletedSlot(QString studyInstanceUID);
 
-    #if QT_VERSION >= 0x040300
-    ///Processa la petició del RIS, i fa les accions pertinents en funció del tipus de sol·licitud
-    void processRISRequest(QString request);
+    ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
+    void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
 
-    #endif
 
 private:
 
@@ -283,9 +282,6 @@ private:
      */
     PacsServer getPacsServerByPacsID(QString pacsID);
 
-    ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
-    void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
-
     /**
      * Llegeix i aplica dades de configuració
      */
@@ -333,6 +329,8 @@ struct retrieveParameters
     QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs, m_contextMenuQStudyTreeWidgetDicomdir;
 
     QList<DICOMStudy> m_studyListQueriedPacs;//llista dels estudis que s'han trobat a la última query al PACS
+
+    ListenRisRequest *m_listenRisRequests;
 };
 
 };
