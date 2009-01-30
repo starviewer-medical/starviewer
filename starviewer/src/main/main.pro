@@ -73,4 +73,4 @@ CONFIG -= staticlib
 
 include(installextensions.inc)
 
-QT += xml opengl
+QT += xml opengl network

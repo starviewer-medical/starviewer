@@ -38,6 +38,7 @@
 #include "testdicomobjects.h"
 #include "starviewerapplication.h"
 #include "parsexmlrispierrequest.h"
+#include "listenrisrequest.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -94,6 +95,8 @@ void QueryScreen::initialize()
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
+    m_listenRisRequests = new ListenRisRequest(this);
+    //m_listenRisRequests->listen();
 
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
@@ -322,6 +325,8 @@ void QueryScreen::createConnections()
 
     // connectem el botó per obrir DICOMDIR
     connect( m_openDICOMDIRToolButton, SIGNAL( clicked() ), SLOT( openDicomdir() ) );
+
+    connect(m_listenRisRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)
@@ -1356,24 +1361,6 @@ void QueryScreen::studyWillBeDeletedSlot(QString studyInstanceUID)
 {
     m_studyTreeWidgetCache->removeStudy(studyInstanceUID);
 }
-
-#if QT_VERSION >= 0x040300
-
-void QueryScreen::processRISRequest(QString request)
-{
-    ParseXmlRisPIERRequest parseXmlRisPIERRequest;
-    DicomMask maskRisRequest;
-
-    maskRisRequest = parseXmlRisPIERRequest.parseXml(request);
-
-    if (parseXmlRisPIERRequest.error())
-    {
-        QMessageBox::critical(this , ApplicationNameString , "Starviewer can't process correctly the RIS request");
-    }
-    else retrieveStudyFromRISRequest(maskRisRequest); //Ara per ara la única petició que rebrem serà la de descàrrega d'un estudi
-}
-
-#endif
 
 void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
 {
