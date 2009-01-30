@@ -14,12 +14,13 @@ namespace udg {
 QWindowLevelComboBox::QWindowLevelComboBox(QWidget *parent)
  : QComboBox(parent), m_presetsData(0)
 {
-    m_customWindowLevelDialog = new QCustomWindowLevelDialog;
+    m_customWindowLevelDialog = new QCustomWindowLevelDialog();
     connect( this, SIGNAL( activated(int) ), SLOT( setActiveWindowLevel(int) ) );
 }
 
 QWindowLevelComboBox::~QWindowLevelComboBox()
 {
+	delete m_customWindowLevelDialog;
 }
 
 void QWindowLevelComboBox::setPresetsData( WindowLevelPresetsToolData *windowLevelData )

@@ -30,7 +30,7 @@ class TableMenu : public QWidget
 {
 Q_OBJECT
 public:
-    TableMenu();
+    TableMenu( QWidget *parent = 0 );
 
     ~TableMenu();
 
@@ -84,7 +84,7 @@ private:
     QLabel * m_information;
 
     /// Llista dels items
-    QList<ItemMenu *> * m_itemList;
+    QList<ItemMenu *> m_itemList;
 
 };
 

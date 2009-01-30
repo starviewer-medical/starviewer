@@ -33,8 +33,6 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     m_gridLayout->setSpacing( 6 );
     m_gridLayout->setMargin( 6 );
 
-    m_itemList = new QList<ItemMenu *>();
-
 //     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
 //     createPredefinedGrids( m_predefinedGridsList );
 
@@ -104,7 +102,7 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
         columns = values.value( 1 ).toInt();
         icon = createIcon( rows, columns );
         gridLayoutPredefined->addWidget( icon, positionRow, positionColumn );
-        m_itemList->push_back( icon );
+        m_itemList.push_back( icon );
         positionColumn ++;
 
         if( positionColumn == m_maxColumns )
@@ -151,7 +149,7 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 			icon = createIcon( hangingProtocol );
 			
 			gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
-			m_itemList->push_back( icon );
+			m_itemList.push_back( icon );
 			positionColumn ++;
 
 			if( positionColumn == m_maxColumns )
@@ -318,13 +316,13 @@ void MenuGridWidget::dropContent()
     int i;
     ItemMenu * item;
 
-    for( i = 0; i < m_itemList->size(); i++ )
+    for( i = 0; i < m_itemList.size(); i++ )
     {
-        item = m_itemList->value( i );
+        item = m_itemList.value( i );
         m_gridLayout->removeWidget( item );
         delete item;
     }
-    m_itemList->clear();
+    m_itemList.clear();
 }
 
 void MenuGridWidget::setHangingItems( QList<HangingProtocol *> listOfCandidates )

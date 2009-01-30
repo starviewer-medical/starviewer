@@ -25,7 +25,7 @@ void QCINEController::setQViewer( QViewer *viewer )
 {
     if( !m_cineController )
     {
-        m_cineController = new QViewerCINEController();
+        m_cineController = new QViewerCINEController(this);
 
         connect( m_loopCheckBox, SIGNAL( toggled(bool) ), m_cineController ,SLOT( enableLoop(bool) ) );
         connect( m_boomerangCheckBox, SIGNAL( toggled(bool) ), m_cineController, SLOT( enableBoomerang(bool) ) );

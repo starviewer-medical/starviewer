@@ -107,6 +107,7 @@ void ExtensionHandler::request( const QString &who )
         STAT_LOG("Activated extension " + who);
         mediator->initializeExtension(extension, m_extensionContext );
         m_mainApp->getExtensionWorkspace()->addApplication(extension, mediator->getExtensionID().getLabel() );
+		delete mediator;
     }
     else
     {

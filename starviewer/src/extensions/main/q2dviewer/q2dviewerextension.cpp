@@ -75,11 +75,11 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 
     m_patient = NULL;
 
-    m_predefinedSeriesGrid = new MenuGridWidget();
-    m_seriesTableGrid = new TableMenu();
-    m_predefinedSlicesGrid = new MenuGridWidget();
-    m_sliceTableGrid = new TableMenu();
-    m_dicomDumpCurrentDisplayedImage = new QDicomDump();
+    m_predefinedSeriesGrid = new MenuGridWidget(this);
+    m_seriesTableGrid = new TableMenu(this);
+    m_predefinedSlicesGrid = new MenuGridWidget(this);
+    m_sliceTableGrid = new TableMenu(this);
+    m_dicomDumpCurrentDisplayedImage = new QDicomDump(this);
 
     readSettings();
     createActions();
@@ -105,36 +105,36 @@ Q2DViewerExtension::~Q2DViewerExtension()
 {
     writeSettings();
 
+	m_hangingCandidates.clear();
     delete m_predefinedSeriesGrid;
     delete m_seriesTableGrid;
     delete m_predefinedSlicesGrid;
     delete m_sliceTableGrid;
     delete m_dicomDumpCurrentDisplayedImage;
-
 }
 
 void Q2DViewerExtension::createActions()
 {
-    m_axialViewAction = new QAction( 0 );
+    m_axialViewAction = new QAction( this );
     m_axialViewAction->setText( tr("Axial") );
     m_axialViewAction->setStatusTip( tr("Change Current View To Axial") );
     m_axialViewAction->setIcon( QIcon(":/images/axial.png") );
     m_axialViewToolButton->setDefaultAction( m_axialViewAction );
 
-    m_sagitalViewAction = new QAction( 0 );
+    m_sagitalViewAction = new QAction( this );
     m_sagitalViewAction->setText( tr("Sagital") );
     m_sagitalViewAction->setStatusTip( tr("Change Current View To Saggital") );
     m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
     m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
 
-    m_coronalViewAction = new QAction( 0 );
+    m_coronalViewAction = new QAction( this );
     m_coronalViewAction->setText( tr("Coronal") );
     m_coronalViewAction->setStatusTip( tr("Change Current View To Coronal") );
     m_coronalViewAction->setIcon( QIcon(":/images/coronal.png") );
     m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
 
     // per activar i desactivar els presentation states
-    m_presentationStateAction = new QAction( 0 );
+    m_presentationStateAction = new QAction( this );
     m_presentationStateAction->setText( tr("PS") );
     m_presentationStateAction->setStatusTip( tr("Enable/Disable the current attached") );
     m_presentationStateAction->setCheckable( true );
@@ -142,7 +142,7 @@ void Q2DViewerExtension::createActions()
     m_presentationStateAction->setChecked(false);
     m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
 
-    m_rotateClockWiseAction = new QAction( 0 );
+    m_rotateClockWiseAction = new QAction( this );
     m_rotateClockWiseAction->setText( tr("Rotate") );
     m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
     m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
@@ -151,7 +151,7 @@ void Q2DViewerExtension::createActions()
 
     connect( m_rotateClockWiseAction, SIGNAL( triggered() ), SLOT( rotateClockWise() ) );
 
-    m_rotateCounterClockWiseAction = new QAction( 0 );
+    m_rotateCounterClockWiseAction = new QAction( this );
     m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
     m_rotateCounterClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
     m_rotateCounterClockWiseAction->setStatusTip( tr("Rotate the image in counter clockwise direction") );
@@ -160,7 +160,7 @@ void Q2DViewerExtension::createActions()
 
     connect( m_rotateCounterClockWiseAction, SIGNAL( triggered() ), SLOT( rotateCounterClockWise() ) );
 
-    m_flipHorizontalAction = new QAction(0);
+    m_flipHorizontalAction = new QAction(this);
     m_flipHorizontalAction->setText( tr("Flip Horizontal") );
     m_flipHorizontalAction->setStatusTip( tr("Flip the image horizontally") );
     m_flipHorizontalAction->setIcon( QIcon(":/images/flipHorizontal.png") );
@@ -168,7 +168,7 @@ void Q2DViewerExtension::createActions()
 
     connect( m_flipHorizontalAction , SIGNAL( triggered() ), SLOT( horizontalFlip() ) );
 
-    m_flipVerticalAction = new QAction(0);
+    m_flipVerticalAction = new QAction(this);
     m_flipVerticalAction->setText( tr("Flip Vertical") );
     m_flipVerticalAction->setStatusTip( tr("Flip the image vertically") );
     m_flipVerticalAction->setIcon( QIcon(":/images/flipVertical.png") );
@@ -233,6 +233,8 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
     m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
+	delete hangingProtocolManger;
+	hangingProtocolManger = 0;
     QApplication::restoreOverrideCursor();
 
     if( m_hangingCandidates.size() == 0 )
@@ -558,7 +560,7 @@ void Q2DViewerExtension::synchronization( Q2DViewerWidget * viewer, bool active 
     if( active )
     {
         // Per defecte sincronitzem només la tool de slicing
-        ToolConfiguration * synchronizeConfiguration = new ToolConfiguration();
+        ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
         synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
         m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
         m_toolManager->activateTool("SynchronizeTool");
