@@ -1,0 +1,290 @@
+#include "qbasicgraphictransferfunctioneditor.h"
+
+#include <QColorDialog>
+#include <QImage>
+#include <QPaintEvent>
+#include <QPainter>
+#include <QPalette>
+#include <QPixmap>
+#include <QPolygonF>
+#include <QResizeEvent>
+
+
+namespace udg {
+
+
+const double QBasicGraphicTransferFunctionEditor::POINT_SIZE = 4.0;
+
+
+QBasicGraphicTransferFunctionEditor::QBasicGraphicTransferFunctionEditor( QWidget *parent )
+ : QWidget( parent ), m_minimum( 0.0 ), m_maximum( 4095.0 ), m_dragging( false )
+{
+    // escacs
+    QPixmap pixmap( 20, 20 );
+    QPainter painter( &pixmap );
+    painter.fillRect( 0, 0, 10, 10, Qt::lightGray );
+    painter.fillRect( 10, 10, 10, 10, Qt::lightGray );
+    painter.fillRect( 0, 10, 10, 10, Qt::darkGray );
+    painter.fillRect( 10, 0, 10, 10, Qt::darkGray );
+    painter.end();
+    QPalette palette = this->palette();
+    palette.setBrush( backgroundRole(), pixmap );
+    setAutoFillBackground( true );
+    setPalette( palette );
+
+    updateColorGradient();
+}
+
+
+QBasicGraphicTransferFunctionEditor::~QBasicGraphicTransferFunctionEditor()
+{
+}
+
+
+void QBasicGraphicTransferFunctionEditor::setRange( double minimum, double maximum )
+{
+    m_minimum = minimum;
+    m_maximum = maximum;
+
+    updateColorGradient();
+}
+
+
+const TransferFunction& QBasicGraphicTransferFunctionEditor::transferFunction() const
+{
+    return m_transferFunction;
+}
+
+
+void QBasicGraphicTransferFunctionEditor::setTransferFunction( const TransferFunction &transferFunction )
+{
+    m_transferFunction = transferFunction;
+
+    updateColorGradient();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::setTransferFunctionName( const QString &name )
+{
+    m_transferFunction.setName( name );
+}
+
+
+void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
+{
+    double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
+    double shiftX = scaleX * -m_minimum;
+    double scaleY = 1.0 / -( height() - 1 );
+    double shiftY = 1.0;
+
+    double x = scaleX * event->x() + shiftX;
+    double y = scaleY * event->y() + shiftY;
+    double radiusX = scaleX * POINT_SIZE;
+
+    QList<double> nearPoints = m_transferFunction.getPointsNear( x, radiusX );
+    double nearestPointX = 0.0;
+    double nearestLength = 2.0 * POINT_SIZE;
+    int nPoints = nearPoints.size();
+    bool found = false;
+
+    for ( int i = 0; i < nPoints; i++ )
+    {
+        double fx = nearPoints.at( i );
+        double fy = m_transferFunction.getOpacity( fx );
+        double px = ( fx - shiftX ) / scaleX;
+        double py = ( fy - shiftY ) / scaleY;
+        double length = QLineF( event->x(), event->y(), px, py ).length();
+
+        if ( length < nearestLength )
+        {
+            nearestPointX = fx;
+            nearestLength = length;
+            found = true;
+        }
+    }
+
+    if ( event->button() == Qt::LeftButton )
+    {
+        m_dragging = true;
+
+        if ( found ) m_currentX = nearestPointX;
+        else
+        {
+            addPoint( x, y );
+            m_currentX = x;
+        }
+
+        m_transferFunctionCopy = m_transferFunction;
+    }
+    else if ( event->button() == Qt::RightButton )
+    {
+        if ( found ) removePoint( nearestPointX );
+    }
+    else if ( event->button() == Qt::MidButton )
+    {
+        if ( found )
+        {
+            QColor color = QColorDialog::getColor( m_transferFunction.getColor( nearestPointX ), this );
+            if ( color.isValid() ) changePointColor( nearestPointX, color );
+        }
+    }
+}
+
+
+void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
+{
+    double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
+    double shiftX = scaleX * -m_minimum;
+    double scaleY = 1.0 / -( height() - 1 );
+    double shiftY = 1.0;
+
+    double x = scaleX * event->x() + shiftX;
+    double y = scaleY * event->y() + shiftY;
+
+    changeCurrentPoint( x, y );
+}
+
+
+void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent( QMouseEvent *event )
+{
+    Q_UNUSED( event );
+
+    m_dragging = false;
+}
+
+
+void QBasicGraphicTransferFunctionEditor::paintEvent( QPaintEvent *event )
+{
+    Q_UNUSED( event );
+
+    drawBackground();
+    drawFunction();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::resizeEvent( QResizeEvent *event )
+{
+    Q_UNUSED( event );
+
+    updateColorGradient();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::updateColorGradient()
+{
+    m_colorGradient = QLinearGradient( 0, 0, width(), 0 );
+
+    double shift = -m_minimum;
+    double scale = 1.0 / ( m_maximum - m_minimum );
+    QList<double> colors = m_transferFunction.getColorPoints();
+    int nColors = colors.size();
+
+    for ( int i = 0; i < nColors; i++ )
+    {
+        double x = colors.at( i );
+        double x01 = ( x + shift ) * scale;
+        QColor color = m_transferFunction.getColor( x );
+        color.setAlpha( 255 );
+        m_colorGradient.setColorAt( x01, color );
+    }
+}
+
+
+void QBasicGraphicTransferFunctionEditor::drawBackground()
+{
+    QImage background( size(), QImage::Format_ARGB32_Premultiplied );
+    background.fill( 0 );
+
+    QPainter backgroundPainter( &background );
+    backgroundPainter.fillRect( rect(), m_colorGradient );
+    backgroundPainter.setCompositionMode( QPainter::CompositionMode_DestinationAtop );
+
+    QLinearGradient alphaGradient( 0, 0, 0, height() );
+    alphaGradient.setColorAt( 0.0, QColor::fromRgbF( 0.0, 0.0, 0.0, 1.0 ) );
+    alphaGradient.setColorAt( 1.0, QColor::fromRgbF( 0.0, 0.0, 0.0, 0.0 ) );
+
+    backgroundPainter.fillRect( rect(), alphaGradient );
+
+    QPainter painter( this );
+    painter.drawImage( 0, 0, background );
+}
+
+
+void QBasicGraphicTransferFunctionEditor::drawFunction()
+{
+    double scaleX = ( width() - 1 ) / ( m_maximum - m_minimum );
+    double shiftX = scaleX * -m_minimum;
+    double scaleY = -( height() - 1 );
+    double shiftY = height() - 1;
+    QPolygonF function;
+    QList<double> points = m_transferFunction.getPoints();
+    int nPoints = points.size();
+
+    for ( int i = 0; i < nPoints; i++ )
+    {
+        double x = points.at( i );
+        function << QPointF( scaleX * x + shiftX, scaleY * m_transferFunction.getOpacity( x ) + shiftY );
+    }
+
+    QPainter painter( this );
+    painter.setRenderHint( QPainter::Antialiasing );
+    painter.setPen( QColor( 251, 251, 251, 216 ) );
+    painter.setBrush( QColor( 248, 248, 248, 202 ) );
+
+    painter.drawPolyline( function );
+
+    foreach ( QPointF point, function )
+    {
+        QRectF rectangle( point.x() - POINT_SIZE, point.y() - POINT_SIZE, 2.0 * POINT_SIZE, 2.0 * POINT_SIZE );
+        painter.drawEllipse( rectangle );
+    }
+}
+
+
+void QBasicGraphicTransferFunctionEditor::addPoint( double x, double y )
+{
+    QColor color = Qt::black;
+    color.setAlphaF( y );
+    m_transferFunction.addPoint( x, color );
+
+    updateColorGradient();
+    update();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::removePoint( double x )
+{
+    m_transferFunction.removePoint( x );
+
+    updateColorGradient();
+    update();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::changePointColor( double x, QColor &color )
+{
+    color.setAlphaF( m_transferFunction.getOpacity( x ) );
+    m_transferFunction.addPoint( x, color );
+
+    updateColorGradient();
+    update();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::changeCurrentPoint( double x, double y )
+{
+    if ( !m_dragging ) return;
+
+    m_transferFunction = m_transferFunctionCopy;
+
+    QColor color = m_transferFunction.getColor( m_currentX );
+    m_transferFunction.removePoint( m_currentX );
+    color.setAlphaF( y );
+    m_transferFunction.addPoint( x, color );
+
+    updateColorGradient();
+    update();
+}
+
+
+}
