@@ -79,6 +79,7 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
         if (m_textPortListenRisRequests->isModified())
         {
             settings.setListenPortRisRequests(m_textPortListenRisRequests->text().toInt());
+            m_textPortListenRisRequests->setModified(false);//Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
         }
 
         m_buttonApplyListenRisConfiguration->setDisabled(true);
