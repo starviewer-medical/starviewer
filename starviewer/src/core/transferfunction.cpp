@@ -362,4 +362,23 @@ TransferFunction TransferFunction::to01( double minimum, double maximum ) const
     return transferFunction01;
 }
 
+
+QList<double> TransferFunction::getPointsNear( double x, double distance ) const
+{
+    getPoints();
+
+    QMap<double, QColor>::const_iterator lowerBound = m_rgba.lowerBound( x - distance );
+    QMap<double, QColor>::const_iterator end = m_rgba.end();
+    double limit = x + distance;
+    QList<double> nearPoints;
+
+    while ( lowerBound != end && lowerBound.key() <= limit )
+    {
+        nearPoints << ( lowerBound++ ).key();
+    }
+
+    return nearPoints;
+}
+
+
 }
