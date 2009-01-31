@@ -74,7 +74,6 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
         }
         
         settings.setListenRisRequests(m_checkBoxListenRisRequests->isChecked());
-        settings.setListenPortRisRequests(m_checkBoxViewAutomaticallyStudies->isChecked());
 
         if (m_textPortListenRisRequests->isModified())
         {
