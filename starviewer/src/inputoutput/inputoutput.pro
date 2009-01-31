@@ -15,7 +15,8 @@ FORMS += qconfigurationscreenbase.ui \
          queryscreenbase.ui \
          qadvancedsearchwidgetbase.ui \
          qbasicsearchwidgetbase.ui \
-         qlocaldatabaseconfigurationscreenbase.ui
+         qlocaldatabaseconfigurationscreenbase.ui \
+         qlistenrisrequestsconfigurationscreenbase.ui
 HEADERS += databaseconnection.h \
            dicomimage.h \
            pacsconnection.h \
@@ -70,7 +71,8 @@ HEADERS += databaseconnection.h \
            qlocaldatabaseconfigurationscreen.h \
            parsexmlrispierrequest.h \
            listenrisrequest.h \
-           processrisrequestthread.h
+           processrisrequestthread.h \
+           qlistenrisrequestsconfigurationscreen.h
 
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
@@ -123,7 +125,8 @@ SOURCES += databaseconnection.cpp \
            qlocaldatabaseconfigurationscreen.cpp \
            parsexmlrispierrequest.cpp \
            listenrisrequest.cpp \
-           processrisrequestthread.cpp
+           processrisrequestthread.cpp \
+           qlistenrisrequestsconfigurationscreen.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
