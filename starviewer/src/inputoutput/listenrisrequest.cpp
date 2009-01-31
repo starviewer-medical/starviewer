@@ -7,14 +7,14 @@
 
 #include "listenrisrequest.h"
 
-#include "processrisrequestthread.h"
-
 #include <QTcpServer>
 #include <QHostAddress>
 #include <QTcpSocket>
 #include <QMetaType>
 
+#include "processrisrequestthread.h"
 #include "logging.h"
+#include "starviewersettings.h"
 
 namespace udg
 {
@@ -26,10 +26,12 @@ ListenRisRequest::ListenRisRequest(QObject *parent)
 
 void ListenRisRequest::listen()
 {
+    StarviewerSettings settings;
     m_qTcpServer = new QTcpServer();
 
-    if (!m_qTcpServer->listen(QHostAddress::Any, 12345))
+    if (!m_qTcpServer->listen(QHostAddress::Any, settings.getListenPortRisRequests()))
     {
+
         DEBUG_LOG("ERROR AL INTENTAR ESCOLTAR" + m_qTcpServer->errorString());
     }
 

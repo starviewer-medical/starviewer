@@ -83,6 +83,8 @@ QueryScreen::~QueryScreen()
 
 void QueryScreen::initialize()
 {
+    StarviewerSettings settings;
+
     //indiquem que la llista de Pacs no es mostra
     m_showPACSNodes = false;
     m_PACSNodes->setVisible(false);
@@ -96,7 +98,10 @@ void QueryScreen::initialize()
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
     m_listenRisRequests = new ListenRisRequest(this);
-    //m_listenRisRequests->listen();
+    if (settings.getListenRisRequests())
+    {
+        m_listenRisRequests->listen();
+    }
 
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
@@ -1366,6 +1371,7 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
 {
     MultipleQueryStudy multipleQueryStudy;
     DicomMask maskStudyToRetrieve;
+    StarviewerSettings settings;
 
     QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr("Starviewer has recieved from RIS a request to retrieve the study with accession number %1.\n\nDo you want to retrieve ?").arg(maskRisRequest.getAccessionNumber()), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
@@ -1392,7 +1398,7 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
         foreach (DICOMStudy study, multipleQueryStudy.getStudyList())
         {
             maskStudyToRetrieve.setStudyUID(study.getStudyUID());
-            retrieveFromPacs(true, study.getPacsId(), maskStudyToRetrieve, study);
+            retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
         }
     }
 }
