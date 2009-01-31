@@ -333,6 +333,19 @@ public:
 	QString getLastOpenedDICOMDIRPath() const;
 	void setLastOpenedDICOMDIRPath( QString const & path );
 
+    ///Especifica/Indica si s'han d'escoltar les peticions del RIS
+    void setListenRisRequests(bool listenRisRequests);
+    bool getListenRisRequests();
+
+    ///Especifica/Indica per quin port s'escolten les peticions del RIS
+    void setListenPortRisRequests(int portListenRisRequests);
+    int getListenPortRisRequests();
+
+    ///Indica/Especifica si una vegada descarregat un estudi com a petició del RIS 
+    void setViewAutomaticallyAStudyRetrievedFromRisRequest(bool viewAutomaticallyStudy);
+    bool getViewAutomaticallyAStudyRetrievedFromRisRequest();
+
+
 private: 
     /// Ens dóna el nom del host local. 
     /// El mètode l'hem extret del propi codi de Qt (QtNetwork) per així evitar haver de 

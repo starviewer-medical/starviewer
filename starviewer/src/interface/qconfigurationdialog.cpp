@@ -11,6 +11,7 @@
 #endif
 
 #include "qlocaldatabaseconfigurationscreen.h"
+#include "qlistenrisrequestsconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -35,6 +36,13 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     connect(localDatabaseScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
     connect(m_okButton , SIGNAL(clicked()), localDatabaseScreen, SLOT(applyChanges()));
 
+#ifndef STARVIEWER_LITE // no mostrem configuració del servei que escolta les peticions del RIS
+    QListenRisRequestsConfigurationScreen *qListenRisRequestsConfigurationScreen = new QListenRisRequestsConfigurationScreen(this);
+    this->addConfigurationWidget(qListenRisRequestsConfigurationScreen, tr("Listen Ris Requests"), AdvancedConfiguration);
+    connect(qListenRisRequestsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
+    connect(m_okButton , SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
+#endif
+    
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
     m_optionsList->setCurrentRow(0);

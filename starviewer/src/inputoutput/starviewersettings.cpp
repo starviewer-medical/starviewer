@@ -51,6 +51,9 @@ const QString qOperationStateColumnWidthKey("/interface/qOperationState/columnWi
 const QString qCreateDicomdirColumnWidthKey("/interface/qCreateDicomdir/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString qConfigurationPacsDeviceColumnWidthKey("/interface/qConfigurationPacsDevice/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString lastOpenedDICOMDIRPath("/interface/lastOpenedDICOMDIRPath"); // últim path des del que hem obert un dicomdir
+const QString listenRisRequests("/risRequests/listen");
+const QString listenRisRequestsPort("/risRequests/listenPort");
+const QString viewAutomaticallyAStudyRetrievedFromRisRequest("/risRequests/viewAutomaticallyAStudyRetrievedFromRisRequest");
 
 namespace udg {
 
@@ -425,5 +428,41 @@ QString StarviewerSettings::getLocalHostName()
     hostName[sizeof(hostName) - 1] = '\0';
     return QString::fromLocal8Bit(hostName);
 }
+
+/** Opcions de configuració d'escoltar peticions des del RIS*/
+
+const QString viewAutomaticallyAStudyRetrievedFromRisRequest("/risRequests/viewAutomaticallyAStudyRetrievedFromRisRequest");
+
+
+void StarviewerSettings::setListenRisRequests(bool listen)
+{
+    m_starviewerSettings.setValue(GroupSettingsName + listenRisRequests, listen);
+}
+
+bool StarviewerSettings::getListenRisRequests()
+{
+    return m_starviewerSettings.value(GroupSettingsName + listenRisRequests, true).toBool();
+}
+
+void StarviewerSettings::setListenPortRisRequests(int portListenRisRequests)
+{
+    m_starviewerSettings.setValue(GroupSettingsName + listenRisRequestsPort, portListenRisRequests); 
+}
+
+int StarviewerSettings::getListenPortRisRequests()
+{
+    return m_starviewerSettings.value(GroupSettingsName + listenRisRequestsPort, 11110).toInt();
+}
+
+void StarviewerSettings::setViewAutomaticallyAStudyRetrievedFromRisRequest(bool viewAutomaticallyStudy)
+{
+    m_starviewerSettings.setValue(GroupSettingsName + viewAutomaticallyAStudyRetrievedFromRisRequest, viewAutomaticallyStudy);
+}
+
+bool StarviewerSettings::getViewAutomaticallyAStudyRetrievedFromRisRequest()
+{
+    return m_starviewerSettings.value(GroupSettingsName + viewAutomaticallyAStudyRetrievedFromRisRequest, true).toBool();
+}
+
 
 };
