@@ -42,6 +42,8 @@ signals:
 private :
 
     QTcpSocket *m_qTcpSocket;
+    ///Indiquem el temps d'espera per llegir la petició del RIS, sinó arriba en aquest temps fem time out
+    static const int msTimeOutToReadData;
 
     void run();
     void processRequest(QString request);

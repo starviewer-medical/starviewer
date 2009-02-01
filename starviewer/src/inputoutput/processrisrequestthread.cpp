@@ -8,12 +8,15 @@
 #include "processrisrequestthread.h"
 
 #include <QMetaType>
+#include <QHostAddress>
 
 #include "parsexmlrispierrequest.h"
 #include "logging.h"
 
 namespace udg
 {
+
+const int ProcessRisRequestThread::msTimeOutToReadData = 15000;
 
 ProcessRisRequestThread::ProcessRisRequestThread(QObject *parent)
  : QThread(parent)
@@ -30,14 +33,18 @@ void ProcessRisRequestThread::process(QTcpSocket *qTcpSocket)
 
 void ProcessRisRequestThread::run()
 {
-    connect(m_qTcpSocket,SIGNAL(readyRead()),SLOT(prova()));
-    if (m_qTcpSocket->waitForReadyRead(15000)) 
+    if (m_qTcpSocket->waitForReadyRead(msTimeOutToReadData)) 
     {
         QString requestXML = QString(m_qTcpSocket->readAll());
-        INFO_LOG("HE LLEGIT " + QString(requestXML));
+        INFO_LOG("He rebut de la IP " + m_qTcpSocket->peerAddress().toString() + " la cadena " + QString(requestXML));
         processRequest(requestXML);
     }
+    else INFO_LOG("S'ha produït timeout esperant llegir dades de la IP " + m_qTcpSocket->peerAddress().toString());
 
+    if ( m_qTcpSocket->error() != QAbstractSocket::UnknownSocketError)
+    {
+        ERROR_LOG("S'ha produït un error m'entre s'esperava rebre dades del RIS" + m_qTcpSocket->errorString());
+    }
     m_qTcpSocket->close();
 }
 
