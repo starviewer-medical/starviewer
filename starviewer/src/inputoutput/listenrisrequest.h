@@ -30,8 +30,10 @@ public:
 
     ListenRisRequest(QObject *parent = 0);
 
+    ///Inicia l'escolta de peticions del RIS a través del port que s'ha establet a la configuració
     void listen();
 
+    ///Indica si s'estant escoltant peticions
     bool isListen();
 
 signals:
