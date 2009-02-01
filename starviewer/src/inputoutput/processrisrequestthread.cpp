@@ -21,7 +21,7 @@ const int ProcessRisRequestThread::msTimeOutToReadData = 15000;
 ProcessRisRequestThread::ProcessRisRequestThread(QObject *parent)
  : QThread(parent)
 {
-    qRegisterMetaType<DicomMask>("DicomMask");
+    qRegisterMetaType<DicomMask>("DicomMask"); //Registrem la classe DicomMask per poder-ne fer un signal
 }
 
 void ProcessRisRequestThread::process(QTcpSocket *qTcpSocket)
@@ -36,6 +36,7 @@ void ProcessRisRequestThread::run()
     if (m_qTcpSocket->waitForReadyRead(msTimeOutToReadData)) 
     {
         QString requestXML = QString(m_qTcpSocket->readAll());
+
         INFO_LOG("He rebut de la IP " + m_qTcpSocket->peerAddress().toString() + " la cadena " + QString(requestXML));
         processRequest(requestXML);
     }

@@ -31,7 +31,7 @@ public:
 
     ProcessRisRequestThread(QObject *parent = 0);
 
-    ///Llegiex a través del socket la petició del RIS i la processa.
+    ///Crea el thread per atendre el socket i processa les dades rebudes
     void process(QTcpSocket *qTcpSocket);
 
 signals:
@@ -45,7 +45,10 @@ private :
     ///Indiquem el temps d'espera per llegir la petició del RIS, sinó arriba en aquest temps fem time out
     static const int msTimeOutToReadData;
 
+    ///Aquest mètode ja s'executa dins el thread, Espera rebre les dades del socket i les processa
     void run();
+
+    ///Processa la cadena rebuda del RIS
     void processRequest(QString request);
 };
 

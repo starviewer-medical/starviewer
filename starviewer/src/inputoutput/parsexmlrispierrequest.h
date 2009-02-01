@@ -39,6 +39,7 @@ class ParseXmlRisPIERRequest :QObject
 Q_OBJECT
 public:
 
+    ///Parseja la cadena de XML i retorna la DicomMask de l'estudi a descarregar
     DicomMask parseXml(QString xmlRisPierRequest);
 
     ///Retorna si s'ha produït un error alhora de parsejar el Xml

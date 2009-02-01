@@ -23,7 +23,7 @@ namespace udg
 
 ListenRisRequest::ListenRisRequest(QObject *parent):QObject(parent)
 {
-    qRegisterMetaType<DicomMask>("DicomMask");
+    qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
 }
 
 void ListenRisRequest::listen()
@@ -37,7 +37,7 @@ void ListenRisRequest::listen()
     }
     else INFO_LOG(QString("Iniciada l'escolta de peticions del RIS pel port %1").arg(settings.getListenPortRisRequests()));
 
-    connect(m_qTcpServer, SIGNAL(newConnection()), SLOT(newConnection()));
+    connect(m_qTcpServer, SIGNAL(newConnection()), SLOT(newConnection()));//Connectem a l'slot per quan arribin noves connexions
 }
 
 bool ListenRisRequest::isListen()
