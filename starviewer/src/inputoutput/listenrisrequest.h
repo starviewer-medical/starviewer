@@ -8,9 +8,7 @@
 #ifndef UDGLISTENRISREQUEST_H
 #define UDGLISTENRISREQUEST_H
 
-
 #include <QObject>
-#include <QThread>
 
 #include "dicommask.h"
 
@@ -19,7 +17,6 @@ class QTcpSocket;
 
 namespace udg {
 
-class DicomMask;
 
 /** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS 
  *
@@ -51,6 +48,8 @@ private :
 
     QTcpServer *m_qTcpServer;
 
+    //Mostra l'error que s'ha produït en el socket
+    void showNetworkError();
 };
 
 }
