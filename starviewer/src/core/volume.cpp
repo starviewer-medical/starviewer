@@ -68,7 +68,7 @@ void Volume::init()
     m_itkToVtkFilter = ItkToVtkFilterType::New();
     m_vtkToItkFilter = VtkToItkFilterType::New();
     m_dataLoaded = false;
-
+    m_progressSignalAdaptor = 0;
     inputConstructor();
 }
 
@@ -650,12 +650,13 @@ void Volume::inputConstructor()
 
     m_gdcmIO = ImageIOType::New();
 
-    itk::QtSignalAdaptor *m_progressSignalAdaptor = new itk::QtSignalAdaptor;
+    if( !m_progressSignalAdaptor )
+        m_progressSignalAdaptor = new itk::QtSignalAdaptor();
     //   Connect the adaptor as an observer of a Filter's event
     m_seriesReader->AddObserver( itk::ProgressEvent(),  m_progressSignalAdaptor->GetCommand() );
 //
 //  Connect the adaptor's Signal to the Qt Widget Slot
-   connect( m_progressSignalAdaptor, SIGNAL( Signal() ), SLOT( slotProgress() ) );
+    connect( m_progressSignalAdaptor, SIGNAL( Signal() ), SLOT( slotProgress() ) );
 }
 
 void Volume::slotProgress()
@@ -665,6 +666,7 @@ void Volume::slotProgress()
 
 void Volume::inputDestructor()
 {
+    delete m_progressSignalAdaptor;
 //     m_seriesReader->Delete();
 //     m_reader->Delete();
 //     m_gdcmIO->Delete();
