@@ -400,7 +400,11 @@ double Patient::needlemanWunchDistance (QString s, QString t, int gap )
 
     int min = qMin( n, m );
     int diff = qMax( n, m ) - min;
-    return (double)p[n] / (double)(min + diff*gap);
+
+    double result = (double)p[n] / (double)(min + diff*gap);
+    delete p;
+    delete d;
+    return result;
 }
 
 
