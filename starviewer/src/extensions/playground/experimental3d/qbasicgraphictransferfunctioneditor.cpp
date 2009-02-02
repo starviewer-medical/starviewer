@@ -61,6 +61,7 @@ void QBasicGraphicTransferFunctionEditor::setTransferFunction( const TransferFun
     m_transferFunction = transferFunction;
 
     updateColorGradient();
+    update();
 }
 
 
