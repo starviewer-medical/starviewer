@@ -58,10 +58,16 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     this->setWindowIcon( QIcon(":/images/starviewer.png") );
     this->setWindowTitle( ApplicationNameString );
 
-    /// Càrrega dels hanging protocols
-    HangingProtocolsLoader * hangingProtocolsLoader = new HangingProtocolsLoader();
-    hangingProtocolsLoader->loadDefaults();
-	delete hangingProtocolsLoader;
+    /// Càrrega dels hanging protocols. 
+    /// Només carregarem un cop per sessió/instància d'starviewer
+    static bool hangingProtocolsAreLoaded = false;
+    if( !hangingProtocolsAreLoaded )
+    {
+        HangingProtocolsLoader *hangingProtocolsLoader = new HangingProtocolsLoader();
+        hangingProtocolsLoader->loadDefaults();
+	    delete hangingProtocolsLoader;
+        hangingProtocolsAreLoaded = true;
+    }
 
     // creem el progress dialog que notificarà la càrrega de volums
     m_progressDialog = new QProgressDialog( this );
@@ -518,7 +524,7 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
     // TODO de moment ho hem de comentar perquè si processem events podem
     // ser "concurrents" carregant sèries i ens pot ocasionar problemes
     // per tant primer cal solucionar la "concurrència" per poder posar això en marxa
-    //qApp->processEvents();
+    // qApp->processEvents();
 }
 
 }; // end namespace udg
