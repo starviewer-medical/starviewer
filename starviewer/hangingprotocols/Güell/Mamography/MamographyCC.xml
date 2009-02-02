@@ -2,6 +2,7 @@
 <hangingProtocol name="MamographyCC">
 <hangingProtocolName>CC</hangingProtocolName>
 <numberScreens>1</numberScreens>
+<strictness>yes</strictness>
 <protocol>CR</protocol>
 <restriction identifier="1">
 <usageFlag>MATCH</usageFlag>

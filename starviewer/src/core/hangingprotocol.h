@@ -84,6 +84,12 @@ public:
 	/// Mètode per comparar hanging protocols
 	bool gratherThan( HangingProtocol * hangingToCompare );
 
+	/// Retorna si el mètode és estricte o no ho hes
+	bool getStrictness();
+
+	/// Assigna si el mètode és estricte o no ho hes
+	void setStrictness( bool strictness );
+
 private:
 
 	/// Identificador
@@ -118,6 +124,9 @@ private:
 
     /// Llista de displays sets
     QList< HangingProtocolDisplaySet * > m_listOfDisplaySets;
+
+	/// Boolea que indica si és estricte o no. Si és estricte vol dir que per ser correcte tots els image sets han d'estar assignats.
+	bool m_strictness;
 
 };
 

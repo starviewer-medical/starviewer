@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangingProtocol name="MamographyGuell">
-<hangingProtocolName>MamographyG</hangingProtocolName>
+<hangingProtocolName>Mamography</hangingProtocolName>
 <numberScreens>1</numberScreens>
+<strictness>yes</strictness>
 <protocol>CR</protocol>
 <restriction identifier="1">
 <usageFlag>MATCH</usageFlag>
@@ -23,24 +24,42 @@
 <selectorAttribute>ViewPosition</selectorAttribute>
 <valueRepresentation>OBL</valueRepresentation>
 </restriction>
+<restriction identifier="5">
+<usageFlag>NO_MATCH</usageFlag>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>cranio-caudal</valueRepresentation>
+</restriction>
+<restriction identifier="6">
+<usageFlag>NO_MATCH</usageFlag>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>medio-lateral</valueRepresentation>
+</restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
 <restriction>4</restriction>
+<restriction>5</restriction>
+<restriction>6</restriction>
 <type>image</type>
 </imageSet>
 <imageSet identifier="2">
 <restriction>2</restriction>
 <restriction>4</restriction>
+<restriction>5</restriction>
+<restriction>6</restriction>
 <type>image</type>
 </imageSet>
 <imageSet identifier="3">
 <restriction>1</restriction>
 <restriction>3</restriction>
+<restriction>5</restriction>
+<restriction>6</restriction>
 <type>image</type>
 </imageSet>
 <imageSet identifier="4">
 <restriction>2</restriction>
 <restriction>3</restriction>
+<restriction>5</restriction>
+<restriction>6</restriction>
 <type>image</type>
 </imageSet>
 <displaySet identifier="1">
