@@ -150,6 +150,9 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
             }
             adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
+			if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 ) 
+				adjustmentOfHanging = 0.0;
+
             if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->gratherThan(bestHangingProtocol) ) )
             {
                 bestHangingProtocol = hangingProtocol;
@@ -481,8 +484,13 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             restriction = listOfRestrictions.value( i );
             if( restriction.selectorAttribute == "ViewPosition" )
             {
-				if( ! dicomReader.getAttributeByName( DCM_ViewPosition ).contains( restriction.valueRepresentation) )
-                    valid = false;
+				//if( ! dicomReader.getAttributeByName( DCM_ViewPosition ).contains( restriction.valueRepresentation) )
+                //    valid = false;
+
+				QString viewPosition = dicomReader.getAttributeByName( DCM_ViewPosition );
+                bool contains = viewPosition.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
+                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NO_MATCH );
+                valid = contains ^ match;
             }
             else if( restriction.selectorAttribute == "ImageLaterality" )
             {
@@ -502,8 +510,12 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             else if( restriction.selectorAttribute == "CodeMeaning" )
             {
                 QStringList tagValue =  dicomReader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
+				bool match = ( restriction.usageFlag  == HangingProtocolImageSet::MATCH );
+
                 if( tagValue.isEmpty() || !( tagValue.at(0).contains( restriction.valueRepresentation ) ) )
-                    valid = false;
+						valid = false;
+
+				if( !match ) valid = !valid;// just el cas contrari
             }
             else if( restriction.selectorAttribute == "ImageType" )
             {

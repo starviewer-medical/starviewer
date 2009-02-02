@@ -145,6 +145,12 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
                         listHangingProtocols.push_back( hangingProtocol );
                         break;
                     }
+					else if( reader->name() == "strictness" )
+                    {
+                        reader->readNext();
+						hangingProtocol->setStrictness( reader->text().toString().contains( "yes" ) );
+                        reader->readNext();
+                    }
                 }
             }
         }

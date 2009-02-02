@@ -222,4 +222,15 @@ bool HangingProtocol::gratherThan( HangingProtocol * hangingToCompare )
 
 }
 
+
+bool HangingProtocol::getStrictness()
+{
+	return m_strictness;
+}
+
+void HangingProtocol::setStrictness( bool strictness )
+{
+	m_strictness = strictness;
+}
+
 }
