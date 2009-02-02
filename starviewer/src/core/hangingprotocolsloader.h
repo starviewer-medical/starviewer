@@ -26,7 +26,7 @@ public:
     void loadDefaults();
 
     /// Càrrega des d'un directori de hanging protocols o un fitxer XML
-    bool loadXMLFiles( QString filePath );
+    bool loadXMLFiles( const QString &filePath );
 
 };
 
