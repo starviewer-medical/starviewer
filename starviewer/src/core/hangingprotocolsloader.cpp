@@ -58,13 +58,14 @@ void HangingProtocolsLoader::loadDefaults()
         loadXMLFiles( userPath );
 }
 
-bool HangingProtocolsLoader::loadXMLFiles( QString filePath )
+bool HangingProtocolsLoader::loadXMLFiles( const QString &filePath )
 {
-	HangingProtocolXMLReader * xmlReader = new HangingProtocolXMLReader();
-	QList<HangingProtocol * > listHangingProtocols = xmlReader->read( filePath );
+	HangingProtocolXMLReader *xmlReader = new HangingProtocolXMLReader();
+	QList<HangingProtocol *> listHangingProtocols = xmlReader->read( filePath );
 
     if( listHangingProtocols.size() > 0 )
     {
+        DEBUG_LOG( QString("Carreguem %1 hanging protocols de [%2]").arg( listHangingProtocols.size() ).arg(filePath) );
         foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
 		{
 			Identifier id = HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
@@ -72,6 +73,8 @@ bool HangingProtocolsLoader::loadXMLFiles( QString filePath )
         }
     }
 
+    delete xmlReader;
     return true;
 }
+
 }
