@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "series.h"
 
+#include "study.h"
 #include "image.h"
 #include "logging.h"
 #include "volumerepository.h"
@@ -38,6 +39,7 @@ QString Series::getInstanceUID() const
 void Series::setParentStudy( Study *study )
 {
     m_parentStudy = study;
+    this->setParent( m_parentStudy );
 }
 
 Study *Series::getParentStudy() const

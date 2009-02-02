@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "image.h"
 
+#include "series.h"
 #include "logging.h"
 #include "thumbnailcreator.h"
 
@@ -305,6 +306,7 @@ QTime Image::getRetrievedTime()
 void Image::setParentSeries( Series *series )
 {
     m_parentSeries = series;
+    this->setParent( m_parentSeries );
 }
 
 Series *Image::getParentSeries() const

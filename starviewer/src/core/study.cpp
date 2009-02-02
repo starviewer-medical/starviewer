@@ -24,6 +24,7 @@ Study::~Study()
 void Study::setParentPatient( Patient *patient )
 {
     m_parentPatient = patient;
+    this->setParent( m_parentPatient );
 }
 
 Patient* Study::getParentPatient() const
