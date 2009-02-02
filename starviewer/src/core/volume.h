@@ -267,6 +267,10 @@ private:
 
     /// TODO membre temporal per la transició al tractament de fases
     int m_numberOfPhases;
+
+    /// Traductor d'events itk en signals de Qt 
+    /// per poder monitorejar el progrés de lectura d'arxius
+    itk::QtSignalAdaptor *m_progressSignalAdaptor;
 };
 
 /**
