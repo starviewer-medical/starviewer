@@ -27,7 +27,7 @@
 namespace udg {
 
 QViewerCINEController::QViewerCINEController(QObject *parent)
-  : QObject(parent), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false), m_cineDimension(TemporalDimension), m_loopEnabled(false), m_boomerangEnabled(false), m_recordFilename( QDir::homePath() + "/cineMovie" )
+  : QObject(parent), m_firstSliceInterval(0), m_lastSliceInterval(0), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false), m_cineDimension(TemporalDimension), m_loopEnabled(false), m_boomerangEnabled(false), m_recordFilename( QDir::homePath() + "/cineMovie" )
 {
     m_timer = new QBasicTimer();
 
@@ -310,35 +310,29 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
         {
             setCINEDimension( TemporalDimension ); // si tenim fases, per defecte treballem sota la temporal
             setVelocity( input->getNumberOfPhases() );
-            m_firstSliceInterval = 0;
-            m_lastSliceInterval = input->getNumberOfPhases() - 1;
         }
         else
         {
             // TODO potser seria més correcte si s'interrogués a partir d'input!
             setCINEDimension( SpatialDimension ); // si no tenim fases, només podem treballar sobre la dim espaial
             setVelocity( 10 ); // li donarem una velocitat de 10 img/sec
-            m_firstSliceInterval = 0;
-
-            this->updateThickness( m_2DViewer->getSlabThickness() );
         }
-
+        m_firstSliceInterval = 0;
+        this->updateThickness( m_2DViewer->getSlabThickness() );
     }
 }
 
 void QViewerCINEController::updateThickness( int thickness )
 {
-    if( m_2DViewer->isThickSlabActive() )
-	{	
-		m_lastSliceInterval = m_2DViewer->getMaximumSlice() - thickness + 1;
-	}
+    if( m_cineDimension == SpatialDimension )
+    {
+        if( m_2DViewer->isThickSlabActive() )
+            m_lastSliceInterval = m_2DViewer->getMaximumSlice() - thickness + 1;
+        else
+            m_lastSliceInterval = m_2DViewer->getMaximumSlice();
+    }
     else
-	{
-		if( m_cineDimension == SpatialDimension )
-			m_lastSliceInterval = m_2DViewer->getMaximumSlice();
-		else
-			m_lastSliceInterval = m_2DViewer->getInput()->getNumberOfPhases() - 1;
-	}
+        m_lastSliceInterval = m_2DViewer->getInput()->getNumberOfPhases() - 1;
 }
 
 }
