@@ -9,6 +9,7 @@
 
 #include <QStringList>
 #include <QChar>
+#include <QSet>
 
 namespace udg {
 
@@ -260,17 +261,17 @@ Patient Patient::operator +=( const Patient &patient )
     return this;
 }
 
-QString Patient::clearStrangeSymbols( QString patientName )
+QString Patient::clearStrangeSymbols( const QString &patientName )
 {
     return patientName.toUpper().replace(QRegExp("[^A-Z ^\\d]"), " ").trimmed();
 }
 
-QString Patient::clearPatientName( QString patientName )
+QString Patient::clearPatientName( const QString &patientName )
 {
     return patientName.toUpper().replace(QRegExp("[^A-Z]"), " ").trimmed();
 }
 
-bool Patient::containtsNumericalSymbols( QString patientName )
+bool Patient::containtsNumericalSymbols( const QString &patientName )
 {
     QRegExp rx("\\d\\d?\\d?\\d?");
     return ( rx.indexIn( patientName ) != -1 );
@@ -278,6 +279,11 @@ bool Patient::containtsNumericalSymbols( QString patientName )
 
 Patient::PatientsSimilarity Patient::compareTo( const Patient *patient )
 {
+    if( !patient )
+    {
+        DEBUG_LOG( "El pacient és NUL" );
+        return Patient::IndeterminableSimilarity;
+    }
     //si tenen el mateix ID de pacient ja podem dir que són el mateix i no cal mirar res més.
     if( patient->m_patientID == this->m_patientID )
     {
@@ -334,6 +340,56 @@ QString Patient::toString()
     return result;
 }
 
+QList<Patient *> Patient::mergePatients( QList<Patient *> patientsList )
+{
+    QList<Patient *> resultingPatientsList;
+    if( patientsList.count() == 1 )
+        resultingPatientsList = patientsList;
+    else if( patientsList.count() > 1 )
+    {
+        // el mètode no és gaire eficient perquè prova "tots contra tots"
+        // ja que un cop fusionem un, en principi es podria eliminar de 
+        // la llista de fusió i no ho fem i tornem a comprovar
+        // TODO millorar l'algorisme de fusió dins de la llista
+
+        QSet<Patient *> patientSet = patientsList.toSet();
+        QMutableSetIterator<Patient *> setIterator(patientSet);
+        while( setIterator.hasNext() )
+        {
+            // Agafem el primer element del conjunt i el treiem
+            Patient *currentPatient = setIterator.next();
+            setIterator.remove();
+            // fem la còpia de l'element agafat, que un cop 
+            // fusionat o no, afegirem a la llista final
+            Patient *newPatient = new Patient( *currentPatient );
+            // ara examinem la resta d'elements del conjunt
+            // per veure si els podem fusionar
+            // en cas que es puguin fusionar, els eliminarem del conjunt
+            while( setIterator.hasNext() )
+            {
+                // comparem per fer la fusió o no amb el proper element
+                if( currentPatient->compareTo( setIterator.peekNext() ) == Patient::SamePatients )
+                {
+                    // BINGO! Són iguals! El fusionem i l'eliminem del conjunt
+                    *newPatient += (*setIterator.peekNext()) ;
+                    setIterator.next();
+                    setIterator.remove();   
+                }
+                else
+                {
+                    // no són iguals, no fusionem i passem al següent element del conjunt
+                    setIterator.next();
+                }
+            }
+            // afegim a la llista el pacient ja fusionat si s'escau
+            resultingPatientsList << newPatient;
+            // retornem l'iterador a l'inici per continuar analitzant la resta d'elements del conjunt que quedin
+            setIterator.toFront();
+        }
+    }
+    return resultingPatientsList;
+}
+
 void Patient::copyPatientInformation( const Patient *patient )
 {
     this->m_fullName = patient->m_fullName;
@@ -369,7 +425,17 @@ int Patient::findStudyIndex( QString uid )
     return i;
 }
 
-double Patient::needlemanWunchDistance (QString s, QString t, int gap )
+double Patient::levenshteinDistance( const QString &s, const QString &t)
+{
+    return needlemanWunchDistance( s, t, 1 );
+}
+
+double Patient::needlemanWunch2Distance( const QString &s, const QString &t )
+{
+    return needlemanWunchDistance( s, t, 2 );
+}
+
+double Patient::needlemanWunchDistance( const QString &s, const QString &t, int gap )
 {
     int n = s.length();
     int m = t.length();
@@ -405,17 +471,6 @@ double Patient::needlemanWunchDistance (QString s, QString t, int gap )
     delete p;
     delete d;
     return result;
-}
-
-
-double Patient::needlemanWunch2Distance( QString s, QString t )
-{
-    return needlemanWunchDistance( s, t, 2 );
-}
-
-double Patient::levenshteinDistance( QString s, QString t)
-{
-    return needlemanWunchDistance( s, t, 1 );
 }
 
 Patient::PatientsSimilarity Patient::metricToSimilarity(double measure)

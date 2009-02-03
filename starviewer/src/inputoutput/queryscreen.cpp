@@ -970,6 +970,8 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
         m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
 
+    // Llista de pacients seleccionats
+    QList<Patient *> selectedPatientsList;
     //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
     foreach(QString studyInstanceUIDSelected, studiesUIDList)
     {
@@ -980,9 +982,8 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
 
             time.start();
             patient = localDatabaseManager.retrieve(patientToProcessMask);
-
             DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
-
+            selectedPatientsList << patient;
             if(showDatabaseManagerError(localDatabaseManager.getLastError()))
             {
                 return;
@@ -993,10 +994,10 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
             time.start();
             patient = m_readDicomdir.retrieve(patientToProcessMask);
             DEBUG_LOG( QString("Llegir del DICOMDIR directament (sense importar) ha trigat: %1 ").arg( time.elapsed() ));
+            selectedPatientsList << patient;
         }
-
-        emit selectedPatient(patient, defaultSeriesUID);
     }
+    emit selectedPatients( Patient::mergePatients( selectedPatientsList ) );
 }
 
 void QueryScreen::importDicomdir()
