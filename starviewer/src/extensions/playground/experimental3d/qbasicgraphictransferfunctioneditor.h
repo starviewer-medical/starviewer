@@ -38,6 +38,7 @@ public slots:
 
 protected:
 
+    virtual bool event( QEvent *event );
     virtual void mousePressEvent( QMouseEvent *event );
     virtual void mouseMoveEvent( QMouseEvent *event );
     virtual void mouseReleaseEvent( QMouseEvent *event );
@@ -52,10 +53,15 @@ private:
     void drawBackground();
     void drawFunction();
 
+    QPointF pixelToFunctionPoint( const QPoint &pixel ) const;
+    QPointF functionPointToGraphicPoint( const QPointF &functionPoint ) const;
+
     void addPoint( double x, double y );
     void removePoint( double x );
     void changePointColor( double x, QColor &color );
     void changeCurrentPoint( double x, double y );
+
+private:
 
     /// Valor de propietat mínim.
     double m_minimum;

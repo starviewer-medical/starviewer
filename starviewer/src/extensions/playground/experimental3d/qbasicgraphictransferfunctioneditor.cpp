@@ -47,6 +47,7 @@ void QBasicGraphicTransferFunctionEditor::setRange( double minimum, double maxim
     m_maximum = maximum;
 
     updateColorGradient();
+    update();
 }
 
 
@@ -71,18 +72,28 @@ void QBasicGraphicTransferFunctionEditor::setTransferFunctionName( const QString
 }
 
 
+bool QBasicGraphicTransferFunctionEditor::event( QEvent *event )
+{/*
+    if ( event->type() == QEvent::ToolTip )
+    {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent*>( event );
+         int index = itemAt(helpEvent->pos());
+         if (index != -1)
+             QToolTip::showText(helpEvent->globalPos(), shapeItems[index].toolTip());
+         else
+             QToolTip::hideText();
+     }*/
+     return QWidget::event(event);
+}
+
+
 void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
 {
-    double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
-    double shiftX = scaleX * -m_minimum;
-    double scaleY = 1.0 / -( height() - 1 );
-    double shiftY = 1.0;
+    QPoint pixel( event->x(), event->y() );
+    QPointF functionPoint = pixelToFunctionPoint( pixel );
+    double radiusX = ( m_maximum - m_minimum ) / ( width() - 1 ) * POINT_SIZE;
 
-    double x = scaleX * event->x() + shiftX;
-    double y = scaleY * event->y() + shiftY;
-    double radiusX = scaleX * POINT_SIZE;
-
-    QList<double> nearPoints = m_transferFunction.getPointsNear( x, radiusX );
+    QList<double> nearPoints = m_transferFunction.getPointsNear( functionPoint.x(), radiusX );
     double nearestPointX = 0.0;
     double nearestLength = 2.0 * POINT_SIZE;
     int nPoints = nearPoints.size();
@@ -92,9 +103,8 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
     {
         double fx = nearPoints.at( i );
         double fy = m_transferFunction.getOpacity( fx );
-        double px = ( fx - shiftX ) / scaleX;
-        double py = ( fy - shiftY ) / scaleY;
-        double length = QLineF( event->x(), event->y(), px, py ).length();
+        QPointF graphicPoint = functionPointToGraphicPoint( QPointF( fx, fy ) );
+        double length = QLineF( pixel, graphicPoint ).length();
 
         if ( length < nearestLength )
         {
@@ -111,8 +121,8 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
         if ( found ) m_currentX = nearestPointX;
         else
         {
-            addPoint( x, y );
-            m_currentX = x;
+            addPoint( functionPoint.x(), functionPoint.y() );
+            m_currentX = functionPoint.x();
         }
 
         m_transferFunctionCopy = m_transferFunction;
@@ -134,15 +144,9 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
 
 void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
 {
-    double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
-    double shiftX = scaleX * -m_minimum;
-    double scaleY = 1.0 / -( height() - 1 );
-    double shiftY = 1.0;
+    QPointF functionPoint = pixelToFunctionPoint( QPoint( event->x(), event->y() ) );
 
-    double x = scaleX * event->x() + shiftX;
-    double y = scaleY * event->y() + shiftY;
-
-    changeCurrentPoint( x, y );
+    changeCurrentPoint( functionPoint.x(), functionPoint.y() );
 }
 
 
@@ -213,10 +217,6 @@ void QBasicGraphicTransferFunctionEditor::drawBackground()
 
 void QBasicGraphicTransferFunctionEditor::drawFunction()
 {
-    double scaleX = ( width() - 1 ) / ( m_maximum - m_minimum );
-    double shiftX = scaleX * -m_minimum;
-    double scaleY = -( height() - 1 );
-    double shiftY = height() - 1;
     QPolygonF function;
     QList<double> points = m_transferFunction.getPoints();
     int nPoints = points.size();
@@ -224,7 +224,7 @@ void QBasicGraphicTransferFunctionEditor::drawFunction()
     for ( int i = 0; i < nPoints; i++ )
     {
         double x = points.at( i );
-        function << QPointF( scaleX * x + shiftX, scaleY * m_transferFunction.getOpacity( x ) + shiftY );
+        function << functionPointToGraphicPoint( QPointF( x, m_transferFunction.getOpacity( x ) ) );
     }
 
     QPainter painter( this );
@@ -239,6 +239,28 @@ void QBasicGraphicTransferFunctionEditor::drawFunction()
         QRectF rectangle( point.x() - POINT_SIZE, point.y() - POINT_SIZE, 2.0 * POINT_SIZE, 2.0 * POINT_SIZE );
         painter.drawEllipse( rectangle );
     }
+}
+
+
+QPointF QBasicGraphicTransferFunctionEditor::pixelToFunctionPoint( const QPoint &pixel ) const
+{
+    double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
+    double shiftX = scaleX * -m_minimum;
+    double scaleY = 1.0 / -( height() - 1 );
+    double shiftY = 1.0;
+
+    return QPointF( scaleX * pixel.x() + shiftX, scaleY * pixel.y() + shiftY );
+}
+
+
+QPointF QBasicGraphicTransferFunctionEditor::functionPointToGraphicPoint( const QPointF &functionPoint ) const
+{
+    double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
+    double shiftX = scaleX * -m_minimum;
+    double scaleY = 1.0 / -( height() - 1 );
+    double shiftY = 1.0;
+
+    return QPointF( ( functionPoint.x() - shiftX ) / scaleX, ( functionPoint.y() - shiftY ) / scaleY );
 }
 
 
