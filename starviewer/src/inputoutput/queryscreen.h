@@ -55,9 +55,8 @@ public slots:
     void bringToFront();
 
 signals:
-
-    ///Signal per quan tenim un pacient carregat a punt per processar-lo per visualitzar
-    void selectedPatient( Patient *patientToProcess, QString selectedSeries);
+    /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
+    void selectedPatients( QList<Patient *> selectedPatients );
 
 protected :
     /** Event que s'activa al tancar al rebren un event de tancament

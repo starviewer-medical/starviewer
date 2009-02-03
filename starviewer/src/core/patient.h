@@ -98,6 +98,14 @@ public:
     /// \TODO Mètode que només serveix per debugar i que s'haurà de refer
     QString toString();
 
+    /**
+        Donada una llista de pacients d'entrada, ens retorna una nova llista on
+        estaran fusionats els pacients que siguin considerats iguals. És a dir si d'un
+        mateix pacient tenim dos estudis, però a la llista estan com dos pacients separats
+        en la llista resultant seran un únic pacient amb els dos estudis
+    */
+    static QList<Patient *> mergePatients( QList<Patient *> patientsList );
+
 private:
     /// Donat un pacient, copia únicament la informació del pacient. No fa res respecte els estudis,series o imatges.
     /// La informació es matxaca i no es fa cap mena de comprovació.
@@ -118,9 +126,9 @@ private:
     int findStudyIndex( QString uid );
 
     ///mètodes per a comparar la simulitud entre noms de pacients
-    double levenshteinDistance( QString s, QString t);
-    double needlemanWunch2Distance( QString s, QString t );
-    double needlemanWunchDistance(QString s, QString t, int gap );
+    double levenshteinDistance( const QString &s, const QString &t );
+    double needlemanWunch2Distance( const QString &s, const QString &t );
+    double needlemanWunchDistance( const QString &s, const QString &t, int gap );
 
     /// A partir del resultat d'una metrica aplicada a dos pacients ens diu la similaritat entre aquests
     PatientsSimilarity metricToSimilarity(double measure);
@@ -133,17 +141,17 @@ private:
 
     /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules.
     /// També elimina els números que contingui en nom del pacient.
-    QString clearPatientName( QString patientName );
+    QString clearPatientName( const QString &patientName );
 
     /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules, 
     /// però sense eliminar els números que contingui el nom, ja que poden haver pacients anonimitzats i diferenciats 
     /// per un número, com per exemple VOLUNTARI1, VOLUNTARI2 i no són el mateix pacient, en canvi si treiem els números
     ///els detectarà com a l mateix pacient.
-    QString clearStrangeSymbols( QString patientName );
+    QString clearStrangeSymbols( const QString &patientName );
 
     /// Ens diu si el nom del pacient conté números identificadors. Considerem números entre 0-9999, és un rang 
     /// suficientment gran.
-    bool containtsNumericalSymbols( QString patientName );
+    bool containtsNumericalSymbols( const QString &patientName );
 
 private:
     /// Informació comuna de pacient per a totes les imatges que fan referència a aquest pacient. Apartat C.7.1.1 PS 3.3 DICOM.

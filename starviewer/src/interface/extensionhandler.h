@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QList>
 #include "patient.h"
 #include "extensioncontext.h"
 
@@ -70,12 +71,17 @@ private slots:
      * Processa un conjunt d'arxius d'input i els processa per decidir què fer amb aquests, com per exemple
      * crear nous pacient, obrir finestres, afegir les dades al pacient actual, etc
      * @param inputFiles Els arxius a processar, que poden ser del tipus suportat per l'aplicació o no
-     * @param defaultStudyUID Estudi que es vol visualitzar per defecte
-     * @param defaultSeriesUID Serie que es vol veure per defecte
-     * @param defaultImageInstance Imatge que es vol per defecte
      */
     void processInput(QStringList inputFiles);
-    void processInput(Patient *patient, const QString &defaultSeriesUID);
+
+    /**
+     * Donada una llista de pacients d'entrada, s'encarrega de posar a punt
+     * aquests i assignar-lis la finestra adequada, decidint si obrir noves finestres
+     * i/o fusionar o matxacar el pacient actual d'aquesta finestra.
+     * La llista s'assumeix que no té pacients iguals separats, és a dir,
+     * s'assumeix que cada entrada correspon a un pacient diferent, amb un o varis estudis
+     */
+    void processInput(QList<Patient *> patientsList);
 
 private:
     /// Crea les connexions de signals i slots
@@ -83,6 +89,10 @@ private:
 
     /// Afegeix un pacient a la mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
     void addPatientToWindow(Patient *patient, bool canReplaceActualPatient);
+
+    /// Processa el pacient donat per tal que pugui ser usat per les extensions
+    //  Li crea els volums al repositori i assigna quina és la sèrie per defecte
+    void processInput(Patient *patient, const QString &defaultSeriesUID);
 
 private:
     /// Punter a l'aplicació principal
