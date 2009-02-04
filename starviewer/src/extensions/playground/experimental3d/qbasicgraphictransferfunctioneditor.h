@@ -15,9 +15,8 @@ namespace udg {
 /**
  * Editor de funcions de transferència gràfic en condicions.
  *
- * \todo - Controls per ajustar el rang (a QTransferFunctionEditor).
- *       - Afegir i triar el color.
-*        - Posició del tooltip quan arrosseguem un punt fora de l'editor.
+ * \todo - Afegir i triar el color.
+ *       - Posició del tooltip quan arrosseguem un punt fora de l'editor.
  *       - Desfer.
  *       - Moure només en horitzontal o en vertical.
  *       - Forçar arrodoniments.

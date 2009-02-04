@@ -44,6 +44,8 @@ QBasicGraphicTransferFunctionEditor::~QBasicGraphicTransferFunctionEditor()
 
 void QBasicGraphicTransferFunctionEditor::setRange( double minimum, double maximum )
 {
+    Q_ASSERT( minimum < maximum );
+
     m_minimum = minimum;
     m_maximum = maximum;
 
@@ -185,6 +187,19 @@ void QBasicGraphicTransferFunctionEditor::updateColorGradient()
     {
         double x = colors.at( i );
         double x01 = ( x + shift ) * scale;
+
+        if ( x01 < 0.0 )
+        {
+            x01 = 0.0;
+            x = x01 / scale - shift;
+        }
+
+        if ( x01 > 1.0 )
+        {
+            x01 = 1.0;
+            x = x01 / scale - shift;
+        }
+
         QColor color = m_transferFunction.getColor( x );
         color.setAlpha( 255 );
         m_colorGradient.setColorAt( x01, color );
@@ -273,7 +288,7 @@ double QBasicGraphicTransferFunctionEditor::nearestX( const QPoint &pixel, bool 
 QPointF QBasicGraphicTransferFunctionEditor::pixelToFunctionPoint( const QPoint &pixel ) const
 {
     double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
-    double shiftX = scaleX * -m_minimum;
+    double shiftX = m_minimum;
     double scaleY = 1.0 / -( height() - 1 );
     double shiftY = 1.0;
 
@@ -283,12 +298,12 @@ QPointF QBasicGraphicTransferFunctionEditor::pixelToFunctionPoint( const QPoint 
 
 QPointF QBasicGraphicTransferFunctionEditor::functionPointToGraphicPoint( const QPointF &functionPoint ) const
 {
-    double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
-    double shiftX = scaleX * -m_minimum;
-    double scaleY = 1.0 / -( height() - 1 );
-    double shiftY = 1.0;
+    double shiftX = -m_minimum;
+    double scaleX = ( width() - 1 ) / ( m_maximum - m_minimum );
+    double shiftY = -1.0;
+    double scaleY = -( height() - 1 );
 
-    return QPointF( ( functionPoint.x() - shiftX ) / scaleX, ( functionPoint.y() - shiftY ) / scaleY );
+    return QPointF( ( functionPoint.x() + shiftX ) * scaleX, ( functionPoint.y() + shiftY ) * scaleY );
 }
 
 
