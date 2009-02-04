@@ -27,6 +27,7 @@ private slots:
     void setMinimum( double minimum );
     void setMaximum( double maximum );
     void keepRange( bool keep );
+    void setMinimum( int minimum );
 
 private:
 
