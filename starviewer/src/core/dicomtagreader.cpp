@@ -41,7 +41,8 @@ DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0)
 
 DICOMTagReader::~DICOMTagReader()
 {
-    delete m_dicomData;
+    if( m_dicomData )
+        delete m_dicomData;
 }
 
 bool DICOMTagReader::setFile( QString filename )
@@ -96,9 +97,13 @@ void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
 
 bool DICOMTagReader::tagExists( DcmTagKey tag )
 {
-    Q_ASSERT( m_dicomData );
-
-    return m_dicomData->tagExists( tag );
+    if( m_dicomData )
+        return m_dicomData->tagExists( tag );
+    else
+    {
+        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat");
+        return false;
+    }
 }
 
 bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
@@ -113,7 +118,11 @@ QString DICOMTagReader::getAttributeByTag( unsigned int group, unsigned int elem
 
 QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
 {
-    Q_ASSERT( m_dicomData );
+    if( !m_dicomData )
+    {
+        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string buida.");
+        return QString();
+    }
 
     QString result;
 
@@ -143,7 +152,11 @@ QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGrou
 
 QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag )
 {
-    Q_ASSERT( m_dicomData );
+    if( !m_dicomData )
+    {
+        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string-list buida.");
+        return QStringList(); 
+    }
 
     QStringList result;
     // obtenim els atributs de cada item d'una seqüència de "primer nivell"
