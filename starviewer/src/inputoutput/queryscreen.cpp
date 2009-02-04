@@ -983,7 +983,6 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
             time.start();
             patient = localDatabaseManager.retrieve(patientToProcessMask);
             DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
-            selectedPatientsList << patient;
             if(showDatabaseManagerError(localDatabaseManager.getLastError()))
             {
                 return;
@@ -994,8 +993,18 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
             time.start();
             patient = m_readDicomdir.retrieve(patientToProcessMask);
             DEBUG_LOG( QString("Llegir del DICOMDIR directament (sense importar) ha trigat: %1 ").arg( time.elapsed() ));
+        }
+        if( patient )
+        {
+            // Marquem la sèrie per defecte
+            // TODO ara sempre posem el mateix UID, per tant de moment només 
+            /// funciona bé del tot quan seleccionem un únic estudi
+            patient->setSelectedSeries(defaultSeriesUID);
+            // l'afegim a la llista de pacients
             selectedPatientsList << patient;
         }
+        else
+            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
     }
     emit selectedPatients( Patient::mergePatients( selectedPatientsList ) );
 }

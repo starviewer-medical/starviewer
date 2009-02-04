@@ -390,6 +390,26 @@ QList<Patient *> Patient::mergePatients( QList<Patient *> patientsList )
     return resultingPatientsList;
 }
 
+void Patient::setSelectedSeries( const QString &selectedSeriesUID )
+{
+    Series *selectedSeries = this->getSeries(selectedSeriesUID);
+    if ( selectedSeries )
+    {
+        selectedSeries->select();
+    }
+    else
+    {
+        QList<Study *> studyList = this->getStudies();
+        if (!studyList.isEmpty())
+        {
+            QList<Series *> seriesList = studyList.first()->getSeries();
+            if( !seriesList.isEmpty() )
+            {
+                seriesList.first()->select();
+            }
+        }
+    }
+}
 void Patient::copyPatientInformation( const Patient *patient )
 {
     this->m_fullName = patient->m_fullName;

@@ -106,6 +106,13 @@ public:
     */
     static QList<Patient *> mergePatients( QList<Patient *> patientsList );
 
+    /**
+     * Marca com a seleccionada la sèrie amb l'UID indicat
+     * En cas que no existeixi tal UID, se selecciona la primera 
+     * sèrie del primer estudi
+     */
+    void setSelectedSeries( const QString &selectedSeriesUID );
+
 private:
     /// Donat un pacient, copia únicament la informació del pacient. No fa res respecte els estudis,series o imatges.
     /// La informació es matxaca i no es fa cap mena de comprovació.
