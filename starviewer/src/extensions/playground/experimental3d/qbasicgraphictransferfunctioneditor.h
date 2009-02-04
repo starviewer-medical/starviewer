@@ -22,7 +22,6 @@ namespace udg {
  *       - Forçar arrodoniments.
  *       - Moure en grup.
  *       - Millorar la documentació.
- *       - Scroll bar.
  */
 class QBasicGraphicTransferFunctionEditor : public QWidget {
 
