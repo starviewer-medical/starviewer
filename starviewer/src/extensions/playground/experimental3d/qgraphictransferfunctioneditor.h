@@ -22,6 +22,11 @@ public:
     void setTransferFunction( const TransferFunction &transferFunction );
     const TransferFunction& transferFunction() const;
 
+private slots:
+
+    void setMinimum( double minimum );
+    void setMaximum( double maximum );
+
 };
 
 
