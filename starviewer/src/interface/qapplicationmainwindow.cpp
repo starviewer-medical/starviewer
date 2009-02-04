@@ -23,8 +23,13 @@
 #include "qlogviewer.h"
 #include "patient.h"
 #include "qconfigurationdialog.h"
-#include "hangingprotocolsloader.h"
 #include "volume.h"
+
+// amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
+#ifndef STARVIEWER_LITE 
+#include "hangingprotocolsloader.h"
+#endif
+
 // Mini - aplicacions
 #include "databaseinstallation.h"
 
@@ -58,6 +63,8 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     this->setWindowIcon( QIcon(":/images/starviewer.png") );
     this->setWindowTitle( ApplicationNameString );
 
+// amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
+#ifndef STARVIEWER_LITE 
     /// Càrrega dels hanging protocols. 
     /// Només carregarem un cop per sessió/instància d'starviewer
     static bool hangingProtocolsAreLoaded = false;
@@ -68,6 +75,7 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
 	    delete hangingProtocolsLoader;
         hangingProtocolsAreLoaded = true;
     }
+#endif
 
     // creem el progress dialog que notificarà la càrrega de volums
     m_progressDialog = new QProgressDialog( this );
