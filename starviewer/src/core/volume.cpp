@@ -99,25 +99,28 @@ Volume::VtkImageTypePointer Volume::getVtkData()
         QStringList fileList = getInputFiles();
         if( !fileList.isEmpty() )
         {
-            // TODO falta control dels errors que pot retornar ( p. exemple OutOfMemory! )
-            if( this->readFiles( fileList ) == OutOfMemory )
+            switch( this->readFiles( fileList ) )
             {
-                // Creem un objecte vtkImageData "neutre"
-                m_imageDataVTK = vtkImageData::New();
-                // Inicialitzem les dades
-                m_imageDataVTK->SetOrigin( .0, .0, .0 );
-                m_imageDataVTK->SetSpacing( 1., 1., 1. );
-                m_imageDataVTK->SetDimensions( 10, 10, 1 );
-                m_imageDataVTK->SetWholeExtent( 0, 9, 0, 9, 0, 0 );
-                m_imageDataVTK->SetScalarTypeToShort();
-                m_imageDataVTK->SetNumberOfScalarComponents(1);
-                m_imageDataVTK->AllocateScalars();
-                // ATENCIÓ memset posa el valor (segon paràmetre) interpretat com
-                // unsigned char i el nombre de blocs de memòria són indicats en bytes, 
-                // per això multipliquem per 2
-                memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
+            case OutOfMemory: 
+                ERROR_LOG( "No podem carregar els arxius següents perquè no caben a memòria\n" + fileList.join("\n") );
+                createNeutralVolume();
                 m_dataLoaded = true;
                 QMessageBox::warning( 0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg( ApplicationNameString ) );
+                break;
+
+            case MissingFile:
+                //Fem el mateix que en el cas OutOfMemory, canviant el missatge d'error
+                createNeutralVolume();
+                m_dataLoaded = true;
+                QMessageBox::warning( 0, tr("Missing Files"), tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg( ApplicationNameString ) );
+                break;
+
+            case UnknownError:
+                // hi ha hagut un error no controlat, creem el volum neutral per evitar desastres majors
+                createNeutralVolume();
+                m_dataLoaded = true;
+                QMessageBox::warning( 0, tr("Unkwown Error"), tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg( ApplicationNameString ) );
+                break;
             }
         }
         /* TODO Descomentar per llegir amb classes DICOMImageReader
@@ -697,6 +700,7 @@ int Volume::readSingleFile( QString fileName )
         // TODO no sembla gaire correcte aquest "emit progress(100)"
         emit progress( 100 );
     }
+    
     if ( errorCode == NoError )
     {
         this->setData( m_reader->GetOutput() );
@@ -730,7 +734,6 @@ int Volume::readFiles( QStringList filenames )
 
         m_seriesReader->SetFileNames( stlFilenames );
 
-        emit progress( 0 );
         try
         {
             m_seriesReader->Update();
@@ -744,22 +747,21 @@ int Volume::readFiles( QStringList filenames )
             // llegim el missatge d'error per esbrinar de quin error es tracta
             errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
         }
-        if ( errorCode == NoError )
+        switch( errorCode )
         {
+        case NoError:
             this->setData( m_seriesReader->GetOutput() );
             emit progress( 100 );
-        }
-        else if( errorCode == SizeMismatch )
-        {
+            break;
+
+        case SizeMismatch:
+            // TODO això es podria fer a ::getVtkData o ja està bé aquí?
             errorCode = NoError;
             readDifferentSizeImagesIntoOneVolume( filenames );
             emit progress( 100 );
+            break;
         }
-        else if( errorCode == OutOfMemory )
-        {
-            ERROR_LOG( "No podem carregar els arxius següents perquè no caben a memòria\n" + filenames.join("\n") );
-            emit progress( 100 );
-        }
+        
     }
     else
     {
@@ -774,8 +776,30 @@ int Volume::identifyErrorMessage( const QString &errorMessage )
         return SizeMismatch;
     else if( errorMessage.contains("Failed to allocate memory for image") )
         return OutOfMemory;
+    else if( errorMessage.contains("The file doesn't exists") )
+        return MissingFile;
     else
         return NoError;
+}
+
+void Volume::createNeutralVolume()
+{
+    if( m_imageDataVTK )
+        m_imageDataVTK->Delete();
+    // Creem un objecte vtkImageData "neutre"
+    m_imageDataVTK = vtkImageData::New();
+    // Inicialitzem les dades
+    m_imageDataVTK->SetOrigin( .0, .0, .0 );
+    m_imageDataVTK->SetSpacing( 1., 1., 1. );
+    m_imageDataVTK->SetDimensions( 10, 10, 1 );
+    m_imageDataVTK->SetWholeExtent( 0, 9, 0, 9, 0, 0 );
+    m_imageDataVTK->SetScalarTypeToShort();
+    m_imageDataVTK->SetNumberOfScalarComponents(1);
+    m_imageDataVTK->AllocateScalars();
+    // ATENCIÓ memset posa el valor (segon paràmetre) interpretat com
+    // unsigned char i el nombre de blocs de memòria són indicats en bytes, 
+    // per això multipliquem per 2
+    memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
 }
 
 };

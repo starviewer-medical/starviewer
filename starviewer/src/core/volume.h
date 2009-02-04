@@ -228,7 +228,7 @@ private slots:
     void slotProgress();
 private:
     /// Tipus d'error que podem tenir
-    enum { NoError = 1, SizeMismatch, InvalidFileName, OutOfMemory, UnknownError };
+    enum { NoError = 1, SizeMismatch, InvalidFileName, MissingFile, OutOfMemory, UnknownError };
     void inputConstructor();
     void inputDestructor();
     /**
@@ -247,6 +247,11 @@ private:
 
 	/// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
 	int identifyErrorMessage( const QString &errorMessage );
+
+    /// S'encarrega de crear un volum "de mínims" per donar un output en casos que
+    /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un 
+    /// volum neutre per evitar que l'aplicació peti en casos d'error no controlats
+    void createNeutralVolume();
 
 private:
     typedef itk::ImageFileReader< ItkImageType >  ReaderType;
