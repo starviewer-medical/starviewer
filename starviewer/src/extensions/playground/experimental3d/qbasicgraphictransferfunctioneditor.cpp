@@ -8,6 +8,7 @@
 #include <QPixmap>
 #include <QPolygonF>
 #include <QResizeEvent>
+#include <QToolTip>
 
 
 namespace udg {
@@ -73,46 +74,29 @@ void QBasicGraphicTransferFunctionEditor::setTransferFunctionName( const QString
 
 
 bool QBasicGraphicTransferFunctionEditor::event( QEvent *event )
-{/*
+{
     if ( event->type() == QEvent::ToolTip )
     {
         QHelpEvent *helpEvent = static_cast<QHelpEvent*>( event );
-         int index = itemAt(helpEvent->pos());
-         if (index != -1)
-             QToolTip::showText(helpEvent->globalPos(), shapeItems[index].toolTip());
-         else
-             QToolTip::hideText();
-     }*/
-     return QWidget::event(event);
+        bool found;
+        double x = nearestX( helpEvent->pos(), found );
+
+        if ( found )
+        {
+            double y = m_transferFunction.getOpacity( x );
+            QToolTip::showText( helpEvent->globalPos(), QString( "(%1, %2)" ).arg( x ).arg( y ) );
+        }
+        else QToolTip::hideText();
+    }
+
+    return QWidget::event(event);
 }
 
 
 void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
 {
-    QPoint pixel( event->x(), event->y() );
-    QPointF functionPoint = pixelToFunctionPoint( pixel );
-    double radiusX = ( m_maximum - m_minimum ) / ( width() - 1 ) * POINT_SIZE;
-
-    QList<double> nearPoints = m_transferFunction.getPointsNear( functionPoint.x(), radiusX );
-    double nearestPointX = 0.0;
-    double nearestLength = 2.0 * POINT_SIZE;
-    int nPoints = nearPoints.size();
-    bool found = false;
-
-    for ( int i = 0; i < nPoints; i++ )
-    {
-        double fx = nearPoints.at( i );
-        double fy = m_transferFunction.getOpacity( fx );
-        QPointF graphicPoint = functionPointToGraphicPoint( QPointF( fx, fy ) );
-        double length = QLineF( pixel, graphicPoint ).length();
-
-        if ( length < nearestLength )
-        {
-            nearestPointX = fx;
-            nearestLength = length;
-            found = true;
-        }
-    }
+    bool found;
+    double nearestPointX = nearestX( event->pos(), found );
 
     if ( event->button() == Qt::LeftButton )
     {
@@ -121,6 +105,7 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
         if ( found ) m_currentX = nearestPointX;
         else
         {
+            QPointF functionPoint = pixelToFunctionPoint( event->pos() );
             addPoint( functionPoint.x(), functionPoint.y() );
             m_currentX = functionPoint.x();
         }
@@ -144,9 +129,11 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
 
 void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
 {
-    QPointF functionPoint = pixelToFunctionPoint( QPoint( event->x(), event->y() ) );
+    QPointF functionPoint = pixelToFunctionPoint( event->pos() );
 
     changeCurrentPoint( functionPoint.x(), functionPoint.y() );
+
+    QToolTip::showText( event->globalPos(), QString( "(%1, %2)" ).arg( functionPoint.x() ).arg( functionPoint.y() ) );
 }
 
 
@@ -155,6 +142,8 @@ void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent( QMouseEvent *event 
     Q_UNUSED( event );
 
     m_dragging = false;
+
+    QToolTip::hideText();
 }
 
 
@@ -172,6 +161,7 @@ void QBasicGraphicTransferFunctionEditor::resizeEvent( QResizeEvent *event )
     Q_UNUSED( event );
 
     updateColorGradient();
+    // l'update() ja es crida automàticament
 }
 
 
@@ -239,6 +229,37 @@ void QBasicGraphicTransferFunctionEditor::drawFunction()
         QRectF rectangle( point.x() - POINT_SIZE, point.y() - POINT_SIZE, 2.0 * POINT_SIZE, 2.0 * POINT_SIZE );
         painter.drawEllipse( rectangle );
     }
+}
+
+
+double QBasicGraphicTransferFunctionEditor::nearestX( const QPoint &pixel, bool &found ) const
+{
+    found = false;
+
+    QPointF functionPoint = pixelToFunctionPoint( pixel );
+    double radiusX = ( m_maximum - m_minimum ) / ( width() - 1 ) * POINT_SIZE;
+
+    QList<double> nearPoints = m_transferFunction.getPointsNear( functionPoint.x(), radiusX );
+    double nearestPointX = 0.0;
+    double nearestLength = 2.0 * POINT_SIZE;
+    int nPoints = nearPoints.size();
+
+    for ( int i = 0; i < nPoints; i++ )
+    {
+        double fx = nearPoints.at( i );
+        double fy = m_transferFunction.getOpacity( fx );
+        QPointF graphicPoint = functionPointToGraphicPoint( QPointF( fx, fy ) );
+        double length = QLineF( pixel, graphicPoint ).length();
+
+        if ( length < nearestLength )
+        {
+            nearestPointX = fx;
+            nearestLength = length;
+            found = true;
+        }
+    }
+
+    return nearestPointX;
 }
 
 
