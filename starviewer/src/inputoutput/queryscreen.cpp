@@ -970,6 +970,7 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
         m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
 
+    QApplication::setOverrideCursor( Qt::WaitCursor );
     // Llista de pacients seleccionats
     QList<Patient *> selectedPatientsList;
     //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
@@ -985,6 +986,7 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
             DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
             if(showDatabaseManagerError(localDatabaseManager.getLastError()))
             {
+                QApplication::restoreOverrideCursor();
                 return;
             }
         }
@@ -1006,6 +1008,7 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
         else
             DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
     }
+    QApplication::restoreOverrideCursor();
     emit selectedPatients( Patient::mergePatients( selectedPatientsList ) );
 }
 
