@@ -14,6 +14,15 @@ namespace udg {
 
 /**
  * Editor de funcions de transferència gràfic en condicions.
+ *
+ * \todo - Evitar missatges d'error quan s'arrossega un punt fora del widget.
+ *       - El tooltip ha de dir el valor real que queda a la funció de transferència, no el que surt de convertir la posició del ratolí.
+ *       - Controls per ajustar el rang (a QTransferFunctionEditor).
+ *       - Desfer.
+ *       - Moure només en horitzontal o en vertical.
+ *       - Forçar arrodoniments.
+ *       - Moure en grup.
+ *       - Millorar la documentació.
  */
 class QBasicGraphicTransferFunctionEditor : public QWidget {
 
@@ -55,6 +64,8 @@ private:
 
     QPointF pixelToFunctionPoint( const QPoint &pixel ) const;
     QPointF functionPointToGraphicPoint( const QPointF &functionPoint ) const;
+
+    double nearestX( const QPoint &pixel, bool &found ) const;
 
     void addPoint( double x, double y );
     void removePoint( double x );
