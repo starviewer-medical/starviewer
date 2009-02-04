@@ -15,9 +15,9 @@ namespace udg {
 /**
  * Editor de funcions de transferència gràfic en condicions.
  *
- * \todo - Evitar missatges d'error quan s'arrossega un punt fora del widget.
- *       - El tooltip ha de dir el valor real que queda a la funció de transferència, no el que surt de convertir la posició del ratolí.
- *       - Controls per ajustar el rang (a QTransferFunctionEditor).
+ * \todo - Controls per ajustar el rang (a QTransferFunctionEditor).
+ *       - Afegir i triar el color.
+*        - Posició del tooltip quan arrosseguem un punt fora de l'editor.
  *       - Desfer.
  *       - Moure només en horitzontal o en vertical.
  *       - Forçar arrodoniments.

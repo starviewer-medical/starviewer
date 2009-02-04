@@ -130,10 +130,17 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
 void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
 {
     QPointF functionPoint = pixelToFunctionPoint( event->pos() );
+    double x = functionPoint.x(), y = functionPoint.y();
 
-    changeCurrentPoint( functionPoint.x(), functionPoint.y() );
+    // vigilem que no es surti de rang
+    if ( x < m_minimum ) x = m_minimum;
+    if ( x > m_maximum ) x = m_maximum;
+    if ( y < 0.0 ) y = 0.0;
+    if ( y > 1.0 ) y = 1.0;
 
-    QToolTip::showText( event->globalPos(), QString( "(%1, %2)" ).arg( functionPoint.x() ).arg( functionPoint.y() ) );
+    changeCurrentPoint( x, y );
+
+    QToolTip::showText( event->globalPos(), QString( "(%1, %2)" ).arg( x ).arg( y ) );
 }
 
 
