@@ -302,26 +302,6 @@ void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeri
         }
     }
     DEBUG_LOG( QString("Patient:\n%1").arg( patient->toString() ));
-
-    // Marquem les series seleccionades
-    Series *selectedSeries = patient->getSeries(defaultSeriesUID);
-    if ( selectedSeries )
-    {
-        DEBUG_LOG("Marquem com a seleccionada");
-        selectedSeries->select();
-    }
-    else
-    {
-        QList<Study *> studyList = patient->getStudies();
-        if (!studyList.isEmpty())
-        {
-            QList<Series *> seriesList = studyList.first()->getSeries();
-            if( !seriesList.isEmpty() )
-            {
-                seriesList.first()->select();
-            }
-        }
-    }
 }
 
 void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient)
