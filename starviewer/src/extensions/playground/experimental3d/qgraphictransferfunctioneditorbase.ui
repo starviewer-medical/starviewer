@@ -40,6 +40,50 @@
      </property>
     </widget>
    </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" >
+     <item>
+      <widget class="QDoubleSpinBox" name="m_minimumDoubleSpinBox" >
+       <property name="minimum" >
+        <double>-5000.000000000000000</double>
+       </property>
+       <property name="maximum" >
+        <double>5000.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_minimumLabel" >
+       <property name="text" >
+        <string>Minimum</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_maximumLabel" >
+       <property name="text" >
+        <string>Maximum</string>
+       </property>
+       <property name="alignment" >
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="m_maximumDoubleSpinBox" >
+       <property name="minimum" >
+        <double>-5000.000000000000000</double>
+       </property>
+       <property name="maximum" >
+        <double>5000.000000000000000</double>
+       </property>
+       <property name="value" >
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <customwidgets>
