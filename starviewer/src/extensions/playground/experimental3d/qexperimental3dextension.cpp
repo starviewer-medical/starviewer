@@ -48,7 +48,7 @@ void QExperimental3DExtension::setInput( Volume *input )
     m_volume = m_viewer->getVolume();
 
     unsigned short max = m_volume->getRangeMax();
-    m_transferFunctionEditor->setMaximum( max );
+    m_transferFunctionEditor->setRange( 0.0, max );
     TransferFunction defaultTransferFunction;
     defaultTransferFunction.addPoint( 0, QColor( 0, 0, 0, 0 ) );
     defaultTransferFunction.addPoint( max, QColor( 255, 255, 255, 255 ) );
@@ -168,9 +168,9 @@ void QExperimental3DExtension::saveTransferFunction()
         QString transferFunctionFileName = saveDialog.selectedFiles().first();
 
         if ( transferFunctionFileName.endsWith( ".xml" ) )
-            TransferFunctionIO::toXmlFile( transferFunctionFileName, m_transferFunctionEditor->getTransferFunction() );
+            TransferFunctionIO::toXmlFile( transferFunctionFileName, m_transferFunctionEditor->transferFunction() );
         else
-            TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunctionEditor->getTransferFunction() );
+            TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunctionEditor->transferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
         settings.setValue( "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
@@ -189,7 +189,7 @@ void QExperimental3DExtension::doVisualization()
     m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
     m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(),
                              m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
-    m_volume->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
+    m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
 }
 
@@ -412,7 +412,7 @@ void QExperimental3DExtension::computeCancelObscurance()
                                                            m_obscuranceDoublePrecisionRadioButton->isChecked(),
                                                            this );
         m_obscuranceMainThread->setVolume( m_volume->getVolume() );
-        m_obscuranceMainThread->setTransferFunction( m_transferFunctionEditor->getTransferFunction() );
+        m_obscuranceMainThread->setTransferFunction( m_transferFunctionEditor->transferFunction() );
 
         m_obscurancePushButton->setText( tr("Cancel obscurance") );
         m_obscuranceProgressBar->setValue( 0 );
