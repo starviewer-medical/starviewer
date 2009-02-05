@@ -13,7 +13,7 @@
    <string>Listen Ris Requests Configuration</string>
   </property>
   <property name="windowIcon" >
-   <iconset>../main/images/open.png</iconset>
+   <iconset resource="../main/main.qrc" >:/images/open.png</iconset>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -140,7 +140,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../main/main.qrc" />
+ </resources>
  <connections>
   <connection>
    <sender>m_checkBoxListenRisRequests</sender>
