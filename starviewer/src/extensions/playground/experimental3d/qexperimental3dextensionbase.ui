@@ -350,7 +350,7 @@
          </layout>
         </item>
         <item>
-         <widget class="udg::QTransferFunctionEditorByValues" native="1" name="m_transferFunctionEditor" />
+         <widget class="udg::QGraphicTransferFunctionEditor" native="1" name="m_transferFunctionEditor" />
         </item>
         <item>
          <widget class="QPushButton" name="m_visualizationOkPushButton" >
@@ -991,14 +991,15 @@
    <header>qexperimental3dviewer.h</header>
   </customwidget>
   <customwidget>
-   <class>udg::QTransferFunctionEditorByValues</class>
-   <extends>QWidget</extends>
-   <header>qtransferfunctioneditorbyvalues.h</header>
-  </customwidget>
-  <customwidget>
    <class>udg::QViewpointDistributionWidget</class>
    <extends>QWidget</extends>
    <header>qviewpointdistributionwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QGraphicTransferFunctionEditor</class>
+   <extends>QWidget</extends>
+   <header>qgraphictransferfunctioneditor.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
