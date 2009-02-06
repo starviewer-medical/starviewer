@@ -1010,6 +1010,8 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
         else
             DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
     }
+
+    INFO_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
     QApplication::restoreOverrideCursor();
     emit selectedPatients( Patient::mergePatients( selectedPatientsList ) );
 }
@@ -1388,33 +1390,29 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
     DicomMask maskStudyToRetrieve;
     StarviewerSettings settings;
 
-    QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr("Starviewer has recieved from RIS a request to retrieve the study with accession number %1.\n\nDo you want to retrieve ?").arg(maskRisRequest.getAccessionNumber()), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    Status state = queryMultiplePacs(maskRisRequest, PacsListDB().queryDefaultPacs(), &multipleQueryStudy);
 
-    if (response == QMessageBox::Yes)
+    //Fem els connects per tracta els possibles errors que es poden donar
+    connect ( &m_multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
+    connect ( &m_multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
+
+    if (!state.good())
     {
-        Status state = queryMultiplePacs(maskRisRequest, PacsListDB().queryDefaultPacs(), &multipleQueryStudy);
+        QMessageBox::critical(this , ApplicationNameString , tr("An error ocurred querying default pacs, can't process the RIS request"));
+        return;
+    }
 
-        //Fem els connects per tracta els possibles errors que es poden donar
-        connect ( &m_multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
-        connect ( &m_multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
+    if (multipleQueryStudy.getStudyList().isEmpty())
+    {
+        QString message = QString (tr("Starviewer can't execute the RIS request, because hasn't found the Study with accession number %1 in the default pacs")).arg(maskRisRequest.getAccessionNumber());
+        QMessageBox::information(this , ApplicationNameString , message);
+        return;
+    }
 
-        if (!state.good())
-        {
-            QMessageBox::critical(this , ApplicationNameString , "An error ocurred querying default pacs, can't process the RIS request");
-            return;
-        }
-
-        if (multipleQueryStudy.getStudyList().isEmpty())
-        {
-            QMessageBox::information(this , ApplicationNameString , "Starviewer hasn't found the Study with accession number " + maskRisRequest.getAccessionNumber());
-            return;
-        }
-
-        foreach (DICOMStudy study, multipleQueryStudy.getStudyList())
-        {
-            maskStudyToRetrieve.setStudyUID(study.getStudyUID());
-            retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
-        }
+    foreach (DICOMStudy study, multipleQueryStudy.getStudyList())
+    {
+        maskStudyToRetrieve.setStudyUID(study.getStudyUID());
+        retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
     }
 }
 
