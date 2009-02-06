@@ -407,20 +407,9 @@ void QCreateDicomdir::examineDicomdirPath()
         }
     }
 
-    QFileDialog *dlg = new QFileDialog( this , QFileDialog::tr( "Open" ) , initialDirectory , tr( "DICOMDIR Directory" ) );
-    QString path;
-
-    dlg->setFileMode( QFileDialog::DirectoryOnly );
-
-    if ( dlg->exec() == QDialog::Accepted )
-    {
-        if ( !dlg->selectedFiles().empty() ) 
-        {
-            m_lineEditDicomdirPath->setText(QDir::toNativeSeparators(dlg->selectedFiles().takeFirst()));
-        }
-    }
-
-    delete dlg;
+    QString path = QFileDialog::getExistingDirectory( this, tr( "Choose an empty directory..." ), initialDirectory );
+    if( !path.isEmpty() )
+        m_lineEditDicomdirPath->setText(QDir::toNativeSeparators(path));
 }
 
 void QCreateDicomdir::removeAllStudies()
