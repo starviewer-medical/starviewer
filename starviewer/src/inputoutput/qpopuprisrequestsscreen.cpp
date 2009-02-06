@@ -1,0 +1,50 @@
+/***************************************************************************
+ *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *                                                                         *
+ *   Universitat de Girona                                                 *
+ ***************************************************************************/
+
+#include "qpopuprisrequestsscreen.h"
+
+#include <QTimer>
+
+#include "operation.h"
+#include "starviewersettings.h"
+#include "logging.h"
+
+namespace udg {
+
+QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QWidget( parent )
+{
+    setupUi(this);
+    this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    m_qTimer = new QTimer();
+    connect(m_qTimer,SIGNAL(timeout()),SLOT(timeoutTimer()));
+}
+
+
+void QPopUpRisRequestsScreen::setAccessionNumber(QString accessionNumber)
+{
+    m_labelRisRequestDescription->setText(m_labelRisRequestDescription->text() + " " + accessionNumber);
+}
+
+void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
+{
+    //El situem a baix a l'esquerre
+    //TODO: buscar millor sistema per siturar-lo a baix a l'esquerre
+    this->setGeometry(this->x()*2 -10, this->y()*2 - 10, this->width(), this->height());
+    m_qTimer->start(5000);
+}
+
+void QPopUpRisRequestsScreen::timeoutTimer()
+{
+    this->setVisible(false);
+}
+
+QPopUpRisRequestsScreen::~QPopUpRisRequestsScreen()
+{
+    m_qTimer->stop();
+}
+
+};
