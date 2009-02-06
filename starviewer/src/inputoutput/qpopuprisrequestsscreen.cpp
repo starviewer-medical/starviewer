@@ -15,7 +15,7 @@
 
 namespace udg {
 
-QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QWidget( parent )
+QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( parent )
 {
     setupUi(this);
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
