@@ -47,6 +47,11 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     m_importFileApp = new AppImportFile;
 
     createConnections();
+
+    //TODO:xapussa per a que l'starviewer escolti les peticions del RIS, com que tot el codi d'escoltar les peticions del ris està a la 
+    //queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
+    QueryScreenSingleton::instance();
+    connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
 }
 
 ExtensionHandler::~ExtensionHandler()

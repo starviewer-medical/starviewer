@@ -17,6 +17,7 @@
 #include "logging.h"
 #include "starviewersettings.h"
 #include "starviewerapplication.h"
+#include "qpopuprisrequestsscreen.h"
 
 namespace udg
 {
@@ -50,8 +51,15 @@ void ListenRisRequest::newConnection()
     ProcessRisRequestThread * processRisRequestThread = new ProcessRisRequestThread();
 
     processRisRequestThread->process(m_qTcpServer->nextPendingConnection());
+    connect(processRisRequestThread,SIGNAL(requestRetrieveStudy(DicomMask)),SLOT(requestRetrieveStudySlot(DicomMask)));
+}
 
-    connect(processRisRequestThread,SIGNAL(requestRetrieveStudy(DicomMask)),SIGNAL(requestRetrieveStudy(DicomMask)));
+void ListenRisRequest::requestRetrieveStudySlot(DicomMask mask)
+{
+    QPopUpRisRequestsScreen *popUp = new QPopUpRisRequestsScreen();
+    popUp->setAccessionNumber(mask.getAccessionNumber());
+    popUp->show();
+    emit requestRetrieveStudy(mask);
 }
 
 void ListenRisRequest::showNetworkError()

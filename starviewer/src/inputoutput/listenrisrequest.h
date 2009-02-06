@@ -46,6 +46,8 @@ private slots:
     ///slot que s'activa quan rebem una nova connexió
     void newConnection();
 
+    void requestRetrieveStudySlot(DicomMask mask);
+
 private :
 
     QTcpServer *m_qTcpServer;
