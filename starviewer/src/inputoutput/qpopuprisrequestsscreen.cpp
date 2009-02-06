@@ -31,9 +31,6 @@ void QPopUpRisRequestsScreen::setAccessionNumber(QString accessionNumber)
 
 void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
 {
-    //El situem a baix a l'esquerre
-    //TODO: buscar millor sistema per siturar-lo a baix a l'esquerre
-    this->setGeometry(this->x()*2 -10, this->y()*2 - 10, this->width(), this->height());
     m_qTimer->start(5000);
 }
 
