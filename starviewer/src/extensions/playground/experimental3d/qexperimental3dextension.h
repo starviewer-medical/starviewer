@@ -59,6 +59,8 @@ private slots:
     void setNumberOfViewpoints( int numberOfViewpoints );
     /// Situa la càmera al punt de vista seleccionat.
     void setViewpoint();
+    /// Situa la càmera al punt de vista passat.
+    void setViewpoint( const Vector3 &viewpoint );
 
     /// Comença el càlcul de les obscurances si no s'estan calculant i el cancel·la si s'estan calculant.
     void computeCancelObscurance();
@@ -81,6 +83,9 @@ private slots:
     void computePmi();
     /// Calcula les saliencies dels valors de propietat.
     void computePropertySaliencies();
+
+    /// Calcula les VMI amb el/s punt/s de vista seleccionat/s.
+    void computeVmi();
 
 private:
 

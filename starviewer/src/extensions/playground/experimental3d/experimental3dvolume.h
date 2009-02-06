@@ -2,6 +2,9 @@
 #define UDGEXPERIMENTAL3DVOLUME_H
 
 
+#include <QVector>
+
+
 class vtkEncodedGradientEstimator;
 class vtkFiniteDifferenceGradientEstimator;
 class vtkImageData;
@@ -24,6 +27,11 @@ class TransferFunction;
 class Volume;
 class vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
+
+// VMI
+class vtkVolumeRayCastVoxelShaderCompositeFunction2;
+class VmiVoxelShader1;
+class VmiVoxelShader2;
 
 
 class Experimental3DVolume {
@@ -62,6 +70,13 @@ public:
     /// Estableix la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
+    /// Prepara el rendering amb el voxel shader per fer càlculs de VMI.
+    void startVmiMode();
+    void startVmiFirstPass();
+    float finishVmiFirstPass();
+    void startVmiSecondPass();
+    QVector<float> finishVmiSecondPass();
+
 private:
 
     /// Crea el model de vòxels de treball.
@@ -98,6 +113,9 @@ private:
     vtkVolumeRayCastCompositeFunction *m_normalVolumeRayCastFunction;
     /// Volume ray cast function amb shaders.
     vtkVolumeRayCastVoxelShaderCompositeFunction *m_shaderVolumeRayCastFunction;
+    // VMI
+    /// Volume ray cast function amb shaders.
+    vtkVolumeRayCastVoxelShaderCompositeFunction2 *m_shaderVolumeRayCastFunction2;
 
     /// Voxel shader d'il·luminació ambient.
     AmbientVoxelShader *m_ambientVoxelShader;
@@ -109,6 +127,11 @@ private:
     ObscuranceVoxelShader *m_obscuranceVoxelShader;
     /// Voxel shader de color bleeding.
     ColorBleedingVoxelShader *m_colorBleedingVoxelShader;
+    // VMI
+    /// Voxel shader per calcular la VMI; serveix per la primera passada.
+    VmiVoxelShader1 *m_vmiVoxelShader1;
+    /// Voxel shader per calcular la VMI; serveix per la segona passada.
+    VmiVoxelShader2 *m_vmiVoxelShader2;
 
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;
