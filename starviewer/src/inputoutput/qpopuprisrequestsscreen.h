@@ -7,7 +7,7 @@
 #ifndef UDGQPOPURISREQUESTSCREEN_H
 #define UDGQPOPURISREQUESTSCREEN_H
 
-#include <QWidget>
+#include <QDialog>
 #include "ui_qpopuprisrequestsscreenbase.h"
 
 class QTimer;
@@ -15,7 +15,7 @@ class QTimer;
 namespace udg {
 
 
-class QPopUpRisRequestsScreen : public QWidget, private Ui::QPopUpRisRequestsScreenBase{
+class QPopUpRisRequestsScreen : public QDialog, private Ui::QPopUpRisRequestsScreenBase{
 Q_OBJECT
 public:
 
