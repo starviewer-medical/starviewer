@@ -130,8 +130,10 @@ void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
     action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/databaseRemove.png") , tr( "&Delete" ) , this , SLOT( deleteSelectedStudiesInCache() ) , Qt::Key_Delete );
     (void) new QShortcut( action->shortcut() , this , SLOT( deleteSelectedStudiesInCache() ) );
 
+#ifndef STARVIEWER_LITE
     action = m_contextMenuQStudyTreeWidgetCache.addAction( tr( "Send to DICOMDIR List" ) , this , SLOT( convertToDicomdir() ) , tr( "Ctrl+M" ) );
     (void) new QShortcut( action->shortcut() , this , SLOT( convertToDicomdir() ) );
+#endif
 
     //TODO: No funciona correctament el store al PACS per això ho deixem comentat per a que en les pròximes release no aparegui en el menú aquesta opció
     /*action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/store.png") , tr( "Store to PACS" ) , this , SLOT( storeStudiesToPacs() ) , tr( "Ctrl+S" ) );
