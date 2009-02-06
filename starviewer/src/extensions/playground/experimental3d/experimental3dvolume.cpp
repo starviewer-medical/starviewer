@@ -21,6 +21,11 @@
 #include "vtk4DLinearRegressionGradientEstimator.h"
 #include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 
+// VMI
+#include "vtkVolumeRayCastVoxelShaderCompositeFunction2.h"
+#include "vmivoxelshader1.h"
+#include "vmivoxelshader2.h"
+
 
 namespace udg {
 
@@ -42,11 +47,14 @@ Experimental3DVolume::~Experimental3DVolume()
     m_image->Delete();
     m_normalVolumeRayCastFunction->Delete();
     m_shaderVolumeRayCastFunction->Delete();
+    m_shaderVolumeRayCastFunction2->Delete();
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
     delete m_contourVoxelShader;
     delete m_obscuranceVoxelShader;
     delete m_colorBleedingVoxelShader;
+    delete m_vmiVoxelShader1;
+    delete m_vmiVoxelShader2;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -96,10 +104,14 @@ void Experimental3DVolume::setInterpolation( Interpolation interpolation )
         case LinearInterpolateClassify:
             m_property->SetInterpolationTypeToLinear();
             m_normalVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
+            m_shaderVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
+            m_shaderVolumeRayCastFunction2->SetCompositeMethodToInterpolateFirst();
             break;
         case LinearClassifyInterpolate:
             m_property->SetInterpolationTypeToLinear();
             m_normalVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+            m_shaderVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
+            m_shaderVolumeRayCastFunction2->SetCompositeMethodToClassifyFirst();
             break;
     }
 }
@@ -221,6 +233,51 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_ambientVoxelShader->setTransferFunction( transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
+    m_vmiVoxelShader1->setTransferFunction( transferFunction );
+    m_vmiVoxelShader2->setTransferFunction( transferFunction );
+}
+
+
+void Experimental3DVolume::startVmiMode()
+{
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction2 );
+}
+
+
+void Experimental3DVolume::startVmiFirstPass()
+{
+    m_shaderVolumeRayCastFunction2->RemoveAllVoxelShaders();
+    m_shaderVolumeRayCastFunction2->AddVoxelShader( m_vmiVoxelShader1 );
+    m_vmiVoxelShader1->initAccumulator();
+}
+
+
+float Experimental3DVolume::finishVmiFirstPass()
+{
+    const QHash<QThread*, float> &accumulator = m_vmiVoxelShader1->accumulator();
+    QHashIterator<QThread*, float> it( accumulator );
+    float volume = 0.0f;
+
+    while ( it.hasNext() )
+    {
+        it.next();
+        volume += it.value();
+    }
+
+    return volume;
+}
+
+
+void Experimental3DVolume::startVmiSecondPass()
+{
+    m_shaderVolumeRayCastFunction2->RemoveAllVoxelShaders();
+    m_shaderVolumeRayCastFunction2->AddVoxelShader( m_vmiVoxelShader2 );
+}
+
+
+QVector<float> Experimental3DVolume::finishVmiSecondPass()
+{
+    return m_vmiVoxelShader2->objectProbabilities();
 }
 
 
@@ -257,6 +314,7 @@ void Experimental3DVolume::createVolumeRayCastFunctions()
 {
     m_normalVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
     m_shaderVolumeRayCastFunction = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
+    m_shaderVolumeRayCastFunction2 = vtkVolumeRayCastVoxelShaderCompositeFunction2::New();
 }
 
 
@@ -269,6 +327,10 @@ void Experimental3DVolume::createVoxelShaders()
     m_contourVoxelShader = new ContourVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
+    m_vmiVoxelShader1 = new VmiVoxelShader1();
+    m_vmiVoxelShader1->setData( m_data, m_rangeMax );
+    m_vmiVoxelShader2 = new VmiVoxelShader2();
+    m_vmiVoxelShader2->setData( m_data, m_rangeMax, m_dataSize );
 }
 
 
