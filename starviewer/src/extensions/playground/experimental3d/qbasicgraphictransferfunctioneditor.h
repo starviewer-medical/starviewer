@@ -15,8 +15,7 @@ namespace udg {
 /**
  * Editor de funcions de transferència gràfic en condicions.
  *
- * \todo - Afegir i triar el color.
- *       - Posició del tooltip quan arrosseguem un punt fora de l'editor.
+ * \todo - Posició del tooltip quan arrosseguem un punt fora de l'editor.
  *       - Desfer.
  *       - Moure només en horitzontal o en vertical.
  *       - Forçar arrodoniments.
