@@ -33,6 +33,8 @@ void ProcessRisRequestThread::process(QTcpSocket *qTcpSocket)
 
 void ProcessRisRequestThread::run()
 {
+	INFO_LOG("Engegat thread esperant la petició de la IP " + m_qTcpSocket->readAll());
+
     if (m_qTcpSocket->waitForReadyRead(msTimeOutToReadData)) 
     {
         QString requestXML = QString(m_qTcpSocket->readAll());

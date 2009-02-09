@@ -49,8 +49,11 @@ bool ListenRisRequest::isListen()
 void ListenRisRequest::newConnection()
 {
     ProcessRisRequestThread * processRisRequestThread = new ProcessRisRequestThread();
+	QTcpSocket *tcpSocket = m_qTcpServer->nextPendingConnection();
 
-    processRisRequestThread->process(m_qTcpServer->nextPendingConnection());
+
+	INFO_LOG("Rebuda petició de connexió per la IP " + tcpSocket->peerAddress().toString());
+    processRisRequestThread->process(tcpSocket);
     connect(processRisRequestThread,SIGNAL(requestRetrieveStudy(DicomMask)),SLOT(requestRetrieveStudySlot(DicomMask)));
 }
 
