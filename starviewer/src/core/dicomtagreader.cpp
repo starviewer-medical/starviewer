@@ -68,7 +68,8 @@ bool DICOMTagReader::setFile( QString filename )
         }
         else
         {
-            DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\n%2 ").arg( filename ).arg( status.text() ) );
+            DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
+            ERROR_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
             return false;
         }
     }
