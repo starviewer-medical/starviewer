@@ -6,6 +6,7 @@
  ***************************************************************************/
 
 #include "sphereuniformpointcloudgenerator.h"
+
 #include "mathtools.h"
 #include "vector3.h"
 
@@ -74,11 +75,12 @@ const QVector< Vector3 > & SphereUniformPointCloudGenerator::getGeographicVertic
 }
 
 
-const QVector< QVector<int> >& SphereUniformPointCloudGenerator::getNeighbours() const
+QVector< QVector<int> > SphereUniformPointCloudGenerator::getNeighbours() const
 {
     QVector< QVector<int> > neighbours;
     int nVertices = m_vertices.size();
     int nFaces = m_faces.size() / 3;
+    Q_ASSERT( nFaces * 3 == m_faces.size() );
 
     for ( int i = 0; i < nVertices; i++ )
     {

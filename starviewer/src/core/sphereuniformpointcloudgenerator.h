@@ -48,7 +48,7 @@ public:
     /// Retorna els punts en coordenades geogràfiques (radi, latitud, longitud).
     const QVector< Vector3 > & getGeographicVertices() const;
     /// Retorna els veïns de cada punt.
-    const QVector< QVector<int> >& getNeighbours() const;
+    QVector< QVector<int> > getNeighbours() const;
 
 private:
 
