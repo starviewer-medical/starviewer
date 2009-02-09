@@ -49,9 +49,6 @@ private slots:
     
     ///composa un nom de fitxer per defecte
     QString compoundSelectedName();
-
-    ///slot per tractar el cas que es produeix quan l'usuari cancel·la el procés de guardar amb el botó Cancel o la creueta de la finestra.
-    void userCancellation();
     
 private:
     /// constants
@@ -66,13 +63,10 @@ private:
     QString m_lastScreenShotExtensionFilter;
     
     ///nom de l'última imatge guardada
-    QString m_lastScreenShotName;
+    QString m_lastScreenShotFileName;
     
-    ///per saber si l'usuari ha cancel·lat l'operació de guardat
-    bool m_userCancellation;
-
     /// Llista amb els filtres d'extensió de fitxers que podem escollir
-    QStringList m_fileExtensionFilters;
+    QString m_fileExtensionFilters;
 };
 
 }

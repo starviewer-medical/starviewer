@@ -31,7 +31,7 @@ ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer
 {
     m_toolName = "ScreenShotTool";
     readSettings();
-    m_fileExtensionFilters << PngFileFilter << JpegFileFilter << BmpFileFilter;
+    m_fileExtensionFilters = PngFileFilter + ";;" + JpegFileFilter + ";;" + BmpFileFilter;
     if( !viewer )
         DEBUG_LOG( "El viewer proporcionat és NUL!" );
 }
@@ -69,91 +69,31 @@ void ScreenShotTool::handleEvent( unsigned long eventID )
 void ScreenShotTool::screenShot( bool singleShot )
 {
     readSettings();
-    
-    
-    
 
-    QFileDialog *saveAsDialog = new QFileDialog(0);
+    QString caption;
     if( singleShot )
-        saveAsDialog->setWindowTitle( tr("Save single screenshot as...") );
+        caption = tr("Save single screenshot as...");
     else
-        saveAsDialog->setWindowTitle( tr("Save multiple screenshots as...") );
-
-    saveAsDialog->setDirectory( m_lastScreenShotPath );
-    saveAsDialog->setFilters( m_fileExtensionFilters );
-    saveAsDialog->selectFilter ( m_lastScreenShotExtensionFilter );
-    saveAsDialog->setFileMode( QFileDialog::AnyFile );
-    saveAsDialog->setAcceptMode( QFileDialog::AcceptSave );
-    saveAsDialog->selectFile( compoundSelectedName() );
-    saveAsDialog->setConfirmOverwrite( true );
-
-    QStringList fileNames;
-    QString selectedFilter;
-    int overWrite = 0;
-    QString fileName;
-
-    connect( saveAsDialog, SIGNAL( rejected() ), SLOT( userCancellation() ) );
-
-    do
     {
-        m_userCancellation = false;
+        QMessageBox::information( 0, tr("Information"), tr("You're going to save several screenshots at one time.\nIt's recommended you put them in an empty folder.") );
+        caption = tr("Save multiple screenshots as...");
+    }
+    QString filename = QFileDialog::getSaveFileName(0, caption, m_lastScreenShotPath + "/" + compoundSelectedName(), m_fileExtensionFilters, &m_lastScreenShotExtensionFilter );
 
-        if( saveAsDialog->exec() )
-        {
-            fileNames = saveAsDialog->selectedFiles();
-            selectedFilter = saveAsDialog->selectedFilter();
-        }
-
-        if( fileNames.isEmpty() )
-        {
-            delete saveAsDialog;
-            return;
-        }
-
-        fileName = fileNames.first();
-
+    if( !filename.isEmpty() )
+    {
         //mirem que el nom del fitxer no contingui coses com: nom.png, és a dir, que no es mostri l'extensió
-        QString selectedExtension = selectedFilter.mid(selectedFilter.length() - 5, 4);
+        QString selectedExtension = m_lastScreenShotExtensionFilter.mid(m_lastScreenShotExtensionFilter.length() - 5, 4);
 
-        if ( fileName.endsWith( selectedExtension ) )
-            fileName.remove( fileName.lastIndexOf( selectedExtension ), 4 );
+        if ( filename.endsWith( selectedExtension ) )
+            filename.remove( filename.lastIndexOf( selectedExtension ), 4 );
 
         //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
-        m_lastScreenShotPath = saveAsDialog->directory().path();
+        m_lastScreenShotPath = QFileInfo( filename ).absolutePath();
+        //guardem el nom de l'ultim fitxer
+        m_lastScreenShotFileName = QFileInfo( filename ).fileName();
 
-        if ( QFileInfo( fileName + selectedFilter.mid(selectedFilter.length() - 5, 4) ).exists() && !m_userCancellation )
-        {
-            //0 -> Yes; 1->No
-            overWrite = QMessageBox::information( 0, tr( "Information" ), tr( "This file already exists. Do you want to replace it?" ), tr( "&Yes" ) , tr( "&No" ) , 0 , 1 );
-        }
-
-    }while( overWrite != 0 && !m_userCancellation );
-
-    delete saveAsDialog;
-
-    if ( overWrite == 0 && !m_userCancellation )
-    {
-        QViewer::FileType fileExtension;
-        if( selectedFilter == PngFileFilter )
-        {
-            fileExtension = QViewer::PNG;
-            m_lastScreenShotExtensionFilter = PngFileFilter;
-        }
-        else if( selectedFilter == JpegFileFilter )
-        {
-            fileExtension = QViewer::JPEG;
-            m_lastScreenShotExtensionFilter = JpegFileFilter;
-        }
-        else if( selectedFilter == BmpFileFilter )
-        {
-            fileExtension = QViewer::BMP;
-            m_lastScreenShotExtensionFilter = BmpFileFilter;
-        }
-        else
-        {
-            DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! RETURN!");
-            return;
-        }
+        QApplication::setOverrideCursor( Qt::WaitCursor );// pel que pugui trigar el procés
         if( singleShot )
         {
             m_viewer->grabCurrentView();
@@ -167,7 +107,7 @@ void ScreenShotTool::screenShot( bool singleShot )
                 int max = viewer2D->getMaximumSlice();
                 // guardem la llesca actual per restaurar
                 int currentSlice = viewer2D->getCurrentSlice();
-                QApplication::setOverrideCursor( Qt::WaitCursor );
+                
                 // recorrem totes les imatges i en fem captura
                 for( int i = 0; i < max; i++ )
                 {
@@ -181,14 +121,37 @@ void ScreenShotTool::screenShot( bool singleShot )
                 m_viewer->grabCurrentView();
             }
         }
+        // determinem l'extensió del fitxer
+        QViewer::FileType fileExtension;
+        if( m_lastScreenShotExtensionFilter == PngFileFilter )
+        {
+            fileExtension = QViewer::PNG;
+        }
+        else if( m_lastScreenShotExtensionFilter == JpegFileFilter )
+        {
+            fileExtension = QViewer::JPEG;
+        }
+        else if( m_lastScreenShotExtensionFilter == BmpFileFilter )
+        {
+            fileExtension = QViewer::BMP;
+        }
+        else
+        {
+            DEBUG_LOG("No coincideix cap patró, no es pot desar la imatge! Assignem PNG, per defecte. Aquest error no hauria de passar MAI! ");
+            fileExtension = QViewer::PNG;
+            m_lastScreenShotExtensionFilter = PngFileFilter;
+        }
         // guardem totes les imatges capturades
-        m_viewer->saveGrabbedViews( fileName, fileExtension );
+        m_viewer->saveGrabbedViews( filename, fileExtension );
         QApplication::restoreOverrideCursor();
 
-        //guardem el nom de l'ultim fitxer
-        m_lastScreenShotName = QFileInfo(fileName).fileName();
+        writeSettings();
     }
-    writeSettings();
+    else
+    {
+        // cal fer alguna cosa?
+        // si està "empty" és que o bé ha cancelat o bé no ha introduit res
+    }
 }
 
 QString ScreenShotTool::compoundSelectedName()
@@ -197,30 +160,30 @@ QString ScreenShotTool::compoundSelectedName()
     // produint un codi molt més net i clar
     QString compoundFile = "";
 
-    if ( !m_lastScreenShotName.isEmpty() )
+    if ( !m_lastScreenShotFileName.isEmpty() )
     {
-        QChar lastChar = m_lastScreenShotName[m_lastScreenShotName.length()-1];
+        QChar lastChar = m_lastScreenShotFileName[m_lastScreenShotFileName.length()-1];
 
         if ( lastChar.isNumber() )
         {
-            int i = m_lastScreenShotName.length()-1;
+            int i = m_lastScreenShotFileName.length()-1;
 
             do
             {
                 i--;
-                lastChar = m_lastScreenShotName[i];
+                lastChar = m_lastScreenShotFileName[i];
             }while ( i > 0 && lastChar.isNumber() );
 
             bool ok;
-            int sufix = m_lastScreenShotName.right(m_lastScreenShotName.length()-(i+1)).toInt( &ok, 10 );
+            int sufix = m_lastScreenShotFileName.right(m_lastScreenShotFileName.length()-(i+1)).toInt( &ok, 10 );
 
             if ( ok )
-                compoundFile = m_lastScreenShotName.mid(0, i+1) + QString::number(sufix+1, 10);
+                compoundFile = m_lastScreenShotFileName.mid(0, i+1) + QString::number(sufix+1, 10);
             else
-                compoundFile = m_lastScreenShotName;
+                compoundFile = m_lastScreenShotFileName;
         }
         else
-            compoundFile = m_lastScreenShotName + "1";
+            compoundFile = m_lastScreenShotFileName + "1";
     }
     return compoundFile;
 }
@@ -231,7 +194,7 @@ void ScreenShotTool::readSettings()
     settings.beginGroup("ScreenshotTool");
     m_lastScreenShotPath = settings.value( "defaultSaveFolder", QDir::homePath() ).toString();
     m_lastScreenShotExtensionFilter = settings.value( "defaultSaveExtension", PngFileFilter ).toString();
-    m_lastScreenShotName = settings.value( "defaultSaveName", "" ).toString();
+    m_lastScreenShotFileName = settings.value( "defaultSaveName", "" ).toString();
     settings.endGroup();
 }
 
@@ -241,13 +204,8 @@ void ScreenShotTool::writeSettings()
     settings.beginGroup("ScreenshotTool");
     settings.setValue("defaultSaveFolder", m_lastScreenShotPath );
     settings.setValue("defaultSaveExtension", m_lastScreenShotExtensionFilter );
-    settings.setValue("defaultSaveName", m_lastScreenShotName );
+    settings.setValue("defaultSaveName", m_lastScreenShotFileName );
     settings.endGroup();
-}
-
-void ScreenShotTool:: userCancellation()
-{
-    m_userCancellation = true;
 }
 
 }
