@@ -22,7 +22,7 @@ namespace udg {
 QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( parent )
 {
     setupUi(this);
-    this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+	this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     m_qTimer = new QTimer();
     connect(m_qTimer,SIGNAL(timeout()),SLOT(timeoutTimer()));
 }
