@@ -8,7 +8,11 @@
 #include "qpopuprisrequestsscreen.h"
 
 #include <QTimer>
+#include <QDesktopWidget>
+#include <QRect>
+#include <QApplication>
 
+#include "qpopuprisrequestsscreen.h"
 #include "operation.h"
 #include "starviewersettings.h"
 #include "logging.h"
@@ -31,7 +35,15 @@ void QPopUpRisRequestsScreen::setAccessionNumber(QString accessionNumber)
 
 void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
 {
-    m_qTimer->start(5000);
+	//Es situa el PopUp a baix a l'esquerre de la pantalla on està la interfície activa del Starviewer
+	QDesktopWidget desktopWidget;
+
+	QRect screenGeometryActiveWindow = desktopWidget.availableGeometry(QApplication::activeWindow()); //Agafem les dimensions de la pantalla on està la finestra activa de l'starviewer
+    
+	this->move(screenGeometryActiveWindow.x() + screenGeometryActiveWindow.width() - this->width() - 10, screenGeometryActiveWindow.y() + screenGeometryActiveWindow.height() - this->height() -10);
+
+	//Activem el timer per amagar el Popup 6 segons després
+	m_qTimer->start(5000);
 }
 
 void QPopUpRisRequestsScreen::timeoutTimer()
