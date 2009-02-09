@@ -102,7 +102,7 @@ void QExperimental3DExtension::createConnections()
 
     // VMI
     connect( m_vmiPushButton, SIGNAL( clicked() ), SLOT( computeVmi() ) );
-//     connect( m_sliceUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeSliceUnstabilities() ) );
+    connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
 //     connect( m_pmiPushButton, SIGNAL( clicked() ), SLOT( computePmi() ) );
 //     connect( m_propertySalienciesPushButton, SIGNAL( clicked() ), SLOT( computePropertySaliencies() ) );
 }
@@ -765,7 +765,7 @@ void QExperimental3DExtension::computeVmi()
             for ( int i = 0; i < nViewpoints; i++ )
             {
                 viewProbabilities[i] /= totalViewedVolume;
-                DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i ).arg( viewProbabilities.at( i ) ) );
+                DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
             }
         }
     }
@@ -804,8 +804,129 @@ void QExperimental3DExtension::computeVmi()
             QTextStream out( &outFile );
             for ( int i = 0; i < nViewpoints; i++ )
             {
-                DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i+1 ).arg( vmi.at( i ) ) );
-                out << "VMI(v" << i+1 << ") = " << vmi.at( i ) << "\n";
+                DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi.at( i ) ) );
+                out << "VMI(v" << i + 1 << ") = " << vmi.at( i ) << "\n";
+            }
+            outFile.close();
+        }
+    }
+
+    doVisualization();
+    m_viewer->setCamera( position, focus, up );
+}
+
+
+void QExperimental3DExtension::computeViewpointUnstabilities()
+{
+    Vector3 position, focus, up;
+    m_viewer->getCamera( position, focus, up );
+
+    float distance = ( position - focus ).length();
+
+    ViewpointGenerator viewpointGenerator;
+
+    if ( m_vmiViewpointDistributionWidget->isUniform() )
+    {
+        switch ( m_vmiViewpointDistributionWidget->numberOfViewpoints() )
+        {
+            case 4: viewpointGenerator.setToUniform4( distance ); break;
+            case 6: viewpointGenerator.setToUniform6( distance ); break;
+            case 8: viewpointGenerator.setToUniform8( distance ); break;
+            case 12: viewpointGenerator.setToUniform12( distance ); break;
+            case 20: viewpointGenerator.setToUniform20( distance ); break;
+            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_vmiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+        }
+    }
+    else viewpointGenerator.setToQuasiUniform( m_vmiViewpointDistributionWidget->recursionLevel(), distance );
+
+    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+    int nViewpoints = viewpoints.size();
+
+    // calculem el nombre de renders que caldran, per fer el progrés més real
+    int nRenders = 2 * nViewpoints;
+    for ( int i = 0; i < nViewpoints; i++ ) nRenders += viewpointGenerator.neighbours( i ).size();
+    int renderCount = 0;
+
+    m_vmiProgressBar->setValue( 0 );
+    m_volume->startVmiMode();
+
+    QVector<float> viewProbabilities( nViewpoints );    // vector de p(v), inicialitzat a 0
+    {
+        float totalViewedVolume = 0.0;
+
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            m_volume->startVmiFirstPass();
+            setViewpoint( viewpoints.at( i ) ); // render
+            float viewedVolume = m_volume->finishVmiFirstPass();
+            viewProbabilities[i] = viewedVolume;
+            totalViewedVolume += viewedVolume;
+            m_vmiProgressBar->setValue( 100 * ++renderCount / nRenders );
+        }
+
+        if ( totalViewedVolume > 0.0f )
+        {
+            for ( int i = 0; i < nViewpoints; i++ )
+            {
+                viewProbabilities[i] /= totalViewedVolume;
+                DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
+            }
+        }
+    }
+
+    QVector<float> viewpointUnstabilities( nViewpoints );
+    {
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            DEBUG_LOG( QString( "v%1" ).arg( i + 1 ) );
+
+            float pvi = viewProbabilities.at( i );
+
+            m_volume->startVmiSecondPass();
+            setViewpoint( viewpoints.at( i ) ); // render
+            QVector<float> objectProbabilitiesInView = m_volume->finishVmiSecondPass(); // vector de p(o|v) = distribució p(O|v)
+            m_vmiProgressBar->setValue( 100 * ++renderCount / nRenders );
+
+            QVector<int> neighbours = viewpointGenerator.neighbours( i );
+            int nNeighbours = neighbours.size();
+            float viewpointUnstability = 0.0;
+
+            for ( int j = 0; j < nNeighbours; j++ )
+            {
+                DEBUG_LOG( QString( "-v%1" ).arg( neighbours.at( j ) + 1 ) );
+
+                float pvj = viewProbabilities.at( neighbours.at( j ) );
+                float pvij = pvi + pvj;
+
+                if ( pvij == 0.0 )
+                {
+                    m_vmiProgressBar->setValue( 100 * ++renderCount / nRenders );
+                    continue;
+                }
+
+                m_volume->startVmiSecondPass();
+                setViewpoint( viewpoints.at( neighbours.at( j ) ) );    // render
+                QVector<float> objectProbabilitiesInNeighbour = m_volume->finishVmiSecondPass();    // vector de p(o|v) = distribució p(O|v)
+
+                float viewpointDissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, objectProbabilitiesInView, objectProbabilitiesInNeighbour );
+                viewpointUnstability += viewpointDissimilarity;
+
+                m_vmiProgressBar->setValue( 100 * ++renderCount / nRenders );
+            }
+
+            viewpointUnstability /= nNeighbours;
+            viewpointUnstabilities[i] = viewpointUnstability;
+        }
+
+        // Printar resultats i guardar-los en un fitxer
+        QFile outFile( QDir::tempPath().append( "/viewpointUnstabilities.txt" ) );
+        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFile );
+            for ( int i = 0; i < nViewpoints; i++ )
+            {
+                DEBUG_LOG( QString( "U(v%1) = %2" ).arg( i + 1 ).arg( viewpointUnstabilities.at( i ) ) );
+                out << "U(v" << i + 1 << ") = " << viewpointUnstabilities.at( i ) << "\n";
             }
             outFile.close();
         }
