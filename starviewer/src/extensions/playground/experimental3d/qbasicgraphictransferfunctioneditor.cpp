@@ -125,6 +125,17 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
             QColor color = QColorDialog::getColor( m_transferFunction.getColor( nearestPointX ), this );
             if ( color.isValid() ) changePointColor( nearestPointX, color );
         }
+        else
+        {
+            QColor color = QColorDialog::getColor( Qt::black, this );
+
+            if ( color.isValid() )
+            {
+                QPointF functionPoint = pixelToFunctionPoint( event->pos() );
+                addPoint( functionPoint.x(), functionPoint.y() );
+                changePointColor( functionPoint.x(), color );
+            }
+        }
     }
 }
 
