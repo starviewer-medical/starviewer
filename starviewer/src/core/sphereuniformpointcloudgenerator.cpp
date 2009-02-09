@@ -74,6 +74,44 @@ const QVector< Vector3 > & SphereUniformPointCloudGenerator::getGeographicVertic
 }
 
 
+const QVector< QVector<int> >& SphereUniformPointCloudGenerator::getNeighbours() const
+{
+    QVector< QVector<int> > neighbours;
+    int nVertices = m_vertices.size();
+    int nFaces = m_faces.size() / 3;
+
+    for ( int i = 0; i < nVertices; i++ )
+    {
+        QVector<int> vertexNeighbours;
+
+        for ( int j = 0; j < nFaces; j++ )
+        {
+            if ( m_faces.at( 3 * j ) == i )
+            {
+                if ( !vertexNeighbours.contains( m_faces.at( 3 * j + 1 ) ) ) vertexNeighbours << m_faces.at( 3 * j + 1 );
+                if ( !vertexNeighbours.contains( m_faces.at( 3 * j + 2 ) ) ) vertexNeighbours << m_faces.at( 3 * j + 2 );
+            }
+
+            if ( m_faces.at( 3 * j + 1 ) == i )
+            {
+                if ( !vertexNeighbours.contains( m_faces.at( 3 * j ) ) ) vertexNeighbours << m_faces.at( 3 * j );
+                if ( !vertexNeighbours.contains( m_faces.at( 3 * j + 2 ) ) ) vertexNeighbours << m_faces.at( 3 * j + 2 );
+            }
+
+            if ( m_faces.at( 3 * j + 2 ) == i )
+            {
+                if ( !vertexNeighbours.contains( m_faces.at( 3 * j ) ) ) vertexNeighbours << m_faces.at( 3 * j );
+                if ( !vertexNeighbours.contains( m_faces.at( 3 * j + 1 ) ) ) vertexNeighbours << m_faces.at( 3 * j + 1 );
+            }
+        }
+
+        neighbours << vertexNeighbours;
+    }
+
+    return neighbours;
+}
+
+
 void SphereUniformPointCloudGenerator::createIcosahedronVertices()
 {
     Vector3 v( 1.0, 0.0, ( 1.0 + sqrt( 5.0 ) ) / 2.0 );
