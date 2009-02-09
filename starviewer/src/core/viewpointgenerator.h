@@ -37,10 +37,13 @@ public:
     QVector<Vector3> viewpoints() const;
     /// Retorna el punt de vista \a i d'entre els generats.
     Vector3 viewpoint( int i ) const;
+    /// Retorna els índex dels veïns del punt amb índex \a i.
+    QVector<int> neighbours( int i ) const;
 
 private:
 
     QVector<Vector3> m_viewpoints;
+    QVector< QVector<int> > m_neighbours;
 
 };
 
