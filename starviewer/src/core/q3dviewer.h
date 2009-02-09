@@ -120,7 +120,7 @@ public slots:
     void setIsoValue( int isoValue );
 
 signals:
-
+    /// TODO documentar els signals
     void obscuranceProgress( int progress );
     void obscuranceComputed();
     /// Es llança quan les obscurances són cancel·lades pel programa (no per l'usuari).
@@ -156,14 +156,16 @@ private:
     /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
     bool rescale();
 
-    /// Orientació que tenim
-    int m_currentOrientation;
-
     /// reinicia la orientació
     void resetOrientation();
 
-private slots:
+    /// S'encarrega de decidir quina és la millor orientació
+    /// depenent del tipus d'input que tenim. Generalment serà 
+    /// Coronal, però depenent del tipus de Sèrie podria ser una altra
+    void setDefaultOrientationForCurrentInput();
 
+private slots:
+    // TODO falta documentar el mètode
     void endComputeObscurance();
 
 protected:
@@ -244,6 +246,8 @@ private:
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
     vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
 
+    /// Orientació que tenim
+    int m_currentOrientation;
 };
 
 };  //  end  namespace udg

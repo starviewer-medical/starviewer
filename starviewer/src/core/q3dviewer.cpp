@@ -96,7 +96,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 
     m_renderFunction = RayCasting; // per defecte
 
-    m_currentOrientation = Axial;
+    setDefaultOrientationForCurrentInput();
     m_orientationMarker = new Q3DOrientationMarker( this->getInteractor() );
 
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
@@ -566,7 +566,7 @@ void Q3DViewer::render()
 void Q3DViewer::reset()
 {
     // \TODO implementar tot el que falti
-    m_currentOrientation = Axial;
+    setDefaultOrientationForCurrentInput();
     this->resetOrientation();
 }
 
@@ -619,10 +619,18 @@ void Q3DViewer::resetOrientation()
     break;
 
     default:
-        DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades ( Axial,Sagital,Coronal). Agafem Axial per defecte");
-        this->resetViewToAxial();
+        setDefaultOrientationForCurrentInput();
+        DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades ( Axial,Sagital,Coronal ). Donem l'orientació per defecte.");
+        this->resetOrientation();
     break;
     }
+}
+
+void Q3DViewer::setDefaultOrientationForCurrentInput()
+{
+    // De moment, sempre serà coronal 
+    // TODO cal implementar que analitzi l'input i esculli la millor orientació
+    m_currentOrientation = Coronal;
 }
 
 // Desplacem les dades de manera que el mínim sigui 0 i ho convertim a un unsigned short, perquè el ray casting no accepta signed short.
