@@ -994,6 +994,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="m_vomiPushButton" >
+          <property name="text" >
+           <string>Compute VoMI</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QProgressBar" name="m_vmiProgressBar" >
           <property name="value" >
            <number>0</number>
