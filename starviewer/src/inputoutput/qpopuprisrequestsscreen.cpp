@@ -30,7 +30,8 @@ QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( pa
 
 void QPopUpRisRequestsScreen::setAccessionNumber(QString accessionNumber)
 {
-    m_labelRisRequestDescription->setText(m_labelRisRequestDescription->text() + " " + accessionNumber);
+    QString popUpText = tr("Starviewer has recieved a request from a RIS to retrieve the study with accession number");
+    m_labelRisRequestDescription->setText(popUpText + " " + accessionNumber);
 }
 
 void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
