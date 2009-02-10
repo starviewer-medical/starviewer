@@ -24,31 +24,40 @@ ProcessRisRequestThread::ProcessRisRequestThread(QObject *parent)
     qRegisterMetaType<DicomMask>("DicomMask"); //Registrem la classe DicomMask per poder-ne fer un signal
 }
 
-void ProcessRisRequestThread::process(QTcpSocket *qTcpSocket)
+void ProcessRisRequestThread::process(int socketDescriptor)
 {
-    m_qTcpSocket = qTcpSocket;
+    m_socketDescriptor = socketDescriptor;
 
     start();//Engeguem el thread
 }
 
+
 void ProcessRisRequestThread::run()
 {
-	INFO_LOG("Engegat thread esperant la petició de la IP " + m_qTcpSocket->peerAddress().toString());
+	INFO_LOG("Engegat thread esperant la petició");
+	QTcpSocket qTcpSocket;
 
-    if (m_qTcpSocket->waitForReadyRead(msTimeOutToReadData)) 
+	if (!qTcpSocket.setSocketDescriptor(m_socketDescriptor)) 
+	{
+	 ERROR_LOG("No s'ha pogut obrir el socket " + qTcpSocket.errorString());
+	 return;
+	}
+
+    if (qTcpSocket.waitForReadyRead(msTimeOutToReadData)) 
     {
-        QString requestXML = QString(m_qTcpSocket->readAll());
+        QString requestXML = QString(qTcpSocket.readAll());
 
-        INFO_LOG("He rebut de la IP " + m_qTcpSocket->peerAddress().toString() + " la cadena " + QString(requestXML));
+        INFO_LOG("He rebut de la IP " + qTcpSocket.peerAddress().toString() + " la cadena " + QString(requestXML));
         processRequest(requestXML);
     }
-    else INFO_LOG("S'ha produït timeout esperant llegir dades de la IP " + m_qTcpSocket->peerAddress().toString());
+    else INFO_LOG("No s'han rebut dades de la IP " + qTcpSocket.peerAddress().toString());
 
-    if ( m_qTcpSocket->error() != QAbstractSocket::UnknownSocketError)
+    if (qTcpSocket.error() != QAbstractSocket::UnknownSocketError)
     {
-        ERROR_LOG("S'ha produït un error m'entre s'esperava rebre dades del RIS" + m_qTcpSocket->errorString());
+        ERROR_LOG("S'ha produït un error m'entre s'esperava rebre dades del RIS" + qTcpSocket.errorString());
     }
-    m_qTcpSocket->close();
+    
+	qTcpSocket.close();
 }
 
 void ProcessRisRequestThread::processRequest(QString request)

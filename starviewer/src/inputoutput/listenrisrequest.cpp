@@ -51,10 +51,13 @@ void ListenRisRequest::newConnection()
     ProcessRisRequestThread * processRisRequestThread = new ProcessRisRequestThread();
 	QTcpSocket *tcpSocket = m_qTcpServer->nextPendingConnection();
 
-
 	INFO_LOG("Rebuda petició de connexió per la IP " + tcpSocket->peerAddress().toString());
-    processRisRequestThread->process(tcpSocket);
-    connect(processRisRequestThread,SIGNAL(requestRetrieveStudy(DicomMask)),SLOT(requestRetrieveStudySlot(DicomMask)));
+	processRisRequestThread->process(tcpSocket->socketDescriptor());
+    connect(processRisRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(requestRetrieveStudySlot(DicomMask)));
+
+	//Quan ha acabat el thread de processament fa delete del processRisRequestThread i del QTcpSocket
+	connect(processRisRequestThread, SIGNAL(finished()), processRisRequestThread, SLOT(deleteLater()));
+	connect(processRisRequestThread, SIGNAL(finished()), tcpSocket, SLOT(deleteLater()));
 }
 
 void ListenRisRequest::requestRetrieveStudySlot(DicomMask mask)
