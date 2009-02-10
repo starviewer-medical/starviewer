@@ -33,7 +33,7 @@ void ProcessRisRequestThread::process(QTcpSocket *qTcpSocket)
 
 void ProcessRisRequestThread::run()
 {
-	INFO_LOG("Engegat thread esperant la petició de la IP " + m_qTcpSocket->readAll());
+	INFO_LOG("Engegat thread esperant la petició de la IP " + m_qTcpSocket->peerAddress().toString());
 
     if (m_qTcpSocket->waitForReadyRead(msTimeOutToReadData)) 
     {
