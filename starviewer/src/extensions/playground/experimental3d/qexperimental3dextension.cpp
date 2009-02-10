@@ -9,6 +9,7 @@
 #include "experimental3dvolume.h"
 #include "informationtheory.h"
 #include "logging.h"
+#include "mathtools.h"
 #include "obscurancemainthread.h"
 #include "transferfunctionio.h"
 #include "vector3.h"
@@ -103,7 +104,7 @@ void QExperimental3DExtension::createConnections()
     // VMI
     connect( m_vmiPushButton, SIGNAL( clicked() ), SLOT( computeVmi() ) );
     connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
-//     connect( m_pmiPushButton, SIGNAL( clicked() ), SLOT( computePmi() ) );
+    connect( m_vomiPushButton, SIGNAL( clicked() ), SLOT( computeVomi() ) );
 //     connect( m_propertySalienciesPushButton, SIGNAL( clicked() ), SLOT( computePropertySaliencies() ) );
 }
 
@@ -927,6 +928,126 @@ void QExperimental3DExtension::computeViewpointUnstabilities()
             {
                 DEBUG_LOG( QString( "U(v%1) = %2" ).arg( i + 1 ).arg( viewpointUnstabilities.at( i ) ) );
                 out << "U(v" << i + 1 << ") = " << viewpointUnstabilities.at( i ) << "\n";
+            }
+            outFile.close();
+        }
+    }
+
+    doVisualization();
+    m_viewer->setCamera( position, focus, up );
+}
+
+
+void QExperimental3DExtension::computeVomi()
+{
+    Vector3 position, focus, up;
+    m_viewer->getCamera( position, focus, up );
+
+    float distance = ( position - focus ).length();
+
+    ViewpointGenerator viewpointGenerator;
+
+    if ( m_vmiViewpointDistributionWidget->isUniform() )
+    {
+        switch ( m_vmiViewpointDistributionWidget->numberOfViewpoints() )
+        {
+            case 4: viewpointGenerator.setToUniform4( distance ); break;
+            case 6: viewpointGenerator.setToUniform6( distance ); break;
+            case 8: viewpointGenerator.setToUniform8( distance ); break;
+            case 12: viewpointGenerator.setToUniform12( distance ); break;
+            case 20: viewpointGenerator.setToUniform20( distance ); break;
+            default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_vmiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+        }
+    }
+    else viewpointGenerator.setToQuasiUniform( m_vmiViewpointDistributionWidget->recursionLevel(), distance );
+
+    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+    int nViewpoints = viewpoints.size();
+
+    m_vmiProgressBar->setValue( 0 );
+    m_volume->startVmiMode();
+
+    QVector<float> viewProbabilities( nViewpoints );    // vector de p(v), inicialitzat a 0
+    {
+        float totalViewedVolume = 0.0;
+
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            m_volume->startVmiFirstPass();
+            setViewpoint( viewpoints.at( i ) ); // render
+            float viewedVolume = m_volume->finishVmiFirstPass();
+            viewProbabilities[i] = viewedVolume;
+            totalViewedVolume += viewedVolume;
+            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / ( 3 * nViewpoints ) );
+        }
+
+        if ( totalViewedVolume > 0.0f )
+        {
+            for ( int i = 0; i < nViewpoints; i++ )
+            {
+                viewProbabilities[i] /= totalViewedVolume;
+                Q_ASSERT( viewProbabilities.at( i ) == viewProbabilities.at( i ) );
+                DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
+            }
+        }
+    }
+
+    unsigned int nObjects = m_volume->getSize();
+    QVector<float> objectProbabilities( nObjects ); // vector de p(o), inicialitzat a 0
+    {
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            m_volume->startVmiSecondPass();
+            setViewpoint( viewpoints.at( i ) ); // render
+            QVector<float> objectProbabilitiesInView = m_volume->finishVmiSecondPass();
+            for ( unsigned int j = 0; j < nObjects; j++ )
+                objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView.at( j );
+            m_vmiProgressBar->setValue( 100 * ( nViewpoints + i + 1 ) / ( 3 * nViewpoints ) );
+        }
+
+        for ( unsigned int i = 0; i < nObjects; i++ )
+        {
+            Q_ASSERT( objectProbabilities.at( i ) == objectProbabilities.at( i ) );
+            //DEBUG_LOG( QString( "p(o%1) = %2" ).arg( i ).arg( objectProbabilities.at( i ) ) );
+        }
+    }
+
+    QVector<float> vomi( nObjects );    // vector de VoMI, inicialitzat a 0
+    {
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            float pv = viewProbabilities.at( i );
+            Q_ASSERT( pv == pv );
+
+            m_volume->startVmiSecondPass();
+            setViewpoint( viewpoints.at( i ) ); // render
+            QVector<float> objectProbabilitiesInView = m_volume->finishVmiSecondPass();
+
+            for ( unsigned int j = 0; j < nObjects; j++ )
+            {
+                float po = objectProbabilities.at( j );
+
+                if ( po > 0.0f )
+                {
+                    float pov = objectProbabilitiesInView.at( j );
+                    Q_ASSERT( pov == pov );
+                    float pvo = pv * pov / po;
+                    if ( pvo > 0.0f ) vomi[j] += pvo * MathTools::logTwo( pvo / pv );
+                }
+            }
+
+            m_vmiProgressBar->setValue( 100 * ( 2 * nViewpoints + i + 1 ) / ( 3 * nViewpoints ) );
+        }
+
+        // Printar resultats i guardar-los en un fitxer
+        QFile outFile( QDir::tempPath().append( "/vomi.txt" ) );
+        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            QTextStream out( &outFile );
+            for ( unsigned int i = 0; i < nObjects; i++ )
+            {
+                //DEBUG_LOG( QString( "VoMI(o%1) = %2" ).arg( i ).arg( vomi.at( i ) ) );
+                out << "VoMI(o" << i << ") = " << vomi.at( i ) << "\n";
             }
             outFile.close();
         }
