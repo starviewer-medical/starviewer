@@ -25,6 +25,8 @@ namespace udg
 ListenRisRequest::ListenRisRequest(QObject *parent):QObject(parent)
 {
     qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
+
+	m_popUp = new QPopUpRisRequestsScreen();
 }
 
 void ListenRisRequest::listen()
@@ -62,9 +64,8 @@ void ListenRisRequest::newConnection()
 
 void ListenRisRequest::requestRetrieveStudySlot(DicomMask mask)
 {
-    QPopUpRisRequestsScreen *popUp = new QPopUpRisRequestsScreen();
-    popUp->setAccessionNumber(mask.getAccessionNumber());
-    popUp->show();
+    m_popUp->setAccessionNumber(mask.getAccessionNumber());
+    m_popUp->show();
     emit requestRetrieveStudy(mask);
 }
 
