@@ -17,6 +17,7 @@ class QTcpSocket;
 
 namespace udg {
 
+class QPopUpRisRequestsScreen;
 
 /** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS 
  *
@@ -50,6 +51,7 @@ private slots:
 
 private :
 
+	QPopUpRisRequestsScreen *m_popUp;
     QTcpServer *m_qTcpServer;
 
     //Mostra l'error que s'ha produït en el socket
