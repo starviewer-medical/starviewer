@@ -1186,9 +1186,10 @@ void QExperimental3DExtension::computeVoxelSaliencies()
             // actualitzem pOV
             for ( int k = 0; k < nViewpoints; k++ )
             {
-                if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );   // quan z == 0, es salta la primera llesca, que seria z == -1, i fem un peek en lloc d'un read
-                else if ( z == dimZ - 1 ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
-                else pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
+                // quan z == 0, es salta la primera llesca, que seria z == -1
+                if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );
+                else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
+                else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
             }
 
             int pOvShift = ( z - 1 ) * dimXY;
@@ -1235,6 +1236,12 @@ void QExperimental3DExtension::computeVoxelSaliencies()
 
                     voxelSaliencies[i] /= 6.0f;
                 }
+            }
+
+            if ( z > 0 )
+            {
+                // avancem una llesca en tots els fitxers
+                for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );
             }
 
             m_vmiProgressBar->setValue( 50 + 50 * ( z + 1 ) / dimZ );
