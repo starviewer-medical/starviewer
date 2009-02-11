@@ -1001,6 +1001,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="m_voxelSalienciesPushButton" >
+          <property name="text" >
+           <string>Compute voxel saliencies</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QProgressBar" name="m_vmiProgressBar" >
           <property name="value" >
            <number>0</number>

@@ -5,7 +5,7 @@ namespace udg {
 
 
 VmiVoxelShader2::VmiVoxelShader2()
- : VoxelShader2(), m_data( 0 ), m_maxValue( 0 ), m_dataSize( 0 ), m_ambientColors( 0 )
+ : VoxelShader2(), m_data( 0 ), m_maxValue( 0 ), m_dataSize( 0 ), m_ambientColors( 0 ), m_viewedVolume( 0.0f )
 {
 }
 
@@ -48,10 +48,18 @@ QVector<float> VmiVoxelShader2::objectProbabilities()
     for ( unsigned int i = 0; i < m_dataSize; i++ )
         objectProbabilities[i] /= totalVolume;
 
+    m_viewedVolume = totalVolume;
+
     m_totalVolumePerThread.clear();
     m_objectVolumePerThread.clear();
 
     return objectProbabilities;
+}
+
+
+float VmiVoxelShader2::viewedVolume() const
+{
+    return m_viewedVolume;
 }
 
 
