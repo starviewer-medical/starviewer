@@ -33,6 +33,8 @@ public:
     void setTransferFunction( const TransferFunction &transferFunction );
     /// Retorna el vector de probabilitats p(o|v) i neteja els acumuladors.
     QVector<float> objectProbabilities();
+    /// Retorna el volum vist a l'última passada (s'actualitza quan es crida objectProbabilities()).
+    float viewedVolume() const;
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual HdrColor shade( int offset, const Vector3 &direction, double remainingOpacity, const HdrColor &baseColor = HdrColor() );
@@ -58,6 +60,8 @@ protected:
     QHash< QThread*, QVector<float> > m_objectVolumePerThread;
     QHash<QThread*, float> m_totalVolumePerThread;
     QMutex m_mutex;
+    /// Volum total vist en l'última passada.
+    float m_viewedVolume;
 
 };
 

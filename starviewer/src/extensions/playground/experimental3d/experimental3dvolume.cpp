@@ -281,6 +281,12 @@ QVector<float> Experimental3DVolume::finishVmiSecondPass()
 }
 
 
+float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
+{
+    return m_vmiVoxelShader2->viewedVolume();
+}
+
+
 void Experimental3DVolume::createImage( Volume *volume )
 {
     // sembla que el volum arriba sempre com a short

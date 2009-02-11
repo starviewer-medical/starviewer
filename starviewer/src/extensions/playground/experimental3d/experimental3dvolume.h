@@ -76,6 +76,7 @@ public:
     float finishVmiFirstPass();
     void startVmiSecondPass();
     QVector<float> finishVmiSecondPass();
+    float viewedVolumeInVmiSecondPass() const;
 
 private:
 
