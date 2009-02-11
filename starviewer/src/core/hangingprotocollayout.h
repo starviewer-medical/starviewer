@@ -31,13 +31,13 @@ public:
     /// Posar la llista de posicions dels visualitzadors
     void setDisplayEnvironmentSpatialPositionList( QList<QString> displayEnvironmentSpatialPosition );
     /// Obtenir el nombre de pantalles
-    int getNumberOfScreens();
+    int getNumberOfScreens() const;
     /// Obtenir la llista de píxels en vertical
-    QList<int> getVerticalPixelsList();
+    QList<int> getVerticalPixelsList() const;
     /// Obtenir la llista de píxels en horitzontal
-    QList<int> getHorizontalPixelsList();
+    QList<int> getHorizontalPixelsList() const;
     /// Obtenir la llista de posicions dels visualitzadors
-    QList<QString> getDisplayEnvironmentSpatialPositionList();
+    QList<QString> getDisplayEnvironmentSpatialPositionList() const;
 
 private:
 

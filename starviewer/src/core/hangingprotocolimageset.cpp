@@ -25,7 +25,7 @@ void HangingProtocolImageSet::setIdentifier( int identifier)
     m_identifier = identifier;
 }
 
-int HangingProtocolImageSet::getIdentifier()
+int HangingProtocolImageSet::getIdentifier() const
 {
     return m_identifier;
 }
@@ -35,7 +35,7 @@ void HangingProtocolImageSet::addRestriction( Restriction restriction )
     m_listOfRestrictions << restriction;
 }
 
-QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrictions()
+QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrictions() const
 {
     return m_listOfRestrictions;
 }
@@ -46,7 +46,7 @@ void HangingProtocolImageSet::setTypeOfItem( QString type)
 	m_typeOfItem = type;
 }
 
-QString HangingProtocolImageSet::getTypeOfItem()
+QString HangingProtocolImageSet::getTypeOfItem() const
 {
 	return m_typeOfItem;
 }
@@ -56,7 +56,7 @@ void HangingProtocolImageSet::setImageToDisplay( int imageNumber )
 	m_imageToDisplay = imageNumber;
 }
 
-int HangingProtocolImageSet::getImatgeToDisplay()
+int HangingProtocolImageSet::getImatgeToDisplay() const
 {	
 	return m_imageToDisplay;
 }
@@ -66,7 +66,7 @@ void HangingProtocolImageSet::setSeriesToDisplay( Series * series )
 	m_serieToDisplay = series;
 }
 
-Series * HangingProtocolImageSet::getSeriesToDisplay()
+Series * HangingProtocolImageSet::getSeriesToDisplay() const
 {
 	return m_serieToDisplay;
 }

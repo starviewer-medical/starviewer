@@ -38,22 +38,22 @@ void HangingProtocolLayout::setDisplayEnvironmentSpatialPositionList( QList<QStr
     m_displayEnvironmentSpatialPosition = displayEnvironmentSpatialPosition;
 }
 
-int HangingProtocolLayout::getNumberOfScreens()
+int HangingProtocolLayout::getNumberOfScreens() const
 {
     return m_numberOfScreens;
 }
 
-QList<int> HangingProtocolLayout::getVerticalPixelsList()
+QList<int> HangingProtocolLayout::getVerticalPixelsList() const
 {
     return m_verticalPixelsList;
 }
 
-QList<int> HangingProtocolLayout::getHorizontalPixelsList()
+QList<int> HangingProtocolLayout::getHorizontalPixelsList() const
 {
     return m_horizontalPixelsList;
 }
 
-QList<QString> HangingProtocolLayout::getDisplayEnvironmentSpatialPositionList()
+QList<QString> HangingProtocolLayout::getDisplayEnvironmentSpatialPositionList() const
 {
     return m_displayEnvironmentSpatialPosition;
 }

@@ -55,13 +55,13 @@ public:
     void addDisplaySet ( HangingProtocolDisplaySet * displaySet );
 
     /// Obtenir el nom del hanging protocol
-    QString getName();
+    QString getName() const;
 
     /// Obté el nombre total d'image sets
-    int getNumberOfImageSets();
+    int getNumberOfImageSets() const;
 
 	/// Obté el nombre total d'image sets
-    int getNumberOfDisplaySets();
+    int getNumberOfDisplaySets() const;
 
     /// Obté l'image set amb identificador "identificador"
     HangingProtocolImageSet * getImageSet( int identificador );
@@ -79,13 +79,13 @@ public:
 	void setIdentifier( int id );
 
 	/// Obtenir l'identificador del hanging protocol
-	int getIdentifier();
+	int getIdentifier() const;
 
 	/// Mètode per comparar hanging protocols
 	bool gratherThan( HangingProtocol * hangingToCompare );
 
 	/// Retorna si el mètode és estricte o no ho hes
-	bool getStrictness();
+	bool getStrictness() const;
 
 	/// Assigna si el mètode és estricte o no ho hes
 	void setStrictness( bool strictness );
