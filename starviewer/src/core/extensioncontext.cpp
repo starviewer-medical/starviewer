@@ -32,38 +32,46 @@ void ExtensionContext::setPatient(Patient *patient)
 Volume *ExtensionContext::getDefaultVolume() const
 {
     Volume *defaultVolume = NULL;
-
+    Series *defaultSeries = NULL;
+    bool searchForDefaultSeries = false;
     QList<Series *> selectedSeries = m_patient->getSelectedSeries();
-    // TODO de moment només agafem la primera
-    if( !selectedSeries.isEmpty() )
-    {
-        Series *defaultSeries = selectedSeries.at(0);
-        QString modality = defaultSeries->getModality();
-        // si la modalitat no és una de les suportades, busquem un altre volum per defecte
-        if( modality == "PR" || modality == "KO" || modality == "SR" )
-        {
-            bool ok = false;
-            foreach( Study *study, m_patient->getStudies() )
-            {
-                foreach( Series *series, study->getSeries() )
-                {
-                    modality = series->getModality();
-                    if( modality != "PR" && modality != "KO" && modality != "SR" )
-                    {
-                        ok = true;
-                        defaultSeries = series;
-                        break;
-                    }
-                }
-            }
-            if( !ok )
-                DEBUG_LOG("No hi ha cap serie de l'actual pacient amb modalitat suportada");
-        }
-        defaultVolume = defaultSeries->getFirstVolume();
-    }
+  
+    if( selectedSeries.isEmpty() )
+        searchForDefaultSeries = true;
     else
-        DEBUG_LOG("EI! No tenim cap sèrie seleccionada!");
-
+    {
+        // TODO de moment només agafem la primera de les possibles seleccionades
+        defaultSeries = selectedSeries.at(0);
+        // necessitem que les sèries siguin visualitzables
+        if( !defaultSeries->isViewable() )
+            searchForDefaultSeries = true;
+        else
+        {
+            defaultVolume = defaultSeries->getFirstVolume();
+        }
+    }
+    // en comptes de searchForDefaultSeries podríem fer servir
+    // defaultVolume, però amb la var. booleana el codi és més llegible
+    if( searchForDefaultSeries )
+    {
+        bool ok = false;
+        foreach( Study *study, m_patient->getStudies() )
+        {
+            QList<Series *> viewableSeries = study->getViewableSeries();
+            if( !viewableSeries.isEmpty() )
+            {
+                ok = true;
+                defaultVolume = viewableSeries.at(0)->getFirstVolume();
+                break;
+            }
+        }
+        if( !ok )
+        {
+            DEBUG_LOG("No hi ha cap serie de l'actual pacient que sigui visualitzable. Retornem volum NUL.");
+            ERROR_LOG("No hi ha cap serie de l'actual pacient que sigui visualitzable. Retornem volum NUL.");
+        }
+    }
+    
     return defaultVolume;
 }
 

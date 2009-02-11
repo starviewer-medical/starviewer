@@ -221,6 +221,15 @@ public:
     ///Permet establir quin és el thumbnail de la sèrie
     void setThumbnail(QPixmap seriesThumbnail);
 
+    /// Aquest mètode comprova si aquesta sèrie és visualitzable
+    /// és a dir que es pot visualitzar en un Q*Viewer
+    /// Les comprovacions que fa són mirar que no es tracti d'una modalitat
+    /// que no sigui d'imatge (PR,KIN,SR...) i/o que contingui realment imatges a l'image set
+    /// La comprovació es fa "al vol", és a dir, sota demanda
+    /// TODO queda pendent fer altres comprovacions més acurades com 
+    /// comprovar que es tracti d'un SOP Class suportat per l'aplicació
+    bool isViewable() const;
+
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
     void select();

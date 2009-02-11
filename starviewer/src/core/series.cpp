@@ -461,6 +461,14 @@ void Series::setThumbnail(QPixmap seriesThumbnail)
     m_seriesThumbnail = seriesThumbnail;
 }
 
+bool Series::isViewable() const
+{
+    if( m_modality == "KO" || m_modality == "PR" || m_modality == "SR" || !this->hasImages() )
+        return false;
+    else
+        return true;
+}
+
 void Series::setNumberOfPhases( int phases )
 {
     m_numberOfPhases = phases;

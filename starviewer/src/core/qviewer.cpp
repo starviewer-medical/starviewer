@@ -496,8 +496,12 @@ void QViewer::grabCurrentView()
 
 void QViewer::setSeries(Series *series)
 {
-    QString modality = series->getModality();
-    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    if( !series )
+    {
+        DEBUG_LOG("La sèrie és nul·la!");
+        return;
+    }
+    if( !series->isViewable() )
     {
         QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
     }
