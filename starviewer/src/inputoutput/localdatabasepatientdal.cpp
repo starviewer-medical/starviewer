@@ -95,7 +95,7 @@ QString LocalDatabasePatientDAL::buildSqlSelect(const DicomMask &patientMaskToSe
                        "From Patient ";
 
     if (!patientMaskToSelect.getPatientId().isEmpty())
-        whereSentence = QString(" Where ID = '%1' ").arg(patientMaskToSelect.getPatientId());
+        whereSentence = QString(" Where ID = '%1' ").arg( DatabaseConnection::formatStringToValidSQLSyntax( patientMaskToSelect.getPatientId() ) );
 
     return selectSentence + whereSentence;
 }
@@ -104,10 +104,10 @@ QString LocalDatabasePatientDAL::buildSqlInsert(Patient *newPatient)
 {
     QString insertSentence = QString ("Insert into Patient  (ID, Name, Birthdate, Sex) "
                                                    "values ('%1', '%2', '%3', '%4')")
-                                    .arg(newPatient->getID())
-                                    .arg(newPatient->getFullName())
-                                    .arg(newPatient->getBirthDate().toString("yyyyMMdd"))
-                                    .arg(newPatient->getSex());
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newPatient->getID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newPatient->getFullName() ) )
+                                    .arg( newPatient->getBirthDate().toString("yyyyMMdd") )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newPatient->getSex() ) );
 
     return insertSentence;
 }
@@ -118,10 +118,10 @@ QString LocalDatabasePatientDAL::buildSqlUpdate(Patient *patientToUpdate)
                                                            "Birthdate = '%2', "
                                                            "Sex = '%3' "
                                                    "Where   ID = '%4'")
-                                    .arg(patientToUpdate->getFullName())
-                                    .arg(patientToUpdate->getBirthDate().toString("yyyyMMdd"))
-                                    .arg(patientToUpdate->getSex())
-                                    .arg(patientToUpdate->getID());
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( patientToUpdate->getFullName() ) )
+                                    .arg( patientToUpdate->getBirthDate().toString("yyyyMMdd") )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( patientToUpdate->getSex() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( patientToUpdate->getID() ) );
     return updateSentence;
 }
 
@@ -131,7 +131,7 @@ QString LocalDatabasePatientDAL::buildSqlDelete(const DicomMask &patientMaskToDe
 
     deleteSentence = "Delete From Patient ";
     if (!patientMaskToDelete.getPatientId().isEmpty())
-        whereSentence = QString(" Where ID = '%1'").arg(patientMaskToDelete.getPatientId());
+        whereSentence = QString(" Where ID = '%1'").arg( DatabaseConnection::formatStringToValidSQLSyntax( patientMaskToDelete.getPatientId() ) );
 
     return deleteSentence + whereSentence;
 }
