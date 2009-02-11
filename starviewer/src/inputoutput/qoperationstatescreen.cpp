@@ -4,14 +4,11 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "qoperationstatescreen.h"
 
-#include <QString>
 #include <QCloseEvent>
 #include <QHeaderView>
 #include "operation.h"
-
 #include "starviewersettings.h"
 
 namespace udg {
@@ -97,16 +94,16 @@ void QOperationStateScreen::insertNewOperation( Operation *operation )
 
 void QOperationStateScreen::clearList()
 {
-    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( "*" , Qt::MatchWildcard, 0 ) );
-    QTreeWidgetItem *item;
-
-    for ( int i = 0; i < qRetrieveList.count();i++ )
+    // seleccionem els elements que volem esborrar
+    QList<QTreeWidgetItem *> clearableItems;
+    clearableItems = m_treeRetrieveStudy->findItems( tr("RETRIEVED"), Qt::MatchExactly, 0 );
+    clearableItems += m_treeRetrieveStudy->findItems( tr("STORED"), Qt::MatchExactly, 0 );
+    clearableItems += m_treeRetrieveStudy->findItems( tr("ERROR"), Qt::MatchExactly, 0 );
+    clearableItems += m_treeRetrieveStudy->findItems( tr("CANCELLED"), Qt::MatchExactly, 0 );
+    // els eliminem de la llista
+    foreach( QTreeWidgetItem *itemToClear, clearableItems )
     {
-        item = qRetrieveList.at( i );
-        if ( isOperationFinalized(item->text(0)) )
-        {
-            delete item;
-        }
+        m_treeRetrieveStudy->invisibleRootItem()->takeChild( m_treeRetrieveStudy->invisibleRootItem()->indexOfChild(itemToClear) );
     }
 }
 
