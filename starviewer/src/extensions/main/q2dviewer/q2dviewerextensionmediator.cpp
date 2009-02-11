@@ -39,7 +39,7 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const E
     q2dviewerExtension->setPatient( extensionContext.getPatient() );
     Volume *input = extensionContext.getDefaultVolume();
     if( !input )
-        QMessageBox::information(0,ApplicationNameString, tr("The selected item is not an image") );
+        QMessageBox::information(0,ApplicationNameString, tr("There is not any viewable or supported Series in the selected Studies") );
     else
         q2dviewerExtension->setInput( input );
 

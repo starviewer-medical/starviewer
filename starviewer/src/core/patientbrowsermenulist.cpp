@@ -76,21 +76,10 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
     gridLayout->addWidget(studyText);
     gridLayout->addLayout(gridLayoutWidgets);
 
+    // les sèries que al final afegirem al llistat
+    QList<Series*> seriesToAdd = study->getViewableSeries(); 
     //comptem el nombre de series que seran visibles
-    int numberOfViewableSeries = 0;
-    QString modality;
-    QList<Series*> seriesList = study->getSeries();
-    QList<Series*> seriesToAdd; // les sèries que al final afegirem al llistat
-    foreach(Series *series,seriesList)
-    {
-        modality = series->getModality();
-        if( !(modality == "PR" || modality == "KO" || modality == "SR") && series->getImages().count() > 0 )
-        {
-            // la sèrie és vàlida per ser mostrada
-            numberOfViewableSeries++;
-            seriesToAdd << series;
-        }
-    }
+    int numberOfViewableSeries = seriesToAdd.count();
 
     int maxColumns = 2;
     if ( numberOfViewableSeries >= 20 )

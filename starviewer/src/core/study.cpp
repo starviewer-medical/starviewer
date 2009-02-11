@@ -318,6 +318,17 @@ QList< Series* > Study::getSeries()
     return m_seriesSet;
 }
 
+QList<Series *> Study::getViewableSeries()
+{
+    QList<Series *> result;
+    foreach( Series *series, m_seriesSet )
+    {
+        if( series->isViewable() )
+            result << series;
+    }
+    return result;
+}
+
 QString Study::toString()
 {
     QString result;

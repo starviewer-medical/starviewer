@@ -182,7 +182,8 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
 
             if( serie != 0 ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
             {
-                if( serie->getFirstVolume())
+                // cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
+                if( serie->isViewable() && serie->getFirstVolume() )
                 {
                     viewerWidget->setInput( serie->getFirstVolume() );
                     qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
@@ -292,8 +293,9 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
     while (!found && i < numberStudies )
     {
         study = listOfStudies.value( i );
-        numberSeries = study->getNumberOfSeries();
-        listOfSeries = study->getSeries();
+        //numberSeries = study->getNumberOfSeries();
+        listOfSeries = study->getViewableSeries();
+        numberSeries = listOfSeries.count();
         j = 0;
 
         while( !found && j < numberSeries )
