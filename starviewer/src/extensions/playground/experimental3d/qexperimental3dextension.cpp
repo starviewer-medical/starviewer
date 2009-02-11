@@ -1095,7 +1095,7 @@ void QExperimental3DExtension::computeVoxelSaliencies()
 
     for ( int i = 0; i < nViewpoints; i++ )
     {
-        pOvFiles[i] = new QTemporaryFile( "pOvXXXXXX.tmp" );
+        pOvFiles[i] = new QTemporaryFile( "pOvXXXXXX.tmp" );    // els fitxers temporals es creen al directori de treball
 
         if ( !pOvFiles[i]->open() )
         {
@@ -1183,13 +1183,18 @@ void QExperimental3DExtension::computeVoxelSaliencies()
         {
             DEBUG_LOG( QString( "llesca %1/%2" ).arg( z + 1 ).arg( dimZ ) );
 
+            // actualitzem pOV
+            for ( int k = 0; k < nViewpoints; k++ )
+            {
+                if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );   // quan z == 0, es salta la primera llesca, que seria z == -1, i fem un peek en lloc d'un read
+                else if ( z == dimZ - 1 ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
+                else pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
+            }
+
             int pOvShift = ( z - 1 ) * dimXY;
-            bool read = false;  // ens indica si hem llegit dades per la llesca actual; només llegirem un cop de cada fitxer en cada llesca, com a màxim
 
             for ( int y = 0; y < dimY; y++ )
             {
-                DEBUG_LOG( QString( "y = %1" ).arg( y ) );
-
                 for ( int x = 0; x < dimX; x++, i++ )
                 {
                     Q_ASSERT( i == x + y * dimX + z * dimXY );
@@ -1198,23 +1203,8 @@ void QExperimental3DExtension::computeVoxelSaliencies()
                     Q_ASSERT( poi == poi );
 
                     // pVoi
-                    if ( poi == 0.0 ) pVoi.fill( 0.0f );    // ens estalviem llegir de fitxer
-                    else
-                    {
-                        for ( int k = 0; k < nViewpoints; k++ )
-                        {
-                            if ( !read )
-                            {
-                                if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );   // quan z == 0, es salta la primera llesca, que seria z == -1
-                                else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
-                                else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
-                            }
-
-                            pVoi[k] = pOV[k][i - pOvShift];
-                        }
-
-                        read = true;
-                    }
+                    if ( poi == 0.0 ) pVoi.fill( 0.0f );    // si poi == 0 vol dir que el vòxel no es veu des d'enlloc --> pVoi ha de ser tot zeros
+                    else for ( int k = 0; k < nViewpoints; k++ ) pVoi[k] = pOV[k][i - pOvShift];
 
                     int neighbours[6] = { x - 1 + y * dimX + z * dimXY, x + 1 + y * dimX + z * dimXY,
                                           x + ( y - 1 ) * dimX + z * dimXY, x + ( y + 1 ) * dimX + z * dimXY,
@@ -1235,23 +1225,8 @@ void QExperimental3DExtension::computeVoxelSaliencies()
                         if ( poij == 0.0 ) continue;
 
                         // pVoj
-                        if ( poj == 0.0 ) pVoj.fill( 0.0f );    // ens estalviem llegir de fitxer
-                        else
-                        {
-                            for ( int k = 0; k < nViewpoints; k++ )
-                            {
-                                if ( !read )
-                                {
-                                    if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );   // quan z == 0, es salta la primera llesca, que seria z == -1
-                                    else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
-                                    else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
-                                }
-
-                                pVoj[k] = pOV[k][neighbours[j] - pOvShift];
-                            }
-
-                            read = true;
-                        }
+                        if ( poj == 0.0 ) pVoj.fill( 0.0f );    // si poi == 0 vol dir que el vòxel no es veu des d'enlloc --> pVoi ha de ser tot zeros
+                        else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = pOV[k][neighbours[j] - pOvShift];
 
                         float saliency = InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
                         Q_ASSERT( saliency == saliency );
@@ -1262,17 +1237,14 @@ void QExperimental3DExtension::computeVoxelSaliencies()
                 }
             }
 
-            if ( z > 0 )
-            {
-                for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );   // avancem una llesca en tots els fitxers
-            }
-
             m_vmiProgressBar->setValue( 50 + 50 * ( z + 1 ) / dimZ );
         }
 
+        DEBUG_LOG( "esborrem pOV" );
         for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
         delete[] pOV;
 
+        DEBUG_LOG( "printem" );
         // Printar resultats i guardar-los en un fitxer
         QFile outFile( QDir::tempPath().append( "/voxelSaliencies.txt" ) );
         if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
@@ -1287,6 +1259,7 @@ void QExperimental3DExtension::computeVoxelSaliencies()
         }
     }
 
+    DEBUG_LOG( "destruïm els fitxers temporals" );
     for ( int i = 0; i < nViewpoints; i++ )
     {
         pOvFiles[i]->close();
@@ -1295,6 +1268,8 @@ void QExperimental3DExtension::computeVoxelSaliencies()
 
     doVisualization();
     m_viewer->setCamera( position, focus, up );
+
+    DEBUG_LOG( "fi" );
 }
 
 
