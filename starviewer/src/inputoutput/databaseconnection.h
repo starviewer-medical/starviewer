@@ -62,6 +62,10 @@ public:
     void endTransaction();
     void rollbackTransaction();
 
+    /// Formata l'string de forma que no contingui caràcters extranys que puguin fer
+    /// que l'execució d'una comanda SQL sigui incorrecta
+    static QString formatStringToValidSQLSyntax( QString string );
+
 private :
 
     sqlite3 *m_databaseConnection;

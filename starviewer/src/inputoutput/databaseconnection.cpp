@@ -11,7 +11,7 @@
 #include <QObject> // per les traduccions: tr()
 #include <QSemaphore>
 #include <QDir>
-
+#include <QString>
 #include "starviewersettings.h"
 #include "status.h"
 #include "logging.h"
@@ -60,6 +60,11 @@ void DatabaseConnection::rollbackTransaction()
 {
     sqlite3_exec(m_databaseConnection, "ROLLBACK", 0, 0, 0);
     m_transactionLock->release();
+}
+
+QString DatabaseConnection::formatStringToValidSQLSyntax( QString string )
+{
+    return string.replace( "'", "''" );
 }
 
 sqlite3* DatabaseConnection::getConnection()

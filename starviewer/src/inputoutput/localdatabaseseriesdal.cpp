@@ -129,25 +129,25 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                                             "Manufacturer, RetrievedDate, RetrievedTime, State) "
                                                     "values ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10', '%11', "
                                                             "'%12', %13, %14, '%15', '%16', '%17', '%18', '%19', %20)")
-                                    .arg(newSeries->getInstanceUID())
-                                    .arg(newSeries->getParentStudy()->getInstanceUID())
-                                    .arg(newSeries->getSeriesNumber())
-                                    .arg(newSeries->getModality())
-                                    .arg(newSeries->getDate().toString("yyyyMMdd"))
-                                    .arg(newSeries->getTime().toString("hhmmss"))
-                                    .arg(newSeries->getInstitutionName())
-                                    .arg(newSeries->getPatientPosition())
-                                    .arg(newSeries->getProtocolName())
-                                    .arg(newSeries->getDescription())
-                                    .arg(newSeries->getFrameOfReferenceUID())
-                                    .arg(newSeries->getPositionReferenceIndicator())
-                                    .arg(newSeries->getNumberOfPhases())
-                                    .arg(newSeries->getNumberOfSlicesPerPhase())
-                                    .arg(newSeries->getBodyPartExamined())
-                                    .arg(newSeries->getViewPosition())
-                                    .arg(newSeries->getManufacturer())
-                                    .arg(newSeries->getRetrievedDate().toString("yyyyMMdd"))
-                                    .arg(newSeries->getRetrievedTime().toString("hhmmss"))
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getInstanceUID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getParentStudy()->getInstanceUID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getSeriesNumber() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getModality() ) )
+                                    .arg( newSeries->getDate().toString("yyyyMMdd") )
+                                    .arg( newSeries->getTime().toString("hhmmss") )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getInstitutionName() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getPatientPosition() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getProtocolName() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getDescription() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getFrameOfReferenceUID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getPositionReferenceIndicator() ) )
+                                    .arg( newSeries->getNumberOfPhases() )
+                                    .arg( newSeries->getNumberOfSlicesPerPhase() )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getBodyPartExamined() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getViewPosition() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getManufacturer() ) )
+                                    .arg( newSeries->getRetrievedDate().toString("yyyyMMdd") )
+                                    .arg( newSeries->getRetrievedTime().toString("hhmmss") )
                                     .arg("0");
 
     return insertSentence;
@@ -175,26 +175,26 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
                                                         "RetrievedTime = '%18', "
                                                         "State = '%19' "
                                                  "Where InstanceUID = '%20'")
-                                    .arg(seriesToUpdate->getParentStudy()->getInstanceUID())
-                                    .arg(seriesToUpdate->getSeriesNumber())
-                                    .arg(seriesToUpdate->getModality())
-                                    .arg(seriesToUpdate->getDate().toString("yyyyMMdd"))
-                                    .arg(seriesToUpdate->getTime().toString("hhmmss"))
-                                    .arg(seriesToUpdate->getInstitutionName())
-                                    .arg(seriesToUpdate->getPatientPosition())
-                                    .arg(seriesToUpdate->getProtocolName())
-                                    .arg(seriesToUpdate->getDescription())
-                                    .arg(seriesToUpdate->getFrameOfReferenceUID())
-                                    .arg(seriesToUpdate->getPositionReferenceIndicator())
-                                    .arg(seriesToUpdate->getNumberOfPhases())
-                                    .arg(seriesToUpdate->getNumberOfSlicesPerPhase())
-                                    .arg(seriesToUpdate->getBodyPartExamined())
-                                    .arg(seriesToUpdate->getViewPosition())
-                                    .arg(seriesToUpdate->getManufacturer())
-                                    .arg(seriesToUpdate->getRetrievedDate().toString("yyyyMMdd"))
-                                    .arg(seriesToUpdate->getRetrievedTime().toString("hhmmss"))
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getParentStudy()->getInstanceUID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getSeriesNumber() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getModality() ) )
+                                    .arg( seriesToUpdate->getDate().toString("yyyyMMdd") )
+                                    .arg( seriesToUpdate->getTime().toString("hhmmss") )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getInstitutionName() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getPatientPosition() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getProtocolName() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getDescription() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getFrameOfReferenceUID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getPositionReferenceIndicator() ) )
+                                    .arg( seriesToUpdate->getNumberOfPhases() )
+                                    .arg( seriesToUpdate->getNumberOfSlicesPerPhase() )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getBodyPartExamined() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getViewPosition() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getManufacturer() ) )
+                                    .arg( seriesToUpdate->getRetrievedDate().toString("yyyyMMdd") )
+                                    .arg( seriesToUpdate->getRetrievedTime().toString("hhmmss") )
                                     .arg("0")
-                                    .arg(seriesToUpdate->getInstanceUID());
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getInstanceUID() ) );
 
     return updateSentence;
 }
@@ -209,7 +209,7 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
     QString whereSentence = "";
 
     if (!seriesMask.getStudyUID().isEmpty()) 
-        whereSentence = QString("where StudyInstanceUID = '%1'").arg(seriesMask.getStudyUID());
+        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesMask.getStudyUID() ) );
 
     if (!seriesMask.getSeriesUID().isEmpty())
     {
@@ -218,7 +218,7 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
         else
             whereSentence += " and ";
 
-        whereSentence += QString(" InstanceUID = '%1'").arg(seriesMask.getSeriesUID());
+        whereSentence += QString(" InstanceUID = '%1'").arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesMask.getSeriesUID() ) );
     }
 
     return whereSentence;

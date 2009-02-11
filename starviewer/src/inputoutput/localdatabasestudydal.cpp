@@ -198,7 +198,7 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
                        "From Study ";
 
     if (!studyMaskToSelect.getStudyUID().isEmpty())
-        whereSentence = QString(" Where InstanceUID = '%1' ").arg(studyMaskToSelect.getStudyUID());
+        whereSentence = QString(" Where InstanceUID = '%1' ").arg( DatabaseConnection::formatStringToValidSQLSyntax( studyMaskToSelect.getStudyUID() ) );
 
     if (lastAccessDateMinor.isValid())
     {
@@ -232,19 +232,19 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     whereSentence = "Where Study.PatientId = Patient.Id ";
 
     if (!studyMaskToSelect.getStudyUID().isEmpty())
-        whereSentence += QString(" and InstanceUID = '%1' ").arg(studyMaskToSelect.getStudyUID());
+        whereSentence += QString(" and InstanceUID = '%1' ").arg(  DatabaseConnection::formatStringToValidSQLSyntax( studyMaskToSelect.getStudyUID() ) );
 
     if (!studyMaskToSelect.getPatientId().isEmpty() && studyMaskToSelect.getPatientId() != "*")
     {
-        whereSentence += QString(" and Patient.Id like '%%1%' ").arg(studyMaskToSelect.getPatientId().replace("*",""));
+        whereSentence += QString(" and Patient.Id like '%%1%' ").arg(  DatabaseConnection::formatStringToValidSQLSyntax( studyMaskToSelect.getPatientId().replace("*","") ) );
     }
     if (!studyMaskToSelect.getPatientName().isEmpty() && studyMaskToSelect.getPatientName() != "*")
-        whereSentence += QString(" and Patient.Name like '%%1%' ").arg(studyMaskToSelect.getPatientName().replace("*",""));
+        whereSentence += QString(" and Patient.Name like '%%1%' ").arg(  DatabaseConnection::formatStringToValidSQLSyntax( studyMaskToSelect.getPatientName().replace("*","") ) );
 
     //Si filtrem per data
     if (studyMaskToSelect.getStudyDate().length() == 8)
     {
-        whereSentence += QString(" and Date = '%1'" ).arg(studyMaskToSelect.getStudyDate());
+        whereSentence += QString(" and Date = '%1'" ).arg( studyMaskToSelect.getStudyDate() );
     }
     else if (studyMaskToSelect.getStudyDate().length() == 9)
     {
@@ -278,7 +278,7 @@ QString LocalDatabaseStudyDAL::buildSqlCountHowManyStudiesHaveAPatient(const QSt
                                       " From Patient, Study "
                                       "Where Patient.Id = Study.PatientId  and"
                                       "      Patient.Id = '%1'")
-                                    .arg(patientID);
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( patientID ) );
 
     return selectSentence;
 }
@@ -291,21 +291,21 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, const QDate &last
                                                            "RetrievedTime , State) "
                                                    "values ('%1', '%2', '%3', '%4', %5, %6, '%7', '%8', '%9', '%10', '%11', "
                                                             "'%12', '%13', '%14', '%15', %16)")
-                                    .arg(newStudy->getInstanceUID())
-                                    .arg(newStudy->getParentPatient()->getID())
-                                    .arg(newStudy->getID())
-                                    .arg(newStudy->getPatientAge())
-                                    .arg(newStudy->getWeight())
-                                    .arg(newStudy->getHeight())
-                                    .arg(newStudy->getModalitiesAsSingleString())
-                                    .arg(newStudy->getDate().toString("yyyyMMdd"))
-                                    .arg(newStudy->getTime().toString("hhmmss"))
-                                    .arg(newStudy->getAccessionNumber())
-                                    .arg(newStudy->getDescription())
-                                    .arg(newStudy->getReferringPhysiciansName())
-                                    .arg(lastAcessDate.toString("yyyyMMdd"))
-                                    .arg(newStudy->getRetrievedDate().toString("yyyyMMdd"))
-                                    .arg(newStudy->getRetrievedTime().toString("hhmmss"))
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getInstanceUID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getParentPatient()->getID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getPatientAge() ) )
+                                    .arg( newStudy->getWeight() )
+                                    .arg( newStudy->getHeight() )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getModalitiesAsSingleString() ) )
+                                    .arg( newStudy->getDate().toString("yyyyMMdd") )
+                                    .arg( newStudy->getTime().toString("hhmmss") )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getAccessionNumber() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getDescription() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newStudy->getReferringPhysiciansName() ) )
+                                    .arg( lastAcessDate.toString("yyyyMMdd") )
+                                    .arg( newStudy->getRetrievedDate().toString("yyyyMMdd") )
+                                    .arg( newStudy->getRetrievedTime().toString("hhmmss") )
                                     .arg("0");
 
     return insertSentence;
@@ -329,22 +329,22 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate 
                                                        "RetrievedTime = '%14', "
                                                        "State = %15 "
                                                 "Where InstanceUid = '%16'")
-                                    .arg(studyToUpdate->getParentPatient()->getID())
-                                    .arg(studyToUpdate->getID())
-                                    .arg(studyToUpdate->getPatientAge())
-                                    .arg(studyToUpdate->getWeight())
-                                    .arg(studyToUpdate->getHeight())
-                                    .arg(studyToUpdate->getModalitiesAsSingleString())
-                                    .arg(studyToUpdate->getDate().toString("yyyyMMdd"))
-                                    .arg(studyToUpdate->getTime().toString("hhmmss"))
-                                    .arg(studyToUpdate->getAccessionNumber())
-                                    .arg(studyToUpdate->getDescription())
-                                    .arg(studyToUpdate->getReferringPhysiciansName())
-                                    .arg(lastAccessDate.toString("yyyyMMdd"))
-                                    .arg(studyToUpdate->getRetrievedDate().toString("yyyyMMdd"))
-                                    .arg(studyToUpdate->getRetrievedTime().toString("hhmmss"))
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getParentPatient()->getID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getID() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getPatientAge() ) )
+                                    .arg( studyToUpdate->getWeight() )
+                                    .arg( studyToUpdate->getHeight() )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getModalitiesAsSingleString() ) )
+                                    .arg( studyToUpdate->getDate().toString("yyyyMMdd") )
+                                    .arg( studyToUpdate->getTime().toString("hhmmss") )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getAccessionNumber() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getDescription() ) )
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getReferringPhysiciansName() ) )
+                                    .arg( lastAccessDate.toString("yyyyMMdd") )
+                                    .arg( studyToUpdate->getRetrievedDate().toString("yyyyMMdd") )
+                                    .arg( studyToUpdate->getRetrievedTime().toString("hhmmss") )
                                     .arg("0")
-                                    .arg(studyToUpdate->getInstanceUID());
+                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( studyToUpdate->getInstanceUID() ) );
 
     return updateSentence;
 }
@@ -355,7 +355,7 @@ QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete
 
     deleteSentence = "Delete From Study ";
     if (!studyMaskToDelete.getStudyUID().isEmpty())
-        whereSentence = QString(" Where InstanceUID = '%1'").arg(studyMaskToDelete.getStudyUID());
+        whereSentence = QString(" Where InstanceUID = '%1'").arg( DatabaseConnection::formatStringToValidSQLSyntax( studyMaskToDelete.getStudyUID() ) );
 
     return deleteSentence + whereSentence;
 }
