@@ -41,31 +41,31 @@ public:
     void setIdentifier( int identifier );
 
     /// Obtenir l'identificador de l'Image Set
-    int getIdentifier();
+    int getIdentifier() const;
 
     /// Afegir una restriccio
     void addRestriction( Restriction restriction );
 
     /// Obtenir les restriccions
-    QList<Restriction> getRestrictions();
+    QList<Restriction> getRestrictions() const;
 
 	/// Posar el tipus d'element
 	void setTypeOfItem( QString );
 		
 	/// Obtenir el tipus d'element
-	QString getTypeOfItem();
+	QString getTypeOfItem() const;
 
 	/// Posar el número de la imatge a mostrar
 	void setImageToDisplay( int imageNumber );
 
 	/// Obtenir el numero de la imatge a mostrar
-	int getImatgeToDisplay();
+	int getImatgeToDisplay() const;
 
 	/// Assignar la serie que es representa
 	void setSeriesToDisplay( Series * series );
 	
 	/// Obtenir la serie que es representa
-	Series * getSeriesToDisplay();
+	Series * getSeriesToDisplay() const;
 
     /// Mètode per mostrar els valors
     void show();

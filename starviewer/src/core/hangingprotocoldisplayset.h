@@ -44,25 +44,25 @@ public:
 	void setPhase( QString phase );
 
 	/// Obtenir l'identificador
-    int getIdentifier();
+    int getIdentifier() const;
 
     /// Obtenir la descripcio
-    QString getDescription();
+    QString getDescription() const;
 
     /// Obtenir l'image set a que referencia
-    int getImageSetNumber();
+    int getImageSetNumber() const;
 
     /// Obtenir la posició del visualitzador
-    QString getPosition();
+    QString getPosition() const;
 
 	/// Obtenir la posició del pacient
-	QString getPatientOrientation();
+	QString getPatientOrientation() const;
 
 	/// Obtenir la reconstruccio
-	QString getReconstruction();
+	QString getReconstruction() const;
 
 	/// Obtenir la fase
-	QString getPhase();
+	QString getPhase() const;
 
     /// Mètode per mostrar els valors
     void show();

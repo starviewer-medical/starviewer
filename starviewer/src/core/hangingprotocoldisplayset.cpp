@@ -43,27 +43,27 @@ void HangingProtocolDisplaySet::setPatientOrientation( QString orientation )
 	m_patientOrientation = orientation;
 }
 
-int HangingProtocolDisplaySet::getIdentifier()
+int HangingProtocolDisplaySet::getIdentifier() const
 {
     return m_identifier;
 }
 
-QString HangingProtocolDisplaySet::getDescription()
+QString HangingProtocolDisplaySet::getDescription() const
 {
     return m_description;
 }
 
-int HangingProtocolDisplaySet::getImageSetNumber()
+int HangingProtocolDisplaySet::getImageSetNumber() const
 {
     return m_imageSetNumber;
 }
 
-QString HangingProtocolDisplaySet::getPosition()
+QString HangingProtocolDisplaySet::getPosition() const
 {
     return m_position;
 }
 
-QString HangingProtocolDisplaySet::getPatientOrientation()
+QString HangingProtocolDisplaySet::getPatientOrientation() const
 {
 	return m_patientOrientation;
 }
@@ -73,7 +73,7 @@ void HangingProtocolDisplaySet::setReconstruction( QString reconstruction )
 	m_reconstruction = reconstruction;
 }
 
-QString HangingProtocolDisplaySet::getReconstruction()
+QString HangingProtocolDisplaySet::getReconstruction() const
 {
 	return m_reconstruction;
 }
@@ -83,7 +83,7 @@ void HangingProtocolDisplaySet::setPhase( QString phase )
 	m_phase = phase;
 }
 		
-QString HangingProtocolDisplaySet::getPhase()
+QString HangingProtocolDisplaySet::getPhase() const
 {
 	return m_phase;
 }

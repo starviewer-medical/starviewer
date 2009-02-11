@@ -28,7 +28,7 @@ public:
     void setProtocolsList( QList<QString> protocols );
 
     /// Obtenir la llista de protocols
-    QList<QString> getProtocolList();
+    QList<QString> getProtocolList() const;
 
 private:
 

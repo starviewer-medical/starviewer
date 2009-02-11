@@ -31,7 +31,7 @@ void HangingProtocol::setName( QString name )
     m_name = name;
 }
 
-QString HangingProtocol::getName()
+QString HangingProtocol::getName() const
 {
     return m_name;
 }
@@ -71,12 +71,12 @@ void HangingProtocol::addDisplaySet ( HangingProtocolDisplaySet * displaySet )
     m_listOfDisplaySets.push_back( displaySet );
 }
 
-int HangingProtocol::getNumberOfImageSets()
+int HangingProtocol::getNumberOfImageSets() const
 {
     return m_listOfImageSets.size();
 }
 
-int HangingProtocol::getNumberOfDisplaySets()
+int HangingProtocol::getNumberOfDisplaySets() const
 {
     return m_listOfDisplaySets.size();
 }
@@ -173,7 +173,7 @@ void HangingProtocol::setIdentifier( int id )
 	m_identifier = id;
 }
 
-int HangingProtocol::getIdentifier()
+int HangingProtocol::getIdentifier() const
 {
 	return m_identifier;
 }
@@ -223,7 +223,7 @@ bool HangingProtocol::gratherThan( HangingProtocol * hangingToCompare )
 }
 
 
-bool HangingProtocol::getStrictness()
+bool HangingProtocol::getStrictness() const
 {
 	return m_strictness;
 }
