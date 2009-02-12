@@ -16,7 +16,6 @@ namespace udg {
  * Editor de funcions de transferència gràfic en condicions.
  *
  * \todo - Desfer.
- *       - Moure només en horitzontal o en vertical.
  *       - Forçar arrodoniments.
  *       - Moure en grup.
  *       - Millorar la documentació.
