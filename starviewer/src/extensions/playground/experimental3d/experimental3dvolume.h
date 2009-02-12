@@ -32,6 +32,7 @@ class vtkVolumeRayCastVoxelShaderCompositeFunction;
 class vtkVolumeRayCastVoxelShaderCompositeFunction2;
 class VmiVoxelShader1;
 class VmiVoxelShader2;
+class VoxelSaliencyVoxelShader;
 
 
 class Experimental3DVolume {
@@ -77,6 +78,7 @@ public:
     void startVmiSecondPass();
     QVector<float> finishVmiSecondPass();
     float viewedVolumeInVmiSecondPass() const;
+    void renderVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor, bool diffuseLighting );
 
 private:
 
@@ -133,6 +135,8 @@ private:
     VmiVoxelShader1 *m_vmiVoxelShader1;
     /// Voxel shader per calcular la VMI; serveix per la segona passada.
     VmiVoxelShader2 *m_vmiVoxelShader2;
+    /// Voxel shader que pinta les voxel saliencies.
+    VoxelSaliencyVoxelShader *m_voxelSaliencyVoxelShader;
 
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;

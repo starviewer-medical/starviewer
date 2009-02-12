@@ -101,6 +101,9 @@ private:
     ObscuranceMainThread *m_obscuranceMainThread;
     Obscurance *m_obscurance;
 
+    QVector<float> m_voxelSaliencies;
+    float m_maximumSaliency;
+
 };
 
 

@@ -78,6 +78,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterLowDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighLabel, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), m_voxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), m_voxelSalienciesFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
 
     // càmera
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
@@ -194,10 +196,17 @@ void QExperimental3DExtension::doVisualization()
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
     m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
     if ( m_diffuseCheckBox->isChecked() ) m_viewer->updateShadingTable();
-    m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
-    m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
-    m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(),
-                             m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
+    if ( !m_voxelSalienciesCheckBox->isChecked() )
+    {
+        m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
+        m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
+        m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(),
+                                 m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
+    }
+    else
+    {
+        m_volume->renderVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
+    }
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
 }
@@ -1168,7 +1177,8 @@ void QExperimental3DExtension::computeVoxelSaliencies()
      * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
      * N'hi haurà prou llegint la llesca actual, l'anterior i la següent.
      */
-    QVector<float> voxelSaliencies( nObjects );
+    m_voxelSaliencies.resize( nObjects );
+    m_maximumSaliency = 0.0f;
     {
         int *dimensions = m_volume->getImage()->GetDimensions();
         int dimX = dimensions[0], dimY = dimensions[1], dimZ = dimensions[2], dimXY = dimX * dimY, dimXY3 = dimXY * 3;
@@ -1231,10 +1241,11 @@ void QExperimental3DExtension::computeVoxelSaliencies()
 
                         float saliency = InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
                         Q_ASSERT( saliency == saliency );
-                        voxelSaliencies[i] += saliency;
+                        m_voxelSaliencies[i] += saliency;
                     }
 
-                    voxelSaliencies[i] /= 6.0f;
+                    m_voxelSaliencies[i] /= 6.0f;
+                    if ( m_voxelSaliencies.at( i ) > m_maximumSaliency ) m_maximumSaliency = m_voxelSaliencies.at( i );
                 }
             }
 
@@ -1251,7 +1262,7 @@ void QExperimental3DExtension::computeVoxelSaliencies()
         for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
         delete[] pOV;
 
-        DEBUG_LOG( "printem" );
+        /*DEBUG_LOG( "printem" );
         // Printar resultats i guardar-los en un fitxer
         QFile outFile( QDir::tempPath().append( "/voxelSaliencies.txt" ) );
         if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
@@ -1259,11 +1270,13 @@ void QExperimental3DExtension::computeVoxelSaliencies()
             QTextStream out( &outFile );
             for ( unsigned int i = 0; i < nObjects; i++ )
             {
-                //DEBUG_LOG( QString( "S(o%1) = %2" ).arg( i ).arg( voxelSaliencies.at( i ) ) );
-                out << "S(o" << i << ") = " << voxelSaliencies.at( i ) << "\n";
+                //DEBUG_LOG( QString( "S(o%1) = %2" ).arg( i ).arg( m_voxelSaliencies.at( i ) ) );
+                out << "S(o" << i << ") = " << m_voxelSaliencies.at( i ) << "\n";
             }
             outFile.close();
-        }
+        }*/
+
+        m_voxelSalienciesCheckBox->setEnabled( true );
     }
 
     DEBUG_LOG( "destruïm els fitxers temporals" );
