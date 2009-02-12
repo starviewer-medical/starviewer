@@ -153,7 +153,8 @@ void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
 
     changeCurrentPoint( x, y );
 
-    QToolTip::showText( event->globalPos(), QString( "(%1, %2)" ).arg( x ).arg( y ) );
+    QPoint pixel = functionPointToGraphicPoint( QPointF( x, y ) ).toPoint();
+    QToolTip::showText( mapToGlobal( pixel ), QString( "(%1, %2)" ).arg( x ).arg( y ) );
 }
 
 
