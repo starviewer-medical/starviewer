@@ -25,6 +25,7 @@
 #include "vtkVolumeRayCastVoxelShaderCompositeFunction2.h"
 #include "vmivoxelshader1.h"
 #include "vmivoxelshader2.h"
+#include "voxelsaliencyvoxelshader.h"
 
 
 namespace udg {
@@ -55,6 +56,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_colorBleedingVoxelShader;
     delete m_vmiVoxelShader1;
     delete m_vmiVoxelShader2;
+    delete m_voxelSaliencyVoxelShader;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -235,6 +237,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
     m_vmiVoxelShader1->setTransferFunction( transferFunction );
     m_vmiVoxelShader2->setTransferFunction( transferFunction );
+    m_voxelSaliencyVoxelShader->setTransferFunction( transferFunction );
 }
 
 
@@ -284,6 +287,17 @@ QVector<float> Experimental3DVolume::finishVmiSecondPass()
 float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 {
     return m_vmiVoxelShader2->viewedVolume();
+}
+
+
+void Experimental3DVolume::renderVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor, bool diffuseLighting )
+{
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction2 );
+    m_shaderVolumeRayCastFunction2->RemoveAllVoxelShaders();
+    m_shaderVolumeRayCastFunction2->AddVoxelShader( m_voxelSaliencyVoxelShader );
+    m_voxelSaliencyVoxelShader->setVoxelSaliencies( voxelSaliencies, maximumSaliency, factor );
+    m_voxelSaliencyVoxelShader->setDiffuseLighting( diffuseLighting );
+    m_voxelSaliencyVoxelShader->setGradientEstimator( gradientEstimator() );
 }
 
 
@@ -337,6 +351,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_vmiVoxelShader1->setData( m_data, m_rangeMax );
     m_vmiVoxelShader2 = new VmiVoxelShader2();
     m_vmiVoxelShader2->setData( m_data, m_rangeMax, m_dataSize );
+    m_voxelSaliencyVoxelShader = new VoxelSaliencyVoxelShader();
+    m_voxelSaliencyVoxelShader->setData( m_data, m_rangeMax );
 }
 
 
