@@ -97,12 +97,6 @@ void QueryScreen::initialize()
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
-    m_listenRisRequests = new ListenRisRequest(this);
-    if (settings.getListenRisRequests())
-    {
-        m_listenRisRequests->listen();
-    }
-
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
     m_operationAnimation->setMovie(operationAnimation);
@@ -118,6 +112,15 @@ void QueryScreen::initialize()
     CreateContextMenuQStudyTreeWidgetDicomdir();
 
     setQStudyTreeWidgetColumnsWidth();
+
+    #ifndef STARVIEWER_LITE
+    m_listenRisRequests = new ListenRisRequest(this);
+    if (settings.getListenRisRequests())
+    {
+        m_listenRisRequests->listen();
+    }
+    #endif
+
 }
 
 void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
@@ -333,7 +336,9 @@ void QueryScreen::createConnections()
     // connectem el botó per obrir DICOMDIR
     connect( m_openDICOMDIRToolButton, SIGNAL( clicked() ), SLOT( openDicomdir() ) );
 
+    #ifndef STARVIEWER_LITE
     connect(m_listenRisRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
+    #endif
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)
