@@ -10,6 +10,7 @@
 #include <QHeaderView>
 #include "operation.h"
 #include "starviewersettings.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -60,35 +61,60 @@ void QOperationStateScreen::setWidthColumns()
 
 void QOperationStateScreen::insertNewOperation( Operation *operation )
 {
-    QTreeWidgetItem* item = new QTreeWidgetItem();
-    QTime time = QTime::currentTime();
-    QString name, operationNumber;
-    QDate date = QDate::currentDate();
-
-    deleteStudy( operation->getStudyUID() ); //si l'estudi ja existeix a la llista l'esborrem
-    name.insert( 0 , operation->getPatientName() );
-    name.replace( "^" ,", ");
-
-    item->setText( 0 , tr( "PENDING" ) );
-
-    if ( operation->getOperation() == Operation::Retrieve || operation->getOperation() == Operation::View )
+    bool canInsert = true;
+    // busquem si l'ítem ja es troba a la llista
+    QTreeWidgetItem *duplicateItem = operationExists( operation->getStudyUID() );
+    if( duplicateItem )
     {
-        item->setText( 1 , tr( "Local" ) );
+        // si l'operació està finalitzada el treiem de la llista
+        if( isOperationFinalized( duplicateItem->text(0) ) )
+        {
+            // TODO estaria bé que en el cas que l'element aparegui com a descarregat, és a dir, l'operació 
+            // va acabar amb èxit, comprovar quant fa que es va inserir aquesta operació i advertir a l'usuari 
+            // si realment vol tornar a baixar-se l'estudi, per exemple
+            deleteStudy( operation->getStudyUID() ); //si l'estudi ja existeix a la llista l'esborrem
+        }
+        else // això vol dir que està o pendent o descarregant, per tant hem de parar i no insertar la operació
+        {
+            canInsert = false;
+        }
     }
-    else item->setText( 1 , tr("Server") );
 
-    item->setText( 2 , operation->getPacsParameters().getAEPacs() );
-    item->setText( 3 , operation->getPatientID() );
-    item->setText( 4 , name );
-    item->setText( 5 , date.toString("dd/MM/yyyy") );
-    item->setText( 6 , time.toString("hh:mm") );
-    item->setText( 7 , "0" ); // series
-    item->setText( 8 , "0"); //imatges
-    item->setText( 9 , operation->getStudyUID() );
-    operationNumber.setNum( operation->getOperation() , 10 );
-    item->setText( 10 , operationNumber ); // indica el tipus d'operació
+    if( !canInsert )
+    {
+        DEBUG_LOG("L'operació amb UID: " + operation->getStudyUID() + " està pendent/descarregant per tant no s'afegeix de nou a la finestra");
+    }
+    else
+    {
+        QTreeWidgetItem* item = new QTreeWidgetItem();
+        QTime time = QTime::currentTime();
+        QString name, operationNumber;
+        QDate date = QDate::currentDate();
 
-    m_treeRetrieveStudy->addTopLevelItem(item);
+        name.insert( 0 , operation->getPatientName() );
+        name.replace( "^" ,", ");
+
+        item->setText( 0 , tr( "PENDING" ) );
+
+        if ( operation->getOperation() == Operation::Retrieve || operation->getOperation() == Operation::View )
+        {
+            item->setText( 1 , tr( "Local" ) );
+        }
+        else item->setText( 1 , tr("Server") );
+
+        item->setText( 2 , operation->getPacsParameters().getAEPacs() );
+        item->setText( 3 , operation->getPatientID() );
+        item->setText( 4 , name );
+        item->setText( 5 , date.toString("dd/MM/yyyy") );
+        item->setText( 6 , time.toString("hh:mm") );
+        item->setText( 7 , "0" ); // series
+        item->setText( 8 , "0"); //imatges
+        item->setText( 9 , operation->getStudyUID() );
+        operationNumber.setNum( operation->getOperation() , 10 );
+        item->setText( 10 , operationNumber ); // indica el tipus d'operació
+
+        m_treeRetrieveStudy->addTopLevelItem(item);
+    }
 }
 
 
@@ -259,6 +285,31 @@ QOperationStateScreen::~QOperationStateScreen()
 bool QOperationStateScreen::isOperationFinalized(const QString &message)
 {
     return  message == tr("RETRIEVED") || message == tr("STORED") || message == tr("ERROR") || message == tr("CANCELLED");
+}
+
+QTreeWidgetItem *QOperationStateScreen::operationExists( const QString &studyUID )
+{
+    QTreeWidgetItem *result = NULL;
+    QList<QTreeWidgetItem *> matchingStudies( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
+
+    // hauríem de tenir únicament 1 sol estudi
+    switch( matchingStudies.count() )
+    {
+    case 0:
+        // ok, no n'hi ha cap
+        break;
+
+    case 1: // ok, lo normal
+        result = matchingStudies.first();
+        break;
+         
+    default: // oops, alguna problema hi ha aquí!! però de totes maneres tornem el primer element
+        DEBUG_LOG( QString("Nombre d'estudis trobats erroni! :: %1").arg( matchingStudies.count() ) );
+        result = matchingStudies.first();
+        break;
+    }
+    
+    return result;
 }
 
 };

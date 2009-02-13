@@ -34,8 +34,6 @@ public:
     unsigned int getActiveOperationsCount();
 
 public slots :
-
-
     /** Insereixu una nova operació
      *  @param operation operació a inserir
      */
@@ -80,14 +78,12 @@ public slots :
     void clearList();
 
 protected :
-
     /** Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
     void closeEvent( QCloseEvent* ce );
 
 private:
-
     /** Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla. La mida de les columnes la tenim guardada al StarviewerSettings
      */
     void setWidthColumns();
@@ -106,6 +102,10 @@ private:
 
     /// Indica si una operació es pot considerar com a finalitzada a partir del seu missatge d'estat
     bool isOperationFinalized(const QString &message);
+
+    /// Comprova si l'operació amb UID studyUID existeix a la llista. Si és així retorna
+    /// l'item, altrament ens retorna NUL
+    QTreeWidgetItem *operationExists( const QString &studyUID );
 
 private:
     QString m_currentProcessingStudyUID;
