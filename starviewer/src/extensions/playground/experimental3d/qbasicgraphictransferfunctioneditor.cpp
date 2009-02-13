@@ -20,6 +20,8 @@ const double QBasicGraphicTransferFunctionEditor::POINT_SIZE = 4.0;
 QBasicGraphicTransferFunctionEditor::QBasicGraphicTransferFunctionEditor( QWidget *parent )
  : QWidget( parent ), m_minimum( 0.0 ), m_maximum( 4095.0 ), m_dragging( false )
 {
+    setFocusPolicy( Qt::WheelFocus );
+
     // escacs
     QPixmap pixmap( 20, 20 );
     QPainter painter( &pixmap );
@@ -80,6 +82,16 @@ void QBasicGraphicTransferFunctionEditor::setTransferFunctionName( const QString
 }
 
 
+void QBasicGraphicTransferFunctionEditor::adjustRangeToFunction()
+{
+    QList<double> points = m_transferFunction.getPoints();
+
+    if ( points.size() < 2 ) return;
+
+    setRange( points.first(), points.last() );
+}
+
+
 bool QBasicGraphicTransferFunctionEditor::event( QEvent *event )
 {
     if ( event->type() == QEvent::ToolTip )
@@ -97,6 +109,12 @@ bool QBasicGraphicTransferFunctionEditor::event( QEvent *event )
     }
 
     return QWidget::event(event);
+}
+
+
+void QBasicGraphicTransferFunctionEditor::keyPressEvent( QKeyEvent *event )
+{
+    if ( event->key() == Qt::Key_Space ) adjustRangeToFunction();
 }
 
 

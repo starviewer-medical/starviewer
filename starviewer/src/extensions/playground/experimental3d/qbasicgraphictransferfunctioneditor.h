@@ -39,6 +39,8 @@ public slots:
 
     /// Assigna el nom de la funció de transferència.
     void setTransferFunctionName( const QString &name );
+    /// Ajusta el mínim i el mínim i el màxim de manera que coincideixin amb els extrems de la funció.
+    void adjustRangeToFunction();
 
 signals:
 
@@ -48,6 +50,7 @@ signals:
 protected:
 
     virtual bool event( QEvent *event );
+    virtual void keyPressEvent( QKeyEvent *event );
     virtual void mousePressEvent( QMouseEvent *event );
     virtual void mouseMoveEvent( QMouseEvent *event );
     virtual void mouseReleaseEvent( QMouseEvent *event );
