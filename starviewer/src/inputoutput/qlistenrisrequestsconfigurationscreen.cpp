@@ -81,6 +81,8 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
             m_textPortListenRisRequests->setModified(false);//Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
         }
 
+        settings.setViewAutomaticallyAStudyRetrievedFromRisRequest(m_checkBoxViewAutomaticallyStudies->isChecked());
+
         m_buttonApplyListenRisConfiguration->setDisabled(true);
 
         return true;
