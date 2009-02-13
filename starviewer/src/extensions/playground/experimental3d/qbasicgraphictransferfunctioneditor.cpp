@@ -145,10 +145,12 @@ void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
     QPointF functionPoint = pixelToFunctionPoint( event->pos() );
     double x = functionPoint.x(), y = functionPoint.y();
 
-    // comprovem les tecles modificadores activades per restringir el moviment en x o en y
+    // comprovem les tecles modificadores activades per restringir el moviment en x o en y o arrodonir
     Qt::KeyboardModifiers modifiers = event->modifiers();
     if ( modifiers.testFlag( Qt::ShiftModifier ) ) x = m_currentX;
     if ( modifiers.testFlag( Qt::ControlModifier ) ) y = m_transferFunctionCopy.getOpacity( m_currentX );
+    if ( modifiers.testFlag( Qt::MetaModifier ) ) x = qRound( x );
+    if ( modifiers.testFlag( Qt::AltModifier ) ) y = qRound( 10.0 * y ) / 10.0;
 
     // vigilem que no es surti de rang
     if ( x < m_minimum ) x = m_minimum;
