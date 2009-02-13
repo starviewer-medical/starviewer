@@ -109,6 +109,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
     connect( m_vomiPushButton, SIGNAL( clicked() ), SLOT( computeVomi() ) );
     connect( m_voxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( computeVoxelSaliencies() ) );
+    connect( m_loadVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelSaliencies() ) );
+    connect( m_saveVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelSaliencies() ) );
 }
 
 
@@ -1070,6 +1072,8 @@ void QExperimental3DExtension::computeVomi()
 
 void QExperimental3DExtension::computeVoxelSaliencies()
 {
+    setCursor( QCursor( Qt::WaitCursor ) );
+
     Vector3 position, focus, up;
     m_viewer->getCamera( position, focus, up );
 
@@ -1096,6 +1100,10 @@ void QExperimental3DExtension::computeVoxelSaliencies()
     unsigned int nObjects = m_volume->getSize();
 
     m_vmiProgressBar->setValue( 0 );
+    m_vmiProgressBar->repaint();
+    m_vmiTotalProgressBar->setMaximum( 4 );
+    m_vmiTotalProgressBar->setValue( 0 );
+    m_vmiTotalProgressBar->repaint();
     m_volume->startVmiMode();
 
     QVector<float> viewProbabilities( nViewpoints );    // vector de p(v), inicialitzat a 0
@@ -1119,6 +1127,9 @@ void QExperimental3DExtension::computeVoxelSaliencies()
 
     // p(V) i p(O)
     {
+        m_vmiProgressBar->setValue( 0 );
+        m_vmiProgressBar->repaint();
+
         float totalViewedVolume = 0.0;
 
         for ( int i = 0; i < nViewpoints; i++ )
@@ -1135,22 +1146,33 @@ void QExperimental3DExtension::computeVoxelSaliencies()
             // p(O|V)
             pOvFiles[i]->write( reinterpret_cast<const char*>( objectProbabilitiesInView.data() ), objectProbabilitiesInView.size() * sizeof(float) );
 
-            m_vmiProgressBar->setValue( 25 * ( i + 1 ) / nViewpoints );
-        }   // progrés al 25%
+            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( 1 );
+        m_vmiTotalProgressBar->repaint();
 
         // p(V)
         if ( totalViewedVolume > 0.0f )
         {
+            m_vmiProgressBar->setValue( 0 );
+
             for ( int i = 0; i < nViewpoints; i++ )
             {
                 viewProbabilities[i] /= totalViewedVolume;
                 Q_ASSERT( viewProbabilities.at( i ) == viewProbabilities.at( i ) );
                 DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
-                m_vmiProgressBar->setValue( 25 + 25 * ( i + 1 ) / nViewpoints / 2 );
+                m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+                m_vmiProgressBar->repaint();
             }
-        }   // progrés al 37%
+        }
+
+        m_vmiTotalProgressBar->setValue( 2 );
+        m_vmiTotalProgressBar->repaint();
 
         // p(O)
+        m_vmiProgressBar->setValue( 0 );
         float *objectProbabilitiesInView = new float[nObjects];
         for ( int i = 0; i < nViewpoints; i++ )
         {
@@ -1160,8 +1182,11 @@ void QExperimental3DExtension::computeVoxelSaliencies()
             {
                 objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j];
             }
-            m_vmiProgressBar->setValue( 25 + ( 25 + 25 * ( i + 1 ) / nViewpoints ) / 2 );
-        }   // progrés al 50%
+            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+            m_vmiProgressBar->repaint();
+        }
+        m_vmiTotalProgressBar->setValue( 3 );
+        m_vmiTotalProgressBar->repaint();
         for ( unsigned int i = 0; i < nObjects; i++ )
         {
                 Q_ASSERT( objectProbabilities.at( i ) == objectProbabilities.at( i ) );
@@ -1170,8 +1195,6 @@ void QExperimental3DExtension::computeVoxelSaliencies()
 
         delete[] objectProbabilitiesInView;
     }
-
-    DEBUG_LOG( "50%" );
 
     /*
      * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
@@ -1187,6 +1210,8 @@ void QExperimental3DExtension::computeVoxelSaliencies()
         for ( int i = 0; i < nViewpoints; i++ ) pOV[i] = new float[dimXY3];
         QVector<float> pVoi( nViewpoints );
         QVector<float> pVoj( nViewpoints );
+
+        m_vmiProgressBar->setValue( 0 );
 
         // iterem pel volum en l'ordre dels vòxels
         for ( int z = 0, i = 0; z < dimZ; z++ )
@@ -1236,7 +1261,7 @@ void QExperimental3DExtension::computeVoxelSaliencies()
                         if ( poij == 0.0 ) continue;
 
                         // pVoj
-                        if ( poj == 0.0 ) pVoj.fill( 0.0f );    // si poi == 0 vol dir que el vòxel no es veu des d'enlloc --> pVoi ha de ser tot zeros
+                        if ( poj == 0.0 ) pVoj.fill( 0.0f );    // si poj == 0 vol dir que el vòxel no es veu des d'enlloc --> pVoj ha de ser tot zeros
                         else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = pOV[k][neighbours[j] - pOvShift];
 
                         float saliency = InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
@@ -1255,8 +1280,12 @@ void QExperimental3DExtension::computeVoxelSaliencies()
                 for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );
             }
 
-            m_vmiProgressBar->setValue( 50 + 50 * ( z + 1 ) / dimZ );
+            m_vmiProgressBar->setValue( 100 * ( z + 1 ) / dimZ );
+            m_vmiProgressBar->repaint();
         }
+
+        m_vmiTotalProgressBar->setValue( 4 );
+        m_vmiTotalProgressBar->repaint();
 
         DEBUG_LOG( "esborrem pOV" );
         for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
@@ -1277,6 +1306,7 @@ void QExperimental3DExtension::computeVoxelSaliencies()
         }*/
 
         m_voxelSalienciesCheckBox->setEnabled( true );
+        m_saveVoxelSalienciesPushButton->setEnabled( true );
     }
 
     DEBUG_LOG( "destruïm els fitxers temporals" );
@@ -1290,6 +1320,85 @@ void QExperimental3DExtension::computeVoxelSaliencies()
     m_viewer->setCamera( position, focus, up );
 
     DEBUG_LOG( "fi" );
+
+    setCursor( QCursor( Qt::ArrowCursor ) );
+}
+
+
+void QExperimental3DExtension::loadVoxelSaliencies()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString voxelSalienciesDir = settings.value( "voxelSalienciesDir", QString() ).toString();
+    QString voxelSalienciesFileName = QFileDialog::getOpenFileName( this, tr("Load voxel saliencies"), voxelSalienciesDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !voxelSalienciesFileName.isNull() )
+    {
+        QFile voxelSalienciesFile( voxelSalienciesFileName );
+
+        if ( !voxelSalienciesFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + voxelSalienciesFileName );
+            QMessageBox::warning( this, tr("Can't load voxel saliencies"), QString( tr("Can't load voxel saliencies from file ") ) + voxelSalienciesFileName );
+            return;
+        }
+
+        unsigned int nObjects = m_volume->getSize();
+        m_voxelSaliencies.resize( nObjects );
+
+        QDataStream in( &voxelSalienciesFile );
+
+        for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ ) in >> m_voxelSaliencies[i];
+
+        voxelSalienciesFile.close();
+
+        QFileInfo voxelSalienciesFileInfo( voxelSalienciesFileName );
+        settings.setValue( "voxelSalienciesDir", voxelSalienciesFileInfo.absolutePath() );
+
+        m_voxelSalienciesCheckBox->setEnabled( true );
+        m_saveVoxelSalienciesPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveVoxelSaliencies()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString voxelSalienciesDir = settings.value( "voxelSalienciesDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save voxel saliencies"), voxelSalienciesDir, tr("Data files (*.dat);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString voxelSalienciesFileName = saveDialog.selectedFiles().first();
+        QFile voxelSalienciesFile( voxelSalienciesFileName );
+
+        if ( !voxelSalienciesFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + voxelSalienciesFileName );
+            QMessageBox::warning( this, tr("Can't save voxel saliencies"), QString( tr("Can't save voxel saliencies to file ") ) + voxelSalienciesFileName );
+            return;
+        }
+
+        QDataStream out( &voxelSalienciesFile );
+
+        unsigned int nObjects = m_volume->getSize();
+
+        for ( unsigned int i = 0; i < nObjects; i++ ) out << m_voxelSaliencies.at( i );
+
+        voxelSalienciesFile.close();
+
+        QFileInfo voxelSalienciesFileInfo( voxelSalienciesFileName );
+        settings.setValue( "voxelSalienciesDir", voxelSalienciesFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
 }
 
 

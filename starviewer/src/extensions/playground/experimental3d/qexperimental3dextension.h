@@ -92,6 +92,8 @@ private slots:
     void computeVomi();
     /// Calcula les saliencies dels vòxels.
     void computeVoxelSaliencies();
+    void loadVoxelSaliencies();
+    void saveVoxelSaliencies();
 
 private:
 
