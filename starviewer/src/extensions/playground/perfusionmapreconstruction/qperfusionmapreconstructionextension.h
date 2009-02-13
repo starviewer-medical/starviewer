@@ -86,6 +86,9 @@ private slots:
     /// gestiona els events del moviment del cursor
     void paintCursorSignal( );
 
+    /// pinta la mitjana del deltaR de cada llesca
+    void paintMeanSlice( int slice );
+
     /// gestiona els events del botó esquerre
     void leftButtonEventHandler();
 
@@ -130,6 +133,8 @@ private:
     DrawerPoint* m_aifDrawPoint;
     int m_aifIndex[3];
     int m_aifSlice;
+    //DeltaR mitjana per cada llesca
+    QVector<QVector<double> > m_meanseries;
 };
 
 } // end namespace udg

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>644</width>
-    <height>681</height>
+    <width>582</width>
+    <height>603</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -334,51 +334,25 @@
          </layout>
         </item>
         <item>
-         <widget class="QLabel" name="m_aifLabel" >
-          <property name="text" >
-           <string>Aif signal:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="udg::ShadeWidget" name="m_AIFView" >
+         <widget class="udg::QGraphicPlotWidget" native="1" name="m_aifplot" >
           <property name="sizePolicy" >
            <sizepolicy>
-            <hsizetype>13</hsizetype>
-            <vsizetype>13</vsizetype>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="minimumSize" >
            <size>
-            <width>50</width>
-            <height>50</height>
+            <width>20</width>
+            <height>20</height>
            </size>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label" >
-          <property name="text" >
-           <string>Mouse signal:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="udg::ShadeWidget" name="m_mouseTrackingView" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>13</hsizetype>
-            <vsizetype>13</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize" >
+          <property name="maximumSize" >
            <size>
-            <width>50</width>
-            <height>50</height>
+            <width>16777215</width>
+            <height>16777215</height>
            </size>
           </property>
          </widget>
@@ -387,8 +361,8 @@
          <widget class="udg::QGraphicPlotWidget" native="1" name="m_graphicplot" >
           <property name="sizePolicy" >
            <sizepolicy>
-            <hsizetype>13</hsizetype>
-            <vsizetype>13</vsizetype>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -483,11 +457,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>udg::ShadeWidget</class>
-   <extends>QGraphicsView</extends>
-   <header>shadewidget.h</header>
-  </customwidget>
   <customwidget>
    <class>udg::QGraphicPlotWidget</class>
    <extends>QWidget</extends>

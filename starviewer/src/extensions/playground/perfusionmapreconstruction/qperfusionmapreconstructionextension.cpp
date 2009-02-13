@@ -73,19 +73,10 @@ QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWid
     createConnections();
     readSettings();
 
-    int t,tend=60;
-    m_graphicplot->setMaxX((double)(tend-1));
-    m_graphicplot->setMinX(0.0);
     m_graphicplot->setTitle("DeltaR signal");
-    QVector<double> signal(tend);
-    for (t=0;t<tend;t++)
-    {
-        signal[t]=0.0;
-    }
-    //Empirical values
-    m_graphicplot->setMaxY(1.0);
-    m_graphicplot->setMinY(-1.0);
-    m_graphicplot->setData(signal);
+    m_graphicplot->setAutoLimits();
+    m_aifplot->setTitle("AIF");
+    m_aifplot->setAutoLimits();
 }
 
 QPerfusionMapReconstructionExtension::~QPerfusionMapReconstructionExtension()
@@ -160,6 +151,7 @@ void QPerfusionMapReconstructionExtension::createConnections()
   connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( eventHandler(unsigned long) ) );
   connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
   connect( m_2DView, SIGNAL( sliceChanged(int) ) , m_sliceViewSlider , SLOT( setValue(int) ) );
+  connect( m_2DView, SIGNAL( sliceChanged(int) ) , SLOT( paintMeanSlice(int) ) );
   connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
   connect( m_chooseDSCPushButton, SIGNAL( clicked() ), SLOT( contextMenuDSCRelease() ) );
   connect( m_computePerfusionPushButton, SIGNAL( clicked() ), SLOT( computePerfusionMap() ) );
@@ -235,6 +227,8 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
     m_mapCalculator->setDSCVolume(m_DSCVolume);
     m_mapCalculator->run();
 
+    m_meanseries = m_mapCalculator->getMeanDeltaRPerSlice();
+
 /*    itk::MinimumMaximumImageCalculator< DoubleImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< DoubleImageType >::New();
     minmaxCalc->SetImage(m_mapCalculator->getCBVImage());
     minmaxCalc->SetRegion(m_mapCalculator->getCBVImage()->GetRequestedRegion());
@@ -276,10 +270,9 @@ void QPerfusionMapReconstructionExtension::paintMap( )
     }
 
     QVector<double> inputAIF = m_mapCalculator->getAIF();
-    QPolygonF p;
 
-    double minp = 100000.0;
-    double maxp = -100000.0;
+    double minp = inputAIF[0];
+    double maxp = inputAIF[0];
     int t, tend = inputAIF.size();
 
     for (t=0;t<tend;t++)
@@ -287,11 +280,8 @@ void QPerfusionMapReconstructionExtension::paintMap( )
         if(inputAIF[t]>maxp) maxp = inputAIF[t];
         if(inputAIF[t]<minp) minp = inputAIF[t];
     }
-    for (t=0;t<tend;t++)
-    {
-        p << QPointF(t*m_AIFView->size().width()/(tend),(inputAIF[t]-minp)*m_AIFView->size().height()/(maxp-minp));
-    }
-    m_AIFView->setPoints(p);
+
+    m_aifplot->setData(inputAIF);
 
 
 
@@ -1031,13 +1021,25 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
             //Empirical values
             m_graphicplot->setMaxY(0.05);
             m_graphicplot->setMinY(-0.01);
-            m_graphicplot->setData(signal);
-
-            for (t=0;t<tend;t++)
+            //m_graphicplot->setHold(true);
+            m_graphicplot->setData( signal );
+            if(m_meanseries.size() > m_2DView->getCurrentSlice())
             {
-                p << QPointF(t*m_mouseTrackingView->size().width()/(tend),(signal[t]-minsig)*(double)m_mouseTrackingView->size().height()/(maxsig-minsig));
+                m_graphicplot->setData( m_meanseries[m_2DView->getCurrentSlice()], 1 );
+                m_graphicplot->setPaintingFeatures(Qt::red, 1.5, 1);
             }
-            m_mouseTrackingView->setPoints(p);
+        }
+    }    
+}
+
+void QPerfusionMapReconstructionExtension::paintMeanSlice( int slice )
+{
+    if(m_mapCalculator->getCBVVolume())    //Si hi ha alguna cosa al volum
+    {
+        //std::cout<<"Painting mean series: slice = "<<slice<<", size ="<<m_meanseries.size()<<std::endl;
+        if(m_meanseries.size() > slice)
+        {
+            m_graphicplot->setData( m_meanseries[slice], 1 );
         }
     }    
 }
