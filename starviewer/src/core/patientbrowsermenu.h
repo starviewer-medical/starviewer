@@ -42,9 +42,6 @@ signals:
     /// senyal que envia la serie escollida per ser visualitzada
     void selectedSeries( Series *series );
 
-protected:
-    bool eventFilter(QObject *watched, QEvent *event);
-
 private slots:
     void emitSelected( Series * serie );
 

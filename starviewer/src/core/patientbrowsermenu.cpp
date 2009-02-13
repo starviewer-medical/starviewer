@@ -30,11 +30,6 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) : QWidget(parent)
 
     m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
     connect( m_patientBrowserList, SIGNAL( close() ), m_patientAdditionalInfo, SLOT( close() ) );
-
-    //TODO Hack per fer desapareixer els 2 popups al clickar fora d'aquest: veure eventFilter
-    //S'hauria de fer que el browser i additional info fossin, realment, fills d'aquest widget i tractar-ho com un de sol.
-    m_patientAdditionalInfo->installEventFilter(this);
-    m_patientBrowserList->installEventFilter(this);
 }
 
 PatientBrowserMenu::~PatientBrowserMenu()
@@ -120,21 +115,6 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
         m_patientAdditionalInfo->show();
     }
     // FI HACK
-}
-
-bool PatientBrowserMenu::eventFilter(QObject *watched, QEvent *event)
-{
-    if (event->type() == QEvent::MouseButtonPress)
-    {
-        QPoint additionalInfoPos = m_patientAdditionalInfo->mapFromGlobal( QCursor::pos() );
-        if ( !m_patientAdditionalInfo->rect().contains(additionalInfoPos) )
-        {
-            m_patientBrowserList->hide();
-            m_patientAdditionalInfo->hide();
-            return true;
-        }
-    }
-    return QWidget::eventFilter(watched, event);
 }
 
 void PatientBrowserMenu::emitSelected( Series * serie )
