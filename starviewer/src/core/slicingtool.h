@@ -57,12 +57,6 @@ private:
      */
     void updateIncrement(int increment);
 
-    /**
-     * Ens diu si l'input actual té fases o no
-     * @return
-     */
-    bool currentInputHasPhases();
-
 private:
     enum { SliceMode, PhaseMode };
 
@@ -89,6 +83,9 @@ private:
 	/// mida de la pantalla
 	/// útil per calcular l'increment proporcional de llesques
 	int *m_screenSize;
+
+    /// Ens indica si l'input actual té fases. S'actualitza cada cop que es canvia d'input
+    bool m_inputHasPhases;
 };
 
 }
