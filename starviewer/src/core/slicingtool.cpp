@@ -11,11 +11,12 @@
 
 //vtk
 #include <vtkCommand.h>
+#include <vtkRenderWindowInteractor.h>
 
 namespace udg {
 
 SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0)
+ : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0), m_inputHasPhases(false)
 {
     m_state = NONE;
     m_toolName = "SlicingTool";
@@ -73,6 +74,8 @@ void SlicingTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::MiddleButtonReleaseEvent:
+        // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
+        // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
         if( !m_mouseMovement )
             switchSlicingMode();
     break;
@@ -129,32 +132,24 @@ void SlicingTool::endSlicing()
 
 void SlicingTool::inputChanged( Volume *input )
 {
-    Q_UNUSED(input);
     m_slicingMode = SliceMode;
     m_mouseMovement = false;
     m_state = NONE;
-}
-
-bool SlicingTool::currentInputHasPhases()
-{
-    bool hasPhases = false;
-
-    if( m_2DViewer->getInput() )
+    m_inputHasPhases = false;
+    if( input )
     {
-        if( m_2DViewer->getInput()->getNumberOfPhases() > 1 )
-            hasPhases = true;
+        if( input->getNumberOfPhases() > 1 )
+            m_inputHasPhases = true;
     }
     else
     {
-        DEBUG_LOG("L'input del viewer és NULL!");
+        DEBUG_LOG("L'input introduit és NULL!");
     }
-
-    return hasPhases;
 }
 
 void SlicingTool::switchSlicingMode()
 {
-    if( currentInputHasPhases() )
+    if( m_inputHasPhases )
     {
         if( m_slicingMode == SliceMode )
             m_slicingMode = PhaseMode;
@@ -165,15 +160,21 @@ void SlicingTool::switchSlicingMode()
 
 void SlicingTool::updateIncrement(int increment)
 {
-    switch( m_slicingMode )
+    // si mantenim control apretat sempe mourem fases independentment de l'slicing mode
+    if( m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases )
+        m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + increment );
+    else // altrament continuem amb el comportament habitual
     {
-        case SliceMode:
-            m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() + increment );
-            break;
+        switch( m_slicingMode )
+        {
+            case SliceMode:
+                m_2DViewer->setSlice( m_2DViewer->getCurrentSlice() + increment );
+                break;
 
-        case PhaseMode:
-            m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + increment );
-            break;
+            case PhaseMode:
+                m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + increment );
+                break;
+        }
     }
 }
 
