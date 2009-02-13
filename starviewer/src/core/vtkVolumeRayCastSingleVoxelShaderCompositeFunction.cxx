@@ -142,7 +142,7 @@ void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::SetVoxelShader( VS 
 
 template <class VS> // per la classe
 template <class T>  // pel mètode
-void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::CastRay( const T *data,
+void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::CastRay( const T *vtkNotUsed(data),
                                                                       vtkVolumeRayCastDynamicInfo *dynamicInfo,
                                                                       const vtkVolumeRayCastStaticInfo *staticInfo ) const
 {
