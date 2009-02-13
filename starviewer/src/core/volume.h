@@ -27,7 +27,6 @@ class vtkImageData;
 
 namespace udg {
 
-class VolumeSourceInformation;
 class Image;
 class Series;
 class Study;
