@@ -46,11 +46,16 @@ void QBasicGraphicTransferFunctionEditor::setRange( double minimum, double maxim
 {
     Q_ASSERT( minimum < maximum );
 
-    m_minimum = minimum;
-    m_maximum = maximum;
+    if ( m_minimum != minimum || m_maximum != maximum )
+    {
+        m_minimum = minimum;
+        m_maximum = maximum;
 
-    updateColorGradient();
-    update();
+        updateColorGradient();
+        update();
+
+        emit rangeChanged( m_minimum, m_maximum );
+    }
 }
 
 
@@ -172,6 +177,22 @@ void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent( QMouseEvent *event 
     m_dragging = false;
 
     QToolTip::hideText();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::wheelEvent( QWheelEvent *event )
+{
+    int zoom = event->delta() / 8;
+
+    if ( 2 * zoom >= m_maximum - m_minimum ) return;
+
+    m_minimum += zoom;
+    m_maximum -= zoom;
+
+    updateColorGradient();
+    update();
+
+    emit rangeChanged( m_minimum, m_maximum );
 }
 
 
