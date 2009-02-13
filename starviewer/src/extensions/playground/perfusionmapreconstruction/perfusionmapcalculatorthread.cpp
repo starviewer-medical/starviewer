@@ -416,10 +416,10 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
     QVector<double> residuefunc(tissue.size());
     int i;
     //std::cout<<"?"<<std::endl;
-    for(i=0;i<tissue.size();i++)
+    /*for(i=0;i<tissue.size();i++)
     {
         std::cout<<tissue[i]<<" "<<std::flush;
-    }
+    }*/
     //std::cout<<"?"<<std::endl;
     typedef std::complex<double> complexd;
     complexd num1, num2, num3;

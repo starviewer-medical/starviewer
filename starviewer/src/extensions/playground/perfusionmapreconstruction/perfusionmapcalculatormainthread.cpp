@@ -357,6 +357,63 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
         delete threads[j];
     }
     //fout.close();
+    this->computeMeanDeltaRPerSlice();
+}
+
+void PerfusionMapCalculatorMainThread::computeMeanDeltaRPerSlice( )
+{
+    int i,j,k,t;
+    //prenem la i perquè sol ser el valor més gran
+    //TODO:Compte quan un no és múltiple de l'altre!!!
+    int iend = m_DSCVolume->getDimensions()[0];
+    int jend = m_DSCVolume->getDimensions()[1];
+    int kend = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    int tend = m_DSCVolume->getNumberOfPhases();
+    m_meanseries = QVector<QVector<double> > (kend,QVector<double> (tend,0.0));
+    QVector<signed int > contseries(kend,0);
+
+    typedef itk::ImageRegionIteratorWithIndex<BoolImageType> BoolIterator;
+    BoolIterator boolIter( checkImage, checkImage->GetBufferedRegion() );
+
+    typedef itk::ImageRegionIteratorWithIndex<DoubleTemporalImageType> DoubleTempIterator;
+    DoubleTempIterator imIter( deltaRImage, deltaRImage->GetBufferedRegion() );
+
+    boolIter.GoToBegin();
+    imIter.GoToBegin();
+
+    for (k=0;k<kend;k++)
+    {
+        for (j=0;j<jend;j++)
+        {
+            for (i=0;i<iend;i++)
+            {
+                if( boolIter.Get() )
+                {
+                    for (t=0;t<tend;t++)
+                    {
+                        m_meanseries[k][t] += (double)imIter.Get( );
+                        ++imIter;
+                    }
+                    contseries[k]++;
+                }
+                else
+                {
+                    for (t=0;t<tend;t++)
+                    {
+                        ++imIter;
+                    }
+                }
+                ++boolIter;
+            }
+        }
+    }
+    for (k=0;k<kend;k++)
+    {
+        for (t=0;t<tend;t++)
+        {
+            m_meanseries[k][t] = m_meanseries[k][t]/(double)contseries[k];
+        }
+    }
 }
 
 void PerfusionMapCalculatorMainThread::computeMoments( )

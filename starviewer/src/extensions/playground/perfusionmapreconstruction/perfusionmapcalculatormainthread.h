@@ -43,6 +43,8 @@ public:
 
     QVector<double> getAIF(){return m_aif;}
 
+    QVector<QVector<double> > getMeanDeltaRPerSlice(){return m_meanseries;}
+
 public slots:
 
     void stop();
@@ -61,6 +63,7 @@ private:
     static const double TR;
 
     void computeDeltaR( );
+    void computeMeanDeltaRPerSlice( );
     void computeMoments( );
     //Xapussa: posem directament el tipus dels voxels del Volume
     void computeMomentsVoxel( QVector<double> v, double &m0, double &m1, double &m2);
@@ -93,6 +96,8 @@ private:
     QVector<double> fftaifreal;
     QVector<double> fftaifimag;
     QVector<double> omega;
+
+    QVector<QVector<double> > m_meanseries;
 
     double reg_fact, reg_exp;
 
