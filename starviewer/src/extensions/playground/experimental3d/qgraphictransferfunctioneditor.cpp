@@ -10,6 +10,7 @@ QGraphicTransferFunctionEditor::QGraphicTransferFunctionEditor( QWidget *parent 
     setupUi( this );
 
     connect( m_nameLineEdit, SIGNAL( textChanged(QString) ), m_basicEditor, SLOT( setTransferFunctionName(const QString&) ) );
+    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setRange(double,double) ) );
     connect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMinimum(double) ) );
     connect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMaximum(double) ) );
     connect( m_keepRangePushButton, SIGNAL( toggled(bool) ), SLOT( keepRange(bool) ) );
@@ -19,16 +20,6 @@ QGraphicTransferFunctionEditor::QGraphicTransferFunctionEditor( QWidget *parent 
 
 QGraphicTransferFunctionEditor::~QGraphicTransferFunctionEditor()
 {
-}
-
-
-void QGraphicTransferFunctionEditor::setRange( double minimum, double maximum )
-{
-    int pageStep = static_cast<int>( maximum - minimum );
-    m_scrollBar->setPageStep( pageStep );
-    m_scrollBar->setMaximum( static_cast<int>( m_maximumDoubleSpinBox->maximum() - pageStep ) );
-    m_minimumDoubleSpinBox->setValue( minimum );
-    m_maximumDoubleSpinBox->setValue( maximum );
 }
 
 
@@ -42,6 +33,22 @@ void QGraphicTransferFunctionEditor::setTransferFunction( const TransferFunction
 const TransferFunction& QGraphicTransferFunctionEditor::transferFunction() const
 {
     return m_basicEditor->transferFunction();
+}
+
+
+void QGraphicTransferFunctionEditor::setRange( double minimum, double maximum )
+{
+    Q_ASSERT( minimum < maximum );
+
+    if ( minimum < m_minimumDoubleSpinBox->minimum() ) minimum = m_minimumDoubleSpinBox->minimum();
+    if ( maximum > m_maximumDoubleSpinBox->maximum() ) maximum = m_maximumDoubleSpinBox->maximum();
+
+    int pageStep = static_cast<int>( maximum - minimum );
+    m_scrollBar->setPageStep( pageStep );
+    m_scrollBar->setMaximum( static_cast<int>( m_maximumDoubleSpinBox->maximum() - pageStep ) );
+    m_minimumDoubleSpinBox->setValue( minimum );
+    m_maximumDoubleSpinBox->setValue( maximum );
+    m_basicEditor->setRange( minimum, maximum );    // per assegurar la sincronització entre els controls i l'editor
 }
 
 
