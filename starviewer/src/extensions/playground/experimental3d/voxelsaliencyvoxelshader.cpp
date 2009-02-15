@@ -7,7 +7,8 @@ namespace udg {
 
 
 VoxelSaliencyVoxelShader::VoxelSaliencyVoxelShader()
- : VoxelShader2(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumSaliency( 1.0f ), m_saliencyFactor( 1.0f ), m_diffuseLighting( false ), m_encodedNormals( 0 ), m_directionEncoder( 0 )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumSaliency( 1.0f ), m_saliencyFactor( 1.0f ), m_diffuseLighting( false ),
+   m_encodedNormals( 0 ), m_directionEncoder( 0 )
 {
 }
 

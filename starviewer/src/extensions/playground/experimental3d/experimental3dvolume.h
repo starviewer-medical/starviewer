@@ -29,7 +29,6 @@ class vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
 
 // VMI
-class vtkVolumeRayCastVoxelShaderCompositeFunction2;
 class VmiVoxelShader1;
 class VmiVoxelShader2;
 class VoxelSaliencyVoxelShader;
@@ -116,9 +115,6 @@ private:
     vtkVolumeRayCastCompositeFunction *m_normalVolumeRayCastFunction;
     /// Volume ray cast function amb shaders.
     vtkVolumeRayCastVoxelShaderCompositeFunction *m_shaderVolumeRayCastFunction;
-    // VMI
-    /// Volume ray cast function amb shaders.
-    vtkVolumeRayCastVoxelShaderCompositeFunction2 *m_shaderVolumeRayCastFunction2;
 
     /// Voxel shader d'il·luminació ambient.
     AmbientVoxelShader *m_ambientVoxelShader;
