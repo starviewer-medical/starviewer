@@ -5,7 +5,7 @@ namespace udg {
 
 
 VmiVoxelShader2::VmiVoxelShader2()
- : VoxelShader2(), m_data( 0 ), m_maxValue( 0 ), m_dataSize( 0 ), m_ambientColors( 0 ), m_viewedVolume( 0.0f )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_dataSize( 0 ), m_ambientColors( 0 ), m_viewedVolume( 0.0f )
 {
 }
 

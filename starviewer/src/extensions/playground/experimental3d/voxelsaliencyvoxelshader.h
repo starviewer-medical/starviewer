@@ -2,7 +2,7 @@
 #define UDGVOXELSALIENCYVOXELSHADER_H
 
 
-#include "voxelshader2.h"
+#include "voxelshader.h"
 
 #include <QVector>
 
@@ -21,7 +21,7 @@ namespace udg {
 /**
  * Voxel shader que pinta la saliency de cada voxel.
  */
-class VoxelSaliencyVoxelShader : public VoxelShader2 {
+class VoxelSaliencyVoxelShader : public VoxelShader {
 
 public:
 
@@ -37,13 +37,15 @@ public:
     void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual HdrColor shade( int offset, const Vector3 &direction, double remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, double remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                            const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició offset.
-    HdrColor nvShade( int offset, const Vector3 &direction, double remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, double remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                      const HdrColor &baseColor = HdrColor() );
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -66,20 +68,24 @@ protected:
 };
 
 
-inline HdrColor VoxelSaliencyVoxelShader::shade( int offset, const Vector3 &direction, double remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VoxelSaliencyVoxelShader::shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
+                                                 const HdrColor &baseColor )
 {
-    return nvShade( offset, direction, remainingOpacity, baseColor );
+    return nvShade( position, offset, direction, remainingOpacity, baseColor );
 }
 
 
-inline HdrColor VoxelSaliencyVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, double remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VoxelSaliencyVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                                 float remainingOpacity, const HdrColor &baseColor )
 {
     return nvShade( position, direction, interpolator, remainingOpacity, baseColor );
 }
 
 
-inline HdrColor VoxelSaliencyVoxelShader::nvShade( int offset, const Vector3 &direction, double remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VoxelSaliencyVoxelShader::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
+                                                   const HdrColor &baseColor )
 {
+    Q_UNUSED( position );
     Q_UNUSED( direction );
     Q_UNUSED( remainingOpacity );
     Q_UNUSED( baseColor );
@@ -109,7 +115,8 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade( int offset, const Vector3 &di
 }
 
 
-inline HdrColor VoxelSaliencyVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, double remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VoxelSaliencyVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                                   float remainingOpacity, const HdrColor &baseColor )
 {
     Q_UNUSED( direction );
     Q_UNUSED( remainingOpacity );

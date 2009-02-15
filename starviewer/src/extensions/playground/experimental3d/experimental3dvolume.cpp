@@ -22,7 +22,6 @@
 #include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 
 // VMI
-#include "vtkVolumeRayCastVoxelShaderCompositeFunction2.h"
 #include "vmivoxelshader1.h"
 #include "vmivoxelshader2.h"
 #include "voxelsaliencyvoxelshader.h"
@@ -48,7 +47,6 @@ Experimental3DVolume::~Experimental3DVolume()
     m_image->Delete();
     m_normalVolumeRayCastFunction->Delete();
     m_shaderVolumeRayCastFunction->Delete();
-    m_shaderVolumeRayCastFunction2->Delete();
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
     delete m_contourVoxelShader;
@@ -107,13 +105,11 @@ void Experimental3DVolume::setInterpolation( Interpolation interpolation )
             m_property->SetInterpolationTypeToLinear();
             m_normalVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_shaderVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
-            m_shaderVolumeRayCastFunction2->SetCompositeMethodToInterpolateFirst();
             break;
         case LinearClassifyInterpolate:
             m_property->SetInterpolationTypeToLinear();
             m_normalVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_shaderVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
-            m_shaderVolumeRayCastFunction2->SetCompositeMethodToClassifyFirst();
             break;
     }
 }
@@ -243,14 +239,14 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
 
 void Experimental3DVolume::startVmiMode()
 {
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction2 );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
 
 void Experimental3DVolume::startVmiFirstPass()
 {
-    m_shaderVolumeRayCastFunction2->RemoveAllVoxelShaders();
-    m_shaderVolumeRayCastFunction2->AddVoxelShader( m_vmiVoxelShader1 );
+    m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_vmiVoxelShader1 );
     m_vmiVoxelShader1->initAccumulator();
 }
 
@@ -273,8 +269,8 @@ float Experimental3DVolume::finishVmiFirstPass()
 
 void Experimental3DVolume::startVmiSecondPass()
 {
-    m_shaderVolumeRayCastFunction2->RemoveAllVoxelShaders();
-    m_shaderVolumeRayCastFunction2->AddVoxelShader( m_vmiVoxelShader2 );
+    m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_vmiVoxelShader2 );
 }
 
 
@@ -292,9 +288,9 @@ float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 
 void Experimental3DVolume::renderVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor, bool diffuseLighting )
 {
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction2 );
-    m_shaderVolumeRayCastFunction2->RemoveAllVoxelShaders();
-    m_shaderVolumeRayCastFunction2->AddVoxelShader( m_voxelSaliencyVoxelShader );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_voxelSaliencyVoxelShader );
     m_voxelSaliencyVoxelShader->setVoxelSaliencies( voxelSaliencies, maximumSaliency, factor );
     m_voxelSaliencyVoxelShader->setDiffuseLighting( diffuseLighting );
     m_voxelSaliencyVoxelShader->setGradientEstimator( gradientEstimator() );
@@ -334,7 +330,6 @@ void Experimental3DVolume::createVolumeRayCastFunctions()
 {
     m_normalVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
     m_shaderVolumeRayCastFunction = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
-    m_shaderVolumeRayCastFunction2 = vtkVolumeRayCastVoxelShaderCompositeFunction2::New();
 }
 
 
