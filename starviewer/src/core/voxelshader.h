@@ -23,9 +23,10 @@ public:
     virtual ~VoxelShader();
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const = 0;
+    virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() ) = 0;
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const = 0;
+    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                            const HdrColor &baseColor = HdrColor() ) = 0;
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 

@@ -30,13 +30,15 @@ public:
     void setFilters( double low, double high );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
+    virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const;
+    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                            const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició offset.
-    HdrColor nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
+    HdrColor nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const;
+    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                      const HdrColor &baseColor = HdrColor() );
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -49,21 +51,25 @@ protected:
 };
 
 
-inline HdrColor ObscuranceVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
+inline HdrColor ObscuranceVoxelShader::shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor )
 {
-    return nvShade( offset, direction, baseColor );
+    return nvShade( position, offset, direction, remainingOpacity, baseColor );
 }
 
 
-inline HdrColor ObscuranceVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+inline HdrColor ObscuranceVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                              float remainingOpacity, const HdrColor &baseColor )
 {
-    return nvShade( position, direction, interpolator, baseColor );
+    return nvShade( position, direction, interpolator, remainingOpacity, baseColor );
 }
 
 
-inline HdrColor ObscuranceVoxelShader::nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
+inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
+                                                const HdrColor &baseColor )
 {
+    Q_UNUSED( position );
     Q_UNUSED( direction );
+    Q_UNUSED( remainingOpacity );
 
     Q_ASSERT( m_obscurance );
 
@@ -81,9 +87,11 @@ inline HdrColor ObscuranceVoxelShader::nvShade( int offset, const Vector3 &direc
 }
 
 
-inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                                float remainingOpacity, const HdrColor &baseColor )
 {
     Q_UNUSED( direction );
+    Q_UNUSED( remainingOpacity );
 
     Q_ASSERT( interpolator );
     Q_ASSERT( m_obscurance );

@@ -22,6 +22,8 @@ public:
 
     /// Assigna els increments que es faran servir per calcular els offsets.
     void setIncrements( int xInc, int yInc, int zInc );
+    /// Calcula les posicions per una posició donada, i les retorna com a paràmetres de sortida.
+    void getPositions( const Vector3 &position, Vector3 positions[] ) const;
     /**
      * Calcula els offsets i els pesos per una posició donada, i els retorna com a paràmetres de sortida.
      * \param position La posició per a la qual es vol calcular els offsets i els pesos.
@@ -49,6 +51,25 @@ inline void TrilinearInterpolator::setIncrements( int xInc, int yInc, int zInc )
     m_increments[5] = xInc + zInc;
     m_increments[6] = yInc + zInc;
     m_increments[7] = xInc + yInc + zInc;
+}
+
+
+inline void TrilinearInterpolator::getPositions( const Vector3 &position, Vector3 positions[] ) const
+{
+    // |-------|-----|
+    //     a      b
+    double x = floor( position.x );
+    double y = floor( position.y );
+    double z = floor( position.z );
+
+    positions[0] = Vector3( x, y, z );
+    positions[1] = Vector3( x + 1.0, y, z );
+    positions[2] = Vector3( x, y + 1.0, z );
+    positions[3] = Vector3( x + 1.0, y + 1.0, z );
+    positions[4] = Vector3( x, y, z + 1.0 );
+    positions[5] = Vector3( x + 1.0, y, z + 1.0 );
+    positions[6] = Vector3( x, y + 1.0, z + 1.0 );
+    positions[7] = Vector3( x + 1.0, y + 1.0, z + 1.0 );
 }
 
 

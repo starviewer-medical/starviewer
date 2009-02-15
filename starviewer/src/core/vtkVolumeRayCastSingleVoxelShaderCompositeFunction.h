@@ -9,11 +9,11 @@ namespace udg {
 
 
 class TrilinearInterpolator;
-// class VoxelShader;
 
 
 /**
- * Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel.
+ * Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel. El tipus del voxel shader és un paràmetre de template per
+ * evitar cridar mètodes virtuals.
  */
 template <class VS>
 class vtkVolumeRayCastSingleVoxelShaderCompositeFunction : public vtkVolumeRayCastFunction {
@@ -26,8 +26,7 @@ public:
     vtkTypeRevisionMacro( vtkVolumeRayCastSingleVoxelShaderCompositeFunction, vtkVolumeRayCastFunction );
     void PrintSelf( ostream &os, vtkIndent indent );
 
-    void SetCompositeMethod( CompositeMethod compositeMethod )
-        { m_compositeMethod = qBound( ClassifyInterpolate, compositeMethod, InterpolateClassify); }
+    void SetCompositeMethod( CompositeMethod compositeMethod ) { m_compositeMethod = qBound( ClassifyInterpolate, compositeMethod, InterpolateClassify); }
     CompositeMethod GetCompositeMethod() const { return m_compositeMethod; }
     void SetCompositeMethodToInterpolateFirst() { m_compositeMethod = InterpolateClassify; }
     void SetCompositeMethodToClassifyFirst() { m_compositeMethod = ClassifyInterpolate; }
@@ -47,12 +46,8 @@ protected:
     ~vtkVolumeRayCastSingleVoxelShaderCompositeFunction();
 
     //BTX
-    void SpecificFunctionInitialize( vtkRenderer *renderer, vtkVolume *volume,
-                                     vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper );
+    void SpecificFunctionInitialize( vtkRenderer *renderer, vtkVolume *volume, vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper );
     //ETX
-
-    template <class T>
-    void CastRay( const T *data, vtkVolumeRayCastDynamicInfo *dynamicInfo, const vtkVolumeRayCastStaticInfo *staticInfo ) const;
 
     CompositeMethod m_compositeMethod;
     VS *m_voxelShader;
@@ -60,10 +55,11 @@ protected:
 
 private:
 
-    static const float REMAINING_OPACITY;
+    /// Opacitat mínima que ha de restar per continuar el ray casting.
+    static const float MINIMUM_REMAINING_OPACITY;
 
-    vtkVolumeRayCastSingleVoxelShaderCompositeFunction( const vtkVolumeRayCastSingleVoxelShaderCompositeFunction& );  // Not implemented.
-    void operator=( const vtkVolumeRayCastSingleVoxelShaderCompositeFunction& );                       // Not implemented.
+    vtkVolumeRayCastSingleVoxelShaderCompositeFunction( const vtkVolumeRayCastSingleVoxelShaderCompositeFunction& );    // Not implemented.
+    void operator=( const vtkVolumeRayCastSingleVoxelShaderCompositeFunction& );                                        // Not implemented.
 
 };
 
