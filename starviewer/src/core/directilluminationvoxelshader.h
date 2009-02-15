@@ -26,13 +26,15 @@ public:
     void setSpecularShadingTables( const float *red, const float *green, const float *blue );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual HdrColor shade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
+    virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const;
+    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                            const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició offset.
-    HdrColor nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor = HdrColor() ) const;
+    HdrColor nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor = HdrColor() ) const;
+    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                      const HdrColor &baseColor = HdrColor() );
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -45,26 +47,29 @@ protected:
 };
 
 
-inline HdrColor DirectIlluminationVoxelShader::shade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
+inline HdrColor DirectIlluminationVoxelShader::shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
+                                                      const HdrColor &baseColor )
 {
-    return nvShade( offset, direction, baseColor );
+    return nvShade( position, offset, direction, remainingOpacity, baseColor );
 }
 
 
-inline HdrColor DirectIlluminationVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+inline HdrColor DirectIlluminationVoxelShader::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                                      float remainingOpacity, const HdrColor &baseColor )
 {
-    return nvShade( position, direction, interpolator, baseColor );
+    return nvShade( position, direction, interpolator, remainingOpacity, baseColor );
 }
 
 
-inline HdrColor DirectIlluminationVoxelShader::nvShade( int offset, const Vector3 &direction, const HdrColor &baseColor ) const
+inline HdrColor DirectIlluminationVoxelShader::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
+                                                        const HdrColor &baseColor )
 {
     Q_ASSERT( m_data );
     Q_ASSERT( m_encodedNormals );
     Q_ASSERT( m_redDiffuseShadingTable ); Q_ASSERT( m_greenDiffuseShadingTable ); Q_ASSERT( m_blueDiffuseShadingTable );
     Q_ASSERT( m_redSpecularShadingTable ); Q_ASSERT( m_greenSpecularShadingTable ); Q_ASSERT( m_blueSpecularShadingTable );
 
-    HdrColor color = AmbientVoxelShader::shade( offset, direction, baseColor );
+    HdrColor color = AmbientVoxelShader::shade( position, offset, direction, remainingOpacity, baseColor );
 
     if ( color.isTransparent() ) return color;
 
@@ -77,9 +82,11 @@ inline HdrColor DirectIlluminationVoxelShader::nvShade( int offset, const Vector
 }
 
 
-inline HdrColor DirectIlluminationVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, const HdrColor &baseColor ) const
+inline HdrColor DirectIlluminationVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                                        float remainingOpacity, const HdrColor &baseColor )
 {
     Q_UNUSED( direction );
+    Q_UNUSED( remainingOpacity );
     Q_UNUSED( baseColor );
 
     Q_ASSERT( interpolator );
