@@ -40,7 +40,6 @@ private slots:
     /// Obre un diàleg per desar una funció de transferència.
     void saveTransferFunction();
     /// Fa la visualització amb les opcions seleccionades.
-    /// Fa la visualització.
     void doVisualization();
 
     /// Posa els paràmetres de la càmera actuals als spinboxs corresponents.
@@ -51,7 +50,6 @@ private slots:
     void loadCamera();
     /// Desa els paràmetres de la càmera a un fitxer.
     void saveCamera();
-    /// Estableix el nombre de punts de vista.
 
 };
 
