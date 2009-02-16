@@ -78,8 +78,12 @@ void QExperimental3DExtension::createConnections()
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterLowDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighLabel, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), SLOT( vomiChecked(bool) ) );
     connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), m_voxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), m_voxelSalienciesFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), SLOT( voxelSalienciesChecked(bool) ) );
 
     // càmera
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
@@ -108,6 +112,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_vmiPushButton, SIGNAL( clicked() ), SLOT( computeVmi() ) );
     connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
     connect( m_vomiPushButton, SIGNAL( clicked() ), SLOT( computeVomi() ) );
+    connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
+    connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
     connect( m_voxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( computeVoxelSaliencies() ) );
     connect( m_loadVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelSaliencies() ) );
     connect( m_saveVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelSaliencies() ) );
@@ -198,16 +204,20 @@ void QExperimental3DExtension::doVisualization()
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
     m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
     if ( m_diffuseCheckBox->isChecked() ) m_viewer->updateShadingTable();
-    if ( !m_voxelSalienciesCheckBox->isChecked() )
+    if ( m_vomiCheckBox->isChecked() )
+    {
+        m_volume->renderVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
+    }
+    else if ( m_voxelSalienciesCheckBox->isChecked() )
+    {
+        m_volume->renderVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
+    }
+    else
     {
         m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
         m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
         m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(),
                                  m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
-    }
-    else
-    {
-        m_volume->renderVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
     }
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
@@ -1024,7 +1034,8 @@ void QExperimental3DExtension::computeVomi()
         }
     }
 
-    QVector<float> vomi( nObjects );    // vector de VoMI, inicialitzat a 0
+    m_vomi.resize( nObjects );  // vector de VoMI, inicialitzat a 0
+    m_maximumVomi = 0.0f;
     {
         for ( int i = 0; i < nViewpoints; i++ )
         {
@@ -1044,29 +1055,121 @@ void QExperimental3DExtension::computeVomi()
                     float pov = objectProbabilitiesInView.at( j );
                     Q_ASSERT( pov == pov );
                     float pvo = pv * pov / po;
-                    if ( pvo > 0.0f ) vomi[j] += pvo * MathTools::logTwo( pvo / pv );
+                    if ( pvo > 0.0f ) m_vomi[j] += pvo * MathTools::logTwo( pvo / pv );
+                    if ( m_vomi.at( j ) > m_maximumVomi ) m_maximumVomi = m_vomi.at( j );
                 }
             }
 
             m_vmiProgressBar->setValue( 100 * ( 2 * nViewpoints + i + 1 ) / ( 3 * nViewpoints ) );
         }
 
-        // Printar resultats i guardar-los en un fitxer
-        QFile outFile( QDir::tempPath().append( "/vomi.txt" ) );
-        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
-        {
-            QTextStream out( &outFile );
-            for ( unsigned int i = 0; i < nObjects; i++ )
-            {
-                //DEBUG_LOG( QString( "VoMI(o%1) = %2" ).arg( i ).arg( vomi.at( i ) ) );
-                out << "VoMI(o" << i << ") = " << vomi.at( i ) << "\n";
-            }
-            outFile.close();
-        }
+//        // Printar resultats i guardar-los en un fitxer
+//        QFile outFile( QDir::tempPath().append( "/vomi.txt" ) );
+//        if ( outFile.open( QFile::WriteOnly | QFile::Truncate ) )
+//        {
+//            QTextStream out( &outFile );
+//            for ( unsigned int i = 0; i < nObjects; i++ )
+//            {
+//                //DEBUG_LOG( QString( "VoMI(o%1) = %2" ).arg( i ).arg( m_vomi.at( i ) ) );
+//                out << "VoMI(o" << i << ") = " << m_vomi.at( i ) << "\n";
+//            }
+//            outFile.close();
+//        }
+
+        m_vomiCheckBox->setEnabled( true );
+        m_saveVomiPushButton->setEnabled( true );
     }
 
     doVisualization();
     m_viewer->setCamera( position, focus, up );
+}
+
+
+void QExperimental3DExtension::loadVomi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString vomiDir = settings.value( "vomiDir", QString() ).toString();
+    QString vomiFileName = QFileDialog::getOpenFileName( this, tr("Load VoMI"), vomiDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !vomiFileName.isNull() )
+    {
+        QFile vomiFile( vomiFileName );
+
+        if ( !vomiFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + vomiFileName );
+            QMessageBox::warning( this, tr("Can't load VoMI"), QString( tr("Can't load VoMI from file ") ) + vomiFileName );
+            return;
+        }
+
+        unsigned int nObjects = m_volume->getSize();
+        m_vomi.resize( nObjects );
+        m_maximumVomi = 0.0f;
+
+        QDataStream in( &vomiFile );
+
+        for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ )
+        {
+            in >> m_vomi[i];
+            if ( m_vomi.at( i ) > m_maximumVomi ) m_maximumVomi = m_vomi.at( i );
+        }
+
+        vomiFile.close();
+
+        QFileInfo vomiFileInfo( vomiFileName );
+        settings.setValue( "vomiDir", vomiFileInfo.absolutePath() );
+
+        m_vomiCheckBox->setEnabled( true );
+        m_saveVomiPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveVomi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString vomiDir = settings.value( "vomiDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save VoMI"), vomiDir, tr("Data files (*.dat);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString vomiFileName = saveDialog.selectedFiles().first();
+        QFile vomiFile( vomiFileName );
+
+        if ( !vomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + vomiFileName );
+            QMessageBox::warning( this, tr("Can't save VoMI"), QString( tr("Can't save VoMI to file ") ) + vomiFileName );
+            return;
+        }
+
+        QDataStream out( &vomiFile );
+
+        unsigned int nObjects = m_volume->getSize();
+
+        for ( unsigned int i = 0; i < nObjects; i++ ) out << m_vomi.at( i );
+
+        vomiFile.close();
+
+        QFileInfo vomiFileInfo( vomiFileName );
+        settings.setValue( "vomiDir", vomiFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::vomiChecked( bool checked )
+{
+    if ( checked ) m_voxelSalienciesCheckBox->setChecked( false );
 }
 
 
@@ -1405,6 +1508,12 @@ void QExperimental3DExtension::saveVoxelSaliencies()
     }
 
     settings.endGroup();
+}
+
+
+void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
+{
+    if ( checked ) m_vomiCheckBox->setChecked( false );
 }
 
 

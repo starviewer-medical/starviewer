@@ -77,6 +77,7 @@ public:
     void startVmiSecondPass();
     QVector<float> finishVmiSecondPass();
     float viewedVolumeInVmiSecondPass() const;
+    void renderVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool diffuseLighting );
     void renderVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor, bool diffuseLighting );
 
 private:
