@@ -20,6 +20,7 @@
     #include "src_breakpad/client/linux/handler/exception_handler.h"
 #endif
 
+#include "../core/starviewerapplication.h"
 
 #ifndef WIN32
 
@@ -109,7 +110,7 @@ CrashHandler::CrashHandler()
 {
 #ifndef NO_CRASH_REPORTER
     // primer comprovem que existeixi el directori ~/.starviewer/dumps/ on guradarem els dumps
-    QDir dumpsDir = QDir::homePath() + "/.starviewer/dumps/";
+    QDir dumpsDir = udg::UserDataRootPath + "dumps/";
     if( !dumpsDir.exists() )
     {
         // creem el directori

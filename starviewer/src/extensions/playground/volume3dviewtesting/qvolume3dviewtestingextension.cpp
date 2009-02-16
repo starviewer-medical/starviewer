@@ -10,6 +10,7 @@
 #include "toolmanager.h"
 #include "transferfunctionio.h"
 #include "renderingstyle.h"
+#include "starviewerapplication.h"
 // qt
 #include <QAction>
 #include <QFileDialog>
@@ -87,7 +88,7 @@ void QVolume3DViewTestingExtension::loadClutPresets()
 
     m_clutPresetsComboBox->clear();
 
-    QString path = QDir::toNativeSeparators( QDir::homePath() + "/.starviewer/cluts" );
+    QString path = QDir::toNativeSeparators( UserDataRootPath + "cluts/" );
     m_clutsDir.setPath( path );
 
     if ( !m_clutsDir.exists() ) m_clutsDir.mkpath( path );

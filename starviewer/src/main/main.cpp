@@ -28,11 +28,11 @@
 void configureLogging()
 {
     // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
-    QDir logDir = QDir::homePath() + "/.starviewer/log/";
+    QDir logDir = udg::UserLogsPath;
     if( !logDir.exists() )
     {
         // creem el directori
-        logDir.mkpath( QDir::homePath() + "/.starviewer/log/" );
+        logDir.mkpath( udg::UserLogsPath );
     }
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
     // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.

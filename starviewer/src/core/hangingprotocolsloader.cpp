@@ -14,6 +14,7 @@
 #include "hangingprotocoldisplayset.h"
 #include "hangingprotocolxmlreader.h"
 #include "identifier.h"
+#include "starviewerapplication.h"
 
 // Qt's
 #include <QFile>
@@ -31,7 +32,6 @@ HangingProtocolsLoader::HangingProtocolsLoader(QObject *parent)
 
 }
 
-
 HangingProtocolsLoader::~HangingProtocolsLoader()
 {
 
@@ -40,19 +40,19 @@ HangingProtocolsLoader::~HangingProtocolsLoader()
 void HangingProtocolsLoader::loadDefaults()
 {
     /// Hanging protocols definits per defecte, agafa el directori de l'executable
-    QString defaultPath = QDir::toNativeSeparators( qApp->applicationDirPath().append( "/" ).append("hangingProtocols").append( "/" ) );
-    if( ! QFile::exists(defaultPath) )
+    QString defaultPath = qApp->applicationDirPath() + "/hangingProtocols/";
+    if( !QFile::exists(defaultPath) )
     {
         /// Mode desenvolupament
-        defaultPath = QDir::toNativeSeparators( qApp->applicationDirPath().append( "/../" ).append("hangingProtocols").append( "/" ) );
+        defaultPath = qApp->applicationDirPath() + "/../hangingProtocols/";
     }
 
-    if( defaultPath != 0 )
+    if( !defaultPath.isEmpty() )
         loadXMLFiles( defaultPath );
 
     /// Hanging protocols definits per l'usuari
     QSettings systemSettings;
-    QString userPath = systemSettings.value("Hanging-Protocols/path").toString(); // s'ha de guardar a documents and settings/hanging
+    QString userPath = systemSettings.value("Hanging-Protocols/path", UserHangingProtocolsPath ).toString(); 
 
     if( !userPath.isEmpty() )
         loadXMLFiles( userPath );

@@ -12,8 +12,9 @@
 #include <QString>
 
 #include "logging.h"
+#include "starviewerapplication.h"
 
-// per getHostName
+// per getHostName // TODO, ara que linkem contra QtNetwork podríem fer servir directament Qt i eliminar "getHostName"
 #ifdef _WIN32
 #include <winsock2.h>
 #else
@@ -107,7 +108,7 @@ QString StarviewerSettings::getDatabasePath()
     QString defaultDir;
 
     //construim directori per defecte
-    defaultDir = dir.homePath() + "/.starviewer/pacs/database/dicom.sdb";
+    defaultDir = UserDataRootPath + "pacs/database/dicom.sdb";
 
     return QDir::toNativeSeparators( m_starviewerSettings.value( GroupSettingsName + databaseRootKey , defaultDir ).toString() );
 }
@@ -143,7 +144,7 @@ QString StarviewerSettings::getCacheImagePath()
     QDir dir;
 
     //construim directori per defecte
-    defaultDir = dir.homePath() + "/.starviewer/pacs/dicom/";
+    defaultDir = UserDataRootPath + "pacs/dicom/";
 
     return QDir::toNativeSeparators( m_starviewerSettings.value( GroupSettingsName + cacheImagePathKey , defaultDir ).toString() );
 }

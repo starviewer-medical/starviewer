@@ -13,6 +13,7 @@
 #include <QSettings>
 
 #include "logging.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -34,11 +35,11 @@ QLogViewer::~QLogViewer()
 void QLogViewer::updateData()
 {
     // \TODO aquest directori s'hauria de guardar en alguna mena de qsettings o similar
-    QFile logFile( QDir::homePath() + "/.starviewer/log/starviewer.log" );
+    QFile logFile( udg::UserLogsPath + "starviewer.log" );
     if ( !logFile.open( QFile::ReadOnly | QFile::Text) )
     {
         ERROR_LOG( "No s'ha pogut obrir l'arxiu de logs" );
-        m_logBrowser->setPlainText( tr("ERROR: No Log file found!") );
+        m_logBrowser->setPlainText( tr("ERROR: No Log file found at this path: %1") + udg::UserLogsPath );
     }
     else
     {
