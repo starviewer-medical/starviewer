@@ -203,7 +203,7 @@ void Volume::getDimensions( int dims[3] )
 
 void Volume::setNumberOfPhases( int phases )
 {
-    if( phases > 1 )
+    if( phases >= 1 )
         m_numberOfPhases = phases;
 }
 
@@ -800,6 +800,9 @@ void Volume::createNeutralVolume()
     // unsigned char i el nombre de blocs de memòria són indicats en bytes, 
     // per això multipliquem per 2
     memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
+    // Quan creem el volum neutre indiquem que només tenim 1 sola fase 
+    // TODO potser s'haurien de crear tantes fases com les que indiqui la sèrie?
+    this->setNumberOfPhases( 1 );
 }
 
 };
