@@ -67,7 +67,7 @@ public:
     HangingProtocolImageSet * getImageSet( int identificador );
 
 	/// Obté el display set amb identificador "identificador"
-	HangingProtocolDisplaySet * getDisplaySet( int identificador );
+	HangingProtocolDisplaySet * getDisplaySet( int identificador ) const;
 
     /// Obté el display set corresponent a l'image set amb l'identificador detallat
     HangingProtocolDisplaySet * getDisplaySetOfImageSet( int numberOfImageSet );

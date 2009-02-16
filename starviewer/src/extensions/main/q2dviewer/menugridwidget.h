@@ -71,7 +71,7 @@ protected:
     ItemMenu * createIcon( int rows, int columns );
 
 	/// Mètode que crea una icona segons un hanging protocol
-	ItemMenu * createIcon( HangingProtocol * hangingProtocol );
+	ItemMenu * createIcon( const HangingProtocol * hangingProtocol );
 
 protected:
 
