@@ -21,7 +21,6 @@ HEADERS += qinputparameters.h \
     slicer.h \
     qshowhidewidget.h \
     vtkVolumeRayCastCompositeFunctionViewpointSaliency.h \
-    vtkVolumeRayCastCompositeFunctionFx.h \
     saliencyvoxelshader.h \
     vtkInteractorStyleFasterTrackballActor.h \
     oldhistogram.h
@@ -41,7 +40,6 @@ SOURCES += qinputparameters.cpp \
     slicer.cpp \
     qshowhidewidget.cpp \
     vtkVolumeRayCastCompositeFunctionViewpointSaliency.cxx \
-    vtkVolumeRayCastCompositeFunctionFx.cxx \
     saliencyvoxelshader.cpp \
     vtkInteractorStyleFasterTrackballActor.cxx \
     oldhistogram.cpp
