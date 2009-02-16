@@ -127,9 +127,9 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    app.setOrganizationName( OrganizationNameString );
-    app.setOrganizationDomain( OrganizationDomainString );
-    app.setApplicationName( ApplicationNameString );
+    app.setOrganizationName( udg::OrganizationNameString );
+    app.setOrganizationDomain( udg::OrganizationDomainString );
+    app.setApplicationName( udg::ApplicationNameString );
 
 	// Inicialitzem el crash handler en el cas que ho suportem.
 #ifndef NO_CRASH_REPORTER
