@@ -286,6 +286,17 @@ float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 }
 
 
+void Experimental3DVolume::renderVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool diffuseLighting )
+{
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_voxelSaliencyVoxelShader );
+    m_voxelSaliencyVoxelShader->setVoxelSaliencies( vomi, maximumVomi, factor );
+    m_voxelSaliencyVoxelShader->setDiffuseLighting( diffuseLighting );
+    m_voxelSaliencyVoxelShader->setGradientEstimator( gradientEstimator() );
+}
+
+
 void Experimental3DVolume::renderVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor, bool diffuseLighting )
 {
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
