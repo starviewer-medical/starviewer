@@ -24,11 +24,10 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) : QWidget(parent)
     m_patientAdditionalInfo = new PatientBrowserMenuExtendedItem(this);
     m_patientBrowserList = new PatientBrowserMenuList(this);
 
-    connect( m_patientAdditionalInfo, SIGNAL( close() ), m_patientBrowserList, SLOT( close() ) );
-
-    m_patientBrowserList->setWindowFlags( Qt::Popup );
-
     m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
+    m_patientBrowserList->setWindowFlags( Qt::Popup );
+    
+    connect( m_patientAdditionalInfo, SIGNAL( close() ), m_patientBrowserList, SLOT( close() ) );
     connect( m_patientBrowserList, SIGNAL( close() ), m_patientAdditionalInfo, SLOT( close() ) );
 }
 
@@ -119,8 +118,12 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
 
 void PatientBrowserMenu::emitSelected( Series * serie )
 {
-    m_patientBrowserList->hide();
-    m_patientAdditionalInfo->hide();
+    // HACK De moment això és un workaround per solucionar el ticket #824
+    // és important que s'esborrin en aquest ordre, sinó es fa així el problema persisteix
+    // ara també ens funciona bé perquè creem cada cop un PatientBrowserMenu.
+    // Si en tinguéssim un d'estàtic segurament això ens ocasionaria que l'aplicació petaria més endavant
+    delete m_patientAdditionalInfo;
+    delete m_patientBrowserList;
     emit selectedSeries( serie );
 }
 
@@ -153,7 +156,6 @@ void PatientBrowserMenu::updatePosition()
     m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
     m_patientAdditionalInfo->show();
     m_patientBrowserList->show();
-
 }
 
 }

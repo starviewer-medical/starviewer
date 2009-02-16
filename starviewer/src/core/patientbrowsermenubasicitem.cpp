@@ -60,6 +60,7 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     else if ( event->type() == QEvent::MouseButtonPress )
     {
         emit selectedSerie( m_serie );
+        return true;
     }
     else if ( event->type() == QEvent::Leave )
     {
