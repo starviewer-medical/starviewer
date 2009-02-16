@@ -150,20 +150,21 @@ void ToolManager::activateTool( const QString &toolName )
             // afegim la tool al proxy
             viewer->getToolProxy()->addTool( tool );
             STAT_LOG("Activated tool " + toolName);
+
+            // comprovem les dades per si cal donar-n'hi
+            if( tool->hasSharedData() )
+            {
+                if( !data ) // si data és nul, vol dir que és la primera tool que creem
+                    data = tool->getToolData();
+                else
+                    tool->setToolData( data ); // si ja les hem creat abans, li assignem les de la primera tool creada
+            }
         }
         else
         {
+            // si la tool ja existeix no cal configurar-la ni donar-li dades específiques perquè ja les té
             tool = viewer->getToolProxy()->getTool( toolName );
-        }
-
-        // comprovem les dades per si cal donar-n'hi
-        if( tool->hasSharedData() )
-        {
-            if( !data ) // si data és nul, vol dir que és la primera tool que creem
-                data = tool->getToolData();
-            else
-                tool->setToolData( data ); // si ja les hem creat abans, li assignem les de la primera tool creada
-        }
+        }        
     }
 }
 
