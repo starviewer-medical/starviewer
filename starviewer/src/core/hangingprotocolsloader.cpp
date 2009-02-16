@@ -40,7 +40,9 @@ HangingProtocolsLoader::~HangingProtocolsLoader()
 void HangingProtocolsLoader::loadDefaults()
 {
     /// Hanging protocols definits per defecte, agafa el directori de l'executable
-    QString defaultPath = qApp->applicationDirPath() + "/hangingProtocols/";
+    QString defaultPath = "/etc/xdg/" + OrganizationNameString + "/" + ApplicationNameString + "/hangingProtocols/"; // Path linux
+    if( !QFile::exists(defaultPath) )
+        defaultPath = qApp->applicationDirPath() + "/hangingProtocols/";
     if( !QFile::exists(defaultPath) )
     {
         /// Mode desenvolupament
