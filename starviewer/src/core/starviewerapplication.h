@@ -7,6 +7,10 @@
 #ifndef UDG_STARVIEWER_APPLICATION
 #define UDG_STARVIEWER_APPLICATION
 
+#include <QDir>
+
+namespace udg{
+
 const QString StarviewerVersionString("0.8.0.devel");
 
 //Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
@@ -22,5 +26,17 @@ const QString OrganizationDomainString("starviewer.udg.edu");
 #endif
 
 const QString OrganizationEmailString("starviewer@ima.udg.edu");
+
+// Paths per defecte on es guarden configuracions i arxius d'usuari
+/// Path base per a dades d'usuari
+const QString UserDataRootPath( QDir::homePath() + "/.starviewer/" );
+/// Path del log
+const QString UserLogsPath( UserDataRootPath + "log/" );
+/// Path dels hanging protocols d'usuari
+const QString UserHangingProtocolsPath( UserDataRootPath + "hangingprotocols/" );
+
+// TODO const QString LogConfigurationFileLocation();
+
+}; // end namespace udg
 
 #endif
