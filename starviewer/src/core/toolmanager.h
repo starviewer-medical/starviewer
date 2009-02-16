@@ -20,6 +20,7 @@ namespace udg {
 class QViewer;
 class ToolConfiguration;
 class ToolRegistry;
+class ToolData;
 
 /**
 Manager de Tools que tindrem per cada extensio, Aquest s'encarregara de determinar les tools i les configuracions que suporten els visualitzadors d'una determinada extensio
@@ -133,6 +134,9 @@ private:
 
     /// Mapa que associa el nom del grup amb les accions agrupades de les tools exclusives
     QMap<QString, QActionGroup *> m_toolsGroups;
+
+    /// Mapa que guarda les ToolData per Tools amb dades compartides
+    QMap<QString, ToolData *> m_sharedToolDataRepository;
 };
 
 }
