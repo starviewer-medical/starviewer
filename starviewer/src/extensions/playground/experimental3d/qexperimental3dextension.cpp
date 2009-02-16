@@ -1177,11 +1177,12 @@ void QExperimental3DExtension::computeVoxelSaliencies()
         for ( int i = 0; i < nViewpoints; i++ )
         {
             pOvFiles[i]->reset();
-            pOvFiles[i]->peek( reinterpret_cast<char*>( objectProbabilitiesInView ), nObjects * sizeof(float) );
+            pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView ), nObjects * sizeof(float) );    // llegim...
             for ( unsigned int j = 0; j < nObjects; j++ )
             {
                 objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j];
             }
+            pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
             m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
             m_vmiProgressBar->repaint();
         }
