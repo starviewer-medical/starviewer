@@ -1347,10 +1347,15 @@ void QExperimental3DExtension::loadVoxelSaliencies()
 
         unsigned int nObjects = m_volume->getSize();
         m_voxelSaliencies.resize( nObjects );
+        m_maximumSaliency = 0.0f;
 
         QDataStream in( &voxelSalienciesFile );
 
-        for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ ) in >> m_voxelSaliencies[i];
+        for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ )
+        {
+            in >> m_voxelSaliencies[i];
+            if ( m_voxelSaliencies.at( i ) > m_maximumSaliency ) m_maximumSaliency = m_voxelSaliencies.at( i );
+        }
 
         voxelSalienciesFile.close();
 
