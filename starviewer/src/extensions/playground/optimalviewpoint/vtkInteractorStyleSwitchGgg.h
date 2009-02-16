@@ -54,7 +54,7 @@
 #define VTKIS_CAMERA    0
 #define VTKIS_ACTOR     1
 
-class vtkInteractorStyleJoystickActorGgg;
+class vtkInteractorStyleJoystickActor;
 class vtkInteractorStyleJoystickCamera;
 namespace udg { class vtkInteractorStyleFasterTrackballActor; }
 class vtkInteractorStyleTrackballCamera;
@@ -100,7 +100,7 @@ protected:
   
   void SetCurrentStyle();
   
-  vtkInteractorStyleJoystickActorGgg *JoystickActor;
+  vtkInteractorStyleJoystickActor *JoystickActor;
   vtkInteractorStyleJoystickCamera *JoystickCamera;
   udg::vtkInteractorStyleFasterTrackballActor *TrackballActor;
   vtkInteractorStyleTrackballCamera *TrackballCamera;
