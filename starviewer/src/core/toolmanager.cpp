@@ -131,7 +131,7 @@ void ToolManager::activateTool( const QString &toolName )
     // TODO caldria comprovar si la tool es troba en un grup exclusiu per "fer fora" les altres tools? o es farà automàticament?
     QList< ViewerToolConfigurationPairType > viewerConfigList = m_toolViewerMap.values( toolName );
 
-    ToolData *data = 0;
+    ToolData *data = m_sharedToolDataRepository.value( toolName );
     foreach( ViewerToolConfigurationPairType pair, viewerConfigList )
     {
         // declarem aquestes variables per fer-ho més llegible
@@ -154,8 +154,11 @@ void ToolManager::activateTool( const QString &toolName )
             // comprovem les dades per si cal donar-n'hi
             if( tool->hasSharedData() )
             {
-                if( !data ) // si data és nul, vol dir que és la primera tool que creem
+                if( !data ) // no hi són al respositori, les obtindrem de la pròpia tool i les registrarem al repositori
+                {
                     data = tool->getToolData();
+                    m_sharedToolDataRepository[ toolName ] = data;
+                }
                 else
                     tool->setToolData( data ); // si ja les hem creat abans, li assignem les de la primera tool creada
             }
@@ -179,6 +182,8 @@ void ToolManager::deactivateTool( const QString &toolName )
         // eliminem la tool del proxy
         viewer->getToolProxy()->removeTool( toolName );
     }
+    // elinimen Shared Data d'aquesta tool
+    m_sharedToolDataRepository.remove( toolName );
 }
 
 void ToolManager::triggeredToolAction( const QString &toolName )
