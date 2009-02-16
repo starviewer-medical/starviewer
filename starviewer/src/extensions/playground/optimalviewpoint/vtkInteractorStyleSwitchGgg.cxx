@@ -32,7 +32,7 @@
 
 #include "vtkCallbackCommand.h"
 #include "vtkCommand.h"
-#include "vtkInteractorStyleJoystickActorGgg.h"
+#include "vtkInteractorStyleJoystickActor.h"
 #include "vtkInteractorStyleJoystickCamera.h"
 #include "vtkInteractorStyleFasterTrackballActor.h"
 #include "vtkInteractorStyleTrackballCamera.h"
@@ -45,7 +45,7 @@ vtkStandardNewMacro(vtkInteractorStyleSwitchGgg);
 //----------------------------------------------------------------------------
 vtkInteractorStyleSwitchGgg::vtkInteractorStyleSwitchGgg() 
 {
-  this->JoystickActor = vtkInteractorStyleJoystickActorGgg::New();
+  this->JoystickActor = vtkInteractorStyleJoystickActor::New();
   this->JoystickCamera = vtkInteractorStyleJoystickCamera::New();
   this->TrackballActor = udg::vtkInteractorStyleFasterTrackballActor::New();
   this->TrackballCamera = vtkInteractorStyleTrackballCamera::New();
