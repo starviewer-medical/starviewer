@@ -193,7 +193,7 @@ void MenuGridWidget::createPredefinedGrids( int numSeries )
     createPredefinedGrids( m_predefinedGridsList );
 }
 
-ItemMenu * MenuGridWidget::createIcon( HangingProtocol * hangingProtocol )
+ItemMenu * MenuGridWidget::createIcon( const HangingProtocol * hangingProtocol )
 {
     HangingProtocolDisplaySet * displaySet;
 	int displaySetNumber;

@@ -101,7 +101,7 @@ HangingProtocolImageSet * HangingProtocol::getImageSet( int identificador )
     return imageSet;
 }
 
-HangingProtocolDisplaySet * HangingProtocol::getDisplaySet( int identificador )
+HangingProtocolDisplaySet * HangingProtocol::getDisplaySet( int identificador ) const
 {
     HangingProtocolDisplaySet * displaySet = 0;
     bool found = false;
