@@ -293,19 +293,28 @@ int ReferenceLinesTool::getIntersections( QVector<double> tlhc, QVector<double> 
 
 void ReferenceLinesTool::updateFrameOfReference()
 {
-    Q_ASSERT( m_2DViewer->getInput() ); // hi ha d'haver input per força
-    Series *series = m_2DViewer->getInput()->getSeries();
-    if( series )
+    if( !m_2DViewer->getInput() )
     {
-        // ens guardem el nostre
-        m_myFrameOfReferenceUID = series->getFrameOfReferenceUID();
-        // i actualitzem el de les dades
-        m_myData->setFrameOfReferenceUID( m_myFrameOfReferenceUID );
+        // no hi ha frame of reference que valgui
+        m_myFrameOfReferenceUID.clear();
     }
     else
     {
-        DEBUG_LOG("EL nou volum no té series NUL!");
+        Series *series = m_2DViewer->getInput()->getSeries();
+        if( series )
+        {
+            // ens guardem el nostre
+            m_myFrameOfReferenceUID = series->getFrameOfReferenceUID();
+        }
+        else
+        {
+            // sense sèries, no hi ha frame of reference
+            m_myFrameOfReferenceUID.clear();
+            DEBUG_LOG("EL nou volum no té series NUL!");
+        }
     }
+    // i actualitzem el de les dades
+    m_myData->setFrameOfReferenceUID( m_myFrameOfReferenceUID );
 }
 
 void ReferenceLinesTool::updateImagePlane()
@@ -341,11 +350,8 @@ void ReferenceLinesTool::refreshReferenceViewerData()
 {
     // si es projectaven plans sobre el nostre drawer, els amaguem
     m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
-    if( m_2DViewer->getInput() )
-    {
-        updateFrameOfReference();
-        updateImagePlane();
-    }
+    updateFrameOfReference();
+    updateImagePlane();
 }
 
 DrawerLine *ReferenceLinesTool::createNewLine( bool isBackgroundLine )
