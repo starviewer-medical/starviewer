@@ -961,11 +961,14 @@ void QExperimental3DExtension::computeSelectedVmi()
                                                     z > 0, z + 1 < dimZ };
 
                         float saliency = 0.0f;
+                        int nNeighbours = 0;
 
                         // iterem pels veïns
                         for ( int j = 0; j < 6; j++ )
                         {
                             if ( !validNeighbours[j] ) continue;
+
+                            nNeighbours++;
 
                             float poj = objectProbabilities.at( neighbours[j] );    // p(oj)
                             Q_ASSERT( poj == poj );
@@ -982,7 +985,7 @@ void QExperimental3DExtension::computeSelectedVmi()
                             saliency += s;
                         }
 
-                        saliency /= 6.0f;
+                        saliency /= nNeighbours;
                         m_voxelSaliencies[i] = saliency;
                         if ( saliency > m_maximumSaliency ) m_maximumSaliency = saliency;
                     }
