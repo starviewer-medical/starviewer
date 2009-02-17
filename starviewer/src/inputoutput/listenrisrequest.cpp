@@ -77,12 +77,12 @@ void ListenRisRequest::showNetworkError()
     switch(m_qTcpServer->serverError())
     {
         case QAbstractSocket::AddressInUseError :
-            message = tr("Can't listen RIS requests on port %1, the port is used for another application").arg(settings.getListenPortRisRequests());
-            message += tr("\n\nIf you want to open different Starviewer's windows always choose the 'New' option from the File menu.");
+            message = tr("Can't listen RIS requests on port %1, the port is used for another application.").arg(settings.getListenPortRisRequests());
+            message += tr("\n\nIf the error has produced when openned new %1's windows, close that window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
             ERROR_LOG(QString("No es poden escoltar les peticions del RIS pel port %1, perquè una altra aplicació ja l'esta utilitzant").arg(settings.getListenPortRisRequests()));
             break;
         default :
-            message = tr("Can't listen Ris requests on port %1, an unknow network error has produced").arg(settings.getListenPortRisRequests());
+            message = tr("Can't listen RIS requests on port %1, an unknow network error has produced.").arg(settings.getListenPortRisRequests());
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             ERROR_LOG(QString("No es poden escoltar les peticions del RIS pel port %1, s' ha produït un error no controlat : " + m_qTcpServer->errorString()).arg(settings.getListenPortRisRequests()));

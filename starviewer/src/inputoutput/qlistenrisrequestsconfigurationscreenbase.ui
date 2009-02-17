@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Listen Ris Requests Configuration</string>
+   <string>Listen RIS Requests Configuration</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="../main/main.qrc" >:/images/open.png</iconset>
@@ -92,7 +92,7 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxViewAutomaticallyStudies" >
        <property name="text" >
-        <string>View automatically the studies when have been retrieved</string>
+        <string>View automatically the studies when have been retrieved.</string>
        </property>
       </widget>
      </item>
@@ -109,7 +109,7 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxListenRisRequests" >
        <property name="text" >
-        <string>Listen Ris Requets on port</string>
+        <string>Listen RIS Requests on port</string>
        </property>
       </widget>
      </item>

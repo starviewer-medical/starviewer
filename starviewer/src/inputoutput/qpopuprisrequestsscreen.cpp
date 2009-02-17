@@ -16,6 +16,7 @@
 #include "operation.h"
 #include "starviewersettings.h"
 #include "logging.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -30,8 +31,8 @@ QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( pa
 
 void QPopUpRisRequestsScreen::setAccessionNumber(QString accessionNumber)
 {
-    QString popUpText = tr("Starviewer has recieved a request from a RIS to retrieve the study with accession number");
-    m_labelRisRequestDescription->setText(popUpText + " " + accessionNumber);
+    QString popUpText = tr("%1 has received a request from a RIS to retrieve the study with accession number").arg(ApplicationNameString);
+    m_labelRisRequestDescription->setText(popUpText + " " + accessionNumber + ".");
 }
 
 void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
@@ -43,7 +44,7 @@ void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
     
 	this->move(screenGeometryActiveWindow.x() + screenGeometryActiveWindow.width() - this->width() - 10, screenGeometryActiveWindow.y() + screenGeometryActiveWindow.height() - this->height() -10);
 
-	//Activem el timer per amagar el Popup 6 segons després
+	//Activem el timer per amagar el Popup 5 segons després de fer-lo apareixer
 	m_qTimer->start(5000);
 }
 
