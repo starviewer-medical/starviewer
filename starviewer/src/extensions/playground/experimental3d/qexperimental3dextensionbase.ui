@@ -1076,7 +1076,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3" >
           <item>
-           <widget class="QPushButton" name="m_vomiPushButton" >
+           <widget class="QCheckBox" name="m_computeVomiCheckBox" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
               <horstretch>1</horstretch>
@@ -1084,7 +1084,7 @@
              </sizepolicy>
             </property>
             <property name="text" >
-             <string>Compute VoMI</string>
+             <string>VoMI</string>
             </property>
            </widget>
           </item>
@@ -1110,7 +1110,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2" >
           <item>
-           <widget class="QPushButton" name="m_voxelSalienciesPushButton" >
+           <widget class="QCheckBox" name="m_computeVoxelSalienciesCheckBox" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
               <horstretch>1</horstretch>
@@ -1118,7 +1118,7 @@
              </sizepolicy>
             </property>
             <property name="text" >
-             <string>Compute voxel saliencies</string>
+             <string>Voxel saliencies</string>
             </property>
            </widget>
           </item>
@@ -1140,6 +1140,13 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_computeVmiPushButton" >
+          <property name="text" >
+           <string>Compute selected</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QProgressBar" name="m_vmiProgressBar" >

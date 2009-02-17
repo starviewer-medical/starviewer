@@ -84,6 +84,9 @@ private slots:
     /// Calcula les saliencies dels valors de propietat.
     void computePropertySaliencies();
 
+    /// Calcula les mesures del grup VMI seleccionades.
+    void computeSelectedVmi();
+
     /// Calcula les VMI amb els punts de vista seleccionats.
     void computeVmi();
     /// Calcula les inestabilitats dels punts de vista seleccionats.

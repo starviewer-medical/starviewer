@@ -109,12 +109,11 @@ void QExperimental3DExtension::createConnections()
     connect( m_propertySalienciesPushButton, SIGNAL( clicked() ), SLOT( computePropertySaliencies() ) );
 
     // VMI
+    connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
     connect( m_vmiPushButton, SIGNAL( clicked() ), SLOT( computeVmi() ) );
     connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
-    connect( m_vomiPushButton, SIGNAL( clicked() ), SLOT( computeVomi() ) );
     connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
     connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
-    connect( m_voxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( computeVoxelSaliencies() ) );
     connect( m_loadVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelSaliencies() ) );
     connect( m_saveVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelSaliencies() ) );
 }
@@ -737,6 +736,302 @@ void QExperimental3DExtension::computePropertySaliencies()
             volumeReslicer.computePropertySaliencies();
         }
     }
+}
+
+
+void QExperimental3DExtension::computeSelectedVmi()
+{
+    bool computeVomi = m_computeVomiCheckBox->isChecked();
+    bool computeVoxelSaliencies = m_computeVoxelSalienciesCheckBox->isChecked();
+
+    if ( !computeVomi && !computeVoxelSaliencies ) return;
+
+    setCursor( QCursor( Qt::WaitCursor ) );
+
+    // Obtenir direccions
+    Vector3 position, focus, up;
+    m_viewer->getCamera( position, focus, up );
+
+    float distance = ( position - focus ).length();
+
+    ViewpointGenerator viewpointGenerator;
+    {
+        if ( m_vmiViewpointDistributionWidget->isUniform() )
+        {
+            switch ( m_vmiViewpointDistributionWidget->numberOfViewpoints() )
+            {
+                case 4: viewpointGenerator.setToUniform4( distance ); break;
+                case 6: viewpointGenerator.setToUniform6( distance ); break;
+                case 8: viewpointGenerator.setToUniform8( distance ); break;
+                case 12: viewpointGenerator.setToUniform12( distance ); break;
+                case 20: viewpointGenerator.setToUniform20( distance ); break;
+                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_vmiViewpointDistributionWidget->numberOfViewpoints() ) ) );
+            }
+        }
+        else viewpointGenerator.setToQuasiUniform( m_vmiViewpointDistributionWidget->recursionLevel(), distance );
+    }
+
+    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+    int nViewpoints = viewpoints.size();
+    unsigned int nObjects = m_volume->getSize();
+
+    // Inicialitzar progrés
+    int nSteps = 4; // ray casting (p(O|V)), p(V), p(O), VoMI + voxel saliencies
+    int step = 0;
+    {
+        m_vmiProgressBar->setValue( 0 );
+        m_vmiProgressBar->repaint();
+        m_vmiTotalProgressBar->setMaximum( nSteps );
+        m_vmiTotalProgressBar->setValue( step );
+        m_vmiTotalProgressBar->repaint();
+    }
+
+    m_volume->startVmiMode();
+
+    QVector<float> viewProbabilities( nViewpoints );    // vector p(V), inicialitzat a 0
+    QVector<float> objectProbabilities( nObjects );     // vector p(O), inicialitzat a 0
+    QVector<QTemporaryFile*> pOvFiles( nViewpoints );   // matriu p(O|V) (cada fitxer una fila p(O|v))
+    {
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            pOvFiles[i] = new QTemporaryFile( "pOvXXXXXX.tmp" );    // els fitxers temporals es creen al directori de treball
+
+            if ( !pOvFiles[i]->open() )
+            {
+                DEBUG_LOG( QString( "No s'ha pogut obrir el fitxer: error %1" ).arg( pOvFiles[i]->errorString() ) );
+                for ( int j = 0; j < i; j++ ) pOvFiles[j]->close();
+                return;
+            }
+        }
+    }
+
+    float totalViewedVolume = 0.0f;
+
+    // p(O|V) (i acumulació de p(V))
+    {
+        m_vmiProgressBar->setValue( 0 );
+        m_vmiProgressBar->repaint();
+
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            m_volume->startVmiSecondPass();
+            setViewpoint( viewpoints.at( i ) ); // render
+            QVector<float> objectProbabilitiesInView = m_volume->finishVmiSecondPass();
+
+            // p(V)
+            float viewedVolume = m_volume->viewedVolumeInVmiSecondPass();
+            viewProbabilities[i] = viewedVolume;
+            totalViewedVolume += viewedVolume;
+
+            // p(O|V)
+            pOvFiles[i]->write( reinterpret_cast<const char*>( objectProbabilitiesInView.data() ), objectProbabilitiesInView.size() * sizeof(float) );
+
+            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( ++step );
+        m_vmiTotalProgressBar->repaint();
+    }
+
+    // p(V)
+    {
+        if ( totalViewedVolume > 0.0f )
+        {
+            m_vmiProgressBar->setValue( 0 );
+
+            for ( int i = 0; i < nViewpoints; i++ )
+            {
+                viewProbabilities[i] /= totalViewedVolume;
+                Q_ASSERT( viewProbabilities.at( i ) == viewProbabilities.at( i ) );
+                DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
+                m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+                m_vmiProgressBar->repaint();
+            }
+        }
+
+        m_vmiTotalProgressBar->setValue( ++step );
+        m_vmiTotalProgressBar->repaint();
+    }
+
+    // p(O)
+    {
+        m_vmiProgressBar->setValue( 0 );
+
+        float *objectProbabilitiesInView = new float[nObjects]; // vector p(O|v)
+
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            pOvFiles[i]->reset();   // reset per tornar al principi
+            pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView ), nObjects * sizeof(float) );    // llegim...
+            pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+            for ( unsigned int j = 0; j < nObjects; j++ )
+            {
+                objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j];
+            }
+
+            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( ++step );
+        m_vmiTotalProgressBar->repaint();
+
+        for ( unsigned int i = 0; i < nObjects; i++ )
+        {
+            Q_ASSERT( objectProbabilities.at( i ) == objectProbabilities.at( i ) );
+            //DEBUG_LOG( QString( "p(o%1) = %2" ).arg( i ).arg( objectProbabilities.at( i ) ) );
+        }
+
+        delete[] objectProbabilitiesInView;
+    }
+
+    // VoMI + voxel saliencies (inicialització)
+    if ( computeVomi )
+    {
+        m_vomi.resize( nObjects );
+        m_maximumVomi = 0.0f;
+    }
+    if ( computeVoxelSaliencies )
+    {
+        m_voxelSaliencies.resize( nObjects );
+        m_maximumSaliency = 0.0f;
+    }
+    // VoMI + voxel saliencies (càlcul)
+    {
+        /*
+         * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
+         * N'hi haurà prou llegint la llesca actual, l'anterior i la següent.
+         */
+        int *dimensions = m_volume->getImage()->GetDimensions();
+        int dimX = dimensions[0], dimY = dimensions[1], dimZ = dimensions[2], dimXY = dimX * dimY, dimXY3 = dimXY * 3;
+        qint64 sizeToRead = dimXY3 * sizeof(float), sizeToReadOnEdge = dimXY * 2 * sizeof(float);
+        float **pOV = new float*[nViewpoints];  // p(O|V) (un tros de la matriu cada vegada)
+        for ( int i = 0; i < nViewpoints; i++ ) pOV[i] = new float[dimXY3];
+        QVector<float> pVoi( nViewpoints ); // p(V|oi)
+        QVector<float> pVoj( nViewpoints ); // p(V|oj)
+
+        m_vmiProgressBar->setValue( 0 );
+
+        // iterem pel volum en l'ordre dels vòxels
+        for ( int z = 0, i = 0; z < dimZ; z++ )
+        {
+            DEBUG_LOG( QString( "llesca %1/%2" ).arg( z + 1 ).arg( dimZ ) );
+
+            // actualitzem pOV
+            for ( int k = 0; k < nViewpoints; k++ )
+            {
+                // quan z == 0, es salta la primera llesca, que seria z == -1
+                if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );
+                else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
+                else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
+            }
+
+            int pOvShift = ( z - 1 ) * dimXY;
+
+            for ( int y = 0; y < dimY; y++ )
+            {
+                for ( int x = 0; x < dimX; x++, i++ )
+                {
+                    Q_ASSERT( i == x + y * dimX + z * dimXY );
+
+                    float poi = objectProbabilities.at( i );    // p(oi)
+                    Q_ASSERT( poi == poi );
+
+                    // p(V|oi)
+                    if ( poi == 0.0 ) pVoi.fill( 0.0f );    // si p(oi) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oi) ha de ser tot zeros
+                    else for ( int k = 0; k < nViewpoints; k++ ) pVoi[k] = viewProbabilities.at( k ) * pOV[k][i - pOvShift] / poi;
+
+                    if ( computeVomi )
+                    {
+                        float vomi = InformationTheory<float>::kullbackLeiblerDivergence( pVoi, viewProbabilities );
+                        Q_ASSERT( vomi == vomi );
+                        m_vomi[i] = vomi;
+                        if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
+                    }
+
+                    if ( computeVoxelSaliencies )
+                    {
+                        int neighbours[6] = { x - 1 + y * dimX + z * dimXY, x + 1 + y * dimX + z * dimXY,
+                                              x + ( y - 1 ) * dimX + z * dimXY, x + ( y + 1 ) * dimX + z * dimXY,
+                                              x + y * dimX + ( z - 1 ) * dimXY, x + y * dimX + ( z + 1 ) * dimXY };
+                        bool validNeighbours[6] = { x > 0, x + 1 < dimX,
+                                                    y > 0, y + 1 < dimY,
+                                                    z > 0, z + 1 < dimZ };
+
+                        float saliency = 0.0f;
+
+                        // iterem pels veïns
+                        for ( int j = 0; j < 6; j++ )
+                        {
+                            if ( !validNeighbours[j] ) continue;
+
+                            float poj = objectProbabilities.at( neighbours[j] );    // p(oj)
+                            Q_ASSERT( poj == poj );
+                            float poij = poi + poj; // p(ô)
+
+                            if ( poij == 0.0 ) continue;
+
+                            // p(V|oj)
+                            if ( poj == 0.0 ) pVoj.fill( 0.0f );    // si p(oj) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oj) ha de ser tot zeros
+                            else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = viewProbabilities.at( k ) * pOV[k][neighbours[j] - pOvShift] / poj;
+
+                            float s = InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
+                            Q_ASSERT( s == s );
+                            saliency += s;
+                        }
+
+                        saliency /= 6.0f;
+                        m_voxelSaliencies[i] = saliency;
+                        if ( saliency > m_maximumSaliency ) m_maximumSaliency = saliency;
+                    }
+                }
+            }
+
+            if ( z > 0 )
+            {
+                // avancem una llesca en tots els fitxers
+                for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );
+            }
+
+            m_vmiProgressBar->setValue( 100 * ( z + 1 ) / dimZ );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( ++step );
+        m_vmiTotalProgressBar->repaint();
+
+        DEBUG_LOG( "esborrem pOV" );
+        for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
+        delete[] pOV;
+
+        if ( computeVomi )
+        {
+            m_vomiCheckBox->setEnabled( true );
+            m_saveVomiPushButton->setEnabled( true );
+        }
+
+        if ( computeVoxelSaliencies )
+        {
+            m_voxelSalienciesCheckBox->setEnabled( true );
+            m_saveVoxelSalienciesPushButton->setEnabled( true );
+        }
+    }
+
+    DEBUG_LOG( "destruïm els fitxers temporals" );
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        pOvFiles[i]->close();
+        delete pOvFiles[i];
+    }
+
+    doVisualization();
+    m_viewer->setCamera( position, focus, up );
+
+    DEBUG_LOG( "fi" );
+
+    setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
 
