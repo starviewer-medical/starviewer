@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "harddiskinformation.h"
-
+#include "logging.h"
 #ifdef _WIN32
     #include <windows.h>
 #else
@@ -17,7 +17,6 @@ namespace udg{
 HardDiskInformation::HardDiskInformation()
 {
 }
-
 
 HardDiskInformation::~HardDiskInformation()
 {
@@ -64,11 +63,11 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
         total = static_cast<quint64>( fsd.f_blocks ) * static_cast<quint64>( fsd.f_frsize );
         existsError = false;
     }
-
 #endif // _WIN32
 
     if (existsError)
     {
+        logLastError();
         total = 0;
     }
 
@@ -96,15 +95,37 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
         total = static_cast<quint64>( fsd.f_bavail ) * static_cast<quint64>( fsd.f_bsize );
         existsError = false;
     }
-
 #endif // _WIN32
 
-    if (existsError)
+    if(existsError)
     {
+        logLastError();
         total = 0;
     }
 
     return total;
+}
+
+void HardDiskInformation::logLastError()
+{
+    QString qtErrorMessage;
+#ifdef Q_OS_WIN32
+    // obtenim el missatge d'error
+    TCHAR errorMessage[512];
+    FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,0,GetLastError(),0,errorMessage,1024,NULL);
+    // formatem a QString
+#ifdef UNICODE      
+    qtErrorMessage = QString::fromUtf16((ushort*)errorMessage);
+#else
+    qtErrorMessage = QString::fromLocal8Bit(errorMessage);
+#endif
+    
+#else
+    // TODO implementar per altres sistemes ( MAC, LINUX )
+    qtErrorMessage = "TODO! No tenim implementat l'obtenció del missatge d'error en aquest sistema operatiu";
+#endif // Q_OS_WIN32
+    DEBUG_LOG( "Error: " + qtErrorMessage );
+    ERROR_LOG( "Error: " + qtErrorMessage );
 }
 
 }; //end udg namespace
