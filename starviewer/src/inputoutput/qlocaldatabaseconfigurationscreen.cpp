@@ -292,7 +292,7 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
                                "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
             showDatabaseErrorMessage( state );
         }
-        else QMessageBox::information( this, ApplicationNameString, "All studies has been deleted successfully");
+        else QMessageBox::information( this, ApplicationNameString, "All studies have been deleted successfully");
 
         emit configurationChanged("Pacs/CacheCleared");
     }
