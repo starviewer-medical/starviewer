@@ -28,7 +28,7 @@ ReferenceLinesTool::ReferenceLinesTool( QViewer *viewer, QObject *parent )
 
     m_myData = new ReferenceLinesToolData;
     m_toolData = m_myData;
-    connect( m_toolData, SIGNAL(changed()), SLOT(updateProjectionLines()) );
+    connect( m_myData, SIGNAL(changed()), SLOT(updateProjectionLines()) );
 
     m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
     if( !m_2DViewer )
@@ -79,10 +79,15 @@ ReferenceLinesTool::~ReferenceLinesTool()
 
 void ReferenceLinesTool::setToolData(ToolData * data)
 {
+    // desfem els vincles anteriors
+    disconnect( m_myData, SIGNAL(changed()), this, SLOT(updateProjectionLines()) );
+    delete m_myData;
+
+    // creem de nou les dades
     m_toolData = data;
     m_myData = qobject_cast<ReferenceLinesToolData *>(data);
     // quan canvïn les dades (ImagePlane), actualitzem les línies de projecció
-    connect( m_toolData, SIGNAL(changed()), SLOT(updateProjectionLines()) );
+    connect( m_myData, SIGNAL(changed()), SLOT(updateProjectionLines()) );
 
     // això serveix perquè s'apliqui tot just quan es creïi la tool
     // amb múltiples viewers
@@ -127,6 +132,7 @@ void ReferenceLinesTool::updateProjectionLines()
     }
     else
     {
+        // TODO això només hauria de ser necessari quan el viewer és marcat com actiu
         m_2DViewer->getDrawer()->hideGroup("ReferenceLines");
     }
 }
