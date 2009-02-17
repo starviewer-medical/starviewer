@@ -420,7 +420,7 @@ void LocalDatabaseManager::clear()
     dbConnect.endTransaction();
     dbConnect.close();
     //esborrem tots els estudis descarregats, físicament del disc dur
-    if (!delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), true)) 
+    if (!delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), false)) 
         m_lastError = DeletingFilesError;
     else 
         m_lastError = Ok;
