@@ -136,7 +136,7 @@ void QConfigurationScreen::addPacs()
 
         if ( !pacsList.insertPacs(pacs) )
         {
-            QMessageBox::warning(this, ApplicationNameString, tr("This pacs already exists"));
+            QMessageBox::warning(this, ApplicationNameString, tr("This PACS already exists."));
         }
         else
         {
@@ -282,7 +282,7 @@ void QConfigurationScreen::test()
 
         if ( !state.good() )
         {
-            message = tr( "PACS \"%1\" doesn't responds\nBe sure that the IP and AETitle of the PACS are correct" ).arg( pacs.getAEPacs() );
+            message = tr( "PACS \"%1\" doesn't responds correctly.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
             QMessageBox::warning( this , ApplicationNameString , message );
             INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds. PACS ERROR : " + state.text() );
         }
@@ -299,7 +299,7 @@ void QConfigurationScreen::test()
             }
             else
             {
-                message = tr( "PACS \"%1\" doesn't responds correctly\nBe sure that the IP and AETitle of the PACS are correct" ).arg( pacs.getAEPacs() );
+                message = tr( "PACS \"%1\" doesn't responds correctly.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
                 QMessageBox::warning( this , ApplicationNameString , message );
                 INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds correctly. PACS ERROR : " + state.text() );
             }

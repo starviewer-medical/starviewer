@@ -463,7 +463,7 @@ void QueryScreen::queryStudyPacs()
         {
             m_studyTreeWidgetPacs->clear();
             QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , ApplicationNameString , tr( "An error has produced while querying. Repeat the query, if the problem persist contact with an administrator," ) );
+            QMessageBox::information( this , ApplicationNameString , tr( "An error has produced while querying.\n\nRepeat it, if the problem persist contact with an administrator." ) );
             return;
         }
 
@@ -531,7 +531,7 @@ void QueryScreen::queryStudy( QString source )
             QApplication::restoreOverrideCursor();
             if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
             {
-                QMessageBox::warning( this , ApplicationNameString , tr( "To search you have to open a dicomdir" ) );
+                QMessageBox::warning( this , ApplicationNameString , tr( "Before search you have to open a dicomdir." ) );
                 ERROR_LOG( "No s'ha obert cap directori dicomdir " + state.text() );
             }
             else
@@ -644,7 +644,7 @@ void QueryScreen::querySeriesPacs(QString studyUID, QString pacsID)
     if ( !state.good() )
     {
         //Error al connectar
-        ERROR_LOG( "Error al connectar al pacs " + pacsDescription + ". PACS ERROR : " + state.text() );
+        ERROR_LOG( "Error al connectar al PACS " + pacsDescription + ". PACS ERROR : " + state.text() );
         errorConnectingPacs (pacsID);
         return;
     }
@@ -735,7 +735,7 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
     if ( !state.good() )
     {   //Error al connectar
         QApplication::restoreOverrideCursor();
-        ERROR_LOG( "Error al connectar al pacs " + pacsDescription + ". PACS ERROR : " + state.text() );
+        ERROR_LOG( "Error al connectar al PACS " + pacsDescription + ". PACS ERROR : " + state.text() );
         errorConnectingPacs (pacsID);
         return;
     }
@@ -796,7 +796,8 @@ void QueryScreen::retrieve(bool view)
         if ( indexStudyInList == -1 ) 
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning(this , ApplicationNameString, tr("Internal can't find which pacs belong the study with study uid %1 to retreive.").arg(currentStudyUID));
+            QMessageBox::warning(this , ApplicationNameString, tr("Internal Error: %2 can't retrieve study with UID %1, because can't find study information.").arg(currentStudyUID, ApplicationNameString));
+            ERROR_LOG("No s'ha trobat la informació de l'estudi a la llista m_studyTreeWidgetPacs per poder descarregar l'estudi");
         }
         else
         {
@@ -1403,13 +1404,13 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
 
     if (!state.good())
     {
-        QMessageBox::critical(this , ApplicationNameString , tr("An error ocurred querying default pacs, can't process the RIS request"));
+        QMessageBox::critical(this , ApplicationNameString , tr("An error ocurred querying default PACS, can't process the RIS request."));
         return;
     }
 
     if (multipleQueryStudy.getStudyList().isEmpty())
     {
-        QString message = QString (tr("Starviewer can't execute the RIS request, because hasn't found the Study with accession number %1 in the default pacs")).arg(maskRisRequest.getAccessionNumber());
+        QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(maskRisRequest.getAccessionNumber(), ApplicationNameString);
         QMessageBox::information(this , ApplicationNameString , message);
         return;
     }
@@ -1452,18 +1453,18 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
                          "\n\nIf you want to open different %1's windows always choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
-            message += tr("%1 database is corrupted."
-                         "\nClose all %1 windows and try again."
+            message += tr("%1 database is corrupted.");
+            message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
-            message += tr("%1 database syntax error."
-                         "\nClose all %1 windows and try again."
+            message += tr("%1 database syntax error.");
+            message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseError:
-            message += tr("An internal error occurs with %1 database."
-                         "\nClose all %1 windows and try again."
+            message += tr("An internal error occurs with %1 database.");
+            message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DeletingFilesError:
@@ -1510,7 +1511,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             QMessageBox::warning( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::NoEnoughSpace :
-            message = tr("There is not enough space to retreive studies, please free space.");
+            message = tr("There is not enough space to retrieve studies, please free space.");
             message += tr("\nAll pending retrieve operations will be cancelled.");
             QMessageBox::warning( this , ApplicationNameString , message );
             break;
@@ -1547,42 +1548,42 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
 {
     QString message;
 
-    message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
-
     switch (error)
     {
         case DICOMDIRImporter::ErrorOpeningDicomdir :
+            message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
             message += tr("the dicomdir could not be opened. Be sure that the dicomdir path is correct.\n");
             message += tr("\n\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::ErrorCopyingFiles :
-            message += tr("some files could not be imported. Be sure that you have write permissions on the %1 cache directory.").arg(ApplicationNameString);
+            message = tr("Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.").arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::NoEnoughSpace :
-            message = tr("There is not enough space to retreive studies, please free space.");
+            message = tr("There is not enough space to retrieve studies, please free space.");
             QMessageBox::warning( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::ErrorFreeingSpace :
-            message += tr("an error has ocurred freeing space, some studies can't be imported.");
+            message = tr("An error has ocurred freeing space, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::DatabaseError :
-            message += tr("a database error has ocurred, some studies can't be imported.");
+            message = tr("A database error has ocurred, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case DICOMDIRImporter::PatientInconsistent :
-            message += tr("the study can't be imported, because %1 has not been capable of read correctly dicom information of the study.").arg(ApplicationNameString);
+            message = tr("The study with UID %2 can't be imported, because %1 has not been capable of read correctly dicom information of the study.").arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case DICOMDIRImporter::DicomdirInconsistent :
+            message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
             message += tr("has ocurred an error. This dicomdir is inconsistent, can't be imported.");
             message += tr("\n\nPlease contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
@@ -1590,8 +1591,7 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
       case DICOMDIRImporter::Ok :
             break;
         default:
-            message = tr("Please review the operation list screen, ");
-            message += tr("An unknow error has ocurred.");
+            message += tr("An unknow error has ocurred importing dicomdir.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
     }

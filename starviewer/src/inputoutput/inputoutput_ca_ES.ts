@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<defaultcodec></defaultcodec>
 <context>
     <name>QAdvancedSearchWidgetBase</name>
     <message>
@@ -330,12 +329,7 @@
         <translation>Port :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1248"/>
-        <source>Delete all the studies of the cache</source>
-        <translation>Esborra tots els estudis de la cache</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1319"/>
+        <location filename="qconfigurationscreenbase.ui" line="879"/>
         <source>Apply Changes</source>
         <translation>Aplicar canvis</translation>
     </message>
@@ -370,36 +364,6 @@
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1225"/>
-        <source>Compact Database</source>
-        <translation>Compactar base de dades</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1106"/>
-        <source>Examine disk to find the directory to save the retrieved images</source>
-        <translation>Examina el disc per trobar el directori on guardar les imatges descarregades</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="964"/>
-        <source>Delete studies that has not been viewed in :</source>
-        <translation>Esborrar els estudis que no hagin estat visualitzats en :</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="984"/>
-        <source>days</source>
-        <translation>dies</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1067"/>
-        <source>Examine disk  to find the database</source>
-        <translation>Examinar el dis per trobar la base de dades</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1313"/>
-        <source>Apply the canges</source>
-        <translation>Aplicar els canvis</translation>
-    </message>
-    <message>
         <location filename="qconfigurationscreenbase.ui" line="873"/>
         <source>Apply changes</source>
         <translation>Aplica els canvis</translation>
@@ -408,11 +372,6 @@
         <location filename="qconfigurationscreenbase.ui" line="174"/>
         <source>Delete selected Pacs</source>
         <translation>Esborra el Pacs seleccionat</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1215"/>
-        <source>Create database</source>
-        <translation>Crear la base de dades</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="396"/>
@@ -445,19 +404,9 @@
         <translation>Descripció :</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1034"/>
-        <source>Gb</source>
-        <translation>Gb</translation>
-    </message>
-    <message>
         <location filename="qconfigurationscreenbase.ui" line="471"/>
         <source>Local Configuration</source>
         <translation>Configuració Local</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1135"/>
-        <source>Database path :</source>
-        <translation>Ruta Base de Dades :</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="27"/>
@@ -540,47 +489,125 @@
         <translation>Correu electrònic:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="889"/>
-        <source>DICOM Cache</source>
-        <translation>Cache DICOM</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="901"/>
-        <source>Local DICOM Cache configuration:</source>
-        <translation>Configuració de la Cache local de DICOM:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1088"/>
-        <source>Cache images path :</source>
-        <translation>Ruta de la Cache d&apos;imatges:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1168"/>
-        <source>Local DICOM Cache operations:</source>
-        <translation>Operacions de la Cache local per DICOM:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1251"/>
-        <source>Delete all Studies</source>
-        <translation>Esborrar tots els estudis</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="1014"/>
-        <source>Minimum space required in harddisk to retrieve dicom objects:</source>
-        <translation>Espai mínim necessari al discdur per descarregar objectes dicom:</translation>
-    </message>
-    <message>
         <location filename="qconfigurationscreenbase.ui" line="110"/>
         <source>PacsId</source>
         <translation>Pacs </translation>
     </message>
 </context>
 <context>
-    <name>QFileDialog</name>
+    <name>QListenRisRequestsConfigurationScreenBase</name>
     <message>
-        <location filename="queryscreen.cpp" line="1155"/>
-        <source>Open</source>
-        <translation>Obrir</translation>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="13"/>
+        <source>Listen RIS Requests Configuration</source>
+        <translation>Configuració del servei d&apos;escolta de peticions del RIS</translation>
+    </message>
+    <message>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="49"/>
+        <source>Apply Changes</source>
+        <translation>Aplicar canvis</translation>
+    </message>
+    <message>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="95"/>
+        <source>View automatically the studies when have been retrieved.</source>
+        <translation>Visualitzar automàticament els estudis quan s&apos;hagin descarregat.</translation>
+    </message>
+    <message>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="112"/>
+        <source>Listen RIS Requests on port</source>
+        <translation>Escoltar les peticions del RIS pel port</translation>
+    </message>
+</context>
+<context>
+    <name>QLocalDatabaseConfigurationScreenBase</name>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="27"/>
+        <source>Local Database Configuration</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="151"/>
+        <source>Local database maintenance:</source>
+        <translation>Manteniment de la base de dades local:</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="182"/>
+        <source>Create database</source>
+        <translation>Crear la base de dades</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="208"/>
+        <source>Compact Database</source>
+        <translation>Compactar base de dades</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="231"/>
+        <source>Delete all the studies of the cache</source>
+        <translation>Esborra tots els estudis de la cache</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="234"/>
+        <source>Delete all Studies</source>
+        <translation>Esborrar tots els estudis</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="287"/>
+        <source>Apply the canges</source>
+        <translation>Aplicar els canvis</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="293"/>
+        <source>Apply Changes</source>
+        <translation>Aplicar canvis</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="310"/>
+        <source>Minimum space required in harddisk to retrieve dicom objects:</source>
+        <translation>Espai mínim necessari al discdur per descarregar objectes dicom:</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="333"/>
+        <source>Gb</source>
+        <translation>Gb</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="363"/>
+        <source>Delete studies automatically that have not been viewed last</source>
+        <translation>Esborrar automàticament els estudis que no han estat visualitzats en els últims</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="386"/>
+        <source>days</source>
+        <translation>dies</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="416"/>
+        <source>When there isn&apos;t enough free space to retrieve or import new studies delete old studies until get</source>
+        <translation>Quan no hi hagi suficient espai lliure per descarregar o importar nous estudis, esborrar estudis vell fins aconseguir</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="439"/>
+        <source>Gb of free space.</source>
+        <translation>Gb d&apos;espai lliure per l&apos;starviewer.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="498"/>
+        <source>Database path :</source>
+        <translation>Ruta Base de Dades :</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="517"/>
+        <source>Cache images path :</source>
+        <translation>Ruta de la Cache d&apos;imatges:</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="534"/>
+        <source>Examine disk to find the database</source>
+        <translation>Examinar el disc per trobar la base de dades</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="550"/>
+        <source>Examine disk to find the directory to save the retrieved images</source>
+        <translation>Examina el disc per trobar el directori on guardar les imatges descarregades</translation>
     </message>
 </context>
 <context>
@@ -617,6 +644,19 @@
     </message>
 </context>
 <context>
+    <name>QPopUpRisRequestsScreenBase</name>
+    <message>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="104"/>
+        <source>Dialog</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="288"/>
+        <source>Starviewer will proceed to retrieve it.</source>
+        <translation>Starviewer procedirà a descarregar l&apos;estudi.</translation>
+    </message>
+</context>
+<context>
     <name>udg::ConvertToDicomdir</name>
     <message>
         <location filename="converttodicomdir.cpp" line="133"/>
@@ -635,18 +675,13 @@
 <context>
     <name>udg::DatabaseInstallation</name>
     <message>
-        <location filename="databaseinstallation.cpp" line="122"/>
-        <source>Starviewer</source>
-        <translation>Starviewer</translation>
-    </message>
-    <message>
         <location filename="databaseinstallation.cpp" line="115"/>
-        <source>Starviewer database is corrupted.
+        <source>%1 database is corrupted.
 
-Starviewer will try to repair it.</source>
-        <translation>La base dades Starviewer està corrupte.
+%1 will try to repair it.</source>
+        <translation>La base dades %1r està corrupte.
 
-Starviewer intentarà reparar-ho.</translation>
+%1 intentarà reparar-ho.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="140"/>
@@ -660,382 +695,309 @@ Starviewer intentarà reparar-ho.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="122"/>
-        <source>Starviewer can&apos;t repair database.
+        <source>%1 can&apos;t repair database, it will be reinstalled.
 
-Database will be reinstalled. All local studies retrieved and imported will be deleted.</source>
-        <translation>Starviewer no pot reparar la base de dades.
+All local studies retrieved and imported will be deleted.</source>
+        <translation>%1 no pot reparar la base de dades, es reinstal·lara.
 
-Es reinstal·larà, esborrant tots els estudis descarregats i importats.</translation>
+Tots els estudis descarregats o importats seran esborrats.</translation>
+    </message>
+</context>
+<context>
+    <name>udg::ListenRisRequest</name>
+    <message>
+        <location filename="listenrisrequest.cpp" line="80"/>
+        <source>Can&apos;t listen RIS requests on port %1, the port is used for another application.</source>
+        <translation>No es poden escoltar peticions del RIS pel port %1, el port està sent utilitzat per una altra aplicació.</translation>
+    </message>
+    <message>
+        <location filename="listenrisrequest.cpp" line="81"/>
+        <source>
+
+If the error has produced when openned new %1&apos;s windows, close that window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
+        <translation>
+
+Si l&apos;error s&apos;ha produït al obrir una nova finestra del %1, tanqueu aquesta finestra. Si voleu obrir una nova finestra del %1, sempreu ho heu de fer des de l&apos;opció &apos;Nou&apos; del menú Arxiu.</translation>
+    </message>
+    <message>
+        <location filename="listenrisrequest.cpp" line="85"/>
+        <source>Can&apos;t listen RIS requests on port %1, an unknow network error has produced.</source>
+        <translation>No es poden escoltar les peticions del RIS pel port %1, s&apos;ha prodüit un error de xarxa desconegut.</translation>
+    </message>
+    <message>
+        <location filename="listenrisrequest.cpp" line="87"/>
+        <source>
+
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</source>
+        <translation>
+
+Tanqueu totes les finestres del %1 i torneu-ho a intentar.
+Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
 </context>
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="747"/>
-        <source>Starviewer</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="395"/>
+        <location filename="qconfigurationscreen.cpp" line="321"/>
         <source>AETitle field can&apos;t be empty</source>
         <translation>El camp AETitle no pot estar buit</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="411"/>
+        <location filename="qconfigurationscreen.cpp" line="337"/>
         <source>PACS Port has to be between 0 and 65535</source>
         <translation>El port del PACS ha d&apos;estar entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="419"/>
+        <location filename="qconfigurationscreen.cpp" line="345"/>
         <source>Institution field can&apos;t be empty</source>
         <translation>El cam institució no pot estar buit</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="434"/>
+        <location filename="qconfigurationscreen.cpp" line="360"/>
         <source>Local Port has to be between 0 and 65535</source>
         <translation>El port local ha d&apos;estar entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="443"/>
+        <location filename="qconfigurationscreen.cpp" line="369"/>
         <source>Maximum simultaenious connections has to be between 1 and 15</source>
         <translation>El nombre màxim de connexions simultànies ha de ser entre 1 i 15</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="452"/>
-        <source>Invalid database path</source>
-        <translation>Ruta a la base de dades incorrecte</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="627"/>
-        <source>Are you sure you want to delete all Studies of the cache ?</source>
-        <translation>Esteu segurs que voleu esborrar tots els estudis de la cache ?</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="462"/>
-        <source>Create directory ?</source>
-        <translation>Crear el directori ?</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="463"/>
-        <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
-        <translation>El directori d&apos;imatges de la cache no existeix. El vols crear ?</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="464"/>
-        <source>&amp;Yes</source>
-        <translation>&amp;Si</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="464"/>
-        <source>&amp;No</source>
-        <translation>&amp;No</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="581"/>
-        <source>Cache Directory</source>
-        <translation>Directori cache</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="469"/>
-        <source>Can&apos;t create the directory. Please check users permission</source>
-        <translation>No es pot crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="710"/>
-        <source>The extension of the database has to be &apos;.sdb&apos;</source>
-        <translation>L&apos;extensió de la base de dades ha de ser &apos;.sdb&apos;</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="716"/>
-        <source>Starviewer can&apos;t create the database because, a database with the same name exists in the directory</source>
-        <translation>No es pot crear la base de dades perquè una base de dades amb el mateix nom ja existeix en el directori</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="747"/>
-        <source>
-Error Number: %1</source>
-        <translation>
-Error número: %1</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="383"/>
+        <location filename="qconfigurationscreen.cpp" line="309"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="330"/>
+        <location filename="qconfigurationscreen.cpp" line="256"/>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="332"/>
+        <location filename="qconfigurationscreen.cpp" line="258"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="258"/>
+        <location filename="qconfigurationscreen.cpp" line="184"/>
         <source>Select a PACS to update</source>
         <translation>Seleccioneu un PACS per actualitzar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="294"/>
+        <location filename="qconfigurationscreen.cpp" line="220"/>
         <source>Select a PACS to delete</source>
         <translation>Seleccioneu un PACS per esborrar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="359"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t responds
-Be sure that the IP and AETitle of the PACS are correct</source>
-        <translation>El PACS &quot;%1&quot; no respon
-Asseguris que la IP i el AETitle del PACS són correctes</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="369"/>
+        <location filename="qconfigurationscreen.cpp" line="295"/>
         <source>Test of PACS &quot;%1&quot; is correct</source>
         <translation>El test del PACS &quot;%1&quot; és correcte</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="376"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t responds correctly
-Be sure that the IP and AETitle of the PACS are correct</source>
+        <location filename="qconfigurationscreen.cpp" line="302"/>
+        <source>PACS &quot;%1&quot; doesn&apos;t responds correctly.
+Be sure that the IP and AETitle of the PACS are correct.</source>
         <translation>El PACS &quot;%1&quot; no respón correctament
-Asseguris que la IP i el AETitle del PACS siguin correctes</translation>
+Asseguris que la IP i el AETitle del PACS siguin correctes.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="383"/>
+        <location filename="qconfigurationscreen.cpp" line="309"/>
         <source>To test a PACS it is necessary to select an item of the list.</source>
         <translation>Per fer un test d&apos;un PACS és necessari seleccionar-ne un de la llista.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="403"/>
+        <location filename="qconfigurationscreen.cpp" line="329"/>
         <source>Incorrect server address</source>
         <translation>Adreça de servidor incorrecte</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="721"/>
-        <source>The application has to be restarted to apply the changes</source>
-        <translation>S&apos;ha de reiniciar l&apos;aplicació per aplicar els canvis</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="485"/>
-        <source>At least 1 GByte of free space is necessary.</source>
-        <translation>Com a mínim es necessita 1 GByte d&apos;espai lliure.</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="670"/>
-        <source>The database cannot be compacted, an unknown error has ocurred.
- Try to close all Starviewer windows and try again.
-
-If the problem persist contact with an administrator.</source>
-        <translation>La base de dades no es pot compactar, s&apos;ha produït un error desconegut.
-Intenteu tancar totes les finestres de l&apos;starviewer i torneu-ho a intentar.
-
-Si el problema persisteix contacteu amb un administrador.</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="646"/>
-        <source>The cache cannot be delete, an unknown error has ocurred.
-Try to close all Starviewer windows and try again.
-
-If the problem persist contact with an administrator.</source>
-        <translation>La cache no es pot esborrar, s&apos;ha produït un error desconegut.
-Intenteu tancar totes les finestres de l&apos;starviewer i torneu-ho a intentar.
-
-Si el problema persisteix contacteu amb un administrador.</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="213"/>
-        <source>This pacs already exists</source>
-        <translation>Aquest pacs ja està donat d&apos;alta</translation>
+        <location filename="qconfigurationscreen.cpp" line="139"/>
+        <source>This PACS already exists.</source>
+        <translation>Aquest PACS ja està donat d&apos;alta.</translation>
     </message>
 </context>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="732"/>
-        <source>Starviewer</source>
-        <translation>Starviewer</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="295"/>
+        <location filename="qcreatedicomdir.cpp" line="296"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="295"/>
+        <location filename="qcreatedicomdir.cpp" line="296"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="293"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>Create directory ?</source>
         <translation>Crear el directori ?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="300"/>
+        <location filename="qcreatedicomdir.cpp" line="301"/>
         <source>Can&apos;t create the directory. Please check users permissions.</source>
         <translation>No es pot crear el directori. Si us plau reviseu els permisos d&apos;usuari.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="452"/>
+        <location filename="qcreatedicomdir.cpp" line="442"/>
         <source>Please select a study to remove of the list.</source>
         <translation>Si us plau seleccioni l&apos;estudi que vol esborrar de la llista.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="73"/>
+        <location filename="qcreatedicomdir.cpp" line="74"/>
         <source>CD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="74"/>
+        <location filename="qcreatedicomdir.cpp" line="75"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de CD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="82"/>
+        <location filename="qcreatedicomdir.cpp" line="83"/>
         <source>DVD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="83"/>
+        <location filename="qcreatedicomdir.cpp" line="84"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de DVD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="91"/>
+        <location filename="qcreatedicomdir.cpp" line="92"/>
         <source>Hard Disk</source>
         <translation>Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="92"/>
+        <location filename="qcreatedicomdir.cpp" line="93"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation>Gravar DICOMDIR al Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="100"/>
+        <location filename="qcreatedicomdir.cpp" line="101"/>
         <source>Pen Drive</source>
         <translation>Memòria Extraible USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="101"/>
+        <location filename="qcreatedicomdir.cpp" line="102"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation>Gravar DICOMDIR a un dispositiu extern USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="196"/>
+        <location filename="qcreatedicomdir.cpp" line="197"/>
         <source>The study already exists in the DICOMDIR list</source>
         <translation>L&apos;estudi ja existeix a la llista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="241"/>
+        <location filename="qcreatedicomdir.cpp" line="242"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation>No es pot crear el directori temporal per crear el DICOMDIR. Si us plau, revisi els permisos d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="270"/>
+        <location filename="qcreatedicomdir.cpp" line="271"/>
         <source>Create DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="271"/>
+        <location filename="qcreatedicomdir.cpp" line="272"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation>El directori conté un DICOMDIR, vols sobreescriure i esborrar tots els fitxers del directori?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="294"/>
+        <location filename="qcreatedicomdir.cpp" line="295"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directori DICOMDIR no existeix. Desitges crear-lo?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="325"/>
+        <location filename="qcreatedicomdir.cpp" line="326"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation>No hi ha suficient espai per crear el DICOMDIR. Si us plau allibereu espai.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="409"/>
-        <source>DICOMDIR Directory</source>
-        <translation>Directori del DICOMDIR</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="475"/>
+        <location filename="qcreatedicomdir.cpp" line="465"/>
         <source>Creating DICOMDIR Image...</source>
         <translation>Creant la Imatge del DICOMDIR...</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="261"/>
+        <location filename="qcreatedicomdir.cpp" line="262"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation>Cap directori especificat per a crear el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="335"/>
+        <location filename="qcreatedicomdir.cpp" line="336"/>
         <source>Please, first select the studies you want to create a DICOMDIR.</source>
         <translation>Esculli primer els estudis amb els que vol crear el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="353"/>
+        <location filename="qcreatedicomdir.cpp" line="354"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation>Algunes de les imatges no compleixen al 100% l&apos;estàndar DICOM. És possible que alguns visualitzadors tinguin problemes per a mostrar-les.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="358"/>
+        <location filename="qcreatedicomdir.cpp" line="359"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
         <translation>Error creant el DICOMDIR. Asseguris que té permisos a %1 i que el directori és buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="616"/>
+        <location filename="qcreatedicomdir.cpp" line="606"/>
         <source>
 Error Number: %1</source>
         <translation>
 Codi d&apos;error: %1</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
+        <location filename="qcreatedicomdir.cpp" line="523"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation>No s&apos;ha pogut iniciar el procés [ %1 ]. O bé el programa invocat no està instal·lat o bé no teniu prou permisos per invocar el programa.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="537"/>
+        <location filename="qcreatedicomdir.cpp" line="527"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation>El procés [ %1 ] s&apos;ha penjat després d&apos;haver-se iniciat correctament.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="545"/>
+        <location filename="qcreatedicomdir.cpp" line="535"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava escriure al procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigui executant o pot ser que s&apos;hagi tancat.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="549"/>
+        <location filename="qcreatedicomdir.cpp" line="539"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava llegir del procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigués executant.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="559"/>
+        <location filename="qcreatedicomdir.cpp" line="549"/>
         <source>DICOMDIR Creation Failure</source>
         <translation>Fallada en la Creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="559"/>
+        <location filename="qcreatedicomdir.cpp" line="549"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation>Hi ha hagut un error durant la creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="559"/>
+        <location filename="qcreatedicomdir.cpp" line="549"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <translation>Si us plau, contacti amb l&apos;administrador del sistema per solucionar aquest problema.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="285"/>
+        <location filename="qcreatedicomdir.cpp" line="286"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
         <translation>El directori de destí no està buit, si us plau escolliu un directori buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="735"/>
+        <location filename="qcreatedicomdir.cpp" line="725"/>
         <source>The creation of dicomdir on cd/dvd in Windows is desactivated.
 
 To create a cd/dvd with a Dicomdir, you have to create first the Dicomdir on your hard disk and then copy the directory where you have created it to a cd/dvd using a burning cd/dvd software.</source>
         <translation>La creació de dicomdir en cd/dvd en Windows està desactivada.
 
 Per crear un cd/dvd amb un Dicomdir, s&apos;ha de crear primer el Dicomdir en el disc dur i llavors copiar el directori on l&apos;ha creat a un cd/dvd, utilitzant una aplicació de gravar cd/dvd.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="410"/>
+        <source>Choose an empty directory...</source>
+        <translation>Escolliu un directori buit...</translation>
     </message>
 </context>
 <context>
@@ -1182,49 +1144,180 @@ Per crear un cd/dvd amb un Dicomdir, s&apos;ha de crear primer el Dicomdir en el
     </message>
 </context>
 <context>
+    <name>udg::QFileDialog</name>
+    <message>
+        <location filename="queryscreen.cpp" line="1215"/>
+        <source>Open</source>
+        <translation>Obrir</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QListenRisRequestsConfigurationScreen</name>
+    <message>
+        <location filename="qlistenrisrequestsconfigurationscreen.cpp" line="73"/>
+        <source>The application has to be restarted to apply the changes.</source>
+        <translation>S&apos;ha de reiniciar l&apos;aplicació per aplicar els canvis.</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QLocalDatabaseConfigurationScreen</name>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="101"/>
+        <source>Some configuration options are not valid:
+</source>
+        <translation>Algunes de les opcionsd de configuració no són vàlides:
+</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="107"/>
+        <source>Invalid database path.</source>
+        <translation>Ruta a la base de dades incorrecte.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="117"/>
+        <source>Create directory ?</source>
+        <translation>Crear el directori ?</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="118"/>
+        <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
+        <translation>El directori d&apos;imatges de la cache no existeix. El voleu crear ?</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="119"/>
+        <source>&amp;Yes</source>
+        <translation>&amp;Si</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="119"/>
+        <source>&amp;No</source>
+        <translation>&amp;No</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="124"/>
+        <source>%1 can&apos;t create the directory. Please check users permission.</source>
+        <translation>%1 no pot crear el directori. Si us plau reviseu els vostres permisos d&apos;usuari.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="140"/>
+        <source>
+- At least 1 GByte of free space in harddisk is necessary to retrieve or import new studies.</source>
+        <translation>
+- Es necessita com a mínim 1 GByte d&apos;espai lliure al disc dur per descarregar o importar nous estudis.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="149"/>
+        <source>
+- At least 1 GByte of studies have to be delete when there is not enough space to retrieve or import new studies.</source>
+        <translation>
+- Com a mínim s&apos;ha d&apos;esborrar 1 GByte d&apos;estudis, quan no hi ha suficient espai per descarregar o importar nous estudis.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="158"/>
+        <source>
+- Can&apos;t delete studies not viewed last 0 days, at least has to be studies not viewed last 1 day.</source>
+        <translation>
+-No es poden esborrar estudis que no hagin estat visualitzat els últims 0 dies, com a mínim han de ser estudis no visualitzats en 1 dia. </translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="350"/>
+        <source>The application has to be restarted to apply the changes.</source>
+        <translation>S&apos;ha de reiniciar l&apos;aplicació per aplicar els canvis.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="218"/>
+        <source>Database Directory</source>
+        <translation>Directori base de dades</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="273"/>
+        <source>Are you sure you want to delete all Studies of the cache ?</source>
+        <translation>Esteu segurs que voleu esborrar tots els estudis de la cache ?</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="292"/>
+        <source>The cache cannot be deleted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</source>
+        <translation>No es pot esborrar la caché, s&apos;ha produït un error desconegut.
+Intenteu tancar totes les finestres del %1 i torneu-ho a provar.
+
+Si el problema persisteix contacteu amb un administrador.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="317"/>
+        <source>The database cannot be compacted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</source>
+        <translation>No es pot compactar la base de dades, s&apos;ha produït un error desconegut.
+Intenteu tancar totes les finestres del %1 i torneu-ho a intentar.
+
+Si el problema persisteix contacteu amb un administrador.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="339"/>
+        <source>The extension of the database has to be &apos;.sdb&apos;</source>
+        <translation>L&apos;extensió de la base de dades ha de ser &apos;.sdb&apos;</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="345"/>
+        <source>%1 can&apos;t create the database because a database with the same name exists in the directory.</source>
+        <translation>%1 no pot crear la base de dades perquè ja existeix en el directori una base de dades amb el mateix nom.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="360"/>
+        <source>
+Error Number: %1</source>
+        <translation>
+Codi d&apos;error: %1</translation>
+    </message>
+</context>
+<context>
     <name>udg::QOperationStateScreen</name>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="75"/>
+        <location filename="qoperationstatescreen.cpp" line="97"/>
         <source>PENDING</source>
         <translation>PENDENT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="79"/>
+        <location filename="qoperationstatescreen.cpp" line="101"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="81"/>
+        <location filename="qoperationstatescreen.cpp" line="103"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="180"/>
+        <location filename="qoperationstatescreen.cpp" line="203"/>
         <source>RETRIEVING</source>
         <translation>DESCARREGANT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="264"/>
+        <location filename="qoperationstatescreen.cpp" line="287"/>
         <source>ERROR</source>
         <translation>ERROR</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="264"/>
+        <location filename="qoperationstatescreen.cpp" line="287"/>
         <source>RETRIEVED</source>
         <translation>DESCARREGAT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="264"/>
+        <location filename="qoperationstatescreen.cpp" line="287"/>
         <source>STORED</source>
         <translation>ENVIAT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="182"/>
+        <location filename="qoperationstatescreen.cpp" line="205"/>
         <source>STORING</source>
         <translation>ENVIANT</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreen.cpp" line="264"/>
+        <location filename="qoperationstatescreen.cpp" line="287"/>
         <source>CANCELLED</source>
         <translation>CANCEL·LAT</translation>
     </message>
@@ -1290,6 +1383,14 @@ Per crear un cd/dvd amb un Dicomdir, s&apos;ha de crear primer el Dicomdir en el
         <location filename="qoperationstatescreenbase.ui" line="16"/>
         <source>Queue Operation List</source>
         <translation>Llista de peticions</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QPopUpRisRequestsScreen</name>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="34"/>
+        <source>%1 has received a request from a RIS to retrieve the study with accession number</source>
+        <translation>%1 ha rebut una petició del RIS per descarregar l&apos;estudi amb l&apos;accession number</translation>
     </message>
 </context>
 <context>
@@ -1447,336 +1548,245 @@ Per crear un cd/dvd amb un Dicomdir, s&apos;ha de crear primer el Dicomdir en el
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="1493"/>
-        <source>Starviewer</source>
-        <translation>Starviewer</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="410"/>
+        <location filename="queryscreen.cpp" line="442"/>
         <source>Please select a PACS to query</source>
         <translation>Selecciona un Pacs a consultar
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="437"/>
-        <source>ERROR QUERING!.</source>
-        <translation>ERROR DESCARREGANT!.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="521"/>
+        <location filename="queryscreen.cpp" line="569"/>
         <source>No study match found.</source>
         <translation>No s&apos;han trobat coincidències.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="654"/>
+        <location filename="queryscreen.cpp" line="702"/>
         <source>No series match for this study.
 </source>
         <translation>No s&apos;han trobat sèries per aquest estudi.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="777"/>
+        <location filename="queryscreen.cpp" line="781"/>
         <source>Select a study to download </source>
         <translation>Selecciona un estudi a descarregar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="802"/>
-        <source>Internal Error : </source>
-        <translation>Error intern :</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="775"/>
+        <location filename="queryscreen.cpp" line="779"/>
         <source>Select a study to view </source>
         <translation>Seleccioneu un estudi per visualitzar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1264"/>
+        <location filename="queryscreen.cpp" line="1328"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS are correct</source>
         <translation>No es pot connectar al PACS %1 de %2
 Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="486"/>
-        <source>Error, not opened Dicomdir</source>
-        <translation>Error, no s&apos;ha obert cap DICOMDIR</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="491"/>
+        <location filename="queryscreen.cpp" line="539"/>
         <source>Error quering in dicomdir</source>
         <translation>Error consultant el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1170"/>
+        <location filename="queryscreen.cpp" line="1231"/>
         <source>Error openning dicomdir</source>
         <translation>Error obrint el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="714"/>
+        <location filename="queryscreen.cpp" line="762"/>
         <source>No images match for this series.
 </source>
         <translation>No s&apos;han trobat imatges per aquesta sèrie.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="756"/>
+        <location filename="queryscreen.cpp" line="848"/>
         <source>No images match for this study.
 </source>
         <translation>No s&apos;han trobat imatges per aquest estudi.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="613"/>
+        <location filename="queryscreen.cpp" line="661"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation>Error! No es poden consultar les sèries al PACS anomenat %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="704"/>
+        <location filename="queryscreen.cpp" line="752"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation>Error! No es poden consultar les sèries al PACS anomenat %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1279"/>
+        <location filename="queryscreen.cpp" line="1343"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Noes pot connectar al PACS %1 de %2Asseguris que la IP i l&apos;AETitle d&apos;aquest PACS siguin correctes</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="926"/>
+        <location filename="queryscreen.cpp" line="971"/>
         <source>Select at least one study to view</source>
         <translation>Seleccioni almenys un estudi a visualitzar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1002"/>
+        <location filename="queryscreen.cpp" line="1062"/>
         <source>Please select at least one study to delete</source>
         <translation>Si us plau seleccioni almenys un estudi a esborrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1007"/>
+        <location filename="queryscreen.cpp" line="1067"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation>Està segur que vol esborrar els estudis seleccionats?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1200"/>
+        <location filename="queryscreen.cpp" line="1262"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Ha de seleccionar un PACS on emmagatzemar l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1249"/>
+        <location filename="queryscreen.cpp" line="1313"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Els estudis només es poden emmagatzemar en un PACS alhora</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1022"/>
+        <location filename="queryscreen.cpp" line="1082"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>L&apos;estudi amb UID: %1 està en ús per la Llista de DICOMDIR. Si desitja esborrar aquest estudi hauri d&apos;esborrar-lo primer de la Llista de DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="141"/>
+        <location filename="queryscreen.cpp" line="165"/>
         <source>&amp;View</source>
         <translation>&amp;Visualitzar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="141"/>
+        <location filename="queryscreen.cpp" line="165"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="111"/>
+        <location filename="queryscreen.cpp" line="133"/>
         <source>&amp;Delete</source>
         <translation>&amp;Esborrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="114"/>
+        <location filename="queryscreen.cpp" line="137"/>
         <source>Send to DICOMDIR List</source>
         <translation>Enviar a la llista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="114"/>
+        <location filename="queryscreen.cpp" line="137"/>
         <source>Ctrl+M</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="144"/>
+        <location filename="queryscreen.cpp" line="155"/>
         <source>&amp;Retrieve</source>
         <translation>&amp;Descarregar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="144"/>
+        <location filename="queryscreen.cpp" line="168"/>
         <source>Ctrl+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="421"/>
+        <location filename="queryscreen.cpp" line="452"/>
         <source>This query can take a long time.
 Do you want continue?</source>
         <translation>Aquesta consulta pot trigar força estona.
 Desitja continuar?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1357"/>
-        <source>The database is blocked by another Starviewer window.
-Close all the others Starviewer windows and try again.
-
-If you want to open different Starviewer&apos;s windows always choose the &apos;New&apos; option from the File menu.</source>
-        <translation>La base de dades està bloquejada per una altra finestra d&apos;Starviewer.
-Tanqueu totes les finestres del Starviewer i torneu-ho a intentar.
-
-Si desitjes obrir diferents finestres d&apos;Starviewer escull sempre la opció &apos;Nou&apos; del menú &apos;Arxiva&apos;.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="205"/>
+        <location filename="queryscreen.cpp" line="236"/>
         <source>deleting a study not full retrived</source>
         <translation>esborrar un estudi parcialment descarregat</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="915"/>
+        <location filename="queryscreen.cpp" line="960"/>
         <source>deleting old studies</source>
         <translation>esborrar estudis vells</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1347"/>
+        <location filename="queryscreen.cpp" line="1443"/>
         <source>An error has ocurred while </source>
         <translation>S&apos;ha produït un error al </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1362"/>
-        <source>Starviewer database is corrupted.
-Close all Starviewer windows and try again.
-
-If the problem persist contact with an administrator.</source>
-        <translation>La base de dades del Starviewer està corrupte.
-Tanqueu totes les finestres del Starviewer i torneu-ho a intentar.
-
-Si el problema persisteix contacteu amb un administrador.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1372"/>
-        <source>An internal error occurs with Starviewer database.
-Close all Starviewer windows and try again.
-
-If the problem persist contact with an administrator.</source>
-        <translation>S&apos;ha produït un error intern a la base de dades del Starviewer.
-Tanqueu totes les finestres del Starviewer i torneu-ho a intentar.
-
-Si el problema persisteix contacteu amb un administrador.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1376"/>
+        <location filename="queryscreen.cpp" line="1472"/>
         <source>Some files can not be delete.
 These have to be delete manually.</source>
         <translation>Alguns fitxers no s&apos;han pogut esborrar.
 S&apos;hauran d&apos;esborrar manualment.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1499"/>
+        <location filename="queryscreen.cpp" line="1475"/>
         <source>An unknow error has ocurred.</source>
         <translation>S&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1498"/>
+        <location filename="queryscreen.cpp" line="1540"/>
         <source>Please review the operation list screen, </source>
         <translation>Si us plau reviseu la llista de peticions, </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1399"/>
+        <location filename="queryscreen.cpp" line="1495"/>
         <source>an error ocurred connecting to a Pacs while retrieving or storing a study.
 </source>
         <translation>s&apos;ha produït un error connectant als Pacs mentre es descarregava o es guardava un estudi.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1400"/>
+        <location filename="queryscreen.cpp" line="1496"/>
         <source>
 Be sure that your computer is connected on network and the Pacs parameters are correct.</source>
         <translation>
 Assegureu-vos que el vostre ordinador està connectat a la xarxa i que els paràmetres del Pacs són correctes.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1408"/>
+        <location filename="queryscreen.cpp" line="1504"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1406"/>
+        <location filename="queryscreen.cpp" line="1502"/>
         <source>an error ocurred retrieving a study.
 </source>
         <translation>s&apos;ha produït un error descarregant un estudi.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1470"/>
-        <source>There is not enough space to retreive studies, please free space.</source>
+        <location filename="queryscreen.cpp" line="1567"/>
+        <source>There is not enough space to retrieve studies, please free space.</source>
         <translation>No hi ha suficient espai lliure per descarregar estudis, si us plau allibereu espai.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1424"/>
+        <location filename="queryscreen.cpp" line="1520"/>
         <source>an error ocurred freeing space and some operations may have failed.</source>
         <translation>s&apos;ha produït un error alliberant espai, algunes operacions poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1501"/>
-        <source>
-
-Close all Starviewer windows and try again.
-If the problem persist contact with an administrator.</source>
-        <translation>
-
-Tanqueu totes les finestres del Starviewer i torneu-ho a intentar.
-Si el problema persisteix contacteu amb un administrador.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1431"/>
+        <location filename="queryscreen.cpp" line="1527"/>
         <source>a database error ocurred and some operations may have failed.</source>
         <translation>s&apos;ha produït un error a la base de dades, algunes operacions poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1438"/>
+        <location filename="queryscreen.cpp" line="1534"/>
         <source>an error ocurred and some operations may have failed.</source>
         <translation>s&apos;ha produït un error i algunes operacions poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1439"/>
-        <source>
-Starviewer has not be capable of read correctly dicom information of the study.</source>
-        <translation>
-Starviewer no és capaç de llegir correctament la informació dicom de l&apos;estudi.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1492"/>
-        <source>
-
-Please contact with Starviewer team.</source>
-        <translation>
-
-Si us plau contecteu amb l&apos;equip del Starviewer.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1445"/>
+        <location filename="queryscreen.cpp" line="1541"/>
         <source>an unknow error has ocurred.</source>
         <translation>s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1367"/>
-        <source>Starviewer database syntax error.
-Close all Starviewer windows and try again.
-
-If the problem persist contact with an administrator.</source>
-        <translation>S&apos;ha produït un error de sintaxis a la base de dades.
-Tanqueu totes les finestres del Starviewer i torneu-ho a intentar.
-
-Si el problema persisteix contacteu amb un administrador.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1407"/>
+        <location filename="queryscreen.cpp" line="1503"/>
         <source>
 Pacs doesn&apos;t respond correclty, be sure that your computer is connected on network and the Pacs parameters are correct.</source>
         <translation>
 El Pacs no ha respòs de forma esperada, assegureu-vos que el vostre ordinador està correctament connectat a la xarxa i que els paràmetres del Pacs són correctes.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1414"/>
+        <location filename="queryscreen.cpp" line="1510"/>
         <source>
 
 Contact with an administrador to register your computer to the Pacs.</source>
@@ -1785,19 +1795,19 @@ Contact with an administrador to register your computer to the Pacs.</source>
 Contacteu amb un administrador per registrar el vostre ordinador al Pacs.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1455"/>
+        <location filename="queryscreen.cpp" line="1588"/>
         <source>Trying to import study with UID %1 </source>
         <translation>Intentant importar l&apos;estudi amb UID %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1460"/>
+        <location filename="queryscreen.cpp" line="1557"/>
         <source>the dicomdir could not be opened. Be sure that the dicomdir path is correct.
 </source>
         <translation>no s&apos;ha pogut obrir el dicomdir. Assegureu-vos que la ruta del dicomdir és correcte.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1466"/>
+        <location filename="queryscreen.cpp" line="1563"/>
         <source>
 
 If the problem persist contact with an administrator.</source>
@@ -1806,50 +1816,153 @@ If the problem persist contact with an administrator.</source>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1465"/>
-        <source>some files could not be imported. Be sure that you have write permissions on the Starviewer cache directory.</source>
-        <translation>alguns arxius no s&apos;han pogut importar. Assegureu-vos que teniu permisos d&apos;escriptura en el directori de la cache del Starviewer.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1474"/>
-        <source>an error has ocurred freeing space, some studies can&apos;t be imported.</source>
-        <translation>s&apos;ha produït un error alliberant espai, alguns estudis no s&apos;han pogut importar.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1480"/>
-        <source>a database error has ocurred, some studies can&apos;t be imported.</source>
-        <translation>s&apos;ha produït un error de base de dades, alguns estudis no s&apos;han pogut importar.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1486"/>
-        <source>the study can&apos;t be imported, because Starviewer has not been capable of read correctly dicom information of the study.</source>
-        <translation>l&apos;estudi no es pot importarm Starviewer no ha sigut capaç de llegir correctament la informació dicom de l&apos;estudi.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1491"/>
+        <location filename="queryscreen.cpp" line="1589"/>
         <source>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</source>
         <translation>s&apos;ha produït un error. El dicomdir és inconsistent, no es pot importar.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1419"/>
+        <location filename="queryscreen.cpp" line="1515"/>
         <source>
 All pending retrieve operations will be cancelled.</source>
         <translation>
 Totes les operacions pendents seran cancel·lades.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1413"/>
+        <location filename="queryscreen.cpp" line="1509"/>
         <source>the Pacs doesn&apos;t recognize your computer&apos;s AETitle %1, some studies can&apos;t be retrieved.</source>
         <translation>el Pacs no ha reconegut el AETitle %1 del vostre ordinador, alguns estudis no podran ser descarregats.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1487"/>
+        <location filename="queryscreen.cpp" line="168"/>
+        <source>&amp;Import</source>
+        <translation>&amp;Importar</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="466"/>
+        <source>An error has produced while querying.
+
+Repeat it, if the problem persist contact with an administrator.</source>
+        <translation>S&apos;ha produït un error fent la consulta. 
+
+Repetiu-la, si l&apos;error persiteix contacteu amb un administrador.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="534"/>
+        <source>Before search you have to open a dicomdir.</source>
+        <translation>Abans de cercar heu d&apos;obrir un dicomdir.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="799"/>
+        <source>Internal Error: %2 can&apos;t retrieve study with UID %1, because can&apos;t find study information.</source>
+        <translation>Internal Error: %2 no pot descarregar l&apos;estudi amb UID %1, perquè no pot trobar la informació de l&apos;estudi.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1407"/>
+        <source>An error ocurred querying default PACS, can&apos;t process the RIS request.</source>
+        <translation>S&apos;ha produit un error cercant als PACS marcats per defecte, no es pot processar la petició del RIS.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1453"/>
+        <source>The database is blocked by another %1 window.
+Close all the others %1 windows and try again.
+
+If you want to open different %1&apos;s windows always choose the &apos;New&apos; option from the File menu.</source>
+        <translation>La base de dades està bloquejada per una altra finestra del %1.
+Tanqueu totes les altres finestres del %1 i torneu-ho a intentar.
+
+Si voleu obrir una nova finestra del %1, sempreu ho heu de fer des de l&apos;opció &apos;Nou&apos; del menú Arxiu.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1468"/>
+        <source>
+Close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</source>
+        <translation>
+Tanqueu totes les finestres del %1 i torneu-ho a intentar.
+
+Si el problema persisteix contacteu amb un administrador.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1598"/>
         <source>
 
-The study may be corrupted, if It is not corrupted please contact with Starviewer team.</source>
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</source>
         <translation>
 
-L&apos;estudi pot està corrupte, si comproveu que no ho està si us plau contacteu amb l&apos;equip de l&apos;Starviewer.</translation>
+Tanqueu totes les finestres del %1 i torneu-ho a intentar.
+Si el problema persisteix contacteu amb un administrador.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1535"/>
+        <source>
+%1 has not be capable of read correctly dicom information of the study.</source>
+        <translation>
+%1 no ha estat capaç de llegir correctament la informació dicom del estudi.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1584"/>
+        <source>
+
+The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
+        <translation>
+
+L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau poseu-vos en contacte amb l&apos;equip del %1.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1590"/>
+        <source>
+
+Please contact with %1 team.</source>
+        <translation>
+
+Si us plau contacteu amb l&apos;equip del %1.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1413"/>
+        <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
+        <translation>%2 no pot executar la petició del RIS, perquè no ha trobat l&apos;estudi amb l&apos;accession number %1 en els PACS escollits per defecte.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1456"/>
+        <source>%1 database is corrupted.</source>
+        <translation>La base de dades del %1 està corrupte.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1461"/>
+        <source>%1 database syntax error.</source>
+        <translation>Error de sintaxis a la base de dades del %1.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1466"/>
+        <source>An internal error occurs with %1 database.</source>
+        <translation>S&apos;ha produït un error intern accedint a la base de dades del %1.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1571"/>
+        <source>An error has ocurred freeing space, some studies can&apos;t be imported.</source>
+        <translation>S&apos;ha porduït un error alliberant espai, alguns estudis no s&apos;han pogut importar.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1577"/>
+        <source>A database error has ocurred, some studies can&apos;t be imported.</source>
+        <translation>S&apos;ha produït un error a la base de dades, alguns estudis no s&apos;han pogut importar.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1596"/>
+        <source>An unknow error has ocurred importing dicomdir.</source>
+        <translation>S&apos;ha produït un error desconegut important el dicomdir.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1562"/>
+        <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
+        <translation>Alguns fitxers del estudi amb UID %2 no s&apos;han pogut importar. Assegureu-vos que teniu permisos en el directori de la cache del %1.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1583"/>
+        <source>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly dicom information of the study.</source>
+        <translation>L&apos;estudi amb UID %2 no s&apos;ha pogut importar, perquè %1 no ha estat capaç de llegir correctament la informació dicom de l&apos;estudi.</translation>
     </message>
 </context>
 <context>
@@ -1865,7 +1978,7 @@ L&apos;estudi pot està corrupte, si comproveu que no ho està si us plau contac
         <translation>Cercar</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="435"/>
+        <location filename="queryscreenbase.ui" line="346"/>
         <source>Retrieve</source>
         <translation>Descarregar</translation>
     </message>
@@ -1928,6 +2041,11 @@ L&apos;estudi pot està corrupte, si comproveu que no ho està si us plau contac
         <location filename="queryscreenbase.ui" line="467"/>
         <source>Open DICOMDIR</source>
         <translation>Obrir DICOMDIR</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="435"/>
+        <source>Import</source>
+        <translation>Importar</translation>
     </message>
 </context>
 </TS>

@@ -98,13 +98,13 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
 {
     QDir dir;
     bool valid = true;
-    QString messageBoxText = tr("Some configuration options are not valid : \n");
+    QString messageBoxText = tr("Some configuration options are not valid:\n");
 
     if ( m_textDatabaseRoot->isModified() )
     {
         if ( !dir.exists(m_textDatabaseRoot->text() ) && m_createDatabase == false ) // si el fitxer indicat no existeix i no s'ha demanat que es crei una nova base de dades, el path és invàlid
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Invalid database path" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Invalid database path." ) );
             return false;
         }
     }
@@ -121,7 +121,7 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
                 case 0:
                     if ( !dir.mkpath( m_textCacheImagePath->text() ) )
                     {
-                        QMessageBox::critical( this , ApplicationNameString , tr( "Can't create the directory. Please check users permission" ) );
+                        QMessageBox::critical( this , ApplicationNameString , tr( "%1 can't create the directory. Please check users permission." ) );
                         return false;
                     }
                     else return true;
@@ -137,7 +137,7 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
     {
         if (m_textMinimumSpaceRequiredToRetrieve->text().toUInt() < 1)
         {
-            messageBoxText += tr("\n- At least 1 GByte of free space in harddisk is necessary to retrieve/import new studies.");
+            messageBoxText += tr("\n- At least 1 GByte of free space in harddisk is necessary to retrieve or import new studies.");
             valid = false;
         }
     }
@@ -146,7 +146,7 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
     {
         if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt() < 1)
         {
-            messageBoxText += tr("\n- At least 1 GByte of studies have to be delete when there is not enough space to retrieve/import new studies.");
+            messageBoxText += tr("\n- At least 1 GByte of studies have to be delete when there is not enough space to retrieve or import new studies.");
             valid = false;
         }
     }
@@ -173,7 +173,7 @@ bool QLocalDatabaseConfigurationScreen::applyChanges()
 
         if ( m_textDatabaseRoot->isModified() && m_createDatabase == false ) // només s'ha de reiniciar en el cas que que s'hagi canviat el path de la base de dades, per una ja existent. En el cas que la base de dades no existeixi, a l'usuari al fer click al botó crear base de dades, ja se li haurà informat que s'havia de reiniciar l'aplicació
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "The application has to be restarted to apply the changes" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "The application has to be restarted to apply the changes." ) );
         }
 
         m_configurationChanged = false;
@@ -313,7 +313,7 @@ void QLocalDatabaseConfigurationScreen::compactCache()
     {
         Status state;
         state.setStatus(tr("The database cannot be compacted, an unknown error has ocurred."
-                "\n Try to close all %1 windows and try again."
+                "\nTry to close all %1 windows and try again."
                 "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
         showDatabaseErrorMessage( state );
     }
@@ -342,12 +342,12 @@ void QLocalDatabaseConfigurationScreen::createDatabase()
     {
         if ( databaseFile.exists( m_textDatabaseRoot->text() ) )
         {
-            QMessageBox::warning( this , ApplicationNameString , tr ( "%1 can't create the database because, a database with the same name exists in the directory" ).arg(ApplicationNameString) );
+            QMessageBox::warning( this , ApplicationNameString , tr ( "%1 can't create the database because a database with the same name exists in the directory." ).arg(ApplicationNameString) );
         }
         else
         {
             settings.setDatabasePath( m_textDatabaseRoot->text() );
-            QMessageBox::warning( this , ApplicationNameString , tr( "The application has to be restarted to apply the changes"  ));
+            QMessageBox::warning( this , ApplicationNameString , tr( "The application has to be restarted to apply the changes."  ));
             m_createDatabase = true;
         }
     }

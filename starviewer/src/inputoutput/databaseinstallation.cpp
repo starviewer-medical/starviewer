@@ -119,7 +119,7 @@ bool DatabaseInstallation::repairDatabase()
     if (localDatabaseManager.isDatabaseCorrupted())
     {
         //Si la base de dades continua corrupte l'hem de reinstal·lar
-        QMessageBox::critical(0, ApplicationNameString, tr("%1 can't repair database.\n\nDatabase will be reinstalled. All local studies retrieved and imported will be deleted.").arg(ApplicationNameString) );
+        QMessageBox::critical(0, ApplicationNameString, tr("%1 can't repair database, it will be reinstalled.\n\nAll local studies retrieved and imported will be deleted.").arg(ApplicationNameString) );
         return reinstallDatabase();
     }
     else

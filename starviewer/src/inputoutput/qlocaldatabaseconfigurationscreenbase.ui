@@ -436,7 +436,7 @@
      <item>
       <widget class="QLabel" name="label_4" >
        <property name="text" >
-        <string>Gb of free space for starviewer.</string>
+        <string>Gb of free space.</string>
        </property>
       </widget>
      </item>
@@ -531,7 +531,7 @@
        <item row="0" column="1" >
         <widget class="QPushButton" name="m_buttonExaminateDataBase" >
          <property name="toolTip" >
-          <string>Examine disk  to find the database</string>
+          <string>Examine disk to find the database</string>
          </property>
          <property name="text" >
           <string/>
