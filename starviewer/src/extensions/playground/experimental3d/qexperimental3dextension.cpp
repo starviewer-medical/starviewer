@@ -977,16 +977,26 @@ void QExperimental3DExtension::computeSelectedVmi()
                                                      x+1 < dimX &&   y > 0    &&   z > 0   , x+1 < dimX &&   y > 0                 , x+1 < dimX &&   y > 0    && z+1 < dimZ,
                                                      x+1 < dimX               &&   z > 0   , x+1 < dimX                            , x+1 < dimX               && z+1 < dimZ,
                                                      x+1 < dimX && y+1 < dimY &&   z > 0   , x+1 < dimX && y+1 < dimY              , x+1 < dimX && y+1 < dimY && z+1 < dimZ };
+                        const float SQRT_1_2 = 1.0f / sqrt( 2.0f ), SQRT_1_3 = 1.0f / sqrt( 3.0f );
+                        float weights[26] = { SQRT_1_3, SQRT_1_2, SQRT_1_3,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                              SQRT_1_3, SQRT_1_2, SQRT_1_3,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                                1.0f  ,             1.0f  ,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                              SQRT_1_3, SQRT_1_2, SQRT_1_3,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                              SQRT_1_3, SQRT_1_2, SQRT_1_3 };
 
                         float saliency = 0.0f;
-                        int nNeighbours = 0;
+                        float totalWeight = 0.0f;
 
                         // iterem pels veïns
                         for ( int j = 0; j < 26; j++ )
                         {
                             if ( !validNeighbours[j] ) continue;
 
-                            nNeighbours++;
+                            totalWeight += weights[j];
 
                             float poj = objectProbabilities.at( neighbours[j] );    // p(oj)
                             Q_ASSERT( poj == poj );
@@ -998,12 +1008,12 @@ void QExperimental3DExtension::computeSelectedVmi()
                             if ( poj == 0.0 ) pVoj.fill( 0.0f );    // si p(oj) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oj) ha de ser tot zeros
                             else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = viewProbabilities.at( k ) * pOV[k][neighbours[j] - pOvShift] / poj;
 
-                            float s = InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
+                            float s = weights[j] * InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
                             Q_ASSERT( s == s );
                             saliency += s;
                         }
 
-                        saliency /= nNeighbours;
+                        saliency /= totalWeight;
                         m_voxelSaliencies[i] = saliency;
                         if ( saliency > m_maximumSaliency ) m_maximumSaliency = saliency;
                     }
