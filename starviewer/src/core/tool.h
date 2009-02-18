@@ -64,6 +64,11 @@ public:
     bool hasSharedData() const;
 
     /**
+     * Ens determina si la tool té dades persistents o no
+     */
+    bool hasPersistentData() const;
+
+    /**
     * Retorna el nom de la tool
     **/
     QString toolName();
@@ -88,6 +93,9 @@ protected:
 
     /// Nom de la tool TODO podem fer servir QMetaObject::className()? i ens estalviem aquesta variable?
     QString m_toolName;
+
+    /// Indica si la tool té dades persistents
+    bool m_hasPersistentData;
 
 };
 

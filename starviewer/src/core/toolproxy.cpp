@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "toolproxy.h"
 #include "tool.h"
+#include "tooldata.h"
 #include <QStringList>
 
 namespace udg {
@@ -18,6 +19,7 @@ ToolProxy::ToolProxy(QObject *parent)
 ToolProxy::~ToolProxy()
 {
     removeAllTools();
+    m_persistentToolDataRepository.clear();
 }
 
 void ToolProxy::addTool( Tool *tool )
@@ -58,12 +60,32 @@ bool ToolProxy::isToolActive( const QString &toolName )
     return m_toolsMap.contains( toolName );
 }
 
-Tool *ToolProxy::getTool( const QString &toolName ) const
+Tool *ToolProxy::getTool( const QString &toolName ) 
 {
     Tool *tool = 0;
     if( m_toolsMap.contains(toolName) )
         tool = m_toolsMap.value( toolName );
 
+    if( tool )
+    {
+        // Si la tool demanada existeix, comprovem si té dades persistents
+        if( tool->hasPersistentData() )
+        {
+            // mirem si les tenim al repositori
+            ToolData *persistentData = m_persistentToolDataRepository.value( toolName );
+            if( persistentData )
+            {
+                // hi són, per tant li assignem a la tool
+                tool->setToolData( persistentData );
+            }
+            else
+            {
+                // no hi són al respositori, per tant és el primer cop que demanen la tool
+                // obtenim les seves dades i les registrem al repositori
+                m_persistentToolDataRepository[toolName] = tool->getToolData();
+            }
+        }
+    }
     return tool;
 }
 
