@@ -9,7 +9,7 @@
 namespace udg {
 
 Tool::Tool( QViewer *viewer, QObject *parent )
- : QObject(parent), m_viewer(viewer), m_toolConfiguration(0), m_toolData(0), m_hasSharedData(false)
+ : QObject(parent), m_viewer(viewer), m_toolConfiguration(0), m_toolData(0), m_hasSharedData(false),m_hasPersistentData(false)
 {
 }
 
@@ -40,6 +40,11 @@ ToolData *Tool::getToolData() const
 bool Tool::hasSharedData() const
 {
     return m_hasSharedData;
+}
+
+bool Tool::hasPersistentData() const
+{
+    return m_hasPersistentData;
 }
 
 QString Tool::toolName()

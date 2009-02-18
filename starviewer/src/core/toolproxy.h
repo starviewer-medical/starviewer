@@ -17,6 +17,7 @@ namespace udg {
 
 //forward declarations space udg
 class Tool;
+class ToolData;
 
 /**
 Classe encarregada de mantenir les tools actives per un visualitzador i de proporcionar-lis els events corresponents.
@@ -68,7 +69,7 @@ public:
      * @param toolName Nom de la tool que volem obtenir
      * @return La tool demanada, NUL si no està registrada en el proxy
      */
-    Tool *getTool( const QString &toolName ) const;
+    Tool *getTool( const QString &toolName );
 
 public slots:
     ///Avalua l'event que ha rebut del visualitzador al que està associat i l'envia a les tools actives
@@ -77,7 +78,11 @@ public slots:
 private:
      /// map on hi guardem les tools associades a una clau determinada pel nom de la tool.
      /// en principi no es poden tenir dues tools amb el mateix nom
-    QMap< QString, Tool* > m_toolsMap;
+    QMap< QString, Tool * > m_toolsMap;
+    
+    /// En aquest repositori ens encarregarem de guardar les dades persistents de les tools que ho necessitin
+    QMap<QString, ToolData *> m_persistentToolDataRepository;
+
 };
 
 }
