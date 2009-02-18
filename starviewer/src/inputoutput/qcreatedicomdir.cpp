@@ -11,8 +11,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QString>
-#include <QDir>
-#include <QFile>
 #include <QProcess>
 #include <QContextMenuEvent>
 #include <QShortcut>
@@ -21,7 +19,6 @@
 #include <QHeaderView>
 #include <QSignalMapper>
 #include <QDate>
-#include <QFileInfo>
 
 #include "converttodicomdir.h"
 #include "status.h"
@@ -168,7 +165,7 @@ void QCreateDicomdir::addStudy(Study *study)
         // "a quin directori està aquest study"?
         StarviewerSettings settings;
 
-        studySizeBytes = getDirectorySize(settings.getCacheImagePath() + study->getInstanceUID() + "/");
+        studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(settings.getCacheImagePath() + study->getInstanceUID() + "/");
 
         //només comprovem l'espai si gravem a un cd o dvd
         /*if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
@@ -431,7 +428,7 @@ void QCreateDicomdir::removeSelectedStudy()
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
-            studySizeBytes = getDirectorySize(settings.getCacheImagePath() + "/" + selectedStudy->text(7) + "/"); 
+            studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(settings.getCacheImagePath() + "/" + selectedStudy->text(7) + "/"); 
             m_dicomdirSizeBytes = m_dicomdirSizeBytes - studySizeBytes;
             setDicomdirSize();
 
@@ -573,30 +570,6 @@ void QCreateDicomdir::clearTemporaryDir()
         DeleteDirectory delDirectory;
         delDirectory.deleteDirectory( dicomdirPath , true );
     }
-}
-
-qint64 QCreateDicomdir::getDirectorySize(QString directoryPath)
-{
-    QDir directory(directoryPath);
-    QFileInfoList fileInfoList;
-    QStringList directoryList;
-    qint64 directorySize = 0;
-
-    fileInfoList =  directory.entryInfoList( QDir::Files );//llista de fitxers del directori
-
-    foreach(QFileInfo fileInfo, fileInfoList)
-    {
-        directorySize += fileInfo.size();
-    }
-
-    directoryList =  directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
-
-    foreach(QString subdirectory, directoryList) //per cada subdirectori
-    {
-        directorySize += getDirectorySize(directoryPath + subdirectory);
-    }
-
-    return directorySize;
 }
 
 void QCreateDicomdir::showDatabaseErrorMessage( const Status &state )

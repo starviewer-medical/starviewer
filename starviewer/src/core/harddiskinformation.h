@@ -69,6 +69,11 @@ public:
      */
     quint64 getNumberOfFreeMBytes(QString path);
 
+    /**
+     * Ens retorna els Bytes que ocupa el contingut del directori donat
+     */
+    static qint64 getDirectorySizeInBytes(const QString &directoryPath);
+
 private:
     quint64 getTotalBytesPlataformEspecific(QString path);
     quint64 getFreeBytesPlataformEspecific(QString path);

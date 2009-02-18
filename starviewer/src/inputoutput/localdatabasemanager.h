@@ -169,11 +169,6 @@ private :
 
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);
-
-    //TODO Aquest mètode s'hauria de traslladar a una classe genèrica
-    ///Retorna el que ocupa en bytes el directori
-    qint64 getDirectorySize(const QString &directoryPath);
-
 };
 
 }
