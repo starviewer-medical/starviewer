@@ -31,6 +31,7 @@ class vtkVolumeRayCastVoxelShaderCompositeFunction;
 // VMI
 class VmiVoxelShader1;
 class VmiVoxelShader2;
+class VomiVoxelShader;
 class VoxelSaliencyVoxelShader;
 
 
@@ -132,6 +133,8 @@ private:
     VmiVoxelShader1 *m_vmiVoxelShader1;
     /// Voxel shader per calcular la VMI; serveix per la segona passada.
     VmiVoxelShader2 *m_vmiVoxelShader2;
+    /// Voxel shader que pinta les VoMI.
+    VomiVoxelShader *m_vomiVoxelShader;
     /// Voxel shader que pinta les voxel saliencies.
     VoxelSaliencyVoxelShader *m_voxelSaliencyVoxelShader;
 
