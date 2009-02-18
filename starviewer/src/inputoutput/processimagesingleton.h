@@ -8,9 +8,8 @@
 #define UDGPROCESSIMAGESINGLETON_H
 
 #include <QString>
-
+#include <QList>
 #include <cond.h>
-#include <list>
 
 class QSemaphore;
 
@@ -30,7 +29,7 @@ public:
     /** retorna una instancia de l'objecte
      * @return instancia de l'objecte
      */
-    static ProcessImageSingleton* getProcessImageSingleton();
+    static ProcessImageSingleton *getProcessImageSingleton();
 
     /** Afegeix un nou objecte ProcessImage, que s'encarregarrà de processar la informació de cada imatge descarregada
      * @param UID de l'estudi
@@ -80,8 +79,7 @@ private:
         QString studyUID;
     };
 
-    list<SingletonProcess>m_listProcess;
-    list<SingletonProcess>::iterator i;
+    QList<SingletonProcess> m_listProcess;
 
     QSemaphore *m_semaphore;
     QString m_imagePath;
