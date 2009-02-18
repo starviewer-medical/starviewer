@@ -24,10 +24,9 @@
 #include "harddiskinformation.h"
 #include "thumbnailcreator.h"
 
+#include <QDir>
 #include <QDate>
 #include <QTime>
-#include <QFileInfo>
-#include <QDir>
 #include <QStringList>
 #include <QSettings>
 #include <QPixmap>
@@ -846,7 +845,7 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
         studyToDelete = studyListToDelete.at(index);
 
 		emit studyWillBeDeleted(studyToDelete->getInstanceUID());
-        MbytesErased += getDirectorySize(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
+        MbytesErased += HardDiskInformation::getDirectorySizeInBytes(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
 		
         del(studyToDelete->getInstanceUID());
         if (getLastError() != LocalDatabaseManager::Ok)
@@ -920,30 +919,6 @@ void LocalDatabaseManager::setLastError(int sqliteLastError)
         m_lastError = DatabaseCorrupted;
     }
     else m_lastError = DatabaseError;
-}
-
-qint64 LocalDatabaseManager::getDirectorySize(const QString &directoryPath)
-{
-    QDir directory(directoryPath);
-    QFileInfoList fileInfoList;
-    QStringList directoryList;
-    qint64 directorySize = 0;
-
-    fileInfoList =  directory.entryInfoList( QDir::Files );//llista de fitxers del directori
-
-    foreach(QFileInfo fileInfo, fileInfoList)
-    {
-        directorySize += fileInfo.size();
-    }
-
-    directoryList =  directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
-
-    foreach(QString subdirectory, directoryList) //per cada subdirectori
-    {
-        directorySize += getDirectorySize(directoryPath + "/" + subdirectory);
-    } 
-
-    return directorySize;
 }
 
 QString LocalDatabaseManager::getSeriesThumbnailPath(QString studyInstanceUID, Series *series)

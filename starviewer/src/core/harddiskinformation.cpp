@@ -6,6 +6,9 @@
  ***************************************************************************/
 #include "harddiskinformation.h"
 #include "logging.h"
+#include <QFileInfo>
+#include <QDir>
+
 #ifdef _WIN32
     #include <windows.h>
 #else
@@ -40,6 +43,30 @@ quint64 HardDiskInformation::getTotalNumberOfMBytes(QString path)
 quint64 HardDiskInformation::getNumberOfFreeMBytes(QString path)
 {
     return getFreeBytesPlataformEspecific(path) / 1048576;
+}
+
+qint64 HardDiskInformation::getDirectorySizeInBytes(const QString &directoryPath)
+{
+    QDir directory(directoryPath);
+    QFileInfoList fileInfoList;
+    QStringList directoryList;
+    qint64 directorySize = 0;
+
+    fileInfoList =  directory.entryInfoList( QDir::Files );//llista de fitxers del directori
+
+    foreach(QFileInfo fileInfo, fileInfoList)
+    {
+        directorySize += fileInfo.size();
+    }
+
+    directoryList =  directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
+
+    foreach(QString subdirectory, directoryList) //per cada subdirectori
+    {
+        directorySize += getDirectorySizeInBytes(directoryPath + "/" + subdirectory);
+    } 
+
+    return directorySize;
 }
 
 quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
