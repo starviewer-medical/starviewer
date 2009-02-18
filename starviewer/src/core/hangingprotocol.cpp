@@ -19,6 +19,8 @@ HangingProtocol::HangingProtocol(QObject *parent)
 {
     m_layout = new HangingProtocolLayout();
     m_mask = new HangingProtocolMask();
+	m_strictness = false;
+	m_allDiferent = false;
 }
 
 
@@ -219,9 +221,7 @@ bool HangingProtocol::gratherThan( HangingProtocol * hangingToCompare )
 		else return hasViewWithPatientOrientation_1;
 
 	}
-
 }
-
 
 bool HangingProtocol::getStrictness() const
 {
@@ -231,6 +231,16 @@ bool HangingProtocol::getStrictness() const
 void HangingProtocol::setStrictness( bool strictness )
 {
 	m_strictness = strictness;
+}
+
+void HangingProtocol::setAllDiferent( bool allDiferent )
+{
+	m_allDiferent = allDiferent;
+}
+
+bool HangingProtocol::getAllDiferent() const
+{
+	return m_allDiferent;
 }
 
 }

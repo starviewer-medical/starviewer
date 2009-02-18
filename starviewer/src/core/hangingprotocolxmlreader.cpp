@@ -151,6 +151,12 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
 						hangingProtocol->setStrictness( reader->text().toString().contains( "yes" ) );
                         reader->readNext();
                     }
+					else if( reader->name() == "allDifferent" )
+                    {
+                        reader->readNext();
+						hangingProtocol->setAllDiferent( reader->text().toString().contains( "yes" ) );
+                        reader->readNext();
+                    }
                 }
             }
         }
