@@ -58,7 +58,8 @@ DUMMY = $$addLibraryDependency(.., inputoutput)
 DUMMY = $$addLibraryDependency(.., core)
 
 win32{
-  LIBS += -ladvapi32
+  LIBS += -ladvapi32 \
+          -lRpcrt4
 }
 
 include(../corelibsconfiguration.inc)
