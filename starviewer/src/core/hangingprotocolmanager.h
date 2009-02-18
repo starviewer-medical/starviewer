@@ -56,6 +56,9 @@ private:
     /// Buscar la sèrie corresponent a l'image set definit
     Series *searchSerie( Patient *patient, HangingProtocolImageSet *imageSet );
 
+	// Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
+	Series *searchSerie( Patient *patient, QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy );
+
 	/// Cert si la imatge compleix les restriccions
 	bool isValidImage( Image *image, HangingProtocolImageSet *imageSet );
 

@@ -90,6 +90,12 @@ public:
 	/// Assigna si el mètode és estricte o no ho hes
 	void setStrictness( bool strictness );
 
+	/// Retorna si el hanging protocol ha de tenir totes les series diferents
+	bool getAllDiferent() const;
+
+	/// Assigna si el hanging protocol ha de tenir totes les series diferents
+	void setAllDiferent( bool allDiferent );
+
 private:
 
 	/// Identificador
@@ -127,6 +133,9 @@ private:
 
 	/// Boolea que indica si és estricte o no. Si és estricte vol dir que per ser correcte tots els image sets han d'estar assignats.
 	bool m_strictness;
+
+	/// Boolea que indica si les sèries han de ser totes diferents entre elles.
+	bool m_allDiferent;
 
 };
 

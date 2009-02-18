@@ -102,7 +102,7 @@ HangingProtocolManager::~HangingProtocolManager()
 {
 }
 
-QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient)
+QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient )
 {
     Identifier id;
     HangingProtocol *hangingProtocol;
@@ -120,6 +120,18 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     Series *serie;
     Q2DViewerWidget *viewerWidget;
 	QList<HangingProtocol * > candidates;
+	QList<Series *> seriesList;
+
+	QList<Series *> allSeries;
+	foreach (Study *study, patient->getStudies())
+	{
+		foreach( Series *series, study->getViewableSeries() )
+		{
+			allSeries.push_back(series);
+		}
+	}
+
+	DEBUG_LOG( QString("Numero de series: %1").arg(allSeries.size()) );
 
     int numberOfSeriesAssigned;
 
@@ -127,19 +139,22 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     // Aprofitem per assignar ja les series, per millorar el rendiment
     for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfItems; hangingProtocolNumber++)
     {	
+		//Inicialitzacions
         id.setValue( hangingProtocolNumber );
         hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
         selectedSeries.clear();
         numberOfSeriesAssigned = 0;
         imageSetNumber = 1;
         serie = 0;
+		seriesList.clear();
+		seriesList += allSeries;// Copia de les series perquè es van eliminant de la llista al ser assignades
 
         if( isValid( hangingProtocol, patient ) )
         {
             while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
             {
                 imageSet = hangingProtocol->getImageSet( imageSetNumber );
-                serie = searchSerie( patient, imageSet );
+				serie = searchSerie( patient, seriesList, imageSet, hangingProtocol->getAllDiferent() );
 
                 if( serie != 0 )
                 {
@@ -149,6 +164,8 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                 imageSetNumber++;
             }
             adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
+
+			DEBUG_LOG( QString("Ajustament del hanging %1: %2").arg(hangingProtocol->getName()).arg(adjustmentOfHanging) );
 
 			if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 ) 
 				adjustmentOfHanging = 0.0;
@@ -293,7 +310,7 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
     while (!found && i < numberStudies )
     {
         study = listOfStudies.value( i );
-        //numberSeries = study->getNumberOfSeries();
+        numberSeries = study->getNumberOfSeries();
         listOfSeries = study->getViewableSeries();
         numberSeries = listOfSeries.count();
         j = 0;
@@ -335,6 +352,66 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
                 return serie;
             j++;   
         }
+        i++;
+    }
+    imageSet->setSeriesToDisplay( 0 );//Important, no hi posem cap serie!
+    return 0;
+}
+
+Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy )
+{
+    bool found = false;
+    int i = 0;
+    int imageNumber = 0;
+	int numberSeries = listOfSeries.size();
+    int numberImages;
+    Series *serie = 0;
+    Image *image = 0;
+	QList< Image * > listOfImages;
+   
+	while( !found && i < numberSeries )
+	{
+		serie = listOfSeries.value( i );
+
+        if( imageSet->getTypeOfItem() != "image" )
+        {
+            if( isValidSerie( patient, serie, imageSet ) )
+            {
+                found = true;
+                imageSet->setSeriesToDisplay( serie );
+				if( quitStudy )
+				{
+					listOfSeries.removeAt(i);
+
+					DEBUG_LOG( QString("Elimino la serie %1").arg(i) );
+				}
+            }
+        }
+        else
+        {
+            imageNumber = 0;
+            listOfImages = serie->getImages();
+            numberImages = listOfImages.size();
+
+            while( !found && imageNumber < numberImages )
+            {
+                image = listOfImages.value( imageNumber );
+                if( isValidImage( image, imageSet ) )
+                {
+                    found = true;
+                    imageSet->setImageToDisplay( imageNumber );
+                    imageSet->setSeriesToDisplay( serie );
+					if( quitStudy )
+						listOfSeries.removeAt(i);
+                }
+                imageNumber++;
+            }
+            if( !found ) 
+                imageSet->setImageToDisplay( 0 );
+        }
+
+        if( found ) 
+            return serie;
         i++;
     }
     imageSet->setSeriesToDisplay( 0 );//Important, no hi posem cap serie!
@@ -390,11 +467,15 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
             {
                 valid = false;
             }
+
+			DEBUG_LOG( QString("scan options %1").arg(valid) );
         }
         else if( restriction.selectorAttribute == "PatientName" )
         {
             if( patient->getFullName() != restriction.valueRepresentation )
                 valid = false;
+
+			DEBUG_LOG( QString("Patient name: %1").arg(valid) );
         }
         else if( restriction.selectorAttribute == "SeriesNumber" )
         {
@@ -422,15 +503,18 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     {
         if( reconstruction == "SAGITAL" )
         {
-            viewer->resetViewToSagital();
+			if (viewer->getViewer()->getView() != Q2DViewer::Sagital)
+				viewer->resetViewToSagital();
         }
         else if ( reconstruction == "CORONAL" )
         {
-            viewer->resetViewToCoronal();
+			if (viewer->getViewer()->getView() != Q2DViewer::Coronal)
+				viewer->resetViewToCoronal();
         }
         else if( reconstruction == "AXIAL" )
         {
-            viewer->resetViewToAxial();
+			if (viewer->getViewer()->getView() != Q2DViewer::Axial)
+				viewer->resetViewToAxial();
         }
         else
         {
