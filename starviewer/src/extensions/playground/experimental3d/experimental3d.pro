@@ -18,7 +18,8 @@ HEADERS += experimental3dextensionmediator.h \
     qgraphictransferfunctioneditor.h \
     vmivoxelshader1.h \
     vmivoxelshader2.h \
-    voxelsaliencyvoxelshader.h
+    voxelsaliencyvoxelshader.h \
+    vomivoxelshader.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     qexperimental3dviewer.cpp \
@@ -32,6 +33,7 @@ SOURCES += experimental3dextensionmediator.cpp \
     qgraphictransferfunctioneditor.cpp \
     vmivoxelshader1.cpp \
     vmivoxelshader2.cpp \
-    voxelsaliencyvoxelshader.cpp
+    voxelsaliencyvoxelshader.cpp \
+    vomivoxelshader.cpp
 RESOURCES += experimental3d.qrc
 include(../../basicconfextensions.inc)
