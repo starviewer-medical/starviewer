@@ -20,9 +20,9 @@ ProcessImageSingleton::ProcessImageSingleton()
     m_semaphore = new QSemaphore( 1 );
 }
 
-ProcessImageSingleton* ProcessImageSingleton::pInstance = 0;
+ProcessImageSingleton *ProcessImageSingleton::pInstance = 0;
 
-ProcessImageSingleton* ProcessImageSingleton::getProcessImageSingleton()
+ProcessImageSingleton *ProcessImageSingleton::getProcessImageSingleton()
 {
     if ( pInstance == 0 )
     {
@@ -40,23 +40,23 @@ void ProcessImageSingleton::addNewProcessImage( QString UID , ProcessImage *pi )
     sp.imgProcess = pi;
 
     m_semaphore->acquire();
-    m_listProcess.push_back( sp );
+    m_listProcess << sp;
     m_semaphore->release();
 }
 
 void ProcessImageSingleton::process(const QString &studyUID, Image *image)
 {
-    list<SingletonProcess>::iterator j;
+    QList<SingletonProcess>::const_iterator j;
 
     j = m_listProcess.begin();
-
     while ( j != m_listProcess.end() )
     {
         if ( (*j).studyUID != studyUID )
         {
             j++;
         }
-        else break;
+        else 
+            break;
     }
 
     if ( j != m_listProcess.end() )
@@ -67,17 +67,17 @@ void ProcessImageSingleton::process(const QString &studyUID, Image *image)
 
 void ProcessImageSingleton::process(const QString &studyUID, DICOMTagReader *dicomTagReader)
 {
-    list<SingletonProcess>::iterator j;
+    QList<SingletonProcess>::const_iterator j;
 
     j = m_listProcess.begin();
-
     while ( j != m_listProcess.end() )
     {
         if ( (*j).studyUID != studyUID )
         {
             j++;
         }
-        else break;
+        else 
+            break;
     }
 
     if ( j != m_listProcess.end() )
@@ -88,17 +88,17 @@ void ProcessImageSingleton::process(const QString &studyUID, DICOMTagReader *dic
 
 void ProcessImageSingleton::setError( QString studyUID )
 {
-    list<SingletonProcess>::iterator j;
-
+    QList<SingletonProcess>::const_iterator j;
+ 
     j = m_listProcess.begin();
-
     while ( j != m_listProcess.end() )
     {
         if ( (*j).studyUID != studyUID )
         {
             j++;
         }
-        else break;
+        else 
+            break;
     }
 
     if ( j != m_listProcess.end() )
@@ -109,17 +109,17 @@ void ProcessImageSingleton::setError( QString studyUID )
 
 bool ProcessImageSingleton::delProcessImage( QString UID )
 {
-    list<SingletonProcess>::iterator j;
+    QList<SingletonProcess>::iterator j;
 
     j = m_listProcess.begin();
-
     while ( j != m_listProcess.end() )
     {
         if ( (*j).studyUID != UID )
         {
             j++;
         }
-        else break;
+        else 
+            break;
     }
 
     if ( j != m_listProcess.end() )
@@ -129,7 +129,8 @@ bool ProcessImageSingleton::delProcessImage( QString UID )
         m_semaphore->release();
         return true;
     }
-    else return false;
+    else 
+        return false;
 }
 
 void ProcessImageSingleton::setPath( QString path )
