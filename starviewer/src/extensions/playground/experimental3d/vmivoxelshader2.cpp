@@ -39,14 +39,49 @@ QVector<float> VmiVoxelShader2::objectProbabilities()
     int nKeys = keys.size();
 
     float totalVolume = 0.0f;
-    for ( int i = 0; i < nKeys; i++ ) totalVolume += m_totalVolumePerThread.value( keys.at(i) );
+    for ( int i = 0; i < nKeys; i++ ) totalVolume += m_totalVolumePerThread.value( keys.at( i ) );
+
+    class MergeThread : public QThread {
+        public:
+            MergeThread( QVector<float> &objectProbabilities, const QHash< QThread*, QVector<float> > &objectVolumePerThread, float totalVolume, int start, int end )
+                : m_objectProbabilities( objectProbabilities ), m_objectVolumePerThread( objectVolumePerThread ), m_totalVolume( totalVolume ), m_start( start ), m_end( end )
+            {
+            }
+            virtual void run()
+            {
+                QList<QThread*> keys = m_objectVolumePerThread.keys();
+                int nKeys = keys.size();
+                for ( int i = 0; i < nKeys; i++ )
+                    for ( int j = m_start; j < m_end; j++ )
+                        m_objectProbabilities[j] += m_objectVolumePerThread.value( keys.at( i ) ).at( j );
+                for ( int i = m_start; i < m_end; i++ )
+                    m_objectProbabilities[i] /= m_totalVolume;
+            }
+        private:
+            QVector<float> &m_objectProbabilities;
+            const QHash< QThread*, QVector<float> > &m_objectVolumePerThread;
+            float m_totalVolume;
+            int m_start, m_end;
+    };
 
     QVector<float> objectProbabilities = m_objectVolumePerThread.take( keys.at( 0 ) );
-    for ( int i = 1; i < nKeys; i++ )
-        for ( unsigned int j = 0; j < m_dataSize; j++ )
-            objectProbabilities[j] += m_objectVolumePerThread.value( keys.at( i ) ).at( j );
-    for ( unsigned int i = 0; i < m_dataSize; i++ )
-        objectProbabilities[i] /= totalVolume;
+    int nThreads = QThread::idealThreadCount();
+    int nObjectsPerThread = m_dataSize / nThreads + 1;
+    QList<QThread*> mergeThreads;
+    int start = 0, end = nObjectsPerThread;
+    for ( int i = 0; i < nThreads; i++ )
+    {
+        mergeThreads << new MergeThread( objectProbabilities, m_objectVolumePerThread, totalVolume, start, end );
+        mergeThreads[i]->start();
+        start += nObjectsPerThread;
+        end += nObjectsPerThread;
+        if ( end > static_cast<int>( m_dataSize ) ) end = m_dataSize;
+    }
+    for ( int i = 0; i < nThreads; i++ )
+    {
+        mergeThreads[i]->wait();
+        delete mergeThreads[i];
+    }
 
     m_viewedVolume = totalVolume;
 
