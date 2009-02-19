@@ -1536,6 +1536,12 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
+	   case QExecuteOperationThread::MoveRefusedOutOfResources :
+			message = tr("Please review the operation list screen, ");
+            message += tr("a database error ocurred and some operations may have failed.");
+            message += tr("\n\nMaybe one or more studies are wrong in PACS.");
+            QMessageBox::critical( this , ApplicationNameString , message );
+            break;
         default:
             message = tr("Please review the operation list screen, ");
             message += tr("an unknow error has ocurred.");

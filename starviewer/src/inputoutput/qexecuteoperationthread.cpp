@@ -179,6 +179,10 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         {
             errorRetrieving(studyUID, MoveDestinationAETileUnknow);
         }
+		else if( retState.code() == 1302)
+		{
+			errorRetrieving(studyUID, MoveRefusedOutOfResources);
+		}
         else errorRetrieving(studyUID, ErrorRetrieving);
     }
     else emit filesRetrieved();

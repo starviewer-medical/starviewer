@@ -29,6 +29,8 @@ namespace udg{
 
     const OFConditionConst DcmtkMoveDestionationUnknow(0, 1300, OF_error, "Move destination unknow");
 
-    const OFConditionConst DcmtkMovescuUnknowError(0, 1301, OF_error, "Movescu unknow error");
+    const OFConditionConst DcmtkMovescuUnknowError(0, 1301, OF_error, "Movescu unknown error");
+
+	const OFConditionConst DcmtkMoveRefusedOutOfResources(0, 1302, OF_error, "Move refused out of resources");
 }; //end namespace
 #endif
