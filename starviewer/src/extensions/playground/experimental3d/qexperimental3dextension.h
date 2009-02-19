@@ -89,6 +89,8 @@ private slots:
 
     /// Calcula les VMI amb els punts de vista seleccionats.
     void computeVmi();
+    void loadVmi();
+    void saveVmi();
     /// Calcula les inestabilitats dels punts de vista seleccionats.
     void computeViewpointUnstabilities();
     void loadVomi();
@@ -106,6 +108,7 @@ private:
     ObscuranceMainThread *m_obscuranceMainThread;
     Obscurance *m_obscurance;
 
+    QVector<float> m_vmi;
     QVector<float> m_vomi;
     float m_maximumVomi;
     QVector<float> m_voxelSaliencies;
