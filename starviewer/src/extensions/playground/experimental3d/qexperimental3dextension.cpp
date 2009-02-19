@@ -110,7 +110,8 @@ void QExperimental3DExtension::createConnections()
 
     // VMI
     connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
-    connect( m_vmiPushButton, SIGNAL( clicked() ), SLOT( computeVmi() ) );
+    connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
+    connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
     connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
     connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
     connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
@@ -741,10 +742,11 @@ void QExperimental3DExtension::computePropertySaliencies()
 
 void QExperimental3DExtension::computeSelectedVmi()
 {
+    bool computeVmi = m_computeVmiCheckBox->isChecked();
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeVoxelSaliencies = m_computeVoxelSalienciesCheckBox->isChecked();
 
-    if ( !computeVomi && !computeVoxelSaliencies ) return;
+    if ( !computeVmi && !computeVomi && !computeVoxelSaliencies ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -776,7 +778,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     unsigned int nObjects = m_volume->getSize();
 
     // Inicialitzar progrés
-    int nSteps = 4; // ray casting (p(O|V)), p(V), p(O), VoMI + voxel saliencies
+    int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
+    if ( computeVmi ) nSteps++; // VMI
+    if ( computeVomi || computeVoxelSaliencies ) nSteps ++; //VoMI + voxel saliencies
     int step = 0;
     {
         m_vmiProgressBar->setValue( 0 );
@@ -887,19 +891,50 @@ void QExperimental3DExtension::computeSelectedVmi()
         delete[] objectProbabilitiesInView;
     }
 
-    // VoMI + voxel saliencies (inicialització)
-    if ( computeVomi )
+    // VMI
+    if ( computeVmi )
     {
-        m_vomi.resize( nObjects );
-        m_maximumVomi = 0.0f;
+        m_vmi.resize( nViewpoints );
+
+        m_vmiProgressBar->setValue( 0 );
+
+        QVector<float> objectProbabilitiesInView( nObjects );   // vector p(O|v)
+
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            pOvFiles[i]->reset();   // reset per tornar al principi
+            pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView.data() ), nObjects * sizeof(float) ); // llegim...
+            pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+            float vmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, objectProbabilities );
+            Q_ASSERT( vmi == vmi );
+            m_vmi[i] = vmi;
+            DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
+
+            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( ++step );
+        m_vmiTotalProgressBar->repaint();
+
+        m_saveVmiPushButton->setEnabled( true );
     }
-    if ( computeVoxelSaliencies )
+
+    // VoMI + voxel saliencies
+    if ( computeVomi || computeVoxelSaliencies )
     {
-        m_voxelSaliencies.resize( nObjects );
-        m_maximumSaliency = 0.0f;
-    }
-    // VoMI + voxel saliencies (càlcul)
-    {
+        if ( computeVomi )
+        {
+            m_vomi.resize( nObjects );
+            m_maximumVomi = 0.0f;
+        }
+        if ( computeVoxelSaliencies )
+        {
+            m_voxelSaliencies.resize( nObjects );
+            m_maximumSaliency = 0.0f;
+        }
+
         /*
          * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
          * N'hi haurà prou llegint la llesca actual, l'anterior i la següent.
@@ -1162,6 +1197,94 @@ void QExperimental3DExtension::computeVmi()
 
     doVisualization();
     m_viewer->setCamera( position, focus, up );
+}
+
+
+void QExperimental3DExtension::loadVmi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString vmiDir = settings.value( "vmiDir", QString() ).toString();
+    QString vmiFileName = QFileDialog::getOpenFileName( this, tr("Load VMI"), vmiDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !vmiFileName.isNull() )
+    {
+        QFile vmiFile( vmiFileName );
+
+        if ( !vmiFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + vmiFileName );
+            QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + vmiFileName );
+            return;
+        }
+
+        QDataStream in( &vmiFile );
+
+        while ( !in.atEnd() )
+        {
+            float vmi;
+            in >> vmi;
+            m_vmi << vmi;
+        }
+
+        vmiFile.close();
+
+        QFileInfo vmiFileInfo( vmiFileName );
+        settings.setValue( "vmiDir", vmiFileInfo.absolutePath() );
+
+        m_saveVmiPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveVmi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString vmiDir = settings.value( "vmiDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save VMI"), vmiDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString vmiFileName = saveDialog.selectedFiles().first();
+        bool saveAsText = vmiFileName.endsWith( ".txt" );
+        QFile vmiFile( vmiFileName );
+        QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+        if ( saveAsText ) mode = mode | QIODevice::Text;
+
+        if ( !vmiFile.open( mode ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + vmiFileName );
+            QMessageBox::warning( this, tr("Can't save VMI"), QString( tr("Can't save VMI to file ") ) + vmiFileName );
+            return;
+        }
+
+        int nViewpoints = m_vmi.size();
+
+        if ( saveAsText )
+        {
+            QTextStream out( &vmiFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << "VMI(v" << i + 1 << ") = " << m_vmi.at( i ) << "\n";
+        }
+        else
+        {
+            QDataStream out( &vmiFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << m_vmi.at( i );
+        }
+
+        vmiFile.close();
+
+        QFileInfo vmiFileInfo( vmiFileName );
+        settings.setValue( "vmiDir", vmiFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
 }
 
 
