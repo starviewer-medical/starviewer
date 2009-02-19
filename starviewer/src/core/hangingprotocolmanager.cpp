@@ -131,8 +131,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
 		}
 	}
 
-	DEBUG_LOG( QString("Numero de series: %1").arg(allSeries.size()) );
-
     int numberOfSeriesAssigned;
 
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
@@ -164,8 +162,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                 imageSetNumber++;
             }
             adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
-
-			DEBUG_LOG( QString("Ajustament del hanging %1: %2").arg(hangingProtocol->getName()).arg(adjustmentOfHanging) );
 
 			if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 ) 
 				adjustmentOfHanging = 0.0;
@@ -310,7 +306,6 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
     while (!found && i < numberStudies )
     {
         study = listOfStudies.value( i );
-        numberSeries = study->getNumberOfSeries();
         listOfSeries = study->getViewableSeries();
         numberSeries = listOfSeries.count();
         j = 0;
@@ -382,8 +377,6 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> 
 				if( quitStudy )
 				{
 					listOfSeries.removeAt(i);
-
-					DEBUG_LOG( QString("Elimino la serie %1").arg(i) );
 				}
             }
         }
@@ -467,15 +460,11 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
             {
                 valid = false;
             }
-
-			DEBUG_LOG( QString("scan options %1").arg(valid) );
         }
         else if( restriction.selectorAttribute == "PatientName" )
         {
             if( patient->getFullName() != restriction.valueRepresentation )
                 valid = false;
-
-			DEBUG_LOG( QString("Patient name: %1").arg(valid) );
         }
         else if( restriction.selectorAttribute == "SeriesNumber" )
         {
