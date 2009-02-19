@@ -194,10 +194,13 @@ void RetrieveImages::storeSCPCallback(
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
-            if ( save(cbdata, imageFilenameToSave).bad() )
+            OFCondition stateSaveImage = save(cbdata, imageFilenameToSave);
+            
+            if ( stateSaveImage.bad() )
             {
                 piSingleton->setError( retrievedImage.getStudyUID() );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
+                ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + imageFilenameToSave + ", error: " + stateSaveImage.text()); 
             }
 
             m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
