@@ -1472,7 +1472,7 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
                          "\nThese have to be delete manually.");
             break;
         default:
-            message = tr("An unknow error has ocurred.");
+            message = tr("An unknown error has ocurred.");
             break;
     }
 
@@ -1504,7 +1504,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
-        case QExecuteOperationThread::MoveDestinationAETileUnknow :
+        case QExecuteOperationThread::MoveDestinationAETileUnknown:
             message = tr("Please review the operation list screen, ");
             message += tr("the Pacs doesn't recognize your computer's AETitle %1, some studies can't be retrieved.").arg(settings.getAETitleMachine());
             message += tr("\n\nContact with an administrador to register your computer to the Pacs.");
@@ -1538,13 +1538,13 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             break;
 	   case QExecuteOperationThread::MoveRefusedOutOfResources :
 			message = tr("Please review the operation list screen, ");
-            message += tr("a database error ocurred and some operations may have failed.");
-            message += tr("\n\nMaybe one or more studies are wrong in PACS.");
+            message += tr("an error ocurred while retrieving some study and some operations may have failed.");
+            message += tr("\n\nData is either missing or corrupted on PACS");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         default:
             message = tr("Please review the operation list screen, ");
-            message += tr("an unknow error has ocurred.");
+            message += tr("an unknown error has ocurred.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
     }
@@ -1597,7 +1597,7 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
       case DICOMDIRImporter::Ok :
             break;
         default:
-            message += tr("An unknow error has ocurred importing dicomdir.");
+            message += tr("An unknown error has ocurred importing dicomdir.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
     }

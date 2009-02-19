@@ -82,7 +82,7 @@ void ListenRisRequest::showNetworkError()
             ERROR_LOG(QString("No es poden escoltar les peticions del RIS pel port %1, perquè una altra aplicació ja l'esta utilitzant").arg(settings.getListenPortRisRequests()));
             break;
         default :
-            message = tr("Can't listen RIS requests on port %1, an unknow network error has produced.").arg(settings.getListenPortRisRequests());
+            message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(settings.getListenPortRisRequests());
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             ERROR_LOG(QString("No es poden escoltar les peticions del RIS pel port %1, s' ha produït un error no controlat : " + m_qTcpServer->errorString()).arg(settings.getListenPortRisRequests()));

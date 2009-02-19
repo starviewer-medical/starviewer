@@ -17,7 +17,7 @@ namespace udg{
 
     const OFConditionConst DcmtkNoError( 0 , 0 , OF_ok, "Normal" );
 
-    const OFConditionConst DcmtkUnknowError( 0 , 1000 , OF_error , "Unknow Error" );
+    const OFConditionConst DcmtkUnknownError( 0 , 1000 , OF_error , "Unknown Error" );
     
     const OFConditionConst DcmtkNoConnectionError( 0 , 1120 , OF_error , "No connection has been set" );
 
@@ -27,9 +27,9 @@ namespace udg{
 
     const OFConditionConst DcmtkCanNotConnectError( 0 , 1200 , OF_error , "Can't connect" );
 
-    const OFConditionConst DcmtkMoveDestionationUnknow(0, 1300, OF_error, "Move destination unknow");
+    const OFConditionConst DcmtkMoveDestionationUnknown(0, 1300, OF_error, "Move destination unknown");
 
-    const OFConditionConst DcmtkMovescuUnknowError(0, 1301, OF_error, "Movescu unknown error");
+    const OFConditionConst DcmtkMovescuUnknownError(0, 1301, OF_error, "Movescu unknown error");
 
 	const OFConditionConst DcmtkMoveRefusedOutOfResources(0, 1302, OF_error, "Move refused out of resources");
 }; //end namespace
