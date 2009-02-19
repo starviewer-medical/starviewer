@@ -189,6 +189,7 @@ HEADERS += extensionfactory.h \
            obscurance.h \
            viewpointgenerator.h \
            thumbnailcreator.h \
+           nonclosedangletool.h \
  abortrendercommand.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -343,6 +344,7 @@ SOURCES += extensionmediator.cpp \
            obscurance.cpp \
            viewpointgenerator.cpp  \
            thumbnailcreator.cpp \
+           nonclosedangletool.cpp \
  abortrendercommand.cpp
 TEMPLATE = lib
 DESTDIR = ./

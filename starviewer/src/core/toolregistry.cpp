@@ -27,6 +27,7 @@
 #include "cursor3dtool.h"
 #include "angletool.h"
 #include "editortool.h"
+#include "nonclosedangletool.h"
 
 #include <QAction>
 
@@ -115,6 +116,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "EditorTool" )
     {
         tool = new EditorTool( viewer );
+    }
+    else if( toolName == "NonClosedAngleTool" )
+    {
+        tool = new NonClosedAngleTool( viewer );
     }
     else
     {
@@ -238,6 +243,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Editor") );
         toolAction->setStatusTip( tr("Enable/Disable editor tool") );
         toolAction->setIcon( QIcon(":/images/pencil.png") );
+    }
+    else if( toolName == "NonClosedAngleTool" )
+    {
+        toolAction->setText( tr("Non Closed Angle") );
+        toolAction->setStatusTip( tr("Enable/Disable non closed angle tool") );
+        toolAction->setIcon( QIcon(":/images/angle.png") );
     }
     else
     {
