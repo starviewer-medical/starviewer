@@ -177,7 +177,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         if (retState.code() == 1300)
         {
-            errorRetrieving(studyUID, MoveDestinationAETileUnknow);
+            errorRetrieving(studyUID, MoveDestinationAETileUnknown);
         }
 		else if( retState.code() == 1302)
 		{
