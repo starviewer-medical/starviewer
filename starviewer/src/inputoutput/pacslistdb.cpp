@@ -70,7 +70,6 @@ QList<PacsParameters> PacsListDB::queryDefaultPacs()
     return defaultPacs;
 }
 
-
 PacsParameters PacsListDB::queryPacs(QString pacsIDString)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
@@ -84,7 +83,9 @@ PacsParameters PacsListDB::queryPacs(QString pacsIDString)
         {
             pacs = pacsList.at(pacsID);
         }
+        else ERROR_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
     }
+    else ERROR_LOG("No s'ha pogut convertir l'string amb l'id del PACS a enter, el valor de l'string és: " + pacsIDString);
 
     return pacs;
 }
