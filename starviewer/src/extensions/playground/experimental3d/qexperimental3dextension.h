@@ -91,13 +91,9 @@ private slots:
     void computeVmi();
     /// Calcula les inestabilitats dels punts de vista seleccionats.
     void computeViewpointUnstabilities();
-    /// Calcula les VoMI amb els punts de vista seleccionats.
-    void computeVomi();
     void loadVomi();
     void saveVomi();
     void vomiChecked( bool checked );
-    /// Calcula les saliencies dels vòxels.
-    void computeVoxelSaliencies();
     void loadVoxelSaliencies();
     void saveVoxelSaliencies();
     void voxelSalienciesChecked( bool checked );
