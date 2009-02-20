@@ -1,5 +1,6 @@
 #include "qexperimental3dextension.h"
 
+#include <QButtonGroup>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -29,6 +30,10 @@ QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
     setupUi( this );
 
     createConnections();
+
+    QButtonGroup *bestViewpointsRadioButtons = new QButtonGroup( this );
+    bestViewpointsRadioButtons->addButton( m_computeBestViewsNRadioButton );
+    bestViewpointsRadioButtons->addButton( m_computeBestViewsThresholdRadioButton );
 }
 
 
@@ -113,6 +118,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
     connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
+    connect( m_loadBestViewsPushButton, SIGNAL( clicked() ), SLOT( loadBestViews() ) );
+    connect( m_saveBestViewsPushButton, SIGNAL( clicked() ), SLOT( saveBestViews() ) );
     connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
     connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
     connect( m_loadVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelSaliencies() ) );
@@ -742,11 +749,14 @@ void QExperimental3DExtension::computePropertySaliencies()
 
 void QExperimental3DExtension::computeSelectedVmi()
 {
+    // Què ha demanat l'usuari
     bool computeVmi = m_computeVmiCheckBox->isChecked();
+    bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeVoxelSaliencies = m_computeVoxelSalienciesCheckBox->isChecked();
 
-    if ( !computeVmi && !computeVomi && !computeVoxelSaliencies ) return;
+    // Si no hi ha res a calcular marxem
+    if ( !computeVmi && !computeBestViews && !computeVomi && !computeVoxelSaliencies ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -777,9 +787,13 @@ void QExperimental3DExtension::computeSelectedVmi()
     int nViewpoints = viewpoints.size();
     unsigned int nObjects = m_volume->getSize();
 
+    // Dependències
+    if ( computeBestViews && ( m_vmi.size() != nViewpoints || m_vmi.size() == 12 ) ) computeVmi = true; // el 12 és perquè hi ha dos 12 diferents
+
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
     if ( computeVmi ) nSteps++; // VMI
+    if ( computeBestViews ) nSteps++;   // best views
     if ( computeVomi || computeVoxelSaliencies ) nSteps ++; //VoMI + voxel saliencies
     int step = 0;
     {
@@ -919,6 +933,123 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->repaint();
 
         m_saveVmiPushButton->setEnabled( true );
+    }
+
+    if ( computeBestViews )
+    {
+        m_bestViews.clear();
+
+        // millor vista
+        float minVmi = m_vmi.at( 0 );
+        int minVmiIndex = 0;
+
+        for ( int i = 1; i < nViewpoints; i++ )
+        {
+            float vmi = m_vmi.at( i );
+
+            if ( vmi < minVmi )
+            {
+                minVmi = vmi;
+                minVmiIndex = i;
+            }
+        }
+
+        m_bestViews << qMakePair( minVmiIndex, viewpoints.at( minVmiIndex ) );
+
+        QList<int> viewpointIndexList;
+        for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
+        viewpointIndexList.removeAt( minVmiIndex );
+
+        float pvv = viewProbabilities.at( minVmiIndex );    // p(v̂)
+        QVector<float> pOvv( nObjects );    // vector p(O|v̂)
+        pOvFiles[minVmiIndex]->reset();     // reset per tornar al principi
+        pOvFiles[minVmiIndex]->read( reinterpret_cast<char*>( pOvv.data() ), nObjects * sizeof(float) );    // llegim...
+        pOvFiles[minVmiIndex]->reset();     // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+        // límits
+        bool limitN = m_computeBestViewsNRadioButton->isChecked();
+        int n = qMin( m_computeBestViewsNSpinBox->value(), nViewpoints );
+        bool limitThreshold = m_computeBestViewsThresholdRadioButton->isChecked();
+        float threshold = m_computeBestViewsThresholdDoubleSpinBox->value();
+        float IVO = 0.0f;       // I(V,O)
+        for ( int i = 0; i < nViewpoints; i++ ) IVO += viewProbabilities.at( i ) * m_vmi.at( i );   // calcular I(V,O)
+        float IvvO = minVmi;    // I(v̂,O)
+
+        if ( limitN ) DEBUG_LOG( QString( "límit %1 vistes" ).arg( n ) );
+        if ( limitThreshold ) DEBUG_LOG( QString( "límit llindar %1" ).arg( threshold ) );
+
+        DEBUG_LOG( QString( "I(V,O) = %1" ).arg( IVO ) );
+        DEBUG_LOG( "Millors vistes:" );
+        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( viewpoints.at( minVmiIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
+
+
+
+        if ( limitN ) m_vmiProgressBar->setValue( 100 / n );
+
+        if ( limitThreshold )
+        {
+            m_vmiProgressBar->setValue( 0 );
+            m_vmiProgressBar->setMaximum( 0 );
+        }
+
+        m_vmiProgressBar->repaint();
+
+        float *pOvi = new float[nObjects];
+
+        while ( ( limitN && m_bestViews.size() < n ) || ( limitThreshold && IvvO / IVO > threshold ) )
+        {
+            int nRemainingViews = viewpointIndexList.size();
+            float pvvMin = 0.0f;
+            QVector<float> pOvvMin;
+            float IvvOMin = 0.0f;
+            int iMin = 0;
+
+            for ( int i = 0; i < nRemainingViews; i++ )
+            {
+                int viewIndex = viewpointIndexList.at( i );
+                float pvi = viewProbabilities.at( viewIndex );
+                pOvFiles[viewIndex]->reset();   // reset per tornar al principi
+                pOvFiles[viewIndex]->read( reinterpret_cast<char*>( pOvi ), nObjects * sizeof(float) ); // llegim...
+                pOvFiles[viewIndex]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+                float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
+                QVector<float> pOvvi( pOvv );   // vector p(O|v̂) afegint aquesta vista
+                for ( unsigned int j = 0; j < nObjects; j++ ) pOvvi[j] = ( pvv * pOvv.at( j ) + pvi * pOvi[j] ) / pvvi;
+                float IvviO = InformationTheory<float>::kullbackLeiblerDivergence( pOvvi, objectProbabilities );    // I(v̂,O) afegint aquesta vista
+
+                if ( i == 0 || IvviO < IvvOMin )
+                {
+                    pvvMin = pvvi;
+                    pOvvMin = pOvvi;
+                    IvvOMin = IvviO;
+                    iMin = i;
+                }
+            }
+
+            pvv = pvvMin;
+            pOvv = pOvvMin;
+            IvvO = IvvOMin;
+            int viewIndex = viewpointIndexList.takeAt( iMin );
+            m_bestViews << qMakePair( viewIndex, viewpoints.at( viewIndex ) );
+            DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( m_bestViews.size() - 1 ).arg( viewIndex + 1 ).arg( viewpoints.at( viewIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
+
+            if ( limitN ) m_vmiProgressBar->setValue( 100 * m_bestViews.size() / n );
+            m_vmiProgressBar->repaint();
+        }
+
+        delete[] pOvi;
+
+        if ( limitThreshold )
+        {
+            m_vmiProgressBar->setMaximum( 100 );
+            m_vmiProgressBar->setValue( 100 );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( ++step );
+        m_vmiTotalProgressBar->repaint();
+
+        m_saveBestViewsPushButton->setEnabled( true );
     }
 
     // VoMI + voxel saliencies
@@ -1406,6 +1537,16 @@ void QExperimental3DExtension::computeViewpointUnstabilities()
 
     doVisualization();
     m_viewer->setCamera( position, focus, up );
+}
+
+
+void QExperimental3DExtension::loadBestViews()
+{
+}
+
+
+void QExperimental3DExtension::saveBestViews()
+{
 }
 
 

@@ -248,7 +248,7 @@
              <bool>false</bool>
             </property>
             <property name="maximum" >
-             <double>10.000000000000000</double>
+             <double>100.000000000000000</double>
             </property>
             <property name="singleStep" >
              <double>0.100000000000000</double>
@@ -288,7 +288,7 @@
              <bool>false</bool>
             </property>
             <property name="maximum" >
-             <double>10.000000000000000</double>
+             <double>100.000000000000000</double>
             </property>
             <property name="singleStep" >
              <double>0.100000000000000</double>
@@ -1101,6 +1101,104 @@
          </widget>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6" >
+          <item>
+           <widget class="QCheckBox" name="m_computeBestViewsCheckBox" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Best views</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3" >
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7" >
+              <item>
+               <widget class="QRadioButton" name="m_computeBestViewsNRadioButton" >
+                <property name="enabled" >
+                 <bool>true</bool>
+                </property>
+                <property name="text" >
+                 <string>N</string>
+                </property>
+                <property name="checked" >
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="m_computeBestViewsNSpinBox" >
+                <property name="enabled" >
+                 <bool>true</bool>
+                </property>
+                <property name="minimum" >
+                 <number>1</number>
+                </property>
+                <property name="maximum" >
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_8" >
+              <item>
+               <widget class="QRadioButton" name="m_computeBestViewsThresholdRadioButton" >
+                <property name="enabled" >
+                 <bool>true</bool>
+                </property>
+                <property name="text" >
+                 <string>Threshold</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="m_computeBestViewsThresholdDoubleSpinBox" >
+                <property name="enabled" >
+                 <bool>true</bool>
+                </property>
+                <property name="maximum" >
+                 <double>10.000000000000000</double>
+                </property>
+                <property name="singleStep" >
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value" >
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_loadBestViewsPushButton" >
+            <property name="text" >
+             <string>Load...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_saveBestViewsPushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Save...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3" >
           <item>
            <widget class="QCheckBox" name="m_computeVomiCheckBox" >
@@ -1222,6 +1320,7 @@
     </widget>
    </item>
   </layout>
+  <zorder>m_splitter</zorder>
  </widget>
  <customwidgets>
   <customwidget>

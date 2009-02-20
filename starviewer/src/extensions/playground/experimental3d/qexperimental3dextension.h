@@ -86,13 +86,14 @@ private slots:
 
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
-
     /// Calcula les VMI amb els punts de vista seleccionats.
     void computeVmi();
     void loadVmi();
     void saveVmi();
     /// Calcula les inestabilitats dels punts de vista seleccionats.
     void computeViewpointUnstabilities();
+    void loadBestViews();
+    void saveBestViews();
     void loadVomi();
     void saveVomi();
     void vomiChecked( bool checked );
@@ -109,6 +110,7 @@ private:
     Obscurance *m_obscurance;
 
     QVector<float> m_vmi;
+    QList< QPair<int, Vector3> > m_bestViews;
     QVector<float> m_vomi;
     float m_maximumVomi;
     QVector<float> m_voxelSaliencies;
