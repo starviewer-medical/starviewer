@@ -975,8 +975,14 @@ void QExperimental3DExtension::computeSelectedVmi()
         for ( int i = 0; i < nViewpoints; i++ ) IVO += viewProbabilities.at( i ) * m_vmi.at( i );   // calcular I(V,O)
         float IvvO = minVmi;    // I(v̂,O)
 
-        if ( limitN ) DEBUG_LOG( QString( "límit %1 vistes" ).arg( n ) );
-        if ( limitThreshold ) DEBUG_LOG( QString( "límit llindar %1" ).arg( threshold ) );
+        if ( limitN )
+        {
+            DEBUG_LOG( QString( "límit %1 vistes" ).arg( n ) );
+        }
+        if ( limitThreshold )
+        {
+            DEBUG_LOG( QString( "límit llindar %1" ).arg( threshold ) );
+        }
 
         DEBUG_LOG( QString( "I(V,O) = %1" ).arg( IVO ) );
         DEBUG_LOG( "Millors vistes:" );
