@@ -10,7 +10,7 @@
 #define UDGOPTIMALVIEWPOINTPARAMETERS_H
 
 
-#include "parameters.h"
+#include <QObject>
 
 #include "transferfunction.h"
 
@@ -31,7 +31,7 @@ class Volume;
  *
  * \todo Es podria fer amb propietats.
  */
-class OptimalViewpointParameters : public Parameters {
+class OptimalViewpointParameters : public QObject {
 
     Q_OBJECT
 
@@ -167,6 +167,9 @@ public slots:
 
 signals:
 
+    /// indica a les interfícies que un dels seus paràmetres s'ha actualitzat
+    /// El paràmetre és un enter que identifica el paràmetre
+    void changed( int );
     void signalAdjustedTransferFunction( const TransferFunction & adjustedTransferFunction );
 
 private:

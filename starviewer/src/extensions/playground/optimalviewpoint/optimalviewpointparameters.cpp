@@ -13,7 +13,7 @@ namespace udg {
 
 
 OptimalViewpointParameters::OptimalViewpointParameters( QObject * parent )
-    : Parameters( parent )
+    : QObject( parent )
 {
 }
 
