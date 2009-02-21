@@ -1308,6 +1308,33 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="m_programTab" >
+       <attribute name="title" >
+        <string>Program</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4" >
+        <item>
+         <widget class="QPushButton" name="m_loadAndRunProgramPushButton" >
+          <property name="text" >
+           <string>Load and run...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3" >
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0" >
+           <size>
+            <width>20</width>
+            <height>576</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="udg::QExperimental3DViewer" native="1" name="m_viewer" >
       <property name="sizePolicy" >
