@@ -34,6 +34,8 @@ private:
     /// Crea les connexions de signals i slots.
     void createConnections();
 
+    void loadTransferFunction( const QString &fileName );
+
 private slots:
 
     /// Obre un diàleg per triar el color de fons.
@@ -100,6 +102,8 @@ private slots:
     void loadVoxelSaliencies();
     void saveVoxelSaliencies();
     void voxelSalienciesChecked( bool checked );
+
+    void loadAndRunProgram();
 
 private:
 

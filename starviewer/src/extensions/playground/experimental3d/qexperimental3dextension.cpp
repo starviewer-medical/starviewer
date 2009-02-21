@@ -124,6 +124,21 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
     connect( m_loadVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelSaliencies() ) );
     connect( m_saveVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelSaliencies() ) );
+
+    // Program
+    connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
+}
+
+
+void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
+{
+    TransferFunction *transferFunction;
+
+    if ( fileName.endsWith( ".xml" ) ) transferFunction = TransferFunctionIO::fromXmlFile( fileName );
+    else transferFunction = TransferFunctionIO::fromFile( fileName );
+
+    m_transferFunctionEditor->setTransferFunction( *transferFunction );
+    delete transferFunction;
 }
 
 
@@ -162,13 +177,7 @@ void QExperimental3DExtension::loadTransferFunction()
 
     if ( !transferFunctionFileName.isNull() )
     {
-        TransferFunction *transferFunction;
-
-        if ( transferFunctionFileName.endsWith( ".xml" ) ) transferFunction = TransferFunctionIO::fromXmlFile( transferFunctionFileName );
-        else transferFunction = TransferFunctionIO::fromFile( transferFunctionFileName );
-
-        m_transferFunctionEditor->setTransferFunction( *transferFunction );
-        delete transferFunction;
+        loadTransferFunction( transferFunctionFileName );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
         settings.setValue( "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
@@ -1729,6 +1738,66 @@ void QExperimental3DExtension::saveVoxelSaliencies()
 void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
 {
     if ( checked ) m_vomiCheckBox->setChecked( false );
+}
+
+
+void QExperimental3DExtension::loadAndRunProgram()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString programDir = settings.value( "programDir", QString() ).toString();
+    QString programFileName = QFileDialog::getOpenFileName( this, tr("Load program"), programDir, tr("Text files (*.txt);;All files (*)") );
+
+    if ( !programFileName.isNull() )
+    {
+        QFile programFile( programFileName );
+
+        if ( !programFile.open( QFile::ReadOnly | QFile::Text ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + programFileName );
+            QMessageBox::warning( this, tr("Can't load program"), QString( tr("Can't load program from file ") ) + programFileName );
+            return;
+        }
+
+        QTextStream in( &programFile );
+
+        while ( !in.atEnd() )
+        {
+            QString line = in.readLine();
+            QStringList words = line.split( ' ', QString::SkipEmptyParts );
+
+            if ( words.isEmpty() ) continue;
+
+            QString command = words.at( 0 );
+
+            if ( command == "tf-load" )
+            {
+                if ( words.size() >= 2 ) loadTransferFunction( words.at( 1 ) );
+                else
+                {
+                    DEBUG_LOG( "[E3DP] Falta el nom del fitxer: " + line );
+                    ERROR_LOG( "[E3DP] Falta el nom del fitxer: " + line );
+                }
+            }
+            else if ( command == "visualization-ok" )
+            {
+                doVisualization();
+            }
+            else
+            {
+                DEBUG_LOG( "[E3DP] Ordre desconeguda: " + line );
+                ERROR_LOG( "[E3DP] Ordre desconeguda: " + line );
+            }
+        }
+
+        programFile.close();
+
+        QFileInfo programFileInfo( programFileName );
+        settings.setValue( "programDir", programFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
 }
 
 
