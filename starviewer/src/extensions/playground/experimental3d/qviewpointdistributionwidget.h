@@ -12,6 +12,9 @@
 namespace udg {
 
 
+class ViewpointGenerator;
+
+
 /**
  * Widget que permet seleccionar un nombre de punts de vista distribuïts uniformement o quasi-uniforme.
  */
@@ -32,6 +35,8 @@ public:
     int recursionLevel() const;
     /// Retorna la llista de punts de vista d'acord amb les opcions seleccionades.
     QVector<Vector3> viewpoints() const;
+    /// Retorna un generador de punts de vista configurat d'acord amb les opcions seleccionades.
+    ViewpointGenerator viewpointGenerator( float radius = 1.0f ) const;
 
 signals:
 

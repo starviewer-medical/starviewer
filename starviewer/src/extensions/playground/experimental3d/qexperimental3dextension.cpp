@@ -774,29 +774,13 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
-    // Obtenir direccions
+    // Guardem la càmera
     Vector3 position, focus, up;
     m_viewer->getCamera( position, focus, up );
 
+    // Obtenir direccions
     float distance = ( position - focus ).length();
-
-    ViewpointGenerator viewpointGenerator;
-    {
-        if ( m_vmiViewpointDistributionWidget->isUniform() )
-        {
-            switch ( m_vmiViewpointDistributionWidget->numberOfViewpoints() )
-            {
-                case 4: viewpointGenerator.setToUniform4( distance ); break;
-                case 6: viewpointGenerator.setToUniform6( distance ); break;
-                case 8: viewpointGenerator.setToUniform8( distance ); break;
-                case 12: viewpointGenerator.setToUniform12( distance ); break;
-                case 20: viewpointGenerator.setToUniform20( distance ); break;
-                default: Q_ASSERT_X( false, "setViewpoint", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( m_vmiViewpointDistributionWidget->numberOfViewpoints() ) ) );
-            }
-        }
-        else viewpointGenerator.setToQuasiUniform( m_vmiViewpointDistributionWidget->recursionLevel(), distance );
-    }
-
+    ViewpointGenerator viewpointGenerator = m_vmiViewpointDistributionWidget->viewpointGenerator( distance );
     QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
     int nViewpoints = viewpoints.size();
     unsigned int nObjects = m_volume->getSize();
@@ -1291,6 +1275,8 @@ void QExperimental3DExtension::computeSelectedVmi()
     }
 
     doVisualization();
+
+    // Restaurem la càmera
     m_viewer->setCamera( position, focus, up );
 
     DEBUG_LOG( "fi" );
