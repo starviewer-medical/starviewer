@@ -63,6 +63,28 @@ QVector<Vector3> QViewpointDistributionWidget::viewpoints() const
 }
 
 
+ViewpointGenerator QViewpointDistributionWidget::viewpointGenerator( float radius ) const
+{
+    ViewpointGenerator viewpointGenerator;
+
+    if ( isUniform() )
+    {
+        switch ( numberOfViewpoints() )
+        {
+            case 4: viewpointGenerator.setToUniform4( radius ); break;
+            case 6: viewpointGenerator.setToUniform6( radius ); break;
+            case 8: viewpointGenerator.setToUniform8( radius ); break;
+            case 12: viewpointGenerator.setToUniform12( radius ); break;
+            case 20: viewpointGenerator.setToUniform20( radius ); break;
+            default: Q_ASSERT_X( false, "viewpoints", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( numberOfViewpoints() ) ) );
+        }
+    }
+    else viewpointGenerator.setToQuasiUniform( recursionLevel(), radius );
+
+    return viewpointGenerator;
+}
+
+
 void QViewpointDistributionWidget::createConnections()
 {
     connect( m_uniformRadioButton, SIGNAL( toggled(bool) ), m_uniformNumberOfViewpointsLabel, SLOT( setEnabled(bool) ) );
