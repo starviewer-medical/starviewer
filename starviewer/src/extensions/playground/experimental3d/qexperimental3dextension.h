@@ -43,6 +43,8 @@ private:
     float vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView );
     /// Normalitza les probabilitats de les vistes dividint-les per \a totalViewedVolume.
     void normalizeViewProbabilities( QVector<float> &viewProbabilities, float totalViewedVolume );
+    /// Retorna les probabilitats p(O) dels objectes (vòxels) donats p(V) i p(O|V).
+    QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
 
 private slots:
 
