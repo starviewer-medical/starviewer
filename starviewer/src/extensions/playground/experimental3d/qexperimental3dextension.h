@@ -88,12 +88,8 @@ private slots:
 
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
-    /// Calcula les VMI amb els punts de vista seleccionats.
-    void computeVmi();
     void loadVmi();
     void saveVmi();
-    /// Calcula les inestabilitats dels punts de vista seleccionats.
-    void computeViewpointUnstabilities();
     void loadViewpointUnstabilities();
     void saveViewpointUnstabilities();
     void loadBestViews();
