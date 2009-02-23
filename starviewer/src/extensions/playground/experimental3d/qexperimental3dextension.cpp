@@ -125,6 +125,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
     connect( m_loadVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelSaliencies() ) );
     connect( m_saveVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelSaliencies() ) );
+    connect( m_loadViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( loadViewpointVomi() ) );
+    connect( m_saveViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( saveViewpointVomi() ) );
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -765,9 +767,10 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeVoxelSaliencies = m_computeVoxelSalienciesCheckBox->isChecked();
+    bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeVomi && !computeVoxelSaliencies ) return;
+    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeVomi && !computeVoxelSaliencies && !computeViewpointVomi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -800,12 +803,13 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     // Dependències
     if ( computeBestViews && m_vmi.size() != nViewpoints ) computeVmi = true;
+    if ( computeViewpointVomi && m_vomi.isEmpty() ) computeVomi = true;
 
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
     if ( computeVmi || computeViewpointUnstabilities ) nSteps++;    // VMI + viewpoint unstabilities
     if ( computeBestViews ) nSteps++;   // best views
-    if ( computeVomi || computeVoxelSaliencies ) nSteps ++; //VoMI + voxel saliencies
+    if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi ) nSteps ++; //VoMI + voxel saliencies + viewpoint VoMI
     int step = 0;
     {
         m_vmiProgressBar->setValue( 0 );
@@ -1103,8 +1107,8 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_saveBestViewsPushButton->setEnabled( true );
     }
 
-    // VoMI + voxel saliencies
-    if ( computeVomi || computeVoxelSaliencies )
+    // VoMI + voxel saliencies + viewpoint VoMI
+    if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi )
     {
         if ( computeVomi )
         {
@@ -1115,6 +1119,11 @@ void QExperimental3DExtension::computeSelectedVmi()
         {
             m_voxelSaliencies.resize( nObjects );
             m_maximumSaliency = 0.0f;
+        }
+        if ( computeViewpointVomi )
+        {
+            m_viewpointVomi.resize( nViewpoints );
+            m_viewpointVomi.fill( 0.0f );
         }
 
         /*
@@ -1234,6 +1243,11 @@ void QExperimental3DExtension::computeSelectedVmi()
                         m_voxelSaliencies[i] = saliency;
                         if ( saliency > m_maximumSaliency ) m_maximumSaliency = saliency;
                     }
+
+                    if ( computeViewpointVomi )
+                    {
+                        for ( int k = 0; k < nViewpoints; k++ ) m_viewpointVomi[k] += m_vomi[i] * pVoi[k];
+                    }
                 }
             }
 
@@ -1265,6 +1279,8 @@ void QExperimental3DExtension::computeSelectedVmi()
             m_voxelSalienciesCheckBox->setEnabled( true );
             m_saveVoxelSalienciesPushButton->setEnabled( true );
         }
+
+        if ( computeViewpointVomi ) m_saveViewpointVomiPushButton->setEnabled( true );
     }
 
     DEBUG_LOG( "destruïm els fitxers temporals" );
@@ -1789,6 +1805,96 @@ void QExperimental3DExtension::loadAndRunProgram()
 
         QFileInfo programFileInfo( programFileName );
         settings.setValue( "programDir", programFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::loadViewpointVomi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString viewpointVomiDir = settings.value( "viewpointVomiDir", QString() ).toString();
+    QString viewpointVomiFileName = QFileDialog::getOpenFileName( this, tr("Load viewpoint VoMI"), viewpointVomiDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !viewpointVomiFileName.isNull() )
+    {
+        QFile viewpointVomiFile( viewpointVomiFileName );
+
+        if ( !viewpointVomiFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + viewpointVomiFileName );
+            QMessageBox::warning( this, tr("Can't load viewpoint VoMI"), QString( tr("Can't load viewpoint VoMI from file ") ) + viewpointVomiFileName );
+            return;
+        }
+
+        m_viewpointVomi.clear();
+
+        QDataStream in( &viewpointVomiFile );
+
+        while ( !in.atEnd() )
+        {
+            float viewpointVomi;
+            in >> viewpointVomi;
+            m_viewpointVomi << viewpointVomi;
+        }
+
+        viewpointVomiFile.close();
+
+        QFileInfo viewpointVomiFileInfo( viewpointVomiFileName );
+        settings.setValue( "viewpointVomiDir", viewpointVomiFileInfo.absolutePath() );
+
+        m_saveViewpointVomiPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveViewpointVomi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString viewpointVomiDir = settings.value( "viewpointVomiDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save viewpoint VoMI"), viewpointVomiDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString viewpointVomiFileName = saveDialog.selectedFiles().first();
+        bool saveAsText = viewpointVomiFileName.endsWith( ".txt" );
+        QFile viewpointVomiFile( viewpointVomiFileName );
+        QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+        if ( saveAsText ) mode = mode | QIODevice::Text;
+
+        if ( !viewpointVomiFile.open( mode ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + viewpointVomiFileName );
+            QMessageBox::warning( this, tr("Can't save viewpoint VoMI"), QString( tr("Can't save viewpoint VoMI to file ") ) + viewpointVomiFileName );
+            return;
+        }
+
+        int nViewpoints = m_viewpointVomi.size();
+
+        if ( saveAsText )
+        {
+            QTextStream out( &viewpointVomiFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << "VoMI(v" << i + 1 << ") = " << m_viewpointVomi.at( i ) << "\n";
+        }
+        else
+        {
+            QDataStream out( &viewpointVomiFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << m_viewpointVomi.at( i );
+        }
+
+        viewpointVomiFile.close();
+
+        QFileInfo viewpointVomiFileInfo( viewpointVomiFileName );
+        settings.setValue( "viewpointVomiDir", viewpointVomiFileInfo.absolutePath() );
     }
 
     settings.endGroup();
