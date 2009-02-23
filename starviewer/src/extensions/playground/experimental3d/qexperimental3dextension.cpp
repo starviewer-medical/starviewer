@@ -797,7 +797,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     unsigned int nObjects = m_volume->getSize();
 
     // Dependències
-    if ( computeBestViews && ( m_vmi.size() != nViewpoints || m_vmi.size() == 12 ) ) computeVmi = true; // el 12 és perquè hi ha dos 12 diferents
+    if ( computeBestViews && m_vmi.size() != nViewpoints ) computeVmi = true;
 
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
@@ -1557,11 +1557,95 @@ void QExperimental3DExtension::computeViewpointUnstabilities()
 
 void QExperimental3DExtension::loadBestViews()
 {
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString bestViewsDir = settings.value( "bestViewsDir", QString() ).toString();
+    QString bestViewsFileName = QFileDialog::getOpenFileName( this, tr("Load best views"), bestViewsDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !bestViewsFileName.isNull() )
+    {
+        QFile bestViewsFile( bestViewsFileName );
+
+        if ( !bestViewsFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + bestViewsFileName );
+            QMessageBox::warning( this, tr("Can't load best views"), QString( tr("Can't load best views from file ") ) + bestViewsFileName );
+            return;
+        }
+
+        QDataStream in( &bestViewsFile );
+
+        while ( !in.atEnd() )
+        {
+            int i;
+            Vector3 v;
+            in >> i;
+            in >> v.x >> v.y >> v.z;
+            m_bestViews << qMakePair( i, v );
+        }
+
+        bestViewsFile.close();
+
+        QFileInfo bestViewsFileInfo( bestViewsFileName );
+        settings.setValue( "bestViewsDir", bestViewsFileInfo.absolutePath() );
+
+        m_saveBestViewsPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
 }
 
 
 void QExperimental3DExtension::saveBestViews()
 {
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString bestViewsDir = settings.value( "bestViewsDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save best views"), bestViewsDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString bestViewsFileName = saveDialog.selectedFiles().first();
+        bool saveAsText = bestViewsFileName.endsWith( ".txt" );
+        QFile bestViewsFile( bestViewsFileName );
+        QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+        if ( saveAsText ) mode = mode | QIODevice::Text;
+
+        if ( !bestViewsFile.open( mode ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + bestViewsFileName );
+            QMessageBox::warning( this, tr("Can't save best views"), QString( tr("Can't save best views to file ") ) + bestViewsFileName );
+            return;
+        }
+
+        int nBestViews = m_bestViews.size();
+
+        if ( saveAsText )
+        {
+            QTextStream out( &bestViewsFile );
+            for ( int i = 0; i < nBestViews; i++ ) out << i << ": v" << m_bestViews.at( i ).first + 1 << " " << m_bestViews.at( i ).second.toString() << "\n";
+        }
+        else
+        {
+            QDataStream out( &bestViewsFile );
+            for ( int i = 0; i < nBestViews; i++ )
+            {
+                const Vector3 &v = m_bestViews.at( i ).second;
+                out << m_bestViews.at( i ).first << v.x << v.y << v.z;
+            }
+        }
+
+        bestViewsFile.close();
+
+        QFileInfo bestViewsFileInfo( bestViewsFileName );
+        settings.setValue( "bestViewsDir", bestViewsFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
 }
 
 
