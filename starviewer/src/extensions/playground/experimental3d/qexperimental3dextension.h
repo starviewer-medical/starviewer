@@ -5,6 +5,9 @@
 #include "ui_qexperimental3dextensionbase.h"
 
 
+class QTemporaryFile;
+
+
 namespace udg {
 
 
@@ -35,6 +38,9 @@ private:
     void createConnections();
 
     void loadTransferFunction( const QString &fileName );
+
+    /// Fa el ray casting pels mètodes de VMI. Rep la llista de punts de vista i els fitxers corresponents. Omple el volum vist per cada vista i retorna el volum total vist.
+    float vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView );
 
 private slots:
 
