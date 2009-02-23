@@ -831,20 +831,7 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     // p(V)
     {
-        if ( totalViewedVolume > 0.0f )
-        {
-            m_vmiProgressBar->setValue( 0 );
-
-            for ( int i = 0; i < nViewpoints; i++ )
-            {
-                viewProbabilities[i] /= totalViewedVolume;
-                Q_ASSERT( viewProbabilities.at( i ) == viewProbabilities.at( i ) );
-                DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
-                m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-                m_vmiProgressBar->repaint();
-            }
-        }
-
+        normalizeViewProbabilities( viewProbabilities, totalViewedVolume );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
     }
@@ -1292,6 +1279,26 @@ float QExperimental3DExtension::vmiRayCasting( const QVector<Vector3> &viewpoint
     }
 
     return totalViewedVolume;
+}
+
+
+void QExperimental3DExtension::normalizeViewProbabilities( QVector<float> &viewProbabilities, float totalViewedVolume )
+{
+    if ( totalViewedVolume > 0.0f )
+    {
+        int nViewpoints = viewProbabilities.size();
+
+        m_vmiProgressBar->setValue( 0 );
+
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            viewProbabilities[i] /= totalViewedVolume;
+            Q_ASSERT( viewProbabilities.at( i ) == viewProbabilities.at( i ) );
+            DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
+            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+            m_vmiProgressBar->repaint();
+        }
+    }
 }
 
 

@@ -41,6 +41,8 @@ private:
 
     /// Fa el ray casting pels mètodes de VMI. Rep la llista de punts de vista i els fitxers corresponents. Omple el volum vist per cada vista i retorna el volum total vist.
     float vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView );
+    /// Normalitza les probabilitats de les vistes dividint-les per \a totalViewedVolume.
+    void normalizeViewProbabilities( QVector<float> &viewProbabilities, float totalViewedVolume );
 
 private slots:
 
