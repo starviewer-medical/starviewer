@@ -172,7 +172,15 @@ void StarviewerSettings::setMaxConnections( QString maxConn )
 
 QString StarviewerSettings::getAETitleMachine()
 {
-    return m_starviewerSettings.value( GroupSettingsName + AETitleMachineKey , QHostInfo::localHostName() ).toString();
+	QString aetitle = m_starviewerSettings.value( GroupSettingsName + AETitleMachineKey , QHostInfo::localHostName() ).toString(); 
+
+	if( aetitle.length() > 16 )
+	{
+		aetitle.truncate(16);
+		ERROR_LOG(QString("S'ha truncat l'AETitle %1 a 16 caràcters: %2").arg( m_starviewerSettings.value( GroupSettingsName + AETitleMachineKey , QHostInfo::localHostName() ).toString()).arg(aetitle));
+	}
+
+    return aetitle;
 }
 
 QString StarviewerSettings::getTimeout()
