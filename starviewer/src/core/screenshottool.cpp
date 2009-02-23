@@ -66,6 +66,16 @@ void ScreenShotTool::handleEvent( unsigned long eventID )
     }
 }
 
+void ScreenShotTool::singleCapture()
+{
+    screenShot(true);
+}
+        
+void ScreenShotTool::completeCapture()
+{
+    screenShot(false);
+}
+
 void ScreenShotTool::screenShot( bool singleShot )
 {
     readSettings();

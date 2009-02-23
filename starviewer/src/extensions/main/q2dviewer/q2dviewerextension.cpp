@@ -21,6 +21,11 @@
 #include "qdicomdump.h"
 #include "hangingprotocolmanager.h"
 
+// per poder fer screenshots desde menú
+#include "screenshottool.h" 
+#include "toolproxy.h"
+
+#include <QMenu>
 #include <QAction>
 #include <QSettings>
 #include <QPoint>
@@ -396,7 +401,6 @@ void Q2DViewerExtension::initializeTools()
     m_translateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
     m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
-    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
     m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction( "DistanceTool" ) );
     m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction( "EraserTool" ) );
@@ -428,7 +432,6 @@ void Q2DViewerExtension::initializeTools()
     m_slicingToolButton->defaultAction()->trigger();
     m_translateToolButton->defaultAction()->trigger();
     m_windowLevelToolButton->defaultAction()->trigger();
-    m_screenShotToolButton->defaultAction()->trigger();
 
     // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
     m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
@@ -436,6 +439,35 @@ void Q2DViewerExtension::initializeTools()
     //TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     //sincronització no té el model de totes les tools
     connect( m_cursor3DToolButton->defaultAction() , SIGNAL( triggered() ) , SLOT( disableSynchronization() ) );
+
+    // SCREEN SHOT TOOL
+    // activem l'eina d'screen shot, que sempre estarà activa
+    m_screenShotTriggerAction = m_toolManager->getToolAction("ScreenShotTool");
+    m_screenShotTriggerAction->setChecked(true);
+    // fem que l'screen shot sigui una mica més acessible afegint-li un menú en el que podem escollir quina acció realitzar
+    // d'alguna manera tot això són una mica uns HACKS ja que el mecanisme de funcionament d'aquesta tool és una mica diferent
+    // i caldria tenir en compte tools d'aquests tipus per donar-li cabuda en la infraestructura de tools.
+    m_screenShotToolButton->setPopupMode( QToolButton::InstantPopup );
+    m_screenShotToolButton->setCheckable(false);
+    m_singleShotAction = new QAction( this );
+    m_singleShotAction->setText( tr("Save current series image") );
+    m_singleShotAction->setShortcut( Qt::CTRL + Qt::Key_S );
+    m_singleShotAction->setToolTip( tr("Save the current image in a standard image format") );
+    
+    m_multipleShotAction = new QAction( this );
+    m_multipleShotAction->setText( tr("Save all images from current series") );
+    m_multipleShotAction->setToolTip( tr("Save all the images in the selected viewer in a standard image format") );
+    m_multipleShotAction->setShortcut( Qt::CTRL + Qt::Key_A );    
+    
+    QMenu *screenShotMenu = new QMenu(this);
+    m_screenShotToolButton->setMenu( screenShotMenu );
+    
+    screenShotMenu->addAction( m_singleShotAction );
+    screenShotMenu->addAction( m_multipleShotAction );
+
+    m_screenShotToolButton->setIcon( m_screenShotTriggerAction->icon() );
+    m_screenShotToolButton->setToolTip( m_screenShotTriggerAction->toolTip() );
+    m_screenShotToolButton->setText( m_screenShotTriggerAction->text() );
 }
 
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
@@ -474,6 +506,10 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
         {
             disconnect( m_lastSelectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
             disconnect( m_lastSelectedViewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
+            // és necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
+            ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>( m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool") );
+            disconnect( m_singleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( singleCapture() ) );
+            disconnect( m_multipleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( completeCapture() ) );
         }
         m_lastSelectedViewer = viewerWidget;
         Q2DViewer *selected2DViewer = viewerWidget->getViewer();
@@ -481,6 +517,13 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
         validePhases();
         connect( viewerWidget->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
         connect( viewerWidget->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
+        // és necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
+        ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>( viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool") );
+        if( screenShotTool )
+        {
+            connect( m_singleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( singleCapture() ) );
+            connect( m_multipleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( completeCapture() ) );
+        }
 
         // TODO potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
         // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal

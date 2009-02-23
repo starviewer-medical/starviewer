@@ -17,7 +17,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class ToolsActionFactory;
 class Q2DViewerKeyImageNoteAttacher;
 class Q2DViewerPresentationStateAttacher;
 class KeyImageNote;
@@ -159,11 +158,11 @@ private:
     QAction *m_rotateCounterClockWiseAction;
     QAction *m_flipHorizontalAction;
     QAction *m_flipVerticalAction;
-    QAction *m_distanceAction;
-    QAction *m_roiAction;
-    ToolsActionFactory *m_actionFactory;
-
     QAction *m_presentationStateAction;
+    QAction *m_singleShotAction;
+    QAction *m_multipleShotAction;
+    QAction *m_screenShotTriggerAction;
+
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
 

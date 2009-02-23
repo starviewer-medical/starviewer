@@ -36,6 +36,13 @@ public:
 
     void handleEvent( unsigned long eventID );
 
+public slots:
+    /// Només fa captura de la imatge actual
+    void singleCapture();
+
+    /// Fa captura de totes les imatges que pot mostrar el visualitzador
+    void completeCapture();
+
 private slots:
     /// Fa la captura d'imatge del viewer
     /// Si single és true fa la captura del que s'està veient, sinó ho fa per totes en cas que sigui un 2DViewer
