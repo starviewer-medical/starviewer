@@ -804,7 +804,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     }
 
     QVector<float> viewProbabilities( nViewpoints );    // vector p(V), inicialitzat a 0
-    QVector<float> objectProbabilities( nObjects );     // vector p(O), inicialitzat a 0
+    QVector<float> objectProbabilities;                 // vector p(O)
     QVector<QTemporaryFile*> pOvFiles( nViewpoints );   // matriu p(O|V) (cada fitxer una fila p(O|v))
     {
         for ( int i = 0; i < nViewpoints; i++ )
@@ -838,35 +838,9 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     // p(O)
     {
-        m_vmiProgressBar->setValue( 0 );
-
-        float *objectProbabilitiesInView = new float[nObjects]; // vector p(O|v)
-
-        for ( int i = 0; i < nViewpoints; i++ )
-        {
-            pOvFiles[i]->reset();   // reset per tornar al principi
-            pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView ), nObjects * sizeof(float) );    // llegim...
-            pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-            for ( unsigned int j = 0; j < nObjects; j++ )
-            {
-                objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j];
-            }
-
-            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-            m_vmiProgressBar->repaint();
-        }
-
+        objectProbabilities = getObjectProbabilities( viewProbabilities, pOvFiles );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
-
-        for ( unsigned int i = 0; i < nObjects; i++ )
-        {
-            Q_ASSERT( objectProbabilities.at( i ) == objectProbabilities.at( i ) );
-            //DEBUG_LOG( QString( "p(o%1) = %2" ).arg( i ).arg( objectProbabilities.at( i ) ) );
-        }
-
-        delete[] objectProbabilitiesInView;
     }
 
     // VMI
@@ -1299,6 +1273,35 @@ void QExperimental3DExtension::normalizeViewProbabilities( QVector<float> &viewP
             m_vmiProgressBar->repaint();
         }
     }
+}
+
+
+QVector<float> QExperimental3DExtension::getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles )
+{
+    int nViewpoints = viewProbabilities.size();
+    unsigned int nObjects = m_volume->getSize();
+    QVector<float> objectProbabilities( nObjects ); // vector p(O), inicialitzat a 0
+    float *objectProbabilitiesInView = new float[nObjects]; // vector p(O|v)
+
+    m_vmiProgressBar->setValue( 0 );
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        pOvFiles[i]->reset();   // reset per tornar al principi
+        pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView ), nObjects * sizeof(float) );    // llegim...
+        pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+        for ( unsigned int j = 0; j < nObjects; j++ ) objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j];
+
+        m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+        m_vmiProgressBar->repaint();
+    }
+
+    delete[] objectProbabilitiesInView;
+
+    for ( unsigned int j = 0; j < nObjects; j++ ) Q_ASSERT( objectProbabilities.at( j ) == objectProbabilities.at( j ) );
+
+    return objectProbabilities;
 }
 
 
