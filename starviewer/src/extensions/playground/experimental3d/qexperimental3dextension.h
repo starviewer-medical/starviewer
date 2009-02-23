@@ -94,6 +94,8 @@ private slots:
     void saveVmi();
     /// Calcula les inestabilitats dels punts de vista seleccionats.
     void computeViewpointUnstabilities();
+    void loadViewpointUnstabilities();
+    void saveViewpointUnstabilities();
     void loadBestViews();
     void saveBestViews();
     void loadVomi();
@@ -114,6 +116,7 @@ private:
     Obscurance *m_obscurance;
 
     QVector<float> m_vmi;
+    QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_bestViews;
     QVector<float> m_vomi;
     float m_maximumVomi;
