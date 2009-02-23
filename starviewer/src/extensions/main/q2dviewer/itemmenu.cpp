@@ -41,7 +41,7 @@ bool ItemMenu::event( QEvent * event )
     else if ( event->type() == QEvent::MouseButtonPress )
     {
         QPalette palette = this->palette();
-        QBrush selected( QColor( 255, 0, 0, 255 ) );
+        QBrush selected( QColor( 85, 160, 255, 128 ) );
         selected.setStyle( Qt::SolidPattern );
         palette.setBrush( QPalette::Active, QPalette::Window, selected );
         setPalette( palette );
