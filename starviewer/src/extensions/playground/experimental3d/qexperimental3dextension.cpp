@@ -803,8 +803,6 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->repaint();
     }
 
-    m_volume->startVmiMode();
-
     QVector<float> viewProbabilities( nViewpoints );    // vector p(V), inicialitzat a 0
     QVector<float> objectProbabilities( nObjects );     // vector p(O), inicialitzat a 0
     QVector<QTemporaryFile*> pOvFiles( nViewpoints );   // matriu p(O|V) (cada fitxer una fila p(O|v))
@@ -822,31 +820,11 @@ void QExperimental3DExtension::computeSelectedVmi()
         }
     }
 
-    float totalViewedVolume = 0.0f;
+    float totalViewedVolume;
 
     // p(O|V) (i acumulació de p(V))
     {
-        m_vmiProgressBar->setValue( 0 );
-        m_vmiProgressBar->repaint();
-
-        for ( int i = 0; i < nViewpoints; i++ )
-        {
-            m_volume->startVmiSecondPass();
-            setViewpoint( viewpoints.at( i ) ); // render
-            QVector<float> objectProbabilitiesInView = m_volume->finishVmiSecondPass();
-
-            // p(V)
-            float viewedVolume = m_volume->viewedVolumeInVmiSecondPass();
-            viewProbabilities[i] = viewedVolume;
-            totalViewedVolume += viewedVolume;
-
-            // p(O|V)
-            pOvFiles[i]->write( reinterpret_cast<const char*>( objectProbabilitiesInView.data() ), objectProbabilitiesInView.size() * sizeof(float) );
-
-            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-            m_vmiProgressBar->repaint();
-        }
-
+        totalViewedVolume = vmiRayCasting( viewpoints, pOvFiles, viewProbabilities );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
     }
@@ -1282,6 +1260,38 @@ void QExperimental3DExtension::computeSelectedVmi()
     DEBUG_LOG( "fi" );
 
     setCursor( QCursor( Qt::ArrowCursor ) );
+}
+
+
+float QExperimental3DExtension::vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView )
+{
+    int nViewpoints = viewpoints.size();
+    float totalViewedVolume = 0.0f;
+
+    m_vmiProgressBar->setValue( 0 );
+    m_vmiProgressBar->repaint();
+
+    m_volume->startVmiMode();
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        m_volume->startVmiSecondPass();
+        setViewpoint( viewpoints.at( i ) ); // render
+        QVector<float> objectProbabilitiesInView = m_volume->finishVmiSecondPass(); // p(O|v)
+
+        // p(V)
+        float viewedVolume = m_volume->viewedVolumeInVmiSecondPass();
+        viewedVolumePerView[i] = viewedVolume;
+        totalViewedVolume += viewedVolume;
+
+        // p(O|V)
+        pOvFiles.at( i )->write( reinterpret_cast<const char*>( objectProbabilitiesInView.data() ), objectProbabilitiesInView.size() * sizeof(float) );
+
+        m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+        m_vmiProgressBar->repaint();
+    }
+
+    return totalViewedVolume;
 }
 
 
