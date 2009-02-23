@@ -117,7 +117,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
-    connect( m_viewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( computeViewpointUnstabilities() ) );
+    connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
+    connect( m_saveViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( saveViewpointUnstabilities() ) );
     connect( m_loadBestViewsPushButton, SIGNAL( clicked() ), SLOT( loadBestViews() ) );
     connect( m_saveBestViewsPushButton, SIGNAL( clicked() ), SLOT( saveBestViews() ) );
     connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
@@ -760,12 +761,13 @@ void QExperimental3DExtension::computeSelectedVmi()
 {
     // Què ha demanat l'usuari
     bool computeVmi = m_computeVmiCheckBox->isChecked();
+    bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesCheckBox->isChecked();
     bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeVoxelSaliencies = m_computeVoxelSalienciesCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeVmi && !computeBestViews && !computeVomi && !computeVoxelSaliencies ) return;
+    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeVomi && !computeVoxelSaliencies ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -801,7 +803,7 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
-    if ( computeVmi ) nSteps++; // VMI
+    if ( computeVmi || computeViewpointUnstabilities ) nSteps++;    // VMI + viewpoint unstabilities
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeVomi || computeVoxelSaliencies ) nSteps ++; //VoMI + voxel saliencies
     int step = 0;
@@ -915,13 +917,14 @@ void QExperimental3DExtension::computeSelectedVmi()
     }
 
     // VMI
-    if ( computeVmi )
+    if ( computeVmi || computeViewpointUnstabilities )
     {
-        m_vmi.resize( nViewpoints );
+        if ( computeVmi ) m_vmi.resize( nViewpoints );
+        if ( computeViewpointUnstabilities ) m_viewpointUnstabilities.resize( nViewpoints );
 
         m_vmiProgressBar->setValue( 0 );
 
-        QVector<float> objectProbabilitiesInView( nObjects );   // vector p(O|v)
+        QVector<float> objectProbabilitiesInView( nObjects );   // vector p(O|vi)
 
         for ( int i = 0; i < nViewpoints; i++ )
         {
@@ -929,10 +932,44 @@ void QExperimental3DExtension::computeSelectedVmi()
             pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView.data() ), nObjects * sizeof(float) ); // llegim...
             pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
 
-            float vmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, objectProbabilities );
-            Q_ASSERT( vmi == vmi );
-            m_vmi[i] = vmi;
-            DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
+            if ( computeVmi )
+            {
+                float vmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, objectProbabilities );
+                Q_ASSERT( vmi == vmi );
+                m_vmi[i] = vmi;
+                DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
+            }
+
+            if ( computeViewpointUnstabilities )
+            {
+                float pvi = viewProbabilities.at( i );  // p(vi)
+
+                QVector<int> neighbours = viewpointGenerator.neighbours( i );
+                int nNeighbours = neighbours.size();
+                float viewpointUnstability = 0.0f;
+                QVector<float> objectProbabilitiesInNeighbour( nObjects );  // vector p(O|vj)
+
+                for ( int j = 0; j < nNeighbours; j++ )
+                {
+                    int neighbour = neighbours.at( j );
+                    DEBUG_LOG( QString( "-v%1" ).arg( neighbour + 1 ) );
+
+                    float pvj = viewProbabilities.at( neighbour );  // p(vj)
+                    float pvij = pvi + pvj; // p(v̂)
+
+                    if ( pvij == 0.0f ) continue;
+
+                    pOvFiles[neighbour]->reset();   // reset per tornar al principi
+                    pOvFiles[neighbour]->read( reinterpret_cast<char*>( objectProbabilitiesInNeighbour.data() ), nObjects * sizeof(float) );    // llegim...
+                    pOvFiles[neighbour]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+                    float viewpointDissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, objectProbabilitiesInView, objectProbabilitiesInNeighbour );
+                    viewpointUnstability += viewpointDissimilarity;
+                }
+
+                viewpointUnstability /= nNeighbours;
+                m_viewpointUnstabilities[i] = viewpointUnstability;
+            }
 
             m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
             m_vmiProgressBar->repaint();
@@ -941,7 +978,8 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
 
-        m_saveVmiPushButton->setEnabled( true );
+        if ( computeVmi ) m_saveVmiPushButton->setEnabled( true );
+        if ( computeViewpointUnstabilities ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
     }
 
     if ( computeBestViews )
@@ -1183,10 +1221,10 @@ void QExperimental3DExtension::computeSelectedVmi()
                             Q_ASSERT( poj == poj );
                             float poij = poi + poj; // p(ô)
 
-                            if ( poij == 0.0 ) continue;
+                            if ( poij == 0.0f ) continue;
 
                             // p(V|oj)
-                            if ( poj == 0.0 ) pVoj.fill( 0.0f );    // si p(oj) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oj) ha de ser tot zeros
+                            if ( poj == 0.0f ) pVoj.fill( 0.0f );   // si p(oj) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oj) ha de ser tot zeros
                             else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = viewProbabilities.at( k ) * pOV[k][neighbours[j] - pOvShift] / poj;
 
                             float s = weights[j] * InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
@@ -1364,6 +1402,8 @@ void QExperimental3DExtension::loadVmi()
             QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + vmiFileName );
             return;
         }
+
+        m_vmi.clear();
 
         QDataStream in( &vmiFile );
 
@@ -1555,6 +1595,96 @@ void QExperimental3DExtension::computeViewpointUnstabilities()
 }
 
 
+void QExperimental3DExtension::loadViewpointUnstabilities()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString viewpointUnstabilitiesDir = settings.value( "viewpointUnstabilitiesDir", QString() ).toString();
+    QString viewpointUnstabilitiesFileName = QFileDialog::getOpenFileName( this, tr("Load viewpoint unstabilities"), viewpointUnstabilitiesDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !viewpointUnstabilitiesFileName.isNull() )
+    {
+        QFile viewpointUnstabilitiesFile( viewpointUnstabilitiesFileName );
+
+        if ( !viewpointUnstabilitiesFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + viewpointUnstabilitiesFileName );
+            QMessageBox::warning( this, tr("Can't load viewpoint unstabilities"), QString( tr("Can't load viewpoint unstabilities from file ") ) + viewpointUnstabilitiesFileName );
+            return;
+        }
+
+        m_viewpointUnstabilities.clear();
+
+        QDataStream in( &viewpointUnstabilitiesFile );
+
+        while ( !in.atEnd() )
+        {
+            float viewpointUnstabilities;
+            in >> viewpointUnstabilities;
+            m_viewpointUnstabilities << viewpointUnstabilities;
+        }
+
+        viewpointUnstabilitiesFile.close();
+
+        QFileInfo viewpointUnstabilitiesFileInfo( viewpointUnstabilitiesFileName );
+        settings.setValue( "viewpointUnstabilitiesDir", viewpointUnstabilitiesFileInfo.absolutePath() );
+
+        m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveViewpointUnstabilities()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString viewpointUnstabilitiesDir = settings.value( "viewpointUnstabilitiesDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save viewpoint unstabilities"), viewpointUnstabilitiesDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString viewpointUnstabilitiesFileName = saveDialog.selectedFiles().first();
+        bool saveAsText = viewpointUnstabilitiesFileName.endsWith( ".txt" );
+        QFile viewpointUnstabilitiesFile( viewpointUnstabilitiesFileName );
+        QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+        if ( saveAsText ) mode = mode | QIODevice::Text;
+
+        if ( !viewpointUnstabilitiesFile.open( mode ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + viewpointUnstabilitiesFileName );
+            QMessageBox::warning( this, tr("Can't save viewpoint unstabilities"), QString( tr("Can't save viewpoint unstabilities to file ") ) + viewpointUnstabilitiesFileName );
+            return;
+        }
+
+        int nViewpoints = m_viewpointUnstabilities.size();
+
+        if ( saveAsText )
+        {
+            QTextStream out( &viewpointUnstabilitiesFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << "U(v" << i + 1 << ") = " << m_viewpointUnstabilities.at( i ) << "\n";
+        }
+        else
+        {
+            QDataStream out( &viewpointUnstabilitiesFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << m_viewpointUnstabilities.at( i );
+        }
+
+        viewpointUnstabilitiesFile.close();
+
+        QFileInfo viewpointUnstabilitiesFileInfo( viewpointUnstabilitiesFileName );
+        settings.setValue( "viewpointUnstabilitiesDir", viewpointUnstabilitiesFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
 void QExperimental3DExtension::loadBestViews()
 {
     QSettings settings;
@@ -1573,6 +1703,8 @@ void QExperimental3DExtension::loadBestViews()
             QMessageBox::warning( this, tr("Can't load best views"), QString( tr("Can't load best views from file ") ) + bestViewsFileName );
             return;
         }
+
+        m_bestViews.clear();
 
         QDataStream in( &bestViewsFile );
 
