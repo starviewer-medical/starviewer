@@ -259,6 +259,7 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 			}
 		}
 	}
+	layout->getViewerSelected()->update();
 }
 
 bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patient)
