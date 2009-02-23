@@ -59,7 +59,7 @@
       <string/>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3" >
       <attribute name="title" >
@@ -564,7 +564,11 @@
             <widget class="QLineEdit" name="m_textTimeout" />
            </item>
            <item row="0" column="1" >
-            <widget class="QLineEdit" name="m_textAETitleMachine" />
+            <widget class="QLineEdit" name="m_textAETitleMachine" >
+             <property name="maxLength" >
+              <number>16</number>
+             </property>
+            </widget>
            </item>
            <item row="1" column="4" >
             <widget class="QLineEdit" name="m_textMaxConnections" />
