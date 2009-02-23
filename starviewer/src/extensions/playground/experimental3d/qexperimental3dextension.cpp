@@ -97,6 +97,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_cameraSavePushButton, SIGNAL( clicked() ), SLOT( saveCamera() ) );
     connect( m_cameraViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setNumberOfViewpoints(int) ) );
     connect( m_viewpointPushButton, SIGNAL( clicked() ), SLOT( setViewpoint() ) );
+    connect( m_tourPushButton, SIGNAL( clicked() ), SLOT( tour() ) );
 
     // obscurances
     connect( m_obscurancePushButton, SIGNAL( clicked() ), SLOT( computeCancelObscurance() ) );
@@ -142,6 +143,18 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
 
     m_transferFunctionEditor->setTransferFunction( *transferFunction );
     delete transferFunction;
+}
+
+
+void QExperimental3DExtension::tour( const QList<Vector3> &viewpoints )
+{
+    DEBUG_LOG( "Tour:" );
+
+    for ( int i = 0; i < viewpoints.size(); i++ )
+    {
+        DEBUG_LOG( viewpoints.at( i ).toString() );
+        setViewpoint( viewpoints.at( i ) );
+    }
 }
 
 
@@ -430,6 +443,27 @@ void QExperimental3DExtension::setViewpoint( const Vector3 &viewpoint )
     if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
 
     m_viewer->setCamera( viewpoint, Vector3(), up );
+}
+
+
+void QExperimental3DExtension::tour()
+{
+    Vector3 position, focus, up;
+    m_viewer->getCamera( position, focus, up );
+    float distance = ( position - focus ).length();
+    ViewpointGenerator viewpointGenerator = m_cameraViewpointDistributionWidget->viewpointGenerator( distance );
+    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+
+    QStringList indices = m_tourLineEdit->text().split( ',' );
+    QList<Vector3> tourViewpoints;
+
+    for ( int i = 0; i < indices.size(); i++ )
+    {
+        int index = indices.at( i ).toInt() - 1;
+        if ( index >= 0 && index < viewpoints.size() ) tourViewpoints << viewpoints.at( i );
+    }
+
+    tour( tourViewpoints );
 }
 
 
@@ -1751,72 +1785,6 @@ void QExperimental3DExtension::saveVoxelSaliencies()
 }
 
 
-void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
-{
-    if ( checked ) m_vomiCheckBox->setChecked( false );
-}
-
-
-void QExperimental3DExtension::loadAndRunProgram()
-{
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
-
-    QString programDir = settings.value( "programDir", QString() ).toString();
-    QString programFileName = QFileDialog::getOpenFileName( this, tr("Load program"), programDir, tr("Text files (*.txt);;All files (*)") );
-
-    if ( !programFileName.isNull() )
-    {
-        QFile programFile( programFileName );
-
-        if ( !programFile.open( QFile::ReadOnly | QFile::Text ) )
-        {
-            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + programFileName );
-            QMessageBox::warning( this, tr("Can't load program"), QString( tr("Can't load program from file ") ) + programFileName );
-            return;
-        }
-
-        QTextStream in( &programFile );
-
-        while ( !in.atEnd() )
-        {
-            QString line = in.readLine();
-            QStringList words = line.split( ' ', QString::SkipEmptyParts );
-
-            if ( words.isEmpty() ) continue;
-
-            QString command = words.at( 0 );
-
-            if ( command == "tf-load" )
-            {
-                if ( words.size() >= 2 ) loadTransferFunction( words.at( 1 ) );
-                else
-                {
-                    DEBUG_LOG( "[E3DP] Falta el nom del fitxer: " + line );
-                    ERROR_LOG( "[E3DP] Falta el nom del fitxer: " + line );
-                }
-            }
-            else if ( command == "visualization-ok" )
-            {
-                doVisualization();
-            }
-            else
-            {
-                DEBUG_LOG( "[E3DP] Ordre desconeguda: " + line );
-                ERROR_LOG( "[E3DP] Ordre desconeguda: " + line );
-            }
-        }
-
-        programFile.close();
-
-        QFileInfo programFileInfo( programFileName );
-        settings.setValue( "programDir", programFileInfo.absolutePath() );
-    }
-
-    settings.endGroup();
-}
-
-
 void QExperimental3DExtension::loadViewpointVomi()
 {
     QSettings settings;
@@ -1901,6 +1869,72 @@ void QExperimental3DExtension::saveViewpointVomi()
 
         QFileInfo viewpointVomiFileInfo( viewpointVomiFileName );
         settings.setValue( "viewpointVomiDir", viewpointVomiFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
+{
+    if ( checked ) m_vomiCheckBox->setChecked( false );
+}
+
+
+void QExperimental3DExtension::loadAndRunProgram()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString programDir = settings.value( "programDir", QString() ).toString();
+    QString programFileName = QFileDialog::getOpenFileName( this, tr("Load program"), programDir, tr("Text files (*.txt);;All files (*)") );
+
+    if ( !programFileName.isNull() )
+    {
+        QFile programFile( programFileName );
+
+        if ( !programFile.open( QFile::ReadOnly | QFile::Text ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + programFileName );
+            QMessageBox::warning( this, tr("Can't load program"), QString( tr("Can't load program from file ") ) + programFileName );
+            return;
+        }
+
+        QTextStream in( &programFile );
+
+        while ( !in.atEnd() )
+        {
+            QString line = in.readLine();
+            QStringList words = line.split( ' ', QString::SkipEmptyParts );
+
+            if ( words.isEmpty() ) continue;
+
+            QString command = words.at( 0 );
+
+            if ( command == "tf-load" )
+            {
+                if ( words.size() >= 2 ) loadTransferFunction( words.at( 1 ) );
+                else
+                {
+                    DEBUG_LOG( "[E3DP] Falta el nom del fitxer: " + line );
+                    ERROR_LOG( "[E3DP] Falta el nom del fitxer: " + line );
+                }
+            }
+            else if ( command == "visualization-ok" )
+            {
+                doVisualization();
+            }
+            else
+            {
+                DEBUG_LOG( "[E3DP] Ordre desconeguda: " + line );
+                ERROR_LOG( "[E3DP] Ordre desconeguda: " + line );
+            }
+        }
+
+        programFile.close();
+
+        QFileInfo programFileInfo( programFileName );
+        settings.setValue( "programDir", programFileInfo.absolutePath() );
     }
 
     settings.endGroup();

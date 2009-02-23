@@ -39,6 +39,9 @@ private:
 
     void loadTransferFunction( const QString &fileName );
 
+    /// Fa un recorregut pels viewpoints en ordre i amb suavitat.
+    void tour( const QList<Vector3> &viewpoints );
+
     /// Fa el ray casting pels mètodes de VMI. Rep la llista de punts de vista i els fitxers corresponents. Omple el volum vist per cada vista i retorna el volum total vist.
     float vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView );
     /// Normalitza les probabilitats de les vistes dividint-les per \a totalViewedVolume.
@@ -73,6 +76,8 @@ private slots:
     void setViewpoint();
     /// Situa la càmera al punt de vista passat.
     void setViewpoint( const Vector3 &viewpoint );
+    /// Fa un recorregut pels punts de vista triats per l'usuari.
+    void tour();
 
     /// Comença el càlcul de les obscurances si no s'estan calculant i el cancel·la si s'estan calculant.
     void computeCancelObscurance();
