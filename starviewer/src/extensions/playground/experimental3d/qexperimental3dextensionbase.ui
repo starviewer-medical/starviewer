@@ -702,6 +702,20 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11" >
+          <item>
+           <widget class="QLineEdit" name="m_tourLineEdit" />
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_tourPushButton" >
+            <property name="text" >
+             <string>Tour</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <spacer>
           <property name="orientation" >
            <enum>Qt::Vertical</enum>
