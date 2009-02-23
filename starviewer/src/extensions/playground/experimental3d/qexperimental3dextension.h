@@ -99,6 +99,8 @@ private slots:
     void vomiChecked( bool checked );
     void loadVoxelSaliencies();
     void saveVoxelSaliencies();
+    void loadViewpointVomi();
+    void saveViewpointVomi();
     void voxelSalienciesChecked( bool checked );
 
     void loadAndRunProgram();
@@ -118,6 +120,7 @@ private:
     float m_maximumVomi;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
+    QVector<float> m_viewpointVomi;
 
 };
 
