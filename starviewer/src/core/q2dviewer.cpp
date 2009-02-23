@@ -287,19 +287,6 @@ void Q2DViewer::updateRulers()
     }
 }
 
-void Q2DViewer::setupDefaultPipeline()
-{
-    if( m_mainVolume )
-    {
-        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-    }
-}
-
-void Q2DViewer::setupThickSlabPipeline()
-{
-    m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
-}
-
 void Q2DViewer::createScalarBar()
 {
     m_scalarBar = vtkScalarBarActor::New();
@@ -1008,10 +995,8 @@ void Q2DViewer::resetView( CameraOrientationType view )
     // a que cal millorar la interacció amb QThickSlabWidget
     // ara si es posa al final, després de resetCamera, peta
     emit viewChanged( m_lastView );
-
     // thick Slab, li indiquem la direcció de projecció
     m_thickSlabProjectionFilter->SetProjectionDimension( m_lastView );
-
     resetCamera();
 }
 
@@ -2185,8 +2170,8 @@ void Q2DViewer::applyGrayscalePipeline()
 {
     DEBUG_LOG( "*** Grayscale Transform Pipeline Begin ***" );
     DEBUG_LOG( QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
-    .arg( m_mainVolume->getImages()[m_currentSlice]->getBitsAllocated() )
-    .arg( m_mainVolume->getImages()[m_currentSlice]->getBitsStored() )
+    .arg( m_mainVolume->getImages().at(0)->getBitsAllocated() )
+    .arg( m_mainVolume->getImages().at(0)->getBitsStored() )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[0] )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[1] )
     .arg( m_mainVolume->getImages().at(0)->getPixelRepresentation() )
@@ -2220,8 +2205,16 @@ void Q2DViewer::applyGrayscalePipeline()
         {
             if( m_presentationLut ) // modality lut + windowlevel lut + presentation lut
             {
-                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> Window Level LUT -> Presentation LUT -> Output  :: FIRST TRY OF IMPLEMENTATION!");
-                m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                if( isThickSlabActive() )
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> Modality LUT -> Window Level LUT -> Presentation LUT -> Output  :: FIRST TRY OF IMPLEMENTATION!");
+                    m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
+                }
+                else
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> Window Level LUT -> Presentation LUT -> Output  :: FIRST TRY OF IMPLEMENTATION!");
+                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                }
                 m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
                 m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
                 // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
@@ -2241,8 +2234,16 @@ void Q2DViewer::applyGrayscalePipeline()
             }
             else // modality [ + ww/wl ]
             {
-                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> [Window Level] -> Output ");
-                m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                if( isThickSlabActive() )
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> Modality LUT -> [Window Level] -> Output ");
+                    m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
+                }
+                else
+                {
+                    DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> [Window Level] -> Output ");
+                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                }
                 m_windowLevelLUTMapper->SetLookupTable( m_modalityLut );
                 m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
                 // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
@@ -2270,13 +2271,30 @@ void Q2DViewer::applyGrayscalePipeline()
             {
                 if( m_modalityLUTRescale ) // rescale slope + windowlevel lut
                 {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> Window Level LUT -> Output ");
-                    m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
+                    if( isThickSlabActive() )
+                    {
+                        // TODO implementar
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> RescaleSlope -> Window Level LUT -> Output :: NOT IMPLEMENTED YET! ");
+                        //m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
+                    }
+                    else
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> Window Level LUT -> Output ");
+                        m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
+                    }
                 }
                 else // windowlevel lut
                 {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> Window Level LUT -> Output ");
-                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                    if( isThickSlabActive() )
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> Window Level LUT -> Output ");
+                        m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
+                    }
+                    else
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> Window Level LUT -> Output ");
+                        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                    }
                 }
                 m_windowLevelLUTMapper->SetLookupTable( m_windowLevelLut );
                 m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
@@ -2291,14 +2309,30 @@ void Q2DViewer::applyGrayscalePipeline()
             {
                 if( m_modalityLUTRescale ) // rescale slope + [ww/wl +] presentation
                 {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Presentation LUT -> Output ");
-                    m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
+                    if( isThickSlabActive() )
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> RescaleSlope -> [Window Level] -> Presentation LUT -> Output ");
+                        m_modalityLUTRescale->SetInput( m_thickSlabProjectionFilter->GetOutput() );
+                    }
+                    else
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Presentation LUT -> Output ");
+                        m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
+                    }
                     m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
                 }
                 else // [ww/wl +] presentation
                 {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Presentation LUT -> Output ");
-                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                    if( isThickSlabActive() )
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Presentation LUT -> Output ");
+                        m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
+                    }
+                    else
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Presentation LUT -> Output ");
+                        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                    }
                 }
                 m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
                 // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
@@ -2310,17 +2344,32 @@ void Q2DViewer::applyGrayscalePipeline()
             {
                 if( m_modalityLUTRescale ) // rescale slope
                 {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Output ");
-//                     m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
+                    if( isThickSlabActive() )
+                    {
+                        // TODO implementar
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> RescaleSlope -> [Window Level] -> Output :: NOT IMPLEMENTED YET!");
+                    }
+                    else
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Output ");
+    //                     m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
+                    }
                     m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
                 }
-                else // res
+                else // res 
                 {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
-                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                    // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
+                    if( isThickSlabActive() )
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Output ");
+                        m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
+                    }
+                    else
+                    {
+                        DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
+                        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+                    }
                 }
-                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
-                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
                 m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
             }
         }
@@ -2350,18 +2399,20 @@ void Q2DViewer::setSlabThickness( int thickness )
     // TODO comprovar aquest pipeline si és millor calcular ara o més tard
     if( m_slabThickness == 1  && isThickSlabActive() )
     {
-        DEBUG_LOG( "desconnectar" );
-        setupDefaultPipeline();
+        DEBUG_LOG("Desactivem thick Slab i resetejem pipeline normal");
         m_thickSlabActive = false;
+        // resetejem el pipeline
+        applyGrayscalePipeline();
         updateDisplayExtent();
         updateSliceAnnotationInformation();
         this->refresh();
     }
     if ( m_slabThickness > 1 && !isThickSlabActive() ) // la comprovacio es per constuir el pipeline nomes el primer cop
     {
-        DEBUG_LOG( "connectar" );
-        setupThickSlabPipeline();
+        DEBUG_LOG("Activem thick Slab i resetejem pipeline amb thickSlab");
         m_thickSlabActive = true;
+        // resetejem el pipeline
+        applyGrayscalePipeline();
     }
 
     m_lastSlabSlice = m_currentSlice + m_slabThickness - 1;
@@ -2486,7 +2537,12 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
         // TODO podríem aplicar newSlabThickness=m_maxSliceValue+1
         return;
     }
-
+    if( newSlabThickness == 1 )
+    {
+        m_slabThickness = 1;
+        return;
+    }
+    
     int difference = newSlabThickness - m_slabThickness;
     // si la diferència és positiva, augmentem el thickness
     if( difference > 0 )
