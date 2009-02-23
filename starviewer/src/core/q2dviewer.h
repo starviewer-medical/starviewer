@@ -506,10 +506,6 @@ private slots:
     /// Actualitza els rulers
     void updateRulers();
 
-    /// thick slab
-    void setupDefaultPipeline();
-    void setupThickSlabPipeline();
-
 protected:
     /// Renderer principal. S'encarrega de pintar la imatge
     vtkRenderer *m_imageRenderer;
