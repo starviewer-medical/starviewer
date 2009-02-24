@@ -125,6 +125,9 @@ public:
     /// Crea una nova funció de transferència resultat de passar aquesta a un rang [0, 1] des de [minimum, maximum].
     TransferFunction to01( double minimum, double maximum ) const;
 
+    /// Retorna els punts x a l'interval [begin, end].
+    QList<double> getPointsInInterval( double begin, double end ) const;
+
     /// Retorna els punts x a l'interval [x-distance, x+distance].
     QList<double> getPointsNear( double x, double distance ) const;
 
