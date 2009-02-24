@@ -1606,9 +1606,10 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
       case DICOMDIRImporter::Ok :
             break;
         default:
-            message += tr("An unknown error has ocurred importing dicomdir.");
+            message = tr("An unknown error has ocurred importing dicomdir.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+            QMessageBox::critical( this , ApplicationNameString , message );
     }
 }
 
