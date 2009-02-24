@@ -40,7 +40,7 @@ private:
     void loadTransferFunction( const QString &fileName );
 
     /// Fa un recorregut pels viewpoints en ordre i amb suavitat.
-    void tour( const QList<Vector3> &viewpoints );
+    void tour( const QList<Vector3> &viewpoints, double speedFactor = 1.0 );
 
     /// Fa el ray casting pels mètodes de VMI. Rep la llista de punts de vista i els fitxers corresponents. Omple el volum vist per cada vista i retorna el volum total vist.
     float vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView );
