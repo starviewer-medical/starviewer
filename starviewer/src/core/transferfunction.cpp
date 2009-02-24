@@ -363,21 +363,23 @@ TransferFunction TransferFunction::to01( double minimum, double maximum ) const
 }
 
 
+QList<double> TransferFunction::getPointsInInterval( double begin, double end ) const
+{
+    getPoints();    // per actualitzar m_rgba
+
+    QMap<double, QColor>::const_iterator lowerBound = m_rgba.lowerBound( begin );
+    QMap<double, QColor>::const_iterator itEnd = m_rgba.end();
+    QList<double> pointsInInterval;
+
+    while ( lowerBound != itEnd && lowerBound.key() <= end ) pointsInInterval << ( lowerBound++ ).key();
+
+    return pointsInInterval;
+}
+
+
 QList<double> TransferFunction::getPointsNear( double x, double distance ) const
 {
-    getPoints();
-
-    QMap<double, QColor>::const_iterator lowerBound = m_rgba.lowerBound( x - distance );
-    QMap<double, QColor>::const_iterator end = m_rgba.end();
-    double limit = x + distance;
-    QList<double> nearPoints;
-
-    while ( lowerBound != end && lowerBound.key() <= limit )
-    {
-        nearPoints << ( lowerBound++ ).key();
-    }
-
-    return nearPoints;
+    return getPointsInInterval( x - distance, x + distance );
 }
 
 

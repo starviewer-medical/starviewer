@@ -16,7 +16,6 @@ namespace udg {
  * Editor de funcions de transferència gràfic en condicions.
  *
  * \todo - Desfer.
- *       - Moure en grup.
  *       - Millorar la documentació.
  */
 class QBasicGraphicTransferFunctionEditor : public QWidget {
@@ -65,6 +64,7 @@ private:
     void updateColorGradient();
     void drawBackground();
     void drawFunction();
+    void drawSelectionRectangle();
 
     QPointF pixelToFunctionPoint( const QPoint &pixel ) const;
     QPointF functionPointToGraphicPoint( const QPointF &functionPoint ) const;
@@ -75,6 +75,8 @@ private:
     void removePoint( double x );
     void changePointColor( double x, QColor &color );
     void changeCurrentPoint( double x, double y );
+
+    void clearSelection();
 
 private:
 
@@ -91,6 +93,11 @@ private:
     bool m_dragging;
     double m_currentX;
     TransferFunction m_transferFunctionCopy;    // còpia de la funció de transferència necessària per arrossegar punts
+
+    bool m_selecting;
+    QRect m_selectionRectangle;
+    QList<double> m_selectedPoints;
+    QList<double> m_selectedPointsCopy;         // còpia dels punts seleccionats necessària per arrossegar punts
 
 };
 
