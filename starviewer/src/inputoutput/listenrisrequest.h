@@ -9,6 +9,7 @@
 #define UDGLISTENRISREQUEST_H
 
 #include <QObject>
+#include <QThread>
 
 #include "dicommask.h"
 
@@ -17,19 +18,20 @@ class QTcpSocket;
 
 namespace udg {
 
-class QPopUpRisRequestsScreen;
-
-/** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS 
+/** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS i atendre les peticions d'aquests
  *
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class ListenRisRequest : public QObject
+class ListenRisRequest : public QThread
 {
 Q_OBJECT
 public:
 
+    enum ListenRisRequestError { risPortInUse, unknowNetworkError };
+
     ListenRisRequest(QObject *parent = 0);
+    ~ListenRisRequest();
 
     ///Inicia l'escolta de peticions del RIS a través del port que s'ha establet a la configuració
     void listen();
@@ -41,21 +43,24 @@ signals:
 
     ///Signal que indica que s'ha fet una petició per descarregar un estudi
     void requestRetrieveStudy(DicomMask mask);
+    
+    ///Signal que s'emet indicant que s'ha produït un error escoltant peticions al RIS
+    void errorListening(ListenRisRequest::ListenRisRequestError);
 
 private slots:
 
-    ///slot que s'activa quan rebem una nova connexió
-    void newConnection();
-
-    void requestRetrieveStudySlot(DicomMask mask);
+    void run();
 
 private :
 
-	QPopUpRisRequestsScreen *m_popUp;
-    QTcpServer *m_qTcpServer;
+	    ///Indiquem el temps d'espera per llegir la petició del RIS, sinó arriba en aquest temps fem time out
+    static const int msTimeOutToReadData;
 
-    //Mostra l'error que s'ha produït en el socket
-    void showNetworkError();
+    ///Processa la petició rebuda del RIS
+    void processRequest(QString risRequestData);
+
+    //Fa un signal del mètode error indicant el tipus d'error que s'ha produït
+    void networkError(QTcpServer *tcpRISServer);
 };
 
 }

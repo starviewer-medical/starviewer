@@ -70,6 +70,12 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_createDICOMDIRToolButton->hide();
     m_advancedSearchToolButton->hide();
     m_tab->removeTab(1); // tab de "PACS" fora
+#else
+    /*L'engeguem després d'haver fet els connects, no es pot fer abans, perquè per exemple en el cas que tinguem un error
+     *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
+     *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
+     */
+    if (StarviewerSettings().getListenRisRequests()) m_listenRisRequests->listen(); 
 #endif
 }
 
@@ -79,6 +85,8 @@ QueryScreen::~QueryScreen()
      *desapareixen les finestres, però el procés continua viu
      */
     this->close();
+
+    delete m_listenRisRequests;
 }
 
 void QueryScreen::initialize()
@@ -115,10 +123,7 @@ void QueryScreen::initialize()
 
     #ifndef STARVIEWER_LITE
     m_listenRisRequests = new ListenRisRequest(this);
-    if (settings.getListenRisRequests())
-    {
-        m_listenRisRequests->listen();
-    }
+    if (settings.getListenRisRequests()) m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
     #endif
 
 }
@@ -338,6 +343,7 @@ void QueryScreen::createConnections()
 
     #ifndef STARVIEWER_LITE
     connect(m_listenRisRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
+    connect(m_listenRisRequests, SIGNAL(errorListening(ListenRisRequest::ListenRisRequestError)), SLOT(showListenRisRequestError(ListenRisRequest::ListenRisRequestError)));
     #endif
 }
 
@@ -1396,6 +1402,10 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
     DicomMask maskStudyToRetrieve;
     StarviewerSettings settings;
 
+    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRisRequest.getAccessionNumber()); //Mostrem el popUP amb l'accession number
+
+    m_qpopUpRisRequestsScreen->show();
+
     Status state = queryMultiplePacs(maskRisRequest, PacsListDB().queryDefaultPacs(), &multipleQueryStudy);
 
     //Fem els connects per tracta els possibles errors que es poden donar
@@ -1601,6 +1611,26 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
     }
+}
+
+void QueryScreen::showListenRisRequestError(ListenRisRequest::ListenRisRequestError error)
+{
+    QString message;
+    StarviewerSettings settings;
+
+    switch(error)
+    {
+        case ListenRisRequest::risPortInUse :
+            message = tr("Can't listen RIS requests on port %1, the port is used for another application.").arg(settings.getListenPortRisRequests());
+            message += tr("\n\nIf the error has produced when openned new %1's windows, close that window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
+            break;
+        case ListenRisRequest::unknowNetworkError :
+            message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(settings.getListenPortRisRequests());
+            message += tr("\nIf the problem persist contact with an administrator.");
+            break;
+    }
+    
+    QMessageBox::critical(this, ApplicationNameString, message);
 }
 
 };
