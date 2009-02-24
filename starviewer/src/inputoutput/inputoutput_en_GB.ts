@@ -289,12 +289,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="431"/>
+        <location filename="qconfigurationscreenbase.ui" line="435"/>
         <source>Add the new Pacs to the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="441"/>
+        <location filename="qconfigurationscreenbase.ui" line="445"/>
         <source>Update the parameters of the selected Pacs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -324,17 +324,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="333"/>
+        <location filename="qconfigurationscreenbase.ui" line="337"/>
         <source>Port :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="879"/>
+        <location filename="qconfigurationscreenbase.ui" line="887"/>
         <source>Apply Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="471"/>
+        <location filename="qconfigurationscreenbase.ui" line="475"/>
         <source>Local Configuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -369,7 +369,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="873"/>
+        <location filename="qconfigurationscreenbase.ui" line="881"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -379,32 +379,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="396"/>
+        <location filename="qconfigurationscreenbase.ui" line="400"/>
         <source>Institution :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="741"/>
+        <location filename="qconfigurationscreenbase.ui" line="749"/>
         <source>ZIP Code :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="798"/>
+        <location filename="qconfigurationscreenbase.ui" line="806"/>
         <source>Country :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="714"/>
+        <location filename="qconfigurationscreenbase.ui" line="722"/>
         <source>Phone Number :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="379"/>
+        <location filename="qconfigurationscreenbase.ui" line="383"/>
         <source>Location :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="389"/>
+        <location filename="qconfigurationscreenbase.ui" line="393"/>
         <source>Description :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -424,67 +424,67 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="343"/>
+        <location filename="qconfigurationscreenbase.ui" line="347"/>
         <source>Mark as default server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="434"/>
+        <location filename="qconfigurationscreenbase.ui" line="438"/>
         <source>Add as new server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="444"/>
+        <location filename="qconfigurationscreenbase.ui" line="448"/>
         <source>Update configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="483"/>
+        <location filename="qconfigurationscreenbase.ui" line="487"/>
         <source>Local DICOM Configuration:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="552"/>
+        <location filename="qconfigurationscreenbase.ui" line="556"/>
         <source>Incoming connections port :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="559"/>
+        <location filename="qconfigurationscreenbase.ui" line="563"/>
         <source>AETitle Local Machine :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="586"/>
+        <location filename="qconfigurationscreenbase.ui" line="594"/>
         <source>Max. simultaneous connections :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="593"/>
+        <location filename="qconfigurationscreenbase.ui" line="601"/>
         <source>Max. seconds for Timeout:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="649"/>
+        <location filename="qconfigurationscreenbase.ui" line="657"/>
         <source>Local Institution information:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="748"/>
+        <location filename="qconfigurationscreenbase.ui" line="756"/>
         <source>City :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="775"/>
+        <location filename="qconfigurationscreenbase.ui" line="783"/>
         <source>Address: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="805"/>
+        <location filename="qconfigurationscreenbase.ui" line="813"/>
         <source>Institution:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="812"/>
+        <location filename="qconfigurationscreenbase.ui" line="820"/>
         <source>EMail :</source>
         <translation type="unfinished"></translation>
     </message>
@@ -644,19 +644,6 @@
     </message>
 </context>
 <context>
-    <name>QPopUpRisRequestsScreenBase</name>
-    <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="104"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="288"/>
-        <source>Starviewer will proceed to retrieve it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>udg::ConvertToDicomdir</name>
     <message>
         <location filename="converttodicomdir.cpp" line="133"/>
@@ -696,34 +683,6 @@
         <source>%1 can&apos;t repair database, it will be reinstalled.
 
 All local studies retrieved and imported will be deleted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::ListenRisRequest</name>
-    <message>
-        <location filename="listenrisrequest.cpp" line="80"/>
-        <source>Can&apos;t listen RIS requests on port %1, the port is used for another application.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="listenrisrequest.cpp" line="81"/>
-        <source>
-
-If the error has produced when openned new %1&apos;s windows, close that window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="listenrisrequest.cpp" line="85"/>
-        <source>Can&apos;t listen RIS requests on port %1, an unknow network error has produced.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="listenrisrequest.cpp" line="87"/>
-        <source>
-
-Close all %1 windows and try again.
-If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -809,180 +768,180 @@ Be sure that the IP and AETitle of the PACS are correct.</source>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="296"/>
+        <location filename="qcreatedicomdir.cpp" line="293"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="296"/>
+        <location filename="qcreatedicomdir.cpp" line="293"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="294"/>
+        <location filename="qcreatedicomdir.cpp" line="291"/>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="301"/>
+        <location filename="qcreatedicomdir.cpp" line="298"/>
         <source>Can&apos;t create the directory. Please check users permissions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="442"/>
+        <location filename="qcreatedicomdir.cpp" line="439"/>
         <source>Please select a study to remove of the list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="74"/>
+        <location filename="qcreatedicomdir.cpp" line="71"/>
         <source>CD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="75"/>
+        <location filename="qcreatedicomdir.cpp" line="72"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="83"/>
+        <location filename="qcreatedicomdir.cpp" line="80"/>
         <source>DVD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="84"/>
+        <location filename="qcreatedicomdir.cpp" line="81"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="92"/>
+        <location filename="qcreatedicomdir.cpp" line="89"/>
         <source>Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="93"/>
+        <location filename="qcreatedicomdir.cpp" line="90"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="101"/>
+        <location filename="qcreatedicomdir.cpp" line="98"/>
         <source>Pen Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="102"/>
+        <location filename="qcreatedicomdir.cpp" line="99"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="197"/>
+        <location filename="qcreatedicomdir.cpp" line="194"/>
         <source>The study already exists in the DICOMDIR list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="242"/>
+        <location filename="qcreatedicomdir.cpp" line="239"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="271"/>
+        <location filename="qcreatedicomdir.cpp" line="268"/>
         <source>Create DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="272"/>
+        <location filename="qcreatedicomdir.cpp" line="269"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="295"/>
+        <location filename="qcreatedicomdir.cpp" line="292"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="326"/>
+        <location filename="qcreatedicomdir.cpp" line="323"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="465"/>
+        <location filename="qcreatedicomdir.cpp" line="462"/>
         <source>Creating DICOMDIR Image...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="262"/>
+        <location filename="qcreatedicomdir.cpp" line="259"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="336"/>
+        <location filename="qcreatedicomdir.cpp" line="333"/>
         <source>Please, first select the studies you want to create a DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="354"/>
+        <location filename="qcreatedicomdir.cpp" line="351"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="359"/>
+        <location filename="qcreatedicomdir.cpp" line="356"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="606"/>
+        <location filename="qcreatedicomdir.cpp" line="579"/>
         <source>
 Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="523"/>
+        <location filename="qcreatedicomdir.cpp" line="520"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="527"/>
+        <location filename="qcreatedicomdir.cpp" line="524"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="535"/>
+        <location filename="qcreatedicomdir.cpp" line="532"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="539"/>
+        <location filename="qcreatedicomdir.cpp" line="536"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="549"/>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
         <source>DICOMDIR Creation Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="549"/>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="549"/>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="286"/>
+        <location filename="qcreatedicomdir.cpp" line="283"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="725"/>
+        <location filename="qcreatedicomdir.cpp" line="698"/>
         <source>The creation of dicomdir on cd/dvd in Windows is desactivated.
 
 To create a cd/dvd with a Dicomdir, you have to create first the Dicomdir on your hard disk and then copy the directory where you have created it to a cd/dvd using a burning cd/dvd software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="410"/>
+        <location filename="qcreatedicomdir.cpp" line="407"/>
         <source>Choose an empty directory...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1133,7 +1092,7 @@ To create a cd/dvd with a Dicomdir, you have to create first the Dicomdir on you
 <context>
     <name>udg::QFileDialog</name>
     <message>
-        <location filename="queryscreen.cpp" line="1215"/>
+        <location filename="queryscreen.cpp" line="1220"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1370,6 +1329,19 @@ Error Number: %1</source>
     </message>
 </context>
 <context>
+    <name>udg::QPopUpRisRequestsScreenBase</name>
+    <message>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="104"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="288"/>
+        <source>Starviewer will proceed to retrieve it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::QSeriesListWidget</name>
     <message>
         <location filename="qserieslistwidget.cpp" line="46"/>
@@ -1524,302 +1496,274 @@ Error Number: %1</source>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="442"/>
+        <location filename="queryscreen.cpp" line="447"/>
         <source>Please select a PACS to query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="569"/>
+        <location filename="queryscreen.cpp" line="574"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="702"/>
+        <location filename="queryscreen.cpp" line="707"/>
         <source>No series match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="781"/>
+        <location filename="queryscreen.cpp" line="786"/>
         <source>Select a study to download </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="779"/>
+        <location filename="queryscreen.cpp" line="784"/>
         <source>Select a study to view </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1328"/>
+        <location filename="queryscreen.cpp" line="1333"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="539"/>
+        <location filename="queryscreen.cpp" line="544"/>
         <source>Error quering in dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1231"/>
+        <location filename="queryscreen.cpp" line="1236"/>
         <source>Error openning dicomdir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="762"/>
+        <location filename="queryscreen.cpp" line="767"/>
         <source>No images match for this series.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="848"/>
+        <location filename="queryscreen.cpp" line="853"/>
         <source>No images match for this study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="661"/>
+        <location filename="queryscreen.cpp" line="666"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="752"/>
+        <location filename="queryscreen.cpp" line="757"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1343"/>
+        <location filename="queryscreen.cpp" line="1348"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="971"/>
+        <location filename="queryscreen.cpp" line="976"/>
         <source>Select at least one study to view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1062"/>
+        <location filename="queryscreen.cpp" line="1067"/>
         <source>Please select at least one study to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1067"/>
+        <location filename="queryscreen.cpp" line="1072"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1262"/>
+        <location filename="queryscreen.cpp" line="1267"/>
         <source>You have to select a PACS to store the study in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1313"/>
+        <location filename="queryscreen.cpp" line="1318"/>
         <source>The studies can only be stored to one PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1082"/>
+        <location filename="queryscreen.cpp" line="1087"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="165"/>
+        <location filename="queryscreen.cpp" line="169"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="165"/>
+        <location filename="queryscreen.cpp" line="169"/>
         <source>Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="133"/>
+        <location filename="queryscreen.cpp" line="137"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="137"/>
+        <location filename="queryscreen.cpp" line="141"/>
         <source>Send to DICOMDIR List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="137"/>
+        <location filename="queryscreen.cpp" line="141"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="155"/>
+        <location filename="queryscreen.cpp" line="159"/>
         <source>&amp;Retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="168"/>
+        <location filename="queryscreen.cpp" line="172"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="452"/>
+        <location filename="queryscreen.cpp" line="457"/>
         <source>This query can take a long time.
 Do you want continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="236"/>
+        <location filename="queryscreen.cpp" line="240"/>
         <source>deleting a study not full retrived</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="960"/>
+        <location filename="queryscreen.cpp" line="965"/>
         <source>deleting old studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1443"/>
+        <location filename="queryscreen.cpp" line="1452"/>
         <source>An error has ocurred while </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1472"/>
+        <location filename="queryscreen.cpp" line="1481"/>
         <source>Some files can not be delete.
 These have to be delete manually.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="1475"/>
-        <source>An unknow error has ocurred.</source>
+        <source>An internal error occurs with %1 database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1540"/>
+        <location filename="queryscreen.cpp" line="1549"/>
         <source>Please review the operation list screen, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1495"/>
+        <location filename="queryscreen.cpp" line="1504"/>
         <source>an error ocurred connecting to a Pacs while retrieving or storing a study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1496"/>
+        <location filename="queryscreen.cpp" line="1505"/>
         <source>
 Be sure that your computer is connected on network and the Pacs parameters are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1504"/>
+        <location filename="queryscreen.cpp" line="1628"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1502"/>
+        <location filename="queryscreen.cpp" line="1511"/>
         <source>an error ocurred retrieving a study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1567"/>
+        <location filename="queryscreen.cpp" line="1579"/>
         <source>There is not enough space to retrieve studies, please free space.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1520"/>
+        <location filename="queryscreen.cpp" line="1529"/>
         <source>an error ocurred freeing space and some operations may have failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1527"/>
+        <location filename="queryscreen.cpp" line="1536"/>
         <source>a database error ocurred and some operations may have failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1534"/>
+        <location filename="queryscreen.cpp" line="1543"/>
         <source>an error ocurred and some operations may have failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1541"/>
-        <source>an unknow error has ocurred.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1503"/>
+        <location filename="queryscreen.cpp" line="1512"/>
         <source>
 Pacs doesn&apos;t respond correclty, be sure that your computer is connected on network and the Pacs parameters are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1510"/>
+        <location filename="queryscreen.cpp" line="1519"/>
         <source>
 
 Contact with an administrador to register your computer to the Pacs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1588"/>
-        <source>Trying to import study with UID %1 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1557"/>
-        <source>the dicomdir could not be opened. Be sure that the dicomdir path is correct.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1563"/>
-        <source>
-
-If the problem persist contact with an administrator.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1589"/>
-        <source>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1515"/>
+        <location filename="queryscreen.cpp" line="1524"/>
         <source>
 All pending retrieve operations will be cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1509"/>
+        <location filename="queryscreen.cpp" line="1518"/>
         <source>the Pacs doesn&apos;t recognize your computer&apos;s AETitle %1, some studies can&apos;t be retrieved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="168"/>
+        <location filename="queryscreen.cpp" line="172"/>
         <source>&amp;Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="466"/>
+        <location filename="queryscreen.cpp" line="471"/>
         <source>An error has produced while querying.
 
 Repeat it, if the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="534"/>
+        <location filename="queryscreen.cpp" line="539"/>
         <source>Before search you have to open a dicomdir.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="799"/>
+        <location filename="queryscreen.cpp" line="804"/>
         <source>Internal Error: %2 can&apos;t retrieve study with UID %1, because can&apos;t find study information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1407"/>
+        <location filename="queryscreen.cpp" line="1416"/>
         <source>An error ocurred querying default PACS, can&apos;t process the RIS request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1453"/>
+        <location filename="queryscreen.cpp" line="1462"/>
         <source>The database is blocked by another %1 window.
 Close all the others %1 windows and try again.
 
@@ -1827,7 +1771,7 @@ If you want to open different %1&apos;s windows always choose the &apos;New&apos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1468"/>
+        <location filename="queryscreen.cpp" line="1477"/>
         <source>
 Close all %1 windows and try again.
 
@@ -1835,7 +1779,7 @@ If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1598"/>
+        <location filename="queryscreen.cpp" line="1610"/>
         <source>
 
 Close all %1 windows and try again.
@@ -1843,68 +1787,125 @@ If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1535"/>
+        <location filename="queryscreen.cpp" line="1544"/>
         <source>
 %1 has not be capable of read correctly dicom information of the study.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1584"/>
+        <location filename="queryscreen.cpp" line="1596"/>
         <source>
 
 The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1590"/>
+        <location filename="queryscreen.cpp" line="1422"/>
+        <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1465"/>
+        <source>%1 database is corrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1470"/>
+        <source>%1 database syntax error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1484"/>
+        <source>Unknown error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1550"/>
+        <source>an error ocurred while retrieving some study, some retrieves may have failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1551"/>
+        <source>
+
+Data is either missing or corrupted on PACS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1555"/>
+        <source>Please review the operation list screen, an unknown error has ocurred retrieving a study.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1600"/>
+        <source>Trying to import study with UID %1 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1569"/>
+        <source>the dicomdir could not be opened. Be sure that the dicomdir path is correct.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1575"/>
+        <source>
+
+If the problem persist contact with an administrator.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1574"/>
+        <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1583"/>
+        <source>An error has ocurred freeing space, some studies can&apos;t be imported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1589"/>
+        <source>A database error has ocurred, some studies can&apos;t be imported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1595"/>
+        <source>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly dicom information of the study.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1601"/>
+        <source>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1602"/>
         <source>
 
 Please contact with %1 team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1413"/>
-        <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
+        <location filename="queryscreen.cpp" line="1608"/>
+        <source>An unknown error has ocurred importing dicomdir.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1456"/>
-        <source>%1 database is corrupted.</source>
+        <location filename="queryscreen.cpp" line="1623"/>
+        <source>Can&apos;t listen RIS requests on port %1, the port is used for another application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1461"/>
-        <source>%1 database syntax error.</source>
+        <location filename="queryscreen.cpp" line="1624"/>
+        <source>
+
+If the error has produced when openned new %1&apos;s windows, close that window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1466"/>
-        <source>An internal error occurs with %1 database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1571"/>
-        <source>An error has ocurred freeing space, some studies can&apos;t be imported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1577"/>
-        <source>A database error has ocurred, some studies can&apos;t be imported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1596"/>
-        <source>An unknow error has ocurred importing dicomdir.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1562"/>
-        <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1583"/>
-        <source>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly dicom information of the study.</source>
+        <location filename="queryscreen.cpp" line="1627"/>
+        <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
