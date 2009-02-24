@@ -38,7 +38,6 @@
 #include "testdicomobjects.h"
 #include "starviewerapplication.h"
 #include "parsexmlrispierrequest.h"
-#include "listenrisrequest.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -75,7 +74,7 @@ QueryScreen::QueryScreen( QWidget *parent )
      *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
-    if (StarviewerSettings().getListenRisRequests()) m_listenRisRequests->listen(); 
+    if (StarviewerSettings().getListenRisRequests()) m_listenRISRequestThread->listen(); 
 #endif
 }
 
@@ -86,7 +85,7 @@ QueryScreen::~QueryScreen()
      */
     this->close();
 
-    delete m_listenRisRequests;
+    delete m_listenRISRequestThread;
 }
 
 void QueryScreen::initialize()
@@ -122,7 +121,7 @@ void QueryScreen::initialize()
     setQStudyTreeWidgetColumnsWidth();
 
     #ifndef STARVIEWER_LITE
-    m_listenRisRequests = new ListenRisRequest(this);
+    m_listenRISRequestThread = new ListenRISRequestThread(this);
     if (settings.getListenRisRequests()) m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
     #endif
 
@@ -342,8 +341,8 @@ void QueryScreen::createConnections()
     connect( m_openDICOMDIRToolButton, SIGNAL( clicked() ), SLOT( openDicomdir() ) );
 
     #ifndef STARVIEWER_LITE
-    connect(m_listenRisRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
-    connect(m_listenRisRequests, SIGNAL(errorListening(ListenRisRequest::ListenRisRequestError)), SLOT(showListenRisRequestError(ListenRisRequest::ListenRisRequestError)));
+    connect(m_listenRISRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
+    connect(m_listenRISRequestThread, SIGNAL(errorListening(ListenRISRequestThread::ListenRISRequestThreadError)), SLOT(showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError)));
     #endif
 }
 
@@ -1613,18 +1612,18 @@ void QueryScreen::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRIm
     }
 }
 
-void QueryScreen::showListenRisRequestError(ListenRisRequest::ListenRisRequestError error)
+void QueryScreen::showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError error)
 {
     QString message;
     StarviewerSettings settings;
 
     switch(error)
     {
-        case ListenRisRequest::risPortInUse :
+        case ListenRISRequestThread::risPortInUse :
             message = tr("Can't listen RIS requests on port %1, the port is used for another application.").arg(settings.getListenPortRisRequests());
             message += tr("\n\nIf the error has produced when openned new %1's windows, close that window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
-        case ListenRisRequest::unknowNetworkError :
+        case ListenRISRequestThread::unknowNetworkError :
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(settings.getListenPortRisRequests());
             message += tr("\nIf the problem persist contact with an administrator.");
             break;

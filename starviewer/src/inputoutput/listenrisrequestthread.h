@@ -23,15 +23,15 @@ namespace udg {
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class ListenRisRequest : public QThread
+class ListenRISRequestThread: public QThread
 {
 Q_OBJECT
 public:
 
-    enum ListenRisRequestError { risPortInUse, unknowNetworkError };
+    enum ListenRISRequestThreadError { risPortInUse, unknowNetworkError };
 
-    ListenRisRequest(QObject *parent = 0);
-    ~ListenRisRequest();
+    ListenRISRequestThread(QObject *parent = 0);
+    ~ListenRISRequestThread();
 
     ///Inicia l'escolta de peticions del RIS a través del port que s'ha establet a la configuració
     void listen();
@@ -45,7 +45,7 @@ signals:
     void requestRetrieveStudy(DicomMask mask);
     
     ///Signal que s'emet indicant que s'ha produït un error escoltant peticions al RIS
-    void errorListening(ListenRisRequest::ListenRisRequestError);
+    void errorListening(ListenRISRequestThread::ListenRISRequestThreadError );
 
 private slots:
 

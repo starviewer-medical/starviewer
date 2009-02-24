@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "listenrisrequest.h"
+#include "listenrisrequestthread.h"
 
 #include <QTcpServer>
 #include <QHostAddress>
@@ -21,25 +21,25 @@
 namespace udg
 {
 
-const int ListenRisRequest::msTimeOutToReadData = 15000;
+const int ListenRISRequestThread::msTimeOutToReadData = 15000;
 
-ListenRisRequest::ListenRisRequest(QObject *parent):QThread(parent)
+ListenRISRequestThread::ListenRISRequestThread(QObject *parent):QThread(parent)
 {
     qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
-    qRegisterMetaType<ListenRisRequest::ListenRisRequestError>("ListenRisRequest::ListenRisRequestError");
+    qRegisterMetaType<ListenRISRequestThread::ListenRISRequestThreadError>("ListenRISRequestThread::ListenRISRequestThreadError");
 }
 
-void ListenRisRequest::listen()
+void ListenRISRequestThread::listen()
 {
     start(); //engeguem el thread
 }
 
-bool ListenRisRequest::isListen()
+bool ListenRISRequestThread::isListen()
 {
     return isRunning();
 }
 
-void ListenRisRequest::run()
+void ListenRISRequestThread::run()
 {
     QTcpServer tcpRISServer;
     StarviewerSettings settings;
@@ -76,7 +76,7 @@ void ListenRisRequest::run()
     networkError(&tcpRISServer);
 }
 
-void ListenRisRequest::processRequest(QString risRequestData)
+void ListenRISRequestThread::processRequest(QString risRequestData)
 {
     //com ara mateix només rebrem peticions del RIS PIER del IDI, no cal esbrinar quin tipus de petició és per defecte entenem que és petició del RIS PIER
     DicomMask mask;
@@ -98,7 +98,7 @@ void ListenRisRequest::processRequest(QString risRequestData)
     #endif
 }
 
-void ListenRisRequest::networkError(QTcpServer *tcpServer)
+void ListenRISRequestThread::networkError(QTcpServer *tcpServer)
 {
     StarviewerSettings settings;
 
@@ -115,7 +115,7 @@ void ListenRisRequest::networkError(QTcpServer *tcpServer)
     }
 }
 
-ListenRisRequest::~ListenRisRequest()
+ListenRISRequestThread::~ListenRISRequestThread()
 {
     terminate();//Parem el thread
     wait();//Esperem que estigui parat
