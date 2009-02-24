@@ -707,6 +707,31 @@
            <widget class="QLineEdit" name="m_tourLineEdit" />
           </item>
           <item>
+           <widget class="QDoubleSpinBox" name="m_tourSpeedDoubleSpinBox" >
+            <property name="toolTip" >
+             <string>Speed</string>
+            </property>
+            <property name="suffix" >
+             <string>x</string>
+            </property>
+            <property name="decimals" >
+             <number>1</number>
+            </property>
+            <property name="minimum" >
+             <double>0.100000000000000</double>
+            </property>
+            <property name="maximum" >
+             <double>10.000000000000000</double>
+            </property>
+            <property name="singleStep" >
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value" >
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="m_tourPushButton" >
             <property name="text" >
              <string>Tour</string>

@@ -146,14 +146,80 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
 }
 
 
-void QExperimental3DExtension::tour( const QList<Vector3> &viewpoints )
+void QExperimental3DExtension::tour( const QList<Vector3> &viewpoints, double speedFactor )
 {
+    if ( viewpoints.isEmpty() ) return;
+
+    const double ALMOST_1 = 0.9;
+
+    int *dimensions = m_volume->getImage()->GetDimensions();
+    int maxDimension = qMax( qMax( dimensions[0], dimensions[1] ), dimensions[2] );
+    double maxDistance = speedFactor * maxDimension / 4.0;
+
     DEBUG_LOG( "Tour:" );
 
-    for ( int i = 0; i < viewpoints.size(); i++ )
+    Vector3 previousPoint = viewpoints.at( 0 );
+    DEBUG_LOG( previousPoint.toString() );
+
+    Vector3 currentPoint = previousPoint;
+    setViewpoint( currentPoint );
+
+    for ( int i = 1; i < viewpoints.size(); i++ )
     {
-        DEBUG_LOG( viewpoints.at( i ).toString() );
-        setViewpoint( viewpoints.at( i ) );
+        Vector3 nextPoint = viewpoints.at( i );
+        double nextRadius = nextPoint.length();
+
+        // Mirem si s'ha d'afegir un punt intermig
+        {
+            Vector3 c = currentPoint;
+            c.normalize();
+            Vector3 n = nextPoint;
+            n.normalize();
+
+            if ( c * n < -ALMOST_1 ) // la línia entre els punts passa pel centre del volum
+            {
+                DEBUG_LOG( QString( "punt intermig: c = %1, n = %2, c * n = %3" ).arg( c.toString() ).arg( n.toString() ).arg( c * n ) );
+                // afegim un punt intermig (0,0,radi) o (radi,0,0)
+                double radius = ( currentPoint.length() + nextRadius ) / 2.0;
+
+                if ( qAbs( c * Vector3( 0.0, 0.0, 1.0 ) ) > ALMOST_1 ) nextPoint.set( radius, 0.0, 0.0 );
+                else nextPoint.set( 0.0, 0.0, radius );
+
+                i--;
+            }
+        }
+
+        while ( currentPoint != nextPoint )
+        {
+            Vector3 direction = nextPoint - currentPoint;
+
+            if ( direction.length() < maxDistance ) currentPoint = nextPoint;
+            else
+            {
+                double currentRadius = currentPoint.length();
+                Vector3 nextCurrentPoint;
+
+                do
+                {
+                    direction.normalize() *= maxDistance;  // posem la direcció a la llargada desitjada
+                    nextCurrentPoint = currentPoint + direction;
+
+                    double currentToNextCurrent = ( nextCurrentPoint - currentPoint ).length();
+                    double nextCurrentToNext = ( nextPoint - nextCurrentPoint ).length();
+                    double a = currentToNextCurrent / ( currentToNextCurrent + nextCurrentToNext ); // valor per interpolar el radi
+                    double nextCurrentRadius = a * currentRadius + ( 1.0 - a ) * nextRadius;
+
+                    nextCurrentPoint.normalize() *= nextCurrentRadius;  // posem el nou punt a la distància correcta
+                    direction = nextCurrentPoint - currentPoint;
+                } while ( direction.length() <= maxDistance - 1.0 || direction.length() >= maxDistance + 1.0 );
+
+                currentPoint = nextCurrentPoint;
+            }
+
+            setViewpoint( currentPoint );
+        }
+
+        DEBUG_LOG( nextPoint.toString() );
     }
 }
 
@@ -460,10 +526,10 @@ void QExperimental3DExtension::tour()
     for ( int i = 0; i < indices.size(); i++ )
     {
         int index = indices.at( i ).toInt() - 1;
-        if ( index >= 0 && index < viewpoints.size() ) tourViewpoints << viewpoints.at( i );
+        if ( index >= 0 && index < viewpoints.size() ) tourViewpoints << viewpoints.at( index );
     }
 
-    tour( tourViewpoints );
+    tour( tourViewpoints, m_tourSpeedDoubleSpinBox->value() );
 }
 
 

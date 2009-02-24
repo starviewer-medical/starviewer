@@ -43,6 +43,11 @@ public:
     template <class C>
     TVector3<T>& operator =( const TVector3<C> &v );
 
+    /// Retorna cert si els vector són iguals.
+    bool operator ==( const TVector3<T> &v ) const;
+    /// Retorna cert si els vectors són diferents.
+    bool operator !=( const TVector3<T> &v ) const;
+
     /// Retorna una còpia del vector.
     TVector3<T> operator +() const;
     /// Retorna el vector negat.
@@ -152,6 +157,20 @@ inline TVector3<T>& TVector3<T>::operator =( const TVector3<C> &v )
 {
     x = v.x; y = v.y; z = v.z;
     return *this;
+}
+
+
+template <class T>
+inline bool TVector3<T>::operator ==( const TVector3<T> &v ) const
+{
+    return x == v.x && y == v.y && z == v.z;
+}
+
+
+template <class T>
+inline bool TVector3<T>::operator !=( const TVector3<T> &v ) const
+{
+    return x != v.x || y != v.y || z != v.z;
 }
 
 
