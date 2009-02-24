@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>QPopUpRisRequestsScreenBase</class>
- <widget class="QDialog" name="QPopUpRisRequestsScreenBase" >
+ <class>udg::QPopUpRisRequestsScreenBase</class>
+ <widget class="QDialog" name="udg::QPopUpRisRequestsScreenBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -118,7 +118,7 @@
      <property name="title" >
       <string/>
      </property>
-     <widget class="QWidget" name="" >
+     <widget class="QWidget" name="layoutWidget" >
       <property name="geometry" >
        <rect>
         <x>10</x>
@@ -268,7 +268,7 @@
             <enum>QFrame::Plain</enum>
            </property>
            <property name="text" >
-            <string></string>
+            <string/>
            </property>
            <property name="wordWrap" >
             <bool>true</bool>

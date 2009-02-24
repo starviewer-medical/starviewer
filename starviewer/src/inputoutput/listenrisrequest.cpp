@@ -13,83 +13,112 @@
 #include <QMetaType>
 #include <QMessageBox>
 
-#include "processrisrequestthread.h"
+#include "parsexmlrispierrequest.h"
 #include "logging.h"
 #include "starviewersettings.h"
 #include "starviewerapplication.h"
-#include "qpopuprisrequestsscreen.h"
 
 namespace udg
 {
 
-ListenRisRequest::ListenRisRequest(QObject *parent):QObject(parent)
+const int ListenRisRequest::msTimeOutToReadData = 15000;
+
+ListenRisRequest::ListenRisRequest(QObject *parent):QThread(parent)
 {
     qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
-
-	m_popUp = new QPopUpRisRequestsScreen();
+    qRegisterMetaType<ListenRisRequest::ListenRisRequestError>("ListenRisRequest::ListenRisRequestError");
 }
 
 void ListenRisRequest::listen()
 {
-    StarviewerSettings settings;
-    m_qTcpServer = new QTcpServer();
-
-    if (!m_qTcpServer->listen(QHostAddress::Any, settings.getListenPortRisRequests()))
-    {
-        showNetworkError();
-    }
-    else INFO_LOG(QString("Iniciada l'escolta de peticions del RIS pel port %1").arg(settings.getListenPortRisRequests()));
-
-    connect(m_qTcpServer, SIGNAL(newConnection()), SLOT(newConnection()));//Connectem a l'slot per quan arribin noves connexions
+    start(); //engeguem el thread
 }
 
 bool ListenRisRequest::isListen()
 {
-    return m_qTcpServer->isListening();
+    return isRunning();
 }
 
-void ListenRisRequest::newConnection()
+void ListenRisRequest::run()
 {
-    ProcessRisRequestThread * processRisRequestThread = new ProcessRisRequestThread();
-	QTcpSocket *tcpSocket = m_qTcpServer->nextPendingConnection();
-
-	INFO_LOG("Rebuda petició de connexió per la IP " + tcpSocket->peerAddress().toString());
-	processRisRequestThread->process(tcpSocket->socketDescriptor());
-    connect(processRisRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(requestRetrieveStudySlot(DicomMask)));
-
-	//Quan ha acabat el thread de processament fa delete del processRisRequestThread i del QTcpSocket
-	connect(processRisRequestThread, SIGNAL(finished()), processRisRequestThread, SLOT(deleteLater()));
-	connect(processRisRequestThread, SIGNAL(finished()), tcpSocket, SLOT(deleteLater()));
-}
-
-void ListenRisRequest::requestRetrieveStudySlot(DicomMask mask)
-{
-    m_popUp->setAccessionNumber(mask.getAccessionNumber());
-    m_popUp->show();
-    emit requestRetrieveStudy(mask);
-}
-
-void ListenRisRequest::showNetworkError()
-{
+    QTcpServer tcpRISServer;
     StarviewerSettings settings;
-    QString message;
 
-    switch(m_qTcpServer->serverError())
+    if (!tcpRISServer.listen(QHostAddress::Any, settings.getListenPortRisRequests()))
     {
-        case QAbstractSocket::AddressInUseError :
-            message = tr("Can't listen RIS requests on port %1, the port is used for another application.").arg(settings.getListenPortRisRequests());
-            message += tr("\n\nIf the error has produced when openned new %1's windows, close that window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
-            ERROR_LOG(QString("No es poden escoltar les peticions del RIS pel port %1, perquè una altra aplicació ja l'esta utilitzant").arg(settings.getListenPortRisRequests()));
-            break;
-        default :
-            message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(settings.getListenPortRisRequests());
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
-            ERROR_LOG(QString("No es poden escoltar les peticions del RIS pel port %1, s' ha produït un error no controlat : " + m_qTcpServer->errorString()).arg(settings.getListenPortRisRequests()));
-            break;
+        networkError(&tcpRISServer);
+        return;
     }
 
-    QMessageBox::critical((QWidget* )this->parent(), ApplicationNameString, message);
+    while (tcpRISServer.waitForNewConnection(-1)) //Esperem rebre connexions
+    {
+        QTcpSocket *tcpSocket = tcpRISServer.nextPendingConnection();
+        QString risRequestData;
+
+        INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
+        if (tcpSocket->waitForReadyRead(msTimeOutToReadData))
+        {
+            risRequestData= QString(tcpSocket->readAll());
+            INFO_LOG("Dades rebudes: " + risRequestData);
+        }
+        else INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
+
+        INFO_LOG("Tanco socket");
+        tcpSocket->close();
+        INFO_LOG("Faig delete del socket");
+        delete tcpSocket;
+
+        if (!risRequestData.isEmpty()) processRequest(risRequestData);
+    }
+
+    //Si sortim del bucle és que s'ha produït un error
+    ERROR_LOG("S'ha produït un error esperant peticions del RIS, error: " + tcpRISServer.errorString());
+    networkError(&tcpRISServer);
+}
+
+void ListenRisRequest::processRequest(QString risRequestData)
+{
+    //com ara mateix només rebrem peticions del RIS PIER del IDI, no cal esbrinar quin tipus de petició és per defecte entenem que és petició del RIS PIER
+    DicomMask mask;
+
+    INFO_LOG("S'intencarà processar la petició rebuda com a Xml");
+
+    #if QT_VERSION >= 0x040300
+
+    ParseXmlRisPIERRequest parseXml;
+
+    mask = parseXml.parseXml(risRequestData);
+
+    if (!parseXml.error())
+    {
+        INFO_LOG("Process correcte faig signal");
+        emit requestRetrieveStudy(mask);
+    }
+
+    #endif
+}
+
+void ListenRisRequest::networkError(QTcpServer *tcpServer)
+{
+    StarviewerSettings settings;
+
+    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(settings.getListenPortRisRequests()) + ", error " + tcpServer->errorString());
+        
+    switch(tcpServer->serverError())
+    {
+        case QAbstractSocket::AddressInUseError :
+            emit errorListening(risPortInUse); 
+            break;
+        default :
+            emit errorListening(unknowNetworkError);
+            break;
+    }
+}
+
+ListenRisRequest::~ListenRisRequest()
+{
+    terminate();//Parem el thread
+    wait();//Esperem que estigui parat
 }
 
 }

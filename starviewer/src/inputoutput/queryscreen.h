@@ -17,6 +17,7 @@
 #include "qdeleteoldstudiesthread.h"
 #include "dicomdirimporter.h"
 #include "listenrisrequest.h"
+#include "qpopuprisrequestsscreen.h"
 
 namespace udg {
 
@@ -171,6 +172,9 @@ private slots:
 
     ///Ens Mostra un missatge indicant l'error produït a la DICOMDIRImporter, i com es pot solucionar
     void showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRImporter::DICOMDIRImporterError error);
+
+    ///Ens mostra un message box indicant l'error produït mentre s'esperaven peticions del RIS
+    void showListenRisRequestError(ListenRisRequest::ListenRisRequestError);
 
     ///S'executa quan un estudi serà esborrat de la bd per alliberar espai, aquest mètode esborra l'estudi del QStudyTreeWidget de la bd local
     void studyWillBeDeletedSlot(QString studyInstanceUID);
@@ -330,6 +334,8 @@ struct retrieveParameters
     QList<DICOMStudy> m_studyListQueriedPacs;//llista dels estudis que s'han trobat a la última query al PACS
 
     ListenRisRequest *m_listenRisRequests;
+
+    QPopUpRisRequestsScreen *m_qpopUpRisRequestsScreen; //Popup que indica que el RIS ha fet una petició per descarregar un estudi
 };
 
 };
