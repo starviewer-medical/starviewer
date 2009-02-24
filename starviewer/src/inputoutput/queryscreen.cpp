@@ -1481,7 +1481,7 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
                          "\nThese have to be delete manually.");
             break;
         default:
-            message = tr("An unknown error has ocurred.");
+            message = tr("Unknown error.");
             break;
     }
 
@@ -1547,13 +1547,12 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             break;
 	   case QExecuteOperationThread::MoveRefusedOutOfResources :
 			message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred while retrieving some study and some operations may have failed.");
-            message += tr("\n\nData is either missing or corrupted on PACS");
+            message += tr("an error ocurred while retrieving some study, some retrieves may have failed.");
+            message += tr("\n\nData is either missing or corrupted on PACS.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         default:
-            message = tr("Please review the operation list screen, ");
-            message += tr("an unknown error has ocurred.");
+            message = tr("Please review the operation list screen, an unknown error has ocurred retrieving a study.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
     }
