@@ -71,7 +71,7 @@ HEADERS += databaseconnection.h \
            databaseinstallation.h \
            qlocaldatabaseconfigurationscreen.h \
            parsexmlrispierrequest.h \
-           listenrisrequest.h \
+           listenrisrequestthread.h \
            qlistenrisrequestsconfigurationscreen.h \
            qpopuprisrequestsscreen.h
 
@@ -125,7 +125,7 @@ SOURCES += databaseconnection.cpp \
            databaseinstallation.cpp \
            qlocaldatabaseconfigurationscreen.cpp \
            parsexmlrispierrequest.cpp \
-           listenrisrequest.cpp \
+           listenrisrequestthread.cpp \
            qlistenrisrequestsconfigurationscreen.cpp \
            qpopuprisrequestsscreen.cpp
 
