@@ -109,6 +109,8 @@ private slots:
     void saveViewpointUnstabilities();
     void loadBestViews();
     void saveBestViews();
+    void loadGuidedTour();
+    void saveGuidedTour();
     void loadVomi();
     void saveVomi();
     void vomiChecked( bool checked );
@@ -119,6 +121,7 @@ private slots:
     void saveViewpointVomi();
 
     void tourBestViews();
+    void guidedTour();
 
     void loadAndRunProgram();
 
@@ -133,6 +136,7 @@ private:
     QVector<float> m_vmi;
     QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_bestViews;
+    QList< QPair<int, Vector3> > m_guidedTour;
     QVector<float> m_vomi;
     float m_maximumVomi;
     QVector<float> m_voxelSaliencies;

@@ -1265,6 +1265,40 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_12" >
+          <item>
+           <widget class="QCheckBox" name="m_computeGuidedTourCheckBox" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Guided tour</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_loadGuidedTourPushButton" >
+            <property name="text" >
+             <string>Load...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_saveGuidedTourPushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Save...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3" >
           <item>
            <widget class="QCheckBox" name="m_computeVomiCheckBox" >
@@ -1394,14 +1428,28 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="m_tourBestViewsPushButton" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
-          <property name="text" >
-           <string>Tour best views</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_13" >
+          <item>
+           <widget class="QPushButton" name="m_tourBestViewsPushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Tour best views</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_guidedTourPushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Guided tour</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <spacer name="verticalSpacer_2" >

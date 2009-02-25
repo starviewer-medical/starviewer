@@ -122,6 +122,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( saveViewpointUnstabilities() ) );
     connect( m_loadBestViewsPushButton, SIGNAL( clicked() ), SLOT( loadBestViews() ) );
     connect( m_saveBestViewsPushButton, SIGNAL( clicked() ), SLOT( saveBestViews() ) );
+    connect( m_loadGuidedTourPushButton, SIGNAL( clicked() ), SLOT( loadGuidedTour() ) );
+    connect( m_saveGuidedTourPushButton, SIGNAL( clicked() ), SLOT( saveGuidedTour() ) );
     connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
     connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
     connect( m_loadVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelSaliencies() ) );
@@ -129,6 +131,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( loadViewpointVomi() ) );
     connect( m_saveViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( saveViewpointVomi() ) );
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
+    connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -889,12 +892,13 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeVmi = m_computeVmiCheckBox->isChecked();
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesCheckBox->isChecked();
     bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
+    bool computeGuidedTour = m_computeGuidedTourCheckBox->isChecked();
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeVoxelSaliencies = m_computeVoxelSalienciesCheckBox->isChecked();
     bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeVomi && !computeVoxelSaliencies && !computeViewpointVomi ) return;
+    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour && !computeVomi && !computeVoxelSaliencies && !computeViewpointVomi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -910,6 +914,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     unsigned int nObjects = m_volume->getSize();
 
     // Dependències
+    if ( computeGuidedTour && m_bestViews.isEmpty() ) computeBestViews = true;
     if ( computeBestViews && m_vmi.size() != nViewpoints ) computeVmi = true;
     if ( computeViewpointVomi && m_vomi.isEmpty() ) computeVomi = true;
 
@@ -917,6 +922,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
     if ( computeVmi || computeViewpointUnstabilities ) nSteps++;    // VMI + viewpoint unstabilities
     if ( computeBestViews ) nSteps++;   // best views
+    if ( computeGuidedTour ) nSteps++;  // guided tour
     if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi ) nSteps ++; //VoMI + voxel saliencies + viewpoint VoMI
     int step = 0;
     {
@@ -967,7 +973,7 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->repaint();
     }
 
-    // VMI
+    // VMI + viewpont unstabilities
     if ( computeVmi || computeViewpointUnstabilities )
     {
         if ( computeVmi ) m_vmi.resize( nViewpoints );
@@ -1085,12 +1091,17 @@ void QExperimental3DExtension::computeSelectedVmi()
         DEBUG_LOG( "Millors vistes:" );
         DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( viewpoints.at( minVmiIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
 
-        if ( limitN ) m_vmiProgressBar->setValue( 100 / n );
+        if ( limitN )
+        {
+            m_vmiProgressBar->setValue( 100 / n );
+            m_vmiProgressBar->repaint();
+        }
 
         if ( limitThreshold )
         {
             m_vmiProgressBar->setValue( 0 );
             m_vmiProgressBar->setMaximum( 0 );
+            m_vmiProgressBar->repaint();
         }
 
         m_vmiProgressBar->repaint();
@@ -1152,6 +1163,82 @@ void QExperimental3DExtension::computeSelectedVmi()
 
         m_saveBestViewsPushButton->setEnabled( true );
         m_tourBestViewsPushButton->setEnabled( true );
+    }
+
+    // guided tour
+    if ( computeGuidedTour )
+    {
+        DEBUG_LOG( "Guided tour:" );
+
+        m_guidedTour.clear();
+
+        m_vmiProgressBar->setValue( 0 );
+        m_vmiProgressBar->repaint();
+
+        QList< QPair<int, Vector3> > bestViews = m_bestViews;   // còpia
+        int nBestViews = bestViews.size();
+
+        m_guidedTour << bestViews.takeAt( 0 );
+        DEBUG_LOG( QString( "%1: (v%2) = %3" ).arg( 0 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ) );
+
+        m_vmiProgressBar->setValue( 100 / nBestViews );
+        m_vmiProgressBar->repaint();
+
+        QVector<float> pOvi( nObjects );    // p(O|vi)
+        QVector<float> pOvj( nObjects );    // p(O|vj)
+
+        while ( !bestViews.isEmpty() )
+        {
+            QPair<int, Vector3> current = m_guidedTour.last();
+            int i = current.first;
+            float pvi = viewProbabilities.at( i );  // p(vi)
+
+            pOvFiles.at( i )->reset();  // reset per tornar al principi
+            pOvFiles.at( i )->read( reinterpret_cast<char*>( pOvi.data() ), nObjects * sizeof(float) ); // llegim...
+            pOvFiles.at( i )->reset();  // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+            int target;
+            float minDissimilarity;
+            int remainingViews = bestViews.size();
+
+            // trobar el target
+            for ( int k = 0; k < remainingViews; k++ )
+            {
+                int j = bestViews.at( k ).first;
+                float pvj = viewProbabilities.at( j );  // p(vj)
+                float pvij = pvi + pvj; // p(v̂)
+
+                float dissimilarity;
+
+                if ( pvij == 0.0f ) dissimilarity = 0.0f;
+                else
+                {
+                    pOvFiles.at( j )->reset();  // reset per tornar al principi
+                    pOvFiles.at( j )->read( reinterpret_cast<char*>( pOvj.data() ), nObjects * sizeof(float) ); // llegim...
+                    pOvFiles.at( j )->reset();  // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+                    dissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, pOvi, pOvj );
+                }
+
+                if ( k == 0 || dissimilarity < minDissimilarity )
+                {
+                    target = k;
+                    minDissimilarity = dissimilarity;
+                }
+            }
+
+            m_guidedTour << bestViews.takeAt( target );
+            DEBUG_LOG( QString( "%1: (v%2) = %3; dissimilarity = %4" ).arg( m_guidedTour.size() - 1 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ).arg( minDissimilarity ) );
+
+            m_vmiProgressBar->setValue( 100 * m_guidedTour.size() / nBestViews );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( nSteps++ );
+        m_vmiTotalProgressBar->repaint();
+
+        m_saveGuidedTourPushButton->setEnabled( true );
+        m_guidedTourPushButton->setEnabled( true );
     }
 
     // VoMI + voxel saliencies + viewpoint VoMI
@@ -1706,6 +1793,103 @@ void QExperimental3DExtension::saveBestViews()
 }
 
 
+void QExperimental3DExtension::loadGuidedTour()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString guidedTourDir = settings.value( "guidedTourDir", QString() ).toString();
+    QString guidedTourFileName = QFileDialog::getOpenFileName( this, tr("Load guided tour"), guidedTourDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !guidedTourFileName.isNull() )
+    {
+        QFile guidedTourFile( guidedTourFileName );
+
+        if ( !guidedTourFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + guidedTourFileName );
+            QMessageBox::warning( this, tr("Can't load guided tour"), QString( tr("Can't load guided tour from file ") ) + guidedTourFileName );
+            return;
+        }
+
+        m_guidedTour.clear();
+
+        QDataStream in( &guidedTourFile );
+
+        while ( !in.atEnd() )
+        {
+            int i;
+            Vector3 v;
+            in >> i;
+            in >> v.x >> v.y >> v.z;
+            m_guidedTour << qMakePair( i, v );
+        }
+
+        guidedTourFile.close();
+
+        QFileInfo guidedTourFileInfo( guidedTourFileName );
+        settings.setValue( "guidedTourDir", guidedTourFileInfo.absolutePath() );
+
+        m_saveGuidedTourPushButton->setEnabled( true );
+        m_guidedTourPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveGuidedTour()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString guidedTourDir = settings.value( "guidedTourDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save guided tour"), guidedTourDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString guidedTourFileName = saveDialog.selectedFiles().first();
+        bool saveAsText = guidedTourFileName.endsWith( ".txt" );
+        QFile guidedTourFile( guidedTourFileName );
+        QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+        if ( saveAsText ) mode = mode | QIODevice::Text;
+
+        if ( !guidedTourFile.open( mode ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + guidedTourFileName );
+            QMessageBox::warning( this, tr("Can't save guided tour"), QString( tr("Can't save guided tour to file ") ) + guidedTourFileName );
+            return;
+        }
+
+        int nGuidedTour = m_guidedTour.size();
+
+        if ( saveAsText )
+        {
+            QTextStream out( &guidedTourFile );
+            for ( int i = 0; i < nGuidedTour; i++ ) out << i << ": v" << m_guidedTour.at( i ).first + 1 << " " << m_guidedTour.at( i ).second.toString() << "\n";
+        }
+        else
+        {
+            QDataStream out( &guidedTourFile );
+            for ( int i = 0; i < nGuidedTour; i++ )
+            {
+                const Vector3 &v = m_guidedTour.at( i ).second;
+                out << m_guidedTour.at( i ).first << v.x << v.y << v.z;
+            }
+        }
+
+        guidedTourFile.close();
+
+        QFileInfo guidedTourFileInfo( guidedTourFileName );
+        settings.setValue( "guidedTourDir", guidedTourFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
 void QExperimental3DExtension::loadVomi()
 {
     QSettings settings;
@@ -1977,6 +2161,14 @@ void QExperimental3DExtension::tourBestViews()
 {
     QList<Vector3> viewpoints;
     for ( int i = 0; i < m_bestViews.size(); i++ ) viewpoints << m_bestViews.at( i ).second;
+    tour( viewpoints, m_tourSpeedDoubleSpinBox->value() );
+}
+
+
+void QExperimental3DExtension::guidedTour()
+{
+    QList<Vector3> viewpoints;
+    for ( int i = 0; i < m_guidedTour.size(); i++ ) viewpoints << m_guidedTour.at( i ).second;
     tour( viewpoints, m_tourSpeedDoubleSpinBox->value() );
 }
 
