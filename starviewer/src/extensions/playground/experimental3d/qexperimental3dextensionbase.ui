@@ -1394,6 +1394,16 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="m_tourBestViewsPushButton" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="text" >
+           <string>Tour best views</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_2" >
           <property name="orientation" >
            <enum>Qt::Vertical</enum>
