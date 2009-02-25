@@ -1,61 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="en">
+<defaultcodec></defaultcodec>
 <context>
     <name>QCrashReporterBase</name>
     <message>
-        <location filename="qcrashreporterbase.ui" line="13"/>
-        <source>Starviewer Crash Reporter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcrashreporterbase.ui" line="26"/>
+        <location filename="qcrashreporterbase.ui" line="23"/>
         <source>The application Starviewer crashed</source>
-        <translation type="unfinished"></translation>
+        <translation>The application Starviewer crashed</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="70"/>
+        <location filename="qcrashreporterbase.ui" line="67"/>
         <source>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
-        <translation type="unfinished"></translation>
+        <translation>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="89"/>
+        <location filename="qcrashreporterbase.ui" line="86"/>
         <source>Tell Starviewer about this crash</source>
-        <translation type="unfinished"></translation>
+        <translation>Tell Starviewer about this crash</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="103"/>
+        <location filename="qcrashreporterbase.ui" line="100"/>
         <source>Comments</source>
-        <translation type="unfinished"></translation>
+        <translation>Comments</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="109"/>
+        <location filename="qcrashreporterbase.ui" line="106"/>
         <source>Please describe any steps needed to trigger the problem (Optional):</source>
-        <translation type="unfinished"></translation>
+        <translation>Please describe any steps needed to trigger the problem (Optional):</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="119"/>
+        <location filename="qcrashreporterbase.ui" line="116"/>
         <source>Email me when more information is available (Optional):</source>
-        <translation type="unfinished"></translation>
+        <translation>Email me when more information is available (Optional):</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="130"/>
+        <location filename="qcrashreporterbase.ui" line="127"/>
         <source>Problem Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Problem Details</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="143"/>
+        <location filename="qcrashreporterbase.ui" line="140"/>
         <source>Sending report...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sending report...</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="170"/>
+        <location filename="qcrashreporterbase.ui" line="167"/>
         <source>Quit Starviewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Quit Starviewer</translation>
     </message>
     <message>
-        <location filename="qcrashreporterbase.ui" line="177"/>
+        <location filename="qcrashreporterbase.ui" line="174"/>
         <source>Restart Starviewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Restart Starviewer</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QCrashReporter</name>
+    <message>
+        <location filename="qcrashreporter.cpp" line="26"/>
+        <source>%1</source>
+        <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="qcrashreporter.cpp" line="27"/>
+        <source>Quit %1</source>
+        <translation>Quit %1</translation>
+    </message>
+    <message>
+        <location filename="qcrashreporter.cpp" line="28"/>
+        <source>Restart %1</source>
+        <translation>Restart %1</translation>
+    </message>
+    <message>
+        <location filename="qcrashreporter.cpp" line="29"/>
+        <source>Tell %1 about this crash</source>
+        <translation>Tell %1 about this crash</translation>
+    </message>
+    <message>
+        <location filename="qcrashreporter.cpp" line="30"/>
+        <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
+        <translation>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </translation>
     </message>
 </context>
 </TS>
