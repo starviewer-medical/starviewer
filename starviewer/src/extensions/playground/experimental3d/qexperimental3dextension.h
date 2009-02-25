@@ -114,9 +114,11 @@ private slots:
     void vomiChecked( bool checked );
     void loadVoxelSaliencies();
     void saveVoxelSaliencies();
+    void voxelSalienciesChecked( bool checked );
     void loadViewpointVomi();
     void saveViewpointVomi();
-    void voxelSalienciesChecked( bool checked );
+
+    void tourBestViews();
 
     void loadAndRunProgram();
 

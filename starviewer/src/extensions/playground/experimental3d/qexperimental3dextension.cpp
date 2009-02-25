@@ -128,6 +128,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelSaliencies() ) );
     connect( m_loadViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( loadViewpointVomi() ) );
     connect( m_saveViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( saveViewpointVomi() ) );
+    connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -1028,6 +1029,7 @@ void QExperimental3DExtension::computeSelectedVmi()
         if ( computeViewpointUnstabilities ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
     }
 
+    // best views
     if ( computeBestViews )
     {
         m_bestViews.clear();
@@ -1080,8 +1082,6 @@ void QExperimental3DExtension::computeSelectedVmi()
         DEBUG_LOG( QString( "I(V,O) = %1" ).arg( IVO ) );
         DEBUG_LOG( "Millors vistes:" );
         DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( viewpoints.at( minVmiIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
-
-
 
         if ( limitN ) m_vmiProgressBar->setValue( 100 / n );
 
@@ -1149,6 +1149,7 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->repaint();
 
         m_saveBestViewsPushButton->setEnabled( true );
+        m_tourBestViewsPushButton->setEnabled( true );
     }
 
     // VoMI + voxel saliencies + viewpoint VoMI
@@ -1644,6 +1645,7 @@ void QExperimental3DExtension::loadBestViews()
         settings.setValue( "bestViewsDir", bestViewsFileInfo.absolutePath() );
 
         m_saveBestViewsPushButton->setEnabled( true );
+        m_tourBestViewsPushButton->setEnabled( true );
     }
 
     settings.endGroup();
@@ -1872,6 +1874,13 @@ void QExperimental3DExtension::saveVoxelSaliencies()
 }
 
 
+void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
+{
+    if ( checked ) m_vomiCheckBox->setChecked( false );
+}
+
+
+
 void QExperimental3DExtension::loadViewpointVomi()
 {
     QSettings settings;
@@ -1962,9 +1971,11 @@ void QExperimental3DExtension::saveViewpointVomi()
 }
 
 
-void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
+void QExperimental3DExtension::tourBestViews()
 {
-    if ( checked ) m_vomiCheckBox->setChecked( false );
+    QList<Vector3> viewpoints;
+    for ( int i = 0; i < m_bestViews.size(); i++ ) viewpoints << m_bestViews.at( i ).second;
+    tour( viewpoints, m_tourSpeedDoubleSpinBox->value() );
 }
 
 
