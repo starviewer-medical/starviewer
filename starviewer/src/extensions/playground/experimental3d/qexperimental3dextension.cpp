@@ -506,7 +506,28 @@ void QExperimental3DExtension::setViewpoint( const Vector3 &viewpoint )
 {
     Vector3 up( 0.0, 1.0, 0.0 );
     Vector3 position = viewpoint;
-    if ( qAbs( position.normalize() * up ) > 0.9 ) up = Vector3( 0.0, 0.0, 1.0 );
+    double dotProduct = qAbs( position.normalize() * up );
+
+    if ( dotProduct > 0.9 ) up.set( 0.0, 0.0, 1.0 );
+    else if ( dotProduct > 0.8 )
+    {
+        double a = 10.0 * ( dotProduct - 0.8 ); // a està entre 0 i 1; 1 ha de ser tot z, 0 ha de ser tot y
+        up.set( 0.0, 1.0 - a, a );
+        up.normalize();
+
+        if ( MathTools::zero( position.x ) == 0.0 && MathTools::haveSameSign( position.y, position.z ) )    // si x és 0 i y i z tenen el mateix signe ens va malament
+        {
+            // fem el nou producte escalar per assegurar que vagi bé
+            dotProduct = qAbs( position * up ); // position ja es manté normalitzada d'abans
+
+            if ( dotProduct > 0.7 )
+            {
+                double b = ( dotProduct - 0.7 ) / 0.3;  // b està entre 0 i 1
+                up.set( b, 1.0 - a, a );
+                up.normalize();
+            }
+        }
+    }
 
     m_viewer->setCamera( viewpoint, Vector3(), up );
 }
