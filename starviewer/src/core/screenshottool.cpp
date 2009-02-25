@@ -120,7 +120,6 @@ void ScreenShotTool::screenShot( bool singleShot )
                 int currentSlice = viewer2D->getCurrentSlice();
                 int currentPhase = viewer2D->getCurrentPhase();
                 int maxSlice = viewer2D->getMaximumSlice() + 1;
-                DEBUG_LOG( QString("Max Slice: %1").arg( maxSlice ) );
                 // En cas que tinguem fases farem tantes passades com fases
                 int phases = viewer2D->getInput()->getNumberOfPhases();
                 for( int i = 0; i < maxSlice; i++ )
