@@ -29,7 +29,7 @@ class NonClosedAngleTool : public Tool
 Q_OBJECT
 public:
  ///possibles estats de la tool
-    enum { FIRST_POINT_FIXED, SECOND_POINT_FIXED, THIRD_POINT_FIXED, NONE };
+    enum { NONE, FIRST_LINE_FIXED };
 
     NonClosedAngleTool( QViewer *viewer, QObject *parent = 0 );
 
@@ -41,26 +41,20 @@ public:
 private slots:
 
 private:
-    /*
-    *   funcions per canviar d'estat: second point, third point... etc
-    *   simular segments com a distancetool.
-    */
-    /// ens permet anotar el primer punt de la primera línia.
-    void annotateFirstPoint();
+    /// ens permet anotar el punts de la primera línia.
+    void annotateFirstLinePoints();
+
+    /// ens permet anotar el punts de la segona línia.
+    void annotateSecondLinePoints();
 
     /// ens simula la linia que estem dibuixant respecte el punt on està el mouse.
     void simulateLine();
 
+    /// ens simula la 2a linia que estem dibuixant.
+    void simulateSecondLine();
+
     /// TODO ens simula una 2a línia respecte el punt on està el mouse.
     void simulateMirrorLine();
-
-    ///ens simula el primer segment de l'angle respecte el punt on està el mouse.
-    void simulateFirstSegmentOfAngle();
-
-    ///ens simula el segon segment de l'angle respecte el punt on està el mouse.
-    void simulateSecondSegmentOfAngle();
-
-    void computeSecondSegmentLimit( double point1[3], double point2[3] );//no s'implementa?
 
     void drawCircumference();//dibuixem arc?
 
@@ -71,7 +65,10 @@ private:
     void findInitialDegreeArc();//dibuixem arc?
 
     ///calcula la correcta posició del caption de l'angle segons els punts de l'angle
-    void textPosition( double *p1, double *p2, double *p3, DrawerText *angleText );
+    void textPosition( double *p1, double *p2, DrawerText *angleText );
+
+    ///retorna el valor mínim dels paràmetres
+    double minimum(double d1, double d2, double d3, double d4);
 
 private:
     /// Viewer 2D sobre el qual treballem
@@ -95,6 +92,10 @@ private:
     double m_radius;
 
     int m_initialDegreeArc;
+
+    bool m_hasFirstPoint;
+
+    bool m_hasSecondPoint;
 };
 
 }

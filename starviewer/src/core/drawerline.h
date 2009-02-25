@@ -38,9 +38,15 @@ public:
 
     vtkProp *getAsVtkProp();
 
+    /// Retorna el primer punt de la línia
+    double *getFirstPoint(){return m_firstPoint;};
+
+    /// Retorna el segon punt de la línia
+    double *getSecondPoint(){return m_secondPoint;};
+
     /// Obté el punt mig de la linia
     double *getMiddlePoint();
-    
+
     /// Obté el punt de més a l'esquerra de la linia, segons la vista en la que estem
     double *getLeftPoint( int view );
 
