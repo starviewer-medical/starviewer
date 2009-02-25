@@ -44,6 +44,13 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     }
     else
     {
+        // comprovar que tenim permisos d'escriptura a la BDD
+        if( !isDatabaseFileWritable() )
+        {
+            // TODO què fem? cal retornar fals? Avisar a l'usuari?
+            ERROR_LOG("L'arxiu de base de dades [" + settings.getDatabasePath() + "] no es pot obrir amb permisos d'escriptura. no podrem guardar estudis nous ni modificar els ja existents");
+        }
+
         if (localDatabaseManager.isDatabaseCorrupted())
         {
             if (!repairDatabase())
@@ -72,6 +79,10 @@ bool DatabaseInstallation::checkLocalImagePath()
             ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + settings.getCacheImagePath());
             return false;
         }
+    }
+    else
+    {
+        // TODO comprovar que tenim permisos d'escriptura al directori local d'imatges
     }
 
     INFO_LOG("Estat de la cache d'imatges correcte ");
@@ -126,6 +137,15 @@ bool DatabaseInstallation::repairDatabase()
     {
         return true;
     }
+}
+
+bool DatabaseInstallation::isDatabaseFileWritable()
+{
+    StarviewerSettings settings;
+
+    QFileInfo databaseFilePath(settings.getDatabasePath());
+    
+    return databaseFilePath.isWritable();
 }
 
 bool DatabaseInstallation::reinstallDatabase()

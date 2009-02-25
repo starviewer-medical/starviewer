@@ -55,7 +55,6 @@ public:
     ~DatabaseInstallation();
 
 private slots:
-
     ///Fa avançar la barra de progrés
     void setValueProgressBar();
 
@@ -76,6 +75,9 @@ private :
 
     ///Intenta reparar la base dedades, sinó ho aconseguei la reinstal·la
     bool repairDatabase();
+
+    /// Retorna cert si tenim permisos d'escriptura a la base de dades, fals altrament
+    bool isDatabaseFileWritable();
 
     /** Crea el directori per guardar les imatges de la cache
      * @return indica si s'ha pogut crear el directori
