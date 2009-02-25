@@ -8,6 +8,7 @@
 #include "qviewer.h"
 #include "q2dviewer.h"
 #include "logging.h"
+#include "volume.h"
 // definicions globals d'aplicació
 #include "starviewerapplication.h"
 // vtk
@@ -113,18 +114,27 @@ void ScreenShotTool::screenShot( bool singleShot )
             Q2DViewer *viewer2D = dynamic_cast< Q2DViewer * >( m_viewer );
             if( viewer2D )
             {
-                // tenim un  Q2DViewer, llavors podem guardar totes les imatges
-                int max = viewer2D->getMaximumSlice();
-                // guardem la llesca actual per restaurar
+                // Tenim un  Q2DViewer, llavors podem guardar totes les imatges
+
+                // guardem la llesca i fase actual per restaurar
                 int currentSlice = viewer2D->getCurrentSlice();
-                
-                // recorrem totes les imatges i en fem captura
-                for( int i = 0; i < max; i++ )
+                int currentPhase = viewer2D->getCurrentPhase();
+                int maxSlice = viewer2D->getMaximumSlice() + 1;
+                DEBUG_LOG( QString("Max Slice: %1").arg( maxSlice ) );
+                // En cas que tinguem fases farem tantes passades com fases
+                int phases = viewer2D->getInput()->getNumberOfPhases();
+                for( int i = 0; i < maxSlice; i++ )
                 {
                     viewer2D->setSlice(i);
-                    viewer2D->grabCurrentView();
+                    for( int j = 0; j < phases; j++ )
+                    {
+                        viewer2D->setPhase(j);
+                        viewer2D->grabCurrentView();
+                    }
                 }
+                // restaurem
                 viewer2D->setSlice( currentSlice );
+                viewer2D->setPhase( currentPhase );
             }
             else // tenim un visor que no és 2D, per tant fem un "single shot"
             {
