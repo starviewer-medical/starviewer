@@ -480,7 +480,6 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
 
 void HangingProtocolManager::applyDisplayTransformations( Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
 {
-    // TODO el paràmetre patient no cal, s'hauria d'eliminar si no és que sigui necesari per alguna raó
     DICOMTagReader dicomReader;
     if( dicomReader.setFile( serie->getImages()[imageNumber]->getPath() ) )
     {//dicomReader.getAttributeByName( DCM_PatientOrientation )
@@ -493,18 +492,15 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     {
         if( reconstruction == "SAGITAL" )
         {
-			if (viewer->getViewer()->getView() != Q2DViewer::Sagital)
-				viewer->resetViewToSagital();
+			viewer->resetViewToSagital();
         }
         else if ( reconstruction == "CORONAL" )
         {
-			if (viewer->getViewer()->getView() != Q2DViewer::Coronal)
-				viewer->resetViewToCoronal();
+			viewer->resetViewToCoronal();
         }
         else if( reconstruction == "AXIAL" )
         {
-			if (viewer->getViewer()->getView() != Q2DViewer::Axial)
-				viewer->resetViewToAxial();
+			viewer->resetViewToAxial();
         }
         else
         {
