@@ -119,6 +119,8 @@ private slots:
     void voxelSalienciesChecked( bool checked );
     void loadViewpointVomi();
     void saveViewpointVomi();
+    void loadEvmi();
+    void saveEvmi();
 
     void tourBestViews();
     void guidedTour();
@@ -142,6 +144,7 @@ private:
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
     QVector<float> m_viewpointVomi;
+    QVector<float> m_evmi;
 
 };
 

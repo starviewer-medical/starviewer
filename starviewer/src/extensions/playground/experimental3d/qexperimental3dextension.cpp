@@ -130,6 +130,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveVoxelSalienciesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelSaliencies() ) );
     connect( m_loadViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( loadViewpointVomi() ) );
     connect( m_saveViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( saveViewpointVomi() ) );
+    connect( m_loadEvmiPushButton, SIGNAL( clicked() ), SLOT( loadEvmi() ) );
+    connect( m_saveEvmiPushButton, SIGNAL( clicked() ), SLOT( saveEvmi() ) );
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
     connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
 
@@ -896,9 +898,10 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeVoxelSaliencies = m_computeVoxelSalienciesCheckBox->isChecked();
     bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
+    bool computeEvmi = m_computeEvmiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour && !computeVomi && !computeVoxelSaliencies && !computeViewpointVomi ) return;
+    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour && !computeVomi && !computeVoxelSaliencies && !computeViewpointVomi && !computeEvmi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -917,13 +920,14 @@ void QExperimental3DExtension::computeSelectedVmi()
     if ( computeGuidedTour && m_bestViews.isEmpty() ) computeBestViews = true;
     if ( computeBestViews && m_vmi.size() != nViewpoints ) computeVmi = true;
     if ( computeViewpointVomi && m_vomi.isEmpty() ) computeVomi = true;
+    if ( computeEvmi && m_vomi.isEmpty() ) computeVomi = true;
 
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
-    if ( computeVmi || computeViewpointUnstabilities ) nSteps++;    // VMI + viewpoint unstabilities
+    if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi ) nSteps ++; //VoMI + voxel saliencies + viewpoint VoMI
+    if ( computeVmi || computeViewpointUnstabilities || computeEvmi ) nSteps++; // VMI + viewpoint unstabilities + EVMI
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
-    if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi ) nSteps ++; //VoMI + voxel saliencies + viewpoint VoMI
     int step = 0;
     {
         m_vmiProgressBar->setValue( 0 );
@@ -973,11 +977,206 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->repaint();
     }
 
-    // VMI + viewpont unstabilities
-    if ( computeVmi || computeViewpointUnstabilities )
+    // VoMI + voxel saliencies + viewpoint VoMI
+    if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi )
+    {
+        if ( computeVomi )
+        {
+            m_vomi.resize( nObjects );
+            m_maximumVomi = 0.0f;
+        }
+        if ( computeVoxelSaliencies )
+        {
+            m_voxelSaliencies.resize( nObjects );
+            m_maximumSaliency = 0.0f;
+        }
+        if ( computeViewpointVomi )
+        {
+            m_viewpointVomi.resize( nViewpoints );
+            m_viewpointVomi.fill( 0.0f );
+        }
+
+        /*
+         * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
+         * N'hi haurà prou llegint la llesca actual, l'anterior i la següent.
+         */
+        int *dimensions = m_volume->getImage()->GetDimensions();
+        int dimX = dimensions[0], dimY = dimensions[1], dimZ = dimensions[2], dimXY = dimX * dimY, dimXY3 = dimXY * 3;
+        qint64 sizeToRead = dimXY3 * sizeof(float), sizeToReadOnEdge = dimXY * 2 * sizeof(float);
+        float **pOV = new float*[nViewpoints];  // p(O|V) (un tros de la matriu cada vegada)
+        for ( int i = 0; i < nViewpoints; i++ ) pOV[i] = new float[dimXY3];
+        QVector<float> pVoi( nViewpoints ); // p(V|oi)
+        QVector<float> pVoj( nViewpoints ); // p(V|oj)
+
+        m_vmiProgressBar->setValue( 0 );
+
+        // iterem pel volum en l'ordre dels vòxels
+        for ( int z = 0, i = 0; z < dimZ; z++ )
+        {
+            DEBUG_LOG( QString( "llesca %1/%2" ).arg( z + 1 ).arg( dimZ ) );
+
+            // actualitzem pOV
+            for ( int k = 0; k < nViewpoints; k++ )
+            {
+                // quan z == 0, es salta la primera llesca, que seria z == -1
+                if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );
+                else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
+                else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
+            }
+
+            int pOvShift = ( z - 1 ) * dimXY;
+
+            for ( int y = 0; y < dimY; y++ )
+            {
+                for ( int x = 0; x < dimX; x++, i++ )
+                {
+                    Q_ASSERT( i == x + y * dimX + z * dimXY );
+
+                    float poi = objectProbabilities.at( i );    // p(oi)
+                    Q_ASSERT( poi == poi );
+
+                    // p(V|oi)
+                    if ( poi == 0.0 ) pVoi.fill( 0.0f );    // si p(oi) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oi) ha de ser tot zeros
+                    else for ( int k = 0; k < nViewpoints; k++ ) pVoi[k] = viewProbabilities.at( k ) * pOV[k][i - pOvShift] / poi;
+
+                    if ( computeVomi )
+                    {
+                        float vomi = InformationTheory<float>::kullbackLeiblerDivergence( pVoi, viewProbabilities );
+                        Q_ASSERT( vomi == vomi );
+                        m_vomi[i] = vomi;
+                        if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
+                    }
+
+                    if ( computeVoxelSaliencies )
+                    {
+//                        int neighbours[6] = { x - 1 + y * dimX + z * dimXY, x + 1 + y * dimX + z * dimXY,
+//                                              x + ( y - 1 ) * dimX + z * dimXY, x + ( y + 1 ) * dimX + z * dimXY,
+//                                              x + y * dimX + ( z - 1 ) * dimXY, x + y * dimX + ( z + 1 ) * dimXY };
+//                        bool validNeighbours[6] = { x > 0, x + 1 < dimX,
+//                                                    y > 0, y + 1 < dimY,
+//                                                    z > 0, z + 1 < dimZ };
+                        int neighbours[26] = { x-1 + (y-1) * dimX + (z-1) * dimXY, x-1 + (y-1) * dimX +  z    * dimXY, x-1 + (y-1) * dimX + (z+1) * dimXY,
+                                               x-1 +  y    * dimX + (z-1) * dimXY, x-1 +  y    * dimX +  z    * dimXY, x-1 +  y    * dimX + (z+1) * dimXY,
+                                               x-1 + (y+1) * dimX + (z-1) * dimXY, x-1 + (y+1) * dimX +  z    * dimXY, x-1 + (y+1) * dimX + (z+1) * dimXY,
+                                               x   + (y-1) * dimX + (z-1) * dimXY, x   + (y-1) * dimX +  z    * dimXY, x   + (y-1) * dimX + (z+1) * dimXY,
+                                               x   +  y    * dimX + (z-1) * dimXY,                                     x   +  y    * dimX + (z+1) * dimXY,
+                                               x   + (y+1) * dimX + (z-1) * dimXY, x   + (y+1) * dimX +  z    * dimXY, x   + (y+1) * dimX + (z+1) * dimXY,
+                                               x+1 + (y-1) * dimX + (z-1) * dimXY, x+1 + (y-1) * dimX +  z    * dimXY, x+1 + (y-1) * dimX + (z+1) * dimXY,
+                                               x+1 +  y    * dimX + (z-1) * dimXY, x+1 +  y    * dimX +  z    * dimXY, x+1 +  y    * dimX + (z+1) * dimXY,
+                                               x+1 + (y+1) * dimX + (z-1) * dimXY, x+1 + (y+1) * dimX +  z    * dimXY, x+1 + (y+1) * dimX + (z+1) * dimXY };
+                        bool validNeighbours[26] = {   x > 0    &&   y > 0    &&   z > 0   ,   x > 0    &&   y > 0                 ,   x > 0    &&   y > 0    && z+1 < dimZ,
+                                                       x > 0                  &&   z > 0   ,   x > 0                               ,   x > 0                  && z+1 < dimZ,
+                                                       x > 0    && y+1 < dimY &&   z > 0   ,   x > 0    && y+1 < dimY              ,   x > 0    && y+1 < dimY && z+1 < dimZ,
+                                                                     y > 0    &&   z > 0   ,                 y > 0                 ,                 y > 0    && z+1 < dimZ,
+                                                                                   z > 0   ,                                                                     z+1 < dimZ,
+                                                                   y+1 < dimY &&   z > 0   ,               y+1 < dimY              ,               y+1 < dimY && z+1 < dimZ,
+                                                     x+1 < dimX &&   y > 0    &&   z > 0   , x+1 < dimX &&   y > 0                 , x+1 < dimX &&   y > 0    && z+1 < dimZ,
+                                                     x+1 < dimX               &&   z > 0   , x+1 < dimX                            , x+1 < dimX               && z+1 < dimZ,
+                                                     x+1 < dimX && y+1 < dimY &&   z > 0   , x+1 < dimX && y+1 < dimY              , x+1 < dimX && y+1 < dimY && z+1 < dimZ };
+                        const float SQRT_1_2 = 1.0f / sqrt( 2.0f ), SQRT_1_3 = 1.0f / sqrt( 3.0f );
+                        float weights[26] = { SQRT_1_3, SQRT_1_2, SQRT_1_3,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                              SQRT_1_3, SQRT_1_2, SQRT_1_3,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                                1.0f  ,             1.0f  ,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                              SQRT_1_3, SQRT_1_2, SQRT_1_3,
+                                              SQRT_1_2,   1.0f  , SQRT_1_2,
+                                              SQRT_1_3, SQRT_1_2, SQRT_1_3 };
+
+                        float saliency = 0.0f;
+                        float totalWeight = 0.0f;
+
+                        // iterem pels veïns
+                        for ( int j = 0; j < 26; j++ )
+                        {
+                            if ( !validNeighbours[j] ) continue;
+
+                            totalWeight += weights[j];
+
+                            float poj = objectProbabilities.at( neighbours[j] );    // p(oj)
+                            Q_ASSERT( poj == poj );
+                            float poij = poi + poj; // p(ô)
+
+                            if ( poij == 0.0f ) continue;
+
+                            // p(V|oj)
+                            if ( poj == 0.0f ) pVoj.fill( 0.0f );   // si p(oj) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oj) ha de ser tot zeros
+                            else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = viewProbabilities.at( k ) * pOV[k][neighbours[j] - pOvShift] / poj;
+
+                            float s = weights[j] * InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
+                            Q_ASSERT( s == s );
+                            saliency += s;
+                        }
+
+                        saliency /= totalWeight;
+                        m_voxelSaliencies[i] = saliency;
+                        if ( saliency > m_maximumSaliency ) m_maximumSaliency = saliency;
+                    }
+
+                    if ( computeViewpointVomi )
+                    {
+                        for ( int k = 0; k < nViewpoints; k++ ) m_viewpointVomi[k] += m_vomi[i] * pVoi[k];
+                    }
+                }
+            }
+
+            if ( z > 0 )
+            {
+                // avancem una llesca en tots els fitxers
+                for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );
+            }
+
+            m_vmiProgressBar->setValue( 100 * ( z + 1 ) / dimZ );
+            m_vmiProgressBar->repaint();
+        }
+
+        m_vmiTotalProgressBar->setValue( ++step );
+        m_vmiTotalProgressBar->repaint();
+
+        DEBUG_LOG( "esborrem pOV" );
+        for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
+        delete[] pOV;
+
+        if ( computeVomi )
+        {
+            m_vomiCheckBox->setEnabled( true );
+            m_saveVomiPushButton->setEnabled( true );
+        }
+
+        if ( computeVoxelSaliencies )
+        {
+            m_voxelSalienciesCheckBox->setEnabled( true );
+            m_saveVoxelSalienciesPushButton->setEnabled( true );
+        }
+
+        if ( computeViewpointVomi ) m_saveViewpointVomiPushButton->setEnabled( true );
+    }
+
+    // VMI + viewpont unstabilities + EVMI
+    if ( computeVmi || computeViewpointUnstabilities || computeEvmi )
     {
         if ( computeVmi ) m_vmi.resize( nViewpoints );
         if ( computeViewpointUnstabilities ) m_viewpointUnstabilities.resize( nViewpoints );
+        if ( computeEvmi ) m_evmi.resize( nViewpoints );
+
+        QVector<float> ppO; // p'(O)
+
+        if ( computeEvmi )
+        {
+            ppO.resize( nObjects );
+
+            float total = 0.0f;
+
+            for ( unsigned int i = 0; i < nObjects; i++ )
+            {
+
+                ppO[i] = objectProbabilities.at( i ) * m_vomi.at( i );
+                total += ppO.at( i );
+            }
+
+            for ( unsigned int i = 0; i < nObjects; i++ ) ppO[i] /= total;
+        }
 
         m_vmiProgressBar->setValue( 0 );
 
@@ -1024,6 +1223,15 @@ void QExperimental3DExtension::computeSelectedVmi()
 
                 viewpointUnstability /= nNeighbours;
                 m_viewpointUnstabilities[i] = viewpointUnstability;
+                DEBUG_LOG( QString( "U(v%1) = %2" ).arg( i + 1 ).arg( viewpointUnstability ) );
+            }
+
+            if ( computeEvmi )
+            {
+                float evmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, ppO );
+                Q_ASSERT( evmi == evmi );
+                m_evmi[i] = evmi;
+                DEBUG_LOG( QString( "EVMI(v%1) = %2" ).arg( i + 1 ).arg( evmi ) );
             }
 
             m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
@@ -1035,6 +1243,7 @@ void QExperimental3DExtension::computeSelectedVmi()
 
         if ( computeVmi ) m_saveVmiPushButton->setEnabled( true );
         if ( computeViewpointUnstabilities ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
+        if ( computeEvmi ) m_saveEvmiPushButton->setEnabled( true );
     }
 
     // best views
@@ -1239,182 +1448,6 @@ void QExperimental3DExtension::computeSelectedVmi()
 
         m_saveGuidedTourPushButton->setEnabled( true );
         m_guidedTourPushButton->setEnabled( true );
-    }
-
-    // VoMI + voxel saliencies + viewpoint VoMI
-    if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi )
-    {
-        if ( computeVomi )
-        {
-            m_vomi.resize( nObjects );
-            m_maximumVomi = 0.0f;
-        }
-        if ( computeVoxelSaliencies )
-        {
-            m_voxelSaliencies.resize( nObjects );
-            m_maximumSaliency = 0.0f;
-        }
-        if ( computeViewpointVomi )
-        {
-            m_viewpointVomi.resize( nViewpoints );
-            m_viewpointVomi.fill( 0.0f );
-        }
-
-        /*
-         * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
-         * N'hi haurà prou llegint la llesca actual, l'anterior i la següent.
-         */
-        int *dimensions = m_volume->getImage()->GetDimensions();
-        int dimX = dimensions[0], dimY = dimensions[1], dimZ = dimensions[2], dimXY = dimX * dimY, dimXY3 = dimXY * 3;
-        qint64 sizeToRead = dimXY3 * sizeof(float), sizeToReadOnEdge = dimXY * 2 * sizeof(float);
-        float **pOV = new float*[nViewpoints];  // p(O|V) (un tros de la matriu cada vegada)
-        for ( int i = 0; i < nViewpoints; i++ ) pOV[i] = new float[dimXY3];
-        QVector<float> pVoi( nViewpoints ); // p(V|oi)
-        QVector<float> pVoj( nViewpoints ); // p(V|oj)
-
-        m_vmiProgressBar->setValue( 0 );
-
-        // iterem pel volum en l'ordre dels vòxels
-        for ( int z = 0, i = 0; z < dimZ; z++ )
-        {
-            DEBUG_LOG( QString( "llesca %1/%2" ).arg( z + 1 ).arg( dimZ ) );
-
-            // actualitzem pOV
-            for ( int k = 0; k < nViewpoints; k++ )
-            {
-                // quan z == 0, es salta la primera llesca, que seria z == -1
-                if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );
-                else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
-                else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
-            }
-
-            int pOvShift = ( z - 1 ) * dimXY;
-
-            for ( int y = 0; y < dimY; y++ )
-            {
-                for ( int x = 0; x < dimX; x++, i++ )
-                {
-                    Q_ASSERT( i == x + y * dimX + z * dimXY );
-
-                    float poi = objectProbabilities.at( i );    // p(oi)
-                    Q_ASSERT( poi == poi );
-
-                    // p(V|oi)
-                    if ( poi == 0.0 ) pVoi.fill( 0.0f );    // si p(oi) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oi) ha de ser tot zeros
-                    else for ( int k = 0; k < nViewpoints; k++ ) pVoi[k] = viewProbabilities.at( k ) * pOV[k][i - pOvShift] / poi;
-
-                    if ( computeVomi )
-                    {
-                        float vomi = InformationTheory<float>::kullbackLeiblerDivergence( pVoi, viewProbabilities );
-                        Q_ASSERT( vomi == vomi );
-                        m_vomi[i] = vomi;
-                        if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
-                    }
-
-                    if ( computeVoxelSaliencies )
-                    {
-//                        int neighbours[6] = { x - 1 + y * dimX + z * dimXY, x + 1 + y * dimX + z * dimXY,
-//                                              x + ( y - 1 ) * dimX + z * dimXY, x + ( y + 1 ) * dimX + z * dimXY,
-//                                              x + y * dimX + ( z - 1 ) * dimXY, x + y * dimX + ( z + 1 ) * dimXY };
-//                        bool validNeighbours[6] = { x > 0, x + 1 < dimX,
-//                                                    y > 0, y + 1 < dimY,
-//                                                    z > 0, z + 1 < dimZ };
-                        int neighbours[26] = { x-1 + (y-1) * dimX + (z-1) * dimXY, x-1 + (y-1) * dimX +  z    * dimXY, x-1 + (y-1) * dimX + (z+1) * dimXY,
-                                               x-1 +  y    * dimX + (z-1) * dimXY, x-1 +  y    * dimX +  z    * dimXY, x-1 +  y    * dimX + (z+1) * dimXY,
-                                               x-1 + (y+1) * dimX + (z-1) * dimXY, x-1 + (y+1) * dimX +  z    * dimXY, x-1 + (y+1) * dimX + (z+1) * dimXY,
-                                               x   + (y-1) * dimX + (z-1) * dimXY, x   + (y-1) * dimX +  z    * dimXY, x   + (y-1) * dimX + (z+1) * dimXY,
-                                               x   +  y    * dimX + (z-1) * dimXY,                                     x   +  y    * dimX + (z+1) * dimXY,
-                                               x   + (y+1) * dimX + (z-1) * dimXY, x   + (y+1) * dimX +  z    * dimXY, x   + (y+1) * dimX + (z+1) * dimXY,
-                                               x+1 + (y-1) * dimX + (z-1) * dimXY, x+1 + (y-1) * dimX +  z    * dimXY, x+1 + (y-1) * dimX + (z+1) * dimXY,
-                                               x+1 +  y    * dimX + (z-1) * dimXY, x+1 +  y    * dimX +  z    * dimXY, x+1 +  y    * dimX + (z+1) * dimXY,
-                                               x+1 + (y+1) * dimX + (z-1) * dimXY, x+1 + (y+1) * dimX +  z    * dimXY, x+1 + (y+1) * dimX + (z+1) * dimXY };
-                        bool validNeighbours[26] = {   x > 0    &&   y > 0    &&   z > 0   ,   x > 0    &&   y > 0                 ,   x > 0    &&   y > 0    && z+1 < dimZ,
-                                                       x > 0                  &&   z > 0   ,   x > 0                               ,   x > 0                  && z+1 < dimZ,
-                                                       x > 0    && y+1 < dimY &&   z > 0   ,   x > 0    && y+1 < dimY              ,   x > 0    && y+1 < dimY && z+1 < dimZ,
-                                                                     y > 0    &&   z > 0   ,                 y > 0                 ,                 y > 0    && z+1 < dimZ,
-                                                                                   z > 0   ,                                                                     z+1 < dimZ,
-                                                                   y+1 < dimY &&   z > 0   ,               y+1 < dimY              ,               y+1 < dimY && z+1 < dimZ,
-                                                     x+1 < dimX &&   y > 0    &&   z > 0   , x+1 < dimX &&   y > 0                 , x+1 < dimX &&   y > 0    && z+1 < dimZ,
-                                                     x+1 < dimX               &&   z > 0   , x+1 < dimX                            , x+1 < dimX               && z+1 < dimZ,
-                                                     x+1 < dimX && y+1 < dimY &&   z > 0   , x+1 < dimX && y+1 < dimY              , x+1 < dimX && y+1 < dimY && z+1 < dimZ };
-                        const float SQRT_1_2 = 1.0f / sqrt( 2.0f ), SQRT_1_3 = 1.0f / sqrt( 3.0f );
-                        float weights[26] = { SQRT_1_3, SQRT_1_2, SQRT_1_3,
-                                              SQRT_1_2,   1.0f  , SQRT_1_2,
-                                              SQRT_1_3, SQRT_1_2, SQRT_1_3,
-                                              SQRT_1_2,   1.0f  , SQRT_1_2,
-                                                1.0f  ,             1.0f  ,
-                                              SQRT_1_2,   1.0f  , SQRT_1_2,
-                                              SQRT_1_3, SQRT_1_2, SQRT_1_3,
-                                              SQRT_1_2,   1.0f  , SQRT_1_2,
-                                              SQRT_1_3, SQRT_1_2, SQRT_1_3 };
-
-                        float saliency = 0.0f;
-                        float totalWeight = 0.0f;
-
-                        // iterem pels veïns
-                        for ( int j = 0; j < 26; j++ )
-                        {
-                            if ( !validNeighbours[j] ) continue;
-
-                            totalWeight += weights[j];
-
-                            float poj = objectProbabilities.at( neighbours[j] );    // p(oj)
-                            Q_ASSERT( poj == poj );
-                            float poij = poi + poj; // p(ô)
-
-                            if ( poij == 0.0f ) continue;
-
-                            // p(V|oj)
-                            if ( poj == 0.0f ) pVoj.fill( 0.0f );   // si p(oj) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oj) ha de ser tot zeros
-                            else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = viewProbabilities.at( k ) * pOV[k][neighbours[j] - pOvShift] / poj;
-
-                            float s = weights[j] * InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
-                            Q_ASSERT( s == s );
-                            saliency += s;
-                        }
-
-                        saliency /= totalWeight;
-                        m_voxelSaliencies[i] = saliency;
-                        if ( saliency > m_maximumSaliency ) m_maximumSaliency = saliency;
-                    }
-
-                    if ( computeViewpointVomi )
-                    {
-                        for ( int k = 0; k < nViewpoints; k++ ) m_viewpointVomi[k] += m_vomi[i] * pVoi[k];
-                    }
-                }
-            }
-
-            if ( z > 0 )
-            {
-                // avancem una llesca en tots els fitxers
-                for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );
-            }
-
-            m_vmiProgressBar->setValue( 100 * ( z + 1 ) / dimZ );
-            m_vmiProgressBar->repaint();
-        }
-
-        m_vmiTotalProgressBar->setValue( ++step );
-        m_vmiTotalProgressBar->repaint();
-
-        DEBUG_LOG( "esborrem pOV" );
-        for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
-        delete[] pOV;
-
-        if ( computeVomi )
-        {
-            m_vomiCheckBox->setEnabled( true );
-            m_saveVomiPushButton->setEnabled( true );
-        }
-
-        if ( computeVoxelSaliencies )
-        {
-            m_voxelSalienciesCheckBox->setEnabled( true );
-            m_saveVoxelSalienciesPushButton->setEnabled( true );
-        }
-
-        if ( computeViewpointVomi ) m_saveViewpointVomiPushButton->setEnabled( true );
     }
 
     DEBUG_LOG( "destruïm els fitxers temporals" );
@@ -2066,7 +2099,6 @@ void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
 }
 
 
-
 void QExperimental3DExtension::loadViewpointVomi()
 {
     QSettings settings;
@@ -2151,6 +2183,96 @@ void QExperimental3DExtension::saveViewpointVomi()
 
         QFileInfo viewpointVomiFileInfo( viewpointVomiFileName );
         settings.setValue( "viewpointVomiDir", viewpointVomiFileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::loadEvmi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString evmiDir = settings.value( "evmiDir", QString() ).toString();
+    QString evmiFileName = QFileDialog::getOpenFileName( this, tr("Load EVMI"), evmiDir, tr("Data files (*.dat);;All files (*)") );
+
+    if ( !evmiFileName.isNull() )
+    {
+        QFile evmiFile( evmiFileName );
+
+        if ( !evmiFile.open( QFile::ReadOnly ) )
+        {
+            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + evmiFileName );
+            QMessageBox::warning( this, tr("Can't load EVMI"), QString( tr("Can't load EVMI from file ") ) + evmiFileName );
+            return;
+        }
+
+        m_evmi.clear();
+
+        QDataStream in( &evmiFile );
+
+        while ( !in.atEnd() )
+        {
+            float evmi;
+            in >> evmi;
+            m_evmi << evmi;
+        }
+
+        evmiFile.close();
+
+        QFileInfo evmiFileInfo( evmiFileName );
+        settings.setValue( "evmiDir", evmiFileInfo.absolutePath() );
+
+        m_saveEvmiPushButton->setEnabled( true );
+    }
+
+    settings.endGroup();
+}
+
+
+void QExperimental3DExtension::saveEvmi()
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString evmiDir = settings.value( "evmiDir", QString() ).toString();
+    QFileDialog saveDialog( this, tr("Save EVMI"), evmiDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( "dat" );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        QString evmiFileName = saveDialog.selectedFiles().first();
+        bool saveAsText = evmiFileName.endsWith( ".txt" );
+        QFile evmiFile( evmiFileName );
+        QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+        if ( saveAsText ) mode = mode | QIODevice::Text;
+
+        if ( !evmiFile.open( mode ) )
+        {
+            DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + evmiFileName );
+            QMessageBox::warning( this, tr("Can't save EVMI"), QString( tr("Can't save EVMI to file ") ) + evmiFileName );
+            return;
+        }
+
+        int nViewpoints = m_evmi.size();
+
+        if ( saveAsText )
+        {
+            QTextStream out( &evmiFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << "evmi(v" << i + 1 << ") = " << m_evmi.at( i ) << "\n";
+        }
+        else
+        {
+            QDataStream out( &evmiFile );
+            for ( int i = 0; i < nViewpoints; i++ ) out << m_evmi.at( i );
+        }
+
+        evmiFile.close();
+
+        QFileInfo evmiFileInfo( evmiFileName );
+        settings.setValue( "evmiDir", evmiFileInfo.absolutePath() );
     }
 
     settings.endGroup();
