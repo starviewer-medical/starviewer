@@ -115,9 +115,9 @@ void SlicingTool::doSlicing()
         value = (int)qRound(increase);
         if( value == 0 )
         {
-            if( increase >= 0 )
+            if( increase > 0 )
                 value = 1;
-            else
+            else if ( increase < 0 )
                 value = -1;
         }
         this->updateIncrement( value );
