@@ -1231,13 +1231,13 @@
                  <bool>true</bool>
                 </property>
                 <property name="maximum" >
-                 <double>10.000000000000000</double>
+                 <double>1.000000000000000</double>
                 </property>
                 <property name="singleStep" >
-                 <double>0.100000000000000</double>
+                 <double>0.010000000000000</double>
                 </property>
                 <property name="value" >
-                 <double>1.000000000000000</double>
+                 <double>0.100000000000000</double>
                 </property>
                </widget>
               </item>
@@ -1390,6 +1390,40 @@
           </item>
           <item>
            <widget class="QPushButton" name="m_saveViewpointVomiPushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Save...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_14" >
+          <item>
+           <widget class="QCheckBox" name="m_computeEvmiCheckBox" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>EVMI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_loadEvmiPushButton" >
+            <property name="text" >
+             <string>Load...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_saveEvmiPushButton" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
