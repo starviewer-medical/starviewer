@@ -102,7 +102,13 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
         }
         else 
         {
-            m_lastError = DatabaseError;
+            if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::PatientInconsistent)
+            {
+                //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
+                m_lastError = PatientInconsistent;
+            }
+            else m_lastError = DatabaseError;
+
             deleteFailedImportedStudy(studyUID); // si hi hagut un error borrem els fitxers importats de l'estudi de la cache local
         }
     }
