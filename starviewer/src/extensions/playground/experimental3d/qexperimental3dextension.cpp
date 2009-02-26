@@ -1234,7 +1234,7 @@ void QExperimental3DExtension::computeSelectedVmi()
             m_vmiProgressBar->repaint();
         }
 
-        m_vmiTotalProgressBar->setValue( nSteps++ );
+        m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
 
         m_saveGuidedTourPushButton->setEnabled( true );
