@@ -80,12 +80,26 @@ T_ASC_Network * PacsNetwork::getNetworkRetrieve()
 
 void PacsNetwork::disconnect()
 {
+	OFCondition cond;
+
     //esborem la configuració de la xarxa per queries
-    if ( m_networkQuery != NULL )  ASC_dropNetwork( &m_networkQuery ); // delete net structure
+    if ( m_networkQuery != NULL )
+	{
+		cond = ASC_dropNetwork( &m_networkQuery ); // delete net structure
+		delete m_networkQuery;
+
+		m_networkQuery = NULL;
+	}
 
     //esborrem la configuració de la xarxa per retrieves
 
-    if ( m_networkRetrieve != NULL ) ASC_dropNetwork( &m_networkRetrieve );
+    if ( m_networkRetrieve != NULL )
+	{
+		cond = ASC_dropNetwork( &m_networkRetrieve );
+		delete m_networkRetrieve;
+
+		m_networkRetrieve = NULL;
+	}
 }
 
 /** Destructor de la classe
