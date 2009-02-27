@@ -4,6 +4,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSet>
 #include <QSettings>
 #include <QTemporaryFile>
 #include <QTextStream>
@@ -1393,6 +1394,9 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiProgressBar->setValue( 100 / nBestViews );
         m_vmiProgressBar->repaint();
 
+        QSet<int> viewpointIndices;
+        for ( int i = 0; i < nViewpoints; i++ ) viewpointIndices << i;
+
         QVector<float> pOvi( nObjects );    // p(O|vi)
         QVector<float> pOvj( nObjects );    // p(O|vj)
 
@@ -1436,10 +1440,67 @@ void QExperimental3DExtension::computeSelectedVmi()
                 }
             }
 
-            m_guidedTour << bestViews.takeAt( target );
-            DEBUG_LOG( QString( "%1: (v%2) = %3; dissimilarity = %4" ).arg( m_guidedTour.size() - 1 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ).arg( minDissimilarity ) );
+            // p(vi) i p(O|vi) ara fan referència al target
+            pvi = viewProbabilities.at( target );   // p(vi)
 
-            m_vmiProgressBar->setValue( 100 * m_guidedTour.size() / nBestViews );
+            pOvFiles.at( target )->reset(); // reset per tornar al principi
+            pOvFiles.at( target )->read( reinterpret_cast<char*>( pOvi.data() ), nObjects * sizeof(float) );    // llegim...
+            pOvFiles.at( target )->reset(); // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+            QSet<int> indices( viewpointIndices );
+            int currentIndex = i;
+
+            // camí fins al target
+            while ( currentIndex != target )
+            {
+                indices.remove( currentIndex );
+
+                QVector<int> neighbours = viewpointGenerator.neighbours( currentIndex );
+                int nNeighbours = neighbours.size();
+                bool test = false;  // per comprovar que sempre tria un veí
+
+                for ( int k = 0; k < nNeighbours; k++ )
+                {
+                    int j = neighbours.at( k );
+
+                    if ( !indices.contains( j ) ) continue;
+
+                    float pvj = viewProbabilities.at( j );  // p(vj)
+                    float pvij = pvi + pvj; // p(v̂)
+
+                    float dissimilarity;
+
+                    if ( pvij == 0.0f ) dissimilarity = 0.0f;
+                    else
+                    {
+                        pOvFiles.at( j )->reset();  // reset per tornar al principi
+                        pOvFiles.at( j )->read( reinterpret_cast<char*>( pOvj.data() ), nObjects * sizeof(float) ); // llegim...
+                        pOvFiles.at( j )->reset();  // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+                        dissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, pOvi, pOvj );
+                    }
+
+                    if ( k == 0 || dissimilarity < minDissimilarity )
+                    {
+                        currentIndex = j;
+                        minDissimilarity = dissimilarity;
+                        test = true;
+                    }
+                }
+
+                Q_ASSERT( test );
+
+                m_guidedTour << qMakePair( currentIndex, viewpoints.at( currentIndex ) );
+                DEBUG_LOG( QString( "%1: (v%2) = %3; dissimilarity = %4" ).arg( m_guidedTour.size() - 1 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ).arg( minDissimilarity ) );
+            }
+
+            bestViews.removeAt( m_guidedTour.last().first );    // esborrem el target de bestViews
+
+            // versió vella
+            //m_guidedTour << bestViews.takeAt( target );
+            //DEBUG_LOG( QString( "%1: (v%2) = %3; dissimilarity = %4" ).arg( m_guidedTour.size() - 1 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ).arg( minDissimilarity ) );
+
+            m_vmiProgressBar->setValue( 100 * ( nBestViews - bestViews.size() ) / nBestViews );
             m_vmiProgressBar->repaint();
         }
 
