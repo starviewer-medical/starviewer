@@ -46,6 +46,9 @@ public:
      */
     T_ASC_Network * getNetworkRetrieve();
 
+	/// Desconnecta els network
+    void disconnect();
+
     ///Destructor de la classe
     ~PacsNetwork();
 
@@ -53,9 +56,6 @@ private :
 
     static PacsNetwork *pacsNetwork;
     T_ASC_Network *m_networkQuery , *m_networkRetrieve;
-
-    /// Desconnecta els network
-    void disconnect();
 
     ///Constructor de la classe
     PacsNetwork();

@@ -445,6 +445,7 @@ void PacsServer::disconnect()
     ASC_releaseAssociation( m_assoc ); // release association
     ASC_destroyAssociation( &m_assoc ); // delete assoc structure
 
+	m_pacsNetwork->disconnect();//desconectem les adreces de xarxa
 }
 
 QString PacsServer:: constructAdrServer( QString host , QString port )
