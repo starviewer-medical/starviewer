@@ -1,6 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-    <qresource prefix="/extensions/VolumeContourDelimiter/" >
+    <qresource prefix="/extensions/VolumeContourDelimiterExtension/" >
         <file>translations_ca_ES.qm</file>
         <file>translations_en_GB.qm</file>
         <file>translations_es_ES.qm</file>
