@@ -19,7 +19,7 @@ namespace udg {
 
 
 /**
- * Voxel shader que pinta la saliency de cada voxel.
+ * Voxel shader que pinta la VoMI de cada voxel.
  */
 class VomiVoxelShader : public VoxelShader {
 
@@ -33,7 +33,7 @@ public:
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
     void setVomi( const QVector<float> &vomi, float maximumVomi, float vomiFactor );
-    void setDiffuseLighting( bool on );
+    void setCombine( bool on );
     void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
@@ -61,7 +61,7 @@ protected:
     QVector<float> m_vomi;
     float m_maximumVomi;
     float m_vomiFactor;
-    bool m_diffuseLighting;
+    bool m_combine;
     unsigned short *m_encodedNormals;
     vtkDirectionEncoder *m_directionEncoder;
 
@@ -85,27 +85,19 @@ inline HdrColor VomiVoxelShader::nvShade( const Vector3 &position, int offset, c
     Q_UNUSED( position );
     Q_UNUSED( direction );
     Q_UNUSED( remainingOpacity );
-    Q_UNUSED( baseColor );
 
     Q_ASSERT( m_data );
 
-    HdrColor color;
-    color.alpha = m_opacities[m_data[offset]];
+    HdrColor color( 1.0f, 1.0f, 1.0f );
 
-    if ( !color.isTransparent() )
+    if ( m_combine ) color = baseColor;
+    else color.alpha = m_opacities[m_data[offset]];
+
+    if ( !color.isTransparent() && !color.isBlack() )
     {
         float vomi = m_vomiFactor * m_vomi.at( offset ) / m_maximumVomi;
         float gray = qMax( 1.0f - vomi, 0.0f );
-
-        if ( m_diffuseLighting )
-        {
-            float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offset] );
-            Vector3 normal( gradient[0], gradient[1], gradient[2] );
-            double dotProduct = direction * normal;
-            gray *= -dotProduct;
-        }
-
-        color.red = color.green = color.blue = gray;
+        color.multiplyColorBy( gray );
     }
 
     return color;
@@ -117,40 +109,32 @@ inline HdrColor VomiVoxelShader::nvShade( const Vector3 &position, const Vector3
 {
     Q_UNUSED( direction );
     Q_UNUSED( remainingOpacity );
-    Q_UNUSED( baseColor );
 
     Q_ASSERT( interpolator );
     Q_ASSERT( m_data );
 
     int offsets[8];
     double weights[8];
-    interpolator->getOffsetsAndWeights( position, offsets, weights );
+    bool offsetsAndWeights = false;
 
-    double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
-    HdrColor color;
-    color.alpha = m_opacities[static_cast<int>(value)];
+    HdrColor color( 1.0f, 1.0f, 1.0f );
 
-    if ( !color.isTransparent() )
+    if ( m_combine ) color = baseColor;
+    else
     {
+        interpolator->getOffsetsAndWeights( position, offsets, weights );
+        offsetsAndWeights = true;
+        double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
+        color.alpha = m_opacities[static_cast<int>(value)];
+    }
+
+    if ( !color.isTransparent() && !color.isBlack() )
+    {
+        if ( !offsetsAndWeights ) interpolator->getOffsetsAndWeights( position, offsets, weights );
+
         float vomi = m_vomiFactor * TrilinearInterpolator::interpolate<float>( m_vomi.constData(), offsets, weights ) / m_maximumVomi;
         float gray = qMax( 1.0f - vomi, 0.0f );
-
-        if ( m_diffuseLighting )
-        {
-            Vector3 normal;
-
-            for ( int i = 0; i < 8; i++ )
-            {
-                float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offsets[i]] );
-                Vector3 localNormal( gradient[0], gradient[1], gradient[2] );
-                normal += weights[i] * localNormal;
-            }
-
-            double dotProduct = direction * normal;
-            gray *= -dotProduct;
-        }
-
-        color.red = color.green = color.blue = gray;
+        color.multiplyColorBy( gray );
     }
 
     return color;

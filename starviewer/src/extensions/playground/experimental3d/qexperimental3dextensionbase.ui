@@ -335,6 +335,9 @@
             <property name="text" >
              <string>VoMI</string>
             </property>
+            <property name="tristate" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>

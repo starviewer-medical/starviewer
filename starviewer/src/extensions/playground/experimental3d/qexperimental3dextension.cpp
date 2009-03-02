@@ -308,22 +308,17 @@ void QExperimental3DExtension::doVisualization()
 {
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
     m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
+
     if ( m_diffuseCheckBox->isChecked() ) m_viewer->updateShadingTable();
-    if ( m_vomiCheckBox->isChecked() )
-    {
-        m_volume->renderVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
-    }
-    else if ( m_voxelSalienciesCheckBox->isChecked() )
-    {
-        m_volume->renderVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
-    }
-    else
-    {
-        m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
-        m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
-        m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(),
-                                 m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
-    }
+
+    m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
+    m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
+    m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
+
+    if ( m_vomiCheckBox->isChecked() ) m_volume->renderVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_vomiCheckBox->checkState() == Qt::Checked );
+
+    if ( m_voxelSalienciesCheckBox->isChecked() ) m_volume->renderVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
+
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
 }

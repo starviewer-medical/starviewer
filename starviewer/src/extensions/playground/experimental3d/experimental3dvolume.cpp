@@ -289,13 +289,13 @@ float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 }
 
 
-void Experimental3DVolume::renderVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool diffuseLighting )
+void Experimental3DVolume::renderVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool combine )
 {
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
-    m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiVoxelShader );
+    if ( !combine ) m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
+    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiVoxelShader );
     m_vomiVoxelShader->setVomi( vomi, maximumVomi, factor );
-    m_vomiVoxelShader->setDiffuseLighting( diffuseLighting );
+    m_vomiVoxelShader->setCombine( combine );
     m_vomiVoxelShader->setGradientEstimator( gradientEstimator() );
 }
 
