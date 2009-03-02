@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>crashreporter_ca_ES.qm</file>
+        <file>crashreporter_en_GB.qm</file>
+        <file>crashreporter_es_ES.qm</file>
+    </qresource>
+</RCC>

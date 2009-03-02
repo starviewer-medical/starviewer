@@ -20,6 +20,7 @@
 #include "starviewerapplication.h"
 // decodificacio jpeg
 #include "dcmtk/dcmjpeg/djdecode.h"
+#include "applicationtranslationsloader.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
@@ -46,57 +47,19 @@ void configureLogging()
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
 }
 
-void loadTranslator(QApplication &app, QString pathTranslator)
-{
-    QTranslator *translator = new QTranslator(&app);
-    if (translator->load( pathTranslator ))
-    {
-        app.installTranslator( translator );
-    }
-    else
-    {
-        ERROR_LOG("No s'ha pogut carregar el translator " + pathTranslator);
-    }
-}
-
 void initializeTranslations(QApplication &app)
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-Language");
-    QString m_defaultLocale = settings.value( "languageLocale", QLocale::system().name() ).toString();
-    settings.endGroup();
-
-	// configurem les locales de l'aplicació
-	// TODO ara està simplificat només als idiomes que nosaltres
-	// suportem. Mirar si es pot millorar i fer més genèric
-	QLocale::Language language;
-	QLocale::Country country;
-
-	if( m_defaultLocale.startsWith("en_") )
-		language = QLocale::English;
-	else if( m_defaultLocale.startsWith("es_") )
-		language = QLocale::Spanish;
-	else if( m_defaultLocale.startsWith("ca_") )
-		language = QLocale::Catalan;
-	else
-		language = QLocale::C; // TODO no hauria de ser anglès per defecte?
-
-	if( m_defaultLocale.endsWith("_GB") )
-		country = QLocale::UnitedKingdom;
-	else if( m_defaultLocale.endsWith("_ES") )
-		country = QLocale::Spain;
-	else
-		country = QLocale::AnyCountry; // // TODO no hauria de ser EEUU/UK per defecte?
-
+    udg::ApplicationTranslationsLoader translationsLoader(&app);
 	// li indiquem la locale corresponent
-	QLocale::setDefault( QLocale( language, country ) );
+    QLocale defaultLocale = translationsLoader.getDefaultLocale();
+	QLocale::setDefault( defaultLocale );
 
-    loadTranslator(app, ":/core/core_" + m_defaultLocale);
-    loadTranslator(app, ":/interface/interface_" + m_defaultLocale);
-    loadTranslator(app, ":/inputoutput/inputoutput_" + m_defaultLocale);
+    translationsLoader.loadTranslation(":/core/core_" + defaultLocale.name());
+    translationsLoader.loadTranslation(":/interface/interface_" + defaultLocale.name());
+    translationsLoader.loadTranslation(":/inputoutput/inputoutput_" + defaultLocale.name());
 
     initExtensionsResources();
-    INFO_LOG("Locales = " + m_defaultLocale);
+    INFO_LOG("Locales = " + defaultLocale.name());
 
     QList<QString> extensionsMediatorNames = udg::ExtensionMediatorFactory::instance()->getFactoryNamesList();
     foreach(QString mediatorName, extensionsMediatorNames)
@@ -105,7 +68,11 @@ void initializeTranslations(QApplication &app)
 
         if (mediator)
         {
-            loadTranslator(app, ":/extensions/" + mediator->getExtensionID().getID() + "/translations_" + m_defaultLocale);
+            QString translationFilePath = ":/extensions/" + mediator->getExtensionID().getID() + "/translations_" + defaultLocale.name();
+            if (!translationsLoader.loadTranslation(translationFilePath))
+            {
+                ERROR_LOG("No s'ha pogut carregar el translator " + translationFilePath);
+            }
             delete mediator;
         }
         else

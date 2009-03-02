@@ -6,7 +6,9 @@ TARGET = $${TARGET_STARVIEWER}
 DESTDIR = ../../bin
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+           applicationtranslationsloader.cpp
+HEADERS += applicationtranslationsloader.h
 RESOURCES = main.qrc
 
 include(crashhandler.inc)

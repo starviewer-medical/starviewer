@@ -21,15 +21,18 @@ win32 {
 
 FORMS = qcrashreporterbase.ui
 HEADERS = qcrashreporter.h \
-          crashreportersender.h 
+          crashreportersender.h \
+          ../main/applicationtranslationsloader.h \
+          ../core/starviewerapplication.h
 SOURCES = crashreporter.cpp \
-          qcrashreporter.cpp
+          qcrashreporter.cpp \
+          ../main/applicationtranslationsloader.cpp \
 
 TRANSLATIONS += crashreporter_ca_ES.ts \
                 crashreporter_es_ES.ts \
                 crashreporter_en_GB.ts 
                 
-INCLUDEPATH += ../main/src_breakpad 
+INCLUDEPATH += ../main/src_breakpad ../core
 
 macx {
     HEADERS += ../main/src_breakpad/common/mac/HTTPMultipartUpload.h
@@ -50,7 +53,7 @@ win32 {
     LIBS += -lWinInet
 }
 
-RESOURCES = ../main/main.qrc
+RESOURCES = crashreporter.qrc ../main/main.qrc
 
 include(../corelibsconfiguration.inc)
 include(../compilationtype.inc)
