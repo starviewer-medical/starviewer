@@ -1,132 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
 <context>
-    <name>QVSIReconstructionExtensionBase</name>
+    <name>udg::PerfusionMapReconstructionExtensionMediator</name>
     <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="13"/>
-        <source>Form</source>
-        <translation type="unfinished">Form</translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="159"/>
-        <source>...</source>
-        <translation type="unfinished">...</translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="93"/>
-        <source>window level</source>
-        <translation type="unfinished">Brillo</translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="115"/>
-        <source>zoom</source>
-        <translation type="unfinished">Zoom</translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="137"/>
-        <source>move</source>
-        <translation type="unfinished">Mover</translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="181"/>
-        <source>voxel information</source>
-        <translation type="unfinished">Información del voxel</translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="222"/>
-        <source>DSC Serie:</source>
+        <location filename="perfusionmapreconstructionextensionmediator.cpp" line="27"/>
+        <source>Perfusion Map Reconstruction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="238"/>
-        <source>DSC</source>
-        <translation type="unfinished"></translation>
+        <location filename="perfusionmapreconstructionextensionmediator.cpp" line="41"/>
+        <source>Starviewer</source>
+        <translation type="unfinished">Starviewer</translation>
     </message>
     <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="264"/>
-        <source>SE Pre:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="280"/>
-        <source>SE PRe</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="306"/>
-        <source>SE Post:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="322"/>
-        <source>SE Post</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="348"/>
-        <source>Multiplier:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="367"/>
-        <source>VSI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextensionbase.ui" line="478"/>
-        <source>Slice:</source>
-        <translation type="unfinished">Corte:</translation>
+        <location filename="perfusionmapreconstructionextensionmediator.cpp" line="41"/>
+        <source>The selected item is not an image</source>
+        <translation type="unfinished">El elemento seleccionado no es una imagen</translation>
     </message>
 </context>
 <context>
-    <name>udg::QVSIReconstructionExtension</name>
+    <name>udg::QGraphicPlotWidgetBase</name>
     <message>
-        <location filename="qvsireconstructionextension.cpp" line="68"/>
+        <location filename="qgraphicplotwidgetbase.ui" line="21"/>
+        <source>Form</source>
+        <translation type="unfinished">Form</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QPerfusionMapReconstructionExtension</name>
+    <message>
+        <location filename="qperfusionmapreconstructionextension.cpp" line="95"/>
         <source>Rotate Clockwise</source>
         <translation type="unfinished">Rotación a la derecha</translation>
     </message>
     <message>
-        <location filename="qvsireconstructionextension.cpp" line="70"/>
+        <location filename="qperfusionmapreconstructionextension.cpp" line="97"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished">Rotar la imagen en el sentido de las agujas del reloj</translation>
     </message>
     <message>
-        <location filename="qvsireconstructionextension.cpp" line="932"/>
-        <source>VSI Extension</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextension.cpp" line="932"/>
-        <source>Some of the images have not been introduced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qvsireconstructionextension.cpp" line="1811"/>
+        <location filename="qperfusionmapreconstructionextension.cpp" line="1099"/>
         <source>Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvsireconstructionextension.cpp" line="1811"/>
+        <location filename="qperfusionmapreconstructionextension.cpp" line="1099"/>
         <source>The selected item is not a valid image format</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>udg::VSIReconstructionExtensionMediator</name>
+    <name>udg::QPerfusionMapReconstructionExtensionBase</name>
     <message>
-        <location filename="vsireconstructionextensionmediator.cpp" line="27"/>
-        <source>VSI Reconstruction</source>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="13"/>
+        <source>Form</source>
+        <translation type="unfinished">Form</translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="58"/>
+        <source>Scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="vsireconstructionextensionmediator.cpp" line="41"/>
-        <source>Starviewer</source>
-        <translation type="unfinished">Starviewer</translation>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="86"/>
+        <source>WW/WL</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="vsireconstructionextensionmediator.cpp" line="41"/>
-        <source>The selected item is not an image</source>
-        <translation type="unfinished">El elemento seleccionado no es una imagen</translation>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="111"/>
+        <source>Pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="136"/>
+        <source>Zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="171"/>
+        <source>Rotate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="199"/>
+        <source>voxel information</source>
+        <translation type="unfinished">Información del voxel</translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="221"/>
+        <source>...</source>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="253"/>
+        <source>DSC Serie:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="280"/>
+        <source>DSC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="289"/>
+        <source>Compute Perfusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="296"/>
+        <source>Map Filtering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="311"/>
+        <source>Map:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="319"/>
+        <source>CBV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="324"/>
+        <source>CBF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="329"/>
+        <source>MTT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="437"/>
+        <source>Slice:</source>
+        <translation type="unfinished">Corte:</translation>
     </message>
 </context>
 </TS>
