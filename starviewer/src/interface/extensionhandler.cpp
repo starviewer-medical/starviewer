@@ -295,6 +295,7 @@ void ExtensionHandler::processInput( QList<Patient *> patientsList )
 
 void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeriesUID)
 {
+    Q_UNUSED( defaultSeriesUID );
     foreach(Study *study, patient->getStudies() )
     {
         foreach(Series *series, study->getSeries() )
