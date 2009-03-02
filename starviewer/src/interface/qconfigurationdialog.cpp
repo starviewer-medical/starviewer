@@ -38,7 +38,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
 #ifndef STARVIEWER_LITE // no mostrem configuració del servei que escolta les peticions del RIS
     QListenRisRequestsConfigurationScreen *qListenRisRequestsConfigurationScreen = new QListenRisRequestsConfigurationScreen(this);
-    this->addConfigurationWidget(qListenRisRequestsConfigurationScreen, tr("Listen Ris Requests"), AdvancedConfiguration);
+    this->addConfigurationWidget(qListenRisRequestsConfigurationScreen, tr("RIS Listener"), AdvancedConfiguration);
     connect(qListenRisRequestsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
     connect(m_okButton , SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
 #endif
