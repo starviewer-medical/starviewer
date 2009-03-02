@@ -196,77 +196,77 @@
 <context>
     <name>udg::QVolume3DViewTestingExtension</name>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="117"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="128"/>
         <source>Spine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="130"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="141"/>
         <source>Thorax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="143"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="154"/>
         <source>Pelvis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="156"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="167"/>
         <source>Circle of Willis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="168"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="179"/>
         <source>Carotids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="181"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="192"/>
         <source>Bones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="194"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="205"/>
         <source>Bones 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="206"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="217"/>
         <source>Abdomen bones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="219"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="230"/>
         <source>Abdomen run-off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="232"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="243"/>
         <source>Abdomen slab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="390"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="404"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="426"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="440"/>
         <source>Compute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="456"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="470"/>
         <source>Load CLUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="481"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="495"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qvolume3dviewtestingextension.cpp" line="481"/>
+        <location filename="qvolume3dviewtestingextension.cpp" line="495"/>
         <source>Save CLUT</source>
         <translation type="unfinished"></translation>
     </message>
