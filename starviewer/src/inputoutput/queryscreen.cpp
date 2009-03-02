@@ -28,14 +28,11 @@
 #include "logging.h"
 #include "status.h"
 #include "dicomdirimporter.h"
-#include "patientfillerinput.h"
 #include "qcreatedicomdir.h"
 #include "dicommask.h"
 #include "qoperationstatescreen.h"
 #include "localdatabasemanager.h"
 #include "patient.h"
-#include "testdatabase.h"
-#include "testdicomobjects.h"
 #include "starviewerapplication.h"
 #include "parsexmlrispierrequest.h"
 
@@ -589,7 +586,7 @@ void QueryScreen::queryStudy( QString source )
     }
 }
 
-void QueryScreen::expandStudy( QString studyUID , QString pacsId )
+void QueryScreen::expandStudy( const QString &studyUID, const QString &pacsId )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -610,7 +607,7 @@ void QueryScreen::expandStudy( QString studyUID , QString pacsId )
 }
 
 /* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
-void QueryScreen::expandSeries( QString studyUID , QString seriesUID , QString pacsId)
+void QueryScreen::expandSeries( const QString &studyUID, const QString &seriesUID, const QString &pacsId )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1549,6 +1546,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
 			message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred while retrieving some study, some retrieves may have failed.");
             message += tr("\n\nData is either missing or corrupted on PACS.");
+            message += tr("\n\nIf the problem persists, please contact your PACS administrator to solve the problem");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         default:

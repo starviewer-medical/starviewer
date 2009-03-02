@@ -16,7 +16,6 @@
 #include "localdatabaseutildal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
-#include "testdicomobjects.h"
 #include "sqlite3.h"
 #include "logging.h"
 #include "deletedirectory.h"
