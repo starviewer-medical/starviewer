@@ -1042,16 +1042,15 @@ Acc:%6
         <translation>Guardar una única captura como...</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="89"/>
-        <source>You&apos;re going to save several screenshots at one time.
-It&apos;s recommended you put them in an empty folder.</source>
-        <translation>Se guardaran diferentes capturas al mismo tiempo.
-Se recomienda poner-las en una carpeta vacía.</translation>
-    </message>
-    <message>
         <location filename="screenshottool.cpp" line="90"/>
         <source>Save multiple screenshots as...</source>
         <translation>Guardar múltiples capturas como...</translation>
+    </message>
+    <message>
+        <location filename="screenshottool.cpp" line="89"/>
+        <source>You&apos;re going to save several screenshots at one time.
+It&apos;s recommended you save them in an empty folder.</source>
+        <translation>Está a punto de guardar diversas capturas de pantalla a la vez.Se recomienda que las guarde en una carpeta vacía.</translation>
     </message>
 </context>
 <context>
@@ -1428,27 +1427,27 @@ Se recomienda poner-las en una carpeta vacía.</translation>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="21"/>
         <source>CT Soft Tissues, Non Contrast</source>
-        <translation>CT Tejidos Blandos, Sin Contraste</translation>
+        <translation>CT Tejidos Blandos</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="22"/>
         <source>CT Soft Tissues, Contrast Medium</source>
-        <translation>CT Tejidos Blandos, Contraste Medio</translation>
+        <translation>CT Tejidos Blandos con contraste</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="23"/>
         <source>CT Liver, Contrast Medium</source>
-        <translation>CT Hígado, Contraste Medio</translation>
+        <translation>CT Hígado con contraste</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="24"/>
         <source>CT Liver, Non Contrast</source>
-        <translation>CT Hígado, Sin Contraste</translation>
+        <translation>CT Hígado</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="25"/>
         <source>CT Neck, Contrast Medium</source>
-        <translation>CT Cuello,  Contraste Medio</translation>
+        <translation>CT Cuello con contraste</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="26"/>
@@ -1474,6 +1473,11 @@ Se recomienda poner-las en una carpeta vacía.</translation>
         <location filename="windowlevelpresetstooldata.cpp" line="130"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="18"/>
+        <source>CT Head</source>
+        <translation>Cráneo CT</translation>
     </message>
 </context>
 </TS>

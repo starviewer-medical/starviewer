@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
+<defaultcodec></defaultcodec>
 <context>
     <name>QAdvancedSearchWidgetBase</name>
     <message>
@@ -495,6 +496,14 @@
     </message>
 </context>
 <context>
+    <name>QFileDialog</name>
+    <message>
+        <location filename="queryscreen.cpp" line="1217"/>
+        <source>Open</source>
+        <translation>Abrir</translation>
+    </message>
+</context>
+<context>
     <name>QListenRisRequestsConfigurationScreenBase</name>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="13"/>
@@ -654,7 +663,7 @@
 <context>
     <name>udg::DICOMDIRImporter</name>
     <message>
-        <location filename="dicomdirimporter.cpp" line="136"/>
+        <location filename="dicomdirimporter.cpp" line="142"/>
         <source>Importing study of </source>
         <translation>Importando el estudio </translation>
     </message>
@@ -662,7 +671,7 @@
 <context>
     <name>udg::DatabaseInstallation</name>
     <message>
-        <location filename="databaseinstallation.cpp" line="115"/>
+        <location filename="databaseinstallation.cpp" line="126"/>
         <source>%1 database is corrupted.
 
 %1 will try to repair it.</source>
@@ -671,17 +680,17 @@
 %1 intentará repararla.</translation>
     </message>
     <message>
-        <location filename="databaseinstallation.cpp" line="140"/>
+        <location filename="databaseinstallation.cpp" line="160"/>
         <source>Reinstalling database</source>
         <translation>Reinstalando la base de datos</translation>
     </message>
     <message>
-        <location filename="databaseinstallation.cpp" line="169"/>
+        <location filename="databaseinstallation.cpp" line="189"/>
         <source>Updating database</source>
         <translation>Actualizando la base de datos</translation>
     </message>
     <message>
-        <location filename="databaseinstallation.cpp" line="122"/>
+        <location filename="databaseinstallation.cpp" line="133"/>
         <source>%1 can&apos;t repair database, it will be reinstalled.
 
 All local studies retrieved and imported will be deleted.</source>
@@ -1098,14 +1107,6 @@ Para crear un cd/dvd con un Dicomdir,  se tiene que crear primero el Dicomdir en
     </message>
 </context>
 <context>
-    <name>udg::QFileDialog</name>
-    <message>
-        <location filename="queryscreen.cpp" line="1220"/>
-        <source>Open</source>
-        <translation>Abrir</translation>
-    </message>
-</context>
-<context>
     <name>udg::QListenRisRequestsConfigurationScreen</name>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreen.cpp" line="73"/>
@@ -1513,240 +1514,240 @@ Código de error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="447"/>
+        <location filename="queryscreen.cpp" line="444"/>
         <source>Please select a PACS to query</source>
         <translation>Seleccione un Pacs a consultar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="574"/>
+        <location filename="queryscreen.cpp" line="571"/>
         <source>No study match found.</source>
         <translation>No se han encontrado estudios.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="707"/>
+        <location filename="queryscreen.cpp" line="704"/>
         <source>No series match for this study.
 </source>
         <translation>No se han encontrado series para este estudio.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="786"/>
+        <location filename="queryscreen.cpp" line="783"/>
         <source>Select a study to download </source>
         <translation>Seleccione un estudio para descargar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="784"/>
+        <location filename="queryscreen.cpp" line="781"/>
         <source>Select a study to view </source>
         <translation>Seleccione un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1333"/>
+        <location filename="queryscreen.cpp" line="1330"/>
         <source>Can&apos;t connect to PACS %1 from %2
 Be sure that the IP and AETitle of the PACS are correct</source>
         <translation>No se puede conectar al PACS %1 de %2
  Asegúrese que la IP y el AETitle de este PACS sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="544"/>
+        <location filename="queryscreen.cpp" line="541"/>
         <source>Error quering in dicomdir</source>
         <translation>Error consultando el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1236"/>
+        <location filename="queryscreen.cpp" line="1233"/>
         <source>Error openning dicomdir</source>
         <translation>Error abriendo el Dicomdir</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="767"/>
+        <location filename="queryscreen.cpp" line="764"/>
         <source>No images match for this series.
 </source>
         <translation>No se han encontrado imagenes para esta serie.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="853"/>
+        <location filename="queryscreen.cpp" line="850"/>
         <source>No images match for this study.
 </source>
         <translation>No se han encontrado imagenes para este estudio.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="666"/>
+        <location filename="queryscreen.cpp" line="663"/>
         <source>Error! Can&apos;t query series to PACS named %1</source>
         <translation>Error! No se pueden consultar las Series al PACS llamado %1</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="757"/>
+        <location filename="queryscreen.cpp" line="754"/>
         <source>Error! Can&apos;t query images to PACS named %1 </source>
         <translation>Error! No se pueden consultar las Series al PACS llamado %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1348"/>
+        <location filename="queryscreen.cpp" line="1345"/>
         <source>Can&apos;t query PACS %1 from %2
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>No se puede consultar el PACS %1 de %2
 Asegúrese que la IP y el AETitle sean correctos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="976"/>
+        <location filename="queryscreen.cpp" line="973"/>
         <source>Select at least one study to view</source>
         <translation>Seleccione almenos un estudio para visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1067"/>
+        <location filename="queryscreen.cpp" line="1064"/>
         <source>Please select at least one study to delete</source>
         <translation>Seleccione almenos un estudio a borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1072"/>
+        <location filename="queryscreen.cpp" line="1069"/>
         <source>Are you sure you want to delete the selected Studies?</source>
         <translation>¿Está seguro que desear borrar el estudio seleccionado?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1267"/>
+        <location filename="queryscreen.cpp" line="1264"/>
         <source>You have to select a PACS to store the study in</source>
         <translation>Debe seleccionar un PACS donde almacenar el estudio</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1318"/>
+        <location filename="queryscreen.cpp" line="1315"/>
         <source>The studies can only be stored to one PACS</source>
         <translation>Los estudios solo se pueden almacenar en un PACS a la vez</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1087"/>
+        <location filename="queryscreen.cpp" line="1084"/>
         <source>The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
         <translation>El estudio con UID: %1 está en uso por la Lista de DICOMDIR. Si desea borrar este estudio debería borrarlo primero de la Lista de DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="169"/>
+        <location filename="queryscreen.cpp" line="166"/>
         <source>&amp;View</source>
         <translation>&amp;Visualizar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="169"/>
+        <location filename="queryscreen.cpp" line="166"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="137"/>
+        <location filename="queryscreen.cpp" line="134"/>
         <source>&amp;Delete</source>
         <translation>&amp;Borrar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="141"/>
+        <location filename="queryscreen.cpp" line="138"/>
         <source>Send to DICOMDIR List</source>
         <translation>Enviar a la lista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="141"/>
+        <location filename="queryscreen.cpp" line="138"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="159"/>
+        <location filename="queryscreen.cpp" line="156"/>
         <source>&amp;Retrieve</source>
         <translation>&amp;Descargar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="172"/>
+        <location filename="queryscreen.cpp" line="169"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="457"/>
+        <location filename="queryscreen.cpp" line="454"/>
         <source>This query can take a long time.
 Do you want continue?</source>
         <translation>Esta consulta puede tardar bastante. 
 ¿Desea continuar?</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="240"/>
+        <location filename="queryscreen.cpp" line="237"/>
         <source>deleting a study not full retrived</source>
         <translation>al borrar un estudio parcialmente descargado</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="965"/>
+        <location filename="queryscreen.cpp" line="962"/>
         <source>deleting old studies</source>
         <translation>al borrar estudios viejos</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1452"/>
+        <location filename="queryscreen.cpp" line="1449"/>
         <source>An error has ocurred while </source>
         <translation>Se ha produciodo un error </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1481"/>
+        <location filename="queryscreen.cpp" line="1478"/>
         <source>Some files can not be delete.
 These have to be delete manually.</source>
         <translation>Algunos archivos no se han podido borrar.
 Tendrán que ser eliminados manualmente.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1475"/>
+        <location filename="queryscreen.cpp" line="1472"/>
         <source>An internal error occurs with %1 database.</source>
         <translation>Se ha producido un error interno desconocido en la base de datos de %1.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1549"/>
+        <location filename="queryscreen.cpp" line="1546"/>
         <source>Please review the operation list screen, </source>
         <translation>Por favor revise la lista de peticiones, </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1504"/>
+        <location filename="queryscreen.cpp" line="1501"/>
         <source>an error ocurred connecting to a Pacs while retrieving or storing a study.
 </source>
         <translation>se ha producido un error conectando al Pacs mientras se descargava o guardava un estudio.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1505"/>
+        <location filename="queryscreen.cpp" line="1502"/>
         <source>
 Be sure that your computer is connected on network and the Pacs parameters are correct.</source>
         <translation>
 Asegúrese que el ordenador está connectado a la red y que los parámetros del Pacs són correctos.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1628"/>
+        <location filename="queryscreen.cpp" line="1626"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation>
 Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1511"/>
+        <location filename="queryscreen.cpp" line="1508"/>
         <source>an error ocurred retrieving a study.
 </source>
         <translation>se ha producido un error descargando un estudio.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1579"/>
+        <location filename="queryscreen.cpp" line="1577"/>
         <source>There is not enough space to retrieve studies, please free space.</source>
         <translation>No hay suficiente espacio libre para descargar estudios, por favor libere espacio.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1529"/>
+        <location filename="queryscreen.cpp" line="1526"/>
         <source>an error ocurred freeing space and some operations may have failed.</source>
         <translation>se ha producido un error liberando espacio, algunas operaciones pueden haber fallado.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1536"/>
+        <location filename="queryscreen.cpp" line="1533"/>
         <source>a database error ocurred and some operations may have failed.</source>
         <translation>se ha producido un error en la base de datos, algunas operacions pueden haber fallado.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1543"/>
+        <location filename="queryscreen.cpp" line="1540"/>
         <source>an error ocurred and some operations may have failed.</source>
         <translation>se ha producido un error, algunas operaciones pueden haber fallado.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1512"/>
+        <location filename="queryscreen.cpp" line="1509"/>
         <source>
 Pacs doesn&apos;t respond correclty, be sure that your computer is connected on network and the Pacs parameters are correct.</source>
         <translation>
 El Pacs no ha respondido de la forma esperada, asegúrese que su ordenador está conectado a la red y que los parámetros del Pacs són correctos.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1519"/>
+        <location filename="queryscreen.cpp" line="1516"/>
         <source>
 
 Contact with an administrador to register your computer to the Pacs.</source>
@@ -1755,19 +1756,19 @@ Contact with an administrador to register your computer to the Pacs.</source>
 Contacte con un administrador para registrar su ordenador al Pacs.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1600"/>
+        <location filename="queryscreen.cpp" line="1598"/>
         <source>Trying to import study with UID %1 </source>
         <translation>Intentado importar el estudio con UID %1 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1569"/>
+        <location filename="queryscreen.cpp" line="1567"/>
         <source>the dicomdir could not be opened. Be sure that the dicomdir path is correct.
 </source>
         <translation>el dicomdir no se ha podido abrir. Asegúrese que la ruta del dicomdir está correcta.
 </translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1575"/>
+        <location filename="queryscreen.cpp" line="1573"/>
         <source>
 
 If the problem persist contact with an administrator.</source>
@@ -1776,29 +1777,29 @@ If the problem persist contact with an administrator.</source>
 Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1601"/>
+        <location filename="queryscreen.cpp" line="1599"/>
         <source>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</source>
         <translation>se ha producido un error. El dicomdir es inconsistente, no se puede importar.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1524"/>
+        <location filename="queryscreen.cpp" line="1521"/>
         <source>
 All pending retrieve operations will be cancelled.</source>
         <translation>
 Todas las operacions pendientes seran canceladas.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1518"/>
+        <location filename="queryscreen.cpp" line="1515"/>
         <source>the Pacs doesn&apos;t recognize your computer&apos;s AETitle %1, some studies can&apos;t be retrieved.</source>
         <translation>el Pacs no reconoce el AETitle %1 de su ordenador, algunos estudios no se han podido importar.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="172"/>
+        <location filename="queryscreen.cpp" line="169"/>
         <source>&amp;Import</source>
         <translation>&amp;Importar</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="471"/>
+        <location filename="queryscreen.cpp" line="468"/>
         <source>An error has produced while querying.
 
 Repeat it, if the problem persist contact with an administrator.</source>
@@ -1807,22 +1808,22 @@ Repeat it, if the problem persist contact with an administrator.</source>
 Repita la consulta, si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="539"/>
+        <location filename="queryscreen.cpp" line="536"/>
         <source>Before search you have to open a dicomdir.</source>
         <translation>Antes de buscar tiene que abrir un dicomdir.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="804"/>
+        <location filename="queryscreen.cpp" line="801"/>
         <source>Internal Error: %2 can&apos;t retrieve study with UID %1, because can&apos;t find study information.</source>
         <translation>No se podrá descargar el estudio con UID %1 porque %2 no puede encontrar a que PACS pertenece.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1416"/>
+        <location filename="queryscreen.cpp" line="1413"/>
         <source>An error ocurred querying default PACS, can&apos;t process the RIS request.</source>
         <translation>Se ha producido un error consultando a los PACS seleccionados por defecto, no se puede processar la petición del RIS.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1462"/>
+        <location filename="queryscreen.cpp" line="1459"/>
         <source>The database is blocked by another %1 window.
 Close all the others %1 windows and try again.
 
@@ -1833,7 +1834,7 @@ Cierre todas las otras ventanas de %1 y vuelva a intentarlo.
 Si quiere abrir otra ventana de %1, siempre tiene que hacerlo des de la opción &apos;Nuevo&apos; del menú Archivo.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1477"/>
+        <location filename="queryscreen.cpp" line="1474"/>
         <source>
 Close all %1 windows and try again.
 
@@ -1844,7 +1845,7 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo
 Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1610"/>
+        <location filename="queryscreen.cpp" line="1608"/>
         <source>
 
 Close all %1 windows and try again.
@@ -1855,14 +1856,14 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo.
 Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1544"/>
+        <location filename="queryscreen.cpp" line="1541"/>
         <source>
 %1 has not be capable of read correctly dicom information of the study.</source>
         <translation>
 %1 no es capaz de leer correctamente la información dicom del estudio.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1596"/>
+        <location filename="queryscreen.cpp" line="1594"/>
         <source>
 
 The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
@@ -1871,7 +1872,7 @@ The study may be corrupted, if It is not corrupted please contact with %1 team.<
 El estudio puede que esté corrupto, si no está corrupto por favor contacte con el equipo de %1.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1602"/>
+        <location filename="queryscreen.cpp" line="1600"/>
         <source>
 
 Please contact with %1 team.</source>
@@ -1880,66 +1881,57 @@ Please contact with %1 team.</source>
 Por favor contacte con el equipo de %1.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1422"/>
+        <location filename="queryscreen.cpp" line="1419"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation>%2 no puede ejecutar la petición del RIS, porque no se ha encontrado ningún estudio con el accession number %1 en los PACS seleccionados por defecto.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1465"/>
+        <location filename="queryscreen.cpp" line="1462"/>
         <source>%1 database is corrupted.</source>
         <translation>La base de datos del %1 está corrupta.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1470"/>
+        <location filename="queryscreen.cpp" line="1467"/>
         <source>%1 database syntax error.</source>
         <translation>Error de sintaxis en la base de datos de %1.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1583"/>
+        <location filename="queryscreen.cpp" line="1581"/>
         <source>An error has ocurred freeing space, some studies can&apos;t be imported.</source>
         <translation>Se ha producido un error liberando espacio, algunos estudios no se han podido importar.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1589"/>
+        <location filename="queryscreen.cpp" line="1587"/>
         <source>A database error has ocurred, some studies can&apos;t be imported.</source>
         <translation>Se ha producido un error en la base de datos, algunos estudios no se han podido importar.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1574"/>
+        <location filename="queryscreen.cpp" line="1572"/>
         <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
         <translation>Algunos archivos del estudio con UID %2 no se han podido importar. Asegurese que tiene permisos en el directorio de la caché de %1.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1595"/>
+        <location filename="queryscreen.cpp" line="1593"/>
         <source>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly dicom information of the study.</source>
         <translation>El estudio con UID %2 no se ha podido ser importar, porque %1 no ha sido capaz de leer correctamente la información del estudio.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1484"/>
+        <location filename="queryscreen.cpp" line="1481"/>
         <source>Unknown error.</source>
         <translation>Error desconocido.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1550"/>
+        <location filename="queryscreen.cpp" line="1547"/>
         <source>an error ocurred while retrieving some study, some retrieves may have failed.</source>
         <translation>se ha producido un error mientras se descargavan algunos estudios, algunas descargas pueden haver fallado.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1551"/>
-        <source>
-
-Data is either missing or corrupted on PACS.</source>
-        <translation>
-
-No se han encontrado datos o estan corruptos en el PACS.</translation>
-    </message>
-    <message>
-        <location filename="queryscreen.cpp" line="1623"/>
+        <location filename="queryscreen.cpp" line="1621"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is used for another application.</source>
         <translation>No se puede escuchar las peticiones del RIS por el puerto %1, este puerto esta siendo usado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1624"/>
+        <location filename="queryscreen.cpp" line="1622"/>
         <source>
 
 If the error has produced when openned new %1&apos;s windows, close that window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
@@ -1948,19 +1940,33 @@ If the error has produced when openned new %1&apos;s windows, close that window.
 Si el error se ha producido al abrir una nueva ventana del %1, cierre esta ventana. Para abrir una nueva ventana del %1 tiene que hacerlo des del menú Archivo con la opción &apos;Nuevo&apos;.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1555"/>
+        <location filename="queryscreen.cpp" line="1553"/>
         <source>Please review the operation list screen, an unknown error has ocurred retrieving a study.</source>
         <translation>Por favor revise la lista de peticiones, se ha producido un error desconocido descargando un estudio.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1608"/>
+        <location filename="queryscreen.cpp" line="1606"/>
         <source>An unknown error has ocurred importing dicomdir.</source>
         <translation>Se ha producido un error desconocido importando el dicomdir.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="1627"/>
+        <location filename="queryscreen.cpp" line="1625"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No se pueden escuchar peticiones del RIS por el puerto %1, se ha producido un error de red desconocido.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1548"/>
+        <source>
+
+Data is either missing or corrupted on PACS. Try again later.</source>
+        <translation>O bien los datos no se encuentran en el PACS o bien están corruptos. Inténtelo de nuevo más tarde.</translation>
+    </message>
+    <message>
+        <location filename="queryscreen.cpp" line="1549"/>
+        <source>
+
+If the problem persists, please contact your PACS administrator to solve the problem</source>
+        <translation>Si el problema persisite, por favor contacte con el administrador de PACS para solucionar el problema</translation>
     </message>
 </context>
 <context>

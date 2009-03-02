@@ -1030,14 +1030,14 @@ Acc:%6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="89"/>
-        <source>You&apos;re going to save several screenshots at one time.
-It&apos;s recommended you put them in an empty folder.</source>
+        <location filename="screenshottool.cpp" line="90"/>
+        <source>Save multiple screenshots as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="90"/>
-        <source>Save multiple screenshots as...</source>
+        <location filename="screenshottool.cpp" line="89"/>
+        <source>You&apos;re going to save several screenshots at one time.
+It&apos;s recommended you save them in an empty folder.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1460,6 +1460,11 @@ It&apos;s recommended you put them in an empty folder.</source>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="130"/>
         <source>Custom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="18"/>
+        <source>CT Head</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
