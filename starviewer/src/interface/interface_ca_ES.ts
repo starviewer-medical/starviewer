@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<defaultcodec></defaultcodec>
 <context>
     <name>QConfigurationDialogBase</name>
     <message>
@@ -357,8 +356,8 @@
     </message>
     <message>
         <location filename="qconfigurationdialog.cpp" line="41"/>
-        <source>Listen Ris Requests</source>
-        <translation>Escoltar peticions del Ris</translation>
+        <source>RIS Listener</source>
+        <translation type="unfinished">Escoltar peticions del Ris</translation>
     </message>
 </context>
 </TS>

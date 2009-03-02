@@ -506,7 +506,7 @@
     <name>QListenRisRequestsConfigurationScreenBase</name>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="13"/>
-        <source>Listen RIS Requests Configuration</source>
+        <source>RIS Listener Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -516,7 +516,7 @@
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="95"/>
-        <source>View automatically the studies when have been retrieved.</source>
+        <source>Automatically view the studies upon reception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

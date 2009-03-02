@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<defaultcodec></defaultcodec>
 <context>
     <name>QAdvancedSearchWidgetBase</name>
     <message>
@@ -507,8 +506,8 @@
     <name>QListenRisRequestsConfigurationScreenBase</name>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="13"/>
-        <source>Listen RIS Requests Configuration</source>
-        <translation>Configuració del servei d&apos;escolta de peticions del RIS</translation>
+        <source>RIS Listener Configuration</source>
+        <translation type="unfinished">Configuració del servei d&apos;escolta de peticions del RIS</translation>
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="49"/>
@@ -517,8 +516,8 @@
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="95"/>
-        <source>View automatically the studies when have been retrieved.</source>
-        <translation>Visualitzar automàticament els estudis quan s&apos;hagin descarregat.</translation>
+        <source>Automatically view the studies upon reception</source>
+        <translation type="unfinished">Visualitzar automàticament els estudis quan s&apos;hagin descarregat.</translation>
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="112"/>
