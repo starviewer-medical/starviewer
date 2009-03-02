@@ -80,6 +80,14 @@
     </message>
 </context>
 <context>
+    <name>udg::NonClosedAngleTool</name>
+    <message>
+        <location filename="nonclosedangletool.cpp" line="508"/>
+        <source>%1 degrees</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::PatientBrowserMenuBasicItem</name>
     <message>
         <location filename="patientbrowsermenubasicitem.cpp" line="31"/>
@@ -152,38 +160,38 @@ Mean: %2</source>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2018"/>
+        <location filename="q2dviewer.cpp" line="2068"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2036"/>
+        <location filename="q2dviewer.cpp" line="2086"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2009"/>
+        <location filename="q2dviewer.cpp" line="2059"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2029"/>
+        <location filename="q2dviewer.cpp" line="2079"/>
         <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2042"/>
+        <location filename="q2dviewer.cpp" line="2092"/>
         <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1833"/>
+        <location filename="q2dviewer.cpp" line="1878"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1856"/>
+        <location filename="q2dviewer.cpp" line="1901"/>
         <source>%1
 %2
 %3 %4 %5
@@ -193,12 +201,12 @@ Acc:%6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1990"/>
+        <location filename="q2dviewer.cpp" line="2040"/>
         <source>Loc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1996"/>
+        <location filename="q2dviewer.cpp" line="2046"/>
         <source>-%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -868,18 +876,18 @@ Acc:%6
 <context>
     <name>udg::QLogViewer</name>
     <message>
-        <location filename="qlogviewer.cpp" line="41"/>
-        <source>ERROR: No Log file found!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlogviewer.cpp" line="59"/>
+        <location filename="qlogviewer.cpp" line="60"/>
         <source>Save as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlogviewer.cpp" line="59"/>
+        <location filename="qlogviewer.cpp" line="60"/>
         <source>Log Files (*.log)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlogviewer.cpp" line="42"/>
+        <source>ERROR: No Log file found at this path: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -914,17 +922,17 @@ Acc:%6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qthickslabwidget.cpp" line="114"/>
+        <location filename="qthickslabwidget.cpp" line="113"/>
         <source>MIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qthickslabwidget.cpp" line="118"/>
+        <location filename="qthickslabwidget.cpp" line="117"/>
         <source>MinIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qthickslabwidget.cpp" line="122"/>
+        <location filename="qthickslabwidget.cpp" line="121"/>
         <source>Average</source>
         <translation type="unfinished"></translation>
     </message>
@@ -953,22 +961,22 @@ Acc:%6
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="476"/>
+        <location filename="qviewer.cpp" line="506"/>
         <source>Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="476"/>
+        <location filename="qviewer.cpp" line="506"/>
         <source>The selected item is not a valid image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="551"/>
+        <location filename="qviewer.cpp" line="600"/>
         <source>Default %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="573"/>
+        <location filename="qviewer.cpp" line="581"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -989,7 +997,7 @@ Acc:%6
 <context>
     <name>udg::QWindowLevelComboBox</name>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="114"/>
+        <location filename="qwindowlevelcombobox.cpp" line="115"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -997,226 +1005,242 @@ Acc:%6
 <context>
     <name>udg::ScreenShotTool</name>
     <message>
-        <location filename="screenshottool.cpp" line="66"/>
-        <source>Save screenshot as...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="screenshottool.cpp" line="129"/>
+        <location filename="screenshottool.cpp" line="27"/>
         <source>PNG (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="135"/>
+        <location filename="screenshottool.cpp" line="28"/>
         <source>Jpeg (*.jpg)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="141"/>
+        <location filename="screenshottool.cpp" line="29"/>
         <source>BMP (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="114"/>
-        <source>&amp;Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="screenshottool.cpp" line="114"/>
-        <source>&amp;No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="screenshottool.cpp" line="114"/>
+        <location filename="screenshottool.cpp" line="89"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="114"/>
-        <source>This file already exists. Do you want to replace it?</source>
+        <location filename="screenshottool.cpp" line="86"/>
+        <source>Save single screenshot as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="screenshottool.cpp" line="89"/>
+        <source>You&apos;re going to save several screenshots at one time.
+It&apos;s recommended you put them in an empty folder.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="screenshottool.cpp" line="90"/>
+        <source>Save multiple screenshots as...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::ToolRegistry</name>
     <message>
-        <location filename="toolregistry.cpp" line="134"/>
+        <location filename="toolregistry.cpp" line="144"/>
         <source>Enable/Disable Window Level tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="139"/>
+        <location filename="toolregistry.cpp" line="149"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="140"/>
+        <location filename="toolregistry.cpp" line="150"/>
         <source>Enable/Disable Zoom tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="146"/>
+        <location filename="toolregistry.cpp" line="156"/>
         <source>Enable/Disable Move tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="151"/>
+        <location filename="toolregistry.cpp" line="161"/>
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="152"/>
+        <location filename="toolregistry.cpp" line="162"/>
         <source>Put Seed tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="157"/>
+        <location filename="toolregistry.cpp" line="167"/>
         <source>Screen Shot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="158"/>
+        <location filename="toolregistry.cpp" line="168"/>
         <source>Enable/Disable Screen shot tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="163"/>
+        <location filename="toolregistry.cpp" line="173"/>
         <source>3D Rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="164"/>
+        <location filename="toolregistry.cpp" line="174"/>
         <source>Enable/Disable 3D Rotation tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="170"/>
+        <location filename="toolregistry.cpp" line="180"/>
         <source>Enable/Disable Distances tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="175"/>
+        <location filename="toolregistry.cpp" line="185"/>
         <source>ROI&apos;s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="176"/>
+        <location filename="toolregistry.cpp" line="186"/>
         <source>Enable/Disable ROI tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="182"/>
+        <location filename="toolregistry.cpp" line="192"/>
         <source>Enable/Disable Reference Lines tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="187"/>
+        <location filename="toolregistry.cpp" line="197"/>
         <source>Voxel Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="188"/>
+        <location filename="toolregistry.cpp" line="198"/>
         <source>Enable voxel information over cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="193"/>
+        <location filename="toolregistry.cpp" line="203"/>
         <source>Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="194"/>
+        <location filename="toolregistry.cpp" line="204"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="199"/>
+        <location filename="toolregistry.cpp" line="209"/>
         <source>Window Level Presets tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="200"/>
+        <location filename="toolregistry.cpp" line="210"/>
         <source>Enable/Disable Window Level Presets tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="205"/>
+        <location filename="toolregistry.cpp" line="215"/>
         <source>Enable/Disable Polyline ROI tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="127"/>
+        <location filename="toolregistry.cpp" line="137"/>
         <source>Scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="128"/>
+        <location filename="toolregistry.cpp" line="138"/>
         <source>Enable/Disable scroll tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="133"/>
+        <location filename="toolregistry.cpp" line="143"/>
         <source>WW/WL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="145"/>
+        <location filename="toolregistry.cpp" line="155"/>
         <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="169"/>
+        <location filename="toolregistry.cpp" line="179"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="181"/>
+        <location filename="toolregistry.cpp" line="191"/>
         <source>Ref.Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="204"/>
+        <location filename="toolregistry.cpp" line="214"/>
         <source>ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="210"/>
+        <location filename="toolregistry.cpp" line="220"/>
         <source>Keyboard slicing tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="211"/>
+        <location filename="toolregistry.cpp" line="221"/>
         <source>Enable/Disable keyboard slicing tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="215"/>
+        <location filename="toolregistry.cpp" line="225"/>
         <source>Erase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="216"/>
+        <location filename="toolregistry.cpp" line="226"/>
         <source>Enable/Disable eraser tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="221"/>
+        <location filename="toolregistry.cpp" line="231"/>
         <source>Cursor 3D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="222"/>
+        <location filename="toolregistry.cpp" line="232"/>
         <source>Enable/Disable Cursor 3D tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="227"/>
+        <location filename="toolregistry.cpp" line="237"/>
         <source>Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="228"/>
+        <location filename="toolregistry.cpp" line="238"/>
         <source>Enable/Disable angle tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="243"/>
+        <source>Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="244"/>
+        <source>Enable/Disable editor tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="249"/>
+        <source>Non Closed Angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="250"/>
+        <source>Enable/Disable non closed angle tool</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1346,75 +1370,95 @@ Acc:%6
 <context>
     <name>udg::Volume</name>
     <message>
-        <location filename="volume.cpp" line="119"/>
+        <location filename="volume.cpp" line="108"/>
         <source>Out of memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="119"/>
-        <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened Starviewer windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
+        <location filename="volume.cpp" line="108"/>
+        <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="115"/>
+        <source>Missing Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="115"/>
+        <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="122"/>
+        <source>Unkwown Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="122"/>
+        <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::WindowLevelPresetsToolData</name>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="18"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="19"/>
         <source>CT Bone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="19"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="20"/>
         <source>CT Lung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="20"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="21"/>
         <source>CT Soft Tissues, Non Contrast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="21"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="22"/>
         <source>CT Soft Tissues, Contrast Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="22"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="23"/>
         <source>CT Liver, Contrast Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="23"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="24"/>
         <source>CT Liver, Non Contrast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="24"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="25"/>
         <source>CT Neck, Contrast Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="25"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="26"/>
         <source>Angiography</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="26"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="27"/>
         <source>Osteoporosis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="27"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="28"/>
         <source>Emphysema</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="28"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="29"/>
         <source>Petrous Bone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="129"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="130"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
