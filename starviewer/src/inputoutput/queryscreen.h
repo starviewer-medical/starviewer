@@ -23,7 +23,6 @@ namespace udg {
 
 class Status;
 class PacsServer;
-class PatientFillerInput;
 class QCreateDicomdir;
 class ProcessImageSingleton;
 class DicomMask;
@@ -77,14 +76,14 @@ private slots:
      * @param studyUID UID de l'estidi
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void expandStudy( QString studyUID , QString pacsId);
+    void expandStudy( const QString &studyUID, const QString &pacsId );
 
     /** Busca la informació d'una sèrie
      * @param studyUID UID de l'estidi
      * @param seriesUID
      * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void expandSeries( QString , QString , QString pacsId );
+    void expandSeries( const QString &studyUID, const QString &seriesUID, const QString &pacsId );
 
     /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
      * @param index del tab al que s'ha canviat
@@ -120,7 +119,7 @@ private slots:
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al fer una query d'estudis amb el pacs
      * @param id del PACS
      */
-    void errorQueringStudiesPacs( QString );
+    void errorQueringStudiesPacs( QString PacsID );
 
     /** Slot que s'activa quant s'ha descarregat un estudi, prove de la classe QExecuteOperationThread
      * @param studyUID UID de l'estudi descarregat
