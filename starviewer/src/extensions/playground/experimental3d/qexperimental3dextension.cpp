@@ -135,6 +135,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveEvmiPushButton, SIGNAL( clicked() ), SLOT( saveEvmi() ) );
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
     connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
+    connect( m_vomiGradientPushButton, SIGNAL( clicked() ), SLOT( computeVomiGradient() ) );
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -1138,6 +1139,7 @@ void QExperimental3DExtension::computeSelectedVmi()
         {
             m_vomiCheckBox->setEnabled( true );
             m_saveVomiPushButton->setEnabled( true );
+            m_vomiGradientPushButton->setEnabled( true );
         }
 
         if ( computeVoxelSaliencies )
@@ -2017,6 +2019,7 @@ void QExperimental3DExtension::loadVomi()
 
         m_vomiCheckBox->setEnabled( true );
         m_saveVomiPushButton->setEnabled( true );
+        m_vomiGradientPushButton->setEnabled( true );
     }
 
     settings.endGroup();
@@ -2348,6 +2351,14 @@ void QExperimental3DExtension::guidedTour()
     QList<Vector3> viewpoints;
     for ( int i = 0; i < m_guidedTour.size(); i++ ) viewpoints << m_guidedTour.at( i ).second;
     tour( viewpoints, m_tourSpeedDoubleSpinBox->value() );
+}
+
+
+void QExperimental3DExtension::computeVomiGradient()
+{
+    m_voxelSaliencies = m_volume->computeVomiGradient( m_vomi );
+    m_voxelSalienciesCheckBox->setEnabled( true );
+    m_maximumSaliency = 1.0f;
 }
 
 

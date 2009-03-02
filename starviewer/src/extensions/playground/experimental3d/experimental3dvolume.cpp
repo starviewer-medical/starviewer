@@ -2,6 +2,7 @@
 
 #include <vtkEncodedGradientShader.h>
 #include <vtkFiniteDifferenceGradientEstimator.h>
+#include <vtkFloatArray.h>
 #include <vtkImageData.h>
 #include <vtkImageShiftScale.h>
 #include <vtkPointData.h>
@@ -308,6 +309,37 @@ void Experimental3DVolume::renderVoxelSaliencies( const QVector<float> &voxelSal
     m_voxelSaliencyVoxelShader->setVoxelSaliencies( voxelSaliencies, maximumSaliency, factor );
     m_voxelSaliencyVoxelShader->setDiffuseLighting( diffuseLighting );
     m_voxelSaliencyVoxelShader->setGradientEstimator( gradientEstimator() );
+}
+
+
+QVector<float> Experimental3DVolume::computeVomiGradient( const QVector<float> &vomi )
+{
+    vtkFloatArray *vomiArray = vtkFloatArray::New();
+    vomiArray->SetArray( const_cast<float*>( vomi.data() ), m_dataSize, 1 );
+
+    vtkImageData *vomiData = vtkImageData::New();
+    vomiData->CopyStructure( m_image );
+    vomiData->SetScalarTypeToFloat();
+
+    vtkPointData *vomiPointData = vomiData->GetPointData();
+    vomiPointData->SetScalars( vomiArray );
+
+    vtkEncodedGradientEstimator *gradientEstimator = this->gradientEstimator();
+    gradientEstimator->SetInput( vomiData );
+
+    unsigned char *gradientMagnitudes = gradientEstimator->GetGradientMagnitudes();
+
+    QVector<float> vomiGradient( m_dataSize );
+    float maxVomiGradient = 0.0f;
+    for ( unsigned int i = 0; i < m_dataSize; i++ ) if ( gradientMagnitudes[i] > maxVomiGradient ) maxVomiGradient = gradientMagnitudes[i];
+    for ( unsigned int i = 0; i < m_dataSize; i++ ) vomiGradient[i] = gradientMagnitudes[i] / maxVomiGradient;
+
+    gradientEstimator->SetInput( m_image );
+
+    vomiArray->Delete();
+    vomiData->Delete();
+
+    return vomiGradient;
 }
 
 
