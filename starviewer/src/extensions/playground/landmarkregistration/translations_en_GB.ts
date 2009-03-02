@@ -119,62 +119,62 @@
 <context>
     <name>udg::QLandmarkRegistrationExtension</name>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="74"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="78"/>
         <source>Rotate Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="76"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="80"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="84"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="88"/>
         <source>Rotate Counter Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="86"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="90"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="108"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="112"/>
         <source>SeedTool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="109"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="113"/>
         <source>Enable/Disable seeding tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="322"/>
         <source>StarViewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1126"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1129"/>
         <source>Save Transform file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1152"/>
         <source>all Files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1152"/>
         <source>Chose a transform filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="301"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="305"/>
         <source>There are not the same number of seeds into images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="322"/>
         <source>The registration process has not obtained successfull results</source>
         <translation type="unfinished"></translation>
     </message>

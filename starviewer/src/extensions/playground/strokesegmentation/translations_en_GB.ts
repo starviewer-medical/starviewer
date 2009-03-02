@@ -91,32 +91,32 @@
 <context>
     <name>udg::QStrokeSegmentationExtension</name>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="85"/>
+        <location filename="qstrokesegmentationextension.cpp" line="88"/>
         <source>Rotate Clockwise</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="87"/>
+        <location filename="qstrokesegmentationextension.cpp" line="90"/>
         <source>Rotate the image in clockwise direction</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="112"/>
+        <location filename="qstrokesegmentationextension.cpp" line="115"/>
         <source>EditorTool</source>
         <translation>Editor Tool</translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="113"/>
+        <location filename="qstrokesegmentationextension.cpp" line="116"/>
         <source>Enable/Disable editor tool</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="207"/>
+        <location filename="qstrokesegmentationextension.cpp" line="210"/>
         <source>StarViewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="qstrokesegmentationextension.cpp" line="207"/>
+        <location filename="qstrokesegmentationextension.cpp" line="210"/>
         <source>ERROR: no hi ha definida llavor o m&#xc3;&#xa0;scara</source>
         <translation>ERROR: it does not have seed or mask defined</translation>
     </message>

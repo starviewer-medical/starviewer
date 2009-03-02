@@ -119,62 +119,62 @@
 <context>
     <name>udg::QLandmarkRegistrationExtension</name>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="74"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="78"/>
         <source>Rotate Clockwise</source>
         <translation>Rotació en sentit horari</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="76"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="80"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rotació de la imatge en sentit horari</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="84"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="88"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rotació en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="86"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="90"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rotació de la imatge en sentit anti-horari</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="108"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="112"/>
         <source>SeedTool</source>
         <translation>Eina de llavors</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="109"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="113"/>
         <source>Enable/Disable seeding tool</source>
         <translation>Activar/Desactivar l&apos;eina de llavors</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="322"/>
         <source>StarViewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1126"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1129"/>
         <source>Save Transform file</source>
         <translation>Desar fitxer de transformada</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1152"/>
         <source>all Files (*)</source>
         <translation>tots els fitxers (*)</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="1149"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="1152"/>
         <source>Chose a transform filename</source>
         <translation>Selecciona un fitxer de transformada</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="301"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="305"/>
         <source>There are not the same number of seeds into images</source>
         <translation>No hi ha el mateix nombre de llavors en les dues imatges</translation>
     </message>
     <message>
-        <location filename="qlandmarkregistrationextension.cpp" line="318"/>
+        <location filename="qlandmarkregistrationextension.cpp" line="322"/>
         <source>The registration process has not obtained successfull results</source>
         <translation>El procés de registre no ha obtingut resultats satisfactoris</translation>
     </message>

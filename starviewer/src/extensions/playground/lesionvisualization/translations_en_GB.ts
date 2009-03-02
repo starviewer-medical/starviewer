@@ -74,12 +74,12 @@
 <context>
     <name>udg::QLesionVisualizationExtension</name>
     <message>
-        <location filename="qlesionvisualizationextension.cpp" line="242"/>
+        <location filename="qlesionvisualizationextension.cpp" line="245"/>
         <source>Open lesion  mask file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlesionvisualizationextension.cpp" line="242"/>
+        <location filename="qlesionvisualizationextension.cpp" line="245"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation type="unfinished"></translation>
     </message>

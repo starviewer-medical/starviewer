@@ -73,12 +73,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QVolumeContourDelimiterExtension</name>
     <message>
-        <location filename="qvolumecontourdelimiterextension.cpp" line="422"/>
+        <location filename="qvolumecontourdelimiterextension.cpp" line="398"/>
         <source>Save Volume as...</source>
         <translation>Guardar volumen como...</translation>
     </message>
     <message>
-        <location filename="qvolumecontourdelimiterextension.cpp" line="422"/>
+        <location filename="qvolumecontourdelimiterextension.cpp" line="398"/>
         <source>MHD Files (*.mhd)</source>
         <translation>Archivos MHD (*.mhd)</translation>
     </message>
