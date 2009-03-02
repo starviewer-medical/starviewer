@@ -106,7 +106,8 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
         for ( int iy = -radius; iy <= radius; iy++ )
             for ( int iz = -radius; iz <= radius; iz++, im++ )
             {
-                w[im] = sqrt( static_cast<float>( ix * ix + iy * iy + iz * iz ) );
+                if ( ix == 0 && iy == 0 && iz == 0 ) w[im] = 0.0f;
+                else w[im] = 1.0f / sqrt( static_cast<float>( ix * ix + iy * iy + iz * iz ) );
                 //maskOffset[im] = ix * xStep + iy * yStep + iz * zStep;    // amb això va un 11% més lent (???)
             }
 
@@ -190,10 +191,10 @@ void vtkComputeGradients( vtk4DLinearRegressionGradientEstimator *estimator, T *
                         {
                             int zPiz = z + iz;
                             if ( zPiz < 0 || zPiz >= size[2] ) continue;    // v = 0
-                            // valor del vòxel (no pot ser 0 perquê ja hem fet les comprovacions abans)
+                            // valor del vòxel (no pot ser 0 perquè ja hem fet les comprovacions abans)
                             float v = *( dPtrPixxStepPiyyStep + iz * zStep );
                             //float v = dPtr[maskOffset[im]];   // d'aquesta manera va més lent (???)
-                            v *= w[im]; // w[iw] = distància euclidiana
+                            v *= w[im]; // w[im] = distància euclidiana
                             A += v * ix;
                             B += v * iy;
                             C += v * iz;
