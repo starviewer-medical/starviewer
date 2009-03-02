@@ -125,6 +125,8 @@ private slots:
     void tourBestViews();
     void guidedTour();
 
+    void computeVomiGradient();
+
     void loadAndRunProgram();
 
 private:
