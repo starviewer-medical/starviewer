@@ -107,8 +107,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     Identifier id;
     HangingProtocol *hangingProtocol;
     HangingProtocol *bestHangingProtocol = NULL;
-    QList<Series *> selectedSeries;
-    QList<Series *> bestSelectedSeries;
     double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
     double bestAdjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
@@ -140,7 +138,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
 		//Inicialitzacions
         id.setValue( hangingProtocolNumber );
         hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
-        selectedSeries.clear();
         numberOfSeriesAssigned = 0;
         imageSetNumber = 1;
         serie = 0;
@@ -156,8 +153,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
 
                 if( serie != 0 )
                 {
-                    selectedSeries << serie;
-                    numberOfSeriesAssigned++;
+					numberOfSeriesAssigned++;
                 }
                 imageSetNumber++;
             }
@@ -169,8 +165,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
             if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->gratherThan(bestHangingProtocol) ) )
             {
                 bestHangingProtocol = hangingProtocol;
-                bestSelectedSeries.clear();
-                bestSelectedSeries << selectedSeries;
                 bestAdjustmentOfHanging = adjustmentOfHanging;
             }
 			if( adjustmentOfHanging > 0 )
