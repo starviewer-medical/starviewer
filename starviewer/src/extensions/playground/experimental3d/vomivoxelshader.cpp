@@ -7,8 +7,7 @@ namespace udg {
 
 
 VomiVoxelShader::VomiVoxelShader()
- : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumVomi( 1.0f ), m_vomiFactor( 1.0f ), m_diffuseLighting( false ),
-   m_encodedNormals( 0 ), m_directionEncoder( 0 )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumVomi( 1.0f ), m_vomiFactor( 1.0f ), m_combine( false ), m_encodedNormals( 0 ), m_directionEncoder( 0 )
 {
 }
 
@@ -43,9 +42,9 @@ void VomiVoxelShader::setVomi( const QVector<float> &vomi, float maximumVomi, fl
 }
 
 
-void VomiVoxelShader::setDiffuseLighting( bool on )
+void VomiVoxelShader::setCombine( bool on )
 {
-    m_diffuseLighting = on;
+    m_combine = on;
 }
 
 
