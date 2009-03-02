@@ -30,9 +30,9 @@ for(directory, MAIN_EXTENSIONS) {
 }
 }
 
-I18NPROJECTS += ../core ../interface ../inputoutput
-I18NPROJECTS_TSFILES += ../core/*.ts ../interface/*.ts ../inputoutput/*.ts
-I18NPROJECTS_QMFILES += ../core/*.qm ../interface/*.qm ../inputoutput/*.qm
+I18NPROJECTS += ../core ../interface ../inputoutput ../crashreporter
+I18NPROJECTS_TSFILES += ../core/*.ts ../interface/*.ts ../inputoutput/*.ts ../crashreporter/*.ts
+I18NPROJECTS_QMFILES += ../core/*.qm ../interface/*.qm ../inputoutput/*.qm ../crashreporter/*.qm
 
 unix {
 i18n_update.commands = @for directory in $$I18NPROJECTS; do \
