@@ -16,7 +16,7 @@
     <message>
         <location filename="qmprextensionbase.ui" line="58"/>
         <source>Window Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Window Level</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="321"/>
@@ -31,22 +31,22 @@
     <message>
         <location filename="qmprextensionbase.ui" line="33"/>
         <source>Slicing</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambio de corte</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="274"/>
         <source>Zoom</source>
-        <translation></translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="83"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="230"/>
         <source>Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Ángulo</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="385"/>
@@ -56,12 +56,17 @@ p, li { white-space: pre-wrap; }<byte value="xd"/>
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#dc143c;&quot;&gt;*The current Series has multiple phases. &lt;/span&gt;&lt;/p&gt;<byte value="xd"/>
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;Currently the MPR 2D doesn&apos;t support &lt;/p&gt;<byte value="xd"/>
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;Series with multiple phases so it won&apos;t work propperly.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#dc143c;&quot;&gt;*La serie actual contiene múltiples fases. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;Actualmente el MPR 2D no soporta &lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600; color:#dc143c;&quot;&gt;series con múltiples fases, por lo tanto no funcionará correctamente.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="qmprextensionbase.ui" line="457"/>
         <source>AXIAL_</source>
-        <translation type="unfinished"></translation>
+        <translation>AXIAL_</translation>
     </message>
 </context>
 <context>
