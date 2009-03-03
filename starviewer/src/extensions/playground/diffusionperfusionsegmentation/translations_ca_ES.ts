@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QDifuPerfuExtensionBase</name>
     <message>
@@ -155,7 +156,7 @@
     <message>
         <location filename="qdifuperfuextensionbase.ui" line="624"/>
         <source>Penombra (in mm&lt;sup&gt;3&lt;/sup&gt;)</source>
-        <translation type="unfinished"></translation>
+        <translation>Penombra (en mm&lt;sup&gt;3&lt;/sup&gt;)</translation>
     </message>
 </context>
 <context>
