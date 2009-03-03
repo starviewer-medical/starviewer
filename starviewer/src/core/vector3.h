@@ -264,7 +264,7 @@ inline TVector3<T>& operator *=( TVector3<T> &v, double a )
 template <class T>
 inline TVector3<T> operator /( const TVector3<T> &v, double a )
 {
-    return Vector3(v.x / a, v.y / a, v.z / a);
+    return TVector3<T>( v.x / a, v.y / a, v.z / a );
 }
 
 
