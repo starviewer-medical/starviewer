@@ -45,9 +45,9 @@ bool Output::saveFile( QString filename )
     {
         m_writer->Update();
     }
-    catch ( itk::ExceptionObject & e )
+    catch ( itk::ExceptionObject &exception )
     {
-        WARN_LOG( "Excepció escrivint l'arxiu [" + filename + "]" );
+        WARN_LOG( "Excepció escrivint l'arxiu [" + filename + "]" + exception.GetDescription() );
         ok = false;
         emit progress(-1);
     }
@@ -105,9 +105,9 @@ Sempre s'ha de fer un casting ( i un rescale image? )
     {
         m_seriesWriter->Update();
     }
-    catch ( itk::ExceptionObject & e )
+    catch ( itk::ExceptionObject &exception )
     {
-        WARN_LOG( "Excepció escrivint l'arxiu [" + QString( filename ) +"]" );
+        WARN_LOG( "Excepció escrivint l'arxiu [" + QString( filename ) +"]" + exception.GetDescription() );
         ok = false;
         emit progress(-1);
     }
