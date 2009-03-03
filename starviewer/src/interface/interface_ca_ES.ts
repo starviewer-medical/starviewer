@@ -357,7 +357,7 @@
     <message>
         <location filename="qconfigurationdialog.cpp" line="41"/>
         <source>RIS Listener</source>
-        <translation type="unfinished">Escoltar peticions del Ris</translation>
+        <translation>Escoltar peticions del RIS</translation>
     </message>
 </context>
 </TS>

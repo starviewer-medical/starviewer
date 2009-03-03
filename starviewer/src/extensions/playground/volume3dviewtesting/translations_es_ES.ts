@@ -204,7 +204,7 @@
     <message>
         <location filename="qvolume3dviewtestingextension.cpp" line="141"/>
         <source>Thorax</source>
-        <translation>tórax</translation>
+        <translation>Tórax</translation>
     </message>
     <message>
         <location filename="qvolume3dviewtestingextension.cpp" line="154"/>
