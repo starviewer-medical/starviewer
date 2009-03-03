@@ -27,6 +27,7 @@
 #include "vmivoxelshader2.h"
 #include "vomivoxelshader.h"
 #include "voxelsaliencyvoxelshader.h"
+#include "colorvomivoxelshader.h"
 
 
 namespace udg {
@@ -58,6 +59,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_vmiVoxelShader2;
     delete m_vomiVoxelShader;
     delete m_voxelSaliencyVoxelShader;
+    delete m_colorVomiVoxelShader;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -238,6 +240,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_vmiVoxelShader2->setTransferFunction( transferFunction );
     m_vomiVoxelShader->setTransferFunction( transferFunction );
     m_voxelSaliencyVoxelShader->setTransferFunction( transferFunction );
+    m_colorVomiVoxelShader->setTransferFunction( transferFunction );
 }
 
 
@@ -309,6 +312,17 @@ void Experimental3DVolume::renderVoxelSaliencies( const QVector<float> &voxelSal
     m_voxelSaliencyVoxelShader->setVoxelSaliencies( voxelSaliencies, maximumSaliency, factor );
     m_voxelSaliencyVoxelShader->setDiffuseLighting( diffuseLighting );
     m_voxelSaliencyVoxelShader->setGradientEstimator( gradientEstimator() );
+}
+
+
+void Experimental3DVolume::renderColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor, bool combine )
+{
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    if ( !combine ) m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
+    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorVomiVoxelShader );
+    m_colorVomiVoxelShader->setColorVomi( colorVomi, maximumColorVomi, factor );
+    m_colorVomiVoxelShader->setCombine( combine );
+    m_colorVomiVoxelShader->setGradientEstimator( gradientEstimator() );
 }
 
 
@@ -396,6 +410,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_vomiVoxelShader->setData( m_data, m_rangeMax );
     m_voxelSaliencyVoxelShader = new VoxelSaliencyVoxelShader();
     m_voxelSaliencyVoxelShader->setData( m_data, m_rangeMax );
+    m_colorVomiVoxelShader = new ColorVomiVoxelShader();
+    m_colorVomiVoxelShader->setData( m_data, m_rangeMax );
 }
 
 

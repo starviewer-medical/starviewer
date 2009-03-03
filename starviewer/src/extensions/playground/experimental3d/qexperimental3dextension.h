@@ -121,6 +121,10 @@ private slots:
     void saveViewpointVomi();
     void loadEvmi();
     void saveEvmi();
+    void loadColorVomiPalette();
+    void loadColorVomi();
+    void saveColorVomi();
+    void colorVomiChecked( bool checked );
 
     void tourBestViews();
     void guidedTour();
@@ -147,6 +151,9 @@ private:
     float m_maximumSaliency;
     QVector<float> m_viewpointVomi;
     QVector<float> m_evmi;
+    QVector<Vector3Float> m_colorVomiPalette;
+    QVector<Vector3Float> m_colorVomi;
+    float m_maximumColorVomi;
 
 };
 
