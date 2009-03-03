@@ -30,9 +30,9 @@
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 
 struct T_ASC_Association;
+struct T_DIMSE_C_FindRQ;
+struct T_DIMSE_C_FindRSP;
 class DcmDataset;
-class T_DIMSE_C_FindRQ;
-class T_DIMSE_C_FindRSP;
 
 namespace udg{
 

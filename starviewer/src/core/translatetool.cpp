@@ -94,7 +94,6 @@ void TranslateTool::pan()
 
     // Has to recalc old mouse point since the viewport has moved,
     // so can't move it outside the loop
-    int last_xy[2];
     m_viewer->getLastEventPosition( xy );
     QViewer::computeDisplayToWorld( renderer,
                                 (double)xy[0],
