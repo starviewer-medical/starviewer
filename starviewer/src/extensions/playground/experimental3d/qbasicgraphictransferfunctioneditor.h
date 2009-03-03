@@ -77,6 +77,7 @@ private:
     void changeCurrentPoint( double x, double y );
 
     void clearSelection();
+    void selectAll();
 
 private:
 

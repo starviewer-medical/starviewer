@@ -118,6 +118,7 @@ void QBasicGraphicTransferFunctionEditor::keyPressEvent( QKeyEvent *event )
     {
         case Qt::Key_Space: adjustRangeToFunction(); break;
         case Qt::Key_Escape: clearSelection(); break;
+        case Qt::Key_A: if ( event->modifiers().testFlag( Qt::ControlModifier ) ) selectAll(); break;
     }
 }
 
@@ -512,6 +513,14 @@ void QBasicGraphicTransferFunctionEditor::changeCurrentPoint( double x, double y
 void QBasicGraphicTransferFunctionEditor::clearSelection()
 {
     m_selectedPoints.clear();
+    update();
+}
+
+
+void QBasicGraphicTransferFunctionEditor::selectAll()
+{
+    m_selectedPoints.clear();
+    m_selectedPoints << m_transferFunction.getPoints();
     update();
 }
 
