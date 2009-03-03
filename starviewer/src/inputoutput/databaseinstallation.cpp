@@ -82,7 +82,13 @@ bool DatabaseInstallation::checkLocalImagePath()
     }
     else
     {
-        // TODO comprovar que tenim permisos d'escriptura al directori local d'imatges
+        // comprovar que tenim permisos d'escriptura al directori local d'imatges
+        QFileInfo imagePathInfo( settings.getCacheImagePath() );
+        if( !imagePathInfo.isWritable() )
+        {
+            ERROR_LOG("El directori de la cache d'imatges no té permisos d'escriptura: " + settings.getCacheImagePath() );
+            return false;
+        }
     }
 
     INFO_LOG("Estat de la cache d'imatges correcte ");
