@@ -194,7 +194,8 @@ Mitjana: %2 </translation>
         <location filename="q2dviewer.cpp" line="1878"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
-        <translation>%1 x %2WW: %5 WL: %6</translation>
+        <translation>%1 x %2
+WW: %5 WL: %6</translation>
     </message>
     <message>
         <location filename="q2dviewer.cpp" line="1901"/>
