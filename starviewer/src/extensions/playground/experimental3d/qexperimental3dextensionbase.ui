@@ -409,6 +409,49 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_16" >
+          <item>
+           <widget class="QCheckBox" name="m_colorVomiCheckBox" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Color VoMI</string>
+            </property>
+            <property name="tristate" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="m_colorVomiFactorLabel" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Factor</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="m_colorVomiFactorDoubleSpinBox" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="maximum" >
+             <double>100.000000000000000</double>
+            </property>
+            <property name="singleStep" >
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value" >
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" >
           <property name="spacing" >
            <number>6</number>
@@ -1427,6 +1470,47 @@
           </item>
           <item>
            <widget class="QPushButton" name="m_saveEvmiPushButton" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Save...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_15" >
+          <item>
+           <widget class="QCheckBox" name="m_computeColorVomiCheckBox" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string>Color VoMI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_loadColorVomiPalettePushButton" >
+            <property name="text" >
+             <string>Load palette...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_loadColorVomiPushButton" >
+            <property name="text" >
+             <string>Load...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_saveColorVomiPushButton" >
             <property name="enabled" >
              <bool>false</bool>
             </property>

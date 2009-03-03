@@ -4,6 +4,8 @@
 
 #include <QVector>
 
+#include "vector3.h"
+
 
 class vtkEncodedGradientEstimator;
 class vtkFiniteDifferenceGradientEstimator;
@@ -33,6 +35,7 @@ class VmiVoxelShader1;
 class VmiVoxelShader2;
 class VomiVoxelShader;
 class VoxelSaliencyVoxelShader;
+class ColorVomiVoxelShader;
 
 
 class Experimental3DVolume {
@@ -80,6 +83,7 @@ public:
     float viewedVolumeInVmiSecondPass() const;
     void renderVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool combine );
     void renderVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor, bool diffuseLighting );
+    void renderColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor, bool combine );
     QVector<float> computeVomiGradient( const QVector<float> &vomi );
 
 private:
@@ -138,6 +142,8 @@ private:
     VomiVoxelShader *m_vomiVoxelShader;
     /// Voxel shader que pinta les voxel saliencies.
     VoxelSaliencyVoxelShader *m_voxelSaliencyVoxelShader;
+    /// Voxel shader que pinta les color VoMI.
+    ColorVomiVoxelShader *m_colorVomiVoxelShader;
 
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;
