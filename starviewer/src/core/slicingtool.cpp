@@ -30,6 +30,7 @@ SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
 
     // cada cop que canvïi l'input cal fer algunes inicialitzacions
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( inputChanged(Volume *) ) );
+    chooseBestDefaultScrollMode( m_2DViewer->getInput() );
 }
 
 SlicingTool::~SlicingTool()
@@ -144,7 +145,7 @@ void SlicingTool::endSlicing()
 
 void SlicingTool::inputChanged( Volume *input )
 {
-    m_slicingMode = SliceMode;
+    chooseBestDefaultScrollMode(input);
     m_mouseMovement = false;
     m_state = NONE;
     m_inputHasPhases = false;
@@ -200,6 +201,19 @@ void SlicingTool::computeImagesForScrollMode()
 		    m_numberOfImages = m_2DViewer->getMaximumSlice();
 	    else
 		    m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
+    }
+}
+
+void SlicingTool::chooseBestDefaultScrollMode( Volume *input )
+{
+    // per defecte sempre serà aquest excepte quan només tenim 1 imatge i tenim fases
+    m_slicingMode = SliceMode;
+    if( input )
+    {
+        if( input->getNumberOfPhases() > 1  && m_2DViewer->getMaximumSlice() <= 1 )
+        {
+            m_slicingMode = PhaseMode;
+        }
     }
 }
 
