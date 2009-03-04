@@ -57,6 +57,11 @@ private:
      */
     void updateIncrement(int increment);
 
+    /// Calcula les imatges o fases a tenir en compte
+    /// pel càlcul del desplaçament a aplicar durant la interacció
+    /// depenent del mode en que ens trobem
+    void computeImagesForScrollMode();
+
 private:
     enum { SliceMode, PhaseMode };
 
@@ -86,6 +91,9 @@ private:
 
     /// Ens indica si l'input actual té fases. S'actualitza cada cop que es canvia d'input
     bool m_inputHasPhases;
+
+    /// Controla si estem forçant el mode de phases amb la tecla Ctrl
+    bool m_forcePhaseMode;
 };
 
 }

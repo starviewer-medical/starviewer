@@ -16,7 +16,7 @@
 namespace udg {
 
 SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0), m_inputHasPhases(false)
+ : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0), m_inputHasPhases(false), m_forcePhaseMode(false)
 {
     m_state = NONE;
     m_toolName = "SlicingTool";
@@ -38,6 +38,9 @@ SlicingTool::~SlicingTool()
 
 void SlicingTool::handleEvent( unsigned long eventID )
 {
+    if( !m_2DViewer->getInput() )
+        return;
+
     switch( eventID )
     {
     case vtkCommand::LeftButtonPressEvent:
@@ -80,6 +83,19 @@ void SlicingTool::handleEvent( unsigned long eventID )
             switchSlicingMode();
     break;
 
+    case vtkCommand::KeyPressEvent:
+        if( m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases )
+        {
+            m_forcePhaseMode = true;
+            computeImagesForScrollMode();
+        }
+        break;
+    
+    case vtkCommand::KeyReleaseEvent:
+        m_forcePhaseMode = false;
+        computeImagesForScrollMode();
+        break;
+
     default:
     break;
     }
@@ -90,11 +106,7 @@ void SlicingTool::startSlicing()
     m_state = SLICING;
     m_2DViewer->getEventPosition( m_startPosition );
 	// calculem el nombre d'imatges que manipulem
-	if( m_slicingMode == SliceMode )
-		m_numberOfImages = m_2DViewer->getMaximumSlice();
-	else
-		m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
-
+    computeImagesForScrollMode();
 	m_screenSize = m_2DViewer->getRenderWindowSize();
 }
 
@@ -161,7 +173,7 @@ void SlicingTool::switchSlicingMode()
 void SlicingTool::updateIncrement(int increment)
 {
     // si mantenim control apretat sempe mourem fases independentment de l'slicing mode
-    if( m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases )
+    if( m_forcePhaseMode )
         m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + increment );
     else // altrament continuem amb el comportament habitual
     {
@@ -175,6 +187,19 @@ void SlicingTool::updateIncrement(int increment)
                 m_2DViewer->setPhase( m_2DViewer->getCurrentPhase() + increment );
                 break;
         }
+    }
+}
+
+void SlicingTool::computeImagesForScrollMode()
+{
+    if( m_forcePhaseMode )
+        m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
+    else
+    {
+	    if( m_slicingMode == SliceMode )
+		    m_numberOfImages = m_2DViewer->getMaximumSlice();
+	    else
+		    m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
     }
 }
 
