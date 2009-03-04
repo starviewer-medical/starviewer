@@ -21,6 +21,7 @@ QListenRisRequestsConfigurationScreen::QListenRisRequestsConfigurationScreen(QWi
     loadRisConfiguration();
     m_buttonApplyListenRisConfiguration->setEnabled(false);
 
+    this->setWindowIcon(QIcon(":images/RISConfiguration.png"));
     createConnections();
     m_buttonApplyListenRisConfiguration->setIcon(QIcon(":images/apply.png"));
     configureInputValidator();

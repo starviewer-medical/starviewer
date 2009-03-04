@@ -12,9 +12,6 @@
   <property name="windowTitle" >
    <string>RIS Listener Configuration</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="../main/main.qrc" >:/images/open.png</iconset>
-  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>9</number>
