@@ -111,5 +111,6 @@
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
         <file>images/openDICOMDIR.png</file>
+        <file>images/RISConfiguration.png</file>
     </qresource>
 </RCC>
