@@ -517,6 +517,26 @@ void QExperimental3DExtension::setViewpoint()
 
 void QExperimental3DExtension::setViewpoint( const Vector3 &viewpoint )
 {
+    /*
+    // Describe the new vector between the camera and the target
+    dx = cameraX - targetX;
+    dy = cameraY - targetY;
+    dz = cameraZ - targetZ;
+
+    // Calculate the new "up" vector for the camera
+    upX = -dx * dy;
+    upY =  dz * dz + dx * dx;
+    upZ = -dz * dy;
+    */
+    //Vector3 up( -viewpoint.x * viewpoint.y, viewpoint.z * viewpoint.z + viewpoint.x * viewpoint.x, -viewpoint.z * viewpoint.y );
+    //Vector3 up( viewpoint.x * viewpoint.y + viewpoint.z * viewpoint.z, viewpoint.y * viewpoint.z + viewpoint.x * viewpoint.x, viewpoint.z * viewpoint.x + viewpoint.y * viewpoint.y );
+    //Vector3 up( 0.0, 2.0 * qAbs( viewpoint.x ) + qAbs( viewpoint.z  ), qAbs( viewpoint.y ) );
+    double max = qMax( qAbs( viewpoint.x ), qMax( qAbs( viewpoint.y ), qAbs( viewpoint.z ) ) );
+    //Vector3 up( max - qAbs( viewpoint.x ), 2.0 * qAbs( viewpoint.x ) + qAbs( viewpoint.z  ), qAbs( viewpoint.y ) );
+    Vector3 up( qMax( max - qAbs( viewpoint.y - viewpoint.z ), 0.0 ), qAbs( viewpoint.x ) + qAbs( viewpoint.z  ), qAbs( viewpoint.y ) );
+    up.normalize();
+
+    /*
     Vector3 up( 0.0, 1.0, 0.0 );
     Vector3 position = viewpoint;
     double dotProduct = qAbs( position.normalize() * up );
@@ -542,6 +562,7 @@ void QExperimental3DExtension::setViewpoint( const Vector3 &viewpoint )
             }
         }
     }
+    */
 
     //DEBUG_LOG( "viewpoint = " + viewpoint.toString() + ", up = " + up.toString() );
     m_viewer->setCamera( viewpoint, Vector3(), up );
