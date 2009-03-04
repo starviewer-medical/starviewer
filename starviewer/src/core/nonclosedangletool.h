@@ -13,10 +13,7 @@
 namespace udg {
 
 class Q2DViewer;
-class Volume;
-class ImagePlane;
 class DrawerLine;
-class DrawerPolyline;
 class DrawerText;
 
 /**
@@ -38,8 +35,6 @@ public:
     ///funcio manejadora dels events passats.
     void handleEvent( long unsigned eventID );
 
-private slots:
-
 private:
     /// ens permet anotar el punts de la primera línia.
     void annotateFirstLinePoints();
@@ -53,29 +48,28 @@ private:
     /// ens simula la 2a linia que estem dibuixant.
     void simulateSecondLine();
 
-    /// TODO ens simula una 2a línia respecte el punt on està el mouse.
-    void simulateMirrorLine();
-
-    void drawCircumference();//dibuixem arc?
-
-    void fixFirstSegment();//fixSecondSegment? un per cada linia
-
-    void computeAngle();//canviar punts de referencia per calcular l'angle
-
-    void findInitialDegreeArc();//dibuixem arc?
+    /// Calcula l'angle de les dues línies dibuixades
+    void computeAngle();
 
     ///calcula la correcta posició del caption de l'angle segons els punts de l'angle
     void textPosition( double *p1, double *p2, DrawerText *angleText );
 
-    ///retorna el valor mínim dels paràmetres
-    double minimum(double d1, double d2, double d3, double d4);
+    /**
+    * retorna el punt d'interseccio de dues línies infinites
+    * definides per dos segments
+    * @param p1 primer punt de la primera recta
+    * @param p2 segon punt de la primera recta
+    * @param p3 primer punt de la segona recta
+    * @param p4 segon punt de la segona recta
+    */
+    double *intersectionPoint(double *p1, double *p2, double *p3, double *p4, int &state);
 
 private:
+    ///estats de la línia segons la interseccio, no es distingeix entre PARALLEL i COINCIDENT
+    enum { PARALLEL, INTERSECT };
+
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
-
-    ///polilinia principal: es la polilinia que ens marca la forma que hem anat editant.
-//     QPointer<DrawerPolyline> m_mainPolyline;
 
     ///primera línia
     QPointer<DrawerLine> m_firstLine;
@@ -83,18 +77,13 @@ private:
     ///segona línia
     QPointer<DrawerLine> m_secondLine;
 
-    ///polilinia de la circumferencia de l'angle.
-    QPointer<DrawerPolyline> m_circumferencePolyline;
+    ///línia d'unió
+    QPointer<DrawerLine> m_middleLine;
 
     ///estat de la tool
     int m_state;
-
-    double m_radius;
-
-    int m_initialDegreeArc;
-
+    /// per controlar els punts de la línia que s'han dibuixat
     bool m_hasFirstPoint;
-
     bool m_hasSecondPoint;
 };
 
