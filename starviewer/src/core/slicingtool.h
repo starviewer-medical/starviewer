@@ -62,6 +62,11 @@ private:
     /// depenent del mode en que ens trobem
     void computeImagesForScrollMode();
 
+    /// Segons l'input escull el millor mode d'srcoll per defecte
+    /// Per exemple, en el cas que només tinguem fases i una sola imatge 
+    /// és millor que per defecte estem en PhaseMode
+    void chooseBestDefaultScrollMode( Volume *input );
+
 private:
     enum { SliceMode, PhaseMode };
 
