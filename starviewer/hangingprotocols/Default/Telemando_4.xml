@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Telemando">
+<hangingProtocolName>RF</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<allDifferent>yes</allDifferent>
+<protocol>RF</protocol>
+<imageSet identifier="1">
+</imageSet>
+<imageSet identifier="2">
+</imageSet>
+<imageSet identifier="3">
+</imageSet>
+<imageSet identifier="4">
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\0.5\0.5</position>
+</displaySet>
+<displaySet identifier="2">
+<imageSetNumber>2</imageSetNumber>
+<position>0.5\1.0\1.0\0.5</position>
+</displaySet>
+<displaySet identifier="3">
+<imageSetNumber>3</imageSetNumber>
+<position>0.0\0.5\0.5\0.0</position>
+</displaySet>
+<displaySet identifier="4">
+<imageSetNumber>4</imageSetNumber>
+<position>0.5\0.5\1.0\0.0</position>
+</displaySet>
+</hangingProtocol>
