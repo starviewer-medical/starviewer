@@ -2,7 +2,6 @@
 <hangingProtocol name="Telemando">
 <hangingProtocolName>RF</hangingProtocolName>
 <numberScreens>1</numberScreens>
-<strictness>yes</strictness>
 <allDifferent>yes</allDifferent>
 <protocol>RF</protocol>
 <imageSet identifier="1">
