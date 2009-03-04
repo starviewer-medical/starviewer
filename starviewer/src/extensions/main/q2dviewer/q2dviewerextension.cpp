@@ -374,7 +374,7 @@ void Q2DViewerExtension::setPatient( Patient *patient )
     // ara és super txapussa i només mirarà el primer estudi
     foreach( Study *study, m_patient->getStudies() )
     {
-        if( study->getModalities().contains("MG") || study->getModalities().contains("CR") )
+        if( study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") || study->getModalities().contains("OP") )
         {
             m_slicingToolButton->defaultAction()->toggle();
             m_zoomToolButton->defaultAction()->trigger();
