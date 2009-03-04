@@ -156,9 +156,6 @@ private slots:
     /// Fa les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
 
-    /// Fa el procés de guardar les imatges capturades
-    void saveImages();
-
     /// Actualitza el valor del thickSlab i tot el que hi estigui relacionat amb ell
     void updateThickSlab( double value );
     void updateThickSlab( int value );
@@ -197,13 +194,7 @@ private:
 
     /// Els plans de tall per cada vista ( més el thickSlab )
     vtkPlaneSource *m_sagitalPlaneSource, *m_coronalPlaneSource , *m_axialPlaneSource , *m_thickSlabPlaneSource;
-
-    /// El directori on es desaran les imatges per defecte
-    QString m_defaultSaveDir;
-
-    /// Filtre de fitxers que es poden desar
-    QString m_fileSaveFilter;
-
+    
     ///conjunt de tools disponibles en aquesta extensió
     QStringList m_extensionToolsList;
 
@@ -219,17 +210,6 @@ private:
     QAction *m_horizontalLayoutAction;
     /// Acció per activar el mip
     QAction *m_mipAction;
-    /// Accions associades a tools
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_screenShotAction;
-    QAction *m_voxelInformationAction;
-    QAction *m_rotate3DAction;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
 
     /// Visor de MIP
     Q3DViewer *m_mipViewer;

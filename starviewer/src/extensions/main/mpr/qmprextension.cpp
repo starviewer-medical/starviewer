@@ -150,8 +150,6 @@ void QMPRExtension::init()
     m_pickedActorReslice = 0;
     m_mipViewer = 0;
 
-    m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
-
     m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
 }
 
@@ -209,6 +207,7 @@ void QMPRExtension::initializeTools()
     m_slicingToolButton->defaultAction()->trigger();
     m_moveToolButton->defaultAction()->trigger();
     m_windowLevelToolButton->defaultAction()->trigger();
+    m_screenShotToolButton->defaultAction()->trigger();
 
     // registrem al manager les tools que van als diferents viewers
     initializeDefaultTools();
@@ -296,15 +295,6 @@ void QMPRExtension::switchToMIPLayout( bool isMIPChecked )
         {
             m_mipViewer = new Q3DViewer;
             m_mipViewer->orientationMarkerOff();
-            // això és un petit parxe per solventar que el mip no sap quina tool estem fent servir
-            // \TODO solucionar això d'una manera més elegant
-            if( m_zoomAction->isChecked() )
-                m_mipViewer->setOldTool( "ZoomTool" );
-            else if( m_moveAction->isChecked() )
-                m_mipViewer->setOldTool( "TranslateTool" );
-            else if( m_screenShotAction->isChecked() )
-                m_mipViewer->setOldTool("ScreenShotTool");
-            // fi parxe
             m_mipViewer->setRenderFunctionToMIP3D();
         }
         Volume *mipInput = new Volume;
@@ -850,37 +840,6 @@ void QMPRExtension::initOrientation()
 
     updatePlanes();
     updateControls();
-}
-
-void QMPRExtension::saveImages()
-{
-    if( m_axial2DView->grabbedViewsCount() == 0 && m_sagital2DView->grabbedViewsCount() == 0 && m_coronal2DView->grabbedViewsCount() == 0 )
-    {
-        QMessageBox::information( 0 , tr("Information") , tr("There are not grabbed views to save") );
-        return;
-    }
-
-    QString fileName = QFileDialog::getSaveFileName( this , tr("Save file") , m_defaultSaveDir , m_fileSaveFilter );
-    if ( !fileName.isEmpty() )
-    {
-        QViewer::FileType extension;
-        if( QFileInfo( fileName ).suffix() == "jpg" )
-            extension = QViewer::JPEG;
-        else if( QFileInfo( fileName ).suffix() == "png" )
-            extension = QViewer::PNG;
-        else if( QFileInfo( fileName ).suffix() == "pnm" )
-            extension = QViewer::PNM;
-        else if( QFileInfo( fileName ).suffix() == "bmp" )
-            extension = QViewer::BMP;
-        else if( QFileInfo( fileName ).suffix() == "tif" )
-            extension = QViewer::TIFF;
-
-        m_axial2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
-        m_sagital2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
-        m_coronal2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
-
-        m_defaultSaveDir = QFileInfo( fileName ).absolutePath();
-    }
 }
 
 void QMPRExtension::createActors()
@@ -1466,8 +1425,6 @@ void QMPRExtension::readSettings()
     else
         m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
 
-    m_defaultSaveDir = settings.value("defaultSaveDir", ".").toString();
-
     settings.endGroup();
 }
 
@@ -1478,8 +1435,6 @@ void QMPRExtension::writeSettings()
 
     settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
     settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-
-    settings.setValue("defaultSaveDir", m_defaultSaveDir );
 
     settings.endGroup();
 }
