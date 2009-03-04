@@ -608,7 +608,6 @@ void Q2DViewer::getSliceRange(int &min, int &max)
     else
     {
         min = max = 0;
-        DEBUG_LOG("Alerta! Demanem el rang de llesques però no tenim volum! Valors de sortida = 0!");
     }
 }
 
