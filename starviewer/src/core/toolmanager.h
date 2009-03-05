@@ -77,6 +77,7 @@ public:
      */
     void addExclusiveToolsGroup( const QString &groupName, const QStringList &tools );
 
+public slots:
     /**
      * Desactiva totes les tools temporalment.
      * Útil per si volem interactuar amb els events de teclat i mouse i no volem que les tools
@@ -92,7 +93,6 @@ public:
       */
     void undoDisableAllToolsTemporarily();
 
-public slots:
     /**
      * Activa/Desactiva la tool especificada en tots els viewers registrats
      * @param toolName Nom de la tool a activar/desactivar
