@@ -13,6 +13,9 @@ win32 {
     debug {
 		CONFIG += console
 	}
+    release {
+        CONFIG -= console
+    }
 }
 	
 # Definim variable per construir versió lite en temps de compilació
