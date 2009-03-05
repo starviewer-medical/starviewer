@@ -9,13 +9,6 @@
 
 #include "ui_qstrokesegmentationextensionbase.h"
 
-#include <QString>
-
-// FWD declarations
-class QAction;
-class vtkImageMask;
-class vtkActor;
-
 namespace udg {
 
 // FWD declarations
@@ -53,20 +46,8 @@ private:
     void writeSettings();
 
 private slots:
-     /// gestiona els events del m_2DView
-    void strokeEventHandler( unsigned long id );
-
-    /// gestiona els events del botó esquerre
-    void leftButtonEventHandler();
-
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition();
-
-     /// determina la llavor del mètode de segmentació
-    void setEditorPoint( );
-
-    /// desactiva el booleà que ens diu si està el botó esquerra apretat
-    void setLeftButtonOff( );
 
     /// actualitza el valor llindar baix
     void setLowerValue( int x );
@@ -77,27 +58,8 @@ private slots:
     /// Canvia la opacitat de la màscara
     void setOpacity(int op);
 
-    /// Canvia a la opció esborrar
-    void setErase();
-
-    /// Canvia a la opció pintar
-    void setPaint();
-
-    /// Canvia a la opció esborrar llesca
-    void setEraseSlice();
-
-    /// Dibuixa el cursor en la forma del pinzell
-    void setPaintCursor( );
-
-    void eraseMask(int size);
-    void paintMask(int size);
-    void eraseSliceMask();
-
     /// Calcula el volum de la màscara
     double calculateMaskVolume();
-
-    /// Calcula el volum de la màscara suposant que la variable m_cont conté el nombre de vòxels != 0 de la màscara
-    double updateMaskVolume();
 
     /// Refresca el resultat del volum
     void updateVolume();
@@ -115,26 +77,12 @@ private:
     /// Mètode de la segmentació
     StrokeSegmentationMethod *m_segMethod;
 
-    /// Membres de classe
-    bool m_isSeed;
-    bool m_isMask;
-    bool m_isErase;
-    bool m_isPaint;
-    bool m_isEraseSlice;
-    bool m_isLeftButtonPressed;
-    vtkActor *m_squareActor;
-    int m_cont;
-    double m_volume;
-
+    bool m_isSeed, m_isMask;
     int m_minValue, m_maxValue;
     int m_insideValue, m_outsideValue;
 
     /// Accions
-    QAction *m_editorAction;
     QAction *m_rotateClockWiseAction;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
 
     /// Tool manager
     ToolManager *m_toolManager;
