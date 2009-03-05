@@ -7,7 +7,6 @@
 #include "qstrokesegmentationextension.h"
 
 #include "strokesegmentationmethod.h"
-#include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
 #include "q2dviewer.h"
@@ -15,23 +14,20 @@
 //Qt
 #include <QString>
 #include <QAction>
-#include <QToolBar>
 #include <QSettings>
 #include <QMessageBox>
 
 // VTK
-#include <vtkRenderer.h>
 #include <vtkImageMask.h>
 #include <vtkImageThreshold.h>
-#include <vtkSphereSource.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkActor.h>
-#include <vtkProperty.h>
-#include <vtkImageIterator.h>
-#include <vtkUnstructuredGrid.h>
-#include <vtkDataSetMapper.h>
-#include <vtkContourGrid.h>
 #include <vtkCommand.h>
+#include <vtkActor.h>
+#include <vtkPoints.h>
+#include <vtkUnstructuredGrid.h>
+#include <vtkProperty.h>
+#include <vtkDataSetMapper.h>
+#include <vtkRenderer.h>
+#include <vtkContourGrid.h>
 
 // ITK
 #include <itkBinaryThresholdImageFilter.h>
@@ -52,34 +48,21 @@ QStrokeSegmentationExtension::QStrokeSegmentationExtension( QWidget *parent )
     m_maskVolume = new Volume();
     m_segMethod = new StrokeSegmentationMethod();
 
-    squareActor = vtkActor::New();
+    m_squareActor = vtkActor::New();
 
-    // activem el framework de "Old Tools"
-    // TODO cal reciclar per les noves tools
-    m_2DView->enableOldTools();
     createActions();
+    initializeTools();
     createConnections();
     readSettings();
-
-    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
-    m_toolManager = new ToolManager(this);
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    QStringList toolsList;
-    toolsList << "VoxelInformationTool";
-    m_toolManager->setViewerTools( m_2DView, toolsList );
 }
 
 QStrokeSegmentationExtension::~QStrokeSegmentationExtension()
 {
     writeSettings();
     delete m_segMethod;
-    //delete m_maskVolume;//TODO descomentar aix�per tal d'alliberar el m_maskVolume (ara peta)
-    /*if(m_vtkFusionImage!=0)
-    {
-        m_vtkFusionImage->Delete();
-    }*/
-    //pointActor  -> Delete();
-    squareActor -> Delete();
+    //TODO descomentar això per tal d'alliberar el m_maskVolume (ara peta)
+    //delete m_maskVolume;
+    m_squareActor->Delete();
 }
 
 void QStrokeSegmentationExtension::createActions()
@@ -92,74 +75,94 @@ void QStrokeSegmentationExtension::createActions()
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
     connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
+}
 
-    // Tools
-    m_actionFactory = new ToolsActionFactory( 0 );
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
+void QStrokeSegmentationExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
 
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
+    // Tool d'slicing per teclat
+    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
+    slicingKeyboardTool->trigger();
 
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
+    // definim els grups exclusius
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
 
-    m_seedAction = m_actionFactory->getActionFrom( "SeedTool" );
-    m_seedAction->setIcon( QIcon(":/images/seed.png") );
-    m_seedToolButton->setDefaultAction( m_seedAction );
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
-    m_editorAction = new QAction( 0 );
-    m_editorAction->setText( tr("EditorTool") );
-    m_editorAction->setStatusTip( tr("Enable/Disable editor tool") );
-    m_editorAction->setIcon( QIcon(":/images/pencil.png") );
-    m_editorAction->setCheckable( true );
-    m_editorAction->setEnabled( false );
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    // inicialitzem totes les tools
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool";
+
+    m_toolManager->setViewerTools( m_2DView, toolsList );
+
+    // Activació de l'eina d'edició "HOME MADE"
+    // TODO Cal fer servir únicament la autèntica tool i treure tota
+    // l'edició manual que es fa dins d'aquesta pròpia classe
+    m_editorAction = m_toolManager->getToolAction("EditorTool");
     m_editorToolButton->setDefaultAction( m_editorAction );
 
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
-
     m_toolsActionGroup = new QActionGroup( 0 );
+    // txapussilla per fer la tool editor(home made) exclusiu de la resta. Amb la tool oficial això seria automàtic
     m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_seedAction );
+    m_toolsActionGroup->addAction( m_slicingToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_zoomToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_seedToolButton->defaultAction() );
     m_toolsActionGroup->addAction( m_editorAction );
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_seedAction->trigger();
-
+    // TODO guarrada total! ens veiem forçats a fer això perquè es refresquin les connexions de les tools
+    // i no quedi l'editor activat a la vegada amb cap altre tool
+    connect( m_editorAction, SIGNAL( triggered() ), m_toolManager, SLOT( undoDisableAllToolsTemporarily() ) );
 }
 
 void QStrokeSegmentationExtension::createConnections()
 {
-  connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( applyMethod() ) );
-  connect( m_eraseButton, SIGNAL( clicked() ), SLOT( setErase() ) );
-  connect( m_eraseSliceButton, SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
-  connect( m_paintButton, SIGNAL( clicked() ), SLOT( setPaint() ) );
-  connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
-  connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
-  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
-  connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-  connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
-  connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
-  connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
-  connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+    connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( applyMethod() ) );
+    connect( m_eraseButton, SIGNAL( clicked() ), SLOT( setErase() ) );
+    connect( m_eraseSliceButton, SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
+    connect( m_paintButton, SIGNAL( clicked() ), SLOT( setPaint() ) );
+    connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
+    connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+    connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
+    connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
+    connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
+    connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
+    connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
+    connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
 }
 
 void QStrokeSegmentationExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    // \TODO ara ho fem "a saco" per?s'hauria de millorar
+    // \TODO ara ho fem "a saco" però s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
     m_2DView->resetView( Q2DViewer::Axial );
-    m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
-    //m_2DView->resetWindowLevelToDefault();
-
+    m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
+    
     int* dim;
     dim = m_mainVolume->getDimensions();
     m_sliceViewSlider->setMinimum(0);
@@ -168,29 +171,16 @@ void QStrokeSegmentationExtension::setInput( Volume *input )
     m_sliceSpinBox->setMaximum(dim[2]-1);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
-    //Posem els nivells de dins i fora de la m�cara els valors l�its del w/l per tal que es vegi correcte
+    //Posem els nivells de dins i fora de la màcara els valors l?its del w/l per tal que es vegi correcte
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
     m_insideValue  = (int) wl[0];
     m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
 
-    typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
-    ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
+    // obtenim els valors mínim i màxim del volum
+    m_minValue = m_mainVolume->getVtkData()->GetScalarRange()[0];
+    m_maxValue = m_mainVolume->getVtkData()->GetScalarRange()[1];
 
-    m_minValue = iter.Get();
-    m_maxValue = m_minValue;
-
-    Volume::ItkImageType::PixelType value;
-
-    while ( !iter.IsAtEnd() )
-    {
-        value = iter.Get();
-
-        if ( value < m_minValue ) { m_minValue = value; }
-        if ( value > m_maxValue ) { m_maxValue = value; }
-
-        ++iter;
-    }
     m_lowerValueSpinBox->setMinimum(m_minValue);
     m_lowerValueSpinBox->setMaximum(m_maxValue);
     m_upperValueSpinBox->setMinimum(m_minValue);
@@ -199,9 +189,6 @@ void QStrokeSegmentationExtension::setInput( Volume *input )
     m_lowerValueSlider->setMaximum(m_maxValue);
     m_upperValueSlider->setMinimum(m_minValue);
     m_upperValueSlider->setMaximum(m_maxValue);
-
-    m_2DView->render();
-
 }
 
 void QStrokeSegmentationExtension::applyMethod( )
@@ -235,7 +222,7 @@ void QStrokeSegmentationExtension::applyMethod( )
 
 
     //double volume = this->calculateMaskVolume();
-    //m_cont est�actualitzat correctament a partir de l'apply method
+    //m_cont està ctualitzat correctament a partir de l'apply method
     //double volume = this->updateMaskVolume();
 
     m_resultsLineEdit->clear();
@@ -251,7 +238,6 @@ void QStrokeSegmentationExtension::applyMethod( )
     m_eraseSliceButton->setFlat(false);
     m_editorSize->setEnabled(true);
     m_editorAction->trigger();
-    m_2DView->disableOldTools();
     m_isPaint = true;
     m_isErase = false;
     m_isEraseSlice = false;
@@ -267,7 +253,7 @@ void QStrokeSegmentationExtension::applyMethod( )
     //typedef itk::CurvatureAnisotropicDiffusionImageFilter< Volume::ItkImageType, IntermediateImageType>  FilterType;
     typedef itk::CurvatureAnisotropicDiffusionImageFilter< Image2DType, Image2DType>  FilterType;
 
-  //Definim la regi�molt probablement infartada
+  //Definim la regió molt probablement infartada
   Volume::ItkImageType::Pointer auxVolume = Volume::ItkImageType::New();
   auxVolume->SetRegions( m_mainVolume->getItkData()->GetLargestPossibleRegion() );
   auxVolume->SetSpacing( m_mainVolume->getItkData()->GetSpacing() );
@@ -391,17 +377,11 @@ void QStrokeSegmentationExtension::leftButtonEventHandler( )
 
     if(m_editorToolButton->isChecked())
     {
-        //std::cout<<"Editor Tool"<<std::endl;
-        m_2DView->disableOldTools();
-        setEditorPoint(  );
-    }
-    else
-    {
-        m_2DView->enableOldTools();
+        setEditorPoint();
     }
 }
 
-void QStrokeSegmentationExtension::setSeedPosition( )
+void QStrokeSegmentationExtension::setSeedPosition()
 {
     double pos[3];
     QString aux;
@@ -423,14 +403,14 @@ void QStrokeSegmentationExtension::setSeedPosition( )
 
 }
 
-void QStrokeSegmentationExtension::setEditorPoint(  )
+void QStrokeSegmentationExtension::setEditorPoint()
 {
     double pos[3];
     if(m_isErase || m_isEraseSlice || m_isPaint)
     {
         m_2DView->getCurrentCursorPosition(pos);
 
-        // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
+        // quan dona una posició de (-1, -1, -1) que estem fora de l'actor
         if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
         {
             if( m_isErase )
@@ -454,7 +434,7 @@ void QStrokeSegmentationExtension::setEditorPoint(  )
     }
 }
 
-void QStrokeSegmentationExtension::setLeftButtonOff( )
+void QStrokeSegmentationExtension::setLeftButtonOff()
 {
     m_isLeftButtonPressed = false;
 }
@@ -570,7 +550,7 @@ void QStrokeSegmentationExtension::setEraseSlice()
 
 void QStrokeSegmentationExtension::setPaintCursor()
 {
-    if(m_editorToolButton->isChecked())    //Nom� en cas que estiguem en l'editor
+    if(m_editorToolButton->isChecked())    //Només en cas que estiguem en l'editor
     {
         if(m_isLeftButtonPressed)
         {
@@ -605,25 +585,25 @@ void QStrokeSegmentationExtension::setPaintCursor()
             pointIds[3] = 3;
 
 
-            vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
+            vtkUnstructuredGrid *grid = vtkUnstructuredGrid::New();
 
             grid->Allocate(1);
             grid->SetPoints(points);
 
             grid->InsertNextCell(VTK_QUAD,4,pointIds);
 
-            squareActor -> GetProperty()->SetColor(0.15, 0.83, 0.26);
-            squareActor -> GetProperty()->SetOpacity(0.2);
+            m_squareActor->GetProperty()->SetColor(0.15, 0.83, 0.26);
+            m_squareActor->GetProperty()->SetOpacity(0.2);
 
             vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
             squareMapper->SetInput( grid );
 
-            squareActor->SetMapper( squareMapper );
+            m_squareActor->SetMapper( squareMapper );
 
-            m_2DView->getRenderer()->AddViewProp( squareActor );
+            m_2DView->getRenderer()->AddViewProp( m_squareActor );
             m_2DView->refresh();
 
-            squareActor->VisibilityOn();
+            m_squareActor->VisibilityOn();
 
             squareMapper->Delete();
             points->Delete();
@@ -631,7 +611,7 @@ void QStrokeSegmentationExtension::setPaintCursor()
         }
         else
         {
-            squareActor->VisibilityOff();
+            m_squareActor->VisibilityOff();
         }
     }
 }

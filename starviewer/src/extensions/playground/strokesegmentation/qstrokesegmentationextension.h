@@ -13,7 +13,6 @@
 
 // FWD declarations
 class QAction;
-class QToolBar;
 class vtkImageMask;
 class vtkActor;
 
@@ -22,7 +21,6 @@ namespace udg {
 // FWD declarations
 class Volume;
 class StrokeSegmentationMethod;
-class ToolsActionFactory;
 class ToolManager;
 
 /**
@@ -44,6 +42,8 @@ public slots:
 private:
     /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
     void createActions();
+
+    void initializeTools();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -112,9 +112,6 @@ private:
     /// El volum on hi guardem el resultat de la segmentació
     Volume *m_maskVolume;
 
-    ///Per pintar la llavor
-    int m_seedSlice;
-
     /// Mètode de la segmentació
     StrokeSegmentationMethod *m_segMethod;
 
@@ -125,7 +122,7 @@ private:
     bool m_isPaint;
     bool m_isEraseSlice;
     bool m_isLeftButtonPressed;
-    vtkActor *squareActor;
+    vtkActor *m_squareActor;
     int m_cont;
     double m_volume;
 
@@ -133,14 +130,8 @@ private:
     int m_insideValue, m_outsideValue;
 
     /// Accions
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_seedAction;
     QAction *m_editorAction;
     QAction *m_rotateClockWiseAction;
-    ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
