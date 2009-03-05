@@ -7,20 +7,16 @@
 #include "qedemasegmentationextension.h"
 
 #include "strokesegmentationmethod.h"
-#include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
 #include "q2dviewer.h"
 #include "toolmanager.h"
-
 //Qt
 #include <QString>
 #include <QAction>
-#include <QToolBar>
 #include <QSettings>
 #include <QMessageBox>
 #include <QFileDialog>
-
 // VTK
 #include <vtkRenderer.h>
 #include <vtkImageMask.h>
@@ -36,18 +32,6 @@
 #include <vtkCommand.h>
 #include <vtkMetaImageWriter.h>
 
-// ITK
-#include <itkBinaryThresholdImageFilter.h>
-
-// prova isomètric
-#include <itkLinearInterpolateImageFunction.h>
-#include <itkResampleImageFilter.h>
-
-//prova recte
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
-#include "itkExtractImageFilter.h"
-
 namespace udg {
 
 QEdemaSegmentationExtension::QEdemaSegmentationExtension( QWidget *parent )
@@ -57,20 +41,11 @@ QEdemaSegmentationExtension::QEdemaSegmentationExtension( QWidget *parent )
 
     m_segMethod = new StrokeSegmentationMethod();
     squareActor = vtkActor::New();
-
-    // activem el framework de "Old Tools"
-    // TODO cal reciclar per les noves tools
-    m_2DView->enableOldTools();
+   
     createActions();
+    initializeTools();
     createConnections();
     readSettings();
-
-    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
-    m_toolManager = new ToolManager(this);
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    QStringList toolsList;
-    toolsList << "VoxelInformationTool";
-    m_toolManager->setViewerTools( m_2DView, toolsList );
 }
 
 QEdemaSegmentationExtension::~QEdemaSegmentationExtension()
@@ -100,7 +75,6 @@ QEdemaSegmentationExtension::~QEdemaSegmentationExtension()
     {
         m_imageThreshold->Delete();
     }
-
 }
 
 void QEdemaSegmentationExtension::createActions()
@@ -113,45 +87,6 @@ void QEdemaSegmentationExtension::createActions()
     m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
 
     connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
-
-    // Tools
-    m_actionFactory = new ToolsActionFactory( 0 );
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
-
-    m_seedAction = m_actionFactory->getActionFrom( "SeedTool" );
-    m_seedAction->setIcon( QIcon(":/images/seed.png") );
-    m_seedToolButton->setDefaultAction( m_seedAction );
-
-    m_editorAction = new QAction( 0 );
-    m_editorAction->setText( tr("EditorTool") );
-    m_editorAction->setStatusTip( tr("Enable/Disable editor tool") );
-    m_editorAction->setIcon( QIcon(":/images/pencil.png") );
-    m_editorAction->setCheckable( true );
-    m_editorAction->setEnabled( false );
-    m_editorToolButton->setDefaultAction( m_editorAction );
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_seedAction );
-    m_toolsActionGroup->addAction( m_editorAction );
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_seedAction->trigger();
 
     m_lesionViewAction = new QAction( 0 );
     m_lesionViewAction->setText( tr("Lesion Overlay") );
@@ -218,7 +153,70 @@ void QEdemaSegmentationExtension::createActions()
     m_editorToolActionGroup->addAction( m_paintEditorAction );
     m_editorToolActionGroup->addAction( m_eraseEditorAction );
     m_editorToolActionGroup->addAction( m_eraseSliceEditorAction );
-    m_editorToolActionGroup->addAction( m_eraseRegionEditorAction );
+    m_editorToolActionGroup->addAction( m_eraseRegionEditorAction );    
+}
+
+void QEdemaSegmentationExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    
+    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
+    // Tool d'slicing per teclat
+    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
+    slicingKeyboardTool->trigger();
+
+    // definim els grups exclusius
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
+
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
+
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
+
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    // inicialitzem totes les tools
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool";
+
+    m_toolManager->setViewerTools( m_2DView, toolsList );
+
+    // Activació de l'eina d'edició "HOME MADE"
+    // TODO Cal fer servir únicament la autèntica tool i treure tota
+    // l'edició manual que es fa dins d'aquesta pròpia classe
+    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+
+    m_toolsActionGroup = new QActionGroup( 0 );
+    // txapussilla per fer la tool editor(home made) exclusiu de la resta. Amb la tool oficial això seria automàtic
+    m_toolsActionGroup->setExclusive( true );
+    m_toolsActionGroup->addAction( m_slicingToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_zoomToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_seedToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_editorToolButton->defaultAction() );
+    // TODO guarrada total! ens veiem forçats a fer això perquè es refresquin les connexions de les tools
+    // i no quedi l'editor activat a la vegada amb cap altre tool
+    connect( m_editorToolButton->defaultAction(), SIGNAL( triggered() ), m_toolManager, SLOT( undoDisableAllToolsTemporarily() ) );
 }
 
 void QEdemaSegmentationExtension::createConnections()
@@ -248,7 +246,6 @@ void QEdemaSegmentationExtension::createConnections()
 
     connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds() ) );
     connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds() ) );
-
 }
 
 void QEdemaSegmentationExtension::setInput( Volume *input )
@@ -315,23 +312,10 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_insideValue  = 255;
     m_outsideValue = 0;
 
-    typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
-    ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
+    // obtenim els valors mínim i màxim del volum
+    m_minValue = m_mainVolume->getVtkData()->GetScalarRange()[0];
+    m_maxValue = m_mainVolume->getVtkData()->GetScalarRange()[1];
 
-    m_minValue = iter.Get();
-    m_maxValue = m_minValue;
-
-    Volume::ItkImageType::PixelType value;
-
-    while ( !iter.IsAtEnd() )
-    {
-        value = iter.Get();
-
-        if ( value < m_minValue ) { m_minValue = value; }
-        if ( value > m_maxValue ) { m_maxValue = value; }
-
-        ++iter;
-    }
     m_lowerValueSpinBox->setMinimum(m_minValue);
     m_lowerValueSpinBox->setMaximum(m_maxValue);
     m_upperValueSpinBox->setMinimum(m_minValue);
@@ -384,10 +368,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
         m_edemaMaskVolume = 0;
     }
 
-    //m_2DView->updateDisplayExtent();
-
     m_2DView->render();
-
 }
 
 void QEdemaSegmentationExtension::applyFilterMainImage( )
@@ -404,7 +385,6 @@ void QEdemaSegmentationExtension::applyFilterMainImage( )
         //delete m_mainVolume;
         QApplication::restoreOverrideCursor();
     }
-
 }
 
 void QEdemaSegmentationExtension::applyCleanSkullMethod( )
@@ -423,7 +403,8 @@ void QEdemaSegmentationExtension::applyCleanSkullMethod( )
 
 void QEdemaSegmentationExtension::applyMethod( )
 {
-    if(!m_isSeed || !m_isMask){
+    if(!m_isSeed || !m_isMask)
+    {
         QMessageBox::critical( this , tr( "StarViewer" ) , tr( "ERROR: Seed or mask undefined" ) );
         return;
     }
@@ -470,16 +451,18 @@ void QEdemaSegmentationExtension::applyMethod( )
     m_editorSize->setEnabled(true);
     m_applyVentriclesMethodButton->setEnabled(true);
     m_applyCleanSkullButton->setEnabled(true);
-    m_editorAction->trigger();
-    m_2DView->disableOldTools();
-    m_editorAction->setEnabled( true );
+    m_editorToolButton->defaultAction()->trigger();
+    m_editorToolButton->defaultAction()->setEnabled( true );
 
     m_paintEditorAction->setEnabled(true);
     m_eraseEditorAction->setEnabled(true);
     m_eraseSliceEditorAction->setEnabled(true);
     m_eraseRegionEditorAction->setEnabled(true);
+
     m_eraseEditorAction->trigger();
-    m_editorTool = QEdemaSegmentationExtension::Erase;
+    m_editorToolButton->defaultAction()->trigger();
+    
+    m_editorTool = QEdemaSegmentationExtension::Erase; 
 
     m_lesionViewAction->setEnabled( true );
     m_lesionViewAction->trigger( );
@@ -582,26 +565,17 @@ void QEdemaSegmentationExtension::strokeEventHandler( unsigned long id )
         default:
         break;
     }
-
 }
 
 void QEdemaSegmentationExtension::leftButtonEventHandler( )
 {
     m_isLeftButtonPressed = true;
 
-    if(m_editorToolButton->isChecked())
-    {
-        //std::cout<<"Editor Tool"<<std::endl;
-        m_2DView->disableOldTools();
-        setEditorPoint(  );
-    }
-    else
-    {
-        m_2DView->enableOldTools();
-    }
+    if( m_editorToolButton->isChecked() )
+        setEditorPoint();
 }
 
-void QEdemaSegmentationExtension::setSeedPosition( )
+void QEdemaSegmentationExtension::setSeedPosition()
 {
     double pos[3];
     QString aux;
@@ -633,7 +607,7 @@ void QEdemaSegmentationExtension::setEditorPoint(  )
         // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
         if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
         {
-            switch( m_editorTool)
+            switch( m_editorTool )
             {
                 case Erase:
                 {
@@ -1011,6 +985,7 @@ void QEdemaSegmentationExtension::viewLesionOverlay()
         m_2DView->setOverlayToBlend();
         m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
+        m_2DView->refresh();
         DEBUG_LOG( QString("Extent les: %1 %2 %3 %4 %5 %6").arg( m_lesionMaskVolume->getWholeExtent()[0] ).arg( m_lesionMaskVolume->getWholeExtent()[1] ).arg( m_lesionMaskVolume->getWholeExtent()[2] ).arg( m_lesionMaskVolume->getWholeExtent()[3] ).arg( m_lesionMaskVolume->getWholeExtent()[4] ).arg( m_lesionMaskVolume->getWholeExtent()[5] ) );
         DEBUG_LOG( QString("Extent Vol: %1 %2 %3 %4 %5 %6").arg( m_mainVolume->getWholeExtent()[0] ).arg( m_mainVolume->getWholeExtent()[1] ).arg( m_mainVolume->getWholeExtent()[2] ).arg( m_mainVolume->getWholeExtent()[3] ).arg( m_mainVolume->getWholeExtent()[4] ).arg( m_mainVolume->getWholeExtent()[5] ) );
     }
@@ -1072,7 +1047,6 @@ double QEdemaSegmentationExtension::calculateMaskVolume()
     volume = volume*(double)(*m_activedCont);
 
     return volume;
-
 }
 
 
@@ -1099,6 +1073,19 @@ double QEdemaSegmentationExtension::updateMaskVolume()
     return (*m_activedVolume);
 
 }
+
+/*
+void QEdemaSegmentationExtension::updateVolumeValues()
+{
+//    this->updateMaskVolume();
+    m_resultsLineEdit->clear();
+    m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
+    m_edemaVolumeLineEdit->clear();
+    m_edemaVolumeLineEdit->insert(QString("%1").arg(m_edemaVolume, 0, 'f', 2));
+    m_2DView->setOverlayInput(m_activedMaskVolume);
+    m_2DView->refresh();
+}
+*/
 
 void QEdemaSegmentationExtension::saveActivedMaskVolume()
 {

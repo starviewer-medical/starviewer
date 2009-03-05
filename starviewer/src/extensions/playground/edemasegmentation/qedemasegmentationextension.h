@@ -9,12 +9,8 @@
 
 #include "ui_qedemasegmentationextensionbase.h"
 
-
-#include <QString>
-
 // FWD declarations
 class QAction;
-class QToolBar;
 class vtkImageMask;
 class vtkImageThreshold;
 class vtkActor;
@@ -24,7 +20,6 @@ namespace udg {
 // FWD declarations
 class Volume;
 class StrokeSegmentationMethod;
-class ToolsActionFactory;
 class ToolManager;
 
 /**
@@ -32,7 +27,6 @@ Extensió que segmenta l'hematoma i l'edema
 
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-
 class QEdemaSegmentationExtension : public QWidget , private ::Ui::QEdemaSegmentationExtensionBase {
 Q_OBJECT
 public:
@@ -61,6 +55,8 @@ private:
     /// Guarda i llegeix les característiques
     void readSettings();
     void writeSettings();
+
+    void initializeTools();
 
 private slots:
      /// gestiona els events del m_2DView
@@ -142,9 +138,6 @@ private:
     /// El volum on hi guardem la imatge principal filtrada
     Volume *m_filteredVolume;
 
-    ///Per pintar la llavor
-    int m_seedSlice;
-
     /// Mètode de la segmentació
     StrokeSegmentationMethod *m_segMethod;
 
@@ -172,31 +165,24 @@ private:
     int m_lowerVentriclesValue, m_upperVentriclesValue;
 
     /// Accions
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_seedAction;
-    QAction *m_editorAction;
     QAction *m_rotateClockWiseAction;
-    ToolsActionFactory *m_actionFactory;
-
-    QAction *m_lesionViewAction;
-    QAction *m_edemaViewAction;
-    QAction *m_ventriclesViewAction;
 
     QAction *m_paintEditorAction;
     QAction *m_eraseEditorAction;
     QAction *m_eraseSliceEditorAction;
     QAction *m_eraseRegionEditorAction;
 
+    QAction *m_lesionViewAction;
+    QAction *m_edemaViewAction;
+    QAction *m_ventriclesViewAction;
+
     ///Directori on guardem les màscares
     QString m_savingMaskDirectory;
 
     /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
     QActionGroup *m_viewOverlayActionGroup;
     QActionGroup* m_editorToolActionGroup;
+    QActionGroup* m_toolsActionGroup;
 
     /// ToolManager
     ToolManager *m_toolManager;
