@@ -82,7 +82,7 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="508"/>
+        <location filename="nonclosedangletool.cpp" line="295"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -160,38 +160,38 @@ Mean: %2</source>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2068"/>
+        <location filename="q2dviewer.cpp" line="2067"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2086"/>
+        <location filename="q2dviewer.cpp" line="2085"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2059"/>
+        <location filename="q2dviewer.cpp" line="2058"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2079"/>
+        <location filename="q2dviewer.cpp" line="2078"/>
         <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2092"/>
+        <location filename="q2dviewer.cpp" line="2091"/>
         <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1878"/>
+        <location filename="q2dviewer.cpp" line="1877"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1901"/>
+        <location filename="q2dviewer.cpp" line="1900"/>
         <source>%1
 %2
 %3 %4 %5
@@ -201,12 +201,12 @@ Acc:%6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2040"/>
+        <location filename="q2dviewer.cpp" line="2039"/>
         <source>Loc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2046"/>
+        <location filename="q2dviewer.cpp" line="2045"/>
         <source>-%1</source>
         <translation type="unfinished"></translation>
     </message>
