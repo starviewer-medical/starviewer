@@ -52,9 +52,12 @@ private:
     void normalizeViewProbabilities( QVector<float> &viewProbabilities, float totalViewedVolume );
     /// Retorna les probabilitats p(O) dels objectes (vòxels) donats p(V) i p(O|V).
     QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
-    // Calcula les mesures de VMI relacionades amb la VoMI: VoMI, saliency, VoMI de cada vista, VoMI amb colors.
+    // Calcula les mesures relacionades amb la VoMI: VoMI, saliency, VoMI de cada vista, VoMI amb colors.
     void computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
                                      bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi );
+    // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
+    void computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
+                                    bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi );
 
 private slots:
 

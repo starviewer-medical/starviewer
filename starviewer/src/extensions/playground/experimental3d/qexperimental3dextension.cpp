@@ -1004,94 +1004,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     // VMI + viewpont unstabilities + EVMI
     if ( computeVmi || computeViewpointUnstabilities || computeEvmi )
     {
-        if ( computeVmi ) m_vmi.resize( nViewpoints );
-        if ( computeViewpointUnstabilities ) m_viewpointUnstabilities.resize( nViewpoints );
-        if ( computeEvmi ) m_evmi.resize( nViewpoints );
-
-        QVector<float> ppO; // p'(O)
-
-        if ( computeEvmi )
-        {
-            ppO.resize( nObjects );
-
-            float total = 0.0f;
-
-            for ( unsigned int i = 0; i < nObjects; i++ )
-            {
-
-                ppO[i] = objectProbabilities.at( i ) * m_vomi.at( i );
-                total += ppO.at( i );
-            }
-
-            for ( unsigned int i = 0; i < nObjects; i++ ) ppO[i] /= total;
-        }
-
-        m_vmiProgressBar->setValue( 0 );
-
-        QVector<float> objectProbabilitiesInView( nObjects );   // vector p(O|vi)
-
-        for ( int i = 0; i < nViewpoints; i++ )
-        {
-            pOvFiles[i]->reset();   // reset per tornar al principi
-            pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView.data() ), nObjects * sizeof(float) ); // llegim...
-            pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-            if ( computeVmi )
-            {
-                float vmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, objectProbabilities );
-                Q_ASSERT( vmi == vmi );
-                m_vmi[i] = vmi;
-                DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
-            }
-
-            if ( computeViewpointUnstabilities )
-            {
-                float pvi = viewProbabilities.at( i );  // p(vi)
-
-                QVector<int> neighbours = viewpointGenerator.neighbours( i );
-                int nNeighbours = neighbours.size();
-                float viewpointUnstability = 0.0f;
-                QVector<float> objectProbabilitiesInNeighbour( nObjects );  // vector p(O|vj)
-
-                for ( int j = 0; j < nNeighbours; j++ )
-                {
-                    int neighbour = neighbours.at( j );
-                    float pvj = viewProbabilities.at( neighbour );  // p(vj)
-                    float pvij = pvi + pvj; // p(v̂)
-
-                    if ( pvij == 0.0f ) continue;
-
-                    pOvFiles[neighbour]->reset();   // reset per tornar al principi
-                    pOvFiles[neighbour]->read( reinterpret_cast<char*>( objectProbabilitiesInNeighbour.data() ), nObjects * sizeof(float) );    // llegim...
-                    pOvFiles[neighbour]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-                    float viewpointDissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, objectProbabilitiesInView, objectProbabilitiesInNeighbour );
-                    viewpointUnstability += viewpointDissimilarity;
-                }
-
-                viewpointUnstability /= nNeighbours;
-                m_viewpointUnstabilities[i] = viewpointUnstability;
-                DEBUG_LOG( QString( "U(v%1) = %2" ).arg( i + 1 ).arg( viewpointUnstability ) );
-            }
-
-            if ( computeEvmi )
-            {
-                float evmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, ppO );
-                Q_ASSERT( evmi == evmi );
-                m_evmi[i] = evmi;
-                DEBUG_LOG( QString( "EVMI(v%1) = %2" ).arg( i + 1 ).arg( evmi ) );
-            }
-
-            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-            m_vmiProgressBar->repaint();
-        }
-
+        computeVmiRelatedMeasures( viewpointGenerator, viewProbabilities, objectProbabilities, pOvFiles, computeVmi, computeViewpointUnstabilities, computeEvmi );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
-
-        if ( computeVmi ) m_saveVmiPushButton->setEnabled( true );
-        if ( computeViewpointUnstabilities ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
-        if ( computeEvmi ) m_saveEvmiPushButton->setEnabled( true );
     }
 
     // best views
@@ -1864,6 +1779,100 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
         m_colorVomiCheckBox->setEnabled( true );
         m_saveColorVomiPushButton->setEnabled( true );
     }
+}
+
+
+void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities,
+                                                          const QVector<QTemporaryFile*> &pOvFiles, bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi )
+{
+    int nViewpoints = viewProbabilities.size();
+    int nObjects = objectProbabilities.size();
+
+    if ( computeVmi ) m_vmi.resize( nViewpoints );
+    if ( computeViewpointUnstabilities ) m_viewpointUnstabilities.resize( nViewpoints );
+    if ( computeEvmi ) m_evmi.resize( nViewpoints );
+
+    QVector<float> ppO; // p'(O)
+
+    if ( computeEvmi )
+    {
+        ppO.resize( nObjects );
+
+        float total = 0.0f;
+
+        for ( int i = 0; i < nObjects; i++ )
+        {
+
+            ppO[i] = objectProbabilities.at( i ) * m_vomi.at( i );
+            total += ppO.at( i );
+        }
+
+        for ( int i = 0; i < nObjects; i++ ) ppO[i] /= total;
+    }
+
+    m_vmiProgressBar->setValue( 0 );
+
+    QVector<float> objectProbabilitiesInView( nObjects );   // vector p(O|vi)
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        pOvFiles[i]->reset();   // reset per tornar al principi
+        pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView.data() ), nObjects * sizeof(float) ); // llegim...
+        pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+        if ( computeVmi )
+        {
+            float vmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, objectProbabilities );
+            Q_ASSERT( vmi == vmi );
+            m_vmi[i] = vmi;
+            DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
+        }
+
+        if ( computeViewpointUnstabilities )
+        {
+            float pvi = viewProbabilities.at( i );  // p(vi)
+
+            QVector<int> neighbours = viewpointGenerator.neighbours( i );
+            int nNeighbours = neighbours.size();
+            float viewpointUnstability = 0.0f;
+            QVector<float> objectProbabilitiesInNeighbour( nObjects );  // vector p(O|vj)
+
+            for ( int j = 0; j < nNeighbours; j++ )
+            {
+                int neighbour = neighbours.at( j );
+                float pvj = viewProbabilities.at( neighbour );  // p(vj)
+                float pvij = pvi + pvj; // p(v̂)
+
+                if ( pvij == 0.0f ) continue;
+
+                pOvFiles[neighbour]->reset();   // reset per tornar al principi
+                pOvFiles[neighbour]->read( reinterpret_cast<char*>( objectProbabilitiesInNeighbour.data() ), nObjects * sizeof(float) );    // llegim...
+                pOvFiles[neighbour]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+                float viewpointDissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, objectProbabilitiesInView, objectProbabilitiesInNeighbour );
+                viewpointUnstability += viewpointDissimilarity;
+            }
+
+            viewpointUnstability /= nNeighbours;
+            m_viewpointUnstabilities[i] = viewpointUnstability;
+            DEBUG_LOG( QString( "U(v%1) = %2" ).arg( i + 1 ).arg( viewpointUnstability ) );
+        }
+
+        if ( computeEvmi )
+        {
+            float evmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, ppO );
+            Q_ASSERT( evmi == evmi );
+            m_evmi[i] = evmi;
+            DEBUG_LOG( QString( "EVMI(v%1) = %2" ).arg( i + 1 ).arg( evmi ) );
+        }
+
+        m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
+        m_vmiProgressBar->repaint();
+    }
+
+    if ( computeVmi ) m_saveVmiPushButton->setEnabled( true );
+    if ( computeViewpointUnstabilities ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
+    if ( computeEvmi ) m_saveEvmiPushButton->setEnabled( true );
 }
 
 
