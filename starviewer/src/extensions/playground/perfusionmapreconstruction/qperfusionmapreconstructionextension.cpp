@@ -7,7 +7,6 @@
 #include "qperfusionmapreconstructionextension.h"
 
 #include "perfusionmapcalculatormainthread.h"
-#include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
 #include "q2dviewer.h"

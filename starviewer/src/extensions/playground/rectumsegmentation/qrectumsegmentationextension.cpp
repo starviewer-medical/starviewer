@@ -7,7 +7,6 @@
 #include "qrectumsegmentationextension.h"
 
 #include "rectumSegmentationMethod.h"
-#include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
 #include "q2dviewer.h"
@@ -601,8 +600,8 @@ void QRectumSegmentationExtension::viewLesionOverlay()
 
 double QRectumSegmentationExtension::calculateMaskVolume()
 {
-
-    if ( m_lesionMaskVolume == 0 ) return 0.0;
+    if ( !m_lesionMaskVolume ) 
+        return 0.0;
 
     double spacing[3];
     m_lesionMaskVolume->getSpacing(spacing);
@@ -628,7 +627,6 @@ double QRectumSegmentationExtension::calculateMaskVolume()
     m_volume = volume*(double)cont;
 
     return m_volume;
-
 }
 
 
