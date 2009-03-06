@@ -60,6 +60,8 @@ private:
                                     bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi );
     // Calcula les millors vistes.
     void computeBestViews( const QVector<Vector3> &viewpoints, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
+    // Calcula el guided tour.
+    void computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
 
 private slots:
 
