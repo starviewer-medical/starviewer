@@ -966,22 +966,9 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->repaint();
     }
 
-    QVector<float> viewProbabilities( nViewpoints );    // vector p(V), inicialitzat a 0
-    QVector<float> objectProbabilities;                 // vector p(O)
-    QVector<QTemporaryFile*> pOvFiles( nViewpoints );   // matriu p(O|V) (cada fitxer una fila p(O|v))
-    {
-        for ( int i = 0; i < nViewpoints; i++ )
-        {
-            pOvFiles[i] = new QTemporaryFile( "pOvXXXXXX.tmp" );    // els fitxers temporals es creen al directori de treball
-
-            if ( !pOvFiles[i]->open() )
-            {
-                DEBUG_LOG( QString( "No s'ha pogut obrir el fitxer: error %1" ).arg( pOvFiles[i]->errorString() ) );
-                for ( int j = 0; j < i; j++ ) pOvFiles[j]->close();
-                return;
-            }
-        }
-    }
+    QVector<float> viewProbabilities( nViewpoints );                                            // vector p(V), inicialitzat a 0
+    QVector<float> objectProbabilities;                                                         // vector p(O)
+    QVector<QTemporaryFile*> pOvFiles = createObjectProbabilitiesPerViewFiles( nViewpoints );   // matriu p(O|V) (cada fitxer una fila p(O|v))
 
     float totalViewedVolume;
 
@@ -1739,12 +1726,7 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_guidedTourPushButton->setEnabled( true );
     }
 
-    DEBUG_LOG( "destruïm els fitxers temporals" );
-    for ( int i = 0; i < nViewpoints; i++ )
-    {
-        pOvFiles[i]->close();
-        delete pOvFiles[i];
-    }
+    deleteObjectProbabilitiesPerViewFiles( pOvFiles );
 
     doVisualization();
 
@@ -1754,6 +1736,43 @@ void QExperimental3DExtension::computeSelectedVmi()
     DEBUG_LOG( "fi" );
 
     setCursor( QCursor( Qt::ArrowCursor ) );
+}
+
+
+QVector<QTemporaryFile*> QExperimental3DExtension::createObjectProbabilitiesPerViewFiles( int nViewpoints )
+{
+    DEBUG_LOG( "creem els fitxers temporals" );
+
+    QVector<QTemporaryFile*> pOvFiles( nViewpoints );   // matriu p(O|V) (cada fitxer una fila p(O|v))
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        pOvFiles[i] = new QTemporaryFile( "pOvXXXXXX.tmp" );    // els fitxers temporals es creen al directori de treball
+
+        if ( !pOvFiles[i]->open() )
+        {
+            DEBUG_LOG( QString( "No s'ha pogut obrir el fitxer: error %1" ).arg( pOvFiles[i]->errorString() ) );
+            for ( int j = 0; j < i; j++ ) pOvFiles[j]->close();
+            pOvFiles.clear();   // retornarm un vector buit si hi ha hagut problemes
+            break;
+        }
+    }
+
+    return pOvFiles;
+}
+
+
+void QExperimental3DExtension::deleteObjectProbabilitiesPerViewFiles( QVector<QTemporaryFile*> &files )
+{
+    DEBUG_LOG( "destruïm els fitxers temporals" );
+
+    for ( int i = 0; i < files.size(); i++ )
+    {
+        files.at( i )->close();
+        delete files.at( i );
+    }
+
+    files.clear();
 }
 
 
