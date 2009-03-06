@@ -48,16 +48,9 @@ HEADERS += extensionfactory.h \
            patient.h \
            series.h \
            study.h \
-           oldtool.h \
            output.h \
            q3dorientationmarker.h \
-           slicing2dtool.h \
-           oldtoolmanager.h \
-           q2dviewertoolmanager.h \
-           toolsactionfactory.h \
-           oldzoomtool.h \
            zoomtool.h \
-           oldtranslatetool.h \
            qlogviewer.h \
            strokesegmentationmethod.h \
            itkErfcLevelSetFunction.h \
@@ -106,8 +99,6 @@ HEADERS += extensionfactory.h \
            imageplane.h \
            slicingtool.h \
            translatetool.h \
-           oldwindowleveltool.h \
-           oldseedtool.h \
            voxelinformationtool.h \
            windowleveltool.h \
            seedtool.h \
@@ -209,18 +200,11 @@ SOURCES += extensionmediator.cpp \
            patient.cpp \
            series.cpp \
            study.cpp \
-           oldtool.cpp \
            output.cpp \
            q3dorientationmarker.cpp \
-           slicing2dtool.cpp \
-           oldtoolmanager.cpp \
-           q2dviewertoolmanager.cpp \
-           toolsactionfactory.cpp \
-           oldzoomtool.cpp \
-           zoomtool.cpp \
-           oldtranslatetool.cpp \
            editortool.cpp \
            editortooldata.cpp \
+           zoomtool.cpp \
            qlogviewer.cpp \
            strokesegmentationmethod.cpp \
            itkErfcLevelSetFunction.cpp \
@@ -269,8 +253,6 @@ SOURCES += extensionmediator.cpp \
            imageplane.cpp \
            translatetool.cpp \
            slicingtool.cpp \
-           oldwindowleveltool.cpp \
-           oldseedtool.cpp \
            voxelinformationtool.cpp \
            windowleveltool.cpp \
            seedtool.cpp \
