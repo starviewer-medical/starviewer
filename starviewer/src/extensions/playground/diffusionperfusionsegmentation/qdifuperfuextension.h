@@ -14,7 +14,6 @@
 #include "volume.h"
 
 // Forward declarations
-class QToolBar;
 class vtkActor;
 class vtkImageActor;
 class vtkLookupTable;
@@ -23,7 +22,6 @@ namespace udg {
 
 // Forward declarations
 class StrokeSegmentationMethod;
-class ToolsActionFactory;
 class ToolManager;
 
 /**
@@ -148,6 +146,9 @@ private slots:
     void computePenombraVolume( const QString & name);
 
 private:
+    /// inicialitza les tools
+    void initializeTools();
+
     /// Crea les accions
     /// \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createActions();
@@ -233,21 +234,13 @@ private:
     vtkActor *m_squareActor;
 
     /// Accions
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
     QAction *m_rotateClockWiseAction;
-    QAction *m_editorAction;
-    QAction *m_seedAction;
     QAction *m_lesionViewAction;
     QAction *m_ventriclesViewAction;
     QAction *m_paintEditorAction;
     QAction *m_eraseEditorAction;
     QAction *m_eraseSliceEditorAction;
     QAction *m_eraseRegionEditorAction;
-
-    ToolsActionFactory *m_actionFactory;
 
     /// Grups de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;

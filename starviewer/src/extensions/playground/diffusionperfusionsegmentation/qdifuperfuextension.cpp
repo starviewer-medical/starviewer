@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "qdifuperfuextension.h"
 #include "strokesegmentationmethod.h"
-#include "toolsactionfactory.h"
 #include "volumecalculator.h"
 #include "series.h"
 #include "logging.h"
@@ -14,7 +13,6 @@
 // Qt
 #include <QMessageBox>
 #include <QSettings>
-#include <QtDebug>
 // VTK
 #include <vtkActor.h>
 #include <vtkCellType.h>
@@ -24,18 +22,15 @@
 #include <vtkImageCast.h>
 #include <vtkImageMapToWindowLevelColors.h>
 #include <vtkImageThreshold.h>
-#include <vtkImageViewer2.h>
 #include <vtkLookupTable.h>
 #include <vtkPoints.h>
 #include <vtkProperty.h>
 #include <vtkRenderer.h>
 #include <vtkUnstructuredGrid.h>
-//prova recte
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
-#include "itkExtractImageFilter.h"
-#include "itkRegistre3DAffine.h"
+//itk
 #include "itkMinimumMaximumImageCalculator.h"
+#include "itkRescaleIntensityImageFilter.h"
+//itk-udg
 #include "udgPerfusionEstimator.h"
 #include "udgBinaryMaker.h"
 
@@ -51,30 +46,21 @@ const double QDifuPerfuSegmentationExtension::REGISTRATION_MINIMUM_STEP = 0.001;
 const int QDifuPerfuSegmentationExtension::REGISTRATION_NUMBER_OF_ITERATIONS = 300;
 
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * parent )
- : QWidget( parent ), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0), m_isLeftButtonPressed(false), m_actionFactory(0)
+ : QWidget( parent ), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0), m_isLeftButtonPressed(false)
 {
     setupUi( this );
 
     m_squareActor = vtkActor::New();
     m_perfusionHueLut = vtkLookupTable::New();
 
-    // activem el framework de "Old Tools"
-    // TODO cal reciclar per les noves tools
-    m_diffusion2DView->enableOldTools();
-    m_perfusion2DView->enableOldTools();
     createActions();
     createConnections();
     readSettings();
 
     m_perfusion2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
 
-    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
-    m_toolManager = new ToolManager(this);
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    QStringList toolsList;
-    toolsList << "VoxelInformationTool";
-    m_toolManager->setViewerTools( m_diffusion2DView, toolsList );
-    m_toolManager->setViewerTools( m_perfusion2DView, toolsList );
+    // creem el tool manager i li assignem les tools
+    initializeTools();
 }
 
 QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
@@ -97,8 +83,70 @@ QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
     m_squareActor->Delete();
 
     m_perfusionHueLut->Delete();
+}
 
-    delete m_actionFactory;
+void QDifuPerfuSegmentationExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    
+    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
+    // Tool d'slicing per teclat
+    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
+    slicingKeyboardTool->trigger();
+
+    // definim els grups exclusius
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
+
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
+
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
+
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    // inicialitzem totes les tools
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool";
+
+    m_toolManager->setViewerTools( m_diffusion2DView, toolsList );
+    m_toolManager->setViewerTools( m_perfusion2DView, toolsList );
+
+    // Activació de l'eina d'edició "HOME MADE"
+    // TODO Cal fer servir únicament la autèntica tool i treure tota
+    // l'edició manual que es fa dins d'aquesta pròpia classe
+    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+
+    m_toolsActionGroup = new QActionGroup( 0 );
+    // txapussilla per fer la tool editor(home made) exclusiu de la resta. Amb la tool oficial això seria automàtic
+    m_toolsActionGroup->setExclusive( true );
+    m_toolsActionGroup->addAction( m_slicingToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_zoomToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_seedToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_editorToolButton->defaultAction() );
+    // TODO guarrada total! ens veiem forçats a fer això perquè es refresquin les connexions de les tools
+    // i no quedi l'editor activat a la vegada amb cap altre tool
+    connect( m_editorToolButton->defaultAction(), SIGNAL( triggered() ), m_toolManager, SLOT( undoDisableAllToolsTemporarily() ) );
 }
 
 void QDifuPerfuSegmentationExtension::createActions()
@@ -117,49 +165,6 @@ void QDifuPerfuSegmentationExtension::createActions()
 
     connect( m_rotateClockWiseAction, SIGNAL( triggered() ), m_diffusion2DView, SLOT( rotateClockWise() ) );
     connect( m_rotateClockWiseAction, SIGNAL( triggered() ), m_perfusion2DView, SLOT( rotateClockWise() ) );
-
-    m_editorAction = new QAction( this );
-    m_editorAction->setText( tr("EditorTool") );
-    m_editorAction->setStatusTip( tr("Enable/disable editor tool") );
-    m_editorAction->setIcon( QIcon( ":/images/pencil.png" ) );
-    m_editorAction->setCheckable( true );
-    m_editorAction->setEnabled( false );
-    m_editorToolButton->setDefaultAction( m_editorAction );
-
-    // Tools
-    m_actionFactory = new ToolsActionFactory();
-
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
-
-    m_seedAction = m_actionFactory->getActionFrom( "SeedTool" );
-    m_seedAction->setIcon( QIcon( ":/images/seed.png" ) );
-    m_seedToolButton->setDefaultAction( m_seedAction );
-
-    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_diffusion2DView, SLOT( setOldTool(QString) ) );
-    connect( m_actionFactory, SIGNAL( triggeredTool(QString) ), m_perfusion2DView, SLOT( setOldTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( this );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_editorAction );
-    m_toolsActionGroup->addAction( m_seedAction );
-
-    // activem per defecte una tool
-    // TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_seedAction->trigger();
 
     m_lesionViewAction = new QAction( this );
     m_lesionViewAction->setText( tr("Lesion Overlay") );
@@ -222,8 +227,7 @@ void QDifuPerfuSegmentationExtension::createActions()
 
 void QDifuPerfuSegmentationExtension::createConnections()
 {
-    connect( m_diffusion2DView, SIGNAL( phaseChanged(int) ),
-             m_selectedDiffusionImageSpinBox, SLOT( setValue(int) ) );
+    connect( m_diffusion2DView, SIGNAL( phaseChanged(int) ), m_selectedDiffusionImageSpinBox, SLOT( setValue(int) ) );
     connect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ), SLOT( setDiffusionImage(int) ) );
 
     connect( m_perfusion2DView, SIGNAL( phaseChanged(int) ), m_selectedPerfusionImageSpinBox, SLOT( setValue(int) ) );
@@ -668,9 +672,8 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_strokeVolumeLabel->setEnabled( true );
     m_strokeVolumeLineEdit->setEnabled( true );
 
-    m_editorAction->trigger();
-    m_diffusion2DView->disableOldTools();
-    m_editorAction->setEnabled( true );
+    m_editorToolButton->defaultAction()->trigger();
+    m_editorToolButton->defaultAction()->setEnabled( true );
 
     m_paintEditorAction->setEnabled(true);
     m_eraseEditorAction->setEnabled(true);
@@ -1119,24 +1122,11 @@ void QDifuPerfuSegmentationExtension::leftButtonEventHandler(int idViewer )
         //DEBUG_LOG("Editor Tool");
         if(idViewer==1)
         {
-            m_diffusion2DView->disableOldTools();
             setEditorPoint( idViewer );
         }
         else    //idViewer=2
         {
-            m_perfusion2DView->disableOldTools();
             setEditorPoint( idViewer );
-        }
-    }
-    else
-    {
-        if(idViewer==1)
-        {
-            m_diffusion2DView->enableOldTools();
-        }
-        else    //idViewer=2
-        {
-            m_perfusion2DView->enableOldTools();
         }
     }
 }
