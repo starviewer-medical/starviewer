@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
-<defaultcodec></defaultcodec>
 <context>
     <name>QObject</name>
     <message>
@@ -83,7 +82,7 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="508"/>
+        <location filename="nonclosedangletool.cpp" line="295"/>
         <source>%1 degrees</source>
         <translation>%1 grados</translation>
     </message>
@@ -166,39 +165,39 @@ Media: %2</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2068"/>
+        <location filename="q2dviewer.cpp" line="2067"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Corte: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2086"/>
+        <location filename="q2dviewer.cpp" line="2085"/>
         <source>Slice: %1/%2</source>
         <translation>Corte: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2059"/>
+        <location filename="q2dviewer.cpp" line="2058"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Corte: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2079"/>
+        <location filename="q2dviewer.cpp" line="2078"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Corte: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2092"/>
+        <location filename="q2dviewer.cpp" line="2091"/>
         <source> Thickness: %1 mm</source>
         <translation> Grosor: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1878"/>
+        <location filename="q2dviewer.cpp" line="1877"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1901"/>
+        <location filename="q2dviewer.cpp" line="1900"/>
         <source>%1
 %2
 %3 %4 %5
@@ -213,12 +212,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2040"/>
+        <location filename="q2dviewer.cpp" line="2039"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2046"/>
+        <location filename="q2dviewer.cpp" line="2045"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -1389,7 +1388,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volume.cpp" line="108"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
-        <translation>No hay suficiente memòria para cargar las series. Prueba de cerrar las %1 ventanas abiertas, reiniciar la aplicación e intentar-lo otra vez. Si el problema persiste, añadiendo más memòria RAM o cambiando a un sistema de 64 bits se puede solucionar el problema.</translation>
+        <translation>No hay suficiente memòria para cargar las series. Cierra todas las ventanas abiertas del %1, reinicia la aplicación e intentalo otra vez. Si el problema persiste, se puede solucionar añadiendo más memòria RAM o cambiando a un sistema de 64 bits.</translation>
     </message>
     <message>
         <location filename="volume.cpp" line="115"/>
