@@ -2807,7 +2807,31 @@ void QExperimental3DExtension::loadAndRunProgram()
 
             QString command = words.at( 0 );
 
-            if ( command == "tf-load" )
+            if ( command == "tab" )
+            {
+                if ( words.size() >= 2 )
+                {
+                    const QString &tab = words.at( 1 );
+
+                    if ( tab == "visualization" ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
+                    else if ( tab == "camera" ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
+                    else if ( tab == "obscurance" ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
+                    else if ( tab == "smi" ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
+                    else if ( tab == "vmi" ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
+                    else if ( tab == "program" ) m_controlsTabWidget->setCurrentWidget( m_programTab );
+                    else
+                    {
+                        DEBUG_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
+                        ERROR_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
+                    }
+                }
+                else
+                {
+                    DEBUG_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
+                    ERROR_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
+                }
+            }
+            else if ( command == "tf-load" )
             {
                 if ( words.size() >= 2 ) loadTransferFunction( words.at( 1 ) );
                 else
