@@ -83,7 +83,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_oldToolManager(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_enabledOldTools(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -149,7 +149,6 @@ Q2DViewer::~Q2DViewer()
     // no ens hauria d'afectar
     // HACK imposem que s'esborri primer el drawer
     delete m_drawer;
-    delete m_oldToolManager;
 }
 
 vtkRenderer *Q2DViewer::getRenderer()
@@ -688,75 +687,6 @@ QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
         i++;
     }
     return oppositeLabel;
-}
-
-void Q2DViewer::setOldTool( QString toolName )
-{
-    // per poder cridar aquesta funcio caldra haver fet
-    // abans un "enableTools" que crei el manager
-    // amb l'assert trobarem facilment on cal fer-lo
-    Q_ASSERT( m_oldToolManager );
-    if( m_oldToolManager->setCurrentTool( toolName ) )
-    {
-        ///\Todo per implementar
-        DEBUG_LOG( QString("OK, hem activat la tool: ") + toolName );
-    }
-    else
-    {
-        ///\Todo per implementar
-        DEBUG_LOG( QString(":/ no s'ha pogut activar la tool: ") + toolName );
-    }
-}
-
-OldTool *Q2DViewer::getOldTool( QString toolName )
-{
-    // per poder cridar aquesta funcio caldra haver fet
-    // abans un "enableTools" que crei el manager
-    // amb l'assert trobarem facilment on cal fer-lo
-    Q_ASSERT( m_oldToolManager );
-    return m_oldToolManager->getTool( toolName );
-}
-
-QString Q2DViewer::getCurrentOldToolName()
-{
-    // per poder cridar aquesta funcio caldra haver fet
-    // abans un "enableTools" que crei el manager
-    // amb l'assert trobarem facilment on cal fer-lo
-    Q_ASSERT( m_oldToolManager );
-    return m_oldToolManager->getCurrentToolName();
-}
-
-void Q2DViewer::setEnableOldTools( bool enable )
-{
-    if( enable )
-        this->enableOldTools();
-    else
-        this->disableOldTools();
-}
-
-void Q2DViewer::enableOldTools()
-{
-    // Això evita que es faci més d'un connect en cas que es cridi aquesta funció i ja s'hagi fet abans
-    if( !m_enabledOldTools )
-    {
-        // el creem si encara no existeix
-        if( !m_oldToolManager )
-            m_oldToolManager = new Q2DViewerToolManager( this );
-
-        connect( this , SIGNAL( eventReceived(unsigned long) ) , m_oldToolManager , SLOT( forwardEvent(unsigned long) ) );
-        m_enabledOldTools = true;
-    }
-}
-
-void Q2DViewer::disableOldTools()
-{
-    if( m_enabledOldTools )
-    {
-        if( m_oldToolManager )
-            disconnect( this , SIGNAL( eventReceived(unsigned long) ) , m_oldToolManager , SLOT( forwardEvent(unsigned long) ) );
-
-        m_enabledOldTools = false;
-    }
 }
 
 void Q2DViewer::setupInteraction()

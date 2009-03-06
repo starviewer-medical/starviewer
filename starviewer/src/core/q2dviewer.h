@@ -41,8 +41,6 @@ namespace udg {
 class Volume;
 class Image;
 class Drawer;
-class Q2DViewerToolManager;
-class OldTool;
 class ImagePlane;
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 class HangingProtocolManager;
@@ -125,18 +123,6 @@ public:
     int getCurrentPhase() const;
 
     void getCurrentWindowLevel( double wl[2] );
-
-    /// Obté la tool antiga que li demanem.
-    /// \TODO Mètode "temporal" per poder accedir a les dades d'una tool;
-    /// per exemple, si tenim la tool de seeds, per certes extensions necessitarem
-    /// obtenir el valor de la seed, i només la SeedTool té el mètode específic per accedir a aquestes dades
-    /// S'eliminara quan ens desfem de les tools antigues
-    OldTool *getOldTool( QString toolName );
-
-    /// Retorna el nom de la tool antiga activa
-    /// TODO eliminar quan el sistema de tools antigues
-    /// s'hagi eliminat del core
-    QString getCurrentOldToolName();
 
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
@@ -266,15 +252,6 @@ public:
 public slots:
     virtual void render();
     void reset();
-    /// Metodes per activar les Tools antigues.
-    /// Per poder-les fer servir cal activar-les explicitament
-    /// Per defecte estan desactivades
-    /// TODO Quan ens desfem de totes les eines
-    /// antigues aquests metodes han de desapareixer
-    void setOldTool( QString toolName );
-    void setEnableOldTools( bool enable );
-    void enableOldTools();
-    void disableOldTools();
 
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
@@ -579,9 +556,6 @@ private:
     /// Barra que mostra l'escala de colors del model que estem visualitzant \TODO quan tinguem models fusionats tindrem una o dues barres d'escala de colors?
     vtkScalarBarActor *m_scalarBar;
 
-    /// El manager de les tools
-    Q2DViewerToolManager *m_oldToolManager;
-
     ///Informació de la posició de la seed
     double m_seedPosition[3];
 
@@ -613,11 +587,6 @@ private:
 
     /// Les diferents look up tables que ens podem trobar durant tot el procés.
     vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
-
-    /// Variable que controla si les tools estant habilitades
-    /// Aquesta variable evita que es faci més d'un "connect"
-    /// quan es fa l'enableOldTools i ja estan habilitades
-    bool m_enabledOldTools;
 
     // Secció "ThickSlab"
     /// Nombre de llesques que composen el thickSlab
