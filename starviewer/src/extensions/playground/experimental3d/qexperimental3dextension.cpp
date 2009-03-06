@@ -1045,9 +1045,169 @@ void QExperimental3DExtension::computeSelectedVmi()
         QVector<Vector3Float> viewpointColors;
         if ( computeColorVomi )
         {
+            QMap< QPair<int, int>, QVector<int> > viewpointSubSets; // (nPunts,nColors) -> punts-millor-distribuïts
+            {
+                // aquí aniran les assignacions que ja sapiguem
+            }
+
             viewpointColors.resize( nViewpoints );
             int nColors = m_colorVomiPalette.size();
-            for ( int i = 0; i < nViewpoints; i++ ) viewpointColors[i] = m_colorVomiPalette.at( i % nColors );
+
+            if ( nColors == 1 ) // tots el mateix
+            {
+                DEBUG_LOG( "tots els colors iguals" );
+                for ( int i = 0; i < nViewpoints; i++ ) viewpointColors[i] = m_colorVomiPalette.at( 0 );
+            }
+            else if ( nViewpoints <= nColors )  // agafem els primers colors
+            {
+                DEBUG_LOG( "primers colors" );
+                for ( int i = 0; i < nViewpoints; i++ ) viewpointColors[i] = m_colorVomiPalette.at( i );
+            }
+            else    // trobar els més separats -> que la distància mínima entre ells sigui màxima entre totes les mínimes
+            {
+                QVector<int> bestIndices;
+                QPair<int, int> mapIndex( nViewpoints, nColors );
+
+                if ( viewpointSubSets.contains( mapIndex ) )
+                {
+                    DEBUG_LOG( "índexs precalculats" );
+                    bestIndices = viewpointSubSets.value( mapIndex );
+                }
+                else
+                {
+                    DEBUG_LOG( "calculem els índexs" );
+                    double maxMinDistance = 0.0;
+
+                    class Combination
+                    {
+                    private:
+                        int m_n;
+                        int m_k;
+                        QVector<int> m_data;
+                    public:
+                        Combination( int n, int k )
+                        {
+                            Q_ASSERT( n >= 0 && k >= 0 );
+                            m_n = n;
+                            m_k = k;
+                            m_data.resize( k );
+                            for ( int i = 0; i < k; ++i ) m_data[i] = i;
+                        }   // Combination(n,k)
+                        QVector<int> data() const
+                        {
+                            return m_data;
+                        }
+                        QString toString() const
+                        {
+                            QString s = "{ ";
+                            for ( int i = 0; i < m_k; ++i ) s += QString::number( m_data.at( i ) ) + " ";
+                            s += "}";
+                            return s;
+                        }   // toString()
+                        Combination* successor() const
+                        {
+                            if ( m_data[0] == m_n - m_k) return 0;
+                            Combination *ans = new Combination( m_n, m_k );
+                            int i;
+                            for ( i = 0; i < m_k; ++i ) ans->m_data[i] = m_data.at( i );
+                            for ( i = m_k - 1; i > 0 && ans->m_data.at( i ) == m_n - m_k + i; --i );
+                            ++ans->m_data[i];
+                            for ( int j = i; j < m_k - 1; ++j ) ans->m_data[j+1] = ans->m_data[j] + 1;
+                            return ans;
+                        }   // successor()
+                        static quint64 choose( int n, int k )
+                        {
+                            if ( n < k ) return 0;  // special case
+                            if ( n == k ) return 1;
+                            int delta, iMax;
+                            if ( k < n - k )    // ex: choose(100,3)
+                            {
+                                delta = n - k;
+                                iMax = k;
+                            }
+                            else                // ex: choose(100,97)
+                            {
+                                delta = k;
+                                iMax = n - k;
+                            }
+                            quint64 ans = delta + 1;
+                            for ( int i = 2; i <= iMax; ++i ) ans = ( ans * ( delta + i ) ) / i;
+                            return ans;
+                        }   // choose()
+                    };  // Combination class
+
+                    quint64 nCombinations = Combination::choose( nViewpoints, nColors );
+                    Combination *c = new Combination( nViewpoints, nColors );
+                    for ( quint64 i = 0; i < nCombinations; i++ )
+                    {
+                        //DEBUG_LOG( QString( "%1: %2" ).arg( i ).arg( c->toString() ) );
+
+                        QVector<int> indices = c->data();
+                        double minDistance = ( viewpoints.at( indices.at( 0 ) ) - viewpoints.at( indices.at( 1 ) ) ).length();
+                        bool mayBeBetter = minDistance > maxMinDistance;
+                        for ( int j = 0; j < nColors - 1 && mayBeBetter; j++ )
+                        {
+                            const Vector3 &v1 = viewpoints.at( indices.at( j ) );
+                            for ( int k = j + 1; k < nColors && mayBeBetter; k++ )
+                            {
+                                double distance = ( v1 - viewpoints.at( indices.at( k ) ) ).length();
+                                if ( distance < minDistance )
+                                {
+                                    minDistance = distance;
+                                    mayBeBetter = minDistance > maxMinDistance;
+                                }
+                            }
+                        }
+                        if ( minDistance > maxMinDistance )
+                        {
+                            maxMinDistance = minDistance;
+                            bestIndices = indices;
+                        }
+
+                        Combination *t = c;
+                        c = c->successor();
+                        delete t;
+                    }
+                }
+
+                DEBUG_LOG( "best indices:" );
+                for ( int i = 0; i < nColors; i++ ) DEBUG_LOG( QString::number( bestIndices.at( i ) ) );
+
+                for ( int i = 0; i < nColors; i++ ) viewpointColors[bestIndices.at(i)] = m_colorVomiPalette.at( i );
+
+                float maxChange;
+                do
+                {
+                    maxChange = 0.0f;
+                    for ( int i = 0; i < nViewpoints; i++ )
+                    {
+                        if ( bestIndices.contains( i ) ) continue;
+                        Vector3 viewpoint = viewpoints.at( i );
+                        QVector<int> neighbours = viewpointGenerator.neighbours( i );
+                        Vector3Float color;
+                        double totalWeight = 0.0;
+                        int nNeighbours = neighbours.size();
+                        for ( int j = 0; j < nNeighbours; j++ )
+                        {
+                            int neighbourIndex = neighbours.at( j );
+                            double distance = ( viewpoint - viewpoints.at( neighbourIndex ) ).length();
+                            double weight = 1.0 / distance;
+                            color += weight * viewpointColors.at( neighbourIndex );
+                            totalWeight += weight;
+                        }
+                        color /= totalWeight;
+                        float change = ( color - viewpointColors.at( i ) ).length();
+                        viewpointColors[i] = color;
+                        if ( change > maxChange ) maxChange = change;
+                    }
+                } while ( maxChange > 0.1f );
+            }
+
+            DEBUG_LOG( "colors: " );
+            for ( int i = 0; i < nViewpoints; i++ )
+            {
+                DEBUG_LOG( QString( "v%1: %2 -> %3" ).arg( i+1 ).arg( viewpoints.at( i ).toString() ).arg( viewpointColors.at( i ).toString() ) );
+            }
         }
 
         m_vmiProgressBar->setValue( 0 );
