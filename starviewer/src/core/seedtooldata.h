@@ -13,6 +13,8 @@
 
 namespace udg {
 
+class DrawerPoint;
+
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -27,10 +29,14 @@ public:
     void setSeedPosition(QVector<double> pos);
 
     QVector<double> getSeedPosition( );
+    DrawerPoint* getPoint( );
 
 private:
     ///Hi guardem la posició de la llavor
     QVector<double> m_position;
+
+    /// Punt que es dibuixa
+    DrawerPoint *m_point;
 
 };
 

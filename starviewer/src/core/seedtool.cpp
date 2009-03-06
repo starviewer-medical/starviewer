@@ -10,7 +10,6 @@
 #include "drawerpoint.h"
 #include "volume.h"
 #include "drawer.h"
-#include "drawerpoint.h"
 
 // Vtk's
 #include <vtkCommand.h>
@@ -24,6 +23,7 @@ SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
 {
     m_toolName = "SeedTool";
     m_hasSharedData = false;
+    m_hasPersistentData = true;
 
     m_myData = new SeedToolData;
 
@@ -31,10 +31,9 @@ SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
 
-    m_point = NULL;
     m_state = NONE;
 
-    DEBUG_LOG("SEED TOOL CREADA ");
+    //DEBUG_LOG("SEED TOOL CREADA ");
 }
 
 
@@ -60,6 +59,20 @@ void SeedTool::handleEvent( unsigned long eventID )
 
     default:
     break;
+    }
+}
+
+void SeedTool::setToolData(ToolData * data)
+{
+    //Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
+    if( m_myData != data )
+    { 
+        // desfem els vincles anteriors
+        delete m_myData;
+    
+        // creem de nou les dades
+        m_toolData = data;
+        m_myData = qobject_cast<SeedToolData *>(data);
     }
 }
 
@@ -101,14 +114,44 @@ void SeedTool::setSeed()
         //Apanyo perquè funcioni de moment, però s'ha d'arreglar
         m_2DViewer->setSeedPosition( xyz );
 
-        if ( !m_point )
+        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    }
+}
+
+void SeedTool::setSeed(QVector<double> seedPosition)
+{
+    if( m_2DViewer )
+    {
+        std::cout<<"SetSeed amb pos: ["<<seedPosition[0]<<", "<<seedPosition[1]<<" ,"<<seedPosition[2]<<"]"<<std::endl;
+        double xyz[3];
+        xyz[0] = seedPosition[0];
+        xyz[1] = seedPosition[1];
+        xyz[2] = seedPosition[2];
+
+        int slice;
+        double *spacing = m_2DViewer->getInput()->getSpacing();
+        double *origin = m_2DViewer->getInput()->getOrigin();
+        switch( m_2DViewer->getView() )
         {
-            m_point = new DrawerPoint;
-            QColor color( 217, 33, 66 );
-            m_point->setColor( color );
+            case Q2DViewer::Axial:
+                slice =(int) ( (seedPosition[2] - origin[2])/ spacing[2]);
+            break;
+            case Q2DViewer::Sagital:
+                slice =(int) ( (seedPosition[0] - origin[0])/ spacing[0]);
+            break;
+            case Q2DViewer::Coronal:
+                slice =(int) ( (seedPosition[1] - origin[1])/ spacing[1]);
+            break;
         }
-        m_point->setPosition(seedPosition);
-        m_2DViewer->getDrawer()->draw( m_point , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+
+        m_myData->setSeedPosition( seedPosition );
+        //Apanyo perquè funcioni de moment, però s'ha d'arreglar
+        //A l'ext. PerfusionMapReconstruction està resolt, però es deixa per a què funcionin les altres
+        m_2DViewer->setSeedPosition( xyz );
+
+        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+
+        emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
     }
 }
 
@@ -148,15 +191,7 @@ void SeedTool::doSeeding( )
         //Apanyo perquè funcioni de moment, però s'ha d'arreglar
         m_2DViewer->setSeedPosition( xyz );
 
-        if ( !m_point )
-        {
-            m_point = new DrawerPoint;
-            QColor color( 217, 33, 66 );
-            m_point->setColor( color );
-        }
-        m_point->setPosition(seedPosition);
-        m_2DViewer->getDrawer()->draw( m_point , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-        m_2DViewer->getDrawer()->refresh();
+        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 }
 
