@@ -20,14 +20,13 @@ class vtkImageData;
 class vtkPolyData;
 class vtkPropPicker;
 
-
 namespace udg {
     
-    // FWD declarations
-    class Volume;
-    class ToolsActionFactory;
-    class Point;
-    
+// FWD declarations
+class Volume;
+class Point;
+class ToolManager;
+
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -44,12 +43,9 @@ public:
     /// Li assigna el volum principal
     void setInput( Volume *input );
     
-        ///assigna atributs per defecte als objectes de la classe
+    ///assigna atributs per defecte als objectes de la classe
     void setAttributes();
     
-    ///crea les accions d'aquesta classe associades a les tools
-    void createActions();
-
     ///insereix un punt a la llista de punts marcats
     void insertPoint();
 
@@ -58,6 +54,12 @@ public:
     
     ///assigna els atributs comuns a tots els splines
     void setSplineAtributes( vtkSplineWidget* );
+
+private:
+    ///crea les accions d'aquesta classe associades a les tools
+    void createActions();
+
+    void initializeTools();
 
 private slots:
     ///guarda l'spline actual en la llesca actual i restaura els splines de la llesca a la qual hem canviat
@@ -84,9 +86,6 @@ private slots:
     void computeAreaAndVolume();
     
 private:
-    ///Factory de Tools
-    ToolsActionFactory *m_actionFactory;
-
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
     
@@ -142,21 +141,15 @@ private:
     ///llista on guardem els punts que es van anotant
     QList<Point> m_pointList;
     
-    ///Acció de zoom
-    QAction *m_zoomAction;
-    
     ///Acció d'edició d'splines
     QAction *m_splineAction;
     
-    ///Acció de windowLevel
-    QAction *m_windowLevelAction;
-    
-    ///Acció d'slicing
-    QAction *m_slicingAction;
-    
     ///per a calcular el volum total
     double m_totalVolume;
-   };
+
+    ToolManager *m_toolManager;
+};
+
 }
 
 #endif
