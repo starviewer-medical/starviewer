@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "seedtooldata.h"
 #include "logging.h"
+#include "drawerpoint.h"
 
 
 namespace udg {
@@ -14,14 +15,18 @@ SeedToolData::SeedToolData(QObject *parent)
  : ToolData(parent)
 {
     m_position = QVector<double> (3,0);
-    DEBUG_LOG("SEED TOOL DATA CREADA ");
-    //std::cout<<this<<std::endl;
+    m_point = NULL;
+    //DEBUG_LOG("SEED TOOL DATA CREADA ");
 }
 
 
 SeedToolData::~SeedToolData()
 {
-    DEBUG_LOG("DYING SEED TOOL DATA ");
+    if ( !m_point )
+    {
+        delete m_point;
+    }
+    //DEBUG_LOG("DYING SEED TOOL DATA ");
 }
 
 void SeedToolData::setSeedPosition(QVector<double> pos)
@@ -29,11 +34,26 @@ void SeedToolData::setSeedPosition(QVector<double> pos)
     m_position[0]=pos[0];
     m_position[1]=pos[1];
     m_position[2]=pos[2];
+
+    if ( !m_point )
+    {
+        //DEBUG_LOG("Creem un nou drawerPoint");
+        m_point = new DrawerPoint;
+        QColor color( 217, 33, 66 );
+        m_point->setColor( color );
+    }
+    m_point->setPosition(m_position);
+
 }
 
 QVector<double> SeedToolData::getSeedPosition( )
 {
     return m_position;
+}
+
+DrawerPoint* SeedToolData::getPoint( )
+{
+    return m_point;
 }
 
 }

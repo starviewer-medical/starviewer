@@ -12,7 +12,6 @@
 namespace udg {
 
 class Q2DViewer;
-class DrawerPoint;
 class SeedToolData;
 
 /**
@@ -37,6 +36,16 @@ public:
     /// Retorna les dades pròpies de la seed
     ToolData *getToolData() const;
 
+    /// Assigna les dades pròpies de la seed (persistent data)
+    void setToolData(ToolData * data);
+
+    /// Posem la llavor i li passem la posició: útil per fer-ho per codi
+    void setSeed(QVector<double> seedPosition);
+
+signals:
+    void seedChanged(double, double, double);
+
+
 private:
     /// Posem la llavor
     void setSeed( );
@@ -50,9 +59,6 @@ private:
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
-
-    /// Punt que es dibuixa
-    DrawerPoint *m_point;
 
     ///estat de la tool
     int m_state;
