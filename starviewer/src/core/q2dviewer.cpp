@@ -26,8 +26,6 @@
 #include <QMenu>
 #include <QAction>
 #include <QMutableMapIterator>
-// Tools
-#include "q2dviewertoolmanager.h"
 
 // include's bàsics vtk
 #include <QVTKWidget.h>
