@@ -1047,7 +1047,7 @@ void QExperimental3DExtension::computeSelectedVmi()
         {
             QMap< QPair<int, int>, QVector<int> > viewpointSubSets; // (nPunts,nColors) -> punts-millor-distribuïts
             {
-                // aquí aniran les assignacions que ja sapiguem
+                viewpointSubSets[qMakePair(42, 6)] = ( QVector<int>() << 13 << 17 << 23 << 27 << 33 << 39 );
             }
 
             viewpointColors.resize( nViewpoints );
