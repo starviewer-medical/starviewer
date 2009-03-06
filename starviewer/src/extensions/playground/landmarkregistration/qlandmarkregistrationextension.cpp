@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "qlandmarkregistrationextension.h"
 
-#include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
 #include "q2dviewer.h"
@@ -18,7 +17,6 @@
 //QT
 #include <QString>
 #include <QAction>
-#include <QToolBar>
 #include <QSettings>
 #include <QSize>
 #include <QFileDialog>
@@ -50,26 +48,61 @@ QLandmarkRegistrationExtension::QLandmarkRegistrationExtension(QWidget *parent)
     m_seedSet1 = itk::VectorContainer<int, PointType>::New();
     m_seedSet2 = itk::VectorContainer<int, PointType>::New();
 
-    // activem el framework de "Old Tools"
-    // TODO cal reciclar per les noves tools
-    m_2DView->enableOldTools();
-    m_2DView_2->enableOldTools();
     createActions();
     createConnections();
     readSettings();
-
-    // creem el tool manager i li assignem les tools. TODO de moment només tenim VoxelInformation, però s'han d'anar afegint la resta
-    m_toolManager = new ToolManager(this);
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    QStringList toolsList;
-    toolsList << "VoxelInformationTool";
-    m_toolManager->setViewerTools( m_2DView, toolsList );
-    m_toolManager->setViewerTools( m_2DView_2, toolsList );
+    initializeTools();
 }
 
 QLandmarkRegistrationExtension::~QLandmarkRegistrationExtension()
 {
     writeSettings();
+}
+
+void QLandmarkRegistrationExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
+
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
+    // Tool d'slicing per teclat
+    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
+    slicingKeyboardTool->trigger();
+
+    // definim els grups exclusius
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
+
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
+
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
+
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    // inicialitzem totes les tools
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "VoxelInformationTool" << "SeedTool";
+
+    m_toolManager->setViewerTools( m_2DView, toolsList );
+    m_toolManager->setViewerTools( m_2DView_2, toolsList );
 }
 
 void QLandmarkRegistrationExtension::createActions()
@@ -93,41 +126,6 @@ void QLandmarkRegistrationExtension::createActions()
 
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateCounterClockWise() ) );
     connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView_2 , SLOT( rotateCounterClockWise() ) );
-
-    // Tools
-    m_actionFactory = new ToolsActionFactory( 0 );
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_moveAction = m_actionFactory->getActionFrom( "TranslateTool" );
-    m_moveToolButton->setDefaultAction( m_moveAction );
-
-    m_seedAction = new QAction( 0 );
-    m_seedAction->setText( tr("SeedTool") );
-    m_seedAction->setStatusTip( tr("Enable/Disable seeding tool") );
-    m_seedAction->setIcon( QIcon(":/images/seed.png") );
-    m_seedAction->setCheckable( true );
-    m_seedToolButton->setDefaultAction( m_seedAction );
-
-
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView, SLOT( setOldTool(QString) ) );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2 , SLOT( setOldTool(QString) ) );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_moveAction );
-    m_toolsActionGroup->addAction( m_seedAction );
-    //activem per defecte una tool. \TODO podríem posar algun mecanisme especial per escollir la tool per defecte?
-    m_seedAction->trigger();
 }
 
 void QLandmarkRegistrationExtension::createConnections()
@@ -216,13 +214,6 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
 
     m_tryAgainPushButton->setEnabled(false);
 
-    //std::cout<<"setInput: NumSlices:"<<dim[2]-1<<std::endl;
-    /*m_actionFactory = new ToolsActionFactory( 0 );
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView , SLOT( setOldTool(QString) ) );
-    m_2DView->enableOldTools();
-    m_windowLevelAction->trigger();
-*/
     m_2DView->setCursor(Qt::CrossCursor);
     m_2DView_2->setCursor(Qt::CrossCursor);
     m_2DView->render();
@@ -274,12 +265,6 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
     m_sliceSpinBox_2->setMinimum(0);
     m_sliceSpinBox_2->setMaximum(dim[2]-1);
     m_sliceViewSlider_2->setValue(m_2DView_2->getCurrentSlice());
-
-    /*m_windowLevelAction_2 = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    connect( m_actionFactory , SIGNAL( triggeredTool(QString) ) , m_2DView_2 , SLOT( setOldTool(QString) ) );
-    m_2DView_2->enableOldTools();
-    m_windowLevelAction_2->trigger();
-    */
 
     m_2DView_2->render();
 }
@@ -743,15 +728,7 @@ void QLandmarkRegistrationExtension::leftButtonEventHandler( int idVolume )
 {
     if(m_seedToolButton->isChecked())
     {
-        //std::cout<<"Seed Tool"<<std::endl;
-        m_2DView->disableOldTools();
-        m_2DView_2->disableOldTools();
         setNewSeedPosition( idVolume );
-    }
-    else
-    {
-        m_2DView->enableOldTools();
-        m_2DView_2->enableOldTools();
     }
 }
 

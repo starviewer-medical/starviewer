@@ -1,9 +1,10 @@
 #include "qvolumecontourdelimiterextension.h"
-#include "toolsactionfactory.h"
 #include "volume.h"
 #include "deletedirectory.h"
 #include "point.h"
 #include "drawerpolyline.h"
+#include "toolmanager.h"
+
 // VTK
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageThreshold.h>
@@ -66,10 +67,8 @@ QVolumeContourDelimiterExtension::QVolumeContourDelimiterExtension(QWidget *pare
     m_extrude = vtkLinearExtrusionFilter::New();
     m_addSpline->setEnabled( false );
     m_createMask->setEnabled( false );
-    // activem el framework de "Old Tools"
-    // TODO cal reciclar per les noves tools
-    m_2DView->enableOldTools();
     createActions();
+    initializeTools();
 }
 
 QVolumeContourDelimiterExtension::~QVolumeContourDelimiterExtension()
@@ -137,55 +136,6 @@ void QVolumeContourDelimiterExtension::setInput( Volume* volume )
     information->Delete();
 }
 
-void QVolumeContourDelimiterExtension::createActions()
-{
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-
-    m_actionFactory = new ToolsActionFactory( 0 );
-
-    m_splineAction = new QAction( 0 );
-    m_setSpline->setDefaultAction( m_splineAction );
-    m_splineAction->setCheckable( true );
-    m_splineAction->setIcon( QIcon( ":/images/polyline.png" ) );
-
-    m_windowLevelAction = m_actionFactory->getActionFrom( "WindowLevelTool" );
-    m_windowLevelToolButton->setDefaultAction( m_windowLevelAction );
-
-    m_zoomAction = m_actionFactory->getActionFrom( "ZoomTool" );
-    m_zoomToolButton->setDefaultAction( m_zoomAction );
-
-    m_slicingAction = m_actionFactory->getActionFrom( "SlicingTool" );
-    m_slicingToolButton->setDefaultAction( m_slicingAction );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_zoomAction );
-    m_toolsActionGroup->addAction( m_windowLevelAction );
-    m_toolsActionGroup->addAction( m_splineAction );
-    m_toolsActionGroup->addAction( m_slicingAction );
-
-    connect( m_createMask, SIGNAL( clicked() )  , this, SLOT( createModelOfVoxelsWithObtainedMasks() ) );
-    connect( m_setSpline, SIGNAL( clicked ( bool ) ), this, SLOT( buttonAddSplineEnabled( bool ) ) );
-    connect( m_addSpline, SIGNAL( clicked() ), this, SLOT( addNewSpline() ) );
-    connect( m_splineAction, SIGNAL( triggered() ), m_2DView, SLOT( disableOldTools() ) );
-    connect( m_zoomAction, SIGNAL( triggered() ), m_2DView, SLOT( enableOldTools() ) );
-    connect( m_windowLevelAction, SIGNAL( triggered() ), m_2DView, SLOT( enableOldTools() ) );
-    connect( m_slicingAction, SIGNAL( triggered() ), m_2DView, SLOT( enableOldTools() ) );
-    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
-    connect( m_2DView, SIGNAL( sliceChanged( int ) ), m_spinBox, SLOT( setValue( int ) ) );
-    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( computeCurrentArea( int ) ) );
-    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( computeTotalVolume() ) );
-    connect( m_refreshButton, SIGNAL( clicked() ), this, SLOT( computeAreaAndVolume() ) );
-    connect( m_spinBox, SIGNAL( valueChanged(int) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
-    connect( m_spinBox, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setSlice( int ) ) );
-    connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), this, SLOT( myEventHandler( unsigned long )) );
-    connect( m_actionFactory, SIGNAL( triggeredTool( QString ) )  , m_2DView, SLOT( setOldTool( QString ) ) );
-
-    m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
-    m_2DView->enableAnnotation( Q2DViewer::SliceAnnotation );
-}
-
 void QVolumeContourDelimiterExtension::setSplineAtributes( vtkSplineWidget *spline )
 {
     switch ( m_view )
@@ -214,6 +164,83 @@ void QVolumeContourDelimiterExtension::setSplineAtributes( vtkSplineWidget *spli
     spline->SetInput( m_volume->getVtkData() );
     spline->SetInteractor( m_2DView->getInteractor() );
     spline->On();
+}
+
+void QVolumeContourDelimiterExtension::createActions()
+{
+    m_splineAction = new QAction( 0 );
+    m_setSpline->setDefaultAction( m_splineAction );
+    m_splineAction->setCheckable( true );
+    m_splineAction->setIcon( QIcon( ":/images/polyline.png" ) );
+
+    connect( m_createMask, SIGNAL( clicked() )  , this, SLOT( createModelOfVoxelsWithObtainedMasks() ) );
+    connect( m_setSpline, SIGNAL( clicked ( bool ) ), this, SLOT( buttonAddSplineEnabled( bool ) ) );
+    connect( m_addSpline, SIGNAL( clicked() ), this, SLOT( addNewSpline() ) );
+    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
+    connect( m_2DView, SIGNAL( sliceChanged( int ) ), m_spinBox, SLOT( setValue( int ) ) );
+    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( computeCurrentArea( int ) ) );
+    connect( m_2DView, SIGNAL( sliceChanged( int ) ), this, SLOT( computeTotalVolume() ) );
+    connect( m_refreshButton, SIGNAL( clicked() ), this, SLOT( computeAreaAndVolume() ) );
+    connect( m_spinBox, SIGNAL( valueChanged(int) ), this, SLOT( saveCurrentSplineAndGetNeededSplines( int ) ) );
+    connect( m_spinBox, SIGNAL( valueChanged(int) ), m_2DView, SLOT( setSlice( int ) ) );
+    connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), this, SLOT( myEventHandler( unsigned long )) );
+    
+
+    m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
+    m_2DView->enableAnnotation( Q2DViewer::SliceAnnotation );
+}
+
+void QVolumeContourDelimiterExtension::initializeTools()
+{
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
+
+    // activem l'eina de valors predefinits de window level
+    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
+    windowLevelPresetsTool->trigger();
+
+    // Tool d'slicing per teclat
+    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
+    slicingKeyboardTool->trigger();
+
+    // definim els grups exclusius
+    QStringList leftButtonExclusiveTools;
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
+
+    QStringList rightButtonExclusiveTools;
+    rightButtonExclusiveTools << "WindowLevelTool";
+    m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
+/*
+    QStringList middleButtonExclusiveTools;
+    middleButtonExclusiveTools << "TranslateTool";
+    m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
+*/
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    m_slicingToolButton->defaultAction()->trigger();
+    //m_moveToolButton->defaultAction()->trigger();
+    m_windowLevelToolButton->defaultAction()->trigger();
+
+    // inicialitzem totes les tools
+    QStringList toolsList;
+    toolsList << "ZoomTool" << "SlicingTool" /*<< "TranslateTool"*/ << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" /*<< "SeedTool" << "VoxelInformationTool"*/;
+
+    m_toolManager->setViewerTools( m_2DView, toolsList );
+
+    // Acoblament "HOME MADE" de l'eina spline
+    m_toolsActionGroup = new QActionGroup( 0 );
+    // txapussilla per fer la tool editor(home made) exclusiu de la resta. Amb la tool oficial això seria automàtic
+    m_toolsActionGroup->setExclusive( true );
+    m_toolsActionGroup->addAction( m_slicingToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_zoomToolButton->defaultAction() );
+    m_toolsActionGroup->addAction( m_splineAction );
+    // TODO guarrada total! ens veiem forçats a fer això perquè es refresquin les connexions de les tools
+    // i no quedi l'editor activat a la vegada amb cap altre tool
+    connect( m_splineAction, SIGNAL( triggered() ), m_toolManager, SLOT( undoDisableAllToolsTemporarily() ) );
 }
 
 void QVolumeContourDelimiterExtension::setAttributes()

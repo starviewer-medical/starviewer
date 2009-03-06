@@ -12,8 +12,6 @@
 #include <QString>
 
 // FWD declarations
-class QAction;
-class QToolBar;
 class vtkImageMask;
 class vtkImageThreshold;
 class vtkActor;
@@ -24,7 +22,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class ToolsActionFactory;
 class ToolManager;
 
 /**
@@ -41,8 +38,7 @@ public slots:
     void setInput( Volume *input );
 
 private:
-
-    void createActions();
+    void initializeTools();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -78,19 +74,8 @@ private:
     /// El volum on hi guardem la lesió
     Volume *m_lesionMaskVolume;
 
-    /// Accions
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    ToolsActionFactory *m_actionFactory;
-
     ///Directori on guardem les màscares
     QString m_defaultOpenDirectory;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
-    QActionGroup *m_viewOverlayActionGroup;
 
     /// Tool Manager
     ToolManager *m_toolManager;

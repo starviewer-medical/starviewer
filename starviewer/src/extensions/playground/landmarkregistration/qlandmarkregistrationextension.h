@@ -16,13 +16,11 @@
 
 // FWD declarations
 class QAction;
-class QToolBar;
 class vtkActor;
 
 namespace udg {
 
 class Volume;
-class ToolsActionFactory;
 class ToolManager;
 
 /**
@@ -51,6 +49,8 @@ public slots:
 private:
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createActions();
+
+    void initializeTools();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -154,21 +154,11 @@ private:
     std::list<std::vector<double> >::iterator m_itListSelected;
 
     /// Accions
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_seedAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_rotateCounterClockWiseAction;
-    ToolsActionFactory *m_actionFactory;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
 
     /// El Tool Manager
     ToolManager *m_toolManager;
-
 };
 
 }
