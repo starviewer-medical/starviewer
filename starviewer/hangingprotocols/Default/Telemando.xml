@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Telemando">
+<hangingProtocolName>RF</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<strictness>yes</strictness>
+<protocol>RF</protocol>
+<imageSet identifier="1">
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\1.0\0.0</position>
+</displaySet>
+</hangingProtocol>
