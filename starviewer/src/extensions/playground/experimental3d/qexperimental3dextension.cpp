@@ -1012,129 +1012,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     // best views
     if ( computeBestViews )
     {
-        m_bestViews.clear();
-
-        // millor vista
-        float minVmi = m_vmi.at( 0 );
-        int minVmiIndex = 0;
-
-        for ( int i = 1; i < nViewpoints; i++ )
-        {
-            float vmi = m_vmi.at( i );
-
-            if ( vmi < minVmi )
-            {
-                minVmi = vmi;
-                minVmiIndex = i;
-            }
-        }
-
-        m_bestViews << qMakePair( minVmiIndex, viewpoints.at( minVmiIndex ) );
-
-        QList<int> viewpointIndexList;
-        for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
-        viewpointIndexList.removeAt( minVmiIndex );
-
-        float pvv = viewProbabilities.at( minVmiIndex );    // p(v̂)
-        QVector<float> pOvv( nObjects );    // vector p(O|v̂)
-        pOvFiles[minVmiIndex]->reset();     // reset per tornar al principi
-        pOvFiles[minVmiIndex]->read( reinterpret_cast<char*>( pOvv.data() ), nObjects * sizeof(float) );    // llegim...
-        pOvFiles[minVmiIndex]->reset();     // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-        // límits
-        bool limitN = m_computeBestViewsNRadioButton->isChecked();
-        int n = qMin( m_computeBestViewsNSpinBox->value(), nViewpoints );
-        bool limitThreshold = m_computeBestViewsThresholdRadioButton->isChecked();
-        float threshold = m_computeBestViewsThresholdDoubleSpinBox->value();
-        float IVO = 0.0f;       // I(V,O)
-        for ( int i = 0; i < nViewpoints; i++ ) IVO += viewProbabilities.at( i ) * m_vmi.at( i );   // calcular I(V,O)
-        float IvvO = minVmi;    // I(v̂,O)
-
-        if ( limitN )
-        {
-            DEBUG_LOG( QString( "límit %1 vistes" ).arg( n ) );
-        }
-        if ( limitThreshold )
-        {
-            DEBUG_LOG( QString( "límit llindar %1" ).arg( threshold ) );
-        }
-
-        DEBUG_LOG( QString( "I(V,O) = %1" ).arg( IVO ) );
-        DEBUG_LOG( "Millors vistes:" );
-        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( viewpoints.at( minVmiIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
-
-        if ( limitN )
-        {
-            m_vmiProgressBar->setValue( 100 / n );
-            m_vmiProgressBar->repaint();
-        }
-
-        if ( limitThreshold )
-        {
-            m_vmiProgressBar->setValue( 0 );
-            m_vmiProgressBar->setMaximum( 0 );
-            m_vmiProgressBar->repaint();
-        }
-
-        m_vmiProgressBar->repaint();
-
-        float *pOvi = new float[nObjects];
-
-        while ( ( limitN && m_bestViews.size() < n ) || ( limitThreshold && IvvO / IVO > threshold ) )
-        {
-            int nRemainingViews = viewpointIndexList.size();
-            float pvvMin = 0.0f;
-            QVector<float> pOvvMin;
-            float IvvOMin = 0.0f;
-            int iMin = 0;
-
-            for ( int i = 0; i < nRemainingViews; i++ )
-            {
-                int viewIndex = viewpointIndexList.at( i );
-                float pvi = viewProbabilities.at( viewIndex );
-                pOvFiles[viewIndex]->reset();   // reset per tornar al principi
-                pOvFiles[viewIndex]->read( reinterpret_cast<char*>( pOvi ), nObjects * sizeof(float) ); // llegim...
-                pOvFiles[viewIndex]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-                float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
-                QVector<float> pOvvi( pOvv );   // vector p(O|v̂) afegint aquesta vista
-                for ( unsigned int j = 0; j < nObjects; j++ ) pOvvi[j] = ( pvv * pOvv.at( j ) + pvi * pOvi[j] ) / pvvi;
-                float IvviO = InformationTheory<float>::kullbackLeiblerDivergence( pOvvi, objectProbabilities );    // I(v̂,O) afegint aquesta vista
-
-                if ( i == 0 || IvviO < IvvOMin )
-                {
-                    pvvMin = pvvi;
-                    pOvvMin = pOvvi;
-                    IvvOMin = IvviO;
-                    iMin = i;
-                }
-            }
-
-            pvv = pvvMin;
-            pOvv = pOvvMin;
-            IvvO = IvvOMin;
-            int viewIndex = viewpointIndexList.takeAt( iMin );
-            m_bestViews << qMakePair( viewIndex, viewpoints.at( viewIndex ) );
-            DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( m_bestViews.size() - 1 ).arg( viewIndex + 1 ).arg( viewpoints.at( viewIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
-
-            if ( limitN ) m_vmiProgressBar->setValue( 100 * m_bestViews.size() / n );
-            m_vmiProgressBar->repaint();
-        }
-
-        delete[] pOvi;
-
-        if ( limitThreshold )
-        {
-            m_vmiProgressBar->setMaximum( 100 );
-            m_vmiProgressBar->setValue( 100 );
-            m_vmiProgressBar->repaint();
-        }
-
+        this->computeBestViews( viewpoints, viewProbabilities, objectProbabilities, pOvFiles );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
-
-        m_saveBestViewsPushButton->setEnabled( true );
-        m_tourBestViewsPushButton->setEnabled( true );
     }
 
     // guided tour
@@ -1873,6 +1753,134 @@ void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerat
     if ( computeVmi ) m_saveVmiPushButton->setEnabled( true );
     if ( computeViewpointUnstabilities ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
     if ( computeEvmi ) m_saveEvmiPushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::computeBestViews( const QVector<Vector3> &viewpoints, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles )
+{
+    int nViewpoints = viewpoints.size();
+    int nObjects = objectProbabilities.size();
+
+    m_bestViews.clear();
+
+    // millor vista
+    float minVmi = m_vmi.at( 0 );
+    int minVmiIndex = 0;
+
+    for ( int i = 1; i < nViewpoints; i++ )
+    {
+        float vmi = m_vmi.at( i );
+
+        if ( vmi < minVmi )
+        {
+            minVmi = vmi;
+            minVmiIndex = i;
+        }
+    }
+
+    m_bestViews << qMakePair( minVmiIndex, viewpoints.at( minVmiIndex ) );
+
+    QList<int> viewpointIndexList;
+    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
+    viewpointIndexList.removeAt( minVmiIndex );
+
+    float pvv = viewProbabilities.at( minVmiIndex );    // p(v̂)
+    QVector<float> pOvv( nObjects );    // vector p(O|v̂)
+    pOvFiles[minVmiIndex]->reset();     // reset per tornar al principi
+    pOvFiles[minVmiIndex]->read( reinterpret_cast<char*>( pOvv.data() ), nObjects * sizeof(float) );    // llegim...
+    pOvFiles[minVmiIndex]->reset();     // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+    // límits
+    bool limitN = m_computeBestViewsNRadioButton->isChecked();
+    int n = qMin( m_computeBestViewsNSpinBox->value(), nViewpoints );
+    bool limitThreshold = m_computeBestViewsThresholdRadioButton->isChecked();
+    float threshold = m_computeBestViewsThresholdDoubleSpinBox->value();
+    float IVO = 0.0f;       // I(V,O)
+    for ( int i = 0; i < nViewpoints; i++ ) IVO += viewProbabilities.at( i ) * m_vmi.at( i );   // calcular I(V,O)
+    float IvvO = minVmi;    // I(v̂,O)
+
+    if ( limitN )
+    {
+        DEBUG_LOG( QString( "límit %1 vistes" ).arg( n ) );
+    }
+    if ( limitThreshold )
+    {
+        DEBUG_LOG( QString( "límit llindar %1" ).arg( threshold ) );
+    }
+
+    DEBUG_LOG( QString( "I(V,O) = %1" ).arg( IVO ) );
+    DEBUG_LOG( "Millors vistes:" );
+    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( viewpoints.at( minVmiIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
+
+    if ( limitN )
+    {
+        m_vmiProgressBar->setValue( 100 / n );
+        m_vmiProgressBar->repaint();
+    }
+
+    if ( limitThreshold )
+    {
+        m_vmiProgressBar->setValue( 0 );
+        m_vmiProgressBar->setMaximum( 0 );
+        m_vmiProgressBar->repaint();
+    }
+
+    m_vmiProgressBar->repaint();
+
+    float *pOvi = new float[nObjects];
+
+    while ( ( limitN && m_bestViews.size() < n ) || ( limitThreshold && IvvO / IVO > threshold ) )
+    {
+        int nRemainingViews = viewpointIndexList.size();
+        float pvvMin = 0.0f;
+        QVector<float> pOvvMin;
+        float IvvOMin = 0.0f;
+        int iMin = 0;
+
+        for ( int i = 0; i < nRemainingViews; i++ )
+        {
+            int viewIndex = viewpointIndexList.at( i );
+            float pvi = viewProbabilities.at( viewIndex );
+            pOvFiles[viewIndex]->reset();   // reset per tornar al principi
+            pOvFiles[viewIndex]->read( reinterpret_cast<char*>( pOvi ), nObjects * sizeof(float) ); // llegim...
+            pOvFiles[viewIndex]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
+            QVector<float> pOvvi( pOvv );   // vector p(O|v̂) afegint aquesta vista
+            for ( int j = 0; j < nObjects; j++ ) pOvvi[j] = ( pvv * pOvv.at( j ) + pvi * pOvi[j] ) / pvvi;
+            float IvviO = InformationTheory<float>::kullbackLeiblerDivergence( pOvvi, objectProbabilities );    // I(v̂,O) afegint aquesta vista
+
+            if ( i == 0 || IvviO < IvvOMin )
+            {
+                pvvMin = pvvi;
+                pOvvMin = pOvvi;
+                IvvOMin = IvviO;
+                iMin = i;
+            }
+        }
+
+        pvv = pvvMin;
+        pOvv = pOvvMin;
+        IvvO = IvvOMin;
+        int viewIndex = viewpointIndexList.takeAt( iMin );
+        m_bestViews << qMakePair( viewIndex, viewpoints.at( viewIndex ) );
+        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( m_bestViews.size() - 1 ).arg( viewIndex + 1 ).arg( viewpoints.at( viewIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
+
+        if ( limitN ) m_vmiProgressBar->setValue( 100 * m_bestViews.size() / n );
+        m_vmiProgressBar->repaint();
+    }
+
+    delete[] pOvi;
+
+    if ( limitThreshold )
+    {
+        m_vmiProgressBar->setMaximum( 100 );
+        m_vmiProgressBar->setValue( 100 );
+        m_vmiProgressBar->repaint();
+    }
+
+    m_saveBestViewsPushButton->setEnabled( true );
+    m_tourBestViewsPushButton->setEnabled( true );
 }
 
 
