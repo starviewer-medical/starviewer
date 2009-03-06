@@ -185,16 +185,6 @@ public slots:
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews(){ m_grabList.clear(); };
 
-    /// Activa o desactiva que el manager escolti els events per processar tools.
-    /// \deprecated quan s'integri el nou model de tools
-    virtual void setEnableOldTools( bool ){};
-    virtual void enableOldTools(){};
-    virtual void disableOldTools(){};
-
-    /// Interroga al tool manager per la tool demanada. Segons si aquesta tool està disponible o no el viewer farà el que calgui. Reimplementat en cada viewer
-    /// \deprecated quan s'integri el nou model de tools per complet
-    virtual void setOldTool( QString ){};
-
     /// Crida que re-inicia a l'estat incial el visor
     virtual void reset() = 0;
 
