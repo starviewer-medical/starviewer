@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "qglialestimationextension.h"
 
-#include "toolsactionfactory.h"
 #include "volume.h"
 #include "logging.h"
 #include "q2dviewer.h"
@@ -24,7 +23,6 @@
 //Qt
 #include <QString>
 #include <QAction>
-#include <QToolBar>
 #include <QSettings>
 #include <QMessageBox>
 #include <QContextMenuEvent>
@@ -1261,22 +1259,6 @@ void QGlialEstimationExtension::applyT1Segmentation()
     m_T1VolumeLabel->setEnabled( true );
     m_T1VolumeLineEdit->setEnabled( true );
 
-/*    m_editorAction->trigger();
-    m_diffusion2DView->disableOldTools();
-    m_editorAction->setEnabled( true );
-
-    m_paintEditorAction->setEnabled(true);
-    m_eraseEditorAction->setEnabled(true);
-    m_eraseSliceEditorAction->setEnabled(true);
-    m_eraseRegionEditorAction->setEnabled(true);
-    m_eraseEditorAction->trigger();
-    m_editorTool = QDifuPerfuSegmentationExtension::Erase;
-    m_editorSize->setEnabled(true);
-
-    m_lesionViewAction->setEnabled( true );
-    m_lesionViewAction->trigger();
-    this->viewLesionOverlay();
-*/
     m_2DView_1->refresh();
 
     QApplication::restoreOverrideCursor();

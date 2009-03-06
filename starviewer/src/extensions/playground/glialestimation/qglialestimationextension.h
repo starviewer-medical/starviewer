@@ -13,7 +13,6 @@
 
 // FWD declarations
 class QAction;
-class QToolBar;
 class vtkImageMask;
 class vtkActor;
 class vtkImageActor;
@@ -22,7 +21,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class ToolsActionFactory;
 class ToolManager;
 class StrokeSegmentationMethod;
 
@@ -131,7 +129,6 @@ private:
     QAction *m_moveAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_voxelInformationAction;
-    ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;

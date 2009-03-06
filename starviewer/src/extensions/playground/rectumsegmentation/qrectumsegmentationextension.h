@@ -23,7 +23,6 @@ namespace udg {
 // FWD declarations
 class Volume;
 class rectumSegmentationMethod;
-class ToolsActionFactory;
 class ToolManager;
 
 /**
