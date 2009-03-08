@@ -5,14 +5,13 @@
 #include <vtkCamera.h>
 #include <vtkEncodedGradientEstimator.h>
 #include <vtkEncodedGradientShader.h>
+#include <vtkInteractorStyleSwitch.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkVolumeRayCastMapper.h>
 
 #include "abortrendercommand.h"
 #include "experimental3dvolume.h"
-#include "vector3.h"
-#include "../optimalviewpoint/vtkInteractorStyleSwitchGgg.h"
 
 
 namespace udg {
@@ -21,7 +20,7 @@ namespace udg {
 QExperimental3DViewer::QExperimental3DViewer( QWidget *parent )
  : QViewer( parent ), m_volume( 0 )
 {
-    vtkInteractorStyleSwitchGgg *style = vtkInteractorStyleSwitchGgg::New();
+    vtkInteractorStyleSwitch *style = vtkInteractorStyleSwitch::New();
     getInteractor()->SetInteractorStyle( style );
     style->SetCurrentStyleToTrackballCamera();
     style->Delete();
