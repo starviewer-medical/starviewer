@@ -10,7 +10,6 @@
 #define UDGOPTIMALVIEWPOINTINPUTPARAMETERSFORM_H
 
 
-#include "qinputparameters.h"
 #include "ui_optimalviewpointinputparametersformbase.h"
 
 #include "transferfunction.h"
@@ -24,7 +23,7 @@ class Volume;
  * Interfície per definir tots els paràmetres del mètode de visualització del
  * Punt de Vista Òptim.
  */
-class OptimalViewpointInputParametersForm : public udg::QInputParameters, private ::Ui::OptimalViewpointInputParametersFormBase
+class OptimalViewpointInputParametersForm : public QWidget, private ::Ui::OptimalViewpointInputParametersFormBase
 {
 Q_OBJECT
 public:
@@ -40,13 +39,13 @@ public slots:
      * ens diguin mitjançant un identificador (que, en realitat, serà un enum).
      * Serveix per canviar els valors a partir d'una classe Parameters.
      */
-    virtual void readParameter( int index );
+    void readParameter( int index );
 
     /**
      * Escriu tots els valors de paràmetres que té actualment al Parameters
      * associat.
      */
-    virtual void writeAllParameters();
+    void writeAllParameters();
 
     /// Assigna la funció de transferència actual.
     void setTransferFunction( const TransferFunction & transferFunction );

@@ -17,7 +17,7 @@
 namespace udg {
 
 OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidget * parent )
-    : QInputParameters( parent )
+    : QWidget( parent )
 {
     setupUi( this );
 
@@ -29,8 +29,6 @@ OptimalViewpointInputParametersForm::OptimalViewpointInputParametersForm( QWidge
     m_transferFunction.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
     m_transferFunction.addPoint( 255.0, QColor( 255, 255, 255, 255 ) );
     m_inited = false;
-
-    this->disableIndividualSynchronization();
 
 
 //     connect( m_gradientEditor, SIGNAL( gradientStopsChanged(const QGradientStops &) ),
