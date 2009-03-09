@@ -73,7 +73,8 @@ HEADERS += databaseconnection.h \
            parsexmlrispierrequest.h \
            listenrisrequestthread.h \
            qlistenrisrequestsconfigurationscreen.h \
-           qpopuprisrequestsscreen.h
+           qpopuprisrequestsscreen.h \
+           utils.h
 
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
@@ -127,7 +128,8 @@ SOURCES += databaseconnection.cpp \
            parsexmlrispierrequest.cpp \
            listenrisrequestthread.cpp \
            qlistenrisrequestsconfigurationscreen.cpp \
-           qpopuprisrequestsscreen.cpp
+           qpopuprisrequestsscreen.cpp \
+           utils.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
