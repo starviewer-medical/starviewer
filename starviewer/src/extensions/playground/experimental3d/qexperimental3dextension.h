@@ -67,6 +67,9 @@ private:
 
     void loadColorVomiPalette( const QString &fileName );
 
+    QString getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter );
+    QString getFileNameToSave();
+
 private slots:
 
     /// Obre un diàleg per triar el color de fons.
