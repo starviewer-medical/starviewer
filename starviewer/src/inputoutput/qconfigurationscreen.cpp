@@ -18,6 +18,7 @@
 #include "starviewerapplication.h"
 #include "starviewersettings.h"
 #include "logging.h"
+#include "utils.h"
 
 namespace udg {
 
@@ -35,6 +36,8 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
 
     configureInputValidator();
     setWidthColumns();
+
+    checkIncomingConnectionsPortNotInUse();
 }
 
 QConfigurationScreen::~QConfigurationScreen()
@@ -49,6 +52,9 @@ void QConfigurationScreen::createConnections()
     connect( m_textAETitleMachine, SIGNAL( textChanged(const QString &) ) , SLOT( enableApplyButtons() ) );
     connect( m_textTimeout, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textLocalPort, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
+    //En el moment en que ens editen el textBox si apareixia el missatge de port en ús el fem invisible
+    connect( m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(hideWarningIncomingConnectionsPortInUse()));
+    connect(m_textLocalPort, SIGNAL(editingFinished()), SLOT(textLocalPortLostFocus()));
     connect( m_textMaxConnections, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textInstitutionName, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textInstitutionAddress, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
@@ -425,6 +431,19 @@ void QConfigurationScreen::enableApplyButtons()
     m_configurationChanged = true;
 }
 
+void QConfigurationScreen::textLocalPortLostFocus()
+{
+    if (m_textLocalPort->isModified())
+    {
+        checkIncomingConnectionsPortNotInUse();
+    }
+}
+
+void QConfigurationScreen::hideWarningIncomingConnectionsPortInUse()
+{
+    m_warningFrameIncomingConnectionsPortInUse->setVisible(false);
+}
+
 void QConfigurationScreen::saveColumnsWidth()
 {
     StarviewerSettings settings;
@@ -438,6 +457,12 @@ void QConfigurationScreen::closeEvent( QCloseEvent* event )
 {
     saveColumnsWidth();
     event->accept();
+}
+
+void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
+{
+    ///Si està en ús el frame que conté el warning es fa visible
+    m_warningFrameIncomingConnectionsPortInUse->setVisible(Utils::isPortInUse(m_textLocalPort->text().toInt()));
 }
 
 };

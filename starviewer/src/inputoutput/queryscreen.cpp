@@ -35,6 +35,7 @@
 #include "patient.h"
 #include "starviewerapplication.h"
 #include "parsexmlrispierrequest.h"
+#include "utils.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -51,8 +52,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     initialize();//inicialitzem les variables necessàries
     //connectem signals i slots
     createConnections();
-    //Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent
-    checkDatabaseImageIntegrity();
+    //Fa les comprovacions necessaries per poder executar la QueryScreen de forma correcte   
+    checkRequeriments();
     //esborrem els estudis vells de la cache
     deleteOldStudies();
     readSettings();
@@ -224,6 +225,28 @@ void QueryScreen::deleteOldStudies()
     if (settings.getDeleteOldStudiesHasNotViewedInDays())
     {
         m_qdeleteOldStudiesThread.deleteOldStudies();
+    }
+}
+
+void QueryScreen::checkRequeriments()
+{
+    //Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent
+    checkDatabaseImageIntegrity();
+    //Comprova que el port pel qual es reben les descàrregues d'objectes dicom del PACS no estigui ja en ús
+    checkIncomingConnectionsPacsPortNotInUse();
+}
+
+void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
+{
+    StarviewerSettings settings;
+
+    if (Utils::isPortInUse(settings.getLocalPort().toInt()))
+    {
+        QString message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(settings.getLocalPort());
+        message += tr("\n\nStarviewer couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change Starviewer port for incoming connections from PACS in the configuration screen.").arg(settings.getLocalPort());
+        message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
+
+        QMessageBox::warning(this, ApplicationNameString, message);
     }
 }
 
@@ -1547,6 +1570,12 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             message += tr("an error ocurred while retrieving some study, some retrieves may have failed.");
             message += tr("\n\nData is either missing or corrupted on PACS. Try again later.");
             message += tr("\n\nIf the problem persists, please contact your PACS administrator to solve the problem");
+            QMessageBox::critical( this , ApplicationNameString , message );
+            break;
+       case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
+            message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(StarviewerSettings().getLocalPort());
+            message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
+            message += tr("\n\nIf there is another Starviewer window retrieving studies from the PACS please wait until those retrieving has finished and try again.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         default:

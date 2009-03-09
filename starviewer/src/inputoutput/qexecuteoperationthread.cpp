@@ -30,6 +30,7 @@
 #include "localdatabasemanagerthreaded.h"
 #include "qthreadrunwithexec.h"
 #include "deletedirectory.h"
+#include "utils.h"
 
 namespace udg {
 
@@ -146,6 +147,18 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         localDatabaseManager.setStudyRetrieveFinished();
         return;
     }
+
+    if (Utils::isPortInUse(StarviewerSettings().getLocalPort().toInt()))
+    {
+        errorRetrieving(studyUID, IncomingConnectionsPortPacsInUse);
+        cancelAllPendingOperations(Operation::Retrieve);
+        cancelAllPendingOperations(Operation::View);
+        localDatabaseManager.setStudyRetrieveFinished();
+        
+        ERROR_LOG("El port " + StarviewerSettings().getLocalPort() + " per a connexions entrants del PACS, està en ús, no es pot descarregar l'estudi");
+        return;
+    }
+
 
     PacsServer pacsConnection(operation.getPacsParameters());//connemtem al pacs
     state = pacsConnection.connect(PacsServer::retrieveImages,PacsServer::studyLevel);
