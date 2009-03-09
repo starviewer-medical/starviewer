@@ -27,6 +27,19 @@ public:
     QViewpointDistributionWidget( QWidget *parent = 0 );
     ~QViewpointDistributionWidget();
 
+    /// Selecciona la distribució uniforme amb 4 punts.
+    void setToUniform4();
+    /// Selecciona la distribució uniforme amb 6 punts.
+    void setToUniform6();
+    /// Selecciona la distribució uniforme amb 8 punts.
+    void setToUniform8();
+    /// Selecciona la distribució uniforme amb 12 punts.
+    void setToUniform12();
+    /// Selecciona la distribució uniforme amb 20 punts.
+    void setToUniform20();
+    /// Selecciona la distribució quasi-uniforme amb el nivell de recursió \a recursionLevel.
+    void setToQuasiUniform( int recursionLevel );
+
     /// Retorna cert si s'ha seleccionat una distribució uniforme.
     bool isUniform() const;
     /// Retorna el nombre de punts de vista seleccionat.

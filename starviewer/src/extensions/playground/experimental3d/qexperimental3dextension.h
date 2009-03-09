@@ -62,6 +62,10 @@ private:
     void computeBestViews( const QVector<Vector3> &viewpoints, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula el guided tour.
     void computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
+    /// Escriu al log un error d'un programa.
+    void logProgramError( int lineNumber, const QString &error, const QString &extra ) const;
+
+    void loadColorVomiPalette( const QString &fileName );
 
 private slots:
 

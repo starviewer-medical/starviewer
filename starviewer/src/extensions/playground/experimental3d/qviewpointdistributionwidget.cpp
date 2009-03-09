@@ -22,6 +22,48 @@ QViewpointDistributionWidget::~QViewpointDistributionWidget()
 }
 
 
+void QViewpointDistributionWidget::setToUniform4()
+{
+    m_uniformRadioButton->setChecked( true );
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 0 );
+}
+
+
+void QViewpointDistributionWidget::setToUniform6()
+{
+    m_uniformRadioButton->setChecked( true );
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 1 );
+}
+
+
+void QViewpointDistributionWidget::setToUniform8()
+{
+    m_uniformRadioButton->setChecked( true );
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 2 );
+}
+
+
+void QViewpointDistributionWidget::setToUniform12()
+{
+    m_uniformRadioButton->setChecked( true );
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 3 );
+}
+
+
+void QViewpointDistributionWidget::setToUniform20()
+{
+    m_uniformRadioButton->setChecked( true );
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 4 );
+}
+
+
+void QViewpointDistributionWidget::setToQuasiUniform( int recursionLevel )
+{
+    m_quasiUniformRadioButton->setChecked( true );
+    m_quasiUniformRecursionLevelSpinBox->setValue( recursionLevel );
+}
+
+
 bool QViewpointDistributionWidget::isUniform() const
 {
     return m_uniformRadioButton->isChecked();
