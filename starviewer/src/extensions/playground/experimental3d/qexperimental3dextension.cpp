@@ -26,7 +26,7 @@ namespace udg {
 QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
  : QWidget( parent ),
    m_volume( 0 ),
-   m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 )
+   m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 ), m_interactive( true )
 {
     setupUi( this );
 
@@ -358,7 +358,7 @@ void QExperimental3DExtension::loadCamera()
         if ( !cameraFile.open( QFile::ReadOnly | QFile::Text ) )
         {
             ERROR_LOG( QString( "No es pot llegir el fitxer " ) + cameraFileName );
-            QMessageBox::warning( this, tr("Can't load"), QString( tr("Can't load from file ") ) + cameraFileName );
+            if ( m_interactive ) QMessageBox::warning( this, tr("Can't load"), QString( tr("Can't load from file ") ) + cameraFileName );
             return;
         }
 
@@ -408,7 +408,7 @@ void QExperimental3DExtension::saveCamera()
         if ( !cameraFile.open( QFile::WriteOnly | QFile::Truncate | QFile::Text ) )
         {
             ERROR_LOG( QString( "No es pot escriure al fitxer " ) + cameraFileName );
-            QMessageBox::warning( this, tr("Can't save"), QString( tr("Can't save to file ") ) + cameraFileName );
+            if ( m_interactive ) QMessageBox::warning( this, tr("Can't save"), QString( tr("Can't save to file ") ) + cameraFileName );
             return;
         }
 
@@ -644,7 +644,7 @@ void QExperimental3DExtension::loadObscurance()
         else
         {
             m_obscuranceSavePushButton->setEnabled( false );
-            QMessageBox::warning( this, tr("Can't load obscurance"), QString( tr("Can't load obscurance from file ") ) + obscuranceFileName );
+            if ( m_interactive ) QMessageBox::warning( this, tr("Can't load obscurance"), QString( tr("Can't load obscurance from file ") ) + obscuranceFileName );
         }
     }
 }
@@ -657,7 +657,9 @@ void QExperimental3DExtension::saveObscurance()
     if ( !obscuranceFileName.isNull() )
     {
         if ( !m_obscurance->save( obscuranceFileName ) )
-            QMessageBox::warning( this, tr("Can't save obscurance"), QString( tr("Can't save obscurance to file ") ) + obscuranceFileName );
+        {
+            if ( m_interactive ) QMessageBox::warning( this, tr("Can't save obscurance"), QString( tr("Can't save obscurance to file ") ) + obscuranceFileName );
+        }
     }
 }
 
@@ -1834,7 +1836,7 @@ void QExperimental3DExtension::loadVmi( const QString &fileName )
     if ( !vmiFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + fileName );
         return;
     }
 
@@ -1872,7 +1874,7 @@ void QExperimental3DExtension::saveVmi( const QString &fileName )
     if ( !vmiFile.open( mode ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save VMI"), QString( tr("Can't save VMI to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save VMI"), QString( tr("Can't save VMI to file ") ) + fileName );
         return;
     }
 
@@ -1907,7 +1909,7 @@ void QExperimental3DExtension::loadViewpointUnstabilities( const QString &fileNa
     if ( !viewpointUnstabilitiesFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load viewpoint unstabilities"), QString( tr("Can't load viewpoint unstabilities from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint unstabilities"), QString( tr("Can't load viewpoint unstabilities from file ") ) + fileName );
         return;
     }
 
@@ -1945,7 +1947,7 @@ void QExperimental3DExtension::saveViewpointUnstabilities( const QString &fileNa
     if ( !viewpointUnstabilitiesFile.open( mode ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save viewpoint unstabilities"), QString( tr("Can't save viewpoint unstabilities to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint unstabilities"), QString( tr("Can't save viewpoint unstabilities to file ") ) + fileName );
         return;
     }
 
@@ -1980,7 +1982,7 @@ void QExperimental3DExtension::loadBestViews( const QString &fileName )
     if ( !bestViewsFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load best views"), QString( tr("Can't load best views from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load best views"), QString( tr("Can't load best views from file ") ) + fileName );
         return;
     }
 
@@ -2021,7 +2023,7 @@ void QExperimental3DExtension::saveBestViews( const QString &fileName )
     if ( !bestViewsFile.open( mode ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save best views"), QString( tr("Can't save best views to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save best views"), QString( tr("Can't save best views to file ") ) + fileName );
         return;
     }
 
@@ -2060,7 +2062,7 @@ void QExperimental3DExtension::loadGuidedTour( const QString &fileName )
     if ( !guidedTourFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load guided tour"), QString( tr("Can't load guided tour from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load guided tour"), QString( tr("Can't load guided tour from file ") ) + fileName );
         return;
     }
 
@@ -2101,7 +2103,7 @@ void QExperimental3DExtension::saveGuidedTour( const QString &fileName )
     if ( !guidedTourFile.open( mode ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save guided tour"), QString( tr("Can't save guided tour to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save guided tour"), QString( tr("Can't save guided tour to file ") ) + fileName );
         return;
     }
 
@@ -2140,7 +2142,7 @@ void QExperimental3DExtension::loadVomi( const QString &fileName )
     if ( !vomiFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load VoMI"), QString( tr("Can't load VoMI from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VoMI"), QString( tr("Can't load VoMI from file ") ) + fileName );
         return;
     }
 
@@ -2178,7 +2180,7 @@ void QExperimental3DExtension::saveVomi( const QString &fileName )
     if ( !vomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save VoMI"), QString( tr("Can't save VoMI to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save VoMI"), QString( tr("Can't save VoMI to file ") ) + fileName );
         return;
     }
 
@@ -2216,7 +2218,7 @@ void QExperimental3DExtension::loadVoxelSaliencies( const QString &fileName )
     if ( !voxelSalienciesFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load voxel saliencies"), QString( tr("Can't load voxel saliencies from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load voxel saliencies"), QString( tr("Can't load voxel saliencies from file ") ) + fileName );
         return;
     }
 
@@ -2253,7 +2255,7 @@ void QExperimental3DExtension::saveVoxelSaliencies( const QString &fileName )
     if ( !voxelSalienciesFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save voxel saliencies"), QString( tr("Can't save voxel saliencies to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save voxel saliencies"), QString( tr("Can't save voxel saliencies to file ") ) + fileName );
         return;
     }
 
@@ -2291,7 +2293,7 @@ void QExperimental3DExtension::loadViewpointVomi( const QString &fileName )
     if ( !viewpointVomiFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load viewpoint VoMI"), QString( tr("Can't load viewpoint VoMI from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint VoMI"), QString( tr("Can't load viewpoint VoMI from file ") ) + fileName );
         return;
     }
 
@@ -2329,7 +2331,7 @@ void QExperimental3DExtension::saveViewpointVomi( const QString &fileName )
     if ( !viewpointVomiFile.open( mode ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save viewpoint VoMI"), QString( tr("Can't save viewpoint VoMI to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint VoMI"), QString( tr("Can't save viewpoint VoMI to file ") ) + fileName );
         return;
     }
 
@@ -2364,7 +2366,7 @@ void QExperimental3DExtension::loadEvmi( const QString &fileName )
     if ( !evmiFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load EVMI"), QString( tr("Can't load EVMI from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load EVMI"), QString( tr("Can't load EVMI from file ") ) + fileName );
         return;
     }
 
@@ -2402,7 +2404,7 @@ void QExperimental3DExtension::saveEvmi( const QString &fileName )
     if ( !evmiFile.open( mode ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save EVMI"), QString( tr("Can't save EVMI to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save EVMI"), QString( tr("Can't save EVMI to file ") ) + fileName );
         return;
     }
 
@@ -2437,7 +2439,7 @@ void QExperimental3DExtension::loadColorVomiPalette( const QString &fileName )
     if ( !colorVomiPaletteFile.open( QFile::ReadOnly | QFile::Text ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + fileName );
         return;
     }
 
@@ -2490,7 +2492,7 @@ void QExperimental3DExtension::loadColorVomi( const QString &fileName )
     if ( !colorVomiFile.open( QFile::ReadOnly ) )
     {
         DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't load color VoMI"), QString( tr("Can't load color VoMI from file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI"), QString( tr("Can't load color VoMI from file ") ) + fileName );
         return;
     }
 
@@ -2532,7 +2534,7 @@ void QExperimental3DExtension::saveColorVomi( const QString &fileName )
     if ( !colorVomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
     {
         DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        QMessageBox::warning( this, tr("Can't save color VoMI"), QString( tr("Can't save color VoMI to file ") ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save color VoMI"), QString( tr("Can't save color VoMI to file ") ) + fileName );
         return;
     }
 
@@ -2584,243 +2586,246 @@ void QExperimental3DExtension::loadAndRunProgram()
 {
     QString programFileName = getFileNameToLoad( "programDir", tr("Load program"), tr("Text files (*.txt);;All files (*)") );
 
-    if ( !programFileName.isNull() )
+    if ( programFileName.isNull() ) return;
+
+    QFile programFile( programFileName );
+
+    if ( !programFile.open( QFile::ReadOnly | QFile::Text ) )
     {
-        QFile programFile( programFileName );
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + programFileName );
+        QMessageBox::warning( this, tr("Can't load program"), QString( tr("Can't load program from file ") ) + programFileName );
+        return;
+    }
 
-        if ( !programFile.open( QFile::ReadOnly | QFile::Text ) )
+    m_interactive = false;
+
+    QTextStream in( &programFile );
+    bool run = false;
+    bool errors = false;
+
+    for ( int i = 0; i < 2; i++ )
+    {
+        int lineNumber = 0;
+
+        while ( !in.atEnd() )
         {
-            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + programFileName );
-            QMessageBox::warning( this, tr("Can't load program"), QString( tr("Can't load program from file ") ) + programFileName );
-            return;
-        }
+            lineNumber++;
 
-        QTextStream in( &programFile );
-        bool run = false;
-        bool errors = false;
+            QString line = in.readLine();
+            QStringList words = line.split( ' ', QString::SkipEmptyParts );
 
-        for ( int i = 0; i < 2; i++ )
-        {
-            int lineNumber = 0;
+            if ( words.isEmpty() ) continue;
 
-            while ( !in.atEnd() )
+            QString command = words.at( 0 );
+
+            if ( command == "tab" )
             {
-                lineNumber++;
-
-                QString line = in.readLine();
-                QStringList words = line.split( ' ', QString::SkipEmptyParts );
-
-                if ( words.isEmpty() ) continue;
-
-                QString command = words.at( 0 );
-
-                if ( command == "tab" )
+                if ( words.size() < 2 )
                 {
-                    if ( words.size() < 2 )
-                    {
-                        logProgramError( lineNumber, "Falta el nom de la pestanya", line );
-                        errors = true;
-                        continue;
-                    }
-
-                    const QString &tab = words.at( 1 );
-
-                    if ( tab == "visualization" )
-                    {
-                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
-                    }
-                    else if ( tab == "camera" )
-                    {
-                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
-                    }
-                    else if ( tab == "obscurance" )
-                    {
-                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
-                    }
-                    else if ( tab == "smi" )
-                    {
-                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
-                    }
-                    else if ( tab == "vmi" )
-                    {
-                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
-                    }
-                    else if ( tab == "program" )
-                    {
-                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_programTab );
-                    }
-                    else
-                    {
-                        logProgramError( lineNumber, "El nom de la pestanya és incorrecte", tab );
-                        errors = true;
-                    }
+                    logProgramError( lineNumber, "Falta el nom de la pestanya", line );
+                    errors = true;
+                    continue;
                 }
-                else if ( command == "tf-load" )
-                {
-                    if ( words.size() < 2 )
-                    {
-                        logProgramError( lineNumber, "Falta el nom del fitxer", line );
-                        errors = true;
-                        continue;
-                    }
 
-                    if ( run ) loadTransferFunction( words.at( 1 ) );
+                const QString &tab = words.at( 1 );
+
+                if ( tab == "visualization" )
+                {
+                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
                 }
-                else if ( command == "visualization-ok" )
+                else if ( tab == "camera" )
                 {
-                    if ( run ) doVisualization();
+                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
                 }
-                else if ( command == "vmi-viewpoints" )
+                else if ( tab == "obscurance" )
                 {
-                    if ( words.size() < 3 )
-                    {
-                        logProgramError( lineNumber, "Falten arguments per a la distribució de punts de VMI", line );
-                        errors = true;
-                        continue;
-                    }
-
-                    if ( words.at( 1 ) == "uni" )
-                    {
-                        int number = words.at( 2 ).toInt();
-
-                        switch ( number )
-                        {
-                            case 4: if ( run ) m_vmiViewpointDistributionWidget->setToUniform4(); break;
-                            case 6: if ( run ) m_vmiViewpointDistributionWidget->setToUniform6(); break;
-                            case 8: if ( run ) m_vmiViewpointDistributionWidget->setToUniform8(); break;
-                            case 12: if ( run ) m_vmiViewpointDistributionWidget->setToUniform12(); break;
-                            case 20: if ( run ) m_vmiViewpointDistributionWidget->setToUniform20(); break;
-                            default: logProgramError( lineNumber, "Nombre incorrecte de punts uniformes", words.at( 2 ) ); errors = true; break;
-                        }
-                    }
-                    else if ( words.at( 1 ) == "q-uni" )
-                    {
-                        if ( run ) m_vmiViewpointDistributionWidget->setToQuasiUniform( words.at( 2 ).toInt() );
-                    }
-                    else
-                    {
-                        logProgramError( lineNumber, "Tipus de distribució de punts de VMI incorrecta", words.at( 1 ) );
-                        errors = true;
-                    }
+                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
                 }
-                else if ( command == "vmi-check" || command == "vmi-uncheck" )
+                else if ( tab == "smi" )
                 {
-                    bool check = command == "vmi-check";
-
-                    for ( int j = 1; j < words.size(); j++ )
-                    {
-                        const QString &word = words.at( j );
-
-                        if ( word == "vmi" )
-                        {
-                            if ( run ) m_computeVmiCheckBox->setChecked( check );
-                        }
-                        else if ( word == "unstabilities" )
-                        {
-                            if ( run ) m_computeViewpointUnstabilitiesCheckBox->setChecked( check );
-                        }
-                        else if ( word == "bestviews" )
-                        {
-                            if ( run ) m_computeBestViewsCheckBox->setChecked( check );
-                        }
-                        else if ( word == "guidedtour" )
-                        {
-                            if ( run ) m_computeGuidedTourCheckBox->setChecked( check );
-                        }
-                        else if ( word == "vomi" )
-                        {
-                            if ( run ) m_computeVomiCheckBox->setChecked( check );
-                        }
-                        else if ( word == "saliencies" )
-                        {
-                            if ( run ) m_computeVoxelSalienciesCheckBox->setChecked( check );
-                        }
-                        else if ( word == "vvomi" )
-                        {
-                            if ( run ) m_computeViewpointVomiCheckBox->setChecked( check );
-                        }
-                        else if ( word == "evmi" )
-                        {
-                            if ( run ) m_computeEvmiCheckBox->setChecked( check );
-                        }
-                        else if ( word == "cvomi" )
-                        {
-                            if ( run ) m_computeColorVomiCheckBox->setChecked( check );
-                        }
-                        else
-                        {
-                            logProgramError( lineNumber, "Nom de checkbox incorrecte", word );
-                            errors = true;
-                        }
-                    }
+                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
                 }
-                else if ( command == "vmi-bestviews" )
+                else if ( tab == "vmi" )
                 {
-                    if ( words.size() < 3 )
-                    {
-                        logProgramError( lineNumber, "Falten arguments per als paràmetres de càlculs de les millors vistes", line );
-                        errors = true;
-                        continue;
-                    }
-
-                    if ( words.at( 1 ) == "n" )
-                    {
-                        if ( run )
-                        {
-                            m_computeBestViewsNRadioButton->setChecked( true );
-                            m_computeBestViewsNSpinBox->setValue( words.at( 2 ).toInt() );
-                        }
-                    }
-                    else if ( words.at( 1 ) == "threshold" )
-                    {
-                        if ( run )
-                        {
-                            m_computeBestViewsThresholdRadioButton->setChecked( true );
-                            m_computeBestViewsThresholdDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
-                        }
-                    }
-                    else
-                    {
-                        logProgramError( lineNumber, "Paràmetre incorrecte pel nombre de vistes", words.at( 1 ) );
-                        errors = true;
-                    }
+                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
                 }
-                else if ( command == "vmi-loadpalette" )
+                else if ( tab == "program" )
                 {
-                    if ( words.size() < 2 )
-                    {
-                        logProgramError( lineNumber, "Falten el nom del fitxer de paleta", line );
-                        errors = true;
-                        continue;
-                    }
-
-                    if ( run ) loadColorVomiPalette( words.at( 1 ) );
-                }
-                else if ( command == "vmi-run" )
-                {
-                    if ( run ) computeSelectedVmi();
+                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_programTab );
                 }
                 else
                 {
-                    logProgramError( lineNumber, "Ordre desconeguda", line );
+                    logProgramError( lineNumber, "El nom de la pestanya és incorrecte", tab );
                     errors = true;
                 }
             }
-
-            if ( errors )
+            else if ( command == "tf-load" )
             {
-                QMessageBox::warning( this, tr("Errors in program"), tr("The errors have been written in the log.") );
-                break;
+                if ( words.size() < 2 )
+                {
+                    logProgramError( lineNumber, "Falta el nom del fitxer", line );
+                    errors = true;
+                    continue;
+                }
+
+                if ( run ) loadTransferFunction( words.at( 1 ) );
+            }
+            else if ( command == "visualization-ok" )
+            {
+                if ( run ) doVisualization();
+            }
+            else if ( command == "vmi-viewpoints" )
+            {
+                if ( words.size() < 3 )
+                {
+                    logProgramError( lineNumber, "Falten arguments per a la distribució de punts de VMI", line );
+                    errors = true;
+                    continue;
+                }
+
+                if ( words.at( 1 ) == "uni" )
+                {
+                    int number = words.at( 2 ).toInt();
+
+                    switch ( number )
+                    {
+                        case 4: if ( run ) m_vmiViewpointDistributionWidget->setToUniform4(); break;
+                        case 6: if ( run ) m_vmiViewpointDistributionWidget->setToUniform6(); break;
+                        case 8: if ( run ) m_vmiViewpointDistributionWidget->setToUniform8(); break;
+                        case 12: if ( run ) m_vmiViewpointDistributionWidget->setToUniform12(); break;
+                        case 20: if ( run ) m_vmiViewpointDistributionWidget->setToUniform20(); break;
+                        default: logProgramError( lineNumber, "Nombre incorrecte de punts uniformes", words.at( 2 ) ); errors = true; break;
+                    }
+                }
+                else if ( words.at( 1 ) == "q-uni" )
+                {
+                    if ( run ) m_vmiViewpointDistributionWidget->setToQuasiUniform( words.at( 2 ).toInt() );
+                }
+                else
+                {
+                    logProgramError( lineNumber, "Tipus de distribució de punts de VMI incorrecta", words.at( 1 ) );
+                    errors = true;
+                }
+            }
+            else if ( command == "vmi-check" || command == "vmi-uncheck" )
+            {
+                bool check = command == "vmi-check";
+
+                for ( int j = 1; j < words.size(); j++ )
+                {
+                    const QString &word = words.at( j );
+
+                    if ( word == "vmi" )
+                    {
+                        if ( run ) m_computeVmiCheckBox->setChecked( check );
+                    }
+                    else if ( word == "unstabilities" )
+                    {
+                        if ( run ) m_computeViewpointUnstabilitiesCheckBox->setChecked( check );
+                    }
+                    else if ( word == "bestviews" )
+                    {
+                        if ( run ) m_computeBestViewsCheckBox->setChecked( check );
+                    }
+                    else if ( word == "guidedtour" )
+                    {
+                        if ( run ) m_computeGuidedTourCheckBox->setChecked( check );
+                    }
+                    else if ( word == "vomi" )
+                    {
+                        if ( run ) m_computeVomiCheckBox->setChecked( check );
+                    }
+                    else if ( word == "saliencies" )
+                    {
+                        if ( run ) m_computeVoxelSalienciesCheckBox->setChecked( check );
+                    }
+                    else if ( word == "vvomi" )
+                    {
+                        if ( run ) m_computeViewpointVomiCheckBox->setChecked( check );
+                    }
+                    else if ( word == "evmi" )
+                    {
+                        if ( run ) m_computeEvmiCheckBox->setChecked( check );
+                    }
+                    else if ( word == "cvomi" )
+                    {
+                        if ( run ) m_computeColorVomiCheckBox->setChecked( check );
+                    }
+                    else
+                    {
+                        logProgramError( lineNumber, "Nom de checkbox incorrecte", word );
+                        errors = true;
+                    }
+                }
+            }
+            else if ( command == "vmi-bestviews" )
+            {
+                if ( words.size() < 3 )
+                {
+                    logProgramError( lineNumber, "Falten arguments per als paràmetres de càlculs de les millors vistes", line );
+                    errors = true;
+                    continue;
+                }
+
+                if ( words.at( 1 ) == "n" )
+                {
+                    if ( run )
+                    {
+                        m_computeBestViewsNRadioButton->setChecked( true );
+                        m_computeBestViewsNSpinBox->setValue( words.at( 2 ).toInt() );
+                    }
+                }
+                else if ( words.at( 1 ) == "threshold" )
+                {
+                    if ( run )
+                    {
+                        m_computeBestViewsThresholdRadioButton->setChecked( true );
+                        m_computeBestViewsThresholdDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+                    }
+                }
+                else
+                {
+                    logProgramError( lineNumber, "Paràmetre incorrecte pel nombre de vistes", words.at( 1 ) );
+                    errors = true;
+                }
+            }
+            else if ( command == "vmi-loadpalette" )
+            {
+                if ( words.size() < 2 )
+                {
+                    logProgramError( lineNumber, "Falten el nom del fitxer de paleta", line );
+                    errors = true;
+                    continue;
+                }
+
+                if ( run ) loadColorVomiPalette( words.at( 1 ) );
+            }
+            else if ( command == "vmi-run" )
+            {
+                if ( run ) computeSelectedVmi();
             }
             else
             {
-                in.seek( 0 );
-                run = true;
+                logProgramError( lineNumber, "Ordre desconeguda", line );
+                errors = true;
             }
         }
 
-        programFile.close();
+        if ( errors )
+        {
+            QMessageBox::warning( this, tr("Errors in program"), tr("The errors have been written in the log.") );
+            break;
+        }
+        else
+        {
+            in.seek( 0 );
+            run = true;
+        }
     }
+
+    programFile.close();
+
+    m_interactive = true;
 }
 
 
