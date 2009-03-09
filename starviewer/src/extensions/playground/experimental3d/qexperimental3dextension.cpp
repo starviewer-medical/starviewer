@@ -273,29 +273,15 @@ void QExperimental3DExtension::loadTransferFunction()
 
 void QExperimental3DExtension::saveTransferFunction()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString transferFunctionFileName = getFileNameToSave( "transferFunctionDir", tr("Save transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml" );
 
-    QString transferFunctionDir = settings.value( "transferFunctionDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save transfer function"), transferFunctionDir,
-                            tr("Transfer function files (*.tf);;XML files (*.xml);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "tf" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !transferFunctionFileName.isNull() )
     {
-        QString transferFunctionFileName = saveDialog.selectedFiles().first();
-
         if ( transferFunctionFileName.endsWith( ".xml" ) )
             TransferFunctionIO::toXmlFile( transferFunctionFileName, m_transferFunctionEditor->transferFunction() );
         else
             TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunctionEditor->transferFunction() );
-
-        QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.setValue( "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -413,17 +399,10 @@ void QExperimental3DExtension::loadCamera()
 
 void QExperimental3DExtension::saveCamera()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString cameraFileName = getFileNameToSave( "cameraDir", tr("Save camera parameters"), tr("Camera files (*.cam);;All files (*)"), "cam" );
 
-    QString cameraDir = settings.value( "cameraDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save camera parameters"), cameraDir, tr("Camera files (*.cam);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "cam" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !cameraFileName.isNull() )
     {
-        QString cameraFileName = saveDialog.selectedFiles().first();
         QFile cameraFile( cameraFileName );
 
         if ( !cameraFile.open( QFile::WriteOnly | QFile::Truncate | QFile::Text ) )
@@ -449,12 +428,7 @@ void QExperimental3DExtension::saveCamera()
 
         out.flush();
         cameraFile.close();
-
-        QFileInfo cameraFileInfo( cameraFileName );
-        settings.setValue( "cameraDir", cameraFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -678,26 +652,13 @@ void QExperimental3DExtension::loadObscurance()
 
 void QExperimental3DExtension::saveObscurance()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString obscuranceFileName = getFileNameToSave( "obscuranceDir", tr("Save obscurance"), tr("Data files (*.dat);;All files (*)"), "dat" );
 
-    QString obscuranceDir = settings.value( "obscuranceDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save obscurance"), obscuranceDir, tr("Data files (*.dat);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !obscuranceFileName.isNull() )
     {
-        QString obscuranceFileName = saveDialog.selectedFiles().first();
-
         if ( !m_obscurance->save( obscuranceFileName ) )
             QMessageBox::warning( this, tr("Can't save obscurance"), QString( tr("Can't save obscurance to file ") ) + obscuranceFileName );
-
-        QFileInfo obscuranceFileInfo( obscuranceFileName );
-        settings.setValue( "obscuranceDir", obscuranceFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -1894,17 +1855,10 @@ void QExperimental3DExtension::loadVmi()
 
 void QExperimental3DExtension::saveVmi()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString vmiFileName = getFileNameToSave( "vmiDir", tr("Save VMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
 
-    QString vmiDir = settings.value( "vmiDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save VMI"), vmiDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !vmiFileName.isNull() )
     {
-        QString vmiFileName = saveDialog.selectedFiles().first();
         bool saveAsText = vmiFileName.endsWith( ".txt" );
         QFile vmiFile( vmiFileName );
         QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
@@ -1931,12 +1885,7 @@ void QExperimental3DExtension::saveVmi()
         }
 
         vmiFile.close();
-
-        QFileInfo vmiFileInfo( vmiFileName );
-        settings.setValue( "vmiDir", vmiFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -1975,17 +1924,10 @@ void QExperimental3DExtension::loadViewpointUnstabilities()
 
 void QExperimental3DExtension::saveViewpointUnstabilities()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString viewpointUnstabilitiesFileName = getFileNameToSave( "viewpointUnstabilitiesDir", tr("Save viewpoint unstabilities"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
 
-    QString viewpointUnstabilitiesDir = settings.value( "viewpointUnstabilitiesDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save viewpoint unstabilities"), viewpointUnstabilitiesDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !viewpointUnstabilitiesFileName.isNull() )
     {
-        QString viewpointUnstabilitiesFileName = saveDialog.selectedFiles().first();
         bool saveAsText = viewpointUnstabilitiesFileName.endsWith( ".txt" );
         QFile viewpointUnstabilitiesFile( viewpointUnstabilitiesFileName );
         QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
@@ -2012,12 +1954,7 @@ void QExperimental3DExtension::saveViewpointUnstabilities()
         }
 
         viewpointUnstabilitiesFile.close();
-
-        QFileInfo viewpointUnstabilitiesFileInfo( viewpointUnstabilitiesFileName );
-        settings.setValue( "viewpointUnstabilitiesDir", viewpointUnstabilitiesFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2059,17 +1996,10 @@ void QExperimental3DExtension::loadBestViews()
 
 void QExperimental3DExtension::saveBestViews()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString bestViewsFileName = getFileNameToSave( "bestViewsDir", tr("Save best views"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
 
-    QString bestViewsDir = settings.value( "bestViewsDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save best views"), bestViewsDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !bestViewsFileName.isNull() )
     {
-        QString bestViewsFileName = saveDialog.selectedFiles().first();
         bool saveAsText = bestViewsFileName.endsWith( ".txt" );
         QFile bestViewsFile( bestViewsFileName );
         QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
@@ -2100,12 +2030,7 @@ void QExperimental3DExtension::saveBestViews()
         }
 
         bestViewsFile.close();
-
-        QFileInfo bestViewsFileInfo( bestViewsFileName );
-        settings.setValue( "bestViewsDir", bestViewsFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2147,17 +2072,10 @@ void QExperimental3DExtension::loadGuidedTour()
 
 void QExperimental3DExtension::saveGuidedTour()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString guidedTourFileName = getFileNameToSave( "guidedTourDir", tr("Save guided tour"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
 
-    QString guidedTourDir = settings.value( "guidedTourDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save guided tour"), guidedTourDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !guidedTourFileName.isNull() )
     {
-        QString guidedTourFileName = saveDialog.selectedFiles().first();
         bool saveAsText = guidedTourFileName.endsWith( ".txt" );
         QFile guidedTourFile( guidedTourFileName );
         QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
@@ -2188,12 +2106,7 @@ void QExperimental3DExtension::saveGuidedTour()
         }
 
         guidedTourFile.close();
-
-        QFileInfo guidedTourFileInfo( guidedTourFileName );
-        settings.setValue( "guidedTourDir", guidedTourFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2235,17 +2148,10 @@ void QExperimental3DExtension::loadVomi()
 
 void QExperimental3DExtension::saveVomi()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString vomiFileName = getFileNameToSave( "vomiDir", tr("Save VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
 
-    QString vomiDir = settings.value( "vomiDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save VoMI"), vomiDir, tr("Data files (*.dat);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !vomiFileName.isNull() )
     {
-        QString vomiFileName = saveDialog.selectedFiles().first();
         QFile vomiFile( vomiFileName );
 
         if ( !vomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
@@ -2262,12 +2168,7 @@ void QExperimental3DExtension::saveVomi()
         for ( unsigned int i = 0; i < nObjects; i++ ) out << m_vomi.at( i );
 
         vomiFile.close();
-
-        QFileInfo vomiFileInfo( vomiFileName );
-        settings.setValue( "vomiDir", vomiFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2318,17 +2219,10 @@ void QExperimental3DExtension::loadVoxelSaliencies()
 
 void QExperimental3DExtension::saveVoxelSaliencies()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString voxelSalienciesFileName = getFileNameToSave( "voxelSalienciesDir", tr("Save voxel saliencies"), tr("Data files (*.dat);;All files (*)"), "dat" );
 
-    QString voxelSalienciesDir = settings.value( "voxelSalienciesDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save voxel saliencies"), voxelSalienciesDir, tr("Data files (*.dat);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !voxelSalienciesFileName.isNull() )
     {
-        QString voxelSalienciesFileName = saveDialog.selectedFiles().first();
         QFile voxelSalienciesFile( voxelSalienciesFileName );
 
         if ( !voxelSalienciesFile.open( QFile::WriteOnly | QFile::Truncate ) )
@@ -2345,12 +2239,7 @@ void QExperimental3DExtension::saveVoxelSaliencies()
         for ( unsigned int i = 0; i < nObjects; i++ ) out << m_voxelSaliencies.at( i );
 
         voxelSalienciesFile.close();
-
-        QFileInfo voxelSalienciesFileInfo( voxelSalienciesFileName );
-        settings.setValue( "voxelSalienciesDir", voxelSalienciesFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2399,17 +2288,10 @@ void QExperimental3DExtension::loadViewpointVomi()
 
 void QExperimental3DExtension::saveViewpointVomi()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString viewpointVomiFileName = getFileNameToSave( "viewpointVomiDir", tr("Save viewpoint VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
 
-    QString viewpointVomiDir = settings.value( "viewpointVomiDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save viewpoint VoMI"), viewpointVomiDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !viewpointVomiFileName.isNull() )
     {
-        QString viewpointVomiFileName = saveDialog.selectedFiles().first();
         bool saveAsText = viewpointVomiFileName.endsWith( ".txt" );
         QFile viewpointVomiFile( viewpointVomiFileName );
         QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
@@ -2436,12 +2318,7 @@ void QExperimental3DExtension::saveViewpointVomi()
         }
 
         viewpointVomiFile.close();
-
-        QFileInfo viewpointVomiFileInfo( viewpointVomiFileName );
-        settings.setValue( "viewpointVomiDir", viewpointVomiFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2480,17 +2357,10 @@ void QExperimental3DExtension::loadEvmi()
 
 void QExperimental3DExtension::saveEvmi()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString evmiFileName = getFileNameToSave( "evmiDir", tr("Save EVMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
 
-    QString evmiDir = settings.value( "evmiDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save EVMI"), evmiDir, tr("Data files (*.dat);;Text files (*.txt);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !evmiFileName.isNull() )
     {
-        QString evmiFileName = saveDialog.selectedFiles().first();
         bool saveAsText = evmiFileName.endsWith( ".txt" );
         QFile evmiFile( evmiFileName );
         QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
@@ -2517,12 +2387,7 @@ void QExperimental3DExtension::saveEvmi()
         }
 
         evmiFile.close();
-
-        QFileInfo evmiFileInfo( evmiFileName );
-        settings.setValue( "evmiDir", evmiFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2621,17 +2486,10 @@ void QExperimental3DExtension::loadColorVomi()
 
 void QExperimental3DExtension::saveColorVomi()
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    QString colorVomiFileName = getFileNameToSave( "colorVomiDir", tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
 
-    QString colorVomiDir = settings.value( "colorVomiDir", QString() ).toString();
-    QFileDialog saveDialog( this, tr("Save color VoMI"), colorVomiDir, tr("Data files (*.dat);;All files (*)") );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( "dat" );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
+    if ( !colorVomiFileName.isNull() )
     {
-        QString colorVomiFileName = saveDialog.selectedFiles().first();
         QFile colorVomiFile( colorVomiFileName );
 
         if ( !colorVomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
@@ -2648,12 +2506,7 @@ void QExperimental3DExtension::saveColorVomi()
         for ( unsigned int i = 0; i < nObjects; i++ ) out << m_colorVomi.at( i ).x << m_colorVomi.at( i ).y << m_colorVomi.at( i ).z;
 
         colorVomiFile.close();
-
-        QFileInfo colorVomiFileInfo( colorVomiFileName );
-        settings.setValue( "colorVomiDir", colorVomiFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
 
 
@@ -2952,6 +2805,31 @@ QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirK
 
     if ( !fileName.isNull() )
     {
+        QFileInfo fileInfo( fileName );
+        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+
+    return fileName;
+}
+
+
+QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix )
+{
+    QString fileName;
+
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString dir = settings.value( settingsDirKey, QString() ).toString();
+    QFileDialog saveDialog( this, caption, dir, filter );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( defaultSuffix );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        fileName = saveDialog.selectedFiles().first();
         QFileInfo fileInfo( fileName );
         settings.setValue( settingsDirKey, fileInfo.absolutePath() );
     }
