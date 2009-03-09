@@ -65,7 +65,25 @@ private:
     /// Escriu al log un error d'un programa.
     void logProgramError( int lineNumber, const QString &error, const QString &extra ) const;
 
+    void loadVmi( const QString &fileName );
+    void saveVmi( const QString &fileName );
+    void loadViewpointUnstabilities( const QString &fileName );
+    void saveViewpointUnstabilities( const QString &fileName );
+    void loadBestViews( const QString &fileName );
+    void saveBestViews( const QString &fileName );
+    void loadGuidedTour( const QString &fileName );
+    void saveGuidedTour( const QString &fileName );
+    void loadVomi( const QString &fileName );
+    void saveVomi( const QString &fileName );
+    void loadVoxelSaliencies( const QString &fileName );
+    void saveVoxelSaliencies( const QString &fileName );
+    void loadViewpointVomi( const QString &fileName );
+    void saveViewpointVomi( const QString &fileName );
+    void loadEvmi( const QString &fileName );
+    void saveEvmi( const QString &fileName );
     void loadColorVomiPalette( const QString &fileName );
+    void loadColorVomi( const QString &fileName );
+    void saveColorVomi( const QString &fileName );
 
     QString getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter );
     QString getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix );
