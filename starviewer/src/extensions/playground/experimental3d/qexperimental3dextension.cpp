@@ -2641,53 +2641,58 @@ void QExperimental3DExtension::loadColorVomiPalette()
 
     if ( !colorVomiPaletteFileName.isNull() )
     {
-        QFile colorVomiPaletteFile( colorVomiPaletteFileName );
-
-        if ( !colorVomiPaletteFile.open( QFile::ReadOnly | QFile::Text ) )
-        {
-            DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + colorVomiPaletteFileName );
-            QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + colorVomiPaletteFileName );
-            return;
-        }
-
-        m_colorVomiPalette.clear();
-
-        QTextStream in( &colorVomiPaletteFile );
-
-        while ( !in.atEnd() )
-        {
-            QString line = in.readLine();
-            QStringList numbers = line.split( ' ', QString::SkipEmptyParts );
-
-            if ( numbers.size() < 3 ) continue;
-
-            Vector3Float color;
-
-            if ( numbers.at( 0 ).contains( '.' ) )  // reals [0,1]
-            {
-                color.x = numbers.at( 0 ).toFloat();
-                color.y = numbers.at( 1 ).toFloat();
-                color.z = numbers.at( 2 ).toFloat();
-            }
-            else    // enters [0,255]
-            {
-                color.x = static_cast<unsigned char>( numbers.at( 0 ).toUShort() ) / 255.0f;
-                color.y = static_cast<unsigned char>( numbers.at( 1 ).toUShort() ) / 255.0f;
-                color.z = static_cast<unsigned char>( numbers.at( 2 ).toUShort() ) / 255.0f;
-            }
-
-            m_colorVomiPalette << color;
-        }
-
-        if ( m_colorVomiPalette.isEmpty() ) m_colorVomiPalette << Vector3Float( 1.0f, 1.0f, 1.0f );
-
-        colorVomiPaletteFile.close();
-
+        loadColorVomiPalette( colorVomiPaletteFileName );
         QFileInfo colorVomiPaletteFileInfo( colorVomiPaletteFileName );
         settings.setValue( "colorVomiPaletteDir", colorVomiPaletteFileInfo.absolutePath() );
     }
 
     settings.endGroup();
+}
+
+
+void QExperimental3DExtension::loadColorVomiPalette( const QString &fileName )
+{
+    QFile colorVomiPaletteFile( fileName );
+
+    if ( !colorVomiPaletteFile.open( QFile::ReadOnly | QFile::Text ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + fileName );
+        return;
+    }
+
+    m_colorVomiPalette.clear();
+
+    QTextStream in( &colorVomiPaletteFile );
+
+    while ( !in.atEnd() )
+    {
+        QString line = in.readLine();
+        QStringList numbers = line.split( ' ', QString::SkipEmptyParts );
+
+        if ( numbers.size() < 3 ) continue;
+
+        Vector3Float color;
+
+        if ( numbers.at( 0 ).contains( '.' ) )  // reals [0,1]
+        {
+            color.x = numbers.at( 0 ).toFloat();
+            color.y = numbers.at( 1 ).toFloat();
+            color.z = numbers.at( 2 ).toFloat();
+        }
+        else    // enters [0,255]
+        {
+            color.x = static_cast<unsigned char>( numbers.at( 0 ).toUShort() ) / 255.0f;
+            color.y = static_cast<unsigned char>( numbers.at( 1 ).toUShort() ) / 255.0f;
+            color.z = static_cast<unsigned char>( numbers.at( 2 ).toUShort() ) / 255.0f;
+        }
+
+        m_colorVomiPalette << color;
+    }
+
+    if ( m_colorVomiPalette.isEmpty() ) m_colorVomiPalette << Vector3Float( 1.0f, 1.0f, 1.0f );
+
+    colorVomiPaletteFile.close();
 }
 
 
@@ -2837,8 +2842,12 @@ void QExperimental3DExtension::loadAndRunProgram()
 
         for ( int i = 0; i < 2; i++ )
         {
+            int lineNumber = 0;
+
             while ( !in.atEnd() )
             {
+                lineNumber++;
+
                 QString line = in.readLine();
                 QStringList words = line.split( ' ', QString::SkipEmptyParts );
 
@@ -2848,69 +2857,193 @@ void QExperimental3DExtension::loadAndRunProgram()
 
                 if ( command == "tab" )
                 {
-                    if ( words.size() >= 2 )
+                    if ( words.size() < 2 )
                     {
-                        const QString &tab = words.at( 1 );
+                        logProgramError( lineNumber, "Falta el nom de la pestanya", line );
+                        errors = true;
+                        continue;
+                    }
 
-                        if ( tab == "visualization" )
-                        {
-                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
-                        }
-                        else if ( tab == "camera" )
-                        {
-                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
-                        }
-                        else if ( tab == "obscurance" )
-                        {
-                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
-                        }
-                        else if ( tab == "smi" )
-                        {
-                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
-                        }
-                        else if ( tab == "vmi" )
-                        {
-                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
-                        }
-                        else if ( tab == "program" )
-                        {
-                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_programTab );
-                        }
-                        else
-                        {
-                            DEBUG_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
-                            ERROR_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
-                            errors = true;
-                        }
+                    const QString &tab = words.at( 1 );
+
+                    if ( tab == "visualization" )
+                    {
+                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
+                    }
+                    else if ( tab == "camera" )
+                    {
+                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
+                    }
+                    else if ( tab == "obscurance" )
+                    {
+                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
+                    }
+                    else if ( tab == "smi" )
+                    {
+                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
+                    }
+                    else if ( tab == "vmi" )
+                    {
+                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
+                    }
+                    else if ( tab == "program" )
+                    {
+                        if ( run ) m_controlsTabWidget->setCurrentWidget( m_programTab );
                     }
                     else
                     {
-                        DEBUG_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
-                        ERROR_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
+                        logProgramError( lineNumber, "El nom de la pestanya és incorrecte", tab );
                         errors = true;
                     }
                 }
                 else if ( command == "tf-load" )
                 {
-                    if ( words.size() >= 2 )
+                    if ( words.size() < 2 )
                     {
-                        if ( run ) loadTransferFunction( words.at( 1 ) );
-                    }
-                    else
-                    {
-                        DEBUG_LOG( "[E3DP] Falta el nom del fitxer: " + line );
-                        ERROR_LOG( "[E3DP] Falta el nom del fitxer: " + line );
+                        logProgramError( lineNumber, "Falta el nom del fitxer", line );
                         errors = true;
+                        continue;
                     }
+
+                    if ( run ) loadTransferFunction( words.at( 1 ) );
                 }
                 else if ( command == "visualization-ok" )
                 {
                     if ( run ) doVisualization();
                 }
+                else if ( command == "vmi-viewpoints" )
+                {
+                    if ( words.size() < 3 )
+                    {
+                        logProgramError( lineNumber, "Falten arguments per a la distribució de punts de VMI", line );
+                        errors = true;
+                        continue;
+                    }
+
+                    if ( words.at( 1 ) == "uni" )
+                    {
+                        int number = words.at( 2 ).toInt();
+
+                        switch ( number )
+                        {
+                            case 4: if ( run ) m_vmiViewpointDistributionWidget->setToUniform4(); break;
+                            case 6: if ( run ) m_vmiViewpointDistributionWidget->setToUniform6(); break;
+                            case 8: if ( run ) m_vmiViewpointDistributionWidget->setToUniform8(); break;
+                            case 12: if ( run ) m_vmiViewpointDistributionWidget->setToUniform12(); break;
+                            case 20: if ( run ) m_vmiViewpointDistributionWidget->setToUniform20(); break;
+                            default: logProgramError( lineNumber, "Nombre incorrecte de punts uniformes", words.at( 2 ) ); errors = true; break;
+                        }
+                    }
+                    else if ( words.at( 1 ) == "q-uni" )
+                    {
+                        if ( run ) m_vmiViewpointDistributionWidget->setToQuasiUniform( words.at( 2 ).toInt() );
+                    }
+                    else
+                    {
+                        logProgramError( lineNumber, "Tipus de distribució de punts de VMI incorrecta", words.at( 1 ) );
+                        errors = true;
+                    }
+                }
+                else if ( command == "vmi-check" || command == "vmi-uncheck" )
+                {
+                    bool check = command == "vmi-check";
+
+                    for ( int j = 1; j < words.size(); j++ )
+                    {
+                        const QString &word = words.at( j );
+
+                        if ( word == "vmi" )
+                        {
+                            if ( run ) m_computeVmiCheckBox->setChecked( check );
+                        }
+                        else if ( word == "unstabilities" )
+                        {
+                            if ( run ) m_computeViewpointUnstabilitiesCheckBox->setChecked( check );
+                        }
+                        else if ( word == "bestviews" )
+                        {
+                            if ( run ) m_computeBestViewsCheckBox->setChecked( check );
+                        }
+                        else if ( word == "guidedtour" )
+                        {
+                            if ( run ) m_computeGuidedTourCheckBox->setChecked( check );
+                        }
+                        else if ( word == "vomi" )
+                        {
+                            if ( run ) m_computeVomiCheckBox->setChecked( check );
+                        }
+                        else if ( word == "saliencies" )
+                        {
+                            if ( run ) m_computeVoxelSalienciesCheckBox->setChecked( check );
+                        }
+                        else if ( word == "vvomi" )
+                        {
+                            if ( run ) m_computeViewpointVomiCheckBox->setChecked( check );
+                        }
+                        else if ( word == "evmi" )
+                        {
+                            if ( run ) m_computeEvmiCheckBox->setChecked( check );
+                        }
+                        else if ( word == "cvomi" )
+                        {
+                            if ( run ) m_computeColorVomiCheckBox->setChecked( check );
+                        }
+                        else
+                        {
+                            logProgramError( lineNumber, "Nom de checkbox incorrecte", word );
+                            errors = true;
+                        }
+                    }
+                }
+                else if ( command == "vmi-bestviews" )
+                {
+                    if ( words.size() < 3 )
+                    {
+                        logProgramError( lineNumber, "Falten arguments per als paràmetres de càlculs de les millors vistes", line );
+                        errors = true;
+                        continue;
+                    }
+
+                    if ( words.at( 1 ) == "n" )
+                    {
+                        if ( run )
+                        {
+                            m_computeBestViewsNRadioButton->setChecked( true );
+                            m_computeBestViewsNSpinBox->setValue( words.at( 2 ).toInt() );
+                        }
+                    }
+                    else if ( words.at( 1 ) == "threshold" )
+                    {
+                        if ( run )
+                        {
+                            m_computeBestViewsThresholdRadioButton->setChecked( true );
+                            m_computeBestViewsThresholdDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+                        }
+                    }
+                    else
+                    {
+                        logProgramError( lineNumber, "Paràmetre incorrecte pel nombre de vistes", words.at( 1 ) );
+                        errors = true;
+                    }
+                }
+                else if ( command == "vmi-loadpalette" )
+                {
+                    if ( words.size() < 2 )
+                    {
+                        logProgramError( lineNumber, "Falten el nom del fitxer de paleta", line );
+                        errors = true;
+                        continue;
+                    }
+
+                    if ( run ) loadColorVomiPalette( words.at( 1 ) );
+                }
+                else if ( command == "vmi-run" )
+                {
+                    if ( run ) computeSelectedVmi();
+                }
                 else
                 {
-                    DEBUG_LOG( "[E3DP] Ordre desconeguda: " + line );
-                    ERROR_LOG( "[E3DP] Ordre desconeguda: " + line );
+                    logProgramError( lineNumber, "Ordre desconeguda", line );
                     errors = true;
                 }
             }
@@ -2934,6 +3067,13 @@ void QExperimental3DExtension::loadAndRunProgram()
     }
 
     settings.endGroup();
+}
+
+
+void QExperimental3DExtension::logProgramError( int lineNumber, const QString &error, const QString &extra ) const
+{
+    DEBUG_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + extra );
+    ERROR_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + extra );
 }
 
 
