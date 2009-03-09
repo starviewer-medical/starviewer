@@ -106,7 +106,9 @@ private:
     /// Guarda la mida de les columnes del QTreeWidget de la pestanya de PACS Device al StarviewerSettings
     void saveColumnsWidth();
 
-    ///Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús, si està en ús es mostrar un warning al cantó del TextBox
+    /** Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui 
+     *  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox 
+     */
     void checkIncomingConnectionsPortNotInUse();
 
 private:

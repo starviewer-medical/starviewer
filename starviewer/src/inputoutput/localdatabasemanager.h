@@ -100,6 +100,9 @@ public:
       */
     void checkNoStudiesRetrieving();
 
+    ///Indica si hi algun estudi descarregant
+    bool isStudyRetrieving();
+
 signals:
 
 	///Aquest signal s'emet per indicar que un estudi serà borrat de la base de dades per alliberar espai

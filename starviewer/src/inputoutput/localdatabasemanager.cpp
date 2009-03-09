@@ -584,7 +584,7 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
     DeleteDirectory deleteDirectory;
     QDir directory;
 
-    if (qsettings.contains(qsettingsRetrievingStudy))
+    if (isStudyRetrieving())
     {
         QString studyNotFullRetrieved = qsettings.value(qsettingsRetrievingStudy).toString();
 
@@ -608,6 +608,11 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
         qsettings.remove(qsettingsRetrievingStudy);
     }
     else m_lastError = Ok;
+}
+
+bool LocalDatabaseManager::isStudyRetrieving()
+{
+    return QSettings().contains(qsettingsRetrievingStudy);
 }
 
 int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)

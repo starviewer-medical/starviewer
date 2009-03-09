@@ -19,6 +19,7 @@
 #include "starviewersettings.h"
 #include "logging.h"
 #include "utils.h"
+#include "localdatabasemanager.h"
 
 namespace udg {
 
@@ -461,8 +462,10 @@ void QConfigurationScreen::closeEvent( QCloseEvent* event )
 
 void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 {
-    ///Si està en ús el frame que conté el warning es fa visible
-    m_warningFrameIncomingConnectionsPortInUse->setVisible(Utils::isPortInUse(m_textLocalPort->text().toInt()));
+    //Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
+    bool isPortInUseByAnotherApplication = Utils::isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
+    m_warningFrameIncomingConnectionsPortInUse->setVisible(isPortInUseByAnotherApplication); ///Si està en ús el frame que conté el warning es fa visible
+
 }
 
 };
