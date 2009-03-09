@@ -430,6 +430,19 @@ Status RetrieveImages::retrieve()
             ERROR_LOG("s'ha produit un error no controlat al intentar descarregar l'estudi, error:" + QString(DU_cfindStatusString(rsp.DimseStatus)));  //DU_cfindStatusString funció dcmtk que tradueix el codi d'error a un string comprensible
             state.setStatus(DcmtkMovescuUnknownError);
         }
+
+        if (statusDetail != NULL)
+        {
+            //Mostrem per tenir més informació el valor dels tags que donen la informació de perquè el PACS no ha pogut portar a terme la operació
+            statusDetail->findAndGetString(DCM_Status, text , false );
+            INFO_LOG("Valor Status Tag (0000,0900): " + QString(text));
+
+            statusDetail->findAndGetString(DCM_OffendingElement, text , false );
+            INFO_LOG("Valor Offending Tag (0000,0901): " + QString(text));
+            
+            statusDetail->findAndGetString(DCM_ErrorComment, text , false );
+            INFO_LOG("Valor Error Comment Tag (0000,0902): " + QString(text));
+        }
     }
     else state.setStatus(cond);
 
