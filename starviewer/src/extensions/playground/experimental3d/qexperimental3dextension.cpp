@@ -2832,57 +2832,98 @@ void QExperimental3DExtension::loadAndRunProgram()
         }
 
         QTextStream in( &programFile );
+        bool run = false;
+        bool errors = false;
 
-        while ( !in.atEnd() )
+        for ( int i = 0; i < 2; i++ )
         {
-            QString line = in.readLine();
-            QStringList words = line.split( ' ', QString::SkipEmptyParts );
-
-            if ( words.isEmpty() ) continue;
-
-            QString command = words.at( 0 );
-
-            if ( command == "tab" )
+            while ( !in.atEnd() )
             {
-                if ( words.size() >= 2 )
-                {
-                    const QString &tab = words.at( 1 );
+                QString line = in.readLine();
+                QStringList words = line.split( ' ', QString::SkipEmptyParts );
 
-                    if ( tab == "visualization" ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
-                    else if ( tab == "camera" ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
-                    else if ( tab == "obscurance" ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
-                    else if ( tab == "smi" ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
-                    else if ( tab == "vmi" ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
-                    else if ( tab == "program" ) m_controlsTabWidget->setCurrentWidget( m_programTab );
+                if ( words.isEmpty() ) continue;
+
+                QString command = words.at( 0 );
+
+                if ( command == "tab" )
+                {
+                    if ( words.size() >= 2 )
+                    {
+                        const QString &tab = words.at( 1 );
+
+                        if ( tab == "visualization" )
+                        {
+                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
+                        }
+                        else if ( tab == "camera" )
+                        {
+                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
+                        }
+                        else if ( tab == "obscurance" )
+                        {
+                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
+                        }
+                        else if ( tab == "smi" )
+                        {
+                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
+                        }
+                        else if ( tab == "vmi" )
+                        {
+                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
+                        }
+                        else if ( tab == "program" )
+                        {
+                            if ( run ) m_controlsTabWidget->setCurrentWidget( m_programTab );
+                        }
+                        else
+                        {
+                            DEBUG_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
+                            ERROR_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
+                            errors = true;
+                        }
+                    }
                     else
                     {
-                        DEBUG_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
-                        ERROR_LOG( "[E3DP] El nom de la pestanya és incorrecte: " + tab );
+                        DEBUG_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
+                        ERROR_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
+                        errors = true;
                     }
                 }
+                else if ( command == "tf-load" )
+                {
+                    if ( words.size() >= 2 )
+                    {
+                        if ( run ) loadTransferFunction( words.at( 1 ) );
+                    }
+                    else
+                    {
+                        DEBUG_LOG( "[E3DP] Falta el nom del fitxer: " + line );
+                        ERROR_LOG( "[E3DP] Falta el nom del fitxer: " + line );
+                        errors = true;
+                    }
+                }
+                else if ( command == "visualization-ok" )
+                {
+                    if ( run ) doVisualization();
+                }
                 else
                 {
-                    DEBUG_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
-                    ERROR_LOG( "[E3DP] Falta el nom de la pestanya: " + line );
+                    DEBUG_LOG( "[E3DP] Ordre desconeguda: " + line );
+                    ERROR_LOG( "[E3DP] Ordre desconeguda: " + line );
+                    errors = true;
                 }
             }
-            else if ( command == "tf-load" )
+
+            if ( errors )
             {
-                if ( words.size() >= 2 ) loadTransferFunction( words.at( 1 ) );
-                else
-                {
-                    DEBUG_LOG( "[E3DP] Falta el nom del fitxer: " + line );
-                    ERROR_LOG( "[E3DP] Falta el nom del fitxer: " + line );
-                }
-            }
-            else if ( command == "visualization-ok" )
-            {
-                doVisualization();
+                QMessageBox::warning( this, tr("Errors in program"), tr("The errors have been written in the log.") );
+                break;
             }
             else
             {
-                DEBUG_LOG( "[E3DP] Ordre desconeguda: " + line );
-                ERROR_LOG( "[E3DP] Ordre desconeguda: " + line );
+                in.seek( 0 );
+                run = true;
             }
         }
 
