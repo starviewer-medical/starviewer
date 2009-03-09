@@ -194,6 +194,9 @@ private:
     QVector<Vector3Float> m_colorVomi;
     float m_maximumColorVomi;
 
+    /// Cert quan estiguem executant el l'extensió interactivament.
+    bool m_interactive;
+
 };
 
 
