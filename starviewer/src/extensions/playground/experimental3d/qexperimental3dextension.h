@@ -68,7 +68,7 @@ private:
     void loadColorVomiPalette( const QString &fileName );
 
     QString getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter );
-    QString getFileNameToSave();
+    QString getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix );
 
 private slots:
 
