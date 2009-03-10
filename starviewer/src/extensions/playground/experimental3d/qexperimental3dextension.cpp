@@ -2659,6 +2659,50 @@ void QExperimental3DExtension::loadAndRunProgram()
                     errors = true;
                 }
             }
+            else if ( command == "visualization-check" || command == "visualization-partcheck" || command == "visualization-uncheck" )
+            {
+                bool check = command == "visualization-check" || command == "visualization-partcheck";
+                Qt::CheckState checkState = command == "visualization-uncheck" ? Qt::Unchecked : command == "visualization-partcheck" ? Qt::PartiallyChecked : Qt::Checked;
+
+                for ( int j = 1; j < words.size(); j++ )
+                {
+                    const QString &word = words.at( j );
+
+                    if ( word == "diffuse" )
+                    {
+                        if ( run && m_diffuseCheckBox->isEnabled() ) m_diffuseCheckBox->setChecked( check );
+                    }
+                    else if ( word == "specular" )
+                    {
+                        if ( run && m_specularCheckBox->isEnabled() ) m_specularCheckBox->setChecked( check );
+                    }
+                    else if ( word == "contour" )
+                    {
+                        if ( run && m_contourCheckBox->isEnabled() ) m_contourCheckBox->setChecked( check );
+                    }
+                    else if ( word == "obscurance" )
+                    {
+                        if ( run && m_obscuranceCheckBox->isEnabled() ) m_obscuranceCheckBox->setChecked( check );
+                    }
+                    else if ( word == "vomi" )
+                    {
+                        if ( run && m_vomiCheckBox->isEnabled() ) m_vomiCheckBox->setCheckState( checkState );
+                    }
+                    else if ( word == "saliencies" )
+                    {
+                        if ( run && m_voxelSalienciesCheckBox->isEnabled() ) m_voxelSalienciesCheckBox->setCheckState( checkState );
+                    }
+                    else if ( word == "cvomi" )
+                    {
+                        if ( run && m_colorVomiCheckBox->isEnabled() ) m_colorVomiCheckBox->setCheckState( checkState );
+                    }
+                    else
+                    {
+                        logProgramError( lineNumber, "Nom de checkbox incorrecte", word );
+                        errors = true;
+                    }
+                }
+            }
             else if ( command == "tf-load" )
             {
                 if ( words.size() < 2 )
