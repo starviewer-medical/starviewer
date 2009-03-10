@@ -1058,6 +1058,27 @@ void QExperimental3DExtension::normalizeViewProbabilities( QVector<float> &viewP
 
 QVector<float> QExperimental3DExtension::getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles )
 {
+    class POThread : public QThread {
+        public:
+            POThread( QVector<float> &objectProbabilities, float *objectProbabilitiesInView, int start, int end )
+                : m_viewProbability( 0.0f ), m_objectProbabilities( objectProbabilities ), m_objectProbabilitiesInView( objectProbabilitiesInView ), m_start( start ), m_end( end )
+            {
+            }
+            void setViewProbability( float viewProbability )
+            {
+                m_viewProbability = viewProbability;
+            }
+            virtual void run()
+            {
+                for ( int i = m_start; i < m_end; i++ ) m_objectProbabilities[i] += m_viewProbability * m_objectProbabilitiesInView[i];
+            }
+        private:
+            float m_viewProbability;
+            QVector<float> &m_objectProbabilities;
+            float *m_objectProbabilitiesInView;
+            int m_start, m_end;
+    };
+
     int nViewpoints = viewProbabilities.size();
     unsigned int nObjects = m_volume->getSize();
     QVector<float> objectProbabilities( nObjects ); // vector p(O), inicialitzat a 0
@@ -1065,21 +1086,47 @@ QVector<float> QExperimental3DExtension::getObjectProbabilities( const QVector<f
 
     m_vmiProgressBar->setValue( 0 );
 
+    int nThreads = QThread::idealThreadCount();
+    POThread **poThreads = new POThread*[nThreads];
+    int nObjectsPerThread = nObjects / nThreads + 1;
+    int start = 0, end = nObjectsPerThread;
+
+    for ( int i = 0; i < nThreads; i++ )
+    {
+        poThreads[i] = new POThread( objectProbabilities, objectProbabilitiesInView, start, end );
+        start += nObjectsPerThread;
+        end += nObjectsPerThread;
+        if ( end > static_cast<int>( nObjects ) ) end = nObjects;
+    }
+
     for ( int i = 0; i < nViewpoints; i++ )
     {
         pOvFiles[i]->reset();   // reset per tornar al principi
         pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView ), nObjects * sizeof(float) );    // llegim...
         pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
 
-        for ( unsigned int j = 0; j < nObjects; j++ ) objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j];
+        //for ( unsigned int j = 0; j < nObjects; j++ ) objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j]; // vell
+
+        for ( int j = 0; j < nThreads; j++ )
+        {
+            poThreads[j]->setViewProbability( viewProbabilities.at( i ) );
+            poThreads[j]->start();
+        }
+
+        for ( int j = 0; j < nThreads; j++ ) poThreads[j]->wait();
 
         m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
         m_vmiProgressBar->repaint();
     }
 
+    for ( int i = 0; i < nThreads; i++ ) delete poThreads[i];
+    delete[] poThreads;
+
     delete[] objectProbabilitiesInView;
 
+#ifndef QT_NO_DEBUG
     for ( unsigned int j = 0; j < nObjects; j++ ) Q_ASSERT( objectProbabilities.at( j ) == objectProbabilities.at( j ) );
+#endif
 
     return objectProbabilities;
 }
