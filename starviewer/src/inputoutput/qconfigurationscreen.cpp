@@ -49,13 +49,12 @@ void QConfigurationScreen::createConnections()
 {
     //connecta el boto aplicar del Pacs amb l'slot apply
     connect( m_buttonApplyPacs , SIGNAL( clicked() ),  SLOT( applyChanges() ) );
-
+    
     connect( m_textAETitleMachine, SIGNAL( textChanged(const QString &) ) , SLOT( enableApplyButtons() ) );
     connect( m_textTimeout, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textLocalPort, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     //En el moment en que ens editen el textBox si apareixia el missatge de port en ús el fem invisible
-    connect( m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(hideWarningIncomingConnectionsPortInUse()));
-    connect(m_textLocalPort, SIGNAL(editingFinished()), SLOT(textLocalPortLostFocus()));
+    connect( m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(checkIncomingConnectionsPortNotInUse()));
     connect( m_textMaxConnections, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textInstitutionName, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textInstitutionAddress, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
@@ -385,6 +384,13 @@ bool QConfigurationScreen::applyChanges()
 {
     if (validateChanges())
     {
+        if (isIncomingConnectionsPortInUseByAnotherApplication() && m_textLocalPort->isModified())
+        {
+            QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr( "The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes ?" ).arg(m_textLocalPort->text()),
+                                                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+            if (response == QMessageBox::No) return false;
+        }
         applyChangesPacs();
         m_configurationChanged = false;
 
@@ -415,6 +421,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         INFO_LOG( "Modificació del Port d'entrada dels estudis" + m_textLocalPort->text() );
         settings.setLocalPort( m_textLocalPort->text() );
+        m_textLocalPort->setModified(false);
     }
 
     if ( m_textMaxConnections->isModified() )
@@ -432,19 +439,6 @@ void QConfigurationScreen::enableApplyButtons()
     m_configurationChanged = true;
 }
 
-void QConfigurationScreen::textLocalPortLostFocus()
-{
-    if (m_textLocalPort->isModified())
-    {
-        checkIncomingConnectionsPortNotInUse();
-    }
-}
-
-void QConfigurationScreen::hideWarningIncomingConnectionsPortInUse()
-{
-    m_warningFrameIncomingConnectionsPortInUse->setVisible(false);
-}
-
 void QConfigurationScreen::saveColumnsWidth()
 {
     StarviewerSettings settings;
@@ -460,12 +454,15 @@ void QConfigurationScreen::closeEvent( QCloseEvent* event )
     event->accept();
 }
 
-void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
+bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 {
     //Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
-    bool isPortInUseByAnotherApplication = Utils::isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
-    m_warningFrameIncomingConnectionsPortInUse->setVisible(isPortInUseByAnotherApplication); ///Si està en ús el frame que conté el warning es fa visible
+    return Utils::isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
+}
 
+void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
+{
+    m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication()); ///Si està en ús el frame que conté el warning es fa visible
 }
 
 };
