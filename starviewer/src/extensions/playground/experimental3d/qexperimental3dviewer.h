@@ -44,6 +44,8 @@ public:
     /// Estableix els paràmetres de la càmera.
     void setCamera( const Vector3 &position, const Vector3 &focus, const Vector3 &up );
 
+    void screenshot( const QString &fileName );
+
 public slots:
 
     /// Força l'execució de la visualització.

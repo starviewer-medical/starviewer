@@ -2895,6 +2895,17 @@ void QExperimental3DExtension::loadAndRunProgram()
                     errors = true;
                 }
             }
+            else if ( command == "screenshot" )
+            {
+                if ( words.size() < 2 )
+                {
+                    logProgramError( lineNumber, "Falta el nom del fitxer on desar la captura", line );
+                    errors = true;
+                    continue;
+                }
+
+                m_viewer->screenshot( words.at( 1 ) );
+            }
             else
             {
                 logProgramError( lineNumber, "Ordre desconeguda", line );
