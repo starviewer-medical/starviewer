@@ -2793,7 +2793,7 @@ void QExperimental3DExtension::loadAndRunProgram()
             {
                 if ( words.size() < 2 )
                 {
-                    logProgramError( lineNumber, "Falten el nom del fitxer de paleta", line );
+                    logProgramError( lineNumber, "Falta el nom del fitxer de paleta", line );
                     errors = true;
                     continue;
                 }
@@ -2803,6 +2803,97 @@ void QExperimental3DExtension::loadAndRunProgram()
             else if ( command == "vmi-run" )
             {
                 if ( run ) computeSelectedVmi();
+            }
+            else if ( command == "vmi-load" || command == "vmi-save" )  // vmi-load vmi fitxer.txt
+            {
+                if ( words.size() < 3 )
+                {
+                    logProgramError( lineNumber, "Falten arguments per a carregar/desar un fitxer d'una mesura de VMI", line );
+                    errors = true;
+                    continue;
+                }
+
+                bool load = command == "vmi-load";
+                const QString &measure = words.at( 1 );
+                const QString &fileName = words.at( 2 );
+
+                if ( measure == "vmi" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadVmi( fileName );
+                        else saveVmi( fileName );
+                    }
+                }
+                else if ( measure == "unstabilities" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadViewpointUnstabilities( fileName );
+                        else saveViewpointUnstabilities( fileName );
+                    }
+                }
+                else if ( measure == "bestviews" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadBestViews( fileName );
+                        else saveBestViews( fileName );
+                    }
+                }
+                else if ( measure == "guidedtour" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadGuidedTour( fileName );
+                        else saveGuidedTour( fileName );
+                    }
+                }
+                else if ( measure == "vomi" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadVomi( fileName );
+                        else saveVomi( fileName );
+                    }
+                }
+                else if ( measure == "saliencies" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadVoxelSaliencies( fileName );
+                        else saveVoxelSaliencies( fileName );
+                    }
+                }
+                else if ( measure == "vvomi" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadViewpointVomi( fileName );
+                        else saveViewpointVomi( fileName );
+                    }
+                }
+                else if ( measure == "evmi" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadEvmi( fileName );
+                        else saveEvmi( fileName );
+                    }
+                }
+                else if ( measure == "cvomi" )
+                {
+                    if ( run )
+                    {
+                        if ( load ) loadColorVomi( fileName );
+                        else saveColorVomi( fileName );
+                    }
+                }
+                else
+                {
+                    logProgramError( lineNumber, "Nom de mesura incorrecte", measure );
+                    errors = true;
+                }
             }
             else
             {
