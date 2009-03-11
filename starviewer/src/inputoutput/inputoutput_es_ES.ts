@@ -804,7 +804,7 @@ Asegurese de que la IP y el AETitle del PACS son correctos.</translation>
     <message>
         <location filename="qcreatedicomdir.cpp" line="439"/>
         <source>Please select a study to remove of the list.</source>
-        <translation>Por favor seleccione el estudi que desea quitar del la lista.</translation>
+        <translation>Por favor seleccione el estudio que desea eliminar del la lista.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="71"/>
@@ -854,7 +854,7 @@ Asegurese de que la IP y el AETitle del PACS son correctos.</translation>
     <message>
         <location filename="qcreatedicomdir.cpp" line="239"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
-        <translation>No se puede crear el directorio temporal para crear el DICOMDIR. Por favor comprube los permisos de usuario</translation>
+        <translation>No se puede crear el directorio temporal para crear el DICOMDIR. Por favor compruebe los permisos de usuario</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="268"/>
@@ -946,7 +946,7 @@ Código de error: %1</translation>
     <message>
         <location filename="qcreatedicomdir.cpp" line="283"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
-        <translation>El directorio de destino no está vacio, por favor escoja un directorio vacio.</translation>
+        <translation>El directorio de destino no está vacio, por favor escoja un directorio vacío.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="698"/>
@@ -1923,7 +1923,7 @@ Por favor contacte con el equipo de %1.</translation>
     <message>
         <location filename="queryscreen.cpp" line="1547"/>
         <source>an error ocurred while retrieving some study, some retrieves may have failed.</source>
-        <translation>se ha producido un error mientras se descargavan algunos estudios, algunas descargas pueden haver fallado.</translation>
+        <translation>se ha producido un error mientras se descargaban algunos estudios, algunas descargas pueden haber fallado.</translation>
     </message>
     <message>
         <location filename="queryscreen.cpp" line="1621"/>
