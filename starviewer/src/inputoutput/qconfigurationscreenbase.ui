@@ -59,7 +59,7 @@
       <string/>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3" >
       <attribute name="title" >
@@ -620,6 +620,12 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>30</width>
+             <height>16777215</height>
+            </size>
            </property>
           </widget>
          </item>
