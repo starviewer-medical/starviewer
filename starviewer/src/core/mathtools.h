@@ -21,6 +21,7 @@ class MathTools{
 public:
 
     enum Sign{ POSITIVE, NEGATIVE };
+    enum Lines{ COINCIDENT, PARALLEL, SKEW, INTERSECT };
 
 /// Declaració de constants
 static const double LOGARITHM_BASE2_E;
@@ -70,6 +71,12 @@ static int planeIntersection( double p[3] , double n[3], double q[3] , double m[
 ///a partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
 static double* directorVector( const double point1[3], const double point2[3] );
 
+///calcula el modul d'un vector
+static double modulus( double vector[3] );
+
+///producte escalar dels dos vectors passats per parametre
+static double dotProduct( double vector1[3], double vector2[3] );
+
 ///producte vectorial dels dos vectors directors passats per paràmetre.
 static double* vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] );
 
@@ -88,6 +95,17 @@ inline static double cbrt( double x )
 /// distància entre punts 2D i 3D
 static double getDistance2D( const double firstPoint[2], const double secondPoint[2] );
 static double getDistance3D( const double firstPoint[3], const double secondPoint[3] );
+
+/**
+* retorna el punt d'interseccio de dues línies infinites
+* definides per dos segments
+* @param p1 primer punt de la primera recta
+* @param p2 segon punt de la primera recta
+* @param p3 primer punt de la segona recta
+* @param p4 segon punt de la segona recta
+* @param state contindrà el resultat de la intersecció: paral·leles, no intersecció, intersecció
+*/
+static double *intersectionPoint3DLines(double *p1, double *p2, double *p3, double *p4, int &state);
 
 /// ens retorna el valor truncat
 static double trunc( double x);
