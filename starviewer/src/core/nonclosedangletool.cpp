@@ -234,7 +234,7 @@ void NonClosedAngleTool::computeAngle()
     double *intersection;
     int state;
 
-    intersection = intersectionPoint(p1,p2,p3,p4,state);
+    intersection = MathTools::intersectionPoint3DLines(p1,p2,p3,p4,state);
 
     double dist1, dist2, dist3, dist4;
     dist1 = MathTools::getDistance3D(intersection, p1);
@@ -292,7 +292,15 @@ void NonClosedAngleTool::computeAngle()
     double angle = MathTools::angleInDegrees( vd1, vd2 );
 
     DrawerText * text = new DrawerText;
-    text->setText( tr("%1 degrees").arg( angle,0,'f',1) );
+
+    if ( state == MathTools::PARALLEL )
+        text->setText( tr("0 degrees") );
+    else if ( state == MathTools::SKEW )   //Won't occur
+        text->setText( tr("Skew lines.") );
+    else
+        text->setText( tr("%1 degrees").arg( angle,0,'f',1) );
+
+
     textPosition( m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text );
 
     text->update( DrawerPrimitive::VTKRepresentation );
@@ -330,108 +338,6 @@ void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angle
 
     angleText->setAttatchmentPoint(position);
 
-}
-
-double *NonClosedAngleTool::intersectionPoint(double *p1, double *p2, double *p3, double *p4, int &state)
-{
-    //using parametric equations:
-    //line 1: y = a + b·x
-    //line 2: y = u + v·x
-    double a, b, u, v;
-    double *intersection;
-    int horizontalCoord, verticalCoord, thirdCoord;
-
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            horizontalCoord = 0;
-            verticalCoord = 1;
-            thirdCoord = 2;
-            break;
-
-        case Q2DViewer::Sagital:
-            horizontalCoord = 1;
-            verticalCoord = 2;
-            thirdCoord = 0;
-            break;
-
-        case Q2DViewer::Coronal:
-            horizontalCoord = 0;
-            verticalCoord = 2;
-            thirdCoord = 1;
-            break;
-    }
-
-    intersection = new double[3];
-    intersection[0] = 0;
-    intersection[1] = 0;
-    intersection[2] = 0;
-
-    if ( ( p2[horizontalCoord] - p1[horizontalCoord] ) != 0 && ( p4[horizontalCoord] - p3[horizontalCoord] ) != 0)
-    //not vertical
-    {
-        b = ( p2[verticalCoord] - p1[verticalCoord] ) / ( p2[horizontalCoord] - p1[horizontalCoord] );
-        v = ( p4[verticalCoord] - p3[verticalCoord] ) / ( p4[horizontalCoord] - p3[horizontalCoord] );
-
-        a = p1[verticalCoord] - ( b * p1[horizontalCoord] ) ;
-        u = p3[verticalCoord] - ( v * p3[horizontalCoord] ) ;
-
-        if ( ( b - v ) != 0)
-        //not parallel
-        {
-            intersection[horizontalCoord] = ( ( - ( a - u ) ) / ( b - v ) );
-            intersection[verticalCoord] = ( a + ( b * intersection[horizontalCoord] ) );
-            intersection[thirdCoord] = p1[thirdCoord];
-
-            state = INTERSECT;
-            return intersection;
-        }
-        else
-        {
-            state = PARALLEL;
-            return intersection;
-        }
-    }
-    else
-    {
-        if( ( p2[horizontalCoord] - p1[horizontalCoord] ) != 0 )
-        //line 2 is vertical
-        {
-            //line 1 parametric equation
-            b = ( p2[verticalCoord] - p1[verticalCoord] ) / ( p2[horizontalCoord] - p1[horizontalCoord] );
-            u = p3[verticalCoord] - ( v * p3[horizontalCoord] ) ;
-
-            intersection[horizontalCoord] = p1[horizontalCoord];
-            intersection[verticalCoord] = ( a + ( b * intersection[horizontalCoord] ) );
-            intersection[thirdCoord] = p1[thirdCoord];
-
-            state = INTERSECT;
-            return intersection;
-
-        }
-        else if( ( p4[horizontalCoord] - p3[horizontalCoord] ) != 0 )
-        //line 1 is vertical
-        {
-            //line 2 parametric equation
-            v = ( p4[verticalCoord] - p3[verticalCoord] ) / ( p4[horizontalCoord] - p3[horizontalCoord] );
-            a = p1[verticalCoord] - ( b * p1[horizontalCoord] ) ;
-
-            intersection[horizontalCoord] = p1[horizontalCoord];
-            intersection[verticalCoord] = ( u + ( v * intersection[horizontalCoord] ) );
-            intersection[thirdCoord] = p1[thirdCoord];
-
-            state = INTERSECT;
-            return intersection;
-        }
-        else
-        //both lines vertical, so -> parallel
-        {
-            state = PARALLEL;
-            return intersection;
-        }
-    }
-
-    return intersection;
 }
 
 }

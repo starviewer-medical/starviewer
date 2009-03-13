@@ -54,20 +54,7 @@ private:
     ///calcula la correcta posició del caption de l'angle segons els punts de l'angle
     void textPosition( double *p1, double *p2, DrawerText *angleText );
 
-    /**
-    * retorna el punt d'interseccio de dues línies infinites
-    * definides per dos segments
-    * @param p1 primer punt de la primera recta
-    * @param p2 segon punt de la primera recta
-    * @param p3 primer punt de la segona recta
-    * @param p4 segon punt de la segona recta
-    */
-    double *intersectionPoint(double *p1, double *p2, double *p3, double *p4, int &state);
-
 private:
-    ///estats de la línia segons la interseccio, no es distingeix entre PARALLEL i COINCIDENT
-    enum { PARALLEL, INTERSECT };
-
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
