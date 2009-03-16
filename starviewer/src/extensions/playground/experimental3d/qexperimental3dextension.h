@@ -152,10 +152,8 @@ private slots:
     void saveGuidedTour();
     void loadVomi();
     void saveVomi();
-    void vomiChecked( bool checked );
     void loadVoxelSaliencies();
     void saveVoxelSaliencies();
-    void voxelSalienciesChecked( bool checked );
     void loadViewpointVomi();
     void saveViewpointVomi();
     void loadEvmi();
@@ -163,7 +161,6 @@ private slots:
     void loadColorVomiPalette();
     void loadColorVomi();
     void saveColorVomi();
-    void colorVomiChecked( bool checked );
 
     void tourBestViews();
     void guidedTour();

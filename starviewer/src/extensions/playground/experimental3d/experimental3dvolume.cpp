@@ -284,7 +284,7 @@ float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 
 void Experimental3DVolume::addVomi( const QVector<float> &vomi, float maximumVomi, float factor )
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiVoxelShader );
+    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiVoxelShader );
     m_vomiVoxelShader->setVomi( vomi, maximumVomi, factor );
     m_vomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) != 0 );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
@@ -293,7 +293,7 @@ void Experimental3DVolume::addVomi( const QVector<float> &vomi, float maximumVom
 
 void Experimental3DVolume::addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor )
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorVomiVoxelShader );
+    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorVomiVoxelShader );
     m_colorVomiVoxelShader->setColorVomi( colorVomi, maximumColorVomi, factor );
     m_colorVomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) != 0 );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );

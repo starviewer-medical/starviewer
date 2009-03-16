@@ -96,13 +96,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceHighFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), SLOT( vomiChecked(bool) ) );
-    connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), m_voxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
-    connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), m_voxelSalienciesFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_voxelSalienciesCheckBox, SIGNAL( toggled(bool) ), SLOT( voxelSalienciesChecked(bool) ) );
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), SLOT( colorVomiChecked(bool) ) );
 
     // càmera
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
@@ -314,7 +309,6 @@ void QExperimental3DExtension::doVisualization()
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value() );
     if ( m_vomiCheckBox->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value() );
     if ( m_colorVomiCheckBox->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value() );
-    if ( m_voxelSalienciesCheckBox->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value() );
 
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
@@ -1144,384 +1138,6 @@ QVector<float> QExperimental3DExtension::getObjectProbabilities( const QVector<f
 }
 
 
-//void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities,
-//                                                           const QVector<QTemporaryFile*> &pOvFiles, bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi )
-//{
-//    const QVector<Vector3> &viewpoints = viewpointGenerator.viewpoints();
-//    int nViewpoints = viewProbabilities.size();
-//    int nObjects = objectProbabilities.size();
-//
-//    if ( computeVomi )
-//    {
-//        m_vomi.resize( nObjects );
-//        m_maximumVomi = 0.0f;
-//    }
-//    if ( computeVoxelSaliencies )
-//    {
-//        m_voxelSaliencies.resize( nObjects );
-//        m_maximumSaliency = 0.0f;
-//    }
-//    if ( computeViewpointVomi )
-//    {
-//        m_viewpointVomi.resize( nViewpoints );
-//        m_viewpointVomi.fill( 0.0f );
-//    }
-//    if ( computeColorVomi )
-//    {
-//        m_colorVomi.resize( nObjects );
-//        m_maximumColorVomi = 0.0f;
-//    }
-//
-//    /*
-//     * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
-//     * N'hi haurà prou llegint la llesca actual, l'anterior i la següent.
-//     */
-//    int *dimensions = m_volume->getImage()->GetDimensions();
-//    int dimX = dimensions[0], dimY = dimensions[1], dimZ = dimensions[2], dimXY = dimX * dimY, dimXY3 = dimXY * 3;
-//    qint64 sizeToRead = dimXY3 * sizeof(float), sizeToReadOnEdge = dimXY * 2 * sizeof(float);
-//    float **pOV = new float*[nViewpoints];  // p(O|V) (un tros de la matriu cada vegada)
-//    for ( int i = 0; i < nViewpoints; i++ ) pOV[i] = new float[dimXY3];
-//    QVector<float> pVoi( nViewpoints ); // p(V|oi)
-//    QVector<float> pVoj( nViewpoints ); // p(V|oj)
-//
-//    QVector<Vector3Float> viewpointColors;
-//    if ( computeColorVomi )
-//    {
-//        QMap< QPair<int, int>, QVector<int> > viewpointSubSets; // (nPunts,nColors) -> punts-millor-distribuïts
-//        {
-//            viewpointSubSets[qMakePair(42, 6)] = ( QVector<int>() << 13 << 17 << 23 << 27 << 33 << 39 );
-//        }
-//
-//        viewpointColors.resize( nViewpoints );
-//        int nColors = m_colorVomiPalette.size();
-//
-//        if ( nColors == 1 ) // tots el mateix
-//        {
-//            DEBUG_LOG( "tots els colors iguals" );
-//            for ( int i = 0; i < nViewpoints; i++ ) viewpointColors[i] = m_colorVomiPalette.at( 0 );
-//        }
-//        else if ( nViewpoints <= nColors )  // agafem els primers colors
-//        {
-//            DEBUG_LOG( "primers colors" );
-//            for ( int i = 0; i < nViewpoints; i++ ) viewpointColors[i] = m_colorVomiPalette.at( i );
-//        }
-//        else    // trobar els més separats -> que la distància mínima entre ells sigui màxima entre totes les mínimes
-//        {
-//            QVector<int> bestIndices;
-//            QPair<int, int> mapIndex( nViewpoints, nColors );
-//
-//            if ( viewpointSubSets.contains( mapIndex ) )
-//            {
-//                DEBUG_LOG( "índexs precalculats" );
-//                bestIndices = viewpointSubSets.value( mapIndex );
-//            }
-//            else
-//            {
-//                DEBUG_LOG( "calculem els índexs" );
-//                double maxMinDistance = 0.0;
-//
-//                class Combination
-//                {
-//                private:
-//                    int m_n;
-//                    int m_k;
-//                    QVector<int> m_data;
-//                public:
-//                    Combination( int n, int k )
-//                    {
-//                        Q_ASSERT( n >= 0 && k >= 0 );
-//                        m_n = n;
-//                        m_k = k;
-//                        m_data.resize( k );
-//                        for ( int i = 0; i < k; ++i ) m_data[i] = i;
-//                    }   // Combination(n,k)
-//                    QVector<int> data() const
-//                    {
-//                        return m_data;
-//                    }
-//                    QString toString() const
-//                    {
-//                        QString s = "{ ";
-//                        for ( int i = 0; i < m_k; ++i ) s += QString::number( m_data.at( i ) ) + " ";
-//                        s += "}";
-//                        return s;
-//                    }   // toString()
-//                    Combination* successor() const
-//                    {
-//                        if ( m_data[0] == m_n - m_k) return 0;
-//                        Combination *ans = new Combination( m_n, m_k );
-//                        int i;
-//                        for ( i = 0; i < m_k; ++i ) ans->m_data[i] = m_data.at( i );
-//                        for ( i = m_k - 1; i > 0 && ans->m_data.at( i ) == m_n - m_k + i; --i );
-//                        ++ans->m_data[i];
-//                        for ( int j = i; j < m_k - 1; ++j ) ans->m_data[j+1] = ans->m_data[j] + 1;
-//                        return ans;
-//                    }   // successor()
-//                    static quint64 choose( int n, int k )
-//                    {
-//                        if ( n < k ) return 0;  // special case
-//                        if ( n == k ) return 1;
-//                        int delta, iMax;
-//                        if ( k < n - k )    // ex: choose(100,3)
-//                        {
-//                            delta = n - k;
-//                            iMax = k;
-//                        }
-//                        else                // ex: choose(100,97)
-//                        {
-//                            delta = k;
-//                            iMax = n - k;
-//                        }
-//                        quint64 ans = delta + 1;
-//                        for ( int i = 2; i <= iMax; ++i ) ans = ( ans * ( delta + i ) ) / i;
-//                        return ans;
-//                    }   // choose()
-//                };  // Combination class
-//
-//                quint64 nCombinations = Combination::choose( nViewpoints, nColors );
-//                Combination *c = new Combination( nViewpoints, nColors );
-//                for ( quint64 i = 0; i < nCombinations; i++ )
-//                {
-//                    //DEBUG_LOG( QString( "%1: %2" ).arg( i ).arg( c->toString() ) );
-//
-//                    QVector<int> indices = c->data();
-//                    double minDistance = ( viewpoints.at( indices.at( 0 ) ) - viewpoints.at( indices.at( 1 ) ) ).length();
-//                    bool mayBeBetter = minDistance > maxMinDistance;
-//                    for ( int j = 0; j < nColors - 1 && mayBeBetter; j++ )
-//                    {
-//                        const Vector3 &v1 = viewpoints.at( indices.at( j ) );
-//                        for ( int k = j + 1; k < nColors && mayBeBetter; k++ )
-//                        {
-//                            double distance = ( v1 - viewpoints.at( indices.at( k ) ) ).length();
-//                            if ( distance < minDistance )
-//                            {
-//                                minDistance = distance;
-//                                mayBeBetter = minDistance > maxMinDistance;
-//                            }
-//                        }
-//                    }
-//                    if ( minDistance > maxMinDistance )
-//                    {
-//                        maxMinDistance = minDistance;
-//                        bestIndices = indices;
-//                    }
-//
-//                    Combination *t = c;
-//                    c = c->successor();
-//                    delete t;
-//                }
-//            }
-//
-//            DEBUG_LOG( "best indices:" );
-//            for ( int i = 0; i < nColors; i++ ) DEBUG_LOG( QString::number( bestIndices.at( i ) ) );
-//
-//            for ( int i = 0; i < nColors; i++ ) viewpointColors[bestIndices.at(i)] = m_colorVomiPalette.at( i );
-//
-//            float maxChange;
-//            do
-//            {
-//                maxChange = 0.0f;
-//                for ( int i = 0; i < nViewpoints; i++ )
-//                {
-//                    if ( bestIndices.contains( i ) ) continue;
-//                    Vector3 viewpoint = viewpoints.at( i );
-//                    QVector<int> neighbours = viewpointGenerator.neighbours( i );
-//                    Vector3Float color;
-//                    double totalWeight = 0.0;
-//                    int nNeighbours = neighbours.size();
-//                    for ( int j = 0; j < nNeighbours; j++ )
-//                    {
-//                        int neighbourIndex = neighbours.at( j );
-//                        double distance = ( viewpoint - viewpoints.at( neighbourIndex ) ).length();
-//                        double weight = 1.0 / distance;
-//                        color += weight * viewpointColors.at( neighbourIndex );
-//                        totalWeight += weight;
-//                    }
-//                    color /= totalWeight;
-//                    float change = ( color - viewpointColors.at( i ) ).length();
-//                    viewpointColors[i] = color;
-//                    if ( change > maxChange ) maxChange = change;
-//                }
-//            } while ( maxChange > 0.1f );
-//        }
-//
-//        DEBUG_LOG( "colors: " );
-//        for ( int i = 0; i < nViewpoints; i++ )
-//        {
-//            DEBUG_LOG( QString( "v%1: %2 -> %3" ).arg( i+1 ).arg( viewpoints.at( i ).toString() ).arg( viewpointColors.at( i ).toString() ) );
-//        }
-//    }
-//
-//    m_vmiProgressBar->setValue( 0 );
-//
-//    // iterem pel volum en l'ordre dels vòxels
-//    for ( int z = 0, i = 0; z < dimZ; z++ )
-//    {
-//        DEBUG_LOG( QString( "llesca %1/%2" ).arg( z + 1 ).arg( dimZ ) );
-//
-//        // actualitzem pOV
-//        for ( int k = 0; k < nViewpoints; k++ )
-//        {
-//            // quan z == 0, es salta la primera llesca, que seria z == -1
-//            if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );
-//            else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
-//            else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
-//        }
-//
-//        int pOvShift = ( z - 1 ) * dimXY;
-//
-//        for ( int y = 0; y < dimY; y++ )
-//        {
-//            for ( int x = 0; x < dimX; x++, i++ )
-//            {
-//                Q_ASSERT( i == x + y * dimX + z * dimXY );
-//
-//                float poi = objectProbabilities.at( i );    // p(oi)
-//                Q_ASSERT( poi == poi );
-//
-//                // p(V|oi)
-//                if ( poi == 0.0 ) pVoi.fill( 0.0f );    // si p(oi) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oi) ha de ser tot zeros
-//                else for ( int k = 0; k < nViewpoints; k++ ) pVoi[k] = viewProbabilities.at( k ) * pOV[k][i - pOvShift] / poi;
-//
-//                if ( computeVomi )
-//                {
-//                    float vomi = InformationTheory<float>::kullbackLeiblerDivergence( pVoi, viewProbabilities );
-//                    Q_ASSERT( vomi == vomi );
-//                    m_vomi[i] = vomi;
-//                    if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
-//                }
-//
-//                if ( computeVoxelSaliencies )
-//                {
-////                        int neighbours[6] = { x - 1 + y * dimX + z * dimXY, x + 1 + y * dimX + z * dimXY,
-////                                              x + ( y - 1 ) * dimX + z * dimXY, x + ( y + 1 ) * dimX + z * dimXY,
-////                                              x + y * dimX + ( z - 1 ) * dimXY, x + y * dimX + ( z + 1 ) * dimXY };
-////                        bool validNeighbours[6] = { x > 0, x + 1 < dimX,
-////                                                    y > 0, y + 1 < dimY,
-////                                                    z > 0, z + 1 < dimZ };
-//                    int neighbours[26] = { x-1 + (y-1) * dimX + (z-1) * dimXY, x-1 + (y-1) * dimX +  z    * dimXY, x-1 + (y-1) * dimX + (z+1) * dimXY,
-//                                           x-1 +  y    * dimX + (z-1) * dimXY, x-1 +  y    * dimX +  z    * dimXY, x-1 +  y    * dimX + (z+1) * dimXY,
-//                                           x-1 + (y+1) * dimX + (z-1) * dimXY, x-1 + (y+1) * dimX +  z    * dimXY, x-1 + (y+1) * dimX + (z+1) * dimXY,
-//                                           x   + (y-1) * dimX + (z-1) * dimXY, x   + (y-1) * dimX +  z    * dimXY, x   + (y-1) * dimX + (z+1) * dimXY,
-//                                           x   +  y    * dimX + (z-1) * dimXY,                                     x   +  y    * dimX + (z+1) * dimXY,
-//                                           x   + (y+1) * dimX + (z-1) * dimXY, x   + (y+1) * dimX +  z    * dimXY, x   + (y+1) * dimX + (z+1) * dimXY,
-//                                           x+1 + (y-1) * dimX + (z-1) * dimXY, x+1 + (y-1) * dimX +  z    * dimXY, x+1 + (y-1) * dimX + (z+1) * dimXY,
-//                                           x+1 +  y    * dimX + (z-1) * dimXY, x+1 +  y    * dimX +  z    * dimXY, x+1 +  y    * dimX + (z+1) * dimXY,
-//                                           x+1 + (y+1) * dimX + (z-1) * dimXY, x+1 + (y+1) * dimX +  z    * dimXY, x+1 + (y+1) * dimX + (z+1) * dimXY };
-//                    bool validNeighbours[26] = {   x > 0    &&   y > 0    &&   z > 0   ,   x > 0    &&   y > 0                 ,   x > 0    &&   y > 0    && z+1 < dimZ,
-//                                                   x > 0                  &&   z > 0   ,   x > 0                               ,   x > 0                  && z+1 < dimZ,
-//                                                   x > 0    && y+1 < dimY &&   z > 0   ,   x > 0    && y+1 < dimY              ,   x > 0    && y+1 < dimY && z+1 < dimZ,
-//                                                                 y > 0    &&   z > 0   ,                 y > 0                 ,                 y > 0    && z+1 < dimZ,
-//                                                                               z > 0   ,                                                                     z+1 < dimZ,
-//                                                               y+1 < dimY &&   z > 0   ,               y+1 < dimY              ,               y+1 < dimY && z+1 < dimZ,
-//                                                 x+1 < dimX &&   y > 0    &&   z > 0   , x+1 < dimX &&   y > 0                 , x+1 < dimX &&   y > 0    && z+1 < dimZ,
-//                                                 x+1 < dimX               &&   z > 0   , x+1 < dimX                            , x+1 < dimX               && z+1 < dimZ,
-//                                                 x+1 < dimX && y+1 < dimY &&   z > 0   , x+1 < dimX && y+1 < dimY              , x+1 < dimX && y+1 < dimY && z+1 < dimZ };
-//                    const float SQRT_1_2 = 1.0f / sqrt( 2.0f ), SQRT_1_3 = 1.0f / sqrt( 3.0f );
-//                    float weights[26] = { SQRT_1_3, SQRT_1_2, SQRT_1_3,
-//                                          SQRT_1_2,   1.0f  , SQRT_1_2,
-//                                          SQRT_1_3, SQRT_1_2, SQRT_1_3,
-//                                          SQRT_1_2,   1.0f  , SQRT_1_2,
-//                                            1.0f  ,             1.0f  ,
-//                                          SQRT_1_2,   1.0f  , SQRT_1_2,
-//                                          SQRT_1_3, SQRT_1_2, SQRT_1_3,
-//                                          SQRT_1_2,   1.0f  , SQRT_1_2,
-//                                          SQRT_1_3, SQRT_1_2, SQRT_1_3 };
-//
-//                    float saliency = 0.0f;
-//                    float totalWeight = 0.0f;
-//
-//                    // iterem pels veïns
-//                    for ( int j = 0; j < 26; j++ )
-//                    {
-//                        if ( !validNeighbours[j] ) continue;
-//
-//                        totalWeight += weights[j];
-//
-//                        float poj = objectProbabilities.at( neighbours[j] );    // p(oj)
-//                        Q_ASSERT( poj == poj );
-//                        float poij = poi + poj; // p(ô)
-//
-//                        if ( poij == 0.0f ) continue;
-//
-//                        // p(V|oj)
-//                        if ( poj == 0.0f ) pVoj.fill( 0.0f );   // si p(oj) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oj) ha de ser tot zeros
-//                        else for ( int k = 0; k < nViewpoints; k++ ) pVoj[k] = viewProbabilities.at( k ) * pOV[k][neighbours[j] - pOvShift] / poj;
-//
-//                        float s = weights[j] * InformationTheory<float>::jensenShannonDivergence( poi / poij, poj / poij, pVoi, pVoj );
-//                        Q_ASSERT( s == s );
-//                        saliency += s;
-//                    }
-//
-//                    saliency /= totalWeight;
-//                    m_voxelSaliencies[i] = saliency;
-//                    if ( saliency > m_maximumSaliency ) m_maximumSaliency = saliency;
-//                }
-//
-//                if ( computeViewpointVomi )
-//                {
-//                    for ( int k = 0; k < nViewpoints; k++ ) m_viewpointVomi[k] += m_vomi[i] * pVoi[k];
-//                }
-//
-//                if ( computeColorVomi )
-//                {
-//                    Vector3Float white( 1.0f, 1.0f, 1.0f );
-//                    Vector3Float colorVomi;
-//
-//                    for ( int k = 0; k < nViewpoints; k++ )
-//                    {
-//                        float pvo = pVoi.at( k );
-//                        if ( pvo > 0.0f ) colorVomi += pvo * log( pvo / viewProbabilities.at( k ) ) * ( white - viewpointColors.at( k ) );
-//                    }
-//
-//                    colorVomi /= log( 2.0f );
-//                    Q_ASSERT( colorVomi.x == colorVomi.x && colorVomi.y == colorVomi.y && colorVomi.z == colorVomi.z );
-//                    m_colorVomi[i] = colorVomi;
-//
-//                    if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
-//                    if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
-//                    if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
-//                }
-//            }
-//        }
-//
-//        if ( z > 0 )
-//        {
-//            // avancem una llesca en tots els fitxers
-//            for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );
-//        }
-//
-//        m_vmiProgressBar->setValue( 100 * ( z + 1 ) / dimZ );
-//        m_vmiProgressBar->repaint();
-//    }
-//
-//    DEBUG_LOG( "esborrem pOV" );
-//    for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
-//    delete[] pOV;
-//
-//    if ( computeVomi )
-//    {
-//        m_vomiCheckBox->setEnabled( true );
-//        m_saveVomiPushButton->setEnabled( true );
-//        m_vomiGradientPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeVoxelSaliencies )
-//    {
-//        m_voxelSalienciesCheckBox->setEnabled( true );
-//        m_saveVoxelSalienciesPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeViewpointVomi ) m_saveViewpointVomiPushButton->setEnabled( true );
-//
-//    if ( computeColorVomi )
-//    {
-//        m_colorVomiCheckBox->setEnabled( true );
-//        m_saveColorVomiPushButton->setEnabled( true );
-//    }
-//}
-
-
 void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities,
                                                            const QVector<QTemporaryFile*> &pOvFiles, bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi )
 {
@@ -1799,7 +1415,6 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
     if ( computeVoxelSaliencies )
     {
         m_baseVoxelSalienciesRadioButton->setEnabled( true );
-        m_voxelSalienciesCheckBox->setEnabled( true );
         m_saveVoxelSalienciesPushButton->setEnabled( true );
     }
 
@@ -2547,16 +2162,6 @@ void QExperimental3DExtension::saveVomi( const QString &fileName )
 }
 
 
-void QExperimental3DExtension::vomiChecked( bool checked )
-{
-    if ( checked )
-    {
-        m_voxelSalienciesCheckBox->setChecked( false );
-        m_colorVomiCheckBox->setChecked( false );
-    }
-}
-
-
 void QExperimental3DExtension::loadVoxelSaliencies()
 {
     QString voxelSalienciesFileName = getFileNameToLoad( "voxelSalienciesDir", tr("Load voxel saliencies"), tr("Data files (*.dat);;All files (*)") );
@@ -2590,7 +2195,6 @@ void QExperimental3DExtension::loadVoxelSaliencies( const QString &fileName )
     voxelSalienciesFile.close();
 
     m_baseVoxelSalienciesRadioButton->setEnabled( true );
-    m_voxelSalienciesCheckBox->setEnabled( true );
     m_saveVoxelSalienciesPushButton->setEnabled( true );
 }
 
@@ -2620,16 +2224,6 @@ void QExperimental3DExtension::saveVoxelSaliencies( const QString &fileName )
     for ( unsigned int i = 0; i < nObjects; i++ ) out << m_voxelSaliencies.at( i );
 
     voxelSalienciesFile.close();
-}
-
-
-void QExperimental3DExtension::voxelSalienciesChecked( bool checked )
-{
-    if ( checked )
-    {
-        m_vomiCheckBox->setChecked( false );
-        m_colorVomiCheckBox->setChecked( false );
-    }
 }
 
 
@@ -2903,16 +2497,6 @@ void QExperimental3DExtension::saveColorVomi( const QString &fileName )
 }
 
 
-void QExperimental3DExtension::colorVomiChecked( bool checked )
-{
-    if ( checked )
-    {
-        m_vomiCheckBox->setChecked( false );
-        m_voxelSalienciesCheckBox->setChecked( false );
-    }
-}
-
-
 void QExperimental3DExtension::tourBestViews()
 {
     QList<Vector3> viewpoints;
@@ -2933,7 +2517,7 @@ void QExperimental3DExtension::computeVomiGradient()
 {
     m_voxelSaliencies = m_volume->computeVomiGradient( m_vomi );
     m_maximumSaliency = 1.0f;
-    m_voxelSalienciesCheckBox->setEnabled( true );
+    m_baseVoxelSalienciesRadioButton->setEnabled( true );
     m_saveVoxelSalienciesPushButton->setEnabled( true );
 }
 
@@ -3043,10 +2627,6 @@ void QExperimental3DExtension::loadAndRunProgram()
                     else if ( word == "vomi" )
                     {
                         if ( run && m_vomiCheckBox->isEnabled() ) m_vomiCheckBox->setCheckState( checkState );
-                    }
-                    else if ( word == "saliencies" )
-                    {
-                        if ( run && m_voxelSalienciesCheckBox->isEnabled() ) m_voxelSalienciesCheckBox->setChecked( check );
                     }
                     else if ( word == "cvomi" )
                     {
