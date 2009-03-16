@@ -114,7 +114,7 @@ void NonClosedAngleTool::annotateLinePoints()
     {
         line->setFirstPoint( computed );
         line->setSecondPoint( computed );
-        m_lineState = ONE_POINT;
+        m_lineState = FIRST_POINT;
 
         if ( m_state == NONE )
             m_firstLine = line;
@@ -132,15 +132,9 @@ void NonClosedAngleTool::annotateLinePoints()
         m_lineState = NO_POINTS;
 
         if ( m_state == NONE )
-        {
-            //m_firstLine = line;
             m_state = FIRST_LINE_FIXED;
-        }
         else
-        {
-            //m_secondLine = line;
             m_state = SECOND_LINE_FIXED;
-        }
     }
 }
 
@@ -241,7 +235,7 @@ void NonClosedAngleTool::computeAngle()
     DrawerText * text = new DrawerText;
 
     if ( state == MathTools::PARALLEL )
-        text->setText( tr("0 degrees") );
+        text->setText( tr("0.0 degrees") );
     else if ( state == MathTools::SKEW )   //Won't occur
         text->setText( tr("Skew lines.") );
     else
