@@ -39,17 +39,17 @@ private:
     void simulateLine();
 
 private:
+    ///estat de la línia
+    enum { NO_POINTS, FIRST_POINT };
+
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
     /// Línia que es dibuixa
     QPointer<DrawerLine> m_line;
 
-    /// Primer punt
-    bool m_hasFirstPoint;
-
-    /// Segon punt
-    bool m_hasSecondPoint;
+    ///estat de la línia
+    int m_lineState;
 
 };
 }
