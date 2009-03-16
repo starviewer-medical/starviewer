@@ -50,7 +50,7 @@ private:
 
 private:
     ///Estats de la línia segons els punts
-    enum { NO_POINTS, ONE_POINT };
+    enum { NO_POINTS, FIRST_POINT };
 
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
