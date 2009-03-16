@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>654</height>
+    <height>780</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" >
@@ -128,57 +128,202 @@
          </layout>
         </item>
         <item>
-         <widget class="QCheckBox" name="m_diffuseCheckBox" >
-          <property name="text" >
-           <string>Diffuse lighting</string>
+         <widget class="QGroupBox" name="m_baseShadingGroupBox" >
+          <property name="title" >
+           <string>Base shading</string>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5" >
+           <item>
+            <widget class="QRadioButton" name="m_baseAmbientLightingRadioButton" >
+             <property name="text" >
+              <string>Ambient lighting</string>
+             </property>
+             <property name="checked" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_17" >
+             <item>
+              <widget class="QRadioButton" name="m_baseDiffuseLightingRadioButton" >
+               <property name="text" >
+                <string>Diffuse lighting</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_baseSpecularLightingCheckBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Specular lighting</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseSpecularLightingPowerLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Power</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseSpecularLightingPowerDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="decimals" >
+                <number>1</number>
+               </property>
+               <property name="maximum" >
+                <double>128.000000000000000</double>
+               </property>
+               <property name="value" >
+                <double>64.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_18" >
+             <item>
+              <widget class="QRadioButton" name="m_baseVomiRadioButton" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>VoMI</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseVomiFactorLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Factor</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseVomiFactorDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep" >
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value" >
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_19" >
+             <item>
+              <widget class="QRadioButton" name="m_baseColorVomiRadioButton" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Color VoMI</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseColorVomiFactorLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Factor</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseColorVomiFactorDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep" >
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value" >
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_20" >
+             <item>
+              <widget class="QRadioButton" name="m_baseVoxelSalienciesRadioButton" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Voxel saliencies</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseVoxelSalienciesFactorLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>Factor</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseVoxelSalienciesFactorDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <double>100.000000000000000</double>
+               </property>
+               <property name="singleStep" >
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value" >
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="m_specularCheckBox" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
-          <property name="text" >
-           <string>Specular lighting</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <property name="margin" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="m_specularPowerLabel" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Specular power</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="decimals" >
-             <number>1</number>
-            </property>
-            <property name="maximum" >
-             <double>128.000000000000000</double>
-            </property>
-            <property name="value" >
-             <double>64.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" >
@@ -211,16 +356,6 @@
          </layout>
         </item>
         <item>
-         <widget class="QCheckBox" name="m_obscuranceCheckBox" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
-          <property name="text" >
-           <string>Obscurance</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <layout class="QHBoxLayout" >
           <property name="spacing" >
            <number>6</number>
@@ -229,12 +364,25 @@
            <number>0</number>
           </property>
           <item>
+           <widget class="QCheckBox" name="m_obscuranceCheckBox" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Obscurance</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="m_obscuranceFactorLabel" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
             <property name="text" >
-             <string>Obscurance factor</string>
+             <string>Factor</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -257,25 +405,32 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <property name="margin" >
-           <number>0</number>
-          </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_21" >
           <item>
-           <widget class="QLabel" name="m_obscuranceFilterLowLabel" >
+           <widget class="QLabel" name="m_obscuranceFiltersLabel" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
             <property name="text" >
-             <string>Obscurance low filter</string>
+             <string>Obscurance filters</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="m_obscuranceFilterLowDoubleSpinBox" >
+           <widget class="QLabel" name="m_obscuranceLowFilterLabel" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Low</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="m_obscuranceLowFilterDoubleSpinBox" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
@@ -287,28 +442,21 @@
             </property>
            </widget>
           </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <property name="margin" >
-           <number>0</number>
-          </property>
           <item>
-           <widget class="QLabel" name="m_obscuranceFilterHighLabel" >
+           <widget class="QLabel" name="m_obscuranceHighFilterLabel" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
             <property name="text" >
-             <string>Obscurance high filter</string>
+             <string>High</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="m_obscuranceFilterHighDoubleSpinBox" >
+           <widget class="QDoubleSpinBox" name="m_obscuranceHighFilterDoubleSpinBox" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
@@ -335,9 +483,6 @@
             <property name="text" >
              <string>VoMI</string>
             </property>
-            <property name="tristate" >
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
@@ -347,6 +492,9 @@
             </property>
             <property name="text" >
              <string>Factor</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -388,6 +536,9 @@
             <property name="text" >
              <string>Factor</string>
             </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
            </widget>
           </item>
           <item>
@@ -418,9 +569,6 @@
             <property name="text" >
              <string>Color VoMI</string>
             </property>
-            <property name="tristate" >
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
           <item>
@@ -430,6 +578,9 @@
             </property>
             <property name="text" >
              <string>Factor</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
