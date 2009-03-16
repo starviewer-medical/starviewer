@@ -74,19 +74,26 @@ void QExperimental3DExtension::createConnections()
 {
     // visualització
     connect( m_backgroundColorPushButton, SIGNAL( clicked() ), SLOT( chooseBackgroundColor() ) );
-    connect( m_diffuseCheckBox, SIGNAL( toggled(bool) ), SLOT( enableSpecularLighting(bool) ) );
-    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerLabel, SLOT( setEnabled(bool) ) );
-    connect( m_specularCheckBox, SIGNAL( toggled(bool) ), m_specularPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseDiffuseLightingRadioButton, SIGNAL( toggled(bool) ), SLOT( enableSpecularLighting(bool) ) );
+    connect( m_baseSpecularLightingCheckBox, SIGNAL( toggled(bool) ), m_baseSpecularLightingPowerLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseSpecularLightingCheckBox, SIGNAL( toggled(bool) ), m_baseSpecularLightingPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_contourCheckBox, SIGNAL( toggled(bool) ), m_contourDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
     connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterLowLabel, SLOT( setEnabled(bool) ) );
-    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterLowDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighLabel, SLOT( setEnabled(bool) ) );
-    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFilterHighDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFiltersLabel, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceLowFilterLabel, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceLowFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceHighFilterLabel, SLOT( setEnabled(bool) ) );
+    connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceHighFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), SLOT( vomiChecked(bool) ) );
@@ -250,17 +257,17 @@ void QExperimental3DExtension::chooseBackgroundColor()
 
 void QExperimental3DExtension::enableSpecularLighting( bool on )
 {
-    m_specularCheckBox->setEnabled( on );
+    m_baseSpecularLightingCheckBox->setEnabled( on );
 
     if ( on )
     {
-        m_specularPowerLabel->setEnabled( m_specularCheckBox->isChecked() );
-        m_specularPowerDoubleSpinBox->setEnabled( m_specularCheckBox->isChecked() );
+        m_baseSpecularLightingPowerLabel->setEnabled( m_baseSpecularLightingCheckBox->isChecked() );
+        m_baseSpecularLightingPowerDoubleSpinBox->setEnabled( m_baseSpecularLightingCheckBox->isChecked() );
     }
     else
     {
-        m_specularPowerLabel->setEnabled( false );
-        m_specularPowerDoubleSpinBox->setEnabled( false );
+        m_baseSpecularLightingPowerLabel->setEnabled( false );
+        m_baseSpecularLightingPowerDoubleSpinBox->setEnabled( false );
     }
 }
 
@@ -291,17 +298,23 @@ void QExperimental3DExtension::doVisualization()
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
     m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
 
-    if ( m_diffuseCheckBox->isChecked() ) m_viewer->updateShadingTable();
+    m_volume->resetShadingOptions();
 
-    m_volume->setLighting( m_diffuseCheckBox->isChecked(), m_specularCheckBox->isChecked(), m_specularPowerDoubleSpinBox->value() );
-    m_volume->setContour( m_contourCheckBox->isChecked(), m_contourDoubleSpinBox->value() );
-    m_volume->setObscurance( m_obscuranceCheckBox->isChecked(), m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceFilterLowDoubleSpinBox->value(), m_obscuranceFilterHighDoubleSpinBox->value() );
+    if ( m_baseAmbientLightingRadioButton->isChecked() ) m_volume->addLighting();
+    else if ( m_baseDiffuseLightingRadioButton->isChecked() )
+    {
+        m_viewer->updateShadingTable();
+        m_volume->addLighting( true, m_baseSpecularLightingCheckBox->isChecked(), m_baseSpecularLightingPowerDoubleSpinBox->value() );
+    }
+    else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
+    else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
+    else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
 
-    if ( m_vomiCheckBox->isChecked() ) m_volume->renderVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_vomiCheckBox->checkState() == Qt::Checked );
-
-    if ( m_voxelSalienciesCheckBox->isChecked() ) m_volume->renderVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value(), m_diffuseCheckBox->isChecked() );
-
-    if ( m_colorVomiCheckBox->isChecked() ) m_volume->renderColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value(), m_colorVomiCheckBox->checkState() == Qt::Checked );
+    if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
+    if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value() );
+    if ( m_vomiCheckBox->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value() );
+    if ( m_colorVomiCheckBox->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value() );
+    if ( m_voxelSalienciesCheckBox->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_voxelSalienciesFactorDoubleSpinBox->value() );
 
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
@@ -550,8 +563,7 @@ void QExperimental3DExtension::computeCancelObscurance()
         if ( m_obscuranceCheckBox->isChecked() )
         {
             m_obscuranceCheckBox->setChecked( false );
-            m_volume->setObscurance( false, 0, 1.0, 0.0, 1.0 );
-            m_viewer->render();
+            doVisualization();
         }
 
         m_obscuranceCheckBox->setEnabled( false );
@@ -625,8 +637,7 @@ void QExperimental3DExtension::loadObscurance()
         if ( m_obscuranceCheckBox->isChecked() )
         {
             m_obscuranceCheckBox->setChecked( false );
-            m_volume->setObscurance( false, 0, 1.0, 0.0, 1.0 );
-            m_viewer->render();
+            doVisualization();
         }
 
         m_obscuranceCheckBox->setEnabled( false );
@@ -1779,6 +1790,7 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
 
     if ( computeVomi )
     {
+        m_baseVomiRadioButton->setEnabled( true );
         m_vomiCheckBox->setEnabled( true );
         m_saveVomiPushButton->setEnabled( true );
         m_vomiGradientPushButton->setEnabled( true );
@@ -1786,6 +1798,7 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
 
     if ( computeVoxelSaliencies )
     {
+        m_baseVoxelSalienciesRadioButton->setEnabled( true );
         m_voxelSalienciesCheckBox->setEnabled( true );
         m_saveVoxelSalienciesPushButton->setEnabled( true );
     }
@@ -1794,6 +1807,7 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
 
     if ( computeColorVomi )
     {
+        m_baseColorVomiRadioButton->setEnabled( true );
         m_colorVomiCheckBox->setEnabled( true );
         m_saveColorVomiPushButton->setEnabled( true );
     }
@@ -1821,7 +1835,8 @@ void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerat
         for ( int i = 0; i < nObjects; i++ )
         {
 
-            ppO[i] = objectProbabilities.at( i ) * m_vomi.at( i );
+            //ppO[i] = objectProbabilities.at( i ) * m_vomi.at( i );
+            ppO[i] = objectProbabilities.at( i ) * qMax( m_vomi.at( i ), 0.01f * m_maximumSaliency );   // prova per evitar infinits a EVMI
             total += ppO.at( i );
         }
 
@@ -2497,6 +2512,7 @@ void QExperimental3DExtension::loadVomi( const QString &fileName )
 
     vomiFile.close();
 
+    m_baseVomiRadioButton->setEnabled( true );
     m_vomiCheckBox->setEnabled( true );
     m_saveVomiPushButton->setEnabled( true );
     m_vomiGradientPushButton->setEnabled( true );
@@ -2573,6 +2589,7 @@ void QExperimental3DExtension::loadVoxelSaliencies( const QString &fileName )
 
     voxelSalienciesFile.close();
 
+    m_baseVoxelSalienciesRadioButton->setEnabled( true );
     m_voxelSalienciesCheckBox->setEnabled( true );
     m_saveVoxelSalienciesPushButton->setEnabled( true );
 }
@@ -2750,7 +2767,7 @@ void QExperimental3DExtension::saveEvmi( const QString &fileName )
     if ( saveAsText )
     {
         QTextStream out( &evmiFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << "evmi(v" << i + 1 << ") = " << m_evmi.at( i ) << "\n";
+        for ( int i = 0; i < nViewpoints; i++ ) out << "EVMI(v" << i + 1 << ") = " << m_evmi.at( i ) << "\n";
     }
     else
     {
@@ -2852,6 +2869,7 @@ void QExperimental3DExtension::loadColorVomi( const QString &fileName )
 
     colorVomiFile.close();
 
+    m_baseColorVomiRadioButton->setEnabled( true );
     m_colorVomiCheckBox->setEnabled( true );
     m_saveColorVomiPushButton->setEnabled( true );
 }
@@ -2914,8 +2932,9 @@ void QExperimental3DExtension::guidedTour()
 void QExperimental3DExtension::computeVomiGradient()
 {
     m_voxelSaliencies = m_volume->computeVomiGradient( m_vomi );
-    m_voxelSalienciesCheckBox->setEnabled( true );
     m_maximumSaliency = 1.0f;
+    m_voxelSalienciesCheckBox->setEnabled( true );
+    m_saveVoxelSalienciesPushButton->setEnabled( true );
 }
 
 
@@ -3007,11 +3026,11 @@ void QExperimental3DExtension::loadAndRunProgram()
 
                     if ( word == "diffuse" )
                     {
-                        if ( run && m_diffuseCheckBox->isEnabled() ) m_diffuseCheckBox->setChecked( check );
+                        if ( run && m_baseDiffuseLightingRadioButton->isEnabled() ) m_baseDiffuseLightingRadioButton->setChecked( check );
                     }
                     else if ( word == "specular" )
                     {
-                        if ( run && m_specularCheckBox->isEnabled() ) m_specularCheckBox->setChecked( check );
+                        if ( run && m_baseSpecularLightingCheckBox->isEnabled() ) m_baseSpecularLightingCheckBox->setChecked( check );
                     }
                     else if ( word == "contour" )
                     {

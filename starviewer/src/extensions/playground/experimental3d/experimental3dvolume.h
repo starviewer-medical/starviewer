@@ -65,12 +65,14 @@ public:
     void setInterpolation( Interpolation interpolation );
     /// Estableix l'estimador de gradient.
     void setGradientEstimator( GradientEstimator gradientEstimator );
-    /// Estableix els paràmetres d'il·luminació.
-    void setLighting( bool diffuse, bool specular, double specularPower );
-    /// Estableix els paràmetres del contorn.
-    void setContour( bool on, double threshold );
-    /// Estableix els paràmetres de les obscurances.
-    void setObscurance( bool on, Obscurance *obscurance, double factor, double filterLow, double filterHigh );
+    /// Assigna les opcions predeterminades de shading: no es pinta res.
+    void resetShadingOptions();
+    /// Afegeix il·luminació al shading.
+    void addLighting( bool diffuse = false, bool specular = false, double specularPower = 0.0 );
+    /// Afegeix contorn al shading.
+    void addContour( double threshold = 0.0 );
+    /// Afegeix obscurances al shading.
+    void addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh );
     /// Estableix la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -81,9 +83,9 @@ public:
     void startVmiSecondPass();
     QVector<float> finishVmiSecondPass();
     float viewedVolumeInVmiSecondPass() const;
-    void renderVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool combine );
-    void renderVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor, bool diffuseLighting );
-    void renderColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor, bool combine );
+    void addVomi( const QVector<float> &vomi, float maximumVomi, float factor );
+    void addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor );
+    void addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor );
     QVector<float> computeVomiGradient( const QVector<float> &vomi );
 
 private:
