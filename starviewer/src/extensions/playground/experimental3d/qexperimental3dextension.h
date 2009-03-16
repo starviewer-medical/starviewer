@@ -65,6 +65,8 @@ private:
     /// Escriu al log un error d'un programa.
     void logProgramError( int lineNumber, const QString &error, const QString &extra ) const;
     bool programTab( const QStringList &words, int lineNumber, bool run );
+    bool programRenderingInterpolation( const QStringList &words, int lineNumber, bool run );
+    bool programRenderingGradientEstimator( const QStringList &words, int lineNumber, bool run );
 
     void loadVmi( const QString &fileName );
     void saveVmi( const QString &fileName );

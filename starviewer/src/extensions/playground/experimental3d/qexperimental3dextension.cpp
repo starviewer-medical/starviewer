@@ -2569,6 +2569,28 @@ void QExperimental3DExtension::loadAndRunProgram()
 
                 errors = !programTab( words, lineNumber, run );
             }
+            else if ( command == "rendering-interpolation" )
+            {
+                if ( words.size() < 2 )
+                {
+                    logProgramError( lineNumber, "Falta el mètode d'interpolació", line );
+                    errors = true;
+                    continue;
+                }
+
+                errors = !programRenderingInterpolation( words, lineNumber, run );
+            }
+            else if ( command == "rendering-gradientestimator" )
+            {
+                if ( words.size() < 2 )
+                {
+                    logProgramError( lineNumber, "Falta l'estimador de gradient", line );
+                    errors = true;
+                    continue;
+                }
+
+                errors = !programRenderingGradientEstimator( words, lineNumber, run );
+            }
             else if ( command == "visualization-check" || command == "visualization-partcheck" || command == "visualization-uncheck" )
             {
                 bool check = command == "visualization-check" || command == "visualization-partcheck";
@@ -2919,6 +2941,58 @@ bool QExperimental3DExtension::programTab( const QStringList &words, int lineNum
     else
     {
         logProgramError( lineNumber, "El nom de la pestanya és incorrecte", tab );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::programRenderingInterpolation( const QStringList &words, int lineNumber, bool run )
+{
+    const QString &interpolation = words.at( 1 );
+
+    if ( interpolation == "nn" )
+    {
+        if ( run ) m_interpolationComboBox->setCurrentIndex( 0 );
+    }
+    else if ( interpolation == "lic" )
+    {
+        if ( run ) m_interpolationComboBox->setCurrentIndex( 1 );
+    }
+    else if ( interpolation == "lci" )
+    {
+        if ( run ) m_interpolationComboBox->setCurrentIndex( 2 );
+    }
+    else
+    {
+        logProgramError( lineNumber, "Mètode d'interpolació incorrecte", interpolation );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::programRenderingGradientEstimator( const QStringList &words, int lineNumber, bool run )
+{
+    const QString &gradientEstimator = words.at( 1 );
+
+    if ( gradientEstimator == "finitedifference" )
+    {
+        if ( run ) m_gradientEstimatorComboBox->setCurrentIndex( 0 );
+    }
+    else if ( gradientEstimator == "4dlr1" )
+    {
+        if ( run ) m_gradientEstimatorComboBox->setCurrentIndex( 1 );
+    }
+    else if ( gradientEstimator == "4dlr2" )
+    {
+        if ( run ) m_gradientEstimatorComboBox->setCurrentIndex( 2 );
+    }
+    else
+    {
+        logProgramError( lineNumber, "Estimador de gradient incorrecte", gradientEstimator );
         return false;
     }
 
