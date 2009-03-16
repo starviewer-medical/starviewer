@@ -2547,7 +2547,7 @@ void QExperimental3DExtension::loadAndRunProgram()
     {
         int lineNumber = 0;
 
-        while ( !in.atEnd() )
+        while ( !in.atEnd() && !( errors && run ) )
         {
             lineNumber++;
 
@@ -2558,38 +2558,26 @@ void QExperimental3DExtension::loadAndRunProgram()
 
             QString command = words.at( 0 );
 
-            if ( command == "tab" )
+            if ( command == "//" ) continue;
+            else if ( command == "tab" )
             {
-                if ( words.size() < 2 )
-                {
-                    logProgramError( lineNumber, "Falta el nom de la pestanya", line );
-                    errors = true;
-                    continue;
-                }
-
-                errors = !programTab( words, lineNumber, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programTab( lineNumber, line, run );
+                else errors = true;
             }
             else if ( command == "rendering-interpolation" )
             {
-                if ( words.size() < 2 )
-                {
-                    logProgramError( lineNumber, "Falta el mètode d'interpolació", line );
-                    errors = true;
-                    continue;
-                }
-
-                errors = !programRenderingInterpolation( words, lineNumber, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingInterpolation( lineNumber, line, run );
+                else errors = true;
             }
             else if ( command == "rendering-gradientestimator" )
             {
-                if ( words.size() < 2 )
-                {
-                    logProgramError( lineNumber, "Falta l'estimador de gradient", line );
-                    errors = true;
-                    continue;
-                }
-
-                errors = !programRenderingGradientEstimator( words, lineNumber, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingGradientEstimator( lineNumber, line, run );
+                else errors = true;
+            }
+            else if ( command == "rendering-baseshading" )
+            {
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingBaseShading( lineNumber, line, run );
+                else errors = true;
             }
             else if ( command == "visualization-check" || command == "visualization-partcheck" || command == "visualization-uncheck" )
             {
@@ -2903,16 +2891,27 @@ void QExperimental3DExtension::loadAndRunProgram()
 }
 
 
-void QExperimental3DExtension::logProgramError( int lineNumber, const QString &error, const QString &extra ) const
+void QExperimental3DExtension::logProgramError( int lineNumber, const QString &error, const QString &line ) const
 {
-    DEBUG_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + extra );
-    ERROR_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + extra );
+    DEBUG_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + line );
+    ERROR_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + line );
 }
 
 
-bool QExperimental3DExtension::programTab( const QStringList &words, int lineNumber, bool run )
+bool QExperimental3DExtension::programCheckWordCount( int lineNumber, const QString &line, int wordCount ) const
 {
-    const QString &tab = words.at( 1 );
+    if ( line.split( ' ', QString::SkipEmptyParts ).size() < wordCount )
+    {
+        logProgramError( lineNumber, "Falten paràmetres", line );
+        return false;
+    }
+    else return true;
+}
+
+
+bool QExperimental3DExtension::programTab( int lineNumber, const QString &line, bool run )
+{
+    QString tab = line.split( ' ', QString::SkipEmptyParts ).at( 1 );
 
     if ( tab == "rendering" )
     {
@@ -2940,7 +2939,7 @@ bool QExperimental3DExtension::programTab( const QStringList &words, int lineNum
     }
     else
     {
-        logProgramError( lineNumber, "El nom de la pestanya és incorrecte", tab );
+        logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
         return false;
     }
 
@@ -2948,9 +2947,9 @@ bool QExperimental3DExtension::programTab( const QStringList &words, int lineNum
 }
 
 
-bool QExperimental3DExtension::programRenderingInterpolation( const QStringList &words, int lineNumber, bool run )
+bool QExperimental3DExtension::programRenderingInterpolation( int lineNumber, const QString &line, bool run )
 {
-    const QString &interpolation = words.at( 1 );
+    QString interpolation = line.split( ' ', QString::SkipEmptyParts ).at( 1 );
 
     if ( interpolation == "nn" )
     {
@@ -2966,7 +2965,7 @@ bool QExperimental3DExtension::programRenderingInterpolation( const QStringList 
     }
     else
     {
-        logProgramError( lineNumber, "Mètode d'interpolació incorrecte", interpolation );
+        logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
         return false;
     }
 
@@ -2974,9 +2973,9 @@ bool QExperimental3DExtension::programRenderingInterpolation( const QStringList 
 }
 
 
-bool QExperimental3DExtension::programRenderingGradientEstimator( const QStringList &words, int lineNumber, bool run )
+bool QExperimental3DExtension::programRenderingGradientEstimator( int lineNumber, const QString &line, bool run )
 {
-    const QString &gradientEstimator = words.at( 1 );
+    QString gradientEstimator = line.split( ' ', QString::SkipEmptyParts ).at( 1 );
 
     if ( gradientEstimator == "finitedifference" )
     {
@@ -2992,7 +2991,95 @@ bool QExperimental3DExtension::programRenderingGradientEstimator( const QStringL
     }
     else
     {
-        logProgramError( lineNumber, "Estimador de gradient incorrecte", gradientEstimator );
+        logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::programRenderingBaseShading( int lineNumber, const QString &line, bool run )
+{
+    QStringList words = line.split( ' ', QString::SkipEmptyParts );
+    const QString &base = words.at( 1 );
+
+    if ( base == "ambient" )
+    {
+        if ( run ) m_baseAmbientLightingRadioButton->setChecked( true );
+    }
+    else if ( base == "diffuse" )
+    {
+        if ( run ) m_baseDiffuseLightingRadioButton->setChecked( true );
+
+        if ( words.size() > 2 )
+        {
+            if ( words.at( 2 ) == "specular" )
+            {
+                if ( run )
+                {
+                    m_baseSpecularLightingCheckBox->setChecked( true );
+                    if ( words.size() > 3 ) m_baseSpecularLightingPowerDoubleSpinBox->setValue( words.at( 3 ).toDouble() );
+                }
+            }
+            else
+            {
+                logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
+                return false;
+            }
+        }
+    }
+    else if ( base == "vomi" )
+    {
+        if ( run )
+        {
+            if ( m_baseVomiRadioButton->isEnabled() )
+            {
+                m_baseVomiRadioButton->setChecked( true );
+                if ( words.size() > 2 ) m_baseVomiFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar VoMI", line );
+                return false;
+            }
+        }
+    }
+    else if ( base == "cvomi" )
+    {
+        if ( run )
+        {
+            if ( m_baseColorVomiRadioButton->isEnabled() )
+            {
+                m_baseColorVomiRadioButton->setChecked( true );
+                if ( words.size() > 2 ) m_baseColorVomiFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar color VoMI", line );
+                return false;
+            }
+        }
+    }
+    else if ( base == "saliency" )
+    {
+        if ( run )
+        {
+            if ( m_baseVomiRadioButton->isEnabled() )
+            {
+                m_baseVoxelSalienciesRadioButton->setChecked( true );
+                if ( words.size() > 2 ) m_baseVoxelSalienciesFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar voxel saliencies", line );
+                return false;
+            }
+        }
+    }
+    else
+    {
+        logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
         return false;
     }
 
