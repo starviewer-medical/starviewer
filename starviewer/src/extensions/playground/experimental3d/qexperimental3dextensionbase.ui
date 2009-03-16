@@ -37,9 +37,9 @@
       <property name="currentIndex" >
        <number>0</number>
       </property>
-      <widget class="QWidget" name="m_visualizationTab" >
+      <widget class="QWidget" name="m_renderingTab" >
        <attribute name="title" >
-        <string>Visualization</string>
+        <string>Rendering</string>
        </attribute>
        <layout class="QVBoxLayout" >
         <property name="spacing" >
@@ -587,7 +587,7 @@
          <widget class="udg::QGraphicTransferFunctionEditor" native="1" name="m_transferFunctionEditor" />
         </item>
         <item>
-         <widget class="QPushButton" name="m_visualizationOkPushButton" >
+         <widget class="QPushButton" name="m_renderingOkPushButton" >
           <property name="text" >
            <string>OK</string>
           </property>

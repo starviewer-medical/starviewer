@@ -64,6 +64,7 @@ private:
     void computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     /// Escriu al log un error d'un programa.
     void logProgramError( int lineNumber, const QString &error, const QString &extra ) const;
+    bool programTab( const QStringList &words, int lineNumber, bool run );
 
     void loadVmi( const QString &fileName );
     void saveVmi( const QString &fileName );
@@ -98,8 +99,8 @@ private slots:
     void loadTransferFunction();
     /// Obre un diàleg per desar una funció de transferència.
     void saveTransferFunction();
-    /// Fa la visualització amb les opcions seleccionades.
-    void doVisualization();
+    /// Renderitza amb les opcions seleccionades.
+    void render();
 
     /// Posa els paràmetres de la càmera actuals als spinboxs corresponents.
     void getCamera();

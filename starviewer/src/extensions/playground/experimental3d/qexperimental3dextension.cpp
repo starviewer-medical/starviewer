@@ -66,7 +66,7 @@ void QExperimental3DExtension::setInput( Volume *input )
     defaultTransferFunction.addPoint( max, QColor( 255, 255, 255, 255 ) );
     m_transferFunctionEditor->setTransferFunction( defaultTransferFunction );
 
-    doVisualization();
+    render();
 }
 
 
@@ -86,7 +86,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_contourCheckBox, SIGNAL( toggled(bool) ), m_contourDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
-    connect( m_visualizationOkPushButton, SIGNAL( clicked() ), SLOT( doVisualization() ) );
+    connect( m_renderingOkPushButton, SIGNAL( clicked() ), SLOT( render() ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFiltersLabel, SLOT( setEnabled(bool) ) );
@@ -288,7 +288,7 @@ void QExperimental3DExtension::saveTransferFunction()
 }
 
 
-void QExperimental3DExtension::doVisualization()
+void QExperimental3DExtension::render()
 {
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
     m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
@@ -557,7 +557,7 @@ void QExperimental3DExtension::computeCancelObscurance()
         if ( m_obscuranceCheckBox->isChecked() )
         {
             m_obscuranceCheckBox->setChecked( false );
-            doVisualization();
+            render();
         }
 
         m_obscuranceCheckBox->setEnabled( false );
@@ -631,7 +631,7 @@ void QExperimental3DExtension::loadObscurance()
         if ( m_obscuranceCheckBox->isChecked() )
         {
             m_obscuranceCheckBox->setChecked( false );
-            doVisualization();
+            render();
         }
 
         m_obscuranceCheckBox->setEnabled( false );
@@ -962,7 +962,7 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     deleteObjectProbabilitiesPerViewFiles( pOvFiles );
 
-    doVisualization();
+    render();
 
     // Restaurem la càmera
     m_viewer->setCamera( position, focus, up );
@@ -2567,37 +2567,7 @@ void QExperimental3DExtension::loadAndRunProgram()
                     continue;
                 }
 
-                const QString &tab = words.at( 1 );
-
-                if ( tab == "visualization" )
-                {
-                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_visualizationTab );
-                }
-                else if ( tab == "camera" )
-                {
-                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
-                }
-                else if ( tab == "obscurance" )
-                {
-                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
-                }
-                else if ( tab == "smi" )
-                {
-                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
-                }
-                else if ( tab == "vmi" )
-                {
-                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
-                }
-                else if ( tab == "program" )
-                {
-                    if ( run ) m_controlsTabWidget->setCurrentWidget( m_programTab );
-                }
-                else
-                {
-                    logProgramError( lineNumber, "El nom de la pestanya és incorrecte", tab );
-                    errors = true;
-                }
+                errors = !programTab( words, lineNumber, run );
             }
             else if ( command == "visualization-check" || command == "visualization-partcheck" || command == "visualization-uncheck" )
             {
@@ -2650,9 +2620,9 @@ void QExperimental3DExtension::loadAndRunProgram()
 
                 if ( run ) loadTransferFunction( words.at( 1 ) );
             }
-            else if ( command == "visualization-ok" )
+            else if ( command == "render" )
             {
-                if ( run ) doVisualization();
+                if ( run ) render();
             }
             else if ( command == "vmi-viewpoints" )
             {
@@ -2915,6 +2885,44 @@ void QExperimental3DExtension::logProgramError( int lineNumber, const QString &e
 {
     DEBUG_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + extra );
     ERROR_LOG( "[E3DP](" + QString::number( lineNumber ) + ") " + error + ": " + extra );
+}
+
+
+bool QExperimental3DExtension::programTab( const QStringList &words, int lineNumber, bool run )
+{
+    const QString &tab = words.at( 1 );
+
+    if ( tab == "rendering" )
+    {
+        if ( run ) m_controlsTabWidget->setCurrentWidget( m_renderingTab );
+    }
+    else if ( tab == "camera" )
+    {
+        if ( run ) m_controlsTabWidget->setCurrentWidget( m_cameraTab );
+    }
+    else if ( tab == "obscurance" )
+    {
+        if ( run ) m_controlsTabWidget->setCurrentWidget( m_obscuranceTab );
+    }
+    else if ( tab == "smi" )
+    {
+        if ( run ) m_controlsTabWidget->setCurrentWidget( m_smiTab );
+    }
+    else if ( tab == "vmi" )
+    {
+        if ( run ) m_controlsTabWidget->setCurrentWidget( m_vmiTab );
+    }
+    else if ( tab == "program" )
+    {
+        if ( run ) m_controlsTabWidget->setCurrentWidget( m_programTab );
+    }
+    else
+    {
+        logProgramError( lineNumber, "El nom de la pestanya és incorrecte", tab );
+        return false;
+    }
+
+    return true;
 }
 
 
