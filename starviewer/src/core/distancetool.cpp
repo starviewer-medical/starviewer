@@ -32,8 +32,7 @@ DistanceTool::DistanceTool( QViewer *viewer, QObject *parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
     m_line = NULL;
-    m_hasFirstPoint = false;
-    m_hasSecondPoint = false;
+    m_lineState = NO_POINTS;
 
     //DEBUG_LOG("DISTANCE TOOL CREADA ");
 }
@@ -73,11 +72,7 @@ void DistanceTool::handleEvent( long unsigned eventID )
 void DistanceTool::annotateNewPoint()
 {
     if ( !m_line )
-    {
         m_line = new DrawerLine;
-        m_hasFirstPoint = false;
-        m_hasSecondPoint = false;
-    }
 
     double position[4];
     double computed[3];
@@ -91,23 +86,19 @@ void DistanceTool::annotateNewPoint()
     computed[2] = position[2];
 
     //afegim el punt
-    if( !m_hasFirstPoint )
+    if( m_lineState == NO_POINTS )
     {
         m_line->setFirstPoint( computed );
-        m_hasFirstPoint = true;
+        m_line->setSecondPoint( computed );
+        m_lineState = FIRST_POINT;
+
+        m_2DViewer->getDrawer()->draw( m_line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
     else
     {
         m_line->setSecondPoint( computed );
-        //actualitzem els atributs de la linia
 
-        if( !m_hasSecondPoint )
-        {
-            m_2DViewer->getDrawer()->draw( m_line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-            m_hasSecondPoint = true;
-        }
-        else
-            m_line->update( DrawerPrimitive::VTKRepresentation );
+        m_line->update( DrawerPrimitive::VTKRepresentation );
 
         //Posem el text
         double *leftPoint = m_line->getLeftPoint( m_2DViewer->getView() );
@@ -144,6 +135,7 @@ void DistanceTool::annotateNewPoint()
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
+        m_lineState = NO_POINTS; //Restaurem l'm_stateLine
         m_line = NULL;//Acabem la linia. Encara no sabem com s'obtindran per modificar
     }
 }
@@ -162,15 +154,8 @@ void DistanceTool::simulateLine()
     computed[2] = position[2];
 
     m_line->setSecondPoint( computed );
-    //actualitzem els atributs de la linia
 
-    if( !m_hasSecondPoint )
-    {
-        m_2DViewer->getDrawer()->draw( m_line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-        m_hasSecondPoint = true;
-    }
-    else
-        m_line->update( DrawerPrimitive::VTKRepresentation );
+    m_line->update( DrawerPrimitive::VTKRepresentation );
 
 }
 
