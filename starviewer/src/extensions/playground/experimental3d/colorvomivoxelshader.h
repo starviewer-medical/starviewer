@@ -34,7 +34,6 @@ public:
     void setTransferFunction( const TransferFunction &transferFunction );
     void setColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float colorVomiFactor );
     void setCombine( bool on );
-    void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
@@ -60,8 +59,6 @@ protected:
     float m_maximumColorVomi;
     float m_colorVomiFactor;
     bool m_combine;
-    unsigned short *m_encodedNormals;
-    vtkDirectionEncoder *m_directionEncoder;
 
 };
 

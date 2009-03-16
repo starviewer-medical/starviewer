@@ -287,7 +287,6 @@ void Experimental3DVolume::addVomi( const QVector<float> &vomi, float maximumVom
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiVoxelShader );
     m_vomiVoxelShader->setVomi( vomi, maximumVomi, factor );
     m_vomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) != 0 );
-    m_vomiVoxelShader->setGradientEstimator( gradientEstimator() );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
@@ -297,7 +296,6 @@ void Experimental3DVolume::addColorVomi( const QVector<Vector3Float> &colorVomi,
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorVomiVoxelShader );
     m_colorVomiVoxelShader->setColorVomi( colorVomi, maximumColorVomi, factor );
     m_colorVomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) != 0 );
-    m_colorVomiVoxelShader->setGradientEstimator( gradientEstimator() );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
@@ -306,8 +304,6 @@ void Experimental3DVolume::addVoxelSaliencies( const QVector<float> &voxelSalien
 {
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_voxelSaliencyVoxelShader );
     m_voxelSaliencyVoxelShader->setVoxelSaliencies( voxelSaliencies, maximumSaliency, factor );
-    m_voxelSaliencyVoxelShader->setDiffuseLighting( false );
-    m_voxelSaliencyVoxelShader->setGradientEstimator( gradientEstimator() );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 

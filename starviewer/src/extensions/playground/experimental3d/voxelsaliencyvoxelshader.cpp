@@ -1,14 +1,11 @@
 #include "voxelsaliencyvoxelshader.h"
 
-#include <vtkEncodedGradientEstimator.h>
-
 
 namespace udg {
 
 
 VoxelSaliencyVoxelShader::VoxelSaliencyVoxelShader()
- : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumSaliency( 1.0f ), m_saliencyFactor( 1.0f ), m_diffuseLighting( false ),
-   m_encodedNormals( 0 ), m_directionEncoder( 0 )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumSaliency( 1.0f ), m_saliencyFactor( 1.0f )
 {
 }
 
@@ -40,19 +37,6 @@ void VoxelSaliencyVoxelShader::setVoxelSaliencies( const QVector<float> &voxelSa
     m_voxelSaliencies = voxelSaliencies;
     m_maximumSaliency = maximumSaliency;
     m_saliencyFactor = saliencyFactor;
-}
-
-
-void VoxelSaliencyVoxelShader::setDiffuseLighting( bool on )
-{
-    m_diffuseLighting = on;
-}
-
-
-void VoxelSaliencyVoxelShader::setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator )
-{
-    m_encodedNormals = gradientEstimator->GetEncodedNormals();
-    m_directionEncoder = gradientEstimator->GetDirectionEncoder();
 }
 
 
