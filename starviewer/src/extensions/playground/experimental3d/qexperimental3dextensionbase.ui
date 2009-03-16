@@ -517,49 +517,6 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout" >
-          <item>
-           <widget class="QCheckBox" name="m_voxelSalienciesCheckBox" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Voxel saliencies</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="m_voxelSalienciesFactorLabel" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="text" >
-             <string>Factor</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="m_voxelSalienciesFactorDoubleSpinBox" >
-            <property name="enabled" >
-             <bool>false</bool>
-            </property>
-            <property name="maximum" >
-             <double>100.000000000000000</double>
-            </property>
-            <property name="singleStep" >
-             <double>0.100000000000000</double>
-            </property>
-            <property name="value" >
-             <double>1.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_16" >
           <item>
            <widget class="QCheckBox" name="m_colorVomiCheckBox" >
