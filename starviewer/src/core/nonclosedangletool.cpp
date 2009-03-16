@@ -30,6 +30,7 @@ NonClosedAngleTool::NonClosedAngleTool( QViewer *viewer, QObject *parent )
     m_firstLine = NULL;
     m_secondLine = NULL;
     m_state = NONE;
+    m_lineState = NO_POINTS;
 }
 
 NonClosedAngleTool::~NonClosedAngleTool()
@@ -53,19 +54,19 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
             {
                 if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
                 {
-                    if ( m_state == NONE )
-                        this->annotateFirstLinePoints();
-                    else if ( m_state == FIRST_LINE_FIXED )
+                    this->annotateLinePoints();
+
+                    if ( m_state == SECOND_LINE_FIXED )
                     {
-                        this->annotateSecondLinePoints();
-                        if ( m_state == NONE )
-                        {
-                            computeAngle();
-                            //Acabem les línies
-                            m_firstLine = NULL;
-                            m_secondLine = NULL;
-                        }
+                        computeAngle();
+                        //Acabem les línies
+                        m_firstLine = NULL;
+                        m_secondLine = NULL;
+
+                        //Restaurem m_state
+                        m_state = NONE;
                     }
+
                     m_2DViewer->getDrawer()->refresh();
                 }
             }
@@ -74,9 +75,9 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
         case vtkCommand::MouseMoveEvent:
 
             if( m_firstLine && m_state == NONE )
-                this->simulateLine();
+                this->simulateLine(m_firstLine);
             else if ( m_secondLine && m_state == FIRST_LINE_FIXED )
-                this->simulateSecondLine();
+                this->simulateLine(m_secondLine);
 
             m_2DViewer->getDrawer()->refresh();
 
@@ -84,14 +85,18 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
     }
 }
 
-void NonClosedAngleTool::annotateFirstLinePoints()
+void NonClosedAngleTool::annotateLinePoints()
 {
-    if ( !m_firstLine )
-    {
-        m_firstLine = new DrawerLine;
-        m_hasFirstPoint = false;
-        m_hasSecondPoint = false;
-    }
+    DrawerLine *line;
+
+    //creem primera o segona línies
+    if ( ( m_state == NONE && m_lineState == NO_POINTS ) ||
+        ( m_state == FIRST_LINE_FIXED && m_lineState == NO_POINTS ) )
+        line = new DrawerLine;
+    else if ( m_state == NONE )
+        line = m_firstLine;
+    else
+        line = m_secondLine;
 
     double position[4];
     double computed[3];
@@ -105,68 +110,41 @@ void NonClosedAngleTool::annotateFirstLinePoints()
     computed[2] = position[2];
 
     //afegim el punt
-    if( !m_hasFirstPoint )
+    if( m_lineState == NO_POINTS )
     {
-        m_firstLine->setFirstPoint( computed );
-        m_hasFirstPoint = true;
+        line->setFirstPoint( computed );
+        line->setSecondPoint( computed );
+        m_lineState = ONE_POINT;
+
+        if ( m_state == NONE )
+            m_firstLine = line;
+        else
+            m_secondLine = line;
+
+        m_2DViewer->getDrawer()->draw( line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
     else
     {
-        m_firstLine->setSecondPoint( computed );
-        //actualitzem els atributs de la linia
-        if( !m_hasSecondPoint )
+        line->setSecondPoint( computed );
+
+        line->update( DrawerPrimitive::VTKRepresentation );
+
+        m_lineState = NO_POINTS;
+
+        if ( m_state == NONE )
         {
-            m_2DViewer->getDrawer()->draw( m_firstLine , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+            //m_firstLine = line;
+            m_state = FIRST_LINE_FIXED;
         }
         else
-            m_firstLine->update( DrawerPrimitive::VTKRepresentation );
-
-        m_state = FIRST_LINE_FIXED;
-    }
-}
-
-void NonClosedAngleTool::annotateSecondLinePoints()
-{
-    if ( !m_secondLine )
-    {
-        m_secondLine = new DrawerLine;
-        m_hasFirstPoint = false;
-        m_hasSecondPoint = false;
-    }
-
-    double position[4];
-    double computed[3];
-
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
-
-    //afegim el punt
-    if( !m_hasFirstPoint )
-    {
-        m_secondLine->setFirstPoint( computed );
-        m_hasFirstPoint = true;
-    }
-    else
-    {
-        m_secondLine->setSecondPoint( computed );
-        //actualitzem els atributs de la linia
-        if( !m_hasSecondPoint )
         {
-            m_2DViewer->getDrawer()->draw( m_secondLine , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+            //m_secondLine = line;
+            m_state = SECOND_LINE_FIXED;
         }
-        else
-            m_secondLine->update( DrawerPrimitive::VTKRepresentation );
-
-        m_state = NONE;
     }
 }
 
-void NonClosedAngleTool::simulateLine()
+void NonClosedAngleTool::simulateLine(DrawerLine *line)
 {
     double position[4];
     double computed[3];
@@ -179,41 +157,10 @@ void NonClosedAngleTool::simulateLine()
     computed[1] = position[1];
     computed[2] = position[2];
 
-    m_firstLine->setSecondPoint( computed );
-    //actualitzem els atributs de la linia
-    if( !m_hasSecondPoint )
-    {
-        m_2DViewer->getDrawer()->draw( m_firstLine , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-        m_hasSecondPoint = true;
-    }
-    else
-        m_firstLine->update( DrawerPrimitive::VTKRepresentation );
+    line->setSecondPoint( computed );
 
-}
-
-void NonClosedAngleTool::simulateSecondLine()
-{
-    double position[4];
-    double computed[3];
-
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
-
-    m_secondLine->setSecondPoint( computed );
-    //actualitzem els atributs de la linia
-    if( !m_hasSecondPoint )
-    {
-        m_2DViewer->getDrawer()->draw( m_secondLine , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-        m_hasSecondPoint = true;
-    }
-    else
-        m_secondLine->update( DrawerPrimitive::VTKRepresentation );
-
+    //Actualitzem viewer
+    line->update( DrawerPrimitive::VTKRepresentation );
 }
 
 void NonClosedAngleTool::computeAngle()
