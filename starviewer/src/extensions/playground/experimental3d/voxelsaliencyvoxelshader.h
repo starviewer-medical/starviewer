@@ -33,8 +33,6 @@ public:
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
     void setVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float saliencyFactor );
-    void setDiffuseLighting( bool on );
-    void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
@@ -61,9 +59,6 @@ protected:
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
     float m_saliencyFactor;
-    bool m_diffuseLighting;
-    unsigned short *m_encodedNormals;
-    vtkDirectionEncoder *m_directionEncoder;
 
 };
 
@@ -101,14 +96,6 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade( const Vector3 &position, int 
         color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * ( saliency - 0.6f ) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
         color.green = saliency > 0.8f ? 1.0f - 5.0f * ( saliency - 0.8f ) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * ( saliency - 0.2f ) : 0.0f;
         color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * ( saliency - 0.4f ) : 1.0f;
-
-        if ( m_diffuseLighting )
-        {
-            float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offset] );
-            Vector3 normal( gradient[0], gradient[1], gradient[2] );
-            double dotProduct = direction * normal;
-            color.multiplyColorBy( -dotProduct );
-        }
     }
 
     return color;
@@ -139,21 +126,6 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade( const Vector3 &position, cons
         color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * ( saliency - 0.6f ) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
         color.green = saliency > 0.8f ? 1.0f - 5.0f * ( saliency - 0.8f ) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * ( saliency - 0.2f ) : 0.0f;
         color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * ( saliency - 0.4f ) : 1.0f;
-
-        if ( m_diffuseLighting )
-        {
-            Vector3 normal;
-
-            for ( int i = 0; i < 8; i++ )
-            {
-                float *gradient = m_directionEncoder->GetDecodedGradient( m_encodedNormals[offsets[i]] );
-                Vector3 localNormal( gradient[0], gradient[1], gradient[2] );
-                normal += weights[i] * localNormal;
-            }
-
-            double dotProduct = direction * normal;
-            color.multiplyColorBy( -dotProduct );
-        }
     }
 
     return color;

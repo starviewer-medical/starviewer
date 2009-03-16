@@ -1,13 +1,11 @@
 #include "colorvomivoxelshader.h"
 
-#include <vtkEncodedGradientEstimator.h>
-
 
 namespace udg {
 
 
 ColorVomiVoxelShader::ColorVomiVoxelShader()
- : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumColorVomi( 1.0f ), m_colorVomiFactor( 1.0f ), m_combine( false ), m_encodedNormals( 0 ), m_directionEncoder( 0 )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumColorVomi( 1.0f ), m_colorVomiFactor( 1.0f ), m_combine( false )
 {
 }
 
@@ -45,13 +43,6 @@ void ColorVomiVoxelShader::setColorVomi( const QVector<Vector3Float> &colorVomi,
 void ColorVomiVoxelShader::setCombine( bool on )
 {
     m_combine = on;
-}
-
-
-void ColorVomiVoxelShader::setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator )
-{
-    m_encodedNormals = gradientEstimator->GetEncodedNormals();
-    m_directionEncoder = gradientEstimator->GetDirectionEncoder();
 }
 
 

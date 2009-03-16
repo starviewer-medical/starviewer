@@ -1,13 +1,11 @@
 #include "vomivoxelshader.h"
 
-#include <vtkEncodedGradientEstimator.h>
-
 
 namespace udg {
 
 
 VomiVoxelShader::VomiVoxelShader()
- : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumVomi( 1.0f ), m_vomiFactor( 1.0f ), m_combine( false ), m_encodedNormals( 0 ), m_directionEncoder( 0 )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_opacities( 0 ), m_maximumVomi( 1.0f ), m_vomiFactor( 1.0f ), m_combine( false )
 {
 }
 
@@ -45,13 +43,6 @@ void VomiVoxelShader::setVomi( const QVector<float> &vomi, float maximumVomi, fl
 void VomiVoxelShader::setCombine( bool on )
 {
     m_combine = on;
-}
-
-
-void VomiVoxelShader::setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator )
-{
-    m_encodedNormals = gradientEstimator->GetEncodedNormals();
-    m_directionEncoder = gradientEstimator->GetDirectionEncoder();
 }
 
 
