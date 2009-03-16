@@ -63,10 +63,13 @@ private:
     // Calcula el guided tour.
     void computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     /// Escriu al log un error d'un programa.
-    void logProgramError( int lineNumber, const QString &error, const QString &extra ) const;
-    bool programTab( const QStringList &words, int lineNumber, bool run );
-    bool programRenderingInterpolation( const QStringList &words, int lineNumber, bool run );
-    bool programRenderingGradientEstimator( const QStringList &words, int lineNumber, bool run );
+    void logProgramError( int lineNumber, const QString &error, const QString &line ) const;
+    /// Comprova que la línia tingi un nombre determinat de paraules.
+    bool programCheckWordCount( int lineNumber, const QString &line, int wordCount ) const;
+    bool programTab( int lineNumber, const QString &line, bool run );
+    bool programRenderingInterpolation( int lineNumber, const QString &line, bool run );
+    bool programRenderingGradientEstimator( int lineNumber, const QString &line, bool run );
+    bool programRenderingBaseShading( int lineNumber, const QString &line, bool run );
 
     void loadVmi( const QString &fileName );
     void saveVmi( const QString &fileName );
