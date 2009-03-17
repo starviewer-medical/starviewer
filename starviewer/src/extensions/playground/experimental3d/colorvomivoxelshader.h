@@ -6,13 +6,8 @@
 
 #include <QVector>
 
-#include <vtkDirectionEncoder.h>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
-
-
-class vtkEncodedGradientEstimator;
 
 
 namespace udg {
