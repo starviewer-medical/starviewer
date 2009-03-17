@@ -73,6 +73,7 @@ private:
     bool programRenderingCheckOrUncheck( int lineNumber, const QString &line, bool run );
     bool programVmiViewpoints( int lineNumber, const QString &line, bool run );
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
+    bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
 
     void loadViewpointEntropy( const QString &fileName );
     void saveViewpointEntropy( const QString &fileName );
