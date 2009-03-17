@@ -127,6 +127,8 @@ void QExperimental3DExtension::createConnections()
 
     // VMI
     connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
+    connect( m_loadViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropy() ) );
+    connect( m_saveViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropy() ) );
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
     connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
@@ -859,6 +861,7 @@ void QExperimental3DExtension::computePropertySaliencies()
 void QExperimental3DExtension::computeSelectedVmi()
 {
     // Què ha demanat l'usuari
+    bool computeViewpointEntropy = m_computeViewpointEntropyCheckBox->isChecked();
     bool computeVmi = m_computeVmiCheckBox->isChecked();
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesCheckBox->isChecked();
     bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
@@ -870,7 +873,8 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour && !computeVomi && !computeVoxelSaliencies && !computeViewpointVomi && !computeEvmi && !computeColorVomi ) return;
+    if ( !computeViewpointEntropy && !computeVmi && !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour
+         && !computeVomi && !computeVoxelSaliencies && !computeViewpointVomi && !computeEvmi && !computeColorVomi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -893,7 +897,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
     if ( computeVomi || computeVoxelSaliencies || computeViewpointVomi || computeColorVomi ) nSteps ++; // VoMI + voxel saliencies + viewpoint VoMI + color VoMI
-    if ( computeVmi || computeViewpointUnstabilities || computeEvmi ) nSteps++; // VMI + viewpoint unstabilities + EVMI
+    if ( computeViewpointEntropy || computeVmi || computeViewpointUnstabilities || computeEvmi ) nSteps++;  // viewpoint entropy + VMI + viewpoint unstabilities + EVMI
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
     int step = 0;
@@ -940,10 +944,10 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_vmiTotalProgressBar->repaint();
     }
 
-    // VMI + viewpont unstabilities + EVMI
-    if ( computeVmi || computeViewpointUnstabilities || computeEvmi )
+    // viewpoint entropy + VMI + viewpont unstabilities + EVMI
+    if ( computeViewpointEntropy || computeVmi || computeViewpointUnstabilities || computeEvmi )
     {
-        computeVmiRelatedMeasures( viewpointGenerator, viewProbabilities, objectProbabilities, pOvFiles, computeVmi, computeViewpointUnstabilities, computeEvmi );
+        computeVmiRelatedMeasures( viewpointGenerator, viewProbabilities, objectProbabilities, pOvFiles, computeViewpointEntropy, computeVmi, computeViewpointUnstabilities, computeEvmi );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
     }
@@ -1438,11 +1442,12 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
 
 
 void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities,
-                                                          const QVector<QTemporaryFile*> &pOvFiles, bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi )
+                                                          const QVector<QTemporaryFile*> &pOvFiles, bool computeViewpointEntropy, bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi )
 {
     int nViewpoints = viewProbabilities.size();
     int nObjects = objectProbabilities.size();
 
+    if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
     if ( computeVmi ) m_vmi.resize( nViewpoints );
     if ( computeViewpointUnstabilities ) m_viewpointUnstabilities.resize( nViewpoints );
     if ( computeEvmi ) m_evmi.resize( nViewpoints );
@@ -1475,6 +1480,14 @@ void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerat
         pOvFiles[i]->reset();   // reset per tornar al principi
         pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView.data() ), nObjects * sizeof(float) ); // llegim...
         pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+
+        if ( computeViewpointEntropy )
+        {
+            float viewpointEntropy = InformationTheory<float>::entropy( objectProbabilitiesInView );
+            Q_ASSERT( viewpointEntropy == viewpointEntropy );
+            m_viewpointEntropy[i] = viewpointEntropy;
+            DEBUG_LOG( QString( "H(O|v%1) = %2" ).arg( i + 1 ).arg( viewpointEntropy ) );
+        }
 
         if ( computeVmi )
         {
@@ -1526,6 +1539,7 @@ void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerat
         m_vmiProgressBar->repaint();
     }
 
+    if ( computeViewpointEntropy ) m_saveViewpointEntropyPushButton->setEnabled( true );
     if ( computeVmi ) m_saveVmiPushButton->setEnabled( true );
     if ( computeViewpointUnstabilities ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
     if ( computeEvmi ) m_saveEvmiPushButton->setEnabled( true );
@@ -1794,6 +1808,79 @@ void QExperimental3DExtension::computeGuidedTour( const ViewpointGenerator &view
 
     m_saveGuidedTourPushButton->setEnabled( true );
     m_guidedTourPushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::loadViewpointEntropy()
+{
+    QString viewpointEntropyFileName = getFileNameToLoad( "viewpointEntropyDir", tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
+    if ( !viewpointEntropyFileName.isNull() ) loadViewpointEntropy( viewpointEntropyFileName );
+}
+
+
+void QExperimental3DExtension::loadViewpointEntropy( const QString &fileName )
+{
+    QFile viewpointEntropyFile( fileName );
+
+    if ( !viewpointEntropyFile.open( QFile::ReadOnly ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint entropy"), QString( tr("Can't load viewpoint entropy from file ") ) + fileName );
+        return;
+    }
+
+    m_viewpointEntropy.clear();
+
+    QDataStream in( &viewpointEntropyFile );
+
+    while ( !in.atEnd() )
+    {
+        float viewpointEntropy;
+        in >> viewpointEntropy;
+        m_viewpointEntropy << viewpointEntropy;
+    }
+
+    viewpointEntropyFile.close();
+
+    m_saveViewpointEntropyPushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::saveViewpointEntropy()
+{
+    QString viewpointEntropyFileName = getFileNameToSave( "viewpointEntropyDir", tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+    if ( !viewpointEntropyFileName.isNull() ) saveViewpointEntropy( viewpointEntropyFileName );
+}
+
+
+void QExperimental3DExtension::saveViewpointEntropy( const QString &fileName )
+{
+    bool saveAsText = fileName.endsWith( ".txt" );
+    QFile viewpointEntropyFile( fileName );
+    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+    if ( saveAsText ) mode = mode | QIODevice::Text;
+
+    if ( !viewpointEntropyFile.open( mode ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint entropy"), QString( tr("Can't save viewpoint entropy to file ") ) + fileName );
+        return;
+    }
+
+    int nViewpoints = m_viewpointEntropy.size();
+
+    if ( saveAsText )
+    {
+        QTextStream out( &viewpointEntropyFile );
+        for ( int i = 0; i < nViewpoints; i++ ) out << "H(O|v" << i + 1 << ") = " << m_viewpointEntropy.at( i ) << "\n";
+    }
+    else
+    {
+        QDataStream out( &viewpointEntropyFile );
+        for ( int i = 0; i < nViewpoints; i++ ) out << m_viewpointEntropy.at( i );
+    }
+
+    viewpointEntropyFile.close();
 }
 
 
@@ -3100,7 +3187,11 @@ bool QExperimental3DExtension::programVmiCheckOrUncheck( int lineNumber, const Q
     bool check = words.at( 0 ) == "vmi-check";
     const QString &checkbox = words.at( 1 );
 
-    if ( checkbox == "vmi" )
+    if ( checkbox == "viewpointentropy" )
+    {
+        if ( run ) m_computeViewpointEntropyCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "vmi" )
     {
         if ( run ) m_computeVmiCheckBox->setChecked( check );
     }

@@ -57,7 +57,7 @@ private:
                                      bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi );
     // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
     void computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
-                                    bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi );
+                                    bool computeViewpointEntropy, bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi );
     // Calcula les millors vistes.
     void computeBestViews( const QVector<Vector3> &viewpoints, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula el guided tour.
@@ -74,6 +74,8 @@ private:
     bool programVmiViewpoints( int lineNumber, const QString &line, bool run );
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
 
+    void loadViewpointEntropy( const QString &fileName );
+    void saveViewpointEntropy( const QString &fileName );
     void loadVmi( const QString &fileName );
     void saveVmi( const QString &fileName );
     void loadViewpointUnstabilities( const QString &fileName );
@@ -151,6 +153,8 @@ private slots:
 
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
+    void loadViewpointEntropy();
+    void saveViewpointEntropy();
     void loadVmi();
     void saveVmi();
     void loadViewpointUnstabilities();
@@ -189,6 +193,7 @@ private:
     ObscuranceMainThread *m_obscuranceMainThread;
     Obscurance *m_obscurance;
 
+    QVector<float> m_viewpointEntropy;
     QVector<float> m_vmi;
     QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_bestViews;
