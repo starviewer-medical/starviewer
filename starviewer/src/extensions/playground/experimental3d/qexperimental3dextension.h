@@ -70,6 +70,7 @@ private:
     bool programRenderingInterpolation( int lineNumber, const QString &line, bool run );
     bool programRenderingGradientEstimator( int lineNumber, const QString &line, bool run );
     bool programRenderingBaseShading( int lineNumber, const QString &line, bool run );
+    bool programRenderingCheckOrUncheck( int lineNumber, const QString &line, bool run );
 
     void loadVmi( const QString &fileName );
     void saveVmi( const QString &fileName );
