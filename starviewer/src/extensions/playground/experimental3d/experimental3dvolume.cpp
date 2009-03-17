@@ -28,6 +28,7 @@
 #include "vomivoxelshader.h"
 #include "voxelsaliencyvoxelshader.h"
 #include "colorvomivoxelshader.h"
+#include "opacityvoxelshader.h"
 
 
 namespace udg {
@@ -60,6 +61,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_vomiVoxelShader;
     delete m_voxelSaliencyVoxelShader;
     delete m_colorVomiVoxelShader;
+    delete m_opacityVoxelShader;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -308,6 +310,14 @@ void Experimental3DVolume::addVoxelSaliencies( const QVector<float> &voxelSalien
 }
 
 
+void Experimental3DVolume::addOpacity( const QVector<float> &data, float maximum, float factor )
+{
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_opacityVoxelShader );
+    m_opacityVoxelShader->setData( data, maximum, factor );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
 QVector<float> Experimental3DVolume::computeVomiGradient( const QVector<float> &vomi )
 {
     vtkFloatArray *vomiArray = vtkFloatArray::New();
@@ -394,6 +404,7 @@ void Experimental3DVolume::createVoxelShaders()
     m_voxelSaliencyVoxelShader->setData( m_data, m_rangeMax );
     m_colorVomiVoxelShader = new ColorVomiVoxelShader();
     m_colorVomiVoxelShader->setData( m_data, m_rangeMax );
+    m_opacityVoxelShader = new OpacityVoxelShader();
 }
 
 

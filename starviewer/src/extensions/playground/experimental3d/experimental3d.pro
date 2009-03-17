@@ -21,7 +21,8 @@ HEADERS += experimental3dextensionmediator.h \
     voxelsaliencyvoxelshader.h \
     vomivoxelshader.h \
     colorvomivoxelshader.h \
-    vomithread.h
+    vomithread.h \
+    opacityvoxelshader.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     qexperimental3dviewer.cpp \
@@ -38,6 +39,7 @@ SOURCES += experimental3dextensionmediator.cpp \
     voxelsaliencyvoxelshader.cpp \
     vomivoxelshader.cpp \
     colorvomivoxelshader.cpp \
-    vomithread.cpp
+    vomithread.cpp \
+    opacityvoxelshader.cpp
 RESOURCES += experimental3d.qrc
 include(../../basicconfextensions.inc)

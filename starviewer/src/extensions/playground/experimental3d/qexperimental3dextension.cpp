@@ -98,6 +98,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_opacityVomiCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityVomiChecked(bool) ) );
+    connect( m_opacitySaliencyCheckBox, SIGNAL( toggled(bool) ), SLOT( opacitySaliencyChecked(bool) ) );
 
     // càmera
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
@@ -309,6 +311,8 @@ void QExperimental3DExtension::render()
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value() );
     if ( m_vomiCheckBox->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value() );
     if ( m_colorVomiCheckBox->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value() );
+    if ( m_opacityVomiCheckBox->isChecked() ) m_volume->addOpacity( m_vomi, m_maximumVomi, m_opacityFactorDoubleSpinBox->value() );
+    if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityFactorDoubleSpinBox->value() );
 
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
@@ -1408,6 +1412,8 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
     {
         m_baseVomiRadioButton->setEnabled( true );
         m_vomiCheckBox->setEnabled( true );
+        m_opacityLabel->setEnabled( true );
+        m_opacityVomiCheckBox->setEnabled( true );
         m_saveVomiPushButton->setEnabled( true );
         m_vomiGradientPushButton->setEnabled( true );
     }
@@ -1415,6 +1421,8 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
     if ( computeVoxelSaliencies )
     {
         m_baseVoxelSalienciesRadioButton->setEnabled( true );
+        m_opacityLabel->setEnabled( true );
+        m_opacitySaliencyCheckBox->setEnabled( true );
         m_saveVoxelSalienciesPushButton->setEnabled( true );
     }
 
@@ -2129,6 +2137,8 @@ void QExperimental3DExtension::loadVomi( const QString &fileName )
 
     m_baseVomiRadioButton->setEnabled( true );
     m_vomiCheckBox->setEnabled( true );
+    m_opacityLabel->setEnabled( true );
+    m_opacityVomiCheckBox->setEnabled( true );
     m_saveVomiPushButton->setEnabled( true );
     m_vomiGradientPushButton->setEnabled( true );
 }
@@ -2195,6 +2205,8 @@ void QExperimental3DExtension::loadVoxelSaliencies( const QString &fileName )
     voxelSalienciesFile.close();
 
     m_baseVoxelSalienciesRadioButton->setEnabled( true );
+    m_opacityLabel->setEnabled( true );
+    m_opacitySaliencyCheckBox->setEnabled( true );
     m_saveVoxelSalienciesPushButton->setEnabled( true );
 }
 
@@ -2518,6 +2530,8 @@ void QExperimental3DExtension::computeVomiGradient()
     m_voxelSaliencies = m_volume->computeVomiGradient( m_vomi );
     m_maximumSaliency = 1.0f;
     m_baseVoxelSalienciesRadioButton->setEnabled( true );
+    m_opacityLabel->setEnabled( true );
+    m_opacitySaliencyCheckBox->setEnabled( true );
     m_saveVoxelSalienciesPushButton->setEnabled( true );
 }
 
@@ -3124,6 +3138,38 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck( int lineNumber, c
             }
         }
     }
+    else if ( checkbox == "opacity-vomi" )
+    {
+        if ( run )
+        {
+            if ( m_opacityVomiCheckBox->isEnabled() )
+            {
+                m_opacityVomiCheckBox->setChecked( check );
+                if ( check && words.size() > 2 ) m_opacityFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar l'opacitat de VoMI", line );
+                return false;
+            }
+        }
+    }
+    else if ( checkbox == "opacity-saliency" )
+    {
+        if ( run )
+        {
+            if ( m_opacitySaliencyCheckBox->isEnabled() )
+            {
+                m_opacitySaliencyCheckBox->setChecked( check );
+                if ( check && words.size() > 2 ) m_opacityFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar l'opacitat de la saliency", line );
+                return false;
+            }
+        }
+    }
     else
     {
         logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
@@ -3176,6 +3222,38 @@ QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirK
     settings.endGroup();
 
     return fileName;
+}
+
+
+void QExperimental3DExtension::opacityVomiChecked( bool checked )
+{
+    if ( checked )
+    {
+        m_opacitySaliencyCheckBox->setChecked( false );
+        m_opacityFactorLabel->setEnabled( true );
+        m_opacityFactorDoubleSpinBox->setEnabled( true );
+    }
+    else
+    {
+        m_opacityFactorLabel->setEnabled( false );
+        m_opacityFactorDoubleSpinBox->setEnabled( false );
+    }
+}
+
+
+void QExperimental3DExtension::opacitySaliencyChecked( bool checked )
+{
+    if ( checked )
+    {
+        m_opacityVomiCheckBox->setChecked( false );
+        m_opacityFactorLabel->setEnabled( true );
+        m_opacityFactorDoubleSpinBox->setEnabled( true );
+    }
+    else
+    {
+        m_opacityFactorLabel->setEnabled( false );
+        m_opacityFactorDoubleSpinBox->setEnabled( false );
+    }
 }
 
 

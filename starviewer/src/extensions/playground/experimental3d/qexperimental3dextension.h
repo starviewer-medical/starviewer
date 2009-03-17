@@ -176,6 +176,9 @@ private slots:
 
     void loadAndRunProgram();
 
+    void opacityVomiChecked( bool checked );
+    void opacitySaliencyChecked( bool checked );
+
 private:
 
     Experimental3DVolume *m_volume; // el destruirà el visor
