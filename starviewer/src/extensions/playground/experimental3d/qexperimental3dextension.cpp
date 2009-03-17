@@ -2600,14 +2600,11 @@ void QExperimental3DExtension::loadAndRunProgram()
             }
             else if ( command == "tf-load" )
             {
-                if ( words.size() < 2 )
+                if ( programCheckWordCount( lineNumber, line, 2 ) )
                 {
-                    logProgramError( lineNumber, "Falta el nom del fitxer", line );
-                    errors = true;
-                    continue;
+                    if ( run ) loadTransferFunction( words.at( 1 ) );
                 }
-
-                if ( run ) loadTransferFunction( words.at( 1 ) );
+                else errors = true;
             }
             else if ( command == "render" )
             {
@@ -2615,129 +2612,13 @@ void QExperimental3DExtension::loadAndRunProgram()
             }
             else if ( command == "vmi-viewpoints" )
             {
-                if ( words.size() < 3 )
-                {
-                    logProgramError( lineNumber, "Falten arguments per a la distribució de punts de VMI", line );
-                    errors = true;
-                    continue;
-                }
-
-                if ( words.at( 1 ) == "uni" )
-                {
-                    int number = words.at( 2 ).toInt();
-
-                    switch ( number )
-                    {
-                        case 4: if ( run ) m_vmiViewpointDistributionWidget->setToUniform4(); break;
-                        case 6: if ( run ) m_vmiViewpointDistributionWidget->setToUniform6(); break;
-                        case 8: if ( run ) m_vmiViewpointDistributionWidget->setToUniform8(); break;
-                        case 12: if ( run ) m_vmiViewpointDistributionWidget->setToUniform12(); break;
-                        case 20: if ( run ) m_vmiViewpointDistributionWidget->setToUniform20(); break;
-                        default: logProgramError( lineNumber, "Nombre incorrecte de punts uniformes", words.at( 2 ) ); errors = true; break;
-                    }
-                }
-                else if ( words.at( 1 ) == "q-uni" )
-                {
-                    if ( run ) m_vmiViewpointDistributionWidget->setToQuasiUniform( words.at( 2 ).toInt() );
-                }
-                else
-                {
-                    logProgramError( lineNumber, "Tipus de distribució de punts de VMI incorrecta", words.at( 1 ) );
-                    errors = true;
-                }
+                if ( programCheckWordCount( lineNumber, line, 3 ) ) errors = !programVmiViewpoints( lineNumber, line, run );
+                else errors = true;
             }
             else if ( command == "vmi-check" || command == "vmi-uncheck" )
             {
-                bool check = command == "vmi-check";
-
-                for ( int j = 1; j < words.size(); j++ )
-                {
-                    const QString &word = words.at( j );
-
-                    if ( word == "vmi" )
-                    {
-                        if ( run ) m_computeVmiCheckBox->setChecked( check );
-                    }
-                    else if ( word == "unstabilities" )
-                    {
-                        if ( run ) m_computeViewpointUnstabilitiesCheckBox->setChecked( check );
-                    }
-                    else if ( word == "bestviews" )
-                    {
-                        if ( run ) m_computeBestViewsCheckBox->setChecked( check );
-                    }
-                    else if ( word == "guidedtour" )
-                    {
-                        if ( run ) m_computeGuidedTourCheckBox->setChecked( check );
-                    }
-                    else if ( word == "vomi" )
-                    {
-                        if ( run ) m_computeVomiCheckBox->setChecked( check );
-                    }
-                    else if ( word == "saliencies" )
-                    {
-                        if ( run ) m_computeVoxelSalienciesCheckBox->setChecked( check );
-                    }
-                    else if ( word == "vvomi" )
-                    {
-                        if ( run ) m_computeViewpointVomiCheckBox->setChecked( check );
-                    }
-                    else if ( word == "evmi" )
-                    {
-                        if ( run ) m_computeEvmiCheckBox->setChecked( check );
-                    }
-                    else if ( word == "cvomi" )
-                    {
-                        if ( run ) m_computeColorVomiCheckBox->setChecked( check );
-                    }
-                    else
-                    {
-                        logProgramError( lineNumber, "Nom de checkbox incorrecte", word );
-                        errors = true;
-                    }
-                }
-            }
-            else if ( command == "vmi-bestviews" )
-            {
-                if ( words.size() < 3 )
-                {
-                    logProgramError( lineNumber, "Falten arguments per als paràmetres de càlculs de les millors vistes", line );
-                    errors = true;
-                    continue;
-                }
-
-                if ( words.at( 1 ) == "n" )
-                {
-                    if ( run )
-                    {
-                        m_computeBestViewsNRadioButton->setChecked( true );
-                        m_computeBestViewsNSpinBox->setValue( words.at( 2 ).toInt() );
-                    }
-                }
-                else if ( words.at( 1 ) == "threshold" )
-                {
-                    if ( run )
-                    {
-                        m_computeBestViewsThresholdRadioButton->setChecked( true );
-                        m_computeBestViewsThresholdDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
-                    }
-                }
-                else
-                {
-                    logProgramError( lineNumber, "Paràmetre incorrecte pel nombre de vistes", words.at( 1 ) );
-                    errors = true;
-                }
-            }
-            else if ( command == "vmi-loadpalette" )
-            {
-                if ( words.size() < 2 )
-                {
-                    logProgramError( lineNumber, "Falta el nom del fitxer de paleta", line );
-                    errors = true;
-                    continue;
-                }
-
-                if ( run ) loadColorVomiPalette( words.at( 1 ) );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programVmiCheckOrUncheck( lineNumber, line, run );
+                else errors = true;
             }
             else if ( command == "vmi-run" )
             {
@@ -3168,6 +3049,120 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck( int lineNumber, c
                 logProgramError( lineNumber, "No es pot activar l'opacitat de la saliency", line );
                 return false;
             }
+        }
+    }
+    else
+    {
+        logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::programVmiViewpoints( int lineNumber, const QString &line, bool run )
+{
+    QStringList words = line.split( ' ', QString::SkipEmptyParts );
+    const QString &distribution = words.at( 1 );
+
+    if ( distribution == "uni" )
+    {
+        int number = words.at( 2 ).toInt();
+
+        switch ( number )
+        {
+            case 4: if ( run ) m_vmiViewpointDistributionWidget->setToUniform4(); break;
+            case 6: if ( run ) m_vmiViewpointDistributionWidget->setToUniform6(); break;
+            case 8: if ( run ) m_vmiViewpointDistributionWidget->setToUniform8(); break;
+            case 12: if ( run ) m_vmiViewpointDistributionWidget->setToUniform12(); break;
+            case 20: if ( run ) m_vmiViewpointDistributionWidget->setToUniform20(); break;
+            default: logProgramError( lineNumber, "Nombre incorrecte de punts uniformes", line ); return false;
+        }
+    }
+    else if ( distribution == "q-uni" )
+    {
+        if ( run ) m_vmiViewpointDistributionWidget->setToQuasiUniform( words.at( 2 ).toInt() );
+    }
+    else
+    {
+        logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run )
+{
+    QStringList words = line.split( ' ', QString::SkipEmptyParts );
+    bool check = words.at( 0 ) == "vmi-check";
+    const QString &checkbox = words.at( 1 );
+
+    if ( checkbox == "vmi" )
+    {
+        if ( run ) m_computeVmiCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "unstabilities" )
+    {
+        if ( run ) m_computeViewpointUnstabilitiesCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "bestviews" )
+    {
+        if ( run ) m_computeBestViewsCheckBox->setChecked( check );
+
+        if ( check && words.size() > 3 )
+        {
+            if ( words.at( 2 ) == "n" )
+            {
+                if ( run )
+                {
+                    m_computeBestViewsNRadioButton->setChecked( true );
+                    m_computeBestViewsNSpinBox->setValue( words.at( 3 ).toInt() );
+                }
+            }
+            else if ( words.at( 2 ) == "threshold" )
+            {
+                if ( run )
+                {
+                    m_computeBestViewsThresholdRadioButton->setChecked( true );
+                    m_computeBestViewsThresholdDoubleSpinBox->setValue( words.at( 3 ).toDouble() );
+                }
+            }
+            else
+            {
+                logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
+                return false;
+            }
+        }
+    }
+    else if ( checkbox == "guidedtour" )
+    {
+        if ( run ) m_computeGuidedTourCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "vomi" )
+    {
+        if ( run ) m_computeVomiCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "saliencies" )
+    {
+        if ( run ) m_computeVoxelSalienciesCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "vvomi" )
+    {
+        if ( run ) m_computeViewpointVomiCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "evmi" )
+    {
+        if ( run ) m_computeEvmiCheckBox->setChecked( check );
+    }
+    else if ( checkbox == "cvomi" )
+    {
+        if ( run )
+        {
+            m_computeColorVomiCheckBox->setChecked( check );
+            if ( check && words.size() > 2 ) loadColorVomiPalette( words.at( 2 ) );
         }
     }
     else
