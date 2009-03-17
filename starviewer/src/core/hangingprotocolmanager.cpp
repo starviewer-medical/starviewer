@@ -23,6 +23,7 @@
 #include "logging.h"
 
 #include <QList>
+#include <QDate>
 
 namespace udg {
 
@@ -46,7 +47,7 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
     m_operationsMap.insert("P\\H-F\\A", "1,1"); m_operationsMap.insert("P\\H-H\\A", "3,0"); m_operationsMap.insert("P\\H-F\\P", "1,0");
     m_operationsMap.insert("P\\H-H\\P", "3,1");
 
-    m_operationsMap.insert("F\\A-A\\F", "3,1"); m_operationsMap.insert("F\\A-A\\H", "3,0"); m_operationsMap.insert("F\\A-P\\F", "1,0"); 
+    m_operationsMap.insert("F\\A-A\\F", "3,1"); m_operationsMap.insert("F\\A-A\\H", "3,0"); m_operationsMap.insert("F\\A-P\\F", "1,0");
     m_operationsMap.insert("F\\A-P\\H", "1,1"); m_operationsMap.insert("F\\A-H\\A", "2,1"); m_operationsMap.insert("F\\A-F\\P", "0,1");
     m_operationsMap.insert("F\\A-H\\P", "2,0");
 
@@ -134,7 +135,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
     // Aprofitem per assignar ja les series, per millorar el rendiment
     for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfItems; hangingProtocolNumber++)
-    {	
+    {
 		//Inicialitzacions
         id.setValue( hangingProtocolNumber );
         hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
@@ -149,7 +150,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
             while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
             {
                 imageSet = hangingProtocol->getImageSet( imageSetNumber );
-				serie = searchSerie( patient, seriesList, imageSet, hangingProtocol->getAllDiferent() );
+				serie = searchSerie( patient, seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
 
                 if( serie != 0 )
                 {
@@ -159,7 +160,9 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
             }
             adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
-			if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 ) 
+            DEBUG_LOG( QString("ajustament del hanging %1: %2").arg( hangingProtocol->getName() ).arg(adjustmentOfHanging) );
+
+			if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 )
 				adjustmentOfHanging = 0.0;
 
             if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->gratherThan(bestHangingProtocol) ) )
@@ -234,13 +237,13 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 		imageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
 		serie = imageSet->getSeriesToDisplay();
 		viewerWidget = layout->addViewer( displaySet->getPosition() );
-		
+
 		if( serie != 0 ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
-		{			
+		{
 			if( serie->getFirstVolume())
 			{
 				viewerWidget->setInput( serie->getFirstVolume() );
-			
+
 				if( imageSet->getTypeOfItem() == "image" )
 				{
 					viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
@@ -278,11 +281,11 @@ bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patien
             i++;
         }
     }
-	
+
     return valid;
 }
 
-Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolImageSet *imageSet )
+Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
 {
     bool found = false;
     int numberStudies = patient->getNumberOfStudies();
@@ -311,7 +314,7 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
 
             if( imageSet->getTypeOfItem() != "image" )
             {
-                if( isValidSerie( patient, serie, imageSet ) )
+                if( isValidSerie( patient, serie, imageSet, hangingProtocol ) )
                 {
                     found = true;
                     imageSet->setSeriesToDisplay( serie );
@@ -326,7 +329,7 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
                 while( !found && imageNumber < numberImages )
                 {
                     image = listOfImages.value( imageNumber );
-                    if( isValidImage( image, imageSet ) )
+                    if( isValidImage( image, imageSet, hangingProtocol ) )
                     {
                         found = true;
                         imageSet->setImageToDisplay( imageNumber );
@@ -334,13 +337,13 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
                     }
                     imageNumber++;
                 }
-                if( !found ) 
+                if( !found )
                     imageSet->setImageToDisplay( 0 );
             }
 
-            if( found ) 
+            if( found )
                 return serie;
-            j++;   
+            j++;
         }
         i++;
     }
@@ -348,7 +351,7 @@ Series *HangingProtocolManager::searchSerie( Patient *patient, HangingProtocolIm
     return 0;
 }
 
-Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy )
+Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
 {
     bool found = false;
     int i = 0;
@@ -358,14 +361,14 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> 
     Series *serie = 0;
     Image *image = 0;
 	QList< Image * > listOfImages;
-   
+
 	while( !found && i < numberSeries )
 	{
 		serie = listOfSeries.value( i );
 
         if( imageSet->getTypeOfItem() != "image" )
         {
-            if( isValidSerie( patient, serie, imageSet ) )
+            if( isValidSerie( patient, serie, imageSet, hangingProtocol ) )
             {
                 found = true;
                 imageSet->setSeriesToDisplay( serie );
@@ -384,7 +387,7 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> 
             while( !found && imageNumber < numberImages )
             {
                 image = listOfImages.value( imageNumber );
-                if( isValidImage( image, imageSet ) )
+                if( isValidImage( image, imageSet, hangingProtocol ) )
                 {
                     found = true;
                     imageSet->setImageToDisplay( imageNumber );
@@ -394,11 +397,11 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> 
                 }
                 imageNumber++;
             }
-            if( !found ) 
+            if( !found )
                 imageSet->setImageToDisplay( 0 );
         }
 
-        if( found ) 
+        if( found )
             return serie;
         i++;
     }
@@ -406,7 +409,7 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> 
     return 0;
 }
 
-bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet )
+bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
 {
     bool valid = true;
     int i = 0;
@@ -423,7 +426,7 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
 
         if( restriction.selectorAttribute == "BodyPartExamined" )
         {
-            if( serie->getBodyPartExamined() != restriction.valueRepresentation ) 
+            if( serie->getBodyPartExamined() != restriction.valueRepresentation )
 				valid = false;
         }
         else if( restriction.selectorAttribute == "ProtocolName" )
@@ -464,6 +467,12 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
         else if( restriction.selectorAttribute == "SeriesNumber" )
         {
             if( serie->getSeriesNumber() != restriction.valueRepresentation )
+                valid = false;
+        }
+        else if( restriction.selectorAttribute == "Anterior" )
+        {
+            int imageSetNumber = restriction.valueRepresentation.toInt();
+            if( serie->getDate() >= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getDate() )
                 valid = false;
         }
         i++;
@@ -513,9 +522,9 @@ void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &curre
 {
     if( !currentOrientation.isEmpty() && !desiredOrientation.isEmpty() )
     {
-        // TODO al tanto, patient orientation podria tenir més d'una lletra per row! 
+        // TODO al tanto, patient orientation podria tenir més d'una lletra per row!
         // per exemple RA\AL en un tall que sigui oblicu
-        // per evitar això i no fer una llista enorme de transformacions, 
+        // per evitar això i no fer una llista enorme de transformacions,
         // agafarem només la primera lletra del row i de la columna
         QStringList rowColumn = currentOrientation.split("\\");
         QString mapIndex = rowColumn.at(0).left(1) + "\\" + rowColumn.at(1).left(1) + "-" + desiredOrientation;
@@ -524,7 +533,7 @@ void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &curre
         if( !operations.isEmpty() )
         {
             QStringList listOfOperations = operations.split(",");
-            // apliquem les transformacions d'imatge necessàries 
+            // apliquem les transformacions d'imatge necessàries
             // per visualitzar correctament la imatge
             viewer->rotateClockWise( listOfOperations[0].toInt() ); // apliquem el nombre de rotacions
             if( listOfOperations[1].toInt() )
@@ -533,7 +542,7 @@ void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &curre
     }
 }
 
-bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet *imageSet )
+bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
 {
     bool valid = true;
     int i = 0;
@@ -589,6 +598,13 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
                 bool isLocalyzer = imageType.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
                 bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NO_MATCH );
                 valid = isLocalyzer ^ match;
+            }
+            else if( restriction.selectorAttribute == "Anterior" )
+            {
+                Series * serie = image->getParentSeries();
+                int imageSetNumber = restriction.valueRepresentation.toInt();
+                if( serie->getDate() <= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getDate() )
+                    valid = false;
             }
             i++;
         }

@@ -45,7 +45,7 @@ public:
     /// es fa especialment per no haver de fer noves classes ni duplicar el mapa de transdormacions
     /// i per poder aplicar-ho ràpidament sobre mamo. S'ha de plantejar bé on hauria d'anar tot això
     /// Donada la orientació actual i la desitjada, aplica sobre el viewer donat les transformacions pertinents
-    /// El format de les orientacions és el mateix que el del DICOM, 2 strings separats per "\", 
+    /// El format de les orientacions és el mateix que el del DICOM, 2 strings separats per "\",
     /// el primer indica la direcció de les rows i el segon la direcció de les columnes
     void applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer);
 
@@ -54,16 +54,16 @@ private:
     bool isValid( HangingProtocol *protocol, Patient *patient);
 
     /// Buscar la sèrie corresponent a l'image set definit
-    Series *searchSerie( Patient *patient, HangingProtocolImageSet *imageSet );
+    Series *searchSerie( Patient *patient, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
 
 	// Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
-	Series *searchSerie( Patient *patient, QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy );
+    Series *searchSerie( Patient *patient, QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol );
 
 	/// Cert si la imatge compleix les restriccions
-	bool isValidImage( Image *image, HangingProtocolImageSet *imageSet );
+    bool isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
 
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
-    bool isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet );
+    bool isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
 
 	/// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
 	void applyDisplayTransformations( Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
