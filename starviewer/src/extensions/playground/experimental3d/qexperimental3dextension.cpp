@@ -2711,6 +2711,18 @@ void QExperimental3DExtension::loadAndRunProgram()
             {
                 if ( run ) computeSelectedVmi();
             }
+            else if ( command == "vmi-vomigradient" )
+            {
+                if ( run )
+                {
+                    if ( m_vomiGradientPushButton->isEnabled() ) computeVomiGradient();
+                    else
+                    {
+                        logProgramError( lineNumber, "No es pot calcular el gradient de la VoMI", line );
+                        errors = true;
+                    }
+                }
+            }
             else if ( command == "vmi-load" || command == "vmi-save" )  // vmi-load vmi fitxer.txt
             {
                 if ( words.size() < 3 )
