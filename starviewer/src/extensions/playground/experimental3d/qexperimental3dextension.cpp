@@ -2579,45 +2579,10 @@ void QExperimental3DExtension::loadAndRunProgram()
                 if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingBaseShading( lineNumber, line, run );
                 else errors = true;
             }
-            else if ( command == "visualization-check" || command == "visualization-partcheck" || command == "visualization-uncheck" )
+            else if ( command == "rendering-check" || command == "rendering-uncheck" )
             {
-                bool check = command == "visualization-check" || command == "visualization-partcheck";
-                Qt::CheckState checkState = command == "visualization-uncheck" ? Qt::Unchecked : command == "visualization-partcheck" ? Qt::PartiallyChecked : Qt::Checked;
-
-                for ( int j = 1; j < words.size(); j++ )
-                {
-                    const QString &word = words.at( j );
-
-                    if ( word == "diffuse" )
-                    {
-                        if ( run && m_baseDiffuseLightingRadioButton->isEnabled() ) m_baseDiffuseLightingRadioButton->setChecked( check );
-                    }
-                    else if ( word == "specular" )
-                    {
-                        if ( run && m_baseSpecularLightingCheckBox->isEnabled() ) m_baseSpecularLightingCheckBox->setChecked( check );
-                    }
-                    else if ( word == "contour" )
-                    {
-                        if ( run && m_contourCheckBox->isEnabled() ) m_contourCheckBox->setChecked( check );
-                    }
-                    else if ( word == "obscurance" )
-                    {
-                        if ( run && m_obscuranceCheckBox->isEnabled() ) m_obscuranceCheckBox->setChecked( check );
-                    }
-                    else if ( word == "vomi" )
-                    {
-                        if ( run && m_vomiCheckBox->isEnabled() ) m_vomiCheckBox->setCheckState( checkState );
-                    }
-                    else if ( word == "cvomi" )
-                    {
-                        if ( run && m_colorVomiCheckBox->isEnabled() ) m_colorVomiCheckBox->setCheckState( checkState );
-                    }
-                    else
-                    {
-                        logProgramError( lineNumber, "Nom de checkbox incorrecte", word );
-                        errors = true;
-                    }
-                }
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingCheckOrUncheck( lineNumber, line, run );
+                else errors = true;
             }
             else if ( command == "tf-load" )
             {
@@ -3073,6 +3038,88 @@ bool QExperimental3DExtension::programRenderingBaseShading( int lineNumber, cons
             else
             {
                 logProgramError( lineNumber, "No es pot activar voxel saliencies", line );
+                return false;
+            }
+        }
+    }
+    else
+    {
+        logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
+        return false;
+    }
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::programRenderingCheckOrUncheck( int lineNumber, const QString &line, bool run )
+{
+    QStringList words = line.split( ' ', QString::SkipEmptyParts );
+    bool check = words.at( 0 ) == "rendering-check";
+    const QString &checkbox = words.at( 1 );
+
+    if ( checkbox == "contour" )
+    {
+        if ( run )
+        {
+            m_contourCheckBox->setChecked( check );
+            if ( check && words.size() > 2 ) m_contourDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+        }
+    }
+    else if ( checkbox == "obscurance" )
+    {
+        if ( run )
+        {
+            if ( m_obscuranceCheckBox->isEnabled() )
+            {
+                m_obscuranceCheckBox->setChecked( check );
+
+                if ( check && words.size() > 2 )
+                {
+                    m_obscuranceFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+
+                    if ( words.size() > 3 )
+                    {
+                        m_obscuranceLowFilterDoubleSpinBox->setValue( words.at( 3 ).toDouble() );
+                        if ( words.size() > 4 ) m_obscuranceHighFilterDoubleSpinBox->setValue( words.at( 4 ).toDouble() );
+                    }
+                }
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar les obscurances", line );
+                return false;
+            }
+        }
+    }
+    else if ( checkbox == "vomi" )
+    {
+        if ( run )
+        {
+            if ( m_vomiCheckBox->isEnabled() )
+            {
+                m_vomiCheckBox->setChecked( check );
+                if ( check && words.size() > 2 ) m_vomiFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar VoMI", line );
+                return false;
+            }
+        }
+    }
+    else if ( checkbox == "cvomi" )
+    {
+        if ( run )
+        {
+            if ( m_colorVomiCheckBox->isEnabled() )
+            {
+                m_colorVomiCheckBox->setChecked( check );
+                if ( check && words.size() > 2 ) m_colorVomiFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
+            }
+            else
+            {
+                logProgramError( lineNumber, "No es pot activar color VoMI", line );
                 return false;
             }
         }
