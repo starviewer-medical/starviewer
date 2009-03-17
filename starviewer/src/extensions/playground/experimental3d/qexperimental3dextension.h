@@ -71,6 +71,8 @@ private:
     bool programRenderingGradientEstimator( int lineNumber, const QString &line, bool run );
     bool programRenderingBaseShading( int lineNumber, const QString &line, bool run );
     bool programRenderingCheckOrUncheck( int lineNumber, const QString &line, bool run );
+    bool programVmiViewpoints( int lineNumber, const QString &line, bool run );
+    bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
 
     void loadVmi( const QString &fileName );
     void saveVmi( const QString &fileName );
