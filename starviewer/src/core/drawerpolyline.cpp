@@ -137,7 +137,7 @@ void DrawerPolyline::updateVtkProp()
     }
     else
     {
-        DEBUG_LOG("No es pot actualitzar l polilínia, ja que encara no s'ha creat!");
+        DEBUG_LOG("No es pot actualitzar la polilínia, ja que encara no s'ha creat!");
     }
 }
 
@@ -190,62 +190,6 @@ void DrawerPolyline::updateVtkActorProperties()
 int DrawerPolyline::getNumberOfPoints()
 {
     return m_pointsList.count();
-}
-
-double DrawerPolyline::computeArea( int view , const double * spacing )
-{
-    double area = 0.0;
-    double actualPoint[3];
-    double followPoint[3];
-    double * point;
-    for ( int j = 0; j < m_pointsList.count()-1 ; j++ )
-    {
-        point = m_pointsList.at( j );
-        actualPoint[0] = point[0];
-        actualPoint[1] = point[1];
-        actualPoint[2] = point[2];
-
-        point = m_pointsList.at( j+1 );
-        followPoint[0] = point[0];
-        followPoint[1] = point[1];
-        followPoint[2] = point[2];
-
-        if ( spacing != NULL )
-        {
-            actualPoint[0] = MathTools::trunc( actualPoint[0]/spacing[0] );
-            actualPoint[1] = MathTools::trunc( actualPoint[1]/spacing[1] );
-            actualPoint[2] = MathTools::trunc( actualPoint[2]/spacing[2] );
-            followPoint[0] = MathTools::trunc( followPoint[0]/spacing[0] );
-            followPoint[1] = MathTools::trunc( followPoint[1]/spacing[1] );
-            followPoint[2] = MathTools::trunc( followPoint[2]/spacing[2] );
-        }
-        switch( view )
-        {
-            case Q2DViewer::Axial:
-                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[1] + actualPoint[1] ) )/2.0;
-                break;
-
-            case Q2DViewer::Sagital:
-                area += ( ( followPoint[2]-actualPoint[2] )*(followPoint[1] + actualPoint[1] ) )/2.0;
-                break;
-
-            case Q2DViewer::Coronal:
-                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[2] + actualPoint[2] ) )/2.0;
-                break;
-        }
-    }
-
-     //en el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
-     //per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
-     if ( area < 0 )
-     {
-        //donem el resultat el valor absolut
-        area *= -1;
-
-        //intercanviem els punts de la QList
-        swap();
-    }
-    return area;
 }
 
 void DrawerPolyline::swap()

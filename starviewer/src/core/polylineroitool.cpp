@@ -13,6 +13,7 @@
 #include "drawertext.h"
 #include "image.h"
 #include "series.h"
+#include "mathtools.h"
 //vtk
 #include <vtkPNGWriter.h>
 #include <vtkImageActor.h>
@@ -26,7 +27,7 @@
 namespace udg {
 
 PolylineROITool::PolylineROITool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent)
+ : ROITool(viewer, parent)
 {
     m_toolName = "PolylineROITool";
     m_hasSharedData = false;
@@ -37,7 +38,8 @@ PolylineROITool::PolylineROITool( QViewer *viewer, QObject *parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
     }
 
-    m_closingPolyline = NULL;
+    connect(this, SIGNAL(finished()), this, SLOT(initCalc()));
+
     m_mainPolyline = NULL;
 }
 
@@ -45,116 +47,49 @@ PolylineROITool::~PolylineROITool()
 {
     if ( !m_mainPolyline.isNull() )
         delete m_mainPolyline;
-
-    if ( !m_closingPolyline.isNull() )
-        delete m_closingPolyline;
 }
 
-void PolylineROITool::handleEvent( long unsigned eventID )
+void PolylineROITool::initCalc()
 {
-    switch( eventID )
-    {
-        case vtkCommand::LeftButtonPressEvent:
-            if( m_2DViewer->getInput() )
-            {
-                this->annotateNewPoint();
-                m_2DViewer->getDrawer()->refresh();
-
-                deleteRepeatedPoints();
-
-                if ( m_2DViewer->getInteractor()->GetRepeatCount() == 1 && m_mainPolyline->getNumberOfPoints() > 2 )
-                {
-                    closeForm();
-                }
-            }
-        break;
-
-        case vtkCommand::MouseMoveEvent:
-
-            if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
-            {
-                this->simulateClosingPolyline();
-                m_2DViewer->getDrawer()->refresh();
-            }
-        break;
-    }
+    if( m_mainPolyline == NULL )
+        DEBUG_LOG(QString("PolylineROITool: La línia rebuda és nul·la!"));
+    else
+        printData();
 }
 
-void PolylineROITool::deleteRepeatedPoints()
+void PolylineROITool::printData()
 {
-    /*
-        si s'ha anotat el pirmer o el segon punt de la polilinia fent doble clic, aquest punt apareixerà repetit dins de la
-        llista de punts de la polilinia, pertant cal truere'ls per tal de tenir un bon funcionament de la tool.
-    */
-    int i;
-    double equals = true;
-    double *first = m_mainPolyline->getPoint(0);
-    double *second = m_mainPolyline->getPoint(1);
-
-    for ( i = 0; i < 3 && equals; i++ )
+    double *bounds = m_mainPolyline->getPolylineBounds();
+    if( !bounds )
     {
-        equals = first[i] == second[i];
+        DEBUG_LOG( "Bounds no definits" );
     }
-
-    if ( equals ) //el primer punt i el segon són el mateix, per tant n'esborrem un
-        m_mainPolyline->removePoint(0);
-
-    // ara cal mirar el mateix pel punts segon i tercer
-    equals = true;
-    first = m_mainPolyline->getPoint(1);
-    second = m_mainPolyline->getPoint(2);
-
-    for ( i = 0; i < 3 && equals; i++ )
+    else
     {
-        equals = first[i] == second[i];
+        double *intersection = new double[3];
+
+        intersection[0] = (bounds[1]+bounds[0])/2.0;
+        intersection[1] = (bounds[3]+bounds[2])/2.0;
+        intersection[2] = (bounds[5]+bounds[4])/2.0;
+
+        DrawerText * text = new DrawerText;
+
+        const double * pixelSpacing = m_2DViewer->getInput()->getSeries()->getImages().at(0)->getPixelSpacing();
+
+        if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
+        {
+            double * spacing = m_2DViewer->getInput()->getSpacing();
+            text->setText( tr("Area: %1 px2\nMean: %2").arg( this->computeArea( spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+        }
+        else
+        {
+            text->setText( tr("Area: %1 mm2\nMean: %2").arg( this->computeArea() ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+        }
+
+        text->setAttatchmentPoint( intersection );
+        text->update( DrawerPrimitive::VTKRepresentation );
+        m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
-
-    if ( equals ) //el primer punt i el segon són el mateix, per tant n'esborrem un
-        m_mainPolyline->removePoint(1);
-
-}
-
-void PolylineROITool::annotateNewPoint()
-{
-    if (!m_mainPolyline )
-    {
-        m_mainPolyline = new DrawerPolyline;
-        m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-    }
-
-    int position[2];
-    m_2DViewer->getEventPosition( position );
-    double *lastPointInModel = m_2DViewer->pointInModel( position[0], position[1] );
-
-    //afegim el punt
-    m_mainPolyline->addPoint( lastPointInModel );
-
-    //actualitzem els atributs de la polilinia
-    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-}
-
-void PolylineROITool::simulateClosingPolyline( )
-{
-    if (!m_closingPolyline )
-    {
-        m_closingPolyline = new DrawerPolyline;
-        m_closingPolyline->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-        m_2DViewer->getDrawer()->draw( m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-    }
-
-    m_closingPolyline->deleteAllPoints();
-
-    int position[2];
-    m_2DViewer->getEventPosition( position );
-    double *lastPointInModel = m_2DViewer->pointInModel( position[0], position[1] );
-
-    //afegim els punts que simulen aquesta polilinia
-    m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-    m_closingPolyline->addPoint( lastPointInModel );
-    m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
-
-    //actualitzem els atributs de la polilinia
-    m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
 double PolylineROITool::computeGrayMean()
@@ -216,7 +151,7 @@ double PolylineROITool::computeGrayMean()
 		rayP2[0] = bounds[1];//xmax
 		rayP2[1] = bounds[2];//y
 		rayP2[2] = bounds[4];//z
-	
+
 		rayPointIndex = 1;
 		intersectionIndex = 0;
 		verticalLimit = bounds[3];
@@ -231,7 +166,7 @@ double PolylineROITool::computeGrayMean()
 		rayP2[2] = bounds[5];//zmax
 
 		rayPointIndex = 1;
-		intersectionIndex = 2;		
+		intersectionIndex = 2;
 		verticalLimit = bounds[3];
 
 	break;
@@ -246,10 +181,10 @@ double PolylineROITool::computeGrayMean()
 
 		rayPointIndex = 2;
 		intersectionIndex = 0;
-		verticalLimit = bounds[5];		
+		verticalLimit = bounds[5];
 	break;
 	}
-	
+
 	while( rayP1[rayPointIndex] <= verticalLimit )
     {
         intersectionList.clear();
@@ -258,8 +193,8 @@ double PolylineROITool::computeGrayMean()
         {
             auxPoints = segments[i]->GetPoints();
             auxPoints->GetPoint(0,p0);
-            auxPoints->GetPoint(1,p1);	
-			if( (rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex]) 
+            auxPoints->GetPoint(1,p1);
+			if( (rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex])
 				|| (rayP1[rayPointIndex] >= p0[rayPointIndex] && rayP1[rayPointIndex] <= p1[rayPointIndex]) )
                 indexList << i;
 
@@ -327,80 +262,60 @@ double PolylineROITool::computeGrayMean()
 
 }
 
-Volume::VoxelType PolylineROITool::getGrayValue( double *coords )
+double PolylineROITool::computeArea( const double * spacing )
 {
-    double *origin = m_2DViewer->getInput()->getOrigin();
-	double *spacing = m_2DViewer->getInput()->getSpacing();
-    int index[3];
-
-    switch( m_2DViewer->getView() )
+    double area = 0.0;
+    double actualPoint[3];
+    double followPoint[3];
+    double * point;
+    for ( int j = 0; j < m_mainPolyline->getNumberOfPoints()-1; j++ )
     {
-        case Q2DViewer::Axial:
-            index[0] = (int)((coords[0] - origin[0])/spacing[0]);
-            index[1] = (int)((coords[1] - origin[1])/spacing[1]);
-            index[2] = m_2DViewer->getCurrentSlice();
-            break;
+        point = m_mainPolyline->getPoint( j );
+        actualPoint[0] = point[0];
+        actualPoint[1] = point[1];
+        actualPoint[2] = point[2];
 
-        case Q2DViewer::Sagital:
-            index[0] = m_2DViewer->getCurrentSlice();
-            index[1] = (int)((coords[1] - origin[1])/spacing[1]);
-            index[2] = (int)((coords[2] - origin[2])/spacing[2]);
-            break;
+        point = m_mainPolyline->getPoint( j+1 );
+        followPoint[0] = point[0];
+        followPoint[1] = point[1];
+        followPoint[2] = point[2];
 
-        case Q2DViewer::Coronal:
-            index[0] = (int)((coords[0] - origin[0])/spacing[0]);
-            index[1] = m_2DViewer->getCurrentSlice();
-            index[2] = (int)((coords[2] - origin[2])/spacing[2]);
-            break;
-    }
-
-    if ( m_2DViewer->isThickSlabActive() )
-		return *((Volume::VoxelType *)m_2DViewer->getCurrentSlabProjection()->GetScalarPointer(index));
-    else
-        return *(m_2DViewer->getInput()->getScalarPointer(index));
-}
-
-void PolylineROITool::closeForm()
-{
-    m_mainPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-
-    double *bounds = m_mainPolyline->getPolylineBounds();
-    if( !bounds )
-    {
-        DEBUG_LOG( "Bounds no definits" );
-    }
-    else
-    {
-        double *intersection = new double[3];
-
-        intersection[0] = (bounds[1]+bounds[0])/2.0;
-        intersection[1] = (bounds[3]+bounds[2])/2.0;
-        intersection[2] = (bounds[5]+bounds[4])/2.0;
-
-        DrawerText * text = new DrawerText;
-
-        const double * pixelSpacing = m_2DViewer->getInput()->getSeries()->getImages().at(0)->getPixelSpacing();
-
-        if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
+        if ( spacing != NULL )
         {
-            double * spacing = m_2DViewer->getInput()->getSpacing();
-            text->setText( tr("Area: %1 px2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() , spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+            actualPoint[0] = MathTools::trunc( actualPoint[0]/spacing[0] );
+            actualPoint[1] = MathTools::trunc( actualPoint[1]/spacing[1] );
+            actualPoint[2] = MathTools::trunc( actualPoint[2]/spacing[2] );
+            followPoint[0] = MathTools::trunc( followPoint[0]/spacing[0] );
+            followPoint[1] = MathTools::trunc( followPoint[1]/spacing[1] );
+            followPoint[2] = MathTools::trunc( followPoint[2]/spacing[2] );
         }
-        else
+        switch( m_2DViewer->getView() )
         {
-            text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
-        }
-        
-        text->setAttatchmentPoint( intersection );
-        text->update( DrawerPrimitive::VTKRepresentation );
-        m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-    }
-    delete m_closingPolyline;
+            case Q2DViewer::Axial:
+                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[1] + actualPoint[1] ) )/2.0;
+                break;
 
-    m_closingPolyline=NULL;
-    m_mainPolyline=NULL;
-    m_2DViewer->getDrawer()->refresh();
+            case Q2DViewer::Sagital:
+                area += ( ( followPoint[2]-actualPoint[2] )*(followPoint[1] + actualPoint[1] ) )/2.0;
+                break;
+
+            case Q2DViewer::Coronal:
+                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[2] + actualPoint[2] ) )/2.0;
+                break;
+        }
+    }
+
+     //en el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
+     //per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
+     if ( area < 0 )
+     {
+        //donem el resultat el valor absolut
+        area *= -1;
+
+        //intercanviem els punts de la QList
+        m_mainPolyline->swap();
+    }
+    return area;
 }
 
 }

@@ -1,7 +1,7 @@
-# Fitxer generat pel gestor de qmake de kdevelop. 
-# ------------------------------------------- 
+# Fitxer generat pel gestor de qmake de kdevelop.
+# -------------------------------------------
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu � una biblioteca:  
+# L'objectiu � una biblioteca:
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui \
@@ -14,10 +14,10 @@ FORMS += qlogviewerbase.ui \
          qtransferfunctionintervaleditorbase.ui \
          qcinecontrollerbase.ui \
          qthickslabwidgetbase.ui \
-         q2dviewerwidgetbase.ui 
+         q2dviewerwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
                 core_es_ES.ts \
-                core_en_GB.ts 
+                core_en_GB.ts
 HEADERS += extensionfactory.h \
            genericfactory.h \
            singleton.h \
@@ -50,7 +50,7 @@ HEADERS += extensionfactory.h \
            study.h \
            output.h \
            q3dorientationmarker.h \
-           zoomtool.h \
+	   zoomtool.h \
            qlogviewer.h \
            strokesegmentationmethod.h \
            itkErfcLevelSetFunction.h \
@@ -181,7 +181,9 @@ HEADERS += extensionfactory.h \
            viewpointgenerator.h \
            thumbnailcreator.h \
            nonclosedangletool.h \
- abortrendercommand.h
+           abortrendercommand.h \
+           roitool.h
+
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -202,9 +204,9 @@ SOURCES += extensionmediator.cpp \
            study.cpp \
            output.cpp \
            q3dorientationmarker.cpp \
+           zoomtool.cpp \
            editortool.cpp \
            editortooldata.cpp \
-           zoomtool.cpp \
            qlogviewer.cpp \
            strokesegmentationmethod.cpp \
            itkErfcLevelSetFunction.cpp \
@@ -327,7 +329,8 @@ SOURCES += extensionmediator.cpp \
            viewpointgenerator.cpp  \
            thumbnailcreator.cpp \
            nonclosedangletool.cpp \
- abortrendercommand.cpp
+           abortrendercommand.cpp \
+           roitool.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
