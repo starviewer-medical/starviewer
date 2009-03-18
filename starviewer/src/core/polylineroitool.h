@@ -8,16 +8,8 @@
 #define UDGPOLYLINEROITOOL_H
 
 #include "roitool.h"
-#include "volume.h"
-#include <QPointer>
 
 namespace udg {
-
-class PolylineROIToolData;
-class Q2DViewer;
-class ImagePlane;
-class DrawerPolyline;
-
 /**
 Tool per calcular l'àrea i la mitjana de grisos d'un polígon fet amb ROITool
 
