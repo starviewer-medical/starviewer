@@ -7,22 +7,13 @@
 #include "roitool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "series.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
 #include "drawertext.h"
-#include "image.h"
-#include "series.h"
 //vtk
-#include <vtkPNGWriter.h>
-#include <vtkImageActor.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
-#include <vtkProp.h>
-#include <vtkLine.h>
-#include <vtkPoints.h>
 //Qt
-#include <QList>
 
 namespace udg {
 

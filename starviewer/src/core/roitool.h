@@ -10,7 +10,6 @@
 #include "tool.h"
 #include "volume.h"
 #include <QPointer>
-#include <QList>
 
 namespace udg {
 
