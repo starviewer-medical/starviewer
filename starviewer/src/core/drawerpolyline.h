@@ -44,7 +44,7 @@ public:
      * @param point[] coordenades del point
      */
     void setPoint( int i, double point[3] );
-    
+
     /**
      * Elimina el punt i-éssim de la polilínia. Si 'i' està fora de rang,
      * no s'esborrarà cap punt de la polilínia.
@@ -67,14 +67,14 @@ public:
     /// retorna els valors minims i maxims de les coordenades de la polilinia
     double* getPolylineBounds();
 
-    /// Calcula l'area del poligon
-    double computeArea( int view , const double * spacing = NULL );
-    
     ///calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
-    
+
     ///mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
+
+     /// Mètode que intercanvia els punts de sentit antihorari a horari
+    void swap();
 
 public slots:
     void update( int representation );
@@ -89,12 +89,9 @@ private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
 
-    /// Mètode que intercanvia els punts de sentit antihorari a horari
-    void swap();
-    
     ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
     bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
-    
+
 private:
     /// Llista de punts de la polilínia
     QList< double* > m_pointsList;
