@@ -14,11 +14,6 @@
 #include "image.h"
 #include "mathtools.h"
 //vtk
-//#include <vtkPNGWriter.h>
-//#include <vtkImageActor.h>
-//#include <vtkRenderWindowInteractor.h>
-//#include <vtkCommand.h>
-//#include <vtkProp.h>
 #include <vtkLine.h>
 #include <vtkPoints.h>
 //Qt
