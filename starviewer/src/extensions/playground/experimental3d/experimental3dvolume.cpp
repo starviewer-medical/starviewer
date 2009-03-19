@@ -12,6 +12,7 @@
 #include <vtkVolumeRayCastMapper.h>
 
 #include "ambientvoxelshader.h"
+#include "celshadingvoxelshader.h"
 #include "colorbleedingvoxelshader.h"
 #include "contourvoxelshader.h"
 #include "directilluminationvoxelshader.h"
@@ -54,6 +55,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
     delete m_contourVoxelShader;
+    delete m_celShadingVoxelShader;
     delete m_obscuranceVoxelShader;
     delete m_colorBleedingVoxelShader;
     delete m_vmiVoxelShader1;
@@ -197,6 +199,14 @@ void Experimental3DVolume::addContour( double threshold )
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
     m_contourVoxelShader->setGradientEstimator( gradientEstimator() );
     m_contourVoxelShader->setThreshold( threshold );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
+void Experimental3DVolume::addCelShading( int quantums )
+{
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_celShadingVoxelShader );
+    m_celShadingVoxelShader->setQuantums( quantums );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
@@ -392,6 +402,7 @@ void Experimental3DVolume::createVoxelShaders()
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
     m_directIlluminationVoxelShader->setData( m_data, m_rangeMax );
     m_contourVoxelShader = new ContourVoxelShader();
+    m_celShadingVoxelShader = new CelShadingVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
     m_vmiVoxelShader1 = new VmiVoxelShader1();

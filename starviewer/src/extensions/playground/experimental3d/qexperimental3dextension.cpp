@@ -100,6 +100,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_opacityVomiCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityVomiChecked(bool) ) );
     connect( m_opacitySaliencyCheckBox, SIGNAL( toggled(bool) ), SLOT( opacitySaliencyChecked(bool) ) );
+    connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsLabel, SLOT( setEnabled(bool) ) );
+    connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsSpinBox, SLOT( setEnabled(bool) ) );
 
     // càmera
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
@@ -315,6 +317,7 @@ void QExperimental3DExtension::render()
     if ( m_colorVomiCheckBox->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value() );
     if ( m_opacityVomiCheckBox->isChecked() ) m_volume->addOpacity( m_vomi, m_maximumVomi, m_opacityFactorDoubleSpinBox->value() );
     if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityFactorDoubleSpinBox->value() );
+    if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
@@ -2662,27 +2665,27 @@ void QExperimental3DExtension::loadAndRunProgram()
             if ( command == "//" ) continue;
             else if ( command == "tab" )
             {
-                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programTab( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors |= !programTab( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "rendering-interpolation" )
             {
-                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingInterpolation( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors |= !programRenderingInterpolation( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "rendering-gradientestimator" )
             {
-                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingGradientEstimator( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors |= !programRenderingGradientEstimator( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "rendering-baseshading" )
             {
-                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingBaseShading( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors |= !programRenderingBaseShading( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "rendering-check" || command == "rendering-uncheck" )
             {
-                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programRenderingCheckOrUncheck( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors |= !programRenderingCheckOrUncheck( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "tf-load" )
@@ -2699,12 +2702,12 @@ void QExperimental3DExtension::loadAndRunProgram()
             }
             else if ( command == "vmi-viewpoints" )
             {
-                if ( programCheckWordCount( lineNumber, line, 3 ) ) errors = !programVmiViewpoints( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 3 ) ) errors |= !programVmiViewpoints( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "vmi-check" || command == "vmi-uncheck" )
             {
-                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors = !programVmiCheckOrUncheck( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 2 ) ) errors |= !programVmiCheckOrUncheck( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "vmi-run" )
@@ -2725,7 +2728,7 @@ void QExperimental3DExtension::loadAndRunProgram()
             }
             else if ( command == "vmi-load" || command == "vmi-save" )
             {
-                if ( programCheckWordCount( lineNumber, line, 3 ) ) errors = !programVmiLoadOrSave( lineNumber, line, run );
+                if ( programCheckWordCount( lineNumber, line, 3 ) ) errors |= !programVmiLoadOrSave( lineNumber, line, run );
                 else errors = true;
             }
             else if ( command == "screenshot" )
@@ -3059,6 +3062,14 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck( int lineNumber, c
                 logProgramError( lineNumber, "No es pot activar l'opacitat de la saliency", line );
                 return false;
             }
+        }
+    }
+    else if ( checkbox == "celshading" )
+    {
+        if ( run )
+        {
+            m_celShadingCheckBox->setChecked( check );
+            if ( check && words.size() > 2 ) m_celShadingQuantumsSpinBox->setValue( words.at( 2 ).toInt() );
         }
     }
     else
