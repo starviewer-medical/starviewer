@@ -1237,19 +1237,15 @@ void QueryScreen::convertToDicomdir()
 void QueryScreen::openDicomdir()
 {
     StarviewerSettings settings;
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , settings.getLastOpenedDICOMDIRPath(), "DICOMDIR" );
-    QString path, dicomdirPath;
-
-    dlg->setFileMode( QFileDialog::ExistingFile );
+    QString dicomdirPath;
     Status state;
+    
+    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getLastOpenedDICOMDIRPath(), "DICOMDIR");
 
-    if ( dlg->exec() == QDialog::Accepted )
+    if (!dicomdirPath.isEmpty())//Si és buit no ens han seleccionat cap fitxer
     {
-        if ( !dlg->selectedFiles().empty() )
-            dicomdirPath = dlg->selectedFiles().takeFirst();
-
         QApplication::setOverrideCursor( Qt::WaitCursor );
-        state = m_readDicomdir.open ( dicomdirPath );//Obrim el dicomdir
+        state = m_readDicomdir.open (dicomdirPath);//Obrim el dicomdir
         QApplication::restoreOverrideCursor();
         if ( !state.good() )
         {
@@ -1268,8 +1264,6 @@ void QueryScreen::openDicomdir()
         //cerquem els estudis al dicomdir per a que es mostrin
         queryStudy("DICOMDIR");
     }
-
-    delete dlg;
 }
 
 void QueryScreen::storeStudiesToPacs()
