@@ -2949,7 +2949,7 @@ bool QExperimental3DExtension::programRenderingBaseShading( int lineNumber, cons
     {
         if ( run )
         {
-            if ( m_baseVomiRadioButton->isEnabled() )
+            if ( m_baseVoxelSalienciesRadioButton->isEnabled() )
             {
                 m_baseVoxelSalienciesRadioButton->setChecked( true );
                 if ( words.size() > 2 ) m_baseVoxelSalienciesFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
