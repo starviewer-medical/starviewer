@@ -20,6 +20,7 @@ namespace udg {
 
 
 class AmbientVoxelShader;
+class CelShadingVoxelShader;
 class ColorBleedingVoxelShader;
 class ContourVoxelShader;
 class DirectIlluminationVoxelShader;
@@ -72,6 +73,8 @@ public:
     void addLighting( bool diffuse = false, bool specular = false, double specularPower = 0.0 );
     /// Afegeix contorn al shading.
     void addContour( double threshold = 0.0 );
+    /// Afegeix cel-shading amb el nombre de quantums especificat.
+    void addCelShading( int quantums );
     /// Afegeix obscurances al shading.
     void addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh );
     /// Estableix la funció de transferència.
@@ -133,6 +136,8 @@ private:
     DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
     /// Voxel shader de contorns.
     ContourVoxelShader *m_contourVoxelShader;
+    /// Voxel shader de cel-shading.
+    CelShadingVoxelShader *m_celShadingVoxelShader;
     /// Voxel shader d'obscurances.
     ObscuranceVoxelShader *m_obscuranceVoxelShader;
     /// Voxel shader de color bleeding.

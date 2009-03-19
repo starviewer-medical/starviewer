@@ -623,6 +623,49 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="_3" >
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QCheckBox" name="m_celShadingCheckBox" >
+            <property name="text" >
+             <string>Cel-shading</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="m_celShadingQuantumsLabel" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Quantums</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="m_celShadingQuantumsSpinBox" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
+            <property name="minimum" >
+             <number>2</number>
+            </property>
+            <property name="maximum" >
+             <number>10</number>
+            </property>
+            <property name="value" >
+             <number>4</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" >
           <property name="spacing" >
            <number>6</number>
