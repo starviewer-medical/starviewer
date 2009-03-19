@@ -20,10 +20,8 @@ class Status;
 class PacsNetwork{
 public:
 
-    /** Retorna una instancia de l'objecte
-     * @return instancia de l'objecte
-     */
-    static PacsNetwork* getPacsNetwork();
+	///Constructor de la classe
+	PacsNetwork();
 
     /** Preparar un network per a fer l'acció de query, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
      *            @param timeout dels query
@@ -54,11 +52,7 @@ public:
 
 private :
 
-    static PacsNetwork *pacsNetwork;
     T_ASC_Network *m_networkQuery , *m_networkRetrieve;
-
-    ///Constructor de la classe
-    PacsNetwork();
 
 };
 
