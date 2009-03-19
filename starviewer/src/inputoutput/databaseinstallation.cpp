@@ -39,20 +39,23 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         if (!createDatabaseFile())
         {
             ERROR_LOG("Error no s'ha pogut crear la base de dades a " + settings.getDatabasePath());
+            QMessageBox::critical(0, ApplicationNameString , tr("%1 can't create database, be sure you have write permissions on database directory").arg(ApplicationNameString));
             return false;
         }
     }
     else
     {
         // comprovar que tenim permisos d'escriptura a la BDD
-        if( !isDatabaseFileWritable() )
+        if(!isDatabaseFileWritable())
         {
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
             ERROR_LOG("L'arxiu de base de dades [" + settings.getDatabasePath() + "] no es pot obrir amb permisos d'escriptura. no podrem guardar estudis nous ni modificar els ja existents");
+            QMessageBox::critical(0, ApplicationNameString, tr("You don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString));
         }
 
         if (localDatabaseManager.isDatabaseCorrupted())
         {
+            INFO_LOG("La base de dades està corrupte " + settings.getDatabasePath());
             if (!repairDatabase())
             {
                 ERROR_LOG("NO S'HA POGUT REPARAR LA BASE DE DADES");
@@ -135,9 +138,16 @@ bool DatabaseInstallation::repairDatabase()
     localDatabaseManager.compact();
     if (localDatabaseManager.isDatabaseCorrupted())
     {
+        INFO_LOG("No s'ha pogut reparar la base de dades, s'intentarà reinstal·lar la base de dades");
         //Si la base de dades continua corrupte l'hem de reinstal·lar
         QMessageBox::critical(0, ApplicationNameString, tr("%1 can't repair database, it will be reinstalled.\n\nAll local studies retrieved and imported will be deleted.").arg(ApplicationNameString) );
-        return reinstallDatabase();
+        if (!reinstallDatabase())
+        {
+            ERROR_LOG("No s'ha pogut reinstal·lar la base de dades");
+            QMessageBox::critical(0, ApplicationNameString , tr("%1 can't reinstall database, be sure you have write permissions on database directory").arg(ApplicationNameString));
+            return false;
+        }
+        else return true;
     }
     else
     {
