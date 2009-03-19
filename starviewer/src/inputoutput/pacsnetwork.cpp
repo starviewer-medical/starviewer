@@ -20,18 +20,6 @@ PacsNetwork::PacsNetwork()
     m_networkRetrieve = NULL;
 }
 
-PacsNetwork* PacsNetwork::pacsNetwork = 0;
-
-PacsNetwork* PacsNetwork::getPacsNetwork()
-{
-    if ( pacsNetwork == 0 )
-    {
-        pacsNetwork = new PacsNetwork;
-    }
-
-    return pacsNetwork;
-}
-
 Status PacsNetwork::createNetworkRetrieve( int port , int timeout )
 {
     Status state;

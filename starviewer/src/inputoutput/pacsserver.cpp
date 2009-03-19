@@ -29,7 +29,7 @@ PacsServer::PacsServer(PacsParameters p)
     m_net = NULL;
     m_params = NULL;
     m_assoc = NULL;
-    m_pacsNetwork = PacsNetwork::getPacsNetwork();
+    m_pacsNetwork = new PacsNetwork();
 }
 
 PacsServer::PacsServer()
@@ -37,7 +37,7 @@ PacsServer::PacsServer()
     m_net = NULL;
     m_params = NULL;
     m_assoc = NULL;
-    m_pacsNetwork = PacsNetwork::getPacsNetwork();
+    m_pacsNetwork = new PacsNetwork();
 }
 
 Status PacsServer::echo()
