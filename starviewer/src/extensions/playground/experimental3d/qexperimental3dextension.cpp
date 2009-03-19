@@ -367,50 +367,53 @@ void QExperimental3DExtension::setCamera()
 void QExperimental3DExtension::loadCamera()
 {
     QString cameraFileName = getFileNameToLoad( "cameraDir", tr("Load camera parameters"), tr("Camera files (*.cam);;All files (*)") );
+    if ( !cameraFileName.isNull() ) loadCamera( cameraFileName );
+}
 
-    if ( !cameraFileName.isNull() )
+
+void QExperimental3DExtension::loadCamera( const QString &fileName )
+{
+    QFile cameraFile( fileName );
+
+    if ( !cameraFile.open( QFile::ReadOnly | QFile::Text ) )
     {
-        QFile cameraFile( cameraFileName );
-
-        if ( !cameraFile.open( QFile::ReadOnly | QFile::Text ) )
-        {
-            ERROR_LOG( QString( "No es pot llegir el fitxer " ) + cameraFileName );
-            if ( m_interactive ) QMessageBox::warning( this, tr("Can't load"), QString( tr("Can't load from file ") ) + cameraFileName );
-            return;
-        }
-
-        QTextStream in( &cameraFile );
-
-        Vector3 position, focus, up;
-
-        if ( !in.atEnd() ) in >> position.x;
-        if ( !in.atEnd() ) in >> position.y;
-        if ( !in.atEnd() ) in >> position.z;
-
-        if ( !in.atEnd() ) in >> focus.x;
-        if ( !in.atEnd() ) in >> focus.y;
-        if ( !in.atEnd() ) in >> focus.z;
-
-        if ( !in.atEnd() ) in >> up.x;
-        if ( !in.atEnd() ) in >> up.y;
-        if ( !in.atEnd() ) in >> up.z;
-
-        m_cameraPositionXDoubleSpinBox->setValue( position.x );
-        m_cameraPositionYDoubleSpinBox->setValue( position.y );
-        m_cameraPositionZDoubleSpinBox->setValue( position.z );
-
-        m_cameraFocusXDoubleSpinBox->setValue( focus.x );
-        m_cameraFocusYDoubleSpinBox->setValue( focus.y );
-        m_cameraFocusZDoubleSpinBox->setValue( focus.z );
-
-        m_cameraUpXDoubleSpinBox->setValue( up.x );
-        m_cameraUpYDoubleSpinBox->setValue( up.y );
-        m_cameraUpZDoubleSpinBox->setValue( up.z );
-
-        cameraFile.close();
-
-        setCamera();
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        ERROR_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load"), QString( tr("Can't load from file ") ) + fileName );
+        return;
     }
+
+    QTextStream in( &cameraFile );
+
+    Vector3 position, focus, up;
+
+    if ( !in.atEnd() ) in >> position.x;
+    if ( !in.atEnd() ) in >> position.y;
+    if ( !in.atEnd() ) in >> position.z;
+
+    if ( !in.atEnd() ) in >> focus.x;
+    if ( !in.atEnd() ) in >> focus.y;
+    if ( !in.atEnd() ) in >> focus.z;
+
+    if ( !in.atEnd() ) in >> up.x;
+    if ( !in.atEnd() ) in >> up.y;
+    if ( !in.atEnd() ) in >> up.z;
+
+    m_cameraPositionXDoubleSpinBox->setValue( position.x );
+    m_cameraPositionYDoubleSpinBox->setValue( position.y );
+    m_cameraPositionZDoubleSpinBox->setValue( position.z );
+
+    m_cameraFocusXDoubleSpinBox->setValue( focus.x );
+    m_cameraFocusYDoubleSpinBox->setValue( focus.y );
+    m_cameraFocusZDoubleSpinBox->setValue( focus.z );
+
+    m_cameraUpXDoubleSpinBox->setValue( up.x );
+    m_cameraUpYDoubleSpinBox->setValue( up.y );
+    m_cameraUpZDoubleSpinBox->setValue( up.z );
+
+    cameraFile.close();
+
+    setCamera();
 }
 
 
@@ -2699,6 +2702,14 @@ void QExperimental3DExtension::loadAndRunProgram()
             else if ( command == "render" )
             {
                 if ( run ) render();
+            }
+            else if ( command == "camera-load" )
+            {
+                if ( programCheckWordCount( lineNumber, line, 2 ) )
+                {
+                    if ( run ) loadCamera( words.at( 1 ) );
+                }
+                else errors = true;
             }
             else if ( command == "vmi-viewpoints" )
             {

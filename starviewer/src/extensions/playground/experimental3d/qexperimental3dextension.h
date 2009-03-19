@@ -38,6 +38,7 @@ private:
     void createConnections();
 
     void loadTransferFunction( const QString &fileName );
+    void loadCamera( const QString &fileName );
 
     /// Fa un recorregut pels viewpoints en ordre i amb suavitat.
     void tour( const QList<Vector3> &viewpoints, double speedFactor = 1.0 );
