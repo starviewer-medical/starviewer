@@ -25,7 +25,7 @@ public:
 
 private slots:
     /// fa els càlculs pertinents de la tool després d'haver rebut un signal de figura acabada
-    void initCalc();
+    void start();
 
 private:
     /// metode per escriure a pantalla les dades calculades.
@@ -33,9 +33,6 @@ private:
 
     /// metode per calcular la mitjana de gris de la regio del polyline
     double computeGrayMean();
-
-    /// calcula l'area del poligon que defineix la ROI
-    double computeArea( const double * spacing = NULL );
 };
 
 }

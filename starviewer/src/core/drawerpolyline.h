@@ -73,8 +73,8 @@ public:
     ///mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
-     /// Mètode que intercanvia els punts de sentit antihorari a horari
-    void swap();
+    /// calcula l'area del poligon que defineix la ROI
+    double computeArea( int view, const double * spacing = NULL );
 
 public slots:
     void update( int representation );
@@ -91,6 +91,9 @@ private:
 
     ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
     bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
+
+    /// Mètode que intercanvia els punts de sentit antihorari a horari
+    void swap();
 
 private:
     /// Llista de punts de la polilínia
