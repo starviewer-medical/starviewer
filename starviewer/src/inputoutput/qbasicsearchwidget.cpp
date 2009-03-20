@@ -39,6 +39,11 @@ void QBasicSearchWidget::initialize()
     m_toStudyDate->setDate(QDate::currentDate());
 
     m_patientNameText->setFocus();
+
+#ifndef STARVIEWER_LITE
+    //Per Starviewer per defecte al iniciar-se senyalem fer cerques d'estudis del dia
+    m_todayRadioButton->setChecked(true);
+#endif
 }
 
 void QBasicSearchWidget::clear()
