@@ -131,6 +131,9 @@ public:
     /// Retorna els punts x a l'interval [x-distance, x+distance].
     QList<double> getPointsNear( double x, double distance ) const;
 
+    /// Retorna una funció de transferència equivalent on hi ha els mateixos punts de color que d'opacitat (és a dir, l'opacitat no està definida per un x que el color no, i viceversa).
+    TransferFunction normalize() const;
+
 private:
     /// Nom de la funció de transferència.
     QString m_name;

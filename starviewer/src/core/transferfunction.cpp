@@ -383,4 +383,21 @@ QList<double> TransferFunction::getPointsNear( double x, double distance ) const
 }
 
 
+TransferFunction TransferFunction::normalize() const
+{
+    getPoints();    // per actualitzar m_rgba
+
+    TransferFunction normalized;
+    QMapIterator<double, QColor> it( m_rgba );
+
+    while ( it.hasNext() )
+    {
+        it.next();
+        normalized.addPoint( it.key(), it.value() );
+    }
+
+    return normalized;
+}
+
+
 }
