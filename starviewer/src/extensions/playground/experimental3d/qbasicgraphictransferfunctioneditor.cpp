@@ -69,7 +69,7 @@ const TransferFunction& QBasicGraphicTransferFunctionEditor::transferFunction() 
 
 void QBasicGraphicTransferFunctionEditor::setTransferFunction( const TransferFunction &transferFunction )
 {
-    m_transferFunction = transferFunction;
+    m_transferFunction = transferFunction.normalize();
 
     updateColorGradient();
     update();
