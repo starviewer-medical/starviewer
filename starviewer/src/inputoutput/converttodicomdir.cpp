@@ -338,6 +338,7 @@ void ConvertToDicomdir::createReadmeTxt()
 
         if ( settings.getInstitutionCountry().length() > 0 ) out << settings.getInstitutionCountry() << "\n";
 
+        // TODO aquests dos paràmetres no s'omplen enlloc de l'aplicació. Cal fer-los servir o els podem eliminar? (tant d'quí com de settings)
         if ( settings.getInstitutionPhoneNumber().length() > 0 ) out << "Phone number "  << settings.getInstitutionPhoneNumber() << "\n";
 
         if ( settings.getInstitutionEmail().length() > 0 ) out << "E-mail contact : " << settings.getInstitutionEmail() << "\n";
