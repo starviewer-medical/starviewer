@@ -79,6 +79,12 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseSpecularLightingCheckBox, SIGNAL( toggled(bool) ), m_baseSpecularLightingPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmYLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmYDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmBLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmBDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
@@ -96,6 +102,12 @@ void QExperimental3DExtension::createConnections()
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceHighFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_vomiCheckBox, SIGNAL( toggled(bool) ), m_vomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmYLabel, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmYDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmBLabel, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmBDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_opacityVomiCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityVomiChecked(bool) ) );
@@ -308,12 +320,16 @@ void QExperimental3DExtension::render()
         m_volume->addLighting( true, m_baseSpecularLightingCheckBox->isChecked(), m_baseSpecularLightingPowerDoubleSpinBox->value() );
     }
     else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
+    else if ( m_baseVomiCoolWarmRadioButton->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_baseVomiCoolWarmFactorDoubleSpinBox->value(),
+                                                                                      m_baseVomiCoolWarmYDoubleSpinBox->value(), m_baseVomiCoolWarmBDoubleSpinBox->value() );
     else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
 
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value() );
     if ( m_vomiCheckBox->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value() );
+    if ( m_vomiCoolWarmCheckBox->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_vomiCoolWarmFactorDoubleSpinBox->value(),
+                                                                          m_vomiCoolWarmYDoubleSpinBox->value(), m_vomiCoolWarmBDoubleSpinBox->value() );
     if ( m_colorVomiCheckBox->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value() );
     if ( m_opacityVomiCheckBox->isChecked() ) m_volume->addOpacity( m_vomi, m_maximumVomi, m_opacityFactorDoubleSpinBox->value() );
     if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityFactorDoubleSpinBox->value() );
@@ -1421,7 +1437,9 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
     if ( computeVomi )
     {
         m_baseVomiRadioButton->setEnabled( true );
+        m_baseVomiCoolWarmRadioButton->setEnabled( true );
         m_vomiCheckBox->setEnabled( true );
+        m_vomiCoolWarmCheckBox->setEnabled( true );
         m_opacityLabel->setEnabled( true );
         m_opacityVomiCheckBox->setEnabled( true );
         m_saveVomiPushButton->setEnabled( true );
@@ -2229,7 +2247,9 @@ void QExperimental3DExtension::loadVomi( const QString &fileName )
     vomiFile.close();
 
     m_baseVomiRadioButton->setEnabled( true );
+    m_baseVomiCoolWarmRadioButton->setEnabled( true );
     m_vomiCheckBox->setEnabled( true );
+    m_vomiCoolWarmCheckBox->setEnabled( true );
     m_opacityLabel->setEnabled( true );
     m_opacityVomiCheckBox->setEnabled( true );
     m_saveVomiPushButton->setEnabled( true );
