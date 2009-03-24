@@ -36,10 +36,10 @@ const QString InstitutionZipCode("/institution/zipCode");
 const QString InstitutionCountry("/institution/country");
 const QString InstitutionEmail("/institution/Email");
 const QString InstitutionPhoneNumber("/institution/phoneNumber");
-const QString queryScreenWindowPositionX("/interface/queryscreen/windowPositionX");
-const QString queryScreenWindowPositionY("/interface/queryscreen/windowPositionY");
-const QString queryScreenWindowWidth("/interface/queryscreen/windowWidth");
-const QString queryScreenWindowHeight("/interface/queryscreen/windowHeigth");
+// Aquesta clau substitueix les obsoletes "queryScreenWindowPositionX", "queryScreenWindowPositionY", "queryScreenWindowWidth" i "queryScreenWindowHeight"
+// que tenien les claus /interface/queryscreen/ + windowPositionX, windowPositionY, windowWidth i windowHeigth respectivament
+// TODO fer neteja d'aquestes claus antigues al registre/.conf
+const QString queryScreenGeometry("/interface/queryscreen/geometry");
 const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
 const QString qOperationStateColumnWidthKey("/interface/qOperationState/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
@@ -209,31 +209,13 @@ void StarviewerSettings::setStudyDicomdirListColumnWidth( int col , int width )
     m_starviewerSettings.setValue( key , width );
 }
 
-void StarviewerSettings::setQueryScreenWindowPositionX( int positionX )
+void StarviewerSettings::saveQueryScreenGeometry( const QByteArray &geometry )
 {
-    QString key = GroupSettingsName + queryScreenWindowPositionX;
-    m_starviewerSettings.setValue( key , positionX );
+    QString key = GroupSettingsName + queryScreenGeometry;
+    m_starviewerSettings.setValue( key , geometry );
 }
 
-void StarviewerSettings::setQueryScreenWindowPositionY( int positionY )
-{
-    QString key = GroupSettingsName + queryScreenWindowPositionY;
-    m_starviewerSettings.setValue( key , positionY );
-}
-
-void StarviewerSettings::setQueryScreenWindowWidth( int width )
-{
-    QString key = GroupSettingsName + queryScreenWindowWidth;
-    m_starviewerSettings.setValue( key , width );
-}
-
-void StarviewerSettings::setQueryScreenWindowHeight( int height )
-{
-    QString key = GroupSettingsName + queryScreenWindowHeight;
-    m_starviewerSettings.setValue( key , height );
-}
-
-void StarviewerSettings::setQueryScreenStudyTreeSeriesListQSplitterState( QByteArray state )
+void StarviewerSettings::setQueryScreenStudyTreeSeriesListQSplitterState( const QByteArray &state )
 {
     QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
     m_starviewerSettings.setValue( key , state );
@@ -275,28 +257,10 @@ int StarviewerSettings::getStudyDicomdirListColumnWidth( int col )
     return m_starviewerSettings.value( key , 100 ).toInt();
 }
 
-int StarviewerSettings::getQueryScreenWindowPositionX()
+QByteArray StarviewerSettings::getQueryScreenGeometry()
 {
-    QString key = GroupSettingsName + queryScreenWindowPositionX;
-    return m_starviewerSettings.value( key , 50 ).toInt();
-}
-
-int StarviewerSettings::getQueryScreenWindowPositionY()
-{
-    QString key = GroupSettingsName + queryScreenWindowPositionY;
-    return m_starviewerSettings.value( key , 50 ).toInt();
-}
-
-int StarviewerSettings::getQueryScreenWindowWidth()
-{
-    QString key = GroupSettingsName + queryScreenWindowWidth;
-    return m_starviewerSettings.value( key , 800 ).toInt();
-}
-
-int StarviewerSettings::getQueryScreenWindowHeight()
-{
-    QString key = GroupSettingsName + queryScreenWindowHeight;
-    return m_starviewerSettings.value( key , 770 ).toInt();
+    QString key = GroupSettingsName + queryScreenGeometry;
+    return m_starviewerSettings.value( key ).toByteArray();
 }
 
 QByteArray StarviewerSettings::getQueryScreenStudyTreeSeriesListQSplitterState()

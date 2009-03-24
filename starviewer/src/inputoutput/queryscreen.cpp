@@ -392,8 +392,7 @@ void QueryScreen::setAdvancedSearchVisible(bool visible)
 void QueryScreen::readSettings()
 {
     StarviewerSettings settings;
-    move( settings.getQueryScreenWindowPositionX() , settings.getQueryScreenWindowPositionY() );
-    resize( settings.getQueryScreenWindowWidth() , settings.getQueryScreenWindowHeight() );
+    this->restoreGeometry( settings.getQueryScreenGeometry() );
     if ( !settings.getQueryScreenStudyTreeSeriesListQSplitterState().isEmpty() )
     {
         m_StudyTreeSeriesListQSplitter->restoreState( settings.getQueryScreenStudyTreeSeriesListQSplitterState() );
@@ -1168,16 +1167,9 @@ void QueryScreen::writeSettings()
 
         saveQStudyTreeWidgetColumnsWidth();
 
-        //guardem l'estat del QSplitter que divideix el StudyTree del QSeries
+        //guardem l'estat del QSplitter que divideix el StudyTree del QSeries i de la QueryScreen
         settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
-
-        //guardem la posició en que es troba la pantalla
-        settings.setQueryScreenWindowPositionX( x() );
-        settings.setQueryScreenWindowPositionY( y() );
-
-        //guardem les dimensions de la pantalla
-        settings.setQueryScreenWindowHeight( height() );
-        settings.setQueryScreenWindowWidth( width() );
+        settings.saveQueryScreenGeometry( this->saveGeometry() );
     }
 }
 

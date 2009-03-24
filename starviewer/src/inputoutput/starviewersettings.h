@@ -149,31 +149,16 @@ public:
      * @param amplada de la columna
      */
     void setStudyDicomdirListColumnWidth( int col , int width );
-
-    /** guarda en quina és la posició en l'eix de coordenades X en que es troba la interficie queryscreen
-     * @param positionX posició en l'eix de coordenades X de la pantalla queryScreen
+    
+    /** Guarda la geometria de la QueryScreen
+     * @param geometry Geometria de la QueryScreen
      */
-    void setQueryScreenWindowPositionX( int positionX );
-
-    /** guarda en quina és la posició en l'eix de coordenades Y en que es troba la interficie queryscreen
-     * @param positionY posició en l'eix de coordenades Y de la pantalla queryScreen
-     */
-    void setQueryScreenWindowPositionY( int positionY );
-
-    /** guarda quina és l'amplada de la queryScreen
-     * @param width amplada de la queryScreen
-     */
-    void setQueryScreenWindowWidth( int width );
-
-    /** guarda quina és l'allargada de la pantalla queryscreen
-     * @param positionY posició en l'eix de coordenades Y de la pantalla queryScreen
-     */
-    void setQueryScreenWindowHeight( int height );
+    void saveQueryScreenGeometry( const QByteArray &geometry );
 
     /** guarda l'estat en que es troba el QSplitter que divideix a la pestany de local el StudyList i el SeriesList
      * @param state estat del QSplitter
      */
-    void setQueryScreenStudyTreeSeriesListQSplitterState( QByteArray state );
+    void setQueryScreenStudyTreeSeriesListQSplitterState( const QByteArray &state );
 
     /** guarda la mida de la columna que se li passa per paràmetre del QTreeWidget de QOperationStateScreen ,  encarregat de mostrar l'estat de les operacions relacionades amb el PACS
      * @param número de columna
@@ -208,25 +193,10 @@ public:
      */
     int getStudyDicomdirListColumnWidth( int column );
 
-    /** retorna en quin posició de l'eix estava la pantalla queryScreen guardada al QSettings l'aplicació
-     * @return posicó en l'eix X que es trobava la interficie queryScreen
+    /** Retorna la geometrua guardada de la QueryScreen
+     * @return geometria de la QueryScreen
      */
-    int getQueryScreenWindowPositionX();
-
-    /** retorna en quin posició de l'eix estava la pantalla queryScreen guardada al QSettings l'aplicació
-     * @return posicó en l'eix Y que es trobava la interficie queryScreen
-     */
-    int getQueryScreenWindowPositionY();
-
-    /** retorna quina era l'amplada de la pantalla queryScreen guardada al QSettings
-     * @return amplada de la pantalla
-     */
-    int getQueryScreenWindowWidth();
-
-    /** retorna l'allargada la pantalla queryScreen guardada al QSettings
-     * @return posicó en l'eix Y que es trobava la interficie queryScreen
-     */
-    int getQueryScreenWindowHeight();
+    QByteArray getQueryScreenGeometry();
 
     /** retorna l'estat amb que estava el QSplitter que separa el StudyTree i el SeriesList
      * @return estat del QSpliltter
@@ -247,7 +217,6 @@ public:
      * @return amplada de la columna
      */
     int getQConfigurationPacsDeviceColumnWidth( int column );
-
 
     /** Guarda el nom de la institució
      * @param institutionName nom de l'institució
