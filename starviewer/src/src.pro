@@ -26,7 +26,7 @@ defineTest(addSubdirs) {
 }
 
 # Fake subdirs per KDevelop
-SUBDIRS = core inputoutput interface extensions main crashreporter starviewersapwrapper
+SUBDIRS = core inputoutput interface extensions main crashreporter
 for(DIR, SUBDIRS){
  SUBDIRS -= $$DIR
 }
@@ -37,7 +37,6 @@ addSubdirs(inputoutput, core)
 addSubdirs(interface, core inputoutput)
 addSubdirs(extensions, core)
 addSubdirs(main, interface extensions)
-addSubdirs(starviewersapwrapper)
 
 # En linux 64bits, de moment, breakpad no està suportat, per tant, no compilem res relacionat.
 include(detectlinux64.inc)
