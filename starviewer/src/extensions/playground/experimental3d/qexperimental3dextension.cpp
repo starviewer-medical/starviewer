@@ -1195,6 +1195,7 @@ void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenera
         QMap< QPair<int, int>, QVector<int> > viewpointSubSets; // (nPunts,nColors) -> punts-millor-distribuïts
         {
             viewpointSubSets[qMakePair(42, 6)] = ( QVector<int>() << 13 << 17 << 23 << 27 << 33 << 39 );
+            viewpointSubSets[qMakePair(162, 6)] = ( QVector<int>() << 16 << 34 << 62 << 82 << 110 << 143 );
         }
 
         viewpointColors.resize( nViewpoints );
