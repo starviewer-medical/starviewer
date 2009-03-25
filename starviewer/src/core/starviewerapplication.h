@@ -32,6 +32,8 @@ const QString OrganizationEmailString("starviewer@ima.udg.edu");
 const QString UserDataRootPath( QDir::homePath() + "/.starviewer/" );
 /// Path del log
 const QString UserLogsPath( UserDataRootPath + "log/" );
+/// Ruta absoluta del fitxer de log
+const QString UserLogsFile( UserLogsPath + "starviewer.log" );
 /// Path dels hanging protocols d'usuari
 const QString UserHangingProtocolsPath( UserDataRootPath + "hangingprotocols/" );
 

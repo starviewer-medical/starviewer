@@ -9,6 +9,7 @@
 #define _LOGGING_
 
 #include <QString>
+#include <cstdlib> // per posar la variable d'entorn
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */
@@ -20,9 +21,12 @@
 #include <log4cxx/helpers/exception.h>
 
 /// Macro per a inicialitzar els logger
+/// Definim la variable d'entorn que indica la localització
+/// dels fitxers de log i llavors llegim la configuració dels logs
 #define LOGGER_INIT( file ) \
     if (true) \
     { \
+        putenv( qPrintable( QString("logFilesLocation=") + QDir::toNativeSeparators( udg::UserLogsFile ) ) ); \
         log4cxx::PropertyConfigurator::configure( file ); \
     } else (void)0
 
