@@ -26,7 +26,9 @@
 #define LOGGER_INIT( file ) \
     if (true) \
     { \
-        putenv( qPrintable( QString("logFilesLocation=") + QDir::toNativeSeparators( udg::UserLogsFile ) ) ); \
+        QByteArray logFilePathByteArray = ("logFilesLocation=" + QDir::toNativeSeparators(udg::UserLogsFile)).toAscii(); \
+        char *logFilePath = logFilePathByteArray.data(); \
+        putenv(logFilePath); \
         log4cxx::PropertyConfigurator::configure( file ); \
     } else (void)0
 
