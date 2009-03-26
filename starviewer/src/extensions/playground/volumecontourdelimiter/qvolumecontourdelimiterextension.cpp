@@ -377,7 +377,7 @@ void QVolumeContourDelimiterExtension::insertPoint()
     double position[4];
 
     m_2DView->getInteractor()->GetEventPosition( xy );
-    m_2DView->computeDisplayToWorld( m_2DView->getRenderer() , xy[0], xy[1], 0, position );
+    m_2DView->computeDisplayToWorld(xy[0], xy[1], 0, position);
 
     Point p( position[0], position[1] );
     m_pointList.append( p );
