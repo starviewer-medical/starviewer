@@ -846,37 +846,6 @@ void QMPR2DExtension::initOrientation()
     updateControls();
 }
 
-void QMPR2DExtension::saveImages()
-{
-    if( m_axial2DView->grabbedViewsCount() == 0 && m_sagital2DView->grabbedViewsCount() == 0 && m_coronal2DView->grabbedViewsCount() == 0 )
-    {
-        QMessageBox::information( 0 , tr("Information") , tr("There are not grabbed views to save") );
-        return;
-    }
-
-    QString fileName = QFileDialog::getSaveFileName( this , tr("Save file") , m_defaultSaveDir , m_fileSaveFilter );
-    if ( !fileName.isEmpty() )
-    {
-        QViewer::FileType extension;
-        if( QFileInfo( fileName ).suffix() == "jpg" )
-            extension = QViewer::JPEG;
-        else if( QFileInfo( fileName ).suffix() == "png" )
-            extension = QViewer::PNG;
-        else if( QFileInfo( fileName ).suffix() == "pnm" )
-            extension = QViewer::PNM;
-        else if( QFileInfo( fileName ).suffix() == "bmp" )
-            extension = QViewer::BMP;
-        else if( QFileInfo( fileName ).suffix() == "tif" )
-            extension = QViewer::TIFF;
-
-        m_axial2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
-        m_sagital2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
-        m_coronal2DView->saveGrabbedViews( QFileInfo( fileName ).completeBaseName(),  extension );
-
-        m_defaultSaveDir = QFileInfo( fileName ).absolutePath();
-    }
-}
-
 void QMPR2DExtension::createActors()
 {
     // creem els axis actors

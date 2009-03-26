@@ -160,9 +160,6 @@ private slots:
     /// Fa les accions pertinents quan una llesca s'ha actualitzat
     void axialSliceUpdated( int slice );
 
-    /// Fa el procés de guardar les imatges capturades
-    void saveImages();
-
     /// Actualitza el valor del thickSlab i tot el que hi estigui relacionat amb ell
     void updateThickSlab( double value );
     void updateThickSlab( int value );
