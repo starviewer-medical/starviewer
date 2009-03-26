@@ -210,18 +210,6 @@ private:
     QAction *m_horizontalLayoutAction;
     /// Acció per activar el mip
     QAction *m_mipAction;
-    /// Accions associades a tools
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_screenShotAction;
-    QAction *m_voxelInformationAction;
-    QAction *m_rotate3DAction;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
-
     /// Visor de MIP
     Q3DViewer *m_mipViewer;
 
