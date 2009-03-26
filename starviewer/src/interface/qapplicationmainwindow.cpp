@@ -46,9 +46,13 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     this->setObjectName( name );
     m_extensionWorkspace = new ExtensionWorkspace( this );
     this->setCentralWidget( m_extensionWorkspace );
-
+ 
     DatabaseInstallation databaseInstallation;
-    databaseInstallation.checkStarviewerDatabase();
+    if( !databaseInstallation.checkStarviewerDatabase() )
+	{
+		QString errorMessage = databaseInstallation.getErrorMessage();
+		QMessageBox::critical(0, ApplicationNameString , tr("There have been some errors:\n").append( errorMessage ).append( tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.") ) );
+	}
 
     m_extensionHandler = new ExtensionHandler( this );
 
