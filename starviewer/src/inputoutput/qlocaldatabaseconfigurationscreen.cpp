@@ -121,7 +121,7 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
                 case 0:
                     if ( !dir.mkpath( m_textCacheImagePath->text() ) )
                     {
-                        QMessageBox::critical( this , ApplicationNameString , tr( "%1 can't create the directory. Please check users permission." ) );
+						QMessageBox::critical( this , ApplicationNameString , tr( "%1 can't create the directory. Please check users permission." ).arg(ApplicationNameString) );
                         return false;
                     }
                     else return true;
