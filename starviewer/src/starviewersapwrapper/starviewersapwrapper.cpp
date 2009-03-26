@@ -50,6 +50,10 @@ int main(int argc, char *argv[])
     QStringList parametersList = application.arguments();
     udg::QStarviewerSAPWrapper starviewerSapWrapper;
 
+    application.setOrganizationName(udg::OrganizationNameString);
+    application.setOrganizationDomain(udg::OrganizationDomainString);
+    application.setApplicationName(udg::ApplicationNameString);
+
     configureLogging();
 
     STAT_LOG("StarviewerSAPWrapper::Iniciat");
