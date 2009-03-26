@@ -97,9 +97,15 @@ public:
      */
     ToolProxy *getToolProxy() const;
 
-    /// Passa coordenades de display a coordenades de món i viceversa \TODO aquest metode haurioa de ser virtual al pare
-    static void computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[4] );
-    static void computeWorldToDisplay( vtkRenderer *renderer , double x , double y , double z , double displayPoint[3] );
+    /// Passa coordenades de display a coordenades de món i viceversa 
+    void computeDisplayToWorld( double x , double y , double z , double worldPoint[4] );
+    void computeWorldToDisplay( double x , double y , double z , double displayPoint[3] );
+    
+    /**
+     * Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
+     */
+    void getEventWorldCoordinate( double worldCoordinate[3] );
+    void getLastEventWorldCoordinate( double worldCoordinate[3] );
 
     /// Fa una captura de la vista actual i la guarda en una estructura interna
     void grabCurrentView();
@@ -260,6 +266,14 @@ protected:
      * @param orientation Orientació, valors enumerats que podran ser Axial, Sagital o Coronal
      */
     void setCameraOrientation( int orientation );
+
+    /**
+     * Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
+     * @param worldCoordinate Variable on es retornarà la coordenada
+     * @param current Si true, ens dóna la coordenada de l'event més recent, 
+     * si fals, ens dóna la coordenada anterior a l'event més recent
+     */
+    void getRecentEventWorldCoordinate( double worldCoordinate[3], bool current );
 
 protected:
     /// El volum a visualitzar

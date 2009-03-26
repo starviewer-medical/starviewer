@@ -143,17 +143,11 @@ void AngleTool::annotateFirstPoint()
     m_mainPolyline = new DrawerPolyline;
     m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
-    double position[4], computed[3];
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), xy[0], xy[1], 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     //afegim el punt
-    m_mainPolyline->addPoint( computed );
+    m_mainPolyline->addPoint( clickedWorldPoint );
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 
     //actualitzem l'estat de la tool
@@ -326,16 +320,8 @@ void AngleTool::drawCircumference()
 
 void AngleTool::simulateFirstSegmentOfAngle()
 {
-    double position[4], computed[3];
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), xy[0], xy[1], 0, position );
-
-    //només ens interessen els 3 primers valors de l'array de 4
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     if ( m_mainPolyline->getNumberOfPoints() == 2 ) //és que ja havíem assignat el segon punt que determina el primer segment de l'angle
     {
@@ -344,23 +330,15 @@ void AngleTool::simulateFirstSegmentOfAngle()
     }
 
     //afegim el nou segon punt que simula el nou primer angle
-    m_mainPolyline->addPoint( computed );
+    m_mainPolyline->addPoint( clickedWorldPoint );
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->refresh();
 }
 
 void AngleTool::simulateSecondSegmentOfAngle()
 {
-    double position[4], computed[3];
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer(), xy[0], xy[1], 0, position );
-
-    //només ens interessen els 3 primers valors de l'array de 4
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     if ( m_mainPolyline->getNumberOfPoints() == 3 ) //és que ja havíem assignat el segon punt que determina el primer segment de l'angle
     {
@@ -369,7 +347,7 @@ void AngleTool::simulateSecondSegmentOfAngle()
     }
 
     //afegim el nou segon punt que simula el nou punt
-    m_mainPolyline->addPoint( computed );
+    m_mainPolyline->addPoint( clickedWorldPoint );
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 
     m_circumferencePolyline->deleteAllPoints();

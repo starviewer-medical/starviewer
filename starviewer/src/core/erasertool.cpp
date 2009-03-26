@@ -29,8 +29,6 @@ EraserTool::EraserTool( QViewer *viewer, QObject *parent )
 
     m_polyline=NULL;
     m_state = NONE;
-
-    DEBUG_LOG("ERASER TOOL CREADA ");
 }
 
 EraserTool::~EraserTool()
@@ -67,18 +65,8 @@ void EraserTool::startEraserAction()
         m_polyline = new DrawerPolyline;
         m_2DViewer->getDrawer()->draw( m_polyline , Q2DViewer::Top2DPlane, m_2DViewer->getCurrentSlice() );
     }
-
-    //guardem el primer punt de la zona d'esborrat i posem l'estat adequat a la tool
-    double position[4];
-
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    m_startPoint[0] = position[0];
-    m_startPoint[1] = position[1];
-    m_startPoint[2] = position[2];
-
+    
+    m_2DViewer->getEventWorldCoordinate( m_startPoint );
     /*
         la següent inicialització de l'm_endPoint és per la distància que es calcula al mètode erasePrimitive(). El primer cop que es calcula,   aquest punt no tindrà valor i, per tant, ens donaria error
     */
@@ -97,15 +85,9 @@ void EraserTool::startEraserAction()
 
 void EraserTool::drawAreaOfErasure()
 {
-    double position[4], p2[3], p3[3];
-
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    m_endPoint[0] = position[0];
-    m_endPoint[1] = position[1];
-    m_endPoint[2] = position[2];
+    double p2[3], p3[3];
+    
+    m_2DViewer->getEventWorldCoordinate( m_endPoint );
 
     if ( m_polyline->getNumberOfPoints() > 1 )
     {
@@ -114,7 +96,7 @@ void EraserTool::drawAreaOfErasure()
         m_polyline->removePoint( 2 );
         m_polyline->removePoint( 1 );
     }
-
+    
     //calculem el segon punt i el tercer
     switch( m_2DViewer->getView() )
     {

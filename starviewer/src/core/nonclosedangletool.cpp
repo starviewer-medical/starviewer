@@ -98,22 +98,14 @@ void NonClosedAngleTool::annotateLinePoints()
     else
         line = m_secondLine;
 
-    double position[4];
-    double computed[3];
-
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     //afegim el punt
     if( m_lineState == NO_POINTS )
     {
-        line->setFirstPoint( computed );
-        line->setSecondPoint( computed );
+        line->setFirstPoint( clickedWorldPoint );
+        line->setSecondPoint( clickedWorldPoint );
         m_lineState = FIRST_POINT;
 
         if ( m_state == NONE )
@@ -125,7 +117,7 @@ void NonClosedAngleTool::annotateLinePoints()
     }
     else
     {
-        line->setSecondPoint( computed );
+        line->setSecondPoint( clickedWorldPoint );
 
         line->update( DrawerPrimitive::VTKRepresentation );
 
@@ -140,19 +132,9 @@ void NonClosedAngleTool::annotateLinePoints()
 
 void NonClosedAngleTool::simulateLine(DrawerLine *line)
 {
-    double position[4];
-    double computed[3];
-
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
-
-    line->setSecondPoint( computed );
-
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
+    line->setSecondPoint( clickedWorldPoint );
     //Actualitzem viewer
     line->update( DrawerPrimitive::VTKRepresentation );
 }
