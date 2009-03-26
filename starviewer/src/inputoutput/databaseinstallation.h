@@ -54,6 +54,9 @@ public:
     ///destructor de la classe
     ~DatabaseInstallation();
 
+	/// Retorna els errors que s'han trobat
+	QString getErrorMessage();
+
 private slots:
     ///Fa avançar la barra de progrés
     void setValueProgressBar();
@@ -93,6 +96,11 @@ private :
      * @return indica si s'ha pogut crear la base de dades
      */
     bool createDatabaseFile();
+
+	/** Missatges d'errors que s'han anat produint
+	*
+	*/
+	QString m_errorMessage;
 };
 }//end namespace udg
 
