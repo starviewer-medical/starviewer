@@ -68,39 +68,11 @@ void TranslateTool::doTranslate()
 
 void TranslateTool::pan()
 {
-    // Codi basat en codi extret de vtkInteractorStyleTrackballActor::Pan()
-    // Si fem servir "current renderer" en comptes de "default" el desplaçament no va del tot bé
-    vtkRenderer *renderer = m_viewer->getInteractorStyle()->GetCurrentRenderer();
-    if( !renderer )
-        return;
-
-    double viewFocus[4], focalDepth;
     double newPickPoint[4], oldPickPoint[4], motionVector[3];
 
-    // Calculate the focal depth since we'll be using it a lot
-    vtkCamera *camera = renderer->GetActiveCamera();
-    camera->GetFocalPoint( viewFocus );
-    QViewer::computeWorldToDisplay( renderer, viewFocus[0], viewFocus[1], viewFocus[2],
-                                viewFocus);
-    focalDepth = viewFocus[2];
-
-    int xy[2];
-    m_viewer->getEventPosition( xy );
-    QViewer::computeDisplayToWorld( renderer,
-                                (double)xy[0],
-                                (double)xy[1],
-                                focalDepth,
-                                newPickPoint);
-
-    // Has to recalc old mouse point since the viewport has moved,
-    // so can't move it outside the loop
-    m_viewer->getLastEventPosition( xy );
-    QViewer::computeDisplayToWorld( renderer,
-                                (double)xy[0],
-                                (double)xy[1],
-                                focalDepth,
-                                oldPickPoint );
-
+    m_viewer->getEventWorldCoordinate( newPickPoint );
+    m_viewer->getLastEventWorldCoordinate( oldPickPoint );
+    
     // Camera motion is reversed
     motionVector[0] = oldPickPoint[0] - newPickPoint[0];
     motionVector[1] = oldPickPoint[1] - newPickPoint[1];

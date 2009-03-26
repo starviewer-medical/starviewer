@@ -123,7 +123,7 @@ void VoxelInformationTool::depthAccordingViewAndSlice( double xyz[3] )
 
 void VoxelInformationTool::placeText( double textPosition[3] )
 {
-    double wPoint[4];
+    double worldPoint[4];
     int position[2];
     double xyz[3];
 
@@ -131,9 +131,9 @@ void VoxelInformationTool::placeText( double textPosition[3] )
         xyz[i] = textPosition[i];
 
     correctPositionOfCaption( position );
-    QViewer::computeDisplayToWorld( m_2DViewer->getRenderer() , position[0] , position[1] , 0. , wPoint );
-    xyz[0] = wPoint[0];
-    xyz[1] = wPoint[1];
+    m_2DViewer->computeDisplayToWorld( position[0] , position[1] , 0. , worldPoint );
+    xyz[0] = worldPoint[0];
+    xyz[1] = worldPoint[1];
     depthAccordingViewAndSlice( xyz );
 
     m_voxelInformationCaption->VisibilityOn();

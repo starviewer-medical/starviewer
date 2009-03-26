@@ -195,9 +195,9 @@ void QViewer::setActive( bool active )
 {
     m_isActive = active;
 }
-
-void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y , double z , double worldPoint[4] )
+void QViewer::computeDisplayToWorld( double x , double y , double z , double worldPoint[4] )
 {
+    vtkRenderer *renderer = this->getRenderer();
     if( renderer )
     {
         renderer->SetDisplayPoint( x, y, z );
@@ -213,14 +213,42 @@ void QViewer::computeDisplayToWorld( vtkRenderer *renderer , double x , double y
     }
 }
 
-void QViewer::computeWorldToDisplay( vtkRenderer *renderer , double x , double y , double z , double displayPoint[3] )
+void QViewer::computeWorldToDisplay( double x , double y , double z , double displayPoint[3] )
 {
+    vtkRenderer *renderer = this->getRenderer();
     if( renderer )
     {
         renderer->SetWorldPoint(x, y, z, 1.0);
         renderer->WorldToDisplay();
         renderer->GetDisplayPoint( displayPoint );
     }
+}
+
+void QViewer::getEventWorldCoordinate( double worldCoordinate[3] )
+{
+    getRecentEventWorldCoordinate( worldCoordinate, true );
+}
+
+void QViewer::getLastEventWorldCoordinate( double worldCoordinate[3] )
+{
+    getRecentEventWorldCoordinate( worldCoordinate, false );
+}
+
+void QViewer::getRecentEventWorldCoordinate( double worldCoordinate[3], bool current )
+{
+    int position[2];
+    
+    if( current )
+        this->getEventPosition( position );
+    else
+        this->getLastEventPosition( position );
+    
+    double computedCoordinate[4];
+    this->computeDisplayToWorld( position[0], position[1], 0, computedCoordinate );
+    worldCoordinate[0] = computedCoordinate[0];
+    worldCoordinate[1] = computedCoordinate[1];
+    worldCoordinate[2] = computedCoordinate[2];
+
 }
 
 bool QViewer::saveGrabbedViews( const QString &baseName , FileType extension )
@@ -430,8 +458,8 @@ void QViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX,
 
     // ara cal calcular la width i height en coordenades de display
     double displayTopLeft[3], displayBottomRight[3];
-    this->computeWorldToDisplay( this->getRenderer(), topLeftX, topLeftY, 0.0, displayTopLeft );
-    this->computeWorldToDisplay( this->getRenderer(), bottomRightX, bottomRightY, 0.0, displayBottomRight );
+    this->computeWorldToDisplay( topLeftX, topLeftY, 0.0, displayTopLeft );
+    this->computeWorldToDisplay( bottomRightX, bottomRightY, 0.0, displayBottomRight );
     // recalculem ara tenint en compte el display
     width = fabs( displayTopLeft[0] - displayBottomRight[0] );
     height = fabs( displayTopLeft[1] - displayBottomRight[1] );
@@ -452,8 +480,8 @@ void QViewer::scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, d
 
     // Calcular la width i height en coordenades de display
     double displayTopLeft[3], displayBottomRight[3];
-    this->computeWorldToDisplay( this->getRenderer(), topLeftX, topLeftY, topLeftZ, displayTopLeft );
-    this->computeWorldToDisplay( this->getRenderer(), bottomRightX, bottomRightY, bottomRightZ, displayBottomRight );
+    this->computeWorldToDisplay( topLeftX, topLeftY, topLeftZ, displayTopLeft );
+    this->computeWorldToDisplay( bottomRightX, bottomRightY, bottomRightZ, displayBottomRight );
 
     // recalculem tenint en compte el display
     double width, height;

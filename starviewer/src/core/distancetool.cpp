@@ -33,8 +33,6 @@ DistanceTool::DistanceTool( QViewer *viewer, QObject *parent )
 
     m_line = NULL;
     m_lineState = NO_POINTS;
-
-    //DEBUG_LOG("DISTANCE TOOL CREADA ");
 }
 
 DistanceTool::~DistanceTool()
@@ -74,29 +72,21 @@ void DistanceTool::annotateNewPoint()
     if ( !m_line )
         m_line = new DrawerLine;
 
-    double position[4];
-    double computed[3];
-
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     //afegim el punt
     if( m_lineState == NO_POINTS )
     {
-        m_line->setFirstPoint( computed );
-        m_line->setSecondPoint( computed );
+        m_line->setFirstPoint( clickedWorldPoint );
+        m_line->setSecondPoint( clickedWorldPoint );
         m_lineState = FIRST_POINT;
 
         m_2DViewer->getDrawer()->draw( m_line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
     else
     {
-        m_line->setSecondPoint( computed );
+        m_line->setSecondPoint( clickedWorldPoint );
 
         m_line->update( DrawerPrimitive::VTKRepresentation );
 
@@ -142,21 +132,11 @@ void DistanceTool::annotateNewPoint()
 
 void DistanceTool::simulateLine()
 {
-    double position[4];
-    double computed[3];
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
-    //capturem l'event de clic esquerre
-    int *xy = m_2DViewer->getEventPosition();
-
-    m_2DViewer->computeDisplayToWorld( m_2DViewer->getRenderer() , xy[0], xy[1], 0, position );
-    computed[0] = position[0];
-    computed[1] = position[1];
-    computed[2] = position[2];
-
-    m_line->setSecondPoint( computed );
-
+    m_line->setSecondPoint( clickedWorldPoint );
     m_line->update( DrawerPrimitive::VTKRepresentation );
-
 }
 
 }
