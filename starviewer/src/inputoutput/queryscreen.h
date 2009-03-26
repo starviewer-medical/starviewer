@@ -167,7 +167,7 @@ private slots:
     void deleteOldStudiesThreadFinished();
 
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
-    void showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error);
+    void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
 
     ///Ens Mostra un missatge indicant l'error produït a la DICOMDIRImporter, i com es pot solucionar
     void showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRImporter::DICOMDIRImporterError error);

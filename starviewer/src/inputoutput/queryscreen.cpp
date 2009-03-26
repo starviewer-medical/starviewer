@@ -332,7 +332,7 @@ void QueryScreen::createConnections()
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation( QString ) ), m_operationStateScreen, SLOT(  setErrorOperation( QString ) ) );
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), m_operationStateScreen, SLOT(setErrorOperation(QString)));
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), m_operationStateScreen, SLOT(setErrorOperation(QString)));
 
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished( QString ) ), m_operationStateScreen, SLOT(  setOperationFinished( QString ) ) );
 
@@ -345,7 +345,7 @@ void QueryScreen::createConnections()
     connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), m_operationStateScreen, SLOT(setCancelledOperation(QString)));
 
     // Label d'informació (cutre-xapussa)
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT( updateOperationsInProgressMessage()));
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT( updateOperationsInProgressMessage()));
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ), SLOT( updateOperationsInProgressMessage() ));
@@ -356,7 +356,7 @@ void QueryScreen::createConnections()
     connect ( &m_multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
-    connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QExecuteOperationThread::OperationError)));
+    connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QString, QExecuteOperationThread::OperationError)));
     connect( &m_qexecuteOperationThread, SIGNAL( retrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
 
     //Amaga o ensenya la cerca avançada
@@ -1506,31 +1506,32 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
     return true;
 }
 
-void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error)
+void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error)
 {
     QString message;
     StarviewerSettings settings;
+    PacsParameters pacs = PacsListDB().queryPacs(pacsID);
 
     switch (error)
     {
         case QExecuteOperationThread::ErrorConnectingPacs :
             message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred connecting to a Pacs while retrieving or storing a study.\n");
+            message += tr("an error ocurred connecting to PACS %1 while retrieving or storing a study.\n").arg(pacs.getAEPacs());
             message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::ErrorRetrieving :
-            message = tr("Please review the operation list screen, ");
+            message = tr("Please review the operation list screen, ";)
             message += tr("an error ocurred retrieving a study.\n");
-            message += tr("\nPacs doesn't respond correclty, be sure that your computer is connected on network and the Pacs parameters are correct.");
+            message += tr("\nPACS %1 doesn't respond correctly, be sure that your computer is connected on network and the PACS parameters are correct.").arg(pacs.getAEPacs());
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::MoveDestinationAETileUnknown:
             message = tr("Please review the operation list screen, ");
-            message += tr("the Pacs doesn't recognize your computer's AETitle %1, some studies can't be retrieved.").arg(settings.getAETitleMachine());
-            message += tr("\n\nContact with an administrador to register your computer to the Pacs.");
+            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAEPacs(), settings.getAETitleMachine());
+            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             QMessageBox::warning( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::NoEnoughSpace :
@@ -1561,8 +1562,8 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             break;
 	   case QExecuteOperationThread::MoveRefusedOutOfResources :
 			message = tr("Please review the operation list screen, ");
-            message += tr("PACS is out of resources and can't process the request for retrieving a study.");
-            message += tr("\n\nTry later to retrieve the study, if the problem persists please contact with your PACS administrator to solve the problem.");
+            message += tr("PACS %1 is out of resources and can't process the request for retrieving a study.").arg(pacs.getAEPacs());
+            message += tr("\n\nTry later to retrieve the study, if the problem persists please contact with PACS administrator to solve the problem.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :

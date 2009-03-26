@@ -138,11 +138,11 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
         {
             //si no hi ha prou espai cancel·lem les operacions de descàrrega
-            errorRetrieving(studyUID, NoEnoughSpace);
+            errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), NoEnoughSpace);
             cancelAllPendingOperations(Operation::Retrieve);
             cancelAllPendingOperations(Operation::View);
         }
-        else errorRetrieving(studyUID, ErrorFreeingSpace);
+        else errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), ErrorFreeingSpace);
 
         localDatabaseManager.setStudyRetrieveFinished();
         return;
@@ -150,7 +150,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     if (Utils::isPortInUse(StarviewerSettings().getLocalPort().toInt()))
     {
-        errorRetrieving(studyUID, IncomingConnectionsPortPacsInUse);
+        errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), IncomingConnectionsPortPacsInUse);
         cancelAllPendingOperations(Operation::Retrieve);
         cancelAllPendingOperations(Operation::View);
         localDatabaseManager.setStudyRetrieveFinished();
@@ -166,7 +166,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         ERROR_LOG( "Error al connectar al pacs " + operation.getPacsParameters().getAEPacs() + ". PACS ERROR : " + state.text() );
 
-        errorRetrieving(studyUID, ErrorConnectingPacs);
+        errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), ErrorConnectingPacs);
         localDatabaseManager.setStudyRetrieveFinished();
 
         return;
@@ -190,13 +190,13 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         if (retState.code() == 1300)
         {
-            errorRetrieving(studyUID, MoveDestinationAETileUnknown);
+            errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), MoveDestinationAETileUnknown);
         }
 		else if( retState.code() == 1302)
 		{
-			errorRetrieving(studyUID, MoveRefusedOutOfResources);
+			errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), MoveRefusedOutOfResources);
 		}
-        else errorRetrieving(studyUID, ErrorRetrieving);
+        else errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), ErrorRetrieving);
     }
     else emit filesRetrieved();
 
@@ -221,9 +221,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::PatientInconsistent)
             {
                 //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
-                errorRetrieving(studyUID, PatientInconsistent);
+                errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), PatientInconsistent);
             }
-            else errorRetrieving(studyUID, DatabaseError);
+            else errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), DatabaseError);
         }
     }
 
@@ -382,19 +382,19 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
     connect(localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
 
     //Connexions d'abortament
-    connect(this, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
-    connect(this, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 
 	//Connexió que s'esborrarà un estudi per alliberar espai
 	connect(localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
 }
 
-void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QExecuteOperationThread::OperationError lastError)
+void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError lastError)
 {
     DeleteDirectory deleteDirectory;
     LocalDatabaseManager localDatabaseManager;
 
-    emit errorInOperation(studyInstanceUID, lastError);
+    emit errorInOperation(studyInstanceUID, pacsID, lastError);
 
     //Com la descàrrega ha fallat esborrem el directori on s'havia de descarregar l'estudi, per si s'ha descarregat alguna imatge
     deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
