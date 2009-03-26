@@ -108,7 +108,7 @@ signals:
     void newOperation( Operation *newOperation );
 
     ///Signal que s'emet quan es produeix un error a l'operació de descàrrega
-    void errorInOperation(QString, QExecuteOperationThread::OperationError);
+    void errorInOperation(QString studyUID, QString pacsID, QExecuteOperationThread::OperationError);
 
     ///Signal que s'emet quan s'han descarregat tots els fitxers d'un estudi
     void filesRetrieved();
@@ -153,7 +153,7 @@ private:
     void createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
 
     ///Si es produeix un error emet un signal amb l'error i esborra el directori de l'estudi per si s'hagués pogut descarregar alguna imatge
-    void errorRetrieving(QString studyInstanceUID, QExecuteOperationThread::OperationError lastError);
+    void errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError lastError);
 };
 
 }
