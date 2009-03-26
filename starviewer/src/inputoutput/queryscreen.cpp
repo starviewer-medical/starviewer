@@ -1561,9 +1561,8 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             break;
 	   case QExecuteOperationThread::MoveRefusedOutOfResources :
 			message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred while retrieving some study, some retrieves may have failed.");
-            message += tr("\n\nData is either missing or corrupted on PACS. Try again later.");
-            message += tr("\n\nIf the problem persists, please contact your PACS administrator to solve the problem");
+            message += tr("PACS is out of resources and can't process the request for retrieving a study.");
+            message += tr("\n\nTry later to retrieve the study, if the problem persists please contact with your PACS administrator to solve the problem.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
