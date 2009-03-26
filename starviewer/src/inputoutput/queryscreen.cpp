@@ -1476,17 +1476,17 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
                          "\n\nIf you want to open different %1's windows always choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
-            message += tr("%1 database is corrupted.");
+			message += tr("%1 database is corrupted.").arg(ApplicationNameString);
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
-            message += tr("%1 database syntax error.");
+            message += tr("%1 database syntax error.").arg(ApplicationNameString);
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseError:
-            message += tr("An internal error occurs with %1 database.");
+            message += tr("An internal error occurs with %1 database.").arg(ApplicationNameString);
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
