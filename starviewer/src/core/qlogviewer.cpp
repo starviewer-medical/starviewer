@@ -35,7 +35,7 @@ QLogViewer::~QLogViewer()
 void QLogViewer::updateData()
 {
     // \TODO aquest directori s'hauria de guardar en alguna mena de qsettings o similar
-    QFile logFile( udg::UserLogsPath + "starviewer.log" );
+    QFile logFile( udg::UserLogsFile );
     if ( !logFile.open( QFile::ReadOnly | QFile::Text) )
     {
         ERROR_LOG( "No s'ha pogut obrir l'arxiu de logs" );
