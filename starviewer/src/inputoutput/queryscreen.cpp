@@ -1343,7 +1343,7 @@ void QueryScreen::errorConnectingPacs( QString IDPacs )
 
     errorPacs = pacsListDB.queryPacs(IDPacs);
 
-    errorMessage = tr( "Can't connect to PACS %1 from %2\nBe sure that the IP and AETitle of the PACS are correct" )
+    errorMessage = tr( "Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct." )
         .arg( errorPacs.getAEPacs() )
         .arg( errorPacs.getInstitution()
     );
@@ -1516,7 +1516,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QSt
     {
         case QExecuteOperationThread::ErrorConnectingPacs :
             message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred connecting to PACS %1 while retrieving or storing a study.\n").arg(pacs.getAEPacs());
+            message += tr("%1 can't connect to PACS %2 trying to retrieve or store a study.\n").arg(ApplicationNameString, pacs.getAEPacs());
             message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
