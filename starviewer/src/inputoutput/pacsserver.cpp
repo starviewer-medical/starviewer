@@ -381,6 +381,9 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     cond = ASC_setPresentationAddresses( m_params , adrLocal , qPrintable(AdrServer) );
     if ( !cond.good() ) return state.setStatus( cond );
 
+    //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
+    dcmConnectionTimeout.set(StarviewerSettings().getTimeout().toInt());
+
     switch ( modality )
     {
         case echoPacs : //configure echo
