@@ -277,6 +277,8 @@ void QConfigurationScreen::test()
     //mirem que hi hagi algun element (pacs) seleccionat per a poder testejar, altrament informem de que cal seleccionar un node
     if ( m_PacsTreeView->selectedItems().count() > 0 )
     {
+        QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
         //Agafem les dades del PACS que estan el textbox per testejar
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
@@ -288,13 +290,17 @@ void QConfigurationScreen::test()
 
         if ( !state.good() )
         {
-            message = tr( "PACS \"%1\" doesn't responds correctly.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+            message = tr( "PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+
+            QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , ApplicationNameString , message );
             INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds. PACS ERROR : " + state.text() );
         }
         else
         {
             state = pacsServer.echo();
+
+            QApplication::restoreOverrideCursor();
 
             if ( state.good() )
             {
@@ -305,7 +311,7 @@ void QConfigurationScreen::test()
             }
             else
             {
-                message = tr( "PACS \"%1\" doesn't responds correctly.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+                message = tr( "PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
                 QMessageBox::warning( this , ApplicationNameString , message );
                 INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds correctly. PACS ERROR : " + state.text() );
             }
@@ -313,7 +319,6 @@ void QConfigurationScreen::test()
     }
     else
         QMessageBox::information( this , tr("Information") , tr("To test a PACS it is necessary to select an item of the list.") );
-
 }
 
 bool QConfigurationScreen::validatePacsParameters()
