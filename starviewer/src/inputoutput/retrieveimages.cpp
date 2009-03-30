@@ -7,7 +7,6 @@
 #include <ofconapp.h>//necessari per fer les sortides per pantalla de les dcmtkz
 
 #include <QDir>
-#include <QTime>
 
 #include "struct.h"
 #include "processimagesingleton.h"
@@ -23,22 +22,10 @@
 
 namespace udg{
 
-int m_timeDownloadingImages; //Comptador per saber quant de temps estem descarregant les imatges de l'estudi
-int m_timeProcessingImages; //Comptador per saber quan de temps estem proce
-int m_timeSaveImages;
-int m_timeProcessDatabase;
-QTime timer;//rellotge per comptar quan tardem a descarrega una imatge
-QTime timerSaveImage;
-QTime timerProcessDatabase;
-
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 RetrieveImages::RetrieveImages()
 {
-    m_timeDownloadingImages = 0;
-    m_timeProcessingImages = 0;
-	m_timeSaveImages = 0;
-	m_timeProcessDatabase = 0;
 }
 
 void RetrieveImages::setConnection( PacsConnection connection )
@@ -170,9 +157,6 @@ void RetrieveImages::storeSCPCallback(
 
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
-        m_timeDownloadingImages += timer.elapsed();//temps que hem tardat a descarregar la imatge
-        timer.restart();//reiniciem per comptar el temps que estem processant la imatge
-
         *statusDetail = NULL;    /* no status detail */
 
         /*
@@ -188,8 +172,6 @@ void RetrieveImages::storeSCPCallback(
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();//proces que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentara comptador des descarregats
             DICOMImage retrievedImage( * imageDataSet );
 
-            timerSaveImage.restart();
-
             E_TransferSyntax xfer = opt_writeTransferSyntax;
             if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
 
@@ -202,8 +184,6 @@ void RetrieveImages::storeSCPCallback(
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
                 ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + imageFilenameToSave + ", error: " + stateSaveImage.text()); 
             }
-
-            m_timeSaveImages += timerSaveImage.elapsed();//temps dedicat a guardar la imatge al disc dur
 
             DICOMTagReader *dicomTagReader = new DICOMTagReader(imageFilenameToSave, new DcmDataset((**imageDataSet)));
 
@@ -233,15 +213,7 @@ void RetrieveImages::storeSCPCallback(
                 }
             }
 
-            timerProcessDatabase.restart();
-
             piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
-
-            m_timeProcessDatabase += timerProcessDatabase.elapsed();//temps d'operació per processar la imatge a la caché
-
-            m_timeProcessingImages += timer.elapsed();//temps que hem estat processant la imatge
-            timer.restart();//reiniciem temporitzador per comptar quan tardem a descarregar la següent imatge
-
         }
     }
 
@@ -400,8 +372,6 @@ Status RetrieveImages::retrieve()
     // set the destination of the images to us
     ASC_getAPTitles( m_assoc->params, req.MoveDestination , NULL , NULL );
 
-
-    timer.start();//iniciem el temporitzador per saber quan tardem a descarregar la primera imatge
     OFCondition cond = DIMSE_moveUser( m_assoc , presId , &req , m_mask ,
         moveCallback , &callbackData , DIMSE_BLOCKING , 0 ,
         m_net , subOpCallback , NULL ,
@@ -451,11 +421,6 @@ Status RetrieveImages::retrieve()
     {
         delete statusDetail;
     }
-
-    DEBUG_LOG(QString( "TEMPS DESCARREGANT IMATGES : %1ms " ).arg( m_timeDownloadingImages ) );
-    DEBUG_LOG(QString( "TEMPS PROCESSANT IMATGES : %1ms " ).arg( m_timeProcessingImages ) );
-    DEBUG_LOG(QString( "TEMPS GUARDANT IMATGES : %1ms " ).arg( m_timeSaveImages ) );
-    DEBUG_LOG(QString( "TEMPS PROCESSANT IMATGE PER LA BASE DE DADES: %1ms " ).arg( m_timeProcessDatabase ) );
 
     if ( rspIds != NULL ) delete rspIds;
 
