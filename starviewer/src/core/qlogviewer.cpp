@@ -39,7 +39,7 @@ void QLogViewer::updateData()
     if ( !logFile.open( QFile::ReadOnly | QFile::Text) )
     {
         ERROR_LOG( "No s'ha pogut obrir l'arxiu de logs" );
-        m_logBrowser->setPlainText( tr("ERROR: No Log file found at this path: %1") + udg::UserLogsPath );
+        m_logBrowser->setPlainText( tr("ERROR: No Log file found at this path: %1\nEnvironment variable(logFilePath): %2").arg( udg::UserLogsFile ).arg( getenv("logFilePath") ) );
     }
     else
     {
