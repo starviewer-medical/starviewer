@@ -251,7 +251,7 @@ void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
     if (Utils::isPortInUse(settings.getLocalPort().toInt()))
     {
         QString message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(settings.getLocalPort());
-        message += tr("\n\nStarviewer couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change Starviewer port for incoming connections from PACS in the configuration screen.").arg(settings.getLocalPort());
+        message += tr("\n\n%1 couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.").arg(ApplicationNameString, Asettings.getLocalPort());
         message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
 
         QMessageBox::warning(this, ApplicationNameString, message);
@@ -1569,7 +1569,7 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QSt
        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
             message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(StarviewerSettings().getLocalPort());
             message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
-            message += tr("\n\nIf there is another Starviewer window retrieving studies from the PACS please wait until those retrieving has finished and try again.");
+            message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         default:
@@ -1642,7 +1642,7 @@ void QueryScreen::showListenRISRequestThreadError(ListenRISRequestThread::Listen
     {
         case ListenRISRequestThread::risPortInUse :
             message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(settings.getListenPortRisRequests());
-            message += tr("\n\nIf the error has produced when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
+            message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case ListenRISRequestThread::unknowNetworkError :
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(settings.getListenPortRisRequests());
