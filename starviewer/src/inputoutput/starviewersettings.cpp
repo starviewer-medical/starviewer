@@ -129,7 +129,7 @@ uint StarviewerSettings::getMinimumSpaceRequiredToRetrieveInGbytes()
 
 uint StarviewerSettings::getMinimumSpaceRequiredToRetrieveInMbytes()
 {
-    return m_starviewerSettings.value(GroupSettingsName + minimumSpaceRequiredToRetrieveInGbytesKey, "5").toString().toUInt() * 1024;
+    return getMinimumSpaceRequiredToRetrieveInGbytes() * 1024;
 }
 
 QString StarviewerSettings::getCacheImagePath()
