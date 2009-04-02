@@ -25,6 +25,13 @@ public:
     ///Envia via Tcp/IP una petició de descarrega de l'estudi amb l'accession number passat per paràmetre al Starviewer de la màquina local
     void sendRequestToLocalStarviewer(QString accessionNumber);
 
+    /**Indica si hi ha una instància del Starviewer executant-se, per fer-ho intenta connectar pel port que el Starviewer espera 
+      *les peticions del RIS, si respón significa que està engegat
+      */ 
+    bool isStarviewerRunning();
+
+    bool startStarviewer();
+
 private :
 
     ///Donant l'accession number retorna un xml que l'Starviewer una vegada l'ha rebut és capaç de descarregar de forma automàtica l'estudi amb l'accession number passat per paràmetre
@@ -38,6 +45,12 @@ private :
 
     ///Imprimeix per pantalla i loggeja error al tancar connexió
     void errorClosing(QString errorDescription);
+
+    ///Adorm el procés els segons passats per paràmetre
+    void sleepCurrentProcess(uint secondsToSleep);
+
+    ///Retorna la ruta del executable del Starviewer
+    QString getStarviewerExecutableFilePath();
 
 };
 };
