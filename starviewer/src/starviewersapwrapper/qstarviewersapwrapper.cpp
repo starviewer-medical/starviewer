@@ -7,6 +7,14 @@
 
 #include <QTcpSocket>
 #include <QSettings>
+#include <QProcess>
+#include <QCoreApplication>
+#include <QProcess>
+#include <QThread>
+
+#ifdef _WIN32
+#include "windows.h"
+#endif
 
 #include "../inputoutput/starviewersettings.h"
 #include "../core/logging.h"
@@ -27,20 +35,26 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
 
     tcpSocket.connectToHost(locaHostAddress, starviewerRisPort);//Connectem contra el localhost
 
-    if (!tcpSocket.waitForConnected(5000)) //Esperem que ens haguem connectat
+    if (!tcpSocket.waitForConnected(1000)) //Esperem que ens haguem connectat
     {
         errorConnecting(starviewerRisPort, tcpSocket.errorString());
         return;
     }
 
     tcpSocket.write(getXmlPier(accessionNumber).toLocal8Bit()); //Enviem la petició de descarregar del estudi
+    tcpSocket.flush();
 
     if (tcpSocket.error() != QAbstractSocket::UnknownSocketError)
     {
         errorWriting(tcpSocket.errorString());
     }
 
-    tcpSocket.close();//desconnectem
+   /* Xapussa a vegades ens trobem que si l'Starviewer tarda a agafar les dades que li hem enviat, resulta que nosaltres ja hem tancat
+    * la connexió, i quan l'Starviewer va per llegir les dades enviades es troba que la connexió està tancada i no pot llegir les dades enviades
+    */
+    sleepCurrentProcess(1);
+
+    tcpSocket.disconnectFromHost();//desconnectem
     tcpSocket.waitForDisconnected(5000);
 
     if (tcpSocket.error() != QAbstractSocket::UnknownSocketError)
@@ -52,6 +66,63 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
         INFO_LOG("QStarviewerSAPWrapper::S'ha enviat amb exit la peticio al Starviewer");
         printf(qPrintable(QString("The request to retrieve the study with accession number %1 has been sent succesfully.\n").arg(accessionNumber)));
     }
+}
+
+bool QStarviewerSAPWrapper::isStarviewerRunning()
+{
+    StarviewerSettings settings;
+    QTcpSocket tcpSocket;
+    QString locaHostAddress = "127.0.0.1";//IP del localhost
+    int starviewerRisPort = settings.getListenPortRisRequests();//Port pel que Starviewer espera peticions del RIS
+
+    INFO_LOG(QString("Comprovo si l'Starviewer està engegat. Intentaré connectar amb l'Starviewer pel port: %1").arg(QString().setNum(starviewerRisPort)));
+
+    tcpSocket.connectToHost(locaHostAddress, starviewerRisPort);//Connectem contra el localhost
+
+    if (!tcpSocket.waitForConnected(1000)) //Esperem que ens haguem connectat
+    {
+        if (tcpSocket.error() != QAbstractSocket::SocketTimeoutError)
+        {
+            errorConnecting(starviewerRisPort, tcpSocket.errorString());
+        }
+
+        INFO_LOG("QStarviewerSAPWrapper::Starviewer no ha respós, no està engegat");
+        return false;
+    }
+
+    tcpSocket.close();
+
+    INFO_LOG("QStarviewerSAPWrapper::Starviewer ha, respós està engegat");
+
+    return true;
+}
+
+bool QStarviewerSAPWrapper::startStarviewer()
+{
+    QString starviewerFilePath = getStarviewerExecutableFilePath();
+    bool starviewerRunning = false;
+    int tries = 0, maxTries = 10;
+    QProcess process;
+
+    INFO_LOG("QStarviewerSAPWrapper:Intento engegar Starviewer: " + starviewerFilePath);
+    process.startDetached(starviewerFilePath);
+
+    //Fem 10 intents per comprovar si l'Starviewer s'està executant
+    while (tries < maxTries && !starviewerRunning)
+    {
+        sleepCurrentProcess(2);//Adormim dos segons i comprovem si l'Starviewer Respón
+        starviewerRunning = isStarviewerRunning();
+        tries++;
+
+        if (!starviewerRunning)
+            INFO_LOG(QString("QStarviewerSAPWrapper:Intent %1 de %2 Starviewer encara no respón").arg(tries, maxTries));
+    }
+
+    /*Xapussa sembla que el Starviewer si li arriben la petició de connexió per comprovar si està engegat i la de descarrega d'un estudi
+     *juntes sense haver tingut temps de processar la primera de provar si el Starviewer respón, dona problemes ja que algunes vegades ignora*/
+    sleepCurrentProcess(1);
+
+    return true;
 }
 
 QString QStarviewerSAPWrapper::getXmlPier(QString accessionNumber)
@@ -82,6 +153,24 @@ void QStarviewerSAPWrapper::errorClosing(QString errorDescription)
 
     ERROR_LOG("QStarviewerSAPWrapper::S'ha produit un error desconnectant del host, descripcio del error: " + errorDescription);
     printf(qPrintable(messageError));
+}
+
+void QStarviewerSAPWrapper::sleepCurrentProcess(uint secondsToSleep)
+{
+    #ifdef _WIN32
+    Sleep(secondsToSleep *1000);
+    #else
+    sleep(secondsToSleep);
+    #endif
+}
+
+QString QStarviewerSAPWrapper::getStarviewerExecutableFilePath()
+{
+    #ifdef _WIN32
+        return QCoreApplication::applicationDirPath() + "/starviewer.exe";
+    #else 
+        return QCoreApplication::applicationDirPath() + "/starviewer";
+    #endif
 }
 
 }
