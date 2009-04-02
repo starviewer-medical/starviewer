@@ -61,7 +61,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
             if (!repairDatabase())
             {
                 ERROR_LOG("NO S'HA POGUT REPARAR LA BASE DE DADES");
-				m_errorMessage.append( tr("\nData base is corrupted. Could not be repaired") );
+				m_errorMessage.append( tr("\nDatabase is corrupted and it could not be repaired. Please contact with an administrator.") );
                 isCorrect = false;
             }
         }
@@ -87,7 +87,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         if (!createLocalImageDir())
         {
             ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + settings.getCacheImagePath());
-			m_errorMessage.append( tr("\nCan't create the cache image directory.") );
+			m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions") );
             return false;
         }
     }
@@ -98,7 +98,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         if( !imagePathInfo.isWritable() )
         {
             ERROR_LOG("El directori de la cache d'imatges no té permisos d'escriptura: " + settings.getCacheImagePath() );
-			m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions") );
+			m_errorMessage.append( tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies.") );
             return false;
         }
     }
