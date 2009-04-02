@@ -45,6 +45,7 @@ void printHelp()
     printf("\t Example calling 'starviewer_sapwrapper 123456' will retrieve the study with accession number 123456.\n\n");
 }
 
+///Connecta amb l'Starviewer i descarrega l'estudi amb Accession Number passat per paràmetre
 void retrieveStudy(QString accessionNumber)
 {
     udg::QStarviewerSAPWrapper starviewerSapWrapper;
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
     {
         udg::StarviewerSettings settings;
 
-        if (settings.getListenRisRequests())
+        if (settings.getListenRisRequests()) //comprovem si el servei d'escolta del RIS està activat
         {
             //Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
             retrieveStudy(parametersList.at(1));
