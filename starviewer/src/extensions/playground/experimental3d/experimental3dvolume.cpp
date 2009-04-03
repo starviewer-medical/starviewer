@@ -15,6 +15,7 @@
 #include "celshadingvoxelshader.h"
 #include "colorbleedingvoxelshader.h"
 #include "contourvoxelshader.h"
+#include "coolwarmvoxelshader.h"
 #include "directilluminationvoxelshader.h"
 #include "obscurance.h"
 #include "obscurancevoxelshader.h"
@@ -59,6 +60,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_celShadingVoxelShader;
     delete m_obscuranceVoxelShader;
     delete m_colorBleedingVoxelShader;
+    delete m_coolWarmVoxelShader;
     delete m_vmiVoxelShader1;
     delete m_vmiVoxelShader2;
     delete m_vomiVoxelShader;
@@ -196,6 +198,16 @@ void Experimental3DVolume::addLighting( bool diffuse, bool specular, double spec
 }
 
 
+void Experimental3DVolume::addCoolWarm( float b, float y, float alpha, float beta )
+{
+    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_coolWarmVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_coolWarmVoxelShader );
+    m_coolWarmVoxelShader->setGradientEstimator( gradientEstimator() );
+    m_coolWarmVoxelShader->setBYAlphaBeta( b, y, alpha, beta );
+    m_coolWarmVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_coolWarmVoxelShader ) != 0 );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
 void Experimental3DVolume::addContour( double threshold )
 {
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
@@ -245,6 +257,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_vomiCoolWarmVoxelShader->setTransferFunction( transferFunction );
     m_voxelSaliencyVoxelShader->setTransferFunction( transferFunction );
     m_colorVomiVoxelShader->setTransferFunction( transferFunction );
+    m_coolWarmVoxelShader->setTransferFunction( transferFunction );
 }
 
 
@@ -431,6 +444,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_colorVomiVoxelShader = new ColorVomiVoxelShader();
     m_colorVomiVoxelShader->setData( m_data, m_rangeMax );
     m_opacityVoxelShader = new OpacityVoxelShader();
+    m_coolWarmVoxelShader = new CoolWarmVoxelShader();
+    m_coolWarmVoxelShader->setData( m_data, m_rangeMax );
 }
 
 

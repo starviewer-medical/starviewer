@@ -194,6 +194,136 @@
             </layout>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_25" >
+             <item>
+              <widget class="QRadioButton" name="m_baseCoolWarmRadioButton" >
+               <property name="enabled" >
+                <bool>true</bool>
+               </property>
+               <property name="text" >
+                <string>Cool-warm</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseCoolWarmBLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>b</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseCoolWarmBDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep" >
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value" >
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseCoolWarmYLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>y</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseCoolWarmYDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep" >
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value" >
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseCoolWarmAlphaLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>alpha</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseCoolWarmAlphaDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep" >
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value" >
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_baseCoolWarmBetaLabel" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="text" >
+                <string>beta</string>
+               </property>
+               <property name="alignment" >
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QDoubleSpinBox" name="m_baseCoolWarmBetaDoubleSpinBox" >
+               <property name="enabled" >
+                <bool>false</bool>
+               </property>
+               <property name="maximum" >
+                <double>1.000000000000000</double>
+               </property>
+               <property name="singleStep" >
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value" >
+                <double>1.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_18" >
              <item>
               <widget class="QRadioButton" name="m_baseVomiRadioButton" >
