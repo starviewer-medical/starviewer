@@ -23,6 +23,7 @@ class AmbientVoxelShader;
 class CelShadingVoxelShader;
 class ColorBleedingVoxelShader;
 class ContourVoxelShader;
+class CoolWarmVoxelShader;
 class DirectIlluminationVoxelShader;
 class Obscurance;
 class ObscuranceVoxelShader;
@@ -72,6 +73,8 @@ public:
     void resetShadingOptions();
     /// Afegeix il·luminació al shading.
     void addLighting( bool diffuse = false, bool specular = false, double specularPower = 0.0 );
+    /// Afegeix cool-warm shading.
+    void addCoolWarm( float b, float y, float alpha, float beta );
     /// Afegeix contorn al shading.
     void addContour( double threshold = 0.0 );
     /// Afegeix cel-shading amb el nombre de quantums especificat.
@@ -140,6 +143,8 @@ private:
     ContourVoxelShader *m_contourVoxelShader;
     /// Voxel shader de cel-shading.
     CelShadingVoxelShader *m_celShadingVoxelShader;
+    /// Voxel shader de cool-warm.
+    CoolWarmVoxelShader *m_coolWarmVoxelShader;
     /// Voxel shader d'obscurances.
     ObscuranceVoxelShader *m_obscuranceVoxelShader;
     /// Voxel shader de color bleeding.

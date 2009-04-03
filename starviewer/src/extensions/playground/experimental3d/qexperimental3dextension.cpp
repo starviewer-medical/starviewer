@@ -77,6 +77,14 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseDiffuseLightingRadioButton, SIGNAL( toggled(bool) ), SLOT( enableSpecularLighting(bool) ) );
     connect( m_baseSpecularLightingCheckBox, SIGNAL( toggled(bool) ), m_baseSpecularLightingPowerLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseSpecularLightingCheckBox, SIGNAL( toggled(bool) ), m_baseSpecularLightingPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmYLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmYDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmAlphaLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmAlphaDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBetaLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBetaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmYLabel, SLOT( setEnabled(bool) ) );
@@ -319,6 +327,8 @@ void QExperimental3DExtension::render()
         m_viewer->updateShadingTable();
         m_volume->addLighting( true, m_baseSpecularLightingCheckBox->isChecked(), m_baseSpecularLightingPowerDoubleSpinBox->value() );
     }
+    else if ( m_baseCoolWarmRadioButton->isChecked() ) m_volume->addCoolWarm( m_baseCoolWarmBDoubleSpinBox->value(), m_baseCoolWarmYDoubleSpinBox->value(), m_baseCoolWarmAlphaDoubleSpinBox->value(),
+                                                                              m_baseCoolWarmBetaDoubleSpinBox->value() );
     else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVomiCoolWarmRadioButton->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_baseVomiCoolWarmFactorDoubleSpinBox->value(),
                                                                                       m_baseVomiCoolWarmYDoubleSpinBox->value(), m_baseVomiCoolWarmBDoubleSpinBox->value() );
@@ -910,6 +920,19 @@ void QExperimental3DExtension::computeSelectedVmi()
     QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
     int nViewpoints = viewpoints.size();
 
+    if ( !m_tourLineEdit->text().isEmpty() )
+    {
+        int selectedViewpoint = m_tourLineEdit->text().toInt() - 1;
+        if ( selectedViewpoint >= 0 && selectedViewpoint < nViewpoints )
+        {
+            viewpoints.clear();
+            viewpoints << viewpointGenerator.viewpoint( selectedViewpoint );
+            QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
+            for ( int i = 0; i < neighbours.size(); i++ ) viewpoints << viewpointGenerator.viewpoint( neighbours.at( i ) );
+            nViewpoints = viewpoints.size();
+        }
+    }
+
     // Dependències
     if ( computeGuidedTour && m_bestViews.isEmpty() ) computeBestViews = true;
     if ( computeBestViews && m_vmi.size() != nViewpoints ) computeVmi = true;
@@ -1171,7 +1194,18 @@ QVector<float> QExperimental3DExtension::getObjectProbabilities( const QVector<f
 void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities,
                                                            const QVector<QTemporaryFile*> &pOvFiles, bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi )
 {
-    const QVector<Vector3> &viewpoints = viewpointGenerator.viewpoints();
+    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
+    if ( !m_tourLineEdit->text().isEmpty() )
+    {
+        int selectedViewpoint = m_tourLineEdit->text().toInt() - 1;
+        if ( selectedViewpoint >= 0 && selectedViewpoint < viewpoints.size() )
+        {
+            viewpoints.clear();
+            viewpoints << viewpointGenerator.viewpoint( selectedViewpoint );
+            QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
+            for ( int i = 0; i < neighbours.size(); i++ ) viewpoints << viewpointGenerator.viewpoint( neighbours.at( i ) );
+        }
+    }
     int nViewpoints = viewProbabilities.size();
     int nObjects = objectProbabilities.size();
 
