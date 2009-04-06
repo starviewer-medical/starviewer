@@ -66,6 +66,12 @@ public:
 
     /// Mètode per mostrar els valors
     void show();
+    
+    /// Posar la llesca a mostrar
+    void setSlice( int sliceNumber );
+
+    /// Obtenir la llesca a mostrar
+    int getSlice();
 
 private:
 
@@ -89,6 +95,9 @@ private:
 
 	/// Fase
 	QString m_phase;
+
+    /// Llesca
+    int m_sliceNumber;
 };
 
 }

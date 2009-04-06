@@ -12,6 +12,7 @@ namespace udg {
 HangingProtocolDisplaySet::HangingProtocolDisplaySet(QObject *parent)
  : QObject(parent)
 {
+    m_sliceNumber = -1;
 }
 
 HangingProtocolDisplaySet::~HangingProtocolDisplaySet()
@@ -93,4 +94,13 @@ void HangingProtocolDisplaySet::show()
     DEBUG_LOG( QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(m_imageSetNumber).arg(m_position) );
 }
 
+void HangingProtocolDisplaySet::setSlice( int sliceNumber )
+{
+    m_sliceNumber = sliceNumber;
+}
+
+int HangingProtocolDisplaySet::getSlice()
+{
+    return m_sliceNumber;
+}
 }

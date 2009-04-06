@@ -276,6 +276,11 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
         {
             break;
         }
+        else if( reader->name() == "imageNumber" )
+        {
+            reader->readNext();
+            displaySet->setSlice( reader->text().toString().toInt() );
+        }
 
         reader->readNext();
     }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Ecography_4">
+<hangingProtocolName>ECO 4</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<protocol>US</protocol>
+<restriction identifier="1">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>MinimumNumberOfImages</selectorAttribute>
+<valueRepresentation>3</valueRepresentation>
+</restriction>
+<imageSet identifier="1">
+<restriction>1</restriction>
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\0.5\0.5</position>
+<imageNumber>0</imageNumber>
+</displaySet>
+<displaySet identifier="2">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\1.0\1.0\0.5</position>
+<imageNumber>1</imageNumber>
+</displaySet>
+<displaySet identifier="3">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\0.5\0.5\0.0</position>
+<imageNumber>2</imageNumber>
+</displaySet>
+<displaySet identifier="4">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\0.5\1.0\0.0</position>
+<imageNumber>3</imageNumber>
+</displaySet>
+</hangingProtocol>
