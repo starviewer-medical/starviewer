@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="Ecography_12">
+<hangingProtocolName>ECO 12</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<protocol>US</protocol>
+<restriction identifier="1">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>MinimumNumberOfImages</selectorAttribute>
+<valueRepresentation>9</valueRepresentation>
+</restriction>
+<imageSet identifier="1">
+<restriction>1</restriction>
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\0.25\0.66</position>
+<imageNumber>0</imageNumber>
+</displaySet>
+<displaySet identifier="2">
+<imageSetNumber>1</imageSetNumber>
+<position>0.25\1.0\0.5\0.66</position>
+<imageNumber>1</imageNumber>
+</displaySet>
+<displaySet identifier="3">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\1.0\0.75\0.66</position>
+<imageNumber>2</imageNumber>
+</displaySet>
+<displaySet identifier="4">
+<imageSetNumber>1</imageSetNumber>
+<position>0.75\1.0\1.0\0.66</position>
+<imageNumber>3</imageNumber>
+</displaySet>
+<displaySet identifier="5">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\0.66\0.25\0.33</position>
+<imageNumber>4</imageNumber>
+</displaySet>
+<displaySet identifier="6">
+<imageSetNumber>1</imageSetNumber>
+<position>0.25\0.66\0.5\0.33</position>
+<imageNumber>5</imageNumber>
+</displaySet>
+<displaySet identifier="7">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\0.66\0.75\0.33</position>
+<imageNumber>6</imageNumber>
+</displaySet>
+<displaySet identifier="8">
+<imageSetNumber>1</imageSetNumber>
+<position>0.75\0.66\1.0\0.33</position>
+<imageNumber>7</imageNumber>
+</displaySet>
+<displaySet identifier="9">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\0.33\0.25\0.0</position>
+<imageNumber>8</imageNumber>
+</displaySet>
+<displaySet identifier="10">
+<imageSetNumber>1</imageSetNumber>
+<position>0.25\0.33\0.5\0.0</position>
+<imageNumber>9</imageNumber>
+</displaySet>
+<displaySet identifier="11">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\0.33\0.75\0.0</position>
+<imageNumber>10</imageNumber>
+</displaySet>
+<displaySet identifier="12">
+<imageSetNumber>1</imageSetNumber>
+<position>0.75\0.33\1.0\0.0</position>
+<imageNumber>11</imageNumber>
+</displaySet>
+</hangingProtocol>

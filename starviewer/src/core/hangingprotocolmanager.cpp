@@ -475,6 +475,11 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
             if( serie->getDate() >= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getDate() )
                 valid = false;
         }
+        else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
+        {
+            if( serie->getNumberOfImages() < restriction.valueRepresentation.toInt() )
+                valid = false;
+        }
         i++;
     }
 
@@ -515,6 +520,12 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     if( !phase.isEmpty() )
     {
 	    viewer->getViewer()->setPhase( phase.toInt() );
+    }
+
+    int sliceNumber = displaySet->getSlice();
+    if( sliceNumber != -1 )
+    {
+        viewer->getViewer()->setSlice( sliceNumber );
     }
 }
 
