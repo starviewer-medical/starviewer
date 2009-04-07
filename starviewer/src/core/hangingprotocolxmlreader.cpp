@@ -157,6 +157,12 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
 						hangingProtocol->setAllDiferent( reader->text().toString().contains( "yes" ) );
                         reader->readNext();
                     }
+                    else if( reader->name() == "iconType" )
+                    {
+                        reader->readNext();
+						hangingProtocol->setIconType( reader->text().toString() );
+                        reader->readNext();
+                    }
                 }
             }
         }
@@ -280,6 +286,11 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
         {
             reader->readNext();
             displaySet->setSlice( reader->text().toString().toInt() );
+        }
+        else if( reader->name() == "iconType" )
+        {
+            reader->readNext();
+			displaySet->setIconType( reader->text().toString() );
         }
 
         reader->readNext();

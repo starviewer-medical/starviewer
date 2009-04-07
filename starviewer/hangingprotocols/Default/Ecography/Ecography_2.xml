@@ -2,6 +2,7 @@
 <hangingProtocol name="Ecography_2">
 <hangingProtocolName>ECO 2</hangingProtocolName>
 <numberScreens>1</numberScreens>
+<iconType>ECO</iconType>
 <protocol>US</protocol>
 <restriction identifier="1">
 <usageFlag>MATCH</usageFlag>

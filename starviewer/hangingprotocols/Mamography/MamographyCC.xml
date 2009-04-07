@@ -31,10 +31,12 @@
 <displaySet identifier="1">
 <imageSetNumber>1</imageSetNumber>
 <position>0.0\1.0\0.5\0.0</position>
+<iconType>CC_R</iconType>
 </displaySet>
 <displaySet identifier="2">
 <imageSetNumber>2</imageSetNumber>
 <position>0.5\1.0\1.0\0.0</position>
 <patientOrientation>A\R</patientOrientation>
+<iconType>CC_L</iconType>
 </displaySet>
 </hangingProtocol>

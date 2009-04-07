@@ -20,6 +20,8 @@
         <file>images/boomerang.png</file>
         <file>images/button_ok.png</file>
         <file>images/cancel.png</file>
+        <file>images/CC_L.png</file>
+        <file>images/CC_R.png</file>
         <file>images/cdrom.png</file>
         <file>images/cineRecord.png</file>
         <file>images/clear.png</file>
@@ -33,6 +35,7 @@
         <file>images/distance.png</file>
         <file>images/down.png</file>
         <file>images/dvd.png</file>
+        <file>images/eco.png</file>
         <file>images/eraser.png</file>
         <file>images/eraser2.png</file>
         <file>images/erasercursor.png</file>
@@ -52,6 +55,8 @@
         <file>images/loader.gif</file>
         <file>images/logs.png</file>
         <file>images/mip.png</file>
+        <file>images/MLO_R.png</file>
+        <file>images/MLO_L.png</file>
         <file>images/mouse.png</file>
         <file>images/move.png</file>
         <file>images/mpr3D.png</file>

@@ -96,6 +96,12 @@ public:
 	/// Assigna si el hanging protocol ha de tenir totes les series diferents
 	void setAllDiferent( bool allDiferent );
 
+    /// Assigna el tipus d'icona per representar-lo
+    void setIconType( QString iconType );
+    
+    /// Obté el tipus d'icona per representar-lo
+    QString getIconType() const;
+
 private:
 
 	/// Identificador
@@ -136,6 +142,9 @@ private:
 
 	/// Boolea que indica si les sèries han de ser totes diferents entre elles.
 	bool m_allDiferent;
+
+    /// Indica el tipus d'icona per representar el hanging protocol
+    QString m_iconType;
 
 };
 

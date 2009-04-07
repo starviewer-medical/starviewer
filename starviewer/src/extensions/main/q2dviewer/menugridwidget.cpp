@@ -205,6 +205,7 @@ ItemMenu * MenuGridWidget::createIcon( const HangingProtocol * hangingProtocol )
 	double y1;
 	double y2;
 	GridIcon* newIcon;
+    QString iconType;
 
     icon->setGeometry( 0, 0, 64, 80 ); 
 	icon->setMaximumWidth( 64 );
@@ -221,7 +222,12 @@ ItemMenu * MenuGridWidget::createIcon( const HangingProtocol * hangingProtocol )
 	for( displaySetNumber = 1; displaySetNumber <= hangingProtocol->getNumberOfDisplaySets(); displaySetNumber++ )
 	{
 		displaySet = hangingProtocol->getDisplaySet( displaySetNumber );
-		newIcon = new GridIcon( icon );
+        iconType = displaySet->getIconType();
+
+        if( iconType.isEmpty() )
+            iconType = hangingProtocol->getIconType();
+
+        newIcon = new GridIcon( icon, iconType );
 
 		listOfPositions = displaySet->getPosition().split("\\");
 		x1 = listOfPositions.value( 0 ).toDouble();
@@ -256,6 +262,7 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
     QLabel * sizeText = new QLabel();
     sizeText->setText( QString( tr( "%1x%2" ).arg( columns ).arg( rows ) ) );
     sizeText->setAlignment( Qt::AlignHCenter );
+    sizeText->setGeometry( 0, 64, 64, 80 );
 
     QGridLayout * gridLayout = new QGridLayout();
     gridLayout->setSpacing( 0 );
@@ -272,10 +279,12 @@ ItemMenu * MenuGridWidget::createIcon( int rows, int columns )
         for( numberColumns = 0; numberColumns < columns; numberColumns++ )
         {
             newIcon = new GridIcon( icon );
+            newIcon->show();
             gridLayout->addWidget( newIcon, numberRows, numberColumns );
         }
     }
 
+    icon->show();
     connect( icon , SIGNAL( isSelected( ItemMenu * ) ) , this , SLOT( emitSelected( ItemMenu * ) ) );
     return icon;
 }

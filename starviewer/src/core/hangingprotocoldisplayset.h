@@ -72,6 +72,12 @@ public:
 
     /// Obtenir la llesca a mostrar
     int getSlice();
+    
+    /// Assigna el tipus d'icona per representar-lo
+    void setIconType( QString iconType );
+    
+    /// Obté el tipus d'icona per representar-lo
+    QString getIconType() const;
 
 private:
 
@@ -98,6 +104,9 @@ private:
 
     /// Llesca
     int m_sliceNumber;
+
+    /// Indica el tipus d'icona per representar el hanging protocol
+    QString m_iconType;
 };
 
 }
