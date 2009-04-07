@@ -120,6 +120,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     Q2DViewerWidget *viewerWidget;
 	QList<HangingProtocol * > candidates;
 	QList<Series *> seriesList;
+    QString hangingProtocolNamesLogList; // Noms per mostrar al log
 
 	QList<Series *> allSeries;
 	foreach (Study *study, patient->getStudies())
@@ -171,6 +172,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
 			if( adjustmentOfHanging > 0 )
 			{
 				candidates << hangingProtocol;
+                hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
 			}
         }
     }
@@ -207,8 +209,11 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                 }
             }
         }
+        INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
+        INFO_LOG( QString("Hanging protocol aplicat: %1").arg( bestHangingProtocol->getName() ) );
         return candidates;
     }
+    INFO_LOG( QString("No s'ha trobat cap hanging protocol") );
     return candidates;
 }
 
@@ -255,6 +260,8 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 		}
 	}
 	layout->getViewerSelected()->update();
+
+    INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
 }
 
 bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patient)

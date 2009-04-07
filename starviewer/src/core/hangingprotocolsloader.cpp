@@ -67,12 +67,15 @@ bool HangingProtocolsLoader::loadXMLFiles( const QString &filePath )
 
     if( listHangingProtocols.size() > 0 )
     {
-        DEBUG_LOG( QString("Carreguem %1 hanging protocols de [%2]").arg( listHangingProtocols.size() ).arg(filePath) );
+        INFO_LOG( QString("Carreguem %1 hanging protocols de [%2].").arg( listHangingProtocols.size() ).arg(filePath) );
+        QString hangingProtocolNamesLogList;
         foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
 		{
 			Identifier id = HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
 			hangingProtocol->setIdentifier( id.getValue() );
+            hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) );
         }
+        INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
     }
 
     delete xmlReader;
