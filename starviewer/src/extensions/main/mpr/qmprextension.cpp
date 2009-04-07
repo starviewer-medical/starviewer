@@ -19,17 +19,11 @@
 // qt
 #include <QSlider> // pel control m_axialSlider
 #include <QSettings>
-#include <QTextStream>
 #include <QSplitter>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QFileDialog>
 // vtk
 #include <vtkRenderer.h>
 #include <vtkMath.h> // pel vtkMath::Cross
-#include <vtkActor.h>
 #include <vtkAxisActor2D.h>
-#include <vtkActor2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPlaneSource.h>
 #include <vtkRenderWindowInteractor.h>
@@ -62,11 +56,15 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_thickSlab = 0.0;
 
     //TODO ocultem botons que no son del tot necessaris o que no es faran servir
-    m_thickSlabLabel->setVisible(false);
-    m_thickSlabSlider->setVisible(false);
-    m_thickSlabSpinBox->setVisible(false);
-    m_mipToolButton->setVisible(false);
+    // Amb "visible" posem a l'abast o no el MIP 3D
+    bool visible = false;
+    m_thickSlabLabel->setVisible(visible);
+    m_thickSlabSlider->setVisible(visible);
+    m_thickSlabSpinBox->setVisible(visible);
+    m_mipToolButton->setVisible(visible);
+    // TODO l'eina de rotar no s'activa al toolmanager
     m_rotate3DToolButton->setVisible(false);
+    // aquests els amaguem per guanyar espai
     m_windowLevelToolButton->setVisible(false);
     m_moveToolButton->setVisible(false);
 }
@@ -459,14 +457,15 @@ void QMPRExtension::rotateAxialViewAxisActor()
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
+    // TODO canviar per MathTools::crossProduct()
     vtkMath::Cross( vec1 , vec2 , direction );
     this->getRotationAxis( m_pickedActorPlaneSource , axis );
-    double dot = vtkMath::Dot( direction , axis );
+    double dot = MathTools::dotProduct( direction , axis );
 
     axis[0] *= dot;
     axis[1] *= dot;
     axis[2] *= dot;
-
+    // TODO fer la normalització amb un mètode de MathTools
     vtkMath::Normalize( axis );
     rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
@@ -548,17 +547,18 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
+    // TODO canviar per MathTools::crossProduct()
     vtkMath::Cross( vec1 , vec2 , direction );
     axis[0] = m_pickedActorPlaneSource->GetPoint1()[0] - m_pickedActorPlaneSource->GetOrigin()[0];
     axis[1] = m_pickedActorPlaneSource->GetPoint1()[1] - m_pickedActorPlaneSource->GetOrigin()[1];
     axis[2] = m_pickedActorPlaneSource->GetPoint1()[2] - m_pickedActorPlaneSource->GetOrigin()[2];
 
-    double dot = vtkMath::Dot( direction , axis );
+    double dot = MathTools::dotProduct( direction , axis );
 
     axis[0] *= dot;
     axis[1] *= dot;
     axis[2] *= dot;
-
+    // TODO fer la normalització amb un mètode de MathTools
     vtkMath::Normalize( axis );
     rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
@@ -602,7 +602,7 @@ void QMPRExtension::pushSagitalViewCoronalAxisActor()
     v[2] = clickedWorldPoint[1] - m_initialPickY;
     v[0] = 0.0;
 
-    m_pickedActorPlaneSource->Push( vtkMath::Dot( v, m_pickedActorPlaneSource->GetNormal() ) );
+    m_pickedActorPlaneSource->Push( MathTools::dotProduct( v, m_pickedActorPlaneSource->GetNormal() ) );
     updatePlanes();
     updateControls();
 
@@ -622,7 +622,7 @@ void QMPRExtension::pushAxialViewAxisActor()
     v[1] = clickedWorldPoint[1] - m_initialPickY;
     v[2] = 0.0;
 
-    m_pickedActorPlaneSource->Push( vtkMath::Dot( v, m_pickedActorPlaneSource->GetNormal() ) );
+    m_pickedActorPlaneSource->Push( MathTools::dotProduct( v, m_pickedActorPlaneSource->GetNormal() ) );
     updatePlanes();
     updateControls();
 
@@ -1084,6 +1084,7 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
     // The x,y dimensions of the plane
     //
+    // TODO fer la normalització amb un mètode de MathTools
     double planeSizeX = vtkMath::Normalize( planeAxis1 );
     double planeSizeY = vtkMath::Normalize( planeAxis2 );
 
@@ -1231,27 +1232,18 @@ void QMPRExtension::getCoronalYVector( double y[3] )
     y[2] = p1[2] - o[2];
 }
 
-double QMPRExtension::angleInRadians( double vec1[3] , double vec2[3] )
-{
-    return acos( vtkMath::Dot( vec1,vec2 ) / ( vtkMath::Norm(vec1)*vtkMath::Norm(vec2) ) );
-}
-
-double QMPRExtension::angleInDegrees( double vec1[3] , double vec2[3] )
-{
-    return angleInRadians( vec1 , vec2 ) * vtkMath::DoubleRadiansToDegrees();
-}
-
 bool QMPRExtension::isParallel( double axis[3] )
 {
     double xyzAxis[3] = {1,0,0};
-    if( angleInDegrees( xyzAxis , axis ) == 0.0 )
+    // TODO hauríem de tenir un mètode MathTools::areParallel(vector1, vector2)
+    if( MathTools::angleInDegrees( xyzAxis , axis ) == 0.0 )
     {
         return true;
     }
     xyzAxis[0] = -1;
     xyzAxis[1] = 0;
     xyzAxis[2] = 0;
-    if( angleInDegrees( xyzAxis , axis ) == 0.0 )
+    if( MathTools::angleInDegrees( xyzAxis , axis ) == 0.0 )
     {
         return true;
     }
@@ -1259,14 +1251,14 @@ bool QMPRExtension::isParallel( double axis[3] )
     xyzAxis[0] = 0;
     xyzAxis[1] = 0;
     xyzAxis[2] = 1;
-    if( angleInDegrees( xyzAxis , axis ) == 0.0 )
+    if( MathTools::angleInDegrees( xyzAxis , axis ) == 0.0 )
     {
         return true;
     }
     xyzAxis[0] = 0;
     xyzAxis[1] = 0;
     xyzAxis[2] = -1;
-    if( angleInDegrees( xyzAxis , axis ) == 0.0 )
+    if( MathTools::angleInDegrees( xyzAxis , axis ) == 0.0 )
     {
         return true;
     }
@@ -1274,14 +1266,14 @@ bool QMPRExtension::isParallel( double axis[3] )
     xyzAxis[0] = 0;
     xyzAxis[1] = 1;
     xyzAxis[2] = 0;
-    if( angleInDegrees( xyzAxis , axis ) == 0.0 )
+    if( MathTools::angleInDegrees( xyzAxis , axis ) == 0.0 )
     {
         return true;
     }
     xyzAxis[0] = 0;
     xyzAxis[1] = -1;
     xyzAxis[2] = 0;
-    if( angleInDegrees( xyzAxis , axis ) == 0.0 )
+    if( MathTools::angleInDegrees( xyzAxis , axis ) == 0.0 )
     {
         return true;
     }
@@ -1310,7 +1302,8 @@ void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtk
 void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane )
 {
 //    Normalitzem l'eix de rotació, serà molt millor per les operacions a fer
-     vtkMath::Normalize( rotationAxis );
+    // TODO fer la normalització amb un mètode de MathTools
+    vtkMath::Normalize( rotationAxis );
 
     if( isParallel( rotationAxis ) )
     {

@@ -69,12 +69,6 @@ private:
     /// Ens diu si un eix és paral·lel a un dels aixos de coordenades X Y o Z
     bool isParallel( double axis[3] );
 
-    /// Calcula l'angle entre dos vectors. Retorna el valor en radians
-    double angleInRadians( double vec1[3] , double vec2[3] );
-
-    /// Calcula l'angle entre dos vectors. Retorna el valor en graus
-    double angleInDegrees( double vec1[3] , double vec2[3] );
-
     /// Obtenim els vectors que defineixen els eixos de cada pla ( sagital , coronal )
     void getSagitalXVector( double x[3] );
     void getSagitalYVector( double y[3] );
