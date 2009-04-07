@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
+<defaultcodec></defaultcodec>
 <context>
     <name>QObject</name>
     <message>
@@ -1388,7 +1389,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volume.cpp" line="108"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
-        <translation>No hay suficiente memòria para cargar las series. Cierra todas las ventanas abiertas del %1, reinicia la aplicación e intentalo otra vez. Si el problema persiste, se puede solucionar añadiendo más memòria RAM o cambiando a un sistema de 64 bits.</translation>
+        <translation>No hay suficiente memoria para cargar las series. Cierre todas las ventanas abiertas de %1, reinicie la aplicación e inténtelo de nuevo. Si el problema persiste, se podría solucionar añadiendo más memoria RAM o cambiando a un sistema de 64 bits.</translation>
     </message>
     <message>
         <location filename="volume.cpp" line="115"/>
