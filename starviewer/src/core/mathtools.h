@@ -78,7 +78,7 @@ static double modulus( double vector[3] );
 static double dotProduct( double vector1[3], double vector2[3] );
 
 ///producte vectorial dels dos vectors directors passats per paràmetre.
-static double* vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] );
+static double* crossProduct( double vectorDirector1[3], double vectorDirector2[3] );
 
 ///ens retorna el mínim dels dos valors
 static double minimum( double a, double b);
