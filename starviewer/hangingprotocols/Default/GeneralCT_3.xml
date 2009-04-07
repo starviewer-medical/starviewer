@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangingProtocol name="GeneralCT_3">
-<hangingProtocolName>AX+SAG+CO</hangingProtocolName>
+<hangingProtocolName>CO+SAG+AX</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <protocol>CT</protocol>
 <restriction identifier="1">
