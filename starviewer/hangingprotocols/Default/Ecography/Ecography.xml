@@ -2,6 +2,7 @@
 <hangingProtocol name="Ecography">
 <hangingProtocolName>ECO 1</hangingProtocolName>
 <numberScreens>1</numberScreens>
+<iconType>ECO</iconType>
 <protocol>US</protocol>
 <imageSet identifier="1">
 </imageSet>

@@ -103,4 +103,14 @@ int HangingProtocolDisplaySet::getSlice()
 {
     return m_sliceNumber;
 }
+
+void HangingProtocolDisplaySet::setIconType( QString iconType )
+{
+    m_iconType = iconType;
+}
+
+QString HangingProtocolDisplaySet::getIconType() const
+{
+    return m_iconType;
+}
 }

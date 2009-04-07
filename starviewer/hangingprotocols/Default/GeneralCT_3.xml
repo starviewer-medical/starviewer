@@ -25,10 +25,12 @@
 <imageSetNumber>1</imageSetNumber>
 <position>0.0\0.5\0.5\0.0</position>
 <reconstruction>SAGITAL</reconstruction>
+<iconType>SAG</iconType>
 </displaySet>
 <displaySet identifier="3">
 <imageSetNumber>1</imageSetNumber>
 <position>0.0\1.0\0.5\0.5</position>
 <reconstruction>CORONAL</reconstruction>
+<iconType>COR</iconType>
 </displaySet>
 </hangingProtocol>

@@ -3,6 +3,7 @@
 <hangingProtocolName>ECO 6</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <protocol>US</protocol>
+<iconType>ECO</iconType>
 <restriction identifier="1">
 <usageFlag>MATCH</usageFlag>
 <selectorAttribute>MinimumNumberOfImages</selectorAttribute>

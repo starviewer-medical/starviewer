@@ -243,4 +243,14 @@ bool HangingProtocol::getAllDiferent() const
 	return m_allDiferent;
 }
 
+void HangingProtocol::setIconType( QString iconType )
+{
+    m_iconType = iconType;
+}
+
+QString HangingProtocol::getIconType() const
+{
+    return m_iconType;
+}
+
 }

@@ -160,8 +160,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
             }
             adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
-            DEBUG_LOG( QString("ajustament del hanging %1: %2").arg( hangingProtocol->getName() ).arg(adjustmentOfHanging) );
-
 			if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 )
 				adjustmentOfHanging = 0.0;
 
