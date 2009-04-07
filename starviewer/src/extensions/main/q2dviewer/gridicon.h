@@ -33,7 +33,7 @@ public:
 protected:
 
     /// Tractament del resize per mantenir els tamanys de les icones
-    void GridIcon::resizeEvent ( QResizeEvent * event );
+    void resizeEvent ( QResizeEvent * event );
 
 private:
     /// Label on posarem la icona
