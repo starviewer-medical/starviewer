@@ -192,7 +192,7 @@ double MathTools::dotProduct( double vector1[3], double vector2[3] )
     return ( (vector1[0]*vector2[0]) + (vector1[1]*vector2[1]) + (vector1[2]*vector2[2]) );
 }
 
-double* MathTools::vectorialProduct( double vectorDirector1[3], double vectorDirector2[3] )
+double* MathTools::crossProduct( double vectorDirector1[3], double vectorDirector2[3] )
 {
     double *vp = new double[3];
     vtkMath::Cross( vectorDirector1, vectorDirector2, vp );
@@ -302,7 +302,7 @@ double *MathTools::intersectionPoint3DLines(double *p1, double *p2, double *p3, 
 
     //coplanarity test
     double *cross;
-    cross = MathTools::vectorialProduct(dv1,dv2);
+    cross = MathTools::crossProduct(dv1,dv2);
 
     double dot = MathTools::dotProduct(dv1, cross);
 
@@ -312,12 +312,12 @@ double *MathTools::intersectionPoint3DLines(double *p1, double *p2, double *p3, 
         double *numerator1, *numerator2, *denominator1;
         double numerator, denominator;
 
-        numerator1 = MathTools::vectorialProduct(dv3,dv2);
-        numerator2 = MathTools::vectorialProduct(dv1,dv2);
+        numerator1 = MathTools::crossProduct(dv3,dv2);
+        numerator2 = MathTools::crossProduct(dv1,dv2);
 
         numerator = MathTools::dotProduct(numerator1,numerator2);
 
-        denominator1 = MathTools::vectorialProduct(dv1,dv2);
+        denominator1 = MathTools::crossProduct(dv1,dv2);
 
         denominator = pow(MathTools::modulus(denominator1),2);
 

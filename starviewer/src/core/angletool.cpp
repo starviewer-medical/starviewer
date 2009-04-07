@@ -126,7 +126,7 @@ void AngleTool::findInitialDegreeArc()
 
     horizontalP2[coord1] += 10.0;
     vd2 = MathTools::directorVector( horizontalP2, p2 );
-    pv = MathTools::vectorialProduct(vd1, vd2);
+    pv = MathTools::crossProduct(vd1, vd2);
 
     if ( pv[coord2] > 0 )
     {
@@ -243,7 +243,7 @@ void AngleTool::drawCircumference()
     intersection[0] = ((yAxis2[0] - yAxis1[0]) / 2.0) + yAxis1[0];
     intersection[1] = ((xAxis2[1] - xAxis1[1]) / 2.0) + xAxis1[1];
 
-    double *pv = MathTools::vectorialProduct(vd1, vd2);
+    double *pv = MathTools::crossProduct(vd1, vd2);
 
     initialI = 360 - m_initialDegreeArc;
     finalI = int(360 - ( angle+m_initialDegreeArc ) );
