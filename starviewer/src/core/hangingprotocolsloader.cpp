@@ -15,6 +15,7 @@
 #include "hangingprotocolxmlreader.h"
 #include "identifier.h"
 #include "starviewerapplication.h"
+#include "logging.h"
 
 // Qt's
 #include <QFile>
@@ -55,7 +56,14 @@ void HangingProtocolsLoader::loadDefaults()
     }
 
     if( !defaultPath.isEmpty() )
+    {
+        INFO_LOG( QString("Directori a on es van a buscar els hanging protocols per defecte: %1").arg(defaultPath) );
         loadXMLFiles( defaultPath );
+    }
+    else
+    {
+        INFO_LOG( QString("El directori per defecte dels hanging protocols no existeix. No es carregaran.") );
+    }
 
     /// Hanging protocols definits per l'usuari
     QSettings systemSettings;
