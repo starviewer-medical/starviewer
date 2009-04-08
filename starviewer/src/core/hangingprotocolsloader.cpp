@@ -47,6 +47,11 @@ void HangingProtocolsLoader::loadDefaults()
     {
         /// Mode desenvolupament
         defaultPath = qApp->applicationDirPath() + "/../hangingProtocols/";
+	
+        if( !QFile::exists(defaultPath) )
+        {
+            defaultPath = qApp->applicationDirPath() + "/../hangingprotocols/"; // Linux
+        }
     }
 
     if( !defaultPath.isEmpty() )
