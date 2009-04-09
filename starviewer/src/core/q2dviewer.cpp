@@ -13,8 +13,7 @@
 #include "study.h"
 #include "patient.h"
 #include "imageplane.h"
-#include "mathtools.h"
-#include "dicomtagreader.h"
+#include "dicomtagreader.h" // per les annotacions de mamo
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 #include "hangingprotocolmanager.h"
 //thickslab
@@ -22,10 +21,6 @@
 
 // include's qt
 #include <QResizeEvent>
-#include <QSize>
-#include <QMenu>
-#include <QAction>
-#include <QMutableMapIterator>
 
 // include's bàsics vtk
 #include <QVTKWidget.h>
@@ -34,9 +29,9 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkInteractorStyleImage.h>
-#include <vtkImageViewer2.h>
+#include <vtkWindowToImageFilter.h>
 #include <vtkCamera.h>
-#include <vtkMath.h>
+#include <vtkMath.h> // per ::Round()
 // composició d'imatges
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h>
@@ -50,14 +45,6 @@
 #include <vtkProp.h>
 #include <vtkScalarBarActor.h>
 #include <vtkLookupTable.h>
-// desar imatges
-#include <vtkWindowToImageFilter.h>
-#include <vtkPNGWriter.h>
-#include <vtkPNMWriter.h>
-#include <vtkJPEGWriter.h>
-#include <vtkTIFFWriter.h>
-#include <vtkBMPWriter.h>
-#include <vtkMetaImageWriter.h>
 // voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
@@ -67,7 +54,6 @@
 // displayed area
 #include <vtkImageChangeInformation.h>
 #include <vtkImageResample.h>
-#include <vtkExtractVOI.h>
 
 // grayscale pipeline
 #include <vtkImageMapToWindowLevelColors.h>
@@ -690,7 +676,6 @@ QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
 void Q2DViewer::setupInteraction()
 {
     Q_ASSERT( m_imageRenderer );
-    Q_ASSERT( m_vtkWidget );
     Q_ASSERT( m_interactorStyle );
 
     this->getRenderWindow()->AddRenderer( m_imageRenderer );
@@ -699,8 +684,8 @@ void Q2DViewer::setupInteraction()
     m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
 
     m_picker = vtkPropPicker::New();
-    // configurem la interacció de qvtkWidget
-    m_vtkWidget->GetRenderWindow()->GetInteractor()->SetPicker( m_picker );
+    // configurem la interacció
+    this->getInteractor()->SetPicker( m_picker );
 
     // \TODO fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
@@ -712,7 +697,7 @@ void Q2DViewer::setupInteraction()
 
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
+    m_vtkQtConnections->Connect( this->getInteractor(),
                                  vtkCommand::AnyEvent,
                                  this,
 #ifdef VTK_QT_5_0_SUPPORT
@@ -723,7 +708,7 @@ void Q2DViewer::setupInteraction()
                                  );
 }
 
-void Q2DViewer::setInput( Volume* volume )
+void Q2DViewer::setInput( Volume *volume )
 {
     if( !volume )
         return;
@@ -819,7 +804,7 @@ void Q2DViewer::setInput( Volume* volume )
     this->m_isRefreshActive = true;
 }
 
-void Q2DViewer::setOverlayInput( Volume* volume )
+void Q2DViewer::setOverlayInput( Volume *volume )
 {
     m_overlayVolume = volume;
 
@@ -1326,12 +1311,6 @@ void Q2DViewer::setPixelAspectRatio( double ratio )
     }
 }
 
-void Q2DViewer::setPresentationPixelSpacing( double x , double y )
-{
-    m_presentationPixelSpacing[0] = x;
-    m_presentationPixelSpacing[1] = y;
-}
-
 void Q2DViewer::setTrueSizeMode( bool on )
 {
     if( on )
@@ -1730,8 +1709,8 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
 			m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
                 .arg( m_imageSizeInformation[0] )
                 .arg( m_imageSizeInformation[1] )
-                .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
-                .arg( (int)vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
+                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
+                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
         }
         else
             m_upperLeftText = "";
@@ -2547,7 +2526,7 @@ double *Q2DViewer::pointInModel( int screen_x, int screen_y )
     return lastPointInModel;
 }
 
-vtkImageData* Q2DViewer::getCurrentSlabProjection()
+vtkImageData *Q2DViewer::getCurrentSlabProjection()
 {
     return m_thickSlabProjectionFilter->GetOutput();
 }

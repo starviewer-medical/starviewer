@@ -8,21 +8,14 @@
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
-#include <QMap>
 
 // Fordward declarations
-// qt
-class QEvent;
-class QAction;
 // vtk
 class vtkPropPicker;
 class vtkTextActor;
-class vtkObject;
-class vtkCommand;
 class vtkRenderer;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
-class vtkWindowToImageFilter;
 class vtkCoordinate;
 class vtkScalarBarActor;
 class vtkImageBlend;
@@ -81,7 +74,7 @@ public:
     ~Q2DViewer();
 
     virtual vtkRenderer *getRenderer();
-    virtual void setInput( Volume* volume );
+    virtual void setInput( Volume *volume );
 
     void resetView( CameraOrientationType view );
     void resetViewToAxial();
@@ -92,10 +85,10 @@ public:
     CameraOrientationType getView() const;
 
     /// Afegim el volum solapat
-    void setOverlayInput( Volume* volume );
+    void setOverlayInput( Volume *volume );
 
     /// Afegim el volum solapat
-    Volume* getOverlayInput( void ) { return m_overlayVolume; }
+    Volume *getOverlayInput( void ) { return m_overlayVolume; }
 
     /// Diem al viewer que s'ha modificat l'overlay per tal que refresqui correctament
     void isOverlayModified( );
@@ -124,9 +117,6 @@ public:
     /// Obtenir la llavor
     void getSeedPosition( double pos[3] );
 
-    /// Mètodes de conveniència pels presentation state
-    void setModalityRescale( vtkImageShiftScale *rescale );
-
     /**
      * Ens retorna el drawer per poder pintar-hi primitives
      * @return Objecte drawer del viewer
@@ -145,21 +135,6 @@ public:
      * @return valor del voxel
      */
     double getCurrentImageValue();
-
-    //
-    // DISPLAYED AREA. Mètodes per poder modificar l'àrea visible del volum (zoom enquadrat) i/o canviar aspecte, espaiat de presentació, etc
-    //
-    /// Canviem l'aspecte entre els eixos x/y
-    void setPixelAspectRatio( double ratio );
-
-    /// canviem l'espaiat de pixel en la presentació en les direccions x/y ( no l'espaiat del volum en sí )
-    void setPresentationPixelSpacing( double x, double y );
-
-    /// En aquest mode, es presenta la imatge de tal manera que les mides estan a escala real, per tant 1mm de la imatge en pantalla seria 1 mm real d'aquella llesca. \TODO aquest mètode encara no està en funcionament, però el deixem per implementar en un futur pròxim
-    void setTrueSizeMode( bool on = true );
-
-    /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
-    void setMagnificationFactor( double factor );
 
     /**
      * Ens retorna la imatge que s'està visualitzant en aquell moment
@@ -238,13 +213,38 @@ public:
     int getSlabThickness() const;
 
     /// Donada les coordenades x,y d'on s'ha clicat de la pantalla, retorna el punt més proper i que caigui dins del model.
-    double * pointInModel( int screen_x, int screen_y );
+    double *pointInModel( int screen_x, int screen_y );
 
     ///Retorna la informació de la llesca actual del visualitzador
-    vtkImageData* getCurrentSlabProjection();
+    vtkImageData *getCurrentSlabProjection();
 
     /// Busca la llesca que es troba més a prop del punt i retorna la distancia
     int getNearestSlice( double point[3], double &distance );
+
+    //
+    // Mètodes de conveniència pels presentation state
+    // Aquests mètodes només estan per les classes de presentation state
+    // i no es fan servir enlloc més
+
+    //
+    // Grayscale Pipeline
+    //
+
+    /// Assigna el rescale de valors que volem
+    void setModalityRescale( vtkImageShiftScale *rescale );
+
+    //
+    // DISPLAYED AREA. Mètodes per poder modificar l'àrea visible del volum (zoom enquadrat) i/o canviar aspecte, espaiat de presentació, etc
+    //
+
+    /// Canviem l'aspecte entre els eixos x/y
+    void setPixelAspectRatio( double ratio );
+
+    /// En aquest mode, es presenta la imatge de tal manera que les mides estan a escala real, per tant 1mm de la imatge en pantalla seria 1 mm real d'aquella llesca. \TODO aquest mètode encara no està en funcionament, però el deixem per implementar en un futur pròxim
+    void setTrueSizeMode( bool on = true );
+
+    /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
+    void setMagnificationFactor( double factor );
 
 public slots:
     virtual void render();
@@ -351,12 +351,6 @@ signals:
     /// Senyal que s'envia quan la llavor s'ha canviat \TODO mirar de treure-ho i posar-ho en la tool SeedTool
     void seedChanged();
 
-    /// informa del valor del m_rotateFactor. S'emetrà quan la rotació de la càmera s'hagi fet efectiva
-    void rotationFactorChanged(int);
-
-    /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
-    void rotationDegreesChanged(double);
-
     /**
      * S'emet quan canvia l'slab thickness
      * @param thickness nou valor de thickness
@@ -366,9 +360,21 @@ signals:
     /// Senyal que s'envia quan ha canviat l'overlay
     void overlayChanged();
 
+    //
+    // Signals de conveniència pels Presentation State
+    // Aquests signals només els fa servir el Q2DViewerBlackboard 
+    // que només el fa servir el kin i presentation state
+    // KIN i PS haurien de fer servir el drawer del viewer en comptes del blackboard
+
+    /// informa del valor del m_rotateFactor. S'emetrà quan la rotació de la càmera s'hagi fet efectiva
+    void rotationFactorChanged(int);
+
+    /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
+    void rotationDegreesChanged(double);
+
 protected:
     /// Processem l'event de resize de la finestra Qt
-    virtual void resizeEvent( QResizeEvent* resize );
+    virtual void resizeEvent( QResizeEvent *resize );
 
 private:
     /**
@@ -500,7 +506,7 @@ protected:
     int m_currentPhase;
 
     /// Aquest és el segon volum afegit a solapar
-    Volume* m_overlayVolume;
+    Volume *m_overlayVolume;
 
     /// Aquest és el blender per veure imatges fusionades
     vtkImageBlend* m_blender;
@@ -518,9 +524,6 @@ protected:
     /// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
     /// i altre informació rellevant ( nº imatge, ww/wl, etc )
     vtkCornerAnnotation *m_cornerAnnotations;
-
-    /// Per controlar l'espaiat en que presentem la imatge
-    double m_presentationPixelSpacing[2];
 
 private:
     /// flag que ens indica quines anotacions es veuran per la finestra
