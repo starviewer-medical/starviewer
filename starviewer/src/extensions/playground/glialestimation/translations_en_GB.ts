@@ -8,172 +8,183 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="58"/>
+        <location filename="qglialestimationextensionbase.ui" line="34"/>
         <source>Scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="86"/>
+        <location filename="qglialestimationextensionbase.ui" line="62"/>
         <source>WW/WL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="111"/>
+        <location filename="qglialestimationextensionbase.ui" line="87"/>
         <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="136"/>
+        <location filename="qglialestimationextensionbase.ui" line="112"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="171"/>
+        <location filename="qglialestimationextensionbase.ui" line="137"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="199"/>
-        <source>voxel information</source>
-        <translation type="unfinished">Voxel information</translation>
+        <location filename="qglialestimationextensionbase.ui" line="169"/>
+        <source>Voxel
+Information</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="243"/>
+        <location filename="qglialestimationextensionbase.ui" line="219"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="265"/>
-        <source>synchro</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="285"/>
-        <source>T1 Serie:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="565"/>
-        <source>T1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="329"/>
-        <source>Pefusion:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="347"/>
-        <source>Perfusion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="364"/>
-        <source>FLAIR:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="575"/>
-        <source>FLAIR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="399"/>
-        <source>Diffusion:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="417"/>
-        <source>Diffusion</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="434"/>
-        <source>Spectrum:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="452"/>
-        <source>Spectrum</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="469"/>
-        <source>Registration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="497"/>
-        <source>Fixed Image:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="570"/>
-        <source>CBV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="580"/>
-        <source>ADC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="546"/>
-        <source>Moving Image:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="598"/>
-        <source>Opacity</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="628"/>
-        <source>Apply Registration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="640"/>
-        <source>CBV perfusion map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="660"/>
-        <source>Calcular mapa CBV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="667"/>
-        <source>Filtrar Mapa Perfusio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="679"/>
-        <source>T1 segmentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="699"/>
-        <source>Threshold value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qglialestimationextensionbase.ui" line="736"/>
+        <location filename="qglialestimationextensionbase.ui" line="844"/>
         <source>Seed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="821"/>
+        <location filename="qglialestimationextensionbase.ui" line="271"/>
+        <source>Layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="296"/>
+        <source>Cursor 3D</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="323"/>
+        <source>GroupBox</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="331"/>
+        <source>T1 Serie:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="338"/>
+        <source>Pefusion:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="345"/>
+        <source>FLAIR:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="352"/>
+        <source>Diffusion:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="359"/>
+        <source>Spectrum:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="678"/>
+        <source>T1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="436"/>
+        <source>Perfusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="688"/>
+        <source>FLAIR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="462"/>
+        <source>Diffusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="475"/>
+        <source>Spectrum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="487"/>
+        <source>CBV perfusion map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="525"/>
+        <source>Calcular mapa CBV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="532"/>
+        <source>Filtrar Mapa Perfusio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="550"/>
+        <source>Registration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="605"/>
+        <source>Fixed Image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="683"/>
+        <source>CBV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="693"/>
+        <source>ADC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="661"/>
+        <source>Moving Image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="720"/>
+        <source>Opacity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="748"/>
+        <source>Apply Registration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="760"/>
+        <source>T1 segmentation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="798"/>
+        <source>Threshold value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qglialestimationextensionbase.ui" line="923"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="828"/>
+        <location filename="qglialestimationextensionbase.ui" line="930"/>
         <source>Opacity:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextensionbase.ui" line="861"/>
+        <location filename="qglialestimationextensionbase.ui" line="972"/>
         <source>Volume (in mm&lt;sup&gt;3&lt;/sup&gt;)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -199,42 +210,42 @@
 <context>
     <name>udg::QGlialEstimationExtension</name>
     <message>
-        <location filename="qglialestimationextension.cpp" line="75"/>
+        <location filename="qglialestimationextension.cpp" line="81"/>
         <source>Rotate Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextension.cpp" line="77"/>
+        <location filename="qglialestimationextension.cpp" line="83"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextension.cpp" line="1051"/>
+        <location filename="qglialestimationextension.cpp" line="1063"/>
         <source>One or more images are not defined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextension.cpp" line="1230"/>
+        <location filename="qglialestimationextension.cpp" line="1242"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextension.cpp" line="1140"/>
+        <location filename="qglialestimationextension.cpp" line="1152"/>
         <source>Registration failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextension.cpp" line="1229"/>
+        <location filename="qglialestimationextension.cpp" line="1241"/>
         <source>The number of phases of the T1 Volume is greater than 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextension.cpp" line="1379"/>
+        <location filename="qglialestimationextension.cpp" line="1391"/>
         <source>Viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qglialestimationextension.cpp" line="1379"/>
+        <location filename="qglialestimationextension.cpp" line="1391"/>
         <source>The selected item is not a valid image format</source>
         <translation type="unfinished"></translation>
     </message>

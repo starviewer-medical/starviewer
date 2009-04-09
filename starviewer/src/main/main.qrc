@@ -48,6 +48,8 @@
         <file>images/folderopen.png</file>
         <file>images/fullscreen.png</file>
         <file>images/grid.png</file>
+        <file>images/grid_3_2.png</file>
+        <file>images/grid_2_3.png</file>
         <file>images/harddrive.png</file>
         <file>images/icon.png</file>
         <file>images/info.png</file>
@@ -79,6 +81,7 @@
         <file>images/referenceLines.png</file>
         <file>images/reload.png</file>
         <file>images/repeat.png</file>
+        <file>images/restore.png</file>
         <file>images/retractFullscreen.png</file>
         <file>images/retrieve.png</file>
         <file>images/roi.png</file>
