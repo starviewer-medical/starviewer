@@ -18,12 +18,10 @@
 #include <QMessageBox>
 
 // include's vtk
-#include <QVTKWidget.h>
-#include <vtkEventQtSlotConnect.h>
+#include <QVTKWidget.h> // pel setAutomaticImageCacheEnabled
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
 #include <vtkRenderWindow.h>
-#include <vtkWindowToImageFilter.h>
 // rendering 3D
 #include <vtkVolumeProperty.h>
 #include <vtkVolume.h>
@@ -56,18 +54,17 @@
 #include <vtkInteractorStyle.h>
 #include <vtkInteractorObserver.h>
 
-#include <vtkImageViewer.h>
-
+// reorientació del volum
 #include <vtkMatrix4x4.h>
 
 // obscurances
 #include "obscurancemainthread.h"
-#include <vtkPointData.h>
 #include "ambientvoxelshader.h"
 #include "directilluminationvoxelshader.h"
 #include "obscurancevoxelshader.h"
 #include "contourvoxelshader.h"
 #include "vtk4DLinearRegressionGradientEstimator.h"
+#include <vtkPointData.h>
 #include <vtkEncodedGradientShader.h>
 
 // settings
@@ -81,39 +78,16 @@ namespace udg {
 Q3DViewer::Q3DViewer( QWidget *parent )
  : QViewer( parent ), m_imageData( 0 ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0), m_newTransferFunction(0)
 {
-    // Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
-    m_renderer = vtkRenderer::New();
-    m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
-    m_renderer->Delete();
-	
     m_vtkWidget->setAutomaticImageCacheEnabled( true );
-    this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
-    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-
     // avortar render
     AbortRenderCommand *abortRenderCommand = AbortRenderCommand::New();
-    m_vtkWidget->GetRenderWindow()->AddObserver( vtkCommand::AbortCheckEvent, abortRenderCommand );
+    getRenderWindow()->AddObserver( vtkCommand::AbortCheckEvent, abortRenderCommand );
     abortRenderCommand->Delete();
 
     m_renderFunction = RayCasting; // per defecte
 
     setDefaultOrientationForCurrentInput();
     m_orientationMarker = new Q3DOrientationMarker( this->getInteractor() );
-
-    m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    // despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
-                                 vtkCommand::AnyEvent,
-                                 this,
-#ifdef VTK_QT_5_0_SUPPORT
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
-#else
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
-#endif
-                                 );
-    // \TODO fer això aquí? o fer-ho en el tool manager?
-    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
 
     // creem el pipeline del volum
     m_vtkVolume = vtkVolume::New();
@@ -226,11 +200,6 @@ Q3DViewer::~Q3DViewer()
     m_volumeRayCastAmbientContourObscuranceFunction->Delete();
     m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
     m_volumeRayCastIsosurfaceFunction->Delete();
-}
-
-vtkRenderer *Q3DViewer::getRenderer()
-{
-    return m_renderer;
 }
 
 void Q3DViewer::getCurrentWindowLevel( double wl[2] )

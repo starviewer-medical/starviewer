@@ -38,7 +38,7 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent ), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isActive(false),
+ : QWidget( parent ), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isRefreshActive(true), m_isActive(false),
    m_hasDefaultWindowLevelDefined(false)
 {
     //TODO: De moment es desactiven els warnings en release i windows perquè no apareixi la finestra vtkOutputWindow
@@ -47,35 +47,35 @@ QViewer::QViewer( QWidget *parent )
     vtkObject::GlobalWarningDisplayOff();
 #endif
 
-    m_isRefreshActive = true;
-
     m_vtkWidget = new QVTKWidget( this );
     m_vtkWidget->setFocusPolicy( Qt::WheelFocus );
+    // creem el renderer i li assignem a la render window
+    m_renderer = vtkRenderer::New();
+    getRenderWindow()->AddRenderer( m_renderer );
+    m_renderer->Delete();
+    // forcem 2x buffer
+    getRenderWindow()->DoubleBufferOn();
+
+    // posem a punt el filtre per guardar captures de pantalla
+    m_windowToImageFilter = vtkWindowToImageFilter::New();
+    m_windowToImageFilter->SetInput( getRenderWindow() );
+
+    // connectem els events
+    setupInteraction();
+
+    m_toolProxy = new ToolProxy(this);
+    connect( this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)) );
+
+    // inicialitzem el window level data
+    setWindowLevelData( new WindowLevelPresetsToolData(this) );
 
     //Afegim el layout
     QHBoxLayout* viewerLayout = new QHBoxLayout( this );
     viewerLayout->setSpacing( 0 );
     viewerLayout->setMargin( 0 );
     viewerLayout->addWidget( m_vtkWidget );
-
-    // això ho fem perquè la finestra buida quedi en negre en un principi
-    m_vtkWidget->GetRenderWindow()->Render();
-
-    // inicialitzem el punter del volum
-    m_mainVolume = 0;
-
-    // 2x buffer
-    m_vtkWidget->GetRenderWindow()->DoubleBufferOn();
-
-    m_windowToImageFilter = vtkWindowToImageFilter::New();
+    
     this->setMouseTracking( false );
-
-    m_vtkQtConnections = 0;
-    m_toolProxy = new ToolProxy(this);
-    connect( this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)) );
-
-    // inicialitzem el window level data
-    setWindowLevelData( new WindowLevelPresetsToolData(this) );
 }
 
 QViewer::~QViewer()
@@ -93,6 +93,11 @@ vtkRenderWindowInteractor *QViewer::getInteractor()
 vtkInteractorStyle *QViewer::getInteractorStyle()
 {
     return vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() );
+}
+
+vtkRenderer *QViewer::getRenderer()
+{
+    return m_renderer;
 }
 
 vtkRenderWindow *QViewer::getRenderWindow()
@@ -185,7 +190,7 @@ void QViewer::eventHandler( vtkObject *vtkNotUsed(obj), unsigned long event, voi
 }
 
 #ifdef VTK_QT_5_0_SUPPORT
-void QViewer::eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command )
+void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
 {
     this->eventHandler(obj, event, client_data, NULL, command);
 }
@@ -195,7 +200,7 @@ void QViewer::setActive( bool active )
 {
     m_isActive = active;
 }
-void QViewer::computeDisplayToWorld( double x , double y , double z , double worldPoint[4] )
+void QViewer::computeDisplayToWorld( double x, double y, double z, double worldPoint[4] )
 {
     vtkRenderer *renderer = this->getRenderer();
     if( renderer )
@@ -249,6 +254,31 @@ void QViewer::getRecentEventWorldCoordinate( double worldCoordinate[3], bool cur
     worldCoordinate[1] = computedCoordinate[1];
     worldCoordinate[2] = computedCoordinate[2];
 
+}
+
+void QViewer::setupInteraction()
+{
+    Q_ASSERT( m_renderer );  
+
+    // \TODO fer això aquí? o fer-ho en el tool manager?
+    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
+    this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
+
+    m_vtkQtConnections = vtkEventQtSlotConnect::New();
+    // despatxa qualsevol event-> tools
+    m_vtkQtConnections->Connect( this->getInteractor(),
+                                 vtkCommand::AnyEvent,
+                                 this,
+#ifdef VTK_QT_5_0_SUPPORT
+                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
+#else
+                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
+#endif
+                                 );
 }
 
 bool QViewer::saveGrabbedViews( const QString &baseName , FileType extension )
@@ -336,8 +366,7 @@ void QViewer::refresh()
 void QViewer::zoom( double factor )
 {
     // TODO potser caldria una comprovació de seguretat pel que torna cadascuna d'aquestes crides
-    vtkRenderer *renderer = this->getInteractor()->GetInteractorStyle()->GetCurrentRenderer();
-    renderer = this->getRenderer();
+    vtkRenderer *renderer = getRenderer();
     if( renderer )
     {
         // codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
@@ -372,7 +401,7 @@ void QViewer::pan( double motionVector[3] )
 {
     double viewFocus[4], viewPoint[3];
 
-    vtkRenderer *renderer = this->getInteractor()->GetInteractorStyle()->GetCurrentRenderer();
+    vtkRenderer *renderer = getRenderer();
     vtkCamera *camera = renderer->GetActiveCamera();
 
     camera->GetFocalPoint( viewFocus );

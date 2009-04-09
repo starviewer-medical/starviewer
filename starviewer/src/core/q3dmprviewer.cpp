@@ -15,8 +15,7 @@
 #include <vtkProperty.h>
 #include <vtkImagePlaneWidget.h>
 #include <vtkInteractorStyle.h>
-#include <vtkEventQtSlotConnect.h>
-#include <QVTKWidget.h>
+#include <vtkCommand.h>
 #include <vtkCamera.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkLookupTable.h>
@@ -74,16 +73,8 @@ public:
 Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
  : QViewer( parent )
 {
-    //Creem el Renderer de VTK i li assignem al widget que ens associa Qt amb VTK
-    m_renderer = vtkRenderer::New();
-    m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
-    this->getInteractorStyle()->SetCurrentRenderer( m_renderer );
-    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-
     this->initializePlanes();
     // interacció
-    m_vtkQtConnections = vtkEventQtSlotConnect::New();
-
     m_axialPlaneVisible = true;
     m_sagitalPlaneVisible = true;
     m_coronalPlaneVisible = true;
@@ -94,30 +85,12 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
     m_sagitalResliced = 0;
     m_coronalResliced = 0;
 
-    m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    // despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect( this->getInteractor(),
-                                 vtkCommand::AnyEvent,
-                                 this,
-#ifdef VTK_QT_5_0_SUPPORT
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
-#else
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
-#endif
-                                 );
-    // \TODO fer això aquí? o fer-ho en el tool manager?
-    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
-
     this->createActors();
     this->addActors();
 }
 
 Q3DMPRViewer::~Q3DMPRViewer()
 {
-    m_renderer->Delete();
-    m_vtkQtConnections->Delete();
     m_axialImagePlaneWidget->Delete();
     m_sagitalImagePlaneWidget->Delete();
     m_coronalImagePlaneWidget->Delete();
@@ -207,9 +180,9 @@ void Q3DMPRViewer::initializePlanes()
     //
     //     INTERACCIÓ
     //
-    m_axialImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-    m_sagitalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
-    m_coronalImagePlaneWidget->SetInteractor( m_vtkWidget->GetRenderWindow()->GetInteractor() );
+    m_axialImagePlaneWidget->SetInteractor( getInteractor() );
+    m_sagitalImagePlaneWidget->SetInteractor( getInteractor() );
+    m_coronalImagePlaneWidget->SetInteractor( getInteractor() );
 
     PlanesInteractionCallback *planesInteractionCallback = PlanesInteractionCallback::New();
     planesInteractionCallback->m_viewer = this;
@@ -270,11 +243,6 @@ void Q3DMPRViewer::createOutline()
     {
         DEBUG_LOG( "Intentant crear outline sense haver donat input abans" );
     }
-}
-
-vtkRenderer *Q3DMPRViewer::getRenderer()
-{
-    return m_renderer;
 }
 
 void Q3DMPRViewer::render()
@@ -405,18 +373,6 @@ void Q3DMPRViewer::orientationMarkerOn()
 void Q3DMPRViewer::orientationMarkerOff()
 {
     this->enableOrientationMarker( false );
-}
-
-void Q3DMPRViewer::setVtkLUT( vtkLookupTable *lut )
-{
-    m_axialImagePlaneWidget->SetLookupTable( lut );
-    m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
-    m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
-}
-
-vtkLookupTable *Q3DMPRViewer::getVtkLUT( )
-{
-    return vtkLookupTable::SafeDownCast( m_axialImagePlaneWidget->GetLookupTable() );
 }
 
 void Q3DMPRViewer::getCurrentWindowLevel( double wl[2] )
