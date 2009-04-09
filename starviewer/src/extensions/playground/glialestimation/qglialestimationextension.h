@@ -13,6 +13,7 @@
 
 // FWD declarations
 class QAction;
+class QToolBar;
 class vtkImageMask;
 class vtkActor;
 class vtkImageActor;
@@ -21,6 +22,7 @@ namespace udg {
 
 // FWD declarations
 class Volume;
+class ToolsActionFactory;
 class ToolManager;
 class StrokeSegmentationMethod;
 
@@ -33,9 +35,21 @@ public:
     QGlialEstimationExtension( QWidget *parent = 0 );
     ~QGlialEstimationExtension();
 
+    enum LayoutDirection { Vertical, Horizontal};
+
 public slots:
     /// Li assigna el volum principal
     void setInput( Volume *input );
+
+    /// Mostrar la informació del volum a cada visualitzador o no.
+    void showViewerInformation( bool show );
+
+    /// Quan es canvia l'input s'han de posar els volums a les etiquetes
+    void setVolumeT1( Volume * );
+    void setVolumePerfu( Volume * );
+    void setVolumeFlair( Volume * );
+    void setVolumeDifu( Volume * );
+    void setVolumeSpectrum( Volume * volume );
 
 private:
     /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
@@ -92,6 +106,21 @@ private slots:
     void contextMenuEvent(QContextMenuEvent *event);
     void setSeries(Series *series);
 
+    /// Canvia a l'estat contrari del layout --> 3x2 a 2x3 o al revés
+    void changeLayout();
+
+    /// Posa el layout en vertical o horitzaontal
+    void changeLayout( LayoutDirection layout );
+
+    /// Activa el nou visualitzador
+    void activateNewViewer( Q2DViewerWidget * newViewerWidget );
+
+    /// Activa la sincronitzacio
+    void synchronization( Q2DViewerWidget * viewer, bool active );
+
+    /// Desactiva la sincronitzacio
+    void disableSynchronization();
+
 
 private:
     enum GlialImage{ T1, perfu, FLAIR, difu, spectrum };
@@ -129,12 +158,24 @@ private:
     QAction *m_moveAction;
     QAction *m_rotateClockWiseAction;
     QAction *m_voxelInformationAction;
+    ToolsActionFactory *m_actionFactory;
 
     /// Grup de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
 
     /// Tool manager
     ToolManager *m_toolManager;
+
+    /// visualitzadors
+    Q2DViewer * m_T1Viewer;
+    Q2DViewer * m_perfuViewer;
+    Q2DViewer * m_flairViewer;
+    Q2DViewer * m_difuViewer;
+    Q2DViewer * m_spectrumViewer;
+    Q2DViewer * m_registryViewer;
+
+    /// posició del layout
+    LayoutDirection m_layoutDirection;
 };
 
 } // end namespace udg

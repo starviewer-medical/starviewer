@@ -24,7 +24,7 @@ GlialEstimationExtensionMediator::~GlialEstimationExtensionMediator()
 
 DisplayableID GlialEstimationExtensionMediator::getExtensionID() const
 {
-    return DisplayableID("GlialEstimationExtension",tr("Glial Estimation"));
+    return DisplayableID("StarGlialExtension",tr("StarGlial"));
 }
 
 bool GlialEstimationExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)

@@ -13,6 +13,7 @@
 #include "study.h"
 #include "patient.h"
 #include "toolmanager.h"
+#include "toolconfiguration.h"
 #include "patientbrowsermenu.h"
 #include "../diffusionperfusionsegmentation/itkRegistre3DAffine.h"
 #include "strokesegmentationmethod.h"
@@ -23,6 +24,7 @@
 //Qt
 #include <QString>
 #include <QAction>
+#include <QToolBar>
 #include <QSettings>
 #include <QMessageBox>
 #include <QContextMenuEvent>
@@ -34,6 +36,7 @@
 #include <vtkImageCast.h>
 #include <vtkImageActor.h>
 #include <vtkImageThreshold.h>
+#include <vtkRenderer.h>
 
 // ITK
 #include <itkImage.h>
@@ -51,10 +54,17 @@ QGlialEstimationExtension::QGlialEstimationExtension( QWidget *parent )
 {
     setupUi( this );
 
-    createActions();
+    m_viewersLayout->addViewer( "0.0\\1.0\\1.0\\0.0" );
+    m_viewersLayout->setViewerSelected( m_viewersLayout->getViewerWidget(0) );
+    m_viewersLayout->setGrid(2,3);
+    m_layoutDirection = QGlialEstimationExtension::Horizontal;
+
     createConnections();
+
+    createActions();
     readSettings();
 
+    activateNewViewer( m_viewersLayout->getViewerWidget( 0 ) );
 }
 
 QGlialEstimationExtension::~QGlialEstimationExtension()
@@ -69,20 +79,6 @@ QGlialEstimationExtension::~QGlialEstimationExtension()
 void QGlialEstimationExtension::createActions()
 {
 
-    m_rotateClockWiseAction = new QAction( 0 );
-    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
-    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
-    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
-    m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
-    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
-
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_1 , SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_2 , SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_3 , SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_4 , SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_5 , SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_6 , SLOT( rotateClockWise() ) );
-
     // Tools
     // creem el tool manager
     m_toolManager = new ToolManager(this);
@@ -94,6 +90,9 @@ void QGlialEstimationExtension::createActions()
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
     m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
+    m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
+    m_cursor3DToolButton->setDefaultAction( m_toolManager->getToolAction("Cursor3DTool") );
+    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
 
     // Tool d'slicing per teclat
     QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
@@ -101,7 +100,7 @@ void QGlialEstimationExtension::createActions()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "ScreenShotTool"<<"SeedTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "ScreenShotTool" << "SeedTool" << "Cursor3DTool" << "EditorTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -120,18 +119,28 @@ void QGlialEstimationExtension::createActions()
     // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
     m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
 
+    //TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
+    //sincronització no té el model de totes les tools
+    connect( m_cursor3DToolButton->defaultAction() , SIGNAL( triggered() ) , SLOT( disableSynchronization() ) );
+
     // registrem al manager les tools que van amb el viewer principal
     //initializeDefaultTools( m_selectedViewer->getViewer() );
 
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" <<  "SlicingKeyboardTool"<<"SeedTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" <<  "SlicingKeyboardTool" << "SeedTool" << "PolylineROITool" << "Cursor3DTool" << "EditorTool" << "SeedTool";
 
-    m_toolManager->setViewerTools( m_2DView_1, toolsList );
-    m_toolManager->setViewerTools( m_2DView_2, toolsList );
-    m_toolManager->setViewerTools( m_2DView_3, toolsList );
-    m_toolManager->setViewerTools( m_2DView_6, toolsList );
-    m_toolManager->setViewerTools( m_2DView_4, toolsList );
-    m_toolManager->setViewerTools( m_2DView_5, toolsList );
+    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(0)->getViewer(), toolsList );
+    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(1)->getViewer(), toolsList );
+    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(2)->getViewer(), toolsList );
+    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(5)->getViewer(), toolsList );
+    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(3)->getViewer(), toolsList );
+    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(4)->getViewer(), toolsList );
+
+    connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeT1( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(1)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumePerfu( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(3)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeFlair( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(4)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeDifu( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(5)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeSpectrum( Volume * ) ) );
 
 }
 
@@ -151,8 +160,17 @@ void QGlialEstimationExtension::createConnections()
     connect( m_computeCBVPushButton, SIGNAL( clicked() ), SLOT( computeCBV() ) );
     connect( m_T1ValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewT1Thresholds(int) ) );
     connect( m_T1MaskOpacitySlider, SIGNAL( valueChanged(int) ), SLOT( setT1MaskOpacity(int) ) );
-    connect( m_2DView_1, SIGNAL( seedChanged() ), SLOT( setT1SeedPosition() ) );
+    connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( seedChanged() ), SLOT( setT1SeedPosition() ) );
     connect( m_T1ApplyPushButton, SIGNAL( clicked() ), SLOT( applyT1Segmentation() ) );
+
+    // Connexions necessaries amb els canvis al layout
+    connect( m_viewersLayout, SIGNAL( viewerAdded( Q2DViewerWidget * ) ), SLOT( activateNewViewer( Q2DViewerWidget * ) ) );
+
+    connect( m_gridButton , SIGNAL( clicked( bool ) ) , this , SLOT( changeLayout() ) );
+
+    // mostrar o no la informacio del volum a cada visualitzador
+    connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
+
 }
 
 void QGlialEstimationExtension::setInput( Volume *input )
@@ -180,31 +198,32 @@ void QGlialEstimationExtension::setInput( Volume *input )
         m_T1ValueSlider->setMinimum( m_minT1Value );
         m_T1ValueSlider->setMaximum( m_maxT1Value );
 
-        m_2DView_1->setInput( m_T1Volume );
-        m_2DView_1->resetCamera();
+        m_viewersLayout->getViewerWidget(0)->setInput( m_T1Volume );
+        m_viewersLayout->getViewerWidget(0)->getViewer()->resetCamera();
         //m_2DView_1->removeAnnotation(Q2DViewer::AllAnnotation);
     }
     if(m_perfuVolume != 0)
     {
         //TODO: Calcular el mapa
-        //this->computeCBV();
-        //m_2DView_2->setInput( m_mapVolume );
-        //m_2DView_2->setInput( m_perfuVolume );
+        this->computeCBV();
+        m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
+//         m_2DView_2->setInput( m_mapVolume );
+//         m_2DView_2->setInput( m_perfuVolume );
         //m_2DView_2->removeAnnotation(Q2DViewer::AllAnnotation);
     }
     if(m_FLAIRVolume != 0)
     {
-        m_2DView_4->setInput( m_FLAIRVolume );
+        m_viewersLayout->getViewerWidget(3)->setInput( m_FLAIRVolume );
         //m_2DView_4->removeAnnotation(Q2DViewer::AllAnnotation);
     }
     if(m_difuVolume != 0)
     {
-        m_2DView_5->setInput( m_difuVolume );
+        m_viewersLayout->getViewerWidget(4)->setInput( m_difuVolume );
         //m_2DView_5->removeAnnotation(Q2DViewer::AllAnnotation);
     }
     if(m_spectrumVolume != 0)
     {
-        m_2DView_6->setInput( m_spectrumVolume );
+        m_viewersLayout->getViewerWidget(5)->setInput( m_spectrumVolume );
     }
     //std::cout<<"Done!!"<<std::endl;
 }
@@ -429,12 +448,12 @@ void QGlialEstimationExtension::computeTTP( )
     m_mapVolume->setData(mapImage);
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
-    m_2DView_2->setInput( m_mapVolume );
-    m_2DView_2->resetView( Q2DViewer::Axial );
-    m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
-    //m_2DView_2->resetWindowLevelToDefault();
+    m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->resetView( Q2DViewer::Axial );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->removeAnnotation(Q2DViewer::NoAnnotation);
+    m_viewersLayout->getViewerWidget(1)->getViewer()->resetWindowLevelToDefault();
 
-    int* ext= m_mapVolume->getWholeExtent();
+//     int* ext= m_mapVolume->getWholeExtent();
     //std::cout<<"["<<ext[0]<<","<<ext[1]<<";"<<ext[2]<<","<<ext[3]<<";"<<ext[4]<<","<<ext[5]<<"]"<<std::endl;
     //std::cout<<"Number of voxels:"<<cont<<std::endl;
 
@@ -457,7 +476,7 @@ void QGlialEstimationExtension::createColorMap( )
     mapHueLut->SetAlphaRange( 1.0, 1.0 );
     mapHueLut->SetRampToLinear();
     mapHueLut->ForceBuild();    //effective built
-    int nvalues=mapHueLut->GetNumberOfTableValues();
+//     int nvalues=mapHueLut->GetNumberOfTableValues();
     //std::cout<<"Max:"<<m_maxValue<<", Min:"<<m_minValue<<", NValues:"<<nvalues<<std::endl;
     //std::cout<<"Max LuT:"<<m_mapMax<<", Min Lut:"<<m_mapMin<<","<<nvalues<<std::endl;
     /*double* tvalue= new double[4];
@@ -478,9 +497,9 @@ void QGlialEstimationExtension::createColorMap( )
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView_2->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
 
-    m_2DView_2->setWindowLevel(1.0, m_mapMin - 1.0);
+    m_viewersLayout->getViewerWidget(1)->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
     //m_2DView->setWindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2);
 }
@@ -495,7 +514,7 @@ void QGlialEstimationExtension::createColorMap( double window, double level )
     mapHueLut->SetAlphaRange( 1.0, 1.0 );
     mapHueLut->SetRampToLinear();
     mapHueLut->ForceBuild();    //effective built
-    int nvalues=mapHueLut->GetNumberOfTableValues();
+//     int nvalues=mapHueLut->GetNumberOfTableValues();
     //std::cout<<"Max:"<<m_maxValue<<", Min:"<<m_minValue<<", NValues:"<<nvalues<<std::endl;
     //std::cout<<"Max LuT:"<<m_mapMax<<", Min Lut:"<<m_mapMin<<","<<nvalues<<std::endl;
     /*double* tvalue= new double[4];
@@ -515,7 +534,7 @@ void QGlialEstimationExtension::createColorMap( double window, double level )
     table->SetTupleValue( 0, tuple );
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView_2->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
 }
 
 void QGlialEstimationExtension::computeCBV( )
@@ -529,7 +548,7 @@ void QGlialEstimationExtension::computeCBV( )
     //Paràmetres que definim constants però que potser no ho són
     static const unsigned int Nbaseline = 5; //->Mostres pre-bolus
     static const double TEdyn = 0.025; //->valor extret del pwp d'en Gerard
-    static const double bloodvolfraction = 0.06; //->Document VSI
+//     static const double bloodvolfraction = 0.06; //->Document VSI
     //Allocating memory for the output image
     Volume::ItkImageType::RegionType region;
     Volume::ItkImageType::IndexType start;
@@ -585,7 +604,7 @@ void QGlialEstimationExtension::computeCBV( )
 
     Volume::ItkImageType::PixelType value;
     double valuesb, valuerCBV;
-    long cont=0;
+//     long cont=0;
     unsigned int i,j,k,p;
 
     unsigned int kend=m_perfuVolume->getSeries()->getNumberOfSlicesPerPhase();
@@ -781,7 +800,7 @@ void QGlialEstimationExtension::computeCBV( )
             }
         }
     }
-    double mean=sum/(bloodvolfraction*(double)contCBV);
+//     double mean=sum/(bloodvolfraction*(double)contCBV);
     //std::cout<<"Mean:"<<mean<<std::endl;
     rCBVIter.GoToBegin();
     mapIter.GoToBegin();
@@ -845,15 +864,15 @@ void QGlialEstimationExtension::computeCBV( )
     //std::cout<<"End new map "<<std::endl;
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
-    m_2DView_2->setInput( m_mapVolume );
-    m_2DView_2->resetView( Q2DViewer::Axial );
-    m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
+    m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->resetView( Q2DViewer::Axial );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->removeAnnotation(Q2DViewer::NoAnnotation);
     this->createColorMap();
 
-    int* ext= m_mapVolume->getWholeExtent();
-    //std::cout<<"["<<ext[0]<<","<<ext[1]<<";"<<ext[2]<<","<<ext[3]<<";"<<ext[4]<<","<<ext[5]<<"]"<<std::endl;
-    //std::cout<<"Number of voxels:"<<cont<<std::endl;
-    //std::cout<<"End computeCBV!!!"<<std::endl;
+//     int* ext= m_mapVolume->getWholeExtent();
+//     std::cout<<"["<<ext[0]<<","<<ext[1]<<";"<<ext[2]<<","<<ext[3]<<";"<<ext[4]<<","<<ext[5]<<"]"<<std::endl;
+//     std::cout<<"Number of voxels:"<<cout<<std::endl;
+//     std::cout<<"End computeCBV!!!"<<std::endl;
 
 }
 
@@ -951,10 +970,10 @@ void QGlialEstimationExtension::applyFilterMapImage( )
             std::cerr << excep << std::endl;
         }
         //std::cout<<"End SetData Volume"<<std::endl;
-        m_2DView_2->setInput( m_mapVolume );
+        m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
         //std::cout<<"Init Colormap"<<std::endl;
         this->createColorMap( );
-        m_2DView_2->setSlice( m_mapVolume->getDimensions()[2]/2 );
+        m_viewersLayout->getViewerWidget(1)->getViewer()->setSlice( m_mapVolume->getDimensions()[2]/2 );
         QApplication::restoreOverrideCursor();
         //std::cout<<"End Filter Volume"<<std::endl;
 
@@ -987,25 +1006,25 @@ void QGlialEstimationExtension::applyRegistration(  )
     case T1:
         fixedVolume = m_T1Volume;
         //std::cout<<"Fem el T1!!!!"<<std::endl;
-        fixedViewer = m_2DView_1;
+        fixedViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
     break;
 
     case perfu:
         fixedVolume = m_mapVolume;
         //std::cout<<"Fem perfu!!!!"<<std::endl;
-        fixedViewer = m_2DView_2;
+        fixedViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
     break;
 
     case FLAIR:
         fixedVolume = m_FLAIRVolume;
         //std::cout<<"Fem el FLAIR!!!!"<<std::endl;
-        fixedViewer = m_2DView_4;
+        fixedViewer = m_viewersLayout->getViewerWidget(3)->getViewer();
     break;
 
     case difu:
         fixedVolume = m_difuVolume;
         //std::cout<<"Fem la difu!!!!"<<std::endl;
-        fixedViewer = m_2DView_5;
+        fixedViewer = m_viewersLayout->getViewerWidget(4)->getViewer();
     break;
 
     default:
@@ -1017,25 +1036,25 @@ void QGlialEstimationExtension::applyRegistration(  )
     case T1:
         movingVolume = m_T1Volume;
         //std::cout<<"Fem el T1!!!!"<<std::endl;
-        movingViewer = m_2DView_1;
+        movingViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
     break;
 
     case perfu:
         movingVolume = m_mapVolume;
         //std::cout<<"Fem perfu!!!!"<<std::endl;
-        movingViewer = m_2DView_2;
+        movingViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
     break;
 
     case FLAIR:
         movingVolume = m_FLAIRVolume;
         //std::cout<<"Fem el FLAIR!!!!"<<std::endl;
-        movingViewer = m_2DView_4;
+        movingViewer = m_viewersLayout->getViewerWidget(3)->getViewer();
     break;
 
     case difu:
         movingVolume = m_difuVolume;
         //std::cout<<"Fem la difu!!!!"<<std::endl;
-        movingViewer = m_2DView_5;
+        movingViewer = m_viewersLayout->getViewerWidget(4)->getViewer();
     break;
 
     default:
@@ -1124,14 +1143,16 @@ void QGlialEstimationExtension::applyRegistration(  )
         m_registeredVolume->setImages( fixedVolume->getImages() );
         m_registeredVolume->setData( rescalerMoving->GetOutput() );
 
-        m_2DView_3->setInput( fixedVolume );
-        m_2DView_3->setWindowLevel(fixedWindow, fixedLevel);
+        m_viewersLayout->getViewerWidget(2)->setInput( fixedVolume );
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setWindowLevel(fixedWindow, fixedLevel);
 
-        m_2DView_3->setOverlayToBlend();
-        m_2DView_3->setOpacityOverlay( m_opacityRegistrationSlider->value() / 100.0 );
-        m_2DView_3->setOverlayInput( m_registeredVolume );
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayToBlend();
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOpacityOverlay( m_opacityRegistrationSlider->value() / 100.0 );
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayInput( m_registeredVolume );
 
-        m_2DView_3->refresh();
+        m_viewersLayout->getViewerWidget(2)->getViewer()->refresh();
+
+
     }
     else
     {
@@ -1182,19 +1203,19 @@ void QGlialEstimationExtension::viewT1Thresholds(int value)
     vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
     imageThreshold->SetInput( m_T1Volume->getVtkData() );
     imageThreshold->ThresholdByUpper( value );
-    imageThreshold->SetInValue ( m_2DView_1->getCurrentColorLevel() + m_2DView_1->getCurrentColorWindow()/2 );
-    imageThreshold->SetOutValue( m_2DView_1->getCurrentColorLevel() - m_2DView_1->getCurrentColorWindow()/2 );
+    imageThreshold->SetInValue ( m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorLevel() + m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorWindow()/2 );
+    imageThreshold->SetOutValue( m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorLevel() - m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorWindow()/2 );
     imageThreshold->Update();
 
     m_T1MaskVolume->setImages( m_T1Volume->getImages() );
     m_T1MaskVolume->setData( imageThreshold->GetOutput() );
 
-    m_2DView_1->setOverlayToBlend();
-    m_2DView_1->setOpacityOverlay( m_T1MaskOpacitySlider->value() / 100.0 );
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayToBlend();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOpacityOverlay( m_T1MaskOpacitySlider->value() / 100.0 );
     //m_2DView_1->setOpacityOverlay( 0.5 );
-    m_2DView_1->setOverlayInput( m_T1MaskVolume );
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput( m_T1MaskVolume );
 
-    m_2DView_1->refresh();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
     //m_T1OpacityLabel->setEnabled( true );
     //m_T1OpacitySlider->setEnabled( true );
 
@@ -1203,14 +1224,14 @@ void QGlialEstimationExtension::viewT1Thresholds(int value)
 
 void QGlialEstimationExtension::setT1MaskOpacity( int opacity )
 {
-    m_2DView_1->setOpacityOverlay(((double)opacity)/100.0);
-    m_2DView_1->setOverlayInput(m_T1MaskVolume);
-    m_2DView_1->refresh();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOpacityOverlay(((double)opacity)/100.0);
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput(m_T1MaskVolume);
+    m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
 }
 
 void QGlialEstimationExtension::setT1SeedPosition ( )
 {
-    m_2DView_1->getSeedPosition( m_seedT1Position );
+    m_viewersLayout->getViewerWidget(0)->getViewer()->getSeedPosition( m_seedT1Position );
 
     m_T1SeedXLineEdit->setText( QString::number( m_seedT1Position[0], 'f', 1 ) );
     m_T1SeedYLineEdit->setText( QString::number( m_seedT1Position[1], 'f', 1 ) );
@@ -1238,8 +1259,8 @@ void QGlialEstimationExtension::applyT1Segmentation()
     if ( !m_T1MaskVolume ) m_T1MaskVolume = new Volume();
 
     m_segmentationMethod->setMask( m_T1MaskVolume );
-    m_segmentationMethod->setInsideMaskValue ( m_2DView_1->getCurrentColorLevel() + m_2DView_1->getCurrentColorWindow()/2 );
-    m_segmentationMethod->setOutsideMaskValue( m_2DView_1->getCurrentColorLevel() - m_2DView_1->getCurrentColorWindow()/2 );
+    m_segmentationMethod->setInsideMaskValue ( m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorLevel() + m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorWindow()/2 );
+    m_segmentationMethod->setOutsideMaskValue( m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorLevel() - m_viewersLayout->getViewerWidget(0)->getViewer()->getCurrentColorWindow()/2 );
     m_segmentationMethod->setHistogramLowerLevel( m_T1ValueSlider->value() );
     m_segmentationMethod->setHistogramUpperLevel( m_maxT1Value );
     m_segmentationMethod->setSeedPosition( m_seedT1Position[0], m_seedT1Position[1], m_seedT1Position[2] );
@@ -1248,9 +1269,9 @@ void QGlialEstimationExtension::applyT1Segmentation()
     //Compte Phases!!!!!!!!
     m_T1Cont = (int)(m_T1VolumeCont / (m_T1Volume->getSpacing()[0]*m_T1Volume->getSpacing()[1]*m_T1Volume->getSpacing()[2]));
 
-    m_2DView_1->setOverlayToBlend();
-    m_2DView_1->setOpacityOverlay( m_T1MaskOpacitySlider->value() / 100.0 );
-    m_2DView_1->setOverlayInput( m_T1MaskVolume );
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayToBlend();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOpacityOverlay( m_T1MaskOpacitySlider->value() / 100.0 );
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput( m_T1MaskVolume );
 
     m_T1MaskOpacityLabel->setEnabled( true );
     m_T1MaskOpacitySlider->setEnabled( true );
@@ -1259,7 +1280,23 @@ void QGlialEstimationExtension::applyT1Segmentation()
     m_T1VolumeLabel->setEnabled( true );
     m_T1VolumeLineEdit->setEnabled( true );
 
-    m_2DView_1->refresh();
+/*    m_editorAction->trigger();
+    m_diffusion2DView->disableTools();
+    m_editorAction->setEnabled( true );
+
+    m_paintEditorAction->setEnabled(true);
+    m_eraseEditorAction->setEnabled(true);
+    m_eraseSliceEditorAction->setEnabled(true);
+    m_eraseRegionEditorAction->setEnabled(true);
+    m_eraseEditorAction->trigger();
+    m_editorTool = QDifuPerfuSegmentationExtension::Erase;
+    m_editorSize->setEnabled(true);
+
+    m_lesionViewAction->setEnabled( true );
+    m_lesionViewAction->trigger();
+    this->viewLesionOverlay();
+*/
+    m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
 
     QApplication::restoreOverrideCursor();
 }
@@ -1381,32 +1418,32 @@ void QGlialEstimationExtension::setSeries(Series *series)
             m_T1ValueSlider->setMinimum( m_minT1Value );
             m_T1ValueSlider->setMaximum( m_maxT1Value );
 
-            m_2DView_1->setInput( m_T1Volume );
+            m_viewersLayout->getViewerWidget(0)->setInput( m_T1Volume );
             break;
         case perfu:
             m_perfuLineEdit->clear();
             m_perfuLineEdit->insert(series->getDescription());
             m_perfuVolume = series->getFirstVolume();
             this->computeCBV();
-            m_2DView_2->setInput( m_mapVolume );
+            m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
             break;
         case FLAIR:
             m_FLAIRLineEdit->clear();
             m_FLAIRLineEdit->insert(series->getDescription());
             m_FLAIRVolume = series->getFirstVolume();
-            m_2DView_4->setInput( m_FLAIRVolume );
+            m_viewersLayout->getViewerWidget(3)->setInput( m_FLAIRVolume );
             break;
         case difu:
             m_difuLineEdit->clear();
             m_difuLineEdit->insert(series->getDescription());
             m_difuVolume = series->getFirstVolume();
-            m_2DView_5->setInput( m_difuVolume );
+            m_viewersLayout->getViewerWidget(4)->setInput( m_difuVolume );
             break;
         case spectrum:
             m_spectrumLineEdit->clear();
             m_spectrumLineEdit->insert(series->getDescription());
             m_spectrumVolume = series->getFirstVolume();
-            m_2DView_6->setInput( m_spectrumVolume );
+            m_viewersLayout->getViewerWidget(5)->setInput( m_spectrumVolume );
             break;
         default:
             DEBUG_LOG("No existeix aquest tipus d'imatge!!");
@@ -1433,6 +1470,8 @@ bool QGlialEstimationExtension::findProbableSeries( )
                 m_T1LineEdit->insert(series->getDescription());
                 m_T1Volume = series->getFirstVolume();
                 findT1=true;
+                Volume * volume = series->getFirstVolume();
+                Image * image = volume->getImage(0,1);
                 //std::cout<<"*";
                 //slicesDSC = series->getFirstVolume()->getDimensions()[3];
             }
@@ -1458,7 +1497,7 @@ bool QGlialEstimationExtension::findProbableSeries( )
                 //slicespost = series->getFirstVolume()->getDimensions()[3];
             }
             //DEBUG_LOG(series->getDescription());
-            if(series->getDescription().contains("DIFUSIO", Qt::CaseInsensitive) && series->getFirstVolume()) // && slicesDSC < series->getFirstVolume()->getDimensions()[3])
+            if(series->getDescription().contains("DIFUSIO", Qt::CaseInsensitive) && series->getFirstVolume() && (series->getNumberOfPhases() > 1) ) // && slicesDSC < series->getFirstVolume()->getDimensions()[3])
             {
                 m_difuLineEdit->clear();
                 m_difuLineEdit->insert(series->getDescription());
@@ -1485,21 +1524,231 @@ bool QGlialEstimationExtension::findProbableSeries( )
 
 void QGlialEstimationExtension::setRegistrationOpacity(int op)
 {
-    m_2DView_3->setOpacityOverlay(((double)op)/100.0);
-    m_2DView_3->setOverlayInput(m_registeredVolume);
-    m_2DView_3->refresh();
+    if( m_viewersLayout->getViewerWidget(2)->getViewer()->getInput() != 0 )
+    {
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOpacityOverlay(((double)op)/100.0);
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayInput(m_registeredVolume);
+        m_viewersLayout->getViewerWidget(2)->getViewer()->refresh();
+    }
 }
 
 void QGlialEstimationExtension::readSettings()
 {
     QSettings settings;
-    m_verticalSplitter->restoreState( settings.value("StarViewer-App-GlialEstimation/verticalSplitter").toByteArray() );
+//     m_verticalSplitter->restoreState( settings.value("StarViewer-App-GlialEstimation/verticalSplitter").toByteArray() );
 }
 
 void QGlialEstimationExtension::writeSettings()
 {
     QSettings settings;
-    settings.setValue("StarViewer-App-GlialEstimation/verticalSplitter", m_verticalSplitter->saveState() );
+//     settings.setValue("StarViewer-App-GlialEstimation/verticalSplitter", m_verticalSplitter->saveState() );
+}
+
+void QGlialEstimationExtension::changeLayout()
+{
+    if( m_layoutDirection == QGlialEstimationExtension::Vertical )
+        changeLayout( QGlialEstimationExtension::Horizontal );
+    else
+        changeLayout( QGlialEstimationExtension::Vertical );
+}
+
+void QGlialEstimationExtension::changeLayout( QGlialEstimationExtension::LayoutDirection layout )
+{
+    if( layout == QGlialEstimationExtension::Vertical)
+    {
+        m_viewersLayout->setGrid(3,2);
+
+        // Canviem els inputs
+        Volume * input = m_viewersLayout->getViewerWidget(1)->getViewer()->getInput();
+
+        m_viewersLayout->getViewerWidget(1)->getViewer()->setInput( m_viewersLayout->getViewerWidget(3)->getViewer()->getInput() );
+        m_viewersLayout->getViewerWidget(1)->update();
+        m_viewersLayout->getViewerWidget(3)->getViewer()->setInput( m_viewersLayout->getViewerWidget(5)->getViewer()->getInput() );
+        m_viewersLayout->getViewerWidget(3)->update();
+        m_viewersLayout->getViewerWidget(4)->getViewer()->setInput( m_viewersLayout->getViewerWidget(2)->getViewer()->getInput() );
+        m_viewersLayout->getViewerWidget(4)->update();
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setInput( input );
+        m_viewersLayout->getViewerWidget(2)->update();
+
+        // Assignem visualitzadors
+        m_perfuViewer = m_viewersLayout->getViewerWidget(2)->getViewer();
+        m_flairViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
+        m_difuViewer = m_viewersLayout->getViewerWidget(3)->getViewer();
+        m_registryViewer = m_viewersLayout->getViewerWidget(4)->getViewer();
+
+        m_layoutDirection = QGlialEstimationExtension::Vertical;
+    }
+    else
+    {
+        m_viewersLayout->setGrid(2,3);
+
+        // Canviem els inputs
+        Volume * input = m_viewersLayout->getViewerWidget(1)->getViewer()->getInput();
+
+        m_viewersLayout->getViewerWidget(1)->getViewer()->setInput( m_viewersLayout->getViewerWidget(2)->getViewer()->getInput() );
+        m_viewersLayout->getViewerWidget(1)->update();
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setInput( m_viewersLayout->getViewerWidget(4)->getViewer()->getInput() );
+        m_viewersLayout->getViewerWidget(2)->update();
+        m_viewersLayout->getViewerWidget(4)->getViewer()->setInput( m_viewersLayout->getViewerWidget(3)->getViewer()->getInput() );
+        m_viewersLayout->getViewerWidget(4)->update();
+        m_viewersLayout->getViewerWidget(3)->getViewer()->setInput( input );
+        m_viewersLayout->getViewerWidget(3)->update();
+
+        // Assignem visualitzadors
+        m_perfuViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
+        m_flairViewer = m_viewersLayout->getViewerWidget(3)->getViewer();
+        m_difuViewer = m_viewersLayout->getViewerWidget(4)->getViewer();
+        m_registryViewer = m_viewersLayout->getViewerWidget(2)->getViewer();
+
+
+
+        m_layoutDirection = QGlialEstimationExtension::Horizontal;
+    }
+}
+
+void QGlialEstimationExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget )
+{
+
+     // i si cal, activem les annotacions
+    if( m_viewerInformationToolButton->isChecked() )
+        newViewerWidget->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation, true );
+
+    connect( newViewerWidget, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
+}
+
+void QGlialEstimationExtension::synchronization( Q2DViewerWidget * viewer, bool active )
+{
+    if( active )
+    {
+        // Per defecte sincronitzem només la tool de slicing
+        ToolConfiguration * synchronizeConfiguration = new ToolConfiguration();
+        synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
+        m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
+        m_toolManager->activateTool("SynchronizeTool");
+
+        //TODO si el cursor 3d està seleccionat, el deseleccionem. Solució temporal
+        if( m_cursor3DToolButton->isChecked () )
+            m_slicingToolButton->defaultAction()->setChecked( true );
+    }
+    else
+    {
+        m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
+    }
+}
+
+void QGlialEstimationExtension::disableSynchronization()
+{
+    //TODO Mètode per desactivar l'eina i el boto de sincronització dels visualitzadors quan
+    // es selecciona l'eina de cursor3D, per solucionar-ho de forma xapussa perquè l'eina de
+    // sincronització encara no té el mateix format que la resta
+    int numViewer;
+    Q2DViewerWidget * viewer;
+
+    int numberOfViewers = m_viewersLayout->getNumberOfViewers();
+
+    for( numViewer = 0; numViewer < numberOfViewers; numViewer++ )
+    {
+        viewer =  m_viewersLayout->getViewerWidget( numViewer );
+        m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
+        viewer->disableSynchronization();
+    }
+}
+
+void QGlialEstimationExtension::showViewerInformation( bool show )
+{
+    int numberOfViewers = m_viewersLayout->getNumberOfViewers();
+    int numViewer;
+
+    for( numViewer = 0; numViewer < numberOfViewers; numViewer++ )
+    {
+       m_viewersLayout->getViewerWidget( numViewer )->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+        Q2DViewer::AcquisitionInformationAnnotation, show );
+    }
+}
+
+void QGlialEstimationExtension::setVolumeT1( Volume * volume)
+{
+    QString modality = volume->getSeries()->getModality();
+    itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc;
+    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    {
+        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
+    }
+
+    m_T1LineEdit->clear();
+    m_T1LineEdit->insert(volume->getSeries()->getDescription());
+    m_T1Volume = volume;
+
+    minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
+    minmaxCalc->SetImage(m_T1Volume->getItkData());
+    minmaxCalc->SetRegion(m_T1Volume->getItkData()->GetRequestedRegion());
+    minmaxCalc->Compute();
+    DEBUG_LOG( QString("ItkMax=%1, ItkMin=%2").arg(minmaxCalc->GetMaximum()).arg(minmaxCalc->GetMinimum()) );
+    m_minT1Value = minmaxCalc->GetMinimum();
+    m_maxT1Value = minmaxCalc->GetMaximum();
+    m_T1ValueSpinBox->setMinimum( m_minT1Value );
+    m_T1ValueSpinBox->setMaximum( m_maxT1Value );
+    m_T1ValueSlider->setMinimum( m_minT1Value );
+    m_T1ValueSlider->setMaximum( m_maxT1Value );
+
+    m_viewersLayout->getViewerWidget(0)->setInput( m_T1Volume );
+}
+
+void QGlialEstimationExtension::setVolumePerfu( Volume * volume )
+{
+    QString modality = volume->getSeries()->getModality();
+    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    {
+        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
+    }
+
+    m_perfuLineEdit->clear();
+    m_perfuLineEdit->insert(volume->getSeries()->getDescription());
+    m_perfuVolume = volume;
+    this->computeCBV();
+    m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
+}
+
+void QGlialEstimationExtension::setVolumeFlair( Volume * volume )
+{
+    QString modality = volume->getSeries()->getModality();
+    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    {
+        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
+    }
+
+    m_FLAIRLineEdit->clear();
+    m_FLAIRLineEdit->insert(volume->getSeries()->getDescription());
+    m_FLAIRVolume = volume;
+}
+
+void QGlialEstimationExtension::setVolumeDifu( Volume * volume )
+{
+    QString modality = volume->getSeries()->getModality();
+    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    {
+        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
+    }
+
+    m_difuLineEdit->clear();
+    m_difuLineEdit->insert(volume->getSeries()->getDescription());
+    m_difuVolume = volume;
+}
+
+void QGlialEstimationExtension::setVolumeSpectrum( Volume * volume )
+{
+    QString modality = volume->getSeries()->getModality();
+    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    {
+        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
+    }
+
+    m_spectrumLineEdit->clear();
+    m_spectrumLineEdit->insert(volume->getSeries()->getDescription());
+    m_spectrumVolume = volume;
 }
 
 }
