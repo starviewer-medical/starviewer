@@ -57,6 +57,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     //esborrem els estudis vells de la cache
     deleteOldStudies();
     readSettings();
+    //fem que per defecte mostri els estudis de la cache
+    queryStudy("Cache");
 
     // Configuració per Starviewer Lite
 #ifdef STARVIEWER_LITE
@@ -65,9 +67,6 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_createDICOMDIRToolButton->hide();
     m_advancedSearchToolButton->hide();
     m_tab->removeTab(1); // tab de "PACS" fora
-
-    //fem que per defecte mostri els estudis de la cache
-    queryStudy("Cache");
 #else
     /*L'engeguem després d'haver fet els connects, no es pot fer abans, perquè per exemple en el cas que tinguem un error
      *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
@@ -111,6 +110,7 @@ void QueryScreen::initialize()
     m_qadvancedSearchWidget->hide();
     m_operationAnimation->hide();
     m_labelOperation->hide();
+    refreshTab( LocalDataBaseTab );
 
     CreateContextMenuQStudyTreeWidgetCache();
     CreateContextMenuQStudyTreeWidgetPacs();
@@ -118,18 +118,10 @@ void QueryScreen::initialize()
 
     setQStudyTreeWidgetColumnsWidth();
 
-#ifndef STARVIEWER_LITE
+    #ifndef STARVIEWER_LITE
     m_listenRISRequestThread = new ListenRISRequestThread(this);
     if (settings.getListenRisRequests()) m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
-
-    //Per Starviewer es mostra al inici la pestanya del PACS
-    m_tab->setCurrentIndex(PACSQueryTab);
-    refreshTab(PACSQueryTab);
-#else
-    //Per Starviewer Lite al inicar-se es mostra la pestanya de la base de dades Local
-    m_tab->setCurrentIndex(LocalDataBaseTab);
-    refreshTab(LocalDataBaseTab);
-#endif
+    #endif
 
 }
 
