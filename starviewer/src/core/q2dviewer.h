@@ -111,9 +111,6 @@ public:
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int data[3] );
 
-    /// Desa la vista actual del visor amb el nom de fitxer base \c baseName i en format especificat per \c extension
-    void saveCurrent( QString baseName , FileType extension );
-
     /// Obté el window level actual de la imatge
     double getCurrentColorWindow();
     double getCurrentColorLevel();
