@@ -9,15 +9,8 @@
 
 #include "qviewer.h"
 
-class vtkRenderer;
-class vtkRenderWindowInteractor;
 class vtkImagePlaneWidget;
 class vtkActor;
-class vtkEventQtSlotConnect;
-class vtkObject;
-class vtkCommand;
-class vtkLookupTable;
-class vtkInteractorStyle;
 
 namespace udg {
 
@@ -39,8 +32,6 @@ public:
     /// Li indiquem el volum a visualitzar
     virtual void setInput( Volume *inputImage );
 
-    virtual vtkRenderer *getRenderer();
-
     /// Retorna el volum transformat segons el reslice de cada vista
     Volume *getAxialResliceOutput();
     Volume *getSagitalResliceOutput();
@@ -61,12 +52,6 @@ public:
     double *getCoronalPlaneNormal();
     void getCoronalPlaneOrigin( double origin[3] );
     void getCoronalPlaneNormal( double normal[3] );
-
-    /// Assigna la LUT en format vtk
-    void setVtkLUT( vtkLookupTable *lut );
-
-    /// Retorna la LUT en format vtk
-    vtkLookupTable *getVtkLUT();
 
     void getCurrentWindowLevel( double wl[2] );
     void resetView( CameraOrientationType view );
@@ -125,9 +110,6 @@ protected:
     /// Afegeix els actors a l'escena
     void addActors();
 
-    /// El renderer
-    vtkRenderer *m_renderer;
-
     /// Els plans
     vtkImagePlaneWidget *m_axialImagePlaneWidget;
     vtkImagePlaneWidget *m_sagitalImagePlaneWidget;
@@ -138,9 +120,6 @@ protected:
 
     /// Widget per veure la orientació en 3D
     Q3DOrientationMarker *m_orientationMarker;
-
-    /// connexions d'events vtk amb slots / signals qt
-    vtkEventQtSlotConnect *m_vtkQtConnections;
 
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow , m_defaultLevel;

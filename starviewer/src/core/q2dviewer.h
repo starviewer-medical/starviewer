@@ -13,7 +13,6 @@
 // vtk
 class vtkPropPicker;
 class vtkTextActor;
-class vtkRenderer;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
 class vtkCoordinate;
@@ -21,7 +20,6 @@ class vtkScalarBarActor;
 class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
-class vtkInteractorStyleImage;
 // grayscale pipeline
 class vtkImageMapToWindowLevelColors;
 class vtkImageShiftScale;
@@ -73,7 +71,6 @@ public:
     Q2DViewer( QWidget *parent = 0 );
     ~Q2DViewer();
 
-    virtual vtkRenderer *getRenderer();
     virtual void setInput( Volume *volume );
 
     void resetView( CameraOrientationType view );
@@ -394,9 +391,6 @@ private:
     /// Si hi ha thick slab, mostrarà el rang d'aquest
     void updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0 );
 
-    /// configuració de la interacció amb l'usuari
-    void setupInteraction();
-
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
 
@@ -487,14 +481,8 @@ private slots:
     void updateRulers();
 
 protected:
-    /// Renderer principal. S'encarrega de pintar la imatge
-    vtkRenderer *m_imageRenderer;
-
     /// Actor d'imatge
     vtkImageActor *m_imageActor;
-
-    /// Interactor Style
-    vtkInteractorStyleImage *m_interactorStyle;
 
     /// conserva la vista actual
     CameraOrientationType m_lastView;

@@ -13,16 +13,13 @@
 #include "vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h"
 
 // FWD declarations
-class vtkRenderer;
+
 class vtkImageData;
-class vtkRenderWindowInteractor;
-class vtkInteractorStyle;
 class vtkVolume;
 class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastIsosurfaceFunction;
 class vtkVolumeRayCastMapper;
-
 
 namespace udg {
 
@@ -60,8 +57,6 @@ public:
     QString getRenderFunctionAsString();
 
     virtual void setInput( Volume* volume );
-
-    virtual vtkRenderer *getRenderer();
 
     /// Obté el window level actual de la imatge
     double getCurrentColorWindow();
@@ -169,9 +164,6 @@ private slots:
     void endComputeObscurance();
 
 protected:
-    /// el renderer
-    vtkRenderer* m_renderer;
-
     /// la funció que es fa servir pel rendering
     RenderFunction m_renderFunction;
 

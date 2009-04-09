@@ -23,13 +23,8 @@
 #include <QResizeEvent>
 
 // include's bàsics vtk
-#include <QVTKWidget.h>
-#include <vtkEventQtSlotConnect.h>
 #include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkInteractorStyleImage.h>
-#include <vtkWindowToImageFilter.h>
 #include <vtkCamera.h>
 #include <vtkMath.h> // per ::Round()
 // composició d'imatges
@@ -75,18 +70,17 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
 
-    // configuració del viewer
-    m_imageRenderer = vtkRenderer::New();
-    m_imageActor = vtkImageActor::New();
-    m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
-    m_interactorStyle = vtkInteractorStyleImage::New();
-    m_interactorStyle->AutoAdjustCameraClippingRangeOn();
-    // per composar el thickSlab
+    // filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
+    m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
 
-    setupInteraction();
-    // anotacions
+    // afegim el picker
+    m_picker = vtkPropPicker::New();
+    this->getInteractor()->SetPicker( m_picker );
+
+    // creem anotacions i actors
     createAnnotations();
+    m_imageActor = vtkImageActor::New();
     addActors();
 
     //creem el drawer, passant-li com a visor l'objecte this
@@ -109,10 +103,7 @@ Q2DViewer::~Q2DViewer()
     m_bottomRuler->Delete();
     m_cornerAnnotations->Delete();
     m_picker->Delete();
-    m_vtkQtConnections->Delete();
     m_imageActor->Delete();
-    m_imageRenderer->Delete();
-    m_interactorStyle->Delete();
     m_anchoredRulerCoordinates->Delete();
     m_windowLevelLUTMapper->Delete();
     m_thickSlabProjectionFilter->Delete();
@@ -133,11 +124,6 @@ Q2DViewer::~Q2DViewer()
     // no ens hauria d'afectar
     // HACK imposem que s'esborri primer el drawer
     delete m_drawer;
-}
-
-vtkRenderer *Q2DViewer::getRenderer()
-{
-    return m_imageRenderer;
 }
 
 void Q2DViewer::createAnnotations()
@@ -634,18 +620,20 @@ void Q2DViewer::addActors()
     Q_ASSERT( m_scalarBar );
     Q_ASSERT( m_imageActor );
 
+    vtkRenderer *renderer = getRenderer();
+    Q_ASSERT( renderer );
     // anotacions de texte
-    this->getRenderer()->AddViewProp( m_cornerAnnotations );
-    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[0] );
-    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[1] );
-    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[2] );
-    this->getRenderer()->AddViewProp( m_patientOrientationTextActor[3] );
-    this->getRenderer()->AddViewProp( m_sideRuler );
-    this->getRenderer()->AddViewProp( m_bottomRuler );
-    this->getRenderer()->AddViewProp( m_scalarBar );
-    m_imageRenderer->AddViewProp( m_imageActor );
+    renderer->AddViewProp( m_cornerAnnotations );
+    renderer->AddViewProp( m_patientOrientationTextActor[0] );
+    renderer->AddViewProp( m_patientOrientationTextActor[1] );
+    renderer->AddViewProp( m_patientOrientationTextActor[2] );
+    renderer->AddViewProp( m_patientOrientationTextActor[3] );
+    renderer->AddViewProp( m_sideRuler );
+    renderer->AddViewProp( m_bottomRuler );
+    renderer->AddViewProp( m_scalarBar );
+    renderer->AddViewProp( m_imageActor );
     // TODO colocar això en un lloc mes adient
-    m_imageRenderer->GetActiveCamera()->ParallelProjectionOn();
+    renderer->GetActiveCamera()->ParallelProjectionOn();
 }
 
 QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
@@ -671,41 +659,6 @@ QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
         i++;
     }
     return oppositeLabel;
-}
-
-void Q2DViewer::setupInteraction()
-{
-    Q_ASSERT( m_imageRenderer );
-    Q_ASSERT( m_interactorStyle );
-
-    this->getRenderWindow()->AddRenderer( m_imageRenderer );
-    this->getInteractor()->SetInteractorStyle( m_interactorStyle );
-    m_interactorStyle->SetCurrentRenderer( m_imageRenderer );
-    m_windowToImageFilter->SetInput( this->getRenderer()->GetRenderWindow() );
-
-    m_picker = vtkPropPicker::New();
-    // configurem la interacció
-    this->getInteractor()->SetPicker( m_picker );
-
-    // \TODO fer això aquí? o fer-ho en el tool manager?
-    this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelForwardEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::MouseWheelBackwardEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::MiddleButtonPressEvent );
-    this->getInteractor()->RemoveObservers( vtkCommand::CharEvent );
-
-    m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    // despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect( this->getInteractor(),
-                                 vtkCommand::AnyEvent,
-                                 this,
-#ifdef VTK_QT_5_0_SUPPORT
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
-#else
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
-#endif
-                                 );
 }
 
 void Q2DViewer::setInput( Volume *volume )
@@ -891,7 +844,7 @@ void Q2DViewer::render()
     // si tenim dades
     if( m_mainVolume )
     {
-        this->getRenderWindow()->Render();
+        getRenderer()->Render();
     }
     else
     {
@@ -1015,7 +968,7 @@ void Q2DViewer::resetCamera()
         m_applyFlip = false;
         m_isImageFlipped = false;
 
-        vtkCamera *camera = m_imageRenderer->GetActiveCamera();
+        vtkCamera *camera = getRenderer()->GetActiveCamera();
         Q_ASSERT( camera );
 
         double bounds[6];
@@ -1032,7 +985,7 @@ void Q2DViewer::resetCamera()
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
             checkAndUpdateSliceValue(0);
             updateDisplayExtent();
-            m_imageRenderer->ResetCamera();
+            getRenderer()->ResetCamera();
 
             // ajustem la imatge al viewport
             m_imageActor->GetBounds( bounds );
@@ -1052,7 +1005,7 @@ void Q2DViewer::resetCamera()
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
             checkAndUpdateSliceValue(m_maxSliceValue/2);
             updateDisplayExtent();
-            m_imageRenderer->ResetCamera();
+            getRenderer()->ResetCamera();
 
             // ajustem la imatge al viewport
             m_imageActor->GetBounds( bounds );
@@ -1079,7 +1032,7 @@ void Q2DViewer::resetCamera()
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
             checkAndUpdateSliceValue(m_maxSliceValue/2);
             updateDisplayExtent();
-            m_imageRenderer->ResetCamera();
+            getRenderer()->ResetCamera();
 
             // ajustem la imatge al viewport
             m_imageActor->GetBounds( bounds );
@@ -1563,7 +1516,7 @@ bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
     // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
     int position[2];
     this->getEventPosition( position );
-    m_picker->PickProp( position[0], position[1], m_imageRenderer );
+    m_picker->PickProp( position[0], position[1], getRenderer() );
     // calculem el pixel trobat
     m_picker->GetPickPosition( xyz );
 
@@ -1969,7 +1922,7 @@ void Q2DViewer::updateDisplayExtent()
             break;
     }
     // TODO si separem els renderers potser caldria aplicar-ho a cada renderer?
-    m_imageRenderer->ResetCameraClippingRange();
+    getRenderer()->ResetCameraClippingRange();
 }
 
 void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )

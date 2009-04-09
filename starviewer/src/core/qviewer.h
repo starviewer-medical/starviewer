@@ -56,13 +56,13 @@ public:
     virtual vtkInteractorStyle *getInteractorStyle();
 
     /// Retorna el renderer
-    virtual vtkRenderer *getRenderer() = 0;
+    virtual vtkRenderer *getRenderer();
 
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume* volume) = 0;
 
     /// Ens retorna el volum d'entrada
-    virtual Volume* getInput( void ) { return m_mainVolume; }
+    virtual Volume *getInput( void ) { return m_mainVolume; }
 
     /// retorna el vtkRenderWindow
     vtkRenderWindow *getRenderWindow();
@@ -172,11 +172,11 @@ public:
 
 public slots:
     /// Gestiona els events que rep de la finestra
-    virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
+    virtual void eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command );
 
 #ifdef VTK_QT_5_0_SUPPORT
     /// \TODO Esborrar el metode. Metode de compatibilitat amb VTK 5.0 de vtkQtConnection
-    void eventHandler( vtkObject * obj, unsigned long event, void * client_data, vtkCommand * command );
+    void eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command );
 #endif
 
     /// Força l'execució de la visualització
@@ -275,12 +275,14 @@ protected:
      */
     void getRecentEventWorldCoordinate( double worldCoordinate[3], bool current );
 
+    virtual void setupInteraction();
+
 protected:
     /// El volum a visualitzar
-    Volume* m_mainVolume;
+    Volume *m_mainVolume;
 
     /// El widget per poder mostrar una finestra vtk amb qt
-    QVTKWidget* m_vtkWidget;
+    QVTKWidget *m_vtkWidget;
 
     /// La llista de captures de pantalla
     QList<vtkImageData *> m_grabList;
@@ -290,6 +292,9 @@ protected:
 
     /// Connector d'events vtk i slots qt
     vtkEventQtSlotConnect *m_vtkQtConnections;
+
+    /// Renderer per defecte
+    vtkRenderer *m_renderer;
 
     /// indica si el menú de contexte està actiu o no. Per defecte sempre està actiu
     bool m_contextMenuActive;
