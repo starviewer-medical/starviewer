@@ -29,7 +29,7 @@ PacsServer::PacsServer(PacsParameters p)
     m_net = NULL;
     m_params = NULL;
     m_assoc = NULL;
-    m_pacsNetwork = PacsNetwork::getPacsNetwork();
+    m_pacsNetwork = new PacsNetwork();
 }
 
 PacsServer::PacsServer()
@@ -37,7 +37,7 @@ PacsServer::PacsServer()
     m_net = NULL;
     m_params = NULL;
     m_assoc = NULL;
-    m_pacsNetwork = PacsNetwork::getPacsNetwork();
+    m_pacsNetwork = new PacsNetwork();
 }
 
 Status PacsServer::echo()
@@ -380,6 +380,9 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     // the DICOM server accepts connections at server.nowhere.com port
     cond = ASC_setPresentationAddresses( m_params , adrLocal , qPrintable(AdrServer) );
     if ( !cond.good() ) return state.setStatus( cond );
+
+    //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
+    dcmConnectionTimeout.set(StarviewerSettings().getTimeout().toInt());
 
     switch ( modality )
     {

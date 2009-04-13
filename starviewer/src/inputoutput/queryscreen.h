@@ -167,7 +167,7 @@ private slots:
     void deleteOldStudiesThreadFinished();
 
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
-    void showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error);
+    void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
 
     ///Ens Mostra un missatge indicant l'error produït a la DICOMDIRImporter, i com es pot solucionar
     void showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRImporter::DICOMDIRImporterError error);
@@ -247,8 +247,14 @@ private:
     /// esborra els estudis vells de la cache
     void deleteOldStudies();
 
+    ///Comprova els requeriments necessaris per poder utilitzar la QueryScreen
+    void checkRequeriments();
+
     ///Es comprova la integritat de la base de dades i les imatges, comprovant que la última vegada l'starviewer no s'hagués tancat amb un estudi a mig baixar, i si és així esborra l'estudi a mig descarregar i deixa la base de dades en un estat integre
     void checkDatabaseImageIntegrity();
+
+    ///Comprova que el port pel qual es reben els objectes dicom a descarregar no estigui sent utitlitzat per cap altre aplicació, si és aixì donar una missatge d'error
+    void checkIncomingConnectionsPacsPortNotInUse();
 
     ///En el cas que l'error que se li passa com a paràmetre realment sigui un error, mostrarà un missatge a l'usuari explicant-lo.
     ///Es retorna true en el cas que hi hagi error, false si no n'hi ha.

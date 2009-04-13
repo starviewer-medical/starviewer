@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QList>
 #include "hangingprotocolimageset.h"
+#include "logging.h"
 
 #if QT_VERSION >= 0x040300
 
@@ -76,6 +77,7 @@ public:
     /// llegeix els hanging protocols del fitxer
     QList<HangingProtocol * > read( QString path )
     {
+	INFO_LOG( QString("No es carreguen els hanging protocols, ja que la versió de qt és inferior a 4.3" ) );
         return QList<HangingProtocol * >();
     };
 

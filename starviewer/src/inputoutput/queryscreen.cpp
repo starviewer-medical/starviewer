@@ -35,6 +35,7 @@
 #include "patient.h"
 #include "starviewerapplication.h"
 #include "parsexmlrispierrequest.h"
+#include "utils.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -51,8 +52,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     initialize();//inicialitzem les variables necessàries
     //connectem signals i slots
     createConnections();
-    //Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent
-    checkDatabaseImageIntegrity();
+    //Fa les comprovacions necessaries per poder executar la QueryScreen de forma correcte   
+    checkRequeriments();
     //esborrem els estudis vells de la cache
     deleteOldStudies();
     readSettings();
@@ -227,6 +228,28 @@ void QueryScreen::deleteOldStudies()
     }
 }
 
+void QueryScreen::checkRequeriments()
+{
+    //Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent
+    checkDatabaseImageIntegrity();
+    //Comprova que el port pel qual es reben les descàrregues d'objectes dicom del PACS no estigui ja en ús
+    checkIncomingConnectionsPacsPortNotInUse();
+}
+
+void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
+{
+    StarviewerSettings settings;
+
+    if (Utils::isPortInUse(settings.getLocalPort().toInt()))
+    {
+        QString message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(settings.getLocalPort());
+        message += tr("\n\n%1 couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.").arg(ApplicationNameString, settings.getLocalPort());
+        message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
+
+        QMessageBox::warning(this, ApplicationNameString, message);
+    }
+}
+
 void QueryScreen::checkDatabaseImageIntegrity()
 {
     LocalDatabaseManager localDatabaseManager;
@@ -301,7 +324,7 @@ void QueryScreen::createConnections()
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation( QString ) ), m_operationStateScreen, SLOT(  setErrorOperation( QString ) ) );
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), m_operationStateScreen, SLOT(setErrorOperation(QString)));
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), m_operationStateScreen, SLOT(setErrorOperation(QString)));
 
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished( QString ) ), m_operationStateScreen, SLOT(  setOperationFinished( QString ) ) );
 
@@ -314,7 +337,7 @@ void QueryScreen::createConnections()
     connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), m_operationStateScreen, SLOT(setCancelledOperation(QString)));
 
     // Label d'informació (cutre-xapussa)
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT( updateOperationsInProgressMessage()));
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT( updateOperationsInProgressMessage()));
     connect( &m_qexecuteOperationThread, SIGNAL( setErrorOperation(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( setOperationFinished(QString) ), SLOT( updateOperationsInProgressMessage() ));
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation(Operation *) ), SLOT( updateOperationsInProgressMessage() ));
@@ -325,7 +348,7 @@ void QueryScreen::createConnections()
     connect ( &m_multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
-    connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QExecuteOperationThread::OperationError)));
+    connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QString, QExecuteOperationThread::OperationError)));
     connect( &m_qexecuteOperationThread, SIGNAL( retrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
 
     //Amaga o ensenya la cerca avançada
@@ -1214,19 +1237,15 @@ void QueryScreen::convertToDicomdir()
 void QueryScreen::openDicomdir()
 {
     StarviewerSettings settings;
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , settings.getLastOpenedDICOMDIRPath(), "DICOMDIR" );
-    QString path, dicomdirPath;
-
-    dlg->setFileMode( QFileDialog::ExistingFile );
+    QString dicomdirPath;
     Status state;
+    
+    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getLastOpenedDICOMDIRPath(), "DICOMDIR");
 
-    if ( dlg->exec() == QDialog::Accepted )
+    if (!dicomdirPath.isEmpty())//Si és buit no ens han seleccionat cap fitxer
     {
-        if ( !dlg->selectedFiles().empty() )
-            dicomdirPath = dlg->selectedFiles().takeFirst();
-
         QApplication::setOverrideCursor( Qt::WaitCursor );
-        state = m_readDicomdir.open ( dicomdirPath );//Obrim el dicomdir
+        state = m_readDicomdir.open (dicomdirPath);//Obrim el dicomdir
         QApplication::restoreOverrideCursor();
         if ( !state.good() )
         {
@@ -1245,8 +1264,6 @@ void QueryScreen::openDicomdir()
         //cerquem els estudis al dicomdir per a que es mostrin
         queryStudy("DICOMDIR");
     }
-
-    delete dlg;
 }
 
 void QueryScreen::storeStudiesToPacs()
@@ -1326,7 +1343,7 @@ void QueryScreen::errorConnectingPacs( QString IDPacs )
 
     errorPacs = pacsListDB.queryPacs(IDPacs);
 
-    errorMessage = tr( "Can't connect to PACS %1 from %2\nBe sure that the IP and AETitle of the PACS are correct" )
+    errorMessage = tr( "Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct." )
         .arg( errorPacs.getAEPacs() )
         .arg( errorPacs.getInstitution()
     );
@@ -1459,17 +1476,17 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
                          "\n\nIf you want to open different %1's windows always choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
-            message += tr("%1 database is corrupted.");
+			message += tr("%1 database is corrupted.").arg(ApplicationNameString);
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
-            message += tr("%1 database syntax error.");
+            message += tr("%1 database syntax error.").arg(ApplicationNameString);
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseError:
-            message += tr("An internal error occurs with %1 database.");
+            message += tr("An internal error occurs with %1 database.").arg(ApplicationNameString);
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
@@ -1489,16 +1506,17 @@ bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error
     return true;
 }
 
-void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QExecuteOperationThread::OperationError error)
+void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error)
 {
     QString message;
     StarviewerSettings settings;
+    PacsParameters pacs = PacsListDB().queryPacs(pacsID);
 
     switch (error)
     {
         case QExecuteOperationThread::ErrorConnectingPacs :
             message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred connecting to a Pacs while retrieving or storing a study.\n");
+            message += tr("%1 can't connect to PACS %2 trying to retrieve or store a study.\n").arg(ApplicationNameString, pacs.getAEPacs());
             message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
@@ -1506,14 +1524,14 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
         case QExecuteOperationThread::ErrorRetrieving :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred retrieving a study.\n");
-            message += tr("\nPacs doesn't respond correclty, be sure that your computer is connected on network and the Pacs parameters are correct.");
+            message += tr("\nPACS %1 doesn't respond correctly, be sure that your computer is connected on network and the PACS parameters are correct.").arg(pacs.getAEPacs());
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::MoveDestinationAETileUnknown:
             message = tr("Please review the operation list screen, ");
-            message += tr("the Pacs doesn't recognize your computer's AETitle %1, some studies can't be retrieved.").arg(settings.getAETitleMachine());
-            message += tr("\n\nContact with an administrador to register your computer to the Pacs.");
+            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAEPacs(), settings.getAETitleMachine());
+            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             QMessageBox::warning( this , ApplicationNameString , message );
             break;
         case QExecuteOperationThread::NoEnoughSpace :
@@ -1544,9 +1562,14 @@ void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QEx
             break;
 	   case QExecuteOperationThread::MoveRefusedOutOfResources :
 			message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred while retrieving some study, some retrieves may have failed.");
-            message += tr("\n\nData is either missing or corrupted on PACS. Try again later.");
-            message += tr("\n\nIf the problem persists, please contact your PACS administrator to solve the problem");
+            message += tr("PACS %1 is out of resources and can't process the request for retrieving a study.").arg(pacs.getAEPacs());
+            message += tr("\n\nTry later to retrieve the study, if the problem persists please contact with PACS administrator to solve the problem.");
+            QMessageBox::critical( this , ApplicationNameString , message );
+            break;
+       case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
+            message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(StarviewerSettings().getLocalPort());
+            message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
+            message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         default:
@@ -1618,8 +1641,8 @@ void QueryScreen::showListenRISRequestThreadError(ListenRISRequestThread::Listen
     switch(error)
     {
         case ListenRISRequestThread::risPortInUse :
-            message = tr("Can't listen RIS requests on port %1, the port is used for another application.").arg(settings.getListenPortRisRequests());
-            message += tr("\n\nIf the error has produced when openned new %1's windows, close that window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
+            message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(settings.getListenPortRisRequests());
+            message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case ListenRISRequestThread::unknowNetworkError :
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(settings.getListenPortRisRequests());

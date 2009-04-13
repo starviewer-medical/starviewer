@@ -18,6 +18,8 @@
 #include "starviewerapplication.h"
 #include "starviewersettings.h"
 #include "logging.h"
+#include "utils.h"
+#include "localdatabasemanager.h"
 
 namespace udg {
 
@@ -35,6 +37,8 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
 
     configureInputValidator();
     setWidthColumns();
+
+    checkIncomingConnectionsPortNotInUse();
 }
 
 QConfigurationScreen::~QConfigurationScreen()
@@ -45,10 +49,12 @@ void QConfigurationScreen::createConnections()
 {
     //connecta el boto aplicar del Pacs amb l'slot apply
     connect( m_buttonApplyPacs , SIGNAL( clicked() ),  SLOT( applyChanges() ) );
-
+    
     connect( m_textAETitleMachine, SIGNAL( textChanged(const QString &) ) , SLOT( enableApplyButtons() ) );
     connect( m_textTimeout, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textLocalPort, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
+    //En el moment en que ens editen el textBox si apareixia el missatge de port en ús el fem invisible
+    connect( m_textLocalPort, SIGNAL(textChanged(const QString &)), SLOT(checkIncomingConnectionsPortNotInUse()));
     connect( m_textMaxConnections, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textInstitutionName, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textInstitutionAddress, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
@@ -271,6 +277,8 @@ void QConfigurationScreen::test()
     //mirem que hi hagi algun element (pacs) seleccionat per a poder testejar, altrament informem de que cal seleccionar un node
     if ( m_PacsTreeView->selectedItems().count() > 0 )
     {
+        QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
         //Agafem les dades del PACS que estan el textbox per testejar
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
@@ -282,13 +290,17 @@ void QConfigurationScreen::test()
 
         if ( !state.good() )
         {
-            message = tr( "PACS \"%1\" doesn't responds correctly.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+            message = tr( "PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+
+            QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , ApplicationNameString , message );
             INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds. PACS ERROR : " + state.text() );
         }
         else
         {
             state = pacsServer.echo();
+
+            QApplication::restoreOverrideCursor();
 
             if ( state.good() )
             {
@@ -299,7 +311,7 @@ void QConfigurationScreen::test()
             }
             else
             {
-                message = tr( "PACS \"%1\" doesn't responds correctly.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+                message = tr( "PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
                 QMessageBox::warning( this , ApplicationNameString , message );
                 INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds correctly. PACS ERROR : " + state.text() );
             }
@@ -307,7 +319,6 @@ void QConfigurationScreen::test()
     }
     else
         QMessageBox::information( this , tr("Information") , tr("To test a PACS it is necessary to select an item of the list.") );
-
 }
 
 bool QConfigurationScreen::validatePacsParameters()
@@ -378,6 +389,13 @@ bool QConfigurationScreen::applyChanges()
 {
     if (validateChanges())
     {
+        if (isIncomingConnectionsPortInUseByAnotherApplication() && m_textLocalPort->isModified())
+        {
+            QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr( "The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes ?" ).arg(m_textLocalPort->text()),
+                                                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+            if (response == QMessageBox::No) return false;
+        }
         applyChangesPacs();
         m_configurationChanged = false;
 
@@ -408,6 +426,7 @@ void QConfigurationScreen::applyChangesPacs()
     {
         INFO_LOG( "Modificació del Port d'entrada dels estudis" + m_textLocalPort->text() );
         settings.setLocalPort( m_textLocalPort->text() );
+        m_textLocalPort->setModified(false);
     }
 
     if ( m_textMaxConnections->isModified() )
@@ -438,6 +457,17 @@ void QConfigurationScreen::closeEvent( QCloseEvent* event )
 {
     saveColumnsWidth();
     event->accept();
+}
+
+bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
+{
+    //Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
+    return Utils::isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
+}
+
+void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
+{
+    m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication()); ///Si està en ús el frame que conté el warning es fa visible
 }
 
 };

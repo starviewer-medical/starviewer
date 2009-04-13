@@ -15,6 +15,7 @@
 #include "hangingprotocolxmlreader.h"
 #include "identifier.h"
 #include "starviewerapplication.h"
+#include "logging.h"
 
 // Qt's
 #include <QFile>
@@ -50,7 +51,14 @@ void HangingProtocolsLoader::loadDefaults()
     }
 
     if( !defaultPath.isEmpty() )
+    {
+        INFO_LOG( QString("Directori a on es van a buscar els hanging protocols per defecte: %1").arg(defaultPath) );
         loadXMLFiles( defaultPath );
+    }
+    else
+    {
+        INFO_LOG( QString("El directori per defecte dels hanging protocols no existeix. No es carregaran.") );
+    }
 
     /// Hanging protocols definits per l'usuari
     QSettings systemSettings;
@@ -67,12 +75,15 @@ bool HangingProtocolsLoader::loadXMLFiles( const QString &filePath )
 
     if( listHangingProtocols.size() > 0 )
     {
-        DEBUG_LOG( QString("Carreguem %1 hanging protocols de [%2]").arg( listHangingProtocols.size() ).arg(filePath) );
+        INFO_LOG( QString("Carreguem %1 hanging protocols de [%2].").arg( listHangingProtocols.size() ).arg(filePath) );
+        QString hangingProtocolNamesLogList;
         foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
 		{
 			Identifier id = HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
 			hangingProtocol->setIdentifier( id.getValue() );
+            hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) );
         }
+        INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
     }
 
     delete xmlReader;

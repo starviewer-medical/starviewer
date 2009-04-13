@@ -15,6 +15,7 @@
 
 // include's qt
 #include <QString>
+#include <QMessageBox>
 
 // include's vtk
 #include <QVTKWidget.h>
@@ -580,16 +581,26 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
 
     if ( m_volumeProperty->GetShade() )
     {
-        vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
-        m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
-        vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
-        gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
-        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
-                                                                  gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
-                                                                  gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
-        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
-                                                                   gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
-                                                                   gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+        try
+        {
+            vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
+            m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+            vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
+            gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
+            m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
+                                                                      gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
+                                                                      gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
+            m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
+                                                                       gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
+                                                                       gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+        }
+        catch ( std::bad_alloc &e )
+        {
+            ERROR_LOG( QString( "Excepció al voler aplicar shading en el volum: " ) + e.what() );
+            QMessageBox::warning( this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected.") );
+            this->setShading( false );
+            this->render();
+        }
     }
 }
 

@@ -60,6 +60,11 @@ private slots:
     /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
     void enableApplyButtons();
 
+    /** Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui 
+     *  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox 
+     */
+    void checkIncomingConnectionsPortNotInUse();
+
 private:
     ///crea els connects dels signals i slots
     void createConnections();
@@ -99,6 +104,9 @@ private:
 
     /// Guarda la mida de les columnes del QTreeWidget de la pestanya de PACS Device al StarviewerSettings
     void saveColumnsWidth();
+
+    ///Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
+    bool isIncomingConnectionsPortInUseByAnotherApplication();
 
 private:
     QString m_selectedPacsID; /// Conté el ID del pacs seleccionat en aquell moment
