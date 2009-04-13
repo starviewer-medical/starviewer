@@ -166,39 +166,39 @@ Media: %2</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2067"/>
+        <location filename="q2dviewer.cpp" line="2068"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Corte: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2085"/>
+        <location filename="q2dviewer.cpp" line="2086"/>
         <source>Slice: %1/%2</source>
         <translation>Corte: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2058"/>
+        <location filename="q2dviewer.cpp" line="2059"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Corte: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2078"/>
+        <location filename="q2dviewer.cpp" line="2079"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Corte: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2091"/>
+        <location filename="q2dviewer.cpp" line="2092"/>
         <source> Thickness: %1 mm</source>
         <translation> Grosor: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1877"/>
+        <location filename="q2dviewer.cpp" line="1878"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1900"/>
+        <location filename="q2dviewer.cpp" line="1901"/>
         <source>%1
 %2
 %3 %4 %5
@@ -213,12 +213,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2039"/>
+        <location filename="q2dviewer.cpp" line="2040"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2045"/>
+        <location filename="q2dviewer.cpp" line="2046"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -252,6 +252,21 @@ Acc:%6
         <location filename="q2dviewerwidgetbase.ui" line="65"/>
         <source>...</source>
         <translation>...</translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q3DViewer</name>
+    <message>
+        <location filename="q3dviewer.cpp" line="600"/>
+        <source>Can&apos;t apply rendering style</source>
+        <translation>No se puede aplicar el estilo de visualización</translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="600"/>
+        <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
+Shading will be disabled, it won&apos;t render as expected.</source>
+        <translation>El sistema no tiene suficiente memoria para aplicar este estilo de visualización a este volumen.
+El sombreado se deshabilitará i, por lo tanto, la visualización no será la esperada.</translation>
     </message>
 </context>
 <context>
@@ -899,8 +914,10 @@ Acc:%6
     </message>
     <message>
         <location filename="qlogviewer.cpp" line="42"/>
-        <source>ERROR: No Log file found at this path: %1</source>
-        <translation>ERROR: No se ha encontrado el archivo de log en esta ruta: %1</translation>
+        <source>ERROR: No Log file found at this path: %1
+Environment variable(logFilePath): %2</source>
+        <translation>ERROR: No se ha encontrado el archivo de log en esta ruta: %1
+Variable de entorno(logFilePath): %2</translation>
     </message>
 </context>
 <context>
