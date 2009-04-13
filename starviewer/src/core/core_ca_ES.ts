@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
+<defaultcodec></defaultcodec>
 <context>
     <name>QObject</name>
     <message>
@@ -47,7 +48,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="401"/>
+        <location filename="angletool.cpp" line="379"/>
         <source>%1 degrees</source>
         <translation>%1 graus</translation>
     </message>
@@ -55,12 +56,12 @@
 <context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="140"/>
+        <location filename="distancetool.cpp" line="121"/>
         <source>%1 mm</source>
         <translation>%1 mm</translation>
     </message>
     <message>
-        <location filename="distancetool.cpp" line="136"/>
+        <location filename="distancetool.cpp" line="117"/>
         <source>%1 px</source>
         <translation>%1 px</translation>
     </message>
@@ -82,9 +83,19 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="295"/>
+        <location filename="nonclosedangletool.cpp" line="224"/>
         <source>%1 degrees</source>
         <translation>%1 graus</translation>
+    </message>
+    <message>
+        <location filename="nonclosedangletool.cpp" line="220"/>
+        <source>0.0 degrees</source>
+        <translation>0.0 graus</translation>
+    </message>
+    <message>
+        <location filename="nonclosedangletool.cpp" line="222"/>
+        <source>Skew lines.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -148,14 +159,14 @@
 <context>
     <name>udg::PolylineROITool</name>
     <message>
-        <location filename="polylineroitool.cpp" line="392"/>
+        <location filename="polylineroitool.cpp" line="80"/>
         <source>Area: %1 mm2
 Mean: %2</source>
         <translation>Area: %1 mm2
 Mitjana: %2 </translation>
     </message>
     <message>
-        <location filename="polylineroitool.cpp" line="388"/>
+        <location filename="polylineroitool.cpp" line="76"/>
         <source>Area: %1 px2
 Mean: %2</source>
         <translation>Area: %1 px2
@@ -165,39 +176,39 @@ Mitjana: %2 </translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2067"/>
+        <location filename="q2dviewer.cpp" line="1853"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Tall: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2085"/>
+        <location filename="q2dviewer.cpp" line="1871"/>
         <source>Slice: %1/%2</source>
         <translation>Tall: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2058"/>
+        <location filename="q2dviewer.cpp" line="1844"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Tall: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2078"/>
+        <location filename="q2dviewer.cpp" line="1864"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Tall: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2091"/>
+        <location filename="q2dviewer.cpp" line="1877"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1877"/>
+        <location filename="q2dviewer.cpp" line="1663"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1900"/>
+        <location filename="q2dviewer.cpp" line="1686"/>
         <source>%1
 %2
 %3 %4 %5
@@ -212,12 +223,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2039"/>
+        <location filename="q2dviewer.cpp" line="1825"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2045"/>
+        <location filename="q2dviewer.cpp" line="1831"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -251,6 +262,21 @@ Acc:%6
         <location filename="q2dviewerwidgetbase.ui" line="65"/>
         <source>...</source>
         <translation>...</translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q3DViewer</name>
+    <message>
+        <location filename="q3dviewer.cpp" line="569"/>
+        <source>Can&apos;t apply rendering style</source>
+        <translation>No es pot aplicar l&apos;estil de visualització</translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="569"/>
+        <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
+Shading will be disabled, it won&apos;t render as expected.</source>
+        <translation>El sistema no té prou memòria per aplicar correctament aquest estil amb aquest volum.
+L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com s&apos;espera.</translation>
     </message>
 </context>
 <context>
@@ -898,8 +924,10 @@ Acc:%6
     </message>
     <message>
         <location filename="qlogviewer.cpp" line="42"/>
-        <source>ERROR: No Log file found at this path: %1</source>
-        <translation>ERROR: No s&apos;ha trobat l&apos;arxiu de log en aquesta ruta: %1</translation>
+        <source>ERROR: No Log file found at this path: %1
+Environment variable(logFilePath): %2</source>
+        <translation>ERROR: No s&apos;ha trobat l&apos;arxiu de log en aquesta ruta: %1
+Variable d&apos;entorn(logFilePath): %2</translation>
     </message>
 </context>
 <context>
@@ -972,22 +1000,22 @@ Acc:%6
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="506"/>
+        <location filename="qviewer.cpp" line="563"/>
         <source>Viewer</source>
         <translation>Visualitzador</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="506"/>
+        <location filename="qviewer.cpp" line="563"/>
         <source>The selected item is not a valid image format</source>
         <translation>L&apos;ítem seleccionat no té un format vàlid</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="600"/>
+        <location filename="qviewer.cpp" line="657"/>
         <source>Default %1</source>
         <translation>Per defecte %1</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="581"/>
+        <location filename="qviewer.cpp" line="638"/>
         <source>Default</source>
         <translation>Per defecte</translation>
     </message>
@@ -1253,129 +1281,6 @@ It&apos;s recommended you save them in an empty folder.</source>
         <location filename="toolregistry.cpp" line="250"/>
         <source>Enable/Disable non closed angle tool</source>
         <translation>Activar/Desactivar l&apos;eina d&apos;angles no tancats</translation>
-    </message>
-</context>
-<context>
-    <name>udg::ToolsActionFactory</name>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="19"/>
-        <source>Slicer</source>
-        <translation>Canvi de tall</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="20"/>
-        <source>Enable/Disable slicing tool</source>
-        <translation>Activar/Desactivar l&apos;eina de canvi de llesca</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="27"/>
-        <source>Window Level</source>
-        <translation>Lluentor</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="28"/>
-        <source>Enable/Disable Window Level tool</source>
-        <translation>Activar/Desactivar l&apos;eina de control de lluentor</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="35"/>
-        <source>Zoom</source>
-        <translation>Zoom</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="36"/>
-        <source>Enable/Disable Zoom tool</source>
-        <translation>Activar/Desactivar l&apos;eina de Zoom</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="43"/>
-        <source>Move</source>
-        <translation>Moure</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="44"/>
-        <source>Enable/Disable Move tool</source>
-        <translation>Activar/Desactivar l&apos;eina de moure</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="51"/>
-        <source>Seed</source>
-        <translation>Llavor</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="52"/>
-        <source>Put Seed tool</source>
-        <translation>Situa l&apos;eina de Llavors</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="59"/>
-        <source>Screen Shot</source>
-        <translation>Captura de pantalla</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="60"/>
-        <source>Enable/Disable Screen shot tool</source>
-        <translation>Activar/Desactivar l&apos;eina de captura de pantalla</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="67"/>
-        <source>3D Rotation</source>
-        <translation>Rotació 3D</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="68"/>
-        <source>Enable/Disable 3D Rotation tool</source>
-        <translation>Activar/Desactivar l&apos;eina de Rotació 3D</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="75"/>
-        <source>Distances</source>
-        <translation>Distàncies</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="76"/>
-        <source>Enable/Disable Distances tool</source>
-        <translation>Activar/Desactivar l&apos;eina d&apos;edició de distàncies</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="83"/>
-        <source>ROI&apos;s</source>
-        <translation>Regions d&apos;interés</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="84"/>
-        <source>Enable/Disable ROI tool</source>
-        <translation>Activar/Desactivar l&apos;eina d&apos;edició de regions d&apos;interés</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="91"/>
-        <source>Voxel Information</source>
-        <translation>Informació de voxel</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="92"/>
-        <source>Enable voxel information over cursor</source>
-        <translation>Activar la informació de voxel sota el cursor</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="99"/>
-        <source>Eraser</source>
-        <translation>Borrar</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="100"/>
-        <source>Enable/Disable Eraser tool</source>
-        <translation>Activar/Desactivar l&apos;eina de borrar</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="107"/>
-        <source>Angle</source>
-        <translation>Angle</translation>
-    </message>
-    <message>
-        <location filename="toolsactionfactory.cpp" line="108"/>
-        <source>Enable/Disable Angle tool</source>
-        <translation>Habilitar/Deshabilitar eina d&apos;Angle</translation>
     </message>
 </context>
 <context>
