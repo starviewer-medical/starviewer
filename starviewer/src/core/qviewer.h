@@ -17,7 +17,6 @@ class QVTKWidget;
 class vtkRenderer;
 class vtkRenderWindow;
 class vtkRenderWindowInteractor;
-class vtkInteractorStyle;
 class vtkWindowToImageFilter;
 class vtkEventQtSlotConnect;
 
@@ -51,9 +50,6 @@ public:
 
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor *getInteractor();
-
-    /// Retorna l'interactor style
-    virtual vtkInteractorStyle *getInteractorStyle();
 
     /// Retorna el renderer
     virtual vtkRenderer *getRenderer();

@@ -32,7 +32,6 @@
 #include <vtkWindowToImageFilter.h>
 #include <vtkEventQtSlotConnect.h>
 // necessari pel zoom
-#include <vtkInteractorStyle.h>
 #include <vtkCamera.h>
 
 namespace udg {
@@ -88,11 +87,6 @@ QViewer::~QViewer()
 vtkRenderWindowInteractor *QViewer::getInteractor()
 {
     return m_vtkWidget->GetRenderWindow()->GetInteractor();
-}
-
-vtkInteractorStyle *QViewer::getInteractorStyle()
-{
-    return vtkInteractorStyle::SafeDownCast( this->getInteractor()->GetInteractorStyle() );
 }
 
 vtkRenderer *QViewer::getRenderer()
