@@ -48,6 +48,9 @@ public:
     /// Tipus de fitxer que pot desar
     enum FileType{ PNG , JPEG , TIFF , DICOM , PNM , META , BMP };
 
+    /// Tipus de format de gravació de vídeo suportats
+    enum RecordFileFormatType{ MPEG2 };
+
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor *getInteractor();
 
@@ -111,6 +114,11 @@ public:
 
     /// Retorna el nombre de vistes capturades que estan desades
     int grabbedViewsCount(){ return m_grabList.size(); }
+
+    /// Grava en format de vídeo els frames que s'hagin capturat amb grabCurrentView. 
+    /// Un cop gravat, esborra la llista de frames.
+    /// TODO de moment només accepta format MPEG
+    bool record( const QString &baseName, RecordFileFormatType format = MPEG2 );
 
     /// Refresca l'escena amb el RenderWindowInteractor. És sobretot per haver d'escriure menys.
     void refresh();

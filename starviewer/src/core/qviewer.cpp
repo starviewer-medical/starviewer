@@ -33,6 +33,8 @@
 #include <vtkEventQtSlotConnect.h>
 // necessari pel zoom
 #include <vtkCamera.h>
+// per grabar el vídeo
+#include <vtkMPEG2Writer.h>
 
 namespace udg {
 
@@ -347,6 +349,51 @@ bool QViewer::saveGrabbedViews( const QString &baseName , FileType extension )
     }
     else
         return false;
+}
+
+bool QViewer::record( const QString &baseName, RecordFileFormatType format )
+{
+    if( !m_grabList.empty() )
+    {
+        vtkGenericMovieWriter *videoWriter;
+        QString fileExtension;
+        switch( format ) // TODO de moment només suportem MPEG2
+        {
+        case MPEG2:
+            videoWriter = vtkMPEG2Writer::New();
+            fileExtension = ".mpg";
+            break;
+        }
+
+        int count = m_grabList.count();
+        // TODO fer alguna cosa especial si només hi ha una sola imatge????
+        
+        vtkImageData *data = m_grabList.at(0);
+
+        videoWriter->SetFileName( qPrintable( baseName+fileExtension ) );
+        videoWriter->SetInput( data );
+        videoWriter->Start();
+
+        // TODO falta activar el procés de notificació de procés de gravació
+        //int progressIncrement = static_cast<int>( (1.0/(double)count) * 100 );
+        //int progress = 0;
+        for( unsigned int i = 0; i < count; i++ )
+        {
+            videoWriter->SetInput( m_grabList.at(i) );
+
+            for( int j = 0; j < 3; j++ ) // TODO perquè un loop de 3?
+            {
+                videoWriter->Write();
+            }
+            //progress += progressIncrement;
+            //emit recording( progress );
+        }
+        videoWriter->End();
+        clearGrabbedViews();
+        return true;
+    }
+    else
+        return false;    
 }
 
 void QViewer::refresh()
