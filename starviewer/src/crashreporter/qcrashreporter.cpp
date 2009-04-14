@@ -4,6 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
+#include <QDateTime>
 
 #include "qcrashreporter.h"
 #include "crashreportersender.h"
@@ -75,16 +76,17 @@ void QCrashReporter::maybeSendReport()
 
 void QCrashReporter::sendReport()
 {
-    
     QHash<QString,QString> options;
+    options.insert( "BuildID", "2009041400" );
     options.insert( "ProductName", ApplicationNameString );
     options.insert( "Version", StarviewerVersionString );
     options.insert( "Email", m_emailLineEdit->text() );
     options.insert( "Comments", m_descriptionTextEdit->toPlainText() );
+    options.insert( "CrashTime", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
 
     // Enviem el report només en cas de release.
 #ifdef QT_NO_DEBUG
-    CrashReporterSender::sendReport("http://trueta.udg.edu/crashreporter/report/", m_minidumpPath, options);
+    CrashReporterSender::sendReport("http://starviewer.udg.edu/crashreporter/submit", m_minidumpPath, options);
 #endif
 
     m_sendReportAnimation->hide();
