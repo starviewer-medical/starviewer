@@ -406,6 +406,7 @@ void Q2DViewerExtension::initializeTools()
     m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction( "EraserTool" ) );
     m_cursor3DToolButton->setDefaultAction( m_toolManager->getToolAction("Cursor3DTool") );
     m_angleToolButton->setDefaultAction( m_toolManager->getToolAction( "AngleTool" ) );
+    m_restoreToolButton->setDefaultAction( m_toolManager->getToolAction( "RestoreTool" ) );
 
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
@@ -473,7 +474,7 @@ void Q2DViewerExtension::initializeTools()
 void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
 {
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool" << "Cursor3DTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool" << "Cursor3DTool" << "RestoreTool";
 
     m_toolManager->setViewerTools( viewer, toolsList );
 }

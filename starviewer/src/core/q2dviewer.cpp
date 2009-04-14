@@ -2517,5 +2517,28 @@ int Q2DViewer::getNearestSlice( double projectedPosition[3], double &distance )
     return minimumSlice;
 }
 
+
+void Q2DViewer::restore()
+{
+    if( ! m_mainVolume )
+        return;
+
+    //S'esborren les anotacions
+    if( m_mainVolume )
+        m_drawer->removeAllPrimitives();
+
+    // HACK
+    // Desactivem el refresh per tal de millorar l'eficiencia del setInput ja que altrament es renderitza multiples vegades
+    this->m_isRefreshActive = false;
+    
+    this->resetView( m_lastView );
+    this->computeInputGrayscalePipeline();
+    this->applyGrayscalePipeline();    
+    
+    // Activem el refresh i refresquem
+    this->m_isRefreshActive = true;
+    this->refresh();
+}
+
 };  // end namespace udg
 
