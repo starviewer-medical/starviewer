@@ -18,12 +18,6 @@
 #include <QDir>
 #include <QTimerEvent>
 
-// vtk
-// per grabar el vídeo
-#include <vtkWindowToImageFilter.h>
-#include <vtkRenderWindow.h>
-#include <vtkMPEG2Writer.h>
-
 namespace udg {
 
 QViewerCINEController::QViewerCINEController(QObject *parent)
@@ -147,53 +141,17 @@ void QViewerCINEController::record()
 
     int phases = m_2DViewer->getInput()->getNumberOfPhases();
     int currentSlice = m_2DViewer->getCurrentSlice();
-    QVector< vtkImageData * > frames;
 
     // Guardar els fotogrames
     for( int i = 0 ; i < phases ; i++ )
     {
-        // TODO això es podria fer amb la crida QViewer::grabCurrentView()
         m_2DViewer->setPhase(i);
-
-        vtkWindowToImageFilter *windowToImageFilter = vtkWindowToImageFilter::New();
-
-        vtkRenderWindow *renderWindow = m_2DViewer->getRenderWindow();
-        renderWindow->OffScreenRenderingOn();
-
-        windowToImageFilter->SetInput( renderWindow );
-        windowToImageFilter->Update();
-
-        renderWindow->Render();
-
-        vtkImageData *image = windowToImageFilter->GetOutput();
-        frames << ( image );
+        m_2DViewer->grabCurrentView();
     }
     m_2DViewer->setSlice( currentSlice );
 
     // Fer la gravació
-    // TODO ara només gravem en mpg, hauríem d'incoporar mètodes per gravar en altres formats
-    vtkGenericMovieWriter *videoWriter = vtkMPEG2Writer::New();
-    videoWriter->SetFileName( qPrintable( m_recordFilename+".mpg" ) );
-
-    vtkImageData *data = frames[0];
-    videoWriter->SetInput( data );
-    videoWriter->Start();
-
-    int progressIncrement = static_cast<int>( (1.0/(double)frames.size()) * 100 );
-    int progress = 0;
-    for( unsigned int i = 0; i < frames.size(); i++ )
-    {
-        videoWriter->SetInput( frames[i] );
-
-        for( int j = 0; j < 3; j++ ) // TODO perquè un loop de 3?
-        {
-            videoWriter->Write();
-        }
-        progress += progressIncrement;
-        emit recording( progress );
-    }
-    videoWriter->End();
-    frames.clear();
+    m_2DViewer->record( m_recordFilename, QViewer::MPEG2 );
 }
 
 void QViewerCINEController::setVelocity( int imagesPerSecond )

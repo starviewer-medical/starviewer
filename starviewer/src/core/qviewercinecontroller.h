@@ -54,7 +54,6 @@ public:
 signals:
     void playing();
     void paused();
-    void recording( int progress );
     void velocityChanged( int velocity );
 
 public slots:
