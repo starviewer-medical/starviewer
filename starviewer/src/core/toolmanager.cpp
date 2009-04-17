@@ -112,6 +112,43 @@ void ToolManager::addExclusiveToolsGroup( const QString &groupName, const QStrin
     connect( actionGroup, SIGNAL(triggered(QAction *)), SLOT(refreshConnections()) );
 }
 
+QAction *ToolManager::registerActionTool( const QString &actionToolName )
+{
+    QPair<QAction *, QString> pair;
+    // si no està registrada la obtenim del registre i l'afegim al nostre map
+    if( !m_actionToolRegistry.contains( actionToolName ) )
+    {
+        pair = m_toolRegistry->getActionToolPair( actionToolName );
+        m_actionToolRegistry.insert( actionToolName, pair );
+    }
+    else // sinó, l'agafem del nostre map i no tornem a crear l'acció
+    {
+        pair = m_actionToolRegistry.value( actionToolName );
+    }
+
+    return pair.first;
+}
+
+void ToolManager::enableActionTools( QViewer *viewer, const QStringList &actionToolsList )
+{
+    QPair<QAction *, QString> pair;
+    foreach( QString actionToolName, actionToolsList )
+    {
+        pair = m_actionToolRegistry.value(actionToolName);
+        connect( pair.first, SIGNAL( triggered() ), viewer, qPrintable(pair.second) );
+    }
+}
+
+void ToolManager::disableActionTools( QViewer *viewer, const QStringList &actionToolsList )
+{
+    QPair<QAction *, QString> pair;
+    foreach( QString actionToolName, actionToolsList )
+    {
+        pair = m_actionToolRegistry.value(actionToolName);
+        disconnect( pair.first, SIGNAL( triggered() ), viewer, 0 );
+    }
+}
+
 void ToolManager::disableAllToolsTemporarily()
 {
     QStringList toolsList = m_toolViewerMap.uniqueKeys();

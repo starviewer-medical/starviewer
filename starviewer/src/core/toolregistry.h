@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QPair>
 
 class QAction;
 
@@ -45,6 +46,13 @@ public:
      */
     QAction *getToolAction( const QString &toolName );
 
+    /**
+     * Crea un parell amb l'acció de la "Action Tool" demanada més l'SLOT associat
+     * @param actionToolName Nom de la "Action Tool" de la qual volem obtenir la parella
+     * @return un QPair amb l'acció creada i l'string de l'SLOT a cridar. Si la "Action
+     *  Tool" demanada no està registrada, retornarà un QPair amb un objecte QAction i QString buits (no NULS!)
+     */
+    QPair<QAction *, QString> getActionToolPair( const QString &actionToolName );
 };
 
 }

@@ -268,4 +268,85 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     return toolAction;
 }
 
+QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &actionToolName )
+{
+    QPair< QAction *, QString > pair;
+    QAction *action = new QAction( 0 );
+    QString slot;
+    if( actionToolName == "RestoreActionTool" )
+    {
+        action->setText( tr("Restore") );
+        action->setStatusTip( tr("Restore to initial state") );
+        action->setIcon( QIcon(":/images/restore.png") );
+
+        slot = SLOT( restore() );
+    }
+    else if( actionToolName == "AxialViewActionTool" )
+    {
+        action->setText( tr("Axial") );
+        action->setStatusTip( tr("Change Current View To Axial") );
+        action->setIcon( QIcon(":/images/axial.png") );
+
+        slot = SLOT( resetViewToAxial() );
+    }
+    else if( actionToolName == "SagitalViewActionTool" )
+    {
+        action->setText( tr("Sagital") );
+        action->setStatusTip( tr("Change Current View To Saggital") );
+        action->setIcon( QIcon(":/images/sagital.png") );
+
+        slot = SLOT( resetViewToSagital() );
+    }
+    else if( actionToolName == "CoronalViewActionTool" )
+    {
+        action->setText( tr("Coronal") );
+        action->setStatusTip( tr("Change Current View To Coronal") );
+        action->setIcon( QIcon(":/images/coronal.png") );
+
+        slot = SLOT( resetViewToCoronal() );
+    }
+    else if( actionToolName == "RotateClockWiseActionTool" )
+    {
+        action->setText( tr("Rotate") );
+        action->setShortcut( Qt::CTRL + Qt::Key_Plus );
+        action->setStatusTip( tr("Rotate the image in clockwise direction") );
+        action->setIcon( QIcon(":/images/rotateClockWise.png") );
+
+        slot = SLOT( rotateClockWise() );
+    }
+    else if( actionToolName == "RotateCounterClockWiseActionTool" )
+    {
+        action->setText( tr("Rotate Counter Clockwise") );
+        action->setShortcut( Qt::CTRL + Qt::Key_Minus );
+        action->setStatusTip( tr("Rotate the image in counter clockwise direction") );
+        action->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
+
+        slot = SLOT( rotateCounterClockWise() );
+    }
+    else if( actionToolName == "HorizontalFlipActionTool" )
+    {
+        action->setText( tr("Horizontal Flip") );
+        action->setStatusTip( tr("Flip the image horizontally") );
+        action->setIcon( QIcon(":/images/flipHorizontal.png") );
+
+        slot = SLOT( horizontalFlip() );
+    }
+    else if( actionToolName == "VerticalFlipActionTool" )
+    {
+        action->setText( tr("Vertical Flip") );
+        action->setStatusTip( tr("Flip the image vertically") );
+        action->setIcon( QIcon(":/images/flipVertical.png") );
+
+        slot = SLOT( verticalFlip() );
+    }
+    else
+    {
+        DEBUG_LOG(actionToolName + "> Action Tool no registrada!");
+    }
+
+    pair.first = action;
+    pair.second = slot;
+    return pair;
+}
+
 }
