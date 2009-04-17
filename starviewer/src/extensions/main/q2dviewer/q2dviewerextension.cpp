@@ -120,24 +120,6 @@ Q2DViewerExtension::~Q2DViewerExtension()
 
 void Q2DViewerExtension::createActions()
 {
-    m_axialViewAction = new QAction( this );
-    m_axialViewAction->setText( tr("Axial") );
-    m_axialViewAction->setStatusTip( tr("Change Current View To Axial") );
-    m_axialViewAction->setIcon( QIcon(":/images/axial.png") );
-    m_axialViewToolButton->setDefaultAction( m_axialViewAction );
-
-    m_sagitalViewAction = new QAction( this );
-    m_sagitalViewAction->setText( tr("Sagital") );
-    m_sagitalViewAction->setStatusTip( tr("Change Current View To Saggital") );
-    m_sagitalViewAction->setIcon( QIcon(":/images/sagital.png") );
-    m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
-
-    m_coronalViewAction = new QAction( this );
-    m_coronalViewAction->setText( tr("Coronal") );
-    m_coronalViewAction->setStatusTip( tr("Change Current View To Coronal") );
-    m_coronalViewAction->setIcon( QIcon(":/images/coronal.png") );
-    m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
-
     // per activar i desactivar els presentation states
     m_presentationStateAction = new QAction( this );
     m_presentationStateAction->setText( tr("PS") );
@@ -146,40 +128,6 @@ void Q2DViewerExtension::createActions()
     m_presentationStateAction->setEnabled(false);
     m_presentationStateAction->setChecked(false);
     m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
-
-    m_rotateClockWiseAction = new QAction( this );
-    m_rotateClockWiseAction->setText( tr("Rotate") );
-    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
-    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
-    m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
-    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
-
-    connect( m_rotateClockWiseAction, SIGNAL( triggered() ), SLOT( rotateClockWise() ) );
-
-    m_rotateCounterClockWiseAction = new QAction( this );
-    m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
-    m_rotateCounterClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
-    m_rotateCounterClockWiseAction->setStatusTip( tr("Rotate the image in counter clockwise direction") );
-    m_rotateCounterClockWiseAction->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
-    m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
-
-    connect( m_rotateCounterClockWiseAction, SIGNAL( triggered() ), SLOT( rotateCounterClockWise() ) );
-
-    m_flipHorizontalAction = new QAction(this);
-    m_flipHorizontalAction->setText( tr("Flip Horizontal") );
-    m_flipHorizontalAction->setStatusTip( tr("Flip the image horizontally") );
-    m_flipHorizontalAction->setIcon( QIcon(":/images/flipHorizontal.png") );
-    m_flipHorizontalToolButton->setDefaultAction( m_flipHorizontalAction );
-
-    connect( m_flipHorizontalAction , SIGNAL( triggered() ), SLOT( horizontalFlip() ) );
-
-    m_flipVerticalAction = new QAction(this);
-    m_flipVerticalAction->setText( tr("Flip Vertical") );
-    m_flipVerticalAction->setStatusTip( tr("Flip the image vertically") );
-    m_flipVerticalAction->setIcon( QIcon(":/images/flipVertical.png") );
-    m_flipVerticalToolButton->setDefaultAction( m_flipVerticalAction );
-
-    connect( m_flipVerticalAction , SIGNAL( triggered() ), SLOT( verticalFlip() ) );
 }
 
 void Q2DViewerExtension::enablePresentationState(bool enable)
@@ -197,12 +145,6 @@ void Q2DViewerExtension::enablePresentationState(bool enable)
 
 void Q2DViewerExtension::createConnections()
 {
-    // adicionals, TODO ara es fa "a saco" però s'ha de millorar, ens podríem estalviar un slot i fer la connexió cada cop que
-    // se selecciona un de nou directament amb els slots del Q2DViewer
-    connect( m_axialViewAction, SIGNAL( triggered() ), SLOT( resetViewToAxial() ) );
-    connect( m_sagitalViewAction, SIGNAL( triggered() ), SLOT( resetViewToSagital() ) );
-    connect( m_coronalViewAction, SIGNAL( triggered() ), SLOT( resetViewToCoronal() ) );
-
     // Menus
     connect( m_downButtonGrid, SIGNAL( clicked ( bool ) ), SLOT( showPredefinedGrid() ) );
     connect( m_buttonGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveTable() ) );
@@ -220,7 +162,7 @@ void Q2DViewerExtension::createConnections()
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
-
+    // per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect( m_dicomDumpToolButton, SIGNAL( clicked() ) , SLOT( showDicomDumpCurrentDisplayedImage() ) );
 
     // Connexions necessaries amb els canvis al layout
@@ -231,8 +173,6 @@ void Q2DViewerExtension::createConnections()
 void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    INFO_LOG("Q2DViewerExtension: Donem l'input principal");
-
     /// Aplicació dels hanging protocols
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
 
@@ -249,21 +189,6 @@ void Q2DViewerExtension::setInput( Volume *input )
     }
     m_workingArea->setViewerSelected( m_workingArea->getViewerWidget(0) );
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
-}
-
-void Q2DViewerExtension::resetViewToAxial()
-{
-    m_workingArea->getViewerSelected()->resetViewToAxial();
-}
-
-void Q2DViewerExtension::resetViewToSagital()
-{
-    m_workingArea->getViewerSelected()->resetViewToSagital();
-}
-
-void Q2DViewerExtension::resetViewToCoronal()
-{
-    m_workingArea->getViewerSelected()->resetViewToCoronal();
 }
 
 void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
@@ -299,26 +224,6 @@ void Q2DViewerExtension::loadPresentationState(const QString &filename)
     m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher(  m_workingArea->getViewerSelected()->getViewer(), qPrintable(filename) );
     m_presentationStateAction->setEnabled( true );
     m_presentationStateAction->setChecked( true );
-}
-
-void Q2DViewerExtension::rotateClockWise()
-{
-    ( m_workingArea->getViewerSelected()->getViewer() )->rotateClockWise();
-}
-
-void Q2DViewerExtension::rotateCounterClockWise()
-{
-    ( m_workingArea->getViewerSelected()->getViewer() )->rotateCounterClockWise();
-}
-
-void Q2DViewerExtension::horizontalFlip()
-{
-    ( m_workingArea->getViewerSelected()->getViewer() )->horizontalFlip();
-}
-
-void Q2DViewerExtension::verticalFlip()
-{
-    ( m_workingArea->getViewerSelected()->getViewer() )->verticalFlip();
 }
 
 void Q2DViewerExtension::showPredefinedGrid()
@@ -406,7 +311,18 @@ void Q2DViewerExtension::initializeTools()
     m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction( "EraserTool" ) );
     m_cursor3DToolButton->setDefaultAction( m_toolManager->getToolAction("Cursor3DTool") );
     m_angleToolButton->setDefaultAction( m_toolManager->getToolAction( "AngleTool" ) );
-    m_restoreToolButton->setDefaultAction( m_toolManager->getToolAction( "RestoreTool" ) );
+
+    // registrem les "Action Tool"    
+    m_sagitalViewAction = m_toolManager->registerActionTool( "SagitalViewActionTool" );
+    m_coronalViewAction = m_toolManager->registerActionTool( "CoronalViewActionTool" );
+    m_axialViewToolButton->setDefaultAction( m_toolManager->registerActionTool( "AxialViewActionTool" ) );
+    m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
+    m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool( "RotateClockWiseActionTool" ) );
+    m_rotateCounterClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool( "RotateCounterClockWiseActionTool" ) );
+    m_flipHorizontalToolButton->setDefaultAction( m_toolManager->registerActionTool( "HorizontalFlipActionTool" ) );
+    m_flipVerticalToolButton->setDefaultAction( m_toolManager->registerActionTool( "VerticalFlipActionTool" ) );
+    m_restoreToolButton->setDefaultAction( m_toolManager->registerActionTool( "RestoreActionTool" ) );
 
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
@@ -469,14 +385,10 @@ void Q2DViewerExtension::initializeTools()
     m_screenShotToolButton->setIcon( m_screenShotTriggerAction->icon() );
     m_screenShotToolButton->setToolTip( m_screenShotTriggerAction->toolTip() );
     m_screenShotToolButton->setText( m_screenShotTriggerAction->text() );
-}
 
-void Q2DViewerExtension::initializeDefaultTools( Q2DViewer *viewer )
-{
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool" << "Cursor3DTool" << "RestoreTool";
-
-    m_toolManager->setViewerTools( viewer, toolsList );
+    // definim les tools disponibles
+    m_availableToolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool" << "Cursor3DTool";
+    m_availableActionToolsList << "RestoreActionTool" << "AxialViewActionTool" << "SagitalViewActionTool" << "CoronalViewActionTool" << "RotateClockWiseActionTool" << "RotateCounterClockWiseActionTool" << "HorizontalFlipActionTool" << "VerticalFlipActionTool";
 }
 
 void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
@@ -489,7 +401,8 @@ void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
 
     connect( newViewerWidget, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
-    initializeDefaultTools( newViewerWidget->getViewer() );
+    // li indiquem les tools que li hem configurat per defecte a tothom
+    m_toolManager->setViewerTools( newViewerWidget->getViewer(), m_availableToolsList );
 }
 
 void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
@@ -511,6 +424,8 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>( m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool") );
             disconnect( m_singleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( singleCapture() ) );
             disconnect( m_multipleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( completeCapture() ) );
+            // desactivem les "ActionTool" pel visor que acaba de deseleccionar-se
+            m_toolManager->disableActionTools( m_lastSelectedViewer->getViewer(), m_availableActionToolsList );
         }
         m_lastSelectedViewer = viewerWidget;
         Q2DViewer *selected2DViewer = viewerWidget->getViewer();
@@ -534,6 +449,9 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
         m_cineController->setQViewer( selected2DViewer );
         m_thickSlabWidget->link( selected2DViewer );
         updateDICOMInformationButton( selected2DViewer->getView() );
+
+        // activem les "ActionTool" pel visor seleccionat
+        m_toolManager->enableActionTools( selected2DViewer, m_availableActionToolsList );
     }
 }
 

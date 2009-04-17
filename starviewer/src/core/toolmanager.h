@@ -63,6 +63,7 @@ public:
 
     /**
      * Obtenim l'acció que defineix una tool a través del ToolRegistry
+     * TODO potser un nom més adequat seria registerToolAction
      * @param toolName Nom de la tool de la qual volem l'acció
      * @return QAction de la tool demanada
      */
@@ -76,6 +77,23 @@ public:
      * @param tools Llista de tools que volem dins del grup
      */
     void addExclusiveToolsGroup( const QString &groupName, const QStringList &tools );
+
+    /**
+     * Registra una Action Tool i ens retorna la QAction associada. 
+     * El mètode assegura que encara que es cridi més d'un cop amb 
+     * el mateix nom d'action tool, es retorni sempre la mateixa acció
+     * @param actionToolName Nom de la "Action Tool" que volem registrar
+     * @return La QAction associada a la "Action Tool".
+     */
+    QAction *registerActionTool( const QString &actionToolName );
+
+    /**
+     * Activa/desactiva en un determinat viewer les "Action Tool" especificades
+     * @param viewer Viewer sobre el qual volem activar/desactivar les "Action Tools"
+     * @param actionToolsList Llista de noms d'"Action Tools"
+     */
+    void enableActionTools( QViewer *viewer, const QStringList &actionToolsList );
+    void disableActionTools( QViewer *viewer, const QStringList &actionToolsList );
 
 public slots:
     /**
@@ -137,6 +155,9 @@ private:
 
     /// Mapa que guarda les ToolData per Tools amb dades compartides
     QMap<QString, ToolData *> m_sharedToolDataRepository;
+
+    /// Mapa que guarda la relació d'"Action Tools" amb les respectives parelles QAction/SLOT
+    QMap<QString, QPair<QAction *, QString> > m_actionToolRegistry;
 };
 
 }

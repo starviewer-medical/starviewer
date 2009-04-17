@@ -55,11 +55,6 @@ public:
     Patient* getPatient() const;
 
 public slots:
-    /// Canvia a la vista axial, sagital o coronal
-    void resetViewToAxial();
-    void resetViewToSagital();
-    void resetViewToCoronal();
-
     /// Carrega un Key Image Note
     void loadKeyImageNote(const QString &filename);
 
@@ -112,21 +107,9 @@ private:
      */
     void initializeTools();
 
-    /**
-     * Inicialitza les tools per defecte per a un viewer determinat
-     * @param viewer viewer pel qual configurem les tools per defecte
-     */
-    void initializeDefaultTools( Q2DViewer *viewer );
-
 private slots:
     /// activem o desactivem el presentation state
     void enablePresentationState( bool enable );
-
-    /// Slots per canviar rotacions al widget seleccionat
-    void rotateClockWise();
-    void rotateCounterClockWise();
-    void horizontalFlip();
-    void verticalFlip();
 
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
@@ -151,20 +134,16 @@ private:
     Volume *m_mainVolume;
 
     /// Accions
-    QAction *m_axialViewAction;
-    QAction *m_sagitalViewAction;
-    QAction *m_coronalViewAction;
-    QAction *m_rotateClockWiseAction;
-    QAction *m_rotateCounterClockWiseAction;
-    QAction *m_flipHorizontalAction;
-    QAction *m_flipVerticalAction;
     QAction *m_presentationStateAction;
     QAction *m_singleShotAction;
     QAction *m_multipleShotAction;
     QAction *m_screenShotTriggerAction;
+    QAction *m_sagitalViewAction;
+    QAction *m_coronalViewAction;
 
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
+    // llistes de tools
+    QStringList m_availableToolsList;
+    QStringList m_availableActionToolsList;
 
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
