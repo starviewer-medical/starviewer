@@ -167,7 +167,11 @@ void QStarviewerSAPWrapper::sleepCurrentProcess(uint secondsToSleep)
 QString QStarviewerSAPWrapper::getStarviewerExecutableFilePath()
 {
     #ifdef _WIN32
-        return QCoreApplication::applicationDirPath() + "/starviewer.exe";
+        /*En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
+         *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes 
+         * per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe" */
+
+        return "\"" + QCoreApplication::applicationDirPath() + "/starviewer.exe" + "\""; //afegim les cometes per si algun dels directori conté espai
     #else 
         return QCoreApplication::applicationDirPath() + "/starviewer";
     #endif
