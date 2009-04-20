@@ -52,7 +52,7 @@ QEdemaSegmentationExtension::~QEdemaSegmentationExtension()
 {
     writeSettings();
     delete m_segMethod;
-    //delete m_lesionMaskVolume;//TODO descomentar aix�per tal d'alliberar el m_lesionMaskVolume (ara peta)
+    //delete m_lesionMaskVolume;//TODO descomentar això per tal d'alliberar el m_lesionMaskVolume (ara peta)
     //pointActor  -> Delete();
     squareActor -> Delete();
     if(m_filteredVolume != 0)
@@ -79,15 +79,6 @@ QEdemaSegmentationExtension::~QEdemaSegmentationExtension()
 
 void QEdemaSegmentationExtension::createActions()
 {
-    m_rotateClockWiseAction = new QAction( 0 );
-    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
-    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
-    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
-    m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
-    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
-
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
-
     m_lesionViewAction = new QAction( 0 );
     m_lesionViewAction->setText( tr("Lesion Overlay") );
     m_lesionViewAction->setStatusTip( tr("Enable/Disable lesion View Overlay") );
@@ -167,8 +158,10 @@ void QEdemaSegmentationExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    
     m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+
+    // Action Tools
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
 
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
@@ -201,6 +194,7 @@ void QEdemaSegmentationExtension::initializeTools()
     toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool";
 
     m_toolManager->setViewerTools( m_2DView, toolsList );
+    m_toolManager->enableActionTools( m_2DView, QStringList("RotateClockWiseActionTool") );
 
     // Activació de l'eina d'edició "HOME MADE"
     // TODO Cal fer servir únicament la autèntica tool i treure tota
