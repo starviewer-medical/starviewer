@@ -218,9 +218,6 @@ public:
     /// Busca la llesca que es troba més a prop del punt i retorna la distancia
     int getNearestSlice( double point[3], double &distance );
 
-    /// Restaura el visualitzador a l'estat inicial
-    void restore();
-
     //
     // Mètodes de conveniència pels presentation state
     // Aquests mètodes només estan per les classes de presentation state
@@ -247,6 +244,9 @@ public:
     void setMagnificationFactor( double factor );
 
 public slots:
+    /// Restaura el visualitzador a l'estat inicial
+    void restore();
+
     virtual void render();
     void reset();
 
