@@ -91,13 +91,6 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
 
 void QRectumSegmentationExtension::createActions()
 {
-    m_rotateClockWiseAction = new QAction( 0 );
-    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
-    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
-    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
-    m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
-    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
-
     m_regionAction = new QAction( 0 );
     m_regionAction->setText( tr("RegionTool") );
     m_regionAction->setStatusTip( tr("Enable/Disable region tool") );
@@ -105,8 +98,6 @@ void QRectumSegmentationExtension::createActions()
     m_regionAction->setEnabled( true );
     m_regionAction->setIcon( QIcon(":/images/roi.png") );
     m_regionToolButton->setDefaultAction( m_regionAction );
-
-   connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
 
     // Tools
     // creem el tool manager
@@ -119,6 +110,9 @@ void QRectumSegmentationExtension::createActions()
     m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
     m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+
+    // Action Tools
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
 
     // Tool d'slicing per teclat
     QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
@@ -145,13 +139,11 @@ void QRectumSegmentationExtension::createActions()
     // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
     m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
 
-    // registrem al manager les tools que van amb el viewer principal
-    //initializeDefaultTools( m_selectedViewer->getViewer() );
-
     QStringList toolsList;
     toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "EditorTool" <<  "SlicingKeyboardTool"<<"SeedTool";
 
     m_toolManager->setViewerTools( m_2DView, toolsList );
+    m_toolManager->enableActionTools( m_2DView, QStringList("RotateClockWiseActionTool") );
 
     //Apanyo que hem de fer per tal de detectar quan s'activa una tool
     m_toolsButtonGroup = new QButtonGroup( this );

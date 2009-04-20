@@ -137,7 +137,6 @@ private:
 
     /// Accions
     QAction *m_regionAction;
-    QAction *m_rotateClockWiseAction;
     QAction *m_lesionViewAction;
     QAction *m_rectumViewAction;
     QAction *m_ventriclesViewAction;

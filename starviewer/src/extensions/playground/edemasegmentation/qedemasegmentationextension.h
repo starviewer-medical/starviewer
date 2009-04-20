@@ -164,9 +164,6 @@ private:
     int m_insideValue, m_outsideValue;
     int m_lowerVentriclesValue, m_upperVentriclesValue;
 
-    /// Accions
-    QAction *m_rotateClockWiseAction;
-
     QAction *m_paintEditorAction;
     QAction *m_eraseEditorAction;
     QAction *m_eraseSliceEditorAction;

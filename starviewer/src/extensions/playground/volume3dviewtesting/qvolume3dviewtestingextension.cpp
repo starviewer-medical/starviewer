@@ -63,6 +63,11 @@ void QVolume3DViewTestingExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_panToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
 
+    // Action tools
+    m_axialOrientationButton->setDefaultAction( m_toolManager->registerActionTool("AxialViewActionTool") );
+    m_sagitalOrientationButton->setDefaultAction( m_toolManager->registerActionTool("SagitalViewActionTool") );
+    m_coronalOrientationButton->setDefaultAction( m_toolManager->registerActionTool("CoronalViewActionTool") );
+
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     m_zoomToolButton->defaultAction()->trigger();
     m_panToolButton->defaultAction()->trigger();
@@ -74,6 +79,10 @@ void QVolume3DViewTestingExtension::initializeTools()
     QStringList toolsList;
     toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "WindowLevelTool" << "ScreenShotTool";
     m_toolManager->setViewerTools( m_3DView, toolsList );
+
+    QStringList actionToolsList;
+    actionToolsList << "AxialViewActionTool" << "SagitalViewActionTool" << "CoronalViewActionTool";
+    m_toolManager->enableActionTools( m_3DView, actionToolsList );
 
     QStringList rightButtonExclusiveTools;
     rightButtonExclusiveTools << "Rotate3DTool" << "WindowLevelTool";
@@ -258,11 +267,6 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
 
 void QVolume3DViewTestingExtension::createConnections()
 {
-    // orientacions axial,sagital i coronal
-    connect( m_axialOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToAxial() ) );
-    connect( m_sagitalOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToSagital() ) );
-    connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_3DView , SLOT( resetViewToCoronal() ) );
-
     // actualització del mètode de rendering
     connect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateUiForRenderingMethod(int) ) );
 
