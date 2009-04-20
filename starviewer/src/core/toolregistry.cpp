@@ -28,7 +28,6 @@
 #include "angletool.h"
 #include "editortool.h"
 #include "nonclosedangletool.h"
-#include "restoretool.h"
 
 #include <QAction>
 
@@ -121,10 +120,6 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "NonClosedAngleTool" )
     {
         tool = new NonClosedAngleTool( viewer );
-    }
-    else if( toolName == "RestoreTool")
-    {
-        tool = new RestoreTool( viewer );
     }
     else
     {
@@ -254,12 +249,6 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Non Closed Angle") );
         toolAction->setStatusTip( tr("Enable/Disable non closed angle tool") );
         toolAction->setIcon( QIcon(":/images/angle.png") );
-    }
-    else if( toolName == "RestoreTool" )
-    {
-        toolAction->setText( tr("Restore") );
-        toolAction->setStatusTip( tr("Restore to initial state") );
-        toolAction->setIcon( QIcon(":/images/restore.png") );
     }
     else
     {
