@@ -642,9 +642,9 @@ void QCreateDicomdir::deviceChanged( int index )
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
-            #ifdef _WIN32
+#ifdef _WIN32
                 dvdCdDicomdirDesactivatedOnWindows();
-            #else
+#else
                 m_stackedWidget->setCurrentIndex(0);
                 int maximumCapacity;
 
@@ -671,7 +671,7 @@ void QCreateDicomdir::deviceChanged( int index )
                     QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
                 }
 */
-            #endif
+#endif
             break;
     }
 
