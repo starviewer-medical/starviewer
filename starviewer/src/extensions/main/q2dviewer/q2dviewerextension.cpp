@@ -323,6 +323,7 @@ void Q2DViewerExtension::initializeTools()
     m_flipHorizontalToolButton->setDefaultAction( m_toolManager->registerActionTool( "HorizontalFlipActionTool" ) );
     m_flipVerticalToolButton->setDefaultAction( m_toolManager->registerActionTool( "VerticalFlipActionTool" ) );
     m_restoreToolButton->setDefaultAction( m_toolManager->registerActionTool( "RestoreActionTool" ) );
+    m_invertToolButton->setDefaultAction( m_toolManager->registerActionTool( "InvertWindowLevelActionTool" ) );
 
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
@@ -388,7 +389,7 @@ void Q2DViewerExtension::initializeTools()
 
     // definim les tools disponibles
     m_availableToolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool" << "Cursor3DTool";
-    m_availableActionToolsList << "RestoreActionTool" << "AxialViewActionTool" << "SagitalViewActionTool" << "CoronalViewActionTool" << "RotateClockWiseActionTool" << "RotateCounterClockWiseActionTool" << "HorizontalFlipActionTool" << "VerticalFlipActionTool";
+    m_availableActionToolsList << "RestoreActionTool" << "AxialViewActionTool" << "SagitalViewActionTool" << "CoronalViewActionTool" << "RotateClockWiseActionTool" << "RotateCounterClockWiseActionTool" << "HorizontalFlipActionTool" << "VerticalFlipActionTool" << "InvertWindowLevelActionTool";
 }
 
 void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)

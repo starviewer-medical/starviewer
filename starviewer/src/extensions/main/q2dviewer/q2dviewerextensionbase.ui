@@ -926,7 +926,29 @@
           <bool>true</bool>
          </property>
         </widget>
-       </item>       
+       </item>
+        <item>
+          <widget class="QToolButton" name="m_invertToolButton" >
+            <property name="text" >
+              <string>Invert</string>
+            </property>
+            <property name="icon" >
+              <iconset/>
+            </property>
+            <property name="iconSize" >
+              <size>
+                <width>32</width>
+                <height>32</height>
+              </size>
+            </property>
+            <property name="toolButtonStyle" >
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+            </property>
+            <property name="autoRaise" >
+              <bool>true</bool>
+            </property>
+          </widget>
+        </item>
       </layout>
      </item>
      <item>
