@@ -6,11 +6,13 @@
 DCMTKLIBDIR = $$(DCMTKLIBDIR)
 isEmpty(DCMTKLIBDIR){
     unix:DCMTKLIBDIR = /usr/lib/dcmtk
+    macx:DCMTKLIBDIR = /usr/local/dicom/lib
     win32:DCMTKLIBDIR = C:\dcmtk-3.5.4\lib
 }
 DCMTKINCLUDEDIR = $$(DCMTKINCLUDEDIR)
 isEmpty(DCMTKINCLUDEDIR){
     unix:DCMTKINCLUDEDIR = /usr/include/dcmtk
+    macx:DCMTKINCLUDEDIR = /usr/local/dicom/include/dcmtk
     win32:DCMTKINCLUDEDIR = C:\dcmtk-3.5.4\include\dcmtk
 }
 
@@ -20,11 +22,13 @@ isEmpty(DCMTKINCLUDEDIR){
 VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
     unix:VTKLIBDIR = /usr/lib
+    macx:VTKLIBDIR = /usr/local/lib
     win32:VTKLIBDIR = C:\vtk\vtk5.0\lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
     unix:VTKINCLUDEDIR = /usr/include/vtk-5.0
+    macx:VTKINCLUDEDIR = /usr/local/include/vtk-5.0
     win32:VTKINCLUDEDIR = C:\vtk\vtk5.0\include\vtk-5.0
 }
 
@@ -34,11 +38,13 @@ isEmpty(VTKINCLUDEDIR){
 ITKLIBDIR = $$(ITKLIBDIR)
 isEmpty(ITKLIBDIR){
     unix:ITKLIBDIR = /usr/lib/InsightToolkit
+    macx:ITKLIBDIR = /usr/local/lib/InsightToolkit
     win32:ITKLIBDIR = C:\InsightToolkit\lib\InsightToolkit
 }
 ITKINCLUDEDIR = $$(ITKINCLUDEDIR)
 isEmpty(ITKINCLUDEDIR){
     unix:ITKINCLUDEDIR = /usr/include/InsightToolkit
+    macx:ITKINCLUDEDIR = /usr/local/include/InsightToolkit
     win32:ITKINCLUDEDIR = C:\InsightToolkit\include\InsightToolkit
 }
 
@@ -47,11 +53,13 @@ isEmpty(ITKINCLUDEDIR){
 LOG4CXXLIBDIR = $$(LOG4CXXLIBDIR)
 isEmpty(LOG4CXXLIBDIR){
     unix:LOG4CXXLIBDIR = /usr/lib
+    macx:LOG4CXXLIBDIR = /usr/local/lib
     win32:LOG4CXXLIBDIR = C:\log4cxx
 }
 LOG4CXXINCLUDEDIR = $$(LOG4CXXINCLUDEDIR)
 isEmpty(LOG4CXXINCLUDEDIR){
     unix:LOG4CXXINCLUDEDIR = /usr/include/log4cxx
+    macx:LOG4CXXINCLUDEDIR = /usr/local/include/log4cxx
     win32:LOG4CXXINCLUDEDIR = C:\log4cxx\include
 }
 
@@ -60,10 +68,12 @@ isEmpty(LOG4CXXINCLUDEDIR){
 GLEWLIBDIR = $$(GLEWLIBDIR)
 isEmpty(GLEWLIBDIR){
     unix:GLEWLIBDIR = /usr/lib
+    macx:GLEWLIBDIR = /opt/local/lib
     win32:GLEWLIBDIR = C:\glew\lib
 }
 GLEWINCLUDEDIR = $$(GLEWINCLUDEDIR)
 isEmpty(GLEWINCLUDEDIR){
     unix:GLEWINCLUDEDIR = /usr/include/GL
+    macx:GLEWINCLUDEDIR = /opt/local/include
     win32:GLEWINCLUDEDIR = C:\glew\include\GL
 }
