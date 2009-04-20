@@ -2540,5 +2540,19 @@ void Q2DViewer::restore()
     this->refresh();
 }
 
+void Q2DViewer::invertWindowLevel()
+{
+    // Passa el window level a negatiu o positiu, per invertir els colors
+    double wl[2];
+    double window;
+    double level;
+
+    this->getCurrentWindowLevel(wl);
+    window = wl[0]*-1;
+    level = wl[1];
+
+    setWindowLevel( window, level );
+}
+
 };  // end namespace udg
 

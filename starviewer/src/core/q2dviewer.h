@@ -247,6 +247,9 @@ public slots:
     /// Restaura el visualitzador a l'estat inicial
     void restore();
 
+    /// Canvia el WW del visualitzador, per tal de canviar els blancs per negres, i el negres per blancs
+    void invertWindowLevel();
+
     virtual void render();
     void reset();
 

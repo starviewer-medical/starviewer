@@ -270,6 +270,14 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
 
         slot = SLOT( restore() );
     }
+    else if( actionToolName == "InvertWindowLevelActionTool" )
+    {
+        action->setText( tr("Invert WL") );
+        action->setStatusTip( tr("Invert window level") );
+        action->setIcon( QIcon(":/images/invertWL.png") );
+
+        slot = SLOT( invertWindowLevel() );
+    }
     else if( actionToolName == "AxialViewActionTool" )
     {
         action->setText( tr("Axial") );
