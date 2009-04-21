@@ -226,6 +226,8 @@ Patient Patient::operator +( const Patient &patient )
             result.addStudy( study ); //\TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! Potser caldria fer una copia de l'study
     }
 
+    emit patientFused();
+
     return result;
 }
 
@@ -257,6 +259,8 @@ Patient Patient::operator +=( const Patient &patient )
             }
         }
     }
+
+    emit patientFused();
 
     return this;
 }
