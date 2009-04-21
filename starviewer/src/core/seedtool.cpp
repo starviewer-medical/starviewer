@@ -10,12 +10,11 @@
 #include "drawerpoint.h"
 #include "volume.h"
 #include "drawer.h"
-
+#include "logging.h"
 // Vtk's
 #include <vtkCommand.h>
 // Qt's
 #include <QVector>
-
 
 namespace udg {
 
@@ -32,10 +31,7 @@ SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
 
     m_state = NONE;
-
-    //DEBUG_LOG("SEED TOOL CREADA ");
 }
-
 
 SeedTool::~SeedTool()
 {
@@ -81,130 +77,66 @@ void SeedTool::setSeed()
     if( m_2DViewer )
     {
         m_state=SEEDING;
-
-        QVector<double> seedPosition(3);
-        double xyz[3];
-        m_2DViewer->getCurrentCursorPosition( xyz );
-        seedPosition[0]=xyz[0];
-        seedPosition[1]=xyz[1];
-        seedPosition[2]=xyz[2];
-
-        //es calcula correctament el valor de profunditat per a corretgir el bug #245
-        int slice = m_2DViewer->getCurrentSlice();
-        double *spacing = m_2DViewer->getInput()->getSpacing();
-        double *origin = m_2DViewer->getInput()->getOrigin();
-
-            switch( m_2DViewer->getView() )
-            {
-                case Q2DViewer::Axial:
-                    seedPosition[2] = origin[2] + (slice * spacing[2]);
-                    xyz[2] = seedPosition[2];
-                break;
-                case Q2DViewer::Sagital:
-                    seedPosition[0] = origin[0] + (slice * spacing[0]);
-                    xyz[0] = seedPosition[0];
-                break;
-                case Q2DViewer::Coronal:
-                    seedPosition[1] = origin[1] + (slice * spacing[1]);
-                    xyz[1] = seedPosition[1];
-                break;
-            }
-
-        m_myData->setSeedPosition( seedPosition );
-        //Apanyo perquè funcioni de moment, però s'ha d'arreglar
-        m_2DViewer->setSeedPosition( xyz );
-
-        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        updateSeedPosition();
     }
 }
 
-void SeedTool::setSeed(QVector<double> seedPosition)
-{
-    if( m_2DViewer )
-    {
-        std::cout<<"SetSeed amb pos: ["<<seedPosition[0]<<", "<<seedPosition[1]<<" ,"<<seedPosition[2]<<"]"<<std::endl;
-        double xyz[3];
-        xyz[0] = seedPosition[0];
-        xyz[1] = seedPosition[1];
-        xyz[2] = seedPosition[2];
-
-        int slice;
-        double *spacing = m_2DViewer->getInput()->getSpacing();
-        double *origin = m_2DViewer->getInput()->getOrigin();
-        switch( m_2DViewer->getView() )
-        {
-            case Q2DViewer::Axial:
-                slice =(int) ( (seedPosition[2] - origin[2])/ spacing[2]);
-            break;
-            case Q2DViewer::Sagital:
-                slice =(int) ( (seedPosition[0] - origin[0])/ spacing[0]);
-            break;
-            case Q2DViewer::Coronal:
-                slice =(int) ( (seedPosition[1] - origin[1])/ spacing[1]);
-            break;
-        }
-
-        m_myData->setSeedPosition( seedPosition );
-        //Apanyo perquè funcioni de moment, però s'ha d'arreglar
-        //A l'ext. PerfusionMapReconstruction està resolt, però es deixa per a què funcionin les altres
-        m_2DViewer->setSeedPosition( xyz );
-
-        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-
-        emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
-    }
-}
-
-void SeedTool::doSeeding( )
+void SeedTool::doSeeding()
 {
     if( m_2DViewer && m_state==SEEDING )
     {
-        QVector<double> seedPosition(3);
-        double xyz[3];
-        m_2DViewer->getCurrentCursorPosition( xyz );
-        seedPosition[0]=xyz[0];
-        seedPosition[1]=xyz[1];
-        seedPosition[2]=xyz[2];
-
-        //es calcula correctament el valor de profunditat per a corretgir el bug #245
-        int slice = m_2DViewer->getCurrentSlice();
-        double *spacing = m_2DViewer->getInput()->getSpacing();
-        double *origin = m_2DViewer->getInput()->getOrigin();
-
-            switch( m_2DViewer->getView() )
-            {
-                case Q2DViewer::Axial:
-                    seedPosition[2] = origin[2] + (slice * spacing[2]);
-                    xyz[2] = seedPosition[2];
-                break;
-                case Q2DViewer::Sagital:
-                    seedPosition[0] = origin[0] + (slice * spacing[0]);
-                    xyz[0] = seedPosition[0];
-                break;
-                case Q2DViewer::Coronal:
-                    seedPosition[1] = origin[1] + (slice * spacing[1]);
-                    xyz[1] = seedPosition[1];
-                break;
-            }
-
-        m_myData->setSeedPosition( seedPosition );
-        //Apanyo perquè funcioni de moment, però s'ha d'arreglar
-        m_2DViewer->setSeedPosition( xyz );
-
-        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        updateSeedPosition();
     }
 }
 
-void SeedTool::endSeeding( )
+void SeedTool::endSeeding()
 {
     m_state = NONE;
+}
+
+void SeedTool::updateSeedPosition()
+{
+    QVector<double> seedPosition(3);
+    double xyz[3];
+    m_2DViewer->getCurrentCursorPosition( xyz );
+    seedPosition[0]=xyz[0];
+    seedPosition[1]=xyz[1];
+    seedPosition[2]=xyz[2];
+
+    //es calcula correctament el valor de profunditat per a corretgir el bug #245
+    int slice = m_2DViewer->getCurrentSlice();
+    double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *origin = m_2DViewer->getInput()->getOrigin();
+
+    switch( m_2DViewer->getView() )
+    {
+        case Q2DViewer::Axial:
+            seedPosition[2] = origin[2] + (slice * spacing[2]);
+            xyz[2] = seedPosition[2];
+        break;
+        case Q2DViewer::Sagital:
+            seedPosition[0] = origin[0] + (slice * spacing[0]);
+            xyz[0] = seedPosition[0];
+        break;
+        case Q2DViewer::Coronal:
+            seedPosition[1] = origin[1] + (slice * spacing[1]);
+            xyz[1] = seedPosition[1];
+        break;
+    }
+
+    m_myData->setSeedPosition( seedPosition );
+    // TODO Apanyo perquè funcioni de momen, però s'ha d'arreglar
+    // s'hauria d'emetre únicament "seedChanged()" i prou
+    m_2DViewer->setSeedPosition( xyz );
+    emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
+    
+    m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }
 
 ToolData *SeedTool::getToolData() const
 {
     return m_myData;
 }
-
 
 }
 

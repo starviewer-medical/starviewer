@@ -45,16 +45,18 @@ public:
 signals:
     void seedChanged(double, double, double);
 
-
 private:
     /// Posem la llavor
-    void setSeed( );
+    void setSeed();
 
     /// Calcula la llesca que s'ha de moure
     void doSeeding();
 
     /// Atura l'estat de seeding
     void endSeeding();
+
+    /// Actualitzem la posició de la llavor
+    void updateSeedPosition();
 
 private:
     /// Viewer 2D sobre el qual treballem
