@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="MamographyMLOPrevia">
-<hangingProtocolName>PREVI MLO</hangingProtocolName>
+<hangingProtocol name="PriorMamographyCC">
+<hangingProtocolName>PREVI CC</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <strictness>yes</strictness>
-<protocol>MG</protocol>
+<protocol>CR</protocol>
 <restriction identifier="1">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>ImageLaterality</selectorAttribute>
+<selectorAttribute>Laterality</selectorAttribute>
 <valueRepresentation>R</valueRepresentation>
 </restriction>
 <restriction identifier="2">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>ImageLaterality</selectorAttribute>
+<selectorAttribute>Laterality</selectorAttribute>
 <valueRepresentation>L</valueRepresentation>
 </restriction>
 <restriction identifier="3">
 <usageFlag>MATCH</usageFlag>
 <selectorAttribute>CodeMeaning</selectorAttribute>
-<valueRepresentation>medio-lateral</valueRepresentation>
+<valueRepresentation>cranio-caudal</valueRepresentation>
 </restriction>
 <restriction identifier="4">
 <usageFlag>MATCH</usageFlag>
@@ -54,23 +54,23 @@
 <displaySet identifier="1">
 <imageSetNumber>1</imageSetNumber>
 <position>0.0\1.0\0.5\0.5</position>
-<iconType>MLO_R</iconType>
+<iconType>CC_R</iconType>
 </displaySet>
 <displaySet identifier="2">
 <imageSetNumber>2</imageSetNumber>
 <position>0.5\1.0\1.0\0.5</position>
-<patientOrientation>A\F</patientOrientation>
-<iconType>MLO_L</iconType>
+<patientOrientation>A\R</patientOrientation>
+<iconType>CC_L</iconType>
 </displaySet>
 <displaySet identifier="3">
 <imageSetNumber>3</imageSetNumber>
 <position>0.0\0.5\0.5\0.0</position>
-<iconType>MLO_R</iconType>
+<iconType>CC_R</iconType>
 </displaySet>
 <displaySet identifier="4">
 <imageSetNumber>4</imageSetNumber>
 <position>0.5\0.5\1.0\0.0</position>
-<patientOrientation>A\F</patientOrientation>
-<iconType>MLO_L</iconType>
+<patientOrientation>A\R</patientOrientation>
+<iconType>CC_L</iconType>
 </displaySet>
 </hangingProtocol>
