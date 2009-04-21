@@ -83,6 +83,10 @@ void QCrashReporter::sendReport()
     options.insert( "Email", m_emailLineEdit->text() );
     options.insert( "Comments", m_descriptionTextEdit->toPlainText() );
     options.insert( "CrashTime", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
+    // El valor 1 significa que es tindran en compte les condicions d'acceptacio programades al fitxer
+    // de configuracio del "collector".
+    // El valor 0 significa que s'acceptaran tots els reports. Les condicions d'acceptacio no es tenen en compte.
+    options.insert( "Throttleable", "1" );
 
     // Enviem el report només en cas de release.
 #ifdef QT_NO_DEBUG
