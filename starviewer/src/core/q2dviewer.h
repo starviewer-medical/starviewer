@@ -73,11 +73,6 @@ public:
 
     virtual void setInput( Volume *volume );
 
-    void resetView( CameraOrientationType view );
-    void resetViewToAxial();
-    void resetViewToCoronal();
-    void resetViewToSagital();
-
     /// ens retorna la vista que tenim en aquells moments del volum
     CameraOrientationType getView() const;
 
@@ -88,30 +83,35 @@ public:
     Volume *getOverlayInput( void ) { return m_overlayVolume; }
 
     /// Diem al viewer que s'ha modificat l'overlay per tal que refresqui correctament
-    void isOverlayModified( );
+    void isOverlayModified();
 
-    /// Canviem l'opacitat del volum solapat
-    void setOpacityOverlay ( double op );
+    /// Canviem l'opacitat del volum solapat 
+    /// TODO refactoritzar el mètode a setOverlayOpacity() que és l'expressió correcta
+    void setOpacityOverlay( double op );
 
     // Mètodes específics checkerboard
     /// Obtenim el nombre de divisions
+    /// TODO set/getDivisions no es fa servir enlloc, es podria 
+    /// donar com a funcionalitat obsoleta i eliminar-la, ja que ara mateix únicament fa nosa
     int *getDivisions();
     void getDivisions( int data[3] );
 
     /// Indiquem el nombre de divisions del checkerboard
     void setDivisions( int data[3] );
+    void setDivisions( int x , int y , int z );
 
     /// Obté el window level actual de la imatge
+    /// TODO els mètodes no es criden enlloc, mirar si són necessaris o no
     double getCurrentColorWindow();
     double getCurrentColorLevel();
+    void getCurrentWindowLevel( double wl[2] );
 
     /// retorna la llesca/fase actual
     int getCurrentSlice() const;
     int getCurrentPhase() const;
 
-    void getCurrentWindowLevel( double wl[2] );
-
     /// Obtenir la llavor
+    /// TODO aquest mètode potser hauria d'estar únicament a la SeedTool i no aquí
     void getSeedPosition( double pos[3] );
 
     /**
@@ -178,6 +178,7 @@ public:
      * @param min valor mínim
      * @param max valor màxim
      */
+    /// TODO podria ser protected o private, ningú necessita aquestes dades fora del visor
     void getSliceRange(int &min, int &max);
     int *getSliceRange();
 
@@ -218,6 +219,21 @@ public:
     /// Busca la llesca que es troba més a prop del punt i retorna la distancia
     int getNearestSlice( double point[3], double &distance );
 
+    /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
+    /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
+    /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
+    /// Si tenim una imatge axial pura la llista seria R,H,L,F (Right, Head, Left, Feet )
+    QVector<QString> getCurrentDisplayedImageOrientationLabels() const;
+
+    /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
+    /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
+    QString getCurrentPlaneProjectionLabel() const;
+
+    /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat.
+    /// Això permet que el càlcul s'hagi fet en un presentation state, per exemple
+    /// TODO És públic únicament perquè el fa servir el presentation state attacher. Podria ser protected o private.
+    void applyGrayscalePipeline();
+
     //
     // Mètodes de conveniència pels presentation state
     // Aquests mètodes només estan per les classes de presentation state
@@ -229,6 +245,12 @@ public:
 
     /// Assigna el rescale de valors que volem
     void setModalityRescale( vtkImageShiftScale *rescale );
+    void setModalityRescale( double slope, double intercept );
+    void setModalityLUT( vtkWindowLevelLookupTable *lut );
+    void setVOILUT( vtkWindowLevelLookupTable *lut );
+    void setPresentationLUT( vtkWindowLevelLookupTable *lut );
+
+    vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
 
     //
     // DISPLAYED AREA. Mètodes per poder modificar l'àrea visible del volum (zoom enquadrat) i/o canviar aspecte, espaiat de presentació, etc
@@ -244,6 +266,11 @@ public:
     void setMagnificationFactor( double factor );
 
 public slots:
+    void resetView( CameraOrientationType view );
+    void resetViewToAxial();
+    void resetViewToCoronal();
+    void resetViewToSagital();
+
     /// Restaura el visualitzador a l'estat inicial
     void restore();
 
@@ -251,6 +278,7 @@ public slots:
     void invertWindowLevel();
 
     virtual void render();
+    // TODO donar aquest per deprecated i fer servir restore() en comptes
     void reset();
 
     /// canvia la llesca que veiem de la vista actual
@@ -264,11 +292,7 @@ public slots:
     void setNoOverlay();
     void setOverlayToBlend();
     void setOverlayToCheckerBoard();
-    void setOverlayToRectilinearWipe();
-
-    // Mètodes específics checkerboard
-    /// Indiquem el nombre de divisions del checkerboard
-    void setDivisions( int x , int y , int z );
+    void setOverlayToRectilinearWipe();   
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
@@ -277,6 +301,7 @@ public slots:
     void setWindowLevel(double window, double level);
 
     /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
+    /// TODO aquest mètode hauria de quedar obsolet i
     void setSeedPosition( double pos[3] );
 
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
@@ -297,18 +322,6 @@ public slots:
     /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
     void resetCamera();
 
-    ///Mètode de conveniència pel tractament dels presentation states
-    vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
-
-    ///
-    void setModalityRescale( double slope, double intercept );
-    void setModalityLUT( vtkWindowLevelLookupTable *lut );
-    void setVOILUT( vtkWindowLevelLookupTable *lut );
-    void setPresentationLUT( vtkWindowLevelLookupTable *lut );
-
-    /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat. Això permet que el càlcul s'hagi fet en un presentation state, per exemple
-    void applyGrayscalePipeline();
-
     // TODO aquests mètodes també haurien d'estar en versió QString!
     /**
      * Li indiquem quin mode de projecció volem aplicar sobre l'slab
@@ -328,16 +341,6 @@ public slots:
      */
     void enableThickSlab( bool enable = true );
 
-    /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
-    /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
-    /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
-    /// Si tenim una imatge axial pura la llista seria R,H,L,F (Right, Head, Left, Feet )
-    QVector<QString> getCurrentDisplayedImageOrientationLabels() const;
-
-    /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
-    /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
-    QString getCurrentPlaneProjectionLabel() const;
-
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
@@ -351,7 +354,8 @@ signals:
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
 
-    /// Senyal que s'envia quan la llavor s'ha canviat \TODO mirar de treure-ho i posar-ho en la tool SeedTool
+    /// Senyal que s'envia quan la llavor s'ha canviat 
+    /// TODO mirar de treure-ho i posar-ho en la tool SeedTool
     void seedChanged();
 
     /**
