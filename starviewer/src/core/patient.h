@@ -113,6 +113,11 @@ public:
      */
     void setSelectedSeries( const QString &selectedSeriesUID );
 
+signals:
+    
+    // Senyal que indica que s'ha fusionat el pacient
+    void patientFused();
+
 private:
     /// Donat un pacient, copia únicament la informació del pacient. No fa res respecte els estudis,series o imatges.
     /// La informació es matxaca i no es fa cap mena de comprovació.

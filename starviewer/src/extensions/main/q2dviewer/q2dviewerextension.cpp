@@ -182,12 +182,25 @@ void Q2DViewerExtension::setInput( Volume *input )
 	hangingProtocolManger = 0;
     QApplication::restoreOverrideCursor();
 
-    if( m_hangingCandidates.size() == 0 )
+    if( m_hangingCandidates.size() == 0 ) // No hi ha hanging protocols
     {
         Q2DViewerWidget *viewerWidget = m_workingArea->addViewer( "0.0\\1.0\\1.0\\0.0" );
         viewerWidget->setInput( m_mainVolume );
     }
     m_workingArea->setViewerSelected( m_workingArea->getViewerWidget(0) );
+    m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
+
+    connect( m_patient, SIGNAL( patientFused() ), SLOT(searchHangingProtocols()) );
+}
+
+void Q2DViewerExtension::searchHangingProtocols()
+{
+    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
+	delete hangingProtocolManger;
+	hangingProtocolManger = 0;
+    QApplication::restoreOverrideCursor();
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
 }
 

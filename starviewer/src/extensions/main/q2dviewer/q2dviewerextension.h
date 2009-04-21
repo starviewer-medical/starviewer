@@ -129,6 +129,9 @@ private slots:
     /// Mètode que tracta el canvi de visualitzador seleccionat
     void changeSelectedViewer( Q2DViewerWidget *viewerWidget );
 
+    /// Mètode que busca els hanging protocols aplicables
+    void searchHangingProtocols();
+
 private:
     /// El volum principal
     Volume *m_mainVolume;
