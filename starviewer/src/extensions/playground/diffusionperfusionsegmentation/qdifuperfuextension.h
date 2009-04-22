@@ -83,7 +83,7 @@ private slots:
     void viewThresholds2(int i);
 
     /// visualitza la informació de la llavor del mètode de segmentació
-    void setSeedPosition();
+    void setSeedPosition(double x, double y, double z);
 
     /// Diversos mètodes per moure l'splitter
     void moveViewerSplitterToLeft();

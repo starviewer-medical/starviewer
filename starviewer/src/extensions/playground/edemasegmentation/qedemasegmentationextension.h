@@ -66,7 +66,7 @@ private slots:
     void leftButtonEventHandler( );
 
     /// visualitza la informació de la llavor del mètode de segmentació
-    void setSeedPosition( );
+    void setSeedPosition(double x, double y, double z);
 
      /// determina la llavor del mètode de segmentació
     void setEditorPoint( );
@@ -183,6 +183,9 @@ private:
 
     /// ToolManager
     ToolManager *m_toolManager;
+
+    /// La posició de la llavor
+    double m_seedPosition[3];
 };
 
 } // end namespace udg

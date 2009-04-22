@@ -49,7 +49,7 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-    /// Guarda i llegeix les caracter�tiques
+    /// Guarda i llegeix les característiques
     void readSettings();
     void writeSettings();
 
@@ -63,7 +63,7 @@ private slots:
     void leftButtonReleaseHandler( );
 
     /// visualitza la informació de la llavor del mètode de segmentació
-    void setSeedPosition( );
+    void setSeedPosition(double x, double y, double z);
 
     void setRegionOfInterest( );
     void setMovingRegionOfInterest( );

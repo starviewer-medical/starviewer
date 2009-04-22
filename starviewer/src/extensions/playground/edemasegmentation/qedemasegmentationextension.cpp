@@ -39,6 +39,10 @@ QEdemaSegmentationExtension::QEdemaSegmentationExtension( QWidget *parent )
 {
     setupUi( this );
 
+    m_seedPosition[0] = 0.0;
+    m_seedPosition[1] = 0.0;
+    m_seedPosition[2] = 0.0;
+
     m_segMethod = new StrokeSegmentationMethod();
     squareActor = vtkActor::New();
    
@@ -234,7 +238,9 @@ void QEdemaSegmentationExtension::createConnections()
     connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
     connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
     connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
-    connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+    // TODO en comptes de tenir aquesta connexió hauríem de connectar el signal de la tool que ens ho hauria de fer el toolmanager
+    connect( m_2DView, SIGNAL( seedPositionChanged(double,double,double) ), SLOT( setSeedPosition(double,double,double) ) );
+
     connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
     connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
 
@@ -420,9 +426,7 @@ void QEdemaSegmentationExtension::applyMethod( )
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_segMethod->setInsideMaskValue ( m_insideValue );
     m_segMethod->setOutsideMaskValue( m_outsideValue );
-    double pos[3];
-    m_2DView->getSeedPosition(pos);
-    m_segMethod->setSeedPosition(pos[0],pos[1],pos[2]);
+    m_segMethod->setSeedPosition(m_seedPosition[0], m_seedPosition[1], m_seedPosition[2]);
     m_volume = m_segMethod->applyMethod();
     //m_volume = m_segMethod->applyMethodVTK();//No funciona!!
     m_cont = m_segMethod->getNumberOfVoxels();
@@ -569,36 +573,30 @@ void QEdemaSegmentationExtension::leftButtonEventHandler( )
         setEditorPoint();
 }
 
-void QEdemaSegmentationExtension::setSeedPosition()
+void QEdemaSegmentationExtension::setSeedPosition(double x,double y, double z)
 {
-    double pos[3];
-    QString aux;
-    m_2DView->getSeedPosition(pos);
-    m_seedXLineEdit->clear();
-    m_seedYLineEdit->clear();
-    m_seedZLineEdit->clear();
-    aux = QString("%1").arg(pos[0], 0, 'f', 1);
-    m_seedXLineEdit->insert(aux);
-    aux = QString("%1").arg(pos[1], 0, 'f', 1);
-    m_seedYLineEdit->insert(aux);
-    aux = QString("%1").arg(pos[2], 0, 'f', 1);
-    m_seedZLineEdit->insert(aux);
+    m_seedPosition[0] = x;
+    m_seedPosition[1] = y;
+    m_seedPosition[2] = z;
+
+    m_seedXLineEdit->setText( QString::number(m_seedPosition[0], 'f', 1) );
+    m_seedYLineEdit->setText( QString::number(m_seedPosition[1], 'f', 1) );
+    m_seedZLineEdit->setText( QString::number(m_seedPosition[2], 'f', 1) );
     m_isSeed=true;
     if(m_isMask)
     {
         m_applyMethodButton->setEnabled(true);
     }
-
 }
 
-void QEdemaSegmentationExtension::setEditorPoint(  )
+void QEdemaSegmentationExtension::setEditorPoint()
 {
     double pos[3];
     if(m_editorTool != QEdemaSegmentationExtension::NoEditor)
     {
         m_2DView->getCurrentCursorPosition(pos);
 
-        // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
+        // quan dona una posició de (-1, -1, -1) és que estem fora de l'actor
         if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
         {
             switch( m_editorTool )
@@ -702,7 +700,7 @@ void QEdemaSegmentationExtension::setEraseRegion()
 
 void QEdemaSegmentationExtension::setPaintCursor()
 {
-    if(m_editorToolButton->isChecked())    //Nom� en cas que estiguem en l'editor
+    if(m_editorToolButton->isChecked())    //Només en cas que estiguem en l'editor
     {
         if(m_isLeftButtonPressed)
         {

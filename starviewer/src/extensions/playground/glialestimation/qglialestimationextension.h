@@ -88,7 +88,7 @@ private slots:
     /// Veure la màscara de T1
     void viewT1Thresholds(int value);
     void setT1MaskOpacity( int opacity );
-    void setT1SeedPosition ( );
+    void setT1SeedPosition( double x, double y, double z );
     void applyT1Segmentation();
 
     /// desactiva el booleà que ens diu si està el botó esquerra apretat

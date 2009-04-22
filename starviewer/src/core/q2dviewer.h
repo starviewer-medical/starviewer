@@ -110,10 +110,6 @@ public:
     int getCurrentSlice() const;
     int getCurrentPhase() const;
 
-    /// Obtenir la llavor
-    /// TODO aquest mètode potser hauria d'estar únicament a la SeedTool i no aquí
-    void getSeedPosition( double pos[3] );
-
     /**
      * Ens retorna el drawer per poder pintar-hi primitives
      * @return Objecte drawer del viewer
@@ -300,8 +296,8 @@ public slots:
 
     void setWindowLevel(double window, double level);
 
-    /// \TODO Per poder obtenir la llavor que s'ha marcat amb la tool SeedTool. Posar la llavor
-    /// TODO aquest mètode hauria de quedar obsolet i
+    /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
+    /// TODO aquest mètode hauria de quedar obsolet
     void setSeedPosition( double pos[3] );
 
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
@@ -356,7 +352,7 @@ signals:
 
     /// Senyal que s'envia quan la llavor s'ha canviat 
     /// TODO mirar de treure-ho i posar-ho en la tool SeedTool
-    void seedChanged();
+    void seedPositionChanged(double,double,double);
 
     /**
      * S'emet quan canvia l'slab thickness
@@ -553,9 +549,6 @@ private:
 
     /// Barra que mostra l'escala de colors del model que estem visualitzant \TODO quan tinguem models fusionats tindrem una o dues barres d'escala de colors?
     vtkScalarBarActor *m_scalarBar;
-
-    ///Informació de la posició de la seed
-    double m_seedPosition[3];
 
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;

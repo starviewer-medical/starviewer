@@ -1635,17 +1635,7 @@ void Q2DViewer::getDivisions( int data[3] )
 
 void Q2DViewer::setSeedPosition( double pos[3] )
 {
-    m_seedPosition[0] = pos[0];
-    m_seedPosition[1] = pos[1];
-    m_seedPosition[2] = pos[2];
-    emit seedChanged();
-}
-
-void Q2DViewer::getSeedPosition( double pos[3] )
-{
-    pos[0] = m_seedPosition[0];
-    pos[1] = m_seedPosition[1];
-    pos[2] = m_seedPosition[2];
+    emit seedPositionChanged(pos[0], pos[1], pos[2]);
 }
 
 void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )

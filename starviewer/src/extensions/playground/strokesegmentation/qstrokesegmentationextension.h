@@ -47,7 +47,7 @@ private:
 
 private slots:
     /// visualitza la informació de la llavor del mètode de segmentació
-    void setSeedPosition();
+    void setSeedPosition(double x, double y, double z);
 
     /// actualitza el valor llindar baix
     void setLowerValue( int x );
@@ -86,6 +86,9 @@ private:
 
     /// Tool manager
     ToolManager *m_toolManager;
+
+    /// Posició de la seed
+    double m_seedPosition[3];
 };
 
 } // end namespace udg
