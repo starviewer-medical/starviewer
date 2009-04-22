@@ -14,8 +14,6 @@
 #include "toolproxy.h"
 #include "editortool.h"
 #include "editortooldata.h"
-#include "seedtool.h"
-#include "seedtooldata.h"
 
 //Qt
 #include <QString>
@@ -168,7 +166,7 @@ void QRectumSegmentationExtension::createConnections()
   connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
   connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
   connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
-  connect( m_2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+  connect( m_2DView, SIGNAL( seedPositionChanged(double, double, double) ), SLOT( setSeedPosition(double, double, double) ) );
   connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
   connect( m_2DView, SIGNAL( overlayChanged( ) ), SLOT( updateVolume() ) );
   connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
@@ -379,31 +377,15 @@ void QRectumSegmentationExtension::leftButtonReleaseHandler( )
     }
 }
 
-void QRectumSegmentationExtension::setSeedPosition( )
+void QRectumSegmentationExtension::setSeedPosition(double x, double y, double z)
 {
-    QString aux;
+    m_seedPosition[0] = x;
+    m_seedPosition[1] = y;
+    m_seedPosition[2] = z;
 
-    //m_2DView->getSeedPosition(pos);
-    SeedToolData* seedToolData = static_cast<SeedToolData*> ( m_2DView->getToolProxy()->getTool("SeedTool")->getToolData() );
-    if(seedToolData!=0)
-    {
-        m_seedPosition = seedToolData->getSeedPosition();
-    }
-    else
-    {
-        DEBUG_LOG("No existeix la seed tool");
-        m_seedPosition = QVector<double>(3,-1.0);
-    }
-
-    m_seedXLineEdit->clear();
-    m_seedYLineEdit->clear();
-    m_seedZLineEdit->clear();
-    aux = QString("%1").arg(m_seedPosition[0], 0, 'f', 1);
-    m_seedXLineEdit->insert(aux);
-    aux = QString("%1").arg(m_seedPosition[1], 0, 'f', 1);
-    m_seedYLineEdit->insert(aux);
-    aux = QString("%1").arg(m_seedPosition[2], 0, 'f', 1);
-    m_seedZLineEdit->insert(aux);
+    m_seedXLineEdit->setText( QString::number( m_seedPosition[0], 'f', 1 ) );
+    m_seedYLineEdit->setText( QString::number( m_seedPosition[1], 'f', 1 ) );
+    m_seedZLineEdit->setText( QString::number( m_seedPosition[2], 'f', 1 ) );
     m_isSeed=true;
     if(m_isMask)
     {

@@ -238,7 +238,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
     connect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setStrokeUpperValue(int) ) );
 /*    connect( m_strokeViewThresholdsPushButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
     connect( m_penombraViewThresholdsPushButton, SIGNAL( clicked() ), SLOT( viewThresholds2() ) );*/
-    connect( m_diffusion2DView, SIGNAL( seedChanged() ), SLOT( setSeedPosition() ) );
+    connect( m_diffusion2DView, SIGNAL( seedPositionChanged(double,double,double) ), SLOT( setSeedPosition(double,double,double) ) );
     connect( m_strokeApplyPushButton, SIGNAL( clicked() ), SLOT( applyStrokeSegmentation() ) );
 //     connect( m_strokeVolumeUpdatePushButton, SIGNAL( clicked() ), SLOT( updateStrokeVolume() ) );
 
@@ -630,9 +630,11 @@ void QDifuPerfuSegmentationExtension::viewThresholds2()
     m_perfusion2DView->refresh();
 }
 
-void QDifuPerfuSegmentationExtension::setSeedPosition()
+void QDifuPerfuSegmentationExtension::setSeedPosition(double x, double y, double z)
 {
-    m_diffusion2DView->getSeedPosition( m_seedPosition );
+    m_seedPosition[0] = x;
+    m_seedPosition[1] = y;
+    m_seedPosition[2] = z;
 
     m_strokeSeedXLineEdit->setText( QString::number( m_seedPosition[0], 'f', 1 ) );
     m_strokeSeedYLineEdit->setText( QString::number( m_seedPosition[1], 'f', 1 ) );

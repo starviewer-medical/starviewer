@@ -27,6 +27,10 @@ QStrokeSegmentationExtension::QStrokeSegmentationExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_isSeed(false), m_isMask(false)
 {
     setupUi( this );
+    
+    m_seedPosition[0] = 0.0;
+    m_seedPosition[1] = 0.0;
+    m_seedPosition[2] = 0.0;
 
     m_maskVolume = new Volume();
     m_segMethod = new StrokeSegmentationMethod();
@@ -166,9 +170,7 @@ void QStrokeSegmentationExtension::applyMethod( )
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_segMethod->setInsideMaskValue ( m_insideValue );
     m_segMethod->setOutsideMaskValue( m_outsideValue );
-    double pos[3];
-    m_2DView->getSeedPosition(pos);
-    m_segMethod->setSeedPosition(pos[0],pos[1],pos[2]);
+    m_segMethod->setSeedPosition(m_seedPosition[0],m_seedPosition[1],m_seedPosition[2]);
     double segmentationVolume = m_segMethod->applyMethod();
     
     m_2DView->setOverlayToBlend();
@@ -189,20 +191,15 @@ void QStrokeSegmentationExtension::applyMethod( )
     DEBUG_LOG( "Fi Apply method!!" );
 }
 
-void QStrokeSegmentationExtension::setSeedPosition()
+void QStrokeSegmentationExtension::setSeedPosition(double x, double y, double z)
 {
-    double pos[3];
-    QString aux;
-    m_2DView->getSeedPosition(pos);
-    m_seedXLineEdit->clear();
-    m_seedYLineEdit->clear();
-    m_seedZLineEdit->clear();
-    aux = QString("%1").arg(pos[0], 0, 'f', 1);
-    m_seedXLineEdit->insert(aux);
-    aux = QString("%1").arg(pos[1], 0, 'f', 1);
-    m_seedYLineEdit->insert(aux);
-    aux = QString("%1").arg(pos[2], 0, 'f', 1);
-    m_seedZLineEdit->insert(aux);
+    m_seedPosition[0] = x;
+    m_seedPosition[1] = y;
+    m_seedPosition[2] = z;
+
+    m_seedXLineEdit->setText( QString::number(m_seedPosition[0], 'f', 1) );
+    m_seedYLineEdit->setText( QString::number(m_seedPosition[1], 'f', 1) );
+    m_seedZLineEdit->setText( QString::number(m_seedPosition[2], 'f', 1) );
     m_isSeed=true;
     if(m_isMask)
     {

@@ -160,7 +160,7 @@ void QGlialEstimationExtension::createConnections()
     connect( m_computeCBVPushButton, SIGNAL( clicked() ), SLOT( computeCBV() ) );
     connect( m_T1ValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewT1Thresholds(int) ) );
     connect( m_T1MaskOpacitySlider, SIGNAL( valueChanged(int) ), SLOT( setT1MaskOpacity(int) ) );
-    connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( seedChanged() ), SLOT( setT1SeedPosition() ) );
+    connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( seedPositionChanged(double,double,double) ), SLOT( setT1SeedPosition(double,double,double) ) );
     connect( m_T1ApplyPushButton, SIGNAL( clicked() ), SLOT( applyT1Segmentation() ) );
 
     // Connexions necessaries amb els canvis al layout
@@ -1229,10 +1229,11 @@ void QGlialEstimationExtension::setT1MaskOpacity( int opacity )
     m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
 }
 
-void QGlialEstimationExtension::setT1SeedPosition ( )
+void QGlialEstimationExtension::setT1SeedPosition (double x,double y,double z)
 {
-    m_viewersLayout->getViewerWidget(0)->getViewer()->getSeedPosition( m_seedT1Position );
-
+    m_seedT1Position[0] = x;
+    m_seedT1Position[1] = y;
+    m_seedT1Position[2] = z;
     m_T1SeedXLineEdit->setText( QString::number( m_seedT1Position[0], 'f', 1 ) );
     m_T1SeedYLineEdit->setText( QString::number( m_seedT1Position[1], 'f', 1 ) );
     m_T1SeedZLineEdit->setText( QString::number( m_seedT1Position[2], 'f', 1 ) );
