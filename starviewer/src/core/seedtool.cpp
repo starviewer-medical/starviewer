@@ -74,16 +74,17 @@ void SeedTool::setToolData(ToolData * data)
 
 void SeedTool::setSeed()
 {
-    if( m_2DViewer )
-    {
-        m_state=SEEDING;
-        updateSeedPosition();
-    }
+    Q_ASSERT( m_2DViewer );
+    
+    m_state=SEEDING;
+    updateSeedPosition();
 }
 
 void SeedTool::doSeeding()
 {
-    if( m_2DViewer && m_state==SEEDING )
+    Q_ASSERT( m_2DViewer );
+
+    if( m_state==SEEDING )
     {
         updateSeedPosition();
     }
@@ -96,6 +97,8 @@ void SeedTool::endSeeding()
 
 void SeedTool::updateSeedPosition()
 {
+    Q_ASSERT( m_2DViewer );
+
     QVector<double> seedPosition(3);
     double xyz[3];
     m_2DViewer->getCurrentCursorPosition( xyz );
