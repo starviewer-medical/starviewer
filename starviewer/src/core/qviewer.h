@@ -217,7 +217,6 @@ public slots:
     virtual void resetViewToSagital(){};
     virtual void resetViewToCoronal(){};
 
-public slots:
     /**
      * Activa o desactiva el menú de contexte
      */
