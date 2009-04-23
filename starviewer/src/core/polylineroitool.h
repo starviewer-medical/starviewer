@@ -31,8 +31,17 @@ private:
     /// metode per escriure a pantalla les dades calculades.
     void printData();
 
+    ///metode per buscar els valors de gris que serviran per calcular la mitjana i la desviació estàndard
+    void computeGrayValues();
+
     /// metode per calcular la mitjana de gris de la regio del polyline
     double computeGrayMean();
+
+    ///mètode per calcular la desviació estàndard de gris de la regió del polyline
+    double computeStandardDeviation();
+
+    ///llista amb els valors de gris per calcular la mitjana i la desviació etàndard
+    QList< double > grayValues;
 };
 
 }

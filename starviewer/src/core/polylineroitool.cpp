@@ -73,11 +73,11 @@ void PolylineROITool::printData()
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
         {
             double * spacing = m_2DViewer->getInput()->getSpacing();
-            text->setText( tr("Area: %1 px2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView(), spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+            text->setText( tr("Area: %1 px2\nMean: %2\nSt.Dev.: %3").arg( m_mainPolyline->computeArea( m_2DViewer->getView(), spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
         }
         else
         {
-            text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+            text->setText( tr("Area: %1 mm2\nMean: %2\nSt.Dev.: %3").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
         }
 
         text->setAttatchmentPoint( intersection );
@@ -86,9 +86,8 @@ void PolylineROITool::printData()
     }
 }
 
-double PolylineROITool::computeGrayMean()
+void PolylineROITool::computeGrayValues()
 {
-	double mean = 0.0;
     int i;
     int subId;
     int initialPosition;
@@ -222,7 +221,7 @@ double PolylineROITool::computeGrayMean()
                 {
                     while ( firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex] )
                     {
-                        mean += (double)getGrayValue( firstIntersection );
+                        grayValues << (double)getGrayValue( firstIntersection );
                         numberOfVoxels++;
                         firstIntersection[intersectionIndex] += spacing[0];
                     }
@@ -231,7 +230,7 @@ double PolylineROITool::computeGrayMean()
                 {
                     while ( firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex] )
                     {
-                        mean += (double)getGrayValue( firstIntersection );
+                        grayValues << (double)getGrayValue( firstIntersection );
                         numberOfVoxels++;
                         firstIntersection[intersectionIndex] -= spacing[0];
                     }
@@ -246,14 +245,52 @@ double PolylineROITool::computeGrayMean()
         rayP2[rayPointIndex] += spacing[1];
     }
 
-	 mean /= numberOfVoxels;
 
     //destruim els diferents segments que hem creat per simular la roi
     for ( i = 0; i < numberOfSegments; i++ )
         segments[i]->Delete();
 
-    return mean;
 
+}
+
+double PolylineROITool::computeGrayMean()
+{
+    computeGrayValues();
+
+    double mean = 0.0;
+
+    foreach ( double value, grayValues )
+        mean += value;
+
+    //no es buida la llista pq la utilitzara computeStandardDeviation()
+
+    return mean / grayValues.size();
+}
+
+double PolylineROITool::computeStandardDeviation()
+{
+    // no cal computeGrayValues(); ja ho ha fet computeGrayMean, que sempre es crida just abans
+
+    double standardDeviation = 0.0;
+    double mean = computeGrayMean();
+
+    QList<double> deviations;
+
+    foreach ( double value, grayValues )
+    {
+        double individualDeviation = value - mean;
+        deviations << ( individualDeviation * individualDeviation );
+
+    }
+
+    grayValues.clear();
+
+    foreach ( double deviation, deviations )
+        standardDeviation += deviation;
+
+    standardDeviation /= deviations.size();
+
+    return std::sqrt( standardDeviation );
 }
 
 }
