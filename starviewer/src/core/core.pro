@@ -56,13 +56,8 @@ HEADERS += extensionfactory.h \
            itkErfcLevelSetFunction.h \
            itkErfcLevelSetImageFilter.h \
            itkVolumeCalculatorImageFilter.h \
-           keyimagenotefilereader.h \
-           keyimagenote.h \
-           q2dviewerkeyimagenoteattacher.h \
-           q2dviewerblackboard.h \
            vtkAtamaiPolyDataToImageStencil2.h \
            shutterfilter.h \
-           q2dviewerpresentationstateattacher.h \
            image.h \
            dicomtagreader.h \
            patientfiller.h \
@@ -212,13 +207,8 @@ SOURCES += extensionmediator.cpp \
            itkErfcLevelSetFunction.cpp \
            itkErfcLevelSetImageFilter.cpp \
            itkVolumeCalculatorImageFilter.cpp \
-           keyimagenote.cpp \
-           keyimagenotefilereader.cpp \
-           q2dviewerkeyimagenoteattacher.cpp \
-           q2dviewerblackboard.cpp \
            vtkAtamaiPolyDataToImageStencil2.cxx \
            shutterfilter.cpp \
-           q2dviewerpresentationstateattacher.cpp \
            image.cpp \
            dicomtagreader.cpp \
            patientfiller.cpp \

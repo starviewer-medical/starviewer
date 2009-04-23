@@ -31,16 +31,11 @@
 #include <QPoint>
 #include <QGridLayout>
 #include <QProgressDialog>
-// EXTRA!!! \TODO es temporal
-#include <QFileDialog>
-#include "keyimagenote.h"
-#include "q2dviewerkeyimagenoteattacher.h"
-#include "q2dviewerpresentationstateattacher.h"
 
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
- : QWidget( parent ), m_presentationStateAttacher(0), m_lastSelectedViewer(0)
+ : QWidget( parent ), m_mainVolume(0), m_patient(0), m_lastSelectedViewer(0) 
 {
     setupUi( this );
 
@@ -71,15 +66,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_translateToolButton->setVisible(false);
     m_rotateCounterClockWiseToolButton->setVisible( false );
 
-    // TODO deshabilitem els presentation states fins la release en què es tornin a habilitar
-    m_presentationStateSwitchToolButton->setVisible(false);
-
-    m_mainVolume = 0;
-    m_keyImageNoteAttacher = NULL;
-    m_keyImageNote = NULL;
-
-    m_patient = NULL;
-
     m_predefinedSeriesGrid = new MenuGridWidget(this);
     m_seriesTableGrid = new TableMenu(this);
     m_predefinedSlicesGrid = new MenuGridWidget(this);
@@ -87,7 +73,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_dicomDumpCurrentDisplayedImage = new QDicomDump(this);
 
     readSettings();
-    createActions();
     createConnections();
 
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
@@ -118,31 +103,6 @@ Q2DViewerExtension::~Q2DViewerExtension()
     delete m_dicomDumpCurrentDisplayedImage;
 }
 
-void Q2DViewerExtension::createActions()
-{
-    // per activar i desactivar els presentation states
-    m_presentationStateAction = new QAction( this );
-    m_presentationStateAction->setText( tr("PS") );
-    m_presentationStateAction->setStatusTip( tr("Enable/Disable the current attached") );
-    m_presentationStateAction->setCheckable( true );
-    m_presentationStateAction->setEnabled(false);
-    m_presentationStateAction->setChecked(false);
-    m_presentationStateSwitchToolButton->setDefaultAction( m_presentationStateAction );
-}
-
-void Q2DViewerExtension::enablePresentationState(bool enable)
-{
-    if( enable )
-    {
-        m_presentationStateAttacher->attach();
-    }
-    else
-    {
-        m_presentationStateAttacher->detach();
-        this->setInput( m_mainVolume );
-    }
-}
-
 void Q2DViewerExtension::createConnections()
 {
     // Menus
@@ -155,10 +115,6 @@ void Q2DViewerExtension::createConnections()
     connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea , SLOT( setGrid( int, int ) ) );
 	connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int ) ), this, SLOT( setHangingProtocol( int ) ) );
     connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea, SLOT( setGrid( int, int ) ) );
-
-    // EXTRA!!!!!\TODO es temporal
-    // enable/disable presentation states
-    connect( m_presentationStateAction, SIGNAL( toggled(bool) ), SLOT( enablePresentationState(bool) ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
@@ -202,41 +158,6 @@ void Q2DViewerExtension::searchHangingProtocols()
 	hangingProtocolManger = 0;
     QApplication::restoreOverrideCursor();
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
-}
-
-void Q2DViewerExtension::loadKeyImageNote(const QString &filename)
-{
-    if (m_keyImageNote != NULL)
-    {
-        delete m_keyImageNote;
-    }
-    m_keyImageNote = new KeyImageNote();
-    if ( ! m_keyImageNote->loadFromFile(filename))
-    {
-        DEBUG_LOG( "ERROR! Al llegir el KIN " + filename );
-        return;
-    }
-
-    // Es carrega l'attacher per el viewer principal
-    if ( m_keyImageNoteAttacher != NULL)
-    {
-        delete m_keyImageNoteAttacher;
-    }
-    m_keyImageNoteAttacher = new Q2DViewerKeyImageNoteAttacher(  m_workingArea->getViewerSelected()->getViewer(), m_keyImageNote );
-    m_keyImageNoteAttacher->setVisibleAdditionalInformation( true );
-    m_keyImageNoteAttacher->attach();
-}
-
-void Q2DViewerExtension::loadPresentationState(const QString &filename)
-{
-    // Es carrega l'attacher per el viewer principal només
-    if( m_presentationStateAttacher != NULL )
-    {
-        delete m_presentationStateAttacher;
-    }
-    m_presentationStateAttacher = new Q2DViewerPresentationStateAttacher(  m_workingArea->getViewerSelected()->getViewer(), qPrintable(filename) );
-    m_presentationStateAction->setEnabled( true );
-    m_presentationStateAction->setChecked( true );
 }
 
 void Q2DViewerExtension::showPredefinedGrid()
