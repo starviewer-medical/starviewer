@@ -37,21 +37,23 @@ class HangingProtocolManager;
 /**
 
 Classe base per als visualitzadors 2D.
+
 El mode d'operació habitual serà el de visualitar un sol volum.
 Normalment per poder visualitzar un volum farem el següent
 \code
 Q2DViewer* visor = new Q2DViewer();
 visor->setInput( volum );
-visor->resetView( Q2DViewer::Axial );
-visor->render();
 
-En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat mab el mètode setOverlayInput().
-Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de checkerboard, aplicant un blending o un rectilinearWipe, en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
+En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat amb el mètode setOverlayInput().
+Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de checkerboard, aplicant un blending o un rectilinearWipe, 
+en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
 \TODO acabar la doc sobre solapament
 
-Per defecte el visualitzador mostra la llesca central de la vista seleccionada, si volem canviar al llesca farem servir el mètode setSlice().
+Per defecte el visualitzador mostra la primera imatge en Axial. Per les altres vistes (Sagital i Coronal) mostraria la imatge central
 
-Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums. Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation() que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
+Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums. 
+Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation() 
+que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
 
 @author Grup de Gràfics de Girona  ( GGG )
 */
@@ -71,7 +73,7 @@ public:
 
     virtual void setInput( Volume *volume );
 
-    /// ens retorna la vista que tenim en aquells moments del volum
+    /// Ens retorna la vista que tenim en aquells moments del volum
     CameraOrientationType getView() const;
 
     /// Afegim el volum solapat
@@ -104,7 +106,7 @@ public:
     double getCurrentColorLevel();
     void getCurrentWindowLevel( double wl[2] );
 
-    /// retorna la llesca/fase actual
+    /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
     int getCurrentPhase() const;
 
@@ -223,6 +225,10 @@ public:
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     QString getCurrentPlaneProjectionLabel() const;
 
+    /// Retorna el filtre de mapeig de window level. 
+    /// TODO El fan servir les extensions que necessiten aplicar una escala de colors
+    /// sobre la imatge. Caldria pensar en un mètode de poder aplicar color sense exposar 
+    /// aquest component intern a l'exterior
     vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
 
 public slots:
