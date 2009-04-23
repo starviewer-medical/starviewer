@@ -39,21 +39,16 @@
 #include <vtkProperty2D.h>
 #include <vtkProp.h>
 #include <vtkScalarBarActor.h>
-#include <vtkLookupTable.h>
+#include <vtkWindowLevelLookupTable.h>
 // voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
 #include <vtkImageActor.h>
-
 // displayed area
 #include <vtkImageChangeInformation.h>
 #include <vtkImageResample.h>
-
 // grayscale pipeline
 #include <vtkImageMapToWindowLevelColors.h>
-#include <vtkImageShiftScale.h>
-#include <vtkWindowLevelLookupTable.h>
-
 // projeccio de punts
 #include <vtkMatrix4x4.h>
 #include <vtkPlane.h>
@@ -61,7 +56,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -104,14 +99,6 @@ Q2DViewer::~Q2DViewer()
     // Fem delete d'altres objectes vtk en cas que s'hagin hagut de crear
     if( m_blender )
         m_blender->Delete();
-    if( m_modalityLUTRescale )
-        m_modalityLUTRescale->Delete();
-    if( m_modalityLut )
-        m_modalityLut->Delete();
-    if( m_windowLevelLut )
-        m_windowLevelLut->Delete();
-    if( m_presentationLut )
-        m_presentationLut->Delete();
     // TODO hem hagut de fer eliminar primer el drawer per davant d'altres objectes
     // per solucionar el ticket #539, però això denota que hi ha algun problema de
     // disseny que fa que no sigui prou robust. L'ordre en que s'esborren els objectes
@@ -333,44 +320,6 @@ void Q2DViewer::verticalFlip()
 {
     m_rotateFactor = (m_rotateFactor + 2) % 4 ;
     horizontalFlip();
-}
-
-void Q2DViewer::setModalityRescale( double slope, double intercept )
-{
-    if( !m_modalityLUTRescale )
-    {
-        m_modalityLUTRescale = vtkImageShiftScale::New();
-        m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
-    }
-    m_modalityLUTRescale->SetShift( slope );
-    m_modalityLUTRescale->SetScale( intercept );
-}
-
-void Q2DViewer::setModalityLUT( vtkWindowLevelLookupTable *lut )
-{
-    if( !lut && m_modalityLut )
-    {
-        m_modalityLut->Delete();
-    }
-    m_modalityLut = lut;
-}
-
-void Q2DViewer::setVOILUT( vtkWindowLevelLookupTable *lut )
-{
-    if( !lut && m_windowLevelLut )
-    {
-        m_windowLevelLut->Delete();
-    }
-    m_windowLevelLut = lut;
-}
-
-void Q2DViewer::setPresentationLUT( vtkWindowLevelLookupTable *lut )
-{
-    if( !lut && m_presentationLut )
-    {
-        m_presentationLut->Delete();
-    }
-    m_presentationLut = lut;
 }
 
 QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
@@ -723,7 +672,6 @@ void Q2DViewer::setInput( Volume *volume )
     }
 	// obtenim valors de gris i aquestes coses
     // aquí es crea tot el pieline del visualitzador
-    this->computeInputGrayscalePipeline();
     this->applyGrayscalePipeline();
 
     // Preparem el thickSlab // TODO cada cop que fem setInput resetejem els valors per defecte??
@@ -902,9 +850,7 @@ void Q2DViewer::updateCamera()
                 roll = -m_rotateFactor*90.;
         break;
         }
-
         camera->SetRoll( roll );
-        emit rotationDegreesChanged( roll );
 
         if( m_applyFlip )
         {
@@ -932,8 +878,6 @@ void Q2DViewer::updateCamera()
             m_applyFlip = false;
             m_isImageFlipped = ! m_isImageFlipped;
         }
-
-        emit rotationFactorChanged( m_rotateFactor );
         emit cameraChanged();
         mapOrientationStringToAnnotation();
         this->refresh();
@@ -1223,72 +1167,6 @@ int Q2DViewer::getCurrentSlice() const
 int Q2DViewer::getCurrentPhase() const
 {
     return m_currentPhase;
-}
-
-void Q2DViewer::setModalityRescale( vtkImageShiftScale *rescale )
-{
-    m_modalityLUTRescale = rescale;
-}
-
-void Q2DViewer::setPixelAspectRatio( double ratio )
-{
-    if( ratio != 1.0 && ratio > 0.0 )
-    {
-        m_mainVolume->updateInformation();
-        double spacing[3];
-        m_mainVolume->getSpacing( spacing );
-
-        vtkImageChangeInformation *change = vtkImageChangeInformation::New();
-        change->SetInput( m_imageActor->GetInput() );
-
-        if( ratio > 1.0 )
-            change->SetOutputSpacing( spacing[0]*ratio, spacing[1], spacing[2] );
-        else
-            change->SetOutputSpacing( spacing[0], spacing[1]*ratio, spacing[2] );
-
-        m_imageActor->SetInput( change->GetOutput() );
-    }
-    else
-    {
-        DEBUG_LOG( QString("Ratio no aplicable: %1").arg(ratio) );
-    }
-}
-
-void Q2DViewer::setTrueSizeMode( bool on )
-{
-    if( on )
-    {
-        DEBUG_LOG("Presentation size mode: TRUE SIZE:: NO IMPLEMENTAT ENCARA!");
-        // \TODO això encara no funciona
-    }
-}
-
-void Q2DViewer::setMagnificationFactor( double factor )
-{
-    // presumiblement un SetScale(factor,factor,1) de l'ImageActor podria ser una solució alternativa
-    if( factor > 0.0 && factor != 1.0 )
-    {
-        m_mainVolume->updateInformation();
-        double spacing[3];
-        m_mainVolume->getSpacing( spacing );
-        vtkImageChangeInformation *change = vtkImageChangeInformation::New();
-        change->SetInput( m_imageActor->GetInput() );
-        change->SetOutputSpacing( spacing[0]*factor, spacing[1]*factor, spacing[2] );
-        vtkImageResample *resample = vtkImageResample::New();
-        resample->SetInput( change->GetOutput() );
-        resample->SetAxisMagnificationFactor( 0, factor );
-        resample->SetAxisMagnificationFactor( 1, factor );
-        resample->SetAxisMagnificationFactor( 2, 1.0 );
-        resample->SetAxisOutputSpacing( 0, spacing[0]*factor );
-        resample->SetAxisOutputSpacing( 1, spacing[1]*factor );
-        resample->SetAxisOutputSpacing( 2, 1.0 );
-        resample->Update();
-        m_imageActor->SetInput( resample->GetOutput() );
-    }
-    else
-    {
-        DEBUG_LOG( QString("Factor no aplicable: %1").arg(factor) );
-    }
 }
 
 Image *Q2DViewer::getCurrentDisplayedImage() const
@@ -1881,16 +1759,6 @@ void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
     enableAnnotation( annotation, false );
 }
 
-void Q2DViewer::computeInputGrayscalePipeline()
-{
-    if( m_mainVolume )
-    {
-        // si llegim l'arxiu tal qual, la modality no cal aplicar-la perquè les pròpies gdcm ja ens apliquen la modality lut
-        computeModalityLUT();
-        computeVOILUT();
-    }
-}
-
 void Q2DViewer::applyGrayscalePipeline()
 {
     DEBUG_LOG( "*** Grayscale Transform Pipeline Begin ***" );
@@ -1902,203 +1770,19 @@ void Q2DViewer::applyGrayscalePipeline()
     .arg( m_mainVolume->getImages().at(0)->getPixelRepresentation() )
     .arg( m_mainVolume->getImages().at(0)->getPhotometricInterpretation() )
                      );
-//\TODO Això s'ha d'aplicar enfunció de si tenim presentationm state o no? mirar si s'ha de fer aquí o al presentation state attacher...
-
-//     if( m_mainVolume->getImages().at(0)->getPhotometricInterpretation() =="MONOCHROME1" && m_presentationStateFilename != NULL )
-//     {
-//         DEBUG_LOG("La imatge és MONOCHROME1: ¿invertim les dades després de la VOI LUT i abans de la presentation LUT?... Si hi ha presentation state això no s'hauria de fer!");
-//         if( m_presentationLut )
-//         {
-//             m_presentationLut->InverseVideoOn();
-//             DEBUG_LOG("Inverteixo la PRESENTATION LUT");
-//         }
-//         else if( m_windowLevelLut )
-//         {
-//             m_windowLevelLut->InverseVideoOn();
-//             DEBUG_LOG("Inverteixo la VOI LUT");
-//         }
-//         else if( m_modalityLut )
-//         {
-//             m_modalityLut->InverseVideoOn();
-//             DEBUG_LOG("Inverteixo la MODALITY LUT");
-//         }
-//     }
-    // crear el pipeline en funció de tot el que ens hem trobat
-    if( m_modalityLut )
+    // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
+    if( isThickSlabActive() )
     {
-        if( m_windowLevelLut )
-        {
-            if( m_presentationLut ) // modality lut + windowlevel lut + presentation lut
-            {
-                if( isThickSlabActive() )
-                {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> Modality LUT -> Window Level LUT -> Presentation LUT -> Output  :: FIRST TRY OF IMPLEMENTATION!");
-                    m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
-                }
-                else
-                {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> Window Level LUT -> Presentation LUT -> Output  :: FIRST TRY OF IMPLEMENTATION!");
-                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-                }
-                m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
-                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
-                // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
-                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
-                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
-            }
-            else // modality lut + windowlevel lut
-            {
-                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> Window Level LUT -> Output  :: NOT IMPLEMENTED YET!");
-            }
-        }
-        else
-        {
-            if( m_presentationLut ) // modality lut + presentation lut [ + ww/wl ]
-            {
-                DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> [Window Level] -> Presentation LUT -> Output  :: NOT IMPLEMENTED YET!");
-            }
-            else // modality [ + ww/wl ]
-            {
-                if( isThickSlabActive() )
-                {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> Modality LUT -> [Window Level] -> Output ");
-                    m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
-                }
-                else
-                {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> Modality LUT -> [Window Level] -> Output ");
-                    m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-                }
-                m_windowLevelLUTMapper->SetLookupTable( m_modalityLut );
-                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
-                // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
-                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
-                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
-            }
-        }
+        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Output ");
+        m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
     }
     else
     {
-        if( m_windowLevelLut )
-        {
-            if( m_presentationLut )
-            {
-                if( m_modalityLUTRescale ) // rescale slope + windowlevel lut + presentation lut
-                {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> Window Level LUT -> Presentation LUT -> Output  :: NOT IMPLEMENTED YET!");
-                }
-                else // windowlevel lut + presentation lut
-                {
-                    DEBUG_LOG("Grayscale pipeline: Source Data -> Window Level LUT -> Presentation LUT -> Output :: NOT IMPLEMENTED YET!");
-                }
-            }
-            else // windowlevel lut
-            {
-                if( m_modalityLUTRescale ) // rescale slope + windowlevel lut
-                {
-                    if( isThickSlabActive() )
-                    {
-                        // TODO implementar
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> RescaleSlope -> Window Level LUT -> Output :: NOT IMPLEMENTED YET! ");
-                        //m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
-                    }
-                    else
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> Window Level LUT -> Output ");
-                        m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
-                    }
-                }
-                else // windowlevel lut
-                {
-                    if( isThickSlabActive() )
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> Window Level LUT -> Output ");
-                        m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
-                    }
-                    else
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> Window Level LUT -> Output ");
-                        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-                    }
-                }
-                m_windowLevelLUTMapper->SetLookupTable( m_windowLevelLut );
-                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
-                // es dóna per fet que el window level queda ajustat per defecte
-                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
-                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
-            }
-        }
-        else
-        {
-            if( m_presentationLut )
-            {
-                if( m_modalityLUTRescale ) // rescale slope + [ww/wl +] presentation
-                {
-                    if( isThickSlabActive() )
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> RescaleSlope -> [Window Level] -> Presentation LUT -> Output ");
-                        m_modalityLUTRescale->SetInput( m_thickSlabProjectionFilter->GetOutput() );
-                    }
-                    else
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Presentation LUT -> Output ");
-                        m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
-                    }
-                    m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
-                }
-                else // [ww/wl +] presentation
-                {
-                    if( isThickSlabActive() )
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Presentation LUT -> Output ");
-                        m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
-                    }
-                    else
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Presentation LUT -> Output ");
-                        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-                    }
-                }
-                m_windowLevelLUTMapper->SetLookupTable( m_presentationLut );
-                // es dóna per fet que els paràmetres correctes de window level ja estan calculats, ja sigui per especificació explícita o per assignació automàtica
-                m_windowLevelLUTMapper->SetWindow( m_defaultWindow );
-                m_windowLevelLUTMapper->SetLevel( m_defaultLevel );
-                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
-            }
-            else
-            {
-                if( m_modalityLUTRescale ) // rescale slope
-                {
-                    if( isThickSlabActive() )
-                    {
-                        // TODO implementar
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> RescaleSlope -> [Window Level] -> Output :: NOT IMPLEMENTED YET!");
-                    }
-                    else
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> RescaleSlope -> [Window Level] -> Output ");
-    //                     m_modalityLUTRescale->SetInput( m_mainVolume->getVtkData() );
-                    }
-                    m_windowLevelLUTMapper->SetInput( m_modalityLUTRescale->GetOutput() );
-                }
-                else // res 
-                {
-                    // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
-                    if( isThickSlabActive() )
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> ThickSlab -> [Window Level] -> Output ");
-                        m_windowLevelLUTMapper->SetInput( m_thickSlabProjectionFilter->GetOutput() );
-                    }
-                    else
-                    {
-                        DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
-                        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-                    }
-                }
-                m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
-            }
-        }
+        DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
+        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
     }
+                
+    m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
 }
 
 void Q2DViewer::setSlabProjectionMode( int projectionMode )
@@ -2174,73 +1858,6 @@ void Q2DViewer::enableThickSlab( bool enable )
 bool Q2DViewer::isThickSlabActive() const
 {
     return m_thickSlabActive;
-}
-
-void Q2DViewer::computeModalityLUT()
-{
-    // If the Modality LUT or equivalent Attributes are part of both the Image and the Presentation State, then the Presentation State Modality LUT shall be used instead of the Image Modality LUT or equivalent Attributes in the Image. If the Modality LUT is not present in the Presentation State it shall be assumed to be an identity transformation. Any Modality LUT or equivalent Attributes in the Image shall not be used.
-
-    // busquem si existeix una modality lut TODO eliminem el parseLookupTable, això hauria de ser feina de
-    // la classe que apliqui les transformacions de grisos i  presentation states
-    m_modalityLut = NULL;
-    if( m_modalityLut )
-    {
-        m_modalityRange[0] = m_modalityLut->GetTableRange()[0];
-        m_modalityRange[1] = m_modalityLut->GetTableRange()[1];
-        if( m_modalityLUTRescale )
-        {
-            m_modalityLUTRescale->Delete();
-            m_modalityLUTRescale = 0;
-        }
-    }
-    // si no hi ha lut busquem els paràmetres de rescale
-    else
-    {
-        // mirar el de la imatge, només per curiositat perquè les itk ja l'apliquen directament
-        DEBUG_LOG( QString("Image Modality LUT Adjustment: Rescale Slope %1, Rescale Intercept %2")
-        .arg( m_mainVolume->getImages().at(0)->getRescaleSlope() )
-        .arg( m_mainVolume->getImages().at(0)->getRescaleIntercept() )
-         );
-        if( m_modalityLUTRescale )
-        {
-            m_modalityLUTRescale->Delete();
-            m_modalityLUTRescale = 0;
-        }
-        m_modalityRange[0] = m_mainVolume->getVtkData()->GetScalarRange()[0];
-        m_modalityRange[1] = m_mainVolume->getVtkData()->GetScalarRange()[1];
-    }
-}
-
-void Q2DViewer::computeVOILUT()
-{
-    //
-    // 3. VOI LUT
-    //
-    // If a VOI LUT is part of both the Image and the Presentation State then the Presentation State VOI LUT shall be used instead of the Image VOI LUT. If a VOI LUT (that applies to the Image) is not present in the Presentation State , it shall be assumed to be an identity transformation. Any VOI LUT or equivalent values in the Image shall not be used.
-
-    // aquests canvis es poden aplicar a un subconjunt de imatges/frames. Per tant podem tenir diverses VOI LUT per una mateixa sèrie que s'apliquen a diverses imatges.
-
-    // primer busquem voi lut, sinó busquem window level TODO eliminem el parseLookupTable, això hauria de ser feina de
-    // la classe que apliqui les transformacions de grisos i  presentation states
-    m_windowLevelLut = NULL;
-    // si hi ha una VOI LUT
-    if( m_windowLevelLut )
-    {
-        // Ara podem considerar els tres casos anteriors de la modality: hi ha rescale, hi ha lut o no hi ha res. el 1r i el tercer es tracten igual.
-        if( m_modalityLut )
-        {
-            DEBUG_LOG("Encara no sabem què fer en aquest cas (concatenar modality + voi LUT)");
-        }
-        else
-        {
-            m_defaultWindow = m_windowLevelLut->GetTableRange()[1] - m_windowLevelLut->GetTableRange()[0];
-            m_defaultLevel = m_defaultWindow / 2.0;
-        }
-    }
-    else
-    {
-		updateWindowLevelData();
-    }
 }
 
 void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
@@ -2472,7 +2089,6 @@ void Q2DViewer::restore()
     this->m_isRefreshActive = false;
     
     this->resetView( m_lastView );
-    this->computeInputGrayscalePipeline();
     this->applyGrayscalePipeline();    
     
     // Activem el refresh i refresquem

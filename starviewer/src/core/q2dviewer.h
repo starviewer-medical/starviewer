@@ -21,8 +21,7 @@ class vtkImageActor;
 class vtkImageData;
 // grayscale pipeline
 class vtkImageMapToWindowLevelColors;
-class vtkImageShiftScale;
-class vtkWindowLevelLookupTable;
+// Thick Slab
 class vtkProjectionImageFilter;
 
 namespace udg {
@@ -224,41 +223,7 @@ public:
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     QString getCurrentPlaneProjectionLabel() const;
 
-    /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat.
-    /// Això permet que el càlcul s'hagi fet en un presentation state, per exemple
-    /// TODO És públic únicament perquè el fa servir el presentation state attacher. Podria ser protected o private.
-    void applyGrayscalePipeline();
-
-    //
-    // Mètodes de conveniència pels presentation state
-    // Aquests mètodes només estan per les classes de presentation state
-    // i no es fan servir enlloc més
-
-    //
-    // Grayscale Pipeline
-    //
-
-    /// Assigna el rescale de valors que volem
-    void setModalityRescale( vtkImageShiftScale *rescale );
-    void setModalityRescale( double slope, double intercept );
-    void setModalityLUT( vtkWindowLevelLookupTable *lut );
-    void setVOILUT( vtkWindowLevelLookupTable *lut );
-    void setPresentationLUT( vtkWindowLevelLookupTable *lut );
-
     vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
-
-    //
-    // DISPLAYED AREA. Mètodes per poder modificar l'àrea visible del volum (zoom enquadrat) i/o canviar aspecte, espaiat de presentació, etc
-    //
-
-    /// Canviem l'aspecte entre els eixos x/y
-    void setPixelAspectRatio( double ratio );
-
-    /// En aquest mode, es presenta la imatge de tal manera que les mides estan a escala real, per tant 1mm de la imatge en pantalla seria 1 mm real d'aquella llesca. \TODO aquest mètode encara no està en funcionament, però el deixem per implementar en un futur pròxim
-    void setTrueSizeMode( bool on = true );
-
-    /// Magnifica la imatge en les direccions X/Y pel factor donat. Si el factor és < 0.0 llavors la imatge es "minifica"
-    void setMagnificationFactor( double factor );
 
 public slots:
     void resetView( CameraOrientationType view );
@@ -362,18 +327,6 @@ signals:
     /// Senyal que s'envia quan ha canviat l'overlay
     void overlayChanged();
 
-    //
-    // Signals de conveniència pels Presentation State
-    // Aquests signals només els fa servir el Q2DViewerBlackboard 
-    // que només el fa servir el kin i presentation state
-    // KIN i PS haurien de fer servir el drawer del viewer en comptes del blackboard
-
-    /// informa del valor del m_rotateFactor. S'emetrà quan la rotació de la càmera s'hagi fet efectiva
-    void rotationFactorChanged(int);
-
-    /// informa dels graus que ha girat la càmera quan s'ha actualitzat aquest paràmetre
-    void rotationDegreesChanged(double);
-
 protected:
     /// Processem l'event de resize de la finestra Qt
     virtual void resizeEvent( QResizeEvent *resize );
@@ -426,51 +379,10 @@ private:
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();
 
-    /// Fa els càlculs del pipeline de l'escala de grisos del volum d'entrada. És a dir calcularà la modality lut, voi lut i presentation lut però no l'aplicarà
-    void computeInputGrayscalePipeline();
-
-    /**
-     * Aplica la transformació de modalitat sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
-     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
-
-        1.1. La imatge original té una modality LUT. La llegim i l'apliquem al principi del pipeline. El seu input són les dades originals del volum.
-
-        1.2. La imatge original conté rescale slope i rescale intercept. No cal fer res, el lector d'itk (GDCM) ja aplica aquesta transformació automàticament quan llegim el volum.
-
-        1.3. No hi ha cap informació referent a modality LUTs. No cal fer res. Aplicar transformació identitat
-
-     2.- En en cas que tinguem un presentation state associat, pot passar el següent
-
-        2.1. El PS té una modality LUT. ídem 1.1
-
-        2.2. El PS conté rescale slope i rescale intercept. Cal aplicar un filtre de rescale (vtImageShiftScale). \TODO Com que la imatge que llegim ja té aplicat el rescale/intercept de la imatge, no sabem si cal contrestar primer la transformació que ens vé de "gratis".
-
-        2.3. ídem 1.3 \TODO però no sabem si en el cas que tinguem un rescalat de "gratis" caldria desfer-lo, és a dir, donar els raw pixels!
-
-    Els canvis de la modality LUT s'apliquen a totes les imatges contingudes en el volum
-     */
-    void computeModalityLUT();
-
-    /**
-     *  Aplica l'ajustament de finestra sobre la imatge. Ens podem trobar amb que tenim un presentation state associat o no.
-
-     1.- En el cas que no hi hagi un presentation state associat ens podem trobar amb les següents situacions:
-
-        1.1. La imatge original té una VOI LUT. La llegim i l'apliquem com a input del window level mapper. \TODO problema: no sabem ben bé què passa si abans teníem una modality LUT. En principi hauríem de fer servir el mapeig sobre l'anterior lut.
-
-        1.2. La imatge original conté valors de window level. Apliquem aquests valors sobre el window level mapper.
-
-        1.3. No hi ha cap informació referent a VOI LUTs. No cal fer res. Aplicar transformació identitat, és a dir el window serà el rang de dades i el level el window/2.
-
-     2.- En en cas que tinguem un presentation state associat, actuem igual que en 1.x. Els valors del presentation state prevalen sobre els de la imatge.
-
-    Es pot tenir més d'una VOI LUT (ja sigui en format de LUT o de window level). Això significa que tenim diverses opcions de presentació. Es pot agafar una per defecte però l'aplicació hauria de mostrar la possiblitat d'escollir entre aquestes.
-
-    Els canvis de la VOI LUT es poden aplicar a sub-conjunts d'imatges referenciades. Això es donarà en el cas d'imatges multi-frame.
-
-    De cares al connectathon només es tracta una sola VOI LUT i imatges mono-frame, però hem de tenir en compte que l'estàndar DICOM contempla les possibilitats abans mencionades.
-     */
-    void computeVOILUT();
+    /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat.
+    /// Això permet que el càlcul s'hagi fet en un presentation state, per exemple
+    /// TODO És públic únicament perquè el fa servir el presentation state attacher. Podria ser protected o private.
+    void applyGrayscalePipeline();
 
     /// thick slab
     void computeRangeAndSlice( int newSlabThickness );
@@ -562,18 +474,11 @@ private:
     /// Aquesta variable controla si la imatge està flipada respecte la seva orientació original. Útil per controlar annotacions.
     bool m_isImageFlipped;
 
-    /// Rangs de dades que ens seran força útils a l'hora de controlar el pipeline de grayscale
-    double m_modalityRange[2];
-
     /// Especialista en dibuixar primitives
     Drawer *m_drawer;
 
     /// objectes per a les transformacions en el pipeline d'escala de grisos
     vtkImageMapToWindowLevelColors *m_windowLevelLUTMapper;
-    vtkImageShiftScale *m_modalityLUTRescale;
-
-    /// Les diferents look up tables que ens podem trobar durant tot el procés.
-    vtkWindowLevelLookupTable *m_modalityLut, *m_windowLevelLut, *m_presentationLut;
 
     // Secció "ThickSlab"
     /// Nombre de llesques que composen el thickSlab

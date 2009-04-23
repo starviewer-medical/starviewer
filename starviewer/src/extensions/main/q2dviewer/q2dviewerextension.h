@@ -17,9 +17,6 @@ namespace udg {
 
 // FWD declarations
 class Volume;
-class Q2DViewerKeyImageNoteAttacher;
-class Q2DViewerPresentationStateAttacher;
-class KeyImageNote;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
@@ -55,12 +52,6 @@ public:
     Patient* getPatient() const;
 
 public slots:
-    /// Carrega un Key Image Note
-    void loadKeyImageNote(const QString &filename);
-
-    /// Carrega un Presentation State
-    void loadPresentationState(const QString &filename);
-
     /// Mostrar menu per seleccionar grid predefinit
     ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showPredefinedGrid();
@@ -92,9 +83,6 @@ public slots:
 	void setHangingProtocol( int hangingProtocolNumber );
 
 private:
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual comú a Extensions? [hauria de ser protected]
-    void createActions();
-
     /// Crea les connexions entre signals i slots
     void createConnections();
 
@@ -108,9 +96,6 @@ private:
     void initializeTools();
 
 private slots:
-    /// activem o desactivem el presentation state
-    void enablePresentationState( bool enable );
-
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
 
@@ -137,7 +122,6 @@ private:
     Volume *m_mainVolume;
 
     /// Accions
-    QAction *m_presentationStateAction;
     QAction *m_singleShotAction;
     QAction *m_multipleShotAction;
     QAction *m_screenShotTriggerAction;
@@ -150,12 +134,6 @@ private:
 
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
-
-    Q2DViewerKeyImageNoteAttacher *m_keyImageNoteAttacher;
-    KeyImageNote *m_keyImageNote;
-
-    /// S'encarrega d'aplicar els presentation states
-    Q2DViewerPresentationStateAttacher *m_presentationStateAttacher;
 
     ///Obre la finestra de dicomdump per la imatge que tenim seleccionada en aquests moments
     QDicomDump *m_dicomDumpCurrentDisplayedImage;
