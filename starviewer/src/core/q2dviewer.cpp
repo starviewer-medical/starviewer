@@ -43,7 +43,6 @@
 // voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
-#include <vtkPropPicker.h>
 #include <vtkImageActor.h>
 
 // displayed area
@@ -62,7 +61,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_picker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false),m_modalityLUTRescale(0), m_modalityLut(0), m_windowLevelLut(0), m_presentationLut(0), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -73,10 +72,6 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     // filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
-
-    // afegim el picker
-    m_picker = vtkPropPicker::New();
-    this->getInteractor()->SetPicker( m_picker );
 
     // creem anotacions i actors
     createAnnotations();
@@ -102,7 +97,6 @@ Q2DViewer::~Q2DViewer()
     m_sideRuler->Delete();
     m_bottomRuler->Delete();
     m_cornerAnnotations->Delete();
-    m_picker->Delete();
     m_imageActor->Delete();
     m_anchoredRulerCoordinates->Delete();
     m_windowLevelLUTMapper->Delete();
@@ -748,10 +742,6 @@ void Q2DViewer::setInput( Volume *volume )
 
     // actualitzem la informació de window level
     this->updateWindowLevelData();
-    // \TODO això no sabem si serà del tot necessari
-    //     m_picker->PickFromListOn();
-    //     m_picker->AddPickList( m_imageActor );
-
     // HACK
     // S'activa el refresh per tal de que es renderitzi el visualitzador
     this->m_isRefreshActive = true;
@@ -1510,49 +1500,9 @@ Drawer *Q2DViewer::getDrawer() const
 
 bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
 {
-    bool found = false;
-    if( !m_mainVolume )
-        return found;
-    // agafem el punt que està apuntant el ratolí en aquell moment \TODO podríem passar-li el 4t parèmatre opcional (vtkPropCollection) per indicar que només agafi de l'ImageActor, però no sembla que suigui necessari realment i que si fa pick d'un altre actor 2D no passa res
-    int position[2];
-    this->getEventPosition( position );
-    m_picker->PickProp( position[0], position[1], getRenderer() );
-    // calculem el pixel trobat
-    m_picker->GetPickPosition( xyz );
-
-    // quan dona una posició de (0,0,0) és que estem fora de l'actor
-    if( !( xyz[0] == 0 && xyz[1] == 0 && xyz[2] == 0) )
-    {
-        double tolerance;
-        int subCellId;
-        double parametricCoordinates[3], interpolationWeights[8];
-
-        // Use tolerance as a function of size of source data
-        tolerance = m_mainVolume->getVtkData()->GetLength();
-        tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
-
-        // HACK per solucionar el problema amb el metode FindAndGetCell que necessita
-        // més presició que la que obtenim amb el GetPickPosition
-        double *origin = m_mainVolume->getVtkData()->GetOrigin();
-        if( abs(xyz[0] - origin[0] ) < 0.00001 ) xyz[0] = origin[0];
-        if( abs(xyz[1] - origin[1] ) < 0.00001 ) xyz[1] = origin[1];
-        if( abs(xyz[2] - origin[2] ) < 0.00001 ) xyz[2] = origin[2];
-
-        // Find the cell that contains q and get it
-        vtkCell *cell = m_mainVolume->getVtkData()->FindAndGetCell( xyz , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
-        if ( cell )
-        {
-            found = true;
-        }
-    }
-    if( !found )
-    {
-        xyz[0] = -1;
-        xyz[1] = -1;
-        xyz[2] = -1;
-    }
-
-    return found;
+    // TODO cal refactoritzar aquest mètode i substituir-lo per aquest que és el seu equivalent
+    getEventWorldCoordinate(xyz);
+    return true;
 }
 
 double Q2DViewer::getCurrentImageValue()

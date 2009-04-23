@@ -11,7 +11,6 @@
 
 // Fordward declarations
 // vtk
-class vtkPropPicker;
 class vtkTextActor;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
@@ -510,9 +509,6 @@ protected:
 
     /// El nombre de divisions per cada dimensió
     int m_divisions[3];
-
-    /// El picker per anotar punts de la imatge
-    vtkPropPicker *m_picker;
 
     /// Annotacions de texte referents a informació de la sèrie
     /// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
