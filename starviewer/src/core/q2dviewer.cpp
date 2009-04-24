@@ -671,7 +671,7 @@ void Q2DViewer::setInput( Volume *volume )
         m_blender = 0;
     }
 	// obtenim valors de gris i aquestes coses
-    // aquí es crea tot el pieline del visualitzador
+    // aquí es crea tot el pipeline del visualitzador
     this->applyGrayscalePipeline();
 
     // Preparem el thickSlab // TODO cada cop que fem setInput resetejem els valors per defecte??
@@ -706,7 +706,6 @@ void Q2DViewer::setOverlayInput( Volume *volume )
     switch( m_overlay )
     {
     case None:
-
         // actualitzem el viewer
         m_windowLevelLUTMapper->RemoveAllInputs();
         m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
@@ -714,7 +713,6 @@ void Q2DViewer::setOverlayInput( Volume *volume )
     break;
 
     case CheckerBoard:
-
         imageCheckerBoard->SetInput1( m_mainVolume->getVtkData() );
         imageCheckerBoard->SetInput2( m_overlayVolume->getVtkData() );
         imageCheckerBoard->SetNumberOfDivisions( m_divisions );
@@ -1050,7 +1048,6 @@ void Q2DViewer::setOverlay( OverlayType overlay )
 void Q2DViewer::setNoOverlay()
 {
     setOverlay( Q2DViewer::None );
-    DEBUG_LOG("Passem pel setNoOverlay()");
     m_windowLevelLUTMapper->RemoveAllInputs();
     m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
 }
@@ -1074,33 +1071,23 @@ void Q2DViewer::resizeEvent( QResizeEvent *vtkNotUsed(resize) )
 {
     if( m_mainVolume )
     {
-        // l'única info que cal actualitzar és la mida de finestra/viewport
-        updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
-        updateRulers();
-
         double bounds[6];
+        // ajustem la imatge al viewport
+        m_imageActor->GetBounds( bounds );
         switch( m_lastView )
         {
             case Axial:
-                // ajustem la imatge al viewport
-                m_imageActor->GetBounds( bounds );
                 scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
             break;
 
             case Sagital:
-                // ajustem la imatge al viewport
-                m_imageActor->GetBounds( bounds );
                 scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
             break;
             case Coronal:
-                // ajustem la imatge al viewport
-                m_imageActor->GetBounds( bounds );
                 scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
             break;
         }
-
     }
-
 }
 
 void Q2DViewer::setWindowLevel( double window , double level )
