@@ -307,6 +307,10 @@ public slots:
      */
     void enableThickSlab( bool enable = true );
 
+    /// Alineament de la imatge dins del visualitzador
+    void alignLeft();
+    void alignRight();
+
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);

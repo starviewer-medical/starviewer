@@ -2097,5 +2097,68 @@ void Q2DViewer::invertWindowLevel()
     setWindowLevel( window, level );
 }
 
+void Q2DViewer::alignLeft()
+{
+    double viewerLeft[4];
+    double bounds[6];
+    double motionVector[4];
+
+    computeDisplayToWorld( 0.0, 0.0, 0.0, viewerLeft );
+    m_imageActor->GetBounds( bounds );
+    motionVector[0]=0.0;
+    motionVector[1]=0.0;
+    motionVector[2]=0.0;
+    motionVector[3]=0.0;
+
+    // Càlcul del desplaçament
+    switch( m_lastView )
+    {
+        case Axial:
+            motionVector[0]=bounds[0]-viewerLeft[0];
+            break;
+        case Sagital:
+            motionVector[1]=bounds[2]-viewerLeft[1];
+            break;
+        case Coronal:
+            motionVector[0]=bounds[0]-viewerLeft[0];
+            break;
+    }
+
+    pan( motionVector );
+}
+
+void Q2DViewer::alignRight()
+{
+    int * size;
+    double viewerRight[4];
+    double bounds[6];
+    double motionVector[4];
+
+    size = this->getRenderer()->GetSize();
+    computeDisplayToWorld( (double)size[0], 0.0, 0.0, viewerRight );
+    m_imageActor->GetBounds( bounds );
+    motionVector[0]=0.0;
+    motionVector[1]=0.0;
+    motionVector[2]=0.0;
+    motionVector[3]=0.0;
+
+    // Càlcul del desplaçament
+    switch( m_lastView )
+    {
+        case Axial:
+            motionVector[0] = bounds[1]-viewerRight[0];
+            break;
+        case Sagital:
+            motionVector[1] = bounds[3]-viewerRight[1];
+            break;
+        case Coronal:
+            motionVector[0] = bounds[1]-viewerRight[0];
+            break;
+    }
+    
+    pan( motionVector );
+}
+
+
 };  // end namespace udg
 
