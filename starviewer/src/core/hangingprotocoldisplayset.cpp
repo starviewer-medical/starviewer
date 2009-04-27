@@ -113,4 +113,15 @@ QString HangingProtocolDisplaySet::getIconType() const
 {
     return m_iconType;
 }
+
+void HangingProtocolDisplaySet::setAlignment( QString alignment )
+{
+    m_alignment = alignment;
+}
+
+QString HangingProtocolDisplaySet::getAlignment() const
+{
+    return m_alignment;
+}
+
 }

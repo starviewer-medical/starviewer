@@ -59,9 +59,15 @@ signals:
     /// Senyal que s'emetra quan es seleccioni al boto de sincronitzar
     void synchronize( Q2DViewerWidget *, bool );
 
+    /// Senyal que s'emet quan es fa un resize del visualitzador
+    void resized();
+
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
     void mousePressEvent ( QMouseEvent * event );
+
+    /// Control de l'event de Resize
+    void resizeEvent ( QResizeEvent * event );
 
 private:
     /// Crea les connexions entre signals i slots

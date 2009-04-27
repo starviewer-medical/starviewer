@@ -79,6 +79,12 @@ public:
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
 
+    /// Assigna cap a quin costat ha d'estar alineada la imatge
+    void setAlignment( QString alignment );
+    
+    /// Obté el costat que s'ha d'alinear la imatge
+    QString getAlignment() const;
+
 private:
 
     /// Identificador de la seqüència
@@ -107,6 +113,9 @@ private:
 
     /// Indica el tipus d'icona per representar el hanging protocol
     QString m_iconType;
+
+    /// Indica si la imatge ha d'estar alineada en algun costat
+    QString m_alignment;
 };
 
 }

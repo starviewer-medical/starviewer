@@ -184,4 +184,10 @@ void Q2DViewerWidget::disableSynchronization()
      m_synchronizeButton->defaultAction()->setChecked( false );
 }
 
+void Q2DViewerWidget::resizeEvent ( QResizeEvent * event )
+{
+    QFrame::resizeEvent( event );
+    emit resized();
+}
+
 }
