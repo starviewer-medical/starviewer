@@ -177,7 +177,8 @@ HEADERS += extensionfactory.h \
            thumbnailcreator.h \
            nonclosedangletool.h \
            abortrendercommand.h \
-           roitool.h 
+           roitool.h \
+           statswatcher.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -320,7 +321,9 @@ SOURCES += extensionmediator.cpp \
            thumbnailcreator.cpp \
            nonclosedangletool.cpp \
            abortrendercommand.cpp \
-           roitool.cpp 
+           roitool.cpp \
+           statswatcher.cpp
+           
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
