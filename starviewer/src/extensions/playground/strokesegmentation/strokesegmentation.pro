@@ -11,4 +11,5 @@ SOURCES += qstrokesegmentationextension.cpp \
 
 RESOURCES += strokesegmentation.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

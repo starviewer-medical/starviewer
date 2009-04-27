@@ -12,4 +12,5 @@ SOURCES += qlesionvisualizationextension.cpp \
 
 RESOURCES += lesionvisualization.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

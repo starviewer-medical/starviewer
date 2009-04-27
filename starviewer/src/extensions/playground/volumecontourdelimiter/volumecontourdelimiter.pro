@@ -14,4 +14,5 @@ SOURCES += volumecontourdelimiterextensionmediator.cpp \
 	   
 RESOURCES += volumecontourdelimiter.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

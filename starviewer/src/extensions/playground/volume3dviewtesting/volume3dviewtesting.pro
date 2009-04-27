@@ -11,4 +11,6 @@ SOURCES += volume3dviewtestingextensionmediator.cpp \
            qvolume3dviewtestingextension.cpp \
            renderingstyle.cpp 
 RESOURCES += volume3dviewtesting.qrc
+
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

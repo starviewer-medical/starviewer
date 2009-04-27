@@ -8,4 +8,5 @@ SOURCES += qmprcardiac3dextension.cpp \
 
 RESOURCES += mprcardiac3d.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

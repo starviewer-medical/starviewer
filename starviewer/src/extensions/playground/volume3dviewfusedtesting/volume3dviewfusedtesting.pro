@@ -19,4 +19,6 @@ SOURCES += volume3dviewfusedtestingextensionmediator.cpp \
            fusionvoxelshader.cpp \
            vtkVolumeRayCastCompositeFxFunction.cxx 
 RESOURCES += volume3dviewfusedtesting.qrc
+
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

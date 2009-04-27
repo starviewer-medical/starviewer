@@ -22,4 +22,5 @@ SOURCES += q2dviewerextensionmediator.cpp \
 
 RESOURCES += q2dviewer.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

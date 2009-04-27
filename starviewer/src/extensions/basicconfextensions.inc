@@ -1,6 +1,6 @@
-TRANSLATIONS += translations_ca_ES.ts \
-                translations_es_ES.ts \
-                translations_en_GB.ts
+TRANSLATIONS += $$EXTENSION_DIR/translations_ca_ES.ts \
+                $$EXTENSION_DIR/translations_es_ES.ts \
+                $$EXTENSION_DIR/translations_en_GB.ts
 
 DESTDIR = ./
 

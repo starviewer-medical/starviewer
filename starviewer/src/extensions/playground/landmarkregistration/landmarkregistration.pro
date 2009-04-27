@@ -17,4 +17,5 @@ SOURCES += landmarkregistrator.cpp \
 
 RESOURCES += landmarkregistration.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
