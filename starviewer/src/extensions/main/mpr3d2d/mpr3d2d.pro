@@ -13,4 +13,5 @@ SOURCES += qmpr3d2dextension.cpp \
 
 RESOURCES += mpr3d2d.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

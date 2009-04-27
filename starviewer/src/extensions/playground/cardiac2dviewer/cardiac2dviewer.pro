@@ -6,4 +6,5 @@ SOURCES += cardiac2dviewerextensionmediator.cpp \
 
 RESOURCES += cardiac2dviewer.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

@@ -11,4 +11,5 @@ SOURCES += qvsireconstructionextension.cpp \
 
 RESOURCES += vsireconstruction.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

@@ -11,4 +11,5 @@ SOURCES += qedemasegmentationextension.cpp \
 
 RESOURCES += edemasegmentation.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

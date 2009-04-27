@@ -48,4 +48,6 @@ SOURCES += experimental3dextensionmediator.cpp \
     vomicoolwarmvoxelshader.cpp \
     coolwarmvoxelshader.cpp
 RESOURCES += experimental3d.qrc
+
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

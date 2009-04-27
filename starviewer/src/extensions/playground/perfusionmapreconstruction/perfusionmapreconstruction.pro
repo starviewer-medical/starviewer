@@ -17,5 +17,6 @@ SOURCES += qperfusionmapreconstructionextension.cpp \
            qgraphicplotwidget.cpp
 RESOURCES += perfusionmapreconstruction.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
 

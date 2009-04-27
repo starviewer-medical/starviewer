@@ -40,4 +40,6 @@ SOURCES += doublehistogram.cpp \
     vtkInteractorStyleFasterTrackballActor.cxx \
     oldhistogram.cpp
 RESOURCES += optimalviewpoint.qrc
+
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)

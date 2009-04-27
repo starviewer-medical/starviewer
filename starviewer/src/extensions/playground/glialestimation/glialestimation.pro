@@ -11,4 +11,5 @@ SOURCES += qglialestimationextension.cpp \
 
 RESOURCES += glialestimation.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
