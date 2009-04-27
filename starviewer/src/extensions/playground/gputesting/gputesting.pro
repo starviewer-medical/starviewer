@@ -23,9 +23,6 @@ SOURCES += gputestingextensionmediator.cpp \
 RESOURCES = gputesting.qrc
 QT += opengl
 LIBS += -lGLEW
-CONFIG += release \
-warn_on
-TEMPLATE = app
 
 EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
