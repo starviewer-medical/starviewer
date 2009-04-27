@@ -112,7 +112,9 @@ void Q2DViewer::createAnnotations()
     // contenidor d'anotacions
     m_cornerAnnotations = vtkCornerAnnotation::New();
     m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
-    m_cornerAnnotations->GetTextProperty()->ShadowOff();
+    m_cornerAnnotations->GetTextProperty()->ShadowOn();
+    m_cornerAnnotations->GetTextProperty()->SetShadow(1);
+
     // escala de colors
     createScalarBar();
     // anotacions de l'orientació del pacient
@@ -131,7 +133,8 @@ void Q2DViewer::createOrientationAnnotations()
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize( 18 );
         m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontFamilyToArial();
-        m_patientOrientationTextActor[i]->GetTextProperty()->ShadowOff();
+        m_patientOrientationTextActor[i]->GetTextProperty()->ShadowOn();
+        m_patientOrientationTextActor[i]->GetTextProperty()->SetShadow(1);
 
         m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
         m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
@@ -2125,6 +2128,9 @@ void Q2DViewer::alignLeft()
     }
 
     pan( motionVector );
+
+    // Canviem els rulers de posició
+    m_anchoredRulerCoordinates->SetValue( 0.95 , -0.9 , -0.95 );
 }
 
 void Q2DViewer::alignRight()
@@ -2157,6 +2163,7 @@ void Q2DViewer::alignRight()
     }
     
     pan( motionVector );
+
 }
 
 
