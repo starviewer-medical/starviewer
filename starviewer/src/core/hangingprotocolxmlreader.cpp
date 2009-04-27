@@ -293,7 +293,11 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
             reader->readNext();
 			displaySet->setIconType( reader->text().toString() );
         }
-
+        else if( reader->name() == "alignment" )
+        {
+            reader->readNext();
+			displaySet->setAlignment( reader->text().toString() );
+        }
         reader->readNext();
     }
     return displaySet;
