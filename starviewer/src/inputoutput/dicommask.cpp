@@ -20,27 +20,27 @@ DicomMask::DicomMask()
 
 /************************* PATIENT  *********************************************************************/
 
-void DicomMask::setPatientId(QString patientId)
+void DicomMask::setPatientId(const QString &patientId)
 {
     m_patientId = patientId;
 }
 
-void DicomMask::setPatientName(QString patientName)
+void DicomMask::setPatientName(const QString &patientName)
 {
     m_patientName = patientName;
 }
 
-void DicomMask::setPatientBirth(QString patientBirth)
+void DicomMask::setPatientBirth(const QString &patientBirth)
 {
     m_patientBirth = patientBirth;
 }
 
-void DicomMask::setPatientSex(QString patientSex)
+void DicomMask::setPatientSex(const QString &patientSex)
 {
     m_patientSex = patientSex;
 }
 
-void DicomMask::setPatientAge(QString patientAge)
+void DicomMask::setPatientAge(const QString &patientAge)
 {
     m_patientAge = patientAge;
 }
@@ -73,42 +73,42 @@ QString DicomMask::getPatientAge() const
 
 /****************************************** STUDY *****************************************************/
 
-void DicomMask:: setStudyId(QString studyId)
+void DicomMask::setStudyId(const QString &studyId)
 {
     m_studyId = studyId;
 }
 
-void DicomMask:: setStudyDate(QString studyDate)
+void DicomMask::setStudyDate(const QString &studyDate)
 {
     m_studyDate = studyDate;
 }
 
-void DicomMask::setStudyDescription(QString studyDescription)
+void DicomMask::setStudyDescription(const QString &studyDescription)
 {
     m_studyDescription = studyDescription;
 }
 
-void DicomMask::setStudyModality(QString studyModality)
+void DicomMask::setStudyModality(const QString &studyModality)
 {
     m_studyModality = studyModality;
 }
 
-void DicomMask:: setStudyTime(QString studyTime)
+void DicomMask::setStudyTime(const QString &studyTime)
 {
     m_studyTime = studyTime;
 }
 
-void DicomMask:: setStudyUID(QString studyUID)
+void DicomMask::setStudyUID(const QString &studyUID)
 {
     m_studyUID = studyUID;
 }
 
-void DicomMask:: setAccessionNumber(QString accessionNumber)
+void DicomMask::setAccessionNumber(const QString &accessionNumber)
 {
     m_accessionNumber = accessionNumber;
 }
 
-void DicomMask::setReferringPhysiciansName(QString referringPhysiciansName)
+void DicomMask::setReferringPhysiciansName(const QString &referringPhysiciansName)
 {
     m_referringPhysiciansName = referringPhysiciansName;
 }
@@ -157,53 +157,53 @@ QString DicomMask::getReferringPhysiciansName() const
 
 /************************************** SERIES *************************************************/
 
-void DicomMask:: setSeriesNumber(QString seriesNumber)
+void DicomMask::setSeriesNumber(const QString &seriesNumber)
 {
     m_seriesNumber = seriesNumber;
 }
 
-void DicomMask:: setSeriesDate(QString seriesDate)
+void DicomMask::setSeriesDate(const QString &seriesDate)
 {
     m_seriesDate = seriesDate;
 }
 
-void DicomMask:: setSeriesDescription(QString seriesDescription)
+void DicomMask::setSeriesDescription(const QString &seriesDescription)
 {
     m_seriesDescription = seriesDescription;
 }
 
-void DicomMask:: setSeriesModality(QString seriesModality)
+void DicomMask::setSeriesModality(const QString &seriesModality)
 {
     m_seriesModality = seriesModality;
 }
 
-void DicomMask:: setSeriesTime(QString seriesTime)
+void DicomMask::setSeriesTime(const QString &seriesTime)
 {
     m_seriesTime = seriesTime;
 }
 
-void DicomMask:: setSeriesUID(QString seriesUID)
+void DicomMask::setSeriesUID(const QString &seriesUID)
 {
     m_seriesUID = seriesUID;
 }
 
-void DicomMask:: setSeriesProtocolName(QString seriesProtocolName)
+void DicomMask::setSeriesProtocolName(const QString &seriesProtocolName)
 {
     m_seriesProtocolName = seriesProtocolName;
 }
 
-void DicomMask::setRequestAttributeSequence(QString requestedProcedureID, QString scheduledProcedureStepID)
+void DicomMask::setRequestAttributeSequence(const QString &requestedProcedureID, const QString &scheduledProcedureStepID)
 {
     m_requestedProcedureID = requestedProcedureID;
     m_scheduledProcedureStepID = scheduledProcedureStepID;
 }
 
-void DicomMask::setPPSStartDate(QString PPPSStartDate)
+void DicomMask::setPPSStartDate(const QString &PPPSStartDate)
 {
     m_PPSStartDate = PPPSStartDate;
 }
 
-void DicomMask::setPPStartTime(QString PPSStartTime)
+void DicomMask::setPPStartTime(const QString &PPSStartTime)
 {
     m_PPSStartTime = PPSStartTime;
 }
@@ -268,12 +268,12 @@ QString DicomMask::getPPSStartTime() const
 
 /********************************************** IMAGE **************************************/
 
-void DicomMask:: setImageNumber(QString imageNumber)
+void DicomMask::setImageNumber(const QString &imageNumber)
 {
     m_imageNumber = imageNumber;
 }
 
-void DicomMask:: setSOPInstanceUID(QString SOPInstanceUID)
+void DicomMask::setSOPInstanceUID(const QString &SOPInstanceUID)
 {
     m_SOPInstanceUID = SOPInstanceUID;
 }
@@ -642,6 +642,66 @@ QString DicomMask::getQueryRetrieveLevel()
         return "SERIES";
     }
     else return "STUDY"; //PER DEFECTE DEL DICOM COM A MÍNIM SON A NIVELL D'ESTUDI
+}
+
+QString DicomMask::getFilledMaskFields() const
+{
+    QString maskFields;
+    
+    if( !QString(m_patientId).remove("*").isEmpty() )
+        maskFields += "Patient_ID=[#*#] ";
+    if( !QString(m_patientName).remove("*").isEmpty() )
+        maskFields += "Patient_Name=[#*#] ";
+    if( !QString(m_patientBirth).remove("*").isEmpty() )
+        maskFields += "Patient_Birth=[#*#] ";
+    if( !QString(m_patientSex).remove("*").isEmpty() )
+        maskFields += "Patient_Sex=[" + m_patientSex + "] ";
+    if( !QString(m_patientAge).remove("*").isEmpty() )
+        maskFields += "Patient_Age=[" + m_patientAge + "] ";
+    if( !QString(m_studyId).remove("*").isEmpty() )
+        maskFields += "Study_ID=[#*#] ";
+    if( !QString(m_studyDate).remove("*").isEmpty() )
+        maskFields += "Study_Date=[" + m_studyDate + "] ";
+    if( !QString(m_studyTime).remove("*").isEmpty() )
+        maskFields += "Study_Time=[" + m_studyTime + "] ";
+    if( !QString(m_studyDescription).remove("*").isEmpty() )
+        maskFields += "Study_Description=[" + m_studyDescription + "] ";
+    if( !QString(m_studyModality).remove("*").isEmpty() )
+        maskFields += "Study_Modality=[" + m_studyModality + "] ";
+    if( !QString(m_studyUID).remove("*").isEmpty() )
+        maskFields += "Study_UID=[#*#] ";
+    if( !QString(m_accessionNumber).remove("*").isEmpty() )
+        maskFields += "Accession_Number=[#*#] ";
+    if( !QString(m_referringPhysiciansName).remove("*").isEmpty() )
+        maskFields += "Referring_PhysiciansName=[#*#] ";
+    if( !QString(m_seriesNumber).remove("*").isEmpty() )
+        maskFields += "Series_Number=[#*#] ";
+    if( !QString(m_seriesDate).remove("*").isEmpty() )
+        maskFields += "Series_Date=[" + m_seriesDate + "] ";
+    if( !QString(m_seriesTime).remove("*").isEmpty() )
+        maskFields += "Series_Time=[" + m_seriesTime + "] ";
+    if( !QString(m_seriesModality).remove("*").isEmpty() )
+        maskFields += "Series_Modality=[" + m_seriesModality + "] ";
+    if( !QString(m_seriesDescription).remove("*").isEmpty() )
+        maskFields += "Series_Description=[" + m_seriesDescription + "] ";
+    if( !QString(m_seriesProtocolName).remove("*").isEmpty() )
+        maskFields += "Series_Protocol_Name=[" + m_seriesProtocolName + "] ";
+    if( !QString(m_seriesUID).remove("*").isEmpty() )
+        maskFields += "Series_UID=[#*#] ";
+    if( !QString(m_requestedProcedureID).remove("*").isEmpty() )
+        maskFields += "Requested_Procedure_ID=[#*#] ";
+    if( !QString(m_scheduledProcedureStepID).remove("*").isEmpty() )
+        maskFields += "Scheduled_Procedure_Step_ID=[#*#] ";
+    if( !QString(m_PPSStartDate).remove("*").isEmpty() )
+        maskFields += "PPS_Start_Date=[#*#] ";
+    if( !QString(m_PPSStartTime).remove("*").isEmpty() )
+        maskFields += "PPS_Start_Time=[#*#] ";
+    if( !QString(m_SOPInstanceUID).remove("*").isEmpty() )
+        maskFields += "SOP_Instance_UID=[#*#] ";
+    if( !QString(m_imageNumber).remove("*").isEmpty() )
+        maskFields += "Image_Number=[" + m_imageNumber + "] ";
+
+    return maskFields;
 }
 
 };
