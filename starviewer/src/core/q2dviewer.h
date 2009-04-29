@@ -63,6 +63,9 @@ public:
     /// tipus de fusió dels models
     enum OverlayType{ None, Blend , CheckerBoard , RectilinearWipe };
 
+    /// Alineament de la imatge (dreta, esquerre, centrat)
+    enum AlignPosition{ AlignCenter, AlignRight, AlignLeft };
+
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
     enum AnnotationFlag{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x1 , PatientOrientationAnnotation = 0x2 , RulersAnnotation = 0x4 , SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40,
     AllAnnotation = 0x7F };
@@ -311,6 +314,9 @@ public slots:
     void alignLeft();
     void alignRight();
 
+    // Posa la posició d'alineament de la imatge (dreta, esquerre, centrat )
+    void setAlignPosition( AlignPosition alignPosition );
+
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
@@ -509,6 +515,9 @@ private:
 
     // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
     HangingProtocolManager *m_hangingProtocolManager;
+
+    /// Posició a on s'ha d'alinear la imatge ( dreta, esquerre o centrat )
+    AlignPosition m_alignPosition;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)

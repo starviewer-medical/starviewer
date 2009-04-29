@@ -79,6 +79,8 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
     m_hangingProtocolManager = new HangingProtocolManager(this);
+    
+    m_alignPosition = Q2DViewer::AlignCenter;
 }
 
 Q2DViewer::~Q2DViewer()
@@ -2085,6 +2087,8 @@ void Q2DViewer::restore()
     
     // Activem el refresh i refresquem
     this->m_isRefreshActive = true;
+    this->setAlignPosition( m_alignPosition );
+
     this->refresh();
 }
 
@@ -2133,6 +2137,7 @@ void Q2DViewer::alignLeft()
 
     // Canviem els rulers de posició
     m_anchoredRulerCoordinates->SetValue( 0.95 , -0.9 , -0.95 );
+    m_alignPosition = Q2DViewer::AlignLeft;
 }
 
 void Q2DViewer::alignRight()
@@ -2165,9 +2170,24 @@ void Q2DViewer::alignRight()
     }
     
     pan( motionVector );
+    m_alignPosition = Q2DViewer::AlignRight;
 
 }
 
+void Q2DViewer::setAlignPosition( AlignPosition alignPosition )
+{
+    switch( alignPosition )
+    {
+    case AlignRight:
+        alignRight();
+        break;
+    case AlignLeft:
+        alignLeft();
+        break;
+    case AlignCenter:
+        break;
+    }
+}
 
 };  // end namespace udg
 
