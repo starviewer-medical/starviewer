@@ -2077,9 +2077,11 @@ void Q2DViewer::restore()
     // HACK
     // Desactivem el refresh per tal de millorar l'eficiencia del setInput ja que altrament es renderitza multiples vegades
     this->m_isRefreshActive = false;
-    
+
+    this->applyGrayscalePipeline();
     this->resetView( m_lastView );
-    this->applyGrayscalePipeline();    
+    this->resetWindowLevelToDefault();
+    this->updateWindowLevelData();
     
     // Activem el refresh i refresquem
     this->m_isRefreshActive = true;
