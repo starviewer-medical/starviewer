@@ -248,7 +248,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     {
         toolAction->setText( tr("Non Closed Angle") );
         toolAction->setStatusTip( tr("Enable/Disable non closed angle tool") );
-        toolAction->setIcon( QIcon(":/images/angle.png") );
+        toolAction->setIcon( QIcon(":/images/nonClosedAngle.png") );
     }
     else
     {
