@@ -43,7 +43,7 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
     {
         m_closeTabButton->show();
     }
-    STAT_LOG( "Obrim extensió: " + caption );
+    INFO_LOG( "Afegim l'extensió: " + caption + " al workspace" );
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
 }
