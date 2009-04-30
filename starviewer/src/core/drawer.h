@@ -39,6 +39,13 @@ public:
     void draw( DrawerPrimitive *primitive, int plane, int slice = -1 );
 
     /**
+    * Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
+    * @param plane Pla sobre el que esborrarem les primitives
+    * @param slice Llesca d'on eliminem la primitiva
+    */
+    void clearViewer( int plane, int slice );
+
+    /**
      * Afegim una primitiva al grup indicat.
      * @param primitive Primitiva que volem afegir
      * @param groupName nom del grup on la volem incloure
@@ -51,14 +58,14 @@ public:
      */
     void hideGroup( const QString &groupName );
     void showGroup( const QString &groupName );
-    
+
     ///ens retorna la primitiva més propera la punt especificat, dins d'un llindar. Si no en troba cap, retorna nul.
     ///especifiquem el pla i la llesca perquè així acotem més la cerca de primitives properes i no cal mirar per totes les possibles.
     DrawerPrimitive* getPrimitiveNearerToPoint( double point[3], int view, int slice );
-    
+
     ///ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
     void erasePrimitivesInsideBounds( double p1[3], double p2[3], int view, int slice );
-    
+
     ///ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
 
@@ -74,7 +81,7 @@ public slots:
      * @param primitive Primitiva que volem deixar de controlar
      */
     void erasePrimitive( DrawerPrimitive *primitive );
-    
+
     ///esborra totes les primitives registrades al drawer.
     void removeAllPrimitives();
 

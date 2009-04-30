@@ -79,7 +79,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
     m_hangingProtocolManager = new HangingProtocolManager(this);
-    
+
     m_alignPosition = Q2DViewer::AlignCenter;
 }
 
@@ -637,7 +637,7 @@ void Q2DViewer::setInput( Volume *volume )
     // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
     //No s'aplica perquè afectaria al cursor3D entre d'altres
 //     ImagePlane * currentPlane = new ImagePlane();
-//     currentPlane->fillFromImage( m_mainVolume->getImage(0,0) ); 
+//     currentPlane->fillFromImage( m_mainVolume->getImage(0,0) );
 //     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
 //     currentPlane->getRowDirectionVector( currentPlaneRowVector );
 //     currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
@@ -649,7 +649,7 @@ void Q2DViewer::setInput( Volume *volume )
 //         projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
 //         projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
 //     }
-// 
+//
 //     m_imageActor->SetUserMatrix(projectionMatrix);
 //     delete currentPlane;
 
@@ -1546,7 +1546,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
 
             QStringList tagValue = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
             if( ! tagValue.isEmpty() )
-            {   
+            {
                 QString projection = tagValue.at(0);
                 /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
                 // TODO tenir-ho carregat en arxius, maps, etc..
@@ -1773,7 +1773,7 @@ void Q2DViewer::applyGrayscalePipeline()
         DEBUG_LOG("Grayscale pipeline: Source Data -> [Window Level] -> Output ");
         m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
     }
-                
+
     m_imageActor->SetInput( m_windowLevelLUTMapper->GetOutput() );
 }
 
@@ -1876,7 +1876,7 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
         m_slabThickness = 1;
         return;
     }
-    
+
     int difference = newSlabThickness - m_slabThickness;
     // si la diferència és positiva, augmentem el thickness
     if( difference > 0 )
@@ -2084,12 +2084,17 @@ void Q2DViewer::restore()
     this->resetView( m_lastView );
     this->resetWindowLevelToDefault();
     this->updateWindowLevelData();
-    
+
     // Activem el refresh i refresquem
     this->m_isRefreshActive = true;
     this->setAlignPosition( m_alignPosition );
 
     this->refresh();
+}
+
+void Q2DViewer::clearViewer()
+{
+    m_drawer->clearViewer( m_lastView, m_currentSlice );
 }
 
 void Q2DViewer::invertWindowLevel()
@@ -2168,7 +2173,7 @@ void Q2DViewer::alignRight()
             motionVector[0] = bounds[1]-viewerRight[0];
             break;
     }
-    
+
     pan( motionVector );
     m_alignPosition = Q2DViewer::AlignRight;
 
