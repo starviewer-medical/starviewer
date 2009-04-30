@@ -26,6 +26,7 @@ class ExtensionHandler;
 class ExtensionContext;
 class QLogViewer;
 class Patient;
+class StatsWatcher;
 
 class QApplicationMainWindow : public QMainWindow
 {
@@ -174,6 +175,9 @@ private:
 
     /// Progress dialog per mostrar el progrés de càrrega dels volums
     QProgressDialog *m_progressDialog;
+
+    /// Estadístiques d'usabilitat
+    StatsWatcher *m_statsWatcher;
 };
 
 }; // fi namespace udg

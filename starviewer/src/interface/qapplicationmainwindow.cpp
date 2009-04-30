@@ -36,6 +36,7 @@
 #include "extensionfactory.h"
 #include "extensionmediatorfactory.h"
 #include "starviewerapplication.h"
+#include "statswatcher.h"
 
 namespace udg{
 
@@ -94,6 +95,13 @@ QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     markAsBetaVersion();
     showBetaVersionDialog();
 #endif
+    m_statsWatcher = new StatsWatcher("Menu triggering", this);
+    m_statsWatcher->addTriggerCounter( m_fileMenu );
+    m_statsWatcher->addTriggerCounter( m_visualizationMenu );
+    m_statsWatcher->addTriggerCounter( m_toolsMenu );
+    m_statsWatcher->addTriggerCounter( m_helpMenu );
+    m_statsWatcher->addTriggerCounter( m_languageMenu );
+    m_statsWatcher->addTriggerCounter( m_windowMenu );
 }
 
 QApplicationMainWindow::~QApplicationMainWindow()
@@ -127,11 +135,11 @@ void QApplicationMainWindow::createActions()
 
     m_openDirAction = new QAction( this );
     m_openDirAction->setText( tr("Open files from a directory...") );
-    m_openDirAction->setShortcut( tr("Ctrl+D") );
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
     m_signalMapper->setMapping( m_openDirAction , 6 );
     connect( m_openDirAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+
 
     m_pacsAction = new QAction( this );
 #ifdef STARVIEWER_LITE // el menú "PACS" es dirà "Exams"
@@ -142,6 +150,7 @@ void QApplicationMainWindow::createActions()
     m_pacsAction->setText(tr("&PACS...") );
     m_pacsAction->setShortcut( tr("Ctrl+P") );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
+
 #endif
     // TODO potser almenys per la versió Lite caldria canviar la icona
     m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") ); 
@@ -150,6 +159,7 @@ void QApplicationMainWindow::createActions()
 
     m_openDICOMDIRAction = new QAction( this );
     m_openDICOMDIRAction->setText(tr("Open DICOMDIR...") );
+    m_openDICOMDIRAction->setShortcut( tr("Ctrl+D") );
     m_openDICOMDIRAction->setStatusTip( tr("Open DICOMDIR from CD,DVD,Pendrive or HardDisk") );
     m_openDICOMDIRAction->setIcon( QIcon(":/images/openDICOMDIR.png") );
     m_signalMapper->setMapping( m_openDICOMDIRAction , 8 );
