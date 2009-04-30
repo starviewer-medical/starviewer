@@ -660,8 +660,40 @@ QString DicomMask::getFilledMaskFields() const
         maskFields += "Patient_Age=[" + m_patientAge + "] ";
     if( !QString(m_studyId).remove("*").isEmpty() )
         maskFields += "Study_ID=[#*#] ";
+    // en el cas de la data fem un tractament especial per fer-ho més llegible i amb més informació
     if( !QString(m_studyDate).remove("*").isEmpty() )
-        maskFields += "Study_Date=[" + m_studyDate + "] ";
+    {
+        QDate date;
+        QDate today = QDate::currentDate();
+        QDate yesterday = QDate::currentDate().addDays(-1);
+        QStringList formattedDates;
+        maskFields += "Study_Date=[";
+        
+        // si tenim un rang de dates estaran separades per el guió "-"
+        // TODO encara no sabem traduir si el rang és només "desde" o "fins" una data 
+        // per exemple [20090512-] (desde), [-20090611] (fins), i ens ho mostrarà com una data única
+        QStringList datesList = m_studyDate.split( "-", QString::SkipEmptyParts );
+        // "traduim" less dates a un format mé llegible
+        foreach( QString dateString, datesList )
+        {
+            date = QDate::fromString( dateString, "yyyyMMdd" );
+            if( date == today )
+                formattedDates << "Today";
+            else if( date == yesterday )
+                formattedDates << "Yesterday";
+            else
+                formattedDates << date.toString("dd/MM/yyyy") + " (" + QString::number(date.daysTo(today)) + " days ago)";
+        }
+        
+        if( formattedDates.count() == 2 )
+        {
+            maskFields += "From " + formattedDates.at(0) + " to " + formattedDates.at(1) + "]";
+        }
+        else
+            maskFields += formattedDates.at(0) + "]";
+        
+    }
+
     if( !QString(m_studyTime).remove("*").isEmpty() )
         maskFields += "Study_Time=[" + m_studyTime + "] ";
     if( !QString(m_studyDescription).remove("*").isEmpty() )
