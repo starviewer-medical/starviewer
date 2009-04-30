@@ -45,14 +45,14 @@ Q2DViewer* visor = new Q2DViewer();
 visor->setInput( volum );
 
 En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat amb el mètode setOverlayInput().
-Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de checkerboard, aplicant un blending o un rectilinearWipe, 
+Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de checkerboard, aplicant un blending o un rectilinearWipe,
 en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
 \TODO acabar la doc sobre solapament
 
 Per defecte el visualitzador mostra la primera imatge en Axial. Per les altres vistes (Sagital i Coronal) mostraria la imatge central
 
-Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums. 
-Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation() 
+Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums.
+Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation()
 que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
 
 @author Grup de Gràfics de Girona  ( GGG )
@@ -88,13 +88,13 @@ public:
     /// Diem al viewer que s'ha modificat l'overlay per tal que refresqui correctament
     void isOverlayModified();
 
-    /// Canviem l'opacitat del volum solapat 
+    /// Canviem l'opacitat del volum solapat
     /// TODO refactoritzar el mètode a setOverlayOpacity() que és l'expressió correcta
     void setOpacityOverlay( double op );
 
     // Mètodes específics checkerboard
     /// Obtenim el nombre de divisions
-    /// TODO set/getDivisions no es fa servir enlloc, es podria 
+    /// TODO set/getDivisions no es fa servir enlloc, es podria
     /// donar com a funcionalitat obsoleta i eliminar-la, ja que ara mateix únicament fa nosa
     int *getDivisions();
     void getDivisions( int data[3] );
@@ -228,9 +228,9 @@ public:
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     QString getCurrentPlaneProjectionLabel() const;
 
-    /// Retorna el filtre de mapeig de window level. 
+    /// Retorna el filtre de mapeig de window level.
     /// TODO El fan servir les extensions que necessiten aplicar una escala de colors
-    /// sobre la imatge. Caldria pensar en un mètode de poder aplicar color sense exposar 
+    /// sobre la imatge. Caldria pensar en un mètode de poder aplicar color sense exposar
     /// aquest component intern a l'exterior
     vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
 
@@ -242,6 +242,9 @@ public slots:
 
     /// Restaura el visualitzador a l'estat inicial
     void restore();
+
+    /// Esborra totes les primitives del visor
+    void clearViewer();
 
     /// Canvia el WW del visualitzador, per tal de canviar els blancs per negres, i el negres per blancs
     void invertWindowLevel();
@@ -261,7 +264,7 @@ public slots:
     void setNoOverlay();
     void setOverlayToBlend();
     void setOverlayToCheckerBoard();
-    void setOverlayToRectilinearWipe();   
+    void setOverlayToRectilinearWipe();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
@@ -330,7 +333,7 @@ signals:
     /// indica el nou window level
     void windowLevelChanged( double window , double level );
 
-    /// Senyal que s'envia quan la llavor s'ha canviat 
+    /// Senyal que s'envia quan la llavor s'ha canviat
     /// TODO mirar de treure-ho i posar-ho en la tool SeedTool
     void seedPositionChanged(double,double,double);
 

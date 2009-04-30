@@ -88,6 +88,70 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
     }
 }
 
+void Drawer::clearViewer( int plane, int slice )
+{
+    QList<DrawerPrimitive*> list;
+    QMultiMap< int, DrawerPrimitive *>::const_iterator it;
+    switch( plane )
+    {
+    case QViewer::AxialPlane:
+        it = m_axialPrimitives.find( slice );
+        while( it != m_axialPrimitives.end() && it.key() == slice )
+        {
+            list << it.value();
+            it++;
+        }
+        //elimina les primitives del contenidor
+        m_axialPrimitives.remove( slice );
+    break;
+
+    case QViewer::SagitalPlane:
+        it = m_sagitalPrimitives.find( slice );
+        while( it != m_sagitalPrimitives.end() && it.key() == slice )
+        {
+            list << it.value();
+            it++;
+        }
+        //elimina les primitives del contenidor
+        m_sagitalPrimitives.remove( slice );
+    break;
+
+    case QViewer::CoronalPlane:
+        it = m_coronalPrimitives.find( slice );
+        while( it != m_coronalPrimitives.end() && it.key() == slice )
+        {
+            list << it.value();
+            it++;
+        }
+        //elimina les primitives del contenidor
+        m_coronalPrimitives.remove( slice );
+    break;
+
+    case QViewer::Top2DPlane:
+        DEBUG_LOG("Esborrar primitives de Top2dPlane no implementat!");
+        return;
+    break;
+
+    default:
+        DEBUG_LOG("Pla no definit!");
+        return;
+    break;
+    }
+
+    foreach(DrawerPrimitive *primitive, list)
+    {
+        // TODO atenció amb aquest tractament pel sucedani d'smart pointer.
+        // només esborrarem si ningú és propietari
+        if( !primitive->hasOwners() )
+        {
+            m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
+            delete primitive;
+        }
+    }
+
+    refresh();
+}
+
 void Drawer::addToGroup( DrawerPrimitive *primitive, const QString &groupName )
 {
     // no comprovem si ja existeix ni si està en cap altre de les llistes, no cal.

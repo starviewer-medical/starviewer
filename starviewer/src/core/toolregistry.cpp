@@ -270,6 +270,14 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
 
         slot = SLOT( restore() );
     }
+    else if ( actionToolName == "ClearCurrentViewAnnotationsActionTool" )
+    {
+        action->setText( tr("Clear") );
+        action->setStatusTip( tr("Clear primitives from viewer") );
+        action->setIcon ( QIcon(":/images/clearCurrentViewAnnotations.png") );
+
+        slot = SLOT( clearViewer() );
+    }
     else if( actionToolName == "InvertWindowLevelActionTool" )
     {
         action->setText( tr("Invert WL") );
