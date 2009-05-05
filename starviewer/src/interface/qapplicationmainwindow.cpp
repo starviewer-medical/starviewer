@@ -151,6 +151,13 @@ void QApplicationMainWindow::createActions()
     m_pacsAction->setShortcut( tr("Ctrl+P") );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
 
+    m_localDatabaseAction = new QAction(this);
+    m_localDatabaseAction->setText( tr("&Local Database Studies") );
+    m_localDatabaseAction->setShortcut( Qt::CTRL + Qt::Key_L );
+    m_localDatabaseAction->setStatusTip( tr("Browse Local Database Studies") );
+    m_localDatabaseAction->setIcon( QIcon(":/images/database.png") );
+    m_signalMapper->setMapping( m_localDatabaseAction , 10 );
+    connect( m_localDatabaseAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
 #endif
     // TODO potser almenys per la versió Lite caldria canviar la icona
     m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") ); 
@@ -263,10 +270,14 @@ void QApplicationMainWindow::createMenus()
     // Menú d'arxiu
     m_fileMenu = menuBar()->addMenu( tr("&File") );
     m_fileMenu->addAction( m_newAction );
-    m_fileMenu->addAction( m_openAction );
-    m_fileMenu->addAction( m_openDirAction );
+#ifndef STARVIEWER_LITE
+    m_fileMenu->addAction( m_localDatabaseAction );
+#endif
     m_fileMenu->addAction( m_pacsAction );
     m_fileMenu->addAction( m_openDICOMDIRAction );
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction( m_openAction );
+    m_fileMenu->addAction( m_openDirAction );
     m_fileMenu->addSeparator();
     m_fileMenu->addAction( m_closeAction );
     m_fileMenu->addAction( m_exitAction );

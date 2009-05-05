@@ -146,6 +146,7 @@ private:
     QMenu *m_toolsMenu;
 
     /// Accions
+    QAction *m_localDatabaseAction;
     QAction *m_pacsAction;
     QAction *m_openDICOMDIRAction;
 
