@@ -75,9 +75,12 @@
 
 /// Macro per a missatges d'estadístiques
 #define STAT_LOG( msg ) \
-    if (true) \
+{ \
+    QSettings settings; \
+    if ( settings.value("LoggingPolicy/registerStatistics", false).toBool() ) \
     { \
         LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release"), qPrintable( QString("STAT: ") + QString(msg) )) \
-    } else (void)0
+    } else (void)0; \
+} 
 
 #endif
