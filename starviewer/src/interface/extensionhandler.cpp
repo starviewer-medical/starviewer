@@ -83,7 +83,7 @@ void ExtensionHandler::request( int who )
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
             disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), 0, 0 );
-            QueryScreenSingleton::instance()->bringToFront();
+            QueryScreenSingleton::instance()->showPACSTab();
             connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
             break;
 
@@ -93,6 +93,15 @@ void ExtensionHandler::request( int who )
             // Queda pendent resoldre-ho de la forma adequada
             disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), 0, 0 );
             QueryScreenSingleton::instance()->openDicomdir();
+            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
+            break;
+
+        case 10: // Mostrar local
+            // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
+            // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
+            // Queda pendent resoldre-ho de la forma adequada
+            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), 0, 0 );
+            QueryScreenSingleton::instance()->showLocalExams();
             connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
             break;
     }

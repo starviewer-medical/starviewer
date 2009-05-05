@@ -435,6 +435,24 @@ void QueryScreen::bringToFront()
     this->activateWindow();
 }
 
+#ifndef STARVIEWER_LITE
+void QueryScreen::showPACSTab()
+{
+    m_tab->setCurrentIndex( PACSQueryTab );
+    bringToFront();
+}
+#endif
+
+void QueryScreen::showLocalExams()
+{
+    m_tab->setCurrentIndex( LocalDataBaseTab );
+    m_qbasicSearchWidget->clear();
+    m_qbasicSearchWidget->setDefaultDate( QBasicSearchWidget::AnyDate );
+    m_qadvancedSearchWidget->clear();
+    queryStudy("Cache");
+    bringToFront();
+}
+
 void QueryScreen::searchStudy()
 {
     switch ( m_tab->currentIndex() )
