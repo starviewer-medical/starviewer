@@ -8,6 +8,7 @@
 #ifndef _LOGGING_
 #define _LOGGING_
 
+#include <QSettings> // per l'STAT_LOG
 #include <QString>
 #include <cstdlib> // per posar la variable d'entorn
 /*!
