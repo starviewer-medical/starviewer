@@ -38,7 +38,7 @@ ConvertToDicomdir::ConvertToDicomdir(QObject *parent) : QObject(parent)
     m_patient = 0;
 }
 
-void ConvertToDicomdir::addStudy( QString studyUID )
+void ConvertToDicomdir::addStudy( const QString &studyUID )
 {
     /*Els estudis s'han d'agrupar per pacient, el que fem és afegir-los a llista d'estudis per convertir a
      dicomdir ja ordenats per pacient*/
@@ -83,7 +83,7 @@ void ConvertToDicomdir::addStudy( QString studyUID )
     else m_studiesToConvert.push_back( studyToConvert );//en aquest cas val al final
 }
 
-Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
+Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     Status state;
@@ -146,7 +146,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordD
     }
 
     //una vegada copiada les imatges les creem
-    state = createDicomdir( dicomdirPath , selectedDevice );
+    state = createDicomdir( m_dicomDirPath , selectedDevice );
 
     m_progress->close();
     if ( !state.good() && state.code() != 4001 )// l'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
@@ -157,7 +157,7 @@ Status ConvertToDicomdir::convert( QString dicomdirPath, CreateDicomdir::recordD
     return state;
 }
 
-Status ConvertToDicomdir::createDicomdir( QString dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
+Status ConvertToDicomdir::createDicomdir( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
 {
     CreateDicomdir createDicomdir;
     Status state, stateNotDicomConformance;
@@ -289,7 +289,6 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
     QString  imageName = QString( "/IMG%1" ).arg( m_image , 5 , 10 , fillChar );
     QString imageInputPath, imageOutputPath;
     ConvertDicomToLittleEndian convertDicom;
-    StarviewerSettings settings;
     Status state;
 
     m_image++;
