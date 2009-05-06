@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/gputesting
-# L'objectiu és una aplicaci??:  
+# L'objectiu ï¿½ una aplicaci??:  
 
 FORMS += qgputestingextensionbase.ui 
 HEADERS += gputestingextensionmediator.h \
@@ -22,7 +22,7 @@ SOURCES += gputestingextensionmediator.cpp \
            gpuprogram.cpp 
 RESOURCES = gputesting.qrc
 QT += opengl
-LIBS += -lGLEW
 
 EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
+include(../../../glew.inc)
