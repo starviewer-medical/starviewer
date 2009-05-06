@@ -48,22 +48,26 @@
 <imageSetNumber>1</imageSetNumber>
 <position>0.0\1.0\0.5\0.5</position>
 <iconType>MLO_R</iconType>
+<alignment>right</alignment>
 </displaySet>
 <displaySet identifier="2">
 <imageSetNumber>2</imageSetNumber>
 <position>0.5\1.0\1.0\0.5</position>
 <patientOrientation>A\F</patientOrientation>
 <iconType>MLO_L</iconType>
+<alignment>left</alignment>
 </displaySet>
 <displaySet identifier="3">
 <imageSetNumber>3</imageSetNumber>
 <position>0.0\0.5\0.5\0.0</position>
 <iconType>CC_R</iconType>
+<alignment>right</alignment>
 </displaySet>
 <displaySet identifier="4">
 <imageSetNumber>4</imageSetNumber>
 <position>0.5\0.5\1.0\0.0</position>
 <patientOrientation>A\R</patientOrientation>
 <iconType>CC_L</iconType>
+<alignment>left</alignment>
 </displaySet>
 </hangingProtocol>

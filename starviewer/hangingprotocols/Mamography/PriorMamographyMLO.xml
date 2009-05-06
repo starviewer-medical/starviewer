@@ -33,23 +33,27 @@
 <restriction>1</restriction>
 <restriction>3</restriction>
 <type>image</type>
+<alignment>right</alignment>
 </imageSet>
 <imageSet identifier="2">
 <restriction>2</restriction>
 <restriction>3</restriction>
 <type>image</type>
+<alignment>left</alignment>
 </imageSet>
 <imageSet identifier="3">
 <restriction>1</restriction>
 <restriction>3</restriction>
 <restriction>4</restriction>
 <type>image</type>
+<alignment>right</alignment>
 </imageSet>
 <imageSet identifier="4">
 <restriction>2</restriction>
 <restriction>3</restriction>
 <restriction>5</restriction>
 <type>image</type>
+<alignment>left</alignment>
 </imageSet>
 <displaySet identifier="1">
 <imageSetNumber>1</imageSetNumber>
