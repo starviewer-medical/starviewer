@@ -796,6 +796,7 @@ void Q2DViewer::render()
 void Q2DViewer::resetView( CameraOrientationType view )
 {
     m_lastView = view;
+    m_alignPosition = Q2DViewer::AlignCenter;
     // TODO aquest signal el mantenim aquí i no el posem
     // al final del mètode, com semblaria lògic, degut
     // a que cal millorar la interacció amb QThickSlabWidget
