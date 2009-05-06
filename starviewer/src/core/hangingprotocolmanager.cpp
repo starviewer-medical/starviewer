@@ -199,8 +199,8 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                     qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
                     if( imageSet->getTypeOfItem() == "image" )
                     {
-                        viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
                         applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+                        viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
                     }
                     else
                     {
@@ -249,8 +249,8 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 
 				if( imageSet->getTypeOfItem() == "image" )
 				{
-					viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
 					applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+                    viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
 				}
 				else
 				{
@@ -500,6 +500,10 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
         applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3], displaySet->getPatientOrientation(), viewer->getViewer() );
     }
 
+    viewer->getViewer()->automaticRefresh( false );
+    //Posem la imatge al mig
+    viewer->getViewer()->setAlignPosition( Q2DViewer::AlignCenter );
+
     QString reconstruction = displaySet->getReconstruction();
     if( !reconstruction.isEmpty() )
     {
@@ -520,6 +524,10 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
             DEBUG_LOG( "Field reconstruction in XML hanging protocol has an error" );
         }
     }
+    else
+    {
+        viewer->resetViewToAxial();
+    }
 
     QString phase = displaySet->getPhase();
     if( !phase.isEmpty() )
@@ -532,6 +540,9 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     {
         viewer->getViewer()->setSlice( sliceNumber );
     }
+
+    disconnect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignRight() ) );
+    disconnect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignLeft() ) );
 
     QString alignment = displaySet->getAlignment();
     if( !alignment.isEmpty() )
@@ -547,6 +558,8 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
             connect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignLeft() ) );
         }
     }
+    viewer->getViewer()->automaticRefresh( true );
+    viewer->getViewer()->refresh();
 }
 
 void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer)
