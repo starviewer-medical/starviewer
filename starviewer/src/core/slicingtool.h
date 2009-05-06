@@ -99,11 +99,6 @@ private:
 
     /// Controla si estem forçant el mode de phases amb la tecla Ctrl
     bool m_forcePhaseMode;
-
-    /// NOMÉS PER ESTADÍSTIQUES
-    // compta el nombre de passos (endavant o enrera) que es fan seguits amb la rodeta
-    QString m_wheelSteps;
-    QString m_scrollSteps;
 };
 
 }
