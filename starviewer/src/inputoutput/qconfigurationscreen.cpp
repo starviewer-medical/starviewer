@@ -101,15 +101,6 @@ void QConfigurationScreen::loadPacsDefaults()
     m_textLocalPort->setText( settings.getLocalPort() );
     m_textTimeout->setText( settings.getTimeout() );
     m_textMaxConnections->setText( settings.getMaxConnections() );
-
-    QSettings qsets( QSettings::SystemScope, "GILab", "Starviewer" );
-    if( !qsets.isWritable() )
-    {
-        m_textAETitleMachine->setReadOnly(true);
-        m_textLocalPort->setReadOnly(true);
-        m_textTimeout->setReadOnly(true);
-        m_textMaxConnections->setReadOnly(true);
-    }
 }
 
 /************************************************************************************************************************/
