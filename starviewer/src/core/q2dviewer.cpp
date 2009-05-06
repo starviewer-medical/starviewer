@@ -627,6 +627,7 @@ void Q2DViewer::setInput( Volume *volume )
     m_currentSlice = 0;
     m_currentPhase = 0;
     m_lastView = Q2DViewer::Axial;
+    m_alignPosition = Q2DViewer::AlignCenter;
 
     // Inicialització del thickSlab
     m_slabThickness = 1;
