@@ -40,10 +40,8 @@ public:
 
     /**
     * Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
-    * @param plane Pla sobre el que esborrarem les primitives
-    * @param slice Llesca d'on eliminem la primitiva
     */
-    void clearViewer( int plane, int slice );
+    void clearViewer();
 
     /**
      * Afegim una primitiva al grup indicat.
