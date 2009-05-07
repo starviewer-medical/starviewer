@@ -199,8 +199,8 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                     qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
                     if( imageSet->getTypeOfItem() == "image" )
                     {
-                        applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
                         viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
+                        applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
                     }
                     else
                     {
@@ -249,8 +249,8 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 
 				if( imageSet->getTypeOfItem() == "image" )
 				{
-					applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
                     viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
+					applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
 				}
 				else
 				{
@@ -524,10 +524,6 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
             DEBUG_LOG( "Field reconstruction in XML hanging protocol has an error" );
         }
     }
-    else
-    {
-        viewer->resetViewToAxial();
-    }
 
     QString phase = displaySet->getPhase();
     if( !phase.isEmpty() )
@@ -558,6 +554,11 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
             connect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignLeft() ) );
         }
     }
+    else
+    {
+        viewer->getViewer()->setAlignPosition( Q2DViewer::AlignCenter );
+    }
+
     viewer->getViewer()->automaticRefresh( true );
     viewer->getViewer()->refresh();
 }
