@@ -178,7 +178,8 @@ HEADERS += extensionfactory.h \
            nonclosedangletool.h \
            abortrendercommand.h \
            roitool.h \
-           statswatcher.h
+           statswatcher.h \
+           clippingplanestool.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -322,7 +323,8 @@ SOURCES += extensionmediator.cpp \
            nonclosedangletool.cpp \
            abortrendercommand.cpp \
            roitool.cpp \
-           statswatcher.cpp
+           statswatcher.cpp \
+           clippingplanestool.cpp
            
 TEMPLATE = lib
 DESTDIR = ./
