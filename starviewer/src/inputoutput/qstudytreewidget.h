@@ -284,8 +284,8 @@ private:
      */
     QTreeWidgetItem *fillSeries(Series *serie);
 
-    ///Emplena un QTreeWidget amb la informació de pacient i estudi
-    QTreeWidgetItem* fillPatient(Patient *);
+    ///Retorna llista QTreeWidgetItem resultant dels estudis que té el pacient
+    QList<QTreeWidgetItem*> fillPatient(Patient *);
 
 };
 
