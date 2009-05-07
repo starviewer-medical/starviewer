@@ -1074,8 +1074,9 @@ void Q2DViewer::setOverlayToRectilinearWipe()
     setOverlay( Q2DViewer::RectilinearWipe );
 }
 
-void Q2DViewer::resizeEvent( QResizeEvent *vtkNotUsed(resize) )
+void Q2DViewer::resizeEvent( QResizeEvent *resize )
 {
+    Q_UNUSED(resize);
     if( m_mainVolume )
     {
         double bounds[6];
