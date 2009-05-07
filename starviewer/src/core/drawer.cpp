@@ -88,43 +88,43 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
     }
 }
 
-void Drawer::clearViewer( int plane, int slice )
+void Drawer::clearViewer()
 {
     QList<DrawerPrimitive*> list;
     QMultiMap< int, DrawerPrimitive *>::const_iterator it;
-    switch( plane )
+    switch( m_currentPlane )
     {
     case QViewer::AxialPlane:
-        it = m_axialPrimitives.find( slice );
-        while( it != m_axialPrimitives.end() && it.key() == slice )
+        it = m_axialPrimitives.find( m_currentSlice );
+        while( it != m_axialPrimitives.end() && it.key() == m_currentSlice )
         {
             list << it.value();
             it++;
         }
         //elimina les primitives del contenidor
-        m_axialPrimitives.remove( slice );
+        m_axialPrimitives.remove( m_currentSlice );
     break;
 
     case QViewer::SagitalPlane:
-        it = m_sagitalPrimitives.find( slice );
-        while( it != m_sagitalPrimitives.end() && it.key() == slice )
+        it = m_sagitalPrimitives.find( m_currentSlice );
+        while( it != m_sagitalPrimitives.end() && it.key() == m_currentSlice )
         {
             list << it.value();
             it++;
         }
         //elimina les primitives del contenidor
-        m_sagitalPrimitives.remove( slice );
+        m_sagitalPrimitives.remove( m_currentSlice );
     break;
 
     case QViewer::CoronalPlane:
-        it = m_coronalPrimitives.find( slice );
-        while( it != m_coronalPrimitives.end() && it.key() == slice )
+        it = m_coronalPrimitives.find( m_currentSlice );
+        while( it != m_coronalPrimitives.end() && it.key() == m_currentSlice )
         {
             list << it.value();
             it++;
         }
         //elimina les primitives del contenidor
-        m_coronalPrimitives.remove( slice );
+        m_coronalPrimitives.remove( m_currentSlice );
     break;
 
     case QViewer::Top2DPlane:
