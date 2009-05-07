@@ -7,17 +7,11 @@ SUBDIRS += diffusionperfusionsegmentation \
            mpr2d \
            edemasegmentation \
            landmarkregistration \
-           strokesegmentation \
            vsireconstruction \
            perfusionmapreconstruction \
            glialestimation \
-           optimalviewpoint \
            rectumsegmentation \
            volume3dviewtesting \
-           mprcardiac3d \
-           cardiac2dviewer \
-           volumecontourdelimiter \
-           lesionvisualization \
            experimental3d \
            gputesting
 include(../../extensions.inc)
