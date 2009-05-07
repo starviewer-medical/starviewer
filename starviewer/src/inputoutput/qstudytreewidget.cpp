@@ -100,22 +100,16 @@ void QStudyTreeWidget::insertStudyList( QList<DICOMStudy> studyList )
 
 void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
 {
-    QHash<QString,QTreeWidgetItem*> qTreeWidgetItemHashTable;
     clear();
 
     foreach(Patient *patient, patientList)
     {
         if (patient->getNumberOfStudies() > 0)
         {
-            if (!qTreeWidgetItemHashTable.contains(patient->getStudies().at(0)->getInstanceUID()))
-            {
-                //Comprovem que no tinguem l'estudi duplicat
-                qTreeWidgetItemHashTable.insert(patient->getStudies().at(0)->getInstanceUID(), fillPatient(patient));
-            }
+            m_studyTreeView->addTopLevelItems(fillPatient(patient));             
         }
     }
-
-    m_studyTreeView->addTopLevelItems(qTreeWidgetItemHashTable.values());
+    
     m_studyTreeView->clearSelection();
 }
 
@@ -128,7 +122,7 @@ void QStudyTreeWidget::insertPatient(Patient* patient)
             //si l'estudi ja hi existeix a StudyTreeView l'esborrem
             removeStudy(patient->getStudies().at(0)->getInstanceUID()); 
         }
-        m_studyTreeView->addTopLevelItem(fillPatient(patient));
+        m_studyTreeView->addTopLevelItems(fillPatient(patient));
         m_studyTreeView->clearSelection();
     }
 }
@@ -184,37 +178,42 @@ void QStudyTreeWidget::insertStudy( DICOMStudy *study)
     m_studyTreeView->clearSelection();
 }
 
-QTreeWidgetItem* QStudyTreeWidget::fillPatient(Patient *patient)
+QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
 {
-    QTreeWidgetItem *item = new QTreeWidgetItem(), *expandableItem = new QTreeWidgetItem(); 
+    QList<QTreeWidgetItem*> qtreeWidgetItemList;
 
-    Study *study = patient->getStudies().at(0);
+    foreach(Study *studyToInsert, patient->getStudies())
+    {
+        QTreeWidgetItem *item = new QTreeWidgetItem(), *expandableItem = new QTreeWidgetItem(); 
 
-    item->setIcon(ObjectName, m_closeFolder);
-    item->setText(ObjectName, patient->getFullName());
-    item->setText(PatientID, patient->getID());
-    item->setText(PatientAge, formatAge(study->getPatientAge()));
-    item->setText(Modality, study->getModalitiesAsSingleString());
-    item->setText(Description, study->getDescription());
-    item->setText(Date, formatDate(study->getDate().toString("yyyyMMdd")));
-    item->setText(Time, formatHour(study->getTime().toString("hhmmss")));
-    item->setText(StudyID, tr("Study %1").arg(study->getID()));
+        item->setIcon(ObjectName, m_closeFolder);
+        item->setText(ObjectName, patient->getFullName());
+        item->setText(PatientID, patient->getID());
+        item->setText(PatientAge, formatAge(studyToInsert->getPatientAge()));
+        item->setText(Modality, studyToInsert->getModalitiesAsSingleString());
+        item->setText(Description, studyToInsert->getDescription());
+        item->setText(Date, formatDate(studyToInsert->getDate().toString("yyyyMMdd")));
+        item->setText(Time, formatHour(studyToInsert->getTime().toString("hhmmss")));
+        item->setText(StudyID, tr("Study %1").arg(studyToInsert->getID()));
 
-    item->setText( AccNumber, study->getAccessionNumber());
-    //item->setText( PACSId, study->getPacsId() );
-    item->setText(UID, study->getInstanceUID());
-    item->setText(Type , "STUDY");//indiquem de que es tracta d'un estudi
-    item->setText(RefPhysName, study->getReferringPhysiciansName());
+        item->setText( AccNumber, studyToInsert->getAccessionNumber());
+        //item->setText( PACSId, study->getPacsId() );
+        item->setText(UID, studyToInsert->getInstanceUID());
+        item->setText(Type , "STUDY");//indiquem de que es tracta d'un estudi
+        item->setText(RefPhysName, studyToInsert->getReferringPhysiciansName());
 
-    /* degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
-       una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
-       consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
-     */
-    expandableItem->setText(Type, "EXPANDABLE_ITEM");
+        /* degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
+           una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+           consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
+         */
+        expandableItem->setText(Type, "EXPANDABLE_ITEM");
 
-    item->addChild(expandableItem);
+        item->addChild(expandableItem);
 
-    return item;
+        qtreeWidgetItemList.append(item);
+    }
+
+    return qtreeWidgetItemList;
 }
 
 void QStudyTreeWidget::insertSeriesList( QList<DICOMSeries> seriesList )
