@@ -2096,7 +2096,7 @@ void Q2DViewer::restore()
 
 void Q2DViewer::clearViewer()
 {
-    m_drawer->clearViewer( m_lastView, m_currentSlice );
+    m_drawer->clearViewer();
 }
 
 void Q2DViewer::invertWindowLevel()
