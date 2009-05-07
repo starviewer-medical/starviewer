@@ -18,6 +18,11 @@ win32 {
     }
 }
 	
+# definim que per sistemes de compilació windows basats en visual studio 
+# la compilació es faci en tants cores com sigui possible
+
+win32-msvc2005:QMAKE_CXXFLAGS += /MP
+
 # Definim variable per construir versió lite en temps de compilació
 lite_version:DEFINES += STARVIEWER_LITE
 
