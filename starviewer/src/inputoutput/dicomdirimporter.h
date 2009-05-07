@@ -16,7 +16,7 @@ class QString;
 
 namespace udg {
 
-class DICOMImage;
+class Image;
 class DICOMTagReader;
 class PatientFiller;
 class LocalDatabaseManagerThreaded;
@@ -59,7 +59,7 @@ private:
 
     void importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
-    void importImage(DICOMImage image);
+    void importImage(Image *imageToImport, QString pathToImportImage);
 
     ///S'esborra de la caché les imatges que s'han importat en local d'un estudi que ha fallat la importació
     void deleteFailedImportedStudy(QString studyInstanceUID);

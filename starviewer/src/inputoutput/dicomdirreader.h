@@ -15,11 +15,11 @@ class DcmDicomDir;
 namespace udg {
 
 class DicomMask;
-class DICOMStudy;
-class DICOMSeries;
-class DICOMImage;
-class Status;
 class Patient;
+class Study;
+class Series;
+class Image;
+class Status;
 
 /** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
   * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a realitzar cerques.
@@ -42,21 +42,21 @@ public:
       * @param studyMask màscara de cerca dels estudis a cercar dins el dicomdir
       * @return estat del mètode
       */
-    Status readStudies( QList<DICOMStudy> &outResultsStudyList , DicomMask studyMask );
+    Status readStudies( QList<Patient*> &outResultsStudyList , DicomMask studyMask );
 
     /** Retorna la llista de sèries d'un estudi que estigui en el dicomdir
      * @param studyUID UID de l'estudi del qual es vol consultar les sèries
      * @param outResultsSeriesList llista amb les sèries que conté l'estudi
      * @return estat del mètode
      */
-    Status readSeries ( QString studyUID , QString seriesUID , QList<DICOMSeries> &outResultsSeriesList );
+    Status readSeries ( QString studyUID , QString seriesUID , QList<Series*> &outResultsSeriesList );
 
     /** Retorna la llista d'imatges que conté un estudi
      * @param seriesUID UID de la serie que volem obtenir les imatges
      * @param imageList Llistat de les imatges que conté
      * @return estat del mètode
      */
-    Status readImages( QString seriesUID , QString sopInstanceUID , QList<DICOMImage> &outResultsImageList );
+    Status readImages( QString seriesUID , QString sopInstanceUID , QList<Image*> &outResultsImageList );
 
     /** Retorna el path del dicomdir
      * @return path del dicomdir
@@ -86,7 +86,7 @@ private :
      * @param studyMask màscara de l'estudi
      * @return cert si l'estudi complei la màscara
      */
-    bool matchStudyMask( DICOMStudy study , DicomMask studyMask );
+    bool matchStudyMask( Patient *patient, Study *study , DicomMask studyMask );
 
     /** Comprova que els dos StudyId el de la màscara i el de l'estudi siguin iguals. Si l'estudi Id de la màscara està buit, per defecte retorna cert
      * @param studyMaskStudyId studyId de la màscara
