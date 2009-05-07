@@ -565,8 +565,7 @@ Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters
 void QueryScreen::queryStudy( const QString &source )
 {
     LocalDatabaseManager localDatabaseManager;
-    QList<DICOMStudy> studyListResultQuery;
-    QList<Patient *> patientList;
+    QList<Patient *> patientStudyList;
     Status state;
     DicomMask searchMask = buildDicomMask();
 
@@ -577,13 +576,13 @@ void QueryScreen::queryStudy( const QString &source )
     {
         m_seriesListWidgetCache->clear();
 
-        patientList = localDatabaseManager.queryPatientStudy(searchMask);
+        patientStudyList = localDatabaseManager.queryPatientStudy(searchMask);
 
         if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
     }
     else if( source == "DICOMDIR" )
     {
-        state = m_readDicomdir.readStudies( studyListResultQuery , searchMask );
+        state = m_readDicomdir.readStudies( patientStudyList , searchMask );
         if ( !state.good() )
         {
             QApplication::restoreOverrideCursor();
@@ -615,7 +614,7 @@ void QueryScreen::queryStudy( const QString &source )
      * es fa és que per llançar el missatge es comprovi que la finestra estigui activa. Si la finestra no està activa
      * vol dir que el mètode ha estat invocat des del constructor
      */
-    if (patientList.isEmpty() && studyListResultQuery.isEmpty() && isActiveWindow() )
+    if ( patientStudyList.isEmpty() && isActiveWindow() )
     {
         //no hi ha estudis
         if( source == "Cache" )
@@ -630,12 +629,12 @@ void QueryScreen::queryStudy( const QString &source )
     {
         if( source == "Cache" )
         {
-            m_studyTreeWidgetCache->insertPatientList(patientList);//es mostra la llista d'estudis
+            m_studyTreeWidgetCache->insertPatientList(patientStudyList);//es mostra la llista d'estudis
             m_studyTreeWidgetCache->setSortColumn( QStudyTreeWidget::ObjectName ); //ordenem pel nom
         }
         else if( source == "DICOMDIR" )
         {
-            m_studyTreeWidgetDicomdir->insertStudyList( studyListResultQuery );
+            m_studyTreeWidgetDicomdir->insertPatientList( patientStudyList );
             m_studyTreeWidgetDicomdir->setSortColumn( QStudyTreeWidget::ObjectName );//ordenem pel nom
         }
         QApplication::restoreOverrideCursor();
@@ -732,7 +731,6 @@ void QueryScreen::querySeriesPacs(QString studyUID, QString pacsID)
 
 void QueryScreen::querySeries( QString studyUID, QString source )
 {
-    QList<DICOMSeries> seriesListQueryResults;
     QList<Series*> seriesList;
     LocalDatabaseManager localDatabaseManager;
     DicomMask mask;
@@ -747,7 +745,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
     }
     else if( source == "DICOMDIR" )
     {
-        m_readDicomdir.readSeries( studyUID , "" , seriesListQueryResults ); //"" pq no busquem cap serie en concret
+        m_readDicomdir.readSeries( studyUID , "" , seriesList ); //"" pq no busquem cap serie en concret
     }
     else
     {
@@ -755,7 +753,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         return;
     }
 
-    if ( seriesListQueryResults.isEmpty() && seriesList.isEmpty() )
+    if ( seriesList.isEmpty() )
     {
         QMessageBox::information( this , ApplicationNameString , tr( "No series match for this study.\n" ) );
         return;
@@ -766,7 +764,7 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         m_studyTreeWidgetCache->insertSeriesList(studyUID, seriesList); //inserim la informació de les sèries al estudi
     }
     else if( source == "DICOMDIR" )
-        m_studyTreeWidgetDicomdir->insertSeriesList( seriesListQueryResults );//inserim la informació de la sèrie al llistat
+        m_studyTreeWidgetDicomdir->insertSeriesList( studyUID , seriesList );//inserim la informació de la sèrie al llistat
 }
 
 void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pacsID)
@@ -881,7 +879,6 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
     LocalDatabaseManager localDatabaseManager;
     DicomMask mask;
     QList<Image*> imageList;
-    QList<DICOMImage> imageListQueryResults;
 
     INFO_LOG("Cerca d'imatges a la font " + source + " de l'estudi " + studyInstanceUID + " i serie " + seriesInstanceUID);
 
@@ -894,7 +891,7 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
     }
     else if (source == "DICOMDIR")
     {
-        m_readDicomdir.readImages(seriesInstanceUID, "", imageListQueryResults);
+        m_readDicomdir.readImages(seriesInstanceUID, "", imageList);
     }
     else
     {
@@ -902,7 +899,7 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
         return;
     }
 
-    if (imageListQueryResults.isEmpty() && imageList.isEmpty())
+    if (imageList.isEmpty())
     {
         QMessageBox::information( this , ApplicationNameString , tr( "No images match for this study.\n" ) );
         return;
@@ -911,7 +908,7 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
     if( source == "Cache" )
         m_studyTreeWidgetCache->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
     else if( source == "DICOMDIR" )
-        m_studyTreeWidgetDicomdir->insertImageList( imageListQueryResults );//inserim la informació de la sèrie al llistat
+        m_studyTreeWidgetDicomdir->insertImageList( studyInstanceUID, seriesInstanceUID, imageList );//inserim la informació de la sèrie al llistat
 }
 
 void QueryScreen::retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, DICOMStudy studyToRetrieve)

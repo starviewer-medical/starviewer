@@ -13,9 +13,9 @@
 
 #include "status.h"
 #include "starviewersettings.h"
-#include "dicomstudy.h"
-#include "dicomseries.h"
-#include "dicomimage.h"
+#include "study.h"
+#include "series.h"
+#include "image.h"
 #include "dicommask.h"
 #include "logging.h"
 #include "errordcmtk.h"
@@ -119,12 +119,11 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
 void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     DicomMask mask;
-    QList<DICOMStudy> studyListToImport;
-    QList<DICOMSeries> seriesListToImport;
+    QList<Patient*> patientStudyListToImport;
+    QList<Series*> seriesListToImport;
     QString studyPath;
     StarviewerSettings starviewerSettings;
-    DICOMStudy study;
-    DICOMSeries serie;
+    Series serie;
 
     studyPath = starviewerSettings.getCacheImagePath() + studyUID + "/";
     QDir directoryCreator;
@@ -132,14 +131,11 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
     mask.setStudyUID( studyUID );
 
-    m_readDicomdir.readStudies( studyListToImport , mask );
+    m_readDicomdir.readStudies( patientStudyListToImport , mask );
 
-    if (!studyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
+    if (!patientStudyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
     {
-        study = studyListToImport.value(0);
-        study.setAbsPath( studyPath );
-
-        m_qprogressDialog->setLabelText(tr("Importing study of ") + study.getPatientName());
+        m_qprogressDialog->setLabelText(tr("Importing study of ") + patientStudyListToImport.at(0)->getFullName());
 
         m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
 
@@ -150,9 +146,9 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
             return;
         }
 
-        foreach(DICOMSeries seriesToImport, seriesListToImport)
+        foreach(Series *seriesToImport, seriesListToImport)
         {
-            importSeries(studyUID, seriesToImport.getSeriesUID(), sopInstanceUID);
+            importSeries(studyUID, seriesToImport->getInstanceUID(), sopInstanceUID);
             if (getLastError() != Ok) break;
         }
     }
@@ -165,12 +161,12 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
 void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
-    QList<DICOMImage> imageListToImport;
+    QList<Image*> imageListToImport;
     QString seriesPath;
     StarviewerSettings starviewerSettings;
-
-    seriesPath = starviewerSettings.getCacheImagePath() + "/" + studyUID + "/" + seriesUID;
+    seriesPath = starviewerSettings.getCacheImagePath() + studyUID + "/" + seriesUID;
     QDir directoryCreator;
+
     directoryCreator.mkdir( seriesPath );
 
     m_readDicomdir.readImages( seriesUID , sopInstanceUID , imageListToImport );
@@ -182,35 +178,35 @@ void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString
         return;
     }
 
-    foreach(DICOMImage imageToImport, imageListToImport)
+    foreach(Image *imageToImport, imageListToImport)
     {
-        importImage(imageToImport);
+        importImage(imageToImport, seriesPath);
         if (getLastError() != Ok) break;
     }
 }
 
-void DICOMDIRImporter::importImage(DICOMImage image)
+void DICOMDIRImporter::importImage(Image *image, QString pathToImportImage)
 {
     QString cacheImagePath, dicomdirImagePath;
     StarviewerSettings starviewerSettings;
 
-    cacheImagePath = starviewerSettings.getCacheImagePath() + image.getStudyUID() + "/" + image.getSeriesUID() + "/" + image.getSOPInstanceUID();
+    cacheImagePath = pathToImportImage + "/" + image->getSOPInstanceUID();
 
-    if (QFile::exists(image.getImagePath()))//comprovem si la imatge a importar existeix
+    if (QFile::exists(image->getPath()))//comprovem si la imatge a importar existeix
     {
-        dicomdirImagePath = image.getImagePath();
+        dicomdirImagePath = image->getPath();
     }
-    else if (QFile::exists(image.getImagePath().toLower()))
+    else if (QFile::exists(image->getPath().toLower()))
     {
         /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules
            com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre 
            unitats vfat falla, per això el que fem es convertir el nom del fitxer a minúscules
          */
-        dicomdirImagePath = image.getImagePath().toLower();
+        dicomdirImagePath = image->getPath().toLower();
     }
     else
     {
-        ERROR_LOG("Dicomdir inconsistent: La imatge [" + image.getImagePath() + "] no existeix" );
+        ERROR_LOG("Dicomdir inconsistent: La imatge [" + image->getPath() + "] no existeix" );
         m_lastError = DicomdirInconsistent;
         return;
     }
