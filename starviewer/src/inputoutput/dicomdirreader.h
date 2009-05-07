@@ -11,6 +11,7 @@
 #include <QList>
 
 class DcmDicomDir;
+class DcmDirectoryRecord;
 
 namespace udg {
 
@@ -129,6 +130,18 @@ private :
      * @return retorna cert si es fa matching amb studyAccessionNumber de la màscara o studyMaskAccessionNumber és buit
      */
     bool matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber );
+
+    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Pacient
+    Patient* fillPatient( DcmDirectoryRecord *dcmDirectoryRecordPatient );
+
+    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Study
+    Study* fillStudy( DcmDirectoryRecord *dcmDirectoryRecordStudy );
+
+    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Series
+    Series* fillSeries( DcmDirectoryRecord *dcmDirectoryRecordSeries );
+
+    ///A partir d'un DcmDirectoryRecord retorna les dades d'un Image
+    Image* fillImage( DcmDirectoryRecord *dcmDirectoryRecordImage );
 
     /** canvia les '\' per '/'. Això es degut a que les dcmtk retornen el path de la imatge en format Windows amb els directoris separats per '\'. En el cas de linux les hem de passar a '/'
      * TODO aquest mètode es pot substituir per QDir::toNativeSeparators() o similar que retornarà els separadors adequats al sistema

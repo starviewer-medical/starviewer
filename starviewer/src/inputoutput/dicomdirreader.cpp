@@ -78,48 +78,18 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
 
     DcmDirectoryRecord *root = &( m_dicomdir->getRootRecord() );//accedim a l'estructura d'arbres del dicomdir
     DcmDirectoryRecord *patientRecord = root->getSub( 0 );//accedim al primer pacient
-    OFString text;
 
     //En aquest primer while accedim al patient Record a nivell de dades de pacient
     while ( patientRecord != NULL )
     {
-        Patient *patient = new Patient();
-        //Nom pacient
-        patientRecord->findAndGetOFStringArray( DCM_PatientsName , text );
-        patient->setFullName( QString::fromLatin1( text.c_str() ) );
-        //Id pacient
-        patientRecord->findAndGetOFStringArray( DCM_PatientID , text );
-        patient->setID( text.c_str() );
+        Patient *patient = fillPatient(patientRecord);
 
         DcmDirectoryRecord *studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
 
         //en aquest while accedim a les dades de l'estudi
         while ( studyRecord != NULL )
         {
-            Study* study = new Study();
-            //Id estudi
-            studyRecord->findAndGetOFStringArray( DCM_StudyID , text );
-            study->setID( text.c_str() );
-
-            //Hora estudi
-            studyRecord->findAndGetOFStringArray( DCM_StudyTime , text );
-            study->setTime( text.c_str() );
-
-            //Data estudi
-            studyRecord->findAndGetOFStringArray( DCM_StudyDate , text );
-            study->setDate( text.c_str() );
-
-            //Descripció estudi
-            studyRecord->findAndGetOFStringArray( DCM_StudyDescription , text );
-            study->setDescription( QString::fromLatin1( text.c_str() ) );
-
-            //accession number
-            studyRecord->findAndGetOFStringArray( DCM_AccessionNumber , text );
-            study->setAccessionNumber( text.c_str() );
-
-            //obtenim el UID de l'estudi
-            studyRecord->findAndGetOFStringArray( DCM_StudyInstanceUID , text );
-            study->setInstanceUID( text.c_str() );
+            Study* study = fillStudy(studyRecord);
 
             //comprovem si l'estudi compleix la màscara de cerca que ens han passat
             if ( matchStudyMask( patient, study , studyMask ) ) 
@@ -183,29 +153,13 @@ Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , QList<
 
         while ( seriesRecord != NULL )
         {
-            //UID Serie
-            seriesRecord->findAndGetOFStringArray( DCM_SeriesInstanceUID , text );
+            Series *series = fillSeries(seriesRecord);
 
-            if ( text.c_str() == seriesUID || seriesUID.length() == 0)
-            {
-                Series *series = new Series;
-
-                series->setInstanceUID(text.c_str());
-
-                //Número de sèrie
-                seriesRecord->findAndGetOFStringArray( DCM_SeriesNumber , text );
-                series->setSeriesNumber( text.c_str() );
-
-                //Modalitat sèrie
-                seriesRecord->findAndGetOFStringArray( DCM_Modality , text );
-                series->setModality( text.c_str() );
-
-                //Protocol Name
-                seriesRecord->findAndGetOFStringArray( DCM_ProtocolName , text );
-                series->setProtocolName( QString::fromLatin1( text.c_str() ) );
-
+            if ( seriesUID.length() == 0 || series->getInstanceUID() == seriesUID)
                 outResultsSeriesList.append(series);
-            }
+            else
+                delete series;
+
             seriesRecord = studyRecord->nextSub( seriesRecord ); //accedim a la següent sèrie de l'estudi
         }
     }
@@ -231,7 +185,7 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
     {
         studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
 
-        while (  studyRecord != NULL && !found )//accedim a nivell estudi
+        while ( studyRecord != NULL && !found )//accedim a nivell estudi
         {
             seriesRecord = studyRecord->getSub( 0 ); //seleccionem la serie de l'estudi que conté el studyUID que cercàvem
             while ( seriesRecord != NULL && !found )//accedim a nivell
@@ -260,28 +214,12 @@ Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , 
         while ( imageRecord != NULL )
         {
             //SopUid Image
-            imageRecord->findAndGetOFStringArray( DCM_ReferencedSOPInstanceUIDInFile , text );
+            Image *image = fillImage(imageRecord);
 
-            if ( sopInstanceUID.length() == 0 || sopInstanceUID == text.c_str())
-            {
-                Image *image = new Image();
-
-                image->setSOPInstanceUID(text.c_str());
-
-                //Instance Number (Número d'imatge
-                imageRecord->findAndGetOFStringArray( DCM_InstanceNumber , text );
-                image->setInstanceNumber( text.c_str() );
-
-                //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '/', per linux s'ha de transformar a '\'
-                imageRecord->findAndGetOFStringArray( DCM_ReferencedFileID , text );//obtenim el path relatiu de la imatge
-                imagePath.clear();
-                //creem el path absolut
-                imagePath =  m_dicomdirAbsolutePath + "/" + buildImageRelativePath( text.c_str() );
-
-                image->setPath( imagePath );
-
+            if ( sopInstanceUID.length() == 0 || sopInstanceUID == image->getSOPInstanceUID())
                 outResultsImageList.append( image );//inserim a la llista la imatge*/
-            }
+            else
+                delete image;
 
             imageRecord = seriesRecord->nextSub( imageRecord ); //accedim a la següent imatge de la sèrie
         }
@@ -523,6 +461,96 @@ bool DICOMDIRReader::matchStudyMaskAccessionNumber( QString studyMaskAccessionNu
     }
 
     return true;
+}
+
+Patient* DICOMDIRReader::fillPatient(DcmDirectoryRecord *dcmDirectoryRecordPatient)
+{
+    OFString tagValue;
+    Patient *patient = new Patient();
+
+    //Nom pacient
+    dcmDirectoryRecordPatient->findAndGetOFStringArray( DCM_PatientsName , tagValue );
+    patient->setFullName( QString::fromLatin1( tagValue.c_str() ) );
+    //Id pacient
+    dcmDirectoryRecordPatient->findAndGetOFStringArray( DCM_PatientID , tagValue );
+    patient->setID( tagValue.c_str() );
+
+    return patient;
+}
+
+Study* DICOMDIRReader::fillStudy( DcmDirectoryRecord *dcmDirectoryRecordStudy )
+{
+    OFString tagValue;
+
+    Study* study = new Study();
+    //Id estudi
+    dcmDirectoryRecordStudy->findAndGetOFStringArray( DCM_StudyID , tagValue );
+    study->setID( tagValue.c_str() );
+
+    //Hora estudi
+    dcmDirectoryRecordStudy->findAndGetOFStringArray( DCM_StudyTime , tagValue );
+    study->setTime( tagValue.c_str() );
+
+    //Data estudi
+    dcmDirectoryRecordStudy->findAndGetOFStringArray( DCM_StudyDate , tagValue );
+    study->setDate( tagValue.c_str() );
+
+    //Descripció estudi
+    dcmDirectoryRecordStudy->findAndGetOFStringArray( DCM_StudyDescription , tagValue );
+    study->setDescription( QString::fromLatin1( tagValue.c_str() ) );
+
+    //accession number
+    dcmDirectoryRecordStudy->findAndGetOFStringArray( DCM_AccessionNumber , tagValue );
+    study->setAccessionNumber( tagValue.c_str() );
+
+    //obtenim el UID de l'estudi
+    dcmDirectoryRecordStudy->findAndGetOFStringArray( DCM_StudyInstanceUID , tagValue );
+    study->setInstanceUID( tagValue.c_str() );
+
+    return study;
+}
+
+Series* DICOMDIRReader::fillSeries( DcmDirectoryRecord *dcmDirectoryRecordSeries )
+{
+    OFString tagValue;
+    Series *series = new Series;
+
+    dcmDirectoryRecordSeries->findAndGetOFStringArray( DCM_SeriesInstanceUID , tagValue );
+    series->setInstanceUID( tagValue.c_str() );
+
+    //Número de sèrie
+    dcmDirectoryRecordSeries->findAndGetOFStringArray( DCM_SeriesNumber , tagValue );
+    series->setSeriesNumber( tagValue.c_str() );
+
+    //Modalitat sèrie
+    dcmDirectoryRecordSeries->findAndGetOFStringArray( DCM_Modality , tagValue );
+    series->setModality( tagValue.c_str() );
+
+    //Protocol Name
+    dcmDirectoryRecordSeries->findAndGetOFStringArray( DCM_ProtocolName , tagValue );
+    series->setProtocolName( QString::fromLatin1( tagValue.c_str() ) );
+
+    return series;
+}
+
+Image* DICOMDIRReader::fillImage( DcmDirectoryRecord *dcmDirectoryRecordImage )
+{
+    OFString tagValue;
+    Image *image = new Image();
+    
+    //SopUid Image
+    dcmDirectoryRecordImage->findAndGetOFStringArray( DCM_ReferencedSOPInstanceUIDInFile , tagValue );
+    image->setSOPInstanceUID( tagValue.c_str() );
+
+    //Instance Number (Número d'imatge
+    dcmDirectoryRecordImage->findAndGetOFStringArray( DCM_InstanceNumber , tagValue );
+    image->setInstanceNumber( tagValue.c_str() );
+
+    //Path de la imatge ens retorna el path relatiu respecte el dicomdir DirectoriEstudi/DirectoriSeries/NomImatge. Atencio retorna els directoris separats per '/', per linux s'ha de transformar a '\'
+    dcmDirectoryRecordImage->findAndGetOFStringArray( DCM_ReferencedFileID , tagValue );//obtenim el path relatiu de la imatge
+    image->setPath(m_dicomdirAbsolutePath + "/" + buildImageRelativePath( tagValue.c_str() ));
+
+    return image;
 }
 
 QString DICOMDIRReader::backSlashToSlash( QString original )
