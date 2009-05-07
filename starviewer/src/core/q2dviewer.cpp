@@ -2192,6 +2192,7 @@ void Q2DViewer::setAlignPosition( AlignPosition alignPosition )
         alignLeft();
         break;
     case AlignCenter:
+        m_alignPosition = Q2DViewer::AlignCenter;
         break;
     }
 }
