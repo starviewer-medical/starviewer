@@ -122,5 +122,6 @@
         <file>images/zoom.png</file>
         <file>images/openDICOMDIR.png</file>
         <file>images/RISConfiguration.png</file>
+        <file>images/clippingBox.png</file>
     </qresource>
 </RCC>

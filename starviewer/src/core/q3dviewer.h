@@ -65,6 +65,11 @@ public:
 
     void resetView( CameraOrientationType view );
 
+    /// Determina la bounding box que definex els plans de tall del volum
+    void setClippingPlanes( vtkPlanes *clippingPlanes );
+    /// Obté els plans de tall que s'han definit sobre el volum
+    vtkPlanes *getClippingPlanes() const;
+    
 public slots:
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function);
@@ -240,6 +245,9 @@ private:
 
     /// Orientació que tenim
     int m_currentOrientation;
+
+    /// Plans de tall
+    vtkPlanes *m_clippingPlanes;
 };
 
 };  //  end  namespace udg

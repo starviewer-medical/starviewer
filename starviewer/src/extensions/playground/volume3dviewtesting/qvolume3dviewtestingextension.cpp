@@ -51,6 +51,9 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
 
 QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
 {
+    // el que aquí volem fer és forçar a eliminar primer totes les tools abans de que s'esborri el viewer
+    // TODO potser caldria refactoritzar el nom d'aquest mètode o crear-ne un per aquesta tasca
+    m_toolManager->disableAllToolsTemporarily();
     writeSettings();
 }
 
@@ -62,6 +65,7 @@ void QVolume3DViewTestingExtension::initializeTools()
     m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
     m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_panToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
+    m_clippingBoxToolButton->setDefaultAction( m_toolManager->getToolAction("ClippingPlanesTool") );
 
     // Action tools
     m_axialOrientationButton->setDefaultAction( m_toolManager->registerActionTool("AxialViewActionTool") );
@@ -77,7 +81,7 @@ void QVolume3DViewTestingExtension::initializeTools()
 
     // registrem al manager les tools que van amb el viewer principal
     QStringList toolsList;
-    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "WindowLevelTool" << "ScreenShotTool";
+    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "WindowLevelTool" << "ScreenShotTool" << "ClippingPlanesTool";
     m_toolManager->setViewerTools( m_3DView, toolsList );
 
     QStringList actionToolsList;

@@ -28,6 +28,7 @@
 #include "angletool.h"
 #include "editortool.h"
 #include "nonclosedangletool.h"
+#include "clippingplanestool.h"
 
 #include <QAction>
 
@@ -120,6 +121,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "NonClosedAngleTool" )
     {
         tool = new NonClosedAngleTool( viewer );
+    }
+    else if( toolName == "ClippingPlanesTool" )
+    {
+        tool = new ClippingPlanesTool( viewer );
     }
     else
     {
@@ -249,6 +254,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Non Closed Angle") );
         toolAction->setStatusTip( tr("Enable/Disable non closed angle tool") );
         toolAction->setIcon( QIcon(":/images/nonClosedAngle.png") );
+    }
+    else if( toolName == "ClippingPlanesTool" )
+    {
+        toolAction->setText( tr("Clipping Planes") );
+        toolAction->setToolTip( tr("Enable/Disable the clipping planes tool") );
+        toolAction->setIcon( QIcon(":/images/clippingBox.png") );
     }
     else
     {

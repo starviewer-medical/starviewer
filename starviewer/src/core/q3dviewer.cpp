@@ -49,14 +49,10 @@
 #include <vtkPiecewiseFunction.h>
 // Casting
 #include <vtkImageShiftScale.h>
-
-// interacció
-#include <vtkInteractorStyle.h>
-#include <vtkInteractorObserver.h>
-
 // reorientació del volum
 #include <vtkMatrix4x4.h>
-
+// Clippping Planes 
+#include <vtkPlanes.h>
 // obscurances
 #include "obscurancemainthread.h"
 #include "ambientvoxelshader.h"
@@ -76,7 +72,7 @@
 namespace udg {
 
 Q3DViewer::Q3DViewer( QWidget *parent )
- : QViewer( parent ), m_imageData( 0 ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0), m_newTransferFunction(0)
+ : QViewer( parent ), m_imageData( 0 ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0), m_newTransferFunction(0), m_clippingPlanes(0)
 {
     m_vtkWidget->setAutomaticImageCacheEnabled( true );
     // avortar render
@@ -337,6 +333,24 @@ void Q3DViewer::resetView( CameraOrientationType view )
     resetOrientation();
 }
 
+void Q3DViewer::setClippingPlanes( vtkPlanes *clippingPlanes )
+{
+    if( clippingPlanes )
+    {
+        m_clippingPlanes = clippingPlanes;
+        m_volumeMapper->SetClippingPlanes( m_clippingPlanes );
+    }
+    else
+    {
+        DEBUG_LOG("Els plans de tall són NULS");
+    }
+}
+
+vtkPlanes *Q3DViewer::getClippingPlanes() const
+{
+    return m_clippingPlanes;
+}
+
 void Q3DViewer::setRenderFunction(RenderFunction function)
 {
     m_renderFunction = function;
@@ -409,8 +423,12 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput( Volume* volume )
 {
-    DEBUG_LOG( "setInput" );
-
+    if( m_clippingPlanes )
+    {
+        m_volumeMapper->RemoveAllClippingPlanes();
+        m_clippingPlanes->Delete();
+        m_clippingPlanes = 0;
+    }
     m_mainVolume = volume;
 
     // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
