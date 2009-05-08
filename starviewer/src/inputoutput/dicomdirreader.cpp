@@ -84,25 +84,29 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
     {
         Patient *patient = fillPatient(patientRecord);
 
-        DcmDirectoryRecord *studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
-
-        //en aquest while accedim a les dades de l'estudi
-        while ( studyRecord != NULL )
+        if ( matchPatientToDicomMask( patient , &studyMask ) )//Si no compleix a nivelld de pacient ja no accedim als seus estudis
         {
-            Study* study = fillStudy(studyRecord);
+            DcmDirectoryRecord *studyRecord = patientRecord->getSub( 0 );//indiquem que volem el primer estudi del pacient
 
-            //comprovem si l'estudi compleix la màscara de cerca que ens han passat
-            if ( matchDicomMask( patient, study , studyMask ) ) 
-                patient->addStudy( study );
-            else
-                delete study;
+            //en aquest while accedim a les dades de l'estudi
+            while ( studyRecord != NULL )
+            {
+                Study* study = fillStudy(studyRecord);
 
-            studyRecord = patientRecord->nextSub( studyRecord ); //accedim al següent estudi del pacient
-        }
+                //comprovem si l'estudi compleix la màscara de cerca que ens han passat
+                if ( matchStudyToDicomMask(  study , &studyMask ) ) 
+                    patient->addStudy( study );
+                else
+                    delete study;
 
-        if (patient->getNumberOfStudies() > 0) //Si cap estudi ha complert la màscara de cerca ja no afegim el pacient
-        {
-            outResultsStudyList.append(patient);
+                studyRecord = patientRecord->nextSub( studyRecord ); //accedim al següent estudi del pacient
+            }
+
+            if (patient->getNumberOfStudies() > 0) //Si cap estudi ha complert la màscara de cerca ja no afegim el pacient
+            {
+                outResultsStudyList.append(patient);
+            }
+            else delete patient;
         }
         else delete patient;
 
@@ -309,15 +313,21 @@ Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
 }
 
 //Per fer el match seguirem els criteris del PACS
-bool DICOMDIRReader::matchDicomMask( Patient *patient, Study *study , DicomMask studyMask )
+bool DICOMDIRReader::matchPatientToDicomMask( Patient *patient , DicomMask *mask )
 {
-    if ( !matchDicomMaskToPatientId( &studyMask , patient ) ) return false;
+    if ( !matchDicomMaskToPatientId( mask , patient ) ) return false;
 
-    if ( !matchDicomMaskToStudyDate( &studyMask , study ) ) return false;
+    if ( !matchDicomMaskToPatientName( mask , patient ) ) return false;
 
-    if ( !matchDicomMaskToPatientName( &studyMask , patient ) ) return false;
+    return true;
+}
 
-    if ( !matchDicomMaskToStudyUID( &studyMask , study ) ) return false;
+//Per fer el match seguirem els criteris del PACS
+bool DICOMDIRReader::matchStudyToDicomMask( Study *study , DicomMask *mask )
+{
+    if ( !matchDicomMaskToStudyDate( mask , study ) ) return false;
+
+    if ( !matchDicomMaskToStudyUID( mask , study ) ) return false;
 
     return true;
 }
