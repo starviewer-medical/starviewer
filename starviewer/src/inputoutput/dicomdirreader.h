@@ -50,14 +50,14 @@ public:
      * @param outResultsSeriesList llista amb les sèries que conté l'estudi
      * @return estat del mètode
      */
-    Status readSeries ( QString studyUID , QString seriesUID , QList<Series*> &outResultsSeriesList );
+    Status readSeries ( const QString &studyUID , const QString &seriesUID , QList<Series*> &outResultsSeriesList );
 
     /** Retorna la llista d'imatges que conté un estudi
      * @param seriesUID UID de la serie que volem obtenir les imatges
      * @param imageList Llistat de les imatges que conté
      * @return estat del mètode
      */
-    Status readImages( QString seriesUID , QString sopInstanceUID , QList<Image*> &outResultsImageList );
+    Status readImages( const QString &seriesUID , const QString &sopInstanceUID , QList<Image*> &outResultsImageList );
 
     /** Retorna el path del dicomdir
      * @return path del dicomdir
@@ -70,7 +70,7 @@ public:
      * @param studyUID UID de l'estudi del qual volem els arxius
      * @return Una llista amb els paths absoluts dels arxius en qüestió
      */
-    QStringList getFiles( QString studyUID );
+    QStringList getFiles( const QString &studyUID );
 
     /// Retorna l'estructura Patient per l'estudi que compleixi la màscara que se li passi.
     /// En la màscara només es té en compte el StudyInstanceUID.
@@ -122,10 +122,10 @@ private :
      * @param original path original
      * @return path amb '/'
      */
-    QString backSlashToSlash( QString original );
+    QString backSlashToSlash( const QString &original );
 
     /**Ens construeix el Path relatiu d'una imatge, posa les '/' correctament i posa en minúscules o majúscules el nom del fitxer en funció de si el dicomdir conté els fitxers en minúscula o majúscula*/
-    QString buildImageRelativePath( QString relativePath );
+    QString buildImageRelativePath( const QString &relativePath );
 };
 
 }
