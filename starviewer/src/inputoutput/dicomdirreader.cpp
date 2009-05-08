@@ -117,7 +117,7 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
 }
 
 //Per trobar les sèries d'une estudi haurem de recorre tots els estudis dels pacients, que hi hagi en el dicomdir, fins que obtinguem l'estudi amb el UID sol·licitat una vegada found, podrem accedir a la seva informacio de la sèrie
-Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , QList<Series*> &outResultsSeriesList )
+Status DICOMDIRReader::readSeries( const QString &studyUID , const QString &seriesUID , QList<Series*> &outResultsSeriesList )
 {
     Status state;
 
@@ -171,7 +171,7 @@ Status DICOMDIRReader::readSeries( QString studyUID , QString seriesUID , QList<
     return state.setStatus( m_dicomdir->error() );
 }
 
-Status DICOMDIRReader::readImages( QString seriesUID , QString sopInstanceUID , QList<Image*> &outResultsImageList )
+Status DICOMDIRReader::readImages( const QString &seriesUID , const QString &sopInstanceUID , QList<Image*> &outResultsImageList )
 {
     Status state;
 
@@ -238,7 +238,7 @@ QString DICOMDIRReader::getDicomdirFilePath()
 }
 
 //TODO s'haurai de mirar si es pot fer servir les funcions de readimage, readseries i readstudy, perquè aquest mètode, són els tres anteriors mètodes en un
-QStringList DICOMDIRReader::getFiles( QString studyUID )
+QStringList DICOMDIRReader::getFiles( const QString &studyUID )
 {
     QStringList files;
     Status state;
@@ -489,7 +489,7 @@ Image* DICOMDIRReader::fillImage( DcmDirectoryRecord *dcmDirectoryRecordImage )
     return image;
 }
 
-QString DICOMDIRReader::backSlashToSlash( QString original )
+QString DICOMDIRReader::backSlashToSlash( const QString &original )
 {
     QString ret;
 
@@ -501,7 +501,7 @@ QString DICOMDIRReader::backSlashToSlash( QString original )
     return ret;
 }
 
-QString DICOMDIRReader::buildImageRelativePath( QString imageRelativePath )
+QString DICOMDIRReader::buildImageRelativePath( const QString &imageRelativePath )
 {
     /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en
         minúscules com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, m_dicomFilesInLowerCase
