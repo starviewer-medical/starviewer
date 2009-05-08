@@ -66,6 +66,12 @@ private:
 
     ///Copia al disc dur una imatge del dicomdir
     bool copyDicomdirImageToLocal(QString dicomdirImagePath, QString localImagePath);
+
+    /**Ens retorna el path de la imatge a importar, hem de tenir en compte que en funció del sistema de fitxers el nom del fitxer pot està en majúscules o minúscules,
+     * aquesta funció s'encarrega de comprovar-ho
+     */
+    QString getDicomdirImagePath(Image *imageToImport);
+
 };
 
 }

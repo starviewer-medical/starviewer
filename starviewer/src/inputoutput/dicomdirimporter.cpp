@@ -120,14 +120,9 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 {
     DicomMask mask;
     QList<Patient*> patientStudyListToImport;
-    QList<Series*> seriesListToImport;
-    QString studyPath;
-    StarviewerSettings starviewerSettings;
-    Series serie;
+    QString studyPath = StarviewerSettings().getCacheImagePath() + studyUID + "/";;
 
-    studyPath = starviewerSettings.getCacheImagePath() + studyUID + "/";
-    QDir directoryCreator;
-    directoryCreator.mkdir( studyPath );
+    QDir().mkdir( studyPath );
 
     mask.setStudyUID( studyUID );
 
@@ -135,6 +130,8 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
     if (!patientStudyListToImport.isEmpty())//comprovem que s'hagin trobat estudis per importar
     {
+        QList<Series*> seriesListToImport;
+
         m_qprogressDialog->setLabelText(tr("Importing study of ") + patientStudyListToImport.at(0)->getFullName());
 
         m_readDicomdir.readSeries( studyUID , seriesUID , seriesListToImport );
@@ -162,12 +159,9 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     QList<Image*> imageListToImport;
-    QString seriesPath;
-    StarviewerSettings starviewerSettings;
-    seriesPath = starviewerSettings.getCacheImagePath() + studyUID + "/" + seriesUID;
-    QDir directoryCreator;
+    QString seriesPath = StarviewerSettings().getCacheImagePath() + studyUID + "/" + seriesUID;
 
-    directoryCreator.mkdir( seriesPath );
+    QDir().mkdir( seriesPath );
 
     m_readDicomdir.readImages( seriesUID , sopInstanceUID , imageListToImport );
 
@@ -187,29 +181,15 @@ void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString
 
 void DICOMDIRImporter::importImage(Image *image, QString pathToImportImage)
 {
-    QString cacheImagePath, dicomdirImagePath;
-    StarviewerSettings starviewerSettings;
+    QString cacheImagePath, dicomdirImagePath = getDicomdirImagePath(image);
 
-    cacheImagePath = pathToImportImage + "/" + image->getSOPInstanceUID();
-
-    if (QFile::exists(image->getPath()))//comprovem si la imatge a importar existeix
+    if (dicomdirImagePath.length() == 0)
     {
-        dicomdirImagePath = image->getPath();
-    }
-    else if (QFile::exists(image->getPath().toLower()))
-    {
-        /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules
-           com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre 
-           unitats vfat falla, per això el que fem es convertir el nom del fitxer a minúscules
-         */
-        dicomdirImagePath = image->getPath().toLower();
-    }
-    else
-    {
-        ERROR_LOG("Dicomdir inconsistent: La imatge [" + image->getPath() + "] no existeix" );
         m_lastError = DicomdirInconsistent;
         return;
     }
+
+    cacheImagePath = pathToImportImage + "/" + image->getSOPInstanceUID();
 
     if(!copyDicomdirImageToLocal(dicomdirImagePath, cacheImagePath))
     {
@@ -258,6 +238,28 @@ bool DICOMDIRImporter::copyDicomdirImageToLocal(QString dicomdirImagePath, QStri
         return true;
     }
     else return false;
+}
+
+QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
+{
+    if (QFile::exists(image->getPath()))//comprovem si la imatge a importar existeix
+    {
+        return image->getPath();
+    }
+    else if (QFile::exists(image->getPath().toLower()))
+    {
+        /* Linux per defecte en les unitats vfat, mostra els noms de fitxer que són shortname ( 8 o menys caràcters ) en minúscules
+           com que en el fitxer de dicomdir les rutes del fitxer es guarden en majúscules, si fem un exist del nom del fitxer sobre 
+           unitats vfat falla, per això el que fem es convertir el nom del fitxer a minúscules
+         */
+        return image->getPath().toLower();
+    }
+    else
+    {
+        ERROR_LOG("Dicomdir inconsistent: La imatge [" + image->getPath() + "] no existeix" );
+        return "";
+    }
+
 }
 
 void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, QThreadRunWithExec *fillersThread)
