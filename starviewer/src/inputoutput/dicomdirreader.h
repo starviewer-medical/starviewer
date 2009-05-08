@@ -87,49 +87,23 @@ private :
      * @param studyMask màscara de l'estudi
      * @return cert si l'estudi complei la màscara
      */
-    bool matchStudyMask( Patient *patient, Study *study , DicomMask studyMask );
-
-    /** Comprova que els dos StudyId el de la màscara i el de l'estudi siguin iguals. Si l'estudi Id de la màscara està buit, per defecte retorna cert
-     * @param studyMaskStudyId studyId de la màscara
-     * @param studyStudyId studyId de l'estudi trobat al dicomdir
-     * @return retorna cert si els dos studyID son iguals o studyMaskStudyID està buit
-     */
-    bool matchStudyMaskStudyId( QString studyMaskStudyId , QString studyStudyId );
+    bool matchDicomMask( Patient *patient, Study *study , DicomMask studyMask );
 
     /** Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
-     * @param studyMaskStudyUID studyUID de la màscara
-     * @param studyStudyUID studyUID de l'estudi trobat al dicomdir
-     * @return retorna cert si els dos studyUID son iguals o studyMaskStudyUID està buit
      */
-    bool matchStudyMaskStudyUID( QString studyMaskStudyUID , QString studyStudyUID );
+    bool matchDicomMaskToStudyUID( DicomMask *mask , Study *study );
 
     /** Comprova que els dos PatientId el de la màscara i el de l'estudi facin matching. Si el Patient Id de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
-     * @param studyMaskPatientId
-     * @param studyPatientId
-     * @return retorna cert si els dos patientId són iguals o studyMaskPatientId està buit
      */
-    bool matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId );
+    bool matchDicomMaskToPatientId( DicomMask *mask , Patient *patient );
 
     /** Comprova que la data de la màscara i la de l'estudi facin matching. Si la studyMaskDate és buida retorna cert per defecte
-     * @param studyMaskDate Màscara de dates
-     * @param studyDate Data de l'estudi
-     * @return retorna cert si es fa matching amb la data de la màscara o studyMaskDate és buit
      */
-    bool matchStudyMaskDate( QString studyMaskDate , QString studyDate );
+    bool matchDicomMaskToStudyDate( DicomMask *mask , Study *study );
 
     /** Comprova que el nom del pacient de la màscara i el de l'estudi facin matching. Si la studyMaskPatientName és buida retorna cert per defecte. En aquest cas fem wildcard matching
-     * @param studyMaskPatienName Màscara de nom pacient
-     * @param studyPatientName Nom del pacient
-     * @return retorna cert si es fa matching amb el nom del pacient de la màscara o studyMaskPatient és buit
      */
-    bool matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName );
-
-    /** Comprova que el AccessionNumber de la màscara i el de l'estudi facin matching. Si la studyMaskAccessionNumber és buida retorna cert per defecte. En aquest cas fem wildcard matching
-     * @param studyMaskPatienName Màscara de AccessionNumber
-     * @param studyPatientName AccessionNumber de l'estudi
-     * @return retorna cert si es fa matching amb studyAccessionNumber de la màscara o studyMaskAccessionNumber és buit
-     */
-    bool matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber );
+    bool matchDicomMaskToPatientName( DicomMask *mask , Patient *patient );
 
     ///A partir d'un DcmDirectoryRecord retorna les dades d'un Pacient
     Patient* fillPatient( DcmDirectoryRecord *dcmDirectoryRecordPatient );
