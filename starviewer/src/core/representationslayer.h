@@ -46,7 +46,7 @@ public:
     * @param posX posició X de l'event
     * @param posY posició Y de l'event
     */
-    void handleEvent(unsigned int eventID, double posX, double posY);
+    void handleEvent(long unsigned eventID, double posX, double posY);
 
 public slots:
     ///Actualitza les variables de plane i slice

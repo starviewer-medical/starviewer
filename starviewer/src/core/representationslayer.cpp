@@ -129,7 +129,7 @@ void RepresentationsLayer::clearAll()
     }
 }
 
-void RepresentationsLayer::handleEvent(unsigned int eventID, double posX, double posY)
+void RepresentationsLayer::handleEvent(long unsigned eventID, double posX, double posY)
 {
     //De moment no fa res...
 }
