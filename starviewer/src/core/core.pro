@@ -180,7 +180,7 @@ HEADERS += extensionfactory.h \
            roitool.h \
            statswatcher.h \
            clippingplanestool.h \
-           represetationslayer.h \
+           representationslayer.h \
            toolrepresentation.h
 
 SOURCES += extensionmediator.cpp \
