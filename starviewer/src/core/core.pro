@@ -179,7 +179,9 @@ HEADERS += extensionfactory.h \
            abortrendercommand.h \
            roitool.h \
            statswatcher.h \
-           clippingplanestool.h
+           clippingplanestool.h \
+           represetationslayer.h \
+           toolrepresentation.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -324,7 +326,9 @@ SOURCES += extensionmediator.cpp \
            abortrendercommand.cpp \
            roitool.cpp \
            statswatcher.cpp \
-           clippingplanestool.cpp
+           clippingplanestool.cpp \
+           representationslayer.cpp \
+           toolrepresentation.cpp
            
 TEMPLATE = lib
 DESTDIR = ./
