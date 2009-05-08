@@ -92,7 +92,7 @@ Status DICOMDIRReader::readStudies(QList<Patient*> &outResultsStudyList, DicomMa
             Study* study = fillStudy(studyRecord);
 
             //comprovem si l'estudi compleix la màscara de cerca que ens han passat
-            if ( matchStudyMask( patient, study , studyMask ) ) 
+            if ( matchDicomMask( patient, study , studyMask ) ) 
                 patient->addStudy( study );
             else
                 delete study;
@@ -309,79 +309,41 @@ Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
 }
 
 //Per fer el match seguirem els criteris del PACS
-bool DICOMDIRReader::matchStudyMask( Patient *patient, Study* study , DicomMask studyMask )
+bool DICOMDIRReader::matchDicomMask( Patient *patient, Study *study , DicomMask studyMask )
 {
-    if ( !matchStudyMaskStudyId( studyMask.getStudyId() , study->getID() ) ) return false;
+    if ( !matchDicomMaskToPatientId( &studyMask , patient ) ) return false;
 
-    if ( !matchStudyMaskPatientId( studyMask.getPatientId() , patient->getID() ) ) return false;
+    if ( !matchDicomMaskToStudyDate( &studyMask , study ) ) return false;
 
-    if ( !matchStudyMaskDate( studyMask.getStudyDate() , study->getDate().toString( "yyyyMMdd" ) ) ) return false;
+    if ( !matchDicomMaskToPatientName( &studyMask , patient ) ) return false;
 
-    if ( !matchStudyMaskPatientName( studyMask.getPatientName() , patient->getFullName() ) ) return false;
-
-    if ( !matchStudyMaskStudyUID( studyMask.getStudyUID() , study->getInstanceUID() ) ) return false;
-
-    if ( !matchStudyMaskAccessionNumber( studyMask.getAccessionNumber() , study->getAccessionNumber() ) ) return false;
+    if ( !matchDicomMaskToStudyUID( &studyMask , study ) ) return false;
 
     return true;
 }
 
-bool DICOMDIRReader::matchStudyMaskStudyId( QString studyMaskStudyId , QString studyStudyId )
+bool DICOMDIRReader::matchDicomMaskToStudyUID( DicomMask *mask , Study *study)
 {
-    if ( studyMaskStudyId.length() > 0 )
-    { //si hi ha màscara d'estudi Id
-      //el id de l'estudi, des de la classe query screen el guardem a la màscara es amb format '*StudyID*'. Els '*' s'han de treure
-        studyMaskStudyId = studyMaskStudyId.toUpper();
-        studyStudyId = studyStudyId.toUpper();
-
-        if ( !studyStudyId.contains( studyMaskStudyId ) )
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    return true;
+    return mask->getStudyUID().length() == 0 || mask->getStudyUID() == study->getInstanceUID();
 }
 
-bool DICOMDIRReader::matchStudyMaskStudyUID( QString studyMaskStudyUID , QString studyStudyUID )
-{
-    if ( studyMaskStudyUID.length() > 0 )
-    { //si hi ha màscara d'estudi UID
-      //en el cas del StudiUID seguim criteri del pacs, només faran match els UID que concordin amb el de la màscara, no podem fer wildcard
-        if ( studyStudyUID == studyMaskStudyUID )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool DICOMDIRReader::matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId )
+bool DICOMDIRReader::matchDicomMaskToPatientId( DicomMask *mask, Patient *patient )
 {
     //Si la màscara és buida rebem  * , si té valor és *ID_PACIENT*
-    if ( studyMaskPatientId.length() > 1 )
-    { //si hi ha màscara Patient Id
+    if ( mask->getPatientId().length() > 1 )
+    { 
+        QString clearedMaskPatientID = mask->getPatientId().remove( "*" );
 
-        studyMaskPatientId = studyMaskPatientId.replace( "*", "" );//treiem els "*"
-
-        if ( !studyPatientId.contains( studyMaskPatientId , Qt::CaseInsensitive  ) ) return false;
+        return patient->getID().contains( clearedMaskPatientID , Qt::CaseInsensitive  );
     }
-
-    return true;
+    else return true;
 }
 
-bool DICOMDIRReader::matchStudyMaskDate( QString studyMaskDate , QString studyDate )
+bool DICOMDIRReader::matchDicomMaskToStudyDate( DicomMask *mask , Study *study )
 {
-    if ( studyMaskDate.length() > 0 )
+    QString maskStudyDate = mask->getStudyDate(), studyDate = study->getDate().toString( "yyyyMMdd" );
+
+    if ( maskStudyDate.length() > 0 )
     { //Si hi ha màscara de data
       //la màscara de la data per DICOM segueix els formats :
       // -  "YYYYMMDD-YYYYMMDD", per indicar un rang de dades
@@ -390,77 +352,41 @@ bool DICOMDIRReader::matchStudyMaskDate( QString studyMaskDate , QString studyDa
       // - "YYYYMMDD" per buscar estudis d'aquella data
       // Hurem de mirar quin d'aquest formats és la nostre màscara
 
-        if (  studyMaskDate.length() == 8 ) // cas YYYYMMDDD
+        if (  maskStudyDate.length() == 8 ) // cas YYYYMMDDD
         {
-            if ( studyMaskDate == studyDate )
-            {
-                return true;
-            }
-            else return false;
+            return maskStudyDate == studyDate;
         }
-        else if (  studyMaskDate.length() == 9 )
+        else if (  maskStudyDate.length() == 9 )
         {
-            if (  studyMaskDate.at( 0 ) == '-' ) // cas -YYYYMMDD
+            if (  maskStudyDate.at( 0 ) == '-' ) // cas -YYYYMMDD
             {
-                if ( studyMaskDate.mid( 1 , 8 ) >= studyDate )
-                {
-                    return true;
-                }
-                else return false;
+                return maskStudyDate.mid( 1 , 8 ) >= studyDate;
             }
-            else if ( studyMaskDate.at( 8 ) == '-' ) // cas YYYYMMDD-
+            else if ( maskStudyDate.at( 8 ) == '-' ) // cas YYYYMMDD-
             {
-                if ( studyMaskDate.mid( 0 , 8 ) <= studyDate )
-                {
-                    return true;
-                }
-                else return false;
+                return maskStudyDate.mid( 0 , 8 ) <= studyDate;
             }
         }
-        else if ( studyMaskDate.length() == 17 ) // cas YYYYMMDD-YYYYMMDD
+        else if ( maskStudyDate.length() == 17 ) // cas YYYYMMDD-YYYYMMDD
         {
-            if ( studyMaskDate.mid( 0 , 8 ) <= studyDate &&
-                 studyMaskDate.mid( 9 , 8 ) >= studyDate )
-            {
-                return true;
-            }
-            else return false;
+            return maskStudyDate.mid( 0 , 8 ) <= studyDate && maskStudyDate.mid( 9 , 8 ) >= studyDate;
         }
-        return false;
+        else return false;
     }
-
+    
     return true;
 }
 
-bool DICOMDIRReader::matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName )
+bool DICOMDIRReader::matchDicomMaskToPatientName( DicomMask *mask , Patient *patient )
 {
     //Si la màscara és buida rebem  * , si té valor és *NOM_A_CERCAR*
-    if ( studyMaskPatientName.length() > 1 )
-    {//si hi ha màscara Patient Name
-        studyMaskPatientName = studyMaskPatientName.replace( "*" , "" ); //treiem els "*"
+    if ( mask->getPatientName().length() > 1 )
+    {   
+        QString clearedPatientNameMask = mask->getPatientName().remove("*");
 
-        if ( !studyPatientName.contains( studyMaskPatientName , Qt::CaseInsensitive ) ) return false;
+        return patient->getFullName().contains( clearedPatientNameMask , Qt::CaseInsensitive );
     }
-
-    return true;
-}
-
-bool DICOMDIRReader::matchStudyMaskAccessionNumber( QString studyMaskAccessionNumber , QString studyAccessionNumber )
-{
-    if ( studyMaskAccessionNumber.length() > 0 )
-    { //si hi ha màscara AccessioNumber
-
-        if ( studyAccessionNumber == studyMaskAccessionNumber )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return true;
+    else return true;
 }
 
 Patient* DICOMDIRReader::fillPatient(DcmDirectoryRecord *dcmDirectoryRecordPatient)
