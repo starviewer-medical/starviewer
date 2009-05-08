@@ -33,7 +33,7 @@ public:
     * @param posX posició X de l'event
     * @param posY posició Y de l'event
     */
-    virtual void handleEvent(unsigned int eventID, double posX, double posY);
+    virtual void handleEvent(long unsigned eventID, double posX, double posY);
 
 signals:
     void finished();
