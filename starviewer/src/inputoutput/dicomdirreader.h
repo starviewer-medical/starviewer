@@ -82,12 +82,12 @@ private :
     QString m_dicomdirAbsolutePath, m_dicomdirFileName;
     bool m_dicomFilesInLowerCase;
 
-    /** Comprova si un estudi compleix la màscara, pels camps PatientId, StudyID, StudyDate, PatientName i AccessionNumber
-     * @param study dades de l'estudi
-     * @param studyMask màscara de l'estudi
-     * @return cert si l'estudi complei la màscara
+    ///Comprova que un pacient compleixi amb la màscara (comprova que compleixi el  Patient Name i Patient ID)
+    bool matchPatientToDicomMask( Patient *patient , DicomMask *mask);
+
+    /** Comprova si un estudi compleix la màscara, pels camps StudyUID, StudyDate
      */
-    bool matchDicomMask( Patient *patient, Study *study , DicomMask studyMask );
+    bool matchStudyToDicomMask( Study *study , DicomMask *mask );
 
     /** Comprova que els dos StudyUID el de la màscara i el de l'estudi facin matching. Si l'estudi UID de la màscara està buit, per defecte retorna cert. En aquest cas fem wildcard matching
      */
