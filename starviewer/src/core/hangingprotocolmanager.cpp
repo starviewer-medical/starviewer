@@ -425,6 +425,11 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
 
     valid = (serie->getModality() != "PR"); // Els presentation states per defecte no es mostren
 
+    if( valid )
+    {
+        valid = hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() );
+    }
+    
     while ( valid && i < numberRestrictions )
     {
         restriction = listOfRestrictions.value( i );
@@ -599,6 +604,8 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
     bool ok = dicomReader.setFile( image->getPath() );
     if( ok )
     {
+        valid = hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( image->getParentSeries()->getModality() );
+
         while ( valid && i < numberRestrictions )
         {
             restriction = listOfRestrictions.value( i );
