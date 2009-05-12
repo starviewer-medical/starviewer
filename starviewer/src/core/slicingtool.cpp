@@ -188,7 +188,7 @@ void SlicingTool::inputChanged( Volume *input )
 
 void SlicingTool::switchSlicingMode()
 {
-    QString statMessage; "SlicingTool:";
+    QString statMessage = "SlicingTool: ";
     if( m_inputHasPhases )
     {
         if( m_slicingMode == SliceMode )
