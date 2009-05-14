@@ -75,8 +75,6 @@ int main(int argc, char *argv[])
 
     configureLogging();
 
-    STAT_LOG("StarviewerSAPWrapper::Iniciat");
-
     if (parametersList.count() == 2)
     {
         udg::StarviewerSettings settings;
@@ -101,6 +99,4 @@ int main(int argc, char *argv[])
         INFO_LOG(QString("StarviewerSAPWrapper::Número de parametres incorrecte, s'han passat %1 parametres").arg(QString().setNum(argc -1)));
         printHelp();
     }
-
-    STAT_LOG("StarviewerSAPWrapper::Finalitzat");
 }

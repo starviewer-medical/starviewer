@@ -39,6 +39,15 @@ void StatsWatcher::addTriggerCounter( QMenu *menu )
         connect( menu, SIGNAL( triggered( QAction *) ), SLOT( registerActionTrigger( QAction *) ) );
 }
 
+void StatsWatcher::log( const QString &message )
+{
+    QSettings settings;
+    if( settings.value("LoggingPolicy/registerStatistics", false).toBool() ) 
+    {
+        INFO_LOG( QString("STAT: ") + message );
+    }
+}
+
 void StatsWatcher::addSliderObserver( QAbstractSlider *slider )
 {
     if( m_registerLogs )
@@ -70,12 +79,12 @@ void StatsWatcher::registerClick(bool checked)
     }
 
     statMessage = QString( "[%1] %2 %3" ).arg(m_context).arg(statMessage).arg( sender()->objectName() );
-    STAT_LOG( statMessage );
+    log( statMessage );
 }
 
 void StatsWatcher::registerActionTrigger( QAction *action )
 {
-    STAT_LOG( QString("[%1] S'ha disparat l'acció [%2], objecte [%3]").arg(m_context).arg( action->text() ).arg( action->objectName() ) );
+    log( QString("[%1] S'ha disparat l'acció [%2], objecte [%3]").arg(m_context).arg( action->text() ).arg( action->objectName() ) );
 }
 
 void StatsWatcher::registerSliderAction(int action)
@@ -130,7 +139,7 @@ void StatsWatcher::registerSliderAction(int action)
     }
 
     if( !statMessage.isEmpty() )
-        STAT_LOG( QString("[%1] S'ha fet l'acció [%2] sobre l'slider [%3]").arg(m_context).arg(statMessage).arg(sender()->objectName()) );
+        log( QString("[%1] S'ha fet l'acció [%2] sobre l'slider [%3]").arg(m_context).arg(statMessage).arg(sender()->objectName()) );
 }
 
 } //end namespace udg

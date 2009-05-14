@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
+#include "statswatcher.h"
 
 //vtk
 #include <vtkCommand.h>
@@ -38,7 +39,7 @@ SlicingTool::~SlicingTool()
     // estadístiques
     if( !m_wheelSteps.isEmpty() )
     {
-        STAT_LOG( "Slicing Tool: Wheel Record: " + m_wheelSteps );
+        StatsWatcher::log( "Slicing Tool: Wheel Record: " + m_wheelSteps );
         m_wheelSteps.clear();
     }
 }
@@ -56,7 +57,7 @@ void SlicingTool::handleEvent( unsigned long eventID )
         // estadístiques
         if( !m_wheelSteps.isEmpty() )
         {
-            STAT_LOG( "Slicing Tool: Wheel Record: " + m_wheelSteps );
+            StatsWatcher::log( "Slicing Tool: Wheel Record: " + m_wheelSteps );
             m_wheelSteps.clear();
         }
     break;
@@ -72,7 +73,7 @@ void SlicingTool::handleEvent( unsigned long eventID )
         // estadístiques
         if( !m_scrollSteps.isEmpty() )
         {
-            STAT_LOG( "Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images" );
+            StatsWatcher::log( "Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images" );
             m_scrollSteps.clear();
         }
     break;
@@ -111,14 +112,14 @@ void SlicingTool::handleEvent( unsigned long eventID )
         {
             m_forcePhaseMode = true;
             computeImagesForScrollMode();
-            STAT_LOG( "FORCE phase mode with Ctrl key" );
+            StatsWatcher::log( "FORCE phase mode with Ctrl key" );
         }
         break;
     
     case vtkCommand::KeyReleaseEvent:
         m_forcePhaseMode = false;
         computeImagesForScrollMode();
-        STAT_LOG( "Disable FORCED phase mode releasing Ctrl key" );
+        StatsWatcher::log( "Disable FORCED phase mode releasing Ctrl key" );
         break;
 
     default:
@@ -205,7 +206,7 @@ void SlicingTool::switchSlicingMode()
     else
         statMessage += "Try to switch slicing mode with input with no phases";
 
-    STAT_LOG( statMessage );
+    StatsWatcher::log( statMessage );
 }
 
 void SlicingTool::updateIncrement(int increment)
@@ -250,10 +251,10 @@ void SlicingTool::chooseBestDefaultScrollMode( Volume *input )
         if( input->getNumberOfPhases() > 1  && m_2DViewer->getMaximumSlice() <= 1 )
         {
             m_slicingMode = PhaseMode;
-            STAT_LOG("Slicing Tool: Default Scroll Mode = PHASE");
+            StatsWatcher::log("Slicing Tool: Default Scroll Mode = PHASE");
         }
         else
-            STAT_LOG("Slicing Tool: Default Scroll Mode = SLICE");
+            StatsWatcher::log("Slicing Tool: Default Scroll Mode = SLICE");
     }
 }
 
