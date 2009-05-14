@@ -449,7 +449,6 @@ void QGlialEstimationExtension::computeTTP( )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
-    m_viewersLayout->getViewerWidget(1)->getViewer()->resetView( Q2DViewer::Axial );
     m_viewersLayout->getViewerWidget(1)->getViewer()->removeAnnotation(Q2DViewer::NoAnnotation);
     m_viewersLayout->getViewerWidget(1)->getViewer()->resetWindowLevelToDefault();
 
@@ -865,7 +864,6 @@ void QGlialEstimationExtension::computeCBV( )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
-    m_viewersLayout->getViewerWidget(1)->getViewer()->resetView( Q2DViewer::Axial );
     m_viewersLayout->getViewerWidget(1)->getViewer()->removeAnnotation(Q2DViewer::NoAnnotation);
     this->createColorMap();
 
