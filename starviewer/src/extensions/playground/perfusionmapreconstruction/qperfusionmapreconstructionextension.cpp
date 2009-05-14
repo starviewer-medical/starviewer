@@ -246,20 +246,17 @@ void QPerfusionMapReconstructionExtension::paintMap( )
     {
     case 0:     //CBV
         m_2DView->setInput( m_mapCalculator->getCBVVolume() );
-        m_2DView->resetView( Q2DViewer::Axial );
         m_2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
         this->createColorMap(m_mapCalculator->getCBVImage(), m_2DView);
         break;
     case 1:     //CBF
         m_2DView->setInput( m_mapCalculator->getCBFVolume() );
-        m_2DView->resetView( Q2DViewer::Axial );
         m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
         //m_2DView->resetWindowLevelToDefault();
         this->createColorMap(m_mapCalculator->getCBFImage(), m_2DView);
         break;
     case 2:     //MTT
         m_2DView->setInput( m_mapCalculator->getMTTVolume() );
-        m_2DView->resetView( Q2DViewer::Axial );
         m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
         //m_2DView->resetWindowLevelToDefault();
         this->createColorMap(m_mapCalculator->getMTTImage(), m_2DView);
@@ -945,9 +942,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         }
         //m_mapVolume->getVtkData()->Update();
         m_2DView->setInput( mapVolume );
-        //m_2DView->resetView( Q2DViewer::Axial );
         //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
-        m_2DView->resetView( Q2DViewer::Axial );
         m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
         //m_2DView->resetWindowLevelToDefault();
         this->createColorMap(auxImage, m_2DView);

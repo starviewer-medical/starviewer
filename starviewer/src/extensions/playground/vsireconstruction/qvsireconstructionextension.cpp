@@ -162,17 +162,14 @@ void QVSIReconstructionExtension::setInput( Volume *input )
     std::cout<<"Rendering image..."<<std::endl;
     //m_2DView_2->render();
     /*m_2DView->setInput( m_mainVolume );
-    m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
     m_2DView->resetWindowLevelToDefault();
 
     m_2DView_2->setInput( m_mainVolume );
-    m_2DView_2->resetView( Q2DViewer::Axial );
     m_2DView_2->removeAnnotation(Q2DViewer::AllAnnotation);
     m_2DView_2->resetWindowLevelToDefault();
 
     m_2DView_4->setInput( m_mainVolume );
-    m_2DView_4->resetView( Q2DViewer::Axial );
     m_2DView_4->removeAnnotation(Q2DViewer::AllAnnotation);
     m_2DView_4->resetWindowLevelToDefault();*/
     if (this->findProbableSeries( ) )
@@ -406,12 +403,10 @@ void QVSIReconstructionExtension::computeTTP( )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mapVolume );
-    m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
 
     m_2DView_2->setInput( m_mainVolume );
-    m_2DView_2->resetView( Q2DViewer::Axial );
     m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView_2->resetWindowLevelToDefault();
 
@@ -941,12 +936,10 @@ void QVSIReconstructionExtension::computeCBV( )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mapVolume );
-    m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView->resetWindowLevelToDefault();
 
     m_2DView_2->setInput( m_mainVolume );
-    m_2DView_2->resetView( Q2DViewer::Axial );
     m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
     m_2DView_2->resetWindowLevelToDefault();
 
@@ -1684,20 +1677,17 @@ void QVSIReconstructionExtension::computeVSI( )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mapVolume );
-    m_2DView->resetView( Q2DViewer::Axial );
     m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
     m_2DView->resetWindowLevelToDefault();
     this->createColorMap( );
     std::cout<<"End new map "<<std::endl;
     m_2DView_4->setInput( m_mapVolume2 );
-    m_2DView_4->resetView( Q2DViewer::Axial );
     m_2DView_4->removeAnnotation(Q2DViewer::AllAnnotation);
     m_2DView_4->resetWindowLevelToDefault();
     this->createColorMap2( );
     std::cout<<"End new map "<<std::endl;
 
     m_2DView_2->setInput( m_DSCVolume );
-    m_2DView_2->resetView( Q2DViewer::Axial );
     m_2DView_2->removeAnnotation(Q2DViewer::AllAnnotation);
     m_2DView_2->resetWindowLevelToDefault();
 
@@ -1818,7 +1808,6 @@ void QVSIReconstructionExtension::applyFilterMapImage( )
         std::cout<<"End SetData Volume"<<std::endl;
         //m_mapVolume->getVtkData()->Update();
         m_2DView->setInput( m_mapVolume );
-        //m_2DView->resetView( Q2DViewer::Axial );
         //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
         std::cout<<"Init Colormap"<<std::endl;
         this->createColorMap( );
@@ -1933,7 +1922,6 @@ void QVSIReconstructionExtension::applyFilterMapImage2( )
         std::cout<<"End SetData Volume"<<std::endl;
         //m_mapVolume->getVtkData()->Update();
         m_2DView_4->setInput( m_mapVolume2 );
-        //m_2DView->resetView( Q2DViewer::Axial );
         //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
         std::cout<<"Init Colormap"<<std::endl;
         this->createColorMap2( );
