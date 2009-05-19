@@ -62,7 +62,6 @@ void QCudaRenderWindow::resizeGL( int width, int height )
 
 void QCudaRenderWindow::paintGL()
 {
-    std::cout << "eeeeeeeeeeooooooooooooo" << std::endl;
     glBindTexture( GL_TEXTURE_2D, m_texture );
     glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pixelBufferObject );
     glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, m_renderSize, m_renderSize, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
