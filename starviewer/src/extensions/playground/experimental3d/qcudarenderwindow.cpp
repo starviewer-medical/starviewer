@@ -9,6 +9,7 @@ namespace udg {
 QCudaRenderWindow::QCudaRenderWindow( QColor backgroundColor, int renderSize )
  : QGLWidget( QGLFormat( QGL::AlphaChannel ) ), m_backgroundColor( backgroundColor ), m_renderSize( renderSize )
 {
+#ifdef CUDA_AVAILABLE
     makeCurrent();
 
     GLenum glew = glewInit();
@@ -30,13 +31,16 @@ QCudaRenderWindow::QCudaRenderWindow( QColor backgroundColor, int renderSize )
     glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, renderSize, renderSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
     glBindTexture( GL_TEXTURE_2D, 0 );
+#endif
 }
 
 
 QCudaRenderWindow::~QCudaRenderWindow()
 {
+#ifdef CUDA_AVAILABLE
     glDeleteBuffersARB( 1, &m_pixelBufferObject );
     glDeleteTextures( 1, &m_texture );
+#endif
 }
 
 
@@ -48,20 +52,25 @@ GLuint QCudaRenderWindow::pixelBufferObject() const
 
 void QCudaRenderWindow::initializeGL()
 {
+#ifdef CUDA_AVAILABLE
     qglClearColor( m_backgroundColor );
     glDisable( GL_DEPTH_TEST );
     glEnable( GL_TEXTURE_2D );
+#endif
 }
 
 
 void QCudaRenderWindow::resizeGL( int width, int height )
 {
+#ifdef CUDA_AVAILABLE
     glViewport( 0, 0, width, height );
+#endif
 }
 
 
 void QCudaRenderWindow::paintGL()
 {
+#ifdef CUDA_AVAILABLE
     glBindTexture( GL_TEXTURE_2D, m_texture );
     glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pixelBufferObject );
     glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, m_renderSize, m_renderSize, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
@@ -85,6 +94,7 @@ void QCudaRenderWindow::paintGL()
     glEnd();
 
     glBindTexture( GL_TEXTURE_2D, 0 );
+#endif
 }
 
 
