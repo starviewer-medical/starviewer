@@ -17,6 +17,9 @@ class ViewpointGenerator {
 
 public:
 
+    /// Retorna un vector cap amunt per al punt de vista passat.
+    static Vector3 up( const Vector3 &viewpoint );
+
     /// Crea el generador sense que generi cap punt de vista.
     ViewpointGenerator();
     ~ViewpointGenerator();

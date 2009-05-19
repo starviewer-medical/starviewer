@@ -155,6 +155,7 @@ private slots:
 
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
+    void computeSelectedVmi2();
     void loadViewpointEntropy();
     void saveViewpointEntropy();
     void loadVmi();

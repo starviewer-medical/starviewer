@@ -17,6 +17,7 @@
 #include "transferfunctionio.h"
 #include "vector3.h"
 #include "viewpointgenerator.h"
+#include "viewpointinformationchannel.h"
 #include "volumereslicer.h"
 #include "vomithread.h"
 
@@ -148,7 +149,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_propertySalienciesPushButton, SIGNAL( clicked() ), SLOT( computePropertySaliencies() ) );
 
     // VMI
-    connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
+    connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi2() ) );
     connect( m_loadViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropy() ) );
     connect( m_saveViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropy() ) );
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
@@ -887,6 +888,54 @@ void QExperimental3DExtension::computePropertySaliencies()
             volumeReslicer.computePropertySaliencies();
         }
     }
+}
+
+
+void QExperimental3DExtension::computeSelectedVmi2()
+{
+    // Què ha demanat l'usuari
+    bool computeViewpointEntropy = m_computeViewpointEntropyCheckBox->isChecked();
+
+    // Si no hi ha res a calcular marxem
+    if ( !computeViewpointEntropy ) return;
+
+    setCursor( QCursor( Qt::WaitCursor ) );
+
+    // Obtenir direccions
+    Vector3 position, focus, up;
+    m_viewer->getCamera( position, focus, up );
+    float distance = ( position - focus ).length();
+    ViewpointGenerator viewpointGenerator = m_vmiViewpointDistributionWidget->viewpointGenerator( distance );
+
+    // Viewpoint Information Channel
+    ViewpointInformationChannel viewpointInformationChannel( viewpointGenerator, m_volume, m_transferFunctionEditor->transferFunction(), m_viewer->getBackgroundColor() );
+
+    // Filtratge de punts de vista
+    if ( !m_tourLineEdit->text().isEmpty() )
+    {
+        int nViewpoints = m_vmiViewpointDistributionWidget->numberOfViewpoints();
+        int selectedViewpoint = m_tourLineEdit->text().toInt() - 1;
+
+        if ( selectedViewpoint >= 0 && selectedViewpoint < nViewpoints )
+        {
+            QVector<bool> filter( nViewpoints );
+
+            filter[selectedViewpoint] = true;
+
+            QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
+            for ( int i = 0; i < neighbours.size(); i++ ) filter[neighbours.at( i )] = true;
+
+            viewpointInformationChannel.filterViewpoints( filter );
+        }
+    }
+
+    connect( &viewpointInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiTotalProgressBar, SLOT( setMaximum(int) ) );
+    connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
+    connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
+
+    viewpointInformationChannel.compute( computeViewpointEntropy );
+
+    setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
 

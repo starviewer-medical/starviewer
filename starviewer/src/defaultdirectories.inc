@@ -77,3 +77,19 @@ isEmpty(GLEWINCLUDEDIR){
     macx:GLEWINCLUDEDIR = /opt/local/include
     win32:GLEWINCLUDEDIR = C:\glew\include\GL
 }
+
+# CUDA Libraries
+
+CUDALIBDIR = $$(CUDALIBDIR)
+isEmpty(CUDALIBDIR){
+    unix:CUDALIBDIR = /usr/local/cuda/lib
+}
+CUDAINCLUDEDIR = $$(CUDAINCLUDEDIR)
+isEmpty(CUDAINCLUDEDIR){
+    unix:CUDAINCLUDEDIR = /usr/local/cuda/include
+}
+# De moment cal el CUDA SDK, però s'hauria de poder treballar sense ell
+CUDASDKINCLUDEDIR = $$(CUDASDKINCLUDEDIR)
+isEmpty(CUDASDKINCLUDEDIR){
+    unix:CUDASDKINCLUDEDIR = /usr/local/cuda-sdk/common/inc
+}

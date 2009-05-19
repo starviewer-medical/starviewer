@@ -7,6 +7,14 @@
 namespace udg {
 
 
+Vector3 ViewpointGenerator::up( const Vector3 &viewpoint )
+{
+    double max = qMax( qAbs( viewpoint.x ), qMax( qAbs( viewpoint.y ), qAbs( viewpoint.z ) ) );
+    Vector3 up( qMax( max - qAbs( viewpoint.y - viewpoint.z ), 0.0 ), qAbs( viewpoint.x ) + qAbs( viewpoint.z  ), qAbs( viewpoint.y ) );
+    return up.normalize();
+}
+
+
 ViewpointGenerator::ViewpointGenerator()
 {
 }
