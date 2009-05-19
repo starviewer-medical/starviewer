@@ -257,8 +257,7 @@ __global__ void histogramToFloatKernel(int *iHistogram, float *fHistogram, cudaE
 }
 
 
-void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunction, int renderSize, int displaySize, QColor backgroundColor, bool render
-)
+void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunction, int renderSize, int displaySize, QColor backgroundColor, bool display)
 {
     ushort *data = reinterpret_cast<unsigned short*>(image->GetScalarPointer());
     gVolumeDataSize = image->GetNumberOfPoints();
@@ -441,7 +440,7 @@ void cvicCleanupRayCast()
 
 
 
-//////////////////////////////////////////////////////////////////////////////////// p(O) ////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// p(Z) ////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -465,13 +464,13 @@ __global__ void voxelProbabilitiesKernel(float pv, float totalViewedVolume, cuda
 
     uint i = x + y * volumeDataDims.width + z * volumeDataDims.width * volumeDataDims.height;
 
-    float pov = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
+    float pzv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
 
-    voxelProbabilities[i] += pv * pov;
+    voxelProbabilities[i] += pv * pzv;
 }
 
 
-void ce3dSetupVoxelProbabilities()
+void cvicSetupVoxelProbabilities()
 {
     CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdVoxelProbabilities), gVolumeDataSize * sizeof(float)) );
     CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdVoxelProbabilities), 0, gVolumeDataSize * sizeof(float)) );
@@ -479,7 +478,7 @@ void ce3dSetupVoxelProbabilities()
 }
 
 
-void ce3dAccumulateVoxelProbabilities( float viewProbability, float totalViewedVolume )
+void cvicAccumulateVoxelProbabilities( float viewProbability, float totalViewedVolume )
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -502,14 +501,14 @@ void ce3dAccumulateVoxelProbabilities( float viewProbability, float totalViewedV
     float elapsedTime = 0.0f;
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << "p(O): " << elapsedTime << " ms" << std::endl;
+    std::cout << "p(Z): " << elapsedTime << " ms" << std::endl;
 
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
 }
 
 
-QVector<float> ce3dGetVoxelProbabilities()
+QVector<float> cvicGetVoxelProbabilities()
 {
     QVector<float> voxelProbabilities( gVolumeDataSize );
     CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(voxelProbabilities.data()), reinterpret_cast<void*>(gdVoxelProbabilities), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost) );
@@ -517,7 +516,7 @@ QVector<float> ce3dGetVoxelProbabilities()
 }
 
 
-void ce3dCleanupVoxelProbabilities()
+void cvicCleanupVoxelProbabilities()
 {
     CUDA_SAFE_CALL( cudaUnbindTexture(gVoxelProbabilitiesTexture) );
     CUDA_SAFE_CALL( cudaFree(gdVoxelProbabilities) );

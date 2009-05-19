@@ -49,6 +49,7 @@ private:
 #else // CUDA_AVAILABLE
     void computeCuda( bool viewpointEntropy );
     void computeViewProbabilitiesCuda();
+    void computeVoxelProbabilitiesCuda();
 #endif // CUDA_AVAILABLE
 
 private:
@@ -60,6 +61,7 @@ private:
 
     QVector<Vector3> m_viewpoints;
     QVector<float> m_viewProbabilities;
+    QVector<float> m_voxelProbabilities;
 
 };
 
