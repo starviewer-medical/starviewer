@@ -54,8 +54,8 @@ SOURCES += experimental3dextensionmediator.cpp \
     qcudarenderwindow.cpp
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
-CUSOURCES = cudaviewpointinformationchannel.cu
-OTHER_FILES = cudaviewpointinformationchannel.cu
+CUSOURCES += cudaviewpointinformationchannel.cu
+OTHER_FILES += cudaviewpointinformationchannel.cu
 include(../../basicconfextensions.inc)
 include(../../../cuda.inc)
 include(../../../glew.inc)
