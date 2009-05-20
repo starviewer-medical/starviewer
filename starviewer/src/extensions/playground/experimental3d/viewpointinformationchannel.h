@@ -33,6 +33,7 @@ public:
      */
     void filterViewpoints( const QVector<bool> &filter );
     void compute( bool viewpointEntropy );
+    const QVector<float>& viewpointEntropy() const;
 
 signals:
 
@@ -47,9 +48,10 @@ private:
 #ifndef CUDA_AVAILABLE
     void computeCpu( bool viewpointEntropy );
 #else // CUDA_AVAILABLE
-    void computeCuda( bool viewpointEntropy );
+    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy );
     void computeViewProbabilitiesCuda();
     void computeVoxelProbabilitiesCuda();
+    void computeViewMeasuresCuda( bool computeViewpointEntropy );
 #endif // CUDA_AVAILABLE
 
 private:
@@ -60,8 +62,11 @@ private:
     QColor m_backgroundColor;
 
     QVector<Vector3> m_viewpoints;
+
     QVector<float> m_viewProbabilities;
     QVector<float> m_voxelProbabilities;
+
+    QVector<float> m_viewpointEntropy;
 
 };
 

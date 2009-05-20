@@ -2,9 +2,12 @@
 
 #include <QCoreApplication>
 
+// només per cuda? llavors el mètode viewmatrix hauria de ser només per cuda també
 #include "../gputesting/camera.h"
 #include "experimental3dvolume.h"
+#include "informationtheory.h"
 #include "logging.h"
+// només per cuda? llavors el mètode viewmatrix hauria de ser només per cuda també
 #include "../gputesting/matrix4.h"
 
 #ifdef CUDA_AVAILABLE
@@ -41,13 +44,23 @@ void ViewpointInformationChannel::compute( bool viewpointEntropy )
     // Si no hi ha res a calcular marxem
     if ( !viewpointEntropy ) return;
 
+    bool viewProbabilities = false;
+    bool voxelProbabilities = false;
+
     // Dependències
+    // per la viewpoint entropy no cal res més
 
 #ifndef CUDA_AVAILABLE
     computeCpu( viewpointEntropy );
 #else // CUDA_AVAILABLE
-    computeCuda( viewpointEntropy );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy );
 #endif // CUDA_AVAILABLE
+}
+
+
+const QVector<float>& ViewpointInformationChannel::viewpointEntropy() const
+{
+    return m_viewpointEntropy;
 }
 
 
@@ -78,12 +91,14 @@ void ViewpointInformationChannel::computeCpu( bool computeViewpointEntropy )
 #else // CUDA_AVAILABLE
 
 
-void ViewpointInformationChannel::computeCuda( bool computeViewpointEntropy )
+void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy )
 {
     DEBUG_LOG( "computeCuda" );
 
     // Inicialitzar progrés
-    int nSteps = 2; // p(V), p(Z)
+    int nSteps = 0;
+    if ( computeViewProbabilities ) nSteps++;   // p(V)
+    if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
     if ( computeViewpointEntropy ) nSteps++;    // viewpoint entropy
 
     emit totalProgressMaximum( nSteps );
@@ -92,9 +107,10 @@ void ViewpointInformationChannel::computeCuda( bool computeViewpointEntropy )
 
     // Inicialització de CUDA
     cvicSetupRayCast( m_volume->getImage(), m_transferFunction, 1024, 720, m_backgroundColor, true );
-    cvicSetupVoxelProbabilities();
+    if ( computeVoxelProbabilities ) cvicSetupVoxelProbabilities();
 
     // p(V)
+    if ( computeViewProbabilities )
     {
         computeViewProbabilitiesCuda();
         emit totalProgress( ++step );
@@ -102,14 +118,22 @@ void ViewpointInformationChannel::computeCuda( bool computeViewpointEntropy )
     }
 
     // p(Z)
+    if ( computeVoxelProbabilities )
     {
         computeVoxelProbabilitiesCuda();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
+    // viewpoint entropy
+    {
+        computeViewMeasuresCuda( computeViewpointEntropy );
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
     // Finalització de CUDA
-    cvicCleanupVoxelProbabilities();
+    if ( computeVoxelProbabilities ) cvicCleanupVoxelProbabilities();
     cvicCleanupRayCast();
 }
 
@@ -127,7 +151,7 @@ void ViewpointInformationChannel::computeViewProbabilitiesCuda()
 
     for ( int i = 0; i < nViewpoints; i++ )
     {
-        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v)
+        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
         for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
@@ -170,7 +194,7 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCuda()
 
     for ( int i = 0; i < nViewpoints; i++ )
     {
-        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v)
+        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
         for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
@@ -195,6 +219,39 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCuda()
     }
     DEBUG_LOG( QString( "sum p(z) = %1" ).arg( sum ) );
 #endif
+}
+
+
+void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy )
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
+
+        double viewedVolume = 0.0;
+        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
+        Q_ASSERT( viewedVolume == viewedVolume );
+        for ( int j = 0; j < nVoxels; j++ ) voxelProbabilitiesInView[j] /= viewedVolume;    // p(Z|v)
+
+        if ( computeViewpointEntropy )
+        {
+            float viewpointEntropy = InformationTheory<float>::entropy( voxelProbabilitiesInView );
+            Q_ASSERT( viewpointEntropy == viewpointEntropy );
+            m_viewpointEntropy[i] = viewpointEntropy;
+            DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( viewpointEntropy ) );
+        }
+
+        emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
 }
 
 
