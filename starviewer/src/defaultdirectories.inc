@@ -63,21 +63,6 @@ isEmpty(LOG4CXXINCLUDEDIR){
     win32:LOG4CXXINCLUDEDIR = C:\log4cxx\include
 }
 
-# GLEW Libraries
-
-GLEWLIBDIR = $$(GLEWLIBDIR)
-isEmpty(GLEWLIBDIR){
-    unix:GLEWLIBDIR = /usr/lib
-    macx:GLEWLIBDIR = /opt/local/lib
-    win32:GLEWLIBDIR = C:\glew\lib
-}
-GLEWINCLUDEDIR = $$(GLEWINCLUDEDIR)
-isEmpty(GLEWINCLUDEDIR){
-    unix:GLEWINCLUDEDIR = /usr/include/GL
-    macx:GLEWINCLUDEDIR = /opt/local/include
-    win32:GLEWINCLUDEDIR = C:\glew\include\GL
-}
-
 # CUDA Libraries
 
 CUDALIBDIR = $$(CUDALIBDIR)

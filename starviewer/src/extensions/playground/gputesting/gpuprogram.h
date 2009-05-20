@@ -1,8 +1,7 @@
 #ifndef UDGGPUPROGRAM_H
 #define UDGGPUPROGRAM_H
 
-
-#include <GL/glew.h>
+#include "glew.h" //Ha d'estar abans que includes d'opengl
 #include <GL/gl.h>
 
 #include <QHash>

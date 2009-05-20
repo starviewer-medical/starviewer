@@ -25,4 +25,3 @@ QT += opengl
 
 EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
-include(../../../glew.inc)

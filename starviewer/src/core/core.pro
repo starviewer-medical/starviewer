@@ -50,7 +50,7 @@ HEADERS += extensionfactory.h \
            study.h \
            output.h \
            q3dorientationmarker.h \
-	   zoomtool.h \
+           zoomtool.h \
            qlogviewer.h \
            strokesegmentationmethod.h \
            itkErfcLevelSetFunction.h \
@@ -181,7 +181,10 @@ HEADERS += extensionfactory.h \
            statswatcher.h \
            clippingplanestool.h \
            representationslayer.h \
-           toolrepresentation.h
+           toolrepresentation.h \
+           glew.h \
+           glxew.h \
+           wglew.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -328,7 +331,8 @@ SOURCES += extensionmediator.cpp \
            statswatcher.cpp \
            clippingplanestool.cpp \
            representationslayer.cpp \
-           toolrepresentation.cpp
+           toolrepresentation.cpp \
+           glew.c
            
 TEMPLATE = lib
 DESTDIR = ./

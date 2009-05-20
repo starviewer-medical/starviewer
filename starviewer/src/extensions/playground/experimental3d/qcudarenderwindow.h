@@ -1,11 +1,9 @@
 #ifndef QCUDARENDERWINDOW_H
 #define QCUDARENDERWINDOW_H
 
-
-#include <GL/glew.h>
+#include "glew.h" //Ha d'estar abans que includes d'opengl
 
 #include <QGLWidget>
-
 
 namespace udg {
 
