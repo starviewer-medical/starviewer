@@ -898,9 +898,10 @@ void QExperimental3DExtension::computeSelectedVmi2()
     // Què ha demanat l'usuari
     bool computeViewpointEntropy = m_computeViewpointEntropyCheckBox->isChecked();
     bool computeEntropy = m_computeEntropyCheckBox->isChecked();
+    bool computeVmi = m_computeVmiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy ) return;
+    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -937,7 +938,7 @@ void QExperimental3DExtension::computeSelectedVmi2()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi );
 
     if ( computeViewpointEntropy )
     {
@@ -949,6 +950,12 @@ void QExperimental3DExtension::computeSelectedVmi2()
     {
         m_entropy = viewpointInformationChannel.entropy();
         m_saveEntropyPushButton->setEnabled( true );
+    }
+
+    if ( computeVmi )
+    {
+        m_vmi = viewpointInformationChannel.vmi();
+        m_saveVmiPushButton->setEnabled( true );
     }
 
     setCursor( QCursor( Qt::ArrowCursor ) );
