@@ -32,8 +32,10 @@ public:
      * \a filter Vector que conté un booleà per cada punt de vista original. Es faran servir els que estiguin a cert.
      */
     void filterViewpoints( const QVector<bool> &filter );
-    void compute( bool viewpointEntropy );
+    /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
+    void compute( bool &viewpointEntropy, bool &entropy );
     const QVector<float>& viewpointEntropy() const;
+    float entropy() const;
 
 signals:
 
@@ -48,10 +50,10 @@ private:
 #ifndef CUDA_AVAILABLE
     void computeCpu( bool viewpointEntropy );
 #else // CUDA_AVAILABLE
-    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy );
+    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy );
     void computeViewProbabilitiesCuda();
     void computeVoxelProbabilitiesCuda();
-    void computeViewMeasuresCuda( bool computeViewpointEntropy );
+    void computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy );
 #endif // CUDA_AVAILABLE
 
 private:
@@ -67,6 +69,7 @@ private:
     QVector<float> m_voxelProbabilities;
 
     QVector<float> m_viewpointEntropy;
+    float m_entropy;
 
 };
 

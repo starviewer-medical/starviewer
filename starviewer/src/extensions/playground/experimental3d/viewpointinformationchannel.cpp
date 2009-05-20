@@ -39,21 +39,22 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
 }
 
 
-void ViewpointInformationChannel::compute( bool viewpointEntropy )
+void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy )
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy ) return;
+    if ( !viewpointEntropy && !entropy ) return;
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
 
     // Dependències
-    // per la viewpoint entropy no cal res més
+    if ( entropy ) viewProbabilities = true;
+    if ( entropy ) viewpointEntropy = true;
 
 #ifndef CUDA_AVAILABLE
     computeCpu( viewpointEntropy );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy );
 #endif // CUDA_AVAILABLE
 }
 
@@ -61,6 +62,12 @@ void ViewpointInformationChannel::compute( bool viewpointEntropy )
 const QVector<float>& ViewpointInformationChannel::viewpointEntropy() const
 {
     return m_viewpointEntropy;
+}
+
+
+float ViewpointInformationChannel::entropy() const
+{
+    return m_entropy;
 }
 
 
@@ -91,7 +98,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewpointEntropy )
 #else // CUDA_AVAILABLE
 
 
-void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy )
+void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -99,7 +106,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     int nSteps = 0;
     if ( computeViewProbabilities ) nSteps++;   // p(V)
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
-    if ( computeViewpointEntropy ) nSteps++;    // viewpoint entropy
+    if ( computeViewpointEntropy || computeEntropy ) nSteps++;  // viewpoint entropy + entropy
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -125,9 +132,9 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    // viewpoint entropy
+    // viewpoint entropy + entropy
     {
-        computeViewMeasuresCuda( computeViewpointEntropy );
+        computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy );
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -222,12 +229,13 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCuda()
 }
 
 
-void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy )
+void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy )
 {
     int nViewpoints = m_viewpoints.size();
     int nVoxels = m_volume->getSize();
 
     if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
+    if ( computeEntropy ) m_entropy = 0.0f;
 
     emit partialProgress( 0 );
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -249,8 +257,18 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
             DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( viewpointEntropy ) );
         }
 
+        if ( computeEntropy )
+        {
+            m_entropy += m_viewProbabilities.at( i ) * m_viewpointEntropy.at( i );
+        }
+
         emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    if ( computeEntropy )
+    {
+        DEBUG_LOG( QString( "H(Z) = %1" ).arg( m_entropy ) );
     }
 }
 
