@@ -156,6 +156,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveEntropyPushButton, SIGNAL( clicked() ), SLOT( saveEntropy() ) );
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
+    connect( m_loadMiPushButton, SIGNAL( clicked() ), SLOT( loadMi() ) );
+    connect( m_saveMiPushButton, SIGNAL( clicked() ), SLOT( saveMi() ) );
     connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
     connect( m_saveViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( saveViewpointUnstabilities() ) );
     connect( m_loadBestViewsPushButton, SIGNAL( clicked() ), SLOT( loadBestViews() ) );
@@ -899,9 +901,10 @@ void QExperimental3DExtension::computeSelectedVmi2()
     bool computeViewpointEntropy = m_computeViewpointEntropyCheckBox->isChecked();
     bool computeEntropy = m_computeEntropyCheckBox->isChecked();
     bool computeVmi = m_computeVmiCheckBox->isChecked();
+    bool computeMi = m_computeMiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi ) return;
+    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -938,7 +941,7 @@ void QExperimental3DExtension::computeSelectedVmi2()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi );
 
     if ( computeViewpointEntropy )
     {
@@ -956,6 +959,12 @@ void QExperimental3DExtension::computeSelectedVmi2()
     {
         m_vmi = viewpointInformationChannel.vmi();
         m_saveVmiPushButton->setEnabled( true );
+    }
+
+    if ( computeMi )
+    {
+        m_mi = viewpointInformationChannel.mi();
+        m_saveMiPushButton->setEnabled( true );
     }
 
     setCursor( QCursor( Qt::ArrowCursor ) );
@@ -2149,6 +2158,70 @@ void QExperimental3DExtension::saveVmi( const QString &fileName )
     }
 
     vmiFile.close();
+}
+
+
+void QExperimental3DExtension::loadMi()
+{
+    QString miFileName = getFileNameToLoad( "miDir", tr("Load MI"), tr("Data files (*.dat);;All files (*)") );
+    if ( !miFileName.isNull() ) loadMi( miFileName );
+}
+
+
+void QExperimental3DExtension::loadMi( const QString &fileName )
+{
+    QFile miFile( fileName );
+
+    if ( !miFile.open( QFile::ReadOnly ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load MI"), QString( tr("Can't load MI from file ") ) + fileName );
+        return;
+    }
+
+    QDataStream in( &miFile );
+
+    if ( !in.atEnd() ) in >> m_mi;
+
+    miFile.close();
+
+    m_saveMiPushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::saveMi()
+{
+    QString miFileName = getFileNameToSave( "miDir", tr("Save MI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+    if ( !miFileName.isNull() ) saveMi( miFileName );
+}
+
+
+void QExperimental3DExtension::saveMi( const QString &fileName )
+{
+    bool saveAsText = fileName.endsWith( ".txt" );
+    QFile miFile( fileName );
+    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+    if ( saveAsText ) mode = mode | QIODevice::Text;
+
+    if ( !miFile.open( mode ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save MI"), QString( tr("Can't save MI to file ") ) + fileName );
+        return;
+    }
+
+    if ( saveAsText )
+    {
+        QTextStream out( &miFile );
+        out << "MI = " << m_mi;
+    }
+    else
+    {
+        QDataStream out( &miFile );
+        out << m_mi;
+    }
+
+    miFile.close();
 }
 
 
