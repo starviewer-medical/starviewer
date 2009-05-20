@@ -152,6 +152,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi2() ) );
     connect( m_loadViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropy() ) );
     connect( m_saveViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropy() ) );
+    connect( m_loadEntropyPushButton, SIGNAL( clicked() ), SLOT( loadEntropy() ) );
+    connect( m_saveEntropyPushButton, SIGNAL( clicked() ), SLOT( saveEntropy() ) );
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
     connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
@@ -895,9 +897,10 @@ void QExperimental3DExtension::computeSelectedVmi2()
 {
     // Què ha demanat l'usuari
     bool computeViewpointEntropy = m_computeViewpointEntropyCheckBox->isChecked();
+    bool computeEntropy = m_computeEntropyCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy ) return;
+    if ( !computeViewpointEntropy && !computeEntropy ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -930,15 +933,22 @@ void QExperimental3DExtension::computeSelectedVmi2()
     }
 
     connect( &viewpointInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiTotalProgressBar, SLOT( setMaximum(int) ) );
+    connect( &viewpointInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiTotalProgressBar, SLOT( repaint() ) ); // no sé per què però cal això perquè s'actualitzi quan toca
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy );
 
     if ( computeViewpointEntropy )
     {
         m_viewpointEntropy = viewpointInformationChannel.viewpointEntropy();
         m_saveViewpointEntropyPushButton->setEnabled( true );
+    }
+
+    if ( computeEntropy )
+    {
+        m_entropy = viewpointInformationChannel.entropy();
+        m_saveEntropyPushButton->setEnabled( true );
     }
 
     setCursor( QCursor( Qt::ArrowCursor ) );
@@ -1995,6 +2005,70 @@ void QExperimental3DExtension::saveViewpointEntropy( const QString &fileName )
     }
 
     viewpointEntropyFile.close();
+}
+
+
+void QExperimental3DExtension::loadEntropy()
+{
+    QString entropyFileName = getFileNameToLoad( "entropyDir", tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
+    if ( !entropyFileName.isNull() ) loadEntropy( entropyFileName );
+}
+
+
+void QExperimental3DExtension::loadEntropy( const QString &fileName )
+{
+    QFile entropyFile( fileName );
+
+    if ( !entropyFile.open( QFile::ReadOnly ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load entropy"), QString( tr("Can't load entropy from file ") ) + fileName );
+        return;
+    }
+
+    QDataStream in( &entropyFile );
+
+    if ( !in.atEnd() ) in >> m_entropy;
+
+    entropyFile.close();
+
+    m_saveEntropyPushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::saveEntropy()
+{
+    QString entropyFileName = getFileNameToSave( "entropyDir", tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+    if ( !entropyFileName.isNull() ) saveEntropy( entropyFileName );
+}
+
+
+void QExperimental3DExtension::saveEntropy( const QString &fileName )
+{
+    bool saveAsText = fileName.endsWith( ".txt" );
+    QFile entropyFile( fileName );
+    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+    if ( saveAsText ) mode = mode | QIODevice::Text;
+
+    if ( !entropyFile.open( mode ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save entropy"), QString( tr("Can't save entropy to file ") ) + fileName );
+        return;
+    }
+
+    if ( saveAsText )
+    {
+        QTextStream out( &entropyFile );
+        out << "entropy = " << m_entropy;
+    }
+    else
+    {
+        QDataStream out( &entropyFile );
+        out << m_entropy;
+    }
+
+    entropyFile.close();
 }
 
 
