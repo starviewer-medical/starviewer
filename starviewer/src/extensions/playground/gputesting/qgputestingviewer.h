@@ -1,8 +1,7 @@
 #ifndef UDGQGPUTESTINGVIEWER_H
 #define UDGQGPUTESTINGVIEWER_H
 
-
-#include <GL/glew.h>    // s'ha de posar aquí, abans del QGLWidget, que és el que inclou GL/gl.h
+#include "glew.h"    // s'ha de posar aquí, abans del QGLWidget, que és el que inclou GL/gl.h
 #include <QGLWidget>
 
 #include "transferfunction.h"

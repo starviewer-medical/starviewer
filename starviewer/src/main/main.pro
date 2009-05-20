@@ -69,7 +69,6 @@ include(../dcmtk.inc)
 include(../vtk.inc)
 include(../itk.inc)
 include(../log4cxx.inc)
-include(../glew.inc)
 include(../cuda.inc)
 include(../compilationtype.inc)
 

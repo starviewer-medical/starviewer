@@ -10,12 +10,8 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         glialestimation \
                         rectumsegmentation \
                         volume3dviewtesting \
-                        experimental3d
-
-# Només per sistemes no windows. Temporal mentre no s'empaqueta GLEW per windows
-!win32{
-    PLAYGROUND_EXTENSIONS += gputesting
-}
+                        experimental3d \
+                        gputesting
 
 #CONTRIB_EXTENSIONS =
 
