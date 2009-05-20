@@ -82,6 +82,8 @@ private:
     void saveEntropy( const QString &fileName );
     void loadVmi( const QString &fileName );
     void saveVmi( const QString &fileName );
+    void loadMi( const QString &fileName );
+    void saveMi( const QString &fileName );
     void loadViewpointUnstabilities( const QString &fileName );
     void saveViewpointUnstabilities( const QString &fileName );
     void loadBestViews( const QString &fileName );
@@ -164,6 +166,8 @@ private slots:
     void saveEntropy();
     void loadVmi();
     void saveVmi();
+    void loadMi();
+    void saveMi();
     void loadViewpointUnstabilities();
     void saveViewpointUnstabilities();
     void loadBestViews();
@@ -203,6 +207,7 @@ private:
     QVector<float> m_viewpointEntropy;
     float m_entropy;
     QVector<float> m_vmi;
+    float m_mi;
     QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_bestViews;
     QList< QPair<int, Vector3> > m_guidedTour;
