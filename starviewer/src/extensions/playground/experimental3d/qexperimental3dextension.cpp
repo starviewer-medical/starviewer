@@ -935,6 +935,12 @@ void QExperimental3DExtension::computeSelectedVmi2()
 
     viewpointInformationChannel.compute( computeViewpointEntropy );
 
+    if ( computeViewpointEntropy )
+    {
+        m_viewpointEntropy = viewpointInformationChannel.viewpointEntropy();
+        m_saveViewpointEntropyPushButton->setEnabled( true );
+    }
+
     setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
