@@ -902,9 +902,10 @@ void QExperimental3DExtension::computeSelectedVmi2()
     bool computeEntropy = m_computeEntropyCheckBox->isChecked();
     bool computeVmi = m_computeVmiCheckBox->isChecked();
     bool computeMi = m_computeMiCheckBox->isChecked();
+    bool computeVomi = m_computeVomiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi ) return;
+    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeVomi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -941,7 +942,7 @@ void QExperimental3DExtension::computeSelectedVmi2()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeVomi );
 
     if ( computeViewpointEntropy )
     {
@@ -965,6 +966,20 @@ void QExperimental3DExtension::computeSelectedVmi2()
     {
         m_mi = viewpointInformationChannel.mi();
         m_saveMiPushButton->setEnabled( true );
+    }
+
+    if ( computeVomi )
+    {
+        m_vomi = viewpointInformationChannel.vomi();
+        m_maximumVomi = viewpointInformationChannel.maximumVomi();
+        m_baseVomiRadioButton->setEnabled( true );
+        m_baseVomiCoolWarmRadioButton->setEnabled( true );
+        m_vomiCheckBox->setEnabled( true );
+        m_vomiCoolWarmCheckBox->setEnabled( true );
+        m_opacityLabel->setEnabled( true );
+        m_opacityVomiCheckBox->setEnabled( true );
+        m_saveVomiPushButton->setEnabled( true );
+        m_vomiGradientPushButton->setEnabled( true );
     }
 
     setCursor( QCursor( Qt::ArrowCursor ) );

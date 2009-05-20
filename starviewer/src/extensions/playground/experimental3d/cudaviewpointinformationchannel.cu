@@ -555,14 +555,14 @@ __global__ void vomiKernel(float pv, float totalViewedVolume, cudaExtent volumeD
 }
 
 
-void ce3dSetupVomi()
+void cvicSetupVomi()
 {
     CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdVomi), gVolumeDataSize * sizeof(float)) );
     CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdVomi), 0, gVolumeDataSize * sizeof(float)) );
 }
 
 
-void ce3dAccumulateVomi(float viewProbability, float totalViewedVolume)
+void cvicAccumulateVomi(float viewProbability, float totalViewedVolume)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -592,7 +592,7 @@ void ce3dAccumulateVomi(float viewProbability, float totalViewedVolume)
 }
 
 
-QVector<float> ce3dCleanupVomi()
+QVector<float> cvicCleanupVomi()
 {
     QVector<float> vomi( gVolumeDataSize );
     CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(vomi.data()), reinterpret_cast<void*>(gdVomi), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost) );
