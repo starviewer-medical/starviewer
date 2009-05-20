@@ -26,9 +26,7 @@ HEADERS += experimental3dextensionmediator.h \
     celshadingvoxelshader.h \
     vomicoolwarmvoxelshader.h \
     coolwarmvoxelshader.h \
-    viewpointinformationchannel.h \
-    cudaviewpointinformationchannel.h \
-    qcudarenderwindow.h
+    viewpointinformationchannel.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     qexperimental3dviewer.cpp \
@@ -50,12 +48,15 @@ SOURCES += experimental3dextensionmediator.cpp \
     celshadingvoxelshader.cpp \
     vomicoolwarmvoxelshader.cpp \
     coolwarmvoxelshader.cpp \
-    viewpointinformationchannel.cpp \
-    qcudarenderwindow.cpp
+    viewpointinformationchannel.cpp
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
-CUSOURCES += cudaviewpointinformationchannel.cu
-OTHER_FILES += cudaviewpointinformationchannel.cu
+cuda {
+    HEADERS += cudaviewpointinformationchannel.h qcudarenderwindow.h
+    SOURCES += qcudarenderwindow.cpp
+    CUSOURCES += cudaviewpointinformationchannel.cu
+    OTHER_FILES += cudaviewpointinformationchannel.cu
+}
 include(../../basicconfextensions.inc)
 include(../../../cuda.inc)
 include(../../../glew.inc)
