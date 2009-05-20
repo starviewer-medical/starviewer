@@ -2,9 +2,8 @@
 #define QCUDARENDERWINDOW_H
 
 
-#ifdef CUDA_AVAILABLE
 #include <GL/glew.h>
-#endif
+
 #include <QGLWidget>
 
 
