@@ -33,9 +33,9 @@ void cvicAccumulateVoxelProbabilities( float viewProbability, float totalViewedV
 QVector<float> cvicGetVoxelProbabilities();
 void cvicCleanupVoxelProbabilities();
 
-void ce3dSetupVomi();
-void ce3dAccumulateVomi( float viewProbability, float totalViewedVolume );
-QVector<float> ce3dCleanupVomi();
+void cvicSetupVomi();
+void cvicAccumulateVomi( float viewProbability, float totalViewedVolume );
+QVector<float> cvicCleanupVomi();
 
 
 #ifdef __cplusplus

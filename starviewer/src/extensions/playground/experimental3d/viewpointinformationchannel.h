@@ -33,11 +33,13 @@ public:
      */
     void filterViewpoints( const QVector<bool> &filter );
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
-    void compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi );
+    void compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &vomi );
     const QVector<float>& viewpointEntropy() const;
     float entropy() const;
     const QVector<float>& vmi() const;
     float mi() const;
+    const QVector<float>& vomi() const;
+    float maximumVomi() const;
 
 signals:
 
@@ -52,10 +54,11 @@ private:
 #ifndef CUDA_AVAILABLE
     void computeCpu( bool viewpointEntropy );
 #else // CUDA_AVAILABLE
-    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi );
+    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi );
     void computeViewProbabilitiesCuda();
     void computeVoxelProbabilitiesCuda();
     void computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi );
+    void computeVomiCuda();
 #endif // CUDA_AVAILABLE
 
 private:
@@ -74,6 +77,8 @@ private:
     float m_entropy;
     QVector<float> m_vmi;
     float m_mi;
+    QVector<float> m_vomi;
+    float m_maximumVomi;
 
 };
 
