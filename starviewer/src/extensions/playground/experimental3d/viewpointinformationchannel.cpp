@@ -39,10 +39,10 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
 }
 
 
-void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy )
+void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi )
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy && !entropy ) return;
+    if ( !viewpointEntropy && !entropy &!vmi ) return;
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
@@ -50,11 +50,13 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
     // Dependències
     if ( entropy ) viewProbabilities = true;
     if ( entropy ) viewpointEntropy = true;
+    if ( vmi ) voxelProbabilities = true;
+    if ( voxelProbabilities ) viewProbabilities = true;
 
 #ifndef CUDA_AVAILABLE
     computeCpu( viewpointEntropy );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi );
 #endif // CUDA_AVAILABLE
 }
 
@@ -68,6 +70,12 @@ const QVector<float>& ViewpointInformationChannel::viewpointEntropy() const
 float ViewpointInformationChannel::entropy() const
 {
     return m_entropy;
+}
+
+
+const QVector<float>& ViewpointInformationChannel::vmi() const
+{
+    return m_vmi;
 }
 
 
@@ -98,7 +106,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewpointEntropy )
 #else // CUDA_AVAILABLE
 
 
-void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy )
+void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -106,7 +114,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     int nSteps = 0;
     if ( computeViewProbabilities ) nSteps++;   // p(V)
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
-    if ( computeViewpointEntropy || computeEntropy ) nSteps++;  // viewpoint entropy + entropy
+    if ( computeViewpointEntropy || computeEntropy || computeVmi ) nSteps++;    // viewpoint entropy + entropy + VMI
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -132,9 +140,10 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    // viewpoint entropy + entropy
+    // viewpoint entropy + entropy + VMI
+    if ( computeViewpointEntropy || computeEntropy || computeVmi )
     {
-        computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy );
+        computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy, computeVmi );
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -229,13 +238,14 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCuda()
 }
 
 
-void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy )
+void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi )
 {
     int nViewpoints = m_viewpoints.size();
     int nVoxels = m_volume->getSize();
 
     if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
     if ( computeEntropy ) m_entropy = 0.0f;
+    if ( computeVmi ) m_vmi.resize( nViewpoints );
 
     emit partialProgress( 0 );
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -260,6 +270,14 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
         if ( computeEntropy )
         {
             m_entropy += m_viewProbabilities.at( i ) * m_viewpointEntropy.at( i );
+        }
+
+        if ( computeVmi )
+        {
+            float vmi = InformationTheory<float>::kullbackLeiblerDivergence( voxelProbabilitiesInView, m_voxelProbabilities );
+            Q_ASSERT( vmi == vmi );
+            m_vmi[i] = vmi;
+            DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
         }
 
         emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
