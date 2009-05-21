@@ -120,6 +120,7 @@ private:
      */
     void decreaseEditorSize();
 
+private slots:
     /**
      * Inicialitza diverses dades necessàries per la tool: Valors de m_insideValue, m_outsideValue i m_volumeCont
      */

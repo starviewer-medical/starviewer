@@ -739,8 +739,6 @@ void Q2DViewer::setOverlayInput( Volume *volume )
         // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
         m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
-        emit overlayChanged();
-
     break;
 
     case RectilinearWipe:
@@ -752,6 +750,7 @@ void Q2DViewer::setOverlayInput( Volume *volume )
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
     }
+    emit overlayChanged();
 }
 
 void Q2DViewer::isOverlayModified( )
@@ -768,12 +767,12 @@ void Q2DViewer::isOverlayModified( )
         // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
         m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
-        emit overlayChanged();
     break;
 
     case RectilinearWipe:
     break;
     }
+    emit overlayModified();
 }
 
 void Q2DViewer::setOpacityOverlay ( double op )

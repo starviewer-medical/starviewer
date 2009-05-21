@@ -10,9 +10,13 @@
 #include "series.h"
 #include "logging.h"
 #include "toolmanager.h"
+#include "toolproxy.h"
+#include "editortool.h"
+#include "editortooldata.h"
 // Qt
 #include <QMessageBox>
 #include <QSettings>
+#include <QFileDialog>
 // VTK
 #include <vtkActor.h>
 #include <vtkCellType.h>
@@ -27,6 +31,7 @@
 #include <vtkProperty.h>
 #include <vtkRenderer.h>
 #include <vtkUnstructuredGrid.h>
+#include <vtkMetaImageWriter.h>
 //itk
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -46,7 +51,7 @@ const double QDifuPerfuSegmentationExtension::REGISTRATION_MINIMUM_STEP = 0.001;
 const int QDifuPerfuSegmentationExtension::REGISTRATION_NUMBER_OF_ITERATIONS = 300;
 
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * parent )
- : QWidget( parent ), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0), m_isLeftButtonPressed(false)
+ : QWidget( parent ), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0)
 {
     setupUi( this );
 
@@ -96,7 +101,6 @@ void QDifuPerfuSegmentationExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
     m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    
     m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
 
     // activem l'eina de valors predefinits de window level
@@ -109,7 +113,7 @@ void QDifuPerfuSegmentationExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool" << "EditorTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -127,26 +131,10 @@ void QDifuPerfuSegmentationExtension::initializeTools()
 
     // inicialitzem totes les tools
     QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool";
+    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool" << "EditorTool";
 
     m_toolManager->setViewerTools( m_diffusion2DView, toolsList );
     m_toolManager->setViewerTools( m_perfusion2DView, toolsList );
-
-    // Activació de l'eina d'edició "HOME MADE"
-    // TODO Cal fer servir únicament la autèntica tool i treure tota
-    // l'edició manual que es fa dins d'aquesta pròpia classe
-    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
-
-    m_toolsActionGroup = new QActionGroup( 0 );
-    // txapussilla per fer la tool editor(home made) exclusiu de la resta. Amb la tool oficial això seria automàtic
-    m_toolsActionGroup->setExclusive( true );
-    m_toolsActionGroup->addAction( m_slicingToolButton->defaultAction() );
-    m_toolsActionGroup->addAction( m_zoomToolButton->defaultAction() );
-    m_toolsActionGroup->addAction( m_seedToolButton->defaultAction() );
-    m_toolsActionGroup->addAction( m_editorToolButton->defaultAction() );
-    // TODO guarrada total! ens veiem forçats a fer això perquè es refresquin les connexions de les tools
-    // i no quedi l'editor activat a la vegada amb cap altre tool
-    connect( m_editorToolButton->defaultAction(), SIGNAL( triggered() ), m_toolManager, SLOT( undoDisableAllToolsTemporarily() ) );
 }
 
 void QDifuPerfuSegmentationExtension::createActions()
@@ -185,44 +173,8 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_viewOverlayActionGroup->addAction( m_ventriclesViewAction );
     m_viewOverlayActionGroup->addAction( m_lesionViewAction );
 
-    m_paintEditorAction = new QAction( 0 );
-    m_paintEditorAction->setText( tr("Paint Editor Tool") );
-    m_paintEditorAction->setStatusTip( tr("Enable/Disable Paint Editor") );
-    m_paintEditorAction->setIcon( QIcon(":/images/airbrush.png") );
-    m_paintEditorAction->setCheckable( true );
-    m_paintEditorAction->setEnabled( false );
-    m_paintButton->setDefaultAction( m_paintEditorAction );
-
-    m_eraseEditorAction = new QAction( 0 );
-    m_eraseEditorAction->setText( tr("Erase Editor Tool") );
-    m_eraseEditorAction->setStatusTip( tr("Enable/Disable Erase Editor") );
-    m_eraseEditorAction->setIcon( QIcon(":/images/eraser.png") );
-    m_eraseEditorAction->setCheckable( true );
-    m_eraseEditorAction->setEnabled( false );
-    m_eraseButton->setDefaultAction( m_eraseEditorAction );
-
-    m_eraseSliceEditorAction = new QAction( 0 );
-    m_eraseSliceEditorAction->setText( tr("Erase Slice Editor Tool") );
-    m_eraseSliceEditorAction->setStatusTip( tr("Enable/Disable Erase Slice Editor") );
-    m_eraseSliceEditorAction->setIcon( QIcon(":/images/axial.png") );
-    m_eraseSliceEditorAction->setCheckable( true );
-    m_eraseSliceEditorAction->setEnabled( false );
-    m_eraseSliceButton->setDefaultAction( m_eraseSliceEditorAction );
-
-    m_eraseRegionEditorAction = new QAction( 0 );
-    m_eraseRegionEditorAction->setText( tr("Erase Region Editor Tool") );
-    m_eraseRegionEditorAction->setStatusTip( tr("Enable/Disable Erase Region Editor") );
-    m_eraseRegionEditorAction->setIcon( QIcon(":/images/move.png") );//A falta d'una millor!!!
-    m_eraseRegionEditorAction->setCheckable( true );
-    m_eraseRegionEditorAction->setEnabled( false );
-    m_eraseRegionButton->setDefaultAction( m_eraseRegionEditorAction );
-
-    m_editorToolActionGroup = new QActionGroup( 0 );
-    m_editorToolActionGroup->setExclusive( true );
-    m_editorToolActionGroup->addAction( m_paintEditorAction );
-    m_editorToolActionGroup->addAction( m_eraseEditorAction );
-    m_editorToolActionGroup->addAction( m_eraseSliceEditorAction );
-    m_editorToolActionGroup->addAction( m_eraseRegionEditorAction );
+    //Disable buttons
+    m_saveRegisteredPerfusionPushButton->setEnabled( false );
 }
 
 void QDifuPerfuSegmentationExtension::createConnections()
@@ -253,8 +205,8 @@ void QDifuPerfuSegmentationExtension::createConnections()
 
     connect( m_filterDiffusionPushButton, SIGNAL( clicked() ), SLOT( applyFilterDiffusionImage() ) );
 
-    connect( m_diffusion2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
-    connect( m_perfusion2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler2 (unsigned long) ) );
+    //connect( m_diffusion2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
+    //connect( m_perfusion2DView , SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler2 (unsigned long) ) );
     // caldria pel perfusion?????
     connect( m_synchroCheckBox, SIGNAL( toggled(bool) ), SLOT( synchronizeSlices(bool) ) );
 
@@ -264,14 +216,14 @@ void QDifuPerfuSegmentationExtension::createConnections()
     // potser és millor fer-ho amb l'acció ( signal triggered() )
     connect( m_ventriclesViewToolButton , SIGNAL( clicked() ), SLOT( viewVentriclesOverlay() ) );
 
-    connect( m_eraseButton , SIGNAL( clicked() ), SLOT( setErase() ) );
+    /*connect( m_eraseButton , SIGNAL( clicked() ), SLOT( setErase() ) );
 
     connect( m_eraseSliceButton , SIGNAL( clicked() ), SLOT( setEraseSlice() ) );
 
     connect( m_paintButton , SIGNAL( clicked() ), SLOT( setPaint() ) );
 
     connect( m_eraseRegionButton , SIGNAL( clicked() ), SLOT( setEraseRegion() ) );
-
+*/
     connect( m_splitterLeftButton, SIGNAL( clicked() ), SLOT( moveViewerSplitterToLeft() ) );
     connect( m_splitterCenterButton, SIGNAL( clicked() ), SLOT( moveViewerSplitterToCenter() ) );
     connect( m_splitterRightButton, SIGNAL( clicked() ), SLOT( moveViewerSplitterToRight() ) );
@@ -290,6 +242,16 @@ void QDifuPerfuSegmentationExtension::createConnections()
     connect( m_diffusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setDiffusionInput( Volume * ) ) );
     connect( m_perfusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setPerfusionInput( Volume * ) ) );
     connect( m_penombraVolumeLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( computePenombraVolume(const QString&) ) );
+
+    connect( m_saveDiffusionMaskPushButton, SIGNAL( clicked() ), SLOT( saveDiffusionMask() ) );
+    connect( m_savePerfusionVolumePushButton, SIGNAL( clicked() ), SLOT( savePerfusionVolume() ) );
+    connect( m_savePerfusionMaskPushButton, SIGNAL( clicked() ), SLOT( savePerfusionMask() ) );
+    connect( m_saveRegisteredPerfusionPushButton, SIGNAL( clicked() ), SLOT( saveRegisteredPerfusionVolume() ) );
+    connect( m_saveTransformPushButton, SIGNAL( clicked() ), SLOT( saveTransform() ) );
+
+    connect( m_diffusion2DView, SIGNAL( overlayModified( ) ), SLOT( updateStrokeVolume() ) );
+    connect( m_perfusion2DView, SIGNAL( overlayModified( ) ), SLOT( updatePenombraVolume() ) );
+
 }
 
 void QDifuPerfuSegmentationExtension::readSettings()
@@ -299,6 +261,7 @@ void QDifuPerfuSegmentationExtension::readSettings()
 
     m_horizontalSplitter->restoreState( settings.value( "horizontalSplitter" ).toByteArray() );
     m_viewerSplitter->restoreState( settings.value( "viewerSplitter" ).toByteArray() );
+    m_savingMaskDirectory = settings.value( "savingDirectory", "." ).toString();
 
     settings.endGroup();
 }
@@ -312,6 +275,7 @@ void QDifuPerfuSegmentationExtension::writeSettings()
     ///Movem l'splitter a la dreta pq quan es torni obrir només es vegi la difu
     //this->moveViewerSplitterToRight();
     settings.setValue( "viewerSplitter", m_viewerSplitter->saveState() );
+    settings.setValue("savingDirectory", m_savingMaskDirectory );
 
     settings.endGroup();
 }
@@ -478,81 +442,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage( int index )
     m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
     //m_perfusion2DView->setWindowLevel( m_perfusionMaxValue - m_perfusionMinValue, 0.0 );
     setPerfusionLut(m_perfusionThresholdViewerSlider->value());
-
-//------------------------------------------------------------------------
-/*
-    //int total = m_totalPerfusionImagesSpinBox->value();
-    int total = m_perfusionInputVolume->getSeries()->getNumberOfPhases();
-
-    //En el cas vingui de la tool ja haurà canviat
-    if(m_perfusion2DView->getCurrentPhase() != index)
-    {
-        m_perfusion2DView->setPhase( index );
-    }
-
-    ItkImageType::Pointer inputImage = m_perfusionInputVolume->getItkData();
-
-    ItkImageType::RegionType region = inputImage->GetLargestPossibleRegion();
-    ItkImageType::RegionType::SizeType size = region.GetSize();
-    size[2] /= total;
-//     DEBUG_LOG( "size: " << size );
-//     DEBUG_LOG( "region: " << region );
-    region.SetSize( size );
-
-
-    ItkImageType::Pointer perfusionImage = ItkImageType::New();
-    perfusionImage->SetRegions( region );
-    perfusionImage->SetSpacing( inputImage->GetSpacing() );
-    perfusionImage->SetOrigin( inputImage->GetOrigin() );
-    perfusionImage->Allocate();
-
-
-    ItkImageType::IndexType imageIndex = { { 0, 0, index * size[2] } };
-    itk::ImageRegionConstIterator< ItkImageType > itInput( inputImage, ItkImageType::RegionType( imageIndex, size ) );
-    itk::ImageRegionIterator< ItkImageType > itPerfusion( perfusionImage, perfusionImage->GetBufferedRegion() );
-
-    itInput.GoToBegin();
-    itPerfusion.GoToBegin();
-
-    unsigned int regionSize = size[0] * size[1] * size[2];
-
-    for ( unsigned int i = 0; i < regionSize; i++ )
-    {
-        itPerfusion.Set( itInput.Get() );
-        ++itInput;
-        ++itPerfusion;
-    }
-
-    delete m_perfusionMainVolume;
-    m_perfusionMainVolume = new Volume();
-    //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-    m_perfusionMainVolume->setImages( m_perfusionInputVolume->getImages() );
-
-    m_perfusionMainVolume->setData( perfusionImage );
-
-    // Trobem els valors de propietat mínim i màxim
-
-    itk::ImageRegionConstIterator< ItkImageType > it( perfusionImage, perfusionImage->GetBufferedRegion() );
-
-    it.GoToBegin();
-    m_perfusionMinValue = m_perfusionMaxValue = it.Get();
-
-    ItkImageType::PixelType value;
-
-    while ( !it.IsAtEnd() )
-    {
-        value = it.Get();
-
-        if ( value < m_perfusionMinValue ) m_perfusionMinValue = value;
-        if ( value > m_perfusionMaxValue ) m_perfusionMaxValue = value;
-
-        ++it;
-    }
-
-    std::cout<<"Index: "<<index<<"Max perf: "<<m_perfusionMaxValue<<", min perfu: "<<m_perfusionMinValue<<std::endl;
-
-*/
-
 }
 
 void QDifuPerfuSegmentationExtension::setStrokeLowerValue( int x )
@@ -675,35 +564,11 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
     m_editorToolButton->defaultAction()->trigger();
     m_editorToolButton->defaultAction()->setEnabled( true );
 
-    m_paintEditorAction->setEnabled(true);
-    m_eraseEditorAction->setEnabled(true);
-    m_eraseSliceEditorAction->setEnabled(true);
-    m_eraseRegionEditorAction->setEnabled(true);
-    m_eraseEditorAction->trigger();
-    m_editorTool = QDifuPerfuSegmentationExtension::Erase;
-    m_editorSize->setEnabled(true);
-
     m_lesionViewAction->setEnabled( true );
     m_lesionViewAction->trigger();
     this->viewLesionOverlay();
 
     QApplication::restoreOverrideCursor();
-}
-
-void QDifuPerfuSegmentationExtension::updateStrokeVolume()
-{
-    m_strokeVolume = this->calculateStrokeVolume();
-    m_strokeVolumeLineEdit->setText( QString::number( m_strokeVolume, 'f', 2 ) );
-}
-
-double QDifuPerfuSegmentationExtension::calculateStrokeVolume()
-{
-    VolumeCalculator volumeCalculator;
-
-    volumeCalculator.setInput( m_strokeMaskVolume );
-    volumeCalculator.setInsideValue( m_diffusionMaxValue );
-
-    return volumeCalculator.getVolume();
 }
 
 void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
@@ -892,6 +757,7 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         m_perfusion2DView->render();
 
         m_computeBlackpointEstimationPushButton->setEnabled( true );
+        m_saveRegisteredPerfusionPushButton->setEnabled( true );
 
         m_perfusionOpacityLabel->setEnabled( true );
         m_perfusionOpacitySlider->setEnabled( true );
@@ -1019,11 +885,16 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     m_perfusionOverlay->SetInput( imageCast->GetOutput() );
     imageCast->Delete();
 
+    //m_perfusion2DView->setInput( m_perfusionRescaledVolume );
+    //m_perfusion2DView->setInput( m_diffusionMainVolume );
     m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
     m_perfusion2DView->setSlice( m_perfusionSliceSlider->value());
+    //m_perfusion2DView->setOverlayToBlend();
+    m_perfusion2DView->setNoOverlay();
+    m_perfusion2DView->setOverlayInput( m_penombraMaskVolume );
+    m_perfusion2DView->refresh();
     //Posem els 2 viewers a la mateixa llesca i els sincronitzem
     m_diffusion2DView->setSlice( m_perfusionSliceSlider->value());
-    m_perfusion2DView->render();
     m_synchroCheckBox->setChecked(true);
     m_lesionViewToolButton->click();
 
@@ -1065,145 +936,6 @@ void QDifuPerfuSegmentationExtension::applyFilterDiffusionImage()
     QApplication::restoreOverrideCursor();
 }
 
-void QDifuPerfuSegmentationExtension::strokeEventHandler( unsigned long id )
-{
-    switch( id )
-    {
-    case vtkCommand::MouseMoveEvent:
-        setPaintCursor(1);
-    break;
-
-    case vtkCommand::LeftButtonPressEvent:
-        leftButtonEventHandler(1);
-    break;
-
-    case vtkCommand::LeftButtonReleaseEvent:
-        setLeftButtonOff();
-    break;
-
-    case vtkCommand::RightButtonPressEvent:
-    break;
-
-    default:
-    break;
-    }
-}
-
-void QDifuPerfuSegmentationExtension::strokeEventHandler2( unsigned long id )
-{
-    switch( id )
-    {
-    case vtkCommand::MouseMoveEvent:
-        setPaintCursor(2);
-    break;
-
-    case vtkCommand::LeftButtonPressEvent:
-        leftButtonEventHandler(2);
-    break;
-
-    case vtkCommand::LeftButtonReleaseEvent:
-        setLeftButtonOff();
-    break;
-
-    case vtkCommand::RightButtonPressEvent:
-    break;
-
-    default:
-    break;
-    }
-}
-
-void QDifuPerfuSegmentationExtension::leftButtonEventHandler(int idViewer )
-{
-    m_isLeftButtonPressed = true;
-
-    if(m_editorToolButton->isChecked())
-    {
-        //DEBUG_LOG("Editor Tool");
-        if(idViewer==1)
-        {
-            setEditorPoint( idViewer );
-        }
-        else    //idViewer=2
-        {
-            setEditorPoint( idViewer );
-        }
-    }
-}
-
-void QDifuPerfuSegmentationExtension::setEditorPoint( int idViewer )
-{
-    double pos[3];
-    if(m_editorTool != QDifuPerfuSegmentationExtension::NoEditor)
-    {
-
-        if(idViewer==1)
-        {
-            m_diffusion2DView->getCurrentCursorPosition(pos);
-        }
-        else    //idViewer=2
-        {
-            m_perfusion2DView->getCurrentCursorPosition(pos);
-        }
-
-        // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
-        if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
-        {
-            switch( m_editorTool)
-            {
-                case Erase:
-                {
-                    this->eraseMask(m_editorSize->value(), idViewer);
-                    break;
-                }
-                case Paint:
-                {
-                    this->paintMask(m_editorSize->value(), idViewer );
-                    break;
-                }
-                case EraseSlice:
-                {
-                    this->eraseSliceMask(  idViewer );
-                    break;
-                }
-                case EraseRegion:
-                {
-                    this->eraseRegionMask(  idViewer );
-                    break;
-                }
-            }
-            if(idViewer==1)
-            {
-                m_strokeVolumeLineEdit->clear();
-                m_strokeVolume=m_strokeMaskVolume->getSpacing()[0]*m_strokeMaskVolume->getSpacing()[1]*m_strokeMaskVolume->getSpacing()[2]*m_strokeCont;
-                m_strokeVolumeLineEdit->insert(QString("%1").arg(m_strokeVolume, 0, 'f', 2));
-                m_diffusion2DView->setOverlayInput(m_activedMaskVolume);
-                m_diffusion2DView->refresh();
-            }
-            else
-            {
-                if( m_penombraVolume )
-                {
-                    m_penombraVolumeLineEdit->clear();
-                    m_penombraVolume=m_penombraMaskVolume->getSpacing()[0]*m_penombraMaskVolume->getSpacing()[1]*m_penombraMaskVolume->getSpacing()[2]*m_penombraCont;
-                    m_penombraVolumeLineEdit->insert(QString("%1").arg(m_penombraVolume, 0, 'f', 2));
-                    vtkImageCast * imageCast = vtkImageCast::New();
-                    imageCast->SetInput( m_penombraMaskVolume->getVtkData() );
-                    imageCast->SetOutputScalarTypeToUnsignedChar();
-                    m_perfusionOverlay->SetInput( imageCast->GetOutput() );
-                    imageCast->Delete();
-                    m_perfusion2DView->refresh();
-                }
-            }
-        }
-    }
-}
-
-void QDifuPerfuSegmentationExtension::setLeftButtonOff(  )
-{
-    m_isLeftButtonPressed = false;
-}
-
 void QDifuPerfuSegmentationExtension::setDiffusionOpacity( int opacity )
 {
     if ( m_activedMaskVolume != 0 )
@@ -1220,383 +952,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionOpacity( int opacity )
     m_perfusion2DView->refresh();
 }
 
-void QDifuPerfuSegmentationExtension::setErase()
-{
-    m_editorTool = QDifuPerfuSegmentationExtension::Erase;
-}
-
-void QDifuPerfuSegmentationExtension::setPaint()
-{
-    m_editorTool = QDifuPerfuSegmentationExtension::Paint;
-}
-
-void QDifuPerfuSegmentationExtension::setEraseSlice()
-{
-    m_editorTool = QDifuPerfuSegmentationExtension::EraseSlice;
-}
-
-void QDifuPerfuSegmentationExtension::setEraseRegion()
-{
-    m_editorTool = QDifuPerfuSegmentationExtension::EraseRegion;
-}
-
-void QDifuPerfuSegmentationExtension::setPaintCursor(int idViewer)
-{
-    if(m_editorToolButton->isChecked())    //Nom� en cas que estiguem en l'editor
-    {
-        if(m_isLeftButtonPressed)
-        {
-            setEditorPoint(idViewer);
-        }
-
-        double pos[3];
-        if(idViewer==1)
-        {
-            m_diffusion2DView->getCurrentCursorPosition(pos);
-        }
-        else    //idViewer=2
-        {
-            m_perfusion2DView->getCurrentCursorPosition(pos);
-        }
-
-        if((m_editorTool == QDifuPerfuSegmentationExtension::Erase || m_editorTool == QDifuPerfuSegmentationExtension::Paint)&&(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) ))
-        {
-            int size = m_editorSize->value();
-            double spacing[3];
-            m_strokeMaskVolume->getSpacing(spacing);
-
-            vtkPoints *points = vtkPoints::New();
-            points->SetNumberOfPoints(4);
-
-            double sizeView[2];
-            sizeView[0]=(double)size*spacing[0];
-            sizeView[1]=(double)size*spacing[1];
-
-            points->SetPoint(0, pos[0] - sizeView[0], pos[1] - sizeView[1], pos[2]-1);
-            points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2]-1);
-            points->SetPoint(2, pos[0] + sizeView[0], pos[1] + sizeView[1], pos[2]-1);
-            points->SetPoint(3, pos[0] - sizeView[0], pos[1] + sizeView[1], pos[2]-1);
-
-
-            vtkIdType pointIds[4];
-
-            pointIds[0] = 0;
-            pointIds[1] = 1;
-            pointIds[2] = 2;
-            pointIds[3] = 3;
-
-            vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
-
-            grid->Allocate(1);
-            grid->SetPoints(points);
-
-            grid->InsertNextCell(VTK_QUAD,4,pointIds);
-
-            m_squareActor -> GetProperty()->SetColor(0.15, 0.83, 0.26);
-            m_squareActor -> GetProperty()->SetOpacity(0.2);
-
-            vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
-            squareMapper->SetInput( grid );
-
-            m_squareActor->SetMapper( squareMapper );
-
-            if(idViewer==1)
-            {
-                m_diffusion2DView->getRenderer()->AddViewProp( m_squareActor );
-                m_diffusion2DView->refresh();
-            }
-            else    //idViewer=2
-            {
-                m_perfusion2DView->getRenderer()->AddViewProp( m_squareActor );
-                m_perfusion2DView->refresh();
-            }
-
-            m_squareActor->VisibilityOn();
-
-            squareMapper-> Delete();
-            points      -> Delete();
-            grid        -> Delete();
-        }
-        else
-        {
-            m_squareActor->VisibilityOff();
-        }
-    }
-    else
-    {
-        m_squareActor->VisibilityOff();
-    }
-}
-
-void QDifuPerfuSegmentationExtension::eraseMask(int size, int idViewer)
-{
-    int i,j;
-    Volume::VoxelType *value;
-    double pos[3];
-    double origin[3];
-    double spacing[3];
-    int centralIndex[3];
-    int index[3];
-    if(idViewer==1)
-    {
-        m_diffusion2DView->getCurrentCursorPosition(pos);
-        m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-        m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-        index[2]=m_diffusion2DView->getCurrentSlice();
-    }
-    else
-    {
-        m_perfusion2DView->getCurrentCursorPosition(pos);
-
-        if( m_penombraMaskVolume )
-        {
-            m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-            m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-            index[2]=m_perfusion2DView->getCurrentSlice();
-        }
-        else return;
-    }
-    centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-    centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-    //index[2]=(int)(((double)pos[2]-origin[2])/spacing[2]);
-
-    if(idViewer==1)
-    {
-        for(i=-size;i<=size;i++)
-        {
-            for(j=-size;j<=size;j++)
-            {
-                index[0]=centralIndex[0]+i;
-                index[1]=centralIndex[1]+j;
-                value = m_activedMaskVolume->getScalarPointer(index);
-                if( value && ((*value) != m_diffusionMinValue) )
-                {
-                    (*value) = m_diffusionMinValue;
-                    if(m_activedMaskVolume == m_strokeMaskVolume)
-                    {
-                        m_strokeCont--;
-                    }
-                }
-            }
-        }
-    }else{
-        for(i=-size;i<=size;i++)
-        {
-            for(j=-size;j<=size;j++)
-            {
-                index[0]=centralIndex[0]+i;
-                index[1]=centralIndex[1]+j;
-                value = m_penombraMaskVolume->getScalarPointer(index);
-                if( value && ( (*value) == m_penombraMaskMaxValue) )
-                {
-                    (*value) = m_penombraMaskMinValue;
-                    m_penombraCont--;
-                }
-            }
-        }
-    }
-    //m_strokeMaskVolume->getVtkData()->Update();
-    //m_2DView->refresh();
-}
-
-void QDifuPerfuSegmentationExtension::paintMask(int size, int idViewer)
-{
-    int i,j;
-    Volume::VoxelType *value;
-    double pos[3];
-    double origin[3];
-    double spacing[3];
-    int centralIndex[3];
-    int index[3];
-    if(idViewer==1)
-    {
-        m_diffusion2DView->getCurrentCursorPosition(pos);
-        m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-        m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-        index[2]=m_diffusion2DView->getCurrentSlice();
-    }
-    else
-    {
-        if( m_penombraMaskVolume )
-        {
-            m_perfusion2DView->getCurrentCursorPosition(pos);
-            m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-            m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-            index[2]=m_perfusion2DView->getCurrentSlice();
-        }
-        else return;
-    }
-    centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-    centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-
-    if(idViewer==1)
-    {
-        for(i=-size;i<=size;i++)
-        {
-            for(j=-size;j<=size;j++)
-            {
-                index[0]=centralIndex[0]+i;
-                index[1]=centralIndex[1]+j;
-                value = m_activedMaskVolume->getScalarPointer(index);
-                if( value && ((*value) == m_diffusionMinValue) )
-                {
-                    (*value) = m_diffusionMaxValue;
-                    if(m_activedMaskVolume == m_strokeMaskVolume)
-                    {
-                        m_strokeCont++;
-                    }
-                }
-            }
-        }
-    }else{
-        for(i=-size;i<=size;i++)
-        {
-            for(j=-size;j<=size;j++)
-            {
-                index[0]=centralIndex[0]+i;
-                index[1]=centralIndex[1]+j;
-                value = m_penombraMaskVolume->getScalarPointer(index);
-                if( value && ((*value) != m_penombraMaskMaxValue) )
-                {
-                    (*value) = m_penombraMaskMaxValue;
-                     m_penombraCont++;
-               }
-            }
-        }
-    }
-    //m_strokeMaskVolume->getVtkData()->Update();
-    //m_2DView->refresh();
-}
-
-void QDifuPerfuSegmentationExtension::eraseSliceMask( int idViewer)
-{
-    int i,j;
-    Volume::VoxelType *value;
-    int index[3];
-    int ext[6];
-
-    if(idViewer==1)
-    {
-        m_strokeMaskVolume->getVtkData()->GetExtent(ext);
-        index[2]=m_diffusion2DView->getCurrentSlice();
-        for(i=ext[0];i<=ext[1];i++)
-        {
-            for(j=ext[2];j<=ext[3];j++)
-            {
-                index[0]=i;
-                index[1]=j;
-                value = m_activedMaskVolume->getScalarPointer(index);
-                if((*value) != m_diffusionMinValue)
-                {
-                    (*value) = m_diffusionMinValue;
-                    if(m_activedMaskVolume == m_strokeMaskVolume)
-                    {
-                        m_strokeCont--;
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        if( m_penombraMaskVolume )
-        {
-            m_penombraMaskVolume->getVtkData()->GetExtent(ext);
-            index[2]=m_perfusion2DView->getCurrentSlice();
-            for(i=ext[0];i<=ext[1];i++)
-            {
-                for(j=ext[2];j<=ext[3];j++)
-                {
-                    index[0]=i;
-                    index[1]=j;
-                    value = m_penombraMaskVolume->getScalarPointer(index);
-                    if((*value) == m_penombraMaskMaxValue)
-                    {
-                        (*value) = m_penombraMaskMinValue;
-                        m_penombraCont--;
-                    }
-                }
-            }
-        }
-    }
-    //m_strokeMaskVolume->getVtkData()->Update();
-    //m_2DView->refresh();
-}
-
-void QDifuPerfuSegmentationExtension::eraseRegionMask( int idViewer)
-{
-    double pos[3];
-    double origin[3];
-    double spacing[3];
-    int index[3];
-
-    if(idViewer==1)
-    {
-        m_diffusion2DView->getCurrentCursorPosition(pos);
-        m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-        m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-        index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-        index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-        index[2]=m_diffusion2DView->getCurrentSlice();
-        eraseRegionMaskRecursive1(index[0],index[1],index[2]);
-    }
-    else
-    {
-        if( m_penombraMaskVolume )
-        {
-            m_perfusion2DView->getCurrentCursorPosition(pos);
-            m_penombraMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
-            m_penombraMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
-            index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
-            index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
-            index[2]=m_perfusion2DView->getCurrentSlice();
-            eraseRegionMaskRecursive2(index[0],index[1],index[2]);
-        }
-    }
-}
-
-void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive1(int a, int b, int c)
-{
-    int ext[6];
-    m_activedMaskVolume->getVtkData()->GetExtent(ext);
-    if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
-    {
-        Volume::VoxelType *value = m_activedMaskVolume->getScalarPointer(a,b,c);
-        if ((*value) != m_diffusionMinValue)
-        {
-            //DEBUG_LOG(m_outsideValue<<" "<<m_insideValue<<"->"<<(*value));
-            (*value)= m_diffusionMinValue;
-            if(m_activedMaskVolume == m_strokeMaskVolume)
-            {
-                m_strokeCont--;
-            }
-            //(*m_activedCont)--;
-            eraseRegionMaskRecursive1( a+1, b, c);
-            eraseRegionMaskRecursive1( a-1, b, c);
-            eraseRegionMaskRecursive1( a, b+1, c);
-            eraseRegionMaskRecursive1( a, b-1, c);
-        }
-    }
-}
-
-void QDifuPerfuSegmentationExtension::eraseRegionMaskRecursive2(int a, int b, int c)
-{
-    int ext[6];
-    m_penombraMaskVolume->getVtkData()->GetExtent(ext);
-    if((a>=ext[0])&&(a<=ext[1])&&(b>=ext[2])&&(b<=ext[3])&&(c>=ext[4])&&(c<=ext[5]))
-    {
-        Volume::VoxelType *value = m_penombraMaskVolume->getScalarPointer(a,b,c);
-        if ((*value) == m_penombraMaskMaxValue)
-        {
-            (*value)= m_penombraMaskMinValue;
-            m_penombraCont--;
-            eraseRegionMaskRecursive2( a+1, b, c);
-            eraseRegionMaskRecursive2( a-1, b, c);
-            eraseRegionMaskRecursive2( a, b+1, c);
-            eraseRegionMaskRecursive2( a, b-1, c);
-        }
-    }
-}
 
 void QDifuPerfuSegmentationExtension::viewLesionOverlay()
 {
@@ -1624,7 +979,6 @@ void QDifuPerfuSegmentationExtension::viewVentriclesOverlay()
 
 void QDifuPerfuSegmentationExtension::viewVentriclesOverlay(int a)
 {
-    std::cout<<"veiwVentricles "<<a<<std::endl;
     if(m_ventriclesMaskVolume != 0)
     {
         m_activedMaskVolume = m_ventriclesMaskVolume;
@@ -1689,6 +1043,255 @@ void QDifuPerfuSegmentationExtension::computePenombraVolume( const QString & nam
 {
     m_penombraLineEdit->clear();
     m_penombraLineEdit->insert(QString("%1").arg(m_penombraVolume - m_strokeVolume, 0, 'f', 2));
+}
+
+void QDifuPerfuSegmentationExtension::saveDiffusionMask( )
+{
+    if(m_strokeMaskVolume)
+    {
+        QString fileName = QFileDialog::getSaveFileName( this, tr("Save Diffusion Mask Volume file"), m_savingMaskDirectory, tr("MetaImage Files (*.mhd)") );
+        if ( !fileName.isEmpty() )
+        {
+            if( QFileInfo( fileName ).suffix() != "mhd" )
+            {
+                fileName += ".mhd";
+            }
+            //Forcem que la màscara que gaurdem el dins sigui 255 i el fora 0
+            vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
+            imageThreshold->SetInput( m_strokeMaskVolume->getVtkData() );
+            // només els que valen m_diffusionMaxValue
+            imageThreshold->ThresholdBetween( m_diffusionMaxValue, m_diffusionMaxValue); 
+            imageThreshold->SetInValue( 255 );
+            imageThreshold->SetOutValue( 0 );
+    
+            m_savingMaskDirectory = QFileInfo( fileName ).absolutePath();
+            vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
+            writer->SetFileName(qPrintable( fileName ));
+            writer->SetFileDimensionality(3);
+            writer->SetInput(imageThreshold->GetOutput());
+            writer->Write();
+    
+            writer->Delete();
+            imageThreshold->Delete();
+        }
+    }
+}
+
+void QDifuPerfuSegmentationExtension::savePerfusionMask( )
+{
+    if(m_penombraMaskVolume)
+    {
+        QString fileName = QFileDialog::getSaveFileName( this, tr("Save Perfusion Mask Volume file"), m_savingMaskDirectory, tr("MetaImage Files (*.mhd)") );
+        if ( !fileName.isEmpty() )
+        {
+            if( QFileInfo( fileName ).suffix() != "mhd" )
+            {
+                fileName += ".mhd";
+            }
+            //Forcem que la màscara que gaurdem el dins sigui 255 i el fora 0
+            vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
+            imageThreshold->SetInput( m_penombraMaskVolume->getVtkData() );
+            // només els que valen m_penombraMaskMaxValue
+            imageThreshold->ThresholdBetween( m_penombraMaskMaxValue, m_penombraMaskMaxValue); 
+            imageThreshold->SetInValue( 255 );
+            imageThreshold->SetOutValue( 0 );
+    
+            m_savingMaskDirectory = QFileInfo( fileName ).absolutePath();
+            vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
+            writer->SetFileName(qPrintable( fileName ));
+            writer->SetFileDimensionality(3);
+            writer->SetInput(imageThreshold->GetOutput());
+            writer->Write();
+    
+            writer->Delete();
+            imageThreshold->Delete();
+        }
+    }
+}
+
+void QDifuPerfuSegmentationExtension::savePerfusionVolume( )
+{
+    if(m_perfusionMainVolume)
+    {
+        QString fileName = QFileDialog::getSaveFileName( this, tr("Save Perfusion Volume file"), m_savingMaskDirectory, tr("MetaImage Files (*.mhd)") );
+        if ( !fileName.isEmpty() )
+        {
+            if( QFileInfo( fileName ).suffix() != "mhd" )
+            {
+                fileName += ".mhd";
+            }
+    
+            m_savingMaskDirectory = QFileInfo( fileName ).absolutePath();
+            vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
+            writer->SetFileName(qPrintable( fileName ));
+            writer->SetFileDimensionality(3);
+            writer->SetInput(m_perfusionMainVolume->getVtkData());
+            writer->Write();
+    
+            writer->Delete();
+        }
+    }
+}
+
+void QDifuPerfuSegmentationExtension::saveRegisteredPerfusionVolume( )
+{
+    if(m_perfusionRescaledVolume)
+    {
+        QString fileName = QFileDialog::getSaveFileName( this, tr("Save Perfusion Volume file"), m_savingMaskDirectory, tr("MetaImage Files (*.mhd)") );
+        if ( !fileName.isEmpty() )
+        {
+            if( QFileInfo( fileName ).suffix() != "mhd" )
+            {
+                fileName += ".mhd";
+            }
+    
+            m_savingMaskDirectory = QFileInfo( fileName ).absolutePath();
+            vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
+            writer->SetFileName(qPrintable( fileName ));
+            writer->SetFileDimensionality(3);
+            writer->SetInput(m_perfusionRescaledVolume->getVtkData());
+            writer->Write();
+    
+            writer->Delete();
+        }
+    }
+}
+
+void QDifuPerfuSegmentationExtension::saveTransform(  )
+{
+    if(m_registerTransform)
+    {
+        QString fileName = QFileDialog::getSaveFileName( this, tr("Save Transform file") , m_savingMaskDirectory, tr("Transform Files (*.tf)") );
+        if ( !fileName.isEmpty() )
+        {
+            if( QFileInfo( fileName ).suffix() != "tf" )
+            {
+                fileName += ".tf";
+            }
+            m_savingMaskDirectory = QFileInfo( fileName ).absolutePath();
+            ofstream fout(qPrintable( fileName ));
+            //DEBUG_LOG(qPrintable( fileName  ));
+    /*
+            //old fashion
+            for(unsigned int i=0;i<landmarkRegTransform->GetNumberOfParameters();i++)
+            {
+                fout<<landmarkRegTransform->GetParameters()[i]<<std::endl;
+            }
+            //fout<<landmarkRegTransform->GetParameters()<<std::endl;
+            fout<<landmarkRegTransform->GetCenter()[0]<<" "<<landmarkRegTransform->GetCenter()[1]<<" "<<landmarkRegTransform->GetCenter()[2]<<" "<<std::endl;
+            */
+            unsigned int i,j;
+            for(i=0;i<3;i++)
+            {
+                for(j=0;j<3;j++)
+                {
+                    fout<<m_registerTransform->GetMatrix()[i][j]<<std::endl;
+                }
+            }
+            for(i=0;i<3;i++)
+            {
+                fout<<m_registerTransform->GetOffset()[i]<<std::endl;
+            }
+            fout.close();
+        }
+    }
+}
+
+double QDifuPerfuSegmentationExtension::calculateDiffusionMaskVolume()
+{
+    if ( !m_strokeMaskVolume ) 
+        return 0.0;
+
+    double spacing[3];
+    m_strokeMaskVolume->getSpacing(spacing);
+    double volume = 1.0;
+
+    for(unsigned int i=0;i<Volume::VDimension;i++)
+    {
+        volume *= spacing[i];
+    }
+
+    int cont;
+    EditorToolData* edToolData = static_cast<EditorToolData*> ( m_diffusion2DView->getToolProxy()->getTool("EditorTool")->getToolData() );
+    if(edToolData!=0)
+    {
+        cont = edToolData->getVolumeVoxels();
+    }
+    else
+    {
+        DEBUG_LOG("No existeix la editor tool");
+        cont = 0;
+    }
+
+    m_strokeVolume = volume*(double)cont;
+
+    return m_strokeVolume;
+}
+
+double QDifuPerfuSegmentationExtension::calculatePerfusionMaskVolume()
+{
+    if ( !m_penombraMaskVolume ) 
+        return 0.0;
+
+    double spacing[3];
+    m_penombraMaskVolume->getSpacing(spacing);
+    double volume = 1.0;
+
+    for(unsigned int i=0;i<Volume::VDimension;i++)
+    {
+        volume *= spacing[i];
+    }
+
+    int cont;
+    EditorToolData* edToolData = static_cast<EditorToolData*> ( m_perfusion2DView->getToolProxy()->getTool("EditorTool")->getToolData() );
+    if(edToolData!=0)
+    {
+        cont = edToolData->getVolumeVoxels();
+    }
+    else
+    {
+        DEBUG_LOG("No existeix la editor tool");
+        cont = 0;
+    }
+
+    m_penombraVolume = volume*(double)cont;
+
+    return m_penombraVolume;
+}
+
+void QDifuPerfuSegmentationExtension::updateStrokeVolume()
+{
+    if(m_strokeVolumeLineEdit->isEnabled() && m_activedMaskVolume == m_strokeMaskVolume)
+    {
+        m_strokeVolume = this->calculateDiffusionMaskVolume();
+        m_strokeVolumeLineEdit->clear();
+        m_strokeVolumeLineEdit->insert(QString("%1").arg(m_strokeVolume, 0, 'f', 2));
+    }
+}
+
+void QDifuPerfuSegmentationExtension::updatePenombraVolume()
+{
+    if(m_penombraVolumeLineEdit->isEnabled())
+    {
+        //this->viewThresholds2();
+        m_penombraVolume = this->calculatePerfusionMaskVolume();
+        m_penombraVolumeLineEdit->clear();
+        m_penombraVolumeLineEdit->insert(QString("%1").arg(m_penombraVolume, 0, 'f', 2));
+        m_penombraLineEdit->clear();
+        m_penombraLineEdit->insert(QString("%1").arg(m_penombraVolume - m_strokeVolume, 0, 'f', 2));
+
+        vtkImageCast * imageCast = vtkImageCast::New();
+        imageCast->SetInput( m_penombraMaskVolume->getVtkData() );
+        imageCast->SetOutputScalarTypeToUnsignedChar();
+        m_perfusionOverlay->SetInput( imageCast->GetOutput() );
+        imageCast->Delete();
+
+        m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
+        m_perfusion2DView->setNoOverlay();
+        m_perfusion2DView->setOverlayInput( m_penombraMaskVolume );
+        m_perfusion2DView->refresh();
+
+    }
 }
 
 }

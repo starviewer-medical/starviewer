@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>916</width>
-    <height>797</height>
+    <height>804</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -146,6 +146,16 @@
                      </property>
                      <property name="value" >
                       <number>4</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="m_savePerfusionVolumePushButton" >
+                     <property name="text" >
+                      <string/>
+                     </property>
+                     <property name="icon" >
+                      <iconset resource="../../../main/main.qrc" >:/images/filesave.png</iconset>
                      </property>
                     </widget>
                    </item>
@@ -401,6 +411,16 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="m_saveDiffusionMaskPushButton" >
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../../../main/main.qrc" >:/images/filesave.png</iconset>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
             </layout>
@@ -478,14 +498,54 @@
               <number>6</number>
              </property>
              <item>
-              <widget class="QPushButton" name="m_applyRegistrationPushButton" >
-               <property name="enabled" >
-                <bool>false</bool>
+              <layout class="QVBoxLayout" >
+               <property name="margin" >
+                <number>0</number>
                </property>
-               <property name="text" >
-                <string>Apply</string>
+               <property name="spacing" >
+                <number>6</number>
                </property>
-              </widget>
+               <item>
+                <widget class="QPushButton" name="m_applyRegistrationPushButton" >
+                 <property name="enabled" >
+                  <bool>false</bool>
+                 </property>
+                 <property name="text" >
+                  <string>Apply</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" >
+                 <property name="margin" >
+                  <number>0</number>
+                 </property>
+                 <property name="spacing" >
+                  <number>6</number>
+                 </property>
+                 <item>
+                  <widget class="QPushButton" name="m_saveTransformPushButton" >
+                   <property name="text" >
+                    <string>Save Matrix</string>
+                   </property>
+                   <property name="icon" >
+                    <iconset resource="../../../main/main.qrc" >:/images/filesave.png</iconset>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="m_saveRegisteredPerfusionPushButton" >
+                   <property name="text" >
+                    <string>Save Volume</string>
+                   </property>
+                   <property name="icon" >
+                    <iconset resource="../../../main/main.qrc" >:/images/filesave.png</iconset>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
@@ -632,6 +692,16 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="m_savePerfusionMaskPushButton" >
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../../../main/main.qrc" >:/images/filesave.png</iconset>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
             </layout>
@@ -647,7 +717,7 @@
          </property>
          <property name="sizeHint" >
           <size>
-           <width>300</width>
+           <width>355</width>
            <height>16</height>
           </size>
          </property>
@@ -920,79 +990,6 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="QToolButton" name="m_eraseButton" >
-             <property name="text" >
-              <string>...</string>
-             </property>
-             <property name="icon" >
-              <iconset/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_paintButton" >
-             <property name="text" >
-              <string>...</string>
-             </property>
-             <property name="icon" >
-              <iconset/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_eraseSliceButton" >
-             <property name="text" >
-              <string>...</string>
-             </property>
-             <property name="icon" >
-              <iconset/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="m_eraseRegionButton" >
-             <property name="text" >
-              <string>...</string>
-             </property>
-             <property name="icon" >
-              <iconset/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_3" >
-             <property name="text" >
-              <string>Size</string>
-             </property>
-             <property name="alignment" >
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="m_editorSize" >
-             <property name="enabled" >
-              <bool>false</bool>
-             </property>
-             <property name="minimum" >
-              <number>0</number>
-             </property>
-             <property name="value" >
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>6</number>
-           </property>
-           <item>
             <spacer>
              <property name="orientation" >
               <enum>Qt::Horizontal</enum>
@@ -1248,7 +1245,10 @@
    <header>q2dviewer.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="diffusionperfusionsegmentation.qrc" />
+  <include location="../../../main/main.qrc" />
+ </resources>
  <connections>
   <connection>
    <sender>m_diffusionSliceSlider</sender>
