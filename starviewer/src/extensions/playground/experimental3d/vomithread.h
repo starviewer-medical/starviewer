@@ -21,7 +21,7 @@ public:
     void setPOV( float **pOV );
     void setDimensions( int dimX, int dimY, int dimZ );
     void setYStartAndStep( int yStart, int yStep );
-    void setMeasuresToCompute( bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi );
+    void setMeasuresToCompute( bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi );
     void setZ( int z );
     virtual void run();
     float maximumVomi() const;
@@ -40,7 +40,7 @@ private:
     float **m_pOV;
     int m_dimX, m_dimY, m_dimZ;
     int m_yStart, m_yStep;
-    bool m_computeVomi, m_computeVoxelSaliencies, m_computeViewpointVomi, m_computeColorVomi;
+    bool m_computeVoxelSaliencies, m_computeViewpointVomi, m_computeColorVomi;
     int m_z;
     float m_maximumVomi;
     float m_maximumSaliency;
