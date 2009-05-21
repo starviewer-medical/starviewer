@@ -68,7 +68,6 @@ HEADERS += extensionfactory.h \
            presentationstatefillerstep.h \
            extensioncontext.h \
            keyimagenotefillerstep.h \
-           dcmdatasetcache.h \
            temporaldimensionfillerstep.h \
            dicomimagereader.h \
            dicomimagereaderitkgdcm.h \
@@ -226,7 +225,6 @@ SOURCES += extensionmediator.cpp \
            presentationstatefillerstep.cpp \
            extensioncontext.cpp \
            keyimagenotefillerstep.cpp \
-           dcmdatasetcache.cpp \
            temporaldimensionfillerstep.cpp \
            dicomimagereader.cpp \
            dicomimagereaderitkgdcm.cpp \
@@ -333,7 +331,7 @@ SOURCES += extensionmediator.cpp \
            representationslayer.cpp \
            toolrepresentation.cpp \
            glew.c
-           
+
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
