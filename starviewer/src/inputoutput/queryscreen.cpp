@@ -73,14 +73,23 @@ QueryScreen::QueryScreen( QWidget *parent )
      *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
-    if (StarviewerSettings().getListenRisRequests()) m_listenRISRequestThread->listen(); 
+    if (StarviewerSettings().getListenRisRequests()) 
+        m_listenRISRequestThread->listen(); 
+#endif
 
-    m_statsWatcher = new StatsWatcher(this);
+    m_statsWatcher = new StatsWatcher("QueryScreen",this);
     m_statsWatcher->addClicksCounter( m_operationListToolButton );
     m_statsWatcher->addClicksCounter( m_showPACSNodesToolButton );
     m_statsWatcher->addClicksCounter( m_createDICOMDIRToolButton );
     m_statsWatcher->addClicksCounter( m_advancedSearchToolButton );
-#endif
+    m_statsWatcher->addClicksCounter( m_viewButtonLocal );
+    m_statsWatcher->addClicksCounter( m_viewButtonPACS );
+    m_statsWatcher->addClicksCounter( m_retrieveButtonPACS );
+    m_statsWatcher->addClicksCounter( m_viewButtonDICOMDIR );
+    m_statsWatcher->addClicksCounter( m_retrieveButtonDICOMDIR );
+    m_statsWatcher->addClicksCounter( m_clearToolButton );
+    m_statsWatcher->addClicksCounter( m_openDICOMDIRToolButton );
+    m_statsWatcher->addClicksCounter( m_createDICOMDIRToolButton );
 }
 
 QueryScreen::~QueryScreen()
@@ -802,6 +811,7 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
 
 void QueryScreen::retrieve(bool view)
 {
+    STAT_LOG( QString("Cridem slot 'retrieve(view=%1)'. Cridat desde: %2").arg(view).arg(sender()->objectName()) );
     QStringList selectedStudiesUIDList = m_studyTreeWidgetPacs->getSelectedStudiesUID();
 
     if( selectedStudiesUIDList.isEmpty() )
@@ -960,9 +970,10 @@ void QueryScreen::refreshTab( int index )
 
 void QueryScreen::view()
 {
+    STAT_LOG( "Cridem slot 'view()'. Cridat desde: " + sender()->objectName() );
     switch ( m_tab->currentIndex() )
     {
-        case LocalDataBaseTab :
+        case LocalDataBaseTab:
             loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getCurrentSeriesUID(), m_studyTreeWidgetCache->getCurrentImageUID(), "Cache" );
             break;
 
@@ -985,6 +996,7 @@ void QueryScreen::viewFromQSeriesListWidget()
 
     studyUIDList << m_seriesListWidgetCache->getCurrentStudyUID();//Agafem l'estudi uid de la sèrie seleccionada
     loadStudies( studyUIDList, m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
+    STAT_LOG( "Obrim estudi seleccionant sèrie desde thumbnail" );
 }
 
 void QueryScreen::deleteOldStudiesThreadFinished()
@@ -1049,7 +1061,7 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
             DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
     }
 
-    INFO_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
+    DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
     QApplication::restoreOverrideCursor();
     emit selectedPatients( Patient::mergePatients( selectedPatientsList ) );
 }

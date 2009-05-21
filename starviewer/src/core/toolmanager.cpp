@@ -149,8 +149,6 @@ void ToolManager::activateTool( const QString &toolName )
                 tool->setConfiguration( configuration );
             // afegim la tool al proxy
             viewer->getToolProxy()->addTool( tool );
-            STAT_LOG("Activated tool " + toolName);
-
             // comprovem les dades per si cal donar-n'hi
             if( tool->hasSharedData() )
             {

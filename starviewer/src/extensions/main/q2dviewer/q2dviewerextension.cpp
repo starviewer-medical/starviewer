@@ -20,7 +20,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "qdicomdump.h"
 #include "hangingprotocolmanager.h"
-
+#include "statswatcher.h"
 // per poder fer screenshots desde menú
 #include "screenshottool.h" 
 #include "toolproxy.h"
@@ -104,6 +104,29 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
         m_flipHorizontalToolButton->setVisible(true);
         m_cineController->setVisible(false);
     }
+
+    // incorporem estadístiques
+    m_statsWatcher = new StatsWatcher("2D Extension",this);
+    m_statsWatcher->addClicksCounter( m_slicingToolButton );
+    m_statsWatcher->addClicksCounter( m_zoomToolButton );
+    m_statsWatcher->addClicksCounter( m_polylineButton );
+    m_statsWatcher->addClicksCounter( m_distanceToolButton );
+    m_statsWatcher->addClicksCounter( m_angleToolButton );
+    m_statsWatcher->addClicksCounter( m_eraserToolButton );
+
+    m_statsWatcher->addClicksCounter( m_axialViewToolButton );
+    m_statsWatcher->addClicksCounter( m_sagitalViewToolButton );
+    m_statsWatcher->addClicksCounter( m_coronalViewToolButton );
+
+    m_statsWatcher->addClicksCounter( m_dicomDumpToolButton );
+    m_statsWatcher->addClicksCounter( m_viewerInformationToolButton );
+
+    m_statsWatcher->addClicksCounter( m_rotateClockWiseToolButton );
+    m_statsWatcher->addClicksCounter( m_flipHorizontalToolButton );
+    m_statsWatcher->addClicksCounter( m_flipVerticalToolButton );
+    
+    m_statsWatcher->addClicksCounter( m_cursor3DToolButton );
+    m_statsWatcher->addClicksCounter( m_referenceLinesToolButton );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
