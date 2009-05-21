@@ -55,10 +55,10 @@ private:
     QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula les mesures relacionades amb la VoMI: VoMI, saliency, VoMI de cada vista, VoMI amb colors.
     void computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
-                                     bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi );
+                                     bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi );
     // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
     void computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
-                                    bool computeViewpointEntropy, bool computeVmi, bool computeViewpointUnstabilities, bool computeEvmi );
+                                    bool computeViewpointUnstabilities, bool computeEvmi );
     // Calcula les millors vistes.
     void computeBestViews( const QVector<Vector3> &viewpoints, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula el guided tour.
@@ -159,7 +159,7 @@ private slots:
 
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
-    void computeSelectedVmi2();
+    void computeSelectedVmiOld();   // el deixem temporalment mentre acabem de passar el codi que queda a ViewpointInformationChannel
     void loadViewpointEntropy();
     void saveViewpointEntropy();
     void loadEntropy();

@@ -9,7 +9,7 @@ namespace udg {
 VomiThread::VomiThread( const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<Vector3Float> &viewpointColors,
                         QVector<float> &vomi, QVector<float> &voxelSaliencies, QVector<Vector3Float> &colorVomi )
  : m_viewProbabilities( viewProbabilities ), m_objectProbabilities( objectProbabilities ), m_viewpointColors( viewpointColors ), m_vomi( vomi ), m_voxelSaliencies( voxelSaliencies ), m_colorVomi( colorVomi ),
-   m_pOV( 0 ), m_dimX( 0 ), m_dimY( 0 ), m_dimZ( 0 ), m_yStart( 0 ), m_yStep( 0 ), m_computeVomi( false ), m_computeVoxelSaliencies( false ), m_computeViewpointVomi( false ), m_computeColorVomi( false ), m_z( 0 ),
+   m_pOV( 0 ), m_dimX( 0 ), m_dimY( 0 ), m_dimZ( 0 ), m_yStart( 0 ), m_yStep( 0 ), m_computeVoxelSaliencies( false ), m_computeViewpointVomi( false ), m_computeColorVomi( false ), m_z( 0 ),
    m_maximumVomi( 0.0f ), m_maximumSaliency( 0.0f )
 {
     m_viewpointVomi.resize( viewProbabilities.size() );
@@ -34,9 +34,8 @@ void VomiThread::setYStartAndStep( int yStart, int yStep )
 }
 
 
-void VomiThread::setMeasuresToCompute( bool computeVomi, bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi )
+void VomiThread::setMeasuresToCompute( bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi )
 {
-    m_computeVomi = computeVomi;
     m_computeVoxelSaliencies = computeVoxelSaliencies;
     m_computeViewpointVomi = computeViewpointVomi;
     m_computeColorVomi = computeColorVomi;
@@ -75,14 +74,6 @@ void VomiThread::run()
             // p(V|oi)
             if ( poi == 0.0 ) pVoi.fill( 0.0f );    // si p(oi) == 0 vol dir que el vòxel no es veu des d'enlloc --> p(V|oi) ha de ser tot zeros
             else for ( int k = 0; k < nViewpoints; k++ ) pVoi[k] = m_viewProbabilities.at( k ) * pOV[k][i - pOvShift] / poi;
-
-            if ( m_computeVomi )
-            {
-                float vomi = InformationTheory<float>::kullbackLeiblerDivergence( pVoi, m_viewProbabilities );
-                Q_ASSERT( vomi == vomi );
-                m_vomi[i] = vomi;
-                if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
-            }
 
             if ( m_computeVoxelSaliencies )
             {
