@@ -2,25 +2,27 @@
 
 #include <QCoreApplication>
 
-// només per cuda? llavors el mètode viewmatrix hauria de ser només per cuda també
-#include "../gputesting/camera.h"
+#include "qexperimental3dviewer.h"
 #include "experimental3dvolume.h"
 #include "informationtheory.h"
 #include "logging.h"
-// només per cuda? llavors el mètode viewmatrix hauria de ser només per cuda també
-#include "../gputesting/matrix4.h"
 
-#ifdef CUDA_AVAILABLE
+#ifndef CUDA_AVAILABLE
+#include <QTemporaryFile>
+#else
+#include "../gputesting/camera.h"
 #include "cudaviewpointinformationchannel.h"
+#include "../gputesting/matrix4.h"
 #endif
 
 
 namespace udg {
 
 
-ViewpointInformationChannel::ViewpointInformationChannel( const ViewpointGenerator &viewpointGenerator, const Experimental3DVolume *volume, const TransferFunction &transferFunction, const QColor &backgroundColor )
-        : m_viewpointGenerator( viewpointGenerator ), m_volume( volume ), m_transferFunction( transferFunction ), m_backgroundColor( backgroundColor )
+ViewpointInformationChannel::ViewpointInformationChannel( const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer, const TransferFunction &transferFunction )
+        : m_viewpointGenerator( viewpointGenerator ), m_volume( volume ), m_viewer( viewer ), m_transferFunction( transferFunction )
 {
+    m_backgroundColor = m_viewer->getBackgroundColor();
     m_viewpoints = m_viewpointGenerator.viewpoints();
 }
 
@@ -56,7 +58,7 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
     if ( voxelProbabilities ) viewProbabilities = true;
 
 #ifndef CUDA_AVAILABLE
-    computeCpu( viewpointEntropy );
+    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi );
 #else // CUDA_AVAILABLE
     computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi );
 #endif // CUDA_AVAILABLE
@@ -99,31 +101,330 @@ float ViewpointInformationChannel::maximumVomi() const
 }
 
 
+#ifndef CUDA_AVAILABLE
+
+
+void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi )
+{
+    DEBUG_LOG( "computeCpu" );
+
+    // Inicialitzar progrés
+    int nSteps = 1; // ray casting (p(Z|V))
+    if ( computeViewProbabilities ) nSteps++;   // p(V)
+    if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
+    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi ) nSteps++;   // viewpoint entropy + entropy + VMI + MI
+    if ( computeVomi ) nSteps++;    // VoMI
+
+    emit totalProgressMaximum( nSteps );
+    int step = 0;
+    emit totalProgress( step );
+
+    createVoxelProbabilitiesPerViewFiles();
+    if ( m_voxelProbabilitiesPerViewFiles.isEmpty() ) return;   // caldria llançar alguna excepció o retornar error
+
+    float totalViewedVolume;
+
+    // p(Z|V) (i acumulació de p(V))
+    {
+        totalViewedVolume = rayCastingCpu( computeViewProbabilities );
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // p(V)
+    if ( computeViewProbabilities )
+    {
+        computeViewProbabilitiesCpu( totalViewedVolume );
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // p(Z)
+    if ( computeVoxelProbabilities )
+    {
+        computeVoxelProbabilitiesCpu();
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // viewpoint entropy + entropy + VMI + MI
+    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi )
+    {
+        computeViewMeasuresCpu( computeViewpointEntropy, computeEntropy, computeVmi, computeMi );
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    deleteVoxelProbabilitiesPerViewFiles();
+}
+
+
+void ViewpointInformationChannel::createVoxelProbabilitiesPerViewFiles()
+{
+    DEBUG_LOG( "Creem p(Z|V)" );
+
+    int nViewpoints = m_viewpoints.size();
+    m_voxelProbabilitiesPerViewFiles.resize( nViewpoints );
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        m_voxelProbabilitiesPerViewFiles[i] = new QTemporaryFile( "pZvXXXXXX.tmp" );    // els fitxers temporals es creen al directori de treball
+
+        if ( !m_voxelProbabilitiesPerViewFiles.at( i )->open() )
+        {
+            DEBUG_LOG( QString( "No s'ha pogut obrir el fitxer: error %1" ).arg( m_voxelProbabilitiesPerViewFiles.at( i )->errorString() ) );
+            for ( int j = 0; j < i; j++ ) m_voxelProbabilitiesPerViewFiles.at( j )->close();
+            m_voxelProbabilitiesPerViewFiles.clear();   // el deixarem buit si hi ha hagut problemes
+            break;
+        }
+    }
+}
+
+
+void ViewpointInformationChannel::readVoxelProbabilitiesInView( int i, QVector<float> &voxelProbabilitiesInView )
+{
+    m_voxelProbabilitiesPerViewFiles.at( i )->reset();  // reset per tornar al principi
+    m_voxelProbabilitiesPerViewFiles.at( i )->read( reinterpret_cast<char*>( voxelProbabilitiesInView.data() ), voxelProbabilitiesInView.size() * sizeof(float) ); // llegim...
+    m_voxelProbabilitiesPerViewFiles.at( i )->reset();  // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
+}
+
+
+void ViewpointInformationChannel::deleteVoxelProbabilitiesPerViewFiles()
+{
+    DEBUG_LOG( "Destruïm p(Z|V)" );
+
+    for ( int i = 0; i < m_voxelProbabilitiesPerViewFiles.size(); i++ )
+    {
+        m_voxelProbabilitiesPerViewFiles.at( i )->close();
+        delete m_voxelProbabilitiesPerViewFiles.at( i );
+    }
+
+    m_voxelProbabilitiesPerViewFiles.clear();
+}
+
+
+float ViewpointInformationChannel::rayCastingCpu( bool computeViewProbabilities )
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+    double totalViewedVolume = 0.0;
+
+    if ( computeViewProbabilities ) m_viewProbabilities.resize( nViewpoints );
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    m_volume->startVmiMode();
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        m_volume->startVmiSecondPass();
+        m_viewer->setCamera( m_viewpoints.at( i ), Vector3(), m_viewpointGenerator.up( m_viewpoints.at( i ) ) );    // render
+
+        // p(Z|V)
+        QVector<float> voxelProbabilitiesInView = m_volume->finishVmiSecondPass();  // p(Z|v)
+        m_voxelProbabilitiesPerViewFiles.at( i )->write( reinterpret_cast<const char*>( voxelProbabilitiesInView.data() ), nVoxels * sizeof(float) );
+
+        // p(V)
+        if ( computeViewProbabilities )
+        {
+            float viewedVolume = m_volume->viewedVolumeInVmiSecondPass();
+            m_viewProbabilities[i] = viewedVolume;
+            totalViewedVolume += viewedVolume;
+        }
+
+        emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    return totalViewedVolume;
+}
+
+
+void ViewpointInformationChannel::computeViewProbabilitiesCpu( float totalViewedVolume )
+{
+    int nViewpoints = m_viewpoints.size();
+
+    if ( totalViewedVolume > 0.0f )
+    {
+        emit partialProgress( 0 );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+        for ( int i = 0; i < nViewpoints; i++ )
+        {
+            m_viewProbabilities[i] /= totalViewedVolume;
+            Q_ASSERT( m_viewProbabilities.at( i ) == m_viewProbabilities.at( i ) );
+            DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( m_viewProbabilities.at( i ) ) );
+
+            emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
+            QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+        }
+    }
+
+#ifndef QT_NO_DEBUG
+    double sum = 0.0;
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        float pv = m_viewProbabilities.at( i );
+        Q_ASSERT( pv == pv );
+        Q_ASSERT( pv >= 0.0f && pv <= 1.0f );
+        sum += pv;
+    }
+    DEBUG_LOG( QString( "sum p(v) = %1" ).arg( sum ) );
+#endif
+}
+
+
+void ViewpointInformationChannel::computeVoxelProbabilitiesCpu()
+{
+    class PZThread : public QThread {
+        public:
+            PZThread( QVector<float> &voxelProbabilities, const QVector<float> &voxelProbabilitiesInView, int start, int end )
+                : m_viewProbability( 0.0f ), m_voxelProbabilities( voxelProbabilities ), m_voxelProbabilitiesInView( voxelProbabilitiesInView ), m_start( start ), m_end( end )
+            {
+            }
+            void setViewProbability( float viewProbability )
+            {
+                m_viewProbability = viewProbability;
+            }
+            virtual void run()
+            {
+                for ( int i = m_start; i < m_end; i++ ) m_voxelProbabilities[i] += m_viewProbability * m_voxelProbabilitiesInView[i];
+            }
+        private:
+            float m_viewProbability;
+            QVector<float> &m_voxelProbabilities;
+            const QVector<float> &m_voxelProbabilitiesInView;
+            int m_start, m_end;
+    };
+
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    m_voxelProbabilities.resize( nVoxels );
+    m_voxelProbabilities.fill( 0.0f );
+    QVector<float> voxelProbabilitiesInView( nVoxels ); // vector p(Z|v)
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    int nThreads = QThread::idealThreadCount();
+    PZThread **pzThreads = new PZThread*[nThreads];
+    int nVoxelsPerThread = nVoxels / nThreads + 1;
+    int start = 0, end = nVoxelsPerThread;
+
+    for ( int k = 0; k < nThreads; k++ )
+    {
+        pzThreads[k] = new PZThread( m_voxelProbabilities, voxelProbabilitiesInView, start, end );
+        start += nVoxelsPerThread;
+        end += nVoxelsPerThread;
+        if ( end > nVoxels ) end = nVoxels;
+    }
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        readVoxelProbabilitiesInView( i, voxelProbabilitiesInView );
+
+        for ( int k = 0; k < nThreads; k++ )
+        {
+            pzThreads[k]->setViewProbability( m_viewProbabilities.at( i ) );
+            pzThreads[k]->start();
+        }
+
+        for ( int k = 0; k < nThreads; k++ ) pzThreads[k]->wait();
+
+        emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    for ( int k = 0; k < nThreads; k++ ) delete pzThreads[k];
+    delete[] pzThreads;
+
+#ifndef QT_NO_DEBUG
+    double sum = 0.0;
+    for ( int j = 0; j < nVoxels; j++ )
+    {
+        float pz = m_voxelProbabilities.at( j );
+        Q_ASSERT( pz == pz );
+        Q_ASSERT( pz >= 0.0f && pz <= 1.0f );
+        sum += pz;
+    }
+    DEBUG_LOG( QString( "sum p(z) = %1" ).arg( sum ) );
+#endif
+}
+
+
+// falta provar-ho!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi )
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
+    if ( computeEntropy ) m_entropy = 0.0f;
+    if ( computeVmi ) m_vmi.resize( nViewpoints );
+    if ( computeMi ) m_mi = 0.0f;
+
+    QVector<float> voxelProbabilitiesInView( nVoxels );
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        readVoxelProbabilitiesInView( i, voxelProbabilitiesInView );
+
+        if ( computeViewpointEntropy )
+        {
+            float viewpointEntropy = InformationTheory<float>::entropy( voxelProbabilitiesInView );
+            Q_ASSERT( viewpointEntropy == viewpointEntropy );
+            m_viewpointEntropy[i] = viewpointEntropy;
+            DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( viewpointEntropy ) );
+        }
+
+        if ( computeEntropy )
+        {
+            m_entropy += m_viewProbabilities.at( i ) * m_viewpointEntropy.at( i );
+        }
+
+        if ( computeVmi )
+        {
+            float vmi = InformationTheory<float>::kullbackLeiblerDivergence( voxelProbabilitiesInView, m_voxelProbabilities );
+            Q_ASSERT( vmi == vmi );
+            m_vmi[i] = vmi;
+            DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
+        }
+
+        if ( computeMi )
+        {
+            m_mi += m_viewProbabilities.at( i ) * m_vmi.at( i );
+        }
+
+        emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    if ( computeEntropy )
+    {
+        DEBUG_LOG( QString( "H(Z) = %1" ).arg( m_entropy ) );
+    }
+
+    if ( computeMi )
+    {
+        DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
+    }
+}
+
+
+#else // CUDA_AVAILABLE
+
+
 Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 {
     Camera camera;
     camera.lookAt( viewpoint, Vector3(), ViewpointGenerator::up( viewpoint ) );
     return camera.getViewMatrix();
 }
-
-
-#ifndef CUDA_AVAILABLE
-
-
-void ViewpointInformationChannel::computeCpu( bool computeViewpointEntropy )
-{
-    DEBUG_LOG( "computeCpu" );
-
-    // Inicialitzar progrés
-    int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
-    if ( computeViewpointEntropy ) nSteps++;    // viewpoint entropy
-
-    emit totalProgressMaximum( nSteps );
-    emit totalProgress( 0 );
-}
-
-
-#else // CUDA_AVAILABLE
 
 
 void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi )

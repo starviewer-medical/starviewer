@@ -916,7 +916,7 @@ void QExperimental3DExtension::computeSelectedVmi2()
     ViewpointGenerator viewpointGenerator = m_vmiViewpointDistributionWidget->viewpointGenerator( distance );
 
     // Viewpoint Information Channel
-    ViewpointInformationChannel viewpointInformationChannel( viewpointGenerator, m_volume, m_transferFunctionEditor->transferFunction(), m_viewer->getBackgroundColor() );
+    ViewpointInformationChannel viewpointInformationChannel( viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction() );
 
     // Filtratge de punts de vista
     if ( !m_tourLineEdit->text().isEmpty() )
@@ -981,6 +981,10 @@ void QExperimental3DExtension::computeSelectedVmi2()
         m_saveVomiPushButton->setEnabled( true );
         m_vomiGradientPushButton->setEnabled( true );
     }
+
+    // Restaurem els paràmetres normals (en realitat només cal si es fa amb CPU)
+    render();
+    m_viewer->setCamera( position, focus, up );
 
     setCursor( QCursor( Qt::ArrowCursor ) );
 }
