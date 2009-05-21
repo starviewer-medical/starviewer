@@ -1,6 +1,5 @@
 include(defaultdirectories.inc)
 
-# de moment posem que només es pugui activar en linux
 cuda {
     DEFINES += CUDA_AVAILABLE
     # aquest és per activar la funció de debug de cutil
