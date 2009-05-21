@@ -55,7 +55,7 @@ private:
     QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula les mesures relacionades amb la VoMI: VoMI, saliency, VoMI de cada vista, VoMI amb colors.
     void computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
-                                     bool computeVoxelSaliencies, bool computeViewpointVomi, bool computeColorVomi );
+                                     bool computeColorVomi );
     // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
     void computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
                                     bool computeViewpointUnstabilities, bool computeEvmi );
@@ -84,18 +84,16 @@ private:
     void saveVmi( const QString &fileName );
     void loadMi( const QString &fileName );
     void saveMi( const QString &fileName );
+    void loadVomi( const QString &fileName );
+    void saveVomi( const QString &fileName );
+    void loadViewpointVomi( const QString &fileName );
+    void saveViewpointVomi( const QString &fileName );
     void loadViewpointUnstabilities( const QString &fileName );
     void saveViewpointUnstabilities( const QString &fileName );
     void loadBestViews( const QString &fileName );
     void saveBestViews( const QString &fileName );
     void loadGuidedTour( const QString &fileName );
     void saveGuidedTour( const QString &fileName );
-    void loadVomi( const QString &fileName );
-    void saveVomi( const QString &fileName );
-    void loadVoxelSaliencies( const QString &fileName );
-    void saveVoxelSaliencies( const QString &fileName );
-    void loadViewpointVomi( const QString &fileName );
-    void saveViewpointVomi( const QString &fileName );
     void loadEvmi( const QString &fileName );
     void saveEvmi( const QString &fileName );
     void loadColorVomiPalette( const QString &fileName );
@@ -168,18 +166,16 @@ private slots:
     void saveVmi();
     void loadMi();
     void saveMi();
+    void loadVomi();
+    void saveVomi();
+    void loadViewpointVomi();
+    void saveViewpointVomi();
     void loadViewpointUnstabilities();
     void saveViewpointUnstabilities();
     void loadBestViews();
     void saveBestViews();
     void loadGuidedTour();
     void saveGuidedTour();
-    void loadVomi();
-    void saveVomi();
-    void loadVoxelSaliencies();
-    void saveVoxelSaliencies();
-    void loadViewpointVomi();
-    void saveViewpointVomi();
     void loadEvmi();
     void saveEvmi();
     void loadColorVomiPalette();
@@ -208,14 +204,14 @@ private:
     float m_entropy;
     QVector<float> m_vmi;
     float m_mi;
+    QVector<float> m_vomi;
+    float m_maximumVomi;
+    QVector<float> m_viewpointVomi;
     QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_bestViews;
     QList< QPair<int, Vector3> > m_guidedTour;
-    QVector<float> m_vomi;
-    float m_maximumVomi;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
-    QVector<float> m_viewpointVomi;
     QVector<float> m_evmi;
     QVector<Vector3Float> m_colorVomiPalette;
     QVector<Vector3Float> m_colorVomi;
