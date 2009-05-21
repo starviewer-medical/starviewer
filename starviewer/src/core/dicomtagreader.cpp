@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "dicomtagreader.h"
 #include "logging.h"
-#include "dcmdatasetcache.h"
 #include "singleton.h"
 
 #include <QStringList>
@@ -16,26 +15,17 @@
 
 namespace udg {
 
-/// Fem servir la cache com a singleton
-typedef SingletonPointer<DcmDatasetCache> DcmDatasetCacheSingleton;
-
 DICOMTagReader::DICOMTagReader() : m_dicomData(0)
 {
-    // Inicialitzem l'autoclear a 300 segons.
-    DcmDatasetCacheSingleton::instance()->startAutoclear(300);
 }
 
 DICOMTagReader::DICOMTagReader(QString filename, DcmDataset *dcmDataset) : m_dicomData(0)
 {
-    DcmDatasetCacheSingleton::instance()->startAutoclear(300);
-
     this->setDcmDataset(filename, dcmDataset);
 }
 
 DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0)
 {
-    DcmDatasetCacheSingleton::instance()->startAutoclear(300);
-
     this->setFile( filename );
 }
 
@@ -47,33 +37,29 @@ DICOMTagReader::~DICOMTagReader()
 
 bool DICOMTagReader::setFile( QString filename )
 {
+    DcmFileFormat dicomFile;
+
     m_filename = filename;
 
-    DcmFileFormat dicomFile;
-    DcmDataset *dataset = DcmDatasetCacheSingleton::instance()->find(filename);
-    if (! dataset)
+    OFCondition status = dicomFile.loadFile( qPrintable(filename) );
+    if( status.good() )
     {
-        OFCondition status = dicomFile.loadFile( qPrintable(filename) );
-        if( status.good() )
+        // eliminem l'objecte anterior si n'hi hagués
+        if( m_dicomData )
         {
-            // eliminem l'objecte anterior si n'hi hagués
-            if( m_dicomData )
-            {
-                delete m_dicomData;
-                m_dicomData = NULL;
-            }
+            delete m_dicomData;
+            m_dicomData = NULL;
+        }
 
-            dataset =  dicomFile.getAndRemoveDataset();
-            DcmDatasetCacheSingleton::instance()->insert( filename, dynamic_cast<DcmDataset*>(dataset->clone()) );
-        }
-        else
-        {
-            DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
-            ERROR_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
-            return false;
-        }
+        m_dicomData =  dicomFile.getAndRemoveDataset();
     }
-    m_dicomData = dataset;
+    else
+    {
+        DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
+        ERROR_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
+        return false;
+    }
+
     return true;
 }
 
