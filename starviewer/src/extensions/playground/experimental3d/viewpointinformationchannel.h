@@ -67,6 +67,7 @@ private:
     void computeViewProbabilitiesCpu( float totalViewedVolume );
     void computeVoxelProbabilitiesCpu();
     void computeViewMeasuresCpu( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi );
+    void computeVomiCpu();
 #else // CUDA_AVAILABLE
     static Matrix4 viewMatrix( const Vector3 &viewpoint );
     void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi );
