@@ -8,7 +8,6 @@
 
 #include <QString>
 #include <QIcon>
-#include <QHash>
 
 #include "series.h"
 
