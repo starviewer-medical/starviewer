@@ -479,7 +479,7 @@ void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointE
             {
                 for ( int k = 0; k < nThreads; k++ )
                 {
-                    viewpointVomiThreads[k]->setViewProbability( m_viewProbabilities.at( i ) );
+                    viewpointVomiThreads[k]->setViewProbability( pv );
                     viewpointVomiThreads[k]->start();
                 }
 
@@ -618,7 +618,8 @@ Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 }
 
 
-void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi )
+void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi,
+                                               bool computeViewpointVomi )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -626,8 +627,8 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     int nSteps = 0;
     if ( computeViewProbabilities ) nSteps++;   // p(V)
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
-    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi ) nSteps++;   // viewpoint entropy + entropy + VMI + MI
     if ( computeVomi ) nSteps++;    // VoMI
+    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi ) nSteps++;   // viewpoint entropy + entropy + VMI + MI + viewpoint VoMI
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -653,18 +654,18 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    // viewpoint entropy + entropy + VMI + MI
-    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi )
-    {
-        computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy, computeVmi, computeMi );
-        emit totalProgress( ++step );
-        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-    }
-
     // VoMI
     if ( computeVomi )
     {
         computeVomiCuda();
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // viewpoint entropy + entropy + VMI + MI + viewpoint VoMI
+    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi )
+    {
+        computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointVomi );
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -759,15 +760,70 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCuda()
 }
 
 
-void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi )
+void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointVomi )
 {
+    class ViewpointVomiThread : public QThread {
+        public:
+            ViewpointVomiThread( const QVector<float> &voxelProbabilities, const QVector<float> &vomi, int start, int end )
+                : m_viewProbability( 0.0f ), m_voxelProbabilities( voxelProbabilities ), m_vomi( vomi ), m_viewpointVomi( 0.0f ), m_start( start ), m_end( end )
+            {
+            }
+            void setViewData( float viewProbability, const QVector<float> &voxelProabilitiesInView )
+            {
+                m_viewProbability = viewProbability;
+                m_voxelProbabilitiesInView = voxelProabilitiesInView;
+            }
+            float viewpointVomi() const
+            {
+                return m_viewpointVomi;
+            }
+        protected:
+            virtual void run()
+            {
+                double viewpointVomi = 0.0;
+                for ( int i = m_start; i < m_end; i++ )
+                {
+                    float pz = m_voxelProbabilities.at( i );
+                    float pzv = m_voxelProbabilitiesInView.at( i );
+                    float pvz = m_viewProbability * pzv / pz;
+                    if ( pvz > 0.0f ) viewpointVomi += pvz * m_vomi.at( i );
+                }
+                m_viewpointVomi = viewpointVomi;
+            }
+        private:
+            float m_viewProbability;
+            const QVector<float> &m_voxelProbabilities;
+            QVector<float> m_voxelProbabilitiesInView;
+            const QVector<float> &m_vomi;
+            float m_viewpointVomi;
+            int m_start, m_end;
+    };
+
     int nViewpoints = m_viewpoints.size();
     int nVoxels = m_volume->getSize();
+
+    int nThreads = QThread::idealThreadCount();
+    ViewpointVomiThread **viewpointVomiThreads;
 
     if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
     if ( computeEntropy ) m_entropy = 0.0f;
     if ( computeVmi ) m_vmi.resize( nViewpoints );
     if ( computeMi ) m_mi = 0.0f;
+    if ( computeViewpointVomi )
+    {
+        m_viewpointVomi.resize( nViewpoints );
+        m_viewpointVomi.fill( 0.0f );
+        viewpointVomiThreads = new ViewpointVomiThread*[nThreads];
+        int nVoxelsPerThread = nVoxels / nThreads + 1;
+        int start = 0, end = nVoxelsPerThread;
+        for ( int k = 0; k < nThreads; k++ )
+        {
+            viewpointVomiThreads[k] = new ViewpointVomiThread( m_voxelProbabilities, m_vomi, start, end );
+            start += nVoxelsPerThread;
+            end += nVoxelsPerThread;
+            if ( end > nVoxels ) end = nVoxels;
+        }
+    }
 
     emit partialProgress( 0 );
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -807,6 +863,32 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
             m_mi += m_viewProbabilities.at( i ) * m_vmi.at( i );
         }
 
+        if ( computeViewpointVomi )
+        {
+            float pv = m_viewProbabilities.at( i );
+
+            if ( pv > 0.0f )
+            {
+                for ( int k = 0; k < nThreads; k++ )
+                {
+                    viewpointVomiThreads[k]->setViewData( pv, voxelProbabilitiesInView );
+                    viewpointVomiThreads[k]->start();
+                }
+
+                double viewpointVomi = 0.0;
+
+                for ( int k = 0; k < nThreads; k++ )
+                {
+                    viewpointVomiThreads[k]->wait();
+                    viewpointVomi += viewpointVomiThreads[k]->viewpointVomi();
+                }
+
+                Q_ASSERT( viewpointVomi == viewpointVomi );
+                m_viewpointVomi[i] = viewpointVomi;
+                DEBUG_LOG( QString( "VVoMI(v%1) = %2" ).arg( i + 1 ).arg( viewpointVomi ) );
+            }
+        }
+
         emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -819,6 +901,12 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
     if ( computeMi )
     {
         DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
+    }
+
+    if ( computeViewpointVomi )
+    {
+        for ( int k = 0; k < nThreads; k++ ) delete viewpointVomiThreads[k];
+        delete[] viewpointVomiThreads;
     }
 }
 
