@@ -14,6 +14,7 @@
 #include <QDir>
 #include <QTextCodec>
 #include "logging.h"
+#include "statswatcher.h"
 #include "extensions.h"
 #include "extensionmediatorfactory.h"
 // definicions globals d'aplicació
@@ -111,7 +112,7 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
 
     configureLogging();
-    STAT_LOG("Inicialització de l'aplicació");
+    udg::StatsWatcher::log("Inicialització de l'aplicació");
 
     initQtPluginsDirectory();
     initializeTranslations(app);
@@ -142,7 +143,7 @@ int main(int argc, char *argv[])
 
     int returnValue = app.exec();
 
-    STAT_LOG("Es tanca l'aplicació");
+    udg::StatsWatcher::log("Es tanca l'aplicació");
 
     return returnValue;
 }

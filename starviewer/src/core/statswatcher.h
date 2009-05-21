@@ -32,6 +32,9 @@ public:
 
     /// Registra les accions fetes sobre un slider
     void addSliderObserver( QAbstractSlider *slider );
+    
+    /// Mètode per loggejar missatges estadístics en el format corresponent
+    static void log( const QString &message );
 
 private slots:
     /// Registra en el log l'objecte sobre el qual s'ha fet el click

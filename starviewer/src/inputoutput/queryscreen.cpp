@@ -482,7 +482,7 @@ void QueryScreen::queryStudyPacs()
     }
 
     DicomMask searchMask = buildDicomMask();
-    STAT_LOG( "Cerca al PACS amb paràmetres: " + searchMask.getFilledMaskFields() );
+    StatsWatcher::log( "Cerca al PACS amb paràmetres: " + searchMask.getFilledMaskFields() );
     
     bool stopQuery = false;
 
@@ -553,7 +553,7 @@ void QueryScreen::queryStudy( const QString &source )
     Status state;
     DicomMask searchMask = buildDicomMask();
 
-    STAT_LOG( "Cerca d'estudis a " + source + " amb paràmetres: " + searchMask.getFilledMaskFields() );
+    StatsWatcher::log( "Cerca d'estudis a " + source + " amb paràmetres: " + searchMask.getFilledMaskFields() );
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     if( source == "Cache" )
@@ -811,7 +811,7 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
 
 void QueryScreen::retrieve(bool view)
 {
-    STAT_LOG( QString("Cridem slot 'retrieve(view=%1)'. Cridat desde: %2").arg(view).arg(sender()->objectName()) );
+    StatsWatcher::log( QString("Cridem slot 'retrieve(view=%1)'. Cridat desde: %2").arg(view).arg(sender()->objectName()) );
     QStringList selectedStudiesUIDList = m_studyTreeWidgetPacs->getSelectedStudiesUID();
 
     if( selectedStudiesUIDList.isEmpty() )
@@ -970,7 +970,7 @@ void QueryScreen::refreshTab( int index )
 
 void QueryScreen::view()
 {
-    STAT_LOG( "Cridem slot 'view()'. Cridat desde: " + sender()->objectName() );
+    StatsWatcher::log( "Cridem slot 'view()'. Cridat desde: " + sender()->objectName() );
     switch ( m_tab->currentIndex() )
     {
         case LocalDataBaseTab:
@@ -996,7 +996,7 @@ void QueryScreen::viewFromQSeriesListWidget()
 
     studyUIDList << m_seriesListWidgetCache->getCurrentStudyUID();//Agafem l'estudi uid de la sèrie seleccionada
     loadStudies( studyUIDList, m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
-    STAT_LOG( "Obrim estudi seleccionant sèrie desde thumbnail" );
+    StatsWatcher::log( "Obrim estudi seleccionant sèrie desde thumbnail" );
 }
 
 void QueryScreen::deleteOldStudiesThreadFinished()

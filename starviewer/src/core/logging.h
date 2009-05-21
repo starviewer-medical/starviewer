@@ -8,7 +8,6 @@
 #ifndef _LOGGING_
 #define _LOGGING_
 
-#include <QSettings> // per l'STAT_LOG
 #include <QString>
 #include <cstdlib> // per posar la variable d'entorn
 /*!
@@ -72,13 +71,6 @@
     if (true) \
     { \
         LOG4CXX_FATAL( log4cxx::Logger::getLogger("errors.release"), qPrintable( QString(msg) )) \
-    } else (void)0
-
-/// Macro per a missatges d'estadístiques
-#define STAT_LOG( msg ) \
-    if (true) \
-    { \
-        LOG4CXX_INFO( log4cxx::Logger::getLogger("info.release"), qPrintable( QString("STAT: ") + QString(msg) )) \
     } else (void)0
 
 #endif
