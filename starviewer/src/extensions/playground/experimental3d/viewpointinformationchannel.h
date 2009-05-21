@@ -8,11 +8,20 @@
 #include "viewpointgenerator.h"
 
 
+#ifndef CUDA_AVAILABLE
+class QTemporaryFile;
+#endif
+
+
 namespace udg {
 
 
 class Experimental3DVolume;
+class QExperimental3DViewer;
+
+#ifdef CUDA_AVAILABLE
 class Matrix4;
+#endif
 
 
 /**
@@ -25,7 +34,7 @@ class ViewpointInformationChannel : public QObject
 
 public:
 
-    ViewpointInformationChannel( const ViewpointGenerator &viewpointGenerator, const Experimental3DVolume *volume, const TransferFunction &transferFunction, const QColor &backgroundColor );
+    ViewpointInformationChannel( const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer, const TransferFunction &transferFunction );
 
     /**
      * Filtra el conjunt de punts de vista que es faran servir.
@@ -49,11 +58,17 @@ signals:
 
 private:
 
-    static Matrix4 viewMatrix( const Vector3 &viewpoint );
-
 #ifndef CUDA_AVAILABLE
-    void computeCpu( bool viewpointEntropy );
+    void computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi );
+    void createVoxelProbabilitiesPerViewFiles();
+    void readVoxelProbabilitiesInView( int i, QVector<float> &voxelProbabilitiesInView );
+    void deleteVoxelProbabilitiesPerViewFiles();
+    float rayCastingCpu( bool computeViewProbabilities );
+    void computeViewProbabilitiesCpu( float totalViewedVolume );
+    void computeVoxelProbabilitiesCpu();
+    void computeViewMeasuresCpu( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi );
 #else // CUDA_AVAILABLE
+    static Matrix4 viewMatrix( const Vector3 &viewpoint );
     void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi );
     void computeViewProbabilitiesCuda();
     void computeVoxelProbabilitiesCuda();
@@ -64,14 +79,19 @@ private:
 private:
 
     ViewpointGenerator m_viewpointGenerator;
-    const Experimental3DVolume *m_volume;
+    Experimental3DVolume *m_volume;
+    QExperimental3DViewer *m_viewer;
     TransferFunction m_transferFunction;
-    QColor m_backgroundColor;
 
+    QColor m_backgroundColor;
     QVector<Vector3> m_viewpoints;
 
-    QVector<float> m_viewProbabilities;
-    QVector<float> m_voxelProbabilities;
+#ifndef CUDA_AVAILABLE
+    QVector<QTemporaryFile*> m_voxelProbabilitiesPerViewFiles;  // p(Z|V)
+#endif
+
+    QVector<float> m_viewProbabilities;     // p(V)
+    QVector<float> m_voxelProbabilities;    // p(Z)
 
     QVector<float> m_viewpointEntropy;
     float m_entropy;
