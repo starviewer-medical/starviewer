@@ -345,6 +345,7 @@ signals:
 
     /// Senyal que s'envia quan ha canviat l'overlay
     void overlayChanged();
+    void overlayModified();
 
 protected:
     /// Processem l'event de resize de la finestra Qt

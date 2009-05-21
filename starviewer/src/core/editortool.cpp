@@ -47,7 +47,7 @@ EditorTool::EditorTool( QViewer *viewer, QObject *parent )
     this->initialize();
 
     // \TODO:cada cop que canvïi l'input cal fer algunes inicialitzacions
-    //connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( inputChanged(Volume *) ) );
+    connect( m_2DViewer, SIGNAL(overlayChanged() ), SLOT( initialize() ) );
 }
 
 EditorTool::~EditorTool()
@@ -69,6 +69,8 @@ void EditorTool::initialize(  )
         m_outsideValue = minmaxCalc->GetMinimum();
         m_insideValue  = minmaxCalc->GetMaximum();
 
+        DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
+
         int ext[6];
         int i,j,k;
         m_volumeCont = 0;
@@ -89,8 +91,8 @@ void EditorTool::initialize(  )
                 }
             }
         }
+        m_myData->setVolumeVoxels(m_volumeCont);
     }
-    m_myData->setVolumeVoxels(m_volumeCont);
 }
 
 void EditorTool::handleEvent( unsigned long eventID )
@@ -149,6 +151,21 @@ void EditorTool::handleEvent( unsigned long eventID )
 
 void EditorTool::increaseState()
 {
+        //Prova!!!!!!!!!!!!!!!!!1
+/*
+        itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
+    
+        minmaxCalc->SetImage(m_2DViewer->getOverlayInput()->getItkData());
+        minmaxCalc->SetRegion(m_2DViewer->getOverlayInput()->getItkData()->GetRequestedRegion());
+        minmaxCalc->Compute();
+    
+        m_outsideValue = minmaxCalc->GetMinimum();
+        m_insideValue  = minmaxCalc->GetMaximum();
+
+        DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
+  */      //Prova!!!!!!!!!!!!!!!!!1
+
+
     switch( m_editorState )
     {
     case Paint:
@@ -231,6 +248,8 @@ void EditorTool::setEditorPoint(  )
     if(m_editorState != NoEditor)
     {
         m_2DViewer->getCurrentCursorPosition(pos);
+
+        //DEBUG_LOG( QString( "Editor (%1,%2,%3)" ).arg(pos[0]).arg(pos[1]).arg(pos[2]) );
 
         // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
         if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
@@ -319,6 +338,7 @@ void EditorTool::setPaintCursor()
         m_squareActor->VisibilityOn();
   
         m_2DViewer->getRenderer()->AddViewProp( m_squareActor );
+        //DEBUG_LOG( QString( "Painting Square Actor" ) );
         m_2DViewer->refresh();
   
         squareMapper->Delete();
@@ -365,6 +385,9 @@ void EditorTool::eraseMask()
 
 void EditorTool::paintMask()
 {
+
+    //DEBUG_LOG( QString( "Màxim = %1 // Mínim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
+
     int i,j;
     Volume::VoxelType *value;
     double pos[3];

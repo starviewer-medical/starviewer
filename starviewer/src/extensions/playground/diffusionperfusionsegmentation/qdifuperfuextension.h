@@ -91,47 +91,18 @@ private slots:
     void moveViewerSplitterToCenter();
 
     /// Refresca el resultat del volum
-    void updateStrokeVolume();
+    //void updateStrokeVolume();
 
     void applyFilterDiffusionImage();
 
     ///Pinta el mapa de colors segons un threshold determinat
     void setPerfusionLut( int threshold );
 
-     /// gestiona els events del m_2DView
-    void strokeEventHandler( unsigned long id );
-    void strokeEventHandler2( unsigned long id );
-
-    /// gestiona els events del botó esquerre
-    void leftButtonEventHandler( int idViewer );
-
-     /// determina la llavor del mètode de segmentació
-    void setEditorPoint( int idViewer );
-
-    /// desactiva el booleà que ens diu si està el botó esquerra apretat
-    void setLeftButtonOff( );
-
     /// Canvia la opacitat de la màscara (difusió)
     void setDiffusionOpacity( int opacity );
 
     /// Canvia la opacitat de la màscara (perfusió)
     void setPerfusionOpacity( int opacity );
-
-    /// Canvia a la opció de l'editor
-    void setErase();
-    void setPaint();
-    void setEraseSlice();
-    void setEraseRegion();
-
-    /// Dibuixa el cursor en la forma del pinzell
-    void setPaintCursor( int idViewer );
-
-    void eraseMask(int size, int idViewer );
-    void paintMask(int size, int idViewer );
-    void eraseSliceMask( int idViewer );
-    void eraseRegionMask( int idViewer );
-    void eraseRegionMaskRecursive1(int a, int b, int c);
-    void eraseRegionMaskRecursive2(int a, int b, int c);
 
     /// Visualitza els diferents overlays
     void viewLesionOverlay();
@@ -144,6 +115,19 @@ private slots:
 
     ///Calcula la diferència de volums
     void computePenombraVolume( const QString & name);
+
+    ///Desa la màscara de la difusió
+    void saveDiffusionMask( );
+    ///Desa la màscara i diferents volumns de la perfusió
+    void savePerfusionVolume( );
+    void saveRegisteredPerfusionVolume( );
+    void savePerfusionMask( );
+    ///Desa la transformada entre la perfusió i la difusió
+    void saveTransform( );
+
+    ///Actualitza els volums de les màscares de la perfusió i la difusió
+    void updateStrokeVolume();
+    void updatePenombraVolume();
 
 private:
     /// inicialitza les tools
@@ -164,6 +148,10 @@ private:
 
     /// Calcula el volum de la màscara d'stroke
     double calculateStrokeVolume();
+
+    ///Calcula els volums de les màscares de la perfusió i la difusió
+    double calculateDiffusionMaskVolume();
+    double calculatePerfusionMaskVolume();
 
 private:
     typedef Volume::ItkImageType ItkImageType;
@@ -229,23 +217,19 @@ private:
     enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
     int m_editorTool;
 
-    bool m_isLeftButtonPressed;
-
     vtkActor *m_squareActor;
 
     /// Accions
     QAction *m_rotateClockWiseAction;
     QAction *m_lesionViewAction;
     QAction *m_ventriclesViewAction;
-    QAction *m_paintEditorAction;
-    QAction *m_eraseEditorAction;
-    QAction *m_eraseSliceEditorAction;
-    QAction *m_eraseRegionEditorAction;
 
     /// Grups de botons en format exclusiu
     QActionGroup *m_toolsActionGroup;
     QActionGroup *m_viewOverlayActionGroup;
-    QActionGroup *m_editorToolActionGroup;
+
+    ///Directori on guardem les màscares
+    QString m_savingMaskDirectory;
 
     /// ToolManager
     ToolManager *m_toolManager;
