@@ -36,6 +36,7 @@
 #include "starviewerapplication.h"
 #include "parsexmlrispierrequest.h"
 #include "utils.h"
+#include "statswatcher.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -73,6 +74,12 @@ QueryScreen::QueryScreen( QWidget *parent )
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
     if (StarviewerSettings().getListenRisRequests()) m_listenRISRequestThread->listen(); 
+
+    m_statsWatcher = new StatsWatcher(this);
+    m_statsWatcher->addClicksCounter( m_operationListToolButton );
+    m_statsWatcher->addClicksCounter( m_showPACSNodesToolButton );
+    m_statsWatcher->addClicksCounter( m_createDICOMDIRToolButton );
+    m_statsWatcher->addClicksCounter( m_advancedSearchToolButton );
 #endif
 }
 
@@ -457,9 +464,6 @@ PacsServer QueryScreen::getPacsServerByPacsID(QString pacsID)
 void QueryScreen::queryStudyPacs()
 {
     QList<PacsParameters> selectedPacsList;
-
-    INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
-
     selectedPacsList = m_PACSNodes->getSelectedPacs(); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     if (selectedPacsList.isEmpty()) //es comprova que hi hagi pacs seleccionats
@@ -469,6 +473,8 @@ void QueryScreen::queryStudyPacs()
     }
 
     DicomMask searchMask = buildDicomMask();
+    STAT_LOG( "Cerca al PACS amb paràmetres: " + searchMask.getFilledMaskFields() );
+    
     bool stopQuery = false;
 
     if ( searchMask.isAHeavyQuery() )
@@ -530,27 +536,28 @@ Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters
     return multipleQueryStudy->StartQueries();
 }
 
-void QueryScreen::queryStudy( QString source )
+void QueryScreen::queryStudy( const QString &source )
 {
     LocalDatabaseManager localDatabaseManager;
     QList<DICOMStudy> studyListResultQuery;
-    QList<Patient*> patientList;
+    QList<Patient *> patientList;
     Status state;
+    DicomMask searchMask = buildDicomMask();
 
-    INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
+    STAT_LOG( "Cerca d'estudis a " + source + " amb paràmetres: " + searchMask.getFilledMaskFields() );
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     if( source == "Cache" )
     {
         m_seriesListWidgetCache->clear();
 
-        patientList = localDatabaseManager.queryPatientStudy(buildDicomMask());
+        patientList = localDatabaseManager.queryPatientStudy(searchMask);
 
         if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
     }
     else if( source == "DICOMDIR" )
     {
-        state = m_readDicomdir.readStudies( studyListResultQuery , buildDicomMask() );
+        state = m_readDicomdir.readStudies( studyListResultQuery , searchMask );
         if ( !state.good() )
         {
             QApplication::restoreOverrideCursor();
@@ -1443,19 +1450,6 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
         maskStudyToRetrieve.setStudyUID(study.getStudyUID());
         retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
     }
-}
-
-QString QueryScreen::buildQueryParametersString(DicomMask mask)
-{
-    QString logMessage;
-
-    logMessage = "PATIENT_ID=[" + mask.getPatientId() + "] "
-        + "PATIENT_NAME=[" + mask.getPatientName() + "] "
-        + "STUDY_ID=[" + mask.getStudyId() + "] "
-        + "DATES_MASK=[" + mask.getStudyDate() + "] "
-        + "ACCESSION_NUMBER=[" + mask.getAccessionNumber() + "]";
-
-    return logMessage;
 }
 
 bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)
