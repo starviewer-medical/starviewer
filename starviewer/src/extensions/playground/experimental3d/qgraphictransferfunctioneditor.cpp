@@ -1,5 +1,7 @@
 #include "qgraphictransferfunctioneditor.h"
 
+#include <cmath>
+
 
 namespace udg {
 
@@ -10,11 +12,10 @@ QGraphicTransferFunctionEditor::QGraphicTransferFunctionEditor( QWidget *parent 
     setupUi( this );
 
     connect( m_nameLineEdit, SIGNAL( textChanged(QString) ), m_basicEditor, SLOT( setTransferFunctionName(const QString&) ) );
-    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setRange(double,double) ) );
-    connect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMinimum(double) ) );
-    connect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMaximum(double) ) );
-    connect( m_keepRangePushButton, SIGNAL( toggled(bool) ), SLOT( keepRange(bool) ) );
-    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
+    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
+    connect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
+    connect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMaximum(int) ) );
+    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setScroll(int) ) );
 }
 
 
@@ -36,106 +37,151 @@ const TransferFunction& QGraphicTransferFunctionEditor::transferFunction() const
 }
 
 
-void QGraphicTransferFunctionEditor::setRange( double minimum, double maximum )
+void QGraphicTransferFunctionEditor::setRange( int minimum, int maximum )
 {
     Q_ASSERT( minimum < maximum );
 
-    if ( minimum < m_minimumDoubleSpinBox->minimum() ) minimum = m_minimumDoubleSpinBox->minimum();
-    if ( maximum > m_maximumDoubleSpinBox->maximum() ) maximum = m_maximumDoubleSpinBox->maximum();
+    disconnect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), this, SLOT( setBasicRange(double,double) ) );
+    disconnect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMinimum(int) ) );
+    disconnect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMaximum(int) ) );
+    disconnect( m_scrollBar, SIGNAL( valueChanged(int) ), this, SLOT( setScroll(int) ) );
 
-    int pageStep = static_cast<int>( maximum - minimum );
+    int min = qMax( minimum, m_minimumSpinBox->minimum() );
+    m_minimumSpinBox->setValue( min );
+    int max = qMin( maximum, m_maximumSpinBox->maximum() );
+    m_maximumSpinBox->setValue( max );
+
+    int basicMin = static_cast<int>( std::floor( m_basicEditor->minimum() ) );
+    int basicMax = static_cast<int>( std::ceil( m_basicEditor->maximum() ) );
+    basicMin = qMax( basicMin, min );
+    basicMax = qMin( basicMax, max );
+    m_basicEditor->setRange( basicMin, basicMax );
+
+    int pageStep = basicMax - basicMin;
+    int scroll = basicMin - min;
     m_scrollBar->setPageStep( pageStep );
-    m_scrollBar->setMaximum( static_cast<int>( m_maximumDoubleSpinBox->maximum() - pageStep ) );
-    m_minimumDoubleSpinBox->setValue( minimum );
-    m_maximumDoubleSpinBox->setValue( maximum );
-    m_basicEditor->setRange( minimum, maximum );    // per assegurar la sincronització entre els controls i l'editor
+    m_scrollBar->setMaximum( ( max - min ) - pageStep );
+    m_scrollBar->setValue( scroll );
+
+    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
+    connect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
+    connect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMaximum(int) ) );
+    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setScroll(int) ) );
 }
 
 
-void QGraphicTransferFunctionEditor::setMinimum( double minimum )
+void QGraphicTransferFunctionEditor::setBasicRange( double minimum, double maximum )
 {
-    disconnect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( setMinimum(double) ) );
-    disconnect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( setMaximum(double) ) );
-    disconnect( m_scrollBar, SIGNAL( valueChanged(int) ), this, SLOT( setMinimum(int) ) );
+    Q_ASSERT( minimum < maximum );
 
-    if ( m_keepRangePushButton->isChecked() )
-    {
-        m_maximumDoubleSpinBox->setValue( minimum + m_range );
-        m_minimumDoubleSpinBox->setValue( m_maximumDoubleSpinBox->value() - m_range );
-    }
+    disconnect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), this, SLOT( setBasicRange(double,double) ) );
+    disconnect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMinimum(int) ) );
+    disconnect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMaximum(int) ) );
+    disconnect( m_scrollBar, SIGNAL( valueChanged(int) ), this, SLOT( setScroll(int) ) );
 
-    if ( minimum >= m_maximumDoubleSpinBox->value() )
-    {
-        m_maximumDoubleSpinBox->setValue( minimum + 1.0 );
-        m_minimumDoubleSpinBox->setValue( m_maximumDoubleSpinBox->value() - 1.0 );
-    }
+    int basicMin = static_cast<int>( std::floor( minimum ) );
+    int basicMax = static_cast<int>( std::ceil( maximum ) );
+    basicMin = qMax( basicMin, m_minimumSpinBox->minimum() );
+    basicMax = qMin( basicMax, m_maximumSpinBox->maximum() );
+    m_basicEditor->setRange( basicMin, basicMax );
 
-    m_basicEditor->setRange( m_minimumDoubleSpinBox->value(), m_maximumDoubleSpinBox->value() );
+    int min = qMin( basicMin, m_minimumSpinBox->value() );
+    m_minimumSpinBox->setValue( min );
+    int max = qMax( basicMax, m_maximumSpinBox->value() );
+    m_maximumSpinBox->setValue( max );
 
-    int pageStep = static_cast<int>( m_maximumDoubleSpinBox->value() - m_minimumDoubleSpinBox->value() );
-    int value = static_cast<int>( m_minimumDoubleSpinBox->value() );
+    int pageStep = basicMax - basicMin;
+    int scroll = basicMin - min;
     m_scrollBar->setPageStep( pageStep );
-    m_scrollBar->setMaximum( static_cast<int>( m_maximumDoubleSpinBox->maximum() - pageStep ) );
-    m_scrollBar->setValue( value );
+    m_scrollBar->setMaximum( ( max - min ) - pageStep );
+    m_scrollBar->setValue( scroll );
 
-    connect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMinimum(double) ) );
-    connect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMaximum(double) ) );
-    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
-}
-
-
-void QGraphicTransferFunctionEditor::setMaximum( double maximum )
-{
-    disconnect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( setMinimum(double) ) );
-    disconnect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( setMaximum(double) ) );
-    disconnect( m_scrollBar, SIGNAL( valueChanged(int) ), this, SLOT( setMinimum(int) ) );
-
-    if ( m_keepRangePushButton->isChecked() )
-    {
-        m_minimumDoubleSpinBox->setValue( maximum - m_range );
-        m_maximumDoubleSpinBox->setValue( m_minimumDoubleSpinBox->value() + m_range );
-    }
-
-    if ( maximum <= m_minimumDoubleSpinBox->value() )
-    {
-        m_minimumDoubleSpinBox->setValue( maximum - 1.0 );
-        m_maximumDoubleSpinBox->setValue( m_minimumDoubleSpinBox->value() + 1.0 );
-    }
-
-    m_basicEditor->setRange( m_minimumDoubleSpinBox->value(), m_maximumDoubleSpinBox->value() );
-
-    int pageStep = static_cast<int>( m_maximumDoubleSpinBox->value() - m_minimumDoubleSpinBox->value() );
-    int value = static_cast<int>( m_minimumDoubleSpinBox->value() );
-    m_scrollBar->setPageStep( pageStep );
-    m_scrollBar->setMaximum( static_cast<int>( m_maximumDoubleSpinBox->maximum() - pageStep ) );
-    m_scrollBar->setValue( value );
-
-    connect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMinimum(double) ) );
-    connect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMaximum(double) ) );
-    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
-}
-
-
-void QGraphicTransferFunctionEditor::keepRange( bool keep )
-{
-    if ( keep ) m_range = m_maximumDoubleSpinBox->value() - m_minimumDoubleSpinBox->value();
+    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
+    connect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
+    connect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMaximum(int) ) );
+    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setScroll(int) ) );
 }
 
 
 void QGraphicTransferFunctionEditor::setMinimum( int minimum )
 {
-    disconnect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( setMinimum(double) ) );
-    disconnect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), this, SLOT( setMaximum(double) ) );
-    disconnect( m_scrollBar, SIGNAL( valueChanged(int) ), this, SLOT( setMinimum(int) ) );
+    disconnect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), this, SLOT( setBasicRange(double,double) ) );
+    disconnect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMinimum(int) ) );
+    disconnect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMaximum(int) ) );
+    disconnect( m_scrollBar, SIGNAL( valueChanged(int) ), this, SLOT( setScroll(int) ) );
 
-    m_minimumDoubleSpinBox->setValue( minimum );
-    m_maximumDoubleSpinBox->setValue( minimum + m_scrollBar->pageStep() );
+    if ( minimum >= m_maximumSpinBox->value() )
+    {
+        m_maximumSpinBox->setValue( minimum + 1 );
+        m_minimumSpinBox->setValue( m_maximumSpinBox->value() - 1 );
+    }
 
-    m_basicEditor->setRange( m_minimumDoubleSpinBox->value(), m_maximumDoubleSpinBox->value() );
+    int min = m_minimumSpinBox->value();
+    int max = m_maximumSpinBox->value();
 
-    connect( m_minimumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMinimum(double) ) );
-    connect( m_maximumDoubleSpinBox, SIGNAL( valueChanged(double) ), SLOT( setMaximum(double) ) );
-    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
+    int basicMin = static_cast<int>( std::floor( m_basicEditor->minimum() ) );
+    int basicMax = static_cast<int>( std::ceil( m_basicEditor->maximum() ) );
+    basicMin = qMax( basicMin, min );
+    basicMax = qMax( basicMin + 1, basicMax );
+    m_basicEditor->setRange( basicMin, basicMax );
+
+    int pageStep = basicMax - basicMin;
+    int scroll = basicMin - min;
+    m_scrollBar->setPageStep( pageStep );
+    m_scrollBar->setMaximum( ( max - min ) - pageStep );
+    m_scrollBar->setValue( scroll );
+
+    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
+    connect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
+    connect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMaximum(int) ) );
+    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setScroll(int) ) );
+}
+
+
+void QGraphicTransferFunctionEditor::setMaximum( int maximum )
+{
+    disconnect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), this, SLOT( setBasicRange(double,double) ) );
+    disconnect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMinimum(int) ) );
+    disconnect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setMaximum(int) ) );
+    disconnect( m_scrollBar, SIGNAL( valueChanged(int) ), this, SLOT( setScroll(int) ) );
+
+    if ( maximum <= m_minimumSpinBox->value() )
+    {
+        m_minimumSpinBox->setValue( maximum - 1 );
+        m_maximumSpinBox->setValue( m_minimumSpinBox->value() + 1 );
+    }
+
+    int min = m_minimumSpinBox->value();
+    int max = m_maximumSpinBox->value();
+
+    int basicMin = static_cast<int>( std::floor( m_basicEditor->minimum() ) );
+    int basicMax = static_cast<int>( std::ceil( m_basicEditor->maximum() ) );
+    basicMax = qMin( basicMax, max );
+    basicMin = qMin( basicMin, basicMax - 1 );
+    m_basicEditor->setRange( basicMin, basicMax );
+
+    int pageStep = basicMax - basicMin;
+    int scroll = basicMin - min;
+    m_scrollBar->setPageStep( pageStep );
+    m_scrollBar->setMaximum( ( max - min ) - pageStep );
+    m_scrollBar->setValue( scroll );
+
+    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
+    connect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
+    connect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMaximum(int) ) );
+    connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setScroll(int) ) );
+}
+
+
+void QGraphicTransferFunctionEditor::setScroll( int scroll )
+{
+    disconnect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), this, SLOT( setBasicRange(double,double) ) );
+
+    int basicMin = m_minimumSpinBox->value() + scroll;
+    int basicMax = basicMin + m_scrollBar->pageStep();
+    m_basicEditor->setRange( basicMin, basicMax );
+
+    connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
 }
 
 

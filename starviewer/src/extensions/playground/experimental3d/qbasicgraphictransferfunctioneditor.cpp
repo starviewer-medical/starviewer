@@ -44,6 +44,18 @@ QBasicGraphicTransferFunctionEditor::~QBasicGraphicTransferFunctionEditor()
 }
 
 
+double QBasicGraphicTransferFunctionEditor::minimum() const
+{
+    return m_minimum;
+}
+
+
+double QBasicGraphicTransferFunctionEditor::maximum() const
+{
+    return m_maximum;
+}
+
+
 void QBasicGraphicTransferFunctionEditor::setRange( double minimum, double maximum )
 {
     Q_ASSERT( minimum < maximum );
