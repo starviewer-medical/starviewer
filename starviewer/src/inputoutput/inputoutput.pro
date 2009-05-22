@@ -74,7 +74,8 @@ HEADERS += databaseconnection.h \
            listenrisrequestthread.h \
            qlistenrisrequestsconfigurationscreen.h \
            qpopuprisrequestsscreen.h \
-           utils.h
+           utils.h \
+ createinformationmodelobject.h
 
 SOURCES += databaseconnection.cpp \
            dicomimage.cpp \
@@ -129,7 +130,8 @@ SOURCES += databaseconnection.cpp \
            listenrisrequestthread.cpp \
            qlistenrisrequestsconfigurationscreen.cpp \
            qpopuprisrequestsscreen.cpp \
-           utils.cpp
+           utils.cpp \
+ createinformationmodelobject.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
