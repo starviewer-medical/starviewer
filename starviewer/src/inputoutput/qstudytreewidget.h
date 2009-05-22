@@ -24,10 +24,6 @@
 #include <QMenu>
 #include <QList>
 
-#include "dicomstudy.h"
-#include "dicomseries.h"
-#include "dicomimage.h"
-
 class QString;
 
 namespace udg {
@@ -36,10 +32,6 @@ namespace udg {
   * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació de la cerca d'estudis, permetent consultar les series d'aquell estudi. Aquesta classe es sincronitzar amb la informació mostrada a QSeriesListWidget
 @author marc
 */
-
-class DICOMStudy;
-class DICOMSeries;
-class DICOMImage;
 
 class Patient;
 class Series;
@@ -58,46 +50,16 @@ public:
     /// Constructor de la classe
     QStudyTreeWidget( QWidget *parent = 0 );
 
-    /** Mostra l'estudi pel ListWidget que se li passa per paràmetre
-     *  @param StudyList a mostrar
-     */
-    void insertStudyList( QList<DICOMStudy> studyList );
-
     ///Mostrar els estudis passats per paràmetres (Els pacients passats per paràmetre ha de contenir només un estudi)
     void insertPatientList(QList<Patient*> patientList);
 
     ///Insereix el pacient al QStudyTreeWiget
     void insertPatient(Patient* patient);
 
-    /** Inseriex la informació d'un estudi
-     * @param Dades de l'estudi
-     */
-    void insertStudy( DICOMStudy * );
-
-    /** Insereix un llista de sèries a l'estudi seleccionat actualment
-     * @param seriesList series afegir
-     */
-    void insertSeriesList( QList<DICOMSeries> seriesList );
-
     /** Insereix un llista de sèries a l'estudi seleccionat actualment
      * @param seriesList series afegir
      */
     void insertSeriesList(QString studyIstanceUID, QList<Series*> seriesList);
-
-    /**Insereix una serie d'un estudi, i emiteix un signal al QSeriesListWidget per a insereixi també la informació de la sèrie
-     *@param informació de la serie
-     */
-    void insertSeries(DICOMSeries *serie);
-
-    /** Insereix una llista d'imatges a la sèrie seleccionada actualment
-     * @param imageList llista d'imatges afegir a la sèrie
-     */
-    void insertImageList( QList<DICOMImage> imageList );
-
-    /** Insereix una image a la sèrie que està seleccionada
-     * @param image imatge a afegir
-     */
-    void insertImage(DICOMImage* image);
 
     /** Insereix una llista d'imatges a la sèrie seleccionada actualment
      * @param imageList llista d'imatges afegir a la sèrie
