@@ -9,11 +9,9 @@
 
 #include <QObject>
 #include <QList>
+#include <QHash>
 
 #include "dicommask.h"
-#include "dicomstudy.h"
-#include "dicomseries.h"
-#include "dicomimage.h"
 
 class QSemaphore;
 
@@ -21,6 +19,10 @@ namespace udg {
 
 class Status;
 class PacsParameters;
+class Patient;
+class Study;
+class Series;
+class Image;
 
 /** Classe que permet fer diverses cerques simultànies, a diversos pacs a la vegada mitjançant la utilitzacio de threads
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -51,13 +53,16 @@ public:
     Status StartQueries();
 
     /// retorna els estudis trobats
-    QList<DICOMStudy> getStudyList();
+    QList<Patient*> getPatientStudyList();
 
     ///Retorna les sèries trobades 
-    QList<DICOMSeries> getSeriesList();
+    QList<Series*> getSeriesList();
 
     ///Retorna les imatges trobades
-    QList<DICOMImage> getImageList();
+    QList<Image*> getImageList();
+
+    ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
+    QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
 
 signals:
     /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
@@ -84,9 +89,10 @@ private:
     // Per raons d'optimització nomes es podran tenir un límit threads alhora executant la query, per aconseguir això utilitzem un semàfor
     QSemaphore *m_semaphoreActiveThreads;
 
-    QList<DICOMStudy> m_studyList;
-    QList<DICOMSeries> m_seriesList;
-    QList<DICOMImage> m_imageList;
+    QList<Patient*> m_patientStudyList;
+    QList<Series*> m_seriesList;
+    QList<Image*> m_imageList;
+    QHash<QString,QString> m_hashPacsIDOfStudyInstanceUID;//Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
 
     ///Neteja les QList que contindran els resultats de les cerques
     void initializeResultsList();

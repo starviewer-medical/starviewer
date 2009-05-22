@@ -138,7 +138,6 @@ void QueryScreen::initialize()
     m_listenRISRequestThread = new ListenRISRequestThread(this);
     if (settings.getListenRisRequests()) m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
     #endif
-
 }
 
 void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
@@ -524,19 +523,16 @@ void QueryScreen::queryStudyPacs()
             return;
         }
 
-        if (m_multipleQueryStudy.getStudyList().isEmpty() )
+        if (m_multipleQueryStudy.getPatientStudyList().isEmpty() )
         {
             m_studyTreeWidgetPacs->clear();
             QApplication::restoreOverrideCursor();
             QMessageBox::information( this , ApplicationNameString , tr( "No study match found." ) );
             return;
         }
+        m_hashPacsIDOfStudyInstanceUID = m_multipleQueryStudy.getHashTablePacsIDOfStudyInstanceUID();
 
-        m_studyListQueriedPacs = m_multipleQueryStudy.getStudyList(); //Guardem una còpia en local de la llista d'estudis trobats al PACS
-
-        m_studyTreeWidgetPacs->insertStudyList( m_multipleQueryStudy.getStudyList() ); //fem que es visualitzi l'studyView seleccionat
-        m_studyTreeWidgetPacs->insertSeriesList( m_multipleQueryStudy.getSeriesList() );
-        m_studyTreeWidgetPacs->insertImageList( m_multipleQueryStudy.getImageList() );
+        m_studyTreeWidgetPacs->insertPatientList( m_multipleQueryStudy.getPatientStudyList() ); //fem que es visualitzi l'studyView seleccionat
         m_studyTreeWidgetPacs->setSortColumn( QStudyTreeWidget::ObjectName );
 
         QApplication::restoreOverrideCursor();
@@ -651,7 +647,7 @@ void QueryScreen::expandStudy( const QString &studyUID, const QString &pacsId )
             querySeries( studyUID, "Cache" );
             break;
         case PACSQueryTab :  //si estem la pestanya del PACS fem query al Pacs
-            querySeriesPacs(studyUID, pacsId);
+            querySeriesPacs(studyUID);
             break;
         case DICOMDIRTab : //si estem a la pestanya del dicomdir, fem query al dicomdir
             querySeries( studyUID, "DICOMDIR" );
@@ -673,7 +669,7 @@ void QueryScreen::expandSeries( const QString &studyUID, const QString &seriesUI
             break;
 
         case PACSQueryTab :  //si estem la pestanya del PACS fem query al Pacs
-            queryImagePacs( studyUID , seriesUID , pacsId);
+            queryImagePacs( studyUID , seriesUID );
             break;
 
         case DICOMDIRTab : //si estem a la pestanya del dicomdir, fem query al dicomdir
@@ -684,18 +680,17 @@ void QueryScreen::expandSeries( const QString &studyUID, const QString &seriesUI
     QApplication::restoreOverrideCursor();
 }
 
-void QueryScreen::querySeriesPacs(QString studyUID, QString pacsID)
+void QueryScreen::querySeriesPacs(QString studyUID)
 {
     DICOMSeries serie;
     Status state;
-    QString text, pacsDescription;
+    QString text, pacsDescription, pacsID = getPacsIDFromQueriedStudies(studyUID);
     QueryPacs querySeriesPacs;
 
     PacsServer pacsServer = getPacsServerByPacsID(pacsID);
     pacsDescription = pacsServer.getPacs().getAEPacs() + " Institució" + pacsServer.getPacs().getInstitution()  + " IP:" + pacsServer.getPacs().getPacsAddress(); 
 
     INFO_LOG("Cercant informacio de les sèries de l'estudi" + studyUID + " del PACS " + pacsDescription);
-
 
     state = pacsServer.connect(PacsServer::query, PacsServer::seriesLevel);
     if ( !state.good() )
@@ -726,7 +721,7 @@ void QueryScreen::querySeriesPacs(QString studyUID, QString pacsID)
         return;
     }
 
-    m_studyTreeWidgetPacs->insertSeriesList( querySeriesPacs.getQueryResultsAsSeriesList() );
+    m_studyTreeWidgetPacs->insertSeriesList( studyUID, querySeriesPacs.getQueryResultsAsSeriesList() );
 }
 
 void QueryScreen::querySeries( QString studyUID, QString source )
@@ -767,11 +762,11 @@ void QueryScreen::querySeries( QString studyUID, QString source )
         m_studyTreeWidgetDicomdir->insertSeriesList( studyUID , seriesList );//inserim la informació de la sèrie al llistat
 }
 
-void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pacsID)
+void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID)
 {
     DICOMSeries serie;
     Status state;
-    QString text, pacsDescription;
+    QString text, pacsDescription, pacsID = getPacsIDFromQueriedStudies(studyUID);
     QueryPacs queryImages;
     DicomMask dicomMask;
 
@@ -819,7 +814,7 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
         return;
     }
 
-    m_studyTreeWidgetPacs->insertImageList( queryImages.getQueryResultsAsImageList() );
+    m_studyTreeWidgetPacs->insertImageList( studyUID , seriesUID , queryImages.getQueryResultsAsImageList() );
 
     QApplication::restoreOverrideCursor();
 }
@@ -843,34 +838,20 @@ void QueryScreen::retrieve(bool view)
     foreach( QString currentStudyUID, selectedStudiesUIDList)
     {
         DicomMask maskStudyToRetrieve;
+        Study *study = new Study;
 
-        //Tenim l'informació de l'estudi a descarregar a la llista d'estudis cercats del pacs, el busquem a la llista a través d'aquest mètode
-        //TODO no hauria de tenir la responsabilitat de retornar l'estudi al QStudyTreeView no la pròpia QueryScreen
-        int indexStudyInList = getStudyPositionInStudyListQueriedPacs(currentStudyUID, 
-        m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID)); 
+        maskStudyToRetrieve.setStudyUID(currentStudyUID);
 
-        //Es comprova que existeixi l'estudi a la llista d'estudis de la última query que s'ha fet al PACS
-        if ( indexStudyInList == -1 ) 
-        {
-            QApplication::restoreOverrideCursor();
-            QMessageBox::warning(this , ApplicationNameString, tr("Internal Error: %2 can't retrieve study with UID %1, because can't find study information.").arg(currentStudyUID, ApplicationNameString));
-            ERROR_LOG("No s'ha trobat la informació de l'estudi a la llista m_studyTreeWidgetPacs per poder descarregar l'estudi");
-        }
-        else
-        {
-            maskStudyToRetrieve.setStudyUID(currentStudyUID);
+        // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
+        // per tant si seleccionem més d'una sèrie/imatge només s'en baixarà una
+        // Caldria fer possible que es baixi tants com en seleccionem
+        if ( !m_studyTreeWidgetPacs->getCurrentSeriesUID().isEmpty() )
+            maskStudyToRetrieve.setSeriesUID( m_studyTreeWidgetPacs->getCurrentSeriesUID() );
 
-            // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
-            // per tant si seleccionem més d'una sèrie/imatge només s'en baixarà una
-            // Caldria fer possible que es baixi tants com en seleccionem
-            if ( !m_studyTreeWidgetPacs->getCurrentSeriesUID().isEmpty() )
-                maskStudyToRetrieve.setSeriesUID( m_studyTreeWidgetPacs->getCurrentSeriesUID() );
+        if ( !m_studyTreeWidgetPacs->getCurrentImageUID().isEmpty() )
+            maskStudyToRetrieve.setSOPInstanceUID( m_studyTreeWidgetPacs->getCurrentImageUID() );
 
-            if ( !m_studyTreeWidgetPacs->getCurrentImageUID().isEmpty() )
-                maskStudyToRetrieve.setSOPInstanceUID( m_studyTreeWidgetPacs->getCurrentImageUID() );
-
-            retrieveFromPacs(view, m_studyTreeWidgetPacs->getStudyPACSIdFromSelectedItems(currentStudyUID), maskStudyToRetrieve, m_studyListQueriedPacs.value(indexStudyInList));
-        }
+        retrieveFromPacs(view, getPacsIDFromQueriedStudies(currentStudyUID), maskStudyToRetrieve, study);
     }
 }
 
@@ -911,7 +892,7 @@ void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID
         m_studyTreeWidgetDicomdir->insertImageList( studyInstanceUID, seriesInstanceUID, imageList );//inserim la informació de la sèrie al llistat
 }
 
-void QueryScreen::retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, DICOMStudy studyToRetrieve)
+void QueryScreen::retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, Study *studyToRetrieve)
 {
     StarviewerSettings settings;
     QString defaultSeriesUID;
@@ -943,10 +924,10 @@ void QueryScreen::retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMas
         operation.setPriority( Operation::Low );
     }
     //emplenem les dades de l'operació
-    operation.setPatientName( studyToRetrieve.getPatientName() );
-    operation.setPatientID( studyToRetrieve.getPatientId() );
-    operation.setStudyID( studyToRetrieve.getStudyId() );
-    operation.setStudyUID( studyToRetrieve.getStudyUID() );
+    operation.setPatientName( "Prova" );
+    operation.setPatientID( "Prova" );
+    operation.setStudyID( "Prova" );
+    operation.setStudyUID( maskStudyToRetrieve.getStudyUID() );
 
     m_qexecuteOperationThread.queueOperation( operation );
 
@@ -1414,22 +1395,6 @@ DicomMask QueryScreen::buildDicomMask()
     return m_qbasicSearchWidget->buildDicomMask() + m_qadvancedSearchWidget->buildDicomMask();
 }
 
-int QueryScreen::getStudyPositionInStudyListQueriedPacs(QString studyUID, QString pacsId)
-{
-    int index = 0;
-    bool studyUIDisTheSame = false , pacsAETitleIsTheSame = false;
-
-    while ( index < m_studyListQueriedPacs.count() && ( !studyUIDisTheSame || !pacsAETitleIsTheSame ) )
-    {
-        studyUIDisTheSame = m_studyListQueriedPacs.value( index ).getStudyUID() == studyUID;
-        pacsAETitleIsTheSame = m_studyListQueriedPacs.value( index ).getPacsId() == pacsId;
-
-        if (!studyUIDisTheSame || !pacsAETitleIsTheSame ) index++;
-    }
-
-    return index < m_studyListQueriedPacs.count() ? index : -1;
-}
-
 void QueryScreen::studyWillBeDeletedSlot(QString studyInstanceUID)
 {
     m_studyTreeWidgetCache->removeStudy(studyInstanceUID);
@@ -1457,18 +1422,35 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
         return;
     }
 
-    if (multipleQueryStudy.getStudyList().isEmpty())
+    if (multipleQueryStudy.getPatientStudyList().isEmpty())
     {
         QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(maskRisRequest.getAccessionNumber(), ApplicationNameString);
         QMessageBox::information(this , ApplicationNameString , message);
         return;
     }
 
-    foreach (DICOMStudy study, multipleQueryStudy.getStudyList())
+    foreach (Patient *patient, multipleQueryStudy.getPatientStudyList())
     {
-        maskStudyToRetrieve.setStudyUID(study.getStudyUID());
-        retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
+        foreach(Study *study, patient->getStudies())
+        {
+            QString pacsID = multipleQueryStudy.getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()];
+
+            maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
+            retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), pacsID, maskStudyToRetrieve, study);
+        }
     }
+}
+
+QString QueryScreen::getPacsIDFromQueriedStudies(QString studyInstanceUID)
+{
+    /*TODO Tenir en compte que podem tenir un studyUID repetit en dos PACS, ara mateix no ho tenim contemplat a la QHash  */
+    if (!m_hashPacsIDOfStudyInstanceUID.contains(studyInstanceUID))
+    {
+        ERROR_LOG(QString("No s'ha trobat a quin PACS pertany l'estudi %1 a la QHash").arg(studyInstanceUID));
+        return "";
+    }
+    else
+        return m_hashPacsIDOfStudyInstanceUID[studyInstanceUID];
 }
 
 bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)

@@ -11,10 +11,13 @@
 #include "starviewersettings.h"
 #include "pacsserver.h"
 #include "dicommask.h"
-#include "dicomstudy.h"
-#include "dicomseries.h"
-#include "dicomimage.h"
 #include "errordcmtk.h"
+#include "image.h"
+#include "study.h"
+#include "series.h"
+#include "patient.h"
+#include "createinformationmodelobject.h"
+#include "dicomtagreader.h"
 
 namespace udg{
 
@@ -35,30 +38,26 @@ void QueryPacs::foundMatchCallback(
         DcmDataset *responseIdentifiers
         )
 {
-    const char* text;
-    StarviewerSettings settings;
     QueryPacs* queryPacsCaller = (QueryPacs*)callbackData;
-
-    responseIdentifiers->findAndGetString( DCM_QueryRetrieveLevel , text , false );
-
-    //Comprovem quin tipus d'objecte ens ha retorna el PACS i el transforme a un objecte del nostre tipus
+    DICOMTagReader *dicomTagReader = new DICOMTagReader("", responseIdentifiers);
+    QString queryRetrieveLevel = dicomTagReader->getAttributeByName( DCM_QueryRetrieveLevel );
 
     //en el cas que l'objecte que cercàvem fos un estudi afegi
-    if ( strcmp( text ,"STUDY" ) == 0 )
+    if ( queryRetrieveLevel == "STUDY" )
     {
-        queryPacsCaller->addStudy( responseIdentifiers );
+        queryPacsCaller->addPatientStudy( dicomTagReader );
 
     } //si la query retorna un objecte sèrie
-    else if ( strcmp( text, "SERIES" ) == 0 )
+    else if ( queryRetrieveLevel == "SERIES" )
     {
-        queryPacsCaller->addStudy( responseIdentifiers );
-        queryPacsCaller->addSeries( responseIdentifiers );
+        queryPacsCaller->addPatientStudy( dicomTagReader );
+        queryPacsCaller->addSeries( dicomTagReader );
     }// si la query retorna un objecte imatge
-    else if ( strcmp( text , "IMAGE" ) == 0)
+    else if ( queryRetrieveLevel == "IMAGE" )
     {
-        queryPacsCaller->addStudy( responseIdentifiers );
-        queryPacsCaller->addSeries( responseIdentifiers );
-        queryPacsCaller->addImage( responseIdentifiers );
+        queryPacsCaller->addPatientStudy( dicomTagReader );
+        queryPacsCaller->addSeries( dicomTagReader );
+        queryPacsCaller->addImage( dicomTagReader );
     }
 }
 
@@ -124,45 +123,50 @@ Status QueryPacs::query( DicomMask mask )
     return query();
 }
 
-void QueryPacs::addStudy( DcmDataset *responsePacs )
+void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
 {
-    DICOMStudy dicomStudy( responsePacs );
+    //Copiem a un altre dataset response pacs perquè dicomTagReader de DcmtkDatsetToStarviewerObject elimina l'objecte després de llegir-lo
 
-    dicomStudy.setPacsId(m_pacsID);
+    Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
+    Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
+    patient->addStudy(study);
 
-    if ( !m_studiesList.contains( dicomStudy ) ) m_studiesList.append( dicomStudy );
+    m_patientStudyList.append(patient);
+    m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacsID;//Afegim a la taula de QHash de quin pacs és l'estudi
 }
 
-void QueryPacs::addSeries( DcmDataset * responsePacs )
+void QueryPacs::addSeries( DICOMTagReader *dicomTagReader )
 {
-    DICOMSeries dicomSeries( responsePacs );
+    Series *series = CreateInformationModelObject::createSeries(dicomTagReader);
 
-    dicomSeries.setPacsId(m_pacsID);
-
-    if ( !m_seriesList.contains( dicomSeries) ) m_seriesList.append( dicomSeries );
+    m_seriesList.append(series);
 }
 
-void QueryPacs::addImage( DcmDataset * responsePacs )
+void QueryPacs::addImage( DICOMTagReader *dicomTagReader )
 {
-    DICOMImage dicomImage(responsePacs);
+    Image *image = CreateInformationModelObject::createImage(dicomTagReader);
 
-    dicomImage.setPacsId(m_pacsID);
-
-    m_imageList.append(dicomImage);
+    m_imageList.append(image);
 }
 
-QList<DICOMStudy> QueryPacs::getQueryResultsAsStudyList()
+QList<Patient*> QueryPacs::getQueryResultsAsPatientStudyList()
 {
-    return m_studiesList;
+    return m_patientStudyList;
 }
 
-QList<DICOMSeries> QueryPacs::getQueryResultsAsSeriesList()
+QList<Series*> QueryPacs::getQueryResultsAsSeriesList()
 {
     return m_seriesList;
 }
 
-QList<DICOMImage> QueryPacs::getQueryResultsAsImageList()
+QList<Image*> QueryPacs::getQueryResultsAsImageList()
 {
     return m_imageList;
 }
+
+QHash<QString,QString> QueryPacs::getHashTablePacsIDOfStudyInstanceUID()
+{
+    return m_hashPacsIDOfStudyInstanceUID;
+}
+
 }

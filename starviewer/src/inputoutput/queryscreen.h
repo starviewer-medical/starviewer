@@ -7,6 +7,8 @@
 #ifndef UDGQUERYSCREEN_H
 #define UDGQUERYSCREEN_H
 
+#include <QHash>
+
 #include "ui_queryscreenbase.h"
 #include "qexecuteoperationthread.h"
 #include "dicomdirreader.h"
@@ -150,7 +152,7 @@ private slots:
      * @param SeriesUID  uid de la sèrie
      * @param PacsAETitle AETitle del PACS a buscar la sèrie
      */
-    void queryImagePacs(QString StudyUID, QString SeriesUID, QString pacsID);
+    void queryImagePacs(QString StudyUID, QString SeriesUID);
 
     /** Cerca les imatges d'una sèrie a la font indicada (Cache,DICOMDIR)
      * @param studyUID uid de l'estudi
@@ -221,7 +223,7 @@ private:
      * @param maskStudyToRetrieve la màscara dels objectes a descarregar
      * @param studyToRetrieve L'estudi al qual pertanyen els objectes ad escarregar
      */
-    void retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask mask, DICOMStudy studyToRetrieve);
+    void retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask mask, Study *studyToRetrieve);
 
     /**
      * Donada una llista de uid's d'estudi, procedeix a carregar-los desde la font indicada (Cache,DICOMDIR)
@@ -244,9 +246,8 @@ private:
 
     /** Busca la informació d'una sèrie en el PACS i la mostra en la interfície
      * @param studyUID UID de l'estidi
-     * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void querySeriesPacs(QString studyUID, QString pacsID);
+    void querySeriesPacs(QString studyUID);
 
     /** Cerca les sèries d'un estudi a la font indicada (Cache,DICOMDIR)
      * @param studyUID UID de l'estudi a cercar
@@ -285,9 +286,6 @@ private:
     ///Estableix la mida de les columnes de QStudyTreeWidget
     void setQStudyTreeWidgetColumnsWidth();
 
-    ///Ens indica en en quina posició es troba dins la llista dels estudis trobats a la última query del PACS l'estudi amb l'UID passat per paràmetre i l'AETitle del PACS passat per paràmetre
-    int getStudyPositionInStudyListQueriedPacs(QString studyUID, QString pacsId);
-
     /** Donat un AETitle busca les dades del PACS a la configuració i prepara un objecte PACSERVER, per poder
      * connectar al PACS
      * @param AETitlePACS Aetitle del PACS a connectar
@@ -305,6 +303,9 @@ private:
 
     ///Guarda la mida de les columnes del QStudyTreeView Pacs, dicomdir i cache
     void saveQStudyTreeWidgetColumnsWidth();
+
+    ///Retorna l'ID del pacs al que pertany l'estudi passat per paràmetre, només té en compte els estudis que s'han consultat a la última query
+    QString getPacsIDFromQueriedStudies(QString studyInstanceUID);
 
 private:
 
@@ -346,6 +347,8 @@ struct retrieveParameters
     ListenRISRequestThread *m_listenRISRequestThread;
 
     QPopUpRisRequestsScreen *m_qpopUpRisRequestsScreen; //Popup que indica que el RIS ha fet una petició per descarregar un estudi
+
+    QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
 
     StatsWatcher *m_statsWatcher;
 };

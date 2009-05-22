@@ -22,23 +22,26 @@
 #define QUERYPACS
 
 #include <QList>
-
-#include "dicomstudy.h"
-#include "dicomseries.h"
-#include "dicomimage.h"
+#include <QHash>
 
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
+
+class DcmDataset;
 
 struct T_ASC_Association;
 struct T_DIMSE_C_FindRQ;
 struct T_DIMSE_C_FindRSP;
-class DcmDataset;
 
 namespace udg{
 
 class PacsConnection;
 class Status;
 class DicomMask;
+class Patient;
+class Study;
+class Series;
+class Image;
+class DICOMTagReader;
 
 class QueryPacs
 {
@@ -55,9 +58,12 @@ public:
      */
     Status query( DicomMask mask);
 
-    QList<DICOMStudy> getQueryResultsAsStudyList();
-    QList<DICOMSeries> getQueryResultsAsSeriesList();
-    QList<DICOMImage> getQueryResultsAsImageList();
+    QList<Patient*> getQueryResultsAsPatientStudyList();
+    QList<Series*> getQueryResultsAsSeriesList();
+    QList<Image*> getQueryResultsAsImageList();
+
+    ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
+    QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
 
 protected:
 
@@ -66,12 +72,15 @@ private:
     T_ASC_Association *m_assoc; // request DICOM association;
     DcmDataset *m_mask;
 
-    QList<DICOMStudy> m_studiesList;
-    QList<DICOMSeries> m_seriesList;
-    QList<DICOMImage> m_imageList;
-
-    ///Guarda el Id del pacs al qual fem la query
-    QString m_pacsID;
+    QList<Patient*> m_patientStudyList;
+    QList<Series*> m_seriesList;
+    QList<Image*> m_imageList;
+    QString m_pacsID;    ///Guarda el Id del pacs al qual fem la query
+    /*TODO m_hashPacsIDOfStudyInstanceUID ara mateix no té gaire sentit perquè per defecte se li posa la ID del PACS el que fem la 
+      cerca, però podem tenir el cas que les consultes es facin a un PACS i que aquest ens indiqui que l'estudi es troba guardat en 
+      un altre PACS, tenir en compte per aquest cas que passa si tenim dos PACS amb el mateix nom
+     */
+    QHash<QString,QString> m_hashPacsIDOfStudyInstanceUID; //Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
 
     //fa el query al pacs
     Status query();
@@ -87,11 +96,11 @@ private:
         );
 
     ///Afegeix l'objecte a la llista d'estudis si no hi existeix
-    void addStudy( DcmDataset * );
+    void addPatientStudy( DICOMTagReader *dicomTagReader );
     ///afegeix l'objecte dicom a la llista de sèries si no hi existeix
-    void addSeries( DcmDataset * );
+    void addSeries( DICOMTagReader *dicomTagReader );
     ///afegeix l'objecte dicom a la llista d'imatges si no hi existeix
-    void addImage( DcmDataset * );
+    void addImage( DICOMTagReader *dicomTagReader );
 };
 };
 #endif
