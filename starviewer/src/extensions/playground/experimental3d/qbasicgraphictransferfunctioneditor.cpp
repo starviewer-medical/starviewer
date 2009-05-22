@@ -18,7 +18,7 @@ const double QBasicGraphicTransferFunctionEditor::POINT_SIZE = 4.0;
 
 
 QBasicGraphicTransferFunctionEditor::QBasicGraphicTransferFunctionEditor( QWidget *parent )
- : QWidget( parent ), m_minimum( 0.0 ), m_maximum( 4095.0 ), m_dragging( false ), m_selecting( false )
+ : QWidget( parent ), m_minimum( -50000.0 ), m_maximum( 50000.0 ), m_dragging( false ), m_selecting( false )
 {
     setFocusPolicy( Qt::WheelFocus );
 
