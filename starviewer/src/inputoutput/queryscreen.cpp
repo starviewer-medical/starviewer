@@ -17,7 +17,6 @@
 #include "processimagesingleton.h"
 #include "pacsconnection.h"
 #include "qstudytreewidget.h"
-#include "dicomseries.h"
 #include "querypacs.h"
 #include "pacsserver.h"
 #include "qserieslistwidget.h"
@@ -682,7 +681,6 @@ void QueryScreen::expandSeries( const QString &studyUID, const QString &seriesUI
 
 void QueryScreen::querySeriesPacs(QString studyUID)
 {
-    DICOMSeries serie;
     Status state;
     QString text, pacsDescription, pacsID = getPacsIDFromQueriedStudies(studyUID);
     QueryPacs querySeriesPacs;
@@ -764,7 +762,6 @@ void QueryScreen::querySeries( QString studyUID, QString source )
 
 void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID)
 {
-    DICOMSeries serie;
     Status state;
     QString text, pacsDescription, pacsID = getPacsIDFromQueriedStudies(studyUID);
     QueryPacs queryImages;

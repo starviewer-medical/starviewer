@@ -19,7 +19,6 @@ FORMS += qconfigurationscreenbase.ui \
          qlistenrisrequestsconfigurationscreenbase.ui \
          qpopuprisrequestsscreenbase.ui  
 HEADERS += databaseconnection.h \
-           dicomimage.h \
            pacsconnection.h \
            pacslistdb.h \
            pacsnetwork.h \
@@ -28,11 +27,9 @@ HEADERS += databaseconnection.h \
            processimage.h \
            processimagesingleton.h \
            retrieveimages.h \
-           dicomseries.h \
            starviewersettings.h \
            status.h \
            struct.h \
-           dicomstudy.h \
            multiplequerystudy.h \
            qquerystudythread.h \
            operation.h \
@@ -78,7 +75,6 @@ HEADERS += databaseconnection.h \
  createinformationmodelobject.h
 
 SOURCES += databaseconnection.cpp \
-           dicomimage.cpp \
            pacsconnection.cpp \
            pacslistdb.cpp \
            pacsnetwork.cpp \
@@ -87,10 +83,8 @@ SOURCES += databaseconnection.cpp \
            processimage.cpp \
            processimagesingleton.cpp \
            retrieveimages.cpp \
-           dicomseries.cpp \
            starviewersettings.cpp \
            status.cpp \
-           dicomstudy.cpp \
            multiplequerystudy.cpp \
            qquerystudythread.cpp \
            operation.cpp \

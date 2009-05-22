@@ -13,7 +13,6 @@
 #include "qexecuteoperationthread.h"
 #include "dicomdirreader.h"
 #include "multiplequerystudy.h"
-#include "dicomstudy.h"
 #include "pacsparameters.h"
 #include "localdatabasemanager.h"
 #include "qdeleteoldstudiesthread.h"
@@ -341,8 +340,6 @@ struct retrieveParameters
     QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
 
     QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs, m_contextMenuQStudyTreeWidgetDicomdir;
-
-    QList<DICOMStudy> m_studyListQueriedPacs;//llista dels estudis que s'han trobat a la última query al PACS
 
     ListenRISRequestThread *m_listenRISRequestThread;
 
