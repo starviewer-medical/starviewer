@@ -53,9 +53,6 @@ private:
     void normalizeViewProbabilities( QVector<float> &viewProbabilities, float totalViewedVolume );
     /// Retorna les probabilitats p(O) dels objectes (vòxels) donats p(V) i p(O|V).
     QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
-    // Calcula les mesures relacionades amb la VoMI: VoMI, saliency, VoMI de cada vista, VoMI amb colors.
-    void computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
-                                     bool computeColorVomi );
     // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
     void computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
                                     bool computeViewpointUnstabilities, bool computeEvmi );
@@ -88,6 +85,9 @@ private:
     void saveVomi( const QString &fileName );
     void loadViewpointVomi( const QString &fileName );
     void saveViewpointVomi( const QString &fileName );
+    void loadColorVomiPalette( const QString &fileName );
+    void loadColorVomi( const QString &fileName );
+    void saveColorVomi( const QString &fileName );
     void loadViewpointUnstabilities( const QString &fileName );
     void saveViewpointUnstabilities( const QString &fileName );
     void loadBestViews( const QString &fileName );
@@ -96,9 +96,6 @@ private:
     void saveGuidedTour( const QString &fileName );
     void loadEvmi( const QString &fileName );
     void saveEvmi( const QString &fileName );
-    void loadColorVomiPalette( const QString &fileName );
-    void loadColorVomi( const QString &fileName );
-    void saveColorVomi( const QString &fileName );
 
     QString getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter );
     QString getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix );
@@ -170,6 +167,9 @@ private slots:
     void saveVomi();
     void loadViewpointVomi();
     void saveViewpointVomi();
+    void loadColorVomiPalette();
+    void loadColorVomi();
+    void saveColorVomi();
     void loadViewpointUnstabilities();
     void saveViewpointUnstabilities();
     void loadBestViews();
@@ -178,9 +178,6 @@ private slots:
     void saveGuidedTour();
     void loadEvmi();
     void saveEvmi();
-    void loadColorVomiPalette();
-    void loadColorVomi();
-    void saveColorVomi();
 
     void tourBestViews();
     void guidedTour();
@@ -207,15 +204,15 @@ private:
     QVector<float> m_vomi;
     float m_maximumVomi;
     QVector<float> m_viewpointVomi;
+    QVector<Vector3Float> m_colorVomiPalette;
+    QVector<Vector3Float> m_colorVomi;
+    float m_maximumColorVomi;
     QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_bestViews;
     QList< QPair<int, Vector3> > m_guidedTour;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
     QVector<float> m_evmi;
-    QVector<Vector3Float> m_colorVomiPalette;
-    QVector<Vector3Float> m_colorVomi;
-    float m_maximumColorVomi;
 
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;

@@ -19,7 +19,6 @@
 #include "viewpointgenerator.h"
 #include "viewpointinformationchannel.h"
 #include "volumereslicer.h"
-#include "vomithread.h"
 
 
 namespace udg {
@@ -158,21 +157,21 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
     connect( m_loadMiPushButton, SIGNAL( clicked() ), SLOT( loadMi() ) );
     connect( m_saveMiPushButton, SIGNAL( clicked() ), SLOT( saveMi() ) );
+    connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
+    connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
+    connect( m_loadViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( loadViewpointVomi() ) );
+    connect( m_saveViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( saveViewpointVomi() ) );
+    connect( m_loadColorVomiPalettePushButton, SIGNAL( clicked() ), SLOT( loadColorVomiPalette() ) );
+    connect( m_loadColorVomiPushButton, SIGNAL( clicked() ), SLOT( loadColorVomi() ) );
+    connect( m_saveColorVomiPushButton, SIGNAL( clicked() ), SLOT( saveColorVomi() ) );
     connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
     connect( m_saveViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( saveViewpointUnstabilities() ) );
     connect( m_loadBestViewsPushButton, SIGNAL( clicked() ), SLOT( loadBestViews() ) );
     connect( m_saveBestViewsPushButton, SIGNAL( clicked() ), SLOT( saveBestViews() ) );
     connect( m_loadGuidedTourPushButton, SIGNAL( clicked() ), SLOT( loadGuidedTour() ) );
     connect( m_saveGuidedTourPushButton, SIGNAL( clicked() ), SLOT( saveGuidedTour() ) );
-    connect( m_loadVomiPushButton, SIGNAL( clicked() ), SLOT( loadVomi() ) );
-    connect( m_saveVomiPushButton, SIGNAL( clicked() ), SLOT( saveVomi() ) );
-    connect( m_loadViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( loadViewpointVomi() ) );
-    connect( m_saveViewpointVomiPushButton, SIGNAL( clicked() ), SLOT( saveViewpointVomi() ) );
     connect( m_loadEvmiPushButton, SIGNAL( clicked() ), SLOT( loadEvmi() ) );
     connect( m_saveEvmiPushButton, SIGNAL( clicked() ), SLOT( saveEvmi() ) );
-    connect( m_loadColorVomiPalettePushButton, SIGNAL( clicked() ), SLOT( loadColorVomiPalette() ) );
-    connect( m_loadColorVomiPushButton, SIGNAL( clicked() ), SLOT( loadColorVomi() ) );
-    connect( m_saveColorVomiPushButton, SIGNAL( clicked() ), SLOT( saveColorVomi() ) );
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
     connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
     connect( m_vomiGradientPushButton, SIGNAL( clicked() ), SLOT( computeVomiGradient() ) );
@@ -902,9 +901,10 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeMi = m_computeMiCheckBox->isChecked();
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
+    bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeVomi && !computeViewpointVomi ) return;
+    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeVomi && !computeViewpointVomi && !computeColorVomi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -916,6 +916,9 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     // Viewpoint Information Channel
     ViewpointInformationChannel viewpointInformationChannel( viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction() );
+
+    // Paleta de colors per la color VoMI
+    if ( computeColorVomi ) viewpointInformationChannel.setColorVomiPalette( m_colorVomiPalette );
 
     // Filtratge de punts de vista
     if ( !m_tourLineEdit->text().isEmpty() )
@@ -941,7 +944,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeVomi, computeViewpointVomi );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeVomi, computeViewpointVomi, computeColorVomi );
 
     if ( computeViewpointEntropy )
     {
@@ -987,6 +990,15 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_saveViewpointVomiPushButton->setEnabled( true );
     }
 
+    if ( computeColorVomi )
+    {
+        m_colorVomi = viewpointInformationChannel.colorVomi();
+        m_maximumColorVomi = viewpointInformationChannel.maximumColorVomi();
+        m_baseColorVomiRadioButton->setEnabled( true );
+        m_colorVomiCheckBox->setEnabled( true );
+        m_saveColorVomiPushButton->setEnabled( true );
+    }
+
     // Restaurem els paràmetres normals (en realitat només cal si es fa amb CPU)
     render();
     m_viewer->setCamera( position, focus, up );
@@ -1002,10 +1014,9 @@ void QExperimental3DExtension::computeSelectedVmiOld()
     bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
     bool computeGuidedTour = m_computeGuidedTourCheckBox->isChecked();
     bool computeEvmi = m_computeEvmiCheckBox->isChecked();
-    bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour && !computeEvmi && !computeColorVomi ) return;
+    if ( !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour && !computeEvmi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1040,7 +1051,6 @@ void QExperimental3DExtension::computeSelectedVmiOld()
 
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
-    if ( computeColorVomi ) nSteps ++; // color VoMI
     if ( computeViewpointUnstabilities || computeEvmi ) nSteps++;  // viewpoint unstabilities + EVMI
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
@@ -1076,14 +1086,6 @@ void QExperimental3DExtension::computeSelectedVmiOld()
     // p(O)
     {
         objectProbabilities = getObjectProbabilities( viewProbabilities, pOvFiles );
-        m_vmiTotalProgressBar->setValue( ++step );
-        m_vmiTotalProgressBar->repaint();
-    }
-
-    // color VoMI
-    if ( computeColorVomi )
-    {
-        computeVomiRelatedMeasures( viewpointGenerator, viewProbabilities, objectProbabilities, pOvFiles, computeColorVomi );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
     }
@@ -1287,281 +1289,6 @@ QVector<float> QExperimental3DExtension::getObjectProbabilities( const QVector<f
 #endif
 
     return objectProbabilities;
-}
-
-
-void QExperimental3DExtension::computeVomiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities,
-                                                           const QVector<QTemporaryFile*> &pOvFiles, bool computeColorVomi )
-{
-    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
-    if ( !m_tourLineEdit->text().isEmpty() )
-    {
-        int selectedViewpoint = m_tourLineEdit->text().toInt() - 1;
-        if ( selectedViewpoint >= 0 && selectedViewpoint < viewpoints.size() )
-        {
-            viewpoints.clear();
-            viewpoints << viewpointGenerator.viewpoint( selectedViewpoint );
-            QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
-            for ( int i = 0; i < neighbours.size(); i++ ) viewpoints << viewpointGenerator.viewpoint( neighbours.at( i ) );
-        }
-    }
-    int nViewpoints = viewProbabilities.size();
-    int nObjects = objectProbabilities.size();
-
-    if ( computeColorVomi ) m_colorVomi.resize( nObjects );
-
-    /*
-     * Fer un peek per llegir el fitxer sencer és costós. Podem aprofitar que sabem com estan distribuïts els veïns per acotar el tros de fitxer que cal llegir de manera que el que valor que busquem sigui a dins.
-     * N'hi haurà prou llegint la llesca actual, l'anterior i la següent.
-     */
-    int *dimensions = m_volume->getImage()->GetDimensions();
-    int dimX = dimensions[0], dimY = dimensions[1], dimZ = dimensions[2], dimXY = dimX * dimY, dimXY3 = dimXY * 3;
-    qint64 sizeToRead = dimXY3 * sizeof(float), sizeToReadOnEdge = dimXY * 2 * sizeof(float);
-    float **pOV = new float*[nViewpoints];  // p(O|V) (un tros de la matriu cada vegada)
-    for ( int i = 0; i < nViewpoints; i++ ) pOV[i] = new float[dimXY3];
-
-    QVector<Vector3Float> viewpointColors;
-    if ( computeColorVomi )
-    {
-        QMap< QPair<int, int>, QVector<int> > viewpointSubSets; // (nPunts,nColors) -> punts-millor-distribuïts
-        {
-            viewpointSubSets[qMakePair(42, 6)] = ( QVector<int>() << 13 << 17 << 23 << 27 << 33 << 39 );
-            viewpointSubSets[qMakePair(162, 6)] = ( QVector<int>() << 16 << 34 << 62 << 82 << 110 << 143 );
-        }
-
-        viewpointColors.resize( nViewpoints );
-        int nColors = m_colorVomiPalette.size();
-
-        if ( nColors == 1 ) // tots el mateix
-        {
-            DEBUG_LOG( "tots els colors iguals" );
-            for ( int i = 0; i < nViewpoints; i++ ) viewpointColors[i] = m_colorVomiPalette.at( 0 );
-        }
-        else if ( nViewpoints <= nColors )  // agafem els primers colors
-        {
-            DEBUG_LOG( "primers colors" );
-            for ( int i = 0; i < nViewpoints; i++ ) viewpointColors[i] = m_colorVomiPalette.at( i );
-        }
-        else    // trobar els més separats -> que la distància mínima entre ells sigui màxima entre totes les mínimes
-        {
-            QVector<int> bestIndices;
-            QPair<int, int> mapIndex( nViewpoints, nColors );
-
-            if ( viewpointSubSets.contains( mapIndex ) )
-            {
-                DEBUG_LOG( "índexs precalculats" );
-                bestIndices = viewpointSubSets.value( mapIndex );
-            }
-            else
-            {
-                DEBUG_LOG( "calculem els índexs" );
-                double maxMinDistance = 0.0;
-
-                class Combination
-                {
-                private:
-                    int m_n;
-                    int m_k;
-                    QVector<int> m_data;
-                public:
-                    Combination( int n, int k )
-                    {
-                        Q_ASSERT( n >= 0 && k >= 0 );
-                        m_n = n;
-                        m_k = k;
-                        m_data.resize( k );
-                        for ( int i = 0; i < k; ++i ) m_data[i] = i;
-                    }   // Combination(n,k)
-                    QVector<int> data() const
-                    {
-                        return m_data;
-                    }
-                    QString toString() const
-                    {
-                        QString s = "{ ";
-                        for ( int i = 0; i < m_k; ++i ) s += QString::number( m_data.at( i ) ) + " ";
-                        s += "}";
-                        return s;
-                    }   // toString()
-                    Combination* successor() const
-                    {
-                        if ( m_data[0] == m_n - m_k) return 0;
-                        Combination *ans = new Combination( m_n, m_k );
-                        int i;
-                        for ( i = 0; i < m_k; ++i ) ans->m_data[i] = m_data.at( i );
-                        for ( i = m_k - 1; i > 0 && ans->m_data.at( i ) == m_n - m_k + i; --i );
-                        ++ans->m_data[i];
-                        for ( int j = i; j < m_k - 1; ++j ) ans->m_data[j+1] = ans->m_data[j] + 1;
-                        return ans;
-                    }   // successor()
-                    static quint64 choose( int n, int k )
-                    {
-                        if ( n < k ) return 0;  // special case
-                        if ( n == k ) return 1;
-                        int delta, iMax;
-                        if ( k < n - k )    // ex: choose(100,3)
-                        {
-                            delta = n - k;
-                            iMax = k;
-                        }
-                        else                // ex: choose(100,97)
-                        {
-                            delta = k;
-                            iMax = n - k;
-                        }
-                        quint64 ans = delta + 1;
-                        for ( int i = 2; i <= iMax; ++i ) ans = ( ans * ( delta + i ) ) / i;
-                        return ans;
-                    }   // choose()
-                };  // Combination class
-
-                quint64 nCombinations = Combination::choose( nViewpoints, nColors );
-                Combination *c = new Combination( nViewpoints, nColors );
-                for ( quint64 i = 0; i < nCombinations; i++ )
-                {
-                    //DEBUG_LOG( QString( "%1: %2" ).arg( i ).arg( c->toString() ) );
-
-                    QVector<int> indices = c->data();
-                    double minDistance = ( viewpoints.at( indices.at( 0 ) ) - viewpoints.at( indices.at( 1 ) ) ).length();
-                    bool mayBeBetter = minDistance > maxMinDistance;
-                    for ( int j = 0; j < nColors - 1 && mayBeBetter; j++ )
-                    {
-                        const Vector3 &v1 = viewpoints.at( indices.at( j ) );
-                        for ( int k = j + 1; k < nColors && mayBeBetter; k++ )
-                        {
-                            double distance = ( v1 - viewpoints.at( indices.at( k ) ) ).length();
-                            if ( distance < minDistance )
-                            {
-                                minDistance = distance;
-                                mayBeBetter = minDistance > maxMinDistance;
-                            }
-                        }
-                    }
-                    if ( minDistance > maxMinDistance )
-                    {
-                        maxMinDistance = minDistance;
-                        bestIndices = indices;
-                    }
-
-                    Combination *t = c;
-                    c = c->successor();
-                    delete t;
-                }
-            }
-
-            DEBUG_LOG( "best indices:" );
-            for ( int i = 0; i < nColors; i++ ) DEBUG_LOG( QString::number( bestIndices.at( i ) ) );
-
-            for ( int i = 0; i < nColors; i++ ) viewpointColors[bestIndices.at(i)] = m_colorVomiPalette.at( i );
-
-            float maxChange;
-            do
-            {
-                maxChange = 0.0f;
-                for ( int i = 0; i < nViewpoints; i++ )
-                {
-                    if ( bestIndices.contains( i ) ) continue;
-                    Vector3 viewpoint = viewpoints.at( i );
-                    QVector<int> neighbours = viewpointGenerator.neighbours( i );
-                    Vector3Float color;
-                    double totalWeight = 0.0;
-                    int nNeighbours = neighbours.size();
-                    for ( int j = 0; j < nNeighbours; j++ )
-                    {
-                        int neighbourIndex = neighbours.at( j );
-                        double distance = ( viewpoint - viewpoints.at( neighbourIndex ) ).length();
-                        double weight = 1.0 / distance;
-                        color += weight * viewpointColors.at( neighbourIndex );
-                        totalWeight += weight;
-                    }
-                    color /= totalWeight;
-                    float change = ( color - viewpointColors.at( i ) ).length();
-                    viewpointColors[i] = color;
-                    if ( change > maxChange ) maxChange = change;
-                }
-            } while ( maxChange > 0.1f );
-        }
-
-        DEBUG_LOG( "colors: " );
-        for ( int i = 0; i < nViewpoints; i++ )
-        {
-            DEBUG_LOG( QString( "v%1: %2 -> %3" ).arg( i+1 ).arg( viewpoints.at( i ).toString() ).arg( viewpointColors.at( i ).toString() ) );
-        }
-    }
-
-    int nThreads = QThread::idealThreadCount();
-    QList<VomiThread*> vomiThreads;
-
-    for ( int i = 0; i < nThreads; i++ )
-    {
-        VomiThread *thread = new VomiThread( viewProbabilities, objectProbabilities, viewpointColors, m_colorVomi );
-        thread->setPOV( pOV );
-        thread->setDimensions( dimX, dimY, dimZ );
-        thread->setYStartAndStep( i, nThreads );
-        thread->setMeasuresToCompute( computeColorVomi );
-        vomiThreads << thread;
-    }
-
-    m_vmiProgressBar->setValue( 0 );
-
-    // iterem pel volum en l'ordre dels vòxels
-    for ( int z = 0; z < dimZ; z++ )
-    {
-        DEBUG_LOG( QString( "llesca %1/%2" ).arg( z + 1 ).arg( dimZ ) );
-
-        // actualitzem pOV
-        for ( int k = 0; k < nViewpoints; k++ )
-        {
-            // quan z == 0, es salta la primera llesca, que seria z == -1
-            if ( z == 0 ) pOvFiles[k]->peek( reinterpret_cast<char*>( &(pOV[k][dimXY]) ), sizeToReadOnEdge );
-            else if ( z == dimZ - 1 ) pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToReadOnEdge );
-            else pOvFiles[k]->peek( reinterpret_cast<char*>( pOV[k] ), sizeToRead );
-        }
-
-        for ( int i = 0; i < nThreads; i++ )
-        {
-            vomiThreads.at( i )->setZ( z );
-            vomiThreads.at( i )->start();
-        }
-
-        for ( int i = 0; i < nThreads; i++ ) vomiThreads.at( i )->wait();
-
-        if ( z > 0 )
-        {
-            // avancem una llesca en tots els fitxers
-            for ( int k = 0; k < nViewpoints; k++ ) pOvFiles[k]->read( reinterpret_cast<char*>( pOV[k] ), dimXY * sizeof(float) );
-        }
-
-        m_vmiProgressBar->setValue( 100 * ( z + 1 ) / dimZ );
-        m_vmiProgressBar->repaint();
-    }
-
-    for ( int i = 0; i < nThreads; i++ )
-    {
-        VomiThread *thread = vomiThreads.at( i );
-
-        if ( i == 0 )
-        {
-            if ( computeColorVomi ) m_maximumColorVomi = thread->maximumColorVomi();
-        }
-        else
-        {
-            if ( computeColorVomi && m_maximumColorVomi < thread->maximumColorVomi() ) m_maximumColorVomi = thread->maximumColorVomi();
-        }
-
-        delete thread;
-    }
-
-    DEBUG_LOG( "esborrem pOV" );
-    for ( int i = 0; i < nViewpoints; i++ ) delete[] pOV[i];
-    delete[] pOV;
-
-    if ( computeColorVomi )
-    {
-        m_baseColorVomiRadioButton->setEnabled( true );
-        m_colorVomiCheckBox->setEnabled( true );
-        m_saveColorVomiPushButton->setEnabled( true );
-    }
 }
 
 
@@ -2333,6 +2060,130 @@ void QExperimental3DExtension::saveViewpointVomi( const QString &fileName )
 }
 
 
+void QExperimental3DExtension::loadColorVomiPalette()
+{
+    QString colorVomiPaletteFileName = getFileNameToLoad( "colorVomiPaletteDir", tr("Load color VoMI palette"), tr("Text files (*.txt);;All files (*)") );
+    if ( !colorVomiPaletteFileName.isNull() ) loadColorVomiPalette( colorVomiPaletteFileName );
+}
+
+
+void QExperimental3DExtension::loadColorVomiPalette( const QString &fileName )
+{
+    QFile colorVomiPaletteFile( fileName );
+
+    if ( !colorVomiPaletteFile.open( QFile::ReadOnly | QFile::Text ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + fileName );
+        return;
+    }
+
+    m_colorVomiPalette.clear();
+
+    QTextStream in( &colorVomiPaletteFile );
+
+    while ( !in.atEnd() )
+    {
+        QString line = in.readLine();
+        QStringList numbers = line.split( ' ', QString::SkipEmptyParts );
+
+        if ( numbers.size() < 3 ) continue;
+
+        Vector3Float color;
+
+        if ( numbers.at( 0 ).contains( '.' ) )  // reals [0,1]
+        {
+            color.x = numbers.at( 0 ).toFloat();
+            color.y = numbers.at( 1 ).toFloat();
+            color.z = numbers.at( 2 ).toFloat();
+        }
+        else    // enters [0,255]
+        {
+            color.x = static_cast<unsigned char>( numbers.at( 0 ).toUShort() ) / 255.0f;
+            color.y = static_cast<unsigned char>( numbers.at( 1 ).toUShort() ) / 255.0f;
+            color.z = static_cast<unsigned char>( numbers.at( 2 ).toUShort() ) / 255.0f;
+        }
+
+        m_colorVomiPalette << color;
+    }
+
+    if ( m_colorVomiPalette.isEmpty() ) m_colorVomiPalette << Vector3Float( 1.0f, 1.0f, 1.0f );
+
+    colorVomiPaletteFile.close();
+}
+
+
+void QExperimental3DExtension::loadColorVomi()
+{
+    QString colorVomiFileName = getFileNameToLoad( "colorVomiDir", tr("Load color VoMI"), tr("Data files (*.dat);;All files (*)") );
+    if ( !colorVomiFileName.isNull() ) loadColorVomi( colorVomiFileName );
+}
+
+
+void QExperimental3DExtension::loadColorVomi( const QString &fileName )
+{
+    QFile colorVomiFile( fileName );
+
+    if ( !colorVomiFile.open( QFile::ReadOnly ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI"), QString( tr("Can't load color VoMI from file ") ) + fileName );
+        return;
+    }
+
+    unsigned int nObjects = m_volume->getSize();
+    m_colorVomi.resize( nObjects );
+    m_maximumColorVomi = 0.0f;
+
+    QDataStream in( &colorVomiFile );
+
+    for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ )
+    {
+        Vector3Float colorVomi;
+        in >> colorVomi.x >> colorVomi.y >> colorVomi.z;
+        m_colorVomi[i] = colorVomi;
+
+        if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
+        if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
+        if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
+    }
+
+    colorVomiFile.close();
+
+    m_baseColorVomiRadioButton->setEnabled( true );
+    m_colorVomiCheckBox->setEnabled( true );
+    m_saveColorVomiPushButton->setEnabled( true );
+}
+
+
+void QExperimental3DExtension::saveColorVomi()
+{
+    QString colorVomiFileName = getFileNameToSave( "colorVomiDir", tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
+    if ( !colorVomiFileName.isNull() ) saveColorVomi( colorVomiFileName );
+}
+
+
+void QExperimental3DExtension::saveColorVomi( const QString &fileName )
+{
+    QFile colorVomiFile( fileName );
+
+    if ( !colorVomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save color VoMI"), QString( tr("Can't save color VoMI to file ") ) + fileName );
+        return;
+    }
+
+    QDataStream out( &colorVomiFile );
+
+    unsigned int nObjects = m_volume->getSize();
+
+    for ( unsigned int i = 0; i < nObjects; i++ ) out << m_colorVomi.at( i ).x << m_colorVomi.at( i ).y << m_colorVomi.at( i ).z;
+
+    colorVomiFile.close();
+}
+
+
 void QExperimental3DExtension::loadViewpointUnstabilities()
 {
     QString viewpointUnstabilitiesFileName = getFileNameToLoad( "viewpointUnstabilitiesDir", tr("Load viewpoint unstabilities"), tr("Data files (*.dat);;All files (*)") );
@@ -2636,130 +2487,6 @@ void QExperimental3DExtension::saveEvmi( const QString &fileName )
     }
 
     evmiFile.close();
-}
-
-
-void QExperimental3DExtension::loadColorVomiPalette()
-{
-    QString colorVomiPaletteFileName = getFileNameToLoad( "colorVomiPaletteDir", tr("Load color VoMI palette"), tr("Text files (*.txt);;All files (*)") );
-    if ( !colorVomiPaletteFileName.isNull() ) loadColorVomiPalette( colorVomiPaletteFileName );
-}
-
-
-void QExperimental3DExtension::loadColorVomiPalette( const QString &fileName )
-{
-    QFile colorVomiPaletteFile( fileName );
-
-    if ( !colorVomiPaletteFile.open( QFile::ReadOnly | QFile::Text ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + fileName );
-        return;
-    }
-
-    m_colorVomiPalette.clear();
-
-    QTextStream in( &colorVomiPaletteFile );
-
-    while ( !in.atEnd() )
-    {
-        QString line = in.readLine();
-        QStringList numbers = line.split( ' ', QString::SkipEmptyParts );
-
-        if ( numbers.size() < 3 ) continue;
-
-        Vector3Float color;
-
-        if ( numbers.at( 0 ).contains( '.' ) )  // reals [0,1]
-        {
-            color.x = numbers.at( 0 ).toFloat();
-            color.y = numbers.at( 1 ).toFloat();
-            color.z = numbers.at( 2 ).toFloat();
-        }
-        else    // enters [0,255]
-        {
-            color.x = static_cast<unsigned char>( numbers.at( 0 ).toUShort() ) / 255.0f;
-            color.y = static_cast<unsigned char>( numbers.at( 1 ).toUShort() ) / 255.0f;
-            color.z = static_cast<unsigned char>( numbers.at( 2 ).toUShort() ) / 255.0f;
-        }
-
-        m_colorVomiPalette << color;
-    }
-
-    if ( m_colorVomiPalette.isEmpty() ) m_colorVomiPalette << Vector3Float( 1.0f, 1.0f, 1.0f );
-
-    colorVomiPaletteFile.close();
-}
-
-
-void QExperimental3DExtension::loadColorVomi()
-{
-    QString colorVomiFileName = getFileNameToLoad( "colorVomiDir", tr("Load color VoMI"), tr("Data files (*.dat);;All files (*)") );
-    if ( !colorVomiFileName.isNull() ) loadColorVomi( colorVomiFileName );
-}
-
-
-void QExperimental3DExtension::loadColorVomi( const QString &fileName )
-{
-    QFile colorVomiFile( fileName );
-
-    if ( !colorVomiFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI"), QString( tr("Can't load color VoMI from file ") ) + fileName );
-        return;
-    }
-
-    unsigned int nObjects = m_volume->getSize();
-    m_colorVomi.resize( nObjects );
-    m_maximumColorVomi = 0.0f;
-
-    QDataStream in( &colorVomiFile );
-
-    for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ )
-    {
-        Vector3Float colorVomi;
-        in >> colorVomi.x >> colorVomi.y >> colorVomi.z;
-        m_colorVomi[i] = colorVomi;
-
-        if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
-        if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
-        if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
-    }
-
-    colorVomiFile.close();
-
-    m_baseColorVomiRadioButton->setEnabled( true );
-    m_colorVomiCheckBox->setEnabled( true );
-    m_saveColorVomiPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveColorVomi()
-{
-    QString colorVomiFileName = getFileNameToSave( "colorVomiDir", tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
-    if ( !colorVomiFileName.isNull() ) saveColorVomi( colorVomiFileName );
-}
-
-
-void QExperimental3DExtension::saveColorVomi( const QString &fileName )
-{
-    QFile colorVomiFile( fileName );
-
-    if ( !colorVomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save color VoMI"), QString( tr("Can't save color VoMI to file ") ) + fileName );
-        return;
-    }
-
-    QDataStream out( &colorVomiFile );
-
-    unsigned int nObjects = m_volume->getSize();
-
-    for ( unsigned int i = 0; i < nObjects; i++ ) out << m_colorVomi.at( i ).x << m_colorVomi.at( i ).y << m_colorVomi.at( i ).z;
-
-    colorVomiFile.close();
 }
 
 
