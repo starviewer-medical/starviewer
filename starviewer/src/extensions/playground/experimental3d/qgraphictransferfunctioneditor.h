@@ -23,18 +23,15 @@ public:
 public slots:
 
     /// Assigna el rang de valors de la funció de transferència.
-    void setRange( double minimum, double maximum );
+    void setRange( int minimum, int maximum );
 
 private slots:
 
-    void setMinimum( double minimum );
-    void setMaximum( double maximum );
-    void keepRange( bool keep );
+    /// Assigna el rang de valors de la funció de transferència.
+    void setBasicRange( double minimum, double maximum );
     void setMinimum( int minimum );
-
-private:
-
-    double m_range;
+    void setMaximum( int maximum );
+    void setScroll( int scroll );
 
 };
 

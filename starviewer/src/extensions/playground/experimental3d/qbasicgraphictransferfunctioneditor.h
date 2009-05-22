@@ -27,6 +27,8 @@ public:
     QBasicGraphicTransferFunctionEditor( QWidget *parent = 0 );
     ~QBasicGraphicTransferFunctionEditor();
 
+    double minimum() const;
+    double maximum() const;
     /// Assigna el rang de valors de la funció de transferència.
     void setRange( double minimum, double maximum );
     /// Retorna la funció de transferència.

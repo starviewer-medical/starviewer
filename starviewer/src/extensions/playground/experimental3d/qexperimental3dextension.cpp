@@ -60,7 +60,7 @@ void QExperimental3DExtension::setInput( Volume *input )
     m_volume = m_viewer->getVolume();
 
     unsigned short max = m_volume->getRangeMax();
-    m_transferFunctionEditor->setRange( 0.0, max );
+    m_transferFunctionEditor->setRange( 0, max );
     TransferFunction defaultTransferFunction;
     defaultTransferFunction.addPoint( 0, QColor( 0, 0, 0, 0 ) );
     defaultTransferFunction.addPoint( max, QColor( 255, 255, 255, 255 ) );
