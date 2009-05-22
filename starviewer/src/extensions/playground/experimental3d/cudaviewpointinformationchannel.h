@@ -33,9 +33,12 @@ void cvicAccumulateVoxelProbabilities( float viewProbability, float totalViewedV
 QVector<float> cvicGetVoxelProbabilities();
 void cvicCleanupVoxelProbabilities();
 
-void cvicSetupVomi();
+void cvicSetupVomi( bool vomi, bool colorVomi );
 void cvicAccumulateVomi( float viewProbability, float totalViewedVolume );
-QVector<float> cvicCleanupVomi();
+void cvicAccumulateColorVomi( float viewProbability, const Vector3Float &viewColor, float totalViewedVolume );
+QVector<float> cvicGetVomi();
+QVector<Vector3Float> cvicGetColorVomi();
+void cvicCleanupVomi();
 
 
 #ifdef __cplusplus

@@ -75,11 +75,12 @@ private:
     void computeVomiCpu( bool computeVomi, bool computeColorVomi );
 #else // CUDA_AVAILABLE
     static Matrix4 viewMatrix( const Vector3 &viewpoint );
-    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi, bool computeViewpointVomi );
+    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi, bool computeViewpointVomi,
+                      bool computeColorVomi );
     void computeViewProbabilitiesCuda();
     void computeVoxelProbabilitiesCuda();
     void computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointVomi );
-    void computeVomiCuda();
+    void computeVomiCuda( bool computeVomi, bool computeColorVomi );
 #endif // CUDA_AVAILABLE
 
 private:

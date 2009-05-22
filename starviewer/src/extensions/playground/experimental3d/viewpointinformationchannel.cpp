@@ -257,7 +257,7 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
 #ifndef CUDA_AVAILABLE
     computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi );
 #endif // CUDA_AVAILABLE
 }
 
@@ -868,7 +868,7 @@ Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 
 
 void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi,
-                                               bool computeViewpointVomi )
+                                               bool computeViewpointVomi, bool computeColorVomi )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -876,7 +876,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     int nSteps = 0;
     if ( computeViewProbabilities ) nSteps++;   // p(V)
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
-    if ( computeVomi ) nSteps++;    // VoMI
+    if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi ) nSteps++;   // viewpoint entropy + entropy + VMI + MI + viewpoint VoMI
 
     emit totalProgressMaximum( nSteps );
@@ -903,10 +903,10 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    // VoMI
-    if ( computeVomi )
+    // VoMI + color VoMI
+    if ( computeVomi || computeColorVomi )
     {
-        computeVomiCuda();
+        computeVomiCuda( computeVomi, computeColorVomi );
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1160,7 +1160,7 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
 }
 
 
-void ViewpointInformationChannel::computeVomiCuda()
+void ViewpointInformationChannel::computeVomiCuda( bool computeVomi, bool computeColorVomi )
 {
     int nViewpoints = m_viewpoints.size();
     int nVoxels = m_volume->getSize();
@@ -1168,7 +1168,7 @@ void ViewpointInformationChannel::computeVomiCuda()
     emit partialProgress( 0 );
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 
-    cvicSetupVomi();
+    cvicSetupVomi( computeVomi, computeColorVomi );
 
     for ( int i = 0; i < nViewpoints; i++ )
     {
@@ -1181,21 +1181,48 @@ void ViewpointInformationChannel::computeVomiCuda()
         for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
         Q_ASSERT( viewedVolume == viewedVolume );
 
-        cvicAccumulateVomi( pv, viewedVolume );
+        if ( computeVomi ) cvicAccumulateVomi( pv, viewedVolume );
+        if ( computeColorVomi ) cvicAccumulateColorVomi( pv, m_viewpointColors.at( i ), viewedVolume );
 
         emit partialProgress( 100 * ( i + 1 ) / nViewpoints );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    m_vomi = cvicCleanupVomi();
-    m_maximumVomi = 0.0f;
+    if ( computeVomi )
+    {
+        m_vomi = cvicGetVomi();
+        m_maximumVomi = 0.0f;
+    }
+
+    if ( computeColorVomi )
+    {
+        m_colorVomi = cvicGetColorVomi();
+        m_maximumColorVomi = 0.0f;
+    }
+
+    cvicCleanupVomi();
 
     for ( int j = 0; j < nVoxels; j++ )
     {
-        float vomi = m_vomi.at( j );
-        Q_ASSERT( vomi == vomi );
-        Q_ASSERT( vomi >= 0.0f );
-        if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
+        if ( computeVomi )
+        {
+            float vomi = m_vomi.at( j );
+            Q_ASSERT( vomi == vomi );
+            Q_ASSERT( vomi >= 0.0f );
+            if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
+        }
+
+        if ( computeColorVomi )
+        {
+            Vector3Float colorVomi = m_colorVomi.at( j );
+            Q_ASSERT( colorVomi.x == colorVomi.x && colorVomi.y == colorVomi.y && colorVomi.z == colorVomi.z );
+            /// \todo pot ser < 0???
+            //Q_ASSERT( colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f );
+            //Q_ASSERT_X( colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f, "comprovació color vomi", qPrintable( colorVomi.toString() ) );
+            if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
+            if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
+            if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
+        }
     }
 }
 
