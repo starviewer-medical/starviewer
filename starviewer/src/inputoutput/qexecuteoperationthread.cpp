@@ -24,7 +24,6 @@
 #include "querypacs.h"
 #include "pacsconnection.h"
 #include "databaseconnection.h"
-#include "dicomseries.h"
 #include "patientfiller.h"
 #include "dicomtagreader.h"
 #include "localdatabasemanagerthreaded.h"
