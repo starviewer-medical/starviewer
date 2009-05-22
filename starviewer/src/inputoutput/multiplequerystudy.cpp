@@ -12,6 +12,10 @@
 #include <QMessageBox>
 #include <QApplication>
 
+#include "patient.h"
+#include "study.h"
+#include "series.h"
+#include "image.h"
 #include "status.h"
 #include "starviewersettings.h"
 #include "pacsparameters.h"
@@ -73,9 +77,14 @@ Status MultipleQueryStudy::StartQueries()
     {
         thread->wait();
         //fusionem les resultats dels diferents threads
-        m_studyList += thread->getStudyList();
+        m_patientStudyList += thread->getPatientStudyList();
         m_seriesList += thread->getSeriesList();
         m_imageList += thread->getImageList();
+
+        /*TODO Tenir en compte que podem tenir un studyUID repetit en dos PACS, ara mateix no ho tenim contemplat fusionem les 
+               dos QHash directament */
+
+        m_hashPacsIDOfStudyInstanceUID = m_hashPacsIDOfStudyInstanceUID.unite(thread->getHashTablePacsIDOfStudyInstanceUID());
 
         delete thread;
     }
@@ -91,22 +100,23 @@ Status MultipleQueryStudy::StartQueries()
 
 void MultipleQueryStudy::initializeResultsList()
 {
-    m_studyList.clear();
+    m_patientStudyList.clear();
     m_seriesList.clear();
     m_imageList.clear();
+    m_hashPacsIDOfStudyInstanceUID.clear();
 }
 
-QList<DICOMStudy> MultipleQueryStudy::getStudyList()
+QList<Patient*> MultipleQueryStudy::getPatientStudyList()
 {
-    return m_studyList;
+    return m_patientStudyList;
 }
 
-QList<DICOMSeries> MultipleQueryStudy::getSeriesList()
+QList<Series*> MultipleQueryStudy::getSeriesList()
 {
     return m_seriesList;
 }
 
-QList<DICOMImage> MultipleQueryStudy::getImageList()
+QList<Image*> MultipleQueryStudy::getImageList()
 {
     return m_imageList;
 }
@@ -114,5 +124,11 @@ QList<DICOMImage> MultipleQueryStudy::getImageList()
 MultipleQueryStudy::~MultipleQueryStudy()
 {
 }
+
+QHash<QString,QString> MultipleQueryStudy::getHashTablePacsIDOfStudyInstanceUID()
+{
+    return m_hashPacsIDOfStudyInstanceUID;
+}
+
 
 }

@@ -12,6 +12,10 @@
 #include "status.h"
 #include "logging.h"
 #include "pacsparameters.h"
+#include "patient.h"
+#include "study.h"
+#include "series.h"
+#include "image.h"
 
 #include <QString>
 
@@ -63,9 +67,10 @@ void QQueryStudyThread::run()
         }
         else 
         {
-            m_studyList = queryPacsStudy.getQueryResultsAsStudyList();
+            m_patientStudyList = queryPacsStudy.getQueryResultsAsPatientStudyList();
             m_seriesList = queryPacsStudy.getQueryResultsAsSeriesList();
             m_imageList = queryPacsStudy.getQueryResultsAsImageList();
+            m_hashPacsIDOfStudyInstanceUID = queryPacsStudy.getHashTablePacsIDOfStudyInstanceUID();
         }
 
         INFO_LOG ( QString("Thread del PACS %1 finalitzant").arg( m_param.getAEPacs() ) );
@@ -76,19 +81,24 @@ void QQueryStudyThread::run()
     }
 }
 
-QList<DICOMStudy> QQueryStudyThread::getStudyList()
+QList<Patient*> QQueryStudyThread::getPatientStudyList()
 {
-    return m_studyList;
+    return m_patientStudyList;
 }
 
-QList<DICOMSeries> QQueryStudyThread::getSeriesList()
+QList<Series*> QQueryStudyThread::getSeriesList()
 {
     return m_seriesList;
 }
 
-QList<DICOMImage> QQueryStudyThread::getImageList()
+QList<Image*> QQueryStudyThread::getImageList()
 {
     return m_imageList;
+}
+
+QHash<QString,QString> QQueryStudyThread::getHashTablePacsIDOfStudyInstanceUID()
+{
+    return m_hashPacsIDOfStudyInstanceUID;
 }
 
 QQueryStudyThread::~QQueryStudyThread()

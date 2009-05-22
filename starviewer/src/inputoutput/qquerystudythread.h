@@ -6,12 +6,11 @@
  ***************************************************************************/
 #ifndef UDGQQueryStudyThread_H
 #define UDGQQueryStudyThread_H
+
 #include <QThread>
 #include <QList>
+#include <QHash>
 
-#include "dicomstudy.h"
-#include "dicomseries.h"
-#include "dicomimage.h"
 #include "dicommask.h"
 #include "pacsparameters.h"
 
@@ -20,6 +19,10 @@ class QString;
 namespace udg {
 
 class PacsConnection;
+class Patient;
+class Study;
+class Series;
+class Image;
 
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou thread
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -42,12 +45,15 @@ public:
     void run();
 
     ///Retorna la llista d'estudis trobats que compleixen el criteri de cerca
-    QList<DICOMStudy> getStudyList();
+    QList<Patient*> getPatientStudyList();
 
     ///Retorna la llista de series trobades que compleixen els criteris de cerca
-    QList<DICOMSeries> getSeriesList();
+    QList<Series*> getSeriesList();
 
-    QList<DICOMImage> getImageList();
+    QList<Image*> getImageList();
+
+    ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
+    QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
 
     ///Destructor de la classe
     ~QQueryStudyThread();
@@ -67,9 +73,10 @@ private :
     PacsParameters m_param;
     DicomMask m_mask;
 
-    QList<DICOMStudy> m_studyList;
-    QList<DICOMSeries> m_seriesList;
-    QList<DICOMImage> m_imageList;
+    QList<Patient*> m_patientStudyList;
+    QList<Series*> m_seriesList;
+    QList<Image*> m_imageList;
+    QHash<QString,QString> m_hashPacsIDOfStudyInstanceUID; //Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
 
 };
 
