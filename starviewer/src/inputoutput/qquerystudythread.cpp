@@ -11,7 +11,6 @@
 #include "querypacs.h"
 #include "status.h"
 #include "logging.h"
-#include "pacsparameters.h"
 #include "patient.h"
 #include "study.h"
 #include "series.h"
