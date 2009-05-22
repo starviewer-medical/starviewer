@@ -21,7 +21,6 @@ HEADERS += experimental3dextensionmediator.h \
     voxelsaliencyvoxelshader.h \
     vomivoxelshader.h \
     colorvomivoxelshader.h \
-    vomithread.h \
     opacityvoxelshader.h \
     celshadingvoxelshader.h \
     vomicoolwarmvoxelshader.h \
@@ -43,7 +42,6 @@ SOURCES += experimental3dextensionmediator.cpp \
     voxelsaliencyvoxelshader.cpp \
     vomivoxelshader.cpp \
     colorvomivoxelshader.cpp \
-    vomithread.cpp \
     opacityvoxelshader.cpp \
     celshadingvoxelshader.cpp \
     vomicoolwarmvoxelshader.cpp \
@@ -51,8 +49,9 @@ SOURCES += experimental3dextensionmediator.cpp \
     viewpointinformationchannel.cpp
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
-cuda {
-    HEADERS += cudaviewpointinformationchannel.h qcudarenderwindow.h
+cuda { 
+    HEADERS += cudaviewpointinformationchannel.h \
+        qcudarenderwindow.h
     SOURCES += qcudarenderwindow.cpp
     CUSOURCES += cudaviewpointinformationchannel.cu
     OTHER_FILES += cudaviewpointinformationchannel.cu

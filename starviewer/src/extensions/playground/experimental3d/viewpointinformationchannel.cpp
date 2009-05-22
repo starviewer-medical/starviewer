@@ -10,7 +10,7 @@
 #ifndef CUDA_AVAILABLE
 #include <QTemporaryFile>
 #include "mathtools.h"
-#else
+#else // CUDA_AVAILABLE
 #include "../gputesting/camera.h"
 #include "cudaviewpointinformationchannel.h"
 #include "../gputesting/matrix4.h"
@@ -28,6 +28,190 @@ ViewpointInformationChannel::ViewpointInformationChannel( const ViewpointGenerat
 }
 
 
+void ViewpointInformationChannel::setColorVomiPalette( const QVector<Vector3Float> &colorVomiPalette )
+{
+    QMap< QPair<int, int>, QVector<int> > viewpointSubSets; // (nPunts,nColors) -> punts-millor-distribuïts
+    {
+        viewpointSubSets[qMakePair(42, 6)] = ( QVector<int>() << 13 << 17 << 23 << 27 << 33 << 39 );
+        viewpointSubSets[qMakePair(162, 6)] = ( QVector<int>() << 16 << 34 << 62 << 82 << 110 << 143 );
+    }
+
+    int nViewpoints = m_viewpoints.size();
+    m_viewpointColors.resize( nViewpoints );
+    m_viewpointColors.fill( Vector3Float() );
+    int nColors = colorVomiPalette.size();
+
+    if ( nColors == 1 ) // tots el mateix
+    {
+        DEBUG_LOG( "tots els colors iguals" );
+        for ( int i = 0; i < nViewpoints; i++ ) m_viewpointColors[i] = colorVomiPalette.at( 0 );
+    }
+    else if ( nViewpoints <= nColors )  // agafem els primers colors
+    {
+        DEBUG_LOG( "primers colors" );
+        for ( int i = 0; i < nViewpoints; i++ ) m_viewpointColors[i] = colorVomiPalette.at( i );
+    }
+    else    // trobar els més separats -> que la distància mínima entre ells sigui màxima entre totes les mínimes
+    {
+        QVector<int> bestIndices;
+        QPair<int, int> mapIndex( nViewpoints, nColors );
+
+        if ( viewpointSubSets.contains( mapIndex ) )
+        {
+            DEBUG_LOG( "índexs precalculats" );
+            bestIndices = viewpointSubSets.value( mapIndex );
+        }
+        else
+        {
+            DEBUG_LOG( "calculem els índexs" );
+            double maxMinDistance = 0.0;
+
+            class Combination
+            {
+                private:
+                    int m_n;
+                    int m_k;
+                    QVector<int> m_data;
+                public:
+                    Combination( int n, int k )
+                    {
+                        Q_ASSERT( n >= 0 && k >= 0 );
+                        m_n = n;
+                        m_k = k;
+                        m_data.resize( k );
+                        for ( int i = 0; i < k; ++i ) m_data[i] = i;
+                    }   // Combination(n,k)
+                    QVector<int> data() const
+                    {
+                        return m_data;
+                    }
+                    QString toString() const
+                    {
+                        QString s = "{ ";
+                        for ( int i = 0; i < m_k; ++i ) s += QString::number( m_data.at( i ) ) + " ";
+                        s += "}";
+                        return s;
+                    }   // toString()
+                    Combination* successor() const
+                    {
+                        if ( m_data[0] == m_n - m_k) return 0;
+                        Combination *ans = new Combination( m_n, m_k );
+                        int i;
+                        for ( i = 0; i < m_k; ++i ) ans->m_data[i] = m_data.at( i );
+                        for ( i = m_k - 1; i > 0 && ans->m_data.at( i ) == m_n - m_k + i; --i );
+                        ++ans->m_data[i];
+                        for ( int j = i; j < m_k - 1; ++j ) ans->m_data[j+1] = ans->m_data[j] + 1;
+                        return ans;
+                    }   // successor()
+                    static quint64 choose( int n, int k )
+                    {
+                        if ( n < k ) return 0;  // special case
+                        if ( n == k ) return 1;
+                        int delta, iMax;
+                        if ( k < n - k )    // ex: choose(100,3)
+                        {
+                            delta = n - k;
+                            iMax = k;
+                        }
+                        else                // ex: choose(100,97)
+                        {
+                            delta = k;
+                            iMax = n - k;
+                        }
+                        quint64 ans = delta + 1;
+                        for ( int i = 2; i <= iMax; ++i ) ans = ( ans * ( delta + i ) ) / i;
+                        return ans;
+                    }   // choose()
+            };  // Combination class
+
+            quint64 nCombinations = Combination::choose( nViewpoints, nColors );
+            Combination *c = new Combination( nViewpoints, nColors );
+            for ( quint64 i = 0; i < nCombinations; i++ )
+            {
+                //DEBUG_LOG( QString( "%1: %2" ).arg( i ).arg( c->toString() ) );
+                QVector<int> indices = c->data();
+                double minDistance = ( m_viewpoints.at( indices.at( 0 ) ) - m_viewpoints.at( indices.at( 1 ) ) ).length();
+                bool mayBeBetter = minDistance > maxMinDistance;
+
+                for ( int j = 0; j < nColors - 1 && mayBeBetter; j++ )
+                {
+                    const Vector3 &v1 = m_viewpoints.at( indices.at( j ) );
+
+                    for ( int k = j + 1; k < nColors && mayBeBetter; k++ )
+                    {
+                        double distance = ( v1 - m_viewpoints.at( indices.at( k ) ) ).length();
+
+                        if ( distance < minDistance )
+                        {
+                            minDistance = distance;
+                            mayBeBetter = minDistance > maxMinDistance;
+                        }
+                    }
+                }
+
+                if ( minDistance > maxMinDistance )
+                {
+                    maxMinDistance = minDistance;
+                    bestIndices = indices;
+                }
+
+                Combination *t = c;
+                c = c->successor();
+                delete t;
+            }
+        }
+
+#ifndef QT_NO_DEBUG
+        DEBUG_LOG( "best indices:" );
+        for ( int i = 0; i < nColors; i++ ) DEBUG_LOG( QString::number( bestIndices.at( i ) ) );
+#endif
+
+        for ( int i = 0; i < nColors; i++ ) m_viewpointColors[bestIndices.at(i)] = colorVomiPalette.at( i );
+
+        float maxChange;
+
+        do
+        {
+            maxChange = 0.0f;
+
+            for ( int i = 0; i < nViewpoints; i++ )
+            {
+                if ( bestIndices.contains( i ) ) continue;
+
+                Vector3 viewpoint = m_viewpoints.at( i );
+                QVector<int> neighbours = m_viewpointGenerator.neighbours( i );
+                Vector3Float color;
+                double totalWeight = 0.0;
+                int nNeighbours = neighbours.size();
+
+                for ( int j = 0; j < nNeighbours; j++ )
+                {
+                    int neighbourIndex = neighbours.at( j );
+                    double distance = ( viewpoint - m_viewpoints.at( neighbourIndex ) ).length();
+                    double weight = 1.0 / distance;
+                    color += weight * m_viewpointColors.at( neighbourIndex );
+                    totalWeight += weight;
+                }
+
+                color /= totalWeight;
+                float change = ( color - m_viewpointColors.at( i ) ).length();
+                m_viewpointColors[i] = color;
+
+                if ( change > maxChange ) maxChange = change;
+            }
+        } while ( maxChange > 0.1f );
+    }
+
+#ifndef QT_NO_DEBUG
+    DEBUG_LOG( "colors: " );
+    for ( int i = 0; i < nViewpoints; i++ )
+    {
+        DEBUG_LOG( QString( "v%1: %2 -> %3" ).arg( i+1 ).arg( m_viewpoints.at( i ).toString() ).arg( m_viewpointColors.at( i ).toString() ) );
+    }
+#endif
+}
+
+
 void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter )
 {
     if ( m_viewpoints.size() != filter.size() )
@@ -37,15 +221,25 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
     }
 
     m_viewpoints.clear();
+    QVector<Vector3Float> viewpointColors;
 
-    for ( int i = 0; i < filter.size(); i++ ) if ( filter.at( i ) ) m_viewpoints << m_viewpointGenerator.viewpoint( i );
+    for ( int i = 0; i < filter.size(); i++ )
+    {
+        if ( filter.at( i ) )
+        {
+            m_viewpoints << m_viewpointGenerator.viewpoint( i );
+            if ( !m_viewpointColors.isEmpty() ) viewpointColors << m_viewpointColors.at( i );
+        }
+    }
+
+    m_viewpointColors = viewpointColors;
 }
 
 
-void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &vomi, bool &viewpointVomi )
+void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &vomi, bool &viewpointVomi, bool &colorVomi )
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy && !entropy && !vmi && !mi && !vomi && !viewpointVomi ) return;
+    if ( !viewpointEntropy && !entropy && !vmi && !mi && !vomi && !viewpointVomi && !colorVomi ) return;
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
@@ -57,10 +251,11 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
     if ( vmi ) voxelProbabilities = true;
     if ( viewpointVomi ) vomi = true;
     if ( vomi ) voxelProbabilities = true;
+    if ( colorVomi ) voxelProbabilities = true;
     if ( voxelProbabilities ) viewProbabilities = true;
 
 #ifndef CUDA_AVAILABLE
-    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi );
+    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi );
 #else // CUDA_AVAILABLE
     computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi );
 #endif // CUDA_AVAILABLE
@@ -109,11 +304,23 @@ const QVector<float>& ViewpointInformationChannel::viewpointVomi() const
 }
 
 
+const QVector<Vector3Float>& ViewpointInformationChannel::colorVomi() const
+{
+    return m_colorVomi;
+}
+
+
+float ViewpointInformationChannel::maximumColorVomi() const
+{
+    return m_maximumColorVomi;
+}
+
+
 #ifndef CUDA_AVAILABLE
 
 
 void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi,
-                                              bool computeViewpointVomi )
+                                              bool computeViewpointVomi, bool computeColorVomi )
 {
     DEBUG_LOG( "computeCpu" );
 
@@ -121,7 +328,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     int nSteps = 1; // ray casting (p(Z|V))
     if ( computeViewProbabilities ) nSteps++;   // p(V)
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
-    if ( computeVomi ) nSteps++;    // VoMI
+    if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi ) nSteps++;   // viewpoint entropy + entropy + VMI + MI + viewpoint VoMI
 
     emit totalProgressMaximum( nSteps );
@@ -156,10 +363,10 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    // VoMI
-    if ( computeVomi )
+    // VoMI + color VoMI
+    if ( computeVomi || computeColorVomi )
     {
-        computeVomiCpu();
+        computeVomiCpu( computeVomi, computeColorVomi );
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -519,42 +726,67 @@ void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointE
 }
 
 
-void ViewpointInformationChannel::computeVomiCpu()
+void ViewpointInformationChannel::computeVomiCpu( bool computeVomi, bool computeColorVomi )
 {
     class VomiThread : public QThread {
         public:
-            VomiThread( const QVector<float> &voxelProbabilities, const QVector<float> &voxelProbabilitiesInView, QVector<float> &vomi, int start, int end )
-                : m_viewProbability( 0.0f ), m_voxelProbabilities( voxelProbabilities ), m_voxelProbabilitiesInView( voxelProbabilitiesInView ), m_vomi( vomi ), m_start( start ), m_end( end )
+            VomiThread( const QVector<float> &voxelProbabilities, const QVector<float> &voxelProbabilitiesInView, bool computeVomi, QVector<float> &vomi, bool computeColorVomi, QVector<Vector3Float> &colorVomi,
+                        int start, int end )
+                : m_viewProbability( 0.0f ), m_voxelProbabilities( voxelProbabilities ), m_voxelProbabilitiesInView( voxelProbabilitiesInView ), m_computeVomi( computeVomi ), m_vomi( vomi ),
+                  m_computeColorVomi( computeColorVomi ), m_viewColor( 1.0f, 1.0f, 1.0f ), m_colorVomi( colorVomi ), m_start( start ), m_end( end )
             {
             }
             void setViewProbability( float viewProbability )
             {
                 m_viewProbability = viewProbability;
             }
+            void setViewColor( const Vector3Float &viewColor )
+            {
+                m_viewColor = viewColor;
+            }
         protected:
             virtual void run()
             {
+                Vector3Float color = Vector3Float( 1.0f, 1.0f, 1.0f ) - m_viewColor;
                 for ( int i = m_start; i < m_end; i++ )
                 {
                     float pz = m_voxelProbabilities.at( i );
                     float pzv = m_voxelProbabilitiesInView.at( i );
                     float pvz = m_viewProbability * pzv / pz;
-                    if ( pvz > 0.0f ) m_vomi[i] += pvz * MathTools::logTwo( pvz / m_viewProbability );
+                    if ( pvz > 0.0f )
+                    {
+                        if ( m_computeVomi ) m_vomi[i] += pvz * MathTools::logTwo( pvz / m_viewProbability );
+                        if ( m_computeColorVomi ) m_colorVomi[i] += pvz * MathTools::logTwo( pvz / m_viewProbability ) * color;
+                    }
                 }
             }
         private:
             float m_viewProbability;
             const QVector<float> &m_voxelProbabilities;
             const QVector<float> &m_voxelProbabilitiesInView;
+            bool m_computeVomi;
             QVector<float> &m_vomi;
+            bool m_computeColorVomi;
+            Vector3Float m_viewColor;
+            QVector<Vector3Float> &m_colorVomi;
             int m_start, m_end;
     };
 
     int nViewpoints = m_viewpoints.size();
     int nVoxels = m_volume->getSize();
 
-    m_vomi.resize( nVoxels );
-    m_vomi.fill( 0.0f );
+    if ( computeVomi )
+    {
+        m_vomi.resize( nVoxels );
+        m_vomi.fill( 0.0f );
+    }
+
+    if ( computeColorVomi )
+    {
+        m_colorVomi.resize( nVoxels );
+        m_colorVomi.fill( Vector3Float() );
+    }
+
     QVector<float> voxelProbabilitiesInView( nVoxels ); // vector p(Z|v)
 
     emit partialProgress( 0 );
@@ -567,7 +799,7 @@ void ViewpointInformationChannel::computeVomiCpu()
 
     for ( int k = 0; k < nThreads; k++ )
     {
-        vomiThreads[k] = new VomiThread( m_voxelProbabilities, voxelProbabilitiesInView, m_vomi, start, end );
+        vomiThreads[k] = new VomiThread( m_voxelProbabilities, voxelProbabilitiesInView, computeVomi, m_vomi, computeColorVomi, m_colorVomi, start, end );
         start += nVoxelsPerThread;
         end += nVoxelsPerThread;
         if ( end > nVoxels ) end = nVoxels;
@@ -583,6 +815,7 @@ void ViewpointInformationChannel::computeVomiCpu()
         for ( int k = 0; k < nThreads; k++ )
         {
             vomiThreads[k]->setViewProbability( m_viewProbabilities.at( i ) );
+            if ( computeColorVomi ) vomiThreads[k]->setViewColor( m_viewpointColors.at( i ) );
             vomiThreads[k]->start();
         }
 
@@ -595,14 +828,30 @@ void ViewpointInformationChannel::computeVomiCpu()
     for ( int k = 0; k < nThreads; k++ ) delete vomiThreads[k];
     delete[] vomiThreads;
 
-    m_maximumVomi = 0.0f;
+    if ( computeVomi ) m_maximumVomi = 0.0f;
+    if ( computeColorVomi ) m_maximumColorVomi = 0.0f;
 
     for ( int j = 0; j < nVoxels; j++ )
     {
-        float vomi = m_vomi.at( j );
-        Q_ASSERT( vomi == vomi );
-        Q_ASSERT( vomi >= 0.0f );
-        if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
+        if ( computeVomi )
+        {
+            float vomi = m_vomi.at( j );
+            Q_ASSERT( vomi == vomi );
+            Q_ASSERT( vomi >= 0.0f );
+            if ( vomi > m_maximumVomi ) m_maximumVomi = vomi;
+        }
+
+        if ( computeColorVomi )
+        {
+            Vector3Float colorVomi = m_colorVomi.at( j );
+            Q_ASSERT( colorVomi.x == colorVomi.x && colorVomi.y == colorVomi.y && colorVomi.z == colorVomi.z );
+            /// \todo pot ser < 0???
+            //Q_ASSERT( colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f );
+            //Q_ASSERT_X( colorVomi.x >= 0.0f && colorVomi.y >= 0.0f && colorVomi.z >= 0.0f, "comprovació color vomi", qPrintable( colorVomi.toString() ) );
+            if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
+            if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
+            if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
+        }
     }
 }
 
