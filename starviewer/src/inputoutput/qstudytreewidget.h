@@ -141,10 +141,10 @@ signals :
     void currentImageChanged();
 
     ///signal que s'emet quan es fa expandir un estudi
-    void studyExpanded(QString studyUID, QString pacsId);
+    void studyExpanded(QString studyUID);
 
     ///signal que s'emet qua es fa expandir una series
-    void seriesExpanded(QString studyUID, QString seriesUID, QString pacsId);
+    void seriesExpanded(QString studyUID, QString seriesUID);
 
     ///signal que s'emet quan s'ha fet un doble click a un estudi
     void studyDoubleClicked();
