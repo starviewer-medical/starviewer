@@ -27,12 +27,9 @@
 #include <QList>
 #include <QHash>
 
-
 #include "qstudytreewidget.h"
-#include "pacslistdb.h"
 #include "starviewersettings.h"
 #include "logging.h"
-#include "pacsparameters.h"
 #include "patient.h"
 #include "study.h"
 #include "series.h"
@@ -104,7 +101,7 @@ void QStudyTreeWidget::insertPatient(Patient* patient)
 {
     if (patient->getNumberOfStudies() > 0)
     {
-        if (getStudyItem(patient->getStudies().at(0)->getInstanceUID(), "") != NULL)
+        if (getStudyItem(patient->getStudies().at(0)->getInstanceUID()) != NULL)
         {
             //si l'estudi ja hi existeix a StudyTreeView l'esborrem
             removeStudy(patient->getStudies().at(0)->getInstanceUID()); 
@@ -154,7 +151,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
 
 void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*> seriesList)
 {
-    QTreeWidgetItem *studyItem = getStudyItem(studyInstanceUID, "" /*serie->getPacsId()*/ );
+    QTreeWidgetItem *studyItem = getStudyItem(studyInstanceUID);
     QList<QTreeWidgetItem*> qTreeWidgetItemSeriesList;
 
     foreach(Series *series, seriesList)
@@ -202,7 +199,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
 
 void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> imageList)
 {
-    QTreeWidgetItem *newImageItem, *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID, "");
+    QTreeWidgetItem *newImageItem, *seriesItem = getSeriesQTreeWidgetItem(studyInstanceUID, seriesInstanceUID);
     QList<QTreeWidgetItem*> qTreeWidgetItemImageList;
 
     if (seriesItem != NULL)
@@ -254,7 +251,6 @@ void QStudyTreeWidget::clear()
     m_studyTreeView->clear();
     //Reinicialitzem variables
     m_oldCurrentStudyUID = "";
-    m_oldPacsId = "";
     m_oldCurrentSeriesUID = "";
 }
 
@@ -370,35 +366,24 @@ QString QStudyTreeWidget::getCurrentSeriesUID()
     else return "";
 }
 
-QTreeWidgetItem*  QStudyTreeWidget::getStudyItem(QString studyUID, QString pacsId)
+QTreeWidgetItem*  QStudyTreeWidget::getStudyItem(QString studyUID)
 {
-    int index = 0;
-    bool stop = false;
-    //busquem l'estudi a la que pertany la sèrie
-    QList<QTreeWidgetItem*> qStudyList( m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID) );
+    QList<QTreeWidgetItem*> qStudyList( m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID) );//busquem l'estudi a la que pertany la sèrie
 
-    while ( !stop && index < qStudyList.count() )
+    //TODO d'aquesta manera podríem tenir problemes si tenim un StudyUID duplicat
+    if (qStudyList.count() > 0)
     {
-        if (qStudyList.at(index)->text(PACSId) ==  pacsId)
-        {
-            stop = true;
-        }
-        else index++;
-    }
-
-    if ( stop )
-    {
-        return qStudyList.at( index );
+        return qStudyList.at(0);
     }
     else return NULL;
 }
 
-QTreeWidgetItem*  QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID, QString pacsId)
+QTreeWidgetItem*  QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstanceUID, QString seriesInstanceUID)
 {
     QTreeWidgetItem* studyItem, *item = NULL;
     int index = 0;
 
-    studyItem = getStudyItem(studyInstanceUID, pacsId);
+    studyItem = getStudyItem(studyInstanceUID);
 
     while (item == NULL && index < studyItem->childCount())//cerquem la sèrie de la que depen la imatge
     {
@@ -426,28 +411,6 @@ QString QStudyTreeWidget::getCurrentImageUID()
     }
 
     return result;
-}
-
-QString QStudyTreeWidget::getStudyPACSIdFromSelectedItems( QString studyUID )
-{
-    QString pacsId = "";
-
-    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
-    foreach( QTreeWidgetItem *item, selectedItems )
-    {
-        QTreeWidgetItem *studyItem;
-
-        if (item->text(Type) == "STUDY") studyItem = item;
-        if (item->text(Type) == "SERIES") studyItem = item->parent();
-        if (item->text(Type) == "IMAGE") studyItem = item->parent()->parent();
-
-        if (studyItem->text(UID) == studyUID)
-        {
-            pacsId = item->text(PACSId);
-            break;
-        }
-    }
-    return pacsId;
 }
 
 void QStudyTreeWidget::removeStudy( QString studyUID )
