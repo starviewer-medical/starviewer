@@ -76,13 +76,6 @@ public:
      */
     void setSortColumn(int);
 
-    /**
-     * Cerca l'AETitle del PACS de l'estudi indicat dins dels estudis seleccionats a la llista
-     * @param studyUID uid de l'estudi que volem saber l'AETitle
-     * @return Retorna el pacsId de l'estudi indicat, sempre que aquest estigui dins dels seleccionats
-     */
-    QString getStudyPACSIdFromSelectedItems(QString studyUID);
-
     /** Retorna el UID Study de l'estudi seleccionat
      * @return UID de l'estudi seleccionat
      */
@@ -210,12 +203,11 @@ private:
     /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
      * un mateix estudi pot estar a més d'un PACS
      * @param studyUID uid de l'estudi a cercar
-     * @param AETitle id del Pacs on està l'estudi
      */
-    QTreeWidgetItem* getStudyItem(QString studyUID, QString pacsId);
+    QTreeWidgetItem* getStudyItem(QString studyUID);
 
-    ///Retorna l'Objecte QTtreeWidgeItem que és de l'estudi, series i pacs passat per paràmetre
-    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID, QString pacsId);
+    ///Retorna l'Objecte QTtreeWidgeItem que és de l'estudi i series
+    QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID);
 
 private:
     /// Menu contextual
@@ -223,7 +215,6 @@ private:
 
     /// strings per guardar valors de l'anterior element
     QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_OldInstitution;
-    QString m_oldPacsId;
 
     QString m_doubleClickedItemUID;
 
