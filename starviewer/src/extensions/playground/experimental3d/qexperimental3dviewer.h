@@ -13,6 +13,9 @@ namespace udg {
 class Experimental3DVolume;
 
 
+/**
+ * Visualitzador de l'extensió Experimental 3D.
+ */
 class QExperimental3DViewer : public QViewer {
 
     Q_OBJECT
@@ -25,8 +28,10 @@ public:
     /// Indiquem les dades d'entrada.
     virtual void setInput( Volume *volume );
 
-    /// Retorn el volum.
-    Experimental3DVolume* getVolume() const;
+    /// Assigna el volum.
+    void setVolume( Experimental3DVolume *volume );
+    /// Elimina el volum actual de la visualització.
+    void removeCurrentVolume();
 
     /// Retorna el color de fons actual.
     QColor getBackgroundColor();
