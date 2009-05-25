@@ -39,22 +39,26 @@ QExperimental3DViewer::QExperimental3DViewer( QWidget *parent )
 
 QExperimental3DViewer::~QExperimental3DViewer()
 {
-    delete m_volume;
 }
 
 
 void QExperimental3DViewer::setInput( Volume *volume )
 {
     m_mainVolume = volume;
-
-    m_volume = new Experimental3DVolume( volume );
-    m_renderer->AddViewProp( m_volume->getVolume() );
 }
 
 
-Experimental3DVolume* QExperimental3DViewer::getVolume() const
+void QExperimental3DViewer::setVolume( Experimental3DVolume *volume )
 {
-    return m_volume;
+    m_volume = volume;
+    m_renderer->AddViewProp( m_volume->getVolume() );
+    m_renderer->ResetCameraClippingRange();
+}
+
+
+void QExperimental3DViewer::removeCurrentVolume()
+{
+    m_renderer->RemoveViewProp( m_volume->getVolume() );
 }
 
 
@@ -122,7 +126,9 @@ void QExperimental3DViewer::render()
 
 void QExperimental3DViewer::reset()
 {
+    m_renderer->ResetCamera();
     m_renderer->SetBackground( 1.0, 1.0, 1.0 );
+    render();
 }
 
 

@@ -102,6 +102,8 @@ private:
 
 private slots:
 
+    void setNewVolume( Volume *volume );
+
     /// Obre un diàleg per triar el color de fons.
     void chooseBackgroundColor();
     /// Habilita/inhabilita la il·luminació especular.

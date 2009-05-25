@@ -25,8 +25,7 @@ namespace udg {
 
 
 QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
- : QWidget( parent ),
-   m_volume( 0 ),
+ : QWidget( parent ), m_volume( 0 ),
    m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 ), m_interactive( true )
 {
     setupUi( this );
@@ -43,6 +42,8 @@ QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
 
 QExperimental3DExtension::~QExperimental3DExtension()
 {
+    delete m_volume;
+
     if ( m_computingObscurance )
     {
         m_obscuranceMainThread->stop();
@@ -50,14 +51,16 @@ QExperimental3DExtension::~QExperimental3DExtension()
     }
 
     delete m_obscuranceMainThread;
-    delete m_obscurance;
+    delete m_obscurance;    
 }
 
 
 void QExperimental3DExtension::setInput( Volume *input )
 {
+    m_volume = new Experimental3DVolume( input );
+
     m_viewer->setInput( input );
-    m_volume = m_viewer->getVolume();
+    m_viewer->setVolume( m_volume );
 
     unsigned short max = m_volume->getRangeMax();
     m_transferFunctionEditor->setRange( 0, max );
@@ -70,8 +73,20 @@ void QExperimental3DExtension::setInput( Volume *input )
 }
 
 
+void QExperimental3DExtension::setNewVolume( Volume *volume )
+{
+    m_viewer->removeCurrentVolume();
+    delete m_volume;
+    m_volume = new Experimental3DVolume( volume );
+    m_viewer->setVolume( m_volume );
+    render();
+}
+
+
 void QExperimental3DExtension::createConnections()
 {
+    connect( m_viewer, SIGNAL( volumeChanged(Volume*) ), SLOT( setNewVolume(Volume*) ) );
+    
     // visualització
     connect( m_backgroundColorPushButton, SIGNAL( clicked() ), SLOT( chooseBackgroundColor() ) );
     connect( m_baseDiffuseLightingRadioButton, SIGNAL( toggled(bool) ), SLOT( enableSpecularLighting(bool) ) );
