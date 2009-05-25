@@ -42,9 +42,6 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
 {
     setupUi( this );
 
-    //la columna de UID AETITLE,type, Image Number i Protocol Name les fem invisibles
-    m_studyTreeView->setColumnHidden( PACSId, true );
-
     // m_studyTreeView->setColumnHidden( UID, true );
 
     m_studyTreeView->setColumnHidden( Type, true );
@@ -130,7 +127,6 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(StudyID, tr("Study %1").arg(studyToInsert->getID()));
 
         item->setText( AccNumber, studyToInsert->getAccessionNumber());
-        //item->setText( PACSId, study->getPacsId() );
         item->setText(UID, studyToInsert->getInstanceUID());
         item->setText(Type , "STUDY");//indiquem de que es tracta d'un estudi
         item->setText(RefPhysName, studyToInsert->getReferringPhysiciansName());
@@ -177,7 +173,6 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
 
     if (!series->getTimeAsString().isEmpty()) seriesItem->setText(Time , formatHour(series->getTime().toString("hhmmss")));
 
-    seriesItem->setText(PACSId, ""/*serie->getPacsId()*/);
     seriesItem->setText(UID, series->getInstanceUID());
     seriesItem->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
 
@@ -210,7 +205,6 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
 
             newImageItem->setIcon(ObjectName, m_iconSeries);
             newImageItem->setText(ObjectName, tr("Image %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
-            newImageItem->setText(PACSId, "");
             newImageItem->setText(UID, image->getSOPInstanceUID());
             newImageItem->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
             qTreeWidgetItemImageList.append(newImageItem);
@@ -497,10 +491,10 @@ void QStudyTreeWidget::itemExpanded( QTreeWidgetItem *itemExpanded )
 
         if ( isItemStudy( itemExpanded ) )
         {
-			itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
-            emit (studyExpanded(itemExpanded->text(UID), itemExpanded->text(PACSId)));
+            itemExpanded->setIcon( ObjectName, m_openFolder );//canviem la icona per la de carpeta oberta quan l'item està expanded
+            emit (studyExpanded(itemExpanded->text(UID)));
         }
-        else if (isItemSeries(itemExpanded)) emit(seriesExpanded(itemExpanded->parent()->text(UID ), itemExpanded->text(UID), itemExpanded->text(PACSId)));
+        else if (isItemSeries(itemExpanded)) emit(seriesExpanded(itemExpanded->parent()->text(UID ), itemExpanded->text(UID)));
 
         m_doubleClickedItemUID = "";
     }

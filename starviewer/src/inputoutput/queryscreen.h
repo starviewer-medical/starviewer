@@ -85,16 +85,14 @@ private slots:
 
     /** Busca la informació d'una sèrie
      * @param studyUID UID de l'estidi
-     * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void expandStudy( const QString &studyUID, const QString &pacsId );
+    void expandStudy( const QString &studyUID);
 
     /** Busca la informació d'una sèrie
      * @param studyUID UID de l'estidi
      * @param seriesUID
-     * @param pacsAETItle AEtitle del pacs a buscar la sèrie
      */
-    void expandSeries( const QString &studyUID, const QString &seriesUID, const QString &pacsId );
+    void expandSeries( const QString &studyUID, const QString &seriesUID);
 
     /** Al canviar de pàgina del tab hem de canviar alguns paràmetres, com activar el boto Retrieve, etec..
      * @param index del tab al que s'ha canviat

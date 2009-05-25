@@ -304,20 +304,20 @@ void QueryScreen::createConnections()
     connect( m_createDICOMDIRToolButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
 
     //connectem Slots dels StudyTreeWidget amb la interficie
-    connect( m_studyTreeWidgetPacs, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
-    connect( m_studyTreeWidgetPacs, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( studyExpanded( QString ) ), SLOT( expandStudy( QString ) ) );
+    connect( m_studyTreeWidgetPacs, SIGNAL( seriesExpanded( QString , QString ) ), SLOT( expandSeries( QString , QString ) ) );
     connect( m_studyTreeWidgetPacs, SIGNAL( studyDoubleClicked() ), SLOT( retrieve() ) );
     connect( m_studyTreeWidgetPacs, SIGNAL( seriesDoubleClicked() ), SLOT( retrieve() ) );
     connect( m_studyTreeWidgetPacs, SIGNAL( imageDoubleClicked() ), SLOT( retrieve() ) );
 
-    connect( m_studyTreeWidgetCache, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( studyExpanded( QString ) ), SLOT( expandStudy( QString ) ) );
+    connect( m_studyTreeWidgetCache, SIGNAL( seriesExpanded( QString , QString ) ), SLOT( expandSeries( QString , QString ) ) );
     connect( m_studyTreeWidgetCache, SIGNAL( studyDoubleClicked() ), SLOT( view() ) );
     connect( m_studyTreeWidgetCache, SIGNAL( seriesDoubleClicked() ), SLOT( view() ) );
     connect( m_studyTreeWidgetCache, SIGNAL( imageDoubleClicked() ), SLOT( view() ) );
 
-    connect( m_studyTreeWidgetDicomdir, SIGNAL( studyExpanded( QString , QString ) ), SLOT( expandStudy( QString , QString ) ) );
-    connect( m_studyTreeWidgetDicomdir, SIGNAL( seriesExpanded( QString , QString , QString ) ), SLOT( expandSeries( QString , QString , QString ) ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( studyExpanded( QString ) ), SLOT( expandStudy( QString ) ) );
+    connect( m_studyTreeWidgetDicomdir, SIGNAL( seriesExpanded( QString , QString ) ), SLOT( expandSeries( QString , QString ) ) );
     connect( m_studyTreeWidgetDicomdir, SIGNAL( studyDoubleClicked() ), SLOT( view() ) );
     connect( m_studyTreeWidgetDicomdir, SIGNAL( seriesDoubleClicked() ), SLOT( view() ) );
     connect( m_studyTreeWidgetDicomdir, SIGNAL( imageDoubleClicked() ), SLOT( view() ) );
@@ -636,7 +636,7 @@ void QueryScreen::queryStudy( const QString &source )
     }
 }
 
-void QueryScreen::expandStudy( const QString &studyUID, const QString &pacsId )
+void QueryScreen::expandStudy( const QString &studyUID )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
@@ -657,7 +657,7 @@ void QueryScreen::expandStudy( const QString &studyUID, const QString &pacsId )
 }
 
 /* AQUESTA ACCIO ES CRIDADA DES DEL STUDYLISTVIEW*/
-void QueryScreen::expandSeries( const QString &studyUID, const QString &seriesUID, const QString &pacsId )
+void QueryScreen::expandSeries( const QString &studyUID, const QString &seriesUID)
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
