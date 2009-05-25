@@ -87,10 +87,11 @@ void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
     {
         if (patient->getNumberOfStudies() > 0)
         {
-            m_studyTreeView->addTopLevelItems(fillPatient(patient));             
+            m_studyTreeView->addTopLevelItems(fillPatient(patient));
         }
     }
-    
+
+    m_insertedPatientList = patientList;
     m_studyTreeView->clearSelection();
 }
 
@@ -302,6 +303,26 @@ QStringList QStudyTreeWidget::getSelectedStudiesUID()
         }
     }
     return result;
+}
+
+QList<Study*> QStudyTreeWidget::getSelectedStudies()
+{
+    QStringList selectedStudiesUID = getSelectedStudiesUID();
+    QList<Study*> selectedStudies;
+
+   //Busquem pels estudis UID seleccionats 
+    foreach ( Patient *patientInserted , m_insertedPatientList ) 
+    {
+        foreach( Study *studyInserted , patientInserted->getStudies() )
+        {
+            if ( selectedStudiesUID.contains( studyInserted->getInstanceUID() ) )
+            {
+                selectedStudies.append(studyInserted);
+            } 
+        }
+    }
+
+    return selectedStudies;
 }
 
 QStringList QStudyTreeWidget::getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID )
