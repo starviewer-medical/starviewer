@@ -20,13 +20,10 @@ class QExperimental3DViewer : public QViewer {
 public:
 
     QExperimental3DViewer( QWidget *parent = 0 );
-    ~QExperimental3DViewer();
-
-    /// Retorna el renderer.
-    vtkRenderer* getRenderer();
+    virtual ~QExperimental3DViewer();
 
     /// Indiquem les dades d'entrada.
-    void setInput( Volume *volume );
+    virtual void setInput( Volume *volume );
 
     /// Retorn el volum.
     Experimental3DVolume* getVolume() const;
@@ -49,23 +46,20 @@ public:
 public slots:
 
     /// Força l'execució de la visualització.
-    void render();
+    virtual void render();
 
     /// Crida que reinicia a l'estat inicial el visor.
-    void reset();
+    virtual void reset();
 
     /// Obté el window level actual de la imatge.
-    void getCurrentWindowLevel( double wl[2] );
+    virtual void getCurrentWindowLevel( double wl[2] );
     /// Ajusta el window level.
-    void setWindowLevel( double window, double level );
+    virtual void setWindowLevel( double window, double level );
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital.
-    void resetView( CameraOrientationType view );
+    virtual void resetView( CameraOrientationType view );
 
 private:
-
-    /// El renderer.
-    vtkRenderer *m_renderer;
 
     /// El volum.
     Experimental3DVolume *m_volume;

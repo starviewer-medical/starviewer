@@ -26,10 +26,8 @@ QExperimental3DViewer::QExperimental3DViewer( QWidget *parent )
     style->SetCurrentStyleToTrackballCamera();
     style->Delete();
 
-    m_renderer = vtkRenderer::New();
     m_renderer->SetBackground( 1.0, 1.0, 1.0 );
 
-    m_vtkWidget->GetRenderWindow()->AddRenderer( m_renderer );
     m_vtkWidget->setAutomaticImageCacheEnabled( true );
 
     // avortar render
@@ -41,14 +39,7 @@ QExperimental3DViewer::QExperimental3DViewer( QWidget *parent )
 
 QExperimental3DViewer::~QExperimental3DViewer()
 {
-    m_renderer->Delete();
     delete m_volume;
-}
-
-
-vtkRenderer* QExperimental3DViewer::getRenderer()
-{
-    return m_renderer;
 }
 
 
