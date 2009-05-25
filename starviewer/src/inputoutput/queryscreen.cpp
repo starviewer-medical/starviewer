@@ -819,9 +819,9 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID)
 void QueryScreen::retrieve(bool view)
 {
     StatsWatcher::log( QString("Cridem slot 'retrieve(view=%1)'. Cridat desde: %2").arg(view).arg(sender()->objectName()) );
-    QStringList selectedStudiesUIDList = m_studyTreeWidgetPacs->getSelectedStudiesUID();
+    QList<Study*> selectedStudies = m_studyTreeWidgetPacs->getSelectedStudies();
 
-    if( selectedStudiesUIDList.isEmpty() )
+    if( selectedStudies.isEmpty() )
     {
         QApplication::restoreOverrideCursor();
         if( view )
@@ -832,12 +832,11 @@ void QueryScreen::retrieve(bool view)
         return;
     }
 
-    foreach( QString currentStudyUID, selectedStudiesUIDList)
+    foreach( Study *studyToRetrieve, selectedStudies)
     {
         DicomMask maskStudyToRetrieve;
-        Study *study = new Study;
 
-        maskStudyToRetrieve.setStudyUID(currentStudyUID);
+        maskStudyToRetrieve.setStudyUID( studyToRetrieve->getInstanceUID() );
 
         // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
         // per tant si seleccionem més d'una sèrie/imatge només s'en baixarà una
@@ -848,7 +847,7 @@ void QueryScreen::retrieve(bool view)
         if ( !m_studyTreeWidgetPacs->getCurrentImageUID().isEmpty() )
             maskStudyToRetrieve.setSOPInstanceUID( m_studyTreeWidgetPacs->getCurrentImageUID() );
 
-        retrieveFromPacs(view, getPacsIDFromQueriedStudies(currentStudyUID), maskStudyToRetrieve, study);
+        retrieveFromPacs(view, getPacsIDFromQueriedStudies( studyToRetrieve->getInstanceUID() ), maskStudyToRetrieve, studyToRetrieve);
     }
 }
 
@@ -921,9 +920,9 @@ void QueryScreen::retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMas
         operation.setPriority( Operation::Low );
     }
     //emplenem les dades de l'operació
-    operation.setPatientName( "Prova" );
-    operation.setPatientID( "Prova" );
-    operation.setStudyID( "Prova" );
+    operation.setPatientName( studyToRetrieve->getParentPatient()->getFullName() );
+    operation.setPatientID( studyToRetrieve->getParentPatient()->getID() );
+    operation.setStudyID( studyToRetrieve->getID() );
     operation.setStudyUID( maskStudyToRetrieve.getStudyUID() );
 
     m_qexecuteOperationThread.queueOperation( operation );

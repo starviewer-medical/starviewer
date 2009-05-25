@@ -28,6 +28,8 @@ class QString;
 
 namespace udg {
 
+class Study;
+
 /** Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
   * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació de la cerca d'estudis, permetent consultar les series d'aquell estudi. Aquesta classe es sincronitzar amb la informació mostrada a QSeriesListWidget
 @author marc
@@ -83,6 +85,9 @@ public:
 
     ///Retorna una llista amb l'UID del estudis seleccionats
     QStringList getSelectedStudiesUID();
+
+    ///Retorna una llista amb els estudis seleccionats
+    QList<Study*> getSelectedStudies();
 
     ///Retorna una llista amb l'UID de les sèries dels estudis seleccionats
     QStringList getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID );
@@ -155,8 +160,8 @@ signals :
     ///signal que s'emet quan s'ha fet un doble click a una imatge
     void imageDoubleClicked();
 
-	///signal que s'emet quan es passa de tenir un item seleccionat a no tenir-ne cap de seleccionat
-	void notCurrentItemSelected();
+    ///signal que s'emet quan es passa de tenir un item seleccionat a no tenir-ne cap de seleccionat
+    void notCurrentItemSelected();
 
 public slots:
     /** Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
@@ -219,6 +224,8 @@ private:
     QString m_doubleClickedItemUID;
 
     QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
+
+    QList<Patient*> m_insertedPatientList;
 
     ///Ens indica si l'item passat és un estudi
     bool isItemStudy( QTreeWidgetItem * );
