@@ -346,10 +346,10 @@ void Experimental3DVolume::addVoxelSaliencies( const QVector<float> &voxelSalien
 }
 
 
-void Experimental3DVolume::addOpacity( const QVector<float> &data, float maximum, float factor )
+void Experimental3DVolume::addOpacity( const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor )
 {
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_opacityVoxelShader );
-    m_opacityVoxelShader->setData( data, maximum, factor );
+    m_opacityVoxelShader->setData( data, maximum, lowThreshold, lowFactor, highThreshold, highFactor );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 

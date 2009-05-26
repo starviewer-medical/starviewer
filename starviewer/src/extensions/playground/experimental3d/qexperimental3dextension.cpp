@@ -411,8 +411,10 @@ void QExperimental3DExtension::render()
     if ( m_vomiCoolWarmCheckBox->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_vomiCoolWarmFactorDoubleSpinBox->value(),
                                                                           m_vomiCoolWarmYDoubleSpinBox->value(), m_vomiCoolWarmBDoubleSpinBox->value() );
     if ( m_colorVomiCheckBox->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value() );
-    if ( m_opacityVomiCheckBox->isChecked() ) m_volume->addOpacity( m_vomi, m_maximumVomi, m_opacityFactorDoubleSpinBox->value() );
-    if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityFactorDoubleSpinBox->value() );
+    if ( m_opacityVomiCheckBox->isChecked() ) m_volume->addOpacity( m_vomi, m_maximumVomi, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
+                                                                                           m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
+    if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
+                                                                                                              m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
     m_viewer->render();
@@ -3004,7 +3006,6 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck( int lineNumber, c
             if ( m_opacityVomiCheckBox->isEnabled() )
             {
                 m_opacityVomiCheckBox->setChecked( check );
-                if ( check && words.size() > 2 ) m_opacityFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
             }
             else
             {
@@ -3020,7 +3021,6 @@ bool QExperimental3DExtension::programRenderingCheckOrUncheck( int lineNumber, c
             if ( m_opacitySaliencyCheckBox->isEnabled() )
             {
                 m_opacitySaliencyCheckBox->setChecked( check );
-                if ( check && words.size() > 2 ) m_opacityFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
             }
             else
             {
@@ -3372,13 +3372,29 @@ void QExperimental3DExtension::opacityVomiChecked( bool checked )
     if ( checked )
     {
         m_opacitySaliencyCheckBox->setChecked( false );
-        m_opacityFactorLabel->setEnabled( true );
-        m_opacityFactorDoubleSpinBox->setEnabled( true );
+        m_opacityLowLabel->setEnabled( true );
+        m_opacityLowThresholdLabel->setEnabled( true );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityLowFactorLabel->setEnabled( true );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( true );
+        m_opacityHighLabel->setEnabled( true );
+        m_opacityHighThresholdLabel->setEnabled( true );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityHighFactorLabel->setEnabled( true );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( true );
     }
     else
     {
-        m_opacityFactorLabel->setEnabled( false );
-        m_opacityFactorDoubleSpinBox->setEnabled( false );
+        m_opacityLowLabel->setEnabled( false );
+        m_opacityLowThresholdLabel->setEnabled( false );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityLowFactorLabel->setEnabled( false );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( false );
+        m_opacityHighLabel->setEnabled( false );
+        m_opacityHighThresholdLabel->setEnabled( false );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityHighFactorLabel->setEnabled( false );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( false );
     }
 }
 
@@ -3388,13 +3404,29 @@ void QExperimental3DExtension::opacitySaliencyChecked( bool checked )
     if ( checked )
     {
         m_opacityVomiCheckBox->setChecked( false );
-        m_opacityFactorLabel->setEnabled( true );
-        m_opacityFactorDoubleSpinBox->setEnabled( true );
+        m_opacityLowLabel->setEnabled( true );
+        m_opacityLowThresholdLabel->setEnabled( true );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityLowFactorLabel->setEnabled( true );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( true );
+        m_opacityHighLabel->setEnabled( true );
+        m_opacityHighThresholdLabel->setEnabled( true );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityHighFactorLabel->setEnabled( true );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( true );
     }
     else
     {
-        m_opacityFactorLabel->setEnabled( false );
-        m_opacityFactorDoubleSpinBox->setEnabled( false );
+        m_opacityLowLabel->setEnabled( false );
+        m_opacityLowThresholdLabel->setEnabled( false );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityLowFactorLabel->setEnabled( false );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( false );
+        m_opacityHighLabel->setEnabled( false );
+        m_opacityHighThresholdLabel->setEnabled( false );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityHighFactorLabel->setEnabled( false );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( false );
     }
 }
 
