@@ -23,7 +23,7 @@ public:
     virtual ~OpacityVoxelShader();
 
     /// Assigna les dades (VoMI o saliency).
-    void setData( const QVector<float> &data, float maximum, float factor );
+    void setData( const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
@@ -41,7 +41,10 @@ protected:
     /// VoMI o saliency.
     QVector<float> m_data;
     float m_maximum;
-    float m_factor;
+    float m_lowThreshold;
+    float m_lowFactor;
+    float m_highThreshold;
+    float m_highFactor;
 
 };
 
@@ -67,8 +70,9 @@ inline HdrColor OpacityVoxelShader::nvShade( const Vector3 &position, int offset
     if ( baseColor.isTransparent() ) return baseColor;
 
     HdrColor color( baseColor );
-    float value = m_factor * m_data.at( offset ) / m_maximum;
-    color.alpha *= value;
+    float value = m_data.at( offset ) / m_maximum;
+    if ( value < m_lowThreshold ) color.alpha *= m_lowFactor * value;
+    else if ( value > m_highThreshold ) color.alpha *= m_highFactor * value;
     return color;
 }
 
@@ -86,8 +90,9 @@ inline HdrColor OpacityVoxelShader::nvShade( const Vector3 &position, const Vect
     int offsets[8];
     double weights[8];
     interpolator->getOffsetsAndWeights( position, offsets, weights );
-    float value = m_factor * TrilinearInterpolator::interpolate<float>( m_data.constData(), offsets, weights ) / m_maximum;
-    color.alpha *= value;
+    float value = TrilinearInterpolator::interpolate<float>( m_data.constData(), offsets, weights ) / m_maximum;
+    if ( value < m_lowThreshold ) color.alpha *= m_lowFactor * value;
+    else if ( value > m_highThreshold ) color.alpha *= m_highFactor * value;
     return color;
 }
 

@@ -95,7 +95,7 @@ public:
     void addVomiCoolWarm( const QVector<float> &vomi, float maximumVomi, float factor, float y, float b );
     void addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor );
     void addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor );
-    void addOpacity( const QVector<float> &data, float maximum, float factor );
+    void addOpacity( const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor );
     QVector<float> computeVomiGradient( const QVector<float> &vomi );
 
 private:
