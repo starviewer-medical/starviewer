@@ -62,6 +62,8 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
     m_segMethod = new rectumSegmentationMethod();
     squareRegionActor = vtkActor::New();
 
+    m_seedPosition = QVector<double> (3);
+
     createActions();
     createConnections();
     readSettings();
@@ -721,7 +723,6 @@ void QRectumSegmentationExtension::readSettings()
     m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
     m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
     m_savingMaskDirectory = settings.value( "savingDirectory", "." ).toString();
-    //std::cout<<"Saving directory: "<<qPrintable( m_savingMaskDirectory )<<std::endl;
     settings.endGroup();
 }
 
