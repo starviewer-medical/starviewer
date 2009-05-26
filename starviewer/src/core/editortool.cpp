@@ -69,7 +69,7 @@ void EditorTool::initialize(  )
         m_outsideValue = minmaxCalc->GetMinimum();
         m_insideValue  = minmaxCalc->GetMaximum();
 
-        DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
+//        DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
 
         int ext[6];
         int i,j,k;
@@ -299,6 +299,23 @@ void EditorTool::setPaintCursor()
         double spacing[3];
         m_2DViewer->getInput()->getSpacing(spacing);
   
+        //es calcula correctament el valor de profunditat per a corretgir el bug #245
+        int slice = m_2DViewer->getCurrentSlice();
+        double *origin = m_2DViewer->getInput()->getOrigin();
+    
+        switch( m_2DViewer->getView() )
+        {
+            case Q2DViewer::Axial:
+                pos[2] = origin[2] + (slice * spacing[2]);
+            break;
+            case Q2DViewer::Sagital:
+                pos[0] = origin[0] + (slice * spacing[0]);
+            break;
+            case Q2DViewer::Coronal:
+                pos[1] = origin[1] + (slice * spacing[1]);
+            break;
+        }
+
         vtkPoints *points = vtkPoints::New();
         points->SetNumberOfPoints(4);
   
@@ -338,7 +355,7 @@ void EditorTool::setPaintCursor()
         m_squareActor->VisibilityOn();
   
         m_2DViewer->getRenderer()->AddViewProp( m_squareActor );
-        //DEBUG_LOG( QString( "Painting Square Actor" ) );
+        m_2DViewer->getRenderer()->ResetCameraClippingRange();
         m_2DViewer->refresh();
   
         squareMapper->Delete();
