@@ -999,7 +999,54 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout">
+         <widget class="QPushButton" name="m_renderingOkPushButton">
+          <property name="text">
+           <string>OK</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="m_transferFunctionTab">
+       <attribute name="title">
+        <string>Transfer function</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QLabel" name="m_recentTransferFunctionsLabel">
+          <property name="text">
+           <string>Recent transfer functions</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListView" name="m_recentTransferFunctionsListView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="_4">
           <property name="spacing">
            <number>6</number>
           </property>
@@ -1009,24 +1056,44 @@
           <item>
            <widget class="QPushButton" name="m_loadTransferFunctionPushButton">
             <property name="text">
-             <string>Load transfer function...</string>
+             <string>Load...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_addRecentTransferFunctionPushButton">
+            <property name="text">
+             <string>Add to recent</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="m_saveTransferFunctionPushButton">
             <property name="text">
-             <string>Save transfer function...</string>
+             <string>Save...</string>
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
-         <widget class="udg::QGraphicTransferFunctionEditor" name="m_transferFunctionEditor" native="true"/>
+         <widget class="udg::QGraphicTransferFunctionEditor" name="m_transferFunctionEditor" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>256</width>
+            <height>256</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="m_renderingOkPushButton">
+         <widget class="QPushButton" name="m_transferFunctionOkPushButton">
           <property name="text">
            <string>OK</string>
           </property>

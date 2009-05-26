@@ -5,6 +5,7 @@
 #include "ui_qexperimental3dextensionbase.h"
 
 
+class QStringListModel;
 class QTemporaryFile;
 
 
@@ -38,6 +39,7 @@ private:
     void createConnections();
 
     void loadTransferFunction( const QString &fileName );
+    void saveTransferFunction( const QString &fileName );
     void loadCamera( const QString &fileName );
 
     /// Fa un recorregut pels viewpoints en ordre i amb suavitat.
@@ -112,6 +114,9 @@ private slots:
     void loadTransferFunction();
     /// Obre un diàleg per desar una funció de transferència.
     void saveTransferFunction();
+    void addRecentTransferFunction();
+    void setRecentTransferFunction( const QModelIndex &index );
+    void setTransferFunction( bool render = true );
     /// Renderitza amb les opcions seleccionades.
     void render();
 
@@ -193,7 +198,10 @@ private slots:
 
 private:
 
-    Experimental3DVolume *m_volume; // el destruirà el visor
+    Experimental3DVolume *m_volume;
+
+    QList<TransferFunction> m_recentTransferFunctions;
+    QStringListModel *m_recentTransferFunctionsModel;
 
     bool m_computingObscurance;
     ObscuranceMainThread *m_obscuranceMainThread;

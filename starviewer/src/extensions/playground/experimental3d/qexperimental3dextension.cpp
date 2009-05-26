@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QSet>
 #include <QSettings>
+#include <QStringListModel>
 #include <QTemporaryFile>
 #include <QTextStream>
 
@@ -37,6 +38,9 @@ QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
     bestViewpointsRadioButtons->addButton( m_computeBestViewsThresholdRadioButton );
 
     m_colorVomiPalette << Vector3Float( 1.0f, 1.0f, 1.0f );
+
+    m_recentTransferFunctionsModel = new QStringListModel( this );
+    m_recentTransferFunctionsListView->setModel( m_recentTransferFunctionsModel );
 }
 
 
@@ -69,6 +73,7 @@ void QExperimental3DExtension::setInput( Volume *input )
     defaultTransferFunction.addPoint( max, QColor( 255, 255, 255, 255 ) );
     m_transferFunctionEditor->setTransferFunction( defaultTransferFunction );
 
+    setTransferFunction( false );
     render();
 }
 
@@ -113,8 +118,6 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_contourCheckBox, SIGNAL( toggled(bool) ), m_contourDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
-    connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
     connect( m_renderingOkPushButton, SIGNAL( clicked() ), SLOT( render() ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
@@ -137,6 +140,13 @@ void QExperimental3DExtension::createConnections()
     connect( m_opacitySaliencyCheckBox, SIGNAL( toggled(bool) ), SLOT( opacitySaliencyChecked(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsLabel, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsSpinBox, SLOT( setEnabled(bool) ) );
+
+    // funcions de transferència
+    connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
+    connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
+    connect( m_addRecentTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( addRecentTransferFunction() ) );
+    connect( m_recentTransferFunctionsListView, SIGNAL( doubleClicked(const QModelIndex&) ), SLOT( setRecentTransferFunction(const QModelIndex&) ) );
+    connect( m_transferFunctionOkPushButton, SIGNAL( clicked() ), SLOT( setTransferFunction() ) );
 
     // càmera
     connect( m_cameraGetPushButton, SIGNAL( clicked() ), SLOT( getCamera() ) );
@@ -196,6 +206,13 @@ void QExperimental3DExtension::createConnections()
 }
 
 
+void QExperimental3DExtension::loadTransferFunction()
+{
+    QString transferFunctionFileName = getFileNameToLoad( "transferFunctionDir", tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
+    if ( !transferFunctionFileName.isNull() ) loadTransferFunction( transferFunctionFileName );
+}
+
+
 void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
 {
     TransferFunction *transferFunction;
@@ -204,7 +221,64 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
     else transferFunction = TransferFunctionIO::fromFile( fileName );
 
     m_transferFunctionEditor->setTransferFunction( *transferFunction );
+
+    m_recentTransferFunctions << *transferFunction;
+    int row = m_recentTransferFunctionsModel->rowCount();
+    m_recentTransferFunctionsModel->insertRow( row );
+    QString name = transferFunction->name();
+    if ( name.isEmpty() ) name = tr("<unnamed>");
+    m_recentTransferFunctionsModel->setData( m_recentTransferFunctionsModel->index( row, 0 ), name );
+
     delete transferFunction;
+
+    setTransferFunction();
+}
+
+
+void QExperimental3DExtension::saveTransferFunction()
+{
+    QString transferFunctionFileName = getFileNameToSave( "transferFunctionDir", tr("Save transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml" );
+
+    if ( !transferFunctionFileName.isNull() ) saveTransferFunction( transferFunctionFileName );
+}
+
+
+void QExperimental3DExtension::saveTransferFunction( const QString &fileName )
+{
+    if ( fileName.endsWith( ".xml" ) ) TransferFunctionIO::toXmlFile( fileName, m_transferFunctionEditor->transferFunction() );
+    else TransferFunctionIO::toFile( fileName, m_transferFunctionEditor->transferFunction() );
+
+    m_recentTransferFunctions << m_transferFunctionEditor->transferFunction();
+    int row = m_recentTransferFunctionsModel->rowCount();
+    m_recentTransferFunctionsModel->insertRow( row );
+    QString name = m_transferFunctionEditor->transferFunction().name();
+    if ( name.isEmpty() ) name = tr("<unnamed>");
+    m_recentTransferFunctionsModel->setData( m_recentTransferFunctionsModel->index( row, 0 ), name );
+}
+
+
+void QExperimental3DExtension::addRecentTransferFunction()
+{
+    m_recentTransferFunctions << m_transferFunctionEditor->transferFunction();
+    int row = m_recentTransferFunctionsModel->rowCount();
+    m_recentTransferFunctionsModel->insertRow( row );
+    QString name = m_transferFunctionEditor->transferFunction().name();
+    if ( name.isEmpty() ) name = tr("<unnamed>");
+    m_recentTransferFunctionsModel->setData( m_recentTransferFunctionsModel->index( row, 0 ), name );
+}
+
+
+void QExperimental3DExtension::setRecentTransferFunction( const QModelIndex &index )
+{
+    m_transferFunctionEditor->setTransferFunction( m_recentTransferFunctions.at( index.row() ) );
+    setTransferFunction();
+}
+
+
+void QExperimental3DExtension::setTransferFunction( bool render )
+{
+    m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
+    if ( render ) m_viewer->render();
 }
 
 
@@ -310,27 +384,6 @@ void QExperimental3DExtension::enableSpecularLighting( bool on )
 }
 
 
-void QExperimental3DExtension::loadTransferFunction()
-{
-    QString transferFunctionFileName = getFileNameToLoad( "transferFunctionDir", tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
-    if ( !transferFunctionFileName.isNull() ) loadTransferFunction( transferFunctionFileName );
-}
-
-
-void QExperimental3DExtension::saveTransferFunction()
-{
-    QString transferFunctionFileName = getFileNameToSave( "transferFunctionDir", tr("Save transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml" );
-
-    if ( !transferFunctionFileName.isNull() )
-    {
-        if ( transferFunctionFileName.endsWith( ".xml" ) )
-            TransferFunctionIO::toXmlFile( transferFunctionFileName, m_transferFunctionEditor->transferFunction() );
-        else
-            TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunctionEditor->transferFunction() );
-    }
-}
-
-
 void QExperimental3DExtension::render()
 {
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
@@ -362,7 +415,6 @@ void QExperimental3DExtension::render()
     if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityFactorDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
-    m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
     m_viewer->render();
 }
 
