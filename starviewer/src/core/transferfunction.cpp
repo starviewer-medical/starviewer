@@ -24,6 +24,7 @@ TransferFunction::TransferFunction()
 
 TransferFunction::TransferFunction( const TransferFunction & transferFunction )
 {
+    m_name = transferFunction.name();
     m_color = transferFunction.m_color;
     m_opacity = transferFunction.m_opacity;
 
