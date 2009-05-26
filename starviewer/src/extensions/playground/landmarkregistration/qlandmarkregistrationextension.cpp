@@ -200,8 +200,6 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_firstVolume );
-    m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
-    m_2DView->resetWindowLevelToDefault();
 
     int* dim;
     dim = m_firstVolume->getDimensions();
@@ -224,8 +222,6 @@ void QLandmarkRegistrationExtension::setPhase( int phase )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_firstVolume );
-    m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
-    m_2DView->resetWindowLevelToDefault();
 
     m_2DView->render();
 
@@ -252,8 +248,6 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView_2->setInput( m_secondVolume );
-    m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
-    m_2DView_2->resetWindowLevelToDefault();
 
     int* dim;
     dim = m_secondVolume->getDimensions();
@@ -272,8 +266,6 @@ void QLandmarkRegistrationExtension::setSecondPhase( int phase )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView_2->setInput( m_secondVolume );
-    m_2DView_2->removeAnnotation(Q2DViewer::NoAnnotation);
-    m_2DView_2->resetWindowLevelToDefault();
 
     m_2DView_2->render();
 
@@ -1104,13 +1096,32 @@ void QLandmarkRegistrationExtension::saveTransform(  )
     {
         ofstream fout(qPrintable( fileName ));
         DEBUG_LOG(qPrintable( fileName  ));
+/*
+        //old fashion
         for(unsigned int i=0;i<landmarkRegTransform->GetNumberOfParameters();i++)
         {
             fout<<landmarkRegTransform->GetParameters()[i]<<std::endl;
         }
         //fout<<landmarkRegTransform->GetParameters()<<std::endl;
         fout<<landmarkRegTransform->GetCenter()[0]<<" "<<landmarkRegTransform->GetCenter()[1]<<" "<<landmarkRegTransform->GetCenter()[2]<<" "<<std::endl;
+        */
+        unsigned int i,j;
+        for(i=0;i<3;i++)
+        {
+            for(j=0;j<3;j++)
+            {
+                fout<<landmarkRegTransform->GetMatrix()[i][j]<<std::endl;
+            }
+        }
+        for(i=0;i<3;i++)
+        {
+            fout<<landmarkRegTransform->GetOffset()[i]<<std::endl;
+        }
         fout.close();
+        std::cout<<"Transformation Matrix: "<<landmarkRegTransform->GetMatrix()<<std::endl;
+        std::cout<<"Transformation Translation: "<<landmarkRegTransform->GetTranslation()<<std::endl;
+        std::cout<<"Transformation Center: "<<landmarkRegTransform->GetCenter()<<std::endl;
+        std::cout<<"Transformation Offset: "<<landmarkRegTransform->GetOffset()<<std::endl;
     }
 
 }
@@ -1128,6 +1139,8 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         QApplication::setOverrideCursor(Qt::WaitCursor);
         ifstream fin(qPrintable( fileName ));
         //std::cout<<qPrintable( fileName  )<<std::endl;
+        /*
+        //old fashion
         LandmarkRegTransformType::ParametersType parameters(landmarkRegTransform->GetNumberOfParameters());
         LandmarkRegTransformType::InputPointType center;
         for(unsigned int i=0;i<landmarkRegTransform->GetNumberOfParameters();i++)
@@ -1142,7 +1155,24 @@ void QLandmarkRegistrationExtension::loadTransform(  )
             fin>>center[i];
         }
         landmarkRegTransform->SetCenter(center);
+        */
 
+        LandmarkRegTransformType::MatrixType transmatrix;
+        LandmarkRegTransformType::OffsetType transoffset;
+        unsigned int i,j;
+        for(i=0;i<3;i++)
+        {
+            for(j=0;j<3;j++)
+            {
+                fin>>transmatrix[i][j];
+            }
+        }
+        for(i=0;i<3;i++)
+        {
+            fin>>transoffset[i];
+        }
+        landmarkRegTransform->SetMatrix(transmatrix);
+        landmarkRegTransform->SetOffset(transoffset);
         fin.close();
         //std::cout<<landmarkRegTransform;
         //std::cout<<landmarkRegTransform->GetParameters()<<std::endl;

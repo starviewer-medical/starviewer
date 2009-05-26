@@ -49,7 +49,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/slicing.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -74,7 +74,7 @@
             <string>window level</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/windowLevel.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -96,7 +96,7 @@
             <string>zoom</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/zoom.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -118,7 +118,7 @@
             <string>move</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/move.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -140,7 +140,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/rotateClockWise.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -159,7 +159,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/rotateCounterClockWise.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -178,7 +178,7 @@
             <string>voxel information</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/voxelInformation.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -200,7 +200,7 @@
             <string>...</string>
            </property>
            <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/seed.png</iconset>
+            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -415,14 +415,14 @@
          <item>
           <widget class="QPushButton" name="m_savePushButton" >
            <property name="text" >
-            <string>Save Transform</string>
+            <string>Save Transform Matrix</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="m_loadPushButton" >
            <property name="text" >
-            <string>Load Transform</string>
+            <string>Load Transform Matrix</string>
            </property>
           </widget>
          </item>
