@@ -88,6 +88,195 @@ void QExperimental3DExtension::setNewVolume( Volume *volume )
 }
 
 
+void QExperimental3DExtension::loadViewpointEntropy( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "viewpointEntropyDir", tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_viewpointEntropy ) ) m_saveViewpointEntropyPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint entropy"), QString( tr("Can't load viewpoint entropy from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveViewpointEntropy( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "viewpointEntropyDir", tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointEntropy, fileName, QString( "H(Z|v%1) = %2" ), 1 );
+    else error = !saveFloatData( m_viewpointEntropy, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint entropy"), QString( tr("Can't save viewpoint entropy to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadEntropy( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "entropyDir", tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_entropy ) ) m_saveEntropyPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load entropy"), QString( tr("Can't load entropy from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveEntropy( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName =getFileNameToSave( "entropyDir", tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_entropy, fileName, QString( "H(Z) = %1" ) );
+    else error = !saveFloatData( m_entropy, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save entropy"), QString( tr("Can't save entropy to file ") ) + fileName );
+}
+
+
+bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &data )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::ReadOnly ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        return false;
+    }
+
+    QDataStream in( &file );
+
+    if ( !in.atEnd() ) in >> data;
+
+    file.close();
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::loadFloatData( const QString &fileName, QVector<float> &vector )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::ReadOnly ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        return false;
+    }
+
+    vector.clear();
+
+    QDataStream in( &file );
+
+    while ( !in.atEnd() )
+    {
+        float data;
+        in >> data;
+        vector << data;
+    }
+
+    file.close();
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::saveFloatData( float data, const QString &fileName )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        return false;
+    }
+
+    QDataStream out( &file );
+
+    out << data;
+
+    file.close();
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::saveFloatData( const QVector<float> &vector, const QString &fileName )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        return false;
+    }
+
+    QDataStream out( &file );
+    int n = vector.size();
+
+    for ( int i = 0; i < n; i++ ) out << vector.at( i );
+
+    file.close();
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::saveFloatDataAsText( float data, const QString &fileName, const QString &format )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        return false;
+    }
+
+    QTextStream out( &file );
+
+    out << format.arg( data ) << "\n";
+
+    file.close();
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::saveFloatDataAsText( const QVector<float> &vector, const QString &fileName, const QString &format, int base )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        return false;
+    }
+
+    QTextStream out( &file );
+    int n = vector.size();
+
+    for ( int i = 0; i < n; i++ ) out << format.arg( i + base ).arg( vector.at( i ) ) << "\n";
+
+    file.close();
+
+    return true;
+}
+
+
 void QExperimental3DExtension::createConnections()
 {
     connect( m_viewer, SIGNAL( volumeChanged(Volume*) ), SLOT( setNewVolume(Volume*) ) );
@@ -1671,143 +1860,6 @@ void QExperimental3DExtension::computeGuidedTour( const ViewpointGenerator &view
 
     m_saveGuidedTourPushButton->setEnabled( true );
     m_guidedTourPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::loadViewpointEntropy()
-{
-    QString viewpointEntropyFileName = getFileNameToLoad( "viewpointEntropyDir", tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
-    if ( !viewpointEntropyFileName.isNull() ) loadViewpointEntropy( viewpointEntropyFileName );
-}
-
-
-void QExperimental3DExtension::loadViewpointEntropy( const QString &fileName )
-{
-    QFile viewpointEntropyFile( fileName );
-
-    if ( !viewpointEntropyFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint entropy"), QString( tr("Can't load viewpoint entropy from file ") ) + fileName );
-        return;
-    }
-
-    m_viewpointEntropy.clear();
-
-    QDataStream in( &viewpointEntropyFile );
-
-    while ( !in.atEnd() )
-    {
-        float viewpointEntropy;
-        in >> viewpointEntropy;
-        m_viewpointEntropy << viewpointEntropy;
-    }
-
-    viewpointEntropyFile.close();
-
-    m_saveViewpointEntropyPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveViewpointEntropy()
-{
-    QString viewpointEntropyFileName = getFileNameToSave( "viewpointEntropyDir", tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-    if ( !viewpointEntropyFileName.isNull() ) saveViewpointEntropy( viewpointEntropyFileName );
-}
-
-
-void QExperimental3DExtension::saveViewpointEntropy( const QString &fileName )
-{
-    bool saveAsText = fileName.endsWith( ".txt" );
-    QFile viewpointEntropyFile( fileName );
-    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if ( saveAsText ) mode = mode | QIODevice::Text;
-
-    if ( !viewpointEntropyFile.open( mode ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint entropy"), QString( tr("Can't save viewpoint entropy to file ") ) + fileName );
-        return;
-    }
-
-    int nViewpoints = m_viewpointEntropy.size();
-
-    if ( saveAsText )
-    {
-        QTextStream out( &viewpointEntropyFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << "H(O|v" << i + 1 << ") = " << m_viewpointEntropy.at( i ) << "\n";
-    }
-    else
-    {
-        QDataStream out( &viewpointEntropyFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << m_viewpointEntropy.at( i );
-    }
-
-    viewpointEntropyFile.close();
-}
-
-
-void QExperimental3DExtension::loadEntropy()
-{
-    QString entropyFileName = getFileNameToLoad( "entropyDir", tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
-    if ( !entropyFileName.isNull() ) loadEntropy( entropyFileName );
-}
-
-
-void QExperimental3DExtension::loadEntropy( const QString &fileName )
-{
-    QFile entropyFile( fileName );
-
-    if ( !entropyFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load entropy"), QString( tr("Can't load entropy from file ") ) + fileName );
-        return;
-    }
-
-    QDataStream in( &entropyFile );
-
-    if ( !in.atEnd() ) in >> m_entropy;
-
-    entropyFile.close();
-
-    m_saveEntropyPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveEntropy()
-{
-    QString entropyFileName = getFileNameToSave( "entropyDir", tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-    if ( !entropyFileName.isNull() ) saveEntropy( entropyFileName );
-}
-
-
-void QExperimental3DExtension::saveEntropy( const QString &fileName )
-{
-    bool saveAsText = fileName.endsWith( ".txt" );
-    QFile entropyFile( fileName );
-    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if ( saveAsText ) mode = mode | QIODevice::Text;
-
-    if ( !entropyFile.open( mode ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save entropy"), QString( tr("Can't save entropy to file ") ) + fileName );
-        return;
-    }
-
-    if ( saveAsText )
-    {
-        QTextStream out( &entropyFile );
-        out << "entropy = " << m_entropy;
-    }
-    else
-    {
-        QDataStream out( &entropyFile );
-        out << m_entropy;
-    }
-
-    entropyFile.close();
 }
 
 
