@@ -11,12 +11,10 @@
 
 #include "ui_queryscreenbase.h"
 #include "qexecuteoperationthread.h"
-#include "dicomdirreader.h"
 #include "multiplequerystudy.h"
 #include "pacsparameters.h"
 #include "localdatabasemanager.h"
 #include "qdeleteoldstudiesthread.h"
-#include "dicomdirimporter.h"
 #include "listenrisrequestthread.h"
 #include "qpopuprisrequestsscreen.h"
 
@@ -66,6 +64,9 @@ public slots:
     /// Mostra tots els estudis en local i reseteja els camps de cerca
     void showLocalExams();
 
+    /// Neteja els LineEdit del formulari
+    void clearTexts();
+
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
     void selectedPatients( QList<Patient *> selectedPatients );
@@ -77,8 +78,6 @@ protected :
     void closeEvent( QCloseEvent* event );
 
 private slots:
-    /// Neteja els LineEdit del formulari
-    void clearTexts();
 
     /// Escull a on fer la cerca, si a nivell local o PACS
     void searchStudy();
@@ -103,9 +102,6 @@ private slots:
      * @param view boolea que indica si després de la descarrega s'ha de visualitzar l'estudi
      */
     void retrieve(bool view = false);
-
-    ///importa el dicomdir a la nostra base de ades
-    void importDicomdir();
 
     /// Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega a la classe volum i es visualitza
     void view();
@@ -178,9 +174,6 @@ private slots:
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
 
-    ///Ens Mostra un missatge indicant l'error produït a la DICOMDIRImporter, i com es pot solucionar
-    void showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRImporter::DICOMDIRImporterError error);
-
     ///Ens mostra un message box indicant l'error produït mentre s'esperaven peticions del RIS
     void showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError);
 
@@ -190,6 +183,10 @@ private slots:
     ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
     void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
 
+    void viewPatients(QList<Patient*>);
+
+    ///Fa un refresc del estudis que es mostren al tab de base de dades local
+    void refreshLocalDatabaseTab();
 
 private:
 
@@ -277,9 +274,6 @@ private:
     ///Crear el menú contextual del QStudyTreeWidgetPacs
     void CreateContextMenuQStudyTreeWidgetPacs();
 
-    ///Crear el menú contextual del QStudyTreeWidgetDicomdir
-    void CreateContextMenuQStudyTreeWidgetDicomdir();
-
     ///Estableix la mida de les columnes de QStudyTreeWidget
     void setQStudyTreeWidgetColumnsWidth();
 
@@ -320,9 +314,6 @@ struct retrieveParameters
     /// Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
     MultipleQueryStudy m_multipleQueryStudy;
 
-    /// conté la informació del dicomdir obert en aquests instants
-    DICOMDIRReader m_readDicomdir;
-
     /** A la pestanya de dicomdir no s'ha de mostrar el QPacsList, per tant a la pestany de dicomdir
      * automaticament l'amaguem, i si tornem a la pestanya de la cache o del pacs, si anteriorment
      * estava desplagat es mostra el QPacsList, per això utilitzem el m_PacsListShow que guarda si
@@ -337,7 +328,7 @@ struct retrieveParameters
     QExecuteOperationThread m_qexecuteOperationThread;
     QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
 
-    QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs, m_contextMenuQStudyTreeWidgetDicomdir;
+    QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs;
 
     ListenRISRequestThread *m_listenRISRequestThread;
 
