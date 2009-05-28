@@ -1802,7 +1802,7 @@ void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerat
                 pOvFiles[neighbour]->read( reinterpret_cast<char*>( objectProbabilitiesInNeighbour.data() ), nObjects * sizeof(float) );    // llegim...
                 pOvFiles[neighbour]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
 
-                float viewpointDissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, objectProbabilitiesInView, objectProbabilitiesInNeighbour );
+                float viewpointDissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, objectProbabilitiesInView, objectProbabilitiesInNeighbour );
                 viewpointUnstability += viewpointDissimilarity;
             }
 
@@ -1813,7 +1813,7 @@ void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerat
 
         if ( computeEvmi )
         {
-            float evmi = InformationTheory<float>::kullbackLeiblerDivergence( objectProbabilitiesInView, ppO );
+            float evmi = InformationTheory::kullbackLeiblerDivergence( objectProbabilitiesInView, ppO );
             Q_ASSERT( evmi == evmi );
             m_evmi[i] = evmi;
             DEBUG_LOG( QString( "EVMI(v%1) = %2" ).arg( i + 1 ).arg( evmi ) );
@@ -1920,7 +1920,7 @@ void QExperimental3DExtension::computeBestViews( const QVector<Vector3> &viewpoi
             float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
             QVector<float> pOvvi( pOvv );   // vector p(O|v̂) afegint aquesta vista
             for ( int j = 0; j < nObjects; j++ ) pOvvi[j] = ( pvv * pOvv.at( j ) + pvi * pOvi[j] ) / pvvi;
-            float IvviO = InformationTheory<float>::kullbackLeiblerDivergence( pOvvi, objectProbabilities );    // I(v̂,O) afegint aquesta vista
+            float IvviO = InformationTheory::kullbackLeiblerDivergence( pOvvi, objectProbabilities );    // I(v̂,O) afegint aquesta vista
 
             if ( i == 0 || IvviO < IvvOMin )
             {
@@ -2014,7 +2014,7 @@ void QExperimental3DExtension::computeGuidedTour( const ViewpointGenerator &view
                 pOvFiles.at( j )->read( reinterpret_cast<char*>( pOvj.data() ), nObjects * sizeof(float) ); // llegim...
                 pOvFiles.at( j )->reset();  // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
 
-                dissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, pOvi, pOvj );
+                dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pOvi, pOvj );
             }
 
             if ( k == 0 || dissimilarity < minDissimilarity )
@@ -2061,7 +2061,7 @@ void QExperimental3DExtension::computeGuidedTour( const ViewpointGenerator &view
                     pOvFiles.at( j )->read( reinterpret_cast<char*>( pOvj.data() ), nObjects * sizeof(float) ); // llegim...
                     pOvFiles.at( j )->reset();  // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
 
-                    dissimilarity = InformationTheory<float>::jensenShannonDivergence( pvi / pvij, pvj / pvij, pOvi, pOvj );
+                    dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pOvi, pOvj );
                 }
 
                 if ( k == 0 || dissimilarity < minDissimilarity )
