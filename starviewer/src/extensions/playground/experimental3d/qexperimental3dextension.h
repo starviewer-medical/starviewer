@@ -84,6 +84,11 @@ private:
     /// Crea les connexions de signals i slots.
     void createConnections();
 
+    /// Llança un diàleg per obtenir un nom de fitxer per llegir.
+    QString getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter );
+    /// Llança un diàleg per obtenir un nom de fitxer per escriure.
+    QString getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix );
+
     void loadTransferFunction( const QString &fileName );
     void saveTransferFunction( const QString &fileName );
     void loadCamera( const QString &fileName );
@@ -125,9 +130,6 @@ private:
     void saveGuidedTour( const QString &fileName );
     void loadEvmi( const QString &fileName );
     void saveEvmi( const QString &fileName );
-
-    QString getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter );
-    QString getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix );
 
 private slots:
 
