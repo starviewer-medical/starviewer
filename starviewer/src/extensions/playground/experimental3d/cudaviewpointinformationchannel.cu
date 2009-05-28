@@ -46,6 +46,7 @@ cudaExtent gVolumeDataDims;
 float3 gVolumeDims;
 
 // per mostrar la imatge
+bool gDisplay;
 QCudaRenderWindow *gCudaRenderWindow;
 uint gRenderSize;
 
@@ -225,9 +226,12 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
             sum.z = maxSample;
             sum.w = 1.0f;*/
 
-            // write output color
-            uint i = __umul24(y, imageWidth) + x;
-            image[i] = rgbaFloatToInt(sum);
+            if (image)
+            {
+                // write output color
+                uint i = __umul24(y, imageWidth) + x;
+                image[i] = rgbaFloatToInt(sum);
+            }
         }   // pj
     }   // pi
 }
@@ -324,12 +328,20 @@ void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunct
     CUDA_SAFE_CALL( cudaBindTexture(0, gViewedVolumesTexture, reinterpret_cast<void*>(gdfHistogram), gViewedVolumesTexture.channelDesc, gVolumeDataSize * sizeof(float)) );
 
     // create render window
-    gCudaRenderWindow = new QCudaRenderWindow(backgroundColor, renderSize);
-    gCudaRenderWindow->resize(displaySize, displaySize);
-    gCudaRenderWindow->show();
+    gDisplay = display;
+    if (display)
+    {
+        gCudaRenderWindow = new QCudaRenderWindow(backgroundColor, renderSize);
+        gCudaRenderWindow->resize(displaySize, displaySize);
+        gCudaRenderWindow->show();
+    }
+    else gCudaRenderWindow = 0;
     gRenderSize = renderSize;
 
-    CUDA_SAFE_CALL( cudaGLRegisterBufferObject(gCudaRenderWindow->pixelBufferObject()) );
+    if (display)
+    {
+        CUDA_SAFE_CALL( cudaGLRegisterBufferObject(gCudaRenderWindow->pixelBufferObject()) );
+    }
 }
 
 
@@ -343,9 +355,12 @@ QVector<float> cvicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
     CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdiHistogram), 0, gVolumeDataSize * sizeof(int)) );   // buidar histograma
 
     // map PBO to get CUDA device pointer
-    uint *pbo;
-    CUDA_SAFE_CALL( cudaGLMapBufferObject(reinterpret_cast<void**>(&pbo), gCudaRenderWindow->pixelBufferObject()) );
-    CUDA_SAFE_CALL( cudaMemset(pbo, 0, gRenderSize * gRenderSize * sizeof(uint)) );   // això és per esborrar-lo
+    uint *pbo = 0;
+    if (gDisplay)
+    {
+        CUDA_SAFE_CALL( cudaGLMapBufferObject(reinterpret_cast<void**>(&pbo), gCudaRenderWindow->pixelBufferObject()) );
+        CUDA_SAFE_CALL( cudaMemset(pbo, 0, gRenderSize * gRenderSize * sizeof(uint)) );   // això és per esborrar-lo
+    }
 
     //CUDA_SAFE_CALL(cudaMemset((void*)histogram, 0, volumeSize.width * volumeSize.height * volumeSize.depth * sizeof(ushort)));
 
@@ -378,7 +393,10 @@ QVector<float> cvicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
     if (cudaSuccess != err) std::cout << "sync after ray cast kernel failed: " << cudaGetErrorString(err) << std::endl;
 
 
-    CUDA_SAFE_CALL( cudaGLUnmapBufferObject(gCudaRenderWindow->pixelBufferObject()) );
+    if (gDisplay)
+    {
+        CUDA_SAFE_CALL( cudaGLUnmapBufferObject(gCudaRenderWindow->pixelBufferObject()) );
+    }
 
 
     cudaEventRecord(stop, 0);
@@ -386,7 +404,7 @@ QVector<float> cvicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
     float elapsedTime1;
     cudaEventElapsedTime(&elapsedTime1, start, stop);
 
-    gCudaRenderWindow->updateGL();
+    if (gDisplay) gCudaRenderWindow->updateGL();
 
 
 
@@ -434,8 +452,11 @@ void cvicCleanupRayCast()
     CUDA_SAFE_CALL( cudaUnbindTexture(gViewedVolumesTexture) );
     CUDA_SAFE_CALL( cudaFree(gdiHistogram) );
     CUDA_SAFE_CALL( cudaFree(gdfHistogram) );
-    CUDA_SAFE_CALL( cudaGLUnregisterBufferObject(gCudaRenderWindow->pixelBufferObject()) );
-    delete gCudaRenderWindow;
+    if (gDisplay)
+    {
+        CUDA_SAFE_CALL( cudaGLUnregisterBufferObject(gCudaRenderWindow->pixelBufferObject()) );
+        delete gCudaRenderWindow;
+    }
 }
 
 

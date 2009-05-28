@@ -1772,6 +1772,13 @@
         <widget class="udg::QViewpointDistributionWidget" name="m_vmiViewpointDistributionWidget" native="true"/>
        </item>
        <item>
+        <widget class="QCheckBox" name="m_vmiDisplayCheckBox">
+         <property name="text">
+          <string>Display views</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_28">
          <item>
           <widget class="QCheckBox" name="m_computeViewpointEntropyCheckBox">
