@@ -218,7 +218,7 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     m_smi.resize( m_sliceCount );
     for ( int i = 0; i < m_sliceCount; i++ )    // iterem sobre les llesques
     {
-        m_smi[i] = InformationTheory<double>::kullbackLeiblerDivergence( m_slices[i].probabilities, valueProbabilities );
+        m_smi[i] = InformationTheory::kullbackLeiblerDivergence( m_slices[i].probabilities, valueProbabilities );
     }
 
     // Printar resultats i guardar-los en un fitxer
@@ -282,7 +282,7 @@ void VolumeReslicer::computePmi()   /// \todo Fer-ho més eficient!!!
     m_pmi.resize( m_nLabels );
     for ( int i = 0; i < m_nLabels; i++ )   // iterem sobre els valors de propietat
     {
-        m_pmi[i] = InformationTheory<double>::kullbackLeiblerDivergence( m_properties[i].sliceProbabilities, sliceProbabilities );
+        m_pmi[i] = InformationTheory::kullbackLeiblerDivergence( m_properties[i].sliceProbabilities, sliceProbabilities );
     }
 
     // Printar resultats i guardar-los en un fitxer
@@ -444,7 +444,7 @@ double VolumeReslicer::sliceDissimilarity( int slice1, int slice2 ) const
         pi1 = pi2 = 0.0;
     }
 
-    return InformationTheory<double>::jensenShannonDivergence( pi1, pi2, s1.probabilities, s2.probabilities );
+    return InformationTheory::jensenShannonDivergence( pi1, pi2, s1.probabilities, s2.probabilities );
 }
 
 
@@ -487,7 +487,7 @@ double VolumeReslicer::propertyDissimilarity( int property1, int property2 ) con
         pi1 = pi2 = 0.0;
     }
 
-    return InformationTheory<double>::jensenShannonDivergence( pi1, pi2, p1.sliceProbabilities, p2.sliceProbabilities );
+    return InformationTheory::jensenShannonDivergence( pi1, pi2, p1.sliceProbabilities, p2.sliceProbabilities );
 }
 
 
