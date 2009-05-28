@@ -625,6 +625,51 @@ void QExperimental3DExtension::createConnections()
 }
 
 
+QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
+{
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString dir = settings.value( settingsDirKey, QString() ).toString();
+    QString fileName = QFileDialog::getOpenFileName( this, caption, dir, filter );
+
+    if ( !fileName.isNull() )
+    {
+        QFileInfo fileInfo( fileName );
+        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+
+    return fileName;
+}
+
+
+QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix )
+{
+    QString fileName;
+
+    QSettings settings;
+    settings.beginGroup( "Experimental3D" );
+
+    QString dir = settings.value( settingsDirKey, QString() ).toString();
+    QFileDialog saveDialog( this, caption, dir, filter );
+    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
+    saveDialog.setDefaultSuffix( defaultSuffix );
+
+    if ( saveDialog.exec() == QDialog::Accepted )
+    {
+        fileName = saveDialog.selectedFiles().first();
+        QFileInfo fileInfo( fileName );
+        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
+    }
+
+    settings.endGroup();
+
+    return fileName;
+}
+
+
 void QExperimental3DExtension::loadTransferFunction()
 {
     QString transferFunctionFileName = getFileNameToLoad( "transferFunctionDir", tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
@@ -3159,51 +3204,6 @@ bool QExperimental3DExtension::programVmiLoadOrSave( int lineNumber, const QStri
     }
 
     return true;
-}
-
-
-QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
-{
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
-
-    QString dir = settings.value( settingsDirKey, QString() ).toString();
-    QString fileName = QFileDialog::getOpenFileName( this, caption, dir, filter );
-
-    if ( !fileName.isNull() )
-    {
-        QFileInfo fileInfo( fileName );
-        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
-    }
-
-    settings.endGroup();
-
-    return fileName;
-}
-
-
-QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix )
-{
-    QString fileName;
-
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
-
-    QString dir = settings.value( settingsDirKey, QString() ).toString();
-    QFileDialog saveDialog( this, caption, dir, filter );
-    saveDialog.setAcceptMode( QFileDialog::AcceptSave );
-    saveDialog.setDefaultSuffix( defaultSuffix );
-
-    if ( saveDialog.exec() == QDialog::Accepted )
-    {
-        fileName = saveDialog.selectedFiles().first();
-        QFileInfo fileInfo( fileName );
-        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
-    }
-
-    settings.endGroup();
-
-    return fileName;
 }
 
 
