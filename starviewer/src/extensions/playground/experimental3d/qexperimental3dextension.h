@@ -43,6 +43,22 @@ public slots:
     void loadEntropy( QString fileName = QString() );
     /// Desa l'entropia a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveEntropy( QString fileName = QString() );
+    /// Carrega la VMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVmi( QString fileName = QString() );
+    /// Desa la VMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVmi( QString fileName = QString() );
+    /// Carrega la informació mútua des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadMi( QString fileName = QString() );
+    /// Desa la informació mútua a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveMi( QString fileName = QString() );
+    /// Carrega la VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVomi( QString fileName = QString() );
+    /// Desa la VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVomi( QString fileName = QString() );
+    /// Carrega la viewpoint VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadViewpointVomi( QString fileName = QString() );
+    /// Desa la viewpoint VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveViewpointVomi( QString fileName = QString() );
 
 private:
 
@@ -95,14 +111,6 @@ private:
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
     bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
 
-    void loadVmi( const QString &fileName );
-    void saveVmi( const QString &fileName );
-    void loadMi( const QString &fileName );
-    void saveMi( const QString &fileName );
-    void loadVomi( const QString &fileName );
-    void saveVomi( const QString &fileName );
-    void loadViewpointVomi( const QString &fileName );
-    void saveViewpointVomi( const QString &fileName );
     void loadColorVomiPalette( const QString &fileName );
     void loadColorVomi( const QString &fileName );
     void saveColorVomi( const QString &fileName );
@@ -178,14 +186,6 @@ private slots:
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
     void computeSelectedVmiOld();   // el deixem temporalment mentre acabem de passar el codi que queda a ViewpointInformationChannel
-    void loadVmi();
-    void saveVmi();
-    void loadMi();
-    void saveMi();
-    void loadVomi();
-    void saveVomi();
-    void loadViewpointVomi();
-    void saveViewpointVomi();
     void loadColorVomiPalette();
     void loadColorVomi();
     void saveColorVomi();
