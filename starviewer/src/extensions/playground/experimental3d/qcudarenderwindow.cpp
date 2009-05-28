@@ -1,18 +1,23 @@
 #include "qcudarenderwindow.h"
 
-#include <iostream>
+#include "logging.h"
 
 
 namespace udg {
 
 
 QCudaRenderWindow::QCudaRenderWindow( QColor backgroundColor, int renderSize )
- : QGLWidget( QGLFormat( QGL::AlphaChannel ) ), m_backgroundColor( backgroundColor ), m_renderSize( renderSize )
+ : QGLWidget(), m_backgroundColor( backgroundColor ), m_renderSize( renderSize )
 {
     makeCurrent();
 
     GLenum glew = glewInit();
-    if ( glew != GLEW_OK ) std::cout << "EEeeeeeEEEEEEEEE" << std::endl;
+
+    if ( glew != GLEW_OK )
+    {
+        DEBUG_LOG( "No s'ha pogut inicialitzar GLEW" );
+        ERROR_LOG( "No s'ha pogut inicialitzar GLEW" );
+    }
 
     // crear el pbo
     glGenBuffersARB( 1, &m_pixelBufferObject );

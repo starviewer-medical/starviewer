@@ -10,13 +10,15 @@ namespace udg {
 
 class QCudaRenderWindow : public QGLWidget {
 
-//    Q_OBJECT  // no funciona (?????!?!?!?!??!!!!!!!!!??!???????!???!)
+    Q_OBJECT
 
 public:
 
+    /// Crea una finestra que renderitza amb el color de fons \a backgroundColor i amb un pixel buffer object de mida \a renderSize * \a renderSize.
     QCudaRenderWindow( QColor backgroundColor, int renderSize );
     virtual ~QCudaRenderWindow();
 
+    /// Retorna el pixel buffer object.
     GLuint pixelBufferObject() const;
 
 protected:
@@ -35,7 +37,7 @@ private:
 };
 
 
-}
+} // namespace udg
 
 
 #endif // QCUDARENDERWINDOW_H
