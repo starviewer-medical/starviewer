@@ -41,6 +41,11 @@ QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
 
     m_recentTransferFunctionsModel = new QStringListModel( this );
     m_recentTransferFunctionsListView->setModel( m_recentTransferFunctionsModel );
+
+#ifndef CUDA_AVAILABLE
+    m_vmiDisplayCheckBox->setChecked( true );
+    m_vmiDisplayCheckBox->setEnabled( false );
+#endif // CUDA_AVAILABLE
 }
 
 
@@ -1427,7 +1432,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeVomi, computeViewpointVomi, computeColorVomi );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeVomi, computeViewpointVomi, computeColorVomi, m_vmiDisplayCheckBox->isChecked() );
 
     if ( computeViewpointEntropy )
     {

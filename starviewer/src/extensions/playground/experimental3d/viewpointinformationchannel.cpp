@@ -236,7 +236,7 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
 }
 
 
-void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &vomi, bool &viewpointVomi, bool &colorVomi )
+void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool display )
 {
     // Si no hi ha res a calcular marxem
     if ( !viewpointEntropy && !entropy && !vmi && !mi && !vomi && !viewpointVomi && !colorVomi ) return;
@@ -255,9 +255,10 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
     if ( voxelProbabilities ) viewProbabilities = true;
 
 #ifndef CUDA_AVAILABLE
+    Q_UNUSED( display );
     computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi, display );
 #endif // CUDA_AVAILABLE
 }
 
@@ -868,7 +869,7 @@ Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 
 
 void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi,
-                                               bool computeViewpointVomi, bool computeColorVomi )
+                                               bool computeViewpointVomi, bool computeColorVomi, bool display )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -884,7 +885,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     emit totalProgress( step );
 
     // Inicialització de CUDA
-    cvicSetupRayCast( m_volume->getImage(), m_transferFunction, 1024, 720, m_backgroundColor, true );
+    cvicSetupRayCast( m_volume->getImage(), m_transferFunction, 1024, 720, m_backgroundColor, display );
     if ( computeVoxelProbabilities ) cvicSetupVoxelProbabilities();
 
     // p(V)
