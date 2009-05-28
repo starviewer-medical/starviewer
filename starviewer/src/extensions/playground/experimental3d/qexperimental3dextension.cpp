@@ -148,6 +148,136 @@ void QExperimental3DExtension::saveEntropy( QString fileName )
 }
 
 
+void QExperimental3DExtension::loadVmi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "vmiDir", tr("Load VMI"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_vmi ) ) m_saveVmiPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveVmi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "vmiDir", tr("Save VMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_vmi, fileName, QString( "VMI(v%1) = %2" ), 1 );
+    else error = !saveFloatData( m_vmi, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save VMI"), QString( tr("Can't save VMI to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadMi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "miDir", tr("Load MI"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_mi ) ) m_saveMiPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load MI"), QString( tr("Can't load MI from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveMi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "miDir", tr("Save MI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_mi, fileName, QString( "I(V;Z) = %1" ) );
+    else error = !saveFloatData( m_mi, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save MI"), QString( tr("Can't save MI to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "vomiDir", tr("Load VoMI"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_vomi ) )
+    {
+        int nVoxels = m_vomi.size();
+        m_maximumVomi = 0.0f;
+
+        for ( int j = 0; j < nVoxels; j++ ) if ( m_vomi.at( j ) > m_maximumVomi ) m_maximumVomi = m_vomi.at( j );
+
+        m_baseVomiRadioButton->setEnabled( true );
+        m_baseVomiCoolWarmRadioButton->setEnabled( true );
+        m_vomiCheckBox->setEnabled( true );
+        m_vomiCoolWarmCheckBox->setEnabled( true );
+        m_opacityLabel->setEnabled( true );
+        m_opacityVomiCheckBox->setEnabled( true );
+        m_saveVomiPushButton->setEnabled( true );
+        m_vomiGradientPushButton->setEnabled( true );
+    }
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VoMI"), QString( tr("Can't load VoMI from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "vomiDir", tr("Save VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( !saveFloatData( m_vomi, fileName ) && m_interactive ) QMessageBox::warning( this, tr("Can't save VoMI"), QString( tr("Can't save VoMI to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadViewpointVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "viewpointVomiDir", tr("Load viewpoint VoMI"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_viewpointVomi ) ) m_saveViewpointVomiPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint VoMI"), QString( tr("Can't load viewpoint VoMI from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveViewpointVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "viewpointVomiDir", tr("Save viewpoint VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointVomi, fileName, QString( "VVoMI(v%1) = %2" ), 1 );
+    else error = !saveFloatData( m_viewpointVomi, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint VoMI"), QString( tr("Can't save viewpoint VoMI to file ") ) + fileName );
+}
+
+
 bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &data )
 {
     QFile file( fileName );
@@ -1860,287 +1990,6 @@ void QExperimental3DExtension::computeGuidedTour( const ViewpointGenerator &view
 
     m_saveGuidedTourPushButton->setEnabled( true );
     m_guidedTourPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::loadVmi()
-{
-    QString vmiFileName = getFileNameToLoad( "vmiDir", tr("Load VMI"), tr("Data files (*.dat);;All files (*)") );
-    if ( !vmiFileName.isNull() ) loadVmi( vmiFileName );
-}
-
-
-void QExperimental3DExtension::loadVmi( const QString &fileName )
-{
-    QFile vmiFile( fileName );
-
-    if ( !vmiFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + fileName );
-        return;
-    }
-
-    m_vmi.clear();
-
-    QDataStream in( &vmiFile );
-
-    while ( !in.atEnd() )
-    {
-        float vmi;
-        in >> vmi;
-        m_vmi << vmi;
-    }
-
-    vmiFile.close();
-
-    m_saveVmiPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveVmi()
-{
-    QString vmiFileName = getFileNameToSave( "vmiDir", tr("Save VMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-    if ( !vmiFileName.isNull() ) saveVmi( vmiFileName );
-}
-
-
-void QExperimental3DExtension::saveVmi( const QString &fileName )
-{
-    bool saveAsText = fileName.endsWith( ".txt" );
-    QFile vmiFile( fileName );
-    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if ( saveAsText ) mode = mode | QIODevice::Text;
-
-    if ( !vmiFile.open( mode ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save VMI"), QString( tr("Can't save VMI to file ") ) + fileName );
-        return;
-    }
-
-    int nViewpoints = m_vmi.size();
-
-    if ( saveAsText )
-    {
-        QTextStream out( &vmiFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << "VMI(v" << i + 1 << ") = " << m_vmi.at( i ) << "\n";
-    }
-    else
-    {
-        QDataStream out( &vmiFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << m_vmi.at( i );
-    }
-
-    vmiFile.close();
-}
-
-
-void QExperimental3DExtension::loadMi()
-{
-    QString miFileName = getFileNameToLoad( "miDir", tr("Load MI"), tr("Data files (*.dat);;All files (*)") );
-    if ( !miFileName.isNull() ) loadMi( miFileName );
-}
-
-
-void QExperimental3DExtension::loadMi( const QString &fileName )
-{
-    QFile miFile( fileName );
-
-    if ( !miFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load MI"), QString( tr("Can't load MI from file ") ) + fileName );
-        return;
-    }
-
-    QDataStream in( &miFile );
-
-    if ( !in.atEnd() ) in >> m_mi;
-
-    miFile.close();
-
-    m_saveMiPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveMi()
-{
-    QString miFileName = getFileNameToSave( "miDir", tr("Save MI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-    if ( !miFileName.isNull() ) saveMi( miFileName );
-}
-
-
-void QExperimental3DExtension::saveMi( const QString &fileName )
-{
-    bool saveAsText = fileName.endsWith( ".txt" );
-    QFile miFile( fileName );
-    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if ( saveAsText ) mode = mode | QIODevice::Text;
-
-    if ( !miFile.open( mode ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save MI"), QString( tr("Can't save MI to file ") ) + fileName );
-        return;
-    }
-
-    if ( saveAsText )
-    {
-        QTextStream out( &miFile );
-        out << "MI = " << m_mi;
-    }
-    else
-    {
-        QDataStream out( &miFile );
-        out << m_mi;
-    }
-
-    miFile.close();
-}
-
-
-void QExperimental3DExtension::loadVomi()
-{
-    QString vomiFileName = getFileNameToLoad( "vomiDir", tr("Load VoMI"), tr("Data files (*.dat);;All files (*)") );
-    if ( !vomiFileName.isNull() ) loadVomi( vomiFileName );
-}
-
-
-void QExperimental3DExtension::loadVomi( const QString &fileName )
-{
-    QFile vomiFile( fileName );
-
-    if ( !vomiFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VoMI"), QString( tr("Can't load VoMI from file ") ) + fileName );
-        return;
-    }
-
-    unsigned int nObjects = m_volume->getSize();
-    m_vomi.resize( nObjects );
-    m_maximumVomi = 0.0f;
-
-    QDataStream in( &vomiFile );
-
-    for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ )
-    {
-        in >> m_vomi[i];
-        if ( m_vomi.at( i ) > m_maximumVomi ) m_maximumVomi = m_vomi.at( i );
-    }
-
-    vomiFile.close();
-
-    m_baseVomiRadioButton->setEnabled( true );
-    m_baseVomiCoolWarmRadioButton->setEnabled( true );
-    m_vomiCheckBox->setEnabled( true );
-    m_vomiCoolWarmCheckBox->setEnabled( true );
-    m_opacityLabel->setEnabled( true );
-    m_opacityVomiCheckBox->setEnabled( true );
-    m_saveVomiPushButton->setEnabled( true );
-    m_vomiGradientPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveVomi()
-{
-    QString vomiFileName = getFileNameToSave( "vomiDir", tr("Save VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
-    if ( !vomiFileName.isNull() ) saveVomi( vomiFileName );
-}
-
-
-void QExperimental3DExtension::saveVomi( const QString &fileName )
-{
-    QFile vomiFile( fileName );
-
-    if ( !vomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save VoMI"), QString( tr("Can't save VoMI to file ") ) + fileName );
-        return;
-    }
-
-    QDataStream out( &vomiFile );
-
-    unsigned int nObjects = m_volume->getSize();
-
-    for ( unsigned int i = 0; i < nObjects; i++ ) out << m_vomi.at( i );
-
-    vomiFile.close();
-}
-
-
-void QExperimental3DExtension::loadViewpointVomi()
-{
-    QString viewpointVomiFileName = getFileNameToLoad( "viewpointVomiDir", tr("Load viewpoint VoMI"), tr("Data files (*.dat);;All files (*)") );
-    if ( !viewpointVomiFileName.isNull() ) loadViewpointVomi( viewpointVomiFileName );
-}
-
-
-void QExperimental3DExtension::loadViewpointVomi( const QString &fileName )
-{
-    QFile viewpointVomiFile( fileName );
-
-    if ( !viewpointVomiFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint VoMI"), QString( tr("Can't load viewpoint VoMI from file ") ) + fileName );
-        return;
-    }
-
-    m_viewpointVomi.clear();
-
-    QDataStream in( &viewpointVomiFile );
-
-    while ( !in.atEnd() )
-    {
-        float viewpointVomi;
-        in >> viewpointVomi;
-        m_viewpointVomi << viewpointVomi;
-    }
-
-    viewpointVomiFile.close();
-
-    m_saveViewpointVomiPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveViewpointVomi()
-{
-    QString viewpointVomiFileName = getFileNameToSave( "viewpointVomiDir", tr("Save viewpoint VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-    if ( !viewpointVomiFileName.isNull() ) saveViewpointVomi( viewpointVomiFileName );
-}
-
-
-void QExperimental3DExtension::saveViewpointVomi( const QString &fileName )
-{
-    bool saveAsText = fileName.endsWith( ".txt" );
-    QFile viewpointVomiFile( fileName );
-    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if ( saveAsText ) mode = mode | QIODevice::Text;
-
-    if ( !viewpointVomiFile.open( mode ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint VoMI"), QString( tr("Can't save viewpoint VoMI to file ") ) + fileName );
-        return;
-    }
-
-    int nViewpoints = m_viewpointVomi.size();
-
-    if ( saveAsText )
-    {
-        QTextStream out( &viewpointVomiFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << "VoMI(v" << i + 1 << ") = " << m_viewpointVomi.at( i ) << "\n";
-    }
-    else
-    {
-        QDataStream out( &viewpointVomiFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << m_viewpointVomi.at( i );
-    }
-
-    viewpointVomiFile.close();
 }
 
 
