@@ -1090,7 +1090,7 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
 
         if ( computeViewpointEntropy )
         {
-            float viewpointEntropy = InformationTheory<float>::entropy( voxelProbabilitiesInView );
+            float viewpointEntropy = InformationTheory::entropy( voxelProbabilitiesInView );
             Q_ASSERT( viewpointEntropy == viewpointEntropy );
             m_viewpointEntropy[i] = viewpointEntropy;
             DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( viewpointEntropy ) );
@@ -1103,7 +1103,7 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
 
         if ( computeVmi )
         {
-            float vmi = InformationTheory<float>::kullbackLeiblerDivergence( voxelProbabilitiesInView, m_voxelProbabilities );
+            float vmi = InformationTheory::kullbackLeiblerDivergence( voxelProbabilitiesInView, m_voxelProbabilities );
             Q_ASSERT( vmi == vmi );
             m_vmi[i] = vmi;
             DEBUG_LOG( QString( "VMI(v%1) = %2" ).arg( i + 1 ).arg( vmi ) );
