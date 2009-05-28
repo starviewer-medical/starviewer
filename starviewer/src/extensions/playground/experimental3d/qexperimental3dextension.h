@@ -59,17 +59,23 @@ public slots:
     void loadViewpointVomi( QString fileName = QString() );
     /// Desa la viewpoint VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveViewpointVomi( QString fileName = QString() );
+    /// Carrega la paleta per la color VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadColorVomiPalette( QString fileName = QString() );
+    /// Carrega la color VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadColorVomi( QString fileName = QString() );
+    /// Desa la color VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveColorVomi( QString fileName = QString() );
 
 private:
 
     /// Carrega dades de tipus float del fitxer al float. Retorna cert si tot va bé i fals si hi ha error.
     static bool loadFloatData( const QString &fileName, float &data );
-    /// Carrega dades de tipus float del fitxer al vector. Retorna cert si tot va bé i fals si hi ha error.
-    static bool loadFloatData( const QString &fileName, QVector<float> &vector );
+    /// Carrega dades de tipus T del fitxer al vector. Retorna cert si tot va bé i fals si hi ha error.
+    template <class T> static bool loadData( const QString &fileName, QVector<T> &vector );
     /// Desa dades de tipus float del float al fitxer. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveFloatData( float data, const QString &fileName );
-    /// Desa dades de tipus float del vector al fitxer. Retorna cert si tot va bé i fals si hi ha error.
-    static bool saveFloatData( const QVector<float> &vector, const QString &fileName );
+    /// Desa dades de tipus T del vector al fitxer. Retorna cert si tot va bé i fals si hi ha error.
+    template <class T> static bool saveData( const QVector<T> &vector, const QString &fileName );
     /// Desa dades de tipus float del float al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveFloatDataAsText( float data, const QString &fileName, const QString &format );
     /// Desa dades de tipus float del vector al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
@@ -111,9 +117,6 @@ private:
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
     bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
 
-    void loadColorVomiPalette( const QString &fileName );
-    void loadColorVomi( const QString &fileName );
-    void saveColorVomi( const QString &fileName );
     void loadViewpointUnstabilities( const QString &fileName );
     void saveViewpointUnstabilities( const QString &fileName );
     void loadBestViews( const QString &fileName );
@@ -186,9 +189,6 @@ private slots:
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
     void computeSelectedVmiOld();   // el deixem temporalment mentre acabem de passar el codi que queda a ViewpointInformationChannel
-    void loadColorVomiPalette();
-    void loadColorVomi();
-    void saveColorVomi();
     void loadViewpointUnstabilities();
     void saveViewpointUnstabilities();
     void loadBestViews();

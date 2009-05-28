@@ -96,7 +96,7 @@ void QExperimental3DExtension::loadViewpointEntropy( QString fileName )
         if ( fileName.isNull() ) return;
     }
 
-    if ( loadFloatData( fileName, m_viewpointEntropy ) ) m_saveViewpointEntropyPushButton->setEnabled( true );
+    if ( loadData( fileName, m_viewpointEntropy ) ) m_saveViewpointEntropyPushButton->setEnabled( true );
     else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint entropy"), QString( tr("Can't load viewpoint entropy from file ") ) + fileName );
 }
 
@@ -112,7 +112,7 @@ void QExperimental3DExtension::saveViewpointEntropy( QString fileName )
     bool error;
 
     if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointEntropy, fileName, QString( "H(Z|v%1) = %2" ), 1 );
-    else error = !saveFloatData( m_viewpointEntropy, fileName );
+    else error = !saveData( m_viewpointEntropy, fileName );
 
     if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint entropy"), QString( tr("Can't save viewpoint entropy to file ") ) + fileName );
 }
@@ -156,7 +156,7 @@ void QExperimental3DExtension::loadVmi( QString fileName )
         if ( fileName.isNull() ) return;
     }
 
-    if ( loadFloatData( fileName, m_vmi ) ) m_saveVmiPushButton->setEnabled( true );
+    if ( loadData( fileName, m_vmi ) ) m_saveVmiPushButton->setEnabled( true );
     else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + fileName );
 }
 
@@ -172,7 +172,7 @@ void QExperimental3DExtension::saveVmi( QString fileName )
     bool error;
 
     if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_vmi, fileName, QString( "VMI(v%1) = %2" ), 1 );
-    else error = !saveFloatData( m_vmi, fileName );
+    else error = !saveData( m_vmi, fileName );
 
     if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save VMI"), QString( tr("Can't save VMI to file ") ) + fileName );
 }
@@ -216,7 +216,7 @@ void QExperimental3DExtension::loadVomi( QString fileName )
         if ( fileName.isNull() ) return;
     }
 
-    if ( loadFloatData( fileName, m_vomi ) )
+    if ( loadData( fileName, m_vomi ) )
     {
         int nVoxels = m_vomi.size();
         m_maximumVomi = 0.0f;
@@ -244,7 +244,7 @@ void QExperimental3DExtension::saveVomi( QString fileName )
         if ( fileName.isNull() ) return;
     }
 
-    if ( !saveFloatData( m_vomi, fileName ) && m_interactive ) QMessageBox::warning( this, tr("Can't save VoMI"), QString( tr("Can't save VoMI to file ") ) + fileName );
+    if ( !saveData( m_vomi, fileName ) && m_interactive ) QMessageBox::warning( this, tr("Can't save VoMI"), QString( tr("Can't save VoMI to file ") ) + fileName );
 }
 
 
@@ -256,7 +256,7 @@ void QExperimental3DExtension::loadViewpointVomi( QString fileName )
         if ( fileName.isNull() ) return;
     }
 
-    if ( loadFloatData( fileName, m_viewpointVomi ) ) m_saveViewpointVomiPushButton->setEnabled( true );
+    if ( loadData( fileName, m_viewpointVomi ) ) m_saveViewpointVomiPushButton->setEnabled( true );
     else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint VoMI"), QString( tr("Can't load viewpoint VoMI from file ") ) + fileName );
 }
 
@@ -272,9 +272,102 @@ void QExperimental3DExtension::saveViewpointVomi( QString fileName )
     bool error;
 
     if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointVomi, fileName, QString( "VVoMI(v%1) = %2" ), 1 );
-    else error = !saveFloatData( m_viewpointVomi, fileName );
+    else error = !saveData( m_viewpointVomi, fileName );
 
     if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint VoMI"), QString( tr("Can't save viewpoint VoMI to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadColorVomiPalette( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "colorVomiPaletteDir", tr("Load color VoMI palette"), tr("Text files (*.txt);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    QFile colorVomiPaletteFile( fileName );
+
+    if ( !colorVomiPaletteFile.open( QFile::ReadOnly | QFile::Text ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + fileName );
+        return;
+    }
+
+    m_colorVomiPalette.clear();
+
+    QTextStream in( &colorVomiPaletteFile );
+
+    while ( !in.atEnd() )
+    {
+        QString line = in.readLine();
+        QStringList numbers = line.split( ' ', QString::SkipEmptyParts );
+
+        if ( numbers.size() < 3 ) continue;
+
+        Vector3Float color;
+
+        if ( numbers.at( 0 ).contains( '.' ) )  // reals [0,1]
+        {
+            color.x = numbers.at( 0 ).toFloat();
+            color.y = numbers.at( 1 ).toFloat();
+            color.z = numbers.at( 2 ).toFloat();
+        }
+        else    // enters [0,255]
+        {
+            color.x = static_cast<unsigned char>( numbers.at( 0 ).toUShort() ) / 255.0f;
+            color.y = static_cast<unsigned char>( numbers.at( 1 ).toUShort() ) / 255.0f;
+            color.z = static_cast<unsigned char>( numbers.at( 2 ).toUShort() ) / 255.0f;
+        }
+
+        m_colorVomiPalette << color;
+    }
+
+    if ( m_colorVomiPalette.isEmpty() ) m_colorVomiPalette << Vector3Float( 1.0f, 1.0f, 1.0f );
+
+    colorVomiPaletteFile.close();
+}
+
+
+void QExperimental3DExtension::loadColorVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "colorVomiDir", tr("Load color VoMI"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_colorVomi ) )
+    {
+        int nVoxels = m_colorVomi.size();
+        m_maximumColorVomi = 0.0f;
+
+        for ( int j = 0; j < nVoxels; j++ )
+        {
+            const Vector3Float &colorVomi = m_colorVomi.at( j );
+            if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
+            if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
+            if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
+        }
+
+        m_baseColorVomiRadioButton->setEnabled( true );
+        m_colorVomiCheckBox->setEnabled( true );
+        m_saveColorVomiPushButton->setEnabled( true );
+    }
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI"), QString( tr("Can't load color VoMI from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveColorVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "colorVomiDir", tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( !saveData( m_colorVomi, fileName ) && m_interactive ) QMessageBox::warning( this, tr("Can't save color VoMI"), QString( tr("Can't save color VoMI to file ") ) + fileName );
 }
 
 
@@ -298,7 +391,8 @@ bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &da
 }
 
 
-bool QExperimental3DExtension::loadFloatData( const QString &fileName, QVector<float> &vector )
+template <class T>
+bool QExperimental3DExtension::loadData( const QString &fileName, QVector<T> &vector )
 {
     QFile file( fileName );
 
@@ -314,7 +408,7 @@ bool QExperimental3DExtension::loadFloatData( const QString &fileName, QVector<f
 
     while ( !in.atEnd() )
     {
-        float data;
+        T data;
         in >> data;
         vector << data;
     }
@@ -345,7 +439,8 @@ bool QExperimental3DExtension::saveFloatData( float data, const QString &fileNam
 }
 
 
-bool QExperimental3DExtension::saveFloatData( const QVector<float> &vector, const QString &fileName )
+template <class T>
+bool QExperimental3DExtension::saveData( const QVector<T> &vector, const QString &fileName )
 {
     QFile file( fileName );
 
@@ -1990,130 +2085,6 @@ void QExperimental3DExtension::computeGuidedTour( const ViewpointGenerator &view
 
     m_saveGuidedTourPushButton->setEnabled( true );
     m_guidedTourPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::loadColorVomiPalette()
-{
-    QString colorVomiPaletteFileName = getFileNameToLoad( "colorVomiPaletteDir", tr("Load color VoMI palette"), tr("Text files (*.txt);;All files (*)") );
-    if ( !colorVomiPaletteFileName.isNull() ) loadColorVomiPalette( colorVomiPaletteFileName );
-}
-
-
-void QExperimental3DExtension::loadColorVomiPalette( const QString &fileName )
-{
-    QFile colorVomiPaletteFile( fileName );
-
-    if ( !colorVomiPaletteFile.open( QFile::ReadOnly | QFile::Text ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI palette"), QString( tr("Can't load color VoMI palette from file ") ) + fileName );
-        return;
-    }
-
-    m_colorVomiPalette.clear();
-
-    QTextStream in( &colorVomiPaletteFile );
-
-    while ( !in.atEnd() )
-    {
-        QString line = in.readLine();
-        QStringList numbers = line.split( ' ', QString::SkipEmptyParts );
-
-        if ( numbers.size() < 3 ) continue;
-
-        Vector3Float color;
-
-        if ( numbers.at( 0 ).contains( '.' ) )  // reals [0,1]
-        {
-            color.x = numbers.at( 0 ).toFloat();
-            color.y = numbers.at( 1 ).toFloat();
-            color.z = numbers.at( 2 ).toFloat();
-        }
-        else    // enters [0,255]
-        {
-            color.x = static_cast<unsigned char>( numbers.at( 0 ).toUShort() ) / 255.0f;
-            color.y = static_cast<unsigned char>( numbers.at( 1 ).toUShort() ) / 255.0f;
-            color.z = static_cast<unsigned char>( numbers.at( 2 ).toUShort() ) / 255.0f;
-        }
-
-        m_colorVomiPalette << color;
-    }
-
-    if ( m_colorVomiPalette.isEmpty() ) m_colorVomiPalette << Vector3Float( 1.0f, 1.0f, 1.0f );
-
-    colorVomiPaletteFile.close();
-}
-
-
-void QExperimental3DExtension::loadColorVomi()
-{
-    QString colorVomiFileName = getFileNameToLoad( "colorVomiDir", tr("Load color VoMI"), tr("Data files (*.dat);;All files (*)") );
-    if ( !colorVomiFileName.isNull() ) loadColorVomi( colorVomiFileName );
-}
-
-
-void QExperimental3DExtension::loadColorVomi( const QString &fileName )
-{
-    QFile colorVomiFile( fileName );
-
-    if ( !colorVomiFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI"), QString( tr("Can't load color VoMI from file ") ) + fileName );
-        return;
-    }
-
-    unsigned int nObjects = m_volume->getSize();
-    m_colorVomi.resize( nObjects );
-    m_maximumColorVomi = 0.0f;
-
-    QDataStream in( &colorVomiFile );
-
-    for ( unsigned int i = 0; i < nObjects && !in.atEnd(); i++ )
-    {
-        Vector3Float colorVomi;
-        in >> colorVomi.x >> colorVomi.y >> colorVomi.z;
-        m_colorVomi[i] = colorVomi;
-
-        if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
-        if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
-        if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
-    }
-
-    colorVomiFile.close();
-
-    m_baseColorVomiRadioButton->setEnabled( true );
-    m_colorVomiCheckBox->setEnabled( true );
-    m_saveColorVomiPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveColorVomi()
-{
-    QString colorVomiFileName = getFileNameToSave( "colorVomiDir", tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
-    if ( !colorVomiFileName.isNull() ) saveColorVomi( colorVomiFileName );
-}
-
-
-void QExperimental3DExtension::saveColorVomi( const QString &fileName )
-{
-    QFile colorVomiFile( fileName );
-
-    if ( !colorVomiFile.open( QFile::WriteOnly | QFile::Truncate ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save color VoMI"), QString( tr("Can't save color VoMI to file ") ) + fileName );
-        return;
-    }
-
-    QDataStream out( &colorVomiFile );
-
-    unsigned int nObjects = m_volume->getSize();
-
-    for ( unsigned int i = 0; i < nObjects; i++ ) out << m_colorVomi.at( i ).x << m_colorVomi.at( i ).y << m_colorVomi.at( i ).z;
-
-    colorVomiFile.close();
 }
 
 

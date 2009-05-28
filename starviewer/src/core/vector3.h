@@ -4,6 +4,7 @@
 
 #include <cmath>
 
+#include <QDataStream>
 #include <QString>
 
 
@@ -83,6 +84,13 @@ public:
     /// Divisió d'un vector per un escalar assignada al propi vector.
     template <class C>
     friend TVector3<C>& operator /=( TVector3<C> &v, double a );
+
+    /// Lectura des d'un QDataStream.
+    template <class C>
+    friend QDataStream& operator >>( QDataStream &in, TVector3<C> &v );
+    /// Escriptura a un QDataStream.
+    template <class C>
+    friend QDataStream& operator <<( QDataStream &out, const TVector3<C> &v );
 
 public:
 
@@ -273,6 +281,22 @@ inline TVector3<T>& operator /=( TVector3<T> &v, double a )
 {
     v.x /= a; v.y /= a; v.z /= a;
     return v;
+}
+
+
+template <class T>
+inline QDataStream& operator >>( QDataStream &in, TVector3<T> &v )
+{
+    in >> v.x >> v.y >> v.z;
+    return in;
+}
+
+
+template <class T>
+inline QDataStream& operator <<( QDataStream &out, const TVector3<T> &v )
+{
+    out << v.x << v.y << v.z;
+    return out;
 }
 
 
