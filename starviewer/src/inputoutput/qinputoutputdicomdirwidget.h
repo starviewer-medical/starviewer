@@ -55,9 +55,6 @@ public slots:
     ///Obre un dicomdir
     void openDicomdir();
 
-    ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
-    void view();
-
 private:
 
     QMenu m_contextMenuQStudyTreeWidget;
@@ -88,9 +85,11 @@ private slots:
     ///Mostra les imatges d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void expandImagesOfSeries(QString studyIntanceUID, QString seriesInstanceUID);
 
-
     ///Importa cap a la base de dades locals els estudis seleccionats
     void retrieveSelectedStudies();
+
+    ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
+    void view();
 };
 
 };// end namespace udg
