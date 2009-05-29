@@ -162,6 +162,11 @@ void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )
     }
 }
 
+void QInputOutputDicomdirWidget::clear()
+{
+    m_studyTreeWidget->clear();
+}
+
 void QInputOutputDicomdirWidget::expandSeriesOfStudy( QString studyInstanceUID )
 {
     QList<Series*> seriesList;
