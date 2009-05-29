@@ -58,6 +58,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QSpinBox" name="m_minimumSpinBox">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
        <property name="minimum">
         <number>-50000</number>
        </property>
@@ -98,6 +101,9 @@
      </item>
      <item>
       <widget class="QSpinBox" name="m_maximumSpinBox">
+       <property name="keyboardTracking">
+        <bool>false</bool>
+       </property>
        <property name="minimum">
         <number>-50000</number>
        </property>
