@@ -33,11 +33,13 @@ Q_OBJECT
 public:
     /// Constructor de la classe
     QInputOutputDicomdirWidget(QWidget *parent = 0);
+    ~QInputOutputDicomdirWidget();
 
     ///Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask);
 
-    ~QInputOutputDicomdirWidget();
+    ///Neteja els resultats de la última cerca
+    void clear();
 
 signals:
 
