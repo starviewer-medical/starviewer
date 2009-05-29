@@ -53,11 +53,10 @@ QueryScreen::QueryScreen( QWidget *parent )
     createConnections();
     //Fa les comprovacions necessaries per poder executar la QueryScreen de forma correcte   
     checkRequeriments();
-    //esborrem els estudis vells de la cache
-    deleteOldStudies();
+
     readSettings();
     //fem que per defecte mostri els estudis de la cache
-    queryStudy("Cache");
+    m_qInputOutputLocalDatabaseWidget->queryStudy(DicomMask());
 
     // Configuració per Starviewer Lite
 #ifdef STARVIEWER_LITE
@@ -80,7 +79,6 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_statsWatcher->addClicksCounter( m_showPACSNodesToolButton );
     m_statsWatcher->addClicksCounter( m_createDICOMDIRToolButton );
     m_statsWatcher->addClicksCounter( m_advancedSearchToolButton );
-    m_statsWatcher->addClicksCounter( m_viewButtonLocal );
     m_statsWatcher->addClicksCounter( m_viewButtonPACS );
     m_statsWatcher->addClicksCounter( m_retrieveButtonPACS );
     m_statsWatcher->addClicksCounter( m_clearToolButton );
@@ -113,6 +111,9 @@ void QueryScreen::initialize()
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
+    //Indiquem quin és la intefície encara de crear dicomdir per a que es puguin comunicar
+    m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
+
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
     m_operationAnimation->setMovie(operationAnimation);
@@ -123,7 +124,6 @@ void QueryScreen::initialize()
     m_labelOperation->hide();
     refreshTab( LocalDataBaseTab );
 
-    CreateContextMenuQStudyTreeWidgetCache();
     CreateContextMenuQStudyTreeWidgetPacs();
 
     setQStudyTreeWidgetColumnsWidth();
@@ -132,28 +132,6 @@ void QueryScreen::initialize()
     m_listenRISRequestThread = new ListenRISRequestThread(this);
     if (settings.getListenRisRequests()) m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
     #endif
-}
-
-void QueryScreen::CreateContextMenuQStudyTreeWidgetCache()
-{
-    QAction *action;
-
-    action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
-    (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
-
-    action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/databaseRemove.png") , tr( "&Delete" ) , this , SLOT( deleteSelectedStudiesInCache() ) , Qt::Key_Delete );
-    (void) new QShortcut( action->shortcut() , this , SLOT( deleteSelectedStudiesInCache() ) );
-
-#ifndef STARVIEWER_LITE
-    action = m_contextMenuQStudyTreeWidgetCache.addAction( tr( "Send to DICOMDIR List" ) , this , SLOT( convertToDicomdir() ) , tr( "Ctrl+M" ) );
-    (void) new QShortcut( action->shortcut() , this , SLOT( convertToDicomdir() ) );
-#endif
-
-    //TODO: No funciona correctament el store al PACS per això ho deixem comentat per a que en les pròximes release no aparegui en el menú aquesta opció
-    /*action = m_contextMenuQStudyTreeWidgetCache.addAction( QIcon(":/images/store.png") , tr( "Store to PACS" ) , this , SLOT( storeStudiesToPacs() ) , tr( "Ctrl+S" ) );
-    (void) new QShortcut( action->shortcut() , this , SLOT( storeStudiesToPacs() ) );
-    */
-    m_studyTreeWidgetCache->setContextMenu( & m_contextMenuQStudyTreeWidgetCache );//Especifiquem que és el menú per la cache
 }
 
 void QueryScreen::CreateContextMenuQStudyTreeWidgetPacs()
@@ -173,49 +151,9 @@ void QueryScreen::setQStudyTreeWidgetColumnsWidth()
 {
     StarviewerSettings settings;
 
-    for ( int column = 0; column < m_studyTreeWidgetCache->getNumberOfColumns(); column++)
-    {
-        m_studyTreeWidgetCache->setColumnWidth( column , settings.getStudyCacheListColumnWidth(column) );
-    }
-
     for ( int column = 0; column < m_studyTreeWidgetPacs->getNumberOfColumns(); column++)
     {
         m_studyTreeWidgetPacs->setColumnWidth( column , settings.getStudyPacsListColumnWidth(column) );
-    }
-}
-
-void QueryScreen::setSeriesToSeriesListWidgetCache()
-{
-    QList<Series*> seriesList;
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask mask;
-    QString studyInstanceUID = m_studyTreeWidgetCache->getCurrentStudyUID();
-
-    INFO_LOG("Cerca de sèries a la cache de l'estudi " + studyInstanceUID);
-
-    //preparem la mascara i cerquem les series a la cache
-    mask.setStudyUID(studyInstanceUID);
-
-    seriesList = localDatabaseManager.querySeries(mask);
-    if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
-
-    m_seriesListWidgetCache->clear();
-
-    foreach(Series* series, seriesList)
-    {
-        m_seriesListWidgetCache->insertSeries(studyInstanceUID, series);
-    }
-}
-
-void QueryScreen::deleteOldStudies()
-{
-    StarviewerSettings settings;
-
-    /*Mirem si està activada la opció de la configuració d'esborrar els estudis vells no visualitzats en un número de dies determinat
-      fem la comprovació, per evitar engegar el thread si no s'han d'esborrar els estudis vells*/
-    if (settings.getDeleteOldStudiesHasNotViewedInDays())
-    {
-        m_qdeleteOldStudiesThread.deleteOldStudies();
     }
 }
 
@@ -248,7 +186,9 @@ void QueryScreen::checkDatabaseImageIntegrity()
     localDatabaseManager.checkNoStudiesRetrieving();
 
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-        showDatabaseManagerError(localDatabaseManager.getLastError(), tr("deleting a study not full retrived"));
+    {
+        ERROR_LOG("S'ha produït un error esborrant un estudi que no s'havia acabat de descarregar en la última execució");
+    }
 }
 
 void QueryScreen::updateOperationsInProgressMessage()
@@ -274,7 +214,6 @@ void QueryScreen::createConnections()
     connect( m_operationListToolButton, SIGNAL( clicked() ) , SLOT( showOperationStateScreen() ) );
     connect( m_showPACSNodesToolButton, SIGNAL( toggled(bool) ), m_PACSNodes, SLOT( setVisible(bool) ) );
 
-    connect( m_viewButtonLocal, SIGNAL( clicked() ), SLOT( view() ) );
     connect( m_viewButtonPACS, SIGNAL( clicked() ), SLOT( view() ) );
     connect( m_createDICOMDIRToolButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
 
@@ -285,22 +224,8 @@ void QueryScreen::createConnections()
     connect( m_studyTreeWidgetPacs, SIGNAL( seriesDoubleClicked() ), SLOT( retrieve() ) );
     connect( m_studyTreeWidgetPacs, SIGNAL( imageDoubleClicked() ), SLOT( retrieve() ) );
 
-    connect( m_studyTreeWidgetCache, SIGNAL( studyExpanded( QString ) ), SLOT( expandStudy( QString ) ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( seriesExpanded( QString , QString ) ), SLOT( expandSeries( QString , QString ) ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( studyDoubleClicked() ), SLOT( view() ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( seriesDoubleClicked() ), SLOT( view() ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( imageDoubleClicked() ), SLOT( view() ) );
-
     //es canvia de pestanya del TAB
     connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
-
-    //connectem els signes del SeriesIconView StudyListView
-    connect( m_seriesListWidgetCache, SIGNAL( selectedSeriesIcon(QString) ), m_studyTreeWidgetCache, SLOT( setCurrentSeries(QString) ) );
-    connect( m_seriesListWidgetCache, SIGNAL( viewSeriesIcon() ), SLOT( viewFromQSeriesListWidget() ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( currentStudyChanged() ), SLOT( setSeriesToSeriesListWidgetCache() ) );
-    connect( m_studyTreeWidgetCache, SIGNAL( currentSeriesChanged(QString) ), m_seriesListWidgetCache, SLOT( setCurrentSeries(QString) ) );
-	//Si passem de tenir un element seleccionat a no tenir-ne li diem al seriesListWidget que no mostri cap previsualització
-	connect(m_studyTreeWidgetCache, SIGNAL(notCurrentItemSelected()), m_seriesListWidgetCache, SLOT(clear()));
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect( &m_qexecuteOperationThread, SIGNAL( viewStudy( QString , QString , QString ) ), SLOT( studyRetrievedView( QString , QString , QString ) ) , Qt::QueuedConnection );
@@ -316,7 +241,7 @@ void QueryScreen::createConnections()
     connect( &m_qexecuteOperationThread, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int)), m_operationStateScreen, SLOT( setRetrievedImagesToCurrentProcessingStudy(int) ));
     connect( &m_qexecuteOperationThread, SIGNAL( seriesCommit( QString ) ), m_operationStateScreen, SLOT(  seriesCommit( QString ) ) );
     connect( &m_qexecuteOperationThread, SIGNAL( newOperation( Operation * ) ), m_operationStateScreen, SLOT(  insertNewOperation( Operation *) ) );
-    connect(&m_qexecuteOperationThread, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
+    connect(&m_qexecuteOperationThread, SIGNAL(studyWillBeDeleted(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
     connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), m_operationStateScreen, SLOT(setCancelledOperation(QString)));
 
     // Label d'informació (cutre-xapussa)
@@ -332,13 +257,10 @@ void QueryScreen::createConnections()
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
     connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QString, QExecuteOperationThread::OperationError)));
-    connect( &m_qexecuteOperationThread, SIGNAL( retrieveFinished( QString ) ), SLOT( studyRetrieveFinished ( QString ) ) );
+    connect( &m_qexecuteOperationThread, SIGNAL( retrieveFinished( QString ) ), m_qInputOutputLocalDatabaseWidget, SLOT( addStudyToQStudyTreeWidget( QString ) ) );
 
     //Amaga o ensenya la cerca avançada
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
-
-    //Connecta amb el signal que indica que ha finalitza el thread d'esborrar els estudis vells
-    connect(&m_qdeleteOldStudiesThread, SIGNAL(finished()), SLOT(deleteOldStudiesThreadFinished()));
 
     #ifndef STARVIEWER_LITE
     connect(m_listenRISRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
@@ -348,6 +270,8 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved()), SLOT(refreshLocalDatabaseTab()));
+
+    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)
@@ -369,10 +293,7 @@ void QueryScreen::readSettings()
 {
     StarviewerSettings settings;
     this->restoreGeometry( settings.getQueryScreenGeometry() );
-    if ( !settings.getQueryScreenStudyTreeSeriesListQSplitterState().isEmpty() )
-    {
-        m_StudyTreeSeriesListQSplitter->restoreState( settings.getQueryScreenStudyTreeSeriesListQSplitterState() );
-    }
+
     //carreguem el processImageSingleton
     m_processImageSingleton->setPath( settings.getCacheImagePath() );
 }
@@ -391,8 +312,7 @@ void QueryScreen::updateConfiguration(const QString &configuration)
     }
     else if (configuration == "Pacs/CacheCleared")
     {
-        m_studyTreeWidgetCache->clear();
-        m_seriesListWidgetCache->clear();
+        m_qInputOutputLocalDatabaseWidget->clear();
     }
 }
 
@@ -417,7 +337,7 @@ void QueryScreen::showLocalExams()
     m_qbasicSearchWidget->clear();
     m_qbasicSearchWidget->setDefaultDate( QBasicSearchWidget::AnyDate );
     m_qadvancedSearchWidget->clear();
-    queryStudy("Cache");
+    m_qInputOutputLocalDatabaseWidget->queryStudy(DicomMask());
     bringToFront();
 }
 
@@ -426,7 +346,7 @@ void QueryScreen::searchStudy()
     switch ( m_tab->currentIndex() )
     {
         case LocalDataBaseTab:
-            queryStudy("Cache");
+            m_qInputOutputLocalDatabaseWidget->queryStudy(buildDicomMask());
             break;
 
         case PACSQueryTab:
@@ -527,68 +447,12 @@ Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters
     return multipleQueryStudy->StartQueries();
 }
 
-void QueryScreen::queryStudy( const QString &source )
-{
-    LocalDatabaseManager localDatabaseManager;
-    QList<Patient *> patientStudyList;
-    Status state;
-    DicomMask searchMask = buildDicomMask();
-
-    StatsWatcher::log( "Cerca d'estudis a " + source + " amb paràmetres: " + searchMask.getFilledMaskFields() );
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
-    if( source == "Cache" )
-    {
-        m_seriesListWidgetCache->clear();
-
-        patientStudyList = localDatabaseManager.queryPatientStudy(searchMask);
-
-        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
-    }
-    else
-    {
-        QApplication::restoreOverrideCursor();
-        DEBUG_LOG( "Unrecognised source: " + source );
-        return;
-    }
-
-    /* Aquest mètode a part de ser cridada quan l'usuari fa click al botó search, també es cridada al
-     * constructor d'aquesta classe, per a que al engegar l'aplicació ja es mostri la llista d'estudis
-     * que hi ha a la base de dades local. Si el mètode no troba cap estudi a la base de dades local
-     * es llença el missatge que no s'han trobat estudis, però com que no és idonii, en el cas aquest que es
-     * crida des del constructor que es mostri el missatge de que no s'han trobat estudis al engegar l'aplicació, el que
-     * es fa és que per llançar el missatge es comprovi que la finestra estigui activa. Si la finestra no està activa
-     * vol dir que el mètode ha estat invocat des del constructor
-     */
-    if ( patientStudyList.isEmpty() && isActiveWindow() )
-    {
-        //no hi ha estudis
-        if( source == "Cache" )
-            m_studyTreeWidgetCache->clear();
-
-        QApplication::restoreOverrideCursor();
-        QMessageBox::information( this , ApplicationNameString , tr( "No study match found." ) );
-    }
-    else
-    {
-        if( source == "Cache" )
-        {
-            m_studyTreeWidgetCache->insertPatientList(patientStudyList);//es mostra la llista d'estudis
-            m_studyTreeWidgetCache->setSortColumn( QStudyTreeWidget::ObjectName ); //ordenem pel nom
-        }
-        QApplication::restoreOverrideCursor();
-    }
-}
-
 void QueryScreen::expandStudy( const QString &studyUID )
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     switch ( m_tab->currentIndex() )
     {
-        case LocalDataBaseTab : // si estem a la pestanya de la cache
-            querySeries( studyUID, "Cache" );
-            break;
         case PACSQueryTab :  //si estem la pestanya del PACS fem query al Pacs
             querySeriesPacs(studyUID);
             break;
@@ -604,10 +468,6 @@ void QueryScreen::expandSeries( const QString &studyUID, const QString &seriesUI
 
     switch ( m_tab->currentIndex() )
     {
-        case LocalDataBaseTab : // si estem a la pestanya de la cache
-            queryImage( studyUID , seriesUID, "Cache" );
-            break;
-
         case PACSQueryTab :  //si estem la pestanya del PACS fem query al Pacs
             queryImagePacs( studyUID , seriesUID );
             break;
@@ -657,38 +517,6 @@ void QueryScreen::querySeriesPacs(QString studyUID)
     }
 
     m_studyTreeWidgetPacs->insertSeriesList( studyUID, querySeriesPacs.getQueryResultsAsSeriesList() );
-}
-
-void QueryScreen::querySeries( QString studyUID, QString source )
-{
-    QList<Series*> seriesList;
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask mask;
-
-    INFO_LOG( "Cerca de sèries a la font " + source +" de l'estudi " + studyUID );
-    if( source == "Cache" )
-    {
-        //preparem la mascara i cerquem les series a la cache
-        mask.setStudyUID(studyUID);
-        seriesList = localDatabaseManager.querySeries(mask);
-        if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
-    }
-    else
-    {
-        DEBUG_LOG( "Unrecognised source: " + source );
-        return;
-    }
-
-    if ( seriesList.isEmpty() )
-    {
-        QMessageBox::information( this , ApplicationNameString , tr( "No series match for this study.\n" ) );
-        return;
-    }
-
-    if( source == "Cache" )
-    {
-        m_studyTreeWidgetCache->insertSeriesList(studyUID, seriesList); //inserim la informació de les sèries al estudi
-    }
 }
 
 void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID)
@@ -782,37 +610,6 @@ void QueryScreen::retrieve(bool view)
     }
 }
 
-void QueryScreen::queryImage(QString studyInstanceUID, QString seriesInstanceUID, QString source)
-{
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask mask;
-    QList<Image*> imageList;
-
-    INFO_LOG("Cerca d'imatges a la font " + source + " de l'estudi " + studyInstanceUID + " i serie " + seriesInstanceUID);
-
-    if(source == "Cache")
-    {
-        mask.setStudyUID(studyInstanceUID);
-        mask.setSeriesUID(seriesInstanceUID);
-        imageList = localDatabaseManager.queryImage(mask);
-        if(showDatabaseManagerError(localDatabaseManager.getLastError()))   return;
-    }
-    else
-    {
-        DEBUG_LOG("Unrecognised source: " + source);
-        return;
-    }
-
-    if (imageList.isEmpty())
-    {
-        QMessageBox::information( this , ApplicationNameString , tr( "No images match for this study.\n" ) );
-        return;
-    }
-
-    if( source == "Cache" )
-        m_studyTreeWidgetCache->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
-}
-
 void QueryScreen::retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, Study *studyToRetrieve)
 {
     StarviewerSettings settings;
@@ -860,7 +657,8 @@ void QueryScreen::studyRetrievedView( QString studyUID , QString seriesUID , QSt
     QStringList studyUIDList;
     studyUIDList << studyUID;
 
-    loadStudies(studyUIDList, seriesUID, sopInstanceUID, "Cache");
+    //Indiquem que volem veure un estudi que està guardat a la base de dades
+    m_qInputOutputLocalDatabaseWidget->view(studyUIDList, seriesUID);
 }
 
 void QueryScreen::refreshTab( int index )
@@ -889,10 +687,6 @@ void QueryScreen::view()
     StatsWatcher::log( "Cridem slot 'view()'. Cridat desde: " + sender()->objectName() );
     switch ( m_tab->currentIndex() )
     {
-        case LocalDataBaseTab:
-            loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getCurrentSeriesUID(), m_studyTreeWidgetCache->getCurrentImageUID(), "Cache" );
-            break;
-
         case PACSQueryTab :
             retrieve(true);
            break;
@@ -900,76 +694,6 @@ void QueryScreen::view()
         default :
             break;
     }
-}
-
-void QueryScreen::viewFromQSeriesListWidget()
-{
-    QStringList studyUIDList;
-
-    studyUIDList << m_seriesListWidgetCache->getCurrentStudyUID();//Agafem l'estudi uid de la sèrie seleccionada
-    loadStudies( studyUIDList, m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
-    StatsWatcher::log( "Obrim estudi seleccionant sèrie desde thumbnail" );
-}
-
-void QueryScreen::deleteOldStudiesThreadFinished()
-{
-    showDatabaseManagerError(m_qdeleteOldStudiesThread.getLastError(), tr("deleting old studies"));
-}
-
-void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesUID, QString defaultSOPInstanceUID, QString source)
-{
-    DicomMask patientToProcessMask;
-    Patient *patient;
-    QTime time;
-
-    if(studiesUIDList.isEmpty())
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view"));
-        return;
-    }
-
-    this->close();//s'amaga per poder visualitzar la serie
-    if ( m_operationStateScreen->isVisible() )
-    {
-        m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
-    }
-
-    QApplication::setOverrideCursor( Qt::WaitCursor );
-    // Llista de pacients seleccionats
-    QList<Patient *> selectedPatientsList;
-    //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
-    foreach(QString studyInstanceUIDSelected, studiesUIDList)
-    {
-        patientToProcessMask.setStudyUID(studyInstanceUIDSelected);
-        if( source == "Cache" )
-        {
-            LocalDatabaseManager localDatabaseManager;
-
-            time.start();
-            patient = localDatabaseManager.retrieve(patientToProcessMask);
-            DEBUG_LOG( QString("Rehidratar de la bd ha trigat: %1 ").arg( time.elapsed() ));
-            if(showDatabaseManagerError(localDatabaseManager.getLastError()))
-            {
-                QApplication::restoreOverrideCursor();
-                return;
-            }
-        }
-        if( patient )
-        {
-            // Marquem la sèrie per defecte
-            // TODO ara sempre posem el mateix UID, per tant de moment només 
-            /// funciona bé del tot quan seleccionem un únic estudi
-            patient->setSelectedSeries(defaultSeriesUID);
-            // l'afegim a la llista de pacients
-            selectedPatientsList << patient;
-        }
-        else
-            DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
-    }
-
-    DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
-    QApplication::restoreOverrideCursor();
-    emit selectedPatients( Patient::mergePatients( selectedPatientsList ) );
 }
 
 void QueryScreen::viewPatients(QList<Patient*> listPatientsToView)
@@ -986,66 +710,7 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView)
 
 void QueryScreen::refreshLocalDatabaseTab()
 {
-    queryStudy("Cache");
-}
-
-void QueryScreen::deleteSelectedStudiesInCache()
-{
-    QStringList studiesList = m_studyTreeWidgetCache->getSelectedStudiesUID();
-    if( studiesList.isEmpty() )
-    {
-        QMessageBox::information( this , ApplicationNameString , tr( "Please select at least one study to delete" ) );
-    }
-    else
-    {
-        QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                                                                           tr( "Are you sure you want to delete the selected Studies?" ),
-                                                                           QMessageBox::Yes | QMessageBox::No,
-                                                                           QMessageBox::No);
-        if (response  == QMessageBox::Yes)
-        {
-            //Posem el cursor en espera
-            QApplication::setOverrideCursor(Qt::WaitCursor);
-
-            LocalDatabaseManager localDatabaseManager;
-
-            foreach(QString studyUID, studiesList)
-            {
-                if( m_qcreateDicomdir->studyExists( studyUID ) )
-                {
-                    QMessageBox::warning( this , ApplicationNameString ,
-                    tr( "The study with UID: %1 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first." ).arg(studyUID) );
-                }
-                else
-                {
-                    localDatabaseManager.del(studyUID);
-                    if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    break;
-
-                    m_seriesListWidgetCache->clear();
-                    m_studyTreeWidgetCache->removeStudy( studyUID );
-                }
-            }
-
-            QApplication::restoreOverrideCursor();
-        }
-    }
-}
-
-void QueryScreen::studyRetrieveFinished( QString studyUID )
-{
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask studyMask;
-    QList<Patient*> patientList;
-
-    studyMask.setStudyUID(studyUID);
-    patientList = localDatabaseManager.queryPatientStudy(studyMask);
-    if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
-
-    if (patientList.count() == 1)
-    {
-        m_studyTreeWidgetCache->insertPatient(patientList.at(0));
-        m_studyTreeWidgetCache->sort();
-    }
+    m_qInputOutputLocalDatabaseWidget->queryStudy(DicomMask());
 }
 
 void QueryScreen::closeEvent( QCloseEvent* event )
@@ -1070,8 +735,6 @@ void QueryScreen::writeSettings()
 
         saveQStudyTreeWidgetColumnsWidth();
 
-        //guardem l'estat del QSplitter que divideix el StudyTree del QSeries i de la QueryScreen
-        settings.setQueryScreenStudyTreeSeriesListQSplitterState( m_StudyTreeSeriesListQSplitter->saveState() );
         settings.saveQueryScreenGeometry( this->saveGeometry() );
     }
 }
@@ -1083,11 +746,6 @@ void QueryScreen::saveQStudyTreeWidgetColumnsWidth()
     for ( int column = 0; column < m_studyTreeWidgetPacs->getNumberOfColumns(); column++ )
     {
         settings.setStudyPacsListColumnWidth( column , m_studyTreeWidgetPacs->getColumnWidth( column ) );
-    }
-
-    for ( int column = 0; column < m_studyTreeWidgetCache->getNumberOfColumns(); column++ )
-    {
-        settings.setStudyCacheListColumnWidth( column , m_studyTreeWidgetCache->getColumnWidth( column ) );
     }
 }
 
@@ -1104,37 +762,8 @@ void QueryScreen::showOperationStateScreen()
     }
 }
 
-void QueryScreen::convertToDicomdir()
-{
-    QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
-
-    DicomMask studyMask;
-    LocalDatabaseManager localDatabaseManager;
-    QList<Patient*> patientList;
-
-    foreach(QString studyUID, studiesUIDList )
-    {
-        studyMask.setStudyUID(studyUID);
-        patientList = localDatabaseManager.queryPatientStudy(studyMask);
-        if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
-
-        // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
-        // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
-        if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
-        {
-            showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
-            return;
-        }
-
-        m_qcreateDicomdir->addStudy(patientList.first()->getStudies().first());
-
-        delete patientList.first();
-   }
-}
-
 void QueryScreen::openDicomdir()
 {
-
     m_qInputOutputDicomdirWidget->openDicomdir();
 
     this->bringToFront();
@@ -1143,7 +772,7 @@ void QueryScreen::openDicomdir()
 
 void QueryScreen::storeStudiesToPacs()
 {
-    QList<PacsParameters> selectedPacsList;
+    /*QList<PacsParameters> selectedPacsList;
     QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     StarviewerSettings settings;
@@ -1170,13 +799,13 @@ void QueryScreen::storeStudiesToPacs()
             DicomMask dicomMask;
             dicomMask.setStudyUID(studyUID);
             patientList = localDatabaseManager.queryPatientStudy(dicomMask);
-            if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
+//            if( showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
 
             // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
             // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
             if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
             {
-                showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
+//                showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
                 return;
             }
 
@@ -1207,7 +836,7 @@ void QueryScreen::storeStudiesToPacs()
         QMessageBox::warning(this, ApplicationNameString, tr("The studies can only be stored to one PACS") );
     }
 
-    QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();*/
 }
 
 void QueryScreen::errorConnectingPacs( QString IDPacs )
@@ -1263,11 +892,6 @@ DicomMask QueryScreen::buildDicomMask()
     return m_qbasicSearchWidget->buildDicomMask() + m_qadvancedSearchWidget->buildDicomMask();
 }
 
-void QueryScreen::studyWillBeDeletedSlot(QString studyInstanceUID)
-{
-    m_studyTreeWidgetCache->removeStudy(studyInstanceUID);
-}
-
 void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
 {
     MultipleQueryStudy multipleQueryStudy;
@@ -1319,54 +943,6 @@ QString QueryScreen::getPacsIDFromQueriedStudies(QString studyInstanceUID)
     }
     else
         return m_hashPacsIDOfStudyInstanceUID[studyInstanceUID];
-}
-
-bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)
-{
-    QString message;
-
-    if (!doingWhat.isEmpty())
-        message = tr("An error has ocurred while ") + doingWhat + ":\n\n";
-
-    switch(error)
-    {
-        case LocalDatabaseManager::Ok:
-            return false;
-
-        case LocalDatabaseManager::DatabaseLocked:
-            message += tr("The database is blocked by another %1 window."
-                         "\nClose all the others %1 windows and try again."
-                         "\n\nIf you want to open different %1's windows always choose the 'New' option from the File menu.").arg(ApplicationNameString);
-            break;
-        case LocalDatabaseManager::DatabaseCorrupted:
-			message += tr("%1 database is corrupted.").arg(ApplicationNameString);
-            message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
-            break;
-        case LocalDatabaseManager::SyntaxErrorSQL:
-            message += tr("%1 database syntax error.").arg(ApplicationNameString);
-            message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
-            break;
-        case LocalDatabaseManager::DatabaseError:
-            message += tr("An internal error occurs with %1 database.").arg(ApplicationNameString);
-            message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
-            break;
-        case LocalDatabaseManager::DeletingFilesError:
-            message += tr("Some files can not be delete."
-                         "\nThese have to be delete manually.");
-            break;
-        default:
-            message = tr("Unknown error.");
-            break;
-    }
-
-    QApplication::restoreOverrideCursor();
-
-    QMessageBox::critical( this , ApplicationNameString , message );
-
-    return true;
 }
 
 void QueryScreen::showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error)
