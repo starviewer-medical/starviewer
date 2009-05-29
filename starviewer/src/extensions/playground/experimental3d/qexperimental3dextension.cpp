@@ -1048,55 +1048,7 @@ void QExperimental3DExtension::setViewpoint()
 
 void QExperimental3DExtension::setViewpoint( const Vector3 &viewpoint )
 {
-    /*
-    // Describe the new vector between the camera and the target
-    dx = cameraX - targetX;
-    dy = cameraY - targetY;
-    dz = cameraZ - targetZ;
-
-    // Calculate the new "up" vector for the camera
-    upX = -dx * dy;
-    upY =  dz * dz + dx * dx;
-    upZ = -dz * dy;
-    */
-    //Vector3 up( -viewpoint.x * viewpoint.y, viewpoint.z * viewpoint.z + viewpoint.x * viewpoint.x, -viewpoint.z * viewpoint.y );
-    //Vector3 up( viewpoint.x * viewpoint.y + viewpoint.z * viewpoint.z, viewpoint.y * viewpoint.z + viewpoint.x * viewpoint.x, viewpoint.z * viewpoint.x + viewpoint.y * viewpoint.y );
-    //Vector3 up( 0.0, 2.0 * qAbs( viewpoint.x ) + qAbs( viewpoint.z  ), qAbs( viewpoint.y ) );
-    double max = qMax( qAbs( viewpoint.x ), qMax( qAbs( viewpoint.y ), qAbs( viewpoint.z ) ) );
-    //Vector3 up( max - qAbs( viewpoint.x ), 2.0 * qAbs( viewpoint.x ) + qAbs( viewpoint.z  ), qAbs( viewpoint.y ) );
-    Vector3 up( qMax( max - qAbs( viewpoint.y - viewpoint.z ), 0.0 ), qAbs( viewpoint.x ) + qAbs( viewpoint.z  ), qAbs( viewpoint.y ) );
-    up.normalize();
-
-    /*
-    Vector3 up( 0.0, 1.0, 0.0 );
-    Vector3 position = viewpoint;
-    double dotProduct = qAbs( position.normalize() * up );
-
-    if ( dotProduct > 0.9 ) up.set( 0.0, 0.0, 1.0 );
-    else if ( dotProduct > 0.8 )
-    {
-        double a = 10.0 * ( dotProduct - 0.8 ); // a està entre 0 i 1; 1 ha de ser tot z, 0 ha de ser tot y
-        up.set( 0.0, 1.0 - a, a );
-        up.normalize();
-
-        if ( qAbs( position.x ) < 0.1 && MathTools::haveSameSign( position.y, position.z ) )    // si x és propera a 0 i y i z tenen el mateix signe ens va malament
-        {
-            // fem el nou producte escalar per assegurar que vagi bé
-            dotProduct = qAbs( position * up ); // position ja es manté normalitzada d'abans
-
-            if ( dotProduct > 0.7 )
-            {
-                double b = ( dotProduct - 0.7 ) / 0.3;  // b està entre 0 i 1
-                double c = 1.0 - ( 10.0 * qAbs( position.x ) ); // c està entre 0 (quan x és 0.1) i 1 (quan x és 0)
-                up.set( b * c, 1.0 - a, a );
-                up.normalize();
-            }
-        }
-    }
-    */
-
-    //DEBUG_LOG( "viewpoint = " + viewpoint.toString() + ", up = " + up.toString() );
-    m_viewer->setCamera( viewpoint, Vector3(), up );
+    m_viewer->setCamera( viewpoint, Vector3(), ViewpointGenerator::up( viewpoint ) );
 }
 
 
