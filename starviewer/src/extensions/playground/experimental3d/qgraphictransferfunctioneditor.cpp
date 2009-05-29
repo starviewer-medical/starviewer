@@ -16,6 +16,8 @@ QGraphicTransferFunctionEditor::QGraphicTransferFunctionEditor( QWidget *parent 
     connect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
     connect( m_maximumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMaximum(int) ) );
     connect( m_scrollBar, SIGNAL( valueChanged(int) ), SLOT( setScroll(int) ) );
+    connect( m_syncToMaxPushButton, SIGNAL( clicked() ), SLOT( syncToMax() ) );
+    connect( m_syncToVisiblePushButton, SIGNAL( clicked() ), SLOT( syncToVisible() ) );
 }
 
 
@@ -182,6 +184,19 @@ void QGraphicTransferFunctionEditor::setScroll( int scroll )
     m_basicEditor->setRange( basicMin, basicMax );
 
     connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
+}
+
+
+void QGraphicTransferFunctionEditor::syncToMax()
+{
+    m_basicEditor->setRange( m_minimumSpinBox->value(), m_maximumSpinBox->value() );
+}
+
+
+void QGraphicTransferFunctionEditor::syncToVisible()
+{
+    m_minimumSpinBox->setValue( static_cast<int>( std::floor( m_basicEditor->minimum() ) ) );
+    m_maximumSpinBox->setValue( static_cast<int>( std::ceil( m_basicEditor->maximum() ) ) );
 }
 
 

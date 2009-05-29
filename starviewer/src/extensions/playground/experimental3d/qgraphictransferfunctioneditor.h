@@ -32,6 +32,8 @@ private slots:
     void setMinimum( int minimum );
     void setMaximum( int maximum );
     void setScroll( int scroll );
+    void syncToMax();
+    void syncToVisible();
 
 };
 
