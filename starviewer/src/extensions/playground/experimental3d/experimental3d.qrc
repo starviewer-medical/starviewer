@@ -1,8 +1,9 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource prefix="/extensions/Experimental3DExtension/" >
-        <file>translations_ca_ES.qm</file>
-        <file>translations_en_GB.qm</file>
-        <file>translations_es_ES.qm</file>
-    </qresource>
+<RCC>
+  <qresource prefix="/extensions/Experimental3DExtension/" >
+    <file>images/synctomax.png</file>
+    <file>images/synctovisible.png</file>
+    <file>translations_ca_ES.qm</file>
+    <file>translations_en_GB.qm</file>
+    <file>translations_es_ES.qm</file>
+  </qresource>
 </RCC>
