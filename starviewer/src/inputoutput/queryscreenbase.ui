@@ -218,7 +218,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="iconSize" >
       <size>
@@ -233,101 +233,16 @@
       <attribute name="icon" >
        <iconset resource="../main/main.qrc" >:/images/database.png</iconset>
       </attribute>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <property name="leftMargin" >
-        <number>9</number>
-       </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <item>
-        <widget class="QSplitter" name="m_StudyTreeSeriesListQSplitter" >
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="udg::QInputOutputLocalDatabaseWidget" native="1" name="m_qInputOutputLocalDatabaseWidget" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="childrenCollapsible" >
-          <bool>false</bool>
-         </property>
-         <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetCache" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-         <widget class="udg::QSeriesListWidget" native="1" name="m_seriesListWidgetCache" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="m_viewButtonLocal" >
-           <property name="text" >
-            <string>View</string>
-           </property>
-           <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/view.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="toolButtonStyle" >
-            <enum>Qt::ToolButtonTextBesideIcon</enum>
-           </property>
-           <property name="autoRaise" >
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
@@ -609,11 +524,6 @@
    <header>qstudytreewidget.h</header>
   </customwidget>
   <customwidget>
-   <class>udg::QSeriesListWidget</class>
-   <extends>QWidget</extends>
-   <header>qserieslistwidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>udg::QPacsList</class>
    <extends>QWidget</extends>
    <header>qpacslist.h</header>
@@ -622,6 +532,11 @@
    <class>udg::QInputOutputDicomdirWidget</class>
    <extends>QWidget</extends>
    <header>qinputoutputdicomdirwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QInputOutputLocalDatabaseWidget</class>
+   <extends>QWidget</extends>
+   <header>qinputoutputlocaldatabasewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -14,7 +14,6 @@
 #include "multiplequerystudy.h"
 #include "pacsparameters.h"
 #include "localdatabasemanager.h"
-#include "qdeleteoldstudiesthread.h"
 #include "listenrisrequestthread.h"
 #include "qpopuprisrequestsscreen.h"
 
@@ -26,7 +25,6 @@ class QCreateDicomdir;
 class ProcessImageSingleton;
 class DicomMask;
 class QOperationStateScreen;
-class QDeleteOldStudiesThread;
 class StatsWatcher;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
@@ -106,9 +104,6 @@ private slots:
     /// Visualitza un estudi, si aquest estudi esta en el pacs el descarrega i posteriorment es visualitza, si es de la cache el carrega a la classe volum i es visualitza
     void view();
 
-    ///slot que s'activa al esborrar estudi de la caché
-    void deleteSelectedStudiesInCache();
-
     /** Slot que s'activa per la classe qexecuteoperationthread, que quant un estudi ha estat descarregat el visualitzar, si l'usuari així ho ha indicat
      * @param studyUID studyUID de l'estudi descarregat
      * @param seriesUID seriesUID de la sèrie descarregada
@@ -126,16 +121,6 @@ private slots:
      */
     void errorQueringStudiesPacs( QString PacsID );
 
-    /** Slot que s'activa quant s'ha descarregat un estudi, prove de la classe QExecuteOperationThread
-     * @param studyUID UID de l'estudi descarregat
-     */
-    void studyRetrieveFinished( QString studyUID );
-
-    /** Afegeix els estudis a la llista d'estudis per convertir a Dicomdir
-     * @param studiesUIDList UID dels estudis a covnertir a Dicomdir
-     */
-    void convertToDicomdir();
-
     /** guarda els estudis seleccionats a m_studyTreeWidgetCache al PACS
      */
     void storeStudiesToPacs();
@@ -147,38 +132,19 @@ private slots:
      */
     void queryImagePacs(QString StudyUID, QString SeriesUID);
 
-    /** Cerca les imatges d'una sèrie a la font indicada (Cache,DICOMDIR)
-     * @param studyUID uid de l'estudi
-     * @param seriesUID  uid de la sèrie
-     * @param source  font de dades on consultar (Cache,DICOMDIR)
-     */
-    void queryImage(QString studyUID, QString seriesUID, QString source );
-
     void updateOperationsInProgressMessage();
 
     /// Mostra/amaga els camps de cerca avançats
     void setAdvancedSearchVisible(bool visible);
 
-    ///S'activa quan seleccionem un estudi del m_qstudyTreeWidgetCache i envia al QSeriesListWidget la informació de les sèries de l'estudi
-    void setSeriesToSeriesListWidgetCache();
-
     ///Mostra la pantalla QOperationStateScreen
     void showOperationStateScreen();
-
-    ///Visualitza la sèrie sobre la que s'ha fet un view des del QSeriesListWidget
-    void viewFromQSeriesListWidget();
-
-    ///Slot que es dispara quan ha finalitzat el thread que esborrar els estudis vells, aquest slot comprova que no s'hagi produït cap error esborrant els estudis vells
-    void deleteOldStudiesThreadFinished();
 
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
 
     ///Ens mostra un message box indicant l'error produït mentre s'esperaven peticions del RIS
     void showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError);
-
-    ///S'executa quan un estudi serà esborrat de la bd per alliberar espai, aquest mètode esborra l'estudi del QStudyTreeWidget de la bd local
-    void studyWillBeDeletedSlot(QString studyInstanceUID);
 
     ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
     void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
@@ -219,38 +185,16 @@ private:
      */
     void retrieveFromPacs(bool view, QString pacsIdToRetrieve, DicomMask mask, Study *studyToRetrieve);
 
-    /**
-     * Donada una llista de uid's d'estudi, procedeix a carregar-los desde la font indicada (Cache,DICOMDIR)
-     * @param studiesUIDList Llista d'uid's d'estudi
-     * @param source font des d'on es volen carregar les dades (Cache i DICOMDIR suportats de moment)
-     */
-    void loadStudies( QStringList studiesUIDList, QString defaultSeriesUID , QString defaultSOPInstanceUID, QString source );
-
     /// Cerca als pacs seleccionats
     void queryStudyPacs();
 
     ///Cerca els estudis que compleixen la màscara de cerca als pacs passats per paràmetre
     Status queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
 
-    /**
-     * Cerca un estudi a la font indicada (Cache,DICOMDIR)
-     * @param source la font que volem interrogar
-     */
-    void queryStudy( const QString &source );
-
     /** Busca la informació d'una sèrie en el PACS i la mostra en la interfície
      * @param studyUID UID de l'estidi
      */
     void querySeriesPacs(QString studyUID);
-
-    /** Cerca les sèries d'un estudi a la font indicada (Cache,DICOMDIR)
-     * @param studyUID UID de l'estudi a cercar
-     * @param source
-     */
-    void querySeries( QString studyUID, QString source );
-
-    /// esborra els estudis vells de la cache
-    void deleteOldStudies();
 
     ///Comprova els requeriments necessaris per poder utilitzar la QueryScreen
     void checkRequeriments();
@@ -267,9 +211,6 @@ private:
 
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();
-
-    ///Crear el menú contextual del QStudyTreeWidgetCache
-    void CreateContextMenuQStudyTreeWidgetCache();
 
     ///Crear el menú contextual del QStudyTreeWidgetPacs
     void CreateContextMenuQStudyTreeWidgetPacs();
@@ -326,7 +267,6 @@ struct retrieveParameters
     QOperationStateScreen *m_operationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
     QExecuteOperationThread m_qexecuteOperationThread;
-    QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
 
     QMenu m_contextMenuQStudyTreeWidgetCache, m_contextMenuQStudyTreeWidgetPacs;
 
