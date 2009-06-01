@@ -399,7 +399,7 @@ void QRectumSegmentationExtension::setRegionOfInterest( )
 {
     //std::cout<<"SetRegionOfInterest"<<std::endl;
     double pos[3];
-    m_2DView->getCurrentCursorPosition(pos);
+    m_2DView->getEventWorldCoordinate(pos);
     m_initialRegionPoint[0]= pos[0];
     m_initialRegionPoint[1]= pos[1];
     m_isRegionSetting = true;
@@ -412,7 +412,7 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
         double pos[3];
         double spacing[3];
         m_mainVolume->getSpacing(spacing);
-        m_2DView->getCurrentCursorPosition(pos);
+        m_2DView->getEventWorldCoordinate(pos);
         m_finalRegionPoint[0]= pos[0];
         m_finalRegionPoint[1]= pos[1];
 

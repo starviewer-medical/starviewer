@@ -669,11 +669,11 @@ void QLandmarkRegistrationExtension::mouseMoveEventHandler( int idVolume )
         double pos[3];
         if( idVolume == 1 )
         {
-            m_2DView->getCurrentCursorPosition(pos);
+            m_2DView->getCurrentCursorImageCoordinate(pos);
         }
         else        // idVolume == 2
         {
-            m_2DView_2->getCurrentCursorPosition(pos);
+            m_2DView_2->getCurrentCursorImageCoordinate(pos);
         }
 
         std::vector<double> posVect(3);
@@ -729,11 +729,11 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
     QString auxZ;
     if( idVolume == 1 )
     {
-        m_2DView->getCurrentCursorPosition(pos);
+        m_2DView->getCurrentCursorImageCoordinate(pos);
     }
     else        // idVolume == 2
     {
-        m_2DView_2->getCurrentCursorPosition(pos);
+        m_2DView_2->getCurrentCursorImageCoordinate(pos);
     }
         //std::cout<<"pos: "<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<std::endl;
 
@@ -804,12 +804,12 @@ void QLandmarkRegistrationExtension::rightButtonPressEventHandler( int idVolume 
     int s;
     if( idVolume == 1 )
     {
-        m_2DView->getCurrentCursorPosition(pos);
+        m_2DView->getCurrentCursorImageCoordinate(pos);
         s = m_2DView->getCurrentSlice();
     }
     else        // idVolume == 2
     {
-        m_2DView_2->getCurrentCursorPosition(pos);
+        m_2DView_2->getCurrentCursorImageCoordinate(pos);
         s = m_2DView_2->getCurrentSlice();
     }
         //std::cout<<"pos: "<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<std::endl;
@@ -886,11 +886,11 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
         QString auxZ;
         if( idVolume == 1 )
         {
-            m_2DView->getCurrentCursorPosition(pos);
+            m_2DView->getCurrentCursorImageCoordinate(pos);
         }
         else        // idVolume == 2
         {
-            m_2DView_2->getCurrentCursorPosition(pos);
+            m_2DView_2->getCurrentCursorImageCoordinate(pos);
         }
             //std::cout<<"pos: "<<pos[0]<<" "<<pos[1]<<" "<<pos[2]<<std::endl;
 

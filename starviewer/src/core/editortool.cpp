@@ -247,12 +247,7 @@ void EditorTool::setEditorPoint(  )
     double pos[3];
     if(m_editorState != NoEditor)
     {
-        m_2DViewer->getCurrentCursorPosition(pos);
-
-        //DEBUG_LOG( QString( "Editor (%1,%2,%3)" ).arg(pos[0]).arg(pos[1]).arg(pos[2]) );
-
-        // quan dona una posici�� de (-1, -1, -1) � que estem fora de l'actor
-        if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
+        if( m_2DViewer->getCurrentCursorImageCoordinate(pos) )
         {
             switch( m_editorState)
             {
@@ -292,33 +287,14 @@ void EditorTool::setPaintCursor()
     }
   
     double pos[3];
-    m_2DViewer->getCurrentCursorPosition(pos);
-    if((m_editorState == Erase || m_editorState == Paint)&&(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) ))
+    if((m_editorState == Erase || m_editorState == Paint)&& m_2DViewer->getCurrentCursorImageCoordinate(pos) )
     {
         int size = m_editorSize;
-        double spacing[3];
-        m_2DViewer->getInput()->getSpacing(spacing);
-  
-        //es calcula correctament el valor de profunditat per a corretgir el bug #245
-        int slice = m_2DViewer->getCurrentSlice();
-        double *origin = m_2DViewer->getInput()->getOrigin();
-    
-        switch( m_2DViewer->getView() )
-        {
-            case Q2DViewer::Axial:
-                pos[2] = origin[2] + (slice * spacing[2]);
-            break;
-            case Q2DViewer::Sagital:
-                pos[0] = origin[0] + (slice * spacing[0]);
-            break;
-            case Q2DViewer::Coronal:
-                pos[1] = origin[1] + (slice * spacing[1]);
-            break;
-        }
-
         vtkPoints *points = vtkPoints::New();
         points->SetNumberOfPoints(4);
-  
+
+        double spacing[3];
+        m_2DViewer->getInput()->getSpacing(spacing);
         double sizeView[2];
         sizeView[0]=(double)size*spacing[0];
         sizeView[1]=(double)size*spacing[1];
@@ -377,7 +353,7 @@ void EditorTool::eraseMask()
     double spacing[3];
     int centralIndex[3];
     int index[3];
-    m_2DViewer->getCurrentCursorPosition(pos);
+    m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
@@ -412,7 +388,7 @@ void EditorTool::paintMask()
     double spacing[3];
     int centralIndex[3];
     int index[3];
-    m_2DViewer->getCurrentCursorPosition(pos);
+    m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
@@ -445,7 +421,7 @@ void EditorTool::eraseSliceMask()
     int index[3];
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    m_2DViewer->getCurrentCursorPosition(pos);
+    m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
@@ -475,7 +451,7 @@ void EditorTool::eraseRegionMask()
     int index[3];
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    m_2DViewer->getCurrentCursorPosition(pos);
+    m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
     index[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);

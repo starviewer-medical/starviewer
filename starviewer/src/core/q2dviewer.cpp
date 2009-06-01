@@ -43,6 +43,7 @@
 // voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
+#include <vtkPropPicker.h>
 #include <vtkImageActor.h>
 // displayed area
 #include <vtkImageChangeInformation.h>
@@ -56,7 +57,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     // CheckerBoard
     // el nombre de divisions per defecte, serà de 2, per simplificar
@@ -73,6 +74,10 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_imageActor = vtkImageActor::New();
     addActors();
 
+    // Creem el picker per obtenir les coordenades de la imatge
+    m_imagePointPicker = vtkPropPicker::New();
+    this->getInteractor()->SetPicker( m_imagePointPicker );
+    
     //creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
@@ -94,6 +99,7 @@ Q2DViewer::~Q2DViewer()
     m_sideRuler->Delete();
     m_bottomRuler->Delete();
     m_cornerAnnotations->Delete();
+    m_imagePointPicker->Delete();
     m_imageActor->Delete();
     m_anchoredRulerCoordinates->Delete();
     m_windowLevelLUTMapper->Delete();
@@ -1370,11 +1376,43 @@ Drawer *Q2DViewer::getDrawer() const
     return m_drawer;
 }
 
-bool Q2DViewer::getCurrentCursorPosition( double xyz[3] )
+bool Q2DViewer::getCurrentCursorImageCoordinate( double xyz[3] )
 {
-    // TODO cal refactoritzar aquest mètode i substituir-lo per aquest que és el seu equivalent
-    getEventWorldCoordinate(xyz);
-    return true;
+    bool inside = false;
+    if( !m_mainVolume )
+        return inside;
+    
+    int position[2];
+    this->getEventPosition( position );
+    if( m_imagePointPicker->PickProp( position[0], position[1], getRenderer() ) )
+    {
+        inside = true;
+        // calculem el pixel trobat
+        m_imagePointPicker->GetPickPosition( xyz );
+        // calculem la profunditat correcta ja que si tenim altres actors pel mig poden interferir en la mesura
+        // TODO una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor 
+        double bounds[6];
+        m_imageActor->GetDisplayBounds(bounds);
+        switch( m_lastView )
+        {
+        case Axial:
+            xyz[2] = bounds[4];
+            break;
+
+        case Sagital:
+            xyz[0] = bounds[0];
+            break;
+
+        case Coronal:
+            xyz[1] = bounds[2];
+            break;
+        }
+    }
+    else
+    {
+        DEBUG_LOG("Outside");
+    }
+    return inside;
 }
 
 double Q2DViewer::getCurrentImageValue()
@@ -1382,7 +1420,7 @@ double Q2DViewer::getCurrentImageValue()
     double xyz[3];
     bool found = false;
     double imageValue;
-    if( this->getCurrentCursorPosition(xyz) )
+    if( this->getCurrentCursorImageCoordinate(xyz) )
     {
         double tolerance;
         int subCellId;

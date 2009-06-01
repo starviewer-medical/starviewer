@@ -983,11 +983,11 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
     if(m_mapCalculator->getCBVVolume())    //Si hi ha alguna cosa al volum
     {
         double pos[3];
-        m_2DView->getCurrentCursorPosition(pos);
+        
         Volume* cbvMapVolume = m_mapCalculator->getCBVVolume();
         PerfusionMapCalculatorMainThread::DoubleTemporalImageType::Pointer signalImage = m_mapCalculator->getDeltaRImage();
 
-        if(pos[0] != -1 && pos[1] != -1 && pos[2] != -1 )
+        if( m_2DView->getCurrentCursorImageCoordinate(pos) )
         {
             int index[3];
             index[0] = (int)((pos[0]- cbvMapVolume->getOrigin()[0])/cbvMapVolume->getSpacing()[0]);

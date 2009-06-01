@@ -103,7 +103,7 @@ void Cursor3DTool::initializePosition()
     if ( !m_crossHair )
     {
         double xyz[3];
-        m_2DViewer->getCurrentCursorPosition( xyz );
+        m_2DViewer->getCurrentCursorImageCoordinate( xyz );
         m_crossHair = new DrawerCrossHair;
 
         //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
@@ -132,15 +132,12 @@ void Cursor3DTool::updatePosition()
 
         //Cal fer els càlculs per passar del món VTK al mon que té el DICOM per guardar el punt en dicom a les dades compartides de la tool.
         // 1.- Trobar el punt correcte en el món VTK
-        m_2DViewer->getCurrentCursorPosition( xyz );
-
-        // 2.- Trobar l'índex del vòxel en el DICOM
-        m_2DViewer->getInput()->getVtkData()->ComputeStructuredCoordinates(xyz, index, coordinates);
-
-        // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
-
-        if( xyz[0] != -1.0 && xyz[1] != -1.0 && xyz[2] != -1)
+        if( m_2DViewer->getCurrentCursorImageCoordinate( xyz ) )
         {
+            // 2.- Trobar l'índex del vòxel en el DICOM
+            m_2DViewer->getInput()->getVtkData()->ComputeStructuredCoordinates(xyz, index, coordinates);
+
+            // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
             int slice = m_2DViewer->getCurrentSlice();
             double *spacing = m_2DViewer->getInput()->getSpacing();
             double *origin = m_2DViewer->getInput()->getOrigin();

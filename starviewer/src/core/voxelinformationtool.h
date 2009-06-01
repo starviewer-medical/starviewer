@@ -54,9 +54,6 @@ private:
     ///situa el text del caption
     void placeText( double textPosition[3] );
 
-    ///calcula la profunditat segons la vista i la llesca en la que estem.
-    void depthAccordingViewAndSlice( double xyz[3] );
-
 private:
     /// 2DViewer amb el que operem
     Q2DViewer *m_2DViewer;
