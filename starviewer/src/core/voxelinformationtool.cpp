@@ -86,39 +86,15 @@ void VoxelInformationTool::createCaptionActor()
 void VoxelInformationTool::updateVoxelInformation()
 {
     double xyz[3];
-
-    if( !m_2DViewer->getCurrentCursorPosition(xyz) )
+    if( m_2DViewer->getCurrentCursorImageCoordinate(xyz) )
     {
-        m_voxelInformationCaption->VisibilityOff();
+        placeText(xyz);
     }
     else
     {
-        placeText( xyz );
+        m_voxelInformationCaption->VisibilityOff();
     }
-
     m_2DViewer->refresh();
-}
-
-void VoxelInformationTool::depthAccordingViewAndSlice( double xyz[3] )
-{
-    int slice = m_2DViewer->getCurrentSlice();
-    double *spacing = m_2DViewer->getInput()->getSpacing();
-    double *origin = m_2DViewer->getInput()->getOrigin();
-
-    //codi que soluciona el bug de les coordenades del voxel information (BUG: 122)
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            xyz[2] = origin[2] + (slice * spacing[2]);
-        break;
-        case Q2DViewer::Sagital:
-            xyz[0] = origin[0] + (slice * spacing[0]);
-        break;
-        case Q2DViewer::Coronal:
-            xyz[1] = origin[1] + (slice * spacing[1]);
-        break;
-    }
-
 }
 
 void VoxelInformationTool::placeText( double textPosition[3] )
@@ -134,7 +110,7 @@ void VoxelInformationTool::placeText( double textPosition[3] )
     m_2DViewer->computeDisplayToWorld( position[0] , position[1] , 0. , worldPoint );
     xyz[0] = worldPoint[0];
     xyz[1] = worldPoint[1];
-    depthAccordingViewAndSlice( xyz );
+    xyz[2] = worldPoint[2];
 
     m_voxelInformationCaption->VisibilityOn();
     m_voxelInformationCaption->SetAttachmentPoint( xyz );

@@ -593,10 +593,7 @@ void QEdemaSegmentationExtension::setEditorPoint()
     double pos[3];
     if(m_editorTool != QEdemaSegmentationExtension::NoEditor)
     {
-        m_2DView->getCurrentCursorPosition(pos);
-
-        // quan dona una posició de (-1, -1, -1) és que estem fora de l'actor
-        if(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) )
+        if( m_2DView->getCurrentCursorImageCoordinate(pos) )
         {
             switch( m_editorTool )
             {
@@ -707,8 +704,8 @@ void QEdemaSegmentationExtension::setPaintCursor()
         }
 
         double pos[3];
-        m_2DView->getCurrentCursorPosition(pos);
-        if((m_editorTool == QEdemaSegmentationExtension::Erase || m_editorTool == QEdemaSegmentationExtension::Paint)&&(!( pos[0] == -1 && pos[1] == -1 && pos[2] == -1) ))
+        
+        if((m_editorTool == QEdemaSegmentationExtension::Erase || m_editorTool == QEdemaSegmentationExtension::Paint)&& m_2DView->getCurrentCursorImageCoordinate(pos) )
         {
             int size = m_editorSize->value();
             double spacing[3];
@@ -775,7 +772,8 @@ void QEdemaSegmentationExtension::eraseMask(int size)
     double spacing[3];
     int centralIndex[3];
     int index[3];
-    m_2DView->getCurrentCursorPosition(pos);
+
+    m_2DView->getCurrentCursorImageCoordinate(pos);
     m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
     m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
@@ -810,7 +808,7 @@ void QEdemaSegmentationExtension::paintMask(int size)
     double spacing[3];
     int centralIndex[3];
     int index[3];
-    m_2DView->getCurrentCursorPosition(pos);
+    m_2DView->getCurrentCursorImageCoordinate(pos);
     m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
     m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
@@ -846,7 +844,7 @@ void QEdemaSegmentationExtension::eraseSliceMask()
     int index[3];
     int ext[6];
     m_lesionMaskVolume->getVtkData()->GetExtent(ext);
-    m_2DView->getCurrentCursorPosition(pos);
+    m_2DView->getCurrentCursorImageCoordinate(pos);
     m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
     m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
@@ -880,7 +878,7 @@ void QEdemaSegmentationExtension::eraseRegionMask()
     int index[3];
     int ext[6];
     m_lesionMaskVolume->getVtkData()->GetExtent(ext);
-    m_2DView->getCurrentCursorPosition(pos);
+    m_2DView->getCurrentCursorImageCoordinate(pos);
     m_activedMaskVolume->getVtkData()->GetSpacing(spacing[0],spacing[1],spacing[2]);
     m_activedMaskVolume->getVtkData()->GetOrigin(origin[0],origin[1],origin[2]);
     index[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);

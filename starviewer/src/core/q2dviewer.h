@@ -11,6 +11,7 @@
 
 // Fordward declarations
 // vtk
+class vtkPropPicker;
 class vtkTextActor;
 class vtkCornerAnnotation;
 class vtkAxisActor2D;
@@ -120,11 +121,12 @@ public:
     Drawer *getDrawer() const;
 
     /**
-     * Calcula la posició del cursor en coordenades de món
-     * @param xyz[] La posició que obtenim
-     * @return Cert si el cursor està sobre una posició vàlida de la imatge, fals altrament
+     * Calcula la coordenada de la imatge que es troba per sota del cursor en coordenades de món
+     * En el cas el cursor estigui fora de la imatge, la coordenada no té cap validesa
+     * @param xyz[] La coordenada de la imatge, en sistema de coordenades de món
+     * @return Cert si el cursor es troba dins de la imatge, fals altrament
      */
-    bool getCurrentCursorPosition( double xyz[3] );
+    bool getCurrentCursorImageCoordinate( double xyz[3] );
 
     /**
      * Retorna el valor del voxel allà on es troba el cursor en aquell moment
@@ -441,6 +443,9 @@ protected:
 
     /// El nombre de divisions per cada dimensió
     int m_divisions[3];
+
+    /// El picker per agafar punts de la imatge
+    vtkPropPicker *m_imagePointPicker;
 
     /// Annotacions de texte referents a informació de la sèrie
     /// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)

@@ -99,41 +99,22 @@ void SeedTool::updateSeedPosition()
 {
     Q_ASSERT( m_2DViewer );
 
-    QVector<double> seedPosition(3);
     double xyz[3];
-    m_2DViewer->getCurrentCursorPosition( xyz );
-    seedPosition[0]=xyz[0];
-    seedPosition[1]=xyz[1];
-    seedPosition[2]=xyz[2];
-
-    //es calcula correctament el valor de profunditat per a corretgir el bug #245
-    int slice = m_2DViewer->getCurrentSlice();
-    double *spacing = m_2DViewer->getInput()->getSpacing();
-    double *origin = m_2DViewer->getInput()->getOrigin();
-
-    switch( m_2DViewer->getView() )
+    if( m_2DViewer->getCurrentCursorImageCoordinate( xyz ) )
     {
-        case Q2DViewer::Axial:
-            seedPosition[2] = origin[2] + (slice * spacing[2]);
-            xyz[2] = seedPosition[2];
-        break;
-        case Q2DViewer::Sagital:
-            seedPosition[0] = origin[0] + (slice * spacing[0]);
-            xyz[0] = seedPosition[0];
-        break;
-        case Q2DViewer::Coronal:
-            seedPosition[1] = origin[1] + (slice * spacing[1]);
-            xyz[1] = seedPosition[1];
-        break;
-    }
+        QVector<double> seedPosition(3);
+        seedPosition[0]=xyz[0];
+        seedPosition[1]=xyz[1];
+        seedPosition[2]=xyz[2];
 
-    m_myData->setSeedPosition( seedPosition );
-    // TODO Apanyo perquè funcioni de momen, però s'ha d'arreglar
-    // s'hauria d'emetre únicament "seedChanged()" i prou
-    m_2DViewer->setSeedPosition( xyz );
-    emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
-    
-    m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        m_myData->setSeedPosition( seedPosition );
+        // TODO Apanyo perquè funcioni de momen, però s'ha d'arreglar
+        // s'hauria d'emetre únicament "seedChanged()" i prou
+        m_2DViewer->setSeedPosition( xyz );
+        emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
+        
+        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    }
 }
 
 ToolData *SeedTool::getToolData() const
