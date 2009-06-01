@@ -112,9 +112,15 @@ void VoxelInformationTool::placeText( double textPosition[3] )
     xyz[1] = worldPoint[1];
     xyz[2] = worldPoint[2];
 
-    m_voxelInformationCaption->VisibilityOn();
-    m_voxelInformationCaption->SetAttachmentPoint( xyz );
-    m_voxelInformationCaption->SetCaption( qPrintable( QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( m_2DViewer->getCurrentImageValue() ) ) );
+    Volume::VoxelType voxelValue;
+    if( m_2DViewer->getCurrentCursorImageVoxel(voxelValue) )
+    {
+        m_voxelInformationCaption->VisibilityOn();
+        m_voxelInformationCaption->SetAttachmentPoint( xyz );
+        m_voxelInformationCaption->SetCaption(qPrintable(QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( voxelValue )));
+    }
+    else
+        DEBUG_LOG("No s'ha trobat valor de la imatge");
 }
 
 bool VoxelInformationTool::captionExceedsViewportTopLimit()

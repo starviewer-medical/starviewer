@@ -8,7 +8,7 @@
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
-
+#include "volume.h" // pel getCurrentCursorImageVoxel()
 // Fordward declarations
 // vtk
 class vtkPropPicker;
@@ -129,10 +129,12 @@ public:
     bool getCurrentCursorImageCoordinate( double xyz[3] );
 
     /**
-     * Retorna el valor del voxel allà on es troba el cursor en aquell moment
-     * @return valor del voxel
+     * Calcula el valor del voxel allà on es troba el cursor en aquell moment
+     * @param voxelValue Valor d'entrada/sortida. Ens dóna el valor del vòxel calculat
+     * En cas que el cursor estigui fora dels límits de la imatge, el valor retornat serà indefinit
+     * @return Cert si el cursor es troba dins dels límits de la imatge, fals altrament
      */
-    double getCurrentImageValue();
+    bool getCurrentCursorImageVoxel( Volume::VoxelType &voxelValue );
 
     /**
      * Ens retorna la imatge que s'està visualitzant en aquell moment
