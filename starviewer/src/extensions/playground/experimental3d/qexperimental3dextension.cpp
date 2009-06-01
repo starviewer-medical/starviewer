@@ -592,6 +592,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_propertySalienciesPushButton, SIGNAL( clicked() ), SLOT( computePropertySaliencies() ) );
 
     // VMI
+    connect( m_vmiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setVmiOneViewpointMaximum(int) ) );
+    connect( m_vmiOneViewpointCheckBox, SIGNAL( toggled(bool) ), m_vmiOneViewpointSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
     connect( m_loadViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropy() ) );
     connect( m_saveViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropy() ) );
@@ -1406,22 +1408,19 @@ void QExperimental3DExtension::computeSelectedVmi()
     if ( computeColorVomi ) viewpointInformationChannel.setColorVomiPalette( m_colorVomiPalette );
 
     // Filtratge de punts de vista
-    if ( !m_tourLineEdit->text().isEmpty() )
+    if ( m_vmiOneViewpointCheckBox->isChecked() )
     {
         int nViewpoints = m_vmiViewpointDistributionWidget->numberOfViewpoints();
-        int selectedViewpoint = m_tourLineEdit->text().toInt() - 1;
+        int selectedViewpoint = m_vmiOneViewpointSpinBox->value() - 1;
 
-        if ( selectedViewpoint >= 0 && selectedViewpoint < nViewpoints )
-        {
-            QVector<bool> filter( nViewpoints );
+        QVector<bool> filter( nViewpoints );
 
-            filter[selectedViewpoint] = true;
+        filter[selectedViewpoint] = true;
 
-            QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
-            for ( int i = 0; i < neighbours.size(); i++ ) filter[neighbours.at( i )] = true;
+        QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
+        for ( int i = 0; i < neighbours.size(); i++ ) filter[neighbours.at( i )] = true;
 
-            viewpointInformationChannel.filterViewpoints( filter );
-        }
+        viewpointInformationChannel.filterViewpoints( filter );
     }
 
     connect( &viewpointInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiTotalProgressBar, SLOT( setMaximum(int) ) );
@@ -3220,6 +3219,12 @@ void QExperimental3DExtension::opacitySaliencyChecked( bool checked )
         m_opacityHighFactorLabel->setEnabled( false );
         m_opacityHighFactorDoubleSpinBox->setEnabled( false );
     }
+}
+
+
+void QExperimental3DExtension::setVmiOneViewpointMaximum( int maximum )
+{
+    m_vmiOneViewpointSpinBox->setMaximum( maximum );
 }
 
 

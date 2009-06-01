@@ -1772,6 +1772,33 @@
         <widget class="udg::QViewpointDistributionWidget" name="m_vmiViewpointDistributionWidget" native="true"/>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_42">
+         <item>
+          <widget class="QCheckBox" name="m_vmiOneViewpointCheckBox">
+           <property name="text">
+            <string>Only one viewpoint and neighbours</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="m_vmiOneViewpointSpinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="wrapping">
+            <bool>true</bool>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>4</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QCheckBox" name="m_vmiDisplayCheckBox">
          <property name="text">
           <string>Display views</string>

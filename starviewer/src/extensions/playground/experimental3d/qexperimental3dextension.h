@@ -210,6 +210,8 @@ private slots:
     void opacityVomiChecked( bool checked );
     void opacitySaliencyChecked( bool checked );
 
+    void setVmiOneViewpointMaximum( int maximum );
+
 private:
 
     Experimental3DVolume *m_volume;
