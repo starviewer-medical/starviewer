@@ -1415,11 +1415,10 @@ bool Q2DViewer::getCurrentCursorImageCoordinate( double xyz[3] )
     return inside;
 }
 
-double Q2DViewer::getCurrentImageValue()
+bool Q2DViewer::getCurrentCursorImageVoxel( Volume::VoxelType &voxelValue )
 {
     double xyz[3];
     bool found = false;
-    double imageValue;
     if( this->getCurrentCursorImageCoordinate(xyz) )
     {
         double tolerance;
@@ -1440,20 +1439,13 @@ double Q2DViewer::getCurrentImageValue()
         {
             // Interpolate the point data
             outPointData->InterpolatePoint( pointData , 0 , cell->PointIds , interpolationWeights );
-            imageValue = outPointData->GetScalars()->GetTuple1(0);
+            voxelValue = outPointData->GetScalars()->GetTuple1(0);
             found = true;
         }
         outPointData->Delete();
     }
-    if( !found )
-    {
-        DEBUG_LOG("No s'ha trobat valor");
-        return -1.;
-    }
-    else
-    {
-        return imageValue;
-    }
+
+    return found;
 }
 
 Q2DViewer::CameraOrientationType Q2DViewer::getView() const
