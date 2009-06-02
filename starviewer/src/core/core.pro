@@ -190,10 +190,7 @@ HEADERS += extensionfactory.h \
            viewpointgenerator.h \
            thumbnailcreator.h \
            nonclosedangletool.h \
-           abortrendercommand.h \
-           statswatcher.h
-
-
+ abortrendercommand.h
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
            displayableid.cpp \
@@ -348,9 +345,7 @@ SOURCES += extensionmediator.cpp \
            viewpointgenerator.cpp  \
            thumbnailcreator.cpp \
            nonclosedangletool.cpp \
-           abortrendercommand.cpp \
-           statswatcher.cpp
-           
+ abortrendercommand.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

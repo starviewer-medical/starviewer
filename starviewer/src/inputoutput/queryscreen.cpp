@@ -36,7 +36,6 @@
 #include "starviewerapplication.h"
 #include "parsexmlrispierrequest.h"
 #include "utils.h"
-#include "statswatcher.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -73,23 +72,8 @@ QueryScreen::QueryScreen( QWidget *parent )
      *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
-    if (StarviewerSettings().getListenRisRequests()) 
-        m_listenRISRequestThread->listen(); 
+    if (StarviewerSettings().getListenRisRequests()) m_listenRISRequestThread->listen(); 
 #endif
-
-    m_statsWatcher = new StatsWatcher("QueryScreen",this);
-    m_statsWatcher->addClicksCounter( m_operationListToolButton );
-    m_statsWatcher->addClicksCounter( m_showPACSNodesToolButton );
-    m_statsWatcher->addClicksCounter( m_createDICOMDIRToolButton );
-    m_statsWatcher->addClicksCounter( m_advancedSearchToolButton );
-    m_statsWatcher->addClicksCounter( m_viewButtonLocal );
-    m_statsWatcher->addClicksCounter( m_viewButtonPACS );
-    m_statsWatcher->addClicksCounter( m_retrieveButtonPACS );
-    m_statsWatcher->addClicksCounter( m_viewButtonDICOMDIR );
-    m_statsWatcher->addClicksCounter( m_retrieveButtonDICOMDIR );
-    m_statsWatcher->addClicksCounter( m_clearToolButton );
-    m_statsWatcher->addClicksCounter( m_openDICOMDIRToolButton );
-    m_statsWatcher->addClicksCounter( m_createDICOMDIRToolButton );
 }
 
 QueryScreen::~QueryScreen()
@@ -473,6 +457,9 @@ PacsServer QueryScreen::getPacsServerByPacsID(QString pacsID)
 void QueryScreen::queryStudyPacs()
 {
     QList<PacsParameters> selectedPacsList;
+
+    INFO_LOG( "Cerca d'estudis als PACS amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
+
     selectedPacsList = m_PACSNodes->getSelectedPacs(); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
     if (selectedPacsList.isEmpty()) //es comprova que hi hagi pacs seleccionats
@@ -482,8 +469,6 @@ void QueryScreen::queryStudyPacs()
     }
 
     DicomMask searchMask = buildDicomMask();
-    StatsWatcher::log( "Cerca al PACS amb paràmetres: " + searchMask.getFilledMaskFields() );
-    
     bool stopQuery = false;
 
     if ( searchMask.isAHeavyQuery() )
@@ -545,28 +530,27 @@ Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters
     return multipleQueryStudy->StartQueries();
 }
 
-void QueryScreen::queryStudy( const QString &source )
+void QueryScreen::queryStudy( QString source )
 {
     LocalDatabaseManager localDatabaseManager;
     QList<DICOMStudy> studyListResultQuery;
-    QList<Patient *> patientList;
+    QList<Patient*> patientList;
     Status state;
-    DicomMask searchMask = buildDicomMask();
 
-    StatsWatcher::log( "Cerca d'estudis a " + source + " amb paràmetres: " + searchMask.getFilledMaskFields() );
+    INFO_LOG( "Cerca d'estudis a la font" + source + " amb paràmetres " + buildQueryParametersString(buildDicomMask()) );
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
     if( source == "Cache" )
     {
         m_seriesListWidgetCache->clear();
 
-        patientList = localDatabaseManager.queryPatientStudy(searchMask);
+        patientList = localDatabaseManager.queryPatientStudy(buildDicomMask());
 
         if (showDatabaseManagerError( localDatabaseManager.getLastError() ))    return;
     }
     else if( source == "DICOMDIR" )
     {
-        state = m_readDicomdir.readStudies( studyListResultQuery , searchMask );
+        state = m_readDicomdir.readStudies( studyListResultQuery , buildDicomMask() );
         if ( !state.good() )
         {
             QApplication::restoreOverrideCursor();
@@ -811,7 +795,6 @@ void QueryScreen::queryImagePacs(QString studyUID, QString seriesUID, QString pa
 
 void QueryScreen::retrieve(bool view)
 {
-    StatsWatcher::log( QString("Cridem slot 'retrieve(view=%1)'. Cridat desde: %2").arg(view).arg(sender()->objectName()) );
     QStringList selectedStudiesUIDList = m_studyTreeWidgetPacs->getSelectedStudiesUID();
 
     if( selectedStudiesUIDList.isEmpty() )
@@ -970,10 +953,9 @@ void QueryScreen::refreshTab( int index )
 
 void QueryScreen::view()
 {
-    StatsWatcher::log( "Cridem slot 'view()'. Cridat desde: " + sender()->objectName() );
     switch ( m_tab->currentIndex() )
     {
-        case LocalDataBaseTab:
+        case LocalDataBaseTab :
             loadStudies( m_studyTreeWidgetCache->getSelectedStudiesUID(), m_studyTreeWidgetCache->getCurrentSeriesUID(), m_studyTreeWidgetCache->getCurrentImageUID(), "Cache" );
             break;
 
@@ -996,7 +978,6 @@ void QueryScreen::viewFromQSeriesListWidget()
 
     studyUIDList << m_seriesListWidgetCache->getCurrentStudyUID();//Agafem l'estudi uid de la sèrie seleccionada
     loadStudies( studyUIDList, m_seriesListWidgetCache->getCurrentSeriesUID(), "", "Cache" );
-    StatsWatcher::log( "Obrim estudi seleccionant sèrie desde thumbnail" );
 }
 
 void QueryScreen::deleteOldStudiesThreadFinished()
@@ -1061,7 +1042,7 @@ void QueryScreen::loadStudies(QStringList studiesUIDList, QString defaultSeriesU
             DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
     }
 
-    DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
+    INFO_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
     QApplication::restoreOverrideCursor();
     emit selectedPatients( Patient::mergePatients( selectedPatientsList ) );
 }
@@ -1462,6 +1443,19 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
         maskStudyToRetrieve.setStudyUID(study.getStudyUID());
         retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
     }
+}
+
+QString QueryScreen::buildQueryParametersString(DicomMask mask)
+{
+    QString logMessage;
+
+    logMessage = "PATIENT_ID=[" + mask.getPatientId() + "] "
+        + "PATIENT_NAME=[" + mask.getPatientName() + "] "
+        + "STUDY_ID=[" + mask.getStudyId() + "] "
+        + "DATES_MASK=[" + mask.getStudyDate() + "] "
+        + "ACCESSION_NUMBER=[" + mask.getAccessionNumber() + "]";
+
+    return logMessage;
 }
 
 bool QueryScreen::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)

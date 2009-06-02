@@ -32,7 +32,6 @@ class Q2DViewer;
 class MenuGridWidget;
 class TableMenu;
 class QDicomDump;
-class StatsWatcher;
 
 /**
 Extensió que s'executarà  per defecte a l'obrir un model
@@ -202,8 +201,6 @@ private:
     /// Llista de hanging protocols aplicables
     QList<HangingProtocol * > m_hangingCandidates;
 
-    /// Per fer estadístiques d'usabilitat
-    StatsWatcher *m_statsWatcher;
 };
 
 } // end namespace udg

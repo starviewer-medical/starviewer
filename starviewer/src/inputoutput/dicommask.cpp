@@ -20,27 +20,27 @@ DicomMask::DicomMask()
 
 /************************* PATIENT  *********************************************************************/
 
-void DicomMask::setPatientId(const QString &patientId)
+void DicomMask::setPatientId(QString patientId)
 {
     m_patientId = patientId;
 }
 
-void DicomMask::setPatientName(const QString &patientName)
+void DicomMask::setPatientName(QString patientName)
 {
     m_patientName = patientName;
 }
 
-void DicomMask::setPatientBirth(const QString &patientBirth)
+void DicomMask::setPatientBirth(QString patientBirth)
 {
     m_patientBirth = patientBirth;
 }
 
-void DicomMask::setPatientSex(const QString &patientSex)
+void DicomMask::setPatientSex(QString patientSex)
 {
     m_patientSex = patientSex;
 }
 
-void DicomMask::setPatientAge(const QString &patientAge)
+void DicomMask::setPatientAge(QString patientAge)
 {
     m_patientAge = patientAge;
 }
@@ -73,42 +73,42 @@ QString DicomMask::getPatientAge() const
 
 /****************************************** STUDY *****************************************************/
 
-void DicomMask::setStudyId(const QString &studyId)
+void DicomMask:: setStudyId(QString studyId)
 {
     m_studyId = studyId;
 }
 
-void DicomMask::setStudyDate(const QString &studyDate)
+void DicomMask:: setStudyDate(QString studyDate)
 {
     m_studyDate = studyDate;
 }
 
-void DicomMask::setStudyDescription(const QString &studyDescription)
+void DicomMask::setStudyDescription(QString studyDescription)
 {
     m_studyDescription = studyDescription;
 }
 
-void DicomMask::setStudyModality(const QString &studyModality)
+void DicomMask::setStudyModality(QString studyModality)
 {
     m_studyModality = studyModality;
 }
 
-void DicomMask::setStudyTime(const QString &studyTime)
+void DicomMask:: setStudyTime(QString studyTime)
 {
     m_studyTime = studyTime;
 }
 
-void DicomMask::setStudyUID(const QString &studyUID)
+void DicomMask:: setStudyUID(QString studyUID)
 {
     m_studyUID = studyUID;
 }
 
-void DicomMask::setAccessionNumber(const QString &accessionNumber)
+void DicomMask:: setAccessionNumber(QString accessionNumber)
 {
     m_accessionNumber = accessionNumber;
 }
 
-void DicomMask::setReferringPhysiciansName(const QString &referringPhysiciansName)
+void DicomMask::setReferringPhysiciansName(QString referringPhysiciansName)
 {
     m_referringPhysiciansName = referringPhysiciansName;
 }
@@ -157,53 +157,53 @@ QString DicomMask::getReferringPhysiciansName() const
 
 /************************************** SERIES *************************************************/
 
-void DicomMask::setSeriesNumber(const QString &seriesNumber)
+void DicomMask:: setSeriesNumber(QString seriesNumber)
 {
     m_seriesNumber = seriesNumber;
 }
 
-void DicomMask::setSeriesDate(const QString &seriesDate)
+void DicomMask:: setSeriesDate(QString seriesDate)
 {
     m_seriesDate = seriesDate;
 }
 
-void DicomMask::setSeriesDescription(const QString &seriesDescription)
+void DicomMask:: setSeriesDescription(QString seriesDescription)
 {
     m_seriesDescription = seriesDescription;
 }
 
-void DicomMask::setSeriesModality(const QString &seriesModality)
+void DicomMask:: setSeriesModality(QString seriesModality)
 {
     m_seriesModality = seriesModality;
 }
 
-void DicomMask::setSeriesTime(const QString &seriesTime)
+void DicomMask:: setSeriesTime(QString seriesTime)
 {
     m_seriesTime = seriesTime;
 }
 
-void DicomMask::setSeriesUID(const QString &seriesUID)
+void DicomMask:: setSeriesUID(QString seriesUID)
 {
     m_seriesUID = seriesUID;
 }
 
-void DicomMask::setSeriesProtocolName(const QString &seriesProtocolName)
+void DicomMask:: setSeriesProtocolName(QString seriesProtocolName)
 {
     m_seriesProtocolName = seriesProtocolName;
 }
 
-void DicomMask::setRequestAttributeSequence(const QString &requestedProcedureID, const QString &scheduledProcedureStepID)
+void DicomMask::setRequestAttributeSequence(QString requestedProcedureID, QString scheduledProcedureStepID)
 {
     m_requestedProcedureID = requestedProcedureID;
     m_scheduledProcedureStepID = scheduledProcedureStepID;
 }
 
-void DicomMask::setPPSStartDate(const QString &PPPSStartDate)
+void DicomMask::setPPSStartDate(QString PPPSStartDate)
 {
     m_PPSStartDate = PPPSStartDate;
 }
 
-void DicomMask::setPPStartTime(const QString &PPSStartTime)
+void DicomMask::setPPStartTime(QString PPSStartTime)
 {
     m_PPSStartTime = PPSStartTime;
 }
@@ -268,12 +268,12 @@ QString DicomMask::getPPSStartTime() const
 
 /********************************************** IMAGE **************************************/
 
-void DicomMask::setImageNumber(const QString &imageNumber)
+void DicomMask:: setImageNumber(QString imageNumber)
 {
     m_imageNumber = imageNumber;
 }
 
-void DicomMask::setSOPInstanceUID(const QString &SOPInstanceUID)
+void DicomMask:: setSOPInstanceUID(QString SOPInstanceUID)
 {
     m_SOPInstanceUID = SOPInstanceUID;
 }
@@ -642,98 +642,6 @@ QString DicomMask::getQueryRetrieveLevel()
         return "SERIES";
     }
     else return "STUDY"; //PER DEFECTE DEL DICOM COM A MÍNIM SON A NIVELL D'ESTUDI
-}
-
-QString DicomMask::getFilledMaskFields() const
-{
-    QString maskFields;
-    
-    if( !QString(m_patientId).remove("*").isEmpty() )
-        maskFields += "Patient_ID=[#*#] ";
-    if( !QString(m_patientName).remove("*").isEmpty() )
-        maskFields += "Patient_Name=[#*#] ";
-    if( !QString(m_patientBirth).remove("*").isEmpty() )
-        maskFields += "Patient_Birth=[#*#] ";
-    if( !QString(m_patientSex).remove("*").isEmpty() )
-        maskFields += "Patient_Sex=[" + m_patientSex + "] ";
-    if( !QString(m_patientAge).remove("*").isEmpty() )
-        maskFields += "Patient_Age=[" + m_patientAge + "] ";
-    if( !QString(m_studyId).remove("*").isEmpty() )
-        maskFields += "Study_ID=[#*#] ";
-    // en el cas de la data fem un tractament especial per fer-ho més llegible i amb més informació
-    if( !QString(m_studyDate).remove("*").isEmpty() )
-    {
-        QDate date;
-        QDate today = QDate::currentDate();
-        QDate yesterday = QDate::currentDate().addDays(-1);
-        QStringList formattedDates;
-        maskFields += "Study_Date=[";
-        
-        // si tenim un rang de dates estaran separades per el guió "-"
-        // TODO encara no sabem traduir si el rang és només "desde" o "fins" una data 
-        // per exemple [20090512-] (desde), [-20090611] (fins), i ens ho mostrarà com una data única
-        QStringList datesList = m_studyDate.split( "-", QString::SkipEmptyParts );
-        // "traduim" less dates a un format mé llegible
-        foreach( QString dateString, datesList )
-        {
-            date = QDate::fromString( dateString, "yyyyMMdd" );
-            if( date == today )
-                formattedDates << "Today";
-            else if( date == yesterday )
-                formattedDates << "Yesterday";
-            else
-                formattedDates << date.toString("dd/MM/yyyy") + " (" + QString::number(date.daysTo(today)) + " days ago)";
-        }
-        
-        if( formattedDates.count() == 2 )
-        {
-            maskFields += "From " + formattedDates.at(0) + " to " + formattedDates.at(1) + "]";
-        }
-        else
-            maskFields += formattedDates.at(0) + "]";
-        
-    }
-
-    if( !QString(m_studyTime).remove("*").isEmpty() )
-        maskFields += "Study_Time=[" + m_studyTime + "] ";
-    if( !QString(m_studyDescription).remove("*").isEmpty() )
-        maskFields += "Study_Description=[" + m_studyDescription + "] ";
-    if( !QString(m_studyModality).remove("*").isEmpty() )
-        maskFields += "Study_Modality=[" + m_studyModality + "] ";
-    if( !QString(m_studyUID).remove("*").isEmpty() )
-        maskFields += "Study_UID=[#*#] ";
-    if( !QString(m_accessionNumber).remove("*").isEmpty() )
-        maskFields += "Accession_Number=[#*#] ";
-    if( !QString(m_referringPhysiciansName).remove("*").isEmpty() )
-        maskFields += "Referring_PhysiciansName=[#*#] ";
-    if( !QString(m_seriesNumber).remove("*").isEmpty() )
-        maskFields += "Series_Number=[#*#] ";
-    if( !QString(m_seriesDate).remove("*").isEmpty() )
-        maskFields += "Series_Date=[" + m_seriesDate + "] ";
-    if( !QString(m_seriesTime).remove("*").isEmpty() )
-        maskFields += "Series_Time=[" + m_seriesTime + "] ";
-    if( !QString(m_seriesModality).remove("*").isEmpty() )
-        maskFields += "Series_Modality=[" + m_seriesModality + "] ";
-    if( !QString(m_seriesDescription).remove("*").isEmpty() )
-        maskFields += "Series_Description=[" + m_seriesDescription + "] ";
-    if( !QString(m_seriesProtocolName).remove("*").isEmpty() )
-        maskFields += "Series_Protocol_Name=[" + m_seriesProtocolName + "] ";
-    if( !QString(m_seriesUID).remove("*").isEmpty() )
-        maskFields += "Series_UID=[#*#] ";
-    if( !QString(m_requestedProcedureID).remove("*").isEmpty() )
-        maskFields += "Requested_Procedure_ID=[#*#] ";
-    if( !QString(m_scheduledProcedureStepID).remove("*").isEmpty() )
-        maskFields += "Scheduled_Procedure_Step_ID=[#*#] ";
-    if( !QString(m_PPSStartDate).remove("*").isEmpty() )
-        maskFields += "PPS_Start_Date=[#*#] ";
-    if( !QString(m_PPSStartTime).remove("*").isEmpty() )
-        maskFields += "PPS_Start_Time=[#*#] ";
-    if( !QString(m_SOPInstanceUID).remove("*").isEmpty() )
-        maskFields += "SOP_Instance_UID=[#*#] ";
-    if( !QString(m_imageNumber).remove("*").isEmpty() )
-        maskFields += "Image_Number=[" + m_imageNumber + "] ";
-
-    return maskFields;
 }
 
 };

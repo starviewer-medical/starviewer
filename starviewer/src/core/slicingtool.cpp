@@ -8,7 +8,6 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
-#include "statswatcher.h"
 
 //vtk
 #include <vtkCommand.h>
@@ -36,12 +35,6 @@ SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
 
 SlicingTool::~SlicingTool()
 {
-    // estadístiques
-    if( !m_wheelSteps.isEmpty() )
-    {
-        StatsWatcher::log( "Slicing Tool: Wheel Record: " + m_wheelSteps );
-        m_wheelSteps.clear();
-    }
 }
 
 void SlicingTool::handleEvent( unsigned long eventID )
@@ -54,12 +47,6 @@ void SlicingTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeftButtonPressEvent:
         m_mouseMovement = false;
         this->startSlicing();
-        // estadístiques
-        if( !m_wheelSteps.isEmpty() )
-        {
-            StatsWatcher::log( "Slicing Tool: Wheel Record: " + m_wheelSteps );
-            m_wheelSteps.clear();
-        }
     break;
 
     case vtkCommand::MouseMoveEvent:
@@ -70,12 +57,6 @@ void SlicingTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeftButtonReleaseEvent:
         m_mouseMovement = false;
         this->endSlicing();
-        // estadístiques
-        if( !m_scrollSteps.isEmpty() )
-        {
-            StatsWatcher::log( "Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images" );
-            m_scrollSteps.clear();
-        }
     break;
 
     case vtkCommand::MouseWheelForwardEvent:
@@ -83,8 +64,6 @@ void SlicingTool::handleEvent( unsigned long eventID )
         m_viewer->setCursor( QCursor( QPixmap(":/images/slicing.png") ) );
         this->updateIncrement( 1 );
         m_viewer->setCursor( Qt::ArrowCursor );
-        // estadístiques
-        m_wheelSteps += QString::number(1) + " ";
     break;
 
     case vtkCommand::MouseWheelBackwardEvent:
@@ -92,8 +71,6 @@ void SlicingTool::handleEvent( unsigned long eventID )
         m_viewer->setCursor( QCursor( QPixmap(":/images/slicing.png") ) );
         this->updateIncrement( -1 );
         m_viewer->setCursor( Qt::ArrowCursor );
-        // estadístiques
-        m_wheelSteps += QString::number(-1) + " ";
     break;
 
     case vtkCommand::MiddleButtonPressEvent:
@@ -112,14 +89,12 @@ void SlicingTool::handleEvent( unsigned long eventID )
         {
             m_forcePhaseMode = true;
             computeImagesForScrollMode();
-            StatsWatcher::log( "FORCE phase mode with Ctrl key" );
         }
         break;
     
     case vtkCommand::KeyReleaseEvent:
         m_forcePhaseMode = false;
         computeImagesForScrollMode();
-        StatsWatcher::log( "Disable FORCED phase mode releasing Ctrl key" );
         break;
 
     default:
@@ -159,8 +134,6 @@ void SlicingTool::doSlicing()
                 value = -1;
         }
         this->updateIncrement( value );
-        // estadístiques
-        m_scrollSteps += QString::number(value) + " ";
     }
 }
 
@@ -189,24 +162,13 @@ void SlicingTool::inputChanged( Volume *input )
 
 void SlicingTool::switchSlicingMode()
 {
-    QString statMessage = "SlicingTool: ";
     if( m_inputHasPhases )
     {
         if( m_slicingMode == SliceMode )
-        {
             m_slicingMode = PhaseMode;
-            statMessage += "Switch from slice mode to phase mode";
-        }
         else
-        {
             m_slicingMode = SliceMode;
-            statMessage += "Switch from phase mode to slice mode";
-        }
     }
-    else
-        statMessage += "Try to switch slicing mode with input with no phases";
-
-    StatsWatcher::log( statMessage );
 }
 
 void SlicingTool::updateIncrement(int increment)
@@ -251,10 +213,7 @@ void SlicingTool::chooseBestDefaultScrollMode( Volume *input )
         if( input->getNumberOfPhases() > 1  && m_2DViewer->getMaximumSlice() <= 1 )
         {
             m_slicingMode = PhaseMode;
-            StatsWatcher::log("Slicing Tool: Default Scroll Mode = PHASE");
         }
-        else
-            StatsWatcher::log("Slicing Tool: Default Scroll Mode = SLICE");
     }
 }
 

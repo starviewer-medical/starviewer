@@ -9,7 +9,6 @@
 #include "logging.h"
 #include "series.h"
 #include "image.h"
-#include "statswatcher.h"
 
 #include <QAction>
 #include <QPalette>
@@ -33,10 +32,6 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
 
     createConnections();
     m_viewText->setText( QString() );
-
-    m_statsWatcher = new StatsWatcher("Q2DViewerWidget", this);
-    m_statsWatcher->addClicksCounter(m_synchronizeButton);
-    m_statsWatcher->addSliderObserver(m_slider);
 }
 
 Q2DViewerWidget::~Q2DViewerWidget()
@@ -111,7 +106,9 @@ void Q2DViewerWidget::resetViewToAxial()
     m_2DView->resetViewToAxial();
 
     m_slider->setMaximum( m_2DView->getMaximumSlice() );
-    m_slider->setValue( m_2DView->getCurrentSlice() );
+    m_slider->setSliderPosition( m_2DView->getCurrentSlice() );
+
+    INFO_LOG("Q2DViewerWidget actiu: Canviem a vista axial");
 }
 
 void Q2DViewerWidget::resetViewToSagital()
@@ -119,7 +116,9 @@ void Q2DViewerWidget::resetViewToSagital()
     m_2DView->resetViewToSagital();
 
     m_slider->setMaximum( m_2DView->getMaximumSlice() );
-    m_slider->setValue( m_2DView->getCurrentSlice() );
+    m_slider->setSliderPosition( m_2DView->getCurrentSlice() );
+
+    INFO_LOG( "Q2DViewerWidget actiu: Canviem a vista sagital" );
 }
 
 void Q2DViewerWidget::resetViewToCoronal()
@@ -127,7 +126,9 @@ void Q2DViewerWidget::resetViewToCoronal()
     m_2DView->resetViewToCoronal();
 
     m_slider->setMaximum( m_2DView->getMaximumSlice() );
-    m_slider->setValue( m_2DView->getCurrentSlice() );
+    m_slider->setSliderPosition( m_2DView->getCurrentSlice() );
+
+    INFO_LOG( "Q2DViewerWidget actiu: Canviem a vista coronal" );
 }
 
 void Q2DViewerWidget::setSelected( bool option )

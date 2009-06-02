@@ -28,7 +28,6 @@ class ProcessImageSingleton;
 class DicomMask;
 class QOperationStateScreen;
 class QDeleteOldStudiesThread;
-class StatsWatcher;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -231,7 +230,7 @@ private:
      * Cerca un estudi a la font indicada (Cache,DICOMDIR)
      * @param source la font que volem interrogar
      */
-    void queryStudy( const QString &source );
+    void queryStudy( QString source );
 
     /** Busca la informació d'una sèrie en el PACS i la mostra en la interfície
      * @param studyUID UID de l'estidi
@@ -275,6 +274,11 @@ private:
 
     ///Estableix la mida de les columnes de QStudyTreeWidget
     void setQStudyTreeWidgetColumnsWidth();
+
+    /** Construeix un string amb els parametres de cerca, per debug/logs
+     * @return retorna un QString indicant amb quins paràmetres es fa la cerca d'estudis
+     */
+    QString buildQueryParametersString(DicomMask mask);
 
     ///Ens indica en en quina posició es troba dins la llista dels estudis trobats a la última query del PACS l'estudi amb l'UID passat per paràmetre i l'AETitle del PACS passat per paràmetre
     int getStudyPositionInStudyListQueriedPacs(QString studyUID, QString pacsId);
@@ -337,8 +341,6 @@ struct retrieveParameters
     ListenRISRequestThread *m_listenRISRequestThread;
 
     QPopUpRisRequestsScreen *m_qpopUpRisRequestsScreen; //Popup que indica que el RIS ha fet una petició per descarregar un estudi
-
-    StatsWatcher *m_statsWatcher;
 };
 
 };
