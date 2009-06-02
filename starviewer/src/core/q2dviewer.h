@@ -213,8 +213,15 @@ public:
      */
     int getSlabThickness() const;
 
-    /// Donada les coordenades x,y d'on s'ha clicat de la pantalla, retorna el punt més proper i que caigui dins del model.
-    double *pointInModel( int screen_x, int screen_y );
+    /**
+     * Donada una coordenada de món, l'ajustem perquè caigui dins dels límits de l'imatge actual
+     * Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui 
+     * dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè 
+     * estigui dins dels límits de la pròpia imatge
+     * @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
+     * es modificarà perquè caigui dins dels límits de la imatge
+     */
+    void putCoordinateInCurrentImageBounds( double xyz[3] );
 
     ///Retorna la informació de la llesca actual del visualitzador
     vtkImageData *getCurrentSlabProjection();

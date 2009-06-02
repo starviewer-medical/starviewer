@@ -1975,89 +1975,28 @@ void Q2DViewer::checkAndUpdateSliceValue( int value )
     m_lastSlabSlice = m_firstSlabSlice + m_slabThickness;
 }
 
-double *Q2DViewer::pointInModel( int screen_x, int screen_y )
+void Q2DViewer::putCoordinateInCurrentImageBounds( double xyz[3] )
 {
-    double *bounds = m_imageActor->GetBounds();
-    double position[4];
-    computeDisplayToWorld( screen_x, screen_y, 0, position );
-    double *lastPointInModel = new double[3];
+    double bounds[6];
+    m_imageActor->GetBounds(bounds);    
 
-    lastPointInModel[0] = position[0];
-    lastPointInModel[1] = position[1];
-    lastPointInModel[2] = position[2];
-    //Cas axial
-    switch( m_lastView )
-    {
-        case Axial:
+    // x bounds check
+    if( bounds[0] > xyz[0] ) // La x està per sota del mínim
+        xyz[0] = bounds[0];
+    else if( bounds[1] < xyz[0] ) // La x està per sobre del màxim
+        xyz[0] = bounds[1];
 
-            if( bounds[0] < position[0] && bounds[1] > position[0] ) // La x cau dins del model
-            {
-                lastPointInModel[0] = position[0];
-            }
-            else {// La x cau fora del model
-                if( bounds[0] > position[0] )
-                    lastPointInModel[0] = bounds[0];
-                else lastPointInModel[0] = bounds[1];
-            }
+    // y bounds check
+    if( bounds[2] > xyz[1] ) // La y està per sota del mínim
+        xyz[1] = bounds[2];
+    else if( bounds[3] < xyz[1] ) // La y està per sobre del màxim
+        xyz[1] = bounds[3];
 
-            if( bounds[2] < position[1] && bounds[3] > position[1] ) // La y cau dins del model
-            {
-                lastPointInModel[1] = position[1];
-            }
-            else{
-                if( bounds[2] > position[1] )
-                    lastPointInModel[1] = bounds[2];
-                else lastPointInModel[1] = bounds[3];
-            }
-            break;
-
-        case Coronal:
-
-            if( bounds[0] < position[0] && bounds[1] > position[0] )
-            {
-                lastPointInModel[0] = position[0];
-            }
-            else{
-                if( bounds[0] > position[0] )
-                    lastPointInModel[0] = bounds[0];
-                else lastPointInModel[0] = bounds[1];
-            }
-
-            if( bounds[4] < position[2] && bounds[5] > position[2] )
-            {
-                lastPointInModel[2] = position[2];
-            }
-            else{
-                if( bounds[4] > position[2] )
-                    lastPointInModel[2] = bounds[4];
-                else lastPointInModel[2] = bounds[5];
-            }
-            break;
-
-        case Sagital:
-
-            if( bounds[4] < position[2] && bounds[5] > position[2] )
-            {
-                lastPointInModel[2] = position[2];
-            }
-            else{
-                if( bounds[4] > position[2] )
-                    lastPointInModel[2] = bounds[4];
-                else lastPointInModel[2] = bounds[5];
-            }
-
-            if( bounds[2] < position[1] && bounds[3] > position[1] )
-            {
-                lastPointInModel[1] = position[1];
-            }
-            else{
-                if( bounds[2] > position[1] )
-                    lastPointInModel[1] = bounds[2];
-                else lastPointInModel[1] = bounds[3];
-            }
-            break;
-    }
-    return lastPointInModel;
+    // z bounds check
+    if( bounds[4] > xyz[2] ) // La z està per sota del mínim
+        xyz[2] = bounds[4];
+    else if( bounds[5] < xyz[2] ) // La z està per sobre del màxim
+        xyz[2] = bounds[5];
 }
 
 vtkImageData *Q2DViewer::getCurrentSlabProjection()

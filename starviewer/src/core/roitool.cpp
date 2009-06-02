@@ -114,15 +114,16 @@ void ROITool::annotateNewPoint()
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 
-    int position[2];
-    m_2DViewer->getEventPosition( position );
-    double *lastPointInModel = m_2DViewer->pointInModel( position[0], position[1] );
-
+    double pickedPoint[3];
+    m_2DViewer->getEventWorldCoordinate(pickedPoint);
+    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
+    
     //afegim el punt
-    m_mainPolyline->addPoint( lastPointInModel );
+    m_mainPolyline->addPoint( pickedPoint );
 
     //actualitzem els atributs de la polilinia
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+
 }
 
 void ROITool::simulateClosingPolyline( )
@@ -133,16 +134,15 @@ void ROITool::simulateClosingPolyline( )
         m_closingPolyline->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
         m_2DViewer->getDrawer()->draw( m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
-
     m_closingPolyline->deleteAllPoints();
 
-    int position[2];
-    m_2DViewer->getEventPosition( position );
-    double *lastPointInModel = m_2DViewer->pointInModel( position[0], position[1] );
+    double pickedPoint[3];
+    m_2DViewer->getEventWorldCoordinate(pickedPoint);
+    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
 
     //afegim els punts que simulen aquesta polilinia
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-    m_closingPolyline->addPoint( lastPointInModel );
+    m_closingPolyline->addPoint( pickedPoint );
     m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
 
     //actualitzem els atributs de la polilinia
