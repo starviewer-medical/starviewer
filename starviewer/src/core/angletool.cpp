@@ -168,121 +168,83 @@ void AngleTool::fixFirstSegment()
 
 void AngleTool::drawCircumference()
 {
-    double degrees, center[2], *newPoint, radius;
-    int initialI, finalI, depthCoord;
+    double degreesIncrease, *newPoint, radius;
+    int initialAngle, finalAngle, depthCoord;
+
+    double *firstPoint = m_mainPolyline->getPoint(0);
+    double *circleCentre = m_mainPolyline->getPoint(1);
+    double *lastPoint = m_mainPolyline->getPoint(2);
+
+    // calculem l'angle que formen els dos segments
+    double *firstSegment = MathTools::directorVector( firstPoint, circleCentre );
+    double *secondSegment = MathTools::directorVector( lastPoint, circleCentre );
+    double angle = MathTools::angleInDegrees( firstSegment, secondSegment );
+    
+    // calculem el radi de l'arc de circumferència que mesurarà
+    // un quart del segment més curt dels dos que formen l'angle
+    double distance1 = MathTools::getDistance3D( firstPoint, circleCentre );
+    double distance2 = MathTools::getDistance3D( circleCentre, lastPoint );
+    radius = MathTools::minimum( distance1, distance2 ) / 4.0;
 
     int view = m_2DViewer->getView();
-
-    double *p1 = m_mainPolyline->getPoint( 0 );
-    double *p2 = m_mainPolyline->getPoint( 1 );
-    double *p3 = m_mainPolyline->getPoint( 2 );
-
-    double *vd1 = MathTools::directorVector( p1, p2 );
-    double *vd2 = MathTools::directorVector( p3, p2 );
-
-    double angle = MathTools::angleInDegrees( vd1, vd2 );
-
     switch( view )
     {
         case QViewer::AxialPlane:
             depthCoord = 2;
-
-            center[0] = p2[0];
-            center[1] = p2[1];
             break;
 
         case QViewer::SagitalPlane:
             depthCoord = 0;
-
-            center[0] = p2[1];
-            center[1] = p2[2];
             break;
 
         case QViewer::CoronalPlane:
             depthCoord = 1;
-
-            center[0] = p2[0];
-            center[1] = p2[2];
             break;
     }
 
-    double distance1 = MathTools::getDistance3D( p1, p2 );
-    double distance2 = MathTools::getDistance3D( p2, p3 );
-
-    radius =  MathTools::minimum( distance1, distance2 ) / 4.0;
-
-    double *pv = MathTools::crossProduct(vd1, vd2);
-
-    initialI = 360 - m_initialDegreeArc;
-    finalI = int(360 - ( angle+m_initialDegreeArc ) );
-
+    // calculem el rang de les iteracions per pintar l'angle correctament
+    initialAngle = 360 - m_initialDegreeArc;
+    finalAngle = int(360 - ( angle+m_initialDegreeArc ) );
+        
+    double *pv = MathTools::crossProduct(firstSegment, secondSegment);
     if ( pv[depthCoord] > 0 )
     {
-        finalI = int(angle-m_initialDegreeArc);
+        finalAngle = int(angle-m_initialDegreeArc);
     }
-
-    if ( (initialI-finalI) <= 180 )
+    if ( (initialAngle-finalAngle) > 180 )
     {
-        for ( int i = initialI; i > finalI; i-- )
-        {
-            degrees = i*1.0*vtkMath::DoubleDegreesToRadians();
-            newPoint = new double[3];
-
-            switch( view )
-            {
-                case QViewer::AxialPlane:
-                    newPoint[0] = cos( degrees )*radius + center[0];
-                    newPoint[1] = sin( degrees )*radius + center[1];
-                    newPoint[2] = 0.0;
-                    break;
-
-                case QViewer::SagitalPlane:
-                    newPoint[0] = 0.0;
-                    newPoint[1] = cos( degrees )*radius + center[0];
-                    newPoint[2] = sin( degrees )*radius + center[1];
-                    break;
-
-                case QViewer::CoronalPlane:
-                    newPoint[0] = sin( degrees )*radius + center[0];
-                    newPoint[1] = 0.0;
-                    newPoint[2] = cos( degrees )*radius + center[1];
-                    break;
-            }
-            m_circumferencePolyline->addPoint( newPoint );
-        }
+        initialAngle = int( angle-m_initialDegreeArc );
+        finalAngle = -m_initialDegreeArc;
     }
-    else
+
+    for ( int i = initialAngle; i > finalAngle; i-- )
     {
-        initialI = -m_initialDegreeArc;
-        finalI = int( angle-m_initialDegreeArc );
-        for ( int i = initialI; i < finalI; i++ )
+        degreesIncrease = i*1.0*vtkMath::DoubleDegreesToRadians();
+        newPoint = new double[3];
+
+        switch( view )
         {
-            degrees = i*1.0*vtkMath::DoubleDegreesToRadians();
-            newPoint = new double[3];
+            case QViewer::AxialPlane:
+                newPoint[0] = cos( degreesIncrease )*radius + circleCentre[0];
+                newPoint[1] = sin( degreesIncrease )*radius + circleCentre[1];
+                newPoint[2] = 0.0;
+                break;
 
-            switch( view )
-            {
-                case QViewer::AxialPlane:
-                    newPoint[0] = cos( degrees )*radius + center[0];
-                    newPoint[1] = sin( degrees )*radius + center[1];
-                    newPoint[2] = 0.0;
-                    break;
+            case QViewer::SagitalPlane:
+                newPoint[0] = 0.0;
+                newPoint[1] = cos( degreesIncrease )*radius + circleCentre[1];
+                newPoint[2] = sin( degreesIncrease )*radius + circleCentre[2];
+                break;
 
-                case QViewer::SagitalPlane:
-                    newPoint[0] = 0.0;
-                    newPoint[1] = cos( degrees )*radius + center[0];
-                    newPoint[2] = sin( degrees )*radius + center[1];
-                    break;
-
-                case QViewer::CoronalPlane:
-                    newPoint[0] = sin( degrees )*radius + center[0];
-                    newPoint[1] = 0.0;
-                    newPoint[2] = cos( degrees )*radius + center[1];
-                    break;
-            }
-            m_circumferencePolyline->addPoint( newPoint );
+            case QViewer::CoronalPlane:
+                newPoint[0] = sin( degreesIncrease )*radius + circleCentre[0];
+                newPoint[1] = 0.0;
+                newPoint[2] = cos( degreesIncrease )*radius + circleCentre[2];
+                break;
         }
+        m_circumferencePolyline->addPoint( newPoint );
     }
+
     m_circumferencePolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
