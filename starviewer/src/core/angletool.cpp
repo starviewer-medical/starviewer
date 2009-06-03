@@ -99,23 +99,23 @@ void AngleTool::findInitialDegreeArc()
     double *p1 = m_mainPolyline->getPoint( 0 );
     double *p2 = m_mainPolyline->getPoint( 1 );
 
-    int coord1, coord2;
+    int coord1, depthCoord;
 
     switch( m_2DViewer->getView() )
     {
         case QViewer::AxialPlane:
             coord1 = 0;
-            coord2 = 2;
+            depthCoord = 2;
             break;
 
         case QViewer::SagitalPlane:
             coord1 = 1;
-            coord2 = 0;
+            depthCoord = 0;
             break;
 
         case QViewer::CoronalPlane:
             coord1 = 2;
-            coord2 = 1;
+            depthCoord = 1;
             break;
     }
 
@@ -128,7 +128,7 @@ void AngleTool::findInitialDegreeArc()
     vd2 = MathTools::directorVector( horizontalP2, p2 );
     pv = MathTools::crossProduct(vd1, vd2);
 
-    if ( pv[coord2] > 0 )
+    if ( pv[depthCoord] > 0 )
     {
         m_initialDegreeArc =(int)MathTools::angleInDegrees( vd1, vd2 );
     }
@@ -168,8 +168,8 @@ void AngleTool::fixFirstSegment()
 
 void AngleTool::drawCircumference()
 {
-    double degrees, intersection[2], xAxis1[2], xAxis2[2], yAxis1[2], yAxis2[2], *newPoint, xRadius, yRadius;
-    int initialI, finalI, viewCoord;
+    double degrees, center[2], *newPoint, radius;
+    int initialI, finalI, depthCoord;
 
     int view = m_2DViewer->getView();
 
@@ -185,70 +185,38 @@ void AngleTool::drawCircumference()
     switch( view )
     {
         case QViewer::AxialPlane:
-            xAxis1[0] = p2[0];
-            xAxis1[1] = p2[1];
+            depthCoord = 2;
 
-            xAxis2[0] = p1[0];
-            xAxis2[1] = p2[1];
-
-            yAxis1[0] = p2[0];
-            yAxis1[1] = p2[1];
-
-            yAxis2[0] = p2[0];
-            yAxis2[1] = p1[1];
-
-            viewCoord = 2;
+            center[0] = p2[0];
+            center[1] = p2[1];
             break;
 
         case QViewer::SagitalPlane:
-            xAxis1[0] = p2[2];
-            xAxis1[1] = p2[1];
+            depthCoord = 0;
 
-            xAxis2[0] = p1[2];
-            xAxis2[1] = p2[1];
-
-            yAxis1[0] = p2[2];
-            yAxis1[1] = p2[1];
-
-            yAxis2[0] = p2[2];
-            yAxis2[1] = p1[1];
-
-            viewCoord = 0;
+            center[0] = p2[1];
+            center[1] = p2[2];
             break;
 
         case QViewer::CoronalPlane:
-            xAxis1[0] = p2[0];
-            xAxis1[1] = p2[2];
+            depthCoord = 1;
 
-            xAxis2[0] = p1[0];
-            xAxis2[1] = p2[2];
-
-            yAxis1[0] = p2[0];
-            yAxis1[1] = p2[2];
-
-            yAxis2[0] = p2[0];
-            yAxis2[1] = p1[2];
-
-            viewCoord = 1;
+            center[0] = p2[0];
+            center[1] = p2[2];
             break;
     }
 
     double distance1 = MathTools::getDistance3D( p1, p2 );
     double distance2 = MathTools::getDistance3D( p2, p3 );
 
-    xRadius =  MathTools::minimum( distance1, distance2 ) / 4.0;
-    m_radius = xRadius;
-    yRadius = xRadius;
-
-    intersection[0] = ((yAxis2[0] - yAxis1[0]) / 2.0) + yAxis1[0];
-    intersection[1] = ((xAxis2[1] - xAxis1[1]) / 2.0) + xAxis1[1];
+    radius =  MathTools::minimum( distance1, distance2 ) / 4.0;
 
     double *pv = MathTools::crossProduct(vd1, vd2);
 
     initialI = 360 - m_initialDegreeArc;
     finalI = int(360 - ( angle+m_initialDegreeArc ) );
 
-    if ( pv[viewCoord] > 0 )
+    if ( pv[depthCoord] > 0 )
     {
         finalI = int(angle-m_initialDegreeArc);
     }
@@ -263,21 +231,21 @@ void AngleTool::drawCircumference()
             switch( view )
             {
                 case QViewer::AxialPlane:
-                    newPoint[0] = cos( degrees )*xRadius + intersection[0];
-                    newPoint[1] = sin( degrees )*yRadius + intersection[1];
+                    newPoint[0] = cos( degrees )*radius + center[0];
+                    newPoint[1] = sin( degrees )*radius + center[1];
                     newPoint[2] = 0.0;
                     break;
 
                 case QViewer::SagitalPlane:
                     newPoint[0] = 0.0;
-                    newPoint[1] = cos( degrees )*yRadius + intersection[1];
-                    newPoint[2] = sin( degrees )*xRadius + intersection[0];
+                    newPoint[1] = cos( degrees )*radius + center[0];
+                    newPoint[2] = sin( degrees )*radius + center[1];
                     break;
 
                 case QViewer::CoronalPlane:
-                    newPoint[0] = sin( degrees )*xRadius + intersection[0];
+                    newPoint[0] = sin( degrees )*radius + center[0];
                     newPoint[1] = 0.0;
-                    newPoint[2] = cos( degrees )*yRadius + intersection[1];
+                    newPoint[2] = cos( degrees )*radius + center[1];
                     break;
             }
             m_circumferencePolyline->addPoint( newPoint );
@@ -295,21 +263,21 @@ void AngleTool::drawCircumference()
             switch( view )
             {
                 case QViewer::AxialPlane:
-                    newPoint[0] = cos( degrees )*xRadius + intersection[0];
-                    newPoint[1] = sin( degrees )*yRadius + intersection[1];
+                    newPoint[0] = cos( degrees )*radius + center[0];
+                    newPoint[1] = sin( degrees )*radius + center[1];
                     newPoint[2] = 0.0;
                     break;
 
                 case QViewer::SagitalPlane:
                     newPoint[0] = 0.0;
-                    newPoint[1] = cos( degrees )*yRadius + intersection[1];
-                    newPoint[2] = sin( degrees )*xRadius + intersection[0];
+                    newPoint[1] = cos( degrees )*radius + center[0];
+                    newPoint[2] = sin( degrees )*radius + center[1];
                     break;
 
                 case QViewer::CoronalPlane:
-                    newPoint[0] = sin( degrees )*xRadius + intersection[0];
+                    newPoint[0] = sin( degrees )*radius + center[0];
                     newPoint[1] = 0.0;
-                    newPoint[2] = cos( degrees )*yRadius + intersection[1];
+                    newPoint[2] = cos( degrees )*radius + center[1];
                     break;
             }
             m_circumferencePolyline->addPoint( newPoint );
