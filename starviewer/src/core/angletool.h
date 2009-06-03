@@ -74,9 +74,10 @@ private:
         
     ///estat de la tool
     int m_state;
-    
-    double m_radius;
-    
+
+    /// Graus que formen inicialment el primer segement amb un segment horitzontal fictici
+    /// Ens servirà per calcular cap a on hem de dibuixar l'arc de circumferència quan 
+    /// estem annotant el segon segment de l'angle
     int m_initialDegreeArc;
 };
 
