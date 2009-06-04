@@ -13,13 +13,11 @@
 namespace udg {
 
 class Q2DViewer;
-class Volume;
-class ImagePlane;
 class DrawerPolyline;
 class DrawerText;
 
 /**
-Tool per calcular angles
+    Tool per calcular angles
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -27,50 +25,46 @@ class AngleTool : public Tool
 {
 Q_OBJECT
 public:
- ///possibles estats de la tool
+    /// Possibles estats de la tool
     enum { CENTER_FIXED, FIRST_POINT_FIXED, NONE };
     
     AngleTool( QViewer *viewer, QObject *parent = 0 );
-
     ~AngleTool();
 
-    ///funcio manejadora dels events passats.
     void handleEvent( long unsigned eventID );
 
-private slots:
-
 private:
-    /// ens permet anotar el primer vèrtex de l'angle.
+    /// Calcula l'angle que fa el primer segment annotat amb l'eix horitzontal
+    void findInitialDegreeArc();
+
+    /// Ens permet anotar el primer vèrtex de l'angle.
     void annotateFirstPoint();
 
-    ///ens simula el primer segment de l'angle respecte el punt on està el mouse.
-    void simulateFirstSegmentOfAngle();
+    /// Ens simula el segment de l'angle segons els punts annotats
+    void simulateCorrespondingSegmentOfAngle();
+
+    /// Dibuixa l'arc de circumferència que hi ha entre els dos segments 
+    /// quan estem definint l'angle
+    void drawCircle();
     
-    ///ens simula el segon segment de l'angle respecte el punt on està el mouse.
-    void simulateSecondSegmentOfAngle();
-    
-    void computeSecondSegmentLimit( double point1[3], double point2[3] );
-    
-    void drawCircumference();
-    
+    /// Ajustem el primer segment i creem la polilínia de l'arc de circumferència
     void fixFirstSegment();
     
-    void computeAngle();
+    /// Acabem el dibuix de l'angle afegint l'annotació textual i eliminant l'arc de circumferència
+    void finishDrawing();
     
-    void findInitialDegreeArc();
-    
-    ///calcula la correcta posició del caption de l'angle segons els punts de l'angle
-    void textPosition( double *p1, double *p2, double *p3, DrawerText *angleText );
+    /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
+    void placeText( DrawerText *angleText );
 
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
-    ///polilinia principal: es la polilinia que ens marca la forma que hem anat editant.
+    /// Polilínia per dibuixar l'angle
     QPointer<DrawerPolyline> m_mainPolyline;
 
-    ///polilinia de la circumferencia de l'angle.
-    QPointer<DrawerPolyline> m_circumferencePolyline;
+    /// Polilínia de la circumferència de l'angle.
+    QPointer<DrawerPolyline> m_circlePolyline;
         
     ///estat de la tool
     int m_state;
@@ -79,6 +73,9 @@ private:
     /// Ens servirà per calcular cap a on hem de dibuixar l'arc de circumferència quan 
     /// estem annotant el segon segment de l'angle
     int m_initialDegreeArc;
+
+    /// Angle que formen en tot moment els dos segments
+    double m_currentAngle;
 };
 
 }
