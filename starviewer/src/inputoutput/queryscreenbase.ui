@@ -253,24 +253,9 @@
       <attribute name="icon" >
        <iconset resource="../main/main.qrc" >:/images/pacsServer.png</iconset>
       </attribute>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <property name="leftMargin" >
-        <number>9</number>
-       </property>
-       <property name="topMargin" >
-        <number>9</number>
-       </property>
-       <property name="rightMargin" >
-        <number>9</number>
-       </property>
-       <property name="bottomMargin" >
-        <number>9</number>
-       </property>
-       <item>
-        <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidgetPacs" >
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="udg::QInputOutputPacsWidget" native="1" name="m_qInputOutputPacsWidget" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
            <horstretch>0</horstretch>
@@ -278,76 +263,6 @@
           </sizepolicy>
          </property>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
-          <number>6</number>
-         </property>
-         <property name="leftMargin" >
-          <number>11</number>
-         </property>
-         <property name="topMargin" >
-          <number>11</number>
-         </property>
-         <property name="rightMargin" >
-          <number>11</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>11</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="m_viewButtonPACS" >
-           <property name="text" >
-            <string>View</string>
-           </property>
-           <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/view.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="toolButtonStyle" >
-            <enum>Qt::ToolButtonTextBesideIcon</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="m_retrieveButtonPACS" >
-           <property name="text" >
-            <string>Retrieve</string>
-           </property>
-           <property name="icon" >
-            <iconset resource="../main/main.qrc" >:/images/retrieve.png</iconset>
-           </property>
-           <property name="iconSize" >
-            <size>
-             <width>32</width>
-             <height>32</height>
-            </size>
-           </property>
-           <property name="toolButtonStyle" >
-            <enum>Qt::ToolButtonTextBesideIcon</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </item>
       </layout>
      </widget>
@@ -537,6 +452,11 @@
    <class>udg::QInputOutputLocalDatabaseWidget</class>
    <extends>QWidget</extends>
    <header>qinputoutputlocaldatabasewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QInputOutputPacsWidget</class>
+   <extends>QWidget</extends>
+   <header>qinputoutputpacswidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>
