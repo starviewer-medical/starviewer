@@ -44,12 +44,10 @@ public slots:
     /// Si la finestra no és visible o està radera d'una altra, la fa visible i la porta al davant de les finestres.
     void bringToFront();
 
-#ifndef STARVIEWER_LITE
     /// Mostra la pestanya de PACS. 
     /// TODO Deixar els camps de cerca com estaven, fer un clear o posar valors per defecte?
     /// Es podria passar un paràmetre "bool clear" amb valor per defecte (false, per exemple)
     void showPACSTab();
-#endif
 
     /// Mostra tots els estudis en local i reseteja els camps de cerca
     void showLocalExams();

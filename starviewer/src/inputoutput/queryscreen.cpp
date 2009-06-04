@@ -250,13 +250,11 @@ void QueryScreen::bringToFront()
     this->activateWindow();
 }
 
-#ifndef STARVIEWER_LITE
 void QueryScreen::showPACSTab()
 {
     m_tab->setCurrentIndex( PACSQueryTab );
     bringToFront();
 }
-#endif
 
 void QueryScreen::showLocalExams()
 {
