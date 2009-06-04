@@ -83,7 +83,9 @@ QueryScreen::~QueryScreen()
      */
     this->close();
 
+#ifndef STARVIEWER_LITE
     delete m_listenRISRequestThread;
+#endif
 }
 
 void QueryScreen::initialize()
