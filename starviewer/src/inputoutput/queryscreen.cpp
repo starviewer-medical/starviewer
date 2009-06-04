@@ -193,7 +193,7 @@ void QueryScreen::createConnections()
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
-    connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved()), SLOT(refreshLocalDatabaseTab()));
+    connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
 
@@ -345,11 +345,6 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView)
     }
 
     emit selectedPatients(listPatientsToView);
-}
-
-void QueryScreen::refreshLocalDatabaseTab()
-{
-    m_qInputOutputLocalDatabaseWidget->queryStudy(DicomMask());
 }
 
 void QueryScreen::closeEvent( QCloseEvent* event )

@@ -50,7 +50,7 @@ signals:
     void viewPatients(QList<Patient*>);
 
     ///Signal que s'emet per indica que un estudi ha estat descarregat
-    void studyRetrieved();
+    void studyRetrieved(QString studyInstanceUID);
 
 public slots:
 
