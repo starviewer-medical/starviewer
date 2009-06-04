@@ -65,21 +65,31 @@ public slots:
     void loadColorVomi( QString fileName = QString() );
     /// Desa la color VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveColorVomi( QString fileName = QString() );
+    /// Carrega les millors vistes des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadBestViews( QString fileName = QString() );
+    /// Desa les millors vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveBestViews( QString fileName = QString() );
 
 private:
 
     /// Carrega dades de tipus float del fitxer al float. Retorna cert si tot va bé i fals si hi ha error.
     static bool loadFloatData( const QString &fileName, float &data );
+    /// Carrega dades de tipus T del fitxer a la llista. Retorna cert si tot va bé i fals si hi ha error.
+    template <class T> static bool loadData( const QString &fileName, QList<T> &list );
     /// Carrega dades de tipus T del fitxer al vector. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool loadData( const QString &fileName, QVector<T> &vector );
     /// Desa dades de tipus float del float al fitxer. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveFloatData( float data, const QString &fileName );
+    /// Desa dades de tipus T de la llista al fitxer. Retorna cert si tot va bé i fals si hi ha error.
+    template <class T> static bool saveData( const QList<T> &list, const QString &fileName );
     /// Desa dades de tipus T del vector al fitxer. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool saveData( const QVector<T> &vector, const QString &fileName );
     /// Desa dades de tipus float del float al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveFloatDataAsText( float data, const QString &fileName, const QString &format );
     /// Desa dades de tipus float del vector al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveFloatDataAsText( const QVector<float> &vector, const QString &fileName, const QString &format, int base = 0 );
+    /// Desa dades de tipus QPair<int, Vector3> de la llista al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
+    static bool saveDataAsText( const QList< QPair<int, Vector3> > &list, const QString &fileName, const QString &format, int base = 0 );
 
     /// Crea les connexions de signals i slots.
     void createConnections();
@@ -105,8 +115,6 @@ private:
     // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
     void computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
                                     bool computeViewpointUnstabilities, bool computeEvmi );
-    // Calcula les millors vistes.
-    void computeBestViews( const QVector<Vector3> &viewpoints, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula el guided tour.
     void computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     /// Escriu al log un error d'un programa.
@@ -124,8 +132,6 @@ private:
 
     void loadViewpointUnstabilities( const QString &fileName );
     void saveViewpointUnstabilities( const QString &fileName );
-    void loadBestViews( const QString &fileName );
-    void saveBestViews( const QString &fileName );
     void loadGuidedTour( const QString &fileName );
     void saveGuidedTour( const QString &fileName );
     void loadEvmi( const QString &fileName );
@@ -193,8 +199,6 @@ private slots:
     void computeSelectedVmiOld();   // el deixem temporalment mentre acabem de passar el codi que queda a ViewpointInformationChannel
     void loadViewpointUnstabilities();
     void saveViewpointUnstabilities();
-    void loadBestViews();
-    void saveBestViews();
     void loadGuidedTour();
     void saveGuidedTour();
     void loadEvmi();
@@ -233,8 +237,8 @@ private:
     QVector<Vector3Float> m_colorVomiPalette;
     QVector<Vector3Float> m_colorVomi;
     float m_maximumColorVomi;
-    QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_bestViews;
+    QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_guidedTour;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;

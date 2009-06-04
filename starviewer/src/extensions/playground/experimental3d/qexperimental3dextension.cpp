@@ -376,6 +376,40 @@ void QExperimental3DExtension::saveColorVomi( QString fileName )
 }
 
 
+void QExperimental3DExtension::loadBestViews( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "bestViewsDir", tr("Load best views"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_bestViews ) )
+    {
+        m_saveBestViewsPushButton->setEnabled( true );
+        m_tourBestViewsPushButton->setEnabled( true );
+    }
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load best views"), QString( tr("Can't load best views from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveBestViews( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "bestViewsDir", tr("Save best views"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveDataAsText( m_bestViews, fileName, QString( "%1: v%2 %3" ) );
+    else error = !saveData( m_bestViews, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save best views"), QString( tr("Can't save best views to file ") ) + fileName );
+}
+
+
 bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &data )
 {
     QFile file( fileName );
@@ -389,6 +423,34 @@ bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &da
     QDataStream in( &file );
 
     if ( !in.atEnd() ) in >> data;
+
+    file.close();
+
+    return true;
+}
+
+
+template <class T>
+bool QExperimental3DExtension::loadData( const QString &fileName, QList<T> &list )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::ReadOnly ) )
+    {
+        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        return false;
+    }
+
+    list.clear();
+
+    QDataStream in( &file );
+
+    while ( !in.atEnd() )
+    {
+        T data;
+        in >> data;
+        list << data;
+    }
 
     file.close();
 
@@ -437,6 +499,28 @@ bool QExperimental3DExtension::saveFloatData( float data, const QString &fileNam
     QDataStream out( &file );
 
     out << data;
+
+    file.close();
+
+    return true;
+}
+
+
+template <class T>
+bool QExperimental3DExtension::saveData( const QList<T> &list, const QString &fileName )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        return false;
+    }
+
+    QDataStream out( &file );
+    int n = list.size();
+
+    for ( int i = 0; i < n; i++ ) out << list.at( i );
 
     file.close();
 
@@ -500,6 +584,27 @@ bool QExperimental3DExtension::saveFloatDataAsText( const QVector<float> &vector
     int n = vector.size();
 
     for ( int i = 0; i < n; i++ ) out << format.arg( i + base ).arg( vector.at( i ) ) << "\n";
+
+    file.close();
+
+    return true;
+}
+
+
+bool QExperimental3DExtension::saveDataAsText( const QList< QPair<int, Vector3> > &list, const QString &fileName, const QString &format, int base )
+{
+    QFile file( fileName );
+
+    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
+    {
+        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
+        return false;
+    }
+
+    QTextStream out( &file );
+    int n = list.size();
+
+    for ( int i = 0; i < n; i++ ) out << format.arg( i + base ).arg( list.at( i ).first ).arg( list.at( i ).second.toString() ) << "\n";
 
     file.close();
 
@@ -610,10 +715,14 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadColorVomiPalettePushButton, SIGNAL( clicked() ), SLOT( loadColorVomiPalette() ) );
     connect( m_loadColorVomiPushButton, SIGNAL( clicked() ), SLOT( loadColorVomi() ) );
     connect( m_saveColorVomiPushButton, SIGNAL( clicked() ), SLOT( saveColorVomi() ) );
-    connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
-    connect( m_saveViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( saveViewpointUnstabilities() ) );
+    connect( m_computeBestViewsCheckBox, SIGNAL( toggled(bool) ), m_computeBestViewsNRadioButton, SLOT( setEnabled(bool) ) );
+    connect( m_computeBestViewsCheckBox, SIGNAL( toggled(bool) ), m_computeBestViewsNSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_computeBestViewsCheckBox, SIGNAL( toggled(bool) ), m_computeBestViewsThresholdRadioButton, SLOT( setEnabled(bool) ) );
+    connect( m_computeBestViewsCheckBox, SIGNAL( toggled(bool) ), m_computeBestViewsThresholdDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_loadBestViewsPushButton, SIGNAL( clicked() ), SLOT( loadBestViews() ) );
     connect( m_saveBestViewsPushButton, SIGNAL( clicked() ), SLOT( saveBestViews() ) );
+    connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
+    connect( m_saveViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( saveViewpointUnstabilities() ) );
     connect( m_loadGuidedTourPushButton, SIGNAL( clicked() ), SLOT( loadGuidedTour() ) );
     connect( m_saveGuidedTourPushButton, SIGNAL( clicked() ), SLOT( saveGuidedTour() ) );
     connect( m_loadEvmiPushButton, SIGNAL( clicked() ), SLOT( loadEvmi() ) );
@@ -1389,9 +1498,10 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
     bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
+    bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeVomi && !computeViewpointVomi && !computeColorVomi ) return;
+    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeVomi && !computeViewpointVomi && !computeColorVomi && !computeBestViews ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1406,6 +1516,9 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     // Paleta de colors per la color VoMI
     if ( computeColorVomi ) viewpointInformationChannel.setColorVomiPalette( m_colorVomiPalette );
+
+    // Paràmetres extres per calcular les millors vistes
+    if ( computeBestViews ) viewpointInformationChannel.setBestViewsParameters( m_computeBestViewsNRadioButton->isChecked(), m_computeBestViewsNSpinBox->value(), m_computeBestViewsThresholdDoubleSpinBox->value() );
 
     // Filtratge de punts de vista
     if ( m_vmiOneViewpointCheckBox->isChecked() )
@@ -1428,7 +1541,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeVomi, computeViewpointVomi, computeColorVomi, m_vmiDisplayCheckBox->isChecked() );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeVomi, computeViewpointVomi, computeColorVomi, computeBestViews, m_vmiDisplayCheckBox->isChecked() );
 
     if ( computeViewpointEntropy )
     {
@@ -1483,6 +1596,13 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_saveColorVomiPushButton->setEnabled( true );
     }
 
+    if ( computeBestViews )
+    {
+        m_bestViews = viewpointInformationChannel.bestViews();
+        m_saveBestViewsPushButton->setEnabled( true );
+        m_tourBestViewsPushButton->setEnabled( true );
+    }
+
     // Restaurem els paràmetres normals (en realitat només cal si es fa amb CPU)
     render();
     m_viewer->setCamera( position, focus, up );
@@ -1497,12 +1617,11 @@ void QExperimental3DExtension::computeSelectedVmiOld()
 
     // Què ha demanat l'usuari
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesCheckBox->isChecked();
-    bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
     bool computeGuidedTour = m_computeGuidedTourCheckBox->isChecked();
     bool computeEvmi = m_computeEvmiCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointUnstabilities && !computeBestViews && !computeGuidedTour && !computeEvmi ) return;
+    if ( !computeViewpointUnstabilities && !computeGuidedTour && !computeEvmi ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1530,15 +1649,12 @@ void QExperimental3DExtension::computeSelectedVmiOld()
     }
 
     // Dependències
-    if ( computeGuidedTour && m_bestViews.isEmpty() ) computeBestViews = true;
-    //if ( computeBestViews && m_vmi.size() != nViewpoints ) computeVmi = true;
-    //if ( computeViewpointVomi && m_vomi.isEmpty() ) computeVomi = true;
+    //if ( computeGuidedTour && m_bestViews.isEmpty() ) computeBestViews = true;
     //if ( computeEvmi && m_vomi.isEmpty() ) computeVomi = true;
 
     // Inicialitzar progrés
     int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
     if ( computeViewpointUnstabilities || computeEvmi ) nSteps++;  // viewpoint unstabilities + EVMI
-    if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
     int step = 0;
     {
@@ -1580,14 +1696,6 @@ void QExperimental3DExtension::computeSelectedVmiOld()
     if ( computeViewpointUnstabilities || computeEvmi )
     {
         computeVmiRelatedMeasures( viewpointGenerator, viewProbabilities, objectProbabilities, pOvFiles, computeViewpointUnstabilities, computeEvmi );
-        m_vmiTotalProgressBar->setValue( ++step );
-        m_vmiTotalProgressBar->repaint();
-    }
-
-    // best views
-    if ( computeBestViews )
-    {
-        this->computeBestViews( viewpoints, viewProbabilities, objectProbabilities, pOvFiles );
         m_vmiTotalProgressBar->setValue( ++step );
         m_vmiTotalProgressBar->repaint();
     }
@@ -1824,134 +1932,6 @@ void QExperimental3DExtension::computeVmiRelatedMeasures( const ViewpointGenerat
 }
 
 
-void QExperimental3DExtension::computeBestViews( const QVector<Vector3> &viewpoints, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles )
-{
-    int nViewpoints = viewpoints.size();
-    int nObjects = objectProbabilities.size();
-
-    m_bestViews.clear();
-
-    // millor vista
-    float minVmi = m_vmi.at( 0 );
-    int minVmiIndex = 0;
-
-    for ( int i = 1; i < nViewpoints; i++ )
-    {
-        float vmi = m_vmi.at( i );
-
-        if ( vmi < minVmi )
-        {
-            minVmi = vmi;
-            minVmiIndex = i;
-        }
-    }
-
-    m_bestViews << qMakePair( minVmiIndex, viewpoints.at( minVmiIndex ) );
-
-    QList<int> viewpointIndexList;
-    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
-    viewpointIndexList.removeAt( minVmiIndex );
-
-    float pvv = viewProbabilities.at( minVmiIndex );    // p(v̂)
-    QVector<float> pOvv( nObjects );    // vector p(O|v̂)
-    pOvFiles[minVmiIndex]->reset();     // reset per tornar al principi
-    pOvFiles[minVmiIndex]->read( reinterpret_cast<char*>( pOvv.data() ), nObjects * sizeof(float) );    // llegim...
-    pOvFiles[minVmiIndex]->reset();     // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-    // límits
-    bool limitN = m_computeBestViewsNRadioButton->isChecked();
-    int n = qMin( m_computeBestViewsNSpinBox->value(), nViewpoints );
-    bool limitThreshold = m_computeBestViewsThresholdRadioButton->isChecked();
-    float threshold = m_computeBestViewsThresholdDoubleSpinBox->value();
-    float IVO = 0.0f;       // I(V,O)
-    for ( int i = 0; i < nViewpoints; i++ ) IVO += viewProbabilities.at( i ) * m_vmi.at( i );   // calcular I(V,O)
-    float IvvO = minVmi;    // I(v̂,O)
-
-    if ( limitN )
-    {
-        DEBUG_LOG( QString( "límit %1 vistes" ).arg( n ) );
-    }
-    if ( limitThreshold )
-    {
-        DEBUG_LOG( QString( "límit llindar %1" ).arg( threshold ) );
-    }
-
-    DEBUG_LOG( QString( "I(V,O) = %1" ).arg( IVO ) );
-    DEBUG_LOG( "Millors vistes:" );
-    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( viewpoints.at( minVmiIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
-
-    if ( limitN )
-    {
-        m_vmiProgressBar->setValue( 100 / n );
-        m_vmiProgressBar->repaint();
-    }
-
-    if ( limitThreshold )
-    {
-        m_vmiProgressBar->setValue( 0 );
-        m_vmiProgressBar->setMaximum( 0 );
-        m_vmiProgressBar->repaint();
-    }
-
-    m_vmiProgressBar->repaint();
-
-    float *pOvi = new float[nObjects];
-
-    while ( ( limitN && m_bestViews.size() < n ) || ( limitThreshold && IvvO / IVO > threshold ) )
-    {
-        int nRemainingViews = viewpointIndexList.size();
-        float pvvMin = 0.0f;
-        QVector<float> pOvvMin;
-        float IvvOMin = 0.0f;
-        int iMin = 0;
-
-        for ( int i = 0; i < nRemainingViews; i++ )
-        {
-            int viewIndex = viewpointIndexList.at( i );
-            float pvi = viewProbabilities.at( viewIndex );
-            pOvFiles[viewIndex]->reset();   // reset per tornar al principi
-            pOvFiles[viewIndex]->read( reinterpret_cast<char*>( pOvi ), nObjects * sizeof(float) ); // llegim...
-            pOvFiles[viewIndex]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
-            QVector<float> pOvvi( pOvv );   // vector p(O|v̂) afegint aquesta vista
-            for ( int j = 0; j < nObjects; j++ ) pOvvi[j] = ( pvv * pOvv.at( j ) + pvi * pOvi[j] ) / pvvi;
-            float IvviO = InformationTheory::kullbackLeiblerDivergence( pOvvi, objectProbabilities );    // I(v̂,O) afegint aquesta vista
-
-            if ( i == 0 || IvviO < IvvOMin )
-            {
-                pvvMin = pvvi;
-                pOvvMin = pOvvi;
-                IvvOMin = IvviO;
-                iMin = i;
-            }
-        }
-
-        pvv = pvvMin;
-        pOvv = pOvvMin;
-        IvvO = IvvOMin;
-        int viewIndex = viewpointIndexList.takeAt( iMin );
-        m_bestViews << qMakePair( viewIndex, viewpoints.at( viewIndex ) );
-        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂,O) = %4; I(v̂,O)/I(V,O) = %5" ).arg( m_bestViews.size() - 1 ).arg( viewIndex + 1 ).arg( viewpoints.at( viewIndex ).toString() ).arg( IvvO ).arg( IvvO / IVO ) );
-
-        if ( limitN ) m_vmiProgressBar->setValue( 100 * m_bestViews.size() / n );
-        m_vmiProgressBar->repaint();
-    }
-
-    delete[] pOvi;
-
-    if ( limitThreshold )
-    {
-        m_vmiProgressBar->setMaximum( 100 );
-        m_vmiProgressBar->setValue( 100 );
-        m_vmiProgressBar->repaint();
-    }
-
-    m_saveBestViewsPushButton->setEnabled( true );
-    m_tourBestViewsPushButton->setEnabled( true );
-}
-
-
 void QExperimental3DExtension::computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles )
 {
     const QVector<Vector3> &viewpoints = viewpointGenerator.viewpoints();
@@ -2159,86 +2139,6 @@ void QExperimental3DExtension::saveViewpointUnstabilities( const QString &fileNa
     }
 
     viewpointUnstabilitiesFile.close();
-}
-
-
-void QExperimental3DExtension::loadBestViews()
-{
-    QString bestViewsFileName = getFileNameToLoad( "bestViewsDir", tr("Load best views"), tr("Data files (*.dat);;All files (*)") );
-    if ( !bestViewsFileName.isNull() ) loadBestViews( bestViewsFileName );
-}
-
-
-void QExperimental3DExtension::loadBestViews( const QString &fileName )
-{
-    QFile bestViewsFile( fileName );
-
-    if ( !bestViewsFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load best views"), QString( tr("Can't load best views from file ") ) + fileName );
-        return;
-    }
-
-    m_bestViews.clear();
-
-    QDataStream in( &bestViewsFile );
-
-    while ( !in.atEnd() )
-    {
-        int i;
-        Vector3 v;
-        in >> i;
-        in >> v.x >> v.y >> v.z;
-        m_bestViews << qMakePair( i, v );
-    }
-
-    bestViewsFile.close();
-
-    m_saveBestViewsPushButton->setEnabled( true );
-    m_tourBestViewsPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveBestViews()
-{
-    QString bestViewsFileName = getFileNameToSave( "bestViewsDir", tr("Save best views"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-    if ( !bestViewsFileName.isNull() ) saveBestViews( bestViewsFileName );
-}
-
-
-void QExperimental3DExtension::saveBestViews( const QString &fileName )
-{
-    bool saveAsText = fileName.endsWith( ".txt" );
-    QFile bestViewsFile( fileName );
-    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if ( saveAsText ) mode = mode | QIODevice::Text;
-
-    if ( !bestViewsFile.open( mode ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save best views"), QString( tr("Can't save best views to file ") ) + fileName );
-        return;
-    }
-
-    int nBestViews = m_bestViews.size();
-
-    if ( saveAsText )
-    {
-        QTextStream out( &bestViewsFile );
-        for ( int i = 0; i < nBestViews; i++ ) out << i << ": v" << m_bestViews.at( i ).first + 1 << " " << m_bestViews.at( i ).second.toString() << "\n";
-    }
-    else
-    {
-        QDataStream out( &bestViewsFile );
-        for ( int i = 0; i < nBestViews; i++ )
-        {
-            const Vector3 &v = m_bestViews.at( i ).second;
-            out << m_bestViews.at( i ).first << v.x << v.y << v.z;
-        }
-    }
-
-    bestViewsFile.close();
 }
 
 
