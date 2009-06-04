@@ -205,14 +205,14 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // TODO ara només permetrem importar estudis sencers
-    foreach(QString studyUID, m_studyTreeWidget->getSelectedStudiesUID())
+    foreach(QString studyInstanceUID, m_studyTreeWidget->getSelectedStudiesUID())
     {
-        importDicom.import(m_readDicomdir.getDicomdirFilePath(), studyUID, QString(), QString());
+        importDicom.import(m_readDicomdir.getDicomdirFilePath(), studyInstanceUID, QString(), QString());
         if (importDicom.getLastError() != DICOMDIRImporter::Ok)
         {
             //S'ha produït un error
             QApplication::restoreOverrideCursor();
-            showDICOMDIRImporterError(studyUID, importDicom.getLastError());
+            showDICOMDIRImporterError(studyInstanceUID, importDicom.getLastError());
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
             if (importDicom.getLastError() != DICOMDIRImporter::PatientInconsistent &&
@@ -222,7 +222,7 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
                 break;
             }
         }
-        else emit studyRetrieved();
+        else emit studyRetrieved(studyInstanceUID);
     }
 
     QApplication::restoreOverrideCursor();

@@ -103,9 +103,6 @@ private slots:
 
     void viewPatients(QList<Patient*>);
 
-    ///Fa un refresc del estudis que es mostren al tab de base de dades local
-    void refreshLocalDatabaseTab();
-
     ///Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
     void viewRetrievedStudyFromPacs(QString studyInstanceUID);
 
