@@ -213,6 +213,14 @@ void ViewpointInformationChannel::setColorVomiPalette( const QVector<Vector3Floa
 }
 
 
+void ViewpointInformationChannel::setBestViewsParameters( bool fixedNumber, int n, float threshold )
+{
+    m_fixedNumberOfBestViews = fixedNumber;
+    m_numberOfBestViews = n;
+    m_bestViewsThreshold = threshold;
+}
+
+
 void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter )
 {
     if ( m_viewpoints.size() != filter.size() )
@@ -237,10 +245,10 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
 }
 
 
-void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool display )
+void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &bestViews, bool display )
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy && !entropy && !vmi && !mi && !vomi && !viewpointVomi && !colorVomi ) return;
+    if ( !viewpointEntropy && !entropy && !vmi && !mi && !vomi && !viewpointVomi && !colorVomi && !bestViews ) return;
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
@@ -248,6 +256,7 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
     // Dependències
     if ( entropy ) viewProbabilities = true;
     if ( entropy ) viewpointEntropy = true;
+    if ( bestViews ) mi = true;
     if ( mi ) vmi = true;
     if ( vmi ) voxelProbabilities = true;
     if ( viewpointVomi ) vomi = true;
@@ -257,9 +266,9 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
 
 #ifndef CUDA_AVAILABLE
     Q_UNUSED( display );
-    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi );
+    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi, bestViews );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi, display );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, vomi, viewpointVomi, colorVomi, bestViews, display );
 #endif // CUDA_AVAILABLE
 }
 
@@ -318,11 +327,17 @@ float ViewpointInformationChannel::maximumColorVomi() const
 }
 
 
+const QList< QPair<int, Vector3> >& ViewpointInformationChannel::bestViews() const
+{
+    return m_bestViews;
+}
+
+
 #ifndef CUDA_AVAILABLE
 
 
 void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi,
-                                              bool computeViewpointVomi, bool computeColorVomi )
+                                              bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews )
 {
     DEBUG_LOG( "computeCpu" );
 
@@ -332,6 +347,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
     if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi ) nSteps++;   // viewpoint entropy + entropy + VMI + MI + viewpoint VoMI
+    if ( computeBestViews ) nSteps++;  // best views
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -377,6 +393,14 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi )
     {
         computeViewMeasuresCpu( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointVomi );
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // best views
+    if ( computeBestViews )
+    {
+        computeBestViewsCpu();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -858,6 +882,117 @@ void ViewpointInformationChannel::computeVomiCpu( bool computeVomi, bool compute
 }
 
 
+void ViewpointInformationChannel::computeBestViewsCpu()
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    m_bestViews.clear();
+
+    // millor vista
+    float minVmi = m_vmi.at( 0 );
+    int minVmiIndex = 0;
+
+    for ( int i = 1; i < nViewpoints; i++ )
+    {
+        float vmi = m_vmi.at( i );
+
+        if ( vmi < minVmi )
+        {
+            minVmi = vmi;
+            minVmiIndex = i;
+        }
+    }
+
+    m_bestViews << qMakePair( minVmiIndex, m_viewpoints.at( minVmiIndex ) );
+
+    QList<int> viewpointIndexList;
+    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
+    viewpointIndexList.removeAt( minVmiIndex );
+
+    float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
+
+    QVector<float> pZvv( nVoxels ); // p(Z|v̂)
+    readVoxelProbabilitiesInView( minVmiIndex, pZvv );
+
+    // límits
+    m_numberOfBestViews = qMin( m_numberOfBestViews, nViewpoints );
+    float IvvZ = minVmi;    // I(v̂;Z)
+
+    if ( m_fixedNumberOfBestViews )
+    {
+        DEBUG_LOG( QString( "límit %1 vistes" ).arg( m_numberOfBestViews ) );
+    }
+    else
+    {
+        DEBUG_LOG( QString( "límit llindar %1" ).arg( m_bestViewsThreshold ) );
+    }
+
+    DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
+    DEBUG_LOG( "Millors vistes:" );
+    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( m_viewpoints.at( minVmiIndex ).toString() ).arg( IvvZ ).arg( IvvZ / m_mi ) );
+
+    if ( m_fixedNumberOfBestViews )
+    {
+        emit partialProgress( 100 / m_numberOfBestViews );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    QVector<float> pZvi( nVoxels ); // p(Z|vi)
+
+    while ( ( m_fixedNumberOfBestViews && m_bestViews.size() < m_numberOfBestViews ) || ( !m_fixedNumberOfBestViews && IvvZ / m_mi > m_bestViewsThreshold ) )
+    {
+        int nRemainingViews = viewpointIndexList.size();
+
+        if ( nRemainingViews == 0 ) break;
+
+        float pvvMin = 0.0f;
+        QVector<float> pZvvMin;
+        float IvvZMin = 0.0f;
+        int iMin = 0;
+
+        for ( int i = 0; i < nRemainingViews; i++ )
+        {
+            int viewIndex = viewpointIndexList.at( i );
+            float pvi = m_viewProbabilities.at( viewIndex );
+            readVoxelProbabilitiesInView( viewIndex, pZvi );
+
+            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
+            QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
+            for ( int j = 0; j < nVoxels; j++ ) pZvvi[j] = ( pvv * pZvv.at( j ) + pvi * pZvi.at( j ) ) / pvvi;
+            float IvviZ = InformationTheory::kullbackLeiblerDivergence( pZvvi, m_voxelProbabilities );  // I(v̂,Z) afegint aquesta vista
+
+            if ( i == 0 || IvviZ < IvvZMin )
+            {
+                pvvMin = pvvi;
+                pZvvMin = pZvvi;
+                IvvZMin = IvviZ;
+                iMin = i;
+            }
+        }
+
+        pvv = pvvMin;
+        pZvv = pZvvMin;
+        IvvZ = IvvZMin;
+        int viewIndex = viewpointIndexList.takeAt( iMin );
+        m_bestViews << qMakePair( viewIndex, m_viewpoints.at( viewIndex ) );
+        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( m_bestViews.size() - 1 ).arg( viewIndex + 1 ).arg( m_viewpoints.at( viewIndex ).toString() ).arg( IvvZ ).arg( IvvZ / m_mi ) );
+
+        if ( m_fixedNumberOfBestViews )
+        {
+            emit partialProgress( 100 * m_bestViews.size() / m_fixedNumberOfBestViews );
+            QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+        }
+    }
+
+    emit partialProgress( 100 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+}
+
+
 #else // CUDA_AVAILABLE
 
 
@@ -870,7 +1005,7 @@ Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 
 
 void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeVomi,
-                                               bool computeViewpointVomi, bool computeColorVomi, bool display )
+                                               bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool display )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -880,6 +1015,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
     if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi ) nSteps++;   // viewpoint entropy + entropy + VMI + MI + viewpoint VoMI
+    if ( computeBestViews ) nSteps++;   // best views
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -917,6 +1053,14 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointVomi )
     {
         computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointVomi );
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // best views
+    if ( computeBestViews )
+    {
+        computeBestViewsCuda();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1226,6 +1370,122 @@ void ViewpointInformationChannel::computeVomiCuda( bool computeVomi, bool comput
             if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
         }
     }
+}
+
+
+void ViewpointInformationChannel::computeBestViewsCuda()
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    m_bestViews.clear();
+
+    // millor vista
+    float minVmi = m_vmi.at( 0 );
+    int minVmiIndex = 0;
+
+    for ( int i = 1; i < nViewpoints; i++ )
+    {
+        float vmi = m_vmi.at( i );
+
+        if ( vmi < minVmi )
+        {
+            minVmi = vmi;
+            minVmiIndex = i;
+        }
+    }
+
+    m_bestViews << qMakePair( minVmiIndex, m_viewpoints.at( minVmiIndex ) );
+
+    QList<int> viewpointIndexList;
+    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
+    viewpointIndexList.removeAt( minVmiIndex );
+
+    float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
+
+    QVector<float> pZvv = cvicRayCastAndGetHistogram( m_viewpoints.at( minVmiIndex ), viewMatrix( m_viewpoints.at( minVmiIndex ) ) );   // p(Z|v̂) * viewedVolume
+    double viewedVolume = 0.0;
+    for ( int j = 0; j < nVoxels; j++ ) viewedVolume += pZvv.at( j );
+    Q_ASSERT( viewedVolume == viewedVolume );
+    for ( int j = 0; j < nVoxels; j++ ) pZvv[j] /= viewedVolume;    // p(Z|v̂)
+
+    // límits
+    m_numberOfBestViews = qMin( m_numberOfBestViews, nViewpoints );
+    float IvvZ = minVmi;    // I(v̂;Z)
+
+    if ( m_fixedNumberOfBestViews )
+    {
+        DEBUG_LOG( QString( "límit %1 vistes" ).arg( m_numberOfBestViews ) );
+    }
+    else
+    {
+        DEBUG_LOG( QString( "límit llindar %1" ).arg( m_bestViewsThreshold ) );
+    }
+
+    DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
+    DEBUG_LOG( "Millors vistes:" );
+    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( m_viewpoints.at( minVmiIndex ).toString() ).arg( IvvZ ).arg( IvvZ / m_mi ) );
+
+    if ( m_fixedNumberOfBestViews )
+    {
+        emit partialProgress( 100 / m_numberOfBestViews );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    while ( ( m_fixedNumberOfBestViews && m_bestViews.size() < m_numberOfBestViews ) || ( !m_fixedNumberOfBestViews && IvvZ / m_mi > m_bestViewsThreshold ) )
+    {
+        int nRemainingViews = viewpointIndexList.size();
+
+        if ( nRemainingViews == 0 ) break;
+
+        float pvvMin = 0.0f;
+        QVector<float> pZvvMin;
+        float IvvZMin = 0.0f;
+        int iMin = 0;
+
+        for ( int i = 0; i < nRemainingViews; i++ )
+        {
+            int viewIndex = viewpointIndexList.at( i );
+            float pvi = m_viewProbabilities.at( viewIndex );
+            QVector<float> pZvi = cvicRayCastAndGetHistogram( m_viewpoints.at( viewIndex ), viewMatrix( m_viewpoints.at( viewIndex ) ) );   // p(Z|vi) * viewedVolume
+            double viewedVolume = 0.0;
+            for ( int j = 0; j < nVoxels; j++ ) viewedVolume += pZvi.at( j );
+            Q_ASSERT( viewedVolume == viewedVolume );
+            for ( int j = 0; j < nVoxels; j++ ) pZvi[j] /= viewedVolume;    // p(Z|vi)
+
+            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
+            QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
+            for ( int j = 0; j < nVoxels; j++ ) pZvvi[j] = ( pvv * pZvv.at( j ) + pvi * pZvi.at( j ) ) / pvvi;
+            float IvviZ = InformationTheory::kullbackLeiblerDivergence( pZvvi, m_voxelProbabilities );  // I(v̂,Z) afegint aquesta vista
+
+            if ( i == 0 || IvviZ < IvvZMin )
+            {
+                pvvMin = pvvi;
+                pZvvMin = pZvvi;
+                IvvZMin = IvviZ;
+                iMin = i;
+            }
+        }
+
+        pvv = pvvMin;
+        pZvv = pZvvMin;
+        IvvZ = IvvZMin;
+        int viewIndex = viewpointIndexList.takeAt( iMin );
+        m_bestViews << qMakePair( viewIndex, m_viewpoints.at( viewIndex ) );
+        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( m_bestViews.size() - 1 ).arg( viewIndex + 1 ).arg( m_viewpoints.at( viewIndex ).toString() ).arg( IvvZ ).arg( IvvZ / m_mi ) );
+
+        if ( m_fixedNumberOfBestViews )
+        {
+            emit partialProgress( 100 * m_bestViews.size() / m_fixedNumberOfBestViews );
+            QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+        }
+    }
+
+    emit partialProgress( 100 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 }
 
 
