@@ -19,7 +19,8 @@ FORMS += qconfigurationscreenbase.ui \
          qlistenrisrequestsconfigurationscreenbase.ui \
          qpopuprisrequestsscreenbase.ui   \
          qinputoutputdicomdirwidgetbase.ui \
-         qinputoutputlocaldatabasewidgetbase.ui
+         qinputoutputlocaldatabasewidgetbase.ui \
+         qinputoutputpacswidgetbase.ui
 HEADERS += databaseconnection.h \
            pacsconnection.h \
            pacslistdb.h \
@@ -76,7 +77,8 @@ HEADERS += databaseconnection.h \
            utils.h \
            createinformationmodelobject.h \
            qinputoutputdicomdirwidget.h \
-           qinputoutputlocaldatabasewidget.h
+           qinputoutputlocaldatabasewidget.h \
+           qinputoutputpacswidget.h
 
 SOURCES += databaseconnection.cpp \
            pacsconnection.cpp \
@@ -131,7 +133,8 @@ SOURCES += databaseconnection.cpp \
            utils.cpp \
            createinformationmodelobject.cpp \
            qinputoutputdicomdirwidget.cpp \
-           qinputoutputlocaldatabasewidget.cpp
+           qinputoutputlocaldatabasewidget.cpp \
+           qinputoutputpacswidget.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
