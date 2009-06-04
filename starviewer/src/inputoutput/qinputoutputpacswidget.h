@@ -150,7 +150,7 @@ private slots:
     /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al fer una query d'estudis amb el pacs
      * @param id del PACS
      */
-    void errorQueringStudiesPacs( QString PacsID );
+    void errorQueringStudiesPacs(QString PacsID);
 
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
