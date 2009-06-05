@@ -5,9 +5,10 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "appimportfile.h"
+
+#include "settings.h"
 // qt
 #include <QFileDialog>
-#include <QSettings>
 #include <QFileInfo>
 // itk
 #include <itkGDCMSeriesFileNames.h> // per generar els noms dels arxius DICOM d'un directori
@@ -90,22 +91,22 @@ QStringList AppImportFile::generateFilenames( QString dirPath )
 
 void AppImportFile::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-ImportFile");
-    m_workingDirectory = settings.value("workingDirectory", ".").toString();
-    m_workingDicomDirectory = settings.value("workingDicomDirectory", ".").toString();
-    m_lastExtension = settings.value( "defaultExtension", "MetaIO Image (*.mhd)" ).toString();
-    settings.endGroup();
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-ImportFile/";
+
+    m_workingDirectory = settings.read( keyPrefix + "workingDirectory", ".").toString();
+    m_workingDicomDirectory = settings.read( keyPrefix + "workingDicomDirectory", ".").toString();
+    m_lastExtension = settings.read( keyPrefix + "defaultExtension", "MetaIO Image (*.mhd)" ).toString();
 }
 
 void AppImportFile::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-ImportFile");
-    settings.setValue("workingDirectory", m_workingDirectory );
-    settings.setValue("workingDicomDirectory", m_workingDicomDirectory );
-    settings.setValue("defaultExtension", m_lastExtension );
-    settings.endGroup();
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-ImportFile/";
+
+    settings.write( keyPrefix + "workingDirectory", m_workingDirectory );
+    settings.write( keyPrefix + "workingDicomDirectory", m_workingDicomDirectory );
+    settings.write( keyPrefix + "defaultExtension", m_lastExtension );
 }
 
 };  // end namespace udg

@@ -4,19 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-// Qt
-#include <QAction>
-#include <QSignalMapper>
-#include <QSettings>
-#include <QMenuBar>
-#include <QCloseEvent>
-#include <QMessageBox>
-#include <QApplication>
-#include <QLocale>
-#include <QProgressDialog>
-
-// els nostres widgets/elements de la plataforma
 #include "qapplicationmainwindow.h"
+
 #include "extensionhandler.h"
 #include "extensionworkspace.h"
 #include "logging.h"
@@ -24,19 +13,27 @@
 #include "patient.h"
 #include "qconfigurationdialog.h"
 #include "volume.h"
+#include "settings.h"
+#include "extensionfactory.h"
+#include "extensionmediatorfactory.h"
+#include "starviewerapplication.h"
+#include "statswatcher.h"
+#include "databaseinstallation.h"
 
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
 #endif
 
-// Mini - aplicacions
-#include "databaseinstallation.h"
-
-#include "extensionfactory.h"
-#include "extensionmediatorfactory.h"
-#include "starviewerapplication.h"
-#include "statswatcher.h"
+// Qt
+#include <QAction>
+#include <QSignalMapper>
+#include <QMenuBar>
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QApplication>
+#include <QLocale>
+#include <QProgressDialog>
 
 namespace udg{
 
@@ -341,8 +338,8 @@ void QApplicationMainWindow::createLanguageMenu()
 
 QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
-    QSettings settings;
-    QString defaultLocale = settings.value("Starviewer-Language/languageLocale", QLocale::system().name()).toString();
+    Settings settings;
+    QString defaultLocale = settings.read("Starviewer-Language/languageLocale", QLocale::system().name()).toString();
 
     QAction *action = new QAction(this);
     action->setText(language);
@@ -355,8 +352,8 @@ QAction *QApplicationMainWindow::createLanguageAction(const QString &language, c
 
 void QApplicationMainWindow::switchToLanguage(QString locale)
 {
-    QSettings settings;
-    settings.setValue("Starviewer-Language/languageLocale", locale);
+    Settings settings;
+    settings.write("Starviewer-Language/languageLocale", locale);
 
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
@@ -485,9 +482,9 @@ void QApplicationMainWindow::about()
 
 void QApplicationMainWindow::writeSettings()
 {
-    QSettings settings;
+    Settings settings;
 
-    settings.setValue("geometry", saveGeometry());
+    settings.write("geometry", saveGeometry());
 }
 
 void QApplicationMainWindow::enableExtensions()
@@ -529,12 +526,12 @@ void QApplicationMainWindow::showBetaVersionDialog()
 
 void QApplicationMainWindow::readSettings()
 {
-    QSettings settings;
+    Settings settings;
 
     if (!settings.contains("geometry"))
         this->showMaximized();
     else
-        this->restoreGeometry(settings.value("geometry").toByteArray());
+        this->restoreGeometry(settings.read("geometry").toByteArray());
 }
 
 void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
