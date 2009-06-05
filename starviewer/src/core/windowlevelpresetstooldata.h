@@ -22,7 +22,7 @@ Dins d'aquests valors, en podem tenir diverses procedències, com per exemple
 - Altres...
 
 Aquests valors predefinits es poden afegir o treure dinàmicament.
-Aquests valors poden ser afegits a través de la lectura d'algun tipus de format ( QSettings, XML, parelles atribut-valor, com en fitxers ".ini", etc )
+Aquests valors poden ser afegits a través de la lectura d'algun tipus de format ( Settings, XML, parelles atribut-valor, com en fitxers ".ini", etc )
 
 Cada valor vindrà definit per una descripció textual més el parell de valors WL/WW, com per exemple "Bone CT", WL: 500, WW: 2000.
 La descripció serà tractada com a camp clau, per tant no hi poden haver dos presets amb el mateix nom.

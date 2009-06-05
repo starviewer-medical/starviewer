@@ -16,12 +16,11 @@
 #include "identifier.h"
 #include "starviewerapplication.h"
 #include "logging.h"
-
+#include "settings.h"
 // Qt's
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
-#include <QSettings>
 #include <QApplication>
 #include <QDir>
 
@@ -66,9 +65,8 @@ void HangingProtocolsLoader::loadDefaults()
     }
 
     /// Hanging protocols definits per l'usuari
-    QSettings systemSettings;
-    QString userPath = systemSettings.value("Hanging-Protocols/path", UserHangingProtocolsPath ).toString(); 
-
+    Settings systemSettings;
+    QString userPath = systemSettings.read("Hanging-Protocols/path", UserHangingProtocolsPath ).toString(); 
     if( !userPath.isEmpty() )
         loadXMLFiles( userPath );
 }

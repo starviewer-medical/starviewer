@@ -12,6 +12,7 @@
 #include "logging.h"
 #include "q3dorientationmarker.h"
 #include "transferfunction.h"
+#include "settings.h"
 
 // include's qt
 #include <QString>
@@ -63,8 +64,8 @@
 #include <vtkPointData.h>
 #include <vtkEncodedGradientShader.h>
 
-// settings
-#include <QSettings>
+
+
 
 // avortar render
 #include "abortrendercommand.h"
@@ -722,10 +723,8 @@ void Q3DViewer::renderRayCastingObscurance()
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
-//     QSettings settings;
-//     settings.beginGroup( "3DViewer" );
-//     QString interpolation = settings.value( "interpolation" ).toString();
-//     settings.endGroup();
+//     Settings settings;
+//     QString interpolation = settings.read( "3DViewer/interpolation" ).toString();
 //     if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
 //     else m_volumeProperty->SetInterpolationTypeToNearest();
 
@@ -1059,29 +1058,27 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
         m_4DLinearRegressionGradientEstimator->SetInput( m_volumeMapper->GetInput() );  /// \todo hauria de funcionar sense això, però no !?!?!
     }
 
-    QSettings settings;
-    settings.beginGroup( "3DViewer" );
-    settings.beginGroup( "obscurances" );
-
+    Settings settings;
+    QString prefixKey = "3DViewer/obscurances/";
     switch ( quality )
     {
         case Low:
-            settings.beginGroup( "low" );
+            prefixKey += "low/";
             break;
         case Medium:
-            settings.beginGroup( "medium" );
+            prefixKey += "medium/";
             break;
         case High:
-            settings.beginGroup( "high" );
+            prefixKey += "high/";
             break;
         default:
             ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( quality ) );
     }
 
-    int numberOfDirections = settings.value( "numberOfDirections" ).toInt();
-    ObscuranceMainThread::Function function = static_cast<ObscuranceMainThread::Function>( settings.value( "function" ).toInt() );
-    ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.value( "variant" ).toInt() );
-    unsigned int gradientRadius = settings.value( "gradientRadius" ).toUInt();
+    int numberOfDirections = settings.read( prefixKey + "numberOfDirections" ).toInt();
+    ObscuranceMainThread::Function function = static_cast<ObscuranceMainThread::Function>( settings.read( prefixKey + "function" ).toInt() );
+    ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.read( prefixKey + "variant" ).toInt() );
+    unsigned int gradientRadius = settings.read( prefixKey + "gradientRadius" ).toUInt();
 
     double distance = m_vtkVolume->GetLength() / 2.0;   /// \todo de moment la meitat de la diagonal, però podria ser una altra funció
     // el primer paràmetre és el nombre de direccions
@@ -1092,10 +1089,6 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
     if ( m_4DLinearRegressionGradientEstimator->GetRadius() < gradientRadius )
         m_4DLinearRegressionGradientEstimator->SetRadius( gradientRadius );
-
-    settings.endGroup();    // qualitat
-    settings.endGroup();    // obscurances
-    settings.endGroup();    // 3DViewer
 
     m_obscuranceMainThread->setVolume( m_vtkVolume );
     m_obscuranceMainThread->setTransferFunction( *m_transferFunction );

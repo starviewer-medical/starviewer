@@ -9,6 +9,7 @@
 #include "q2dviewer.h"
 #include "logging.h"
 #include "volume.h"
+#include "settings.h"
 // definicions globals d'aplicació
 #include "starviewerapplication.h"
 // vtk
@@ -17,7 +18,6 @@
 // Qt
 #include <QFileInfo>
 #include <QFileDialog>
-#include <QSettings>
 #include <QMessageBox>
 #include <QString>
 #include <QApplication> // pel "wait cursor"
@@ -209,22 +209,22 @@ QString ScreenShotTool::compoundSelectedName()
 
 void ScreenShotTool::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("ScreenshotTool");
-    m_lastScreenShotPath = settings.value( "defaultSaveFolder", QDir::homePath() ).toString();
-    m_lastScreenShotExtensionFilter = settings.value( "defaultSaveExtension", PngFileFilter ).toString();
-    m_lastScreenShotFileName = settings.value( "defaultSaveName", "" ).toString();
-    settings.endGroup();
+    Settings settings;
+    QString keyPrefix = "ScreenshotTool/";
+    
+    m_lastScreenShotPath = settings.read( keyPrefix + "defaultSaveFolder", QDir::homePath() ).toString();
+    m_lastScreenShotExtensionFilter = settings.read( keyPrefix + "defaultSaveExtension", PngFileFilter ).toString();
+    m_lastScreenShotFileName = settings.read( keyPrefix + "defaultSaveName", "" ).toString();
 }
 
 void ScreenShotTool::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("ScreenshotTool");
-    settings.setValue("defaultSaveFolder", m_lastScreenShotPath );
-    settings.setValue("defaultSaveExtension", m_lastScreenShotExtensionFilter );
-    settings.setValue("defaultSaveName", m_lastScreenShotFileName );
-    settings.endGroup();
+    Settings settings;
+    QString keyPrefix = "ScreenshotTool/";
+
+    settings.write( keyPrefix + "defaultSaveFolder", m_lastScreenShotPath );
+    settings.write( keyPrefix + "defaultSaveExtension", m_lastScreenShotExtensionFilter );
+    settings.write( keyPrefix + "defaultSaveName", m_lastScreenShotFileName );
 }
 
 }

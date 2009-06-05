@@ -5,15 +5,17 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qlogviewer.h"
+
+#include "settings.h"
+#include "logging.h"
+#include "starviewerapplication.h"
+
+// qt
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
 #include <QTextCodec>
 #include <QFileDialog>
-#include <QSettings>
-
-#include "logging.h"
-#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -34,7 +36,7 @@ QLogViewer::~QLogViewer()
 
 void QLogViewer::updateData()
 {
-    // \TODO aquest directori s'hauria de guardar en alguna mena de qsettings o similar
+    // \TODO aquest directori s'hauria de guardar en alguna mena de settings o similar
     QFile logFile( udg::UserLogsFile );
     if ( !logFile.open( QFile::ReadOnly | QFile::Text) )
     {
@@ -72,14 +74,14 @@ void QLogViewer::saveLogFileAs()
 
 void QLogViewer::writeSettings()
 {
-	QSettings settings;
-    settings.setValue("logViewerDialogGeometry", saveGeometry());
+	Settings settings;
+    settings.write("logViewerDialogGeometry", saveGeometry());
 }
 
 void QLogViewer::readSettings()
 {
-    QSettings settings;
-    this->restoreGeometry(settings.value("logViewerDialogGeometry").toByteArray());
+    Settings settings;
+    this->restoreGeometry(settings.read("logViewerDialogGeometry").toByteArray());
 }
 
 }
