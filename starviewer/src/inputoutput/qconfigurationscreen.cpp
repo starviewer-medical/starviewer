@@ -132,11 +132,7 @@ void QConfigurationScreen::addPacs()
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
         pacs.setDescription( m_textDescription->text() );
-        if ( m_checkDefault->isChecked() )
-        {
-            pacs.setDefault( "S" );
-        }
-        else pacs.setDefault( "N" );
+        pacs.setIsDefault( m_checkDefault->isChecked() );
 
         INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
 
@@ -171,11 +167,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
         m_textLocation->setText( selectedPacs.getLocation() );
         m_textDescription->setText( selectedPacs.getDescription() );
         m_selectedPacsID = selectedPacs.getPacsID();
-        if ( selectedPacs.getDefault() == "S" )
-        {
-            m_checkDefault->setChecked( true );
-        }
-        else m_checkDefault->setChecked( false );
+        m_checkDefault->setChecked( selectedPacs.getIsDefault() );
     }
     else m_selectedPacsID = "";
 }
@@ -200,12 +192,7 @@ void QConfigurationScreen::updatePacs()
         pacs.setLocation( m_textLocation->text() );
         pacs.setDescription( m_textDescription->text() );
         pacs.setPacsID( m_selectedPacsID );
-        if ( m_checkDefault->isChecked() )
-        {
-            pacs.setDefault( "S" );
-        }
-        else pacs.setDefault( "N" );
-
+        pacs.setIsDefault( m_checkDefault->isChecked() );
 
         INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
 
@@ -256,12 +243,7 @@ void QConfigurationScreen::fillPacsListView()
         item->setText(4, pacs.getInstitution());
         item->setText(5, pacs.getLocation());
         item->setText(6, pacs.getDescription());
-
-        if (pacs.getDefault() == "S")
-        {
-            item->setText(7, tr("Yes"));
-        }
-        else item->setText(7, tr("No"));
+        item->setText(7, pacs.getIsDefault() ? tr("Yes") : tr("No" ) );
     }
 }
 

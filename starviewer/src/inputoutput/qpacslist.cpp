@@ -49,7 +49,7 @@ void QPacsList::refresh()
         item->setText(1, pacs.getAEPacs());
         item->setText(2, pacs.getInstitution());
         item->setText(3, pacs.getDescription());
-        item->setText(4, pacs.getDefault());
+        item->setText(4, pacs.getIsDefault() ? "S" : "N");
     }
 
     setSelectedDefaultPacs();
