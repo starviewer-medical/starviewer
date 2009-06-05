@@ -39,12 +39,6 @@ public slots:
     /// Carrega al ListView la Llista de Pacs disponibles
     void refresh();
 
-private:
-
-    ///Aquesta accio selecciona en el PacsListView els Pacs que tenen a 'S' a Default. Son els pacs que per defecte l'usuari te que es
-    ///realitzin les cerques
-    void setSelectedDefaultPacs();
-
 };
 
 };
