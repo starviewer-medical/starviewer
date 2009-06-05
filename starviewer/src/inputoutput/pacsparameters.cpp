@@ -38,16 +38,6 @@ QString PacsParameters::getPacsPort() const
     return m_pacsPort;
 }
 
-void PacsParameters::setAELocal(const QString &AETitle)
-{
-    m_myAETitle = AETitle;
-}
-
-QString PacsParameters::getAELocal() const
-{
-    return m_myAETitle;
-}
-
 void PacsParameters::setAEPacs(const QString &remoteServerAETitle)
 {
     m_pacsAETitle = remoteServerAETitle;
@@ -56,16 +46,6 @@ void PacsParameters::setAEPacs(const QString &remoteServerAETitle)
 QString PacsParameters::getAEPacs() const
 {
     return m_pacsAETitle;
-}
-
-void PacsParameters::setLocalPort(const QString &port)
-{
-    m_localPort = port;
-}
-
-QString PacsParameters::getLocalPort() const
-{
-    return m_localPort;
 }
 
 void PacsParameters::setInstitution(const QString &institution)
@@ -106,16 +86,6 @@ void PacsParameters::setDefault(const QString &isDefault)
 QString PacsParameters::getDefault() const
 {
     return m_pacsIsDefault;
-}
-
-void PacsParameters::setTimeOut(int timeoutInSeconds)
-{
-    m_connectionTimeOut = timeoutInSeconds; //convertim a ms
-}
-
-int PacsParameters::getTimeOut() const
-{
-    return m_connectionTimeOut;
 }
 
 void PacsParameters::setPacsID(QString ID)

@@ -34,14 +34,6 @@ public:
     /// Constructor buit de la classe
     PacsParameters();
 
-    /// Assigna/Retorna l'aet title de la nostra màquina local
-    void setAELocal(const QString &AETitle);
-    QString getAELocal() const;
-
-    /// Assigna/Retorna el port pel qual nosaltres volem rebre les imatges del PACS
-    void setLocalPort(const QString &port);
-    QString getLocalPort() const;
-
     /// Assigna/Retorna l'adreça al pacs al qual ens volem connectar
     void setPacsAddress(const QString &address);
     QString getPacsAddress() const;
@@ -69,11 +61,6 @@ public:
     /// Assigna/Retorna al Pacs si és el Predeterminat. Si val 'S' voldrà di que és el pacs predeterminat per realitzar les cerques
     void setDefault(const QString &isDefault);
     QString getDefault() const;
-
-    /// Assigna el timeout, en segons, de la connexio
-    void setTimeOut(int timeoutInSeconds);
-    /// Retorna el temps de time out en ms
-    int getTimeOut() const;
 
     /// Assigna/Retorna l'id del PACS, aquest és un camp clau per diferenciar els PACS que l'assigna l'aplicacio.
     void setPacsID(QString ID);
