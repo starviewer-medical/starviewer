@@ -15,10 +15,10 @@
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
 #include "drawer.h"
+#include "settings.h"
 
 // qt
 #include <QSlider> // pel control m_axialSlider
-#include <QSettings>
 #include <QSplitter>
 // vtk
 #include <vtkRenderer.h>
@@ -1367,39 +1367,35 @@ void QMPRExtension::updateThickSlab( int value )
 
 void QMPRExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-MPR");
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-MPR/";
 
-    if( settings.value("horizontalSplitter").toByteArray().isEmpty() )
+    if( settings.read( keyPrefix + "horizontalSplitter").toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().width()/2 << this->size().width()/2;
         m_horizontalSplitter->setSizes( list );
     }
     else
-        m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
+        m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
 
-    if( settings.value("verticalSplitter").toByteArray().isEmpty() )
+    if( settings.read( keyPrefix + "verticalSplitter").toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().height()/2 << this->size().height()/2;
         m_verticalSplitter->setSizes( list );
     }
     else
-        m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
-
-    settings.endGroup();
+        m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
 }
 
 void QMPRExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-MPR");
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-MPR/";
 
-    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
 }
 
 };  // end namespace udg

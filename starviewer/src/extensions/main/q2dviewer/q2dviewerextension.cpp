@@ -24,10 +24,10 @@
 // per poder fer screenshots desde menú
 #include "screenshottool.h" 
 #include "toolproxy.h"
+#include "settings.h"
 
 #include <QMenu>
 #include <QAction>
-#include <QSettings>
 #include <QPoint>
 #include <QGridLayout>
 #include <QProgressDialog>
@@ -463,16 +463,12 @@ void Q2DViewerExtension::updateDICOMInformationButton( int view )
 
 void Q2DViewerExtension::readSettings()
 {
-    QSettings settings;
-    m_profile = settings.value("Starviewer-App-2DViewer/profile").toString();
+    Settings settings;
+    m_profile = settings.read("Starviewer-App-2DViewer/profile").toString();
 }
 
 void Q2DViewerExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-2DViewer");
-
-    settings.endGroup();
 }
 
 void Q2DViewerExtension::synchronization( Q2DViewerWidget * viewer, bool active )

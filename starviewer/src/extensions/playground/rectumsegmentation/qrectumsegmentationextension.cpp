@@ -14,12 +14,11 @@
 #include "toolproxy.h"
 #include "editortool.h"
 #include "editortooldata.h"
-
+#include "settings.h"
 //Qt
 #include <QString>
 #include <QAction>
 #include <QToolBar>
-#include <QSettings>
 #include <QMessageBox>
 #include <QFileDialog>
 
@@ -717,25 +716,22 @@ void QRectumSegmentationExtension::toolChanged( int but )
 
 void QRectumSegmentationExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-RectumSegmentation");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-RectumSegmentation/";
 
-    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
-    m_savingMaskDirectory = settings.value( "savingDirectory", "." ).toString();
-    settings.endGroup();
+    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
+    m_savingMaskDirectory = settings.read( keyPrefix + "savingDirectory", "." ).toString();
 }
 
 void QRectumSegmentationExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-RectumSegmentation");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-RectumSegmentation/";
 
-    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-    settings.setValue("savingDirectory", m_savingMaskDirectory );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.write( keyPrefix + "savingDirectory", m_savingMaskDirectory );
 }
 
 }

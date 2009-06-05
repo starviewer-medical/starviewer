@@ -13,9 +13,9 @@
 #include "toolproxy.h"
 #include "editortool.h"
 #include "editortooldata.h"
+#include "settings.h"
 // Qt
 #include <QMessageBox>
-#include <QSettings>
 #include <QFileDialog>
 // VTK
 #include <vtkActor.h>
@@ -256,28 +256,24 @@ void QDifuPerfuSegmentationExtension::createConnections()
 
 void QDifuPerfuSegmentationExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-DiffusionPerfusionSegmentation");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-DiffusionPerfusionSegmentation/";
 
-    m_horizontalSplitter->restoreState( settings.value( "horizontalSplitter" ).toByteArray() );
-    m_viewerSplitter->restoreState( settings.value( "viewerSplitter" ).toByteArray() );
-    m_savingMaskDirectory = settings.value( "savingDirectory", "." ).toString();
-
-    settings.endGroup();
+    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter" ).toByteArray() );
+    m_viewerSplitter->restoreState( settings.read( keyPrefix + "viewerSplitter" ).toByteArray() );
+    m_savingMaskDirectory = settings.read( keyPrefix + "savingDirectory", "." ).toString();
 }
 
 void QDifuPerfuSegmentationExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup( "StarViewer-App-DiffusionPerfusionSegmentation" );
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-DiffusionPerfusionSegmentation/";
 
-    settings.setValue( "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
     ///Movem l'splitter a la dreta pq quan es torni obrir només es vegi la difu
     //this->moveViewerSplitterToRight();
-    settings.setValue( "viewerSplitter", m_viewerSplitter->saveState() );
-    settings.setValue("savingDirectory", m_savingMaskDirectory );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "viewerSplitter", m_viewerSplitter->saveState() );
+    settings.write( keyPrefix + "savingDirectory", m_savingMaskDirectory );
 }
 
 void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )

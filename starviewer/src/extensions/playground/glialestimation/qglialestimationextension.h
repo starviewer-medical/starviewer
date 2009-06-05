@@ -58,9 +58,6 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-    /// Guarda i llegeix les característiques
-    void readSettings();
-    void writeSettings();
     bool findProbableSeries( );
 
     void createColorMap( );

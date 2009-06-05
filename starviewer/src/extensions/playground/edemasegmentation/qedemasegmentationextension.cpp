@@ -11,10 +11,10 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "toolmanager.h"
+#include "settings.h"
 //Qt
 #include <QString>
 #include <QAction>
-#include <QSettings>
 #include <QMessageBox>
 #include <QFileDialog>
 // VTK
@@ -1107,26 +1107,23 @@ void QEdemaSegmentationExtension::saveActivedMaskVolume()
 
 void QEdemaSegmentationExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-EdemaSegmentation");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-EdemaSegmentation/";
 
-    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
-    m_savingMaskDirectory = settings.value( "savingDirectory", "." ).toString();
-    //std::cout<<"Saving directory: "<<qPrintable( m_savingMaskDirectory )<<std::endl;
-    settings.endGroup();
+    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
+    m_savingMaskDirectory = settings.read( keyPrefix + "savingDirectory", "." ).toString();
+    
 }
 
 void QEdemaSegmentationExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-EdemaSegmentation");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-EdemaSegmentation/";
 
-    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-    settings.setValue("savingDirectory", m_savingMaskDirectory );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.write( keyPrefix + "savingDirectory", m_savingMaskDirectory );
 }
 
 }

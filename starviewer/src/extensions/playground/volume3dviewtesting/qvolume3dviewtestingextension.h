@@ -76,10 +76,6 @@ private:
     /// Estableix les connexions de signals i slots
     void createConnections();
 
-    /// Lectura/escriptura de configuració
-    void readSettings();
-    void writeSettings();
-
     void enableObscuranceRendering( bool on );
 
     /// Fa que es cridi updateView() quan canvia qualsevol element de la interfície.

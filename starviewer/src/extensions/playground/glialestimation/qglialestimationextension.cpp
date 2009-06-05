@@ -15,6 +15,7 @@
 #include "toolmanager.h"
 #include "toolconfiguration.h"
 #include "patientbrowsermenu.h"
+// TODO Super guarrada!!! Estem vinculant una extensió amb una altre!!!!
 #include "../diffusionperfusionsegmentation/itkRegistre3DAffine.h"
 #include "strokesegmentationmethod.h"
 
@@ -25,7 +26,6 @@
 #include <QString>
 #include <QAction>
 #include <QToolBar>
-#include <QSettings>
 #include <QMessageBox>
 #include <QContextMenuEvent>
 
@@ -60,20 +60,15 @@ QGlialEstimationExtension::QGlialEstimationExtension( QWidget *parent )
     m_layoutDirection = QGlialEstimationExtension::Horizontal;
 
     createConnections();
-
     createActions();
-    readSettings();
 
     activateNewViewer( m_viewersLayout->getViewerWidget( 0 ) );
 }
 
 QGlialEstimationExtension::~QGlialEstimationExtension()
 {
-
     delete m_toolManager;
     delete m_rotateClockWiseAction;
-
-    writeSettings();
 }
 
 void QGlialEstimationExtension::createActions()
@@ -1529,18 +1524,6 @@ void QGlialEstimationExtension::setRegistrationOpacity(int op)
         m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayInput(m_registeredVolume);
         m_viewersLayout->getViewerWidget(2)->getViewer()->refresh();
     }
-}
-
-void QGlialEstimationExtension::readSettings()
-{
-    QSettings settings;
-//     m_verticalSplitter->restoreState( settings.value("StarViewer-App-GlialEstimation/verticalSplitter").toByteArray() );
-}
-
-void QGlialEstimationExtension::writeSettings()
-{
-    QSettings settings;
-//     settings.setValue("StarViewer-App-GlialEstimation/verticalSplitter", m_verticalSplitter->saveState() );
 }
 
 void QGlialEstimationExtension::changeLayout()
