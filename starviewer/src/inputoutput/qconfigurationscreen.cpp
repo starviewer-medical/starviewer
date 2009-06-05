@@ -272,7 +272,6 @@ void QConfigurationScreen::test()
     PacsManager pacsList;
     PacsServer pacsServer;
     QString message;
-    StarviewerSettings settings;
 
     //mirem que hi hagi algun element (pacs) seleccionat per a poder testejar, altrament informem de que cal seleccionar un node
     if ( m_PacsTreeView->selectedItems().count() > 0 )
@@ -283,7 +282,6 @@ void QConfigurationScreen::test()
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
         pacs.setPacsAddress( m_textAddress->text() );
-        pacs.setAELocal( settings.getAETitleMachine() );
         pacsServer.setPacs( pacs );
 
         state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );

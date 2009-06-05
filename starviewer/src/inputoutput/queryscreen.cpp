@@ -289,14 +289,11 @@ void QueryScreen::searchStudy()
 Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
 {
     QList<PacsParameters> filledPacsParameters;
-    StarviewerSettings settings;
 
     //TODO PacsParameters no hauria de contenir el AETitle i el timeout
     //Hem d'afegir a les dades de pacs parameters el nostre aetitle i timeout
     foreach(PacsParameters pacs, listPacsToQuery)
     {
-        pacs.setAELocal(settings.getAETitleMachine());
-        pacs.setTimeOut(settings.getTimeout().toInt());
         filledPacsParameters.append(pacs);
     }
 

@@ -15,6 +15,7 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
+#include "starviewersettings.h"
 
 #include <QString>
 
@@ -40,7 +41,7 @@ void QQueryStudyThread::run()
     //creem la connexió
     PacsServer serverSCP(m_param);
 
-    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + m_param.getAELocal() + "; AEPACS= " + m_param.getAEPacs() + "; PACS Adr= " + m_param.getPacsAddress() + "; PACS Port= " + m_param.getPacsPort() + ";" );
+    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + StarviewerSettings().getAETitleMachine() + "; AEPACS= " + m_param.getAEPacs() + "; PACS Adr= " + m_param.getPacsAddress() + "; PACS Port= " + m_param.getPacsPort() + ";" );
 
     state = serverSCP.connect( PacsServer::query,PacsServer::studyLevel );
 

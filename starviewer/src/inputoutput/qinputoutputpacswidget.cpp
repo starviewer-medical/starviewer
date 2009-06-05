@@ -388,14 +388,11 @@ void QInputOutputPacsWidget::view()
 Status QInputOutputPacsWidget::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
 {
     QList<PacsParameters> filledPacsParameters;
-    StarviewerSettings settings;
 
     //TODO PacsParameters no hauria de contenir el AETitle i el timeout
     //Hem d'afegir a les dades de pacs parameters el nostre aetitle i timeout
     foreach(PacsParameters pacs, listPacsToQuery)
     {
-        pacs.setAELocal(settings.getAETitleMachine());
-        pacs.setTimeOut(settings.getTimeout().toInt());
         filledPacsParameters.append(pacs);
     }
 
@@ -406,7 +403,6 @@ Status QInputOutputPacsWidget::queryMultiplePacs(DicomMask searchMask, QList<Pac
 
 void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, Study *studyToRetrieve)
 {
-    StarviewerSettings settings;
     QString defaultSeriesUID;
     Operation operation;
     PacsParameters pacs;
@@ -414,13 +410,7 @@ void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, Dicom
     QApplication::setOverrideCursor(QCursor (Qt::WaitCursor));
 
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    PacsManager pacsManager;
-    pacs = pacsManager.queryPacs(pacsIdToRetrieve);
-
-    //emplanem els parametres locals per conenctar amb el pacs amb dades del starviewersettings
-    pacs.setAELocal(settings.getAETitleMachine());
-    pacs.setTimeOut(settings.getTimeout().toInt(NULL, 10));
-    pacs.setLocalPort(settings.getLocalPort());
+    pacs = PacsManager().queryPacs(pacsIdToRetrieve);
 
     //definim l'operació
     operation.setPacsParameters(pacs);
@@ -478,12 +468,7 @@ QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanc
 PacsServer QInputOutputPacsWidget::getPacsServerByPacsID(QString pacsID)
 {
     PacsParameters pacsParameters;
-    PacsManager pacsManager;
-    pacsParameters = pacsManager.queryPacs(pacsID);//cerquem els paràmetres del Pacs 
-
-    StarviewerSettings settings;
-    pacsParameters.setAELocal(settings.getAETitleMachine()); //especifiquem el nostres AE
-    pacsParameters.setTimeOut(settings.getTimeout().toInt(NULL, 10)); //li especifiquem el TimeOut
+    pacsParameters = PacsManager().queryPacs(pacsID);//cerquem els paràmetres del Pacs 
 
     PacsServer pacsServer;
     pacsServer.setPacs(pacsParameters);

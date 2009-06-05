@@ -362,7 +362,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
     // set calling and called AE titles
     //el c_str, converteix l'string que ens retornen les funcions get a un char
-    ASC_setAPTitles( m_params , qPrintable(m_pacs.getAELocal()) , qPrintable(m_pacs.getAEPacs()) , NULL );
+    ASC_setAPTitles( m_params , qPrintable(settings.getAETitleMachine()) , qPrintable(m_pacs.getAEPacs()) , NULL );
 
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
@@ -390,7 +390,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond = configureEcho();
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
+                        state = m_pacsNetwork->createNetworkQuery( settings.getTimeout().toInt() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkQuery();
@@ -400,7 +400,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond = configureFind( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
+                        state = m_pacsNetwork->createNetworkQuery( settings.getTimeout().toInt() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkQuery();
@@ -410,7 +410,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond=configureMove( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkRetrieve( m_pacs.getLocalPort().toInt() , m_pacs.getTimeOut() );
+                        state = m_pacsNetwork->createNetworkRetrieve( settings.getLocalPort().toInt() , settings.getTimeout().toInt() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkRetrieve();
@@ -420,7 +420,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond = configureStore();
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkQuery( m_pacs.getTimeOut() );
+                        state = m_pacsNetwork->createNetworkQuery( settings.getTimeout().toInt() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkQuery();
