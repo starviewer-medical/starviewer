@@ -13,11 +13,11 @@
 #include "series.h"
 #include "image.h"
 #include "toolmanager.h"
+#include "settings.h"
 
 //QT
 #include <QString>
 #include <QAction>
-#include <QSettings>
 #include <QSize>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -159,24 +159,20 @@ void QLandmarkRegistrationExtension::createConnections()
 
 void QLandmarkRegistrationExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-LandmarkRegistration");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-LandmarkRegistration/";
 
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
-    m_verticalSplitter2->restoreState( settings.value("verticalSplitter2").toByteArray() );
-
-    settings.endGroup();
+    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
+    m_verticalSplitter2->restoreState( settings.read( keyPrefix + "verticalSplitter2").toByteArray() );
 }
 
 void QLandmarkRegistrationExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-LandmarkRegistration");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-LandmarkRegistration/";
 
-    settings.setValue("verticalSplitter" , m_verticalSplitter->saveState() );
-    settings.setValue("verticalSplitter2", m_verticalSplitter2->saveState() );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "verticalSplitter" , m_verticalSplitter->saveState() );
+    settings.write( keyPrefix + "verticalSplitter2", m_verticalSplitter2->saveState() );
 }
 
 void QLandmarkRegistrationExtension::setInput( Volume *input )

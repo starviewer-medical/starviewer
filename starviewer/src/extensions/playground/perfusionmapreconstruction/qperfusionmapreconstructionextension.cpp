@@ -20,6 +20,7 @@
 #include "hoverpoints.h"
 #include "mathtools.h" // pel PI
 #include "qgraphicplotwidget.h"
+#include "settings.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -30,7 +31,6 @@
 #include <QPair>
 #include <QAction>
 #include <QToolBar>
-#include <QSettings>
 #include <QMessageBox>
 #include <QContextMenuEvent>
 #include <QDataStream>
@@ -1126,23 +1126,20 @@ bool QPerfusionMapReconstructionExtension::findProbableSeries( )
 
 void QPerfusionMapReconstructionExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-PerfusionMapReconstruction");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-PerfusionMapReconstruction/";
 
-    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
-    settings.endGroup();
+    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
 }
 
 void QPerfusionMapReconstructionExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-PerfusionMapReconstruction");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-PerfusionMapReconstruction/";
 
-    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
 }
 
 }

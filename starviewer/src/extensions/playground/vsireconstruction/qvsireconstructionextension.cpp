@@ -14,6 +14,7 @@
 #include "patient.h"
 #include "toolmanager.h"
 #include "patientbrowsermenu.h"
+#include "settings.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -22,7 +23,6 @@
 #include <QString>
 #include <QAction>
 #include <QToolBar>
-#include <QSettings>
 #include <QMessageBox>
 #include <QContextMenuEvent>
 
@@ -31,13 +31,11 @@
 #include <vtkLookupTable.h>
 #include <vtkImageMapToWindowLevelColors.h>
 
-
 // ITK
 #include <itkImage.h>
 #include <itkImageFileWriter.h>
 #include <itkCurvatureFlowImageFilter.h>
 #include <itkCastImageFilter.h>
-
 
 namespace udg {
 
@@ -2122,27 +2120,24 @@ bool QVSIReconstructionExtension::findProbableSeries( )
 
 void QVSIReconstructionExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-VSIReconstruction");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
-    m_verticalImageSplitter->restoreState( settings.value("verticalImageSplitter").toByteArray() );
-    m_horizontalImageSplitter->restoreState( settings.value("horizontalImageSplitter").toByteArray() );
-    settings.endGroup();
+    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
+    m_verticalImageSplitter->restoreState( settings.read( keyPrefix + "verticalImageSplitter").toByteArray() );
+    m_horizontalImageSplitter->restoreState( settings.read( keyPrefix + "horizontalImageSplitter").toByteArray() );
 }
 
 void QVSIReconstructionExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("StarViewer-App-VSIReconstruction");
+    Settings settings;
+    QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-    settings.setValue("horizontalImageSplitter", m_horizontalImageSplitter->saveState() );
-    settings.setValue("verticalImageSplitter", m_verticalImageSplitter->saveState() );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.write( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter->saveState() );
+    settings.write( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter->saveState() );
 }
 
 }

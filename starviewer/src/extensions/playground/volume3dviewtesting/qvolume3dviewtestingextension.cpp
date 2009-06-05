@@ -11,10 +11,10 @@
 #include "transferfunctionio.h"
 #include "renderingstyle.h"
 #include "starviewerapplication.h"
+#include "settings.h"
 // qt
 #include <QAction>
 #include <QFileDialog>
-#include <QSettings>
 #include <QStandardItemModel>
 #include <QTimer>
 // vtk
@@ -38,7 +38,6 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     loadClutPresets();
     loadRenderingStyles();
     createConnections();
-    readSettings();
     updateUiForRenderingMethod( m_renderingMethodComboBox->currentIndex() );
     m_obscuranceCheckBox->hide(); m_obscuranceFactorLabel->hide(); m_obscuranceFactorDoubleSpinBox->hide();
 
@@ -54,7 +53,6 @@ QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
     // el que aquí volem fer és forçar a eliminar primer totes les tools abans de que s'esborri el viewer
     // TODO potser caldria refactoritzar el nom d'aquest mètode o crear-ne un per aquesta tasca
     m_toolManager->disableAllToolsTemporarily();
-    writeSettings();
 }
 
 void QVolume3DViewTestingExtension::initializeTools()
@@ -385,20 +383,6 @@ void QVolume3DViewTestingExtension::changeViewerTransferFunction( )
     m_editorByValues->setTransferFunction( *(m_3DView->getTransferFunction()) );
 }
 
-void QVolume3DViewTestingExtension::readSettings()
-{
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-3DTesting");
-    settings.endGroup();
-}
-
-void QVolume3DViewTestingExtension::writeSettings()
-{
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-3DTesting");
-    settings.endGroup();
-}
-
 void QVolume3DViewTestingExtension::computeOrCancelObscurance()
 {
     this->setCursor( QCursor(Qt::WaitCursor) );
@@ -470,9 +454,9 @@ void QVolume3DViewTestingExtension::render()
 
 void QVolume3DViewTestingExtension::loadClut()
 {
-    QSettings settings;
-    settings.beginGroup( "Starviewer-App-3DTesting" );
-    QString customClutsDirPath = settings.value( "customClutsDir", QString() ).toString();
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-3DTesting/";
+    QString customClutsDirPath = settings.read( keyPrefix + "customClutsDir", QString() ).toString();
 
     QString transferFunctionFileName =
             QFileDialog::getOpenFileName( this, tr("Load CLUT"),
@@ -487,18 +471,15 @@ void QVolume3DViewTestingExtension::loadClut()
         emit newTransferFunction();
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.setValue( "customClutsDir", transferFunctionFileInfo.absolutePath() );
+        settings.write( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
-
 
 void QVolume3DViewTestingExtension::saveClut()
 {
-    QSettings settings;
-    settings.beginGroup( "Starviewer-App-3DTesting" );
-    QString customClutsDirPath = settings.value( "customClutsDir", QString() ).toString();
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-3DTesting/";
+    QString customClutsDirPath = settings.read( keyPrefix + "customClutsDir", QString() ).toString();
 
     QFileDialog saveDialog( this, tr("Save CLUT"), customClutsDirPath, tr("Transfer function files (*.tf);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
@@ -511,12 +492,9 @@ void QVolume3DViewTestingExtension::saveClut()
         TransferFunctionIO::toFile( transferFunctionFileName, currentEditor->getTransferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.setValue( "customClutsDir", transferFunctionFileInfo.absolutePath() );
+        settings.write( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 }
-
 
 void QVolume3DViewTestingExtension::switchEditor()
 {
@@ -527,14 +505,12 @@ void QVolume3DViewTestingExtension::switchEditor()
     currentEditor->setTransferFunction( currentTransferFunction );
 }
 
-
 void QVolume3DViewTestingExtension::applyEditorClut()
 {
     QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
     applyClut( currentEditor->getTransferFunction() );
     this->render();
 }
-
 
 void QVolume3DViewTestingExtension::toggleClutEditor()
 {
@@ -547,7 +523,6 @@ void QVolume3DViewTestingExtension::toggleClutEditor()
     else    // hide
         hideClutEditor();
 }
-
 
 void QVolume3DViewTestingExtension::hideClutEditor()
 {

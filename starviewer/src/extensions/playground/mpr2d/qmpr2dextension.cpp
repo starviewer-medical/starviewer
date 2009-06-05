@@ -14,10 +14,11 @@
 #include "logging.h"
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
+#include "settings.h"
+
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
-#include <QSettings>
 #include <QTextStream>
 #include <QSplitter>
 #include <QPushButton>
@@ -1406,43 +1407,38 @@ void QMPR2DExtension::updateThickSlab( int value )
 
 void QMPR2DExtension::readSettings()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-MPR");
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-MPR/";
 
-    if( settings.value("horizontalSplitter").toByteArray().isEmpty() )
+    if( settings.read( keyPrefix + "horizontalSplitter").toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().width()/2 << this->size().width()/2;
         m_horizontalSplitter->setSizes( list );
     }
     else
-        m_horizontalSplitter->restoreState( settings.value("horizontalSplitter").toByteArray() );
+        m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
 
-    if( settings.value("verticalSplitter").toByteArray().isEmpty() )
+    if( settings.read( keyPrefix + "verticalSplitter").toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().height()/2 << this->size().height()/2;
         m_verticalSplitter->setSizes( list );
     }
     else
-        m_verticalSplitter->restoreState( settings.value("verticalSplitter").toByteArray() );
+        m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
 
-    m_defaultSaveDir = settings.value("defaultSaveDir", ".").toString();
-
-    settings.endGroup();
+    m_defaultSaveDir = settings.read( keyPrefix + "defaultSaveDir", ".").toString();
 }
 
 void QMPR2DExtension::writeSettings()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-App-MPR");
+    Settings settings;
+    QString keyPrefix = "Starviewer-App-MPR/";
 
-    settings.setValue("horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue("verticalSplitter", m_verticalSplitter->saveState() );
-
-    settings.setValue("defaultSaveDir", m_defaultSaveDir );
-
-    settings.endGroup();
+    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.write( keyPrefix + "defaultSaveDir", m_defaultSaveDir );
 }
 
 };  // end namespace udg

@@ -1,15 +1,5 @@
 #include "qexperimental3dextension.h"
 
-#include <QButtonGroup>
-#include <QColorDialog>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QSet>
-#include <QSettings>
-#include <QStringListModel>
-#include <QTemporaryFile>
-#include <QTextStream>
-
 #include "experimental3dvolume.h"
 #include "informationtheory.h"
 #include "logging.h"
@@ -20,10 +10,18 @@
 #include "viewpointgenerator.h"
 #include "viewpointinformationchannel.h"
 #include "volumereslicer.h"
+#include "settings.h"
 
+#include <QButtonGroup>
+#include <QColorDialog>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QSet>
+#include <QStringListModel>
+#include <QTemporaryFile>
+#include <QTextStream>
 
 namespace udg {
-
 
 QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
  : QWidget( parent ), m_volume( 0 ),
@@ -738,19 +736,17 @@ void QExperimental3DExtension::createConnections()
 
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
 {
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    Settings settings;
+    QString keyPrefix = "Experimental3D/";
 
-    QString dir = settings.value( settingsDirKey, QString() ).toString();
+    QString dir = settings.read( keyPrefix + settingsDirKey, QString() ).toString();
     QString fileName = QFileDialog::getOpenFileName( this, caption, dir, filter );
 
     if ( !fileName.isNull() )
     {
         QFileInfo fileInfo( fileName );
-        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
+        settings.write( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
     }
-
-    settings.endGroup();
 
     return fileName;
 }
@@ -760,10 +756,10 @@ QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirK
 {
     QString fileName;
 
-    QSettings settings;
-    settings.beginGroup( "Experimental3D" );
+    Settings settings;
+    QString keyPrefix = "Experimental3D/";
 
-    QString dir = settings.value( settingsDirKey, QString() ).toString();
+    QString dir = settings.read( keyPrefix + settingsDirKey, QString() ).toString();
     QFileDialog saveDialog( this, caption, dir, filter );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
     saveDialog.setDefaultSuffix( defaultSuffix );
@@ -772,10 +768,9 @@ QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirK
     {
         fileName = saveDialog.selectedFiles().first();
         QFileInfo fileInfo( fileName );
-        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
+        settings.write( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
     }
 
-    settings.endGroup();
 
     return fileName;
 }
