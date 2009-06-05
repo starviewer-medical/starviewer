@@ -23,7 +23,6 @@ QPacsList::QPacsList( QWidget *parent )
     setupUi( this );
 
     m_PacsTreeView->setColumnHidden(0, true); //la columna PacsId està amagada
-    m_PacsTreeView->setColumnHidden(4, true); //La columna default està amagada
 
     refresh();
 }
@@ -49,24 +48,8 @@ void QPacsList::refresh()
         item->setText(1, pacs.getAEPacs());
         item->setText(2, pacs.getInstitution());
         item->setText(3, pacs.getDescription());
-        item->setText(4, pacs.getIsDefault() ? "S" : "N");
-    }
 
-    setSelectedDefaultPacs();
-}
-
-void QPacsList::setSelectedDefaultPacs()
-{
-    QList<QTreeWidgetItem *> qPacsList( m_PacsTreeView->findItems( "*" , Qt::MatchWildcard , 0 ) );
-    QTreeWidgetItem *item;
-
-    for  (int i = 0; i < qPacsList.count(); i++ )
-    {
-        item = qPacsList.at( i );
-        if ( item->text(4) == "S" )
-        {
-            m_PacsTreeView->setItemSelected( item,true );
-        }
+        item->setSelected(pacs.getIsDefault());
     }
 }
 
