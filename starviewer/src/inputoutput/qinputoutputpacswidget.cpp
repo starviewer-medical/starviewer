@@ -24,7 +24,7 @@
 #include "multiplequerystudy.h"
 #include "querypacs.h"
 #include "pacsserver.h"
-#include "pacslistdb.h"
+#include "pacsmanager.h"
 #include "pacsconnection.h"
 #include "study.h"
 #include "qoperationstatescreen.h"
@@ -190,7 +190,7 @@ void QInputOutputPacsWidget::storeStudiesToPacs()
         StarviewerSettings settings;
         foreach(QString studyUID, studiesUIDList)
         {
-            PacsListDB pacsListDB;
+            PacsManager pacsManager;
             PacsParameters pacs;
             Operation storeStudyOperation;
             Study *study;
@@ -223,7 +223,7 @@ void QInputOutputPacsWidget::storeStudiesToPacs()
 
             delete patient;
             //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-            pacs = pacsListDB.queryPacs(selectedPacsList.value(0).getPacsID());
+            pacs = pacsManager.queryPacs(selectedPacsList.value(0).getPacsID());
             pacs.setAELocal(settings.getAETitleMachine());
             pacs.setTimeOut(settings.getTimeout().toInt());
             storeStudyOperation.setPacsParameters(pacs);
@@ -414,8 +414,8 @@ void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, Dicom
     QApplication::setOverrideCursor(QCursor (Qt::WaitCursor));
 
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    PacsListDB pacsListDB;
-    pacs = pacsListDB.queryPacs(pacsIdToRetrieve);
+    PacsManager pacsManager;
+    pacs = pacsManager.queryPacs(pacsIdToRetrieve);
 
     //emplanem els parametres locals per conenctar amb el pacs amb dades del starviewersettings
     pacs.setAELocal(settings.getAETitleMachine());
@@ -478,8 +478,8 @@ QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanc
 PacsServer QInputOutputPacsWidget::getPacsServerByPacsID(QString pacsID)
 {
     PacsParameters pacsParameters;
-    PacsListDB pacsListDB;
-    pacsParameters = pacsListDB.queryPacs(pacsID);//cerquem els paràmetres del Pacs 
+    PacsManager pacsManager;
+    pacsParameters = pacsManager.queryPacs(pacsID);//cerquem els paràmetres del Pacs 
 
     StarviewerSettings settings;
     pacsParameters.setAELocal(settings.getAETitleMachine()); //especifiquem el nostres AE
@@ -493,11 +493,11 @@ PacsServer QInputOutputPacsWidget::getPacsServerByPacsID(QString pacsID)
 
 void QInputOutputPacsWidget::errorConnectingPacs(QString IDPacs)
 {
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
     PacsParameters errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsListDB.queryPacs(IDPacs);
+    errorPacs = pacsManager.queryPacs(IDPacs);
 
     errorMessage = tr("Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct.")
         .arg(errorPacs.getAEPacs())
@@ -537,11 +537,11 @@ DicomMask QInputOutputPacsWidget::buildImageDicomMask(QString studyInstanceUID, 
 
 void QInputOutputPacsWidget::errorQueringStudiesPacs(QString PacsID)
 {
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
     PacsParameters errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsListDB.queryPacs(PacsID);
+    errorPacs = pacsManager.queryPacs(PacsID);
     errorMessage = tr("Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct")
         .arg(errorPacs.getAEPacs())
         .arg(errorPacs.getInstitution()
@@ -554,7 +554,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
 {
     QString message;
     StarviewerSettings settings;
-    PacsParameters pacs = PacsListDB().queryPacs(pacsID);
+    PacsParameters pacs = PacsManager().queryPacs(pacsID);
 
     switch (error)
     {

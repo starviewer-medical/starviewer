@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "pacslistdb.h"
+#include "pacsmanager.h"
 
 #include <QString>
 #include <QSettings>
@@ -15,17 +15,17 @@
 
 namespace udg {
 
-const QString PacsListDB::PacsListConfigurationSectionName = "PacsList";
+const QString PacsManager::PacsListConfigurationSectionName = "PacsList";
 
-PacsListDB::PacsListDB()
+PacsManager::PacsManager()
 {
 }
 
-PacsListDB::~PacsListDB()
+PacsManager::~PacsManager()
 {
 }
 
-bool PacsListDB::insertPacs(const PacsParameters &pacs)
+bool PacsManager::insertPacs(const PacsParameters &pacs)
 {
     if(!this->existPacs(pacs))
     {
@@ -39,7 +39,7 @@ bool PacsListDB::insertPacs(const PacsParameters &pacs)
     return false;
 }
 
-void PacsListDB::updatePacs(const PacsParameters &pacsToUpdate)
+void PacsManager::updatePacs(const PacsParameters &pacsToUpdate)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
 
@@ -48,12 +48,12 @@ void PacsListDB::updatePacs(const PacsParameters &pacsToUpdate)
     this->saveConfiguredPacsListToDisk(pacsList);
 }
 
-QList<PacsParameters> PacsListDB::queryPacsList()
+QList<PacsParameters> PacsManager::queryPacsList()
 {
     return getConfiguredPacsList();
 }
 
-QList<PacsParameters> PacsListDB::queryDefaultPacs()
+QList<PacsParameters> PacsManager::queryDefaultPacs()
 {
     QList<PacsParameters> defaultPacs;
     QSettings settings;
@@ -70,7 +70,7 @@ QList<PacsParameters> PacsListDB::queryDefaultPacs()
     return defaultPacs;
 }
 
-PacsParameters PacsListDB::queryPacs(QString pacsIDString)
+PacsParameters PacsManager::queryPacs(QString pacsIDString)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
     bool ok = false;
@@ -90,7 +90,7 @@ PacsParameters PacsListDB::queryPacs(QString pacsIDString)
     return pacs;
 }
 
-bool PacsListDB::existPacs(const PacsParameters &pacs)
+bool PacsManager::existPacs(const PacsParameters &pacs)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
 
@@ -107,7 +107,7 @@ bool PacsListDB::existPacs(const PacsParameters &pacs)
     return false;
 }
 
-bool PacsListDB::deletePacs(QString pacsIDString)
+bool PacsManager::deletePacs(QString pacsIDString)
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
     bool ok = false;
@@ -121,7 +121,7 @@ bool PacsListDB::deletePacs(QString pacsIDString)
     return true;
 }
 
-QList<PacsParameters> PacsListDB::getConfiguredPacsList()
+QList<PacsParameters> PacsManager::getConfiguredPacsList()
 {
     QList<PacsParameters> configuredPacsList;
     QSettings settings;
@@ -138,7 +138,7 @@ QList<PacsParameters> PacsListDB::getConfiguredPacsList()
     return configuredPacsList;
 }
 
-void PacsListDB::saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacsList)
+void PacsManager::saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacsList)
 {
     QSettings settings;
 
@@ -160,7 +160,7 @@ void PacsListDB::saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacsL
     settings.endArray();
 }
 
-PacsParameters PacsListDB::fillPacs(const QSettings &settings)
+PacsParameters PacsManager::fillPacs(const QSettings &settings)
 {
     PacsParameters pacsParameters;
 

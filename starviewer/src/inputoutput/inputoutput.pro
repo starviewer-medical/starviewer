@@ -23,7 +23,7 @@ FORMS += qconfigurationscreenbase.ui \
          qinputoutputpacswidgetbase.ui
 HEADERS += databaseconnection.h \
            pacsconnection.h \
-           pacslistdb.h \
+           pacsmanager.h \
            pacsnetwork.h \
            pacsparameters.h \
            pacsserver.h \
@@ -82,7 +82,7 @@ HEADERS += databaseconnection.h \
 
 SOURCES += databaseconnection.cpp \
            pacsconnection.cpp \
-           pacslistdb.cpp \
+           pacsmanager.cpp \
            pacsnetwork.cpp \
            pacsparameters.cpp \
            pacsserver.cpp \

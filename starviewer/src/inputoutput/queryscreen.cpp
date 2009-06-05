@@ -13,7 +13,7 @@
 #include "qpacslist.h"
 #include "starviewersettings.h"
 #include "operation.h"
-#include "pacslistdb.h"
+#include "pacsmanager.h"
 #include "logging.h"
 #include "status.h"
 #include "qcreatedicomdir.h"
@@ -394,11 +394,11 @@ void QueryScreen::openDicomdir()
 
 void QueryScreen::errorConnectingPacs( QString IDPacs )
 {
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
     PacsParameters errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsListDB.queryPacs(IDPacs);
+    errorPacs = pacsManager.queryPacs(IDPacs);
 
     errorMessage = tr( "Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct." )
         .arg( errorPacs.getAEPacs() )
@@ -410,11 +410,11 @@ void QueryScreen::errorConnectingPacs( QString IDPacs )
 
 void QueryScreen::errorQueringStudiesPacs(QString PacsID)
 {
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
     PacsParameters errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsListDB.queryPacs(PacsID);
+    errorPacs = pacsManager.queryPacs(PacsID);
     errorMessage = tr( "Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct" )
         .arg( errorPacs.getAEPacs() )
         .arg( errorPacs.getInstitution()
@@ -441,7 +441,7 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
     connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
     connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
 
-    Status state = queryMultiplePacs(maskRisRequest, PacsListDB().queryDefaultPacs(), &multipleQueryStudy);
+    Status state = queryMultiplePacs(maskRisRequest, PacsManager().queryDefaultPacs(), &multipleQueryStudy);
 
     //Fem els connects per tracta els possibles errors que es poden donar
 
