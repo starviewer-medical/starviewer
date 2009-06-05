@@ -69,6 +69,11 @@ signals:
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewPatients(QList<Patient*>);
 
+protected :
+
+    /// Event que s'activa al tancar al rebren un event de tancament
+    void closeEvent( QCloseEvent* event );
+
 private:
 
     QMenu m_contextMenuQStudyTreeWidget;

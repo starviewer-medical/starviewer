@@ -46,7 +46,6 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 {
     saveQStudyTreeWidgetColumnsWidth();
-    saveQSplitterState();
 }
 
 void QInputOutputLocalDatabaseWidget::createConnections()
@@ -411,6 +410,12 @@ void QInputOutputLocalDatabaseWidget::saveQSplitterState()
 {
     //guardem l'estat del QSplitter que divideix el StudyTree del QSeries i de la QueryScreen
     StarviewerSettings().setQueryScreenStudyTreeSeriesListQSplitterState(m_StudyTreeSeriesListQSplitter->saveState());
+}
+
+void QInputOutputLocalDatabaseWidget::closeEvent(QCloseEvent*)
+{
+    //S'ha de guardar el seu valor al fer un closeEvent, si ho fem de des destructor no es guarda correctament la posició del QSplitter
+    saveQSplitterState();
 }
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)
