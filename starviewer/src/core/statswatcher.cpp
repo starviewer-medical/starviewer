@@ -1,10 +1,10 @@
 #include "statswatcher.h"
 #include "logging.h"
+#include "settings.h"
 
 #include <QAbstractButton>
 #include <QAbstractSlider>
 #include <QAction>
-#include <QSettings>
 #include <QMenu>
 
 namespace udg {
@@ -12,15 +12,15 @@ namespace udg {
 StatsWatcher::StatsWatcher( QObject *parent )
  : QObject(parent), m_context("*")
 {
-    QSettings settings;
-    m_registerLogs = settings.value("LoggingPolicy/registerStatistics", false).toBool();
+    Settings settings;
+    m_registerLogs = settings.read("LoggingPolicy/registerStatistics", false).toBool();
 }
 
 StatsWatcher::StatsWatcher( const QString &context, QObject *parent )
  : QObject(parent), m_context(context)
 {
-    QSettings settings;
-    m_registerLogs = settings.value("LoggingPolicy/registerStatistics", false).toBool();
+    Settings settings;
+    m_registerLogs = settings.read("LoggingPolicy/registerStatistics", false).toBool();
 }
 
 StatsWatcher::~StatsWatcher()
@@ -41,8 +41,8 @@ void StatsWatcher::addTriggerCounter( QMenu *menu )
 
 void StatsWatcher::log( const QString &message )
 {
-    QSettings settings;
-    if( settings.value("LoggingPolicy/registerStatistics", false).toBool() ) 
+    Settings settings;
+    if( settings.read("LoggingPolicy/registerStatistics", false).toBool() ) 
     {
         INFO_LOG( QString("STAT: ") + message );
     }
