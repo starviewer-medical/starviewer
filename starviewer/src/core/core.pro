@@ -181,6 +181,7 @@ HEADERS += extensionfactory.h \
            clippingplanestool.h \
            representationslayer.h \
            toolrepresentation.h \
+           settings.h \
            glew.h \
            glxew.h \
            wglew.h
@@ -330,6 +331,7 @@ SOURCES += extensionmediator.cpp \
            clippingplanestool.cpp \
            representationslayer.cpp \
            toolrepresentation.cpp \
+           settings.cpp \
            glew.c
 
 TEMPLATE = lib
