@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGPACSLISTDB_H
-#define UDGPACSLISTDB_H
+#ifndef UDGPACSMANAGER_H
+#define UDGPACSMANAGER_H
 
 #include <QList>
 
@@ -20,15 +20,15 @@ namespace udg {
 @author marc
 */
 
-class PacsListDB{
+class PacsManager{
 
 public:
 
     ///Constructor de la classe
-    PacsListDB( );
+    PacsManager( );
 
     ///Destructor de la classe
-    ~PacsListDB( );
+    ~PacsManager( );
 
     /** Insereix els parametres d'un pacs a la base de dades, per a poder-hi cercar imatge. En un alta el camp PacsID, és assignat automàticament per l'aplicació!
      * @param Objecte PacsParameters amb les dades del pacs

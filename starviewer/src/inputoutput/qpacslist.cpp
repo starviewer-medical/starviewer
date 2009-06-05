@@ -10,7 +10,7 @@
 #include <QList>
 #include <QMessageBox>
 
-#include "pacslistdb.h"
+#include "pacsmanager.h"
 #include "pacsparameters.h"
 #include "starviewersettings.h"
 #include "status.h"
@@ -34,12 +34,12 @@ QPacsList::~QPacsList()
 
 void QPacsList::refresh()
 {
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
     QList<PacsParameters> pacsList;
 
     m_PacsTreeView->clear();
 
-    pacsList = pacsListDB.queryPacsList();
+    pacsList = pacsManager.queryPacsList();
 
     foreach(PacsParameters pacs, pacsList)
     {
@@ -72,7 +72,7 @@ void QPacsList::setSelectedDefaultPacs()
 
 QList<PacsParameters> QPacsList::getSelectedPacs()
 {
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
     StarviewerSettings settings;
 
     QList< QTreeWidgetItem * > qPacsList( m_PacsTreeView->selectedItems() );
@@ -85,7 +85,7 @@ QList<PacsParameters> QPacsList::getSelectedPacs()
         item = qPacsList.at( i );
         PacsParameters pacs;
 
-        pacs = pacsListDB.queryPacs(item->text(0)); //fem el query per cercar la informació del PACS
+        pacs = pacsManager.queryPacs(item->text(0)); //fem el query per cercar la informació del PACS
 
         selectedPacsList.append( pacs ); //inserim a la llista
     }

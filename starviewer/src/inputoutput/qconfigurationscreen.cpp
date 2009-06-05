@@ -14,7 +14,7 @@
 #include "pacsserver.h"
 #include "status.h"
 #include "pacsparameters.h"
-#include "pacslistdb.h"
+#include "pacsmanager.h"
 #include "starviewerapplication.h"
 #include "starviewersettings.h"
 #include "logging.h"
@@ -122,7 +122,7 @@ void QConfigurationScreen:: clear()
 void QConfigurationScreen::addPacs()
 {
     PacsParameters pacs;
-    PacsListDB pacsList;
+    PacsManager pacsManager;
 
     if (validatePacsParameters())
     {
@@ -140,7 +140,7 @@ void QConfigurationScreen::addPacs()
 
         INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
 
-        if ( !pacsList.insertPacs(pacs) )
+        if ( !pacsManager.insertPacs(pacs) )
         {
             QMessageBox::warning(this, ApplicationNameString, tr("This PACS already exists."));
         }
@@ -157,11 +157,11 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 {
     QList<PacsParameters> pacsList;
     PacsParameters selectedPacs;
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
 
     if ( selectedItem != NULL )
     {
-        selectedPacs = pacsListDB.queryPacs(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
+        selectedPacs = pacsManager.queryPacs(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
 
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAEPacs() );
@@ -183,7 +183,7 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 void QConfigurationScreen::updatePacs()
 {
     PacsParameters pacs;
-    PacsListDB pacsList;
+    PacsManager pacsManager;
 
     if ( m_selectedPacsID == "" )
     {
@@ -209,7 +209,7 @@ void QConfigurationScreen::updatePacs()
 
         INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
 
-        pacsList.updatePacs(pacs);
+        pacsManager.updatePacs(pacs);
 
         fillPacsListView();
         clear();
@@ -219,7 +219,7 @@ void QConfigurationScreen::updatePacs()
 
 void QConfigurationScreen::deletePacs()
 {
-    PacsListDB pacsList;
+    PacsManager pacsManager;
 
     if ( m_selectedPacsID == "" )
     {
@@ -229,7 +229,7 @@ void QConfigurationScreen::deletePacs()
 
     INFO_LOG( "Esborrant el PACS: " + m_textAETitle->text() );
 
-    pacsList.deletePacs( m_selectedPacsID );
+    pacsManager.deletePacs( m_selectedPacsID );
 
     fillPacsListView();
     clear();
@@ -239,11 +239,11 @@ void QConfigurationScreen::deletePacs()
 void QConfigurationScreen::fillPacsListView()
 {
     QList<PacsParameters> pacsList;
-    PacsListDB pacsListDB;
+    PacsManager pacsManager;
 
     m_PacsTreeView->clear();
 
-    pacsList = pacsListDB.queryPacsList();
+    pacsList = pacsManager.queryPacsList();
 
     foreach(PacsParameters pacs, pacsList)
     {
@@ -269,7 +269,7 @@ void QConfigurationScreen::test()
 {
     Status state;
     PacsParameters pacs;
-    PacsListDB pacsList;
+    PacsManager pacsList;
     PacsServer pacsServer;
     QString message;
     StarviewerSettings settings;
