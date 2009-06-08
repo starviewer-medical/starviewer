@@ -8,6 +8,7 @@
 #include <QVariant>
 // Forward declarations
 class QString;
+class QTreeWidget;
 
 namespace udg {
 
@@ -29,6 +30,17 @@ public:
 
     /// Elimina els settings de key i totes les sub-settings que hi hagi per sota de la clau
     void remove( const QString &key );
+
+    /**
+     * Mètodes per facilitar el guardar i/o restaurar la geometria de certs widgets
+     */
+
+    /// Guarda/Restaura els amples de columna del widget dins de la clau donada. 
+    /// Sota la clau donada es guardaran els amples de cada columna amb nom columnWidthX on X serà el nombre de columna
+    /// L'unica implementació de moment és per QTreeWidget (i classes que n'hereden). 
+    /// Es sobrecarregarà el mètode per tants widgets com calgui.
+    void saveColumnsWidths( const QString &key, QTreeWidget *treeView );
+    void restoreColumnsWidths( const QString &key, QTreeWidget *treeView );
 };
 
 } // end namespace udg
