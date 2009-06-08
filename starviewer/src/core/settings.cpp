@@ -1,6 +1,8 @@
 #include "settings.h"
 
 #include <QSettings>
+#include <QTreeWidget>
+#include <QHeaderView> // pel restoreColumnsWidths
 
 namespace udg{
 
@@ -38,6 +40,34 @@ void Settings::remove( const QString &key )
     QSettings settings;
 
     settings.remove(key);
+}
+
+void Settings::saveColumnsWidths( const QString &key, QTreeWidget *treeView )
+{
+    Q_ASSERT( treeView );
+
+    Settings settings;
+    int columnCount = treeView->columnCount();
+    QString columnKey;
+    for( int column = 0; column < columnCount; column++ )
+    {   
+        columnKey = key + "/columnWidth" + QString::number(column);
+        settings.write( columnKey, treeView->columnWidth(column) );
+    }
+}
+
+void Settings::restoreColumnsWidths( const QString &key, QTreeWidget *treeView )
+{
+    Q_ASSERT( treeView );
+
+    Settings settings;
+    int columnCount = treeView->columnCount();
+    QString columnKey;
+    for( int column = 0; column < columnCount; column++ )
+    {   
+        columnKey = key + "/columnWidth" + QString::number(column);
+        treeView->header()->resizeSection( column, settings.read( columnKey, column ).toInt() );
+    }
 }
 
 }  // end namespace udg
