@@ -5,22 +5,17 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
+#include "qstarviewersapwrapper.h"
+#include "../inputoutput/starviewersettings.h"
+#include "../core/logging.h"
+
 #include <QTcpSocket>
-#include <QSettings>
 #include <QProcess>
 #include <QCoreApplication>
-#include <QProcess>
-#include <QThread>
 
 #ifdef _WIN32
 #include "windows.h"
 #endif
-
-#include "../inputoutput/starviewersettings.h"
-#include "../core/logging.h"
-
-#include "qstarviewersapwrapper.h"
-
 
 namespace udg {
 
