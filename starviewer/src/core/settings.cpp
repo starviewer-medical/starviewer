@@ -33,4 +33,11 @@ bool Settings::contains( const QString &key ) const
     return settings.contains(key);
 }
 
+void Settings::remove( const QString &key )
+{
+    QSettings settings;
+
+    settings.remove(key);
+}
+
 }  // end namespace udg
