@@ -26,6 +26,9 @@ public:
 
     /// Retorna cert si existeix un setting anomenat key; returna fals altrament.
     bool contains( const QString &key ) const;
+
+    /// Elimina els settings de key i totes les sub-settings que hi hagi per sota de la clau
+    void remove( const QString &key );
 };
 
 } // end namespace udg
