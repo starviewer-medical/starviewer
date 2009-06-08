@@ -51,6 +51,10 @@ public slots:
     void loadMi( QString fileName = QString() );
     /// Desa la informació mútua a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveMi( QString fileName = QString() );
+    /// Carrega les inestabilitats de les vistes des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadViewpointUnstabilities( QString fileName = QString() );
+    /// Desa les inestabilitats de les vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveViewpointUnstabilities( QString fileName = QString() );
     /// Carrega la VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadVomi( QString fileName = QString() );
     /// Desa la VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -113,8 +117,7 @@ private:
     /// Retorna les probabilitats p(O) dels objectes (vòxels) donats p(V) i p(O|V).
     QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
-    void computeVmiRelatedMeasures( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles,
-                                    bool computeViewpointUnstabilities, bool computeEvmi );
+    void computeVmiRelatedMeasures( const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles, bool computeEvmi );
     // Calcula el guided tour.
     void computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     /// Escriu al log un error d'un programa.
@@ -130,8 +133,6 @@ private:
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
     bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
 
-    void loadViewpointUnstabilities( const QString &fileName );
-    void saveViewpointUnstabilities( const QString &fileName );
     void loadGuidedTour( const QString &fileName );
     void saveGuidedTour( const QString &fileName );
     void loadEvmi( const QString &fileName );
@@ -197,8 +198,6 @@ private slots:
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
     void computeSelectedVmiOld();   // el deixem temporalment mentre acabem de passar el codi que queda a ViewpointInformationChannel
-    void loadViewpointUnstabilities();
-    void saveViewpointUnstabilities();
     void loadGuidedTour();
     void saveGuidedTour();
     void loadEvmi();
@@ -231,6 +230,7 @@ private:
     float m_entropy;
     QVector<float> m_vmi;
     float m_mi;
+    QVector<float> m_viewpointUnstabilities;
     QVector<float> m_vomi;
     float m_maximumVomi;
     QVector<float> m_viewpointVomi;
@@ -238,7 +238,6 @@ private:
     QVector<Vector3Float> m_colorVomi;
     float m_maximumColorVomi;
     QList< QPair<int, Vector3> > m_bestViews;
-    QVector<float> m_viewpointUnstabilities;
     QList< QPair<int, Vector3> > m_guidedTour;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
