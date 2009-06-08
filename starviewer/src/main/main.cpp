@@ -4,15 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "qapplicationmainwindow.h"
-#include <QApplication>
-#include <QSplashScreen>
-#include <QTranslator>
-#include <QSettings>
-#include <QLocale>
-#include <QDir>
-#include <QTextCodec>
+
 #include "logging.h"
 #include "statswatcher.h"
 #include "extensions.h"
@@ -26,6 +19,12 @@
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
 #endif
+
+#include <QApplication>
+#include <QSplashScreen>
+#include <QLocale>
+#include <QTextCodec>
+#include <QDir>
 
 void configureLogging()
 {

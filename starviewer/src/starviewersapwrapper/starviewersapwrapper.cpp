@@ -5,10 +5,8 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include <QString>
 #include <QDir>
 #include <QApplication>
-#include <QCoreApplication>
 
 #include "../core/starviewerapplication.h"// definicions globals d'aplicació
 #include "../core/logging.h"
