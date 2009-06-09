@@ -1129,8 +1129,8 @@ void QPerfusionMapReconstructionExtension::readSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-PerfusionMapReconstruction/";
 
-    m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
+    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
 }
 
 void QPerfusionMapReconstructionExtension::writeSettings()
@@ -1138,8 +1138,8 @@ void QPerfusionMapReconstructionExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-PerfusionMapReconstruction/";
 
-    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
 }
 
 }
