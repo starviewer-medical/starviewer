@@ -66,7 +66,7 @@ void HangingProtocolsLoader::loadDefaults()
 
     /// Hanging protocols definits per l'usuari
     Settings systemSettings;
-    QString userPath = systemSettings.read("Hanging-Protocols/path", UserHangingProtocolsPath ).toString(); 
+    QString userPath = systemSettings.getValue("Hanging-Protocols/path", UserHangingProtocolsPath ).toString(); 
     if( !userPath.isEmpty() )
         loadXMLFiles( userPath );
 }

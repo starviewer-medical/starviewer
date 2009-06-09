@@ -13,12 +13,12 @@ Settings::~Settings()
 {
 }
 
-QVariant Settings::read( const QString &key, const QVariant &defaultValue ) const
+QVariant Settings::getValue( const QString &key, const QVariant &defaultValue ) const
 {
     return m_settings.value(key, defaultValue);
 }
 
-void Settings::write( const QString &key, const QVariant &value )
+void Settings::setValue( const QString &key, const QVariant &value )
 {
     m_settings.setValue(key, value);
 }
@@ -42,7 +42,7 @@ void Settings::saveColumnsWidths( const QString &key, QTreeWidget *treeWidget )
     for( int column = 0; column < columnCount; column++ )
     {   
         columnKey = key + "/columnWidth" + QString::number(column);
-        this->write( columnKey, treeWidget->columnWidth(column) );
+        this->setValue( columnKey, treeWidget->columnWidth(column) );
     }
 }
 
@@ -58,7 +58,7 @@ void Settings::restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget
         if( !this->contains( columnKey ) )
             treeWidget->resizeColumnToContents(column);
         else
-            treeWidget->header()->resizeSection( column, this->read( columnKey ).toInt() );
+            treeWidget->header()->resizeSection( column, this->getValue( columnKey ).toInt() );
     }
 }
 

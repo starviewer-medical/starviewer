@@ -1110,9 +1110,9 @@ void QEdemaSegmentationExtension::readSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-EdemaSegmentation/";
 
-    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
-    m_savingMaskDirectory = settings.read( keyPrefix + "savingDirectory", "." ).toString();
+    m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
+    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory", "." ).toString();
     
 }
 
@@ -1121,9 +1121,9 @@ void QEdemaSegmentationExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-EdemaSegmentation/";
 
-    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
-    settings.write( keyPrefix + "savingDirectory", m_savingMaskDirectory );
+    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.setValue( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.setValue( keyPrefix + "savingDirectory", m_savingMaskDirectory );
 }
 
 }

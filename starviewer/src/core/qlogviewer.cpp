@@ -74,14 +74,14 @@ void QLogViewer::saveLogFileAs()
 
 void QLogViewer::writeSettings()
 {
-	Settings settings;
-    settings.write("logViewerDialogGeometry", saveGeometry());
+    Settings settings;
+    settings.setValue("logViewerDialogGeometry", saveGeometry());
 }
 
 void QLogViewer::readSettings()
 {
     Settings settings;
-    this->restoreGeometry(settings.read("logViewerDialogGeometry").toByteArray());
+    this->restoreGeometry(settings.getValue("logViewerDialogGeometry").toByteArray());
 }
 
 }

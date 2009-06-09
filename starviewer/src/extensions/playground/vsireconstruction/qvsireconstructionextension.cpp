@@ -2123,10 +2123,10 @@ void QVSIReconstructionExtension::readSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
-    m_verticalImageSplitter->restoreState( settings.read( keyPrefix + "verticalImageSplitter").toByteArray() );
-    m_horizontalImageSplitter->restoreState( settings.read( keyPrefix + "horizontalImageSplitter").toByteArray() );
+    m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray() );
+    m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
+    m_verticalImageSplitter->restoreState( settings.getValue( keyPrefix + "verticalImageSplitter").toByteArray() );
+    m_horizontalImageSplitter->restoreState( settings.getValue( keyPrefix + "horizontalImageSplitter").toByteArray() );
 }
 
 void QVSIReconstructionExtension::writeSettings()
@@ -2134,10 +2134,10 @@ void QVSIReconstructionExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
-    settings.write( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter->saveState() );
-    settings.write( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter->saveState() );
+    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.setValue( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.setValue( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter->saveState() );
+    settings.setValue( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter->saveState() );
 }
 
 }

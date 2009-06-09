@@ -259,9 +259,9 @@ void QDifuPerfuSegmentationExtension::readSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-DiffusionPerfusionSegmentation/";
 
-    m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter" ).toByteArray() );
-    m_viewerSplitter->restoreState( settings.read( keyPrefix + "viewerSplitter" ).toByteArray() );
-    m_savingMaskDirectory = settings.read( keyPrefix + "savingDirectory", "." ).toString();
+    m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter" ).toByteArray() );
+    m_viewerSplitter->restoreState( settings.getValue( keyPrefix + "viewerSplitter" ).toByteArray() );
+    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory", "." ).toString();
 }
 
 void QDifuPerfuSegmentationExtension::writeSettings()
@@ -269,11 +269,11 @@ void QDifuPerfuSegmentationExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-DiffusionPerfusionSegmentation/";
 
-    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
     ///Movem l'splitter a la dreta pq quan es torni obrir només es vegi la difu
     //this->moveViewerSplitterToRight();
-    settings.write( keyPrefix + "viewerSplitter", m_viewerSplitter->saveState() );
-    settings.write( keyPrefix + "savingDirectory", m_savingMaskDirectory );
+    settings.setValue( keyPrefix + "viewerSplitter", m_viewerSplitter->saveState() );
+    settings.setValue( keyPrefix + "savingDirectory", m_savingMaskDirectory );
 }
 
 void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )

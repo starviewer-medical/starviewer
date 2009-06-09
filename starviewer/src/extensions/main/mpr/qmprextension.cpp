@@ -1370,23 +1370,23 @@ void QMPRExtension::readSettings()
     Settings settings;
     QString keyPrefix = "Starviewer-App-MPR/";
 
-    if( settings.read( keyPrefix + "horizontalSplitter").toByteArray().isEmpty() )
+    if( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().width()/2 << this->size().width()/2;
         m_horizontalSplitter->setSizes( list );
     }
     else
-        m_horizontalSplitter->restoreState( settings.read( keyPrefix + "horizontalSplitter").toByteArray() );
+        m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray() );
 
-    if( settings.read( keyPrefix + "verticalSplitter").toByteArray().isEmpty() )
+    if( settings.getValue( keyPrefix + "verticalSplitter").toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().height()/2 << this->size().height()/2;
         m_verticalSplitter->setSizes( list );
     }
     else
-        m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
+        m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
 }
 
 void QMPRExtension::writeSettings()
@@ -1394,8 +1394,8 @@ void QMPRExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "Starviewer-App-MPR/";
 
-    settings.write( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.write( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
+    settings.setValue( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
 }
 
 };  // end namespace udg

@@ -464,7 +464,7 @@ void Q2DViewerExtension::updateDICOMInformationButton( int view )
 void Q2DViewerExtension::readSettings()
 {
     Settings settings;
-    m_profile = settings.read("Starviewer-App-2DViewer/profile").toString();
+    m_profile = settings.getValue("Starviewer-App-2DViewer/profile").toString();
 }
 
 void Q2DViewerExtension::writeSettings()

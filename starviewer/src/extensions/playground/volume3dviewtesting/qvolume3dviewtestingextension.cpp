@@ -456,7 +456,7 @@ void QVolume3DViewTestingExtension::loadClut()
 {
     Settings settings;
     QString keyPrefix = "Starviewer-App-3DTesting/";
-    QString customClutsDirPath = settings.read( keyPrefix + "customClutsDir", QString() ).toString();
+    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir", QString() ).toString();
 
     QString transferFunctionFileName =
             QFileDialog::getOpenFileName( this, tr("Load CLUT"),
@@ -471,7 +471,7 @@ void QVolume3DViewTestingExtension::loadClut()
         emit newTransferFunction();
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.write( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
+        settings.setValue( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
     }
 }
 
@@ -479,7 +479,7 @@ void QVolume3DViewTestingExtension::saveClut()
 {
     Settings settings;
     QString keyPrefix = "Starviewer-App-3DTesting/";
-    QString customClutsDirPath = settings.read( keyPrefix + "customClutsDir", QString() ).toString();
+    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir", QString() ).toString();
 
     QFileDialog saveDialog( this, tr("Save CLUT"), customClutsDirPath, tr("Transfer function files (*.tf);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
@@ -492,7 +492,7 @@ void QVolume3DViewTestingExtension::saveClut()
         TransferFunctionIO::toFile( transferFunctionFileName, currentEditor->getTransferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.write( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
+        settings.setValue( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
     }
 }
 
