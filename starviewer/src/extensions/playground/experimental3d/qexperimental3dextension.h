@@ -73,6 +73,10 @@ public slots:
     void loadBestViews( QString fileName = QString() );
     /// Desa les millors vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveBestViews( QString fileName = QString() );
+    /// Carrega el guided tour des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadGuidedTour( QString fileName = QString() );
+    /// Desa el guided tour a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveGuidedTour( QString fileName = QString() );
 
 private:
 
@@ -93,7 +97,7 @@ private:
     /// Desa dades de tipus float del vector al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveFloatDataAsText( const QVector<float> &vector, const QString &fileName, const QString &format, int base = 0 );
     /// Desa dades de tipus QPair<int, Vector3> de la llista al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
-    static bool saveDataAsText( const QList< QPair<int, Vector3> > &list, const QString &fileName, const QString &format, int base = 0 );
+    static bool saveDataAsText( const QList< QPair<int, Vector3> > &list, const QString &fileName, const QString &format, int base1 = 0, int base2 = 0 );
 
     /// Crea les connexions de signals i slots.
     void createConnections();
@@ -118,8 +122,6 @@ private:
     QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
     void computeVmiRelatedMeasures( const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles, bool computeEvmi );
-    // Calcula el guided tour.
-    void computeGuidedTour( const ViewpointGenerator &viewpointGenerator, const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
     /// Escriu al log un error d'un programa.
     void logProgramError( int lineNumber, const QString &error, const QString &line ) const;
     /// Comprova que la línia tingi un nombre determinat de paraules.
@@ -133,8 +135,6 @@ private:
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
     bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
 
-    void loadGuidedTour( const QString &fileName );
-    void saveGuidedTour( const QString &fileName );
     void loadEvmi( const QString &fileName );
     void saveEvmi( const QString &fileName );
 
@@ -198,8 +198,6 @@ private slots:
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
     void computeSelectedVmiOld();   // el deixem temporalment mentre acabem de passar el codi que queda a ViewpointInformationChannel
-    void loadGuidedTour();
-    void saveGuidedTour();
     void loadEvmi();
     void saveEvmi();
 
