@@ -25,9 +25,6 @@ const QString AETitleMachineKey("/pacsparam/AETitle" );
 const QString localPortKey("/pacsparam/localPort" );
 const QString timeoutPacsKey("/pacsparam/timeout" );
 const QString maxConnectionsKey("/pacsparam/MaxConnects" );
-const QString pacsColumnWidthKey("/interface/studyPacsList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString cacheColumnWidthKey("/interface/studyCacheList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString dicomdirColumnWidthKey("/interface/studyDicomdirList/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString MaximumDaysNotViewedStudy("/cache/MaximumDaysNotViewedStudy" );
 const QString InstitutionName("/institution/name");
 const QString InstitutionAddress("/institution/address");
@@ -42,9 +39,6 @@ const QString InstitutionPhoneNumber("/institution/phoneNumber");
 const QString queryScreenGeometry("/interface/queryscreen/geometry");
 const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
-const QString qOperationStateColumnWidthKey("/interface/qOperationState/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString qCreateDicomdirColumnWidthKey("/interface/qCreateDicomdir/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
-const QString qConfigurationPacsDeviceColumnWidthKey("/interface/qConfigurationPacsDevice/columnWidth" );//en aquesta clau a darrera s'hi concatena el número de columna ,  per diferenciar cada columna
 const QString lastOpenedDICOMDIRPath("/interface/lastOpenedDICOMDIRPath"); // últim path des del que hem obert un dicomdir
 const QString listenRisRequests("/risRequests/listen");
 const QString listenRisRequestsPort("/risRequests/listenPort");
@@ -191,24 +185,6 @@ QString StarviewerSettings::getMaxConnections()
 }
 
 /************************ INTERFICIE ************************************************/
-void StarviewerSettings::setStudyPacsListColumnWidth( int col , int width )
-{
-    QString key = GroupSettingsName + pacsColumnWidthKey + QString::number( col );
-    m_starviewerSettings.setValue( key , width );
-}
-
-void StarviewerSettings::setStudyCacheListColumnWidth( int col , int width )
-{
-    QString key = GroupSettingsName + cacheColumnWidthKey + QString::number( col );
-    m_starviewerSettings.setValue( key , width );
-}
-
-void StarviewerSettings::setStudyDicomdirListColumnWidth( int col , int width )
-{
-    QString key = GroupSettingsName + dicomdirColumnWidthKey + QString::number( col );
-    m_starviewerSettings.setValue( key , width );
-}
-
 void StarviewerSettings::saveQueryScreenGeometry( const QByteArray &geometry )
 {
     QString key = GroupSettingsName + queryScreenGeometry;
@@ -221,42 +197,6 @@ void StarviewerSettings::setQueryScreenStudyTreeSeriesListQSplitterState( const 
     m_starviewerSettings.setValue( key , state );
 }
 
-void StarviewerSettings::setQOperationStateColumnWidth( int col , int width )
-{
-    QString key = GroupSettingsName + qOperationStateColumnWidthKey + QString::number( col );
-    m_starviewerSettings.setValue( key , width );
-}
-
-void StarviewerSettings::setQCreateDicomdirColumnWidth( int col , int width )
-{
-    QString key = GroupSettingsName + qCreateDicomdirColumnWidthKey + QString::number( col );
-    m_starviewerSettings.setValue( key , width );
-}
-
-void StarviewerSettings::setQConfigurationPacsDeviceColumnWidth( int col , int width )
-{
-    QString key = GroupSettingsName + qConfigurationPacsDeviceColumnWidthKey + QString::number( col );
-    m_starviewerSettings.setValue( key , width );
-}
-
-int StarviewerSettings::getStudyPacsListColumnWidth( int col )
-{
-    QString key = GroupSettingsName + pacsColumnWidthKey + QString::number(col);
-    return m_starviewerSettings.value( key , 100) .toInt();
-}
-
-int StarviewerSettings::getStudyCacheListColumnWidth( int col )
-{
-    QString key = GroupSettingsName + cacheColumnWidthKey + QString::number( col );
-    return m_starviewerSettings.value( key , 100 ).toInt();
-}
-
-int StarviewerSettings::getStudyDicomdirListColumnWidth( int col )
-{
-    QString key = GroupSettingsName + dicomdirColumnWidthKey + QString::number( col );
-    return m_starviewerSettings.value( key , 100 ).toInt();
-}
-
 QByteArray StarviewerSettings::getQueryScreenGeometry()
 {
     QString key = GroupSettingsName + queryScreenGeometry;
@@ -267,24 +207,6 @@ QByteArray StarviewerSettings::getQueryScreenStudyTreeSeriesListQSplitterState()
 {
     QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
     return m_starviewerSettings.value( key ).toByteArray();
-}
-
-int StarviewerSettings::getQOperationStateColumnWidth( int col )
-{
-    QString key = GroupSettingsName + qOperationStateColumnWidthKey + QString::number( col );
-    return m_starviewerSettings.value( key , 100 ).toInt();
-}
-
-int StarviewerSettings::getQCreateDicomdirColumnWidth( int col )
-{
-    QString key = GroupSettingsName + qCreateDicomdirColumnWidthKey + QString::number( col );
-    return m_starviewerSettings.value( key , 100 ).toInt();
-}
-
-int StarviewerSettings::getQConfigurationPacsDeviceColumnWidth( int col )
-{
-    QString key = GroupSettingsName + qConfigurationPacsDeviceColumnWidthKey + QString::number( col );
-    return m_starviewerSettings.value( key , 100 ).toInt();
 }
 
 /*** Dades de la institució*/

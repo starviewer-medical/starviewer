@@ -8,9 +8,7 @@
 #include "qinputoutputdicomdirwidget.h"
 
 #include <QMessageBox>
-#include <QString>
 #include <QFileDialog>
-#include <QFileInfo>
 #include <QShortcut>
 
 #include "starviewersettings.h"
@@ -20,19 +18,22 @@
 #include "dicommask.h"
 #include "patient.h"
 #include "statswatcher.h"
+#include "settings.h"
 
 namespace udg
 {
+// Clau de settings del widget
+const QString dicomdirSettingKey("PACS/interface/studyDicomdirList/");
 
 QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWidget( parent )
 {
     setupUi( this );
 
     createConnections();
-
     createContextMenuQStudyTreeWidget();
 
-    setQStudyTreeWidgetColumnsWidth();
+    Settings settings;
+    settings.restoreColumnsWidths( dicomdirSettingKey, m_studyTreeWidget->getQTreeWidget() );
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget",this);
     m_statsWatcher->addClicksCounter( m_viewButton );
@@ -42,7 +43,8 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
 
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 {
-    saveQStudyTreeWidgetColumnsWidth();
+    Settings settings;
+    settings.saveColumnsWidths( dicomdirSettingKey, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputDicomdirWidget::createConnections()
@@ -70,26 +72,6 @@ void  QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
     (void) new QShortcut( action->shortcut() , this , SLOT( retrieveSelectedStudies() ) );
 
     m_studyTreeWidget->setContextMenu( & m_contextMenuQStudyTreeWidget ); //Especifiquem que es el menu del dicomdir
-}
-
-void QInputOutputDicomdirWidget::setQStudyTreeWidgetColumnsWidth()
-{
-    StarviewerSettings settings;
-
-    for ( int column = 0; column < m_studyTreeWidget->getNumberOfColumns(); column++)
-    {
-        m_studyTreeWidget->setColumnWidth( column , settings.getStudyDicomdirListColumnWidth(column) );
-    }
-}
-
-void QInputOutputDicomdirWidget::saveQStudyTreeWidgetColumnsWidth()
-{
-    StarviewerSettings settings;
-
-    for ( int column = 0; column < m_studyTreeWidget->getNumberOfColumns(); column++ )
-    {
-        settings.setStudyDicomdirListColumnWidth( column , m_studyTreeWidget->getColumnWidth( column ) );
-    }
 }
 
 void QInputOutputDicomdirWidget::openDicomdir()

@@ -6,19 +6,12 @@
  ***************************************************************************/
 #include "qcreatedicomdir.h"
 
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QString>
-#include <QProcess>
-#include <QContextMenuEvent>
-#include <QShortcut>
 #include <QProgressDialog>
+#include <QProcess>
 #include <QCloseEvent>
-#include <QHeaderView>
 #include <QSignalMapper>
-#include <QDate>
 
 #include "converttodicomdir.h"
 #include "status.h"
@@ -30,8 +23,12 @@
 #include "starviewerapplication.h"
 #include "study.h"
 #include "patient.h"
+#include "settings.h"
 
 namespace udg {
+
+// clau de settings corresponent a aquesta classe
+const QString qCreateDicomdirSettingKey("PACS/interface/qCreateDicomdir/");
 
 QCreateDicomdir::QCreateDicomdir(QWidget *parent)
  : QDialog(parent)
@@ -49,7 +46,8 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     createActions();
     createConnections();
 
-    setWidthColumns();
+    Settings settings;
+    settings.restoreColumnsWidths(qCreateDicomdirSettingKey,m_dicomdirStudiesList);
 
     //TODO:De manera temporal no es mostra la mida del dicomdir perquè no la sabem calcular correctament quan tenim imatges descarregades amb la transfer syntax JpegLossLess
     hideDicomdirSize();
@@ -117,16 +115,6 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonRemoveAll , SIGNAL( clicked() ) , this , SLOT( removeAllStudies() ) );
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
-}
-
-void QCreateDicomdir::setWidthColumns()
-{
-    StarviewerSettings settings;
-
-    for ( int index = 0; index < m_dicomdirStudiesList->columnCount(); index++ )
-    {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
-            m_dicomdirStudiesList->header()->resizeSection( index ,settings.getQCreateDicomdirColumnWidth( index ) );
-    }
 }
 
 //TODO: De manera temporal no es mostrarà la mida del dicomdir, degut a que les imatges descarregades amb la transfer synstax de JpegLossLess s'han de passar a LittleEndian i ocupen més espai, com ara de moment no està implementat un sistema per calcular que ocuparan les imatges a LittleEndian de moment no ho calculem
@@ -611,19 +599,10 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
     else return false;
 }
 
-void QCreateDicomdir::saveColumnsWidth()
-{
-    StarviewerSettings settings;
-    for ( int i = 0; i < m_dicomdirStudiesList->columnCount(); i++ )
-    {
-        settings.setQCreateDicomdirColumnWidth( i , m_dicomdirStudiesList->columnWidth( i ) );
-    }
-}
-
 void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 {
-    saveColumnsWidth();
-
+    Settings settings;
+    settings.saveColumnsWidths( qCreateDicomdirSettingKey, m_dicomdirStudiesList );
     ce->accept();
 }
 

@@ -10,22 +10,24 @@
 
 #include "ui_qinputoutputdicomdirwidgetbase.h"
 
-#include <QMenu>
-
 #include "dicomdirimporter.h"
 #include "dicomdirreader.h"
 
+#include <QMenu>
+
+// fordward declarations
 class QString;
 
 namespace udg {
 
-/** Widget en el que controla les operacions d'entrada/sortida d'un dicomdir
-*/
-
+// fordward declarations
 class DicomMask;
 class Patient;
 class StatsWatcher;
 
+/** 
+ * Widget en el que controla les operacions d'entrada/sortida d'un dicomdir
+ */
 class QInputOutputDicomdirWidget : public QWidget, private Ui::QInputOutputDicomdirWidgetBase
 {
 Q_OBJECT
@@ -41,8 +43,11 @@ public:
     ///Neteja els resultats de la última cerca
     void clear();
 
-signals:
+public slots:
+    ///Obre un dicomdir
+    void openDicomdir();
 
+signals:
     ///Signal que s'emet per indicar que es netegin els camps de cerca
     void clearSearchTexts();
 
@@ -52,35 +57,17 @@ signals:
     ///Signal que s'emet per indica que un estudi ha estat descarregat
     void studyRetrieved(QString studyInstanceUID);
 
-public slots:
-
-    ///Obre un dicomdir
-    void openDicomdir();
-
 private:
-
-    QMenu m_contextMenuQStudyTreeWidget;
-
-    DICOMDIRReader m_readDicomdir; // conté la informació del dicomdir obert en aquests instants
-    StatsWatcher *m_statsWatcher;
-
     ///Crea les connexions entre signals i slots
     void createConnections();
 
     ///Genera el menú contextual que apareix quan clickem amb el botó dret a sobre d'un item del StudyTreeWidget
     void createContextMenuQStudyTreeWidget();
 
-    ///Carrega l'amplada de les columnes de QStudyTreeView guardada al QSettings
-    void setQStudyTreeWidgetColumnsWidth();
-
-    ///Guarda al QSettings l'amplada de les columnes del QStudyTreeView, perquè quan es torni a carregar el widget es motri l'amplada de les columnes igual a quan es va tancar
-    void saveQStudyTreeWidgetColumnsWidth();
-
     ///Mostrar l'error que s'ha produït al importar el dicomdir
     void showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRImporter::DICOMDIRImporterError error);
 
 private slots:
-
     ///Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void expandSeriesOfStudy(QString seriesInstanceUID);
 
@@ -92,6 +79,12 @@ private slots:
 
     ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
     void view();
+
+private:
+    QMenu m_contextMenuQStudyTreeWidget;
+
+    DICOMDIRReader m_readDicomdir; // conté la informació del dicomdir obert en aquests instants
+    StatsWatcher *m_statsWatcher;
 };
 
 };// end namespace udg

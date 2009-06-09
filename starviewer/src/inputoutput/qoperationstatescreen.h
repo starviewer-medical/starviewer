@@ -9,25 +9,20 @@
 
 #include "ui_qoperationstatescreenbase.h"
 
+// fordward declarations
 class QString;
 
-/// Interfície que implementa la llista d'operacions realitzades cap a un PACS
 namespace udg {
 
+// fordward declarations
 class Status;
 class Operation;
 
+/// Interfície que implementa la llista d'operacions realitzades cap a un PACS
 class QOperationStateScreen : public QDialog , private Ui::QOperationStateScreenBase{
 Q_OBJECT
 public:
-
-    /** Constructor de la classe
-     * @param parent
-     * @return
-     */
     QOperationStateScreen( QWidget *parent = 0 );
-
-	/// destructor de la classe
     ~QOperationStateScreen();
 
     /// Retorna el núm. d'operacions que s'estan executant
@@ -84,10 +79,6 @@ protected :
     void closeEvent( QCloseEvent* ce );
 
 private:
-    /** Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla. La mida de les columnes la tenim guardada al StarviewerSettings
-     */
-    void setWidthColumns();
-
     /// Crea les connexions pels signals i slots
     void createConnections();
 
@@ -95,10 +86,6 @@ private:
      * @param UID de l'estudi
      */
     void deleteStudy( QString studyUID );
-
-    /** Guarda la mida de les columnes del QTreeWidget al StarviewerSettings
-     */
-    void saveColumnsWidth();
 
     /// Indica si una operació es pot considerar com a finalitzada a partir del seu missatge d'estat
     bool isOperationFinalized(const QString &message);

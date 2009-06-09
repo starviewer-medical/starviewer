@@ -15,13 +15,12 @@
 
 #include "qexecuteoperationthread.h"
 
+// fordward declarations
 class QString;
 
 namespace udg {
 
-/** Widget en el que controla les operacions d'entrada/sortida d'un dicomdir
-*/
-
+// fordward declarations
 class DicomMask;
 class Patient;
 class StatsWatcher;
@@ -33,10 +32,12 @@ class Study;
 class QOperationStateScreen;
 class ProcessImageSingleton;
 
+/** 
+ * Widget en el que controla les operacions d'entrada/sortida del PACS
+ */
 class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidgetBase
 {
 Q_OBJECT
-
 public:
     /// Constructor de la classe
     QInputOutputPacsWidget(QWidget *parent = 0);
@@ -63,7 +64,6 @@ public:
     void retrieve(bool view, QString pacsIdToRetrieve, DicomMask mask, Study *studyToRetrieve);
 
 signals:
-
     ///Signal que s'emet per indicar que es netegin els camps de cerca
     void clearSearchTexts();
 
@@ -80,15 +80,6 @@ signals:
     void studyWillBeDeletedFromDatabase(QString studyInstanceUID);
 
 private:
-
-    QMenu m_contextMenuQStudyTreeWidget;
-    QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
-    QExecuteOperationThread m_qexecuteOperationThread;
-    QOperationStateScreen *m_qoperationStateScreen;
-    ProcessImageSingleton *m_processImageSingleton;
-
-    StatsWatcher *m_statsWatcher;
-
     /// Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
     MultipleQueryStudy *m_multipleQueryStudy;
 
@@ -97,12 +88,6 @@ private:
 
     ///Genera el menú contextual que apareix quan clickem amb el botó dret a sobre d'un item del StudyTreeWidget
     void createContextMenuQStudyTreeWidget();
-
-    ///Carrega l'amplada de les columnes de QStudyTreeView guardada al QSettings
-    void setQStudyTreeWidgetColumnsWidth();
-
-    ///Guarda al QSettings l'amplada de les columnes del QStudyTreeView, perquè quan es torni a carregar el widget es motri l'amplada de les columnes igual a quan es va tancar
-    void saveQStudyTreeWidgetColumnsWidth();
 
     ///Fa la consulta a diversos PACS
     //TODO aquest mètode quan s'hagi fet el refactoring de pacsparameters hauria de desapareixer no tindrà sentit
@@ -129,7 +114,6 @@ private:
     DicomMask buildImageDicomMask(QString studyInstanceUID, QString seriesInstanceUID);
 
 private slots:
-
     ///Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void expandSeriesOfStudy(QString seriesInstanceUID);
 
@@ -155,6 +139,14 @@ private slots:
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
 
+private:
+    QMenu m_contextMenuQStudyTreeWidget;
+    QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
+    QExecuteOperationThread m_qexecuteOperationThread;
+    QOperationStateScreen *m_qoperationStateScreen;
+    ProcessImageSingleton *m_processImageSingleton;
+
+    StatsWatcher *m_statsWatcher;
 };
 
 };// end namespace udg

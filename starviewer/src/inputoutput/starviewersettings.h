@@ -131,25 +131,6 @@ public:
     QString getMaxConnections();
 
     //interficie
-
-	/** guarda la mida de la columna que se li passa per paràmetre del QStudyListView ,  encarregat de mostrar les dades del Pacs
-	 * @param número de columna
-	 * @param amplada de la columna
-	 */
-    void setStudyPacsListColumnWidth( int col , int width );
-
-	/** guarda la mida de la columna que se li passa per paràmetre del QStudyListView ,  encarregat de mostrar les dades de la cache
-	 * @param número de columna
-	 * @param amplada de la columna
-	 */
-    void setStudyCacheListColumnWidth( int col , int width );
-
-    /** guarda la mida de la columna que se li passa per paràmetre del QStudyListView ,  encarregat de mostrar les dades d'un dicomdir
-     * @param número de columna
-     * @param amplada de la columna
-     */
-    void setStudyDicomdirListColumnWidth( int col , int width );
-    
     /** Guarda la geometria de la QueryScreen
      * @param geometry Geometria de la QueryScreen
      */
@@ -160,39 +141,6 @@ public:
      */
     void setQueryScreenStudyTreeSeriesListQSplitterState( const QByteArray &state );
 
-    /** guarda la mida de la columna que se li passa per paràmetre del QTreeWidget de QOperationStateScreen ,  encarregat de mostrar l'estat de les operacions relacionades amb el PACS
-     * @param número de columna
-     * @param amplada de la columna
-     */
-    void setQOperationStateColumnWidth( int col , int width );
-
-    /** guarda la mida de la columna que se li passa per paràmetre del QTreeWidget QCreatoDicomdir ,  on s'hi mostren quins estudis es convertiran en dicomdirs
-     * @param número de columna
-     * @param amplada de la columna
-     */
-    void setQCreateDicomdirColumnWidth( int col , int width );
-
-    /** guarda la mida de la columna que se li passa per paràmetre del QTreeWidget de la QConfigurationScreen ,  on s'hi mostren quins pacs tenim per connectar-nos
-     * @param número de columna
-     * @param amplada de la columna
-     */
-    void setQConfigurationPacsDeviceColumnWidth( int col , int width );
-
-	/** retorna l'amplada del número de columna de la llista d'estudis del PACS ,  passat per paràmetre
-	 * @return amplada de la columna
-	 */
-   	int getStudyPacsListColumnWidth( int column );
-
-	/** retorna l'amplada del número de columna de la llista d'estudis de la cache ,  passat per paràmetre
-	 * @return amplada de la columna
-	 */
-   	int getStudyCacheListColumnWidth( int column );
-
-    /** retorna l'amplada del número de columna de la llista d'estudis de Dicomdir,  passat per paràmetre
-     * @return amplada de la columna
-     */
-    int getStudyDicomdirListColumnWidth( int column );
-
     /** Retorna la geometrua guardada de la QueryScreen
      * @return geometria de la QueryScreen
      */
@@ -202,21 +150,6 @@ public:
      * @return estat del QSpliltter
      */
     QByteArray getQueryScreenStudyTreeSeriesListQSplitterState();
-
-    /** retorna l'amplada del número de columna de la QTreeWidget de la QOperationStateScreen
-     * @return amplada de la columna
-     */
-    int getQOperationStateColumnWidth( int column );
-
-    /** retorna l'amplada del número de columna de la QTreeWidget de la QCreatoDicomdir
-     * @return amplada de la columna
-     */
-    int getQCreateDicomdirColumnWidth( int column );
-
-    /** retorna l'amplada del número de columna de la QTreeWidget de la QConfigurationScree
-     * @return amplada de la columna
-     */
-    int getQConfigurationPacsDeviceColumnWidth( int column );
 
     /** Guarda el nom de la institució
      * @param institutionName nom de l'institució

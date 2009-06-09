@@ -113,12 +113,11 @@ public slots:
     ///Guarda el pacient a la base de dades, si no existeix insereix les dades, i si alguna de les dades ja existeix a la BD l'actualitza
     void save(Patient *newPatient);
 
-private :
-
+private:
     ///Guardem a partir de quina data de lastAccessDate cerquem els estudis, d'aquesta manera sabem quins estudis vells s'han d'esborrar, quins hem de mostrar al fer cerques, i evitem incoherències, com la que podria ser que al cercar estudis en una mateixa sessió de l'apliació a les 23:59,o a les 0:01 de l'endemà donint resultats diferents, perquè hi han estudis que passen a ser considerats estudis vells. D'aquesta manera en tota la vida de l'aplicació mantenim el mateix criteri de data per establir si un estudi es vell o no i s'ha de mostrar a les cerques.
     static QDate LastAccessDateSelectedStudies;
-    ///Conté el nom de la llista de QSettings que guardarà els estudis que tenim en aquell moment descarregant
-    static const QString qsettingsRetrievingStudy;
+    ///Conté el nom de la llista de settings que guardarà els estudis que tenim en aquell moment descarregant
+    static const QString retrievingStudySettingKey;
 
     LastError m_lastError;
 

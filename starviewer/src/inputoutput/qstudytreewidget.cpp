@@ -18,16 +18,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QHeaderView>
-#include <QContextMenuEvent>
-#include <QMessageBox>
-#include <QShortcut>
-#include <QString>
-#include <QDate>
-#include <QList>
-#include <QHash>
-
 #include "qstudytreewidget.h"
+
+#include <QContextMenuEvent>
+
 #include "starviewersettings.h"
 #include "logging.h"
 #include "patient.h"
@@ -69,14 +63,9 @@ void QStudyTreeWidget::createConnections()
     connect( m_studyTreeView, SIGNAL( itemCollapsed( QTreeWidgetItem * ) ) , SLOT ( itemCollapsed( QTreeWidgetItem * ) ) );
 }
 
-void QStudyTreeWidget::setColumnWidth( int columnNumber , int columnWidth )
+QTreeWidget *QStudyTreeWidget::getQTreeWidget() const
 {
-    m_studyTreeView->header()->resizeSection( columnNumber , columnWidth );
-}
-
-int QStudyTreeWidget::getColumnWidth( int columnNumber )
-{
-    return m_studyTreeView->columnWidth( columnNumber );
+    return m_studyTreeView;
 }
 
 void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
@@ -464,11 +453,6 @@ void QStudyTreeWidget::sort()
 void QStudyTreeWidget::setContextMenu(QMenu * contextMenu)
 {
     m_contextMenu = contextMenu;
-}
-
-int QStudyTreeWidget::getNumberOfColumns()
-{
-    return m_studyTreeView->columnCount();
 }
 
 void QStudyTreeWidget::contextMenuEvent( QContextMenuEvent *event )
