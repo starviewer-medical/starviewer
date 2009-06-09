@@ -131,20 +131,10 @@ public:
     QString getMaxConnections();
 
     //interficie
-    /** Guarda la geometria de la QueryScreen
-     * @param geometry Geometria de la QueryScreen
-     */
-    void saveQueryScreenGeometry( const QByteArray &geometry );
-
     /** guarda l'estat en que es troba el QSplitter que divideix a la pestany de local el StudyList i el SeriesList
      * @param state estat del QSplitter
      */
     void setQueryScreenStudyTreeSeriesListQSplitterState( const QByteArray &state );
-
-    /** Retorna la geometrua guardada de la QueryScreen
-     * @return geometria de la QueryScreen
-     */
-    QByteArray getQueryScreenGeometry();
 
     /** retorna l'estat amb que estava el QSplitter que separa el StudyTree i el SeriesList
      * @return estat del QSpliltter

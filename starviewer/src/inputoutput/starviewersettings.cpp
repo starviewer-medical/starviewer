@@ -33,10 +33,7 @@ const QString InstitutionZipCode("/institution/zipCode");
 const QString InstitutionCountry("/institution/country");
 const QString InstitutionEmail("/institution/Email");
 const QString InstitutionPhoneNumber("/institution/phoneNumber");
-// Aquesta clau substitueix les obsoletes "queryScreenWindowPositionX", "queryScreenWindowPositionY", "queryScreenWindowWidth" i "queryScreenWindowHeight"
-// que tenien les claus /interface/queryscreen/ + windowPositionX, windowPositionY, windowWidth i windowHeigth respectivament
-// TODO fer neteja d'aquestes claus antigues al registre/.conf
-const QString queryScreenGeometry("/interface/queryscreen/geometry");
+
 const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
 const QString lastOpenedDICOMDIRPath("/interface/lastOpenedDICOMDIRPath"); // últim path des del que hem obert un dicomdir
@@ -185,22 +182,10 @@ QString StarviewerSettings::getMaxConnections()
 }
 
 /************************ INTERFICIE ************************************************/
-void StarviewerSettings::saveQueryScreenGeometry( const QByteArray &geometry )
-{
-    QString key = GroupSettingsName + queryScreenGeometry;
-    m_starviewerSettings.setValue( key , geometry );
-}
-
 void StarviewerSettings::setQueryScreenStudyTreeSeriesListQSplitterState( const QByteArray &state )
 {
     QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
     m_starviewerSettings.setValue( key , state );
-}
-
-QByteArray StarviewerSettings::getQueryScreenGeometry()
-{
-    QString key = GroupSettingsName + queryScreenGeometry;
-    return m_starviewerSettings.value( key ).toByteArray();
 }
 
 QByteArray StarviewerSettings::getQueryScreenStudyTreeSeriesListQSplitterState()
