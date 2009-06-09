@@ -1,17 +1,22 @@
-/**
-    Interfície per manipular settings
-*/
-
 #ifndef UDGSETTINGS_H
 #define UDGSETTINGS_H
 
-#include <QVariant>
+#include <QSettings>
+
 // Forward declarations
 class QString;
 class QTreeWidget;
 
 namespace udg {
 
+/**
+    Interfície per manipular settings.
+    La manera correcta de fer servir la classe és declarant-la localment en el mètode en
+    el que volem accedir o escriure al setting, mai es declararà com a variable membre d'una classe.
+    L'escriptura d'un setting no es farà efectiva a disc fins que no es destrueixi la instància.
+    Aquest mecanisme funciona d'aquesta manera per raons d'eficiència, així podem assignar diversos
+    settings alhora sense penalitzar un accés a disc fins que no es destrueixi l'objecte de Settings.
+*/
 class Settings
 {
 public:
@@ -41,6 +46,10 @@ public:
     /// Es sobrecarregarà el mètode per tants widgets com calgui.
     void saveColumnsWidths( const QString &key, QTreeWidget *treeWidget );
     void restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget );
+
+private:
+    /// Objecte QSettings amb el que manipularem les configuracions
+    QSettings m_settings;
 };
 
 } // end namespace udg
