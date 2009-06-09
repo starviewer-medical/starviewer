@@ -1,6 +1,5 @@
 #include "settings.h"
 
-#include <QSettings>
 #include <QTreeWidget>
 #include <QHeaderView> // pel restoreColumnsWidths
 
@@ -16,43 +15,34 @@ Settings::~Settings()
 
 QVariant Settings::read( const QString &key, const QVariant &defaultValue ) const
 {
-    QSettings settings;
-
-    return settings.value(key, defaultValue);
+    return m_settings.value(key, defaultValue);
 }
 
 void Settings::write( const QString &key, const QVariant &value )
 {
-    QSettings settings;
-
-    settings.setValue(key, value);
+    m_settings.setValue(key, value);
 }
 
 bool Settings::contains( const QString &key ) const
 {
-    QSettings settings;
-
-    return settings.contains(key);
+    return m_settings.contains(key);
 }
 
 void Settings::remove( const QString &key )
 {
-    QSettings settings;
-
-    settings.remove(key);
+    m_settings.remove(key);
 }
 
 void Settings::saveColumnsWidths( const QString &key, QTreeWidget *treeWidget )
 {
     Q_ASSERT( treeWidget );
 
-    Settings settings;
     int columnCount = treeWidget->columnCount();
     QString columnKey;
     for( int column = 0; column < columnCount; column++ )
     {   
         columnKey = key + "/columnWidth" + QString::number(column);
-        settings.write( columnKey, treeWidget->columnWidth(column) );
+        this->write( columnKey, treeWidget->columnWidth(column) );
     }
 }
 
@@ -60,16 +50,15 @@ void Settings::restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget
 {
     Q_ASSERT( treeWidget );
 
-    Settings settings;
     int columnCount = treeWidget->columnCount();
     QString columnKey;
     for( int column = 0; column < columnCount; column++ )
     {   
         columnKey = key + "/columnWidth" + QString::number(column);
-        if( !settings.contains( columnKey ) )
+        if( !this->contains( columnKey ) )
             treeWidget->resizeColumnToContents(column);
         else
-            treeWidget->header()->resizeSection( column, settings.read( columnKey ).toInt() );
+            treeWidget->header()->resizeSection( column, this->read( columnKey ).toInt() );
     }
 }
 
