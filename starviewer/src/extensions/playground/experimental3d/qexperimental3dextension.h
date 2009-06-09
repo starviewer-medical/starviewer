@@ -77,6 +77,10 @@ public slots:
     void loadGuidedTour( QString fileName = QString() );
     /// Desa el guided tour a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveGuidedTour( QString fileName = QString() );
+    /// Carrega l'exploratory tour des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadExploratoryTour( QString fileName = QString() );
+    /// Desa l'exploratory tour a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveExploratoryTour( QString fileName = QString() );
 
 private:
 
@@ -203,6 +207,7 @@ private slots:
 
     void tourBestViews();
     void guidedTour();
+    void exploratoryTour();
 
     void computeVomiGradient();
 
@@ -237,6 +242,7 @@ private:
     float m_maximumColorVomi;
     QList< QPair<int, Vector3> > m_bestViews;
     QList< QPair<int, Vector3> > m_guidedTour;
+    QList< QPair<int, Vector3> > m_exploratoryTour;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
     QVector<float> m_evmi;
