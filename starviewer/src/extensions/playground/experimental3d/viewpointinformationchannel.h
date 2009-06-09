@@ -46,7 +46,7 @@ public:
      */
     void filterViewpoints( const QVector<bool> &filter );
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
-    void compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &bestViews, bool display = false );
+    void compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &bestViews, bool &guidedTour, bool display = false );
     const QVector<float>& viewpointEntropy() const;
     float entropy() const;
     const QVector<float>& vmi() const;
@@ -58,6 +58,7 @@ public:
     const QVector<Vector3Float>& colorVomi() const;
     float maximumColorVomi() const;
     const QList< QPair<int, Vector3> >& bestViews() const;
+    const QList< QPair<int, Vector3> >& guidedTour() const;
 
 signals:
 
@@ -69,7 +70,7 @@ private:
 
 #ifndef CUDA_AVAILABLE
     void computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities,
-                     bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews );
+                     bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour );
     void createVoxelProbabilitiesPerViewFiles();
     void readVoxelProbabilitiesInView( int i, QVector<float> &voxelProbabilitiesInView );
     void deleteVoxelProbabilitiesPerViewFiles();
@@ -79,15 +80,18 @@ private:
     void computeViewMeasuresCpu( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi );
     void computeVomiCpu( bool computeVomi, bool computeColorVomi );
     void computeBestViewsCpu();
+    void computeGuidedTourCpu();
 #else // CUDA_AVAILABLE
     static Matrix4 viewMatrix( const Vector3 &viewpoint );
     void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities,
-                      bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool display );
+                      bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour, bool display );
+    QVector<float> voxelProbabilitiesInView( int i );
     void computeViewProbabilitiesCuda();
     void computeVoxelProbabilitiesCuda();
     void computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi );
     void computeVomiCuda( bool computeVomi, bool computeColorVomi );
     void computeBestViewsCuda();
+    void computeGuidedTourCuda();
 #endif // CUDA_AVAILABLE
 
 private:
@@ -122,6 +126,7 @@ private:
     int m_numberOfBestViews;
     float m_bestViewsThreshold;
     QList< QPair<int, Vector3> > m_bestViews;
+    QList< QPair<int, Vector3> > m_guidedTour;
 
 };
 

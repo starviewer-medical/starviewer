@@ -1,6 +1,7 @@
 #include "viewpointinformationchannel.h"
 
 #include <QCoreApplication>
+#include <QSet>
 #include <QThread>
 
 #include "qexperimental3dviewer.h"
@@ -245,10 +246,11 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
 }
 
 
-void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &bestViews, bool display )
+void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &bestViews, bool &guidedTour,
+                                           bool display )
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy && !entropy && !vmi && !mi && !viewpointUnstabilities && !vomi && !viewpointVomi && !colorVomi && !bestViews ) return;
+    if ( !viewpointEntropy && !entropy && !vmi && !mi && !viewpointUnstabilities && !vomi && !viewpointVomi && !colorVomi && !bestViews && !guidedTour ) return;
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
@@ -256,6 +258,7 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
     // Dependències
     if ( entropy ) viewProbabilities = true;
     if ( entropy ) viewpointEntropy = true;
+    if ( guidedTour ) bestViews = true;
     if ( bestViews ) mi = true;
     if ( mi ) vmi = true;
     if ( vmi ) voxelProbabilities = true;
@@ -267,9 +270,9 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
 
 #ifndef CUDA_AVAILABLE
     Q_UNUSED( display );
-    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews );
+    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews, guidedTour );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews, display );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews, guidedTour, display );
 #endif // CUDA_AVAILABLE
 }
 
@@ -340,11 +343,17 @@ const QList< QPair<int, Vector3> >& ViewpointInformationChannel::bestViews() con
 }
 
 
+const QList< QPair<int, Vector3> >& ViewpointInformationChannel::guidedTour() const
+{
+    return m_guidedTour;
+}
+
+
 #ifndef CUDA_AVAILABLE
 
 
 void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi,
-                                              bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews )
+                                              bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour )
 {
     DEBUG_LOG( "computeCpu" );
 
@@ -354,7 +363,8 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
     if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi ) nSteps++;  // viewpoint entropy + entropy + VMI + MI + unstabilities + VVoMI
-    if ( computeBestViews ) nSteps++;  // best views
+    if ( computeBestViews ) nSteps++;   // best views
+    if ( computeGuidedTour ) nSteps++;  // guided tour
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -408,6 +418,14 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     if ( computeBestViews )
     {
         computeBestViewsCpu();
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // guided tour
+    if ( computeBestViews )
+    {
+        computeGuidedTourCpu();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1030,6 +1048,128 @@ void ViewpointInformationChannel::computeBestViewsCpu()
 }
 
 
+void ViewpointInformationChannel::computeGuidedTourCpu()
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    DEBUG_LOG( "Guided tour:" );
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    m_guidedTour.clear();
+
+    QList< QPair<int, Vector3> > bestViews = m_bestViews;   // còpia
+    int nBestViews = bestViews.size();
+
+    m_guidedTour << bestViews.takeAt( 0 );
+    DEBUG_LOG( QString( "%1: (v%2) = %3" ).arg( 0 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ) );
+
+    emit partialProgress( 100 / nBestViews );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    QSet<int> viewpointIndices;
+    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndices << i;
+
+    QVector<float> pZvi( nVoxels ); // p(Z|vi)
+    QVector<float> pZvj( nVoxels ); // p(Z|vj)
+
+    while ( !bestViews.isEmpty() )
+    {
+        QPair<int, Vector3> current = m_guidedTour.last();
+        int i = current.first;
+        float pvi = m_viewProbabilities.at( i );    // p(vi)
+
+        readVoxelProbabilitiesInView( i, pZvi );
+
+        int target, targetIndex;
+        float minDissimilarity;
+        int remainingViews = bestViews.size();
+
+        // trobar el target
+        for ( int k = 0; k < remainingViews; k++ )
+        {
+            int j = bestViews.at( k ).first;
+            float pvj = m_viewProbabilities.at( j );    // p(vj)
+            float pvij = pvi + pvj; // p(v̂)
+
+            float dissimilarity;
+
+            if ( pvij == 0.0f ) dissimilarity = 0.0f;
+            else
+            {
+                readVoxelProbabilitiesInView( j, pZvj );
+
+                dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
+            }
+
+            if ( k == 0 || dissimilarity < minDissimilarity )
+            {
+                target = j;
+                targetIndex = k;
+                minDissimilarity = dissimilarity;
+            }
+        }
+
+        // p(vi) i p(Z|vi) ara fan referència al target
+        pvi = m_viewProbabilities.at( target ); // p(vi)
+
+        readVoxelProbabilitiesInView( target, pZvi );
+
+        QSet<int> indices( viewpointIndices );
+        int currentIndex = i;
+
+        // camí fins al target
+        while ( currentIndex != target )
+        {
+            indices.remove( currentIndex );
+
+            QVector<int> neighbours = m_viewpointGenerator.neighbours( currentIndex );
+            int nNeighbours = neighbours.size();
+            bool test = false;  // per comprovar que sempre tria un veí
+
+            for ( int k = 0; k < nNeighbours; k++ )
+            {
+                int j = neighbours.at( k );
+
+                if ( !indices.contains( j ) ) continue;
+
+                float pvj = m_viewProbabilities.at( j );    // p(vj)
+                float pvij = pvi + pvj; // p(v̂)
+
+                float dissimilarity;
+
+                if ( pvij == 0.0f ) dissimilarity = 0.0f;
+                else
+                {
+                    readVoxelProbabilitiesInView( j, pZvj );
+
+                    dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
+                }
+
+                if ( k == 0 || dissimilarity < minDissimilarity )
+                {
+                    currentIndex = j;
+                    minDissimilarity = dissimilarity;
+                    test = true;
+                }
+            }
+
+            Q_ASSERT( test );
+
+            m_guidedTour << qMakePair( currentIndex, m_viewpoints.at( currentIndex ) );
+            DEBUG_LOG( QString( "%1: (v%2) = %3; dissimilarity = %4" ).arg( m_guidedTour.size() - 1 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ).arg( minDissimilarity ) );
+        }
+
+        bestViews.removeAt( targetIndex );  // esborrem el target de bestViews
+
+        emit partialProgress( 100 * ( nBestViews - bestViews.size() ) / nBestViews );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+}
+
+
 #else // CUDA_AVAILABLE
 
 
@@ -1042,7 +1182,7 @@ Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 
 
 void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi,
-                                               bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool display )
+                                               bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour, bool display )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -1053,6 +1193,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi ) nSteps++;  // viewpoint entropy + entropy + VMI + MI + unstabilities + VVoMI
     if ( computeBestViews ) nSteps++;   // best views
+    if ( computeGuidedTour ) nSteps++;  // guided tour
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -1102,9 +1243,29 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
+    // guided tour
+    if ( computeGuidedTour )
+    {
+        computeGuidedTourCuda();
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
     // Finalització de CUDA
     if ( computeVoxelProbabilities ) cvicCleanupVoxelProbabilities();
     cvicCleanupRayCast();
+}
+
+
+QVector<float> ViewpointInformationChannel::voxelProbabilitiesInView( int i )
+{
+    QVector<float> pZv = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );    // p(Z|v) * viewedVolume
+    double viewedVolume = 0.0;
+    int nVoxels = m_volume->getSize();
+    for ( int j = 0; j < nVoxels; j++ ) viewedVolume += pZv.at( j );
+    Q_ASSERT( viewedVolume == viewedVolume );
+    for ( int j = 0; j < nVoxels; j++ ) pZv[j] /= viewedVolume; // p(Z|v)
+    return pZv;
 }
 
 
@@ -1121,10 +1282,10 @@ void ViewpointInformationChannel::computeViewProbabilitiesCuda()
 
     for ( int i = 0; i < nViewpoints; i++ )
     {
-        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
+        QVector<float> histogram = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
+        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += histogram.at( j );
         Q_ASSERT( viewedVolume == viewedVolume );
 
         m_viewProbabilities[i] = viewedVolume;
@@ -1164,10 +1325,10 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCuda()
 
     for ( int i = 0; i < nViewpoints; i++ )
     {
-        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
+        QVector<float> histogram = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
+        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += histogram.at( j );
         Q_ASSERT( viewedVolume == viewedVolume );
 
         cvicAccumulateVoxelProbabilities( m_viewProbabilities.at( i ), viewedVolume );
@@ -1263,12 +1424,7 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
 
     for ( int i = 0; i < nViewpoints; i++ )
     {
-        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
-
-        double viewedVolume = 0.0;
-        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
-        Q_ASSERT( viewedVolume == viewedVolume );
-        for ( int j = 0; j < nVoxels; j++ ) voxelProbabilitiesInView[j] /= viewedVolume;    // p(Z|v)
+        QVector<float> voxelProbabilitiesInView = this->voxelProbabilitiesInView( i );  // p(Z|v)
 
         if ( computeViewpointEntropy )
         {
@@ -1312,11 +1468,7 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
 
                 if ( pvij == 0.0f ) continue;
 
-                QVector<float> voxelProbabilitiesInNeighbour = cvicRayCastAndGetHistogram( m_viewpoints.at( neighbour ), viewMatrix( m_viewpoints.at( neighbour ) ) ); // p(Z|vj) * viewedVolume
-                double viewedVolume = 0.0;
-                for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInNeighbour.at( j );
-                Q_ASSERT( viewedVolume == viewedVolume );
-                for ( int j = 0; j < nVoxels; j++ ) voxelProbabilitiesInNeighbour[j] /= viewedVolume;   // p(Z|vj)
+                QVector<float> voxelProbabilitiesInNeighbour = this->voxelProbabilitiesInView( neighbour ); // p(Z|vj)
 
                 float viewpointDissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, voxelProbabilitiesInView, voxelProbabilitiesInNeighbour );
                 viewpointUnstability += viewpointDissimilarity;
@@ -1390,10 +1542,10 @@ void ViewpointInformationChannel::computeVomiCuda( bool computeVomi, bool comput
         float pv = m_viewProbabilities.at( i );
         if ( pv == 0.0f ) continue;
 
-        QVector<float> voxelProbabilitiesInView = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
+        QVector<float> histogram = cvicRayCastAndGetHistogram( m_viewpoints.at( i ), viewMatrix( m_viewpoints.at( i ) ) );  // p(Z|v) * viewedVolume
 
         double viewedVolume = 0.0;
-        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += voxelProbabilitiesInView.at( j );
+        for ( int j = 0; j < nVoxels; j++ ) viewedVolume += histogram.at( j );
         Q_ASSERT( viewedVolume == viewedVolume );
 
         if ( computeVomi ) cvicAccumulateVomi( pv, viewedVolume );
@@ -1475,11 +1627,7 @@ void ViewpointInformationChannel::computeBestViewsCuda()
 
     float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
 
-    QVector<float> pZvv = cvicRayCastAndGetHistogram( m_viewpoints.at( minVmiIndex ), viewMatrix( m_viewpoints.at( minVmiIndex ) ) );   // p(Z|v̂) * viewedVolume
-    double viewedVolume = 0.0;
-    for ( int j = 0; j < nVoxels; j++ ) viewedVolume += pZvv.at( j );
-    Q_ASSERT( viewedVolume == viewedVolume );
-    for ( int j = 0; j < nVoxels; j++ ) pZvv[j] /= viewedVolume;    // p(Z|v̂)
+    QVector<float> pZvv = this->voxelProbabilitiesInView( minVmiIndex );    // p(Z|v̂)
 
     // límits
     m_numberOfBestViews = qMin( m_numberOfBestViews, nViewpoints );
@@ -1519,11 +1667,7 @@ void ViewpointInformationChannel::computeBestViewsCuda()
         {
             int viewIndex = viewpointIndexList.at( i );
             float pvi = m_viewProbabilities.at( viewIndex );
-            QVector<float> pZvi = cvicRayCastAndGetHistogram( m_viewpoints.at( viewIndex ), viewMatrix( m_viewpoints.at( viewIndex ) ) );   // p(Z|vi) * viewedVolume
-            double viewedVolume = 0.0;
-            for ( int j = 0; j < nVoxels; j++ ) viewedVolume += pZvi.at( j );
-            Q_ASSERT( viewedVolume == viewedVolume );
-            for ( int j = 0; j < nVoxels; j++ ) pZvi[j] /= viewedVolume;    // p(Z|vi)
+            QVector<float> pZvi = this->voxelProbabilitiesInView( viewIndex );  // p(Z|vi)
 
             float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
             QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
@@ -1555,6 +1699,126 @@ void ViewpointInformationChannel::computeBestViewsCuda()
 
     emit partialProgress( 100 );
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+}
+
+
+void ViewpointInformationChannel::computeGuidedTourCuda()
+{
+    int nViewpoints = m_viewpoints.size();
+
+    DEBUG_LOG( "Guided tour:" );
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    m_guidedTour.clear();
+
+    QList< QPair<int, Vector3> > bestViews = m_bestViews;   // còpia
+    int nBestViews = bestViews.size();
+
+    m_guidedTour << bestViews.takeAt( 0 );
+    DEBUG_LOG( QString( "%1: (v%2) = %3" ).arg( 0 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ) );
+
+    emit partialProgress( 100 / nBestViews );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    QSet<int> viewpointIndices;
+    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndices << i;
+
+    while ( !bestViews.isEmpty() )
+    {
+        QPair<int, Vector3> current = m_guidedTour.last();
+        int i = current.first;
+        float pvi = m_viewProbabilities.at( i );    // p(vi)
+
+        QVector<float> pZvi = this->voxelProbabilitiesInView( i );  // p(Z|vi)
+
+        int target, targetIndex;
+        float minDissimilarity;
+        int remainingViews = bestViews.size();
+
+        // trobar el target
+        for ( int k = 0; k < remainingViews; k++ )
+        {
+            int j = bestViews.at( k ).first;
+            float pvj = m_viewProbabilities.at( j );    // p(vj)
+            float pvij = pvi + pvj; // p(v̂)
+
+            float dissimilarity;
+
+            if ( pvij == 0.0f ) dissimilarity = 0.0f;
+            else
+            {
+                QVector<float> pZvj = this->voxelProbabilitiesInView( j );  // p(Z|vj)
+
+                dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
+            }
+
+            if ( k == 0 || dissimilarity < minDissimilarity )
+            {
+                target = j;
+                targetIndex = k;
+                minDissimilarity = dissimilarity;
+            }
+        }
+
+        DEBUG_LOG( QString( "target = %1" ).arg( target + 1 ) );
+
+        // p(vi) i p(Z|vi) ara fan referència al target
+        pvi = m_viewProbabilities.at( target ); // p(vi)
+
+        pZvi = this->voxelProbabilitiesInView( target );
+
+        QSet<int> indices( viewpointIndices );
+        int currentIndex = i;
+
+        // camí fins al target
+        while ( currentIndex != target )
+        {
+            indices.remove( currentIndex );
+
+            QVector<int> neighbours = m_viewpointGenerator.neighbours( currentIndex );
+            int nNeighbours = neighbours.size();
+            bool test = false;  // per comprovar que sempre tria un veí
+
+            for ( int k = 0; k < nNeighbours; k++ )
+            {
+                int j = neighbours.at( k );
+
+                if ( !indices.contains( j ) ) continue;
+
+                float pvj = m_viewProbabilities.at( j );    // p(vj)
+                float pvij = pvi + pvj; // p(v̂)
+
+                float dissimilarity;
+
+                if ( pvij == 0.0f ) dissimilarity = 0.0f;
+                else
+                {
+                    QVector<float> pZvj = this->voxelProbabilitiesInView( j );
+
+                    dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
+                }
+
+                if ( k == 0 || dissimilarity < minDissimilarity )
+                {
+                    currentIndex = j;
+                    minDissimilarity = dissimilarity;
+                    test = true;
+                }
+            }
+
+            Q_ASSERT( test );
+
+            m_guidedTour << qMakePair( currentIndex, m_viewpoints.at( currentIndex ) );
+            DEBUG_LOG( QString( "%1: (v%2) = %3; dissimilarity = %4" ).arg( m_guidedTour.size() - 1 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ).arg( minDissimilarity ) );
+        }
+
+        bestViews.removeAt( targetIndex );  // esborrem el target de bestViews
+
+        emit partialProgress( 100 * ( nBestViews - bestViews.size() ) / nBestViews );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
 }
 
 
