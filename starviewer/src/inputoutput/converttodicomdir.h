@@ -7,16 +7,17 @@
 #ifndef UDGCONVERTTODICOMDIR_H
 #define UDGCONVERTTODICOMDIR_H
 
-#include <QStringList>
 #include <QObject>
+#include <QStringList>
 
 #include "createdicomdir.h"
 
-class QString;
+// fordward declarations
 class QProgressDialog;
 
 namespace udg {
 
+// fordward declarations
 class Status;
 class Study;
 class Series;
@@ -34,8 +35,8 @@ class ConvertToDicomdir : public QObject
 {
 Q_OBJECT
 public:
-
     ConvertToDicomdir(QObject *parent = 0);
+    ~ConvertToDicomdir();
 
     /** Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
      * @param studyUID UID de l'estudi a convertir a dicomdir
@@ -53,19 +54,18 @@ public:
       */
     void createReadmeTxt();
 
-
-    ~ConvertToDicomdir();
-
-private :
-
-    /*Estructura que conté la informació d'un estudi a convertir a dicomdir, és necessari guardar el Patient ID perquè segons la normativa del IHE, els estudis s'han d'agrupar per id de pacient*/
+private:
+    /** Estructura que conté la informació d'un estudi a convertir a dicomdir. 
+      * És necessari guardar el Patient ID perquè segons la normativa de l'IHE, 
+      * els estudis s'han d'agrupar per id de pacient
+      */
     struct StudyToConvert
         {
             QString patientId;
             QString studyUID;
         };
 
-    /** crea un dicomdir, al directori especificat
+    /** Crea un dicomdir, al directori especificat
      * @param dicomdirPath lloc a crear el dicomdir
      * @param selectedDevice dispositiu on es crearà el dicomdir
      * @return  estat del mètode
@@ -93,7 +93,7 @@ private :
      */
     Status copyImageToDicomdirPath(Image *image);
 
-    /// esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
+    /// Esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
 
 private:

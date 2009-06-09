@@ -6,13 +6,8 @@
  ***************************************************************************/
 #include "converttodicomdir.h"
 
-#include <QString>
 #include <QProgressDialog>
-#include <QDir>
-#include <QChar>
-#include <QFile>
 #include <QTextStream>
-#include <QList>
 
 #include "logging.h"
 #include "status.h"
@@ -30,12 +25,14 @@ namespace udg {
 
 ConvertToDicomdir::ConvertToDicomdir(QObject *parent) : QObject(parent)
 {
-    QDir dicomDir;
-
     m_study = 0;
     m_series = 0;
     m_image = 0;
     m_patient = 0;
+}
+
+ConvertToDicomdir::~ConvertToDicomdir()
+{
 }
 
 void ConvertToDicomdir::addStudy( const QString &studyUID )
@@ -229,7 +226,6 @@ Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
     return state;
 }
 
-
 Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
 {
     /*Creem el directori de l'estudi on es mourà un estudi seleccionat per convertir a dicomdir*/
@@ -330,10 +326,6 @@ void ConvertToDicomdir::createReadmeTxt()
     out << "E-mail contact : " << OrganizationEmailString << "\n";
 
     file.close();
-}
-
-ConvertToDicomdir::~ConvertToDicomdir()
-{
 }
 
 }
