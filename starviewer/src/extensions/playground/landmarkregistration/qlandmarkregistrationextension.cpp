@@ -162,8 +162,8 @@ void QLandmarkRegistrationExtension::readSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-LandmarkRegistration/";
 
-    m_verticalSplitter->restoreState( settings.read( keyPrefix + "verticalSplitter").toByteArray() );
-    m_verticalSplitter2->restoreState( settings.read( keyPrefix + "verticalSplitter2").toByteArray() );
+    m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
+    m_verticalSplitter2->restoreState( settings.getValue( keyPrefix + "verticalSplitter2").toByteArray() );
 }
 
 void QLandmarkRegistrationExtension::writeSettings()
@@ -171,8 +171,8 @@ void QLandmarkRegistrationExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-LandmarkRegistration/";
 
-    settings.write( keyPrefix + "verticalSplitter" , m_verticalSplitter->saveState() );
-    settings.write( keyPrefix + "verticalSplitter2", m_verticalSplitter2->saveState() );
+    settings.setValue( keyPrefix + "verticalSplitter" , m_verticalSplitter->saveState() );
+    settings.setValue( keyPrefix + "verticalSplitter2", m_verticalSplitter2->saveState() );
 }
 
 void QLandmarkRegistrationExtension::setInput( Volume *input )

@@ -339,7 +339,7 @@ void QApplicationMainWindow::createLanguageMenu()
 QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
-    QString defaultLocale = settings.read("Starviewer-Language/languageLocale", QLocale::system().name()).toString();
+    QString defaultLocale = settings.getValue("Starviewer-Language/languageLocale", QLocale::system().name()).toString();
 
     QAction *action = new QAction(this);
     action->setText(language);
@@ -353,7 +353,7 @@ QAction *QApplicationMainWindow::createLanguageAction(const QString &language, c
 void QApplicationMainWindow::switchToLanguage(QString locale)
 {
     Settings settings;
-    settings.write("Starviewer-Language/languageLocale", locale);
+    settings.setValue("Starviewer-Language/languageLocale", locale);
 
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
@@ -484,7 +484,7 @@ void QApplicationMainWindow::writeSettings()
 {
     Settings settings;
 
-    settings.write("geometry", saveGeometry());
+    settings.setValue("geometry", saveGeometry());
 }
 
 void QApplicationMainWindow::enableExtensions()
@@ -531,7 +531,7 @@ void QApplicationMainWindow::readSettings()
     if (!settings.contains("geometry"))
         this->showMaximized();
     else
-        this->restoreGeometry(settings.read("geometry").toByteArray());
+        this->restoreGeometry(settings.getValue("geometry").toByteArray());
 }
 
 void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )

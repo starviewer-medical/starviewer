@@ -724,7 +724,7 @@ void Q3DViewer::renderRayCastingObscurance()
     m_volumeProperty->SetInterpolationTypeToLinear();
 
 //     Settings settings;
-//     QString interpolation = settings.read( "3DViewer/interpolation" ).toString();
+//     QString interpolation = settings.getValue( "3DViewer/interpolation" ).toString();
 //     if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
 //     else m_volumeProperty->SetInterpolationTypeToNearest();
 
@@ -1075,10 +1075,10 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
             ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( quality ) );
     }
 
-    int numberOfDirections = settings.read( prefixKey + "numberOfDirections" ).toInt();
-    ObscuranceMainThread::Function function = static_cast<ObscuranceMainThread::Function>( settings.read( prefixKey + "function" ).toInt() );
-    ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.read( prefixKey + "variant" ).toInt() );
-    unsigned int gradientRadius = settings.read( prefixKey + "gradientRadius" ).toUInt();
+    int numberOfDirections = settings.getValue( prefixKey + "numberOfDirections" ).toInt();
+    ObscuranceMainThread::Function function = static_cast<ObscuranceMainThread::Function>( settings.getValue( prefixKey + "function" ).toInt() );
+    ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( prefixKey + "variant" ).toInt() );
+    unsigned int gradientRadius = settings.getValue( prefixKey + "gradientRadius" ).toUInt();
 
     double distance = m_vtkVolume->GetLength() / 2.0;   /// \todo de moment la meitat de la diagonal, però podria ser una altra funció
     // el primer paràmetre és el nombre de direccions

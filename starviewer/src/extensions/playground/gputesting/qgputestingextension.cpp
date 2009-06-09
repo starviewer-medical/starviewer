@@ -75,7 +75,7 @@ void QGpuTestingExtension::loadTransferFunction()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString transferFunctionDir = settings.read(  keyPrefix + "transferFunctionDir", QString() ).toString();
+    QString transferFunctionDir = settings.getValue(  keyPrefix + "transferFunctionDir", QString() ).toString();
     QString transferFunctionFileName = QFileDialog::getOpenFileName( this, tr("Load transfer function"), transferFunctionDir,
                                                                      tr("Transfer function files (*.tf);;XML files (*.xml);;All files (*)") );
 
@@ -90,7 +90,7 @@ void QGpuTestingExtension::loadTransferFunction()
         delete transferFunction;
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.write( keyPrefix + "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
+        settings.setValue( keyPrefix + "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
     }
 }
 
@@ -100,7 +100,7 @@ void QGpuTestingExtension::saveTransferFunction()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString transferFunctionDir = settings.read( keyPrefix + "transferFunctionDir", QString() ).toString();
+    QString transferFunctionDir = settings.getValue( keyPrefix + "transferFunctionDir", QString() ).toString();
     QFileDialog saveDialog( this, tr("Save transfer function"), transferFunctionDir,
                             tr("Transfer function files (*.tf);;XML files (*.xml);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
@@ -116,7 +116,7 @@ void QGpuTestingExtension::saveTransferFunction()
             TransferFunctionIO::toFile( transferFunctionFileName, m_transferFunctionEditor->getTransferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.write( keyPrefix + "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
+        settings.setValue( keyPrefix + "transferFunctionDir", transferFunctionFileInfo.absolutePath() );
     }
 }
 
@@ -175,7 +175,7 @@ void QGpuTestingExtension::loadCamera()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString cameraDir = settings.read( keyPrefix + "cameraDir", QString() ).toString();
+    QString cameraDir = settings.getValue( keyPrefix + "cameraDir", QString() ).toString();
     QString cameraFileName = QFileDialog::getOpenFileName( this, tr("Load camera parameters"), cameraDir,
                                                            tr("Camera files (*.cam);;All files (*)") );
 
@@ -221,7 +221,7 @@ void QGpuTestingExtension::loadCamera()
         cameraFile.close();
 
         QFileInfo cameraFileInfo( cameraFileName );
-        settings.write( keyPrefix + "cameraDir", cameraFileInfo.absolutePath() );
+        settings.setValue( keyPrefix + "cameraDir", cameraFileInfo.absolutePath() );
 
         setCamera();
     }
@@ -233,7 +233,7 @@ void QGpuTestingExtension::saveCamera()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString cameraDir = settings.read( keyPrefix + "cameraDir", QString() ).toString();
+    QString cameraDir = settings.getValue( keyPrefix + "cameraDir", QString() ).toString();
     QFileDialog saveDialog( this, tr("Save camera parameters"), cameraDir, tr("Camera files (*.cam);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
     saveDialog.setDefaultSuffix( "cam" );
@@ -268,7 +268,7 @@ void QGpuTestingExtension::saveCamera()
         cameraFile.close();
 
         QFileInfo cameraFileInfo( cameraFileName );
-        settings.write( keyPrefix + "cameraDir", cameraFileInfo.absolutePath() );
+        settings.setValue( keyPrefix + "cameraDir", cameraFileInfo.absolutePath() );
     }
 }
 

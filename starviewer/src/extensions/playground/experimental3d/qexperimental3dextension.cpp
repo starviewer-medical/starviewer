@@ -769,13 +769,13 @@ QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirK
     Settings settings;
     QString keyPrefix = "Experimental3D/";
 
-    QString dir = settings.read( keyPrefix + settingsDirKey, QString() ).toString();
+    QString dir = settings.getValue( keyPrefix + settingsDirKey, QString() ).toString();
     QString fileName = QFileDialog::getOpenFileName( this, caption, dir, filter );
 
     if ( !fileName.isNull() )
     {
         QFileInfo fileInfo( fileName );
-        settings.write( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
+        settings.setValue( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
     }
 
     return fileName;
@@ -789,7 +789,7 @@ QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirK
     Settings settings;
     QString keyPrefix = "Experimental3D/";
 
-    QString dir = settings.read( keyPrefix + settingsDirKey, QString() ).toString();
+    QString dir = settings.getValue( keyPrefix + settingsDirKey, QString() ).toString();
     QFileDialog saveDialog( this, caption, dir, filter );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
     saveDialog.setDefaultSuffix( defaultSuffix );
@@ -798,7 +798,7 @@ QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirK
     {
         fileName = saveDialog.selectedFiles().first();
         QFileInfo fileInfo( fileName );
-        settings.write( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
+        settings.setValue( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
     }
 
 

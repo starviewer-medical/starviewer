@@ -212,9 +212,9 @@ void ScreenShotTool::readSettings()
     Settings settings;
     QString keyPrefix = "ScreenshotTool/";
     
-    m_lastScreenShotPath = settings.read( keyPrefix + "defaultSaveFolder", QDir::homePath() ).toString();
-    m_lastScreenShotExtensionFilter = settings.read( keyPrefix + "defaultSaveExtension", PngFileFilter ).toString();
-    m_lastScreenShotFileName = settings.read( keyPrefix + "defaultSaveName", "" ).toString();
+    m_lastScreenShotPath = settings.getValue( keyPrefix + "defaultSaveFolder", QDir::homePath() ).toString();
+    m_lastScreenShotExtensionFilter = settings.getValue( keyPrefix + "defaultSaveExtension", PngFileFilter ).toString();
+    m_lastScreenShotFileName = settings.getValue( keyPrefix + "defaultSaveName", "" ).toString();
 }
 
 void ScreenShotTool::writeSettings()
@@ -222,9 +222,9 @@ void ScreenShotTool::writeSettings()
     Settings settings;
     QString keyPrefix = "ScreenshotTool/";
 
-    settings.write( keyPrefix + "defaultSaveFolder", m_lastScreenShotPath );
-    settings.write( keyPrefix + "defaultSaveExtension", m_lastScreenShotExtensionFilter );
-    settings.write( keyPrefix + "defaultSaveName", m_lastScreenShotFileName );
+    settings.setValue( keyPrefix + "defaultSaveFolder", m_lastScreenShotPath );
+    settings.setValue( keyPrefix + "defaultSaveExtension", m_lastScreenShotExtensionFilter );
+    settings.setValue( keyPrefix + "defaultSaveName", m_lastScreenShotFileName );
 }
 
 }
