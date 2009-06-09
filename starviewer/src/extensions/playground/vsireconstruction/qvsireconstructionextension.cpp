@@ -2123,10 +2123,10 @@ void QVSIReconstructionExtension::readSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
-    m_verticalImageSplitter->restoreState( settings.getValue( keyPrefix + "verticalImageSplitter").toByteArray() );
-    m_horizontalImageSplitter->restoreState( settings.getValue( keyPrefix + "horizontalImageSplitter").toByteArray() );
+    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
+    settings.restoreGeometry( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter );
+    settings.restoreGeometry( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter );
 }
 
 void QVSIReconstructionExtension::writeSettings()
@@ -2134,10 +2134,10 @@ void QVSIReconstructionExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
-    settings.setValue( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter->saveState() );
-    settings.setValue( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter->saveState() );
+    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
+    settings.saveGeometry( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter );
+    settings.saveGeometry( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter );
 }
 
 }

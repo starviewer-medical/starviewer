@@ -1377,7 +1377,7 @@ void QMPRExtension::readSettings()
         m_horizontalSplitter->setSizes( list );
     }
     else
-        m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray() );
+        settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
 
     if( settings.getValue( keyPrefix + "verticalSplitter").toByteArray().isEmpty() )
     {
@@ -1386,7 +1386,7 @@ void QMPRExtension::readSettings()
         m_verticalSplitter->setSizes( list );
     }
     else
-        m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
+        settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
 }
 
 void QMPRExtension::writeSettings()
@@ -1394,8 +1394,8 @@ void QMPRExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "Starviewer-App-MPR/";
 
-    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
 }
 
 };  // end namespace udg

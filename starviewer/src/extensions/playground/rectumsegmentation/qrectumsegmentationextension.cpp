@@ -719,8 +719,8 @@ void QRectumSegmentationExtension::readSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-RectumSegmentation/";
 
-    m_horizontalSplitter->restoreState( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray() );
-    m_verticalSplitter->restoreState( settings.getValue( keyPrefix + "verticalSplitter").toByteArray() );
+    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
     m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory", "." ).toString();
 }
 
@@ -729,8 +729,8 @@ void QRectumSegmentationExtension::writeSettings()
     Settings settings;
     QString keyPrefix = "StarViewer-App-RectumSegmentation/";
 
-    settings.setValue( keyPrefix + "horizontalSplitter", m_horizontalSplitter->saveState() );
-    settings.setValue( keyPrefix + "verticalSplitter", m_verticalSplitter->saveState() );
+    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
     settings.setValue( keyPrefix + "savingDirectory", m_savingMaskDirectory );
 }
 
