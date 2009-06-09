@@ -21,7 +21,9 @@
 #include <QTemporaryFile>
 #include <QTextStream>
 
+
 namespace udg {
+
 
 QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
  : QWidget( parent ), m_volume( 0 ),
@@ -472,6 +474,40 @@ void QExperimental3DExtension::saveGuidedTour( QString fileName )
 }
 
 
+void QExperimental3DExtension::loadExploratoryTour( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "exploratoryTourDir", tr("Load exploratory tour"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_exploratoryTour ) )
+    {
+        m_saveExploratoryTourPushButton->setEnabled( true );
+        m_exploratoryTourPushButton->setEnabled( true );
+    }
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load exploratory tour"), QString( tr("Can't load exploratory tour from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveExploratoryTour( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "exploratoryTourDir", tr("Save exploratory tour"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveDataAsText( m_exploratoryTour, fileName, QString( "%1: v%2 %3" ), 0, 1 );
+    else error = !saveData( m_exploratoryTour, fileName );
+
+    if ( error && m_interactive )QMessageBox::warning( this, tr("Can't save exploratory tour"), QString( tr("Can't save exploratory tour to file ") ) + fileName );
+}
+
+
 bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &data )
 {
     QFile file( fileName );
@@ -787,10 +823,15 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveBestViewsPushButton, SIGNAL( clicked() ), SLOT( saveBestViews() ) );
     connect( m_loadGuidedTourPushButton, SIGNAL( clicked() ), SLOT( loadGuidedTour() ) );
     connect( m_saveGuidedTourPushButton, SIGNAL( clicked() ), SLOT( saveGuidedTour() ) );
+    connect( m_computeExploratoryTourCheckBox, SIGNAL( toggled(bool) ), m_computeExploratoryTourThresholdLabel, SLOT( setEnabled(bool) ) );
+    connect( m_computeExploratoryTourCheckBox, SIGNAL( toggled(bool) ), m_computeExploratoryTourThresholdDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_loadExploratoryTourPushButton, SIGNAL( clicked() ), SLOT( loadExploratoryTour() ) );
+    connect( m_saveExploratoryTourPushButton, SIGNAL( clicked() ), SLOT( saveExploratoryTour() ) );
     connect( m_loadEvmiPushButton, SIGNAL( clicked() ), SLOT( loadEvmi() ) );
     connect( m_saveEvmiPushButton, SIGNAL( clicked() ), SLOT( saveEvmi() ) );
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
     connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
+    connect( m_exploratoryTourPushButton, SIGNAL( clicked() ), SLOT( exploratoryTour() ) );
     connect( m_vomiGradientPushButton, SIGNAL( clicked() ), SLOT( computeVomiGradient() ) );
 
     // Program
@@ -1560,10 +1601,11 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
     bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
     bool computeGuidedTour = m_computeGuidedTourCheckBox->isChecked();
+    bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
     if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeViewpointVomi && !computeColorVomi && !computeBestViews
-         && !computeGuidedTour ) return;
+         && !computeGuidedTour && !computeExploratoryTour ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1581,6 +1623,9 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     // Paràmetres extres per calcular les millors vistes (els passem sempre perquè tinguin algun valor, per si s'ha de calcular el guided tour per exemple)
     viewpointInformationChannel.setBestViewsParameters( m_computeBestViewsNRadioButton->isChecked(), m_computeBestViewsNSpinBox->value(), m_computeBestViewsThresholdDoubleSpinBox->value() );
+
+    // Llinda per calcular l'exploratory tour
+    viewpointInformationChannel.setExploratoryTourThreshold( m_computeExploratoryTourThresholdDoubleSpinBox->value() );
 
     // Filtratge de punts de vista
     if ( m_vmiOneViewpointCheckBox->isChecked() )
@@ -1604,7 +1649,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
     viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi, computeBestViews,
-                                         computeGuidedTour, m_vmiDisplayCheckBox->isChecked() );
+                                         computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked() );
 
     if ( computeViewpointEntropy )
     {
@@ -1677,6 +1722,13 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_guidedTour = viewpointInformationChannel.guidedTour();
         m_saveGuidedTourPushButton->setEnabled( true );
         m_guidedTourPushButton->setEnabled( true );
+    }
+
+    if ( computeExploratoryTour )
+    {
+        m_exploratoryTour = viewpointInformationChannel.exploratoryTour();
+        m_saveExploratoryTourPushButton->setEnabled( true );
+        m_exploratoryTourPushButton->setEnabled( true );
     }
 
     // Restaurem els paràmetres normals (en realitat només cal si es fa amb CPU)
@@ -2048,6 +2100,14 @@ void QExperimental3DExtension::guidedTour()
 {
     QList<Vector3> viewpoints;
     for ( int i = 0; i < m_guidedTour.size(); i++ ) viewpoints << m_guidedTour.at( i ).second;
+    tour( viewpoints, m_tourSpeedDoubleSpinBox->value() );
+}
+
+
+void QExperimental3DExtension::exploratoryTour()
+{
+    QList<Vector3> viewpoints;
+    for ( int i = 0; i < m_exploratoryTour.size(); i++ ) viewpoints << m_exploratoryTour.at( i ).second;
     tour( viewpoints, m_tourSpeedDoubleSpinBox->value() );
 }
 

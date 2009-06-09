@@ -222,6 +222,12 @@ void ViewpointInformationChannel::setBestViewsParameters( bool fixedNumber, int 
 }
 
 
+void ViewpointInformationChannel::setExploratoryTourThreshold( float threshold )
+{
+    m_exploratoryTourThreshold = threshold;
+}
+
+
 void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter )
 {
     if ( m_viewpoints.size() != filter.size() )
@@ -247,10 +253,10 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
 
 
 void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &bestViews, bool &guidedTour,
-                                           bool display )
+                                           bool &exploratoryTour, bool display )
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy && !entropy && !vmi && !mi && !viewpointUnstabilities && !vomi && !viewpointVomi && !colorVomi && !bestViews && !guidedTour ) return;
+    if ( !viewpointEntropy && !entropy && !vmi && !mi && !viewpointUnstabilities && !vomi && !viewpointVomi && !colorVomi && !bestViews && !guidedTour && !exploratoryTour ) return;
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
@@ -260,6 +266,7 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
     if ( entropy ) viewpointEntropy = true;
     if ( guidedTour ) bestViews = true;
     if ( bestViews ) mi = true;
+    if ( exploratoryTour ) mi = true;
     if ( mi ) vmi = true;
     if ( vmi ) voxelProbabilities = true;
     if ( viewpointUnstabilities ) viewProbabilities = true;
@@ -270,9 +277,9 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
 
 #ifndef CUDA_AVAILABLE
     Q_UNUSED( display );
-    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews, guidedTour );
+    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews, guidedTour, exploratoryTour );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews, guidedTour, display );
+    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, bestViews, guidedTour, exploratoryTour, display );
 #endif // CUDA_AVAILABLE
 }
 
@@ -349,11 +356,18 @@ const QList< QPair<int, Vector3> >& ViewpointInformationChannel::guidedTour() co
 }
 
 
+const QList< QPair<int, Vector3> >& ViewpointInformationChannel::exploratoryTour() const
+{
+    return m_exploratoryTour;
+}
+
+
 #ifndef CUDA_AVAILABLE
 
 
 void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi,
-                                              bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour )
+                                              bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour,
+                                              bool computeExploratoryTour )
 {
     DEBUG_LOG( "computeCpu" );
 
@@ -365,6 +379,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi ) nSteps++;  // viewpoint entropy + entropy + VMI + MI + unstabilities + VVoMI
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
+    if ( computeExploratoryTour ) nSteps++; // exploratory tour
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -423,9 +438,17 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     }
 
     // guided tour
-    if ( computeBestViews )
+    if ( computeGuidedTour )
     {
         computeGuidedTourCpu();
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // exploratory tour
+    if ( computeExploratoryTour )
+    {
+        computeExploratoryTourCpu();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1170,6 +1193,109 @@ void ViewpointInformationChannel::computeGuidedTourCpu()
 }
 
 
+void ViewpointInformationChannel::computeExploratoryTourCpu()
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    m_exploratoryTour.clear();
+
+    // millor vista
+    float minVmi = m_vmi.at( 0 );
+    int minVmiIndex = 0;
+
+    for ( int i = 1; i < nViewpoints; i++ )
+    {
+        float vmi = m_vmi.at( i );
+
+        if ( vmi < minVmi )
+        {
+            minVmi = vmi;
+            minVmiIndex = i;
+        }
+    }
+
+    m_exploratoryTour << qMakePair( minVmiIndex, m_viewpoints.at( minVmiIndex ) );
+
+    QList<int> viewpointIndexList;
+    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
+    viewpointIndexList.removeAt( minVmiIndex );
+
+    float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
+
+    QVector<float> pZvv( nVoxels ); // p(Z|v̂)
+    readVoxelProbabilitiesInView( minVmiIndex, pZvv );
+
+    float IvvZ = minVmi;    // I(v̂;Z)
+    float ratio = IvvZ / m_mi;  // I(v̂;Z) / I(V;Z)
+
+    DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
+    DEBUG_LOG( "Exploratory tour:" );
+    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( m_viewpoints.at( minVmiIndex ).toString() ).arg( IvvZ ).arg( ratio ) );
+
+    QVector<float> pZvi( nVoxels ); // p(Z|vi)
+
+    while ( ratio > m_exploratoryTourThreshold )
+    {
+        int nRemainingViews = viewpointIndexList.size();
+
+        if ( nRemainingViews == 0 ) break;
+
+        float pvvMin = 0.0f;
+        QVector<float> pZvvMin;
+        float IvvZMin = 0.0f;
+        float ratioMin = 0.0f;
+        int iMin = -1;
+
+        int currentIndex = m_exploratoryTour.last().first;
+
+        QVector<int> neighbours = m_viewpointGenerator.neighbours( currentIndex );
+        int nNeighbours = neighbours.size();
+
+        for ( int k = 0; k < nNeighbours; k++ )
+        {
+            int viewIndex = neighbours.at( k );
+
+            if ( !viewpointIndexList.contains( viewIndex ) ) continue;
+
+            float pvi = m_viewProbabilities.at( viewIndex );
+            readVoxelProbabilitiesInView( viewIndex, pZvi );
+
+            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
+            QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
+            for ( int j = 0; j < nVoxels; j++ ) pZvvi[j] = ( pvv * pZvv.at( j ) + pvi * pZvi.at( j ) ) / pvvi;
+            float IvviZ = InformationTheory::kullbackLeiblerDivergence( pZvvi, m_voxelProbabilities );  // I(v̂,Z) afegint aquesta vista
+            float ratioi = IvviZ / m_mi;
+
+            if ( iMin < 0 || ratioi < ratioMin )
+            {
+                pvvMin = pvvi;
+                pZvvMin = pZvvi;
+                IvvZMin = IvviZ;
+                ratioMin = ratioi;
+                iMin = viewpointIndexList.indexOf( viewIndex );
+            }
+        }
+
+        if ( iMin < 0 ) break;  // no hi ha més veïns que puguem afegir, per tant pleguem
+
+        pvv = pvvMin;
+        pZvv = pZvvMin;
+        IvvZ = IvvZMin;
+        ratio = ratioMin;
+        int viewIndex = viewpointIndexList.takeAt( iMin );
+        m_exploratoryTour << qMakePair( viewIndex, m_viewpoints.at( viewIndex ) );
+        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( m_exploratoryTour.size() - 1 ).arg( viewIndex + 1 ).arg( m_viewpoints.at( viewIndex ).toString() ).arg( IvvZ ).arg( ratio ) );
+    }
+
+    emit partialProgress( 100 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+}
+
+
 #else // CUDA_AVAILABLE
 
 
@@ -1182,7 +1308,8 @@ Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 
 
 void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi,
-                                               bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour, bool display )
+                                               bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeBestViews, bool computeGuidedTour,
+                                               bool computeExploratoryTour, bool display )
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -1194,6 +1321,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi ) nSteps++;  // viewpoint entropy + entropy + VMI + MI + unstabilities + VVoMI
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
+    if ( computeExploratoryTour ) nSteps++; // exploratory tour
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -1247,6 +1375,14 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     if ( computeGuidedTour )
     {
         computeGuidedTourCuda();
+        emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // exploratory tour
+    if ( computeExploratoryTour )
+    {
+        computeExploratoryTourCuda();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1819,6 +1955,106 @@ void ViewpointInformationChannel::computeGuidedTourCuda()
         emit partialProgress( 100 * ( nBestViews - bestViews.size() ) / nBestViews );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
+}
+
+
+void ViewpointInformationChannel::computeExploratoryTourCuda()
+{
+    int nViewpoints = m_viewpoints.size();
+    int nVoxels = m_volume->getSize();
+
+    emit partialProgress( 0 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+
+    m_exploratoryTour.clear();
+
+    // millor vista
+    float minVmi = m_vmi.at( 0 );
+    int minVmiIndex = 0;
+
+    for ( int i = 1; i < nViewpoints; i++ )
+    {
+        float vmi = m_vmi.at( i );
+
+        if ( vmi < minVmi )
+        {
+            minVmi = vmi;
+            minVmiIndex = i;
+        }
+    }
+
+    m_exploratoryTour << qMakePair( minVmiIndex, m_viewpoints.at( minVmiIndex ) );
+
+    QList<int> viewpointIndexList;
+    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
+    viewpointIndexList.removeAt( minVmiIndex );
+
+    float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
+
+    QVector<float> pZvv = this->voxelProbabilitiesInView( minVmiIndex );    // p(Z|v̂)
+
+    float IvvZ = minVmi;    // I(v̂;Z)
+    float ratio = IvvZ / m_mi;  // I(v̂;Z) / I(V;Z)
+
+    DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
+    DEBUG_LOG( "Exploratory tour:" );
+    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( m_viewpoints.at( minVmiIndex ).toString() ).arg( IvvZ ).arg( ratio ) );
+
+    while ( ratio > m_exploratoryTourThreshold )
+    {
+        int nRemainingViews = viewpointIndexList.size();
+
+        if ( nRemainingViews == 0 ) break;
+
+        float pvvMin = 0.0f;
+        QVector<float> pZvvMin;
+        float IvvZMin = 0.0f;
+        float ratioMin = 0.0f;
+        int iMin = -1;
+
+        int currentIndex = m_exploratoryTour.last().first;
+
+        QVector<int> neighbours = m_viewpointGenerator.neighbours( currentIndex );
+        int nNeighbours = neighbours.size();
+
+        for ( int k = 0; k < nNeighbours; k++ )
+        {
+            int viewIndex = neighbours.at( k );
+
+            if ( !viewpointIndexList.contains( viewIndex ) ) continue;
+
+            float pvi = m_viewProbabilities.at( viewIndex );
+            QVector<float> pZvi = this->voxelProbabilitiesInView( viewIndex );  // p(Z|vi)
+
+            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
+            QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
+            for ( int j = 0; j < nVoxels; j++ ) pZvvi[j] = ( pvv * pZvv.at( j ) + pvi * pZvi.at( j ) ) / pvvi;
+            float IvviZ = InformationTheory::kullbackLeiblerDivergence( pZvvi, m_voxelProbabilities );  // I(v̂,Z) afegint aquesta vista
+            float ratioi = IvviZ / m_mi;
+
+            if ( iMin < 0 || ratioi < ratioMin )
+            {
+                pvvMin = pvvi;
+                pZvvMin = pZvvi;
+                IvvZMin = IvviZ;
+                ratioMin = ratioi;
+                iMin = viewpointIndexList.indexOf( viewIndex );
+            }
+        }
+
+        if ( iMin < 0 ) break;  // no hi ha més veïns que puguem afegir, per tant pleguem
+
+        pvv = pvvMin;
+        pZvv = pZvvMin;
+        IvvZ = IvvZMin;
+        ratio = ratioMin;
+        int viewIndex = viewpointIndexList.takeAt( iMin );
+        m_exploratoryTour << qMakePair( viewIndex, m_viewpoints.at( viewIndex ) );
+        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( m_exploratoryTour.size() - 1 ).arg( viewIndex + 1 ).arg( m_viewpoints.at( viewIndex ).toString() ).arg( IvvZ ).arg( ratio ) );
+    }
+
+    emit partialProgress( 100 );
+    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 }
 
 
