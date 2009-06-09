@@ -63,9 +63,9 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_studyTreeWidget, SIGNAL(studyExpanded(QString)), SLOT(expandSeriesOfStudy(QString)));
     connect(m_studyTreeWidget, SIGNAL(seriesExpanded(QString, QString)), SLOT(expandImagesOfSeries(QString, QString)));
 
-    connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(view()));
-    connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(view()));
-    connect(m_studyTreeWidget, SIGNAL(imageDoubleClicked()), SLOT(view()));
+    connect(m_studyTreeWidget, SIGNAL(studyDoubleClicked()), SLOT(retrieveSelectedStudies()));
+    connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(retrieveSelectedStudies()));
+    connect(m_studyTreeWidget, SIGNAL(imageDoubleClicked()), SLOT(retrieveSelectedStudies()));
 
     connect(m_viewButton, SIGNAL(clicked()), SLOT(view()));
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
