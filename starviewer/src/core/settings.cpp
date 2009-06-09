@@ -42,34 +42,34 @@ void Settings::remove( const QString &key )
     settings.remove(key);
 }
 
-void Settings::saveColumnsWidths( const QString &key, QTreeWidget *treeView )
+void Settings::saveColumnsWidths( const QString &key, QTreeWidget *treeWidget )
 {
-    Q_ASSERT( treeView );
+    Q_ASSERT( treeWidget );
 
     Settings settings;
-    int columnCount = treeView->columnCount();
+    int columnCount = treeWidget->columnCount();
     QString columnKey;
     for( int column = 0; column < columnCount; column++ )
     {   
         columnKey = key + "/columnWidth" + QString::number(column);
-        settings.write( columnKey, treeView->columnWidth(column) );
+        settings.write( columnKey, treeWidget->columnWidth(column) );
     }
 }
 
-void Settings::restoreColumnsWidths( const QString &key, QTreeWidget *treeView )
+void Settings::restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget )
 {
-    Q_ASSERT( treeView );
+    Q_ASSERT( treeWidget );
 
     Settings settings;
-    int columnCount = treeView->columnCount();
+    int columnCount = treeWidget->columnCount();
     QString columnKey;
     for( int column = 0; column < columnCount; column++ )
     {   
         columnKey = key + "/columnWidth" + QString::number(column);
         if( !settings.contains( columnKey ) )
-            treeView->resizeColumnToContents(column);
+            treeWidget->resizeColumnToContents(column);
         else
-            treeView->header()->resizeSection( column, settings.read( columnKey ).toInt() );
+            treeWidget->header()->resizeSection( column, settings.read( columnKey ).toInt() );
     }
 }
 

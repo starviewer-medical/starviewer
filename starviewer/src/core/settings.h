@@ -39,8 +39,8 @@ public:
     /// Sota la clau donada es guardaran els amples de cada columna amb nom columnWidthX on X serà el nombre de columna
     /// L'unica implementació de moment és per QTreeWidget (i classes que n'hereden). 
     /// Es sobrecarregarà el mètode per tants widgets com calgui.
-    void saveColumnsWidths( const QString &key, QTreeWidget *treeView );
-    void restoreColumnsWidths( const QString &key, QTreeWidget *treeView );
+    void saveColumnsWidths( const QString &key, QTreeWidget *treeWidget );
+    void restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget );
 };
 
 } // end namespace udg
