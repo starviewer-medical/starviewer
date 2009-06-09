@@ -66,7 +66,10 @@ void Settings::restoreColumnsWidths( const QString &key, QTreeWidget *treeView )
     for( int column = 0; column < columnCount; column++ )
     {   
         columnKey = key + "/columnWidth" + QString::number(column);
-        treeView->header()->resizeSection( column, settings.read( columnKey, column ).toInt() );
+        if( !settings.contains( columnKey ) )
+            treeView->resizeColumnToContents(column);
+        else
+            treeView->header()->resizeSection( column, settings.read( columnKey ).toInt() );
     }
 }
 
