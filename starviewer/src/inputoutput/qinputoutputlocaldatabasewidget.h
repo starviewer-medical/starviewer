@@ -68,22 +68,12 @@ signals:
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewPatients(QList<Patient*>);
 
-protected:
-    /// Event que s'activa al tancar al rebren un event de tancament
-    void closeEvent( QCloseEvent* event );
-
 private:
     ///Crea les connexions entre signals i slots
     void createConnections();
 
     ///Genera el menú contextual que apareix quan clickem amb el botó dret a sobre d'un item del StudyTreeWidget
     void createContextMenuQStudyTreeWidget();
-
-    ///Carrega l'estat del QSplitter entre el QStudyTreeWidget i el QSeriesListWidget 
-    void setQSplitterState();
-
-    ///Guarda l'estat del QSplitter entre el QStudyTreeWidget i el QSeriesListWidget
-    void saveQSplitterState();
 
     ///Mostrar l'error que s'ha produït amb les operacions a la base de dades
     bool showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat = "");
