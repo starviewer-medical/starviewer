@@ -62,4 +62,16 @@ void Settings::restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget
     }
 }
 
+void Settings::saveGeometry( const QString &key, QWidget *widget )
+{
+    Q_ASSERT( widget );
+    this->setValue( key + "/geometry", widget->saveGeometry() );
+}
+
+void Settings::restoreGeometry( const QString &key, QWidget *widget )
+{
+    Q_ASSERT( widget );
+    widget->restoreGeometry( this->getValue( key + "/geometry" ).toByteArray() );
+}
+
 }  // end namespace udg

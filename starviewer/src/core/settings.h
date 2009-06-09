@@ -47,6 +47,12 @@ public:
     void saveColumnsWidths( const QString &key, QTreeWidget *treeWidget );
     void restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget );
 
+    /// Guarda/Restaura la geometria d'un widget dins de la clau donada.
+    /// A la clau donada se li afegeix la sub-clau "geometry". Per exemple si la clau és
+    /// "interface/viewerWidget/" la clau a la que s'accedirà finalment serà "interface/viewerWidget/geometry"
+    void saveGeometry( const QString &key, QWidget *widget );
+    void restoreGeometry( const QString &key, QWidget *widget );
+
 private:
     /// Objecte QSettings amb el que manipularem les configuracions
     QSettings m_settings;
