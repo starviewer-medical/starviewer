@@ -125,16 +125,6 @@ public:
 	 */
     QString getMaxConnections();
 
-    /** Estableix si l'aplicació s'ha d'executar en mode verbose o no (les comunicacions del pacs surten per cònsola)
-     * @param VerboseMode indica si l'aplicació s'executa en mode verbose
-     */
-    void setLogCommunicationPacsVerboseMode(bool VerboseMode);
-
-    /** retorn si hem d'executar l'aplicació en verbose Mode,
-      * @return indica si s'executa l'aplicació en verbode Mode
-      */
-    bool getLogCommunicationPacsVerboseMode();
-
 	/// Path amb l'últim directori on hem obert un DICOMDIR
 	QString getLastOpenedDICOMDIRPath() const;
 	void setLastOpenedDICOMDIRPath( QString const & path );
