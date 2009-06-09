@@ -26,13 +26,6 @@ const QString localPortKey("/pacsparam/localPort" );
 const QString timeoutPacsKey("/pacsparam/timeout" );
 const QString maxConnectionsKey("/pacsparam/MaxConnects" );
 const QString MaximumDaysNotViewedStudy("/cache/MaximumDaysNotViewedStudy" );
-const QString InstitutionName("/institution/name");
-const QString InstitutionAddress("/institution/address");
-const QString InstitutionTown("/institution/town");
-const QString InstitutionZipCode("/institution/zipCode");
-const QString InstitutionCountry("/institution/country");
-const QString InstitutionEmail("/institution/Email");
-const QString InstitutionPhoneNumber("/institution/phoneNumber");
 const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
 const QString lastOpenedDICOMDIRPath("/interface/lastOpenedDICOMDIRPath"); // últim path des del que hem obert un dicomdir
 const QString listenRisRequests("/risRequests/listen");
@@ -177,77 +170,6 @@ QString StarviewerSettings::getLocalPort()
 QString StarviewerSettings::getMaxConnections()
 {
     return m_starviewerSettings.value( GroupSettingsName + maxConnectionsKey , "3" ).toString();
-}
-
-/*** Dades de la institució*/
-void StarviewerSettings::setInstitutionName( QString institutionNameString )
-{
-    m_starviewerSettings.setValue( GroupSettingsName + InstitutionName , institutionNameString );
-}
-
-void StarviewerSettings::setInstitutionAddress ( QString institutionAddressString )
-{
-    m_starviewerSettings.setValue( GroupSettingsName + InstitutionAddress , institutionAddressString );
-}
-
-void StarviewerSettings::setInstitutionTown( QString institutionTownString )
-{
-    m_starviewerSettings.setValue( GroupSettingsName + InstitutionTown , institutionTownString );
-}
-
-void StarviewerSettings::setInstitutionZipCode( QString institutionZipCodeString )
-{
-    m_starviewerSettings.setValue( GroupSettingsName + InstitutionZipCode , institutionZipCodeString );
-}
-
-void StarviewerSettings::setInstitutionCountry( QString institutionCountryString )
-{
-    m_starviewerSettings.setValue( GroupSettingsName + InstitutionCountry , institutionCountryString );
-}
-
-void StarviewerSettings::setInstitutionPhoneNumber( QString institutionPhoneNumberString )
-{
-    m_starviewerSettings.setValue( GroupSettingsName + InstitutionPhoneNumber , institutionPhoneNumberString );
-}
-
-void StarviewerSettings::setInstitutionEmail( QString institutionEmailString )
-{
-    m_starviewerSettings.setValue( GroupSettingsName + InstitutionEmail , institutionEmailString );
-}
-
-QString StarviewerSettings::getInstitutionName()
-{
-    return m_starviewerSettings.value( GroupSettingsName + InstitutionName , "" ).toString();
-}
-
-QString StarviewerSettings::getInstitutionAddress()
-{
-    return m_starviewerSettings.value( GroupSettingsName + InstitutionAddress , "" ).toString();
-}
-
-QString StarviewerSettings::getInstitutionTown()
-{
-    return m_starviewerSettings.value( GroupSettingsName + InstitutionTown , "" ).toString();
-}
-
-QString StarviewerSettings::getInstitutionCountry()
-{
-    return m_starviewerSettings.value( GroupSettingsName + InstitutionCountry , "" ).toString();
-}
-
-QString StarviewerSettings::getInstitutionZipCode()
-{
-    return m_starviewerSettings.value( GroupSettingsName + InstitutionZipCode , "" ).toString();
-}
-
-QString StarviewerSettings::getInstitutionPhoneNumber()
-{
-    return m_starviewerSettings.value( GroupSettingsName + InstitutionPhoneNumber , "" ).toString();
-}
-
-QString StarviewerSettings::getInstitutionEmail()
-{
-    return m_starviewerSettings.value( GroupSettingsName + InstitutionEmail , "" ).toString();
 }
 
 void StarviewerSettings::setLogCommunicationPacsVerboseMode(bool verboseMode)
