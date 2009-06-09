@@ -26,7 +26,6 @@ const QString localPortKey("/pacsparam/localPort" );
 const QString timeoutPacsKey("/pacsparam/timeout" );
 const QString maxConnectionsKey("/pacsparam/MaxConnects" );
 const QString MaximumDaysNotViewedStudy("/cache/MaximumDaysNotViewedStudy" );
-const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
 const QString lastOpenedDICOMDIRPath("/interface/lastOpenedDICOMDIRPath"); // últim path des del que hem obert un dicomdir
 const QString listenRisRequests("/risRequests/listen");
 const QString listenRisRequestsPort("/risRequests/listenPort");
@@ -170,16 +169,6 @@ QString StarviewerSettings::getLocalPort()
 QString StarviewerSettings::getMaxConnections()
 {
     return m_starviewerSettings.value( GroupSettingsName + maxConnectionsKey , "3" ).toString();
-}
-
-void StarviewerSettings::setLogCommunicationPacsVerboseMode(bool verboseMode)
-{
-    m_starviewerSettings.setValue( GroupSettingsName + logsPacsCommunicationModeVerbose , verboseMode );
-}
-
-bool StarviewerSettings::getLogCommunicationPacsVerboseMode()
-{
-    return m_starviewerSettings.value( GroupSettingsName + logsPacsCommunicationModeVerbose , false ).toBool();
 }
 
 QString StarviewerSettings::getLastOpenedDICOMDIRPath() const
