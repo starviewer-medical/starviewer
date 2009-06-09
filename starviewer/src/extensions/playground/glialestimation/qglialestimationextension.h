@@ -42,8 +42,8 @@ public slots:
     void setVolumeSpectrum( Volume * volume );
 
 private:
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
-    void createActions();
+    /// Inicialitza les eines de l'extensió
+    void initializeTools();
 
     /// Crea les connexions entre signals i slots
     void createConnections();

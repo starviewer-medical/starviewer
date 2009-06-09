@@ -23,29 +23,18 @@
 #include "../interface/qapplicationmainwindow.h"
 
 //Qt
-#include <QString>
-#include <QAction>
-#include <QToolBar>
 #include <QMessageBox>
-#include <QContextMenuEvent>
 
 // VTK
 #include <vtkCommand.h>
 #include <vtkLookupTable.h>
 #include <vtkImageMapToWindowLevelColors.h>
-#include <vtkImageCast.h>
-#include <vtkImageActor.h>
 #include <vtkImageThreshold.h>
-#include <vtkRenderer.h>
 
 // ITK
-#include <itkImage.h>
-#include <itkImageFileWriter.h>
 #include <itkCurvatureFlowImageFilter.h>
-#include <itkCastImageFilter.h>
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkMinimumMaximumImageCalculator.h"
-
+#include <itkRescaleIntensityImageFilter.h>
+#include <itkMinimumMaximumImageCalculator.h>
 
 namespace udg {
 
@@ -60,7 +49,7 @@ QGlialEstimationExtension::QGlialEstimationExtension( QWidget *parent )
     m_layoutDirection = QGlialEstimationExtension::Horizontal;
 
     createConnections();
-    createActions();
+    initializeTools();
 
     activateNewViewer( m_viewersLayout->getViewerWidget( 0 ) );
 }
@@ -70,9 +59,8 @@ QGlialEstimationExtension::~QGlialEstimationExtension()
     delete m_toolManager;
 }
 
-void QGlialEstimationExtension::createActions()
+void QGlialEstimationExtension::initializeTools()
 {
-
     // Tools
     // creem el tool manager
     m_toolManager = new ToolManager(this);
@@ -129,26 +117,16 @@ void QGlialEstimationExtension::createActions()
     m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(5)->getViewer(), toolsList );
     m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(3)->getViewer(), toolsList );
     m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(4)->getViewer(), toolsList );
-
-    connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeT1( Volume * ) ) );
-    connect( m_viewersLayout->getViewerWidget(1)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumePerfu( Volume * ) ) );
-    connect( m_viewersLayout->getViewerWidget(3)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeFlair( Volume * ) ) );
-    connect( m_viewersLayout->getViewerWidget(4)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeDifu( Volume * ) ) );
-    connect( m_viewersLayout->getViewerWidget(5)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeSpectrum( Volume * ) ) );
-
 }
 
 void QGlialEstimationExtension::createConnections()
 {
-    //connect( m_2DView_1, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
-    //connect( m_2DView_2, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
     connect( m_chooseT1PushButton, SIGNAL( clicked() ), SLOT( contextMenuT1Release() ) );
     connect( m_choosePerfuPushButton, SIGNAL( clicked() ), SLOT( contextMenuPerfuRelease() ) );
     connect( m_chooseFLAIRPushButton, SIGNAL( clicked() ), SLOT( contextMenuFLAIRRelease() ) );
     connect( m_chooseDifuPushButton, SIGNAL( clicked() ), SLOT( contextMenuDifuRelease() ) );
     connect( m_chooseSpectrumPushButton, SIGNAL( clicked() ), SLOT( contextMenuSpectrumRelease() ) );
     connect( m_filterVSIPushButton, SIGNAL( clicked() ), SLOT( applyFilterMapImage() ) );
-    //connect( m_2DView_1, SIGNAL( windowLevelChanged( double,double ) ), SLOT( createColorMap( double, double ) ) );
     connect( m_opacityRegistrationSlider, SIGNAL( valueChanged(int) ), SLOT( setRegistrationOpacity(int) ) );
     connect( m_registrationPushButton, SIGNAL( clicked() ), SLOT( applyRegistration() ) );
     connect( m_computeCBVPushButton, SIGNAL( clicked() ), SLOT( computeCBV() ) );
@@ -159,18 +137,22 @@ void QGlialEstimationExtension::createConnections()
 
     // Connexions necessaries amb els canvis al layout
     connect( m_viewersLayout, SIGNAL( viewerAdded( Q2DViewerWidget * ) ), SLOT( activateNewViewer( Q2DViewerWidget * ) ) );
-
     connect( m_gridButton , SIGNAL( clicked( bool ) ) , this , SLOT( changeLayout() ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
 
+    connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeT1( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(1)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumePerfu( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(3)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeFlair( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(4)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeDifu( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(5)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeSpectrum( Volume * ) ) );
 }
 
 void QGlialEstimationExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-    if (this->findProbableSeries( ) )
+    if( this->findProbableSeries() )
     {
         //std::cout<<"Tot ok!!"<<std::endl;
     }
