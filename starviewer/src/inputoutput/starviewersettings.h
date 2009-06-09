@@ -16,14 +16,9 @@ namespace udg {
 /** Aquesta classe permet accedir i guardar els parametres de configuracio de l'starviewer
 @author marc
 */
-
 class StarviewerSettings{
 public:
-
-	/// Constructor de la casse
     StarviewerSettings();
-
-	///Destructor de la classe
     ~StarviewerSettings();
 
     //Cache
@@ -129,17 +124,6 @@ public:
 	 * @return nombre màxim de connexions
 	 */
     QString getMaxConnections();
-
-    //interficie
-    /** guarda l'estat en que es troba el QSplitter que divideix a la pestany de local el StudyList i el SeriesList
-     * @param state estat del QSplitter
-     */
-    void setQueryScreenStudyTreeSeriesListQSplitterState( const QByteArray &state );
-
-    /** retorna l'estat amb que estava el QSplitter que separa el StudyTree i el SeriesList
-     * @return estat del QSpliltter
-     */
-    QByteArray getQueryScreenStudyTreeSeriesListQSplitterState();
 
     /** Guarda el nom de la institució
      * @param institutionName nom de l'institució

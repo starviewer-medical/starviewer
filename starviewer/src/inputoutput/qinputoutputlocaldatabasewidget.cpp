@@ -24,6 +24,9 @@ namespace udg
 {
 // Clau dels settings del widget
 const QString localDatabaseSettingKey("PACS/interface/studyCacheList/");
+// TODO aquesta clau hauria de canviar de nom. No es farà fins que no tinguem a punt el tema de fer migració de dades
+// de moment conservem la mateixa clau
+const QString localDatabaseStudyTreeSeriesListQSplitterStateSettingKey("PACS/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 
 QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent) : QWidget(parent)
 {
@@ -36,8 +39,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
     Settings settings;
     settings.restoreColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
-
-    setQSplitterState();
+    settings.restoreGeometry(localDatabaseStudyTreeSeriesListQSplitterStateSettingKey, m_StudyTreeSeriesListQSplitter );
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputLocalDatabaseWidget",this);
     m_statsWatcher->addClicksCounter(m_viewButton);
@@ -47,6 +49,7 @@ QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 {
     Settings settings;
     settings.saveColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveGeometry(localDatabaseStudyTreeSeriesListQSplitterStateSettingKey, m_StudyTreeSeriesListQSplitter );
 }
 
 void QInputOutputLocalDatabaseWidget::createConnections()
@@ -375,28 +378,6 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudies()
 void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 {
     showDatabaseManagerError(m_qdeleteOldStudiesThread.getLastError(), tr("deleting old studies"));
-}
-
-void QInputOutputLocalDatabaseWidget::setQSplitterState()
-{
-    StarviewerSettings settings;
-
-    if (!settings.getQueryScreenStudyTreeSeriesListQSplitterState().isEmpty())
-    {
-        m_StudyTreeSeriesListQSplitter->restoreState(settings.getQueryScreenStudyTreeSeriesListQSplitterState());
-    }
-}
-
-void QInputOutputLocalDatabaseWidget::saveQSplitterState()
-{
-    //guardem l'estat del QSplitter que divideix el StudyTree del QSeries i de la QueryScreen
-    StarviewerSettings().setQueryScreenStudyTreeSeriesListQSplitterState(m_StudyTreeSeriesListQSplitter->saveState());
-}
-
-void QInputOutputLocalDatabaseWidget::closeEvent(QCloseEvent*)
-{
-    //S'ha de guardar el seu valor al fer un closeEvent, si ho fem de des destructor no es guarda correctament la posició del QSplitter
-    saveQSplitterState();
 }
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)

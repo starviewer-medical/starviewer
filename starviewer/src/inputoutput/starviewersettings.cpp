@@ -33,8 +33,6 @@ const QString InstitutionZipCode("/institution/zipCode");
 const QString InstitutionCountry("/institution/country");
 const QString InstitutionEmail("/institution/Email");
 const QString InstitutionPhoneNumber("/institution/phoneNumber");
-
-const QString queryScreenStudyTreeSeriesListQSplitterState("/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 const QString logsPacsCommunicationModeVerbose("/logs/pacsCommunicationmodeVerbose");
 const QString lastOpenedDICOMDIRPath("/interface/lastOpenedDICOMDIRPath"); // últim path des del que hem obert un dicomdir
 const QString listenRisRequests("/risRequests/listen");
@@ -181,21 +179,7 @@ QString StarviewerSettings::getMaxConnections()
     return m_starviewerSettings.value( GroupSettingsName + maxConnectionsKey , "3" ).toString();
 }
 
-/************************ INTERFICIE ************************************************/
-void StarviewerSettings::setQueryScreenStudyTreeSeriesListQSplitterState( const QByteArray &state )
-{
-    QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
-    m_starviewerSettings.setValue( key , state );
-}
-
-QByteArray StarviewerSettings::getQueryScreenStudyTreeSeriesListQSplitterState()
-{
-    QString key = GroupSettingsName + queryScreenStudyTreeSeriesListQSplitterState;
-    return m_starviewerSettings.value( key ).toByteArray();
-}
-
 /*** Dades de la institució*/
-
 void StarviewerSettings::setInstitutionName( QString institutionNameString )
 {
     m_starviewerSettings.setValue( GroupSettingsName + InstitutionName , institutionNameString );
