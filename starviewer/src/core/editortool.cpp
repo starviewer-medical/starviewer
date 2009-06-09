@@ -15,18 +15,11 @@
 #include <vtkPoints.h>
 #include <vtkUnstructuredGrid.h>
 #include <vtkProperty.h>
-
 #include <vtkRenderer.h>
-#include <vtkPolyDataMapper.h>
 #include <vtkActor.h>
-#include <vtkProperty.h>
-#include <vtkImageIterator.h>
 #include <vtkDataSetMapper.h>
-#include <vtkContourGrid.h>
 #include <vtkRenderWindowInteractor.h>
-
-//itk
-#include "itkMinimumMaximumImageCalculator.h"
+#include <vtkCellType.h>
 
 namespace udg {
 
@@ -60,16 +53,10 @@ void EditorTool::initialize(  )
 {
     if(m_2DViewer->getOverlayInput()!=0)
     {
-        itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
-    
-        minmaxCalc->SetImage(m_2DViewer->getOverlayInput()->getItkData());
-        minmaxCalc->SetRegion(m_2DViewer->getOverlayInput()->getItkData()->GetRequestedRegion());
-        minmaxCalc->Compute();
-    
-        m_outsideValue = minmaxCalc->GetMinimum();
-        m_insideValue  = minmaxCalc->GetMaximum();
+        double *range = m_2DViewer->getOverlayInput()->getVtkData()->GetScalarRange();
 
-//        DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
+        m_outsideValue = (int)range[0];
+        m_insideValue  = (int)range[1];
 
         int ext[6];
         int i,j,k;

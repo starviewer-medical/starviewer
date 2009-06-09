@@ -34,7 +34,6 @@
 // ITK
 #include <itkCurvatureFlowImageFilter.h>
 #include <itkRescaleIntensityImageFilter.h>
-#include <itkMinimumMaximumImageCalculator.h>
 
 namespace udg {
 
@@ -159,16 +158,11 @@ void QGlialEstimationExtension::setInput( Volume *input )
 
     if(m_T1Volume != 0)
     {
-        itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
+        double *range = m_T1Volume->getVtkData()->GetScalarRange();
+        m_minT1Value = (int)range[0];
+        m_maxT1Value = (int)range[1];
+        DEBUG_LOG( QString("Max T1 Value=%1, Min T1 Value=%2").arg(m_maxT1Value).arg(m_minT1Value) );
 
-        minmaxCalc->SetImage(m_T1Volume->getItkData());
-        minmaxCalc->SetRegion(m_T1Volume->getItkData()->GetRequestedRegion());
-        minmaxCalc->Compute();
-
-        DEBUG_LOG( QString("ItkMax=%1, ItkMin=%2").arg(minmaxCalc->GetMaximum()).arg(minmaxCalc->GetMinimum()) );
-
-        m_minT1Value = minmaxCalc->GetMinimum();
-        m_maxT1Value = minmaxCalc->GetMaximum();
         m_T1ValueSpinBox->setMinimum( m_minT1Value );
         m_T1ValueSpinBox->setMaximum( m_maxT1Value );
         m_T1ValueSlider->setMinimum( m_minT1Value );
