@@ -484,7 +484,7 @@ void QApplicationMainWindow::writeSettings()
 {
     Settings settings;
 
-    settings.setValue("geometry", saveGeometry());
+    settings.saveGeometry("geometry", this);
 }
 
 void QApplicationMainWindow::enableExtensions()
@@ -531,7 +531,7 @@ void QApplicationMainWindow::readSettings()
     if (!settings.contains("geometry"))
         this->showMaximized();
     else
-        this->restoreGeometry(settings.getValue("geometry").toByteArray());
+        settings.restoreGeometry("geometry", this);
 }
 
 void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
