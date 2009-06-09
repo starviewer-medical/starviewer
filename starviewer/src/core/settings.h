@@ -6,6 +6,7 @@
 // Forward declarations
 class QString;
 class QTreeWidget;
+class QSplitter;
 
 namespace udg {
 
@@ -47,9 +48,11 @@ public:
     void saveColumnsWidths( const QString &key, QTreeWidget *treeWidget );
     void restoreColumnsWidths( const QString &key, QTreeWidget *treeWidget );
 
-    /// Guarda/Restaura la geometria d'un widget dins de la clau donada.
+    /// Guarda/Restaura la geometria d'un widget/splitter dins de la clau donada.
     void saveGeometry( const QString &key, QWidget *widget );
     void restoreGeometry( const QString &key, QWidget *widget );
+    void saveGeometry( const QString &key, QSplitter *splitter );
+    void restoreGeometry( const QString &key, QSplitter *splitter );
 
 private:
     /// Objecte QSettings amb el que manipularem les configuracions
