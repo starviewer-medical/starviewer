@@ -8,9 +8,6 @@
 #include "qinputoutputpacswidget.h"
 
 #include <QMessageBox>
-#include <QString>
-#include <QFileDialog>
-#include <QFileInfo>
 #include <QShortcut>
 
 #include "starviewersettings.h"
@@ -29,9 +26,12 @@
 #include "study.h"
 #include "qoperationstatescreen.h"
 #include "processimagesingleton.h"
+#include "settings.h"
 
 namespace udg
 {
+// clau dels settings d'aquest widget
+const QString pacsWidgetSettingKey("PACS/interface/studyPacsList/");
 
 QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent)
 {
@@ -39,7 +39,8 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 
     createContextMenuQStudyTreeWidget();
 
-    setQStudyTreeWidgetColumnsWidth();
+    Settings settings;
+    settings.restoreColumnsWidths( pacsWidgetSettingKey, m_studyTreeWidget->getQTreeWidget() );
 
     m_multipleQueryStudy = new MultipleQueryStudy();
 
@@ -53,7 +54,8 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 
 QInputOutputPacsWidget::~QInputOutputPacsWidget()
 {
-    saveQStudyTreeWidgetColumnsWidth();
+    Settings settings;
+    settings.saveColumnsWidths( pacsWidgetSettingKey, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputPacsWidget::createConnections()
@@ -67,7 +69,6 @@ void QInputOutputPacsWidget::createConnections()
 
     connect(m_viewButton, SIGNAL(clicked()), SLOT(view()));
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
-
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect(&m_qexecuteOperationThread, SIGNAL(setErrorOperation(QString)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
@@ -114,26 +115,6 @@ void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
     m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget); //Especifiquem que es el menu del dicomdir
-}
-
-void QInputOutputPacsWidget::setQStudyTreeWidgetColumnsWidth()
-{
-    StarviewerSettings settings;
-
-    for (int column = 0; column < m_studyTreeWidget->getNumberOfColumns(); column++)
-    {
-        m_studyTreeWidget->setColumnWidth(column, settings.getStudyPacsListColumnWidth(column));
-    }
-}
-
-void QInputOutputPacsWidget::saveQStudyTreeWidgetColumnsWidth()
-{
-    StarviewerSettings settings;
-
-    for (int column = 0; column < m_studyTreeWidget->getNumberOfColumns(); column++)
-    {
-        settings.setStudyPacsListColumnWidth(column, m_studyTreeWidget->getColumnWidth(column));
-    }
 }
 
 void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameters> pacsToQuery)

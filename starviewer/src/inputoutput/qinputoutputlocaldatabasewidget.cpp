@@ -8,9 +8,6 @@
 #include "qinputoutputlocaldatabasewidget.h"
 
 #include <QMessageBox>
-#include <QString>
-#include <QFileDialog>
-#include <QFileInfo>
 #include <QShortcut>
 
 #include "starviewersettings.h"
@@ -21,22 +18,25 @@
 #include "patient.h"
 #include "statswatcher.h"
 #include "qcreatedicomdir.h"
+#include "settings.h"
 
 namespace udg
 {
+// Clau dels settings del widget
+const QString localDatabaseSettingKey("PACS/interface/studyCacheList/");
 
 QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
-
     createConnections();
 
     //esborrem els estudis vells de la cache
     deleteOldStudies();
-
     createContextMenuQStudyTreeWidget();
 
-    setQStudyTreeWidgetColumnsWidth();
+    Settings settings;
+    settings.restoreColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
+
     setQSplitterState();
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputLocalDatabaseWidget",this);
@@ -45,7 +45,8 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 {
-    saveQStudyTreeWidgetColumnsWidth();
+    Settings settings;
+    settings.saveColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputLocalDatabaseWidget::createConnections()
@@ -374,26 +375,6 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudies()
 void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 {
     showDatabaseManagerError(m_qdeleteOldStudiesThread.getLastError(), tr("deleting old studies"));
-}
-
-void QInputOutputLocalDatabaseWidget::setQStudyTreeWidgetColumnsWidth()
-{
-    StarviewerSettings settings;
-
-    for (int column = 0; column < m_studyTreeWidget->getNumberOfColumns(); column++)
-    {
-        m_studyTreeWidget->setColumnWidth(column, settings.getStudyCacheListColumnWidth(column));
-    }
-}
-
-void QInputOutputLocalDatabaseWidget::saveQStudyTreeWidgetColumnsWidth()
-{
-    StarviewerSettings settings;
-
-    for (int column = 0; column < m_studyTreeWidget->getNumberOfColumns(); column++)
-    {
-        settings.setStudyCacheListColumnWidth(column, m_studyTreeWidget->getColumnWidth(column));
-    }
 }
 
 void QInputOutputLocalDatabaseWidget::setQSplitterState()

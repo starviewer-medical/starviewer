@@ -7,6 +7,8 @@
 
 #include "localdatabasemanager.h"
 
+#include <QDir>
+
 #include "patient.h"
 #include "study.h"
 #include "localdatabaseimagedal.h"
@@ -22,18 +24,12 @@
 #include "starviewersettings.h"
 #include "harddiskinformation.h"
 #include "thumbnailcreator.h"
-
-#include <QDir>
-#include <QDate>
-#include <QTime>
-#include <QStringList>
-#include <QSettings>
-#include <QPixmap>
+#include "settings.h"
 
 namespace udg
 {
-//Nom de la llista de QSettings que guardarà els estudis que tenim en aquell moment descarregant
-const QString LocalDatabaseManager::qsettingsRetrievingStudy = "/PACS/RetrievingStudy";
+//Nom de la llista de Settings que guardarà els estudis que tenim en aquell moment descarregant
+const QString LocalDatabaseManager::retrievingStudySettingKey = "/PACS/RetrievingStudy";
 QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
 
 LocalDatabaseManager::LocalDatabaseManager()
@@ -55,7 +51,6 @@ LocalDatabaseManager::LocalDatabaseManager()
 void LocalDatabaseManager::save(Patient *newPatient)
 {
     DeleteDirectory delDirectory;
-    StarviewerSettings settings;
     QDate currentDate = QDate::currentDate();
     QTime currentTime = QTime::currentTime();
     DatabaseConnection dbConnect;
@@ -311,7 +306,6 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 void LocalDatabaseManager::del(const QString &studyInstanceToDelete)
 {
     DatabaseConnection dbConnect;
-    StarviewerSettings settings;
     DicomMask studyMaskToDelete;
     int status;
 
@@ -511,7 +505,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
     quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());
     quint64 minimumSpaceRequired = quint64(settings.getMinimumSpaceRequiredToRetrieveInMbytes());
     quint64 MbytesToFree;
-    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk =  settings.getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable() * 1024;
+    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk = settings.getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable() * 1024;
 
     m_lastError = Ok;
 
@@ -561,11 +555,11 @@ LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
 
 bool LocalDatabaseManager::setStudyRetrieving(const QString &studyInstanceUID)
 {
-    QSettings qsettings;
+    Settings settings;
 
-    if (!qsettings.contains(qsettingsRetrievingStudy) && !studyInstanceUID.isEmpty())
+    if (!settings.contains(retrievingStudySettingKey) && !studyInstanceUID.isEmpty())
     {
-        qsettings.setValue(qsettingsRetrievingStudy, studyInstanceUID);
+        settings.setValue(retrievingStudySettingKey, studyInstanceUID);
         return true;
     }
     else return false;
@@ -573,20 +567,20 @@ bool LocalDatabaseManager::setStudyRetrieving(const QString &studyInstanceUID)
 
 void LocalDatabaseManager::setStudyRetrieveFinished()
 {
-    QSettings qsettings;
+    Settings settings;
 
-    qsettings.remove(qsettingsRetrievingStudy);
+    settings.remove(retrievingStudySettingKey);
 }
 
 void LocalDatabaseManager::checkNoStudiesRetrieving()
 {
-    QSettings qsettings;
+    Settings settings;
     DeleteDirectory deleteDirectory;
     QDir directory;
 
     if (isStudyRetrieving())
     {
-        QString studyNotFullRetrieved = qsettings.value(qsettingsRetrievingStudy).toString();
+        QString studyNotFullRetrieved = settings.getValue(retrievingStudySettingKey).toString();
 
         INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la última execució de l'starviewer, per mantenir la integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
 
@@ -605,14 +599,14 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
                 deleteStudyFromHardDisk(studyNotFullRetrieved);
         }
 
-        qsettings.remove(qsettingsRetrievingStudy);
+        settings.remove(retrievingStudySettingKey);
     }
     else m_lastError = Ok;
 }
 
 bool LocalDatabaseManager::isStudyRetrieving()
 {
-    return QSettings().contains(qsettingsRetrievingStudy);
+    return Settings().contains(retrievingStudySettingKey);
 }
 
 int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)

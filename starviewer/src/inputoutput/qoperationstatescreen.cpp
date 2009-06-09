@@ -7,12 +7,14 @@
 #include "qoperationstatescreen.h"
 
 #include <QCloseEvent>
-#include <QHeaderView>
 #include "operation.h"
-#include "starviewersettings.h"
 #include "logging.h"
+#include "settings.h"
 
 namespace udg {
+
+// Clau de settings
+const QString qOperationStateSettingKey("PACS/interface/qOperationState/");
 
 QOperationStateScreen::QOperationStateScreen( QWidget *parent )
  : QDialog( parent )
@@ -24,7 +26,12 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
 
     createConnections();
 
-    setWidthColumns();//carreguem la mida de les columnes
+    Settings settings;
+    settings.restoreColumnsWidths(qOperationStateSettingKey, m_treeRetrieveStudy);
+}
+
+QOperationStateScreen::~QOperationStateScreen()
+{
 }
 
 unsigned int QOperationStateScreen::getActiveOperationsCount()
@@ -47,16 +54,6 @@ unsigned int QOperationStateScreen::getActiveOperationsCount()
 void QOperationStateScreen::createConnections()
 {
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearList() ) );
-}
-
-void QOperationStateScreen::setWidthColumns()
-{
-    StarviewerSettings settings;
-
-    for ( int index = 0; index < m_treeRetrieveStudy->columnCount(); index++ )
-    {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
-            m_treeRetrieveStudy->header()->resizeSection( index ,settings.getQOperationStateColumnWidth( index ) );
-    }
 }
 
 void QOperationStateScreen::insertNewOperation( Operation *operation )
@@ -262,24 +259,11 @@ void QOperationStateScreen::setCancelledOperation(QString studyInstanceUID)
     m_treeRetrieveStudy->repaint();
 }
 
-void QOperationStateScreen::saveColumnsWidth()
-{
-    StarviewerSettings settings;
-    for ( int i = 0; i < m_treeRetrieveStudy->columnCount(); i++ )
-    {
-        settings.setQOperationStateColumnWidth( i , m_treeRetrieveStudy->columnWidth( i ) );
-    }
-}
-
 void QOperationStateScreen::closeEvent( QCloseEvent* ce )
 {
-    saveColumnsWidth();
-
+    Settings settings;
+    settings.saveColumnsWidths(qOperationStateSettingKey, m_treeRetrieveStudy);
     ce->accept();
-}
-
-QOperationStateScreen::~QOperationStateScreen()
-{
 }
 
 bool QOperationStateScreen::isOperationFinalized(const QString &message)

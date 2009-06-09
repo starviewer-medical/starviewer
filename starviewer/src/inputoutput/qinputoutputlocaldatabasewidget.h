@@ -10,30 +10,33 @@
 
 #include "ui_qinputoutputlocaldatabasewidgetbase.h"
 
-#include <QMenu>
-
 #include "localdatabasemanager.h"
 #include "qdeleteoldstudiesthread.h"
 
+#include <QMenu>
+
+// fordward declarations
 class QString;
 
 namespace udg {
 
-/** Widget en el que controla les operacions d'entrada/sortida d'un dicomdir
-*/
-
+// fordward declarations
 class DicomMask;
 class Patient;
 class StatsWatcher;
 class QCreateDicomdir;
 
+/** 
+ * Widget en el que controla les operacions d'entrada/sortida de la base de dades local
+ */
 class QInputOutputLocalDatabaseWidget : public QWidget, private Ui::QInputOutputLocalDatabaseWidgetBase
 {
 Q_OBJECT
 
 public:
-    /// Constructor de la classe
+    
     QInputOutputLocalDatabaseWidget(QWidget *parent = 0);
+    ~QInputOutputLocalDatabaseWidget();
 
     ///Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask);
@@ -48,10 +51,7 @@ public:
     ///Neteja els resultats que es mostren de la cerca
     void clear();
 
-    ~QInputOutputLocalDatabaseWidget();
-
 public slots:
-
     ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
     void view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID);
 
@@ -62,36 +62,22 @@ public slots:
     void removeStudyFromQStudyTreeWidget(QString studyInstanceUID);
 
 signals:
-
     ///Signal que s'emet per indicar que es netegin els camps de cerca
     void clearSearchTexts();
 
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewPatients(QList<Patient*>);
 
-protected :
-
+protected:
     /// Event que s'activa al tancar al rebren un event de tancament
     void closeEvent( QCloseEvent* event );
 
 private:
-
-    QMenu m_contextMenuQStudyTreeWidget;
-    QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
-    QCreateDicomdir *m_qcreateDicomdir;
-    StatsWatcher *m_statsWatcher;
-
     ///Crea les connexions entre signals i slots
     void createConnections();
 
     ///Genera el menú contextual que apareix quan clickem amb el botó dret a sobre d'un item del StudyTreeWidget
     void createContextMenuQStudyTreeWidget();
-
-    ///Carrega l'amplada de les columnes de QStudyTreeView guardada al QSettings
-    void setQStudyTreeWidgetColumnsWidth();
-
-    ///Guarda al QSettings l'amplada de les columnes del QStudyTreeView, perquè quan es torni a carregar el widget es motri l'amplada de les columnes igual a quan es va tancar
-    void saveQStudyTreeWidgetColumnsWidth();
 
     ///Carrega l'estat del QSplitter entre el QStudyTreeWidget i el QSeriesListWidget 
     void setQSplitterState();
@@ -103,12 +89,11 @@ private:
     bool showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat = "");
 
     ///Esborra els estudis vells
-    /*TODO: Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de traslladar a un altre lloc, no és responsabilitat
-           d'aquesta inferfície */
+    // TODO Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de 
+    // traslladar a un altre lloc, no és responsabilitat d'aquesta inferfície
     void deleteOldStudies();
 
 private slots:
-
     ///Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void expandSeriesOfStudy(QString seriesInstanceUID);
 
@@ -133,6 +118,11 @@ private slots:
     ///Visualitza els estudis seleccionats a la QStudyTreeWidget
     void viewFromQStudyTreeWidget();
 
+private:
+    QMenu m_contextMenuQStudyTreeWidget;
+    QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
+    QCreateDicomdir *m_qcreateDicomdir;
+    StatsWatcher *m_statsWatcher;
 };
 
 };// end namespace udg

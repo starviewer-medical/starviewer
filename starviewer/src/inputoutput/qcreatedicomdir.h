@@ -56,17 +56,12 @@ public slots:
     void createDicomdir();
 
 protected :
-
     /** Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
     void closeEvent( QCloseEvent* ce );
 
 private:
-    /** Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla. La mida de les columnes la tenim guardada al StarviewerSettings
-     */
-    void setWidthColumns();
-
     ///Crea les connexions de signals i slots de la interfície
     void createConnections();
 
@@ -123,10 +118,6 @@ private:
     /** neteja la pantalla de dicomdir, després que s'hagi creat un dicomdir amb exit
      */
     void clearQCreateDicomdirScreen();
-
-    /** Guarda la mida de les columnes del QTreeWidget al StarviewerSettings
-     */
-    void saveColumnsWidth();
 
     /// Inicialitza les QActions
     void createActions();

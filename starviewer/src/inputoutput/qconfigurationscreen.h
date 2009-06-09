@@ -34,10 +34,6 @@ signals:
     /// Signal que s'emet cada vegada que hi ha un canvi a la configuració que pot afectar al queryscreen
     void configurationChanged(const QString& configuration);
 
-protected:
-    /// Event que s'activa al tancar al rebren un event de tancament
-    void closeEvent( QCloseEvent* event );
-
 private slots:
     /// Neteja els line edit de la pantalla
     void clear();
@@ -72,10 +68,6 @@ private:
     /// Crea els input validators necessaris pels diferents camps d'edició.
     void configureInputValidator();
 
-    /// Carreguem la mida de les columnes del QTreeWidget de l'última vegada que es va tancar la pantalla.
-    /// La mida de les columnes la tenim guardada al StarviewerSettings
-    void setWidthColumns();
-
     /** Comprovem que els paràmetres dels PACS siguin correctes.
      *  1r Que el AETitle no estigui en blanc,
      *  2n Que l'adreça del PACS no estigui en blanc,
@@ -101,9 +93,6 @@ private:
 
     /// Guarda els canvis a la configuració dels paràmetres del PACS
     void applyChangesPacs();
-
-    /// Guarda la mida de les columnes del QTreeWidget de la pestanya de PACS Device al StarviewerSettings
-    void saveColumnsWidth();
 
     ///Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
     bool isIncomingConnectionsPortInUseByAnotherApplication();

@@ -21,24 +21,27 @@
 #define UDGQSTUDYTREEWIDGET_H
 
 #include "ui_qstudytreewidgetbase.h"
+
 #include <QMenu>
 #include <QList>
 
+// forward declarations
 class QString;
 
 namespace udg {
 
+// forward declarations
 class Study;
-
-/** Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
-  * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació de la cerca d'estudis, permetent consultar les series d'aquell estudi. Aquesta classe es sincronitzar amb la informació mostrada a QSeriesListWidget
-@author marc
-*/
-
 class Patient;
 class Series;
 class Image;
 
+/** Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
+  * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació 
+  * de la cerca d'estudis, permetent consultar les series d'aquell estudi. 
+  * Aquesta classe es sincronitza amb la informació mostrada a QSeriesListWidget
+  * @author marc
+  */
 class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
 {
 Q_OBJECT
@@ -49,8 +52,8 @@ public:
     RefPhysName = 14, PPStartDate = 15, PPStartTime = 16, ReqProcID = 17, SchedProcStep = 18
     };
 
-    /// Constructor de la classe
     QStudyTreeWidget( QWidget *parent = 0 );
+    ~QStudyTreeWidget();
 
     ///Mostrar els estudis passats per paràmetres (Els pacients passats per paràmetre ha de contenir només un estudi)
     void insertPatientList(QList<Patient*> patientList);
@@ -111,23 +114,8 @@ public:
     ///Estableix el menú contextual del Widget
     void setContextMenu( QMenu *contextMenu );
 
-    ///Retorna el número de columnes del tree view
-    int getNumberOfColumns();
-
-    /** Assigna l'amplada a les columnes segons el paràmetre passat
-     * @param columnNumber número de columna
-     * @param columnWidth amplada de la columna
-     */
-    void setColumnWidth( int columnNumber , int columnWidth );
-
-    /** Retorna l'amplada de la columna
-     * @param columnNumber número de columna
-     * @return amplada de la columna
-     */
-    int getColumnWidth( int columnNumber );
-
-    /// Destructor de la classe
-    ~QStudyTreeWidget();
+    /// Retorna el QTreeWidget que conté el widget
+    QTreeWidget *getQTreeWidget() const;
 
 protected:
     /** Mostra el menu contextual
@@ -172,8 +160,7 @@ public slots:
     /// Neteja el TreeView
     void clear();
 
-private slots :
-
+private slots:
     ///Emet signal quan es selecciona un estudi o serie diferent a l'anterior
     void currentItemChanged( QTreeWidgetItem * current, QTreeWidgetItem * previous );
 
@@ -215,18 +202,6 @@ private:
     QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID);
 
 private:
-    /// Menu contextual
-    QMenu *m_contextMenu;
-
-    /// strings per guardar valors de l'anterior element
-    QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_OldInstitution;
-
-    QString m_doubleClickedItemUID;
-
-    QIcon m_openFolder , m_closeFolder , m_iconSeries;///< icones utilitzades com a root al TreeWidget
-
-    QList<Patient*> m_insertedPatientList;
-
     ///Ens indica si l'item passat és un estudi
     bool isItemStudy( QTreeWidgetItem * );
 
@@ -247,6 +222,19 @@ private:
     ///Retorna llista QTreeWidgetItem resultant dels estudis que té el pacient
     QList<QTreeWidgetItem*> fillPatient(Patient *);
 
+private:
+    /// Menu contextual
+    QMenu *m_contextMenu;
+
+    /// Strings per guardar valors de l'anterior element
+    QString m_oldCurrentStudyUID, m_oldCurrentSeriesUID, m_OldInstitution;
+
+    QString m_doubleClickedItemUID;
+
+    /// Icones utilitzades com a root al TreeWidget
+    QIcon m_openFolder , m_closeFolder , m_iconSeries;
+
+    QList<Patient*> m_insertedPatientList;
 };
 
 }; // end namespace

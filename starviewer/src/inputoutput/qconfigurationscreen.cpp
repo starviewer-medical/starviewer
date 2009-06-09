@@ -6,10 +6,8 @@
  ***************************************************************************/
 #include "qconfigurationscreen.h"
 
-#include <QHeaderView>
 #include <QMessageBox>
 #include <QDir>
-#include <QCloseEvent>
 
 #include "pacsserver.h"
 #include "status.h"
@@ -20,8 +18,12 @@
 #include "logging.h"
 #include "utils.h"
 #include "localdatabasemanager.h"
+#include "settings.h"
 
 namespace udg {
+
+// Clau de settings del widget
+const QString qConfigurationScreenSettingKey("PACS/interface/qConfigurationPacsDevice/" );
 
 QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
 {
@@ -36,13 +38,19 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
     m_buttonApplyPacs->setIcon( QIcon( ":images/apply.png" ) );
 
     configureInputValidator();
-    setWidthColumns();
+    
+    Settings settings;
+    settings.restoreColumnsWidths(qConfigurationScreenSettingKey, m_PacsTreeView );
+    // amaguem la columna amb l'ID del PACS que és irrellevant per l'usuari
+    m_PacsTreeView->setColumnHidden(0,true); 
 
     checkIncomingConnectionsPortNotInUse();
 }
 
 QConfigurationScreen::~QConfigurationScreen()
 {
+    Settings settings;
+    settings.saveColumnsWidths(qConfigurationScreenSettingKey, m_PacsTreeView );
 }
 
 void QConfigurationScreen::createConnections()
@@ -78,18 +86,6 @@ void QConfigurationScreen::configureInputValidator()
     m_textLocalPort->setValidator( new QIntValidator(0, 65535, m_textPort) );
     m_textTimeout->setValidator( new QIntValidator(0, 99, m_textTimeout) );
     m_textMaxConnections->setValidator( new QIntValidator(0, 99, m_textMaxConnections) );
-}
-
-void QConfigurationScreen::setWidthColumns()
-{
-    StarviewerSettings settings;
-
-    m_PacsTreeView->setColumnHidden(0, true); //La columna pacsID està amagada
-
-    for ( int index = 1; index < m_PacsTreeView->columnCount(); index++ )
-    {   //Al haver un QSplitter el nom del Pare del TabCache és l'splitter
-            m_PacsTreeView->header()->resizeSection( index ,settings.getQConfigurationPacsDeviceColumnWidth(  index ) );
-    }
 }
 
 void QConfigurationScreen::loadPacsDefaults()
@@ -422,21 +418,6 @@ void QConfigurationScreen::enableApplyButtons()
 {
     m_buttonApplyPacs->setEnabled( true );
     m_configurationChanged = true;
-}
-
-void QConfigurationScreen::saveColumnsWidth()
-{
-    StarviewerSettings settings;
-    for ( int i = 0; i < m_PacsTreeView->columnCount(); i++ )
-    {
-        settings.setQConfigurationPacsDeviceColumnWidth( i , m_PacsTreeView->columnWidth( i ) );
-    }
-}
-
-void QConfigurationScreen::closeEvent( QCloseEvent* event )
-{
-    saveColumnsWidth();
-    event->accept();
 }
 
 bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
