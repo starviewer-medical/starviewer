@@ -13,15 +13,13 @@
 #include "volume.h"
 #include "mathtools.h" // pel PI
 
+// Qt
 #include <QTime>
 #include <QPair>
-
+// VTK
 #include <vtkMultiThreader.h>
-
 // ITK
-#include <itkImage.h>
 #include <itkCastImageFilter.h>
-#include "itkMinimumMaximumImageCalculator.h"
 #include <itkVnlFFTRealToComplexConjugateImageFilter.h>
 #include <itkVnlFFTComplexConjugateToRealImageFilter.h>
 

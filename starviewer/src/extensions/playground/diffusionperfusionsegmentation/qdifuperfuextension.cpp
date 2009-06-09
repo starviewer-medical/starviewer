@@ -19,22 +19,15 @@
 #include <QFileDialog>
 // VTK
 #include <vtkActor.h>
-#include <vtkCellType.h>
-#include <vtkCommand.h>
-#include <vtkDataSetMapper.h>
 #include <vtkImageActor.h>
 #include <vtkImageCast.h>
 #include <vtkImageMapToWindowLevelColors.h>
 #include <vtkImageThreshold.h>
 #include <vtkLookupTable.h>
-#include <vtkPoints.h>
-#include <vtkProperty.h>
 #include <vtkRenderer.h>
-#include <vtkUnstructuredGrid.h>
 #include <vtkMetaImageWriter.h>
 //itk
-#include "itkMinimumMaximumImageCalculator.h"
-#include "itkRescaleIntensityImageFilter.h"
+#include <itkRescaleIntensityImageFilter.h>
 //itk-udg
 #include "udgPerfusionEstimator.h"
 #include "udgBinaryMaker.h"
@@ -309,16 +302,11 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 {
     m_diffusionMainVolume = m_diffusionInputVolume->getPhaseVolume(index);
 
-    itk::MinimumMaximumImageCalculator< ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< ItkImageType >::New();
+    double *range = m_diffusionMainVolume->getVtkData()->GetScalarRange();
+    m_diffusionMinValue = (ItkImageType::PixelType)range[0];
+    m_diffusionMaxValue = (ItkImageType::PixelType)range[1];
 
-    minmaxCalc->SetImage(m_diffusionMainVolume->getItkData());
-    minmaxCalc->SetRegion(m_diffusionMainVolume->getItkData()->GetRequestedRegion());
-    minmaxCalc->Compute();
-
-    DEBUG_LOG( QString("ItkMax=%1, ItkMin=%2").arg(minmaxCalc->GetMaximum()).arg(minmaxCalc->GetMinimum()) );
-
-    m_diffusionMinValue = minmaxCalc->GetMinimum();
-    m_diffusionMaxValue = minmaxCalc->GetMaximum();
+    DEBUG_LOG( QString("diffusionMax=%1, diffusionMin=%2").arg(m_diffusionMaxValue).arg(m_diffusionMinValue) );
 
     m_strokeLowerValueSpinBox->setMinimum( m_diffusionMinValue );
     m_strokeLowerValueSpinBox->setMaximum( m_diffusionMaxValue );
