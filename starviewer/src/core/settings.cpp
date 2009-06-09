@@ -2,6 +2,7 @@
 
 #include <QTreeWidget>
 #include <QHeaderView> // pel restoreColumnsWidths
+#include <QSplitter> // pels saveGeometry(),restoreGeometry() de QSplitter
 
 namespace udg{
 
@@ -72,6 +73,18 @@ void Settings::restoreGeometry( const QString &key, QWidget *widget )
 {
     Q_ASSERT( widget );
     widget->restoreGeometry( this->getValue(key).toByteArray() );
+}
+
+void Settings::saveGeometry( const QString &key, QSplitter *splitter )
+{
+    Q_ASSERT( splitter );
+    this->setValue( key, splitter->saveState() );
+}
+
+void Settings::restoreGeometry( const QString &key, QSplitter *splitter )
+{
+    Q_ASSERT( splitter );
+    splitter->restoreState( this->getValue(key).toByteArray() );
 }
 
 }  // end namespace udg
