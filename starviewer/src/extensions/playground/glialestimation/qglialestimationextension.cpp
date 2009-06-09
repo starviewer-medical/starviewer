@@ -68,7 +68,6 @@ QGlialEstimationExtension::QGlialEstimationExtension( QWidget *parent )
 QGlialEstimationExtension::~QGlialEstimationExtension()
 {
     delete m_toolManager;
-    delete m_rotateClockWiseAction;
 }
 
 void QGlialEstimationExtension::createActions()
