@@ -458,7 +458,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     // exploratory tour
     if ( computeExploratoryTour )
     {
-        computeExploratoryTourCpu();
+        this->computeExploratoryTour();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1196,106 +1196,6 @@ void ViewpointInformationChannel::computeGuidedTourCpu()
 }
 
 
-void ViewpointInformationChannel::computeExploratoryTourCpu()
-{
-    int nViewpoints = m_viewpoints.size();
-    int nVoxels = m_volume->getSize();
-
-    emit partialProgress( 0 );
-    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-
-    m_exploratoryTour.clear();
-
-    // millor vista
-    float minVmi = m_vmi.at( 0 );
-    int minVmiIndex = 0;
-
-    for ( int i = 1; i < nViewpoints; i++ )
-    {
-        float vmi = m_vmi.at( i );
-
-        if ( vmi < minVmi )
-        {
-            minVmi = vmi;
-            minVmiIndex = i;
-        }
-    }
-
-    m_exploratoryTour << qMakePair( minVmiIndex, m_viewpoints.at( minVmiIndex ) );
-
-    QList<int> viewpointIndexList;
-    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
-    viewpointIndexList.removeAt( minVmiIndex );
-
-    float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
-
-    QVector<float> pZvv = voxelProbabilitiesInView( minVmiIndex );  // p(Z|v̂)
-
-    float IvvZ = minVmi;    // I(v̂;Z)
-    float ratio = IvvZ / m_mi;  // I(v̂;Z) / I(V;Z)
-
-    DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
-    DEBUG_LOG( "Exploratory tour:" );
-    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( m_viewpoints.at( minVmiIndex ).toString() ).arg( IvvZ ).arg( ratio ) );
-
-    while ( ratio > m_exploratoryTourThreshold )
-    {
-        int nRemainingViews = viewpointIndexList.size();
-
-        if ( nRemainingViews == 0 ) break;
-
-        float pvvMin = 0.0f;
-        QVector<float> pZvvMin;
-        float IvvZMin = 0.0f;
-        float ratioMin = 0.0f;
-        int iMin = -1;
-
-        int currentIndex = m_exploratoryTour.last().first;
-
-        QVector<int> neighbours = m_viewpointGenerator.neighbours( currentIndex );
-        int nNeighbours = neighbours.size();
-
-        for ( int k = 0; k < nNeighbours; k++ )
-        {
-            int viewIndex = neighbours.at( k );
-
-            if ( !viewpointIndexList.contains( viewIndex ) ) continue;
-
-            float pvi = m_viewProbabilities.at( viewIndex );
-            QVector<float> pZvi = voxelProbabilitiesInView( viewIndex );    // p(Z|vi)
-
-            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
-            QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
-            for ( int j = 0; j < nVoxels; j++ ) pZvvi[j] = ( pvv * pZvv.at( j ) + pvi * pZvi.at( j ) ) / pvvi;
-            float IvviZ = InformationTheory::kullbackLeiblerDivergence( pZvvi, m_voxelProbabilities );  // I(v̂,Z) afegint aquesta vista
-            float ratioi = IvviZ / m_mi;
-
-            if ( iMin < 0 || ratioi < ratioMin )
-            {
-                pvvMin = pvvi;
-                pZvvMin = pZvvi;
-                IvvZMin = IvviZ;
-                ratioMin = ratioi;
-                iMin = viewpointIndexList.indexOf( viewIndex );
-            }
-        }
-
-        if ( iMin < 0 ) break;  // no hi ha més veïns que puguem afegir, per tant pleguem
-
-        pvv = pvvMin;
-        pZvv = pZvvMin;
-        IvvZ = IvvZMin;
-        ratio = ratioMin;
-        int viewIndex = viewpointIndexList.takeAt( iMin );
-        m_exploratoryTour << qMakePair( viewIndex, m_viewpoints.at( viewIndex ) );
-        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( m_exploratoryTour.size() - 1 ).arg( viewIndex + 1 ).arg( m_viewpoints.at( viewIndex ).toString() ).arg( IvvZ ).arg( ratio ) );
-    }
-
-    emit partialProgress( 100 );
-    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-}
-
-
 #else // CUDA_AVAILABLE
 
 
@@ -1382,7 +1282,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     // exploratory tour
     if ( computeExploratoryTour )
     {
-        computeExploratoryTourCuda();
+        this->computeExploratoryTour();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1958,7 +1858,10 @@ void ViewpointInformationChannel::computeGuidedTourCuda()
 }
 
 
-void ViewpointInformationChannel::computeExploratoryTourCuda()
+#endif // CUDA_AVAILABLE
+
+
+void ViewpointInformationChannel::computeExploratoryTour()
 {
     int nViewpoints = m_viewpoints.size();
     int nVoxels = m_volume->getSize();
@@ -1991,7 +1894,7 @@ void ViewpointInformationChannel::computeExploratoryTourCuda()
 
     float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
 
-    QVector<float> pZvv = this->voxelProbabilitiesInView( minVmiIndex );    // p(Z|v̂)
+    QVector<float> pZvv = voxelProbabilitiesInView( minVmiIndex );  // p(Z|v̂)
 
     float IvvZ = minVmi;    // I(v̂;Z)
     float ratio = IvvZ / m_mi;  // I(v̂;Z) / I(V;Z)
@@ -2024,7 +1927,7 @@ void ViewpointInformationChannel::computeExploratoryTourCuda()
             if ( !viewpointIndexList.contains( viewIndex ) ) continue;
 
             float pvi = m_viewProbabilities.at( viewIndex );
-            QVector<float> pZvi = this->voxelProbabilitiesInView( viewIndex );  // p(Z|vi)
+            QVector<float> pZvi = voxelProbabilitiesInView( viewIndex );    // p(Z|vi)
 
             float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
             QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
@@ -2056,9 +1959,6 @@ void ViewpointInformationChannel::computeExploratoryTourCuda()
     emit partialProgress( 100 );
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 }
-
-
-#endif // CUDA_AVAILABLE
 
 
 } // namespace udg
