@@ -33,7 +33,6 @@ class vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
 
 // VMI
-class VmiVoxelShader1;
 class VmiVoxelShader2;
 class VomiVoxelShader;
 class VomiCoolWarmVoxelShader;
@@ -86,8 +85,6 @@ public:
 
     /// Prepara el rendering amb el voxel shader per fer càlculs de VMI.
     void startVmiMode();
-    void startVmiFirstPass();
-    float finishVmiFirstPass();
     void startVmiSecondPass();
     QVector<float> finishVmiSecondPass();
     float viewedVolumeInVmiSecondPass() const;
@@ -150,8 +147,6 @@ private:
     /// Voxel shader de color bleeding.
     ColorBleedingVoxelShader *m_colorBleedingVoxelShader;
     // VMI
-    /// Voxel shader per calcular la VMI; serveix per la primera passada.
-    VmiVoxelShader1 *m_vmiVoxelShader1;
     /// Voxel shader per calcular la VMI; serveix per la segona passada.
     VmiVoxelShader2 *m_vmiVoxelShader2;
     /// Voxel shader que pinta les VoMI.
