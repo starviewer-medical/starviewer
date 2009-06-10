@@ -78,14 +78,14 @@ QString PacsParameters::getDescription() const
     return m_pacsDescription;
 }
 
-void PacsParameters::setIsDefault(bool isDefault)
+void PacsParameters::setDefault(bool default)
 {
-    m_pacsIsDefault = isDefault;
+    m_isDefaultPACS = default;
 }
 
-bool PacsParameters::getIsDefault() const
+bool PacsParameters::isDefault() const
 {
-    return m_pacsIsDefault;
+    return m_isDefaultPACS;
 }
 
 void PacsParameters::setPacsID(QString ID)
@@ -108,7 +108,7 @@ bool PacsParameters::operator ==(const PacsParameters &parameters)
         && m_pacsDescription == parameters.m_pacsDescription
         && m_pacsInstitution == parameters.m_pacsInstitution
         && m_pacsLocation == parameters.m_pacsLocation
-        && m_pacsIsDefault == parameters.m_pacsIsDefault
+        && isDefault() == parameters.isDefault()
         && m_pacsLocation == parameters.m_pacsLocation
         && m_pacsID == parameters.m_pacsID
         && m_connectionTimeOut == parameters.m_connectionTimeOut;
