@@ -250,6 +250,16 @@ QTime Study::getRetrievedTime()
     return m_retrieveTime;
 }
 
+void Study::setInstitution(const QString &institution)
+{
+    m_institution = institution;
+}
+
+QString Study::getInstitution() const
+{
+    return m_institution;
+}
+
 bool Study::addSeries( Series *series )
 {
     bool ok = true;
