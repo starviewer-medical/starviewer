@@ -25,7 +25,6 @@
 #include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 
 // VMI
-#include "vmivoxelshader1.h"
 #include "vmivoxelshader2.h"
 #include "vomivoxelshader.h"
 #include "vomicoolwarmvoxelshader.h"
@@ -61,7 +60,6 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_obscuranceVoxelShader;
     delete m_colorBleedingVoxelShader;
     delete m_coolWarmVoxelShader;
-    delete m_vmiVoxelShader1;
     delete m_vmiVoxelShader2;
     delete m_vomiVoxelShader;
     delete m_vomiCoolWarmVoxelShader;
@@ -251,7 +249,6 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_ambientVoxelShader->setTransferFunction( transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
-    m_vmiVoxelShader1->setTransferFunction( transferFunction );
     m_vmiVoxelShader2->setTransferFunction( transferFunction );
     m_vomiVoxelShader->setTransferFunction( transferFunction );
     m_vomiCoolWarmVoxelShader->setTransferFunction( transferFunction );
@@ -264,30 +261,6 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
 void Experimental3DVolume::startVmiMode()
 {
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
-}
-
-
-void Experimental3DVolume::startVmiFirstPass()
-{
-    m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_vmiVoxelShader1 );
-    m_vmiVoxelShader1->initAccumulator();
-}
-
-
-float Experimental3DVolume::finishVmiFirstPass()
-{
-    const QHash<QThread*, float> &accumulator = m_vmiVoxelShader1->accumulator();
-    QHashIterator<QThread*, float> it( accumulator );
-    float volume = 0.0f;
-
-    while ( it.hasNext() )
-    {
-        it.next();
-        volume += it.value();
-    }
-
-    return volume;
 }
 
 
@@ -432,8 +405,6 @@ void Experimental3DVolume::createVoxelShaders()
     m_celShadingVoxelShader = new CelShadingVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
-    m_vmiVoxelShader1 = new VmiVoxelShader1();
-    m_vmiVoxelShader1->setData( m_data, m_rangeMax );
     m_vmiVoxelShader2 = new VmiVoxelShader2();
     m_vmiVoxelShader2->setData( m_data, m_rangeMax, m_dataSize );
     m_vomiVoxelShader = new VomiVoxelShader();

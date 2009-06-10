@@ -16,7 +16,6 @@ HEADERS += experimental3dextensionmediator.h \
     informationtheory.h \
     qbasicgraphictransferfunctioneditor.h \
     qgraphictransferfunctioneditor.h \
-    vmivoxelshader1.h \
     vmivoxelshader2.h \
     voxelsaliencyvoxelshader.h \
     vomivoxelshader.h \
@@ -37,7 +36,6 @@ SOURCES += experimental3dextensionmediator.cpp \
     informationtheory.cpp \
     qbasicgraphictransferfunctioneditor.cpp \
     qgraphictransferfunctioneditor.cpp \
-    vmivoxelshader1.cpp \
     vmivoxelshader2.cpp \
     voxelsaliencyvoxelshader.cpp \
     vomivoxelshader.cpp \
