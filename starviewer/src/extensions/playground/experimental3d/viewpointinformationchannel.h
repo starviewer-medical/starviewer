@@ -85,7 +85,6 @@ private:
     void computeViewMeasuresCpu( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi );
     void computeVomiCpu( bool computeVomi, bool computeColorVomi );
     void computeBestViewsCpu();
-    void computeGuidedTourCpu();
 #else // CUDA_AVAILABLE
     static Matrix4 viewMatrix( const Vector3 &viewpoint );
     void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities,
@@ -96,9 +95,9 @@ private:
     void computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi );
     void computeVomiCuda( bool computeVomi, bool computeColorVomi );
     void computeBestViewsCuda();
-    void computeGuidedTourCuda();
 #endif // CUDA_AVAILABLE
 
+    void computeGuidedTour();
     void computeExploratoryTour();
 
 private:

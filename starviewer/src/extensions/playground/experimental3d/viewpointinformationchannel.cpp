@@ -450,7 +450,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     // guided tour
     if ( computeGuidedTour )
     {
-        computeGuidedTourCpu();
+        this->computeGuidedTour();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1078,124 +1078,6 @@ void ViewpointInformationChannel::computeBestViewsCpu()
 }
 
 
-void ViewpointInformationChannel::computeGuidedTourCpu()
-{
-    int nViewpoints = m_viewpoints.size();
-
-    DEBUG_LOG( "Guided tour:" );
-
-    emit partialProgress( 0 );
-    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-
-    m_guidedTour.clear();
-
-    QList< QPair<int, Vector3> > bestViews = m_bestViews;   // còpia
-    int nBestViews = bestViews.size();
-
-    m_guidedTour << bestViews.takeAt( 0 );
-    DEBUG_LOG( QString( "%1: (v%2) = %3" ).arg( 0 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ) );
-
-    emit partialProgress( 100 / nBestViews );
-    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-
-    QSet<int> viewpointIndices;
-    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndices << i;
-
-    while ( !bestViews.isEmpty() )
-    {
-        QPair<int, Vector3> current = m_guidedTour.last();
-        int i = current.first;
-        float pvi = m_viewProbabilities.at( i );    // p(vi)
-
-        QVector<float> pZvi = voxelProbabilitiesInView( i );    // p(Z|vi);
-
-        int target, targetIndex;
-        float minDissimilarity;
-        int remainingViews = bestViews.size();
-
-        // trobar el target
-        for ( int k = 0; k < remainingViews; k++ )
-        {
-            int j = bestViews.at( k ).first;
-            float pvj = m_viewProbabilities.at( j );    // p(vj)
-            float pvij = pvi + pvj; // p(v̂)
-
-            float dissimilarity;
-
-            if ( pvij == 0.0f ) dissimilarity = 0.0f;
-            else
-            {
-                QVector<float> pZvj = voxelProbabilitiesInView( j );    // p(Z|vj)
-
-                dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
-            }
-
-            if ( k == 0 || dissimilarity < minDissimilarity )
-            {
-                target = j;
-                targetIndex = k;
-                minDissimilarity = dissimilarity;
-            }
-        }
-
-        // p(vi) i p(Z|vi) ara fan referència al target
-        pvi = m_viewProbabilities.at( target ); // p(vi)
-
-        pZvi = voxelProbabilitiesInView( target );
-
-        QSet<int> indices( viewpointIndices );
-        int currentIndex = i;
-
-        // camí fins al target
-        while ( currentIndex != target )
-        {
-            indices.remove( currentIndex );
-
-            QVector<int> neighbours = m_viewpointGenerator.neighbours( currentIndex );
-            int nNeighbours = neighbours.size();
-            bool test = false;  // per comprovar que sempre tria un veí
-
-            for ( int k = 0; k < nNeighbours; k++ )
-            {
-                int j = neighbours.at( k );
-
-                if ( !indices.contains( j ) ) continue;
-
-                float pvj = m_viewProbabilities.at( j );    // p(vj)
-                float pvij = pvi + pvj; // p(v̂)
-
-                float dissimilarity;
-
-                if ( pvij == 0.0f ) dissimilarity = 0.0f;
-                else
-                {
-                    QVector<float> pZvj = voxelProbabilitiesInView( j );
-
-                    dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
-                }
-
-                if ( k == 0 || dissimilarity < minDissimilarity )
-                {
-                    currentIndex = j;
-                    minDissimilarity = dissimilarity;
-                    test = true;
-                }
-            }
-
-            Q_ASSERT( test );
-
-            m_guidedTour << qMakePair( currentIndex, m_viewpoints.at( currentIndex ) );
-            DEBUG_LOG( QString( "%1: (v%2) = %3; dissimilarity = %4" ).arg( m_guidedTour.size() - 1 ).arg( m_guidedTour.last().first + 1 ).arg( m_guidedTour.last().second.toString() ).arg( minDissimilarity ) );
-        }
-
-        bestViews.removeAt( targetIndex );  // esborrem el target de bestViews
-
-        emit partialProgress( 100 * ( nBestViews - bestViews.size() ) / nBestViews );
-        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-    }
-}
-
-
 #else // CUDA_AVAILABLE
 
 
@@ -1274,7 +1156,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     // guided tour
     if ( computeGuidedTour )
     {
-        computeGuidedTourCuda();
+        this->computeGuidedTour();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1738,7 +1620,10 @@ void ViewpointInformationChannel::computeBestViewsCuda()
 }
 
 
-void ViewpointInformationChannel::computeGuidedTourCuda()
+#endif // CUDA_AVAILABLE
+
+
+void ViewpointInformationChannel::computeGuidedTour()
 {
     int nViewpoints = m_viewpoints.size();
 
@@ -1767,7 +1652,7 @@ void ViewpointInformationChannel::computeGuidedTourCuda()
         int i = current.first;
         float pvi = m_viewProbabilities.at( i );    // p(vi)
 
-        QVector<float> pZvi = this->voxelProbabilitiesInView( i );  // p(Z|vi)
+        QVector<float> pZvi = voxelProbabilitiesInView( i );    // p(Z|vi);
 
         int target, targetIndex;
         float minDissimilarity;
@@ -1785,7 +1670,7 @@ void ViewpointInformationChannel::computeGuidedTourCuda()
             if ( pvij == 0.0f ) dissimilarity = 0.0f;
             else
             {
-                QVector<float> pZvj = this->voxelProbabilitiesInView( j );  // p(Z|vj)
+                QVector<float> pZvj = voxelProbabilitiesInView( j );    // p(Z|vj)
 
                 dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
             }
@@ -1798,12 +1683,10 @@ void ViewpointInformationChannel::computeGuidedTourCuda()
             }
         }
 
-        DEBUG_LOG( QString( "target = %1" ).arg( target + 1 ) );
-
         // p(vi) i p(Z|vi) ara fan referència al target
         pvi = m_viewProbabilities.at( target ); // p(vi)
 
-        pZvi = this->voxelProbabilitiesInView( target );
+        pZvi = voxelProbabilitiesInView( target );
 
         QSet<int> indices( viewpointIndices );
         int currentIndex = i;
@@ -1831,7 +1714,7 @@ void ViewpointInformationChannel::computeGuidedTourCuda()
                 if ( pvij == 0.0f ) dissimilarity = 0.0f;
                 else
                 {
-                    QVector<float> pZvj = this->voxelProbabilitiesInView( j );
+                    QVector<float> pZvj = voxelProbabilitiesInView( j );
 
                     dissimilarity = InformationTheory::jensenShannonDivergence( pvi / pvij, pvj / pvij, pZvi, pZvj );
                 }
@@ -1856,9 +1739,6 @@ void ViewpointInformationChannel::computeGuidedTourCuda()
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 }
-
-
-#endif // CUDA_AVAILABLE
 
 
 void ViewpointInformationChannel::computeExploratoryTour()
