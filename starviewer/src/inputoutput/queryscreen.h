@@ -120,11 +120,6 @@ private:
      */
     DicomMask buildDicomMask();
 
-    /** construeix la màscara de les dates
-     * @return retorna la màscara de les dates
-     */
-    QString getStudyDatesStringMask();
-
     ///Cerca els estudis que compleixen la màscara de cerca als pacs passats per paràmetre
     Status queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
 
