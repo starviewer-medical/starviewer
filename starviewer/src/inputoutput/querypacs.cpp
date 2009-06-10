@@ -18,6 +18,7 @@
 #include "patient.h"
 #include "createinformationmodelobject.h"
 #include "dicomtagreader.h"
+#include "pacsmanager.h"
 
 namespace udg{
 
@@ -28,6 +29,8 @@ void QueryPacs::setConnection(QString pacsID, PacsConnection connection)
 {
     m_assoc = connection.getPacsConnection();
     m_pacsID = pacsID;
+
+    m_institutionPacs = PacsManager().queryPacs(pacsID).getInstitution();//Cerquem el nom de la Institució a la qual pertany el PACS
 }
 
 void QueryPacs::foundMatchCallback(
@@ -129,6 +132,8 @@ void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
 
     Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
     Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
+    study->setInstitution(m_institutionPacs);
+
     patient->addStudy(study);
 
     m_patientStudyList.append(patient);

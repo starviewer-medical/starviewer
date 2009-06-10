@@ -117,7 +117,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(Date, formatDate(studyToInsert->getDate().toString("yyyyMMdd")));
         item->setText(Time, formatHour(studyToInsert->getTime().toString("hhmmss")));
         item->setText(StudyID, tr("Study %1").arg(studyToInsert->getID()));
-
+        item->setText(Institution, studyToInsert->getInstitution());
         item->setText( AccNumber, studyToInsert->getAccessionNumber());
         item->setText(UID, studyToInsert->getInstanceUID());
         item->setText(Type , "STUDY");//indiquem de que es tracta d'un estudi
