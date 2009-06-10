@@ -82,6 +82,8 @@ private:
      */
     QHash<QString,QString> m_hashPacsIDOfStudyInstanceUID; //Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
 
+    QString m_institutionPacs;//Guarda la institució a la que pertany al PACS
+
     //fa el query al pacs
     Status query();
 
