@@ -63,7 +63,7 @@ QList<PacsParameters> PacsManager::queryDefaultPacs()
     {
         settings.setArrayIndex(i);
         PacsParameters pacs = fillPacs(settings);
-        if (pacs.getIsDefault()) defaultPacs.append(pacs);
+        if (pacs.isDefault()) defaultPacs.append(pacs);
     }
     settings.endArray();
 
@@ -153,7 +153,7 @@ void PacsManager::saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacs
         settings.setValue("PacsPort", pacsList.at(i).getPacsPort() );
         settings.setValue("Location", pacsList.at(i).getLocation() );
         settings.setValue("Institution", pacsList.at(i).getInstitution() );
-        settings.setValue("Default", pacsList.at(i).getIsDefault() ? "S" : "N" );//Guardem el camp en format string
+        settings.setValue("Default", pacsList.at(i).isDefault() ? "S" : "N" );//Guardem el camp en format string
         settings.setValue("PacsHostname", pacsList.at(i).getPacsAddress() );
         settings.setValue("Description", pacsList.at(i).getDescription() );
     }
@@ -169,7 +169,7 @@ PacsParameters PacsManager::fillPacs(const QSettings &settings)
     pacsParameters.setPacsPort( settings.value("PacsPort" ).toString() );
     pacsParameters.setLocation( settings.value("Location" ).toString() );
     pacsParameters.setInstitution( settings.value("Institution" ).toString() );
-    pacsParameters.setIsDefault( settings.value("Default" ).toString() == "S" );
+    pacsParameters.setDefault( settings.value("Default" ).toString() == "S" );
     pacsParameters.setPacsAddress( settings.value("PacsHostname" ).toString() );
     pacsParameters.setDescription( settings.value("Description" ).toString() );
 
