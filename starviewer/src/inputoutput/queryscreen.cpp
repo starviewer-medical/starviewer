@@ -128,6 +128,40 @@ void QueryScreen::initialize()
     #endif
 }
 
+void QueryScreen::createConnections()
+{
+    //connectem els butons
+    connect( m_searchButton, SIGNAL( clicked() ), SLOT( searchStudy() ) );
+    connect( m_clearToolButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
+    connect( m_operationListToolButton, SIGNAL( clicked() ) , SLOT( showOperationStateScreen() ) );
+    connect( m_showPACSNodesToolButton, SIGNAL( toggled(bool) ), m_PACSNodes, SLOT( setVisible(bool) ) );
+
+    connect( m_createDICOMDIRToolButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
+
+    //es canvia de pestanya del TAB
+    connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
+
+    //Amaga o ensenya la cerca avançada
+    connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
+
+    #ifndef STARVIEWER_LITE
+    connect(m_listenRISRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
+    connect(m_listenRISRequestThread, SIGNAL(errorListening(ListenRISRequestThread::ListenRISRequestThreadError)), SLOT(showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError)));
+    #endif
+
+    connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
+    connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
+    connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
+
+    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
+
+    connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
+    ///Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
+    connect(m_qInputOutputPacsWidget, SIGNAL(operationStateChange()), SLOT(updateOperationsInProgressMessage()));
+    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(studyWillBeDeletedFromDatabase(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
+}
+
 void QueryScreen::checkRequeriments()
 {
     //Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent
@@ -176,40 +210,6 @@ void QueryScreen::updateOperationsInProgressMessage()
     }
 }
 
-void QueryScreen::createConnections()
-{
-    //connectem els butons
-    connect( m_searchButton, SIGNAL( clicked() ), SLOT( searchStudy() ) );
-    connect( m_clearToolButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
-    connect( m_operationListToolButton, SIGNAL( clicked() ) , SLOT( showOperationStateScreen() ) );
-    connect( m_showPACSNodesToolButton, SIGNAL( toggled(bool) ), m_PACSNodes, SLOT( setVisible(bool) ) );
-
-    connect( m_createDICOMDIRToolButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
-
-    //es canvia de pestanya del TAB
-    connect( m_tab , SIGNAL( currentChanged( int ) ), SLOT( refreshTab( int ) ) );
-
-    //Amaga o ensenya la cerca avançada
-    connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
-
-    #ifndef STARVIEWER_LITE
-    connect(m_listenRISRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
-    connect(m_listenRISRequestThread, SIGNAL(errorListening(ListenRISRequestThread::ListenRISRequestThreadError)), SLOT(showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError)));
-    #endif
-
-    connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
-    connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
-    connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
-
-    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
-
-    connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
-    ///Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
-    connect(m_qInputOutputPacsWidget, SIGNAL(operationStateChange()), SLOT(updateOperationsInProgressMessage()));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyWillBeDeletedFromDatabase(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
-}
-
 void QueryScreen::setAdvancedSearchVisible(bool visible)
 {
     m_qadvancedSearchWidget->setVisible(visible);
@@ -223,15 +223,6 @@ void QueryScreen::setAdvancedSearchVisible(bool visible)
         m_qadvancedSearchWidget->clear();
         m_advancedSearchToolButton->setText( m_advancedSearchToolButton->text().replace("<<",">>") );
     }
-}
-
-void QueryScreen::readSettings()
-{
-    Settings settings;
-    settings.restoreGeometry(queryScreenGeometrySettingKey,this);
-    // Aquesta clau substitueix les obsoletes "queryScreenWindowPositionX", "queryScreenWindowPositionY", "queryScreenWindowWidth" i "queryScreenWindowHeight"
-    // que tenien les claus /interface/queryscreen/ + windowPositionX, windowPositionY, windowWidth i windowHeigth respectivament
-    // TODO fer neteja d'aquestes claus antigues amb la migració de dades
 }
 
 void QueryScreen::clearTexts()
@@ -293,22 +284,6 @@ void QueryScreen::searchStudy()
     }
 }
 
-Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
-{
-    QList<PacsParameters> filledPacsParameters;
-
-    //TODO PacsParameters no hauria de contenir el AETitle i el timeout
-    //Hem d'afegir a les dades de pacs parameters el nostre aetitle i timeout
-    foreach(PacsParameters pacs, listPacsToQuery)
-    {
-        filledPacsParameters.append(pacs);
-    }
-
-    multipleQueryStudy->setMask( searchMask ); //assignem la mascara
-    multipleQueryStudy->setPacsList(filledPacsParameters);
-    return multipleQueryStudy->StartQueries();
-}
-
 void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
 {
     QStringList studyUIDList;
@@ -351,29 +326,6 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView)
     emit selectedPatients(listPatientsToView);
 }
 
-void QueryScreen::closeEvent( QCloseEvent* event )
-{
-    writeSettings(); // guardem els settings
-
-    m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
-
-    event->accept();
-    m_qcreateDicomdir->clearTemporaryDir();
-}
-
-void QueryScreen::writeSettings()
-{
-    /* Només guardem els settings quan la interfície ha estat visible, ja que hi ha settings com el QSplitter que si la primera vegada
-     * que executem l'starviewer no obrim la QueryScreen retorna un valors incorrecte per això, el que fem és comprova que la QueryScreen
-     * hagi estat visible per guardar el settings
-     */
-    if (this->isVisible())
-    {
-        Settings settings;
-        settings.saveGeometry(queryScreenGeometrySettingKey, this);
-    }
-}
-
 void QueryScreen::showOperationStateScreen()
 {
     if ( !m_operationStateScreen->isVisible() )
@@ -395,40 +347,57 @@ void QueryScreen::openDicomdir()
     m_tab->setCurrentIndex( DICOMDIRTab ); // mostre el tab del dicomdir
 }
 
-void QueryScreen::errorConnectingPacs( QString IDPacs )
-{
-    PacsManager pacsManager;
-    PacsParameters errorPacs;
-    QString errorMessage;
-
-    errorPacs = pacsManager.queryPacs(IDPacs);
-
-    errorMessage = tr( "Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct." )
-        .arg( errorPacs.getAEPacs() )
-        .arg( errorPacs.getInstitution()
-    );
-
-    QMessageBox::critical( this , ApplicationNameString , errorMessage );
-}
-
-void QueryScreen::errorQueringStudiesPacs(QString PacsID)
-{
-    PacsManager pacsManager;
-    PacsParameters errorPacs;
-    QString errorMessage;
-
-    errorPacs = pacsManager.queryPacs(PacsID);
-    errorMessage = tr( "Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct" )
-        .arg( errorPacs.getAEPacs() )
-        .arg( errorPacs.getInstitution()
-    );
-
-    QMessageBox::critical( this , ApplicationNameString , errorMessage );
-}
-
 DicomMask QueryScreen::buildDicomMask()
 {
     return m_qbasicSearchWidget->buildDicomMask() + m_qadvancedSearchWidget->buildDicomMask();
+}
+
+void QueryScreen::closeEvent( QCloseEvent* event )
+{
+    writeSettings(); // guardem els settings
+
+    m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
+
+    event->accept();
+    m_qcreateDicomdir->clearTemporaryDir();
+}
+
+void QueryScreen::readSettings()
+{
+    Settings settings;
+    settings.restoreGeometry(queryScreenGeometrySettingKey,this);
+    // Aquesta clau substitueix les obsoletes "queryScreenWindowPositionX", "queryScreenWindowPositionY", "queryScreenWindowWidth" i "queryScreenWindowHeight"
+    // que tenien les claus /interface/queryscreen/ + windowPositionX, windowPositionY, windowWidth i windowHeigth respectivament
+    // TODO fer neteja d'aquestes claus antigues amb la migració de dades
+}
+
+void QueryScreen::writeSettings()
+{
+    /* Només guardem els settings quan la interfície ha estat visible, ja que hi ha settings com el QSplitter que si la primera vegada
+     * que executem l'starviewer no obrim la QueryScreen retorna un valors incorrecte per això, el que fem és comprova que la QueryScreen
+     * hagi estat visible per guardar el settings
+     */
+    if (this->isVisible())
+    {
+        Settings settings;
+        settings.saveGeometry(queryScreenGeometrySettingKey, this);
+    }
+}
+
+Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
+{
+    QList<PacsParameters> filledPacsParameters;
+
+    //TODO PacsParameters no hauria de contenir el AETitle i el timeout
+    //Hem d'afegir a les dades de pacs parameters el nostre aetitle i timeout
+    foreach(PacsParameters pacs, listPacsToQuery)
+    {
+        filledPacsParameters.append(pacs);
+    }
+
+    multipleQueryStudy->setMask( searchMask ); //assignem la mascara
+    multipleQueryStudy->setPacsList(filledPacsParameters);
+    return multipleQueryStudy->StartQueries();
 }
 
 void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
@@ -471,6 +440,37 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
             m_qInputOutputPacsWidget->retrieve(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), pacsID, maskStudyToRetrieve, study);
         }
     }
+}
+
+void QueryScreen::errorConnectingPacs( QString IDPacs )
+{
+    PacsManager pacsManager;
+    PacsParameters errorPacs;
+    QString errorMessage;
+
+    errorPacs = pacsManager.queryPacs(IDPacs);
+
+    errorMessage = tr( "Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct." )
+        .arg( errorPacs.getAEPacs() )
+        .arg( errorPacs.getInstitution()
+    );
+
+    QMessageBox::critical( this , ApplicationNameString , errorMessage );
+}
+
+void QueryScreen::errorQueringStudiesPacs(QString PacsID)
+{
+    PacsManager pacsManager;
+    PacsParameters errorPacs;
+    QString errorMessage;
+
+    errorPacs = pacsManager.queryPacs(PacsID);
+    errorMessage = tr( "Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct" )
+        .arg( errorPacs.getAEPacs() )
+        .arg( errorPacs.getInstitution()
+    );
+
+    QMessageBox::critical( this , ApplicationNameString , errorMessage );
 }
 
 void QueryScreen::showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError error)
