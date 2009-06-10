@@ -442,7 +442,7 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     // best views
     if ( computeBestViews )
     {
-        computeBestViewsCpu();
+        this->computeBestViews();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -970,114 +970,6 @@ void ViewpointInformationChannel::computeVomiCpu( bool computeVomi, bool compute
 }
 
 
-void ViewpointInformationChannel::computeBestViewsCpu()
-{
-    int nViewpoints = m_viewpoints.size();
-    int nVoxels = m_volume->getSize();
-
-    emit partialProgress( 0 );
-    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-
-    m_bestViews.clear();
-
-    // millor vista
-    float minVmi = m_vmi.at( 0 );
-    int minVmiIndex = 0;
-
-    for ( int i = 1; i < nViewpoints; i++ )
-    {
-        float vmi = m_vmi.at( i );
-
-        if ( vmi < minVmi )
-        {
-            minVmi = vmi;
-            minVmiIndex = i;
-        }
-    }
-
-    m_bestViews << qMakePair( minVmiIndex, m_viewpoints.at( minVmiIndex ) );
-
-    QList<int> viewpointIndexList;
-    for ( int i = 0; i < nViewpoints; i++ ) viewpointIndexList << i;
-    viewpointIndexList.removeAt( minVmiIndex );
-
-    float pvv = m_viewProbabilities.at( minVmiIndex );    // p(v̂)
-
-    QVector<float> pZvv = this->voxelProbabilitiesInView( minVmiIndex );    // p(Z|v̂)
-
-    // límits
-    m_numberOfBestViews = qMin( m_numberOfBestViews, nViewpoints );
-    float IvvZ = minVmi;    // I(v̂;Z)
-
-    if ( m_fixedNumberOfBestViews )
-    {
-        DEBUG_LOG( QString( "límit %1 vistes" ).arg( m_numberOfBestViews ) );
-    }
-    else
-    {
-        DEBUG_LOG( QString( "límit llindar %1" ).arg( m_bestViewsThreshold ) );
-    }
-
-    DEBUG_LOG( QString( "I(V;Z) = %1" ).arg( m_mi ) );
-    DEBUG_LOG( "Millors vistes:" );
-    DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( 0 ).arg( minVmiIndex + 1 ).arg( m_viewpoints.at( minVmiIndex ).toString() ).arg( IvvZ ).arg( IvvZ / m_mi ) );
-
-    if ( m_fixedNumberOfBestViews )
-    {
-        emit partialProgress( 100 / m_numberOfBestViews );
-        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-    }
-
-    while ( ( m_fixedNumberOfBestViews && m_bestViews.size() < m_numberOfBestViews ) || ( !m_fixedNumberOfBestViews && IvvZ / m_mi > m_bestViewsThreshold ) )
-    {
-        int nRemainingViews = viewpointIndexList.size();
-
-        if ( nRemainingViews == 0 ) break;
-
-        float pvvMin = 0.0f;
-        QVector<float> pZvvMin;
-        float IvvZMin = 0.0f;
-        int iMin = 0;
-
-        for ( int i = 0; i < nRemainingViews; i++ )
-        {
-            int viewIndex = viewpointIndexList.at( i );
-            float pvi = m_viewProbabilities.at( viewIndex );
-            QVector<float> pZvi = this->voxelProbabilitiesInView( viewIndex );  // p(Z|vi)
-
-            float pvvi = pvv + pvi;         // p(v̂) afegint aquesta vista
-            QVector<float> pZvvi( pZvv );   // vector p(Z|v̂) afegint aquesta vista
-            for ( int j = 0; j < nVoxels; j++ ) pZvvi[j] = ( pvv * pZvv.at( j ) + pvi * pZvi.at( j ) ) / pvvi;
-            float IvviZ = InformationTheory::kullbackLeiblerDivergence( pZvvi, m_voxelProbabilities );  // I(v̂,Z) afegint aquesta vista
-
-            if ( i == 0 || IvviZ < IvvZMin )
-            {
-                pvvMin = pvvi;
-                pZvvMin = pZvvi;
-                IvvZMin = IvviZ;
-                iMin = i;
-            }
-        }
-
-        pvv = pvvMin;
-        pZvv = pZvvMin;
-        IvvZ = IvvZMin;
-        int viewIndex = viewpointIndexList.takeAt( iMin );
-        m_bestViews << qMakePair( viewIndex, m_viewpoints.at( viewIndex ) );
-        DEBUG_LOG( QString( "%1: (v%2) = %3; I(v̂;Z) = %4; I(v̂;Z)/I(V;Z) = %5" ).arg( m_bestViews.size() - 1 ).arg( viewIndex + 1 ).arg( m_viewpoints.at( viewIndex ).toString() ).arg( IvvZ ).arg( IvvZ / m_mi ) );
-
-        if ( m_fixedNumberOfBestViews )
-        {
-            emit partialProgress( 100 * m_bestViews.size() / m_fixedNumberOfBestViews );
-            QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-        }
-    }
-
-    emit partialProgress( 100 );
-    QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
-}
-
-
 #else // CUDA_AVAILABLE
 
 
@@ -1148,7 +1040,7 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     // best views
     if ( computeBestViews )
     {
-        computeBestViewsCuda();
+        this->computeBestViews();
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1512,7 +1404,10 @@ void ViewpointInformationChannel::computeVomiCuda( bool computeVomi, bool comput
 }
 
 
-void ViewpointInformationChannel::computeBestViewsCuda()
+#endif // CUDA_AVAILABLE
+
+
+void ViewpointInformationChannel::computeBestViews()
 {
     int nViewpoints = m_viewpoints.size();
     int nVoxels = m_volume->getSize();
@@ -1618,9 +1513,6 @@ void ViewpointInformationChannel::computeBestViewsCuda()
     emit partialProgress( 100 );
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 }
-
-
-#endif // CUDA_AVAILABLE
 
 
 void ViewpointInformationChannel::computeGuidedTour()
