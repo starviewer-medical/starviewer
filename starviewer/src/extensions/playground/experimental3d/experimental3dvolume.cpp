@@ -295,6 +295,7 @@ void Experimental3DVolume::startVmiSecondPass()
 {
     m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_vmiVoxelShader2 );
+    m_vmiVoxelShader2->clearViewedVolumes();
 }
 
 
