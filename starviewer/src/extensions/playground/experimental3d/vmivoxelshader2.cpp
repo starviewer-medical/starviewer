@@ -98,6 +98,13 @@ float VmiVoxelShader2::viewedVolume() const
 }
 
 
+void VmiVoxelShader2::clearViewedVolumes()
+{
+    m_totalVolumePerThread.clear();
+    m_objectVolumePerThread.clear();
+}
+
+
 QString VmiVoxelShader2::toString() const
 {
     return "VmiVoxelShader2";

@@ -35,6 +35,7 @@ public:
     QVector<float> objectProbabilities();
     /// Retorna el volum vist a l'última passada (s'actualitza quan es crida objectProbabilities()).
     float viewedVolume() const;
+    void clearViewedVolumes();
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
