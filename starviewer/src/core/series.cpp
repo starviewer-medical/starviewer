@@ -324,6 +324,46 @@ QString Series::getViewPosition() const
     return m_viewPosition;
 }
 
+void Series::setRequestedProcedureID( const QString &requestedProcedureID )
+{
+    m_requestedProcedureID = requestedProcedureID;
+}
+
+QString Series::getRequestedProcedureID() const
+{
+    return m_requestedProcedureID;
+}
+
+void Series::setScheduledProcedureStepID( const QString &scheduledProcedureID )
+{
+    m_scheduledProcedureStepID = scheduledProcedureID;
+}
+
+QString Series::getScheduledProcedureStepID() const
+{
+    return m_scheduledProcedureStepID;
+}
+
+void Series::setPerformedProcedureStepStartDate(const QString &startDate )
+{
+    m_performedProcedureStepStartDate = startDate;
+}
+
+QString Series::getPerformedProcedureStepStartDate() const
+{
+    return m_performedProcedureStepStartDate;
+}
+
+void Series::setPerformedProcedureStepStartTime( const QString &startTime )
+{
+    m_performedProcedureStepStartTime = startTime;
+}
+
+QString Series::getPerformedProcedureStepStartTime() const
+{
+    return m_performedProcedureStepStartTime;
+}
+
 int Series::getNumberOfVolumes()
 {
     return m_volumesList.size();

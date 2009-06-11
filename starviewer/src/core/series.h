@@ -171,6 +171,22 @@ public:
     void setImagesPath( QString imagesPath );
     QString getImagesPath() const;
 
+    /// Assignar/Obtenir el requeste procedure ID
+    void setRequestedProcedureID( const QString &requestedProcedureID );
+    QString getRequestedProcedureID() const;
+
+    /// Assignar/Obtenir el scheduled procedure step ID
+    void setScheduledProcedureStepID( const QString &scheduledProcedureStepID );
+    QString getScheduledProcedureStepID() const;
+
+    /// Assignar/Obtenir el Performed Procedure Step Start Date
+    void setPerformedProcedureStepStartDate( const QString &startDate );
+    QString getPerformedProcedureStepStartDate() const;
+
+    /// Assigna/Obté el Perfomed Procedure Step Start Time
+    void setPerformedProcedureStepStartTime( const QString &startTime );
+    QString getPerformedProcedureStepStartTime() const;
+
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
 
@@ -334,6 +350,15 @@ private:
 
     ///Guarda el thumbnail de la sèrie
     QPixmap m_seriesThumbnail;
+
+    ///Request Procedure ID (0040,1001) Tipus 1C/2 
+    QString m_requestedProcedureID;
+    ///Schedulet Procedure Step ID (0040,0253) Tipus 1C/3
+    QString m_scheduledProcedureStepID;
+    ///Perfomed procedure step start date (0040,0244) Tipus 3
+    QString m_performedProcedureStepStartDate;
+    ///Perfomed procedure step start time (0040,0345) Tipus 3
+    QString m_performedProcedureStepStartTime;
 };
 
 }

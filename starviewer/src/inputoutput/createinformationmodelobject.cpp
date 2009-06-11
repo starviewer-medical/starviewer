@@ -67,6 +67,10 @@ Series* CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReade
     series->setFrameOfReferenceUID(dicomTagReader->getAttributeByName(DCM_FrameOfReferenceUID));
     series->setPositionReferenceIndicator(dicomTagReader->getAttributeByName(DCM_PositionReferenceIndicator));
     series->setManufacturer(dicomTagReader->getAttributeByName(DCM_Manufacturer));
+    series->setRequestedProcedureID(dicomTagReader->getAttributeByName(DCM_RequestedProcedureID));
+    series->setScheduledProcedureStepID(dicomTagReader->getAttributeByName(DCM_ScheduledProcedureStepID));
+    series->setPerformedProcedureStepStartDate(dicomTagReader->getAttributeByName(DCM_PerformedProcedureStepStartDate));
+    series->setPerformedProcedureStepStartTime(dicomTagReader->getAttributeByName(DCM_PerformedProcedureStepStartTime));
 
     /// Atributs necessaris pels hanging protocols
     series->setBodyPartExamined(dicomTagReader->getAttributeByName(DCM_BodyPartExamined));
