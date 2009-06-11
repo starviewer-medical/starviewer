@@ -34,10 +34,16 @@ namespace udg {
     class OnlyOne : public Singleton<OnlyOne>
     {
         //..resta del codi
+        protected:
+            friend Singleton<OnlyOne>;
+            OnlyOne();
+            ~OnlyOne();
     };
     \endcode
     D'aquesta forma sí que estem assegurant que de la classe OnlyOne, en tota la vida del programa, només n'hi haurà una i serà la
     mateixa per tota l'execució.
+    Cal declarar a Singleton<OnlyOne> com a friend perquè sinó ens veuríem obligats a declarar constructor i destructor
+    públics, trencant així la filosofia d'un Singleton.
     \todo Fer-la thread-safe.
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
