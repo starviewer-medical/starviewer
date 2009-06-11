@@ -132,7 +132,7 @@ void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
 
     Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
     Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
-    study->setInstitution(m_institutionPacs);
+    study->setInstitutionName(m_institutionPacs);
 
     patient->addStudy(study);
 

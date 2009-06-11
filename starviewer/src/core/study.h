@@ -103,8 +103,9 @@ public:
     QDate getRetrievedDate();
     QTime getRetrievedTime();
 
-    void setInstitution(const QString &institution);
-    QString getInstitution() const;
+    ///Assigna/Obté la institució de la qual s'ha obtingut l'estudi
+    void setInstitutionName(const QString &institution);
+    QString getInstitutionName() const;
 
     /// Afegeix una nova sèrie i li assigna com a parent aquest objecte study. Retorna fals si existeix una sèrie amb el mateix uid
     bool addSeries( Series *series );
@@ -191,8 +192,8 @@ private:
     QDate m_retrievedDate;
     QTime m_retrieveTime;
 
-    ///Insitutició a la que pertany l'estudi
-    QString m_institution;
+    ///Insitutició de la que s'ha obtingut l'estudi
+    QString m_institutionName;
 
     /// Llista de les Series de l'estudi ordenades per número de serie
     QList<Series *> m_seriesSet;
