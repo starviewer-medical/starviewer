@@ -39,7 +39,6 @@ ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer
 
 ScreenShotTool::~ScreenShotTool()
 {
-    writeSettings();
 }
 
 void ScreenShotTool::handleEvent( unsigned long eventID )
