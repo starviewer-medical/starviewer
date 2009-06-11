@@ -169,10 +169,10 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     seriesItem->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
 
     seriesItem->setText(ProtocolName , series->getProtocolName());
-    seriesItem->setText(PPStartDate , "");
-    seriesItem->setText(PPStartTime , "");
-    seriesItem->setText(ReqProcID , "");
-    seriesItem->setText(SchedProcStep , "");
+    seriesItem->setText(PPStartDate , series->getPerformedProcedureStepStartDate());
+    seriesItem->setText(PPStartTime , series->getPerformedProcedureStepStartTime());
+    seriesItem->setText(ReqProcID , series->getRequestedProcedureID());
+    seriesItem->setText(SchedProcStep , series->getScheduledProcedureStepID());
 
     /* degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
     una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
