@@ -47,9 +47,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 {
-    Settings settings;
-    settings.saveColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
-    settings.saveGeometry(localDatabaseStudyTreeSeriesListQSplitterStateSettingKey, m_StudyTreeSeriesListQSplitter );
+    Settings().saveColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputLocalDatabaseWidget::createConnections()
@@ -72,6 +70,9 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     //Connecta amb el signal que indica que ha finalitza el thread d'esborrar els estudis vells
     connect(&m_qdeleteOldStudiesThread, SIGNAL(finished()), SLOT(deleteOldStudiesThreadFinished()));
+
+    ///Si movem el QSplitter capturem el signal per guardar la seva posició
+    connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
@@ -326,7 +327,6 @@ void QInputOutputLocalDatabaseWidget::viewFromQStudyTreeWidget()
     view(m_studyTreeWidget->getSelectedStudiesUID(), m_studyTreeWidget->getCurrentSeriesUID());
 }
 
-
 void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
 {
     QStringList selectedStudiesInstanceUID;
@@ -378,6 +378,11 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudies()
 void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 {
     showDatabaseManagerError(m_qdeleteOldStudiesThread.getLastError(), tr("deleting old studies"));
+}
+
+void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
+{
+    Settings().saveGeometry(localDatabaseStudyTreeSeriesListQSplitterStateSettingKey, m_StudyTreeSeriesListQSplitter );
 }
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)

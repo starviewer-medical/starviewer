@@ -108,6 +108,9 @@ private slots:
     ///Visualitza els estudis seleccionats a la QStudyTreeWidget
     void viewFromQStudyTreeWidget();
 
+    ///Guarda la posició de l'splitter quan l'han mogut
+    void qSplitterPositionChanged();
+
 private:
     QMenu m_contextMenuQStudyTreeWidget;
     QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
