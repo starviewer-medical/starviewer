@@ -82,7 +82,7 @@ double InformationTheory::entropy( const QVector<T> &probabilities )
 
 // D_KL(P||Q) = sum[0,n)( P(i) log ( P(i) / Q(i) ) )
 template <class T>
-double InformationTheory::kullbackLeiblerDivergence( const QVector<T> &probabilitiesP, const QVector<T> &probabilitiesQ )
+double InformationTheory::kullbackLeiblerDivergence( const QVector<T> &probabilitiesP, const QVector<T> &probabilitiesQ, bool skipZeroQ )
 {
     int size = probabilitiesP.size();
     double kullbackLeiblerDivergence = 0.0;
@@ -96,7 +96,7 @@ double InformationTheory::kullbackLeiblerDivergence( const QVector<T> &probabili
 
         for ( int i = 0; i < nThreads; i++ )
         {
-            threads[i] = new KullbackLeiblerDivergenceThread<T>( probabilitiesP, probabilitiesQ, start, end );
+            threads[i] = new KullbackLeiblerDivergenceThread<T>( probabilitiesP, probabilitiesQ, skipZeroQ, start, end );
             threads[i]->start();
             start += sizePerThread;
             end += sizePerThread;
@@ -121,7 +121,7 @@ double InformationTheory::kullbackLeiblerDivergence( const QVector<T> &probabili
             if ( p > 0.0 )
             {
                 double q = probabilitiesQ.at( i );
-                kullbackLeiblerDivergence += p * log( p / q );
+                if ( !skipZeroQ || q > 0.0 ) kullbackLeiblerDivergence += p * log( p / q );
             }
         }
     }
@@ -196,8 +196,8 @@ class InformationTheory::EntropyThread : public QThread {
 template <class T>
 class InformationTheory::KullbackLeiblerDivergenceThread : public QThread {
     public:
-        KullbackLeiblerDivergenceThread( const QVector<T> &probabilitiesP, const QVector<T> &probabilitiesQ, int start, int end )
-            : m_probabilitiesP( probabilitiesP ), m_probabilitiesQ( probabilitiesQ ), m_start( start ), m_end( end ) {}
+        KullbackLeiblerDivergenceThread( const QVector<T> &probabilitiesP, const QVector<T> &probabilitiesQ, bool skipZeroQ, int start, int end )
+            : m_probabilitiesP( probabilitiesP ), m_probabilitiesQ( probabilitiesQ ), m_skipZeroQ( skipZeroQ ), m_start( start ), m_end( end ) {}
         virtual void run()
         {
             m_kullbackLeiblerDivergence = 0.0;
@@ -207,13 +207,14 @@ class InformationTheory::KullbackLeiblerDivergenceThread : public QThread {
                 if ( p > 0.0 )
                 {
                     double q = m_probabilitiesQ.at( i );
-                    m_kullbackLeiblerDivergence += p * log( p / q );
+                    if ( !m_skipZeroQ || q > 0.0 ) m_kullbackLeiblerDivergence += p * log( p / q );
                 }
             }
         }
         double kullbackLeiblerDivergence() const { return m_kullbackLeiblerDivergence; }
     private:
         const QVector<T> &m_probabilitiesP, &m_probabilitiesQ;
+        bool m_skipZeroQ;
         int m_start, m_end;
         double m_kullbackLeiblerDivergence;
 };

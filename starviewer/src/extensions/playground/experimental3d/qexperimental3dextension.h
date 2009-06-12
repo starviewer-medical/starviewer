@@ -6,7 +6,6 @@
 
 
 class QStringListModel;
-class QTemporaryFile;
 
 
 namespace udg {
@@ -69,6 +68,14 @@ public slots:
     void loadColorVomi( QString fileName = QString() );
     /// Desa la color VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveColorVomi( QString fileName = QString() );
+    /// Carrega l'EVMI amb opacitat des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadEvmiOpacity( QString fileName = QString() );
+    /// Desa la l'EVMI amb opacitat a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveEvmiOpacity( QString fileName = QString() );
+    /// Carrega l'EVMI amb VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadEvmiVomi( QString fileName = QString() );
+    /// Desa la l'EVMI amb VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveEvmiVomi( QString fileName = QString() );
     /// Carrega les millors vistes des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadBestViews( QString fileName = QString() );
     /// Desa les millors vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -118,14 +125,6 @@ private:
     /// Fa un recorregut pels viewpoints en ordre i amb suavitat.
     void tour( const QList<Vector3> &viewpoints, double speedFactor = 1.0 );
 
-    /// Fa el ray casting pels mètodes de VMI. Rep la llista de punts de vista i els fitxers corresponents. Omple el volum vist per cada vista i retorna el volum total vist.
-    float vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView );
-    /// Normalitza les probabilitats de les vistes dividint-les per \a totalViewedVolume.
-    void normalizeViewProbabilities( QVector<float> &viewProbabilities, float totalViewedVolume );
-    /// Retorna les probabilitats p(O) dels objectes (vòxels) donats p(V) i p(O|V).
-    QVector<float> getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles );
-    // Calcula les mesures relacionades amb la VMI: VMI, inestabilitats, EVMI.
-    void computeVmiRelatedMeasures( const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles, bool computeEvmi );
     /// Escriu al log un error d'un programa.
     void logProgramError( int lineNumber, const QString &error, const QString &line ) const;
     /// Comprova que la línia tingi un nombre determinat de paraules.
@@ -138,9 +137,6 @@ private:
     bool programVmiViewpoints( int lineNumber, const QString &line, bool run );
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
     bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
-
-    void loadEvmi( const QString &fileName );
-    void saveEvmi( const QString &fileName );
 
 private slots:
 
@@ -201,9 +197,6 @@ private slots:
 
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
-    void computeSelectedVmiOld();   // el deixem temporalment mentre acabem de passar el codi que queda a ViewpointInformationChannel
-    void loadEvmi();
-    void saveEvmi();
 
     void tourBestViews();
     void guidedTour();
@@ -217,6 +210,8 @@ private slots:
     void opacitySaliencyChecked( bool checked );
 
     void setVmiOneViewpointMaximum( int maximum );
+
+    void getFileNameToSaveTour();
 
 private:
 
@@ -240,12 +235,13 @@ private:
     QVector<Vector3Float> m_colorVomiPalette;
     QVector<Vector3Float> m_colorVomi;
     float m_maximumColorVomi;
+    QVector<float> m_evmiOpacity;
+    QVector<float> m_evmiVomi;
     QList< QPair<int, Vector3> > m_bestViews;
     QList< QPair<int, Vector3> > m_guidedTour;
     QList< QPair<int, Vector3> > m_exploratoryTour;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
-    QVector<float> m_evmi;
 
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;

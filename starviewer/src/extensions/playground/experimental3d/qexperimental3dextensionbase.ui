@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>459</width>
-    <height>679</height>
+    <height>715</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -1453,6 +1453,34 @@
         </layout>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_44">
+         <item>
+          <widget class="QCheckBox" name="m_saveNextTourCheckBox">
+           <property name="text">
+            <string>Save next tour</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="m_saveNextTourLineEdit">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveNextTourPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Browse...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -2092,6 +2120,74 @@
         </layout>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_39">
+         <item>
+          <widget class="QCheckBox" name="m_computeEvmiOpacityCheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>EVMI with opacity</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadEvmiOpacityPushButton">
+           <property name="text">
+            <string>Load...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveEvmiOpacityPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Save...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_45">
+         <item>
+          <widget class="QCheckBox" name="m_computeEvmiVomiCheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>EVMI with VoMI</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadEvmiVomiPushButton">
+           <property name="text">
+            <string>Load...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveEvmiVomiPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Save...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_36">
@@ -2285,40 +2381,6 @@
          </item>
          <item>
           <widget class="QPushButton" name="m_saveExploratoryTourPushButton">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Save...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_39">
-         <item>
-          <widget class="QCheckBox" name="m_computeEvmiCheckBox">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>1</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>EVMI</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_loadEvmiPushButton">
-           <property name="text">
-            <string>Load...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_saveEvmiPushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>
