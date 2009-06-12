@@ -78,9 +78,9 @@ QString PacsParameters::getDescription() const
     return m_pacsDescription;
 }
 
-void PacsParameters::setDefault(bool default)
+void PacsParameters::setDefault(bool isDefault)
 {
-    m_isDefaultPACS = default;
+    m_isDefaultPACS = isDefault;
 }
 
 bool PacsParameters::isDefault() const
