@@ -388,8 +388,14 @@ Status RetrieveImages::retrieve()
         if (rsp.DimseStatus == STATUS_MOVE_Failed_MoveDestinationUnknown)
         {
             //El PACS no té registrat el nostre AETitle
-            statusDetail->findAndGetString(DCM_ErrorComment, text, false); 
-            ERROR_LOG("No s'ha pogut descarregar els objectes DICOM, el PACS no te registrat aquest AETITLE :" + QString(text));
+            QString errorMessage = "No s'han pogut descarregar els objectes DICOM, el PACS no té registrat aquest AETITLE";
+            if( statusDetail )
+            {
+                statusDetail->findAndGetString(DCM_ErrorComment, text, false); 
+                errorMessage += ": " + QString(text);
+            }
+
+            ERROR_LOG(errorMessage);
             state.setStatus(DcmtkMoveDestionationUnknown);
         }
 		else if (rsp.DimseStatus == STATUS_MOVE_Refused_OutOfResourcesSubOperations)
