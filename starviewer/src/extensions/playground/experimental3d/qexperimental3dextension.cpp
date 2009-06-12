@@ -16,9 +16,7 @@
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
-#include <QSet>
 #include <QStringListModel>
-#include <QTemporaryFile>
 #include <QTextStream>
 
 
@@ -406,6 +404,66 @@ void QExperimental3DExtension::saveColorVomi( QString fileName )
 }
 
 
+void QExperimental3DExtension::loadEvmiOpacity( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "evmiOpacityDir", tr("Load EVMI with opacity"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_evmiOpacity ) ) m_saveEvmiOpacityPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load EVMI with opacity"), QString( tr("Can't load EVMI with opacity from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveEvmiOpacity( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "evmiOpacityDir", tr("Save EVMI with opacity"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_evmiOpacity, fileName, QString( "EVMI(v%1) = %2" ), 1 );
+    else error = !saveData( m_evmiOpacity, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save EVMI with opacity"), QString( tr("Can't save EVMI with opacity to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadEvmiVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "evmiVomiDir", tr("Load EVMI with VoMI"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_evmiVomi ) ) m_saveEvmiVomiPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load EVMI with VoMI"), QString( tr("Can't load EVMI with VoMI from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveEvmiVomi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "evmiVomiDir", tr("Save EVMI with VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_evmiVomi, fileName, QString( "EVMI(v%1) = %2" ), 1 );
+    else error = !saveData( m_evmiVomi, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save EVMI with VoMI"), QString( tr("Can't save EVMI with VoMI to file ") ) + fileName );
+}
+
+
 void QExperimental3DExtension::loadBestViews( QString fileName )
 {
     if ( fileName.isEmpty() )
@@ -778,6 +836,9 @@ void QExperimental3DExtension::createConnections()
     connect( m_cameraViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setNumberOfViewpoints(int) ) );
     connect( m_viewpointPushButton, SIGNAL( clicked() ), SLOT( setViewpoint() ) );
     connect( m_tourPushButton, SIGNAL( clicked() ), SLOT( tour() ) );
+    connect( m_saveNextTourCheckBox, SIGNAL( toggled(bool) ), m_saveNextTourLineEdit, SLOT( setEnabled(bool) ) );
+    connect( m_saveNextTourCheckBox, SIGNAL( toggled(bool) ), m_saveNextTourPushButton, SLOT( setEnabled(bool) ) );
+    connect( m_saveNextTourPushButton, SIGNAL( clicked() ), SLOT( getFileNameToSaveTour() ) );
 
     // obscurances
     connect( m_obscurancePushButton, SIGNAL( clicked() ), SLOT( computeCancelObscurance() ) );
@@ -815,6 +876,10 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadColorVomiPalettePushButton, SIGNAL( clicked() ), SLOT( loadColorVomiPalette() ) );
     connect( m_loadColorVomiPushButton, SIGNAL( clicked() ), SLOT( loadColorVomi() ) );
     connect( m_saveColorVomiPushButton, SIGNAL( clicked() ), SLOT( saveColorVomi() ) );
+    connect( m_loadEvmiOpacityPushButton, SIGNAL( clicked() ), SLOT( loadEvmiOpacity() ) );
+    connect( m_saveEvmiOpacityPushButton, SIGNAL( clicked() ), SLOT( saveEvmiOpacity() ) );
+    connect( m_loadEvmiVomiPushButton, SIGNAL( clicked() ), SLOT( loadEvmiVomi() ) );
+    connect( m_saveEvmiVomiPushButton, SIGNAL( clicked() ), SLOT( saveEvmiVomi() ) );
     connect( m_computeBestViewsCheckBox, SIGNAL( toggled(bool) ), m_computeBestViewsNRadioButton, SLOT( setEnabled(bool) ) );
     connect( m_computeBestViewsCheckBox, SIGNAL( toggled(bool) ), m_computeBestViewsNSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_computeBestViewsCheckBox, SIGNAL( toggled(bool) ), m_computeBestViewsThresholdRadioButton, SLOT( setEnabled(bool) ) );
@@ -827,8 +892,6 @@ void QExperimental3DExtension::createConnections()
     connect( m_computeExploratoryTourCheckBox, SIGNAL( toggled(bool) ), m_computeExploratoryTourThresholdDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_loadExploratoryTourPushButton, SIGNAL( clicked() ), SLOT( loadExploratoryTour() ) );
     connect( m_saveExploratoryTourPushButton, SIGNAL( clicked() ), SLOT( saveExploratoryTour() ) );
-    connect( m_loadEvmiPushButton, SIGNAL( clicked() ), SLOT( loadEvmi() ) );
-    connect( m_saveEvmiPushButton, SIGNAL( clicked() ), SLOT( saveEvmi() ) );
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
     connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
     connect( m_exploratoryTourPushButton, SIGNAL( clicked() ), SLOT( exploratoryTour() ) );
@@ -961,6 +1024,10 @@ void QExperimental3DExtension::tour( const QList<Vector3> &viewpoints, double sp
 {
     if ( viewpoints.isEmpty() ) return;
 
+    uint frameCounter = 0;
+    QString tourFileName = m_saveNextTourLineEdit->text();
+    bool saveTour = m_saveNextTourCheckBox->isChecked();
+
     const double ALMOST_1 = 0.9;
 
     int *dimensions = m_volume->getImage()->GetDimensions();
@@ -974,6 +1041,7 @@ void QExperimental3DExtension::tour( const QList<Vector3> &viewpoints, double sp
 
     Vector3 currentPoint = previousPoint;
     setViewpoint( currentPoint );
+    if ( saveTour ) m_viewer->screenshot( tourFileName.arg( frameCounter++, 8, 10, QChar( '0' ) ) );
 
     for ( int i = 1; i < viewpoints.size(); i++ )
     {
@@ -1028,6 +1096,7 @@ void QExperimental3DExtension::tour( const QList<Vector3> &viewpoints, double sp
             }
 
             setViewpoint( currentPoint );
+            if ( saveTour ) m_viewer->screenshot( tourFileName.arg( frameCounter++, 8, 10, QChar( '0' ) ) );
         }
 
         DEBUG_LOG( nextPoint.toString() );
@@ -1599,13 +1668,15 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeVomi = m_computeVomiCheckBox->isChecked();
     bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
     bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
+    bool computeEvmiOpacity = m_computeEvmiOpacityCheckBox->isChecked();
+    bool computeEvmiVomi = m_computeEvmiVomiCheckBox->isChecked();
     bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
     bool computeGuidedTour = m_computeGuidedTourCheckBox->isChecked();
     bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeViewpointVomi && !computeColorVomi && !computeBestViews
-         && !computeGuidedTour && !computeExploratoryTour ) return;
+    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeViewpointVomi && !computeColorVomi && !computeEvmiOpacity
+         && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -1648,8 +1719,8 @@ void QExperimental3DExtension::computeSelectedVmi()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi, computeBestViews,
-                                         computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked() );
+    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi, computeEvmiOpacity,
+                                         computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked() );
 
     if ( computeViewpointEntropy )
     {
@@ -1710,6 +1781,18 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_saveColorVomiPushButton->setEnabled( true );
     }
 
+    if ( computeEvmiOpacity )
+    {
+        m_evmiOpacity = viewpointInformationChannel.evmiOpacity();
+        m_saveEvmiOpacityPushButton->setEnabled( true );
+    }
+
+    if ( computeEvmiVomi )
+    {
+        m_evmiVomi = viewpointInformationChannel.evmiVomi();
+        m_saveEvmiVomiPushButton->setEnabled( true );
+    }
+
     if ( computeBestViews )
     {
         m_bestViews = viewpointInformationChannel.bestViews();
@@ -1736,355 +1819,6 @@ void QExperimental3DExtension::computeSelectedVmi()
     m_viewer->setCamera( position, focus, up );
 
     setCursor( QCursor( Qt::ArrowCursor ) );
-}
-
-
-void QExperimental3DExtension::computeSelectedVmiOld()
-{
-    return; // per seguretat, per si el cridem per error
-
-    // Què ha demanat l'usuari
-    bool computeEvmi = m_computeEvmiCheckBox->isChecked();
-
-    // Si no hi ha res a calcular marxem
-    if ( !computeEvmi ) return;
-
-    setCursor( QCursor( Qt::WaitCursor ) );
-
-    // Guardem la càmera
-    Vector3 position, focus, up;
-    m_viewer->getCamera( position, focus, up );
-
-    // Obtenir direccions
-    float distance = ( position - focus ).length();
-    ViewpointGenerator viewpointGenerator = m_vmiViewpointDistributionWidget->viewpointGenerator( distance );
-    QVector<Vector3> viewpoints = viewpointGenerator.viewpoints();
-    int nViewpoints = viewpoints.size();
-
-    if ( !m_tourLineEdit->text().isEmpty() )
-    {
-        int selectedViewpoint = m_tourLineEdit->text().toInt() - 1;
-        if ( selectedViewpoint >= 0 && selectedViewpoint < nViewpoints )
-        {
-            viewpoints.clear();
-            viewpoints << viewpointGenerator.viewpoint( selectedViewpoint );
-            QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
-            for ( int i = 0; i < neighbours.size(); i++ ) viewpoints << viewpointGenerator.viewpoint( neighbours.at( i ) );
-            nViewpoints = viewpoints.size();
-        }
-    }
-
-    // Dependències
-    //if ( computeEvmi && m_vomi.isEmpty() ) computeVomi = true;
-
-    // Inicialitzar progrés
-    int nSteps = 3; // ray casting (p(O|V)), p(V), p(O)
-    if ( computeEvmi ) nSteps++;  // EVMI
-    int step = 0;
-    {
-        m_vmiProgressBar->setValue( 0 );
-        m_vmiProgressBar->repaint();
-        m_vmiTotalProgressBar->setMaximum( nSteps );
-        m_vmiTotalProgressBar->setValue( step );
-        m_vmiTotalProgressBar->repaint();
-    }
-
-    QVector<float> viewProbabilities( nViewpoints );                                            // vector p(V), inicialitzat a 0
-    QVector<float> objectProbabilities;                                                         // vector p(O)
-    QVector<QTemporaryFile*> pOvFiles;   // matriu p(O|V) (cada fitxer una fila p(O|v))
-
-    float totalViewedVolume;
-
-    // p(O|V) (i acumulació de p(V))
-    {
-        totalViewedVolume = vmiRayCasting( viewpoints, pOvFiles, viewProbabilities );
-        m_vmiTotalProgressBar->setValue( ++step );
-        m_vmiTotalProgressBar->repaint();
-    }
-
-    // p(V)
-    {
-        normalizeViewProbabilities( viewProbabilities, totalViewedVolume );
-        m_vmiTotalProgressBar->setValue( ++step );
-        m_vmiTotalProgressBar->repaint();
-    }
-
-    // p(O)
-    {
-        objectProbabilities = getObjectProbabilities( viewProbabilities, pOvFiles );
-        m_vmiTotalProgressBar->setValue( ++step );
-        m_vmiTotalProgressBar->repaint();
-    }
-
-    // EVMI
-    if ( computeEvmi )
-    {
-        computeVmiRelatedMeasures( viewProbabilities, objectProbabilities, pOvFiles, computeEvmi );
-        m_vmiTotalProgressBar->setValue( ++step );
-        m_vmiTotalProgressBar->repaint();
-    }
-
-    render();
-
-    // Restaurem la càmera
-    m_viewer->setCamera( position, focus, up );
-
-    DEBUG_LOG( "fi" );
-
-    setCursor( QCursor( Qt::ArrowCursor ) );
-}
-
-
-float QExperimental3DExtension::vmiRayCasting( const QVector<Vector3> &viewpoints, const QVector<QTemporaryFile*> &pOvFiles, QVector<float> &viewedVolumePerView )
-{
-    int nViewpoints = viewpoints.size();
-    float totalViewedVolume = 0.0f;
-
-    m_vmiProgressBar->setValue( 0 );
-    m_vmiProgressBar->repaint();
-
-    m_volume->startVmiMode();
-
-    for ( int i = 0; i < nViewpoints; i++ )
-    {
-        m_volume->startVmiSecondPass();
-        setViewpoint( viewpoints.at( i ) ); // render
-        QVector<float> objectProbabilitiesInView = m_volume->finishVmiSecondPass(); // p(O|v)
-
-        // p(V)
-        float viewedVolume = m_volume->viewedVolumeInVmiSecondPass();
-        viewedVolumePerView[i] = viewedVolume;
-        totalViewedVolume += viewedVolume;
-
-        // p(O|V)
-        pOvFiles.at( i )->write( reinterpret_cast<const char*>( objectProbabilitiesInView.data() ), objectProbabilitiesInView.size() * sizeof(float) );
-
-        m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-        m_vmiProgressBar->repaint();
-    }
-
-    return totalViewedVolume;
-}
-
-
-void QExperimental3DExtension::normalizeViewProbabilities( QVector<float> &viewProbabilities, float totalViewedVolume )
-{
-    if ( totalViewedVolume > 0.0f )
-    {
-        int nViewpoints = viewProbabilities.size();
-
-        m_vmiProgressBar->setValue( 0 );
-
-        for ( int i = 0; i < nViewpoints; i++ )
-        {
-            viewProbabilities[i] /= totalViewedVolume;
-            Q_ASSERT( viewProbabilities.at( i ) == viewProbabilities.at( i ) );
-            DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( viewProbabilities.at( i ) ) );
-            m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-            m_vmiProgressBar->repaint();
-        }
-    }
-}
-
-
-QVector<float> QExperimental3DExtension::getObjectProbabilities( const QVector<float> &viewProbabilities, const QVector<QTemporaryFile*> &pOvFiles )
-{
-    class POThread : public QThread {
-        public:
-            POThread( QVector<float> &objectProbabilities, float *objectProbabilitiesInView, int start, int end )
-                : m_viewProbability( 0.0f ), m_objectProbabilities( objectProbabilities ), m_objectProbabilitiesInView( objectProbabilitiesInView ), m_start( start ), m_end( end )
-            {
-            }
-            void setViewProbability( float viewProbability )
-            {
-                m_viewProbability = viewProbability;
-            }
-            virtual void run()
-            {
-                for ( int i = m_start; i < m_end; i++ ) m_objectProbabilities[i] += m_viewProbability * m_objectProbabilitiesInView[i];
-            }
-        private:
-            float m_viewProbability;
-            QVector<float> &m_objectProbabilities;
-            float *m_objectProbabilitiesInView;
-            int m_start, m_end;
-    };
-
-    int nViewpoints = viewProbabilities.size();
-    unsigned int nObjects = m_volume->getSize();
-    QVector<float> objectProbabilities( nObjects ); // vector p(O), inicialitzat a 0
-    float *objectProbabilitiesInView = new float[nObjects]; // vector p(O|v)
-
-    m_vmiProgressBar->setValue( 0 );
-
-    int nThreads = QThread::idealThreadCount();
-    POThread **poThreads = new POThread*[nThreads];
-    int nObjectsPerThread = nObjects / nThreads + 1;
-    int start = 0, end = nObjectsPerThread;
-
-    for ( int i = 0; i < nThreads; i++ )
-    {
-        poThreads[i] = new POThread( objectProbabilities, objectProbabilitiesInView, start, end );
-        start += nObjectsPerThread;
-        end += nObjectsPerThread;
-        if ( end > static_cast<int>( nObjects ) ) end = nObjects;
-    }
-
-    for ( int i = 0; i < nViewpoints; i++ )
-    {
-        pOvFiles[i]->reset();   // reset per tornar al principi
-        pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView ), nObjects * sizeof(float) );    // llegim...
-        pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-        //for ( unsigned int j = 0; j < nObjects; j++ ) objectProbabilities[j] += viewProbabilities.at( i ) * objectProbabilitiesInView[j]; // vell
-
-        for ( int j = 0; j < nThreads; j++ )
-        {
-            poThreads[j]->setViewProbability( viewProbabilities.at( i ) );
-            poThreads[j]->start();
-        }
-
-        for ( int j = 0; j < nThreads; j++ ) poThreads[j]->wait();
-
-        m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-        m_vmiProgressBar->repaint();
-    }
-
-    for ( int i = 0; i < nThreads; i++ ) delete poThreads[i];
-    delete[] poThreads;
-
-    delete[] objectProbabilitiesInView;
-
-#ifndef QT_NO_DEBUG
-    for ( unsigned int j = 0; j < nObjects; j++ ) Q_ASSERT( objectProbabilities.at( j ) == objectProbabilities.at( j ) );
-#endif
-
-    return objectProbabilities;
-}
-
-
-void QExperimental3DExtension::computeVmiRelatedMeasures( const QVector<float> &viewProbabilities, const QVector<float> &objectProbabilities, const QVector<QTemporaryFile*> &pOvFiles, bool computeEvmi )
-{
-    int nViewpoints = viewProbabilities.size();
-    int nObjects = objectProbabilities.size();
-
-    if ( computeEvmi ) m_evmi.resize( nViewpoints );
-
-    QVector<float> ppO; // p'(O)
-
-    if ( computeEvmi )
-    {
-        ppO.resize( nObjects );
-
-        float total = 0.0f;
-
-        for ( int i = 0; i < nObjects; i++ )
-        {
-
-            //ppO[i] = objectProbabilities.at( i ) * m_vomi.at( i );
-            ppO[i] = objectProbabilities.at( i ) * qMax( m_vomi.at( i ), 0.01f * m_maximumSaliency );   // prova per evitar infinits a EVMI
-            total += ppO.at( i );
-        }
-
-        for ( int i = 0; i < nObjects; i++ ) ppO[i] /= total;
-    }
-
-    m_vmiProgressBar->setValue( 0 );
-
-    QVector<float> objectProbabilitiesInView( nObjects );   // vector p(O|vi)
-
-    for ( int i = 0; i < nViewpoints; i++ )
-    {
-        pOvFiles[i]->reset();   // reset per tornar al principi
-        pOvFiles[i]->read( reinterpret_cast<char*>( objectProbabilitiesInView.data() ), nObjects * sizeof(float) ); // llegim...
-        pOvFiles[i]->reset();   // ... i després fem un reset per tornar al principi i buidar el buffer (amb un peek queda el buffer ple, i es gasta molta memòria)
-
-        if ( computeEvmi )
-        {
-            float evmi = InformationTheory::kullbackLeiblerDivergence( objectProbabilitiesInView, ppO );
-            Q_ASSERT( evmi == evmi );
-            m_evmi[i] = evmi;
-            DEBUG_LOG( QString( "EVMI(v%1) = %2" ).arg( i + 1 ).arg( evmi ) );
-        }
-
-        m_vmiProgressBar->setValue( 100 * ( i + 1 ) / nViewpoints );
-        m_vmiProgressBar->repaint();
-    }
-
-    if ( computeEvmi ) m_saveEvmiPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::loadEvmi()
-{
-    QString evmiFileName = getFileNameToLoad( "evmiDir", tr("Load EVMI"), tr("Data files (*.dat);;All files (*)") );
-    if ( !evmiFileName.isNull() ) loadEvmi( evmiFileName );
-}
-
-
-void QExperimental3DExtension::loadEvmi( const QString &fileName )
-{
-    QFile evmiFile( fileName );
-
-    if ( !evmiFile.open( QFile::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't load EVMI"), QString( tr("Can't load EVMI from file ") ) + fileName );
-        return;
-    }
-
-    m_evmi.clear();
-
-    QDataStream in( &evmiFile );
-
-    while ( !in.atEnd() )
-    {
-        float evmi;
-        in >> evmi;
-        m_evmi << evmi;
-    }
-
-    evmiFile.close();
-
-    m_saveEvmiPushButton->setEnabled( true );
-}
-
-
-void QExperimental3DExtension::saveEvmi()
-{
-    QString evmiFileName = getFileNameToSave( "evmiDir", tr("Save EVMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-    if ( !evmiFileName.isNull() ) saveEvmi( evmiFileName );
-}
-
-
-void QExperimental3DExtension::saveEvmi( const QString &fileName )
-{
-    bool saveAsText = fileName.endsWith( ".txt" );
-    QFile evmiFile( fileName );
-    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
-    if ( saveAsText ) mode = mode | QIODevice::Text;
-
-    if ( !evmiFile.open( mode ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        if ( m_interactive ) QMessageBox::warning( this, tr("Can't save EVMI"), QString( tr("Can't save EVMI to file ") ) + fileName );
-        return;
-    }
-
-    int nViewpoints = m_evmi.size();
-
-    if ( saveAsText )
-    {
-        QTextStream out( &evmiFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << "EVMI(v" << i + 1 << ") = " << m_evmi.at( i ) << "\n";
-    }
-    else
-    {
-        QDataStream out( &evmiFile );
-        for ( int i = 0; i < nViewpoints; i++ ) out << m_evmi.at( i );
-    }
-
-    evmiFile.close();
 }
 
 
@@ -2676,10 +2410,6 @@ bool QExperimental3DExtension::programVmiCheckOrUncheck( int lineNumber, const Q
     {
         if ( run ) m_computeViewpointVomiCheckBox->setChecked( check );
     }
-    else if ( checkbox == "evmi" )
-    {
-        if ( run ) m_computeEvmiCheckBox->setChecked( check );
-    }
     else if ( checkbox == "cvomi" )
     {
         if ( run )
@@ -2817,22 +2547,6 @@ bool QExperimental3DExtension::programVmiLoadOrSave( int lineNumber, const QStri
             }
         }
     }
-    else if ( measure == "evmi" )
-    {
-        if ( run )
-        {
-            if ( load ) loadEvmi( fileName );
-            else
-            {
-                if ( m_saveEvmiPushButton->isEnabled() ) saveEvmi( fileName );
-                else
-                {
-                    logProgramError( lineNumber, "No es pot desar l'EVMI", line );
-                    return false;
-                }
-            }
-        }
-    }
     else if ( measure == "cvomi" )
     {
         if ( run )
@@ -2926,6 +2640,22 @@ void QExperimental3DExtension::opacitySaliencyChecked( bool checked )
 void QExperimental3DExtension::setVmiOneViewpointMaximum( int maximum )
 {
     m_vmiOneViewpointSpinBox->setMaximum( maximum );
+}
+
+
+void QExperimental3DExtension::getFileNameToSaveTour()
+{
+    QString fileName = getFileNameToSave( "tourDir", tr("Save tour"), tr("PNG files (*.png);;All files (*)"), "png" );
+
+    if ( fileName.isNull() ) return;
+
+    if ( !fileName.contains( "%1" ) )
+    {
+        int i = fileName.lastIndexOf( "." );
+        fileName.insert( i, "%1" );
+    }
+
+    m_saveNextTourLineEdit->setText( fileName );
 }
 
 

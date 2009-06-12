@@ -32,7 +32,7 @@ public:
      * Retorna la divergència de Kullback-Leibler entre les distribucions de probabilitat P i Q, amb les probabilitats definides a \p probabilitiesP i \p probabilitiesQ.
      * D_KL(P||Q) = sum[0,n)( P(i) log ( P(i) / Q(i) ) )
      */
-    template <class T> static double kullbackLeiblerDivergence( const QVector<T> &probabilitiesP, const QVector<T> &probabilitiesQ );
+    template <class T> static double kullbackLeiblerDivergence( const QVector<T> &probabilitiesP, const QVector<T> &probabilitiesQ, bool skipZeroQ = false );
     /**
      * Retorna la divergència de Jensen-Shannon entre les distribucions de probabilitat P1 i P2, amb les probabilitats definides a \p probabilitiesP1 i \p probabilitiesP2 i
      * els pesos \p pi1 i \p pi2.
