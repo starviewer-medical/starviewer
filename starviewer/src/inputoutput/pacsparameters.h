@@ -59,7 +59,7 @@ public:
     QString getLocation() const;
 
     /// Assigna/Retorna al Pacs si és el Predeterminat. Si val 'S' voldrà di que és el pacs predeterminat per realitzar les cerques
-    void setDefault(bool default);
+    void setDefault(bool isDefault);
     bool isDefault() const;
 
     /// Assigna/Retorna l'id del PACS, aquest és un camp clau per diferenciar els PACS que l'assigna l'aplicacio.
