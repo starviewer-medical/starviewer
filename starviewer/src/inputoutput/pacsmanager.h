@@ -10,25 +10,22 @@
 #include <QList>
 
 #include "pacsparameters.h"
-
-class QString;
-class QSettings;
+#include "settings.h"
 
 namespace udg {
 
-/** Aquesta classe implementa les accions necessaries per afegir nous pacs o modificar/consultar els paràmetres dels PACS  que tenim disponible a l'aplicació, guardats en un fitxer de configuració.
-@author marc
-*/
-
+/** Aquesta classe implementa les accions necessaries per afegir nous pacs o modificar/consultar els paràmetres 
+  * dels PACS  que tenim disponible a l'aplicació, guardats en un fitxer de configuració.
+  * @author marc
+  */
 class PacsManager{
 
 public:
-
     ///Constructor de la classe
-    PacsManager( );
+    PacsManager();
 
     ///Destructor de la classe
-    ~PacsManager( );
+    ~PacsManager();
 
     /** Insereix els parametres d'un pacs a la base de dades, per a poder-hi cercar imatge. En un alta el camp PacsID, és assignat automàticament per l'aplicació!
      * @param Objecte PacsParameters amb les dades del pacs
@@ -52,28 +49,30 @@ public:
     /** Es donarà de baixa el Pacs. No es dona de baixa físicament, sinó que es posa en estat donat de baixa
      * @param  Objecte pacsID del pacs a donar de baixa
      */
-    bool deletePacs(QString pacsID);
+    bool deletePacs( const QString &pacsID );
 
     /** Cerca la informació d'un pacs en concret.
      * @param Conté la informació del pacs cercat
      * @param pacs a cercar
      */
-    PacsParameters queryPacs(QString pacsID);
+    PacsParameters queryPacs( const QString &pacsID );
 
 private:
-
     ///Ens indica si un Pacs ja està donat d'alta a partir del seu AETitle, IP i port
     bool existPacs(const PacsParameters &pacsAETitle );
 
     ///Mètode que s'ha de fer servir sempre que es vulgui accedir a la llista de pacs configurats.
     ///S'encarrega d'omplir la llista en el cas que no s'hagi fet prèviament.
-    QList<PacsParameters> getConfiguredPacsList();
-    void saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacsList);
+    QList<PacsParameters> getConfiguredPacsList( bool onlyDefault = false );
 
-    PacsParameters fillPacs(const QSettings &settings);
+    /// Donat un objecte PacsParameters el transformem en un conjunt de claus-valor per una manipulació de settings més còmode
+    Settings::KeyValueMapType pacsParametersToKeyValueMap( const PacsParameters &parameters );
+
+    /// Donat un conjunt de claus-valor omple i retorna un objecte PacsParameters
+    PacsParameters keyValueMapToPacsParameters( const Settings::KeyValueMapType &item );
 
 private:
-
+    /// Clau de settings per la llista de PACS
     static const QString PacsListConfigurationSectionName;
 };
 

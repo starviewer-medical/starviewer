@@ -8,8 +8,6 @@
 #include "pacsmanager.h"
 
 #include <QString>
-#include <QSettings>
-
 #include "pacsparameters.h"
 #include "logging.h"
 
@@ -27,50 +25,35 @@ PacsManager::~PacsManager()
 
 bool PacsManager::insertPacs(const PacsParameters &pacs)
 {
-    if(!this->existPacs(pacs))
+    bool ok = !this->existPacs(pacs);
+    if( ok )
     {
-        QList<PacsParameters> pacsList = getConfiguredPacsList();
-        pacsList.append(pacs);
-
-        this->saveConfiguredPacsListToDisk(pacsList);
-
-        return true;
+        Settings settings;
+        settings.addListItem( PacsListConfigurationSectionName, pacsParametersToKeyValueMap(pacs) );
     }
-    return false;
+
+    return ok;
 }
 
 void PacsManager::updatePacs(const PacsParameters &pacsToUpdate)
 {
-    QList<PacsParameters> pacsList = getConfiguredPacsList();
-
-    pacsList[pacsToUpdate.getPacsID().toInt()] = pacsToUpdate;
-
-    this->saveConfiguredPacsListToDisk(pacsList);
+    Settings settings;
+    settings.setListItem( pacsToUpdate.getPacsID().toInt(),PacsListConfigurationSectionName, pacsParametersToKeyValueMap(pacsToUpdate) );
 }
 
 QList<PacsParameters> PacsManager::queryPacsList()
 {
+    // els tornem tots
     return getConfiguredPacsList();
 }
 
 QList<PacsParameters> PacsManager::queryDefaultPacs()
 {
-    QList<PacsParameters> defaultPacs;
-    QSettings settings;
-    int size = settings.beginReadArray(PacsListConfigurationSectionName);
-
-    for(int i = 0; i < size; ++i)
-    {
-        settings.setArrayIndex(i);
-        PacsParameters pacs = fillPacs(settings);
-        if (pacs.isDefault()) defaultPacs.append(pacs);
-    }
-    settings.endArray();
-
-    return defaultPacs;
+    // només tornem els que estan per defecte
+    return getConfiguredPacsList(true);
 }
 
-PacsParameters PacsManager::queryPacs(QString pacsIDString)
+PacsParameters PacsManager::queryPacs( const QString &pacsIDString )
 {
     QList<PacsParameters> pacsList = getConfiguredPacsList();
     bool ok = false;
@@ -83,9 +66,11 @@ PacsParameters PacsManager::queryPacs(QString pacsIDString)
         {
             pacs = pacsList.at(pacsID);
         }
-        else ERROR_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
+        else 
+            ERROR_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
     }
-    else ERROR_LOG("No s'ha pogut convertir l'string amb l'id del PACS a enter, el valor de l'string és: " + pacsIDString);
+    else 
+        ERROR_LOG("No s'ha pogut convertir l'string amb l'id del PACS a enter, el valor de l'string és: " + pacsIDString);
 
     return pacs;
 }
@@ -107,73 +92,81 @@ bool PacsManager::existPacs(const PacsParameters &pacs)
     return false;
 }
 
-bool PacsManager::deletePacs(QString pacsIDString)
+bool PacsManager::deletePacs( const QString &pacsIDString)
 {
-    QList<PacsParameters> pacsList = getConfiguredPacsList();
     bool ok = false;
     int pacsID = pacsIDString.toInt(&ok);
 
-    if (!ok) return false;
+    if(ok)
+    {
+        Settings settings;
+        settings.removeListItem( PacsListConfigurationSectionName, pacsID );
+    }
 
-    pacsList.removeAt(pacsID);
-    this->saveConfiguredPacsListToDisk(pacsList);
-
-    return true;
+    return ok;
 }
 
-QList<PacsParameters> PacsManager::getConfiguredPacsList()
+QList<PacsParameters> PacsManager::getConfiguredPacsList( bool onlyDefault )
 {
     QList<PacsParameters> configuredPacsList;
-    QSettings settings;
-    int size = settings.beginReadArray(PacsListConfigurationSectionName);
-
-    for(int i = 0; i < size; ++i)
+    Settings settings;
+    Settings::SettingListType list = settings.getList(PacsListConfigurationSectionName);
+    foreach( Settings::KeyValueMapType item, list )
     {
-        settings.setArrayIndex(i);
-        PacsParameters pacs = fillPacs(settings);
-        configuredPacsList.append(pacs);
+        PacsParameters pacs;
+        pacs = keyValueMapToPacsParameters(item);
+        // depenent del paràmetre "onlyDefault" afegirem o no els pacs
+        if( (onlyDefault && pacs.isDefault()) || !onlyDefault )
+        {
+            configuredPacsList << pacs;
+        }
     }
-    settings.endArray();
 
     return configuredPacsList;
 }
 
-void PacsManager::saveConfiguredPacsListToDisk(const QList<PacsParameters> &pacsList)
+Settings::KeyValueMapType PacsManager::pacsParametersToKeyValueMap( const PacsParameters &parameters )
 {
-    QSettings settings;
+    Settings::KeyValueMapType item;
+        
+    item["ID"] = parameters.getPacsID();
+    item["AETitle"] = parameters.getAEPacs();
+    item["PacsPort"] = parameters.getPacsPort();
+    item["Location"] = parameters.getLocation();
+    item["Institution"] = parameters.getInstitution();
+    item["Default"] = parameters.isDefault() ? "S" : "N";//Guardem el camp en format string
+    item["PacsHostname"] = parameters.getPacsAddress();
+    item["Description"] = parameters.getDescription();
 
-    settings.beginWriteArray(PacsListConfigurationSectionName);
-    settings.remove(""); //Esborrem la llista de pacs abans de guardar la nova.
-    for(int i = 0; i < pacsList.size(); ++i)
-    {
-        settings.setArrayIndex(i);
-
-        settings.setValue("ID", i);
-        settings.setValue("AETitle", pacsList.at(i).getAEPacs() );
-        settings.setValue("PacsPort", pacsList.at(i).getPacsPort() );
-        settings.setValue("Location", pacsList.at(i).getLocation() );
-        settings.setValue("Institution", pacsList.at(i).getInstitution() );
-        settings.setValue("Default", pacsList.at(i).isDefault() ? "S" : "N" );//Guardem el camp en format string
-        settings.setValue("PacsHostname", pacsList.at(i).getPacsAddress() );
-        settings.setValue("Description", pacsList.at(i).getDescription() );
-    }
-    settings.endArray();
+    return item;
 }
 
-PacsParameters PacsManager::fillPacs(const QSettings &settings)
+PacsParameters PacsManager::keyValueMapToPacsParameters( const Settings::KeyValueMapType &item )
 {
-    PacsParameters pacsParameters;
+    PacsParameters parameters;
+    // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
+    parameters.setPacsID( item.value("ID").toString() );
+    parameters.setAEPacs( item.value("AETitle" ).toString() );
+    parameters.setPacsPort( item.value("PacsPort" ).toString() );
+    parameters.setLocation( item.value("Location" ).toString() );
+    parameters.setInstitution( item.value("Institution" ).toString() );
+    
+    // TODO la clau "Default" s'hauria de renombrar per una altre ja que en el cas del 
+    // registre de windows pot donar problemes, ja que ve a ser una paraula "reservada"
+    // Un nom més adient seria isDefault o isADefaultPACS, per exemple
+    // cal fer aquest comprovació ja que depèn com s'hagin obtingut les dades per accedir a 
+    // "Default", s'hauria de fer amb la clau "."
+    QString isDefault;
+    if( item.contains("Default") )
+        isDefault = item.value("Default").toString();
+    else
+        isDefault = item.value(".").toString();
+    parameters.setDefault( isDefault == "S" );
+    
+    parameters.setPacsAddress( item.value("PacsHostname" ).toString() );
+    parameters.setDescription( item.value("Description" ).toString() );
 
-    pacsParameters.setPacsID( settings.value("ID" ).toString() );
-    pacsParameters.setAEPacs( settings.value("AETitle" ).toString() );
-    pacsParameters.setPacsPort( settings.value("PacsPort" ).toString() );
-    pacsParameters.setLocation( settings.value("Location" ).toString() );
-    pacsParameters.setInstitution( settings.value("Institution" ).toString() );
-    pacsParameters.setDefault( settings.value("Default" ).toString() == "S" );
-    pacsParameters.setPacsAddress( settings.value("PacsHostname" ).toString() );
-    pacsParameters.setDescription( settings.value("Description" ).toString() );
-
-    return pacsParameters;
+    return parameters;
 }
 
 };
