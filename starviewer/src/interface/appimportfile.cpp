@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "appimportfile.h"
 
-#include "settings.h"
+#include "interfacesettings.h"
 // qt
 #include <QFileDialog>
 #include <QFileInfo>
@@ -92,21 +92,19 @@ QStringList AppImportFile::generateFilenames( QString dirPath )
 void AppImportFile::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-ImportFile/";
 
-    m_workingDirectory = settings.getValue( keyPrefix + "workingDirectory", ".").toString();
-    m_workingDicomDirectory = settings.getValue( keyPrefix + "workingDicomDirectory", ".").toString();
-    m_lastExtension = settings.getValue( keyPrefix + "defaultExtension", "MetaIO Image (*.mhd)" ).toString();
+    m_workingDirectory = settings.getValue( InterfaceSettings::openFileLastPathKey, ".").toString();
+    m_workingDicomDirectory = settings.getValue( InterfaceSettings::openDirectoryLastPathKey, ".").toString();
+    m_lastExtension = settings.getValue( InterfaceSettings::openFileLastFileExtensionKey, "MetaIO Image (*.mhd)" ).toString();
 }
 
 void AppImportFile::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-ImportFile/";
 
-    settings.setValue( keyPrefix + "workingDirectory", m_workingDirectory );
-    settings.setValue( keyPrefix + "workingDicomDirectory", m_workingDicomDirectory );
-    settings.setValue( keyPrefix + "defaultExtension", m_lastExtension );
+    settings.setValue( InterfaceSettings::openFileLastPathKey, m_workingDirectory );
+    settings.setValue( InterfaceSettings::openDirectoryLastPathKey, m_workingDicomDirectory );
+    settings.setValue( InterfaceSettings::openFileLastFileExtensionKey, m_lastExtension );
 }
 
 };  // end namespace udg
