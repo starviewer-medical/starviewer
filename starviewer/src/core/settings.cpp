@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "logging.h"
 
 #include <QTreeWidget>
 #include <QHeaderView> // pel restoreColumnsWidths
@@ -32,6 +33,87 @@ bool Settings::contains( const QString &key ) const
 void Settings::remove( const QString &key )
 {
     m_settings.remove(key);
+}
+
+Settings::KeyValueMapType Settings::getListItem( const QString &key, int index )
+{
+    KeyValueMapType item;
+
+    int size = m_settings.beginReadArray(key);
+    if( index < size && index >= 0 )
+    {
+        m_settings.setArrayIndex(index);
+        // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
+        item = fillKeyValueMapFromKeyList( m_settings.allKeys() );
+    }
+    else
+    {
+        DEBUG_LOG("Índex fora de rang. L'element retornat serà buit");
+    }
+
+    m_settings.endArray();
+
+    return item;
+}
+
+Settings::SettingListType Settings::getList( const QString &key )
+{
+    SettingListType list;
+    int size = m_settings.beginReadArray(key);
+
+    for(int i = 0; i < size; ++i)
+    {
+        m_settings.setArrayIndex(i);
+
+        KeyValueMapType item;
+        // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
+        item = fillKeyValueMapFromKeyList( m_settings.allKeys() );
+        // Afegim el nou conjunts de valors a la llista
+        list << item;
+    }
+    m_settings.endArray();
+
+    return list;
+}
+
+void Settings::addListItem( const QString &key, const KeyValueMapType &item )
+{
+    int arraySize = m_settings.beginReadArray(key);
+    m_settings.endArray();
+    setListItem( arraySize, key, item );
+}
+
+void Settings::setListItem( int index, const QString &key, const KeyValueMapType &item )
+{
+    // no comprobem si l'índex està dins d'un rang determinat
+    // farem servir la política que tingui QSettings::setArrayIndex()
+    m_settings.beginWriteArray(key); 
+    m_settings.setArrayIndex(index);
+    // omplim
+    dumpKeyValueMap(item);
+    m_settings.endArray();
+}
+
+void Settings::removeListItem( const QString &key, int index )
+{
+    // ara mateix simplement el que fa és posar-li la clau adequada
+    // TODO mirar si és necessari fer alguna comprovació més o si cal "re-ordenar" 
+    // la llista, és a dir, si elimino l'element 3 de 5, potser cal renombrar l'element
+    // 4 a "3" i el 5 a "4"    
+    remove( key + "/" + QString::number(index+1) );
+}
+
+void Settings::setList( const QString &key, const SettingListType &list )
+{
+    // eliminem tot el que pogués haver d'aquella llista anteriorment
+    remove(key);
+    // escrivim la llista
+    m_settings.beginWriteArray(key);
+    foreach( KeyValueMapType item, list )
+    {
+        dumpKeyValueMap( item );
+    }
+    m_settings.endArray();
 }
 
 void Settings::saveColumnsWidths( const QString &key, QTreeWidget *treeWidget )
@@ -85,6 +167,26 @@ void Settings::restoreGeometry( const QString &key, QSplitter *splitter )
 {
     Q_ASSERT( splitter );
     splitter->restoreState( this->getValue(key).toByteArray() );
+}
+
+Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList( const QStringList &keysList )
+{
+    KeyValueMapType item;
+    
+    foreach( QString key, keysList )
+    {
+        item[ key ] = m_settings.value( key );
+    }
+    return item;
+}
+
+void Settings::dumpKeyValueMap( const KeyValueMapType &item )
+{
+    QStringList keysList = item.keys();
+    foreach( QString key, keysList )
+    {
+        m_settings.setValue( key, item.value(key) );
+    }   
 }
 
 }  // end namespace udg

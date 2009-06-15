@@ -2,6 +2,7 @@
 #define UDGSETTINGS_H
 
 #include <QSettings>
+#include <QMap>
 
 // Forward declarations
 class QString;
@@ -38,6 +39,39 @@ public:
     void remove( const QString &key );
 
     /**
+     * Mètodes per la manipulació de llistes de Settings
+     */
+
+    typedef QMap<QString, QVariant> KeyValueMapType;
+    typedef QList< KeyValueMapType > SettingListType;
+
+    /**
+     * Obtenció d'informació de llistes de settings
+     */
+    /// Ens retorna l'i-éssim (index) conjunt de valors de la llista amb clau "key"
+    KeyValueMapType getListItem( const QString &key, int index );
+
+    /// Ens retorna tota la llista de settings que hi hagi sota key
+    SettingListType getList( const QString &key );
+
+    /**
+     * Modificació de llistes de conjunts de valors
+     */
+    /// Afegeix a la llista amb clau "key" un conjunt de valors
+    void addListItem( const QString &key, const KeyValueMapType &item );
+
+    /// Actualitza les dades del conjunt de valors "item" a l'índex index de la llista amb clau "key" 
+    void setListItem( int index, const QString &key, const KeyValueMapType &item );
+
+    /// Elimina de la llista amb clau "key" l'element i-éssim (index)
+    void removeListItem( const QString &key, int index );
+
+    /// Afegeix una llista sencera de conjunts de valors amb clau "key". 
+    /// Si existia una llista anteriorment amb aquesta clau, els valors queden
+    /// sobre-escrits per la llista proporcionada
+    void setList( const QString &key, const SettingListType &list );
+
+    /**
      * Mètodes per facilitar el guardar i/o restaurar la geometria de certs widgets
      */
 
@@ -53,6 +87,13 @@ public:
     void restoreGeometry( const QString &key, QWidget *widget );
     void saveGeometry( const QString &key, QSplitter *splitter );
     void restoreGeometry( const QString &key, QSplitter *splitter );
+
+private:
+    /// A partir d'una llista de claus, omplim un conjunt clau-valor 
+    KeyValueMapType fillKeyValueMapFromKeyList( const QStringList &keysList );
+
+    /// Traspassa el contingut del conjunt clau-valor a m_settings
+    void dumpKeyValueMap( const KeyValueMapType &item );
 
 private:
     /// Objecte QSettings amb el que manipularem les configuracions
