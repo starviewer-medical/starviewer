@@ -16,7 +16,7 @@
 #include "identifier.h"
 #include "starviewerapplication.h"
 #include "logging.h"
-#include "settings.h"
+#include "coresettings.h"
 // Qt's
 #include <QFile>
 #include <QMessageBox>
@@ -66,7 +66,7 @@ void HangingProtocolsLoader::loadDefaults()
 
     /// Hanging protocols definits per l'usuari
     Settings systemSettings;
-    QString userPath = systemSettings.getValue("Hanging-Protocols/path", UserHangingProtocolsPath ).toString(); 
+    QString userPath = systemSettings.getValue( CoreSettings::userHangingProtocolsPathKey, UserHangingProtocolsPath ).toString(); 
     if( !userPath.isEmpty() )
         loadXMLFiles( userPath );
 }

@@ -9,7 +9,7 @@
 #include "q2dviewer.h"
 #include "logging.h"
 #include "volume.h"
-#include "settings.h"
+#include "coresettings.h"
 // definicions globals d'aplicació
 #include "starviewerapplication.h"
 // vtk
@@ -209,21 +209,19 @@ QString ScreenShotTool::compoundSelectedName()
 void ScreenShotTool::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "ScreenshotTool/";
     
-    m_lastScreenShotPath = settings.getValue( keyPrefix + "defaultSaveFolder", QDir::homePath() ).toString();
-    m_lastScreenShotExtensionFilter = settings.getValue( keyPrefix + "defaultSaveExtension", PngFileFilter ).toString();
-    m_lastScreenShotFileName = settings.getValue( keyPrefix + "defaultSaveName", "" ).toString();
+    m_lastScreenShotPath = settings.getValue( CoreSettings::screenShotToolFolderKey, QDir::homePath() ).toString();
+    m_lastScreenShotExtensionFilter = settings.getValue( CoreSettings::screenShotToolFileExtensionKey, PngFileFilter ).toString();
+    m_lastScreenShotFileName = settings.getValue( CoreSettings::screenShotToolFilenameKey, "" ).toString();
 }
 
 void ScreenShotTool::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "ScreenshotTool/";
 
-    settings.setValue( keyPrefix + "defaultSaveFolder", m_lastScreenShotPath );
-    settings.setValue( keyPrefix + "defaultSaveExtension", m_lastScreenShotExtensionFilter );
-    settings.setValue( keyPrefix + "defaultSaveName", m_lastScreenShotFileName );
+    settings.setValue( CoreSettings::screenShotToolFolderKey, m_lastScreenShotPath );
+    settings.setValue( CoreSettings::screenShotToolFileExtensionKey, m_lastScreenShotExtensionFilter );
+    settings.setValue( CoreSettings::screenShotToolFilenameKey, m_lastScreenShotFileName );
 }
 
 }
