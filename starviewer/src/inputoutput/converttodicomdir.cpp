@@ -13,7 +13,6 @@
 #include "status.h"
 #include "dicommask.h"
 #include "convertdicomtolittleendian.h"
-#include "starviewersettings.h"
 #include "deletedirectory.h"
 #include "starviewerapplication.h"
 #include "localdatabasemanager.h"
@@ -317,7 +316,6 @@ void ConvertToDicomdir::createReadmeTxt()
 {
     QString readmeFilePath = m_dicomDirPath + "/README.TXT";
     QFile file( readmeFilePath );
-    StarviewerSettings settings;
 
     if ( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) return;
 
