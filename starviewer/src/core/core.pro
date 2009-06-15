@@ -182,6 +182,9 @@ HEADERS += extensionfactory.h \
            representationslayer.h \
            toolrepresentation.h \
            settings.h \
+           settingsregistry.h \
+           defaultsettings.h \
+           coresettings.h \
            glew.h \
            glxew.h \
            wglew.h
@@ -332,6 +335,9 @@ SOURCES += extensionmediator.cpp \
            representationslayer.cpp \
            toolrepresentation.cpp \
            settings.cpp \
+           settingsregistry.cpp \
+           defaultsettings.cpp \
+           coresettings.cpp \
            glew.c
 
 TEMPLATE = lib

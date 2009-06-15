@@ -75,6 +75,7 @@ HEADERS += databaseconnection.h \
            qlistenrisrequestsconfigurationscreen.h \
            qpopuprisrequestsscreen.h \
            utils.h \
+           inputoutputsettings.h \
            createinformationmodelobject.h \
            qinputoutputdicomdirwidget.h \
            qinputoutputlocaldatabasewidget.h \
@@ -131,6 +132,7 @@ SOURCES += databaseconnection.cpp \
            qlistenrisrequestsconfigurationscreen.cpp \
            qpopuprisrequestsscreen.cpp \
            utils.cpp \
+           inputoutputsettings.cpp \
            createinformationmodelobject.cpp \
            qinputoutputdicomdirwidget.cpp \
            qinputoutputlocaldatabasewidget.cpp \

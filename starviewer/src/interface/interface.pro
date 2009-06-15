@@ -8,11 +8,13 @@ TRANSLATIONS += interface_ca_ES.ts \
                 interface_en_GB.ts 
 FORMS += qconfigurationdialogbase.ui
 HEADERS += qapplicationmainwindow.h \
+           interfacesettings.h \
            appimportfile.h \
            extensionhandler.h \
            extensionworkspace.h \
            qconfigurationdialog.h
 SOURCES += qapplicationmainwindow.cpp \
+           interfacesettings.cpp \
            appimportfile.cpp \
            extensionhandler.cpp \
            extensionworkspace.cpp \
