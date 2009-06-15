@@ -19,7 +19,7 @@
 #include "starviewerapplication.h"
 #include "statswatcher.h"
 #include "databaseinstallation.h"
-
+#include "interfacesettings.h"
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
@@ -339,7 +339,7 @@ void QApplicationMainWindow::createLanguageMenu()
 QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
-    QString defaultLocale = settings.getValue("Starviewer-Language/languageLocale", QLocale::system().name()).toString();
+    QString defaultLocale = settings.getValue( InterfaceSettings::languageLocaleKey, QLocale::system().name()).toString();
 
     QAction *action = new QAction(this);
     action->setText(language);
@@ -353,7 +353,7 @@ QAction *QApplicationMainWindow::createLanguageAction(const QString &language, c
 void QApplicationMainWindow::switchToLanguage(QString locale)
 {
     Settings settings;
-    settings.setValue("Starviewer-Language/languageLocale", locale);
+    settings.setValue(InterfaceSettings::languageLocaleKey, locale);
 
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
@@ -484,7 +484,7 @@ void QApplicationMainWindow::writeSettings()
 {
     Settings settings;
 
-    settings.saveGeometry("geometry", this);
+    settings.saveGeometry(InterfaceSettings::applicationMainWindowGeometryKey, this);
 }
 
 void QApplicationMainWindow::enableExtensions()
@@ -528,10 +528,10 @@ void QApplicationMainWindow::readSettings()
 {
     Settings settings;
 
-    if (!settings.contains("geometry"))
+    if ( !settings.contains(InterfaceSettings::applicationMainWindowGeometryKey) )
         this->showMaximized();
     else
-        settings.restoreGeometry("geometry", this);
+        settings.restoreGeometry(InterfaceSettings::applicationMainWindowGeometryKey, this);
 }
 
 void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
