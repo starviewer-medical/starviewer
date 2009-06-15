@@ -6,7 +6,7 @@
  ***************************************************************************/
 #include "qlogviewer.h"
 
-#include "settings.h"
+#include "coresettings.h"
 #include "logging.h"
 #include "starviewerapplication.h"
 
@@ -75,13 +75,13 @@ void QLogViewer::saveLogFileAs()
 void QLogViewer::writeSettings()
 {
     Settings settings;
-    settings.saveGeometry("logViewerDialogGeometry", this);
+    settings.saveGeometry(CoreSettings::logViewerGeometryKey, this);
 }
 
 void QLogViewer::readSettings()
 {
     Settings settings;
-    settings.restoreGeometry("logViewerDialogGeometry", this);
+    settings.restoreGeometry(CoreSettings::logViewerGeometryKey, this);
 }
 
 }

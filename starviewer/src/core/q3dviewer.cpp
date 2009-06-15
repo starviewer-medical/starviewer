@@ -12,7 +12,7 @@
 #include "logging.h"
 #include "q3dorientationmarker.h"
 #include "transferfunction.h"
-#include "settings.h"
+#include "coresettings.h"
 
 // include's qt
 #include <QString>
@@ -63,9 +63,6 @@
 #include "vtk4DLinearRegressionGradientEstimator.h"
 #include <vtkPointData.h>
 #include <vtkEncodedGradientShader.h>
-
-
-
 
 // avortar render
 #include "abortrendercommand.h"
@@ -723,11 +720,6 @@ void Q3DViewer::renderRayCastingObscurance()
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
-//     Settings settings;
-//     QString interpolation = settings.getValue( "3DViewer/interpolation" ).toString();
-//     if ( interpolation == "linear" ) m_volumeProperty->SetInterpolationTypeToLinear();
-//     else m_volumeProperty->SetInterpolationTypeToNearest();
-
     m_vtkVolume->SetMapper( m_volumeMapper );
     if ( m_obscuranceOn )
     {
@@ -1059,26 +1051,36 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     }
 
     Settings settings;
-    QString prefixKey = "3DViewer/obscurances/";
+    int numberOfDirections;
+    ObscuranceMainThread::Function function;
+    ObscuranceMainThread::Variant variant;
+    unsigned int gradientRadius;
     switch ( quality )
     {
         case Low:
-            prefixKey += "low/";
+            numberOfDirections = settings.getValue( CoreSettings::numberOfDirectionsForLowQualityObscurancesKey ).toInt();
+            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::functionForLowQualityObscurancesKey ).toInt() );
+            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::variantForLowQualityObscurancesKey ).toInt() );
+            gradientRadius = settings.getValue( CoreSettings::gradientRadiusForLowQualityObscurancesKey ).toUInt();
             break;
+
         case Medium:
-            prefixKey += "medium/";
+            numberOfDirections = settings.getValue( CoreSettings::numberOfDirectionsForMediumQualityObscurancesKey ).toInt();
+            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::functionForMediumQualityObscurancesKey ).toInt() );
+            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::variantForMediumQualityObscurancesKey ).toInt() );
+            gradientRadius = settings.getValue( CoreSettings::gradientRadiusForMediumQualityObscurancesKey ).toUInt();
             break;
+
         case High:
-            prefixKey += "high/";
+            numberOfDirections = settings.getValue( CoreSettings::numberOfDirectionsForHighQualityObscurancesKey ).toInt();
+            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::functionForHighQualityObscurancesKey ).toInt() );
+            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::variantForHighQualityObscurancesKey ).toInt() );
+            gradientRadius = settings.getValue( CoreSettings::gradientRadiusForHighQualityObscurancesKey ).toUInt();
             break;
+
         default:
             ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( quality ) );
     }
-
-    int numberOfDirections = settings.getValue( prefixKey + "numberOfDirections" ).toInt();
-    ObscuranceMainThread::Function function = static_cast<ObscuranceMainThread::Function>( settings.getValue( prefixKey + "function" ).toInt() );
-    ObscuranceMainThread::Variant variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( prefixKey + "variant" ).toInt() );
-    unsigned int gradientRadius = settings.getValue( prefixKey + "gradientRadius" ).toUInt();
 
     double distance = m_vtkVolume->GetLength() / 2.0;   /// \todo de moment la meitat de la diagonal, però podria ser una altra funció
     // el primer paràmetre és el nombre de direccions
