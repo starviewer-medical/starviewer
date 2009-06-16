@@ -8,13 +8,13 @@ namespace udg {
 class SettingsRegistry : public Singleton<SettingsRegistry>
 {
 public:
-    /// Afegeix un setting al registre. Li donem la clau i valor que té per defecte
+    /// Afegeix un setting al registre. Li donem la clau i valor que tï¿½ per defecte
     void addSetting( const QString &key, const QVariant &defaultValue );
 
 protected:
-    /// Cal declarar-ho friend perquè sinó hauríem de fer públics 
-    /// el constructor i destructor i trencaríem així la filosofia d'un Singleton
-    friend Singleton<SettingsRegistry>;
+    /// Cal declarar-ho friend perquï¿½ sinï¿½ haurï¿½em de fer pï¿½blics 
+    /// el constructor i destructor i trencarï¿½em aixï¿½ la filosofia d'un Singleton
+    friend class Singleton<SettingsRegistry>;
     SettingsRegistry();
     ~SettingsRegistry();
 
