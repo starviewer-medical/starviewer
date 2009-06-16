@@ -13,7 +13,7 @@ public:
 
     void init();
 
-    /// Declaració de claus
+    /// Declaraciï¿½ de claus
     static const QString screenShotToolFolderKey;
     static const QString screenShotToolFileExtensionKey;
     static const QString screenShotToolFilenameKey;
@@ -24,7 +24,7 @@ public:
     static const QString numberOfDirectionsForLowQualityObscurancesKey;
     static const QString functionForLowQualityObscurancesKey;
     static const QString variantForLowQualityObscurancesKey;
-    static const QString CoreSettings::gradientRadiusForLowQualityObscurancesKey;
+    static const QString gradientRadiusForLowQualityObscurancesKey;
 
     static const QString numberOfDirectionsForMediumQualityObscurancesKey;
     static const QString functionForMediumQualityObscurancesKey;
