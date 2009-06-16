@@ -117,8 +117,9 @@ private slots:
     void computePenombraVolume( const QString & name);
 
     ///Desa la màscara de la difusió
+    void saveDiffusionVolume( );
     void saveDiffusionMask( );
-    ///Desa la màscara i diferents volumns de la perfusió
+    ///Desa la màscara i diferents volums de la perfusió
     void savePerfusionVolume( );
     void saveRegisteredPerfusionVolume( );
     void savePerfusionMask( );

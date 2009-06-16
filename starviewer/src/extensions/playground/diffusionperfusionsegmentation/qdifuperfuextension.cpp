@@ -236,6 +236,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
     connect( m_perfusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setPerfusionInput( Volume * ) ) );
     connect( m_penombraVolumeLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( computePenombraVolume(const QString&) ) );
 
+    connect( m_saveDiffusionVolumePushButton, SIGNAL( clicked() ), SLOT( saveDiffusionVolume() ) );
     connect( m_saveDiffusionMaskPushButton, SIGNAL( clicked() ), SLOT( saveDiffusionMask() ) );
     connect( m_savePerfusionVolumePushButton, SIGNAL( clicked() ), SLOT( savePerfusionVolume() ) );
     connect( m_savePerfusionMaskPushButton, SIGNAL( clicked() ), SLOT( savePerfusionMask() ) );
@@ -1089,6 +1090,30 @@ void QDifuPerfuSegmentationExtension::savePerfusionMask( )
     
             writer->Delete();
             imageThreshold->Delete();
+        }
+    }
+}
+
+void QDifuPerfuSegmentationExtension::saveDiffusionVolume( )
+{
+    if(m_diffusionMainVolume)
+    {
+        QString fileName = QFileDialog::getSaveFileName( this, tr("Save Diffusion Volume file"), m_savingMaskDirectory, tr("MetaImage Files (*.mhd)") );
+        if ( !fileName.isEmpty() )
+        {
+            if( QFileInfo( fileName ).suffix() != "mhd" )
+            {
+                fileName += ".mhd";
+            }
+    
+            m_savingMaskDirectory = QFileInfo( fileName ).absolutePath();
+            vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
+            writer->SetFileName(qPrintable( fileName ));
+            writer->SetFileDimensionality(3);
+            writer->SetInput(m_diffusionMainVolume->getVtkData());
+            writer->Write();
+    
+            writer->Delete();
         }
     }
 }
