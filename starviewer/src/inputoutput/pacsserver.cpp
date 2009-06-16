@@ -211,6 +211,8 @@ OFCondition PacsServer::configureStore()
     return cond;
 }
 
+/*TODO Estudiar si el millor transferSyntax per defecte és UID_LittleEndianExplicitTransferSyntax o com els cas del move és el JPegLossLess
+ */
 OFCondition PacsServer::addStoragePresentationContexts()
 {
     /*
@@ -234,7 +236,6 @@ OFCondition PacsServer::addStoragePresentationContexts()
     OFList<OFString> fallbackSyntaxes;
     OFString preferredTransferSyntax;
 
-    // Which transfer syntax was preferred on the command line
     if ( gLocalByteOrder == EBO_LittleEndian )
     {
         /* we are on a little endian machine */
@@ -256,6 +257,14 @@ OFCondition PacsServer::addStoragePresentationContexts()
 
     /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
      * les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és l'estudi només caldria afegir-hi la de la motalitat de l'estudi
+    /*Les sopClass és equivalent amb el Move quina acció volem fer per exemple UID_MOVEStudyRootQueryRetrieveInformationModel , en el
+     * case del move, en el cas de StoreScu, el sopClass que tenim van en funció del tipus d'imatge per exemple tenim
+     * ComputedRadiographyImageStorage, CTImageStore, etc.. aquestes sopClass indiquen quin tipus d'imatge anirem a guardar, per això
+     * sinó sabem de quin tipus de SOPClass són les imatges que anem a guardar al PACS, li indiquem una llista per defecte que cobreix
+     * la gran majoria i més comuns de SOPClass que existeixen */
+
+    /* TODO Si que le podem arribar a saber la transfer syntax, només hem de mirar la SOPClassUID de cada imatge a enviar, mirar
+     * codi storescu.cc a partir de la línia 639
      */
     for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ )
     {
@@ -282,6 +291,10 @@ OFCondition PacsServer::addStoragePresentationContexts()
     s_cur = sops.begin();
     s_end = sops.end();
 
+    /*Creem un presentation context per cada SOPClass que tinguem, indicant per cada SOPClass quina transfer syntax utilitzarem*/
+    /*En el cas del Store amb el presentation Context indiquem que per cada tipus d'imatge que volem guardar SOPClass amb quins 
+     *transfer syntax ens podem comunicar, llavors el PACS ens indicarà si ell pot guardar aquest tipus de SOPClass, i amb quin
+     *transfer syntax li hem d'enviar la imatge*/
     while ( s_cur != s_end && cond.good() )
     {
         // No poden haver més de 255 presentation context
