@@ -88,11 +88,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     /* figure out which of the accepted presentation contexts should be used */
     DcmXfer filexfer( dcmff.getDataset()->getOriginalXfer() );
 
-    /* special case: if the file uses an unencapsulated transfer syntax (uncompressed
-     * or deflated explicit VR) and we prefer deflated explicit VR, then try
-     * to find a presentation context for deflated explicit VR first.
-     */
-
+    //Busquem dels presentationContextID que hem establert al connectar quin és el que hem d'utilitzar per transferir aquesta imatge
     if ( filexfer.getXfer() != EXS_Unknown )
     {
         presId = ASC_findAcceptedPresentationContextID( assoc , sopClass , filexfer.getXferID() );
@@ -101,6 +97,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
 
     if ( presId == 0 )
     {
+        //No hem trobat cap presentation context vàlid dels que hem configuarat a la connexió pacsserver.cpp
         const char *modalityName = dcmSOPClassUIDToModality( sopClass );
 
         if ( !modalityName ) modalityName = dcmFindNameOfUID( sopClass );
@@ -143,6 +140,7 @@ Status StoreImages::store( QList<Image*> imageListToStore )
     ProcessImageSingleton* piSingleton;
     QString statusMessage;
 
+    //A la connexió del Pacs ja s'han establert els PresentationContext (SopClass-TransferSyntax) amb els que s'enviara les imatges
     //If not connection has been setted, return error because we need a PACS connection
     if ( m_assoc == NULL )
     {
@@ -157,6 +155,8 @@ Status StoreImages::store( QList<Image*> imageListToStore )
         cond = storeSCU( m_assoc, qPrintable(imageToStore->getPath()) );
         piSingleton->process(imageToStore->getParentSeries()->getParentStudy()->getInstanceUID(), imageToStore);
 
+        /*TODO Al fallar un de les imatges quina política fem, cancel·lem l'Store o continuem, pensem que si cancel·lem
+         *les imatges que ja s'hagin pujat ja estaran guardades*/
         if ( m_lastStatusCode != STATUS_Success ) 
         {
             ERROR_LOG( QString("Error %1 al fer el store de la imatge " ).arg( m_lastStatusCode ) + imageToStore->getPath() );
