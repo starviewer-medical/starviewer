@@ -32,6 +32,8 @@
 #include <vtkRenderer.h>
 #include <vtkPropPicker.h>
 #include <vtkAlgorithmOutput.h>
+#include <vtkMetaImageWriter.h>
+#include <vtkMetaImageReader.h>
 
 // ITK
 #include <itkRescaleIntensityImageFilter.h>
@@ -133,6 +135,8 @@ void QLandmarkRegistrationExtension::createConnections()
     connect( m_savePushButton , SIGNAL( clicked() ), SLOT( saveTransform () ) );
     connect( m_loadPushButton , SIGNAL( clicked() ), SLOT( loadTransform () ) );
     connect( m_restorePushButton , SIGNAL( clicked() ), SLOT( restore () ) );
+    connect( m_saveRegisteredVolumePushButton , SIGNAL( clicked() ), SLOT( saveTransformedVolume() ) );
+    connect( m_loadVolumePushButton , SIGNAL( clicked() ), SLOT( loadVolume() ) );
     connect( m_tryAgainPushButton , SIGNAL( clicked() ), SLOT( tryAgain () ) );
     connect( m_applyRegistrationPushButton , SIGNAL( clicked() ), SLOT( applyMethod() ) );
 
@@ -164,6 +168,7 @@ void QLandmarkRegistrationExtension::readSettings()
 
     settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
     settings.restoreGeometry( keyPrefix + "verticalSplitter2", m_verticalSplitter2 );
+    m_savingDirectory = settings.getValue( keyPrefix + "savingDirectory", "." ).toString();
 }
 
 void QLandmarkRegistrationExtension::writeSettings()
@@ -173,6 +178,7 @@ void QLandmarkRegistrationExtension::writeSettings()
 
     settings.saveGeometry( keyPrefix + "verticalSplitter" , m_verticalSplitter );
     settings.saveGeometry( keyPrefix + "verticalSplitter2", m_verticalSplitter2 );
+    settings.setValue( keyPrefix + "savingDirectory", m_savingDirectory );
 }
 
 void QLandmarkRegistrationExtension::setInput( Volume *input )
@@ -1087,11 +1093,12 @@ void QLandmarkRegistrationExtension::sliceChanged2( int s )
 
 void QLandmarkRegistrationExtension::saveTransform(  )
 {
-    QString fileName = QFileDialog::getSaveFileName( this, tr("Save Transform file") , QDir::homePath() , tr("all Files (*)") );
+    QString fileName = QFileDialog::getSaveFileName( this, tr("Save Transform file") , m_savingDirectory , tr("MetaImage Files (*.mhd)") );
     if ( !fileName.isEmpty() )
     {
         ofstream fout(qPrintable( fileName ));
         DEBUG_LOG(qPrintable( fileName  ));
+        m_savingDirectory = QFileInfo( fileName ).absolutePath();
 /*
         //old fashion
         for(unsigned int i=0;i<landmarkRegTransform->GetNumberOfParameters();i++)
@@ -1129,11 +1136,12 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         landmarkRegTransform = LandmarkRegTransformType::New();
     }
 
-    QString fileName = QFileDialog::getOpenFileName( this , tr("Chose a transform filename") , QDir::homePath() , tr("all Files (*)") );
+    QString fileName = QFileDialog::getOpenFileName( this , tr("Chose a transform filename") , m_savingDirectory , tr("MetaImage Files (*.mhd)") );
     if ( !fileName.isEmpty() )
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
         ifstream fin(qPrintable( fileName ));
+        m_savingDirectory = QFileInfo( fileName ).absolutePath();
         //std::cout<<qPrintable( fileName  )<<std::endl;
         /*
         //old fashion
@@ -1245,6 +1253,87 @@ void QLandmarkRegistrationExtension::loadTransform(  )
 
         QApplication::restoreOverrideCursor();
         //std::cout<<"EndApply"<<std::endl;
+    }
+}
+
+void QLandmarkRegistrationExtension::saveTransformedVolume(  )
+{
+    if(m_registeredVolume)
+    {
+        QString fileName = QFileDialog::getSaveFileName( this, tr("Save Transformed Volume file"), m_savingDirectory , tr("MetaImage Files (*.mhd)") );
+        if ( !fileName.isEmpty() )
+        {
+            if( QFileInfo( fileName ).suffix() != "mhd" )
+            {
+                fileName += ".mhd";
+            }
+            m_savingDirectory = QFileInfo( fileName ).absolutePath();
+    
+            vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
+            writer->SetFileName(qPrintable( fileName ));
+            writer->SetFileDimensionality(3);
+            writer->SetInput(m_registeredVolume->getVtkData());
+            writer->Write();
+    
+            writer->Delete();
+        }
+    }
+}
+
+void QLandmarkRegistrationExtension::loadVolume(  )
+{
+    bool ok;
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open Moving Volume"), m_savingDirectory, tr("MetaImage Files (*.mhd)"));
+
+    if ( !fileName.isEmpty() )
+    {
+        if( QFileInfo( fileName ).suffix() != "mhd" )
+        {
+            fileName += ".mhd";
+        }
+        m_savingDirectory = QFileInfo( fileName ).absolutePath();
+    
+        vtkMetaImageReader *reader = vtkMetaImageReader::New();
+        reader->SetFileName(qPrintable( fileName ));
+    
+        switch( reader->CanReadFile( qPrintable(fileName) ) )
+        {
+            case 0: // no és un arxiu mhd :(
+                ok = false;
+                break;
+    
+            case 1: // I think I can read the file but I cannot prove it
+            case 2: // I definitely can read the file
+            case 3: // I can read the file and I have validated that I am the correct reader for this file
+                ok = true;
+                break;
+        }
+        
+        if(ok)
+        {   
+            reader->Update();
+            m_firstVolume->setData(reader->GetOutput());
+            std::cout<<reader->GetOutput()->GetOrigin()[0]<<" "<<reader->GetOutput()->GetOrigin()[1]<<" "<<reader->GetOutput()->GetOrigin()[2]<<std::endl;
+            std::cout<<m_firstVolume->getOrigin()[0]<<" "<<m_firstVolume->getOrigin()[1]<<" "<<m_firstVolume->getOrigin()[2]<<std::endl;
+            m_seriesLabel->setVisible(false);
+            m_seriesSpinBox->setVisible(false);
+            m_2DView->setInput( m_firstVolume );
+        
+            int* dim;
+            dim = m_firstVolume->getDimensions();
+            m_sliceViewSlider->setMinimum(0);
+            m_sliceViewSlider->setMaximum(dim[2]-1);
+            m_sliceSpinBox->setMinimum(0);
+            m_sliceSpinBox->setMaximum(dim[2]-1);
+            m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
+        
+            m_tryAgainPushButton->setEnabled(false);
+        
+            m_2DView->setCursor(Qt::CrossCursor);
+            m_2DView_2->setCursor(Qt::CrossCursor);
+            m_2DView->render();
+            reader->Delete();
+        }
     }
 }
 
