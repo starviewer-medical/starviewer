@@ -427,6 +427,20 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="m_saveRegisteredVolumePushButton" >
+           <property name="text" >
+            <string>Save Registered Volume</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadVolumePushButton" >
+           <property name="text" >
+            <string>Load Volume</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="m_restorePushButton" >
            <property name="text" >
             <string>Restore</string>
@@ -604,7 +618,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../main/main.qrc" />
+  <include location="../../../main/main.qrc" />
  </resources>
  <connections>
   <connection>

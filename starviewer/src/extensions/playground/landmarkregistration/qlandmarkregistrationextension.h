@@ -104,6 +104,10 @@ private slots:
     ///Carrega una transformada a partir del fitxer de registre
     void loadTransform(  );
 
+    ///Desa el volum transformat resultant del registre
+    void saveTransformedVolume(  );
+    void loadVolume(  );
+
     ///Reinicialitza l'extensió
     void restore(  );
 
@@ -156,6 +160,9 @@ private:
     /// Accions
     QAction *m_rotateClockWiseAction;
     QAction *m_rotateCounterClockWiseAction;
+
+    ///Directori on guardem les dades
+    QString m_savingDirectory;
 
     /// El Tool Manager
     ToolManager *m_toolManager;
