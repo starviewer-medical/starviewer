@@ -20,6 +20,7 @@
 #include "statswatcher.h"
 #include "databaseinstallation.h"
 #include "interfacesettings.h"
+#include "coresettings.h" // pel languageLocaleKey
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
@@ -339,7 +340,7 @@ void QApplicationMainWindow::createLanguageMenu()
 QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
-    QString defaultLocale = settings.getValue( InterfaceSettings::languageLocaleKey, QLocale::system().name()).toString();
+    QString defaultLocale = settings.getValue( CoreSettings::languageLocaleKey, QLocale::system().name()).toString();
 
     QAction *action = new QAction(this);
     action->setText(language);
@@ -353,7 +354,7 @@ QAction *QApplicationMainWindow::createLanguageAction(const QString &language, c
 void QApplicationMainWindow::switchToLanguage(QString locale)
 {
     Settings settings;
-    settings.setValue(InterfaceSettings::languageLocaleKey, locale);
+    settings.setValue(CoreSettings::languageLocaleKey, locale);
 
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
