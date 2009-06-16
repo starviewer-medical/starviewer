@@ -1,7 +1,7 @@
 #include "interfacesettings.h"
 #include "settingsregistry.h"
 
-#include <QLocale> // pel languageLocaleKey
+
 #include <QDir>
 
 namespace udg {
@@ -13,7 +13,6 @@ const QString InterfaceSettings::openDirectoryLastPathKey( openBaseKey + "workin
 const QString InterfaceSettings::openFileLastFileExtensionKey( openBaseKey + "defaultExtension" );
 
 const QString InterfaceSettings::applicationMainWindowGeometryKey("geometry");
-const QString InterfaceSettings::languageLocaleKey("Starviewer-Language/languageLocale");
 
 InterfaceSettings::InterfaceSettings()
 {
@@ -29,7 +28,6 @@ void InterfaceSettings::init()
     settingsRegistry->addSetting( openFileLastPathKey, QDir::homePath() );
     settingsRegistry->addSetting( openDirectoryLastPathKey, QDir::homePath()  );
     settingsRegistry->addSetting( openFileLastFileExtensionKey, "MetaIO Image (*.mhd)" );
-    settingsRegistry->addSetting( languageLocaleKey, QLocale::system().name()  );
 }
 
 } // end namespace udg 

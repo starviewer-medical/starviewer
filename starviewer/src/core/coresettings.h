@@ -13,7 +13,7 @@ public:
 
     void init();
 
-    /// Declaraci� de claus
+    /// Declaració de claus
     static const QString screenShotToolFolderKey;
     static const QString screenShotToolFileExtensionKey;
     static const QString screenShotToolFilenameKey;
@@ -35,6 +35,8 @@ public:
     static const QString functionForHighQualityObscurancesKey;
     static const QString variantForHighQualityObscurancesKey;
     static const QString gradientRadiusForHighQualityObscurancesKey;
+
+    static const QString languageLocaleKey;
 };
 
 } // end namespace udg 

@@ -3,6 +3,7 @@
 
 #include "starviewerapplication.h"
 #include <QDir>
+#include <QLocale> // pel languageLocaleKey
 
 namespace udg {
 
@@ -37,6 +38,8 @@ const QString CoreSettings::functionForHighQualityObscurancesKey( highQualityObs
 const QString CoreSettings::variantForHighQualityObscurancesKey( highQualityObscurancesBaseKey + "variant" );
 const QString CoreSettings::gradientRadiusForHighQualityObscurancesKey( highQualityObscurancesBaseKey + "gradientRadius" );
 
+const QString CoreSettings::languageLocaleKey("Starviewer-Language/languageLocale");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -52,6 +55,8 @@ void CoreSettings::init()
     settingsRegistry->addSetting( screenShotToolFileExtensionKey, QObject::tr("PNG (*.png)") );
     settingsRegistry->addSetting( userHangingProtocolsPathKey, UserHangingProtocolsPath );
     settingsRegistry->addSetting( registerStatLogsKey, false );
+    settingsRegistry->addSetting( languageLocaleKey, QLocale::system().name() );
+    
 }
 
 } // end namespace udg 
