@@ -84,6 +84,16 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="m_saveDiffusionVolumePushButton" >
+                 <property name="text" >
+                  <string/>
+                 </property>
+                 <property name="icon" >
+                  <iconset resource="../../../main/main.qrc" >:/images/filesave.png</iconset>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
             </layout>
