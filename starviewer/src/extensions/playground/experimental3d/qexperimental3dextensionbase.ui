@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
+    <width>475</width>
     <height>715</height>
    </rect>
   </property>
@@ -2131,6 +2131,16 @@
            </property>
            <property name="text">
             <string>EVMI with opacity</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_computeEvmiOpacityUseOtherPushButton">
+           <property name="text">
+            <string>Use another opacity...</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

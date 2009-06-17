@@ -39,6 +39,7 @@ public:
     ViewpointInformationChannel( const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer, const TransferFunction &transferFunction );
 
     void setColorVomiPalette( const QVector<Vector3Float> &colorVomiPalette );
+    void setEvmiOpacityTransferFunction( const TransferFunction &evmiOpacityTransferFunction );
     void setBestViewsParameters( bool fixedNumber, int n, float threshold );
     void setExploratoryTourThreshold( float threshold );
     /**
@@ -132,6 +133,7 @@ private:
     QVector<Vector3Float> m_viewpointColors;
     QVector<Vector3Float> m_colorVomi;
     float m_maximumColorVomi;
+    TransferFunction m_evmiOpacityTransferFunction;
     QVector<float> m_evmiOpacity;
     QVector<float> m_evmiVomi;
     bool m_fixedNumberOfBestViews;

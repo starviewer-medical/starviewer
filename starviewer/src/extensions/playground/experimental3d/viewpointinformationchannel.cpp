@@ -23,7 +23,7 @@ namespace udg {
 
 
 ViewpointInformationChannel::ViewpointInformationChannel( const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer, const TransferFunction &transferFunction )
-        : m_viewpointGenerator( viewpointGenerator ), m_volume( volume ), m_viewer( viewer ), m_transferFunction( transferFunction )
+        : QObject(), m_viewpointGenerator( viewpointGenerator ), m_volume( volume ), m_viewer( viewer ), m_transferFunction( transferFunction )
 {
     m_backgroundColor = m_viewer->getBackgroundColor();
     m_viewpoints = m_viewpointGenerator.viewpoints();
@@ -211,6 +211,12 @@ void ViewpointInformationChannel::setColorVomiPalette( const QVector<Vector3Floa
         DEBUG_LOG( QString( "v%1: %2 -> %3" ).arg( i+1 ).arg( m_viewpoints.at( i ).toString() ).arg( m_viewpointColors.at( i ).toString() ) );
     }
 #endif
+}
+
+
+void ViewpointInformationChannel::setEvmiOpacityTransferFunction( const TransferFunction &evmiOpacityTransferFunction )
+{
+    m_evmiOpacityTransferFunction = evmiOpacityTransferFunction;
 }
 
 
@@ -756,7 +762,7 @@ void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointE
         unsigned short *voxels = reinterpret_cast<unsigned short*>( m_volume->getImage()->GetScalarPointer() );
         for ( int j = 0; j < nVoxels; j++ )
         {
-            ppZOpacity[j] = m_voxelProbabilities.at( j ) * m_transferFunction.getOpacity( voxels[j] );
+            ppZOpacity[j] = m_voxelProbabilities.at( j ) * m_evmiOpacityTransferFunction.getOpacity( voxels[j] );
             total += ppZOpacity.at( j );
         }
         for ( int j = 0; j < nVoxels; j++ ) ppZOpacity[j] /= total;
@@ -1299,7 +1305,7 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
         unsigned short *voxels = reinterpret_cast<unsigned short*>( m_volume->getImage()->GetScalarPointer() );
         for ( int j = 0; j < nVoxels; j++ )
         {
-            ppZOpacity[j] = m_voxelProbabilities.at( j ) * m_transferFunction.getOpacity( voxels[j] );
+            ppZOpacity[j] = m_voxelProbabilities.at( j ) * m_evmiOpacityTransferFunction.getOpacity( voxels[j] );
             total += ppZOpacity.at( j );
         }
         for ( int j = 0; j < nVoxels; j++ ) ppZOpacity[j] /= total;

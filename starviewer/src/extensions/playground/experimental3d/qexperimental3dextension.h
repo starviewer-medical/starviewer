@@ -68,6 +68,8 @@ public slots:
     void loadColorVomi( QString fileName = QString() );
     /// Desa la color VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveColorVomi( QString fileName = QString() );
+    /// Carrega des d'un fitxer la funció de transferència d'on s'agafarà l'opacitat per calcular l'EVMI amb opacitat. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadEvmiOpacityOtherTransferFunction( QString fileName = QString() );
     /// Carrega l'EVMI amb opacitat des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadEvmiOpacity( QString fileName = QString() );
     /// Desa la l'EVMI amb opacitat a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -235,6 +237,7 @@ private:
     QVector<Vector3Float> m_colorVomiPalette;
     QVector<Vector3Float> m_colorVomi;
     float m_maximumColorVomi;
+    TransferFunction m_evmiOpacityTransferFunction;
     QVector<float> m_evmiOpacity;
     QVector<float> m_evmiVomi;
     QList< QPair<int, Vector3> > m_bestViews;
