@@ -404,6 +404,27 @@ void QExperimental3DExtension::saveColorVomi( QString fileName )
 }
 
 
+void QExperimental3DExtension::loadEvmiOpacityOtherTransferFunction( QString fileName )
+{
+    if ( !m_computeEvmiOpacityUseOtherPushButton->isChecked() ) return;
+
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( "transferFunctionDir", tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    TransferFunction *transferFunction;
+
+    if ( fileName.endsWith( ".xml" ) ) transferFunction = TransferFunctionIO::fromXmlFile( fileName );
+    else transferFunction = TransferFunctionIO::fromFile( fileName );
+
+    m_evmiOpacityTransferFunction = *transferFunction;
+
+    delete transferFunction;
+}
+
+
 void QExperimental3DExtension::loadEvmiOpacity( QString fileName )
 {
     if ( fileName.isEmpty() )
@@ -876,6 +897,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadColorVomiPalettePushButton, SIGNAL( clicked() ), SLOT( loadColorVomiPalette() ) );
     connect( m_loadColorVomiPushButton, SIGNAL( clicked() ), SLOT( loadColorVomi() ) );
     connect( m_saveColorVomiPushButton, SIGNAL( clicked() ), SLOT( saveColorVomi() ) );
+    connect( m_computeEvmiOpacityUseOtherPushButton, SIGNAL( clicked() ), SLOT( loadEvmiOpacityOtherTransferFunction() ) );
     connect( m_loadEvmiOpacityPushButton, SIGNAL( clicked() ), SLOT( loadEvmiOpacity() ) );
     connect( m_saveEvmiOpacityPushButton, SIGNAL( clicked() ), SLOT( saveEvmiOpacity() ) );
     connect( m_loadEvmiVomiPushButton, SIGNAL( clicked() ), SLOT( loadEvmiVomi() ) );
@@ -1692,10 +1714,17 @@ void QExperimental3DExtension::computeSelectedVmi()
     // Paleta de colors per la color VoMI
     if ( computeColorVomi ) viewpointInformationChannel.setColorVomiPalette( m_colorVomiPalette );
 
+    // Funció de transferència per l'EVMI amb opacitat
+    if ( computeEvmiOpacity )
+    {
+        if ( m_computeEvmiOpacityUseOtherPushButton->isChecked() ) viewpointInformationChannel.setEvmiOpacityTransferFunction( m_evmiOpacityTransferFunction );
+        else viewpointInformationChannel.setEvmiOpacityTransferFunction( m_transferFunctionEditor->transferFunction() );
+    }
+
     // Paràmetres extres per calcular les millors vistes (els passem sempre perquè tinguin algun valor, per si s'ha de calcular el guided tour per exemple)
     viewpointInformationChannel.setBestViewsParameters( m_computeBestViewsNRadioButton->isChecked(), m_computeBestViewsNSpinBox->value(), m_computeBestViewsThresholdDoubleSpinBox->value() );
 
-    // Llinda per calcular l'exploratory tour
+    // Llindar per calcular l'exploratory tour
     viewpointInformationChannel.setExploratoryTourThreshold( m_computeExploratoryTourThresholdDoubleSpinBox->value() );
 
     // Filtratge de punts de vista
