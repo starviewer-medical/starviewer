@@ -87,12 +87,10 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
 #ifndef STARVIEWER_LITE
     action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()), tr("Ctrl+M"));
     (void) new QShortcut(action->shortcut(), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
-#endif
 
-    //TODO: No funciona correctament el store al PACS per això ho deixem comentat per a que en les pròximes release no aparegui en el menú aquesta opció
-    /*action = m_contextMenuQStudyTreeWidgetCache.addAction(QIcon(":/images/store.png"), tr("Store to PACS"), this, SLOT(storeStudiesToPacs()), tr("Ctrl+S"));
-    (void) new QShortcut(action->shortcut(), this, SLOT(storeStudiesToPacs()));
-    */
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Store to PACS"), this, SLOT(selectedStudiesStoreToPacs()), tr("Ctrl+S"));
+    (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
+#endif
     m_studyTreeWidget->setContextMenu(&m_contextMenuQStudyTreeWidget);//Especifiquem que és el menú per la cache
 }
 
@@ -334,6 +332,21 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
     view(selectedStudiesInstanceUID, m_seriesListWidget->getCurrentSeriesUID());
 
     StatsWatcher::log("Obrim estudi seleccionant sèrie desde thumbnail");
+}
+
+/*TODO en comptes de fer un signal cap a la queryscreen, perquè aquesta indiqui a la QInputOutPacsWidget que guardi un estudi al PACS
+ *, no hauria de ser aquesta funció l'encarregada de guardar l'estudi directament al PACS, entenc que no és responsabilitat de 
+ * QInputOutputPacsWidget
+ */
+void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
+{
+    QList<Study*> selectedStudies = m_studyTreeWidget->getSelectedStudies();
+
+    if (selectedStudies.count() == 0)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store"));
+    }
+    else emit storeStudiesToPacs(selectedStudies);
 }
 
 void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()

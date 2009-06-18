@@ -47,7 +47,7 @@ public:
     void queryStudy(DicomMask queryMask, QList<PacsParameters> pacsToQuery);
 
     //TODO: per implementar
-    void storeStudiesToPacs();
+    void storeStudiesToPacs(PacsParameters pacs, QList<Study*> studiesToStore);
 
     ///Neteja els resultats de la última cerca
     void clear();
