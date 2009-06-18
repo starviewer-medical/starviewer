@@ -117,6 +117,13 @@ void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
 
 void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameters> pacsToQuery)
 {
+    if (pacsToQuery.count() == 0)
+    {
+        QMessageBox::information(this, ApplicationNameString, tr("You have to select at least one PACS to query."));
+        
+        return;
+    }
+
     if (AreValidQueryParameters(&queryMask, pacsToQuery))
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -150,71 +157,45 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameter
     }
 }
 
-void QInputOutputPacsWidget::storeStudiesToPacs()
+void QInputOutputPacsWidget::storeStudiesToPacs(PacsParameters pacsToStore, QList<Study*> studiesToStore)
 {
-    /*QList<PacsParameters> selectedPacsList;
-    QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    selectedPacsList = m_PACSNodes->getSelectedPacs(); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
-
-    if(selectedPacsList.size() == 0)
+    /*if(selectedPacsList.size() == 0)
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("You have to select a PACS to store the study in"));
-    }
-    else if(selectedPacsList.size() == 1)
+    }*/
+    /*else if(selectedPacsList.size() == 1)
     {
-        foreach(QString studyUID, studiesUIDList)
-        {
-            PacsManager pacsManager;
-            PacsParameters pacs;
-            Operation storeStudyOperation;
-            Study *study;
-            LocalDatabaseManager localDatabaseManager;
-            QList<Patient*> patientList;
+      */  
 
-            DicomMask dicomMask;
-            dicomMask.setStudyUID(studyUID);
-            patientList = localDatabaseManager.queryPatientStudy(dicomMask);
-//            if(showDatabaseManagerError(localDatabaseManager.getLastError()))    return;
+    foreach(Study *studyToStore, studiesToStore)
+    {
+        PacsManager pacsManager;
+        Operation storeStudyOperation;
+        DicomMask dicomMask;
+        dicomMask.setStudyUID(studyToStore->getInstanceUID());
 
-            // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
-            // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
-            if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
-            {
-//                showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
-                return;
-            }
+        storeStudyOperation.setPatientName(studyToStore->getParentPatient()->getFullName());
+        storeStudyOperation.setPatientID(studyToStore->getParentPatient()->getID());
+        storeStudyOperation.setStudyUID(studyToStore->getInstanceUID());
+        storeStudyOperation.setStudyID(studyToStore->getID());
+        storeStudyOperation.setPriority(Operation::Low);
+        storeStudyOperation.setOperation(Operation::Move);
+        storeStudyOperation.setDicomMask(dicomMask);
+        storeStudyOperation.setPacsParameters(pacsToStore);
 
-            study = patientList.first()->getStudies().first();
-            Patient *patient = study->getParentPatient();
-
-            storeStudyOperation.setPatientName(patient->getFullName());
-            storeStudyOperation.setPatientID(patient->getID());
-            storeStudyOperation.setStudyUID(study->getInstanceUID());
-            storeStudyOperation.setStudyID(study->getID());
-            storeStudyOperation.setPriority(Operation::Low);
-            storeStudyOperation.setOperation(Operation::Move);
-            storeStudyOperation.setDicomMask(dicomMask);
-
-            delete patient;
-            //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
-            pacs = pacsManager.queryPacs(selectedPacsList.value(0).getPacsID());
-            pacs.setAELocal( PacsParameters::getLocalAETitle());
-            pacs.setTimeOut( PacsParameters::getConnectionTimeout() );
-            storeStudyOperation.setPacsParameters(pacs);
-
-            m_qexecuteOperationThread.queueOperation(storeStudyOperation);
-        }
+        m_qexecuteOperationThread.queueOperation(storeStudyOperation);
     }
+/*    }
     else
     {
         QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, ApplicationNameString, tr("The studies can only be stored to one PACS"));
     }
-
-    QApplication::restoreOverrideCursor();*/
+*/
+    QApplication::restoreOverrideCursor();
 }
 
 void QInputOutputPacsWidget::clear()

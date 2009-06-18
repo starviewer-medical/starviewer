@@ -104,6 +104,9 @@ private slots:
     ///Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
     void viewRetrievedStudyFromPacs(QString studyInstanceUID);
 
+    ///Signal indicant que hi ha estudis que s'han de guardar al PACS
+    void storeStudiesToPacs(QList<Study*> studiesToStore);
+
 private:
 
     #ifdef STARVIEWER_LITE //Al fer remove de la pestanya del pacs es canvia el index de cada tab, per això hem de redefinir-lo pel cas de StarviewerLite

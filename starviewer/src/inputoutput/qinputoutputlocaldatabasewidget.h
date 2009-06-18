@@ -25,6 +25,7 @@ class DicomMask;
 class Patient;
 class StatsWatcher;
 class QCreateDicomdir;
+class Study;
 
 /** 
  * Widget en el que controla les operacions d'entrada/sortida de la base de dades local
@@ -68,6 +69,9 @@ signals:
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewPatients(QList<Patient*>);
 
+    ///Signal indicant que aquests estudis s'han de guardar a un PACS
+    void storeStudiesToPacs(QList<Study*> storeStudiesToPacs);
+
 private:
     ///Crea les connexions entre signals i slots
     void createConnections();
@@ -107,6 +111,9 @@ private slots:
 
     ///Visualitza els estudis seleccionats a la QStudyTreeWidget
     void viewFromQStudyTreeWidget();
+
+    ///Fa signal indicant que els estudis seleccionats s'han de guardar al PACS
+    void selectedStudiesStoreToPacs();
 
     ///Guarda la posició de l'splitter quan l'han mogut
     void qSplitterPositionChanged();

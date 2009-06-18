@@ -160,6 +160,8 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(operationStateChange()), SLOT(updateOperationsInProgressMessage()));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyWillBeDeletedFromDatabase(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
+
+    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeStudiesToPacs(QList<Study*> )), SLOT(storeStudiesToPacs(QList<Study*> )));
 }
 
 void QueryScreen::checkRequeriments()
@@ -292,6 +294,24 @@ void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
 
     //Indiquem que volem veure un estudi que està guardat a la base de dades
     m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "");
+}
+
+void QueryScreen::storeStudiesToPacs(QList<Study*> studiesToStore)
+{
+    QList<PacsParameters> selectedPacs = m_PACSNodes->getSelectedPacs();
+
+    if (selectedPacs.count() == 0)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("You have to select a PACS to store the study in."));
+    }
+    else if (selectedPacs.count() > 1)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("The studies can only be stored to one PACS"));
+    }
+    else
+    {
+        m_qInputOutputPacsWidget->storeStudiesToPacs(selectedPacs.at(0), studiesToStore); 
+    }
 }
 
 void QueryScreen::refreshTab( int index )
