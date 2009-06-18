@@ -8,7 +8,6 @@
 
 #include "pacsconnection.h"
 #include "status.h"
-#include "starviewersettings.h"
 #include "pacsserver.h"
 #include "dicommask.h"
 #include "errordcmtk.h"
@@ -75,7 +74,6 @@ Status QueryPacs::query()
     T_DIMSE_C_FindRSP rsp;
     DcmDataset *statusDetail = NULL;
     Status state;
-    StarviewerSettings settings;
 
     //If not connection has been setted, return error because we need a PACS connection
     if ( m_assoc == NULL )

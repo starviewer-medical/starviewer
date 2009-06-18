@@ -18,7 +18,6 @@
 #include "processimagesingleton.h"
 #include "logging.h"
 #include "pacsconnection.h"
-#include "starviewersettings.h"
 #include "errordcmtk.h"
 #include "image.h"
 #include "series.h"
@@ -65,7 +64,6 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     DIC_UI sopClass;
     DIC_UI sopInstance;
     DcmDataset *statusDetail = NULL;
-    StarviewerSettings settings;
 
     OFBool unsuccessfulStoreEncountered = OFTrue; // assumption
 
