@@ -11,7 +11,7 @@
 #include <QMovie>
 
 #include "qpacslist.h"
-#include "starviewersettings.h"
+#include "inputoutputsettings.h"
 #include "operation.h"
 #include "pacsmanager.h"
 #include "logging.h"
@@ -27,7 +27,6 @@
 #include "statswatcher.h"
 #include "multiplequerystudy.h"
 #include "pacsparameters.h"
-#include "settings.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -67,7 +66,7 @@ QueryScreen::QueryScreen( QWidget *parent )
      *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
-    if (StarviewerSettings().getListenRisRequests()) 
+    if (Settings().getValue(InputOutputSettings::listenToRISRequestsKey, true).toBool()) 
         m_listenRISRequestThread->listen(); 
 #endif
 
@@ -94,8 +93,6 @@ QueryScreen::~QueryScreen()
 
 void QueryScreen::initialize()
 {
-    StarviewerSettings settings;
-
     //indiquem que la llista de Pacs no es mostra
     m_showPACSNodes = false;
     m_PACSNodes->setVisible(false);
@@ -121,11 +118,14 @@ void QueryScreen::initialize()
     m_operationAnimation->hide();
     m_labelOperation->hide();
     refreshTab( LocalDataBaseTab );
-
-    #ifndef STARVIEWER_LITE
+    
+#ifndef STARVIEWER_LITE
+    Settings settings;
     m_listenRISRequestThread = new ListenRISRequestThread(this);
-    if (settings.getListenRisRequests()) m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
-    #endif
+    if (settings.getValue(InputOutputSettings::listenToRISRequestsKey, true).toBool()) 
+        m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
+#endif
+
 }
 
 void QueryScreen::createConnections()
@@ -172,12 +172,13 @@ void QueryScreen::checkRequeriments()
 
 void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
 {
-    StarviewerSettings settings;
+    Settings settings;
+    int localPort = PacsParameters::getQueryRetrievePort();
 
-    if (Utils::isPortInUse(settings.getLocalPort().toInt()))
+    if ( Utils::isPortInUse( localPort ) )
     {
-        QString message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(settings.getLocalPort());
-        message += tr("\n\n%1 couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.").arg(ApplicationNameString, settings.getLocalPort());
+        QString message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(localPort);
+        message += tr("\n\n%1 couldn't retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.").arg(ApplicationNameString, localPort);
         message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
 
         QMessageBox::warning(this, ApplicationNameString, message);
@@ -404,7 +405,7 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
 {
     MultipleQueryStudy multipleQueryStudy;
     DicomMask maskStudyToRetrieve;
-    StarviewerSettings settings;
+    Settings settings;
 
     m_qpopUpRisRequestsScreen->setAccessionNumber(maskRisRequest.getAccessionNumber()); //Mostrem el popUP amb l'accession number
 
@@ -437,7 +438,7 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
             QString pacsID = multipleQueryStudy.getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()];
 
             maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
-            m_qInputOutputPacsWidget->retrieve(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), pacsID, maskStudyToRetrieve, study);
+            m_qInputOutputPacsWidget->retrieve( settings.getValue( InputOutputSettings::risRequestViewOnceRetrievedKey, true ).toBool(), pacsID, maskStudyToRetrieve, study);
         }
     }
 }
@@ -476,16 +477,16 @@ void QueryScreen::errorQueringStudiesPacs(QString PacsID)
 void QueryScreen::showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError error)
 {
     QString message;
-    StarviewerSettings settings;
-
+    Settings settings;
+    int risPort = settings.getValue( InputOutputSettings::risRequestsPortKey, 11110 ).toInt();
     switch(error)
     {
         case ListenRISRequestThread::risPortInUse :
-            message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(settings.getListenPortRisRequests());
+            message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
             message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case ListenRISRequestThread::unknowNetworkError :
-            message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(settings.getListenPortRisRequests());
+            message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
             message += tr("\nIf the problem persist contact with an administrator.");
             break;
     }

@@ -14,11 +14,10 @@
 #include "pacsparameters.h"
 #include "pacsmanager.h"
 #include "starviewerapplication.h"
-#include "starviewersettings.h"
 #include "logging.h"
 #include "utils.h"
 #include "localdatabasemanager.h"
-#include "settings.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
 
@@ -91,12 +90,11 @@ void QConfigurationScreen::configureInputValidator()
 void QConfigurationScreen::loadPacsDefaults()
 {
     QString result;
-    StarviewerSettings settings;
-
-    m_textAETitleMachine->setText( settings.getAETitleMachine() );
-    m_textLocalPort->setText( settings.getLocalPort() );
-    m_textTimeout->setText( settings.getTimeout() );
-    m_textMaxConnections->setText( settings.getMaxConnections() );
+    Settings settings;
+    m_textAETitleMachine->setText( PacsParameters::getLocalAETitle() );
+    m_textLocalPort->setText( QString::number(PacsParameters::getQueryRetrievePort()) );
+    m_textTimeout->setText( QString::number(PacsParameters::getConnectionTimeout()) );
+    m_textMaxConnections->setText( QString::number(PacsParameters::getMaximumConnections()) );
 }
 
 /************************************************************************************************************************/
@@ -384,31 +382,31 @@ bool QConfigurationScreen::applyChanges()
 void QConfigurationScreen::applyChangesPacs()
 {
     // TODO realment cal fer INFO LOGS d'això?
-    StarviewerSettings settings;
+    Settings settings;
 
     if ( m_textAETitleMachine->isModified() )
     {
         INFO_LOG( "Modificació del AETitle de la màquina: " + m_textAETitleMachine->text() );
-        settings.setAETitleMachine(m_textAETitleMachine->text());
+        settings.setValue( InputOutputSettings::localAETitleKey, m_textAETitleMachine->text() );
     }
 
     if ( m_textTimeout->isModified() )
     {
         INFO_LOG( "Modificació del valor del timeout " + m_textTimeout->text() );
-        settings.setTimeout(m_textTimeout->text());
+        settings.setValue(InputOutputSettings::pacsConnectionTimeoutKey, m_textTimeout->text());
     }
 
     if ( m_textLocalPort->isModified() )
     {
         INFO_LOG( "Modificació del Port d'entrada dels estudis" + m_textLocalPort->text() );
-        settings.setLocalPort( m_textLocalPort->text() );
+        settings.setValue( InputOutputSettings::queryRetrieveLocalPortKey, m_textLocalPort->text() );
         m_textLocalPort->setModified(false);
     }
 
     if ( m_textMaxConnections->isModified() )
     {
         INFO_LOG( "Modificació del nombre màxim de connexions " + m_textMaxConnections->text() );
-        settings.setMaxConnections( m_textMaxConnections->text() );
+        settings.setValue( InputOutputSettings::maximumPACSConnectionsKey, m_textMaxConnections->text() );
     }
 
     m_buttonApplyPacs->setEnabled( false );

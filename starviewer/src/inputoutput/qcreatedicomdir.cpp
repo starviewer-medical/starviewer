@@ -19,16 +19,13 @@
 #include "status.h"
 #include "harddiskinformation.h"
 #include "deletedirectory.h"
-#include "starviewersettings.h"
 #include "starviewerapplication.h"
 #include "study.h"
 #include "patient.h"
-#include "settings.h"
+#include "inputoutputsettings.h"
+#include "localdatabasemanager.h"
 
 namespace udg {
-
-// clau de settings corresponent a aquesta classe
-const QString qCreateDicomdirSettingKey("PACS/interface/qCreateDicomdir/");
 
 QCreateDicomdir::QCreateDicomdir(QWidget *parent)
  : QDialog(parent)
@@ -47,7 +44,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     createConnections();
 
     Settings settings;
-    settings.restoreColumnsWidths(qCreateDicomdirSettingKey,m_dicomdirStudiesList);
+    settings.restoreColumnsWidths(InputOutputSettings::createDicomdirStudyListColumnsWidthKey,m_dicomdirStudiesList);
 
     //TODO:De manera temporal no es mostra la mida del dicomdir perquè no la sabem calcular correctament quan tenim imatges descarregades amb la transfer syntax JpegLossLess
     hideDicomdirSize();
@@ -151,9 +148,7 @@ void QCreateDicomdir::addStudy(Study *study)
 
         // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
         // "a quin directori està aquest study"?
-        StarviewerSettings settings;
-
-        studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(settings.getCacheImagePath() + study->getInstanceUID() + "/");
+        studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + study->getInstanceUID() + "/");
 
         //només comprovem l'espai si gravem a un cd o dvd
         /*if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
@@ -409,14 +404,13 @@ void QCreateDicomdir::removeAllStudies()
 void QCreateDicomdir::removeSelectedStudy()
 {
     qint64 studySizeBytes;
-    StarviewerSettings settings;
 
     if (m_dicomdirStudiesList->selectedItems().count() != 0)
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
-            studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(settings.getCacheImagePath() + "/" + selectedStudy->text(7) + "/"); 
+            studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + "/" + selectedStudy->text(7) + "/"); 
             m_dicomdirSizeBytes = m_dicomdirSizeBytes - studySizeBytes;
             setDicomdirSize();
 
@@ -602,7 +596,7 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
 void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 {
     Settings settings;
-    settings.saveColumnsWidths( qCreateDicomdirSettingKey, m_dicomdirStudiesList );
+    settings.saveColumnsWidths( InputOutputSettings::createDicomdirStudyListColumnsWidthKey, m_dicomdirStudiesList );
     ce->accept();
 }
 

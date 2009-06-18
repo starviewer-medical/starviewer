@@ -10,7 +10,7 @@
 
 #include "../core/starviewerapplication.h"// definicions globals d'aplicació
 #include "../core/logging.h"
-#include "../inputoutput/starviewersettings.h"
+#include "../inputoutput/inputoutputsettings.h"
 
 #include "qstarviewersapwrapper.h"
 
@@ -75,9 +75,9 @@ int main(int argc, char *argv[])
 
     if (parametersList.count() == 2)
     {
-        udg::StarviewerSettings settings;
+        udg::Settings settings;
 
-        if (settings.getListenRisRequests()) //comprovem si el servei d'escolta del RIS està activat
+        if (settings.getValue(udg::InputOutputSettings::listenToRISRequestsKey, true).toBool()) //comprovem si el servei d'escolta del RIS està activat
         {
             //Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
             retrieveStudy(parametersList.at(1));

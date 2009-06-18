@@ -17,7 +17,6 @@
 #include "series.h"
 #include "image.h"
 #include "status.h"
-#include "starviewersettings.h"
 #include "pacsparameters.h"
 #include "qquerystudythread.h"
 
@@ -28,9 +27,7 @@ namespace udg {
 MultipleQueryStudy::MultipleQueryStudy( QObject *parent )
  : QObject( parent )
 {
-    StarviewerSettings settings;
-
-    m_semaphoreActiveThreads = new QSemaphore( settings.getMaxConnections().toInt( NULL , 10 ) );
+    m_semaphoreActiveThreads = new QSemaphore( PacsParameters::getMaximumConnections() );
 }
 
 void MultipleQueryStudy::setMask( DicomMask mask )

@@ -11,19 +11,16 @@
 #include <QFileDialog>
 #include <QShortcut>
 
-#include "starviewersettings.h"
 #include "status.h"
 #include "logging.h"
 #include "starviewerapplication.h"
 #include "dicommask.h"
 #include "patient.h"
 #include "statswatcher.h"
-#include "settings.h"
+#include "inputoutputsettings.h"
 
 namespace udg
 {
-// Clau de settings del widget
-const QString dicomdirSettingKey("PACS/interface/studyDicomdirList/");
 
 QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWidget( parent )
 {
@@ -33,7 +30,7 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( dicomdirSettingKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreColumnsWidths( InputOutputSettings::dicomdirStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget",this);
     m_statsWatcher->addClicksCounter( m_viewButton );
@@ -44,7 +41,7 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( dicomdirSettingKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths( InputOutputSettings::dicomdirStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputDicomdirWidget::createConnections()
@@ -76,11 +73,11 @@ void  QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
 
 void QInputOutputDicomdirWidget::openDicomdir()
 {
-    StarviewerSettings settings;
+    Settings settings;
     QString dicomdirPath;
     Status state;
 
-    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getLastOpenedDICOMDIRPath(), "DICOMDIR");
+    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getValue( InputOutputSettings::lastOpenedDICOMDIRPathKey, QDir::homePath() ).toString(), "DICOMDIR");
 
     if (!dicomdirPath.isEmpty())//Si és buit no ens han seleccionat cap fitxer
     {
@@ -95,7 +92,7 @@ void QInputOutputDicomdirWidget::openDicomdir()
         else
         {
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
-            settings.setLastOpenedDICOMDIRPath( QFileInfo(dicomdirPath).dir().path() );
+            settings.setValue( InputOutputSettings::lastOpenedDICOMDIRPathKey, QFileInfo(dicomdirPath).dir().path() );
         }
 
         emit clearSearchTexts();//Netegem el filtre de cerca al obrir el dicomdir

@@ -9,12 +9,9 @@
 #include <QCloseEvent>
 #include "operation.h"
 #include "logging.h"
-#include "settings.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
-
-// Clau de settings
-const QString qOperationStateSettingKey("PACS/interface/qOperationState/");
 
 QOperationStateScreen::QOperationStateScreen( QWidget *parent )
  : QDialog( parent )
@@ -27,7 +24,7 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
     createConnections();
 
     Settings settings;
-    settings.restoreColumnsWidths(qOperationStateSettingKey, m_treeRetrieveStudy);
+    settings.restoreColumnsWidths(InputOutputSettings::operationStateColumnsWidthKey, m_treeRetrieveStudy);
 }
 
 QOperationStateScreen::~QOperationStateScreen()
@@ -262,7 +259,7 @@ void QOperationStateScreen::setCancelledOperation(QString studyInstanceUID)
 void QOperationStateScreen::closeEvent( QCloseEvent* ce )
 {
     Settings settings;
-    settings.saveColumnsWidths(qOperationStateSettingKey, m_treeRetrieveStudy);
+    settings.saveColumnsWidths(InputOutputSettings::operationStateColumnsWidthKey, m_treeRetrieveStudy);
     ce->accept();
 }
 

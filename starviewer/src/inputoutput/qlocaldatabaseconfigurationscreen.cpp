@@ -13,7 +13,7 @@
 
 #include "localdatabasemanager.h"
 #include "starviewerapplication.h"
-#include "starviewersettings.h"
+#include "inputoutputsettings.h"
 #include "logging.h"
 
 namespace udg {
@@ -79,19 +79,18 @@ void QLocalDatabaseConfigurationScreen::configureInputValidator()
 
 void QLocalDatabaseConfigurationScreen::loadCacheDefaults()
 {
-    StarviewerSettings settings;
+    Settings settings;
 
-    m_textDatabaseRoot->setText(settings.getDatabasePath());
-    m_textCacheImagePath->setText(settings.getCacheImagePath());
+    m_textDatabaseRoot->setText(LocalDatabaseManager::getDatabaseFilePath());
+    m_textCacheImagePath->setText(LocalDatabaseManager::getCachePath());
 
-    m_textMinimumSpaceRequiredToRetrieve->setText(QString().setNum(settings.getMinimumSpaceRequiredToRetrieveInGbytes()));
-    m_textMaximumDaysNotViewed->setText(settings.getMaximumDaysNotViewedStudy());
-    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setText(QString().setNum(settings.getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable()));
-    m_textMaximumDaysNotViewed->setEnabled(settings.getDeleteOldStudiesHasNotViewedInDays());
-    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setEnabled(settings.getDeleteOldStudiesIfNotEnoughSpaceAvailable());
-    m_checkBoxDeletedOldStudies->setChecked(settings.getDeleteOldStudiesHasNotViewedInDays());
-    m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->setChecked(settings.getDeleteOldStudiesIfNotEnoughSpaceAvailable());
-    
+    m_textMaximumDaysNotViewed->setText(settings.getValue( InputOutputSettings::minimumDaysUnusedToDeleteStudyKey,7).toString() );
+    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setText(QString().setNum( settings.getValue(InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey,2).toInt() ) );
+    m_textMinimumSpaceRequiredToRetrieve->setText(QString().setNum(settings.getValue( InputOutputSettings::minimumFreeGigaBytesForCacheKey, 5 ).toUInt() ));
+    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setEnabled(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey,true).toBool());
+    m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->setChecked(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey,true).toBool());
+    m_checkBoxDeletedOldStudies->setChecked(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool());
+    m_textMaximumDaysNotViewed->setEnabled(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool());
 }
 
 bool QLocalDatabaseConfigurationScreen::validateChanges()
@@ -231,38 +230,38 @@ void QLocalDatabaseConfigurationScreen::examinateCacheImagePath()
 
 void QLocalDatabaseConfigurationScreen::applyChangesCache()
 {
-    StarviewerSettings settings;
+    Settings settings;
 
     //Aquest els guardem sempre
-    settings.setCacheImagePath( m_textCacheImagePath->text() );
-    settings.setDatabasePath( m_textDatabaseRoot->text() );
+    settings.setValue( InputOutputSettings::cachePathKey, m_textCacheImagePath->text() );
+    settings.setValue( InputOutputSettings::databaseAbsoluteFilePathKey, m_textDatabaseRoot->text() );
 
     if ( m_textMinimumSpaceRequiredToRetrieve->isModified() )
     {
         INFO_LOG( "Es modificarà l'espai mínim necessari per descarregar" + m_textMinimumSpaceRequiredToRetrieve->text() );
-        settings.setMinimumSpaceRequiredToRetrieveInGbytes(m_textMinimumSpaceRequiredToRetrieve->text().toUInt());
+        settings.setValue( InputOutputSettings::minimumFreeGigaBytesForCacheKey, m_textMinimumSpaceRequiredToRetrieve->text().toUInt() );
     }
 
     if ( m_textCacheImagePath->isModified() )
     {
         INFO_LOG( "Es modificarà el directori de la cache d'imatges " + m_textCacheImagePath->text() );
-        settings.setCacheImagePath( m_textCacheImagePath->text() );
+        settings.setValue( InputOutputSettings::cachePathKey, m_textCacheImagePath->text() );
     }
 
     if ( m_textMaximumDaysNotViewed->isModified() )
     {
         INFO_LOG( "Es modificarà el nombre maxim de dies d'un estudi a la cache" + m_textMaximumDaysNotViewed->text() );
-        settings.setMaximumDaysNotViewedStudy( m_textMaximumDaysNotViewed->text() );
+        settings.setValue(InputOutputSettings::minimumDaysUnusedToDeleteStudyKey, m_textMaximumDaysNotViewed->text() );
     }
 
     if (m_textSpaceToFreeIfNotEnoughSpaceAvailable->isModified())
     {
         INFO_LOG("Es modificarà el Gbytes a alliberar quan no hi ha suficent espai per descarregar nous estudis" + m_textSpaceToFreeIfNotEnoughSpaceAvailable->text() );
-        settings.setGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable(m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt());
+        settings.setValue(InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey, m_textSpaceToFreeIfNotEnoughSpaceAvailable->text().toUInt());
     }
 
-    settings.setDeleteOldStudiesHasNotViewedInDays(m_checkBoxDeletedOldStudies->isChecked());
-    settings.setDeleteOldStudiesIfNotEnoughSpaceAvailable(m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->isChecked());
+    settings.setValue( InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey, m_checkBoxDeletedOldStudies->isChecked());
+    settings.setValue( InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey, m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->isChecked());
 
     m_buttonApplyCache->setEnabled( false );
 }
@@ -330,7 +329,6 @@ void QLocalDatabaseConfigurationScreen::cacheImagePathEditingFinish()
 
 void QLocalDatabaseConfigurationScreen::createDatabase()
 {
-    StarviewerSettings settings;
     QFile databaseFile;
     QString stringDatabasePath;
 
@@ -346,7 +344,8 @@ void QLocalDatabaseConfigurationScreen::createDatabase()
         }
         else
         {
-            settings.setDatabasePath( m_textDatabaseRoot->text() );
+            Settings settings;
+            settings.setValue( InputOutputSettings::databaseAbsoluteFilePathKey, m_textDatabaseRoot->text() );
             QMessageBox::warning( this , ApplicationNameString , tr( "The application has to be restarted to apply the changes."  ));
             m_createDatabase = true;
         }

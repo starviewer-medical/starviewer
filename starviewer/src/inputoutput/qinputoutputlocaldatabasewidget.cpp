@@ -10,7 +10,6 @@
 #include <QMessageBox>
 #include <QShortcut>
 
-#include "starviewersettings.h"
 #include "status.h"
 #include "logging.h"
 #include "starviewerapplication.h"
@@ -18,7 +17,7 @@
 #include "patient.h"
 #include "statswatcher.h"
 #include "qcreatedicomdir.h"
-#include "settings.h"
+#include "inputoutputsettings.h"
 
 namespace udg
 {
@@ -367,9 +366,10 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
         d'aquesta inferfície */
 void QInputOutputLocalDatabaseWidget::deleteOldStudies()
 {
+    Settings settings;
     /*Mirem si està activada la opció de la configuració d'esborrar els estudis vells no visualitzats en un número de dies determinat
       fem la comprovació, per evitar engegar el thread si no s'han d'esborrar els estudis vells*/
-    if (StarviewerSettings().getDeleteOldStudiesHasNotViewedInDays())
+    if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool())
     {
         m_qdeleteOldStudiesThread.deleteOldStudies();
     }

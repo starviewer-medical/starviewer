@@ -13,7 +13,7 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "databaseconnection.h"
-#include "starviewersettings.h"
+#include "localdatabasemanager.h"
 
 namespace udg {
 
@@ -82,7 +82,6 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
 {
     QString studyInstanceUID;
     Series *series = new Series();
-    StarviewerSettings settings;
 
     studyInstanceUID = reply[1 + row * columns];
 
@@ -104,7 +103,7 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
     series->setManufacturer(reply[16 + row * columns]);
     series->setRetrievedDate(QDate().fromString(reply[17 + row * columns], "yyyyMMdd"));
     series->setRetrievedTime(QTime().fromString(reply[18 + row * columns], "hhmmss"));
-    series->setImagesPath(settings.getCacheImagePath() + "/" + studyInstanceUID + "/" + series->getInstanceUID());
+    series->setImagesPath(LocalDatabaseManager::getCachePath() + "/" + studyInstanceUID + "/" + series->getInstanceUID());
 
     return series;
 }

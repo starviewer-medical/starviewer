@@ -6,8 +6,8 @@
  ***************************************************************************/
 
 #include "qstarviewersapwrapper.h"
-#include "../inputoutput/starviewersettings.h"
 #include "../core/logging.h"
+#include "../inputoutput/inputoutputsettings.h"
 
 #include <QTcpSocket>
 #include <QProcess>
@@ -21,10 +21,10 @@ namespace udg {
 
 void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber)
 {
-    StarviewerSettings settings;
+    Settings settings;
     QTcpSocket tcpSocket;
     QString locaHostAddress = "127.0.0.1";//IP del localhost
-    int starviewerRisPort = settings.getListenPortRisRequests();//Port pel que Starviewer espera peticions del RIS
+    int starviewerRisPort = settings.getValue( InputOutputSettings::listenToRISRequestsKey, 11110 ).toInt();//Port pel que Starviewer espera peticions del RIS
 
     INFO_LOG(QString("QStarviewerSAPWrapper::Demanare a l'Starviewer local pel port %1 la descarrega de l'estudi amb accession number %2").arg(QString().setNum(starviewerRisPort), accessionNumber));
 
@@ -65,10 +65,10 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
 
 bool QStarviewerSAPWrapper::isStarviewerRunning()
 {
-    StarviewerSettings settings;
+    Settings settings;
     QTcpSocket tcpSocket;
     QString locaHostAddress = "127.0.0.1";//IP del localhost
-    int starviewerRisPort = settings.getListenPortRisRequests();//Port pel que Starviewer espera peticions del RIS
+    int starviewerRisPort = settings.getValue( InputOutputSettings::listenToRISRequestsKey, 11110 ).toInt();//Port pel que Starviewer espera peticions del RIS
 
     INFO_LOG(QString("Comprovo si l'Starviewer està engegat. Intentaré connectar amb l'Starviewer pel port: %1").arg(QString().setNum(starviewerRisPort)));
 

@@ -14,7 +14,7 @@
 #include "logging.h"
 #include "errordcmtk.h"
 #include "pacsconnection.h"
-#include "starviewersettings.h"
+#include "localdatabasemanager.h"
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomtagreader.h"
@@ -114,7 +114,6 @@ void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ *req, i
 {
     OFCondition cond = EC_Normal;
     MyCallbackInfo *myCallbackData;
-    StarviewerSettings settings;
 
     myCallbackData = ( MyCallbackInfo* )callbackData;
 }
@@ -151,8 +150,6 @@ void RetrieveImages::storeSCPCallback(
     E_EncodingType    opt_sequenceType = EET_ExplicitLength;
     OFBool            opt_correctUIDPadding = OFFalse;
     E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
-    StarviewerSettings settings;
-    
 
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
@@ -249,7 +246,6 @@ OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc , T_DIMSE_Message
     char imageFileName[2048];
     req = &msg->msg.CStoreRQ;
     OFBool opt_useMetaheader = OFTrue; // I found its default value in movescu.cpp */
-    StarviewerSettings settings;
 
     StoreCallbackData callbackData;
     callbackData.assoc = assoc;
@@ -349,7 +345,6 @@ Status RetrieveImages::retrieve()
     DcmDataset          *statusDetail = NULL;
     MyCallbackInfo      callbackData;
     Status state;
-    StarviewerSettings settings;
 
     //If not connection has been setted, return error because we need a PACS connection
     if ( m_assoc == NULL )
@@ -440,12 +435,11 @@ Status RetrieveImages::retrieve()
 QString RetrieveImages::getCompositeInstanceFileName(DcmDataset *imageDataset)
 {
     QString studyPath, seriesPath;
-    StarviewerSettings settings;
     QDir directory;
     const char *text;
 
     imageDataset->findAndGetString(DCM_StudyInstanceUID, text, false);
-    studyPath = settings.getCacheImagePath() + text;
+    studyPath = LocalDatabaseManager::getCachePath() + text;
 
     //comprovem, si el directori de l'estudi ja està creat
     if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
