@@ -93,7 +93,7 @@ static OFCondition storeSCU( T_ASC_Association * assoc , const char *fname )
     }
     else presId = ASC_findAcceptedPresentationContextID( assoc , sopClass );
 
-    if ( presId != 0 )
+    if ( presId == 0 )
     {
         //No hem trobat cap presentation context vàlid dels que hem configuarat a la connexió pacsserver.cpp
         const char *modalityName = dcmSOPClassUIDToModality( sopClass );
