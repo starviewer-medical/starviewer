@@ -22,7 +22,6 @@
 
 #include <QContextMenuEvent>
 
-#include "starviewersettings.h"
 #include "logging.h"
 #include "patient.h"
 #include "study.h"

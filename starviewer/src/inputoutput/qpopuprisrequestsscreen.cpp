@@ -14,7 +14,6 @@
 
 #include "qpopuprisrequestsscreen.h"
 #include "operation.h"
-#include "starviewersettings.h"
 #include "logging.h"
 #include "starviewerapplication.h"
 

@@ -12,7 +12,6 @@
 
 #include "pacsmanager.h"
 #include "pacsparameters.h"
-#include "starviewersettings.h"
 #include "status.h"
 
 namespace udg {
@@ -56,7 +55,6 @@ void QPacsList::refresh()
 QList<PacsParameters> QPacsList::getSelectedPacs()
 {
     PacsManager pacsManager;
-    StarviewerSettings settings;
 
     QList< QTreeWidgetItem * > qPacsList( m_PacsTreeView->selectedItems() );
     QTreeWidgetItem *item;
