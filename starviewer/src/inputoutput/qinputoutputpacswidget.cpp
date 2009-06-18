@@ -161,15 +161,6 @@ void QInputOutputPacsWidget::storeStudiesToPacs(PacsParameters pacsToStore, QLis
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    /*if(selectedPacsList.size() == 0)
-    {
-        QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, ApplicationNameString, tr("You have to select a PACS to store the study in"));
-    }*/
-    /*else if(selectedPacsList.size() == 1)
-    {
-      */  
-
     foreach(Study *studyToStore, studiesToStore)
     {
         PacsManager pacsManager;
@@ -188,13 +179,7 @@ void QInputOutputPacsWidget::storeStudiesToPacs(PacsParameters pacsToStore, QLis
 
         m_qexecuteOperationThread.queueOperation(storeStudyOperation);
     }
-/*    }
-    else
-    {
-        QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, ApplicationNameString, tr("The studies can only be stored to one PACS"));
-    }
-*/
+
     QApplication::restoreOverrideCursor();
 }
 
