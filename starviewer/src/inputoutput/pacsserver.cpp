@@ -11,6 +11,7 @@
 #include "pacsconnection.h"
 #include "pacsnetwork.h"
 #include "errordcmtk.h"
+#include "logging.h"
 
 namespace udg{
 
@@ -445,6 +446,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     {
         if ( ASC_countAcceptedPresentationContexts(m_params)  ==  0 )
         {
+            ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats.");
             return state.setStatus( DcmtkCanNotConnectError );
         }
     }
