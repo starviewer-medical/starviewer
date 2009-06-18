@@ -12,7 +12,6 @@
 #include <QMessageBox>
 #include <sqlite3.h>
 
-#include "starviewersettings.h"
 #include "databaseconnection.h"
 #include "logging.h"
 #include "deletedirectory.h"
@@ -22,16 +21,19 @@
 namespace udg {
 
 DatabaseInstallation::DatabaseInstallation()
+ : m_qprogressDialog(0)
 {
-    m_qprogressDialog = NULL;
+}
+
+DatabaseInstallation::~DatabaseInstallation()
+{
 }
 
 bool DatabaseInstallation::checkStarviewerDatabase()
 {
-    StarviewerSettings settings;
     LocalDatabaseManager localDatabaseManager;
-	m_errorMessage = "";
-	bool isCorrect;
+    m_errorMessage = "";
+    bool isCorrect;
 
     //Comprovem que existeix el path on s'importen les imatges, sinó existeix l'intentarà crear
 	isCorrect = checkLocalImagePath();
@@ -40,7 +42,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     {
         if (!createDatabaseFile())
         {
-            ERROR_LOG("Error no s'ha pogut crear la base de dades a " + settings.getDatabasePath());
+            ERROR_LOG("Error no s'ha pogut crear la base de dades a " + LocalDatabaseManager::getDatabaseFilePath());
 			m_errorMessage.append( tr("\nCan't create database, be sure you have write permissions on database directory") );
             isCorrect = false;
         }
@@ -51,13 +53,13 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         if(!isDatabaseFileWritable())
         {
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
-            ERROR_LOG("L'arxiu de base de dades [" + settings.getDatabasePath() + "] no es pot obrir amb permisos d'escriptura. no podrem guardar estudis nous ni modificar els ja existents");
+            ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura. no podrem guardar estudis nous ni modificar els ja existents");
 			m_errorMessage.append( tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString) );
         }
 
         if (localDatabaseManager.isDatabaseCorrupted())
         {
-            INFO_LOG("La base de dades està corrupte " + settings.getDatabasePath());
+            INFO_LOG("La base de dades està corrupte " + LocalDatabaseManager::getDatabaseFilePath());
             if (!repairDatabase())
             {
                 ERROR_LOG("NO S'HA POGUT REPARAR LA BASE DE DADES");
@@ -74,19 +76,17 @@ bool DatabaseInstallation::checkStarviewerDatabase()
 	}
 
     INFO_LOG("Estat de la base de dades correcte ");
-    INFO_LOG("Base de dades utilitzada : " + settings.getDatabasePath() + " revisió " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
+    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisió " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
     return true;
 }
 
 bool DatabaseInstallation::checkLocalImagePath()
 {
-    StarviewerSettings settings;
-
     if (!existsLocalImagePath())
     {
         if (!createLocalImageDir())
         {
-            ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + settings.getCacheImagePath());
+            ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + LocalDatabaseManager::getCachePath());
 			m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions") );
             return false;
         }
@@ -94,30 +94,28 @@ bool DatabaseInstallation::checkLocalImagePath()
     else
     {
         // comprovar que tenim permisos d'escriptura al directori local d'imatges
-        QFileInfo imagePathInfo( settings.getCacheImagePath() );
+        QFileInfo imagePathInfo( LocalDatabaseManager::getCachePath() );
         if( !imagePathInfo.isWritable() )
         {
-            ERROR_LOG("El directori de la cache d'imatges no té permisos d'escriptura: " + settings.getCacheImagePath() );
+            ERROR_LOG("El directori de la cache d'imatges no té permisos d'escriptura: " + LocalDatabaseManager::getCachePath() );
 			m_errorMessage.append( tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies.") );
             return false;
         }
     }
 
     INFO_LOG("Estat de la cache d'imatges correcte ");
-    INFO_LOG("Cache d'imatges utilitzada : " + settings.getCacheImagePath());
+    INFO_LOG("Cache d'imatges utilitzada : " + LocalDatabaseManager::getCachePath());
 
     return true;
 }
 
 bool DatabaseInstallation::checkDatabasePath()
 {
-    StarviewerSettings settings;
-
     if (!existsDatabasePath())
     {
         if (!createDatabaseDirectory())
         {
-            ERROR_LOG("Error el path de la base de dades no s'ha pogut crear " + settings.getDatabasePath());
+            ERROR_LOG("Error el path de la base de dades no s'ha pogut crear " + LocalDatabaseManager::getDatabaseFilePath());
             return false;
         }
     }
@@ -166,9 +164,7 @@ bool DatabaseInstallation::repairDatabase()
 
 bool DatabaseInstallation::isDatabaseFileWritable()
 {
-    StarviewerSettings settings;
-
-    QFileInfo databaseFilePath(settings.getDatabasePath());
+    QFileInfo databaseFilePath(LocalDatabaseManager::getDatabaseFilePath());
     
     return databaseFilePath.isWritable();
 }
@@ -176,7 +172,6 @@ bool DatabaseInstallation::isDatabaseFileWritable()
 bool DatabaseInstallation::reinstallDatabase()
 {
     QDir databaseFile;
-    StarviewerSettings settings;
     DeleteDirectory *deleteDirectory = new DeleteDirectory();
 
     if (m_qprogressDialog == NULL)
@@ -191,14 +186,14 @@ bool DatabaseInstallation::reinstallDatabase()
     if (existsDatabaseFile())
     {
         QFile databaseFile;
-        databaseFile.remove(settings.getDatabasePath());
+        databaseFile.remove(LocalDatabaseManager::getDatabaseFilePath());
     }
 
     createDatabaseFile();
 
     //Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les, i per cada directori esborrat movem la barra de progrés
     connect(deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
-    deleteDirectory->deleteDirectory(settings.getCacheImagePath(), false);
+    deleteDirectory->deleteDirectory(LocalDatabaseManager::getCachePath(), false);
     delete deleteDirectory;
 
     m_qprogressDialog->close();
@@ -229,51 +224,46 @@ bool DatabaseInstallation::updateDatabaseRevision()
 
 bool DatabaseInstallation::existsLocalImagePath()
 {
-    StarviewerSettings settings;
     QDir cacheImageDir;
 
-    return cacheImageDir.exists(settings.getCacheImagePath());
+    return cacheImageDir.exists(LocalDatabaseManager::getCachePath());
 }
 
 bool DatabaseInstallation::existsDatabasePath()
 {
-    StarviewerSettings settings;
     QDir databaseDir;
 
-    return databaseDir.exists(settings.getDatabasePath());
+    return databaseDir.exists(LocalDatabaseManager::getDatabaseFilePath());
 }
 
 bool DatabaseInstallation::existsDatabaseFile()
 {
-    StarviewerSettings settings;
     QFile databaseFile;
 
-    return databaseFile.exists(settings.getDatabasePath());
+    return databaseFile.exists(LocalDatabaseManager::getDatabaseFilePath());
 }
 
 bool DatabaseInstallation::createLocalImageDir()
 {
-    StarviewerSettings settings;
     QDir cacheImageDir;
 
-    if (cacheImageDir.mkpath(settings.getCacheImagePath()))
+    if (cacheImageDir.mkpath(LocalDatabaseManager::getCachePath()))
     {
-        INFO_LOG("S'ha creat el directori de la cache d'imatges " + settings.getCacheImagePath());
+        INFO_LOG("S'ha creat el directori de la cache d'imatges " + LocalDatabaseManager::getCachePath());
         return true;
     }
     else
     {
-        ERROR_LOG("No s'ha pogut crear el directori de la cache d'imatges " + settings.getCacheImagePath());
+        ERROR_LOG("No s'ha pogut crear el directori de la cache d'imatges " + LocalDatabaseManager::getCachePath());
         return false;
     }
 }
 
 bool DatabaseInstallation::createDatabaseDirectory()
 {
-    StarviewerSettings settings;
     QDir databaseDir;
 
-    QFileInfo databaseFilePath(settings.getDatabasePath());
+    QFileInfo databaseFilePath(LocalDatabaseManager::getDatabaseFilePath());
     QString databasePath = databaseFilePath.path();
 
     if (databaseDir.mkpath(databasePath))
@@ -327,12 +317,9 @@ void DatabaseInstallation::setValueProgressBar()
     m_qprogressDialog->setValue(m_qprogressDialog->value() + 1);
 }
 
-DatabaseInstallation::~DatabaseInstallation()
-{
-}
-
 QString DatabaseInstallation::getErrorMessage()
 {
 	return m_errorMessage;
 }
+
 }

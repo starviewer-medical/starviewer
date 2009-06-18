@@ -67,6 +67,12 @@ public:
 
     bool operator ==(const PacsParameters &parameters);
 
+    // TODO aquests mètodes poden desaparèixer quan estigui enllestit tot el tema de setting
+    static QString getLocalAETitle();
+    static int getMaximumConnections();
+    static int getConnectionTimeout();
+    static int getQueryRetrievePort();
+
 private:
     /// Especifica el port pel qual rebrem imatges
     QString m_localPort; 

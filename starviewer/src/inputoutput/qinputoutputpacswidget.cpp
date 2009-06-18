@@ -10,7 +10,7 @@
 #include <QMessageBox>
 #include <QShortcut>
 
-#include "starviewersettings.h"
+#include "inputoutputsettings.h"
 #include "status.h"
 #include "logging.h"
 #include "starviewerapplication.h"
@@ -26,12 +26,10 @@
 #include "study.h"
 #include "qoperationstatescreen.h"
 #include "processimagesingleton.h"
-#include "settings.h"
+#include "localdatabasemanager.h"
 
 namespace udg
 {
-// clau dels settings d'aquest widget
-const QString pacsWidgetSettingKey("PACS/interface/studyPacsList/");
 
 QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent)
 {
@@ -40,12 +38,12 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( pacsWidgetSettingKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreColumnsWidths( InputOutputSettings::pacsStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
 
     m_multipleQueryStudy = new MultipleQueryStudy();
 
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    m_processImageSingleton->setPath(StarviewerSettings().getCacheImagePath());
+    m_processImageSingleton->setPath( LocalDatabaseManager::getCachePath());
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputPacsWidget",this);
     m_statsWatcher->addClicksCounter(m_viewButton);
@@ -55,7 +53,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 QInputOutputPacsWidget::~QInputOutputPacsWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( pacsWidgetSettingKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths( InputOutputSettings::pacsStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputPacsWidget::createConnections()
@@ -157,7 +155,6 @@ void QInputOutputPacsWidget::storeStudiesToPacs()
     /*QList<PacsParameters> selectedPacsList;
     QStringList studiesUIDList = m_studyTreeWidgetCache->getSelectedStudiesUID();
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    StarviewerSettings settings;
 
     selectedPacsList = m_PACSNodes->getSelectedPacs(); //Emplemen el pacsList amb les pacs seleccionats al QPacsList
 
@@ -168,7 +165,6 @@ void QInputOutputPacsWidget::storeStudiesToPacs()
     }
     else if(selectedPacsList.size() == 1)
     {
-        StarviewerSettings settings;
         foreach(QString studyUID, studiesUIDList)
         {
             PacsManager pacsManager;
@@ -205,8 +201,8 @@ void QInputOutputPacsWidget::storeStudiesToPacs()
             delete patient;
             //cerquem els paràmetres del Pacs al qual s'han de cercar les dades
             pacs = pacsManager.queryPacs(selectedPacsList.value(0).getPacsID());
-            pacs.setAELocal(settings.getAETitleMachine());
-            pacs.setTimeOut(settings.getTimeout().toInt());
+            pacs.setAELocal( PacsParameters::getLocalAETitle());
+            pacs.setTimeOut( PacsParameters::getConnectionTimeout() );
             storeStudyOperation.setPacsParameters(pacs);
 
             m_qexecuteOperationThread.queueOperation(storeStudyOperation);
@@ -519,7 +515,6 @@ void QInputOutputPacsWidget::errorQueringStudiesPacs(QString PacsID)
 void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error)
 {
     QString message;
-    StarviewerSettings settings;
     PacsParameters pacs = PacsManager().queryPacs(pacsID);
 
     switch (error)
@@ -540,7 +535,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             break;
         case QExecuteOperationThread::MoveDestinationAETileUnknown:
             message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAEPacs(), settings.getAETitleMachine());
+            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAEPacs(), PacsParameters::getLocalAETitle() );
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
@@ -577,7 +572,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
-            message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg(StarviewerSettings().getLocalPort());
+           message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsParameters::getQueryRetrievePort() );
             message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
             message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);

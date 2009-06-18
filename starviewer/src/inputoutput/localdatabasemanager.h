@@ -103,8 +103,13 @@ public:
     ///Indica si hi algun estudi descarregant
     bool isStudyRetrieving();
 
-signals:
+    /// Ens dóna la ruta absoluta al fitxer de bases de dades, fitxer de bases de dades inclós
+    static QString getDatabaseFilePath();
 
+    /// Ens dóna la ruta absoluta al directori on es troba la caché
+    static QString getCachePath();
+
+signals:
 	///Aquest signal s'emet per indicar que un estudi serà borrat de la base de dades per alliberar espai
 	void studyWillBeDeleted(const QString &studyInstanceUID);
 

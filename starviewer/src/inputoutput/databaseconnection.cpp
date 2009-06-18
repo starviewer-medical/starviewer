@@ -12,7 +12,7 @@
 #include <QSemaphore>
 #include <QDir>
 #include <QString>
-#include "starviewersettings.h"
+#include "localdatabasemanager.h"
 #include "status.h"
 #include "logging.h"
 
@@ -22,9 +22,7 @@ namespace udg {
 DatabaseConnection::DatabaseConnection()
     : m_databaseConnection(NULL)
 {
-    StarviewerSettings settings;
-
-    m_databasePath = settings.getDatabasePath();
+    m_databasePath = LocalDatabaseManager::getDatabaseFilePath();
     m_transactionLock = new QSemaphore(1);
 }
 

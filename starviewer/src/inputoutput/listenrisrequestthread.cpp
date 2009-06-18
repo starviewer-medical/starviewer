@@ -15,7 +15,7 @@
 
 #include "parsexmlrispierrequest.h"
 #include "logging.h"
-#include "starviewersettings.h"
+#include "inputoutputsettings.h"
 #include "starviewerapplication.h"
 
 namespace udg
@@ -42,9 +42,9 @@ bool ListenRISRequestThread::isListen()
 void ListenRISRequestThread::run()
 {
     QTcpServer tcpRISServer;
-    StarviewerSettings settings;
+    Settings settings;
 
-    if (!tcpRISServer.listen(QHostAddress::Any, settings.getListenPortRisRequests()))
+    if ( !tcpRISServer.listen(QHostAddress::Any, settings.getValue( InputOutputSettings::risRequestsPortKey, 11110 ).toUInt() ) )
     {
         networkError(&tcpRISServer);
         return;
@@ -100,9 +100,9 @@ void ListenRISRequestThread::processRequest(QString risRequestData)
 
 void ListenRISRequestThread::networkError(QTcpServer *tcpServer)
 {
-    StarviewerSettings settings;
+    Settings settings;
 
-    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(settings.getListenPortRisRequests()) + ", error " + tcpServer->errorString());
+    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(settings.getValue( InputOutputSettings::risRequestsPortKey, 11110 ).toUInt() ) + ", error " + tcpServer->errorString());
         
     switch(tcpServer->serverError())
     {

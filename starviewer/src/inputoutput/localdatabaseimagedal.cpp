@@ -17,8 +17,7 @@
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "logging.h"
-
-#include "starviewersettings.h" //TODO arrrgghh!!
+#include "localdatabasemanager.h"
 
 namespace udg {
 
@@ -128,8 +127,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setRetrievedTime(QTime().fromString(reply[26 + row * columns], "hhmmss"));
 
     //TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
-    StarviewerSettings settings;
-    image->setPath( settings.getCacheImagePath() + reply[1 + row * columns] + "/" + reply[2 + row * columns] + "/" + reply[0 + row * columns] );
+    image->setPath( LocalDatabaseManager::getCachePath() + reply[1 + row * columns] + "/" + reply[2 + row * columns] + "/" + reply[0 + row * columns] );
 
     return image;
 }

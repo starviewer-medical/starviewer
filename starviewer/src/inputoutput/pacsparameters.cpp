@@ -1,5 +1,7 @@
-
 #include "pacsparameters.h"
+
+#include "inputoutputsettings.h"
+#include <QHostInfo> // pel getLocalAETitle()
 
 namespace udg{
 
@@ -112,6 +114,30 @@ bool PacsParameters::operator ==(const PacsParameters &parameters)
         && m_pacsLocation == parameters.m_pacsLocation
         && m_pacsID == parameters.m_pacsID
         && m_connectionTimeOut == parameters.m_connectionTimeOut;
+}
+
+QString PacsParameters::getLocalAETitle()
+{
+    Settings settings;
+    return settings.getValue( InputOutputSettings::localAETitleKey, QHostInfo::localHostName() ).toString();
+}
+
+int PacsParameters::getMaximumConnections()
+{
+    Settings settings;
+    return settings.getValue( InputOutputSettings::maximumPACSConnectionsKey, 3 ).toInt();
+}
+
+int PacsParameters::getConnectionTimeout()
+{
+    Settings settings;
+    return settings.getValue( InputOutputSettings::pacsConnectionTimeoutKey, 20 ).toInt();
+}
+
+int PacsParameters::getQueryRetrievePort()
+{
+    Settings settings;
+    return settings.getValue( InputOutputSettings::queryRetrieveLocalPortKey, 4006 ).toInt();
 }
 
 }

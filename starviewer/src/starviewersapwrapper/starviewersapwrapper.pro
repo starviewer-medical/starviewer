@@ -13,10 +13,16 @@ QT += network
 
 HEADERS = ../core/starviewerapplication.h \
           ../core/logging.h \
-          ../inputoutput/starviewersettings.h \
+          ../core/settingsregistry.h \
+          ../core/settings.h \
+          ../core/defaultsettings.h \
+          ../inputoutput/inputoutputsettings.h \
           qstarviewersapwrapper.h
 
-SOURCES = ../inputoutput/starviewersettings.cpp \
+SOURCES = ../core/settingsregistry.cpp \
+          ../core/settings.cpp \
+          ../core/defaultsettings.cpp \
+          ../inputoutput/inputoutputsettings.cpp \
           starviewersapwrapper.cpp \
           qstarviewersapwrapper.cpp
 

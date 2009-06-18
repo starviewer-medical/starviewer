@@ -30,7 +30,6 @@ HEADERS += databaseconnection.h \
            processimage.h \
            processimagesingleton.h \
            retrieveimages.h \
-           starviewersettings.h \
            status.h \
            struct.h \
            multiplequerystudy.h \
@@ -90,7 +89,6 @@ SOURCES += databaseconnection.cpp \
            processimage.cpp \
            processimagesingleton.cpp \
            retrieveimages.cpp \
-           starviewersettings.cpp \
            status.cpp \
            multiplequerystudy.cpp \
            qquerystudythread.cpp \

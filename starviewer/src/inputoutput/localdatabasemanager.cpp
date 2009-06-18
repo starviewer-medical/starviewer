@@ -21,10 +21,10 @@
 #include "sqlite3.h"
 #include "logging.h"
 #include "deletedirectory.h"
-#include "starviewersettings.h"
+#include "inputoutputsettings.h"
+#include "starviewerapplication.h"
 #include "harddiskinformation.h"
 #include "thumbnailcreator.h"
-#include "settings.h"
 
 namespace udg
 {
@@ -34,15 +34,15 @@ QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
 
 LocalDatabaseManager::LocalDatabaseManager()
 {
-    StarviewerSettings settings;
+    Settings settings;
 
     /* Comprovem si està activada la opció de configuració que indica si s'ha d'esborrar automàticament els estudis vells, sinó
        està activada, construim una data nul·la perquè no s'ha de tenir en compte alhora de fer las cerques*/
-    if (settings.getDeleteOldStudiesHasNotViewedInDays())
+    if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool())
     {
         if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
         {
-            LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getMaximumDaysNotViewedStudy().toInt(NULL, 10));
+            LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::minimumDaysUnusedToDeleteStudyKey,7).toInt());
         }
     }
     else LocalDatabaseManager::LastAccessDateSelectedStudies = QDate();
@@ -412,7 +412,7 @@ void LocalDatabaseManager::clear()
     dbConnect.endTransaction();
     dbConnect.close();
     //esborrem tots els estudis descarregats, físicament del disc dur
-    if (!delDirectory.deleteDirectory(StarviewerSettings().getCacheImagePath(), false)) 
+    if (!delDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false)) 
         m_lastError = DeletingFilesError;
     else 
         m_lastError = Ok;
@@ -420,14 +420,14 @@ void LocalDatabaseManager::clear()
 
 void LocalDatabaseManager::deleteOldStudies()
 {
-    StarviewerSettings settings;
+    Settings settings;
     DicomMask oldStudiesMask;
     QList<Study*> studyListToDelete;
     LocalDatabaseStudyDAL studyDAL;
     DatabaseConnection dbConnect;
 
     //Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
-    if (!settings.getDeleteOldStudiesHasNotViewedInDays()) return;
+    if (!settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool()) return;
 
     dbConnect.open();
     studyDAL.setDatabaseConnection(&dbConnect);
@@ -501,11 +501,11 @@ bool LocalDatabaseManager::isDatabaseCorrupted()
 bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
 {
     HardDiskInformation hardDiskInformation;
-    StarviewerSettings settings;
-    quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath());
-    quint64 minimumSpaceRequired = quint64(settings.getMinimumSpaceRequiredToRetrieveInMbytes());
+    Settings settings;
+    quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
+    quint64 minimumSpaceRequired = quint64( settings.getValue(InputOutputSettings::minimumFreeGigaBytesForCacheKey, 5 ).toULongLong() * 1024 );
     quint64 MbytesToFree;
-    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk = settings.getGbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable() * 1024;
+    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk = settings.getValue( InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey, 2 ).toULongLong() * 1024;
 
     m_lastError = Ok;
 
@@ -513,7 +513,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
     {
         INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb) ");
 
-        if (settings.getDeleteOldStudiesIfNotEnoughSpaceAvailable())
+        if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey,true).toBool())
         {
             INFO_LOG("s'intentarà esborrar estudis vells per alliberar suficient espai");
 
@@ -528,7 +528,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
             }
 
             //Tornem a consultar l'espai lliure
-            if (hardDiskInformation.getNumberOfFreeMBytes(settings.getCacheImagePath()) < minimumSpaceRequired)
+            if (hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath()) < minimumSpaceRequired)
             {
                 INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb)");
                 return false;
@@ -543,9 +543,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
 
 QString LocalDatabaseManager::getStudyPath(const QString &studyInstanceUID)
 {
-    StarviewerSettings settings;
-
-    return settings.getCacheImagePath() + studyInstanceUID;
+    return LocalDatabaseManager::getCachePath() + studyInstanceUID;
 }
 
 LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
@@ -739,11 +737,10 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
 void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
 {
     DeleteDirectory delDirectory;
-    StarviewerSettings settings;
 
     foreach(Study *failedStudy, failedPatient->getStudies())
     {
-        delDirectory.deleteDirectory(settings.getCacheImagePath() + failedStudy->getInstanceUID(), true);
+        delDirectory.deleteDirectory(LocalDatabaseManager::getCachePath() + failedStudy->getInstanceUID(), true);
     }
 }
 
@@ -827,7 +824,6 @@ int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, const DicomMas
 
 void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
 {
-    StarviewerSettings settings;
     DicomMask oldStudiesMask;
     QList<Study*> studyListToDelete;
     Study *studyToDelete;
@@ -843,7 +839,7 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
         studyToDelete = studyListToDelete.at(index);
 
 		emit studyWillBeDeleted(studyToDelete->getInstanceUID());
-        MbytesErased += HardDiskInformation::getDirectorySizeInBytes(settings.getCacheImagePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
+        MbytesErased += HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
 		
         del(studyToDelete->getInstanceUID());
         if (getLastError() != LocalDatabaseManager::Ok)
@@ -922,6 +918,24 @@ void LocalDatabaseManager::setLastError(int sqliteLastError)
 QString LocalDatabaseManager::getSeriesThumbnailPath(QString studyInstanceUID, Series *series)
 {
     return getStudyPath(studyInstanceUID) + "/" + series->getInstanceUID() + "/thumbnail.pgm";
+}
+
+QString LocalDatabaseManager::getDatabaseFilePath() 
+{
+    Settings settings;
+    QDir dir;
+    QString defaultDir = UserDataRootPath + "pacs/database/dicom.sdb";   
+    
+    return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::databaseAbsoluteFilePathKey, defaultDir ).toString() );
+}
+
+QString LocalDatabaseManager::getCachePath() 
+{
+    Settings settings;
+    QDir dir;
+    QString defaultDir = UserDataRootPath + "pacs/dicom/";
+
+    return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::cachePathKey, defaultDir ).toString() );
 }
 
 }

@@ -5,11 +5,9 @@
 #include <ofcond.h>
 #include <assoc.h>
 #include "dcmtk/dcmdata/dcdebug.h"
-#include <QString>
 
 #include "pacsparameters.h"
 #include "status.h"
-#include "starviewersettings.h"
 #include "pacsconnection.h"
 #include "pacsnetwork.h"
 #include "errordcmtk.h"
@@ -367,7 +365,6 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     char adrLocal[255];
     Status state;
     QString AdrServer;
-    StarviewerSettings settings;
 
     //create the parameters of the connection
     cond = ASC_createAssociationParameters( &m_params , ASC_DEFAULTMAXPDU );
@@ -375,7 +372,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
     // set calling and called AE titles
     //el c_str, converteix l'string que ens retornen les funcions get a un char
-    ASC_setAPTitles( m_params , qPrintable(settings.getAETitleMachine()) , qPrintable(m_pacs.getAEPacs()) , NULL );
+    ASC_setAPTitles( m_params , qPrintable( PacsParameters::getLocalAETitle() ) , qPrintable(m_pacs.getAEPacs()) , NULL );
 
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
@@ -386,8 +383,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
     AdrServer = constructAdrServer( m_pacs.getPacsAddress(), m_pacs.getPacsPort() );
 
-    //get localhost name
-
+    //get localhost name TODO substituir per QHostInfo::localHostName()
     gethostname( adrLocal , 255 );
 
     // the DICOM server accepts connections at server.nowhere.com port
@@ -395,7 +391,8 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     if ( !cond.good() ) return state.setStatus( cond );
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
-    dcmConnectionTimeout.set(StarviewerSettings().getTimeout().toInt());
+    int timeout = PacsParameters::getConnectionTimeout();
+    dcmConnectionTimeout.set( timeout );
 
     switch ( modality )
     {
@@ -403,7 +400,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond = configureEcho();
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkQuery( settings.getTimeout().toInt() );
+                        state = m_pacsNetwork->createNetworkQuery( timeout );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkQuery();
@@ -413,7 +410,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond = configureFind( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkQuery( settings.getTimeout().toInt() );
+                        state = m_pacsNetwork->createNetworkQuery( timeout );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkQuery();
@@ -423,7 +420,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond=configureMove( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkRetrieve( settings.getLocalPort().toInt() , settings.getTimeout().toInt() );
+                        state = m_pacsNetwork->createNetworkRetrieve( PacsParameters::getQueryRetrievePort() , PacsParameters::getConnectionTimeout() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkRetrieve();
@@ -433,7 +430,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond = configureStore();
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkQuery( settings.getTimeout().toInt() );
+                        state = m_pacsNetwork->createNetworkQuery( timeout );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkQuery();

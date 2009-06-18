@@ -16,7 +16,6 @@
 #include "starviewerprocessimageretrieved.h"
 #include "starviewerprocessimagestored.h"
 #include "harddiskinformation.h"
-#include "starviewersettings.h"
 #include "errordcmtk.h"
 #include "logging.h"
 #include "status.h"
@@ -30,6 +29,8 @@
 #include "qthreadrunwithexec.h"
 #include "deletedirectory.h"
 #include "utils.h"
+
+#include <QMetaType> // pel qRegisterMetaType
 
 namespace udg {
 
@@ -147,14 +148,15 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         return;
     }
 
-    if (Utils::isPortInUse(StarviewerSettings().getLocalPort().toInt()))
+    int localPort = PacsParameters::getQueryRetrievePort();
+    if ( Utils::isPortInUse(localPort) )
     {
         errorRetrieving(studyUID, operation.getPacsParameters().getPacsID(), IncomingConnectionsPortPacsInUse);
         cancelAllPendingOperations(Operation::Retrieve);
         cancelAllPendingOperations(Operation::View);
         localDatabaseManager.setStudyRetrieveFinished();
         
-        ERROR_LOG("El port " + StarviewerSettings().getLocalPort() + " per a connexions entrants del PACS, està en ús, no es pot descarregar l'estudi");
+        ERROR_LOG("El port " + QString::number(localPort) + " per a connexions entrants del PACS, està en ús, no es pot descarregar l'estudi");
         return;
     }
 
@@ -236,7 +238,6 @@ void QExecuteOperationThread::moveStudy( Operation operation )
 {
     Status state;
     PacsParameters pacs;
-    StarviewerSettings settings;
     StoreImages storeImages;
     StarviewerProcessImageStored *storedProcessImage = new StarviewerProcessImageStored();
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();

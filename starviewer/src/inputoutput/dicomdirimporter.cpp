@@ -12,7 +12,6 @@
 #include <QString>
 
 #include "status.h"
-#include "starviewersettings.h"
 #include "study.h"
 #include "series.h"
 #include "image.h"
@@ -24,6 +23,7 @@
 #include "localdatabasemanager.h"
 #include "localdatabasemanagerthreaded.h"
 #include "qthreadrunwithexec.h"
+#include "localdatabasemanager.h"
 #include "deletedirectory.h"
 
 namespace udg
@@ -120,7 +120,7 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 {
     DicomMask mask;
     QList<Patient*> patientStudyListToImport;
-    QString studyPath = StarviewerSettings().getCacheImagePath() + studyUID + "/";;
+    QString studyPath = LocalDatabaseManager::getCachePath() + studyUID + "/";;
 
     QDir().mkdir( studyPath );
 
@@ -159,7 +159,7 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 void DICOMDIRImporter::importSeries(QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
     QList<Image*> imageListToImport;
-    QString seriesPath = StarviewerSettings().getCacheImagePath() + studyUID + "/" + seriesUID;
+    QString seriesPath = LocalDatabaseManager::getCachePath() + studyUID + "/" + seriesUID;
 
     QDir().mkdir( seriesPath );
 
