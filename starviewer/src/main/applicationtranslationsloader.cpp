@@ -6,11 +6,11 @@
  ***************************************************************************/
 #include "applicationtranslationsloader.h"
 
-#include <QSettings>
 #include <QApplication>
 #include <QTranslator>
 
 #include "starviewerapplication.h"
+#include "coresettings.h"
 
 namespace udg {
 
@@ -25,10 +25,8 @@ ApplicationTranslationsLoader::~ApplicationTranslationsLoader()
 
 QLocale ApplicationTranslationsLoader::getDefaultLocale()
 {
-    QSettings settings;
-    settings.beginGroup("Starviewer-Language");
-    QString defaultLocale = settings.value( "languageLocale", QLocale::system().name() ).toString();
-    settings.endGroup();
+    Settings settings;
+    QString defaultLocale = settings.getValue( CoreSettings::languageLocaleKey, QLocale::system().name() ).toString();
 
 	// configurem les locales de l'aplicació
 	// TODO ara està simplificat només als idiomes que nosaltres

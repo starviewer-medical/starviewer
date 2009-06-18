@@ -22,10 +22,19 @@ win32 {
 FORMS = qcrashreporterbase.ui
 HEADERS = qcrashreporter.h \
           crashreportersender.h \
+          ../core/settingsregistry.h \
+          ../core/settings.h \
+          ../core/defaultsettings.h \
+          ../core/coresettings.h \
           ../main/applicationtranslationsloader.h \
           ../core/starviewerapplication.h
+          
 SOURCES = crashreporter.cpp \
           qcrashreporter.cpp \
+          ../core/settingsregistry.cpp \
+          ../core/settings.cpp \
+          ../core/defaultsettings.cpp \
+          ../core/coresettings.cpp \
           ../main/applicationtranslationsloader.cpp \
 
 TRANSLATIONS += crashreporter_ca_ES.ts \
@@ -57,3 +66,4 @@ RESOURCES = crashreporter.qrc ../main/main.qrc
 
 include(../corelibsconfiguration.inc)
 include(../compilationtype.inc)
+include(../log4cxx.inc)
