@@ -235,36 +235,31 @@ OFCondition PacsServer::addStoragePresentationContexts()
     OFList<OFString> fallbackSyntaxes;
     OFString preferredTransferSyntax;
 
-    if ( gLocalByteOrder == EBO_LittleEndian )
-    {
-        /* we are on a little endian machine */
-        preferredTransferSyntax = UID_LittleEndianExplicitTransferSyntax;
-    }
-    else
-    {
-        preferredTransferSyntax = UID_BigEndianExplicitTransferSyntax;      /* we are on a big endian machine */
-    }
+    ///Indiquem que con Transfer syntax preferida volem utilitzar JpegLossless
+    preferredTransferSyntax = UID_JPEGProcess14SV1TransferSyntax;
 
     fallbackSyntaxes.push_back( UID_LittleEndianExplicitTransferSyntax );
     fallbackSyntaxes.push_back( UID_BigEndianExplicitTransferSyntax );
     fallbackSyntaxes.push_back( UID_LittleEndianImplicitTransferSyntax );
-    // Remove the preferred syntax from the fallback list
-    fallbackSyntaxes.remove( preferredTransferSyntax );
 
     OFListIterator( OFString ) s_cur;
     OFListIterator( OFString ) s_end;
 
     /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
      * les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és l'estudi només caldria afegir-hi la de la motalitat de l'estudi
-    /*Les sopClass és equivalent amb el Move quina acció volem fer per exemple UID_MOVEStudyRootQueryRetrieveInformationModel , en el
-     * case del move, en el cas de StoreScu, el sopClass que tenim van en funció del tipus d'imatge per exemple tenim
-     * ComputedRadiographyImageStorage, CTImageStore, etc.. aquestes sopClass indiquen quin tipus d'imatge anirem a guardar, per això
-     * sinó sabem de quin tipus de SOPClass són les imatges que anem a guardar al PACS, li indiquem una llista per defecte que cobreix
-     * la gran majoria i més comuns de SOPClass que existeixen */
+    /*Les sopClass o també conegudes com AbstractSyntax és equivalent amb el Move quina acció volem fer per exemple 
+     * UID_MOVEStudyRootQueryRetrieveInformationModel , en el case del move, en el cas de StoreScu, el sopClass que tenim van en 
+     * funció del tipus d'imatge per exemple tenim ComputedRadiographyImageStorage, CTImageStore, etc.. aquestes sopClass indiquen 
+     * quin tipus d'imatge anirem a guardar, per això sinó sabem de quin tipus de SOPClass són les imatges que anem a guardar al 
+     * PACS, li indiquem una llista per defecte que cobreix la gran majoria i més comuns de SOPClass que existeixen */
 
-    /* TODO Si que le podem arribar a saber la transfer syntax, només hem de mirar la SOPClassUID de cada imatge a enviar, mirar
+    /*Amb l'Abstract syntax o SOPClass definim quina operació volem fer, i amb els transfer syntax indiquem amb quin protocol es farà
+     * la transfarència de les dades, LittleEndian, JPegLossLess, etc.. */
+
+    /* TODO Si que la podem arribar a saber la transfer syntax, només hem de mirar la SOPClassUID de cada imatge a enviar, mirar
      * codi storescu.cc a partir de la línia 639
      */
+    //Les SOPClasses també són conegudes com les Ab
     for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ )
     {
         sopClasses.push_back( dcmShortSCUStorageSOPClassUIDs[i] );
