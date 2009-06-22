@@ -34,6 +34,8 @@ public:
 
 public slots:
 
+    /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveViewedVolume( QString fileName = QString() );
     /// Carrega la viewpoint entropy des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadViewpointEntropy( QString fileName = QString() );
     /// Desa la viewpoint entropy a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -226,6 +228,7 @@ private:
     ObscuranceMainThread *m_obscuranceMainThread;
     Obscurance *m_obscurance;
 
+    QVector<float> m_viewedVolume;
     QVector<float> m_viewpointEntropy;
     float m_entropy;
     QVector<float> m_vmi;

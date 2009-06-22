@@ -91,6 +91,19 @@ void QExperimental3DExtension::setNewVolume( Volume *volume )
 }
 
 
+void QExperimental3DExtension::saveViewedVolume( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( "viewedVolumeDir", tr("Save viewed volume"), tr("Text files (*.txt);;All files (*)"), "txt" );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( !saveFloatDataAsText( m_viewedVolume, fileName, QString( "volume(v%1) = %2" ), 1 ) && m_interactive )
+        QMessageBox::warning( this, tr("Can't save viewed volume"), QString( tr("Can't save viewed volume to file ") ) + fileName );
+}
+
+
 void QExperimental3DExtension::loadViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
@@ -879,7 +892,7 @@ void QExperimental3DExtension::createConnections()
     // VMI
     connect( m_vmiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setVmiOneViewpointMaximum(int) ) );
     connect( m_vmiOneViewpointCheckBox, SIGNAL( toggled(bool) ), m_vmiOneViewpointSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
+    connect( m_saveViewedVolumePushButton, SIGNAL( clicked() ), SLOT( saveViewedVolume() ) );
     connect( m_loadViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropy() ) );
     connect( m_saveViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropy() ) );
     connect( m_loadEntropyPushButton, SIGNAL( clicked() ), SLOT( loadEntropy() ) );
@@ -914,6 +927,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_computeExploratoryTourCheckBox, SIGNAL( toggled(bool) ), m_computeExploratoryTourThresholdDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_loadExploratoryTourPushButton, SIGNAL( clicked() ), SLOT( loadExploratoryTour() ) );
     connect( m_saveExploratoryTourPushButton, SIGNAL( clicked() ), SLOT( saveExploratoryTour() ) );
+    connect( m_computeVmiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmi() ) );
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
     connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
     connect( m_exploratoryTourPushButton, SIGNAL( clicked() ), SLOT( exploratoryTour() ) );
@@ -1750,6 +1764,12 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi, computeEvmiOpacity,
                                          computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked() );
+
+    if ( viewpointInformationChannel.hasViewedVolume() )
+    {
+        m_viewedVolume = viewpointInformationChannel.viewedVolume();
+        m_saveViewedVolumePushButton->setEnabled( true );
+    }
 
     if ( computeViewpointEntropy )
     {

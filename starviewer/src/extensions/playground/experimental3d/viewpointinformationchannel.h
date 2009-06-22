@@ -50,6 +50,8 @@ public:
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
     void compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity, bool &evmiVomi, bool &bestViews,
                   bool &guidedTour, bool &exploratoryTour, bool display = false );
+    bool hasViewedVolume() const;
+    const QVector<float>& viewedVolume() const;
     const QVector<float>& viewpointEntropy() const;
     float entropy() const;
     const QVector<float>& vmi() const;
@@ -119,6 +121,7 @@ private:
     QVector<QTemporaryFile*> m_voxelProbabilitiesPerViewFiles;  // p(Z|V)
 #endif
 
+    QVector<float> m_viewedVolume;  // volum vist des de cada vista
     QVector<float> m_viewProbabilities;     // p(V)
     QVector<float> m_voxelProbabilities;    // p(Z)
 
