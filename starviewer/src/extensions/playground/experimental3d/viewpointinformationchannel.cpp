@@ -293,6 +293,18 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
 }
 
 
+bool ViewpointInformationChannel::hasViewedVolume() const
+{
+    return !m_viewedVolume.isEmpty();
+}
+
+
+const QVector<float>& ViewpointInformationChannel::viewedVolume() const
+{
+    return m_viewedVolume;
+}
+
+
 const QVector<float>& ViewpointInformationChannel::viewpointEntropy() const
 {
     return m_viewpointEntropy;
@@ -577,6 +589,8 @@ void ViewpointInformationChannel::computeViewProbabilitiesCpu( float totalViewed
 {
     int nViewpoints = m_viewpoints.size();
 
+    m_viewedVolume = m_viewProbabilities;
+
     if ( totalViewedVolume > 0.0f )
     {
         emit partialProgress( 0 );
@@ -584,6 +598,7 @@ void ViewpointInformationChannel::computeViewProbabilitiesCpu( float totalViewed
 
         for ( int i = 0; i < nViewpoints; i++ )
         {
+            DEBUG_LOG( QString( "volume(v%1) = %2" ).arg( i + 1 ).arg( m_viewProbabilities.at( i ) ) );
             m_viewProbabilities[i] /= totalViewedVolume;
             Q_ASSERT( m_viewProbabilities.at( i ) == m_viewProbabilities.at( i ) );
             DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i + 1 ).arg( m_viewProbabilities.at( i ) ) );
@@ -1172,8 +1187,11 @@ void ViewpointInformationChannel::computeViewProbabilitiesCuda()
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
+    m_viewedVolume = m_viewProbabilities;
+
     for ( int i = 0; i < nViewpoints; i++ )
     {
+        DEBUG_LOG( QString( "volume(v%1) = %2" ).arg( i + 1 ).arg( m_viewProbabilities.at( i ) ) );
         m_viewProbabilities[i] /= totalViewedVolume;
         DEBUG_LOG( QString( "p(v%1) = %2" ).arg( i+1 ).arg( m_viewProbabilities.at(i) ) );
     }
