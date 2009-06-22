@@ -255,7 +255,7 @@ void QDifuPerfuSegmentationExtension::readSettings()
 
     settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
     settings.restoreGeometry( keyPrefix + "viewerSplitter", m_viewerSplitter );
-    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory", "." ).toString();
+    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory" ).toString();
 }
 
 void QDifuPerfuSegmentationExtension::writeSettings()

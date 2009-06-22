@@ -168,7 +168,7 @@ void QLandmarkRegistrationExtension::readSettings()
 
     settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
     settings.restoreGeometry( keyPrefix + "verticalSplitter2", m_verticalSplitter2 );
-    m_savingDirectory = settings.getValue( keyPrefix + "savingDirectory", "." ).toString();
+    m_savingDirectory = settings.getValue( keyPrefix + "savingDirectory" ).toString();
 }
 
 void QLandmarkRegistrationExtension::writeSettings()

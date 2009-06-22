@@ -1428,7 +1428,7 @@ void QMPR2DExtension::readSettings()
     else
         settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
 
-    m_defaultSaveDir = settings.getValue( keyPrefix + "defaultSaveDir", ".").toString();
+    m_defaultSaveDir = settings.getValue( keyPrefix + "defaultSaveDir").toString();
 }
 
 void QMPR2DExtension::writeSettings()

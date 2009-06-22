@@ -456,7 +456,7 @@ void QVolume3DViewTestingExtension::loadClut()
 {
     Settings settings;
     QString keyPrefix = "Starviewer-App-3DTesting/";
-    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir", QString() ).toString();
+    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir" ).toString();
 
     QString transferFunctionFileName =
             QFileDialog::getOpenFileName( this, tr("Load CLUT"),
@@ -479,7 +479,7 @@ void QVolume3DViewTestingExtension::saveClut()
 {
     Settings settings;
     QString keyPrefix = "Starviewer-App-3DTesting/";
-    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir", QString() ).toString();
+    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir" ).toString();
 
     QFileDialog saveDialog( this, tr("Save CLUT"), customClutsDirPath, tr("Transfer function files (*.tf);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
