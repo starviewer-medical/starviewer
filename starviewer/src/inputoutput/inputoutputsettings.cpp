@@ -9,7 +9,7 @@ namespace udg {
 // Definició de les claus
 const QString cacheBaseKey("PACS/cache/");
 const QString InputOutputSettings::databaseAbsoluteFilePathKey( cacheBaseKey + "sdatabasePath");
-const QString InputOutputSettings::cachePathKey( cacheBaseKey + "PACS/cache/imagePath");
+const QString InputOutputSettings::cachePathKey( cacheBaseKey + "imagePath");
 const QString InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey( cacheBaseKey + "deleteOldStudiesHasNotViewedInDays");
 const QString InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey( cacheBaseKey + "deleteOldStudiesIfNotEnoughSpaceAvailable");
 const QString InputOutputSettings::minimumDaysUnusedToDeleteStudyKey( cacheBaseKey + "MaximumDaysNotViewedStudy");
