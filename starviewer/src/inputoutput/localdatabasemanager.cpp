@@ -38,11 +38,11 @@ LocalDatabaseManager::LocalDatabaseManager()
 
     /* Comprovem si està activada la opció de configuració que indica si s'ha d'esborrar automàticament els estudis vells, sinó
        està activada, construim una data nul·la perquè no s'ha de tenir en compte alhora de fer las cerques*/
-    if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool())
+    if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey).toBool())
     {
         if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
         {
-            LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::minimumDaysUnusedToDeleteStudyKey,7).toInt());
+            LocalDatabaseManager::LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::minimumDaysUnusedToDeleteStudyKey).toInt());
         }
     }
     else LocalDatabaseManager::LastAccessDateSelectedStudies = QDate();
@@ -427,7 +427,7 @@ void LocalDatabaseManager::deleteOldStudies()
     DatabaseConnection dbConnect;
 
     //Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
-    if (!settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool()) return;
+    if (!settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey).toBool()) return;
 
     dbConnect.open();
     studyDAL.setDatabaseConnection(&dbConnect);
@@ -503,9 +503,9 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
     HardDiskInformation hardDiskInformation;
     Settings settings;
     quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
-    quint64 minimumSpaceRequired = quint64( settings.getValue(InputOutputSettings::minimumFreeGigaBytesForCacheKey, 5 ).toULongLong() * 1024 );
+    quint64 minimumSpaceRequired = quint64( settings.getValue(InputOutputSettings::minimumFreeGigaBytesForCacheKey ).toULongLong() * 1024 );
     quint64 MbytesToFree;
-    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk = settings.getValue( InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey, 2 ).toULongLong() * 1024;
+    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk = settings.getValue( InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey ).toULongLong() * 1024;
 
     m_lastError = Ok;
 
@@ -513,7 +513,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
     {
         INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb) ");
 
-        if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey,true).toBool())
+        if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey).toBool())
         {
             INFO_LOG("s'intentarà esborrar estudis vells per alliberar suficient espai");
 
@@ -924,18 +924,16 @@ QString LocalDatabaseManager::getDatabaseFilePath()
 {
     Settings settings;
     QDir dir;
-    QString defaultDir = UserDataRootPath + "pacs/database/dicom.sdb";   
     
-    return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::databaseAbsoluteFilePathKey, defaultDir ).toString() );
+    return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::databaseAbsoluteFilePathKey ).toString() );
 }
 
 QString LocalDatabaseManager::getCachePath() 
 {
     Settings settings;
     QDir dir;
-    QString defaultDir = UserDataRootPath + "pacs/dicom/";
 
-    return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::cachePathKey, defaultDir ).toString() );
+    return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::cachePathKey ).toString() );
 }
 
 }

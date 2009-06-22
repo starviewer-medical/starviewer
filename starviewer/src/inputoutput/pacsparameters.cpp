@@ -119,25 +119,25 @@ bool PacsParameters::operator ==(const PacsParameters &parameters)
 QString PacsParameters::getLocalAETitle()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::localAETitleKey, QHostInfo::localHostName() ).toString();
+    return settings.getValue( InputOutputSettings::localAETitleKey ).toString();
 }
 
 int PacsParameters::getMaximumConnections()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::maximumPACSConnectionsKey, 3 ).toInt();
+    return settings.getValue( InputOutputSettings::maximumPACSConnectionsKey ).toInt();
 }
 
 int PacsParameters::getConnectionTimeout()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::pacsConnectionTimeoutKey, 20 ).toInt();
+    return settings.getValue( InputOutputSettings::pacsConnectionTimeoutKey ).toInt();
 }
 
 int PacsParameters::getQueryRetrievePort()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::queryRetrieveLocalPortKey, 4006 ).toInt();
+    return settings.getValue( InputOutputSettings::queryRetrieveLocalPortKey ).toInt();
 }
 
 }

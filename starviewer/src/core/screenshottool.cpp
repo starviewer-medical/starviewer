@@ -210,9 +210,9 @@ void ScreenShotTool::readSettings()
 {
     Settings settings;
     
-    m_lastScreenShotPath = settings.getValue( CoreSettings::screenShotToolFolderKey, QDir::homePath() ).toString();
-    m_lastScreenShotExtensionFilter = settings.getValue( CoreSettings::screenShotToolFileExtensionKey, PngFileFilter ).toString();
-    m_lastScreenShotFileName = settings.getValue( CoreSettings::screenShotToolFilenameKey, "" ).toString();
+    m_lastScreenShotPath = settings.getValue( CoreSettings::screenShotToolFolderKey ).toString();
+    m_lastScreenShotExtensionFilter = settings.getValue( CoreSettings::screenShotToolFileExtensionKey ).toString();
+    m_lastScreenShotFileName = settings.getValue( CoreSettings::screenShotToolFilenameKey ).toString();
 }
 
 void ScreenShotTool::writeSettings()

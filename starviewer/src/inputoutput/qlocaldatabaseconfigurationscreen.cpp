@@ -84,13 +84,13 @@ void QLocalDatabaseConfigurationScreen::loadCacheDefaults()
     m_textDatabaseRoot->setText(LocalDatabaseManager::getDatabaseFilePath());
     m_textCacheImagePath->setText(LocalDatabaseManager::getCachePath());
 
-    m_textMaximumDaysNotViewed->setText(settings.getValue( InputOutputSettings::minimumDaysUnusedToDeleteStudyKey,7).toString() );
-    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setText(QString().setNum( settings.getValue(InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey,2).toInt() ) );
-    m_textMinimumSpaceRequiredToRetrieve->setText(QString().setNum(settings.getValue( InputOutputSettings::minimumFreeGigaBytesForCacheKey, 5 ).toUInt() ));
-    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setEnabled(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey,true).toBool());
-    m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->setChecked(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey,true).toBool());
-    m_checkBoxDeletedOldStudies->setChecked(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool());
-    m_textMaximumDaysNotViewed->setEnabled(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool());
+    m_textMaximumDaysNotViewed->setText(settings.getValue( InputOutputSettings::minimumDaysUnusedToDeleteStudyKey).toString() );
+    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setText(QString().setNum( settings.getValue(InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey).toInt() ) );
+    m_textMinimumSpaceRequiredToRetrieve->setText(QString().setNum(settings.getValue( InputOutputSettings::minimumFreeGigaBytesForCacheKey).toUInt() ));
+    m_textSpaceToFreeIfNotEnoughSpaceAvailable->setEnabled(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey).toBool());
+    m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable->setChecked(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey).toBool());
+    m_checkBoxDeletedOldStudies->setChecked(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey).toBool());
+    m_textMaximumDaysNotViewed->setEnabled(settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey).toBool());
 }
 
 bool QLocalDatabaseConfigurationScreen::validateChanges()

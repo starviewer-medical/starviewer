@@ -93,9 +93,9 @@ void AppImportFile::readSettings()
 {
     Settings settings;
 
-    m_workingDirectory = settings.getValue( InterfaceSettings::openFileLastPathKey, ".").toString();
-    m_workingDicomDirectory = settings.getValue( InterfaceSettings::openDirectoryLastPathKey, ".").toString();
-    m_lastExtension = settings.getValue( InterfaceSettings::openFileLastFileExtensionKey, "MetaIO Image (*.mhd)" ).toString();
+    m_workingDirectory = settings.getValue( InterfaceSettings::openFileLastPathKey).toString();
+    m_workingDicomDirectory = settings.getValue( InterfaceSettings::openDirectoryLastPathKey).toString();
+    m_lastExtension = settings.getValue( InterfaceSettings::openFileLastFileExtensionKey).toString();
 }
 
 void AppImportFile::writeSettings()

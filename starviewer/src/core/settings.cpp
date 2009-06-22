@@ -1,5 +1,7 @@
 #include "settings.h"
+
 #include "logging.h"
+#include "settingsregistry.h"
 
 #include <QTreeWidget>
 #include <QHeaderView> // pel restoreColumnsWidths
@@ -15,9 +17,18 @@ Settings::~Settings()
 {
 }
 
-QVariant Settings::getValue( const QString &key, const QVariant &defaultValue ) const
+QVariant Settings::getValue( const QString &key ) const
 {
-    return m_settings.value(key, defaultValue);
+    QVariant value;
+    // Primer mirem si tenim valor als settings
+    // Si estigués buit, llavors agafem el valor per defecte que tinguem al registre
+    value = m_settings.value(key);
+    if( value == QVariant() )
+    {
+        value = SettingsRegistry::instance()->getDefaultValue(key);
+    }
+
+    return value;
 }
 
 void Settings::setValue( const QString &key, const QVariant &value )

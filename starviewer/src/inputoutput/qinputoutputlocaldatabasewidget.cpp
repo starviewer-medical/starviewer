@@ -382,7 +382,7 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudies()
     Settings settings;
     /*Mirem si està activada la opció de la configuració d'esborrar els estudis vells no visualitzats en un número de dies determinat
       fem la comprovació, per evitar engegar el thread si no s'han d'esborrar els estudis vells*/
-    if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey,true).toBool())
+    if (settings.getValue(InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey).toBool())
     {
         m_qdeleteOldStudiesThread.deleteOldStudies();
     }
