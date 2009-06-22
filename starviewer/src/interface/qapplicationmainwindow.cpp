@@ -340,7 +340,7 @@ void QApplicationMainWindow::createLanguageMenu()
 QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
-    QString defaultLocale = settings.getValue( CoreSettings::languageLocaleKey, QLocale::system().name()).toString();
+    QString defaultLocale = settings.getValue( CoreSettings::languageLocaleKey ).toString();
 
     QAction *action = new QAction(this);
     action->setText(language);

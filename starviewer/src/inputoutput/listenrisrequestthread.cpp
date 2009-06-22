@@ -44,7 +44,7 @@ void ListenRISRequestThread::run()
     QTcpServer tcpRISServer;
     Settings settings;
 
-    if ( !tcpRISServer.listen(QHostAddress::Any, settings.getValue( InputOutputSettings::risRequestsPortKey, 11110 ).toUInt() ) )
+    if ( !tcpRISServer.listen(QHostAddress::Any, settings.getValue( InputOutputSettings::risRequestsPortKey ).toUInt() ) )
     {
         networkError(&tcpRISServer);
         return;
@@ -102,7 +102,7 @@ void ListenRISRequestThread::networkError(QTcpServer *tcpServer)
 {
     Settings settings;
 
-    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(settings.getValue( InputOutputSettings::risRequestsPortKey, 11110 ).toUInt() ) + ", error " + tcpServer->errorString());
+    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(settings.getValue( InputOutputSettings::risRequestsPortKey ).toUInt() ) + ", error " + tcpServer->errorString());
         
     switch(tcpServer->serverError())
     {

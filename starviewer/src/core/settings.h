@@ -25,9 +25,9 @@ public:
     Settings();
     ~Settings();
 
-    /// Retorna el valor per la clau demanada. Si el setting no existeix, retorna defaultValue.
-    /// Si no s'especifica cap valor per defecte, es retorna una default QVariant.
-    QVariant getValue( const QString &key, const QVariant &defaultValue = QVariant() ) const;
+    /// Retorna el valor per la clau demanada. Si el setting no existeix, retorna el valor 
+    /// per defecte que aquesta clau tingui registrat
+    QVariant getValue( const QString &key ) const;
 
     /// Assigna el valor al setting amb la clau indicada. Si la clau ja existeix, els valor anterior queda sobre-escrit.
     void setValue( const QString &key, const QVariant &value );

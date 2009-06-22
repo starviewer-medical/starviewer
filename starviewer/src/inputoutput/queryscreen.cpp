@@ -66,7 +66,7 @@ QueryScreen::QueryScreen( QWidget *parent )
      *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
-    if (Settings().getValue(InputOutputSettings::listenToRISRequestsKey, true).toBool()) 
+    if (Settings().getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
         m_listenRISRequestThread->listen(); 
 #endif
 
@@ -122,7 +122,7 @@ void QueryScreen::initialize()
 #ifndef STARVIEWER_LITE
     Settings settings;
     m_listenRISRequestThread = new ListenRISRequestThread(this);
-    if (settings.getValue(InputOutputSettings::listenToRISRequestsKey, true).toBool()) 
+    if (settings.getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
         m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
 #endif
 
@@ -458,7 +458,7 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
             QString pacsID = multipleQueryStudy.getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()];
 
             maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
-            m_qInputOutputPacsWidget->retrieve( settings.getValue( InputOutputSettings::risRequestViewOnceRetrievedKey, true ).toBool(), pacsID, maskStudyToRetrieve, study);
+            m_qInputOutputPacsWidget->retrieve( settings.getValue( InputOutputSettings::risRequestViewOnceRetrievedKey ).toBool(), pacsID, maskStudyToRetrieve, study);
         }
     }
 }
@@ -498,7 +498,7 @@ void QueryScreen::showListenRISRequestThreadError(ListenRISRequestThread::Listen
 {
     QString message;
     Settings settings;
-    int risPort = settings.getValue( InputOutputSettings::risRequestsPortKey, 11110 ).toInt();
+    int risPort = settings.getValue( InputOutputSettings::risRequestsPortKey ).toInt();
     switch(error)
     {
         case ListenRISRequestThread::risPortInUse :

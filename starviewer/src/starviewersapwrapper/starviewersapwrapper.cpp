@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     {
         udg::Settings settings;
 
-        if (settings.getValue(udg::InputOutputSettings::listenToRISRequestsKey, true).toBool()) //comprovem si el servei d'escolta del RIS està activat
+        if (settings.getValue(udg::InputOutputSettings::listenToRISRequestsKey).toBool()) //comprovem si el servei d'escolta del RIS està activat
         {
             //Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
             retrieveStudy(parametersList.at(1));

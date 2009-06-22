@@ -16,6 +16,10 @@
 #include "dcmtk/dcmjpeg/djdecode.h"
 #include "applicationtranslationsloader.h"
 
+#include "coresettings.h"
+#include "inputoutputsettings.h"
+#include "interfacesettings.h"
+
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
 #endif
@@ -113,6 +117,15 @@ int main(int argc, char *argv[])
     configureLogging();
     udg::StatsWatcher::log("Inicialització de l'aplicació");
 
+    // Inicialitzem els settings
+    udg::CoreSettings coreSettings;
+    udg::InputOutputSettings inputoutputSettings;
+    udg::InterfaceSettings interfaceSettings;
+    
+    coreSettings.init();
+    inputoutputSettings.init();
+    interfaceSettings.init();
+    
     initQtPluginsDirectory();
     initializeTranslations(app);
 
