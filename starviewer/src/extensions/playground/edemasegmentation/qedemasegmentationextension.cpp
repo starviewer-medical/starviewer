@@ -1112,7 +1112,7 @@ void QEdemaSegmentationExtension::readSettings()
 
     settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
     settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory", "." ).toString();
+    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory" ).toString();
     
 }
 

@@ -75,7 +75,7 @@ void QGpuTestingExtension::loadTransferFunction()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString transferFunctionDir = settings.getValue(  keyPrefix + "transferFunctionDir", QString() ).toString();
+    QString transferFunctionDir = settings.getValue(  keyPrefix + "transferFunctionDir" ).toString();
     QString transferFunctionFileName = QFileDialog::getOpenFileName( this, tr("Load transfer function"), transferFunctionDir,
                                                                      tr("Transfer function files (*.tf);;XML files (*.xml);;All files (*)") );
 
@@ -100,7 +100,7 @@ void QGpuTestingExtension::saveTransferFunction()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString transferFunctionDir = settings.getValue( keyPrefix + "transferFunctionDir", QString() ).toString();
+    QString transferFunctionDir = settings.getValue( keyPrefix + "transferFunctionDir" ).toString();
     QFileDialog saveDialog( this, tr("Save transfer function"), transferFunctionDir,
                             tr("Transfer function files (*.tf);;XML files (*.xml);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
@@ -175,7 +175,7 @@ void QGpuTestingExtension::loadCamera()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString cameraDir = settings.getValue( keyPrefix + "cameraDir", QString() ).toString();
+    QString cameraDir = settings.getValue( keyPrefix + "cameraDir" ).toString();
     QString cameraFileName = QFileDialog::getOpenFileName( this, tr("Load camera parameters"), cameraDir,
                                                            tr("Camera files (*.cam);;All files (*)") );
 
@@ -233,7 +233,7 @@ void QGpuTestingExtension::saveCamera()
     Settings settings;
     QString keyPrefix = "GpuTesting/";
 
-    QString cameraDir = settings.getValue( keyPrefix + "cameraDir", QString() ).toString();
+    QString cameraDir = settings.getValue( keyPrefix + "cameraDir" ).toString();
     QFileDialog saveDialog( this, tr("Save camera parameters"), cameraDir, tr("Camera files (*.cam);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
     saveDialog.setDefaultSuffix( "cam" );
