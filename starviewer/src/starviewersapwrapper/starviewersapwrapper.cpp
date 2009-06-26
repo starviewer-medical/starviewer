@@ -73,6 +73,9 @@ int main(int argc, char *argv[])
 
     configureLogging();
 
+    udg::InputOutputSettings inputOutputSettings;
+    inputOutputSettings.init();
+
     if (parametersList.count() == 2)
     {
         udg::Settings settings;
