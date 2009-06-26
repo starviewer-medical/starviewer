@@ -22,6 +22,7 @@ namespace udg {
 class Settings
 {
 public:
+    enum AccessLevel{ UserLevel, SystemLevel };
     Settings();
     ~Settings();
 
@@ -95,9 +96,13 @@ private:
     /// Traspassa el contingut del conjunt clau-valor a m_settings
     void dumpKeyValueMap( const KeyValueMapType &item );
 
+    /// Ens retorna l'objecte adient de settings (usuari o sistema) 
+    /// segons com estigui configurada la clau en qüestió
+    QSettings *getSettingsObject( const QString &key );
+
 private:
-    /// Objecte QSettings amb el que manipularem les configuracions
-    QSettings m_settings;
+    /// Objectes QSettings amb el que manipularem les configuracions
+    QMap<int, QSettings *> m_settings;
 };
 
 } // end namespace udg

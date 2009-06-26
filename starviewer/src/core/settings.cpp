@@ -1,6 +1,7 @@
 #include "settings.h"
 
 #include "logging.h"
+#include "starviewerapplication.h"
 #include "settingsregistry.h"
 
 #include <QTreeWidget>
@@ -11,6 +12,11 @@ namespace udg{
 
 Settings::Settings()
 {
+    QSettings *userSettings = new QSettings( QSettings::UserScope, OrganizationNameString, ApplicationNameString );
+    QSettings *systemSettings = new QSettings( QSettings::SystemScope, OrganizationNameString, ApplicationNameString );
+
+    m_settings.insert( UserLevel, userSettings );
+    m_settings.insert( SystemLevel, systemSettings );
 }
 
 Settings::~Settings()
@@ -22,7 +28,9 @@ QVariant Settings::getValue( const QString &key ) const
     QVariant value;
     // Primer mirem si tenim valor als settings
     // Si estigués buit, llavors agafem el valor per defecte que tinguem al registre
-    value = m_settings.value(key);
+    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key) 
+    // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
+    value = m_settings.value( SettingsRegistry::instance()->getAccessLevel(key) )->value(key);
     if( value == QVariant() )
     {
         value = SettingsRegistry::instance()->getDefaultValue(key);
@@ -33,36 +41,38 @@ QVariant Settings::getValue( const QString &key ) const
 
 void Settings::setValue( const QString &key, const QVariant &value )
 {
-    m_settings.setValue(key, value);
+    getSettingsObject(key)->setValue(key, value);
 }
 
 bool Settings::contains( const QString &key ) const
 {
-    return m_settings.contains(key);
+    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key) 
+    // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
+    return m_settings.value( SettingsRegistry::instance()->getAccessLevel(key) )->contains(key);
 }
 
 void Settings::remove( const QString &key )
 {
-    m_settings.remove(key);
+    getSettingsObject(key)->remove(key);
 }
 
 Settings::KeyValueMapType Settings::getListItem( const QString &key, int index )
 {
     KeyValueMapType item;
+    QSettings *qsettings = getSettingsObject(key);
 
-    int size = m_settings.beginReadArray(key);
+    int size = qsettings->beginReadArray(key);
     if( index < size && index >= 0 )
     {
-        m_settings.setArrayIndex(index);
+        qsettings->setArrayIndex(index);
         // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
-        item = fillKeyValueMapFromKeyList( m_settings.allKeys() );
+        item = fillKeyValueMapFromKeyList( qsettings->allKeys() );
     }
     else
     {
         DEBUG_LOG("Índex fora de rang. L'element retornat serà buit");
     }
-
-    m_settings.endArray();
+    qsettings->endArray();
 
     return item;
 }
@@ -70,39 +80,43 @@ Settings::KeyValueMapType Settings::getListItem( const QString &key, int index )
 Settings::SettingListType Settings::getList( const QString &key )
 {
     SettingListType list;
-    int size = m_settings.beginReadArray(key);
+    QSettings *qsettings = getSettingsObject(key);
 
+    int size = qsettings->beginReadArray(key);
     for(int i = 0; i < size; ++i)
     {
-        m_settings.setArrayIndex(i);
+        qsettings->setArrayIndex(i);
 
         KeyValueMapType item;
         // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
-        item = fillKeyValueMapFromKeyList( m_settings.allKeys() );
+        item = fillKeyValueMapFromKeyList( qsettings->allKeys() );
         // Afegim el nou conjunts de valors a la llista
         list << item;
     }
-    m_settings.endArray();
+    qsettings->endArray();
 
     return list;
 }
 
 void Settings::addListItem( const QString &key, const KeyValueMapType &item )
 {
-    int arraySize = m_settings.beginReadArray(key);
-    m_settings.endArray();
+    QSettings *qsettings = getSettingsObject(key);
+
+    int arraySize = qsettings->beginReadArray(key);
+    qsettings->endArray();
     setListItem( arraySize, key, item );
 }
 
 void Settings::setListItem( int index, const QString &key, const KeyValueMapType &item )
 {
+    QSettings *qsettings = getSettingsObject(key);
     // no comprobem si l'índex està dins d'un rang determinat
     // farem servir la política que tingui QSettings::setArrayIndex()
-    m_settings.beginWriteArray(key); 
-    m_settings.setArrayIndex(index);
+    qsettings->beginWriteArray(key); 
+    qsettings->setArrayIndex(index);
     // omplim
     dumpKeyValueMap(item);
-    m_settings.endArray();
+    qsettings->endArray();
 }
 
 void Settings::removeListItem( const QString &key, int index )
@@ -116,15 +130,16 @@ void Settings::removeListItem( const QString &key, int index )
 
 void Settings::setList( const QString &key, const SettingListType &list )
 {
+    QSettings *qsettings = getSettingsObject(key);
     // eliminem tot el que pogués haver d'aquella llista anteriorment
     remove(key);
     // escrivim la llista
-    m_settings.beginWriteArray(key);
+    qsettings->beginWriteArray(key);
     foreach( KeyValueMapType item, list )
     {
         dumpKeyValueMap( item );
     }
-    m_settings.endArray();
+    qsettings->endArray();
 }
 
 void Settings::saveColumnsWidths( const QString &key, QTreeWidget *treeWidget )
@@ -186,7 +201,7 @@ Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList( const QStringLis
     
     foreach( QString key, keysList )
     {
-        item[ key ] = m_settings.value( key );
+        item[ key ] = getSettingsObject(key)->value( key );
     }
     return item;
 }
@@ -196,8 +211,13 @@ void Settings::dumpKeyValueMap( const KeyValueMapType &item )
     QStringList keysList = item.keys();
     foreach( QString key, keysList )
     {
-        m_settings.setValue( key, item.value(key) );
+        getSettingsObject(key)->setValue( key, item.value(key) );
     }   
+}
+
+QSettings *Settings::getSettingsObject( const QString &key )
+{
+    return m_settings.value( SettingsRegistry::instance()->getAccessLevel(key) );
 }
 
 }  // end namespace udg

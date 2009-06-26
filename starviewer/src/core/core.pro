@@ -185,6 +185,7 @@ HEADERS += extensionfactory.h \
            settingsregistry.h \
            defaultsettings.h \
            coresettings.h \
+           settingsaccesslevelxmlreader.h \
            glew.h \
            glxew.h \
            wglew.h
@@ -338,6 +339,7 @@ SOURCES += extensionmediator.cpp \
            settingsregistry.cpp \
            defaultsettings.cpp \
            coresettings.cpp \
+           settingsaccesslevelxmlreader.cpp \
            glew.c
 
 TEMPLATE = lib
