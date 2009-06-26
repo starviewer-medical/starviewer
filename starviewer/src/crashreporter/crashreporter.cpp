@@ -7,6 +7,7 @@
 
 #include "../main/applicationtranslationsloader.h"
 #include "../core/starviewerapplication.h"
+#include "../core/coresettings.h"
 #include "qcrashreporter.h"
 
 /* Programa principal per executar l'aplicació de crash report */
@@ -31,6 +32,9 @@ int main( int argc, char* argv[] )
     app.setOrganizationName( udg::OrganizationNameString );
     app.setOrganizationDomain( udg::OrganizationDomainString );
     app.setApplicationName( udg::ApplicationNameString );
+
+    udg::CoreSettings coreSettings;
+    coreSettings.init();
 
     initializeTranslations(app);
     
