@@ -69,8 +69,6 @@ QTreeWidget *QStudyTreeWidget::getQTreeWidget() const
 
 void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
 {
-    clear();
-
     foreach(Patient *patient, patientList)
     {
         if (patient->getNumberOfStudies() > 0)

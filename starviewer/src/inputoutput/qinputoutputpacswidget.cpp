@@ -127,6 +127,7 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameter
     if (AreValidQueryParameters(&queryMask, pacsToQuery))
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        m_studyTreeWidget->clear();
 
         StatsWatcher::log("Cerca al PACS amb paràmetres: " + queryMask.getFilledMaskFields());
 
@@ -134,7 +135,6 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameter
 
         if(!queryStatus.good())  //no fem la query
         {
-            m_studyTreeWidget->clear();
             QApplication::restoreOverrideCursor();
             QMessageBox::information(this, ApplicationNameString, tr("An error has produced while querying.\n\nRepeat it, if the problem persist contact with an administrator."));
             return;
@@ -142,7 +142,6 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameter
 
         if (m_multipleQueryStudy->getPatientStudyList().isEmpty())
         {
-            m_studyTreeWidget->clear();
             QApplication::restoreOverrideCursor();
             QMessageBox::information(this, ApplicationNameString, tr("No study match found."));
             return;
