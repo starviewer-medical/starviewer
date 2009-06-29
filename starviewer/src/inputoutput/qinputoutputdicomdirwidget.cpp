@@ -108,6 +108,7 @@ void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )
     Status state;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    m_studyTreeWidget->clear();
 
     state = m_readDicomdir.readStudies( patientStudyList , queryMask );
     if ( !state.good() )
@@ -128,8 +129,6 @@ void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )
 
     if ( patientStudyList.isEmpty() )
     {
-        m_studyTreeWidget->clear();
-
         QApplication::restoreOverrideCursor();
         QMessageBox::information( this , ApplicationNameString , tr( "No study match found." ) );
     }

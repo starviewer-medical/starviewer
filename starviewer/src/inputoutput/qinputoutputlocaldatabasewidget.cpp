@@ -114,6 +114,7 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
     StatsWatcher::log("Cerca d'estudis a la base de dades local amb paràmetres: " + queryMask.getFilledMaskFields());
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
+    m_studyTreeWidget->clear();
     m_seriesListWidget->clear();
 
     patientStudyList = localDatabaseManager.queryPatientStudy(queryMask);
@@ -130,8 +131,6 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
      */
     if (patientStudyList.isEmpty() && isActiveWindow())
     {
-        m_studyTreeWidget->clear();
-
         QApplication::restoreOverrideCursor();
         QMessageBox::information(this, ApplicationNameString, tr("No study match found."));
     }
