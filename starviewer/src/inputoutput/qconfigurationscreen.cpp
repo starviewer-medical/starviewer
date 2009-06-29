@@ -120,6 +120,10 @@ void QConfigurationScreen::addPacs()
 
     if (validatePacsParameters())
     {
+        // TODO de moment assignem l'ID segons el nombre de PACS configurats
+        // TODO Caldria plantejar-se si realment el paràmetre "ID" tal i com s'està fent servir, és necessari o no
+        QString pacsID = QString::number( m_PacsTreeView->topLevelItemCount() );
+        pacs.setPacsID( pacsID );
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
         pacs.setPacsAddress( m_textAddress->text() );
