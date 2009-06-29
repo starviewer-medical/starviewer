@@ -90,11 +90,13 @@ public:
     void restoreGeometry( const QString &key, QSplitter *splitter );
 
 private:
-    /// A partir d'una llista de claus, omplim un conjunt clau-valor 
-    KeyValueMapType fillKeyValueMapFromKeyList( const QStringList &keysList );
+    /// A partir d'una llista de claus, omplim un conjunt clau-valor. 
+    /// És necessari que li passem l'objecte qsettings (user/system) amb el que obtindrà els valors
+    KeyValueMapType fillKeyValueMapFromKeyList( const QStringList &keysList, QSettings *qsettings );
 
     /// Traspassa el contingut del conjunt clau-valor a m_settings
-    void dumpKeyValueMap( const KeyValueMapType &item );
+    /// És necessari que li passem l'objecte qsettings (user/system) en el que volcarà els valors
+    void dumpKeyValueMap( const KeyValueMapType &item, QSettings *qsettings  );
 
     /// Ens retorna l'objecte adient de settings (usuari o sistema) 
     /// segons com estigui configurada la clau en qüestió

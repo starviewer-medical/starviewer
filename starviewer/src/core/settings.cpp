@@ -66,7 +66,7 @@ Settings::KeyValueMapType Settings::getListItem( const QString &key, int index )
     {
         qsettings->setArrayIndex(index);
         // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
-        item = fillKeyValueMapFromKeyList( qsettings->allKeys() );
+        item = fillKeyValueMapFromKeyList( qsettings->allKeys(), qsettings );
     }
     else
     {
@@ -89,7 +89,7 @@ Settings::SettingListType Settings::getList( const QString &key )
 
         KeyValueMapType item;
         // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
-        item = fillKeyValueMapFromKeyList( qsettings->allKeys() );
+        item = fillKeyValueMapFromKeyList( qsettings->allKeys(), qsettings );
         // Afegim el nou conjunts de valors a la llista
         list << item;
     }
@@ -115,7 +115,7 @@ void Settings::setListItem( int index, const QString &key, const KeyValueMapType
     qsettings->beginWriteArray(key); 
     qsettings->setArrayIndex(index);
     // omplim
-    dumpKeyValueMap(item);
+    dumpKeyValueMap(item,qsettings);
     qsettings->endArray();
 }
 
@@ -125,7 +125,8 @@ void Settings::removeListItem( const QString &key, int index )
     // TODO mirar si és necessari fer alguna comprovació més o si cal "re-ordenar" 
     // la llista, és a dir, si elimino l'element 3 de 5, potser cal renombrar l'element
     // 4 a "3" i el 5 a "4"    
-    remove( key + "/" + QString::number(index+1) );
+    QSettings *qsettings = getSettingsObject(key);
+    qsettings->remove( key + "/" + QString::number(index+1) );
 }
 
 void Settings::setList( const QString &key, const SettingListType &list )
@@ -137,7 +138,7 @@ void Settings::setList( const QString &key, const SettingListType &list )
     qsettings->beginWriteArray(key);
     foreach( KeyValueMapType item, list )
     {
-        dumpKeyValueMap( item );
+        dumpKeyValueMap( item, qsettings );
     }
     qsettings->endArray();
 }
@@ -195,23 +196,27 @@ void Settings::restoreGeometry( const QString &key, QSplitter *splitter )
     splitter->restoreState( this->getValue(key).toByteArray() );
 }
 
-Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList( const QStringList &keysList )
+Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList( const QStringList &keysList, QSettings *qsettings )
 {
+    Q_ASSERT( qsettings );
+
     KeyValueMapType item;
     
     foreach( QString key, keysList )
     {
-        item[ key ] = getSettingsObject(key)->value( key );
+        item[ key ] = qsettings->value( key );
     }
     return item;
 }
 
-void Settings::dumpKeyValueMap( const KeyValueMapType &item )
+void Settings::dumpKeyValueMap( const KeyValueMapType &item, QSettings *qsettings )
 {
+    Q_ASSERT( qsettings );
+
     QStringList keysList = item.keys();
     foreach( QString key, keysList )
     {
-        getSettingsObject(key)->setValue( key, item.value(key) );
+        qsettings->setValue( key, item.value(key) );
     }   
 }
 
