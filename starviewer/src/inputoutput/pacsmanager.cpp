@@ -13,7 +13,8 @@
 
 namespace udg {
 
-const QString PacsManager::PacsListConfigurationSectionName = "PacsList";
+// TODO passar-ho inputoutputsettings?
+const QString PacsManager::PacsListConfigurationSectionName = "PacsList/";
 
 PacsManager::PacsManager()
 {
