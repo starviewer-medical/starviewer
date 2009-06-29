@@ -104,29 +104,38 @@ void Settings::addListItem( const QString &key, const KeyValueMapType &item )
 
     int arraySize = qsettings->beginReadArray(key);
     qsettings->endArray();
-    setListItem( arraySize, key, item );
-}
 
-void Settings::setListItem( int index, const QString &key, const KeyValueMapType &item )
-{
-    QSettings *qsettings = getSettingsObject(key);
-    // no comprobem si l'índex està dins d'un rang determinat
-    // farem servir la política que tingui QSettings::setArrayIndex()
     qsettings->beginWriteArray(key); 
-    qsettings->setArrayIndex(index);
+    qsettings->setArrayIndex(arraySize);
     // omplim
     dumpKeyValueMap(item,qsettings);
     qsettings->endArray();
 }
 
+void Settings::setListItem( int index, const QString &key, const KeyValueMapType &item )
+{
+    Settings::SettingListType list = getList(key);
+    int listSize = list.count();
+    if( index >= 0 && index < listSize )
+    {
+        list[index] = item;
+        setList(key,list);
+    }
+    else
+        DEBUG_LOG("L'index està fora de rang més gran");
+}
+
 void Settings::removeListItem( const QString &key, int index )
 {
-    // ara mateix simplement el que fa és posar-li la clau adequada
-    // TODO mirar si és necessari fer alguna comprovació més o si cal "re-ordenar" 
-    // la llista, és a dir, si elimino l'element 3 de 5, potser cal renombrar l'element
-    // 4 a "3" i el 5 a "4"    
-    QSettings *qsettings = getSettingsObject(key);
-    qsettings->remove( key + "/" + QString::number(index+1) );
+    Settings::SettingListType list = getList(key);
+    int listSize = list.count();
+    if( index >= 0 && index < listSize )
+    {
+        list.removeAt(index);
+        setList(key,list);
+    }
+    else
+        DEBUG_LOG("L'index està fora de rang més gran");
 }
 
 void Settings::setList( const QString &key, const SettingListType &list )
@@ -134,11 +143,14 @@ void Settings::setList( const QString &key, const SettingListType &list )
     QSettings *qsettings = getSettingsObject(key);
     // eliminem tot el que pogués haver d'aquella llista anteriorment
     remove(key);
+    int index = 0;
     // escrivim la llista
     qsettings->beginWriteArray(key);
     foreach( KeyValueMapType item, list )
     {
+        qsettings->setArrayIndex(index);
         dumpKeyValueMap( item, qsettings );
+        index++;
     }
     qsettings->endArray();
 }
