@@ -1,5 +1,5 @@
-#ifndef PACSPARAMETERS
-#define PACSPARAMETERS
+#ifndef PACSDEVICE
+#define PACSDEVICE
 
 #include <QString>
 
@@ -16,7 +16,7 @@ namespace udg{
  *            - Localitzacio del Pacs
  *            - Default, estableix si aquest PACS és el predeterminat per realitzar les cerques
  */
-class PacsParameters
+class PacsDevice
 {
 public:
 
@@ -28,10 +28,10 @@ public:
      * @param   remoteServerAEtitle AETitle de la nostra màquina. Cada màquina ha de tenir un AETitle únic. 
      *          El PACS comprova al connectar-nos si la nostra IP correspont al nostre AETitle que li enviem
     */
-    PacsParameters(const QString &address, const QString &port, const QString &myAEtitle, const QString &remoteServerAEtitle);
+    PacsDevice(const QString &address, const QString &port, const QString &myAEtitle, const QString &remoteServerAEtitle);
 
     /// Constructor buit de la classe
-    PacsParameters();
+    PacsDevice();
 
     /// Assigna/Retorna l'adreça al pacs al qual ens volem connectar
     void setPacsAddress(const QString &address);
@@ -65,7 +65,7 @@ public:
     void setPacsID(QString ID);
     QString getPacsID() const;
 
-    bool operator ==(const PacsParameters &parameters);
+    bool operator ==(const PacsDevice &parameters);
 
     // TODO aquests mètodes poden desaparèixer quan estigui enllestit tot el tema de setting
     static QString getLocalAETitle();

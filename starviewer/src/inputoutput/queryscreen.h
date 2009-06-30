@@ -124,7 +124,7 @@ private:
     DicomMask buildDicomMask();
 
     ///Cerca els estudis que compleixen la màscara de cerca als pacs passats per paràmetre
-    Status queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
+    Status queryMultiplePacs(DicomMask searchMask, QList<PacsDevice> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
 
     ///Comprova els requeriments necessaris per poder utilitzar la QueryScreen
     void checkRequeriments();

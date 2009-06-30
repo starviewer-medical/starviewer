@@ -1,11 +1,11 @@
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 
 #include "inputoutputsettings.h"
 #include <QHostInfo> // pel getLocalAETitle()
 
 namespace udg{
 
-PacsParameters::PacsParameters(const QString &address, const QString &port, const QString &myAEtitle, const QString &remoteServerAEtitle)
+PacsDevice::PacsDevice(const QString &address, const QString &port, const QString &myAEtitle, const QString &remoteServerAEtitle)
 {
     m_pacsAddress = address;
     m_pacsPort = port;
@@ -15,92 +15,92 @@ PacsParameters::PacsParameters(const QString &address, const QString &port, cons
     m_pacsID = "";
 }
 
-PacsParameters::PacsParameters()
+PacsDevice::PacsDevice()
 {
     m_pacsID = "";
 }
 
-void PacsParameters::setPacsAddress(const QString &address)
+void PacsDevice::setPacsAddress(const QString &address)
 {
     m_pacsAddress = address;
 }
 
-QString PacsParameters::getPacsAddress() const
+QString PacsDevice::getPacsAddress() const
 {
     return m_pacsAddress;
 }
 
-void PacsParameters::setPacsPort(const QString &port)
+void PacsDevice::setPacsPort(const QString &port)
 {
     m_pacsPort = port;
 }
 
-QString PacsParameters::getPacsPort() const
+QString PacsDevice::getPacsPort() const
 {
     return m_pacsPort;
 }
 
-void PacsParameters::setAEPacs(const QString &remoteServerAETitle)
+void PacsDevice::setAEPacs(const QString &remoteServerAETitle)
 {
     m_pacsAETitle = remoteServerAETitle;
 }
 
-QString PacsParameters::getAEPacs() const
+QString PacsDevice::getAEPacs() const
 {
     return m_pacsAETitle;
 }
 
-void PacsParameters::setInstitution(const QString &institution)
+void PacsDevice::setInstitution(const QString &institution)
 {
     m_pacsInstitution = institution;
 }
 
-QString PacsParameters::getInstitution() const
+QString PacsDevice::getInstitution() const
 {
     return m_pacsInstitution;
 }
 
-void PacsParameters::setLocation(const QString &location)
+void PacsDevice::setLocation(const QString &location)
 {
     m_pacsLocation = location;
 }
 
-QString PacsParameters::getLocation() const
+QString PacsDevice::getLocation() const
 {
     return m_pacsLocation;
 }
 
-void PacsParameters::setDescription(const QString &description)
+void PacsDevice::setDescription(const QString &description)
 {
     m_pacsDescription = description;
 }
 
-QString PacsParameters::getDescription() const
+QString PacsDevice::getDescription() const
 {
     return m_pacsDescription;
 }
 
-void PacsParameters::setDefault(bool isDefault)
+void PacsDevice::setDefault(bool isDefault)
 {
     m_isDefaultPACS = isDefault;
 }
 
-bool PacsParameters::isDefault() const
+bool PacsDevice::isDefault() const
 {
     return m_isDefaultPACS;
 }
 
-void PacsParameters::setPacsID(QString ID)
+void PacsDevice::setPacsID(QString ID)
 {
     m_pacsID = ID;
 }
 
-QString PacsParameters::getPacsID() const
+QString PacsDevice::getPacsID() const
 {
     return m_pacsID;
 }
 
-bool PacsParameters::operator ==(const PacsParameters &parameters)
+bool PacsDevice::operator ==(const PacsDevice &parameters)
 {
     return m_pacsAETitle == parameters.m_pacsAETitle
         && m_myAETitle == parameters.m_myAETitle
@@ -116,25 +116,25 @@ bool PacsParameters::operator ==(const PacsParameters &parameters)
         && m_connectionTimeOut == parameters.m_connectionTimeOut;
 }
 
-QString PacsParameters::getLocalAETitle()
+QString PacsDevice::getLocalAETitle()
 {
     Settings settings;
     return settings.getValue( InputOutputSettings::localAETitleKey ).toString();
 }
 
-int PacsParameters::getMaximumConnections()
+int PacsDevice::getMaximumConnections()
 {
     Settings settings;
     return settings.getValue( InputOutputSettings::maximumPACSConnectionsKey ).toInt();
 }
 
-int PacsParameters::getConnectionTimeout()
+int PacsDevice::getConnectionTimeout()
 {
     Settings settings;
     return settings.getValue( InputOutputSettings::pacsConnectionTimeoutKey ).toInt();
 }
 
-int PacsParameters::getQueryRetrievePort()
+int PacsDevice::getQueryRetrievePort()
 {
     Settings settings;
     return settings.getValue( InputOutputSettings::queryRetrieveLocalPortKey ).toInt();

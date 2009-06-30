@@ -17,11 +17,11 @@
 #include "dicommask.h"
 #include "patient.h"
 #include "statswatcher.h"
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 #include "multiplequerystudy.h"
 #include "querypacs.h"
 #include "pacsserver.h"
-#include "pacsmanager.h"
+#include "pacsdevicemanager.h"
 #include "pacsconnection.h"
 #include "study.h"
 #include "qoperationstatescreen.h"
@@ -115,7 +115,7 @@ void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
     m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget); //Especifiquem que es el menu del dicomdir
 }
 
-void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameters> pacsToQuery)
+void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery)
 {
     if (pacsToQuery.count() == 0)
     {
@@ -156,13 +156,13 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsParameter
     }
 }
 
-void QInputOutputPacsWidget::storeStudiesToPacs(PacsParameters pacsToStore, QList<Study*> studiesToStore)
+void QInputOutputPacsWidget::storeStudiesToPacs(PacsDevice pacsToStore, QList<Study*> studiesToStore)
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     foreach(Study *studyToStore, studiesToStore)
     {
-        PacsManager pacsManager;
+        PacsDeviceManager pacsDeviceManager;
         Operation storeStudyOperation;
         DicomMask dicomMask;
         dicomMask.setStudyUID(studyToStore->getInstanceUID());
@@ -174,7 +174,7 @@ void QInputOutputPacsWidget::storeStudiesToPacs(PacsParameters pacsToStore, QLis
         storeStudyOperation.setPriority(Operation::Low);
         storeStudyOperation.setOperation(Operation::Move);
         storeStudyOperation.setDicomMask(dicomMask);
-        storeStudyOperation.setPacsParameters(pacsToStore);
+        storeStudyOperation.setPacsDevice(pacsToStore);
 
         m_qexecuteOperationThread.queueOperation(storeStudyOperation);
     }
@@ -327,19 +327,17 @@ void QInputOutputPacsWidget::view()
     retrieveSelectedStudies(true);
 }
 
-Status QInputOutputPacsWidget::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
+Status QInputOutputPacsWidget::queryMultiplePacs(DicomMask searchMask, QList<PacsDevice> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
 {
-    QList<PacsParameters> filledPacsParameters;
+    QList<PacsDevice> filledPacsDevice;
 
-    //TODO PacsParameters no hauria de contenir el AETitle i el timeout
-    //Hem d'afegir a les dades de pacs parameters el nostre aetitle i timeout
-    foreach(PacsParameters pacs, listPacsToQuery)
+    foreach(PacsDevice pacs, listPacsToQuery)
     {
-        filledPacsParameters.append(pacs);
+        filledPacsDevice.append(pacs);
     }
 
     multipleQueryStudy->setMask(searchMask); //assignem la mascara
-    multipleQueryStudy->setPacsList(filledPacsParameters);
+    multipleQueryStudy->setPacsList(filledPacsDevice);
     return multipleQueryStudy->StartQueries();
 }
 
@@ -347,15 +345,15 @@ void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, Dicom
 {
     QString defaultSeriesUID;
     Operation operation;
-    PacsParameters pacs;
+    PacsDevice pacs;
 
     QApplication::setOverrideCursor(QCursor (Qt::WaitCursor));
 
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    pacs = PacsManager().queryPacs(pacsIdToRetrieve);
+    pacs = PacsDeviceManager().queryPacs(pacsIdToRetrieve);
 
     //definim l'operació
-    operation.setPacsParameters(pacs);
+    operation.setPacsDevice(pacs);
     operation.setDicomMask(maskStudyToRetrieve);
     if (view)
     {
@@ -378,7 +376,7 @@ void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, Dicom
     QApplication::restoreOverrideCursor();
 }
 
-bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsParameters> pacsToQuery)
+bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)
 {
     if (pacsToQuery.isEmpty()) //es comprova que hi hagi pacs seleccionats
     {
@@ -409,22 +407,22 @@ QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanc
 
 PacsServer QInputOutputPacsWidget::getPacsServerByPacsID(QString pacsID)
 {
-    PacsParameters pacsParameters;
-    pacsParameters = PacsManager().queryPacs(pacsID);//cerquem els paràmetres del Pacs 
+    PacsDevice pacsDevice;
+    pacsDevice = PacsDeviceManager().queryPacs(pacsID);//cerquem els paràmetres del Pacs 
 
     PacsServer pacsServer;
-    pacsServer.setPacs(pacsParameters);
+    pacsServer.setPacs(pacsDevice);
 
     return pacsServer;
 }
 
 void QInputOutputPacsWidget::errorConnectingPacs(QString IDPacs)
 {
-    PacsManager pacsManager;
-    PacsParameters errorPacs;
+    PacsDeviceManager pacsDeviceManager;
+    PacsDevice errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsManager.queryPacs(IDPacs);
+    errorPacs = pacsDeviceManager.queryPacs(IDPacs);
 
     errorMessage = tr("Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct.")
         .arg(errorPacs.getAEPacs())
@@ -464,11 +462,11 @@ DicomMask QInputOutputPacsWidget::buildImageDicomMask(QString studyInstanceUID, 
 
 void QInputOutputPacsWidget::errorQueringStudiesPacs(QString PacsID)
 {
-    PacsManager pacsManager;
-    PacsParameters errorPacs;
+    PacsDeviceManager pacsDeviceManager;
+    PacsDevice errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsManager.queryPacs(PacsID);
+    errorPacs = pacsDeviceManager.queryPacs(PacsID);
     errorMessage = tr("Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct")
         .arg(errorPacs.getAEPacs())
         .arg(errorPacs.getInstitution()
@@ -480,7 +478,7 @@ void QInputOutputPacsWidget::errorQueringStudiesPacs(QString PacsID)
 void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error)
 {
     QString message;
-    PacsParameters pacs = PacsManager().queryPacs(pacsID);
+    PacsDevice pacs = PacsDeviceManager().queryPacs(pacsID);
 
     switch (error)
     {
@@ -500,7 +498,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             break;
         case QExecuteOperationThread::MoveDestinationAETileUnknown:
             message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAEPacs(), PacsParameters::getLocalAETitle() );
+            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAEPacs(), PacsDevice::getLocalAETitle() );
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
@@ -537,7 +535,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
-           message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsParameters::getQueryRetrievePort() );
+           message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getQueryRetrievePort() );
             message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
             message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);

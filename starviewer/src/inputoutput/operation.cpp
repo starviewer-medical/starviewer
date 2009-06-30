@@ -38,7 +38,7 @@ bool Operation::operator ==(const Operation &operation)
         && (m_patientName == operation.m_patientName)
         && (m_studyID == operation.m_studyID)
         && (m_studyUID == operation.m_studyUID)
-        && (m_pacsParameters == operation.m_pacsParameters)
+        && (m_pacsDevice == operation.m_pacsDevice)
         && (m_mask == operation.m_mask)
         )
         return true;
@@ -61,9 +61,9 @@ void Operation::setOperation( OperationAction operation )
     m_operation = operation;
 }
 
-void Operation::setPacsParameters( PacsParameters parameters )
+void Operation::setPacsDevice( PacsDevice parameters )
 {
-    m_pacsParameters = parameters;
+    m_pacsDevice= parameters;
 }
 
 DicomMask Operation::getDicomMask()
@@ -81,9 +81,9 @@ Operation::OperationAction Operation::getOperation()
     return m_operation;
 }
 
-PacsParameters Operation::getPacsParameters()
+PacsDevice Operation::getPacsDevice()
 {
-    return m_pacsParameters;
+    return m_pacsDevice;
 }
 
 void Operation::setPatientName( QString patientName )

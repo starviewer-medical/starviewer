@@ -5,61 +5,61 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "pacsmanager.h"
+#include "pacsdevicemanager.h"
 
 #include <QString>
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 #include "logging.h"
 
 namespace udg {
 
 // TODO passar-ho inputoutputsettings?
-const QString PacsManager::PacsListConfigurationSectionName = "PacsList/";
+const QString PacsDeviceManager::PacsListConfigurationSectionName = "PacsList/";
 
-PacsManager::PacsManager()
+PacsDeviceManager::PacsDeviceManager()
 {
 }
 
-PacsManager::~PacsManager()
+PacsDeviceManager::~PacsDeviceManager()
 {
 }
 
-bool PacsManager::insertPacs(const PacsParameters &pacs)
+bool PacsDeviceManager::insertPacs(const PacsDevice &pacs)
 {
     bool ok = !this->existPacs(pacs);
     if( ok )
     {
         Settings settings;
-        settings.addListItem( PacsListConfigurationSectionName, pacsParametersToKeyValueMap(pacs) );
+        settings.addListItem( PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacs) );
     }
 
     return ok;
 }
 
-void PacsManager::updatePacs(const PacsParameters &pacsToUpdate)
+void PacsDeviceManager::updatePacs(const PacsDevice &pacsToUpdate)
 {
     Settings settings;
-    settings.setListItem( pacsToUpdate.getPacsID().toInt(),PacsListConfigurationSectionName, pacsParametersToKeyValueMap(pacsToUpdate) );
+    settings.setListItem( pacsToUpdate.getPacsID().toInt(),PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacsToUpdate) );
 }
 
-QList<PacsParameters> PacsManager::queryPacsList()
+QList<PacsDevice> PacsDeviceManager::queryPacsList()
 {
     // els tornem tots
     return getConfiguredPacsList();
 }
 
-QList<PacsParameters> PacsManager::queryDefaultPacs()
+QList<PacsDevice> PacsDeviceManager::queryDefaultPacs()
 {
     // només tornem els que estan per defecte
     return getConfiguredPacsList(true);
 }
 
-PacsParameters PacsManager::queryPacs( const QString &pacsIDString )
+PacsDevice PacsDeviceManager::queryPacs( const QString &pacsIDString )
 {
-    QList<PacsParameters> pacsList = getConfiguredPacsList();
+    QList<PacsDevice> pacsList = getConfiguredPacsList();
     bool ok = false;
     int pacsID = pacsIDString.toInt(&ok);
-    PacsParameters pacs;
+    PacsDevice pacs;
 
     if (ok)
     {
@@ -76,15 +76,15 @@ PacsParameters PacsManager::queryPacs( const QString &pacsIDString )
     return pacs;
 }
 
-bool PacsManager::existPacs(const PacsParameters &pacs)
+bool PacsDeviceManager::existPacs(const PacsDevice &pacs)
 {
-    QList<PacsParameters> pacsList = getConfiguredPacsList();
+    QList<PacsDevice> pacsList = getConfiguredPacsList();
 
-    foreach(PacsParameters pacsParameters, pacsList)
+    foreach(PacsDevice pacsDevice, pacsList)
     {
-        if (pacsParameters.getAEPacs() == pacs.getAEPacs() && 
-            pacsParameters.getPacsPort() == pacs.getPacsPort() &&
-            pacsParameters.getPacsAddress() == pacs.getPacsAddress())
+        if (pacsDevice.getAEPacs() == pacs.getAEPacs() && 
+            pacsDevice.getPacsPort() == pacs.getPacsPort() &&
+            pacsDevice.getPacsAddress() == pacs.getPacsAddress())
         {
             return true;
         }
@@ -93,7 +93,7 @@ bool PacsManager::existPacs(const PacsParameters &pacs)
     return false;
 }
 
-bool PacsManager::deletePacs( const QString &pacsIDString)
+bool PacsDeviceManager::deletePacs( const QString &pacsIDString)
 {
     bool ok = false;
     int pacsID = pacsIDString.toInt(&ok);
@@ -107,15 +107,15 @@ bool PacsManager::deletePacs( const QString &pacsIDString)
     return ok;
 }
 
-QList<PacsParameters> PacsManager::getConfiguredPacsList( bool onlyDefault )
+QList<PacsDevice> PacsDeviceManager::getConfiguredPacsList( bool onlyDefault )
 {
-    QList<PacsParameters> configuredPacsList;
+    QList<PacsDevice> configuredPacsList;
     Settings settings;
     Settings::SettingListType list = settings.getList(PacsListConfigurationSectionName);
     foreach( Settings::KeyValueMapType item, list )
     {
-        PacsParameters pacs;
-        pacs = keyValueMapToPacsParameters(item);
+        PacsDevice pacs;
+        pacs = keyValueMapToPacsDevice(item);
         // depenent del paràmetre "onlyDefault" afegirem o no els pacs
         if( (onlyDefault && pacs.isDefault()) || !onlyDefault )
         {
@@ -126,7 +126,7 @@ QList<PacsParameters> PacsManager::getConfiguredPacsList( bool onlyDefault )
     return configuredPacsList;
 }
 
-Settings::KeyValueMapType PacsManager::pacsParametersToKeyValueMap( const PacsParameters &parameters )
+Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const PacsDevice &parameters )
 {
     Settings::KeyValueMapType item;
         
@@ -142,9 +142,9 @@ Settings::KeyValueMapType PacsManager::pacsParametersToKeyValueMap( const PacsPa
     return item;
 }
 
-PacsParameters PacsManager::keyValueMapToPacsParameters( const Settings::KeyValueMapType &item )
+PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueMapType &item )
 {
-    PacsParameters parameters;
+    PacsDevice parameters;
     // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
     parameters.setPacsID( item.value("ID").toString() );
     parameters.setAEPacs( item.value("AETitle" ).toString() );

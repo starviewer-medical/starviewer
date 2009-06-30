@@ -23,9 +23,9 @@ FORMS += qconfigurationscreenbase.ui \
          qinputoutputpacswidgetbase.ui
 HEADERS += databaseconnection.h \
            pacsconnection.h \
-           pacsmanager.h \
+           pacsdevicemanager.h \
            pacsnetwork.h \
-           pacsparameters.h \
+           pacsdevice.h \
            pacsserver.h \
            processimage.h \
            processimagesingleton.h \
@@ -82,9 +82,9 @@ HEADERS += databaseconnection.h \
 
 SOURCES += databaseconnection.cpp \
            pacsconnection.cpp \
-           pacsmanager.cpp \
+           pacsdevicemanager.cpp \
            pacsnetwork.cpp \
-           pacsparameters.cpp \
+           pacsdevice.cpp \
            pacsserver.cpp \
            processimage.cpp \
            processimagesingleton.cpp \

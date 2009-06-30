@@ -75,7 +75,7 @@ private:
      *  4t Que l'institució no estigui buida
      * @return bool, retorna cert si tots els parametres del pacs son correctes
      */
-    bool validatePacsParameters();
+    bool validatePacsDevice();
 
     /** Valida que els canvis de la configuració siguin correctes
      *  Port local entre 0 i 65535

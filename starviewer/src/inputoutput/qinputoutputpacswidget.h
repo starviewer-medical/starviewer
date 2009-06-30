@@ -25,7 +25,7 @@ class DicomMask;
 class Patient;
 class StatsWatcher;
 class Status;
-class PacsParameters;
+class PacsDevice;
 class MultipleQueryStudy;
 class PacsServer;
 class Study;
@@ -44,10 +44,10 @@ public:
     ~QInputOutputPacsWidget();
 
     ///Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
-    void queryStudy(DicomMask queryMask, QList<PacsParameters> pacsToQuery);
+    void queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery);
 
     //TODO: per implementar
-    void storeStudiesToPacs(PacsParameters pacs, QList<Study*> studiesToStore);
+    void storeStudiesToPacs(PacsDevice pacs, QList<Study*> studiesToStore);
 
     ///Neteja els resultats de la última cerca
     void clear();
@@ -91,12 +91,12 @@ private:
 
     ///Fa la consulta a diversos PACS
     //TODO aquest mètode quan s'hagi fet el refactoring de pacsparameters hauria de desapareixer no tindrà sentit
-    Status queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
+    Status queryMultiplePacs(DicomMask searchMask, QList<PacsDevice> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
 
     /**Comprova que els paràmetres per la cerca siguin correctes, que no es tractir d'un consulta pesada i que ens hagin seleccionat
      * algun PACS per consultar 
      */
-    bool AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsParameters> pacsToQuery);
+    bool AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery);
 
     ///Retorna l'ID del pacs al que pertany l'estudi passat per paràmetre, només té en compte els estudis que s'han consultat a la última query
     QString getPacsIDFromQueriedStudies(QString studyInstanceUID);
@@ -104,7 +104,7 @@ private:
     /** Donat un AETitle busca les dades del PACS a la configuració i prepara un objecte PACSERVER, per poder
      * connectar al PACS
      */
-    //TODO Aquest mètode ha de desapareixer quan s'hagi fet refactoring de PacsParameters i s'hagin tret els paràmetres que no li són propis
+    //TODO Aquest mètode ha de desapareixer quan s'hagi fet refactoring de PacsDevice i s'hagin tret els paràmetres que no li són propis
     PacsServer getPacsServerByPacsID(QString pacsID);
 
     ///Construeix la màscara de cerca per cercar les sèries d'un estudi

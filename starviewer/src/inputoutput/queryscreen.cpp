@@ -13,7 +13,7 @@
 #include "qpacslist.h"
 #include "inputoutputsettings.h"
 #include "operation.h"
-#include "pacsmanager.h"
+#include "pacsdevicemanager.h"
 #include "logging.h"
 #include "status.h"
 #include "qcreatedicomdir.h"
@@ -26,7 +26,7 @@
 #include "utils.h"
 #include "statswatcher.h"
 #include "multiplequerystudy.h"
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -175,7 +175,7 @@ void QueryScreen::checkRequeriments()
 void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
 {
     Settings settings;
-    int localPort = PacsParameters::getQueryRetrievePort();
+    int localPort = PacsDevice::getQueryRetrievePort();
 
     if ( Utils::isPortInUse( localPort ) )
     {
@@ -298,7 +298,7 @@ void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
 
 void QueryScreen::storeStudiesToPacs(QList<Study*> studiesToStore)
 {
-    QList<PacsParameters> selectedPacs = m_PACSNodes->getSelectedPacs();
+    QList<PacsDevice> selectedPacs = m_PACSNodes->getSelectedPacs();
 
     if (selectedPacs.count() == 0)
     {
@@ -405,19 +405,17 @@ void QueryScreen::writeSettings()
     }
 }
 
-Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsParameters> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
+Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsDevice> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
 {
-    QList<PacsParameters> filledPacsParameters;
+    QList<PacsDevice> filledPacsDevice;
 
-    //TODO PacsParameters no hauria de contenir el AETitle i el timeout
-    //Hem d'afegir a les dades de pacs parameters el nostre aetitle i timeout
-    foreach(PacsParameters pacs, listPacsToQuery)
+    foreach(PacsDevice pacs, listPacsToQuery)
     {
-        filledPacsParameters.append(pacs);
+        filledPacsDevice.append(pacs);
     }
 
     multipleQueryStudy->setMask( searchMask ); //assignem la mascara
-    multipleQueryStudy->setPacsList(filledPacsParameters);
+    multipleQueryStudy->setPacsList(filledPacsDevice);
     return multipleQueryStudy->StartQueries();
 }
 
@@ -434,7 +432,7 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
     connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
     connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
 
-    Status state = queryMultiplePacs(maskRisRequest, PacsManager().queryDefaultPacs(), &multipleQueryStudy);
+    Status state = queryMultiplePacs(maskRisRequest, PacsDeviceManager().queryDefaultPacs(), &multipleQueryStudy);
 
     //Fem els connects per tracta els possibles errors que es poden donar
 
@@ -465,11 +463,11 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
 
 void QueryScreen::errorConnectingPacs( QString IDPacs )
 {
-    PacsManager pacsManager;
-    PacsParameters errorPacs;
+    PacsDeviceManager pacsDeviceManager;
+    PacsDevice errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsManager.queryPacs(IDPacs);
+    errorPacs = pacsDeviceManager.queryPacs(IDPacs);
 
     errorMessage = tr( "Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct." )
         .arg( errorPacs.getAEPacs() )
@@ -481,11 +479,11 @@ void QueryScreen::errorConnectingPacs( QString IDPacs )
 
 void QueryScreen::errorQueringStudiesPacs(QString PacsID)
 {
-    PacsManager pacsManager;
-    PacsParameters errorPacs;
+    PacsDeviceManager pacsDeviceManager;
+    PacsDevice errorPacs;
     QString errorMessage;
 
-    errorPacs = pacsManager.queryPacs(PacsID);
+    errorPacs = pacsDeviceManager.queryPacs(PacsID);
     errorMessage = tr( "Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct" )
         .arg( errorPacs.getAEPacs() )
         .arg( errorPacs.getInstitution()
