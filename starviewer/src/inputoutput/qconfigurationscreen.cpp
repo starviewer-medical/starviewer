@@ -11,8 +11,8 @@
 
 #include "pacsserver.h"
 #include "status.h"
-#include "pacsparameters.h"
-#include "pacsmanager.h"
+#include "pacsdevice.h"
+#include "pacsdevicemanager.h"
 #include "starviewerapplication.h"
 #include "logging.h"
 #include "utils.h"
@@ -91,10 +91,10 @@ void QConfigurationScreen::loadPacsDefaults()
 {
     QString result;
     Settings settings;
-    m_textAETitleMachine->setText( PacsParameters::getLocalAETitle() );
-    m_textLocalPort->setText( QString::number(PacsParameters::getQueryRetrievePort()) );
-    m_textTimeout->setText( QString::number(PacsParameters::getConnectionTimeout()) );
-    m_textMaxConnections->setText( QString::number(PacsParameters::getMaximumConnections()) );
+    m_textAETitleMachine->setText( PacsDevice::getLocalAETitle() );
+    m_textLocalPort->setText( QString::number(PacsDevice::getQueryRetrievePort()) );
+    m_textTimeout->setText( QString::number(PacsDevice::getConnectionTimeout()) );
+    m_textMaxConnections->setText( QString::number(PacsDevice::getMaximumConnections()) );
 }
 
 /************************************************************************************************************************/
@@ -115,10 +115,10 @@ void QConfigurationScreen:: clear()
 
 void QConfigurationScreen::addPacs()
 {
-    PacsParameters pacs;
-    PacsManager pacsManager;
+    PacsDevice pacs;
+    PacsDeviceManager pacsDeviceManager;
 
-    if (validatePacsParameters())
+    if (validatePacsDevice())
     {
         // TODO de moment assignem l'ID segons el nombre de PACS configurats
         // TODO Caldria plantejar-se si realment el paràmetre "ID" tal i com s'està fent servir, és necessari o no
@@ -134,7 +134,7 @@ void QConfigurationScreen::addPacs()
 
         INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
 
-        if ( !pacsManager.insertPacs(pacs) )
+        if ( !pacsDeviceManager.insertPacs(pacs) )
         {
             QMessageBox::warning(this, ApplicationNameString, tr("This PACS already exists."));
         }
@@ -149,13 +149,13 @@ void QConfigurationScreen::addPacs()
 
 void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 {
-    QList<PacsParameters> pacsList;
-    PacsParameters selectedPacs;
-    PacsManager pacsManager;
+    QList<PacsDevice> pacsList;
+    PacsDevice selectedPacs;
+    PacsDeviceManager pacsDeviceManager;
 
     if ( selectedItem != NULL )
     {
-        selectedPacs = pacsManager.queryPacs(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
+        selectedPacs = pacsDeviceManager.queryPacs(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
 
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAEPacs() );
@@ -172,8 +172,8 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
 
 void QConfigurationScreen::updatePacs()
 {
-    PacsParameters pacs;
-    PacsManager pacsManager;
+    PacsDevice pacs;
+    PacsDeviceManager pacsDeviceManager;
 
     if ( m_selectedPacsID == "" )
     {
@@ -181,7 +181,7 @@ void QConfigurationScreen::updatePacs()
         return;
     }
 
-    if ( validatePacsParameters() )
+    if ( validatePacsDevice() )
     {
         pacs.setAEPacs( m_textAETitle->text() );
         pacs.setPacsPort( m_textPort->text() );
@@ -194,7 +194,7 @@ void QConfigurationScreen::updatePacs()
 
         INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
 
-        pacsManager.updatePacs(pacs);
+        pacsDeviceManager.updatePacs(pacs);
 
         fillPacsListView();
         clear();
@@ -204,7 +204,7 @@ void QConfigurationScreen::updatePacs()
 
 void QConfigurationScreen::deletePacs()
 {
-    PacsManager pacsManager;
+    PacsDeviceManager pacsDeviceManager;
 
     if ( m_selectedPacsID == "" )
     {
@@ -214,7 +214,7 @@ void QConfigurationScreen::deletePacs()
 
     INFO_LOG( "Esborrant el PACS: " + m_textAETitle->text() );
 
-    pacsManager.deletePacs( m_selectedPacsID );
+    pacsDeviceManager.deletePacs( m_selectedPacsID );
 
     fillPacsListView();
     clear();
@@ -223,14 +223,14 @@ void QConfigurationScreen::deletePacs()
 
 void QConfigurationScreen::fillPacsListView()
 {
-    QList<PacsParameters> pacsList;
-    PacsManager pacsManager;
+    QList<PacsDevice> pacsList;
+    PacsDeviceManager pacsDeviceManager;
 
     m_PacsTreeView->clear();
 
-    pacsList = pacsManager.queryPacsList();
+    pacsList = pacsDeviceManager.queryPacsList();
 
-    foreach(PacsParameters pacs, pacsList)
+    foreach(PacsDevice pacs, pacsList)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
 
@@ -248,8 +248,8 @@ void QConfigurationScreen::fillPacsListView()
 void QConfigurationScreen::test()
 {
     Status state;
-    PacsParameters pacs;
-    PacsManager pacsList;
+    PacsDevice pacs;
+    PacsDeviceManager pacsList;
     PacsServer pacsServer;
     QString message;
 
@@ -299,7 +299,7 @@ void QConfigurationScreen::test()
         QMessageBox::information( this , tr("Information") , tr("To test a PACS it is necessary to select an item of the list.") );
 }
 
-bool QConfigurationScreen::validatePacsParameters()
+bool QConfigurationScreen::validatePacsDevice()
 {
     QString text;
 

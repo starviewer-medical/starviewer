@@ -14,7 +14,7 @@
 namespace udg {
 
 class Status;
-class PacsParameters;
+class PacsDevice;
 
 /** Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
 @author marc
@@ -29,7 +29,7 @@ public:
     QPacsList(QWidget *parent = 0 );
 
     /// Retorna els pacs seleccionats per l'usuari
-    QList<PacsParameters> getSelectedPacs();
+    QList<PacsDevice> getSelectedPacs();
 
     ///Destructor de la classe
     ~QPacsList();

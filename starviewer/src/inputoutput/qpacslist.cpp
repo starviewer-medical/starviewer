@@ -10,8 +10,8 @@
 #include <QList>
 #include <QMessageBox>
 
-#include "pacsmanager.h"
-#include "pacsparameters.h"
+#include "pacsdevicemanager.h"
+#include "pacsdevice.h"
 #include "status.h"
 
 namespace udg {
@@ -32,14 +32,14 @@ QPacsList::~QPacsList()
 
 void QPacsList::refresh()
 {
-    PacsManager pacsManager;
-    QList<PacsParameters> pacsList;
+    PacsDeviceManager pacsDeviceManager;
+    QList<PacsDevice> pacsList;
 
     m_PacsTreeView->clear();
 
-    pacsList = pacsManager.queryPacsList();
+    pacsList = pacsDeviceManager.queryPacsList();
 
-    foreach(PacsParameters pacs, pacsList)
+    foreach(PacsDevice pacs, pacsList)
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
 
@@ -52,21 +52,21 @@ void QPacsList::refresh()
     }
 }
 
-QList<PacsParameters> QPacsList::getSelectedPacs()
+QList<PacsDevice> QPacsList::getSelectedPacs()
 {
-    PacsManager pacsManager;
+    PacsDeviceManager pacsDeviceManager;
 
     QList< QTreeWidgetItem * > qPacsList( m_PacsTreeView->selectedItems() );
     QTreeWidgetItem *item;
 
-    QList<PacsParameters> selectedPacsList;
+    QList<PacsDevice> selectedPacsList;
 
     for ( int i = 0; i < qPacsList.count(); i++ )
     {
         item = qPacsList.at( i );
-        PacsParameters pacs;
+        PacsDevice pacs;
 
-        pacs = pacsManager.queryPacs(item->text(0)); //fem el query per cercar la informació del PACS
+        pacs = pacsDeviceManager.queryPacs(item->text(0)); //fem el query per cercar la informació del PACS
 
         selectedPacsList.append( pacs ); //inserim a la llista
     }

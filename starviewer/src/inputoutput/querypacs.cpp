@@ -17,7 +17,7 @@
 #include "patient.h"
 #include "createinformationmodelobject.h"
 #include "dicomtagreader.h"
-#include "pacsmanager.h"
+#include "pacsdevicemanager.h"
 
 namespace udg{
 
@@ -29,7 +29,7 @@ void QueryPacs::setConnection(QString pacsID, PacsConnection connection)
     m_assoc = connection.getPacsConnection();
     m_pacsID = pacsID;
 
-    m_institutionPacs = PacsManager().queryPacs(pacsID).getInstitution();//Cerquem el nom de la Institució a la qual pertany el PACS
+    m_institutionPacs = PacsDeviceManager().queryPacs(pacsID).getInstitution();//Cerquem el nom de la Institució a la qual pertany el PACS
 }
 
 void QueryPacs::foundMatchCallback(

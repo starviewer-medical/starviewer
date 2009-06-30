@@ -25,7 +25,7 @@ QQueryStudyThread::QQueryStudyThread(QObject *parent)
 {
 }
 
-void QQueryStudyThread::queryStudy( PacsParameters param , DicomMask mask )
+void QQueryStudyThread::queryStudy( PacsDevice param , DicomMask mask )
 {
     m_param = param;
     m_mask = mask;
@@ -40,7 +40,7 @@ void QQueryStudyThread::run()
     //creem la connexió
     PacsServer serverSCP(m_param);
 
-    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsParameters::getLocalAETitle() + "; AEPACS= " + m_param.getAEPacs() + "; PACS Adr= " + m_param.getPacsAddress() + "; PACS Port= " + m_param.getPacsPort() + ";" );
+    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsDevice::getLocalAETitle() + "; AEPACS= " + m_param.getAEPacs() + "; PACS Adr= " + m_param.getPacsAddress() + "; PACS Port= " + m_param.getPacsPort() + ";" );
 
     state = serverSCP.connect( PacsServer::query,PacsServer::studyLevel );
 

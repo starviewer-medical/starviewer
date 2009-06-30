@@ -12,7 +12,7 @@
 #include <QHash>
 
 #include "dicommask.h"
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 
 class QString;
 
@@ -39,7 +39,7 @@ public:
      * @param parametres del pacs a consultar
      * @param DicomMask màscara de cerca
      */
-    void queryStudy( PacsParameters parameters , DicomMask mask );
+    void queryStudy( PacsDevice parameters , DicomMask mask );
 
     /// el codi d'aquest mètode es el que s'executa en un nou thread
     void run();
@@ -70,7 +70,7 @@ signals:
     void errorQueringStudiesPacs( QString pacsID );
 
 private :
-    PacsParameters m_param;
+    PacsDevice m_param;
     DicomMask m_mask;
 
     QList<Patient*> m_patientStudyList;

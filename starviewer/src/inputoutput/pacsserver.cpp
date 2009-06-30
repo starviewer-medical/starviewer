@@ -6,7 +6,7 @@
 #include <assoc.h>
 #include "dcmtk/dcmdata/dcdebug.h"
 
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 #include "status.h"
 #include "pacsconnection.h"
 #include "pacsnetwork.h"
@@ -18,7 +18,7 @@ namespace udg{
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 
-PacsServer::PacsServer(PacsParameters p)
+PacsServer::PacsServer(PacsDevice p)
 {
     // Variable global de dcmtk per evitar el dnslookup, que dona problemes de lentitu a windows.
     // TODO: Al fer refactoring aquesta inicialització hauria de quedar en un lloc central de configuracions per dcmtk.
@@ -368,7 +368,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
     // set calling and called AE titles
     //el c_str, converteix l'string que ens retornen les funcions get a un char
-    ASC_setAPTitles( m_params , qPrintable( PacsParameters::getLocalAETitle() ) , qPrintable(m_pacs.getAEPacs()) , NULL );
+    ASC_setAPTitles( m_params , qPrintable( PacsDevice::getLocalAETitle() ) , qPrintable(m_pacs.getAEPacs()) , NULL );
 
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
@@ -387,7 +387,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     if ( !cond.good() ) return state.setStatus( cond );
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
-    int timeout = PacsParameters::getConnectionTimeout();
+    int timeout = PacsDevice::getConnectionTimeout();
     dcmConnectionTimeout.set( timeout );
 
     switch ( modality )
@@ -416,7 +416,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond=configureMove( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkRetrieve( PacsParameters::getQueryRetrievePort() , PacsParameters::getConnectionTimeout() );
+                        state = m_pacsNetwork->createNetworkRetrieve( PacsDevice::getQueryRetrievePort() , PacsDevice::getConnectionTimeout() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkRetrieve();
@@ -470,12 +470,12 @@ QString PacsServer:: constructAdrServer( QString host , QString port )
     return adrServer;
 }
 
-void PacsServer:: setPacs( PacsParameters p )
+void PacsServer:: setPacs( PacsDevice p )
 {
     m_pacs = p;
 }
 
-PacsParameters PacsServer::getPacs()
+PacsDevice PacsServer::getPacs()
 {
     return m_pacs;
 }

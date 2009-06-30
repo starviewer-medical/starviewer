@@ -4,7 +4,7 @@
 
 #include <oflist.h>
 
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 
 struct T_ASC_Network;
 struct T_ASC_Parameters;
@@ -32,10 +32,10 @@ public:
     //any it's only can be used with echoPacs modality
     enum levelConnection { patientLevel , studyLevel , seriesLevel , any , imageLevel };
 
-    /** Constuctor de la classe. Se li ha de passar un objecte PacsParameters, amb els paràmetres del pacs correctament especificats
+    /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
      */
-    PacsServer( PacsParameters );
+    PacsServer( PacsDevice );
 
     /// Constructor buit de la classe
     PacsServer();
@@ -55,12 +55,12 @@ public:
     /** Estableix un pacs per a la connexió
      * @param Pacs amb els paràmetres per a la connexió
      */
-    void setPacs( PacsParameters );
+    void setPacs( PacsDevice );
 
     /** retorna els paràmetres del PACS
      * @return paràmetres del Pacs
      */
-    PacsParameters getPacs();
+    PacsDevice getPacs();
 
     /** Retorna una connexió per a poder buscar informació, o descarregar imatges
      * @return retorna una connexió de PACS
@@ -82,7 +82,7 @@ private:
    T_ASC_Association *m_assoc; // request DICOM association;
    PacsNetwork *m_pacsNetwork; //configures the T_ASC_Network
 
-   PacsParameters m_pacs;
+   PacsDevice m_pacs;
 
     /** Aquesta funció és privada. És utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell és un echo. Per defecte en qualsevol modalitat de connexió podrem fer un echo
      * @return retorna l'estat de la configuració

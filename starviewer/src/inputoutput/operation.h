@@ -8,7 +8,7 @@
 #define UDGOPERATION_H
 
 #include "dicommask.h"
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 
 class QString;
 
@@ -45,7 +45,7 @@ public:
     /** Estableix a quin PACS es dura a terme la operacio
      * @param Pacs al qual es dura a terme l'operacio
      */
-    void setPacsParameters( PacsParameters parameters );
+    void setPacsDevice( PacsDevice parameters );
 
    /** Retorna la màscara de l'operació
     * @return màscara de l'operació
@@ -63,9 +63,9 @@ public:
     OperationAction getOperation();
 
     /** Retorna el pacsParameters de l'objecte operation
-     * @return PacsParameters de l'objecte operation
+     * @return PacsDevice de l'objecte operation
      */
-    PacsParameters getPacsParameters();
+    PacsDevice getPacsDevice();
 
     /// Operador per ordernar per prioritats
     bool operator < ( Operation ) const;
@@ -121,7 +121,7 @@ private :
     DicomMask m_mask;
     OperationPriority m_priority;
     OperationAction m_operation;
-    PacsParameters m_pacsParameters;
+    PacsDevice m_pacsDevice;
 
     // AQUESTA INFORMACIO ES NECESSARIA, JA QUE ES LA QUE PASSA A LA QRETRIEVESCREEN, pantalla que mostra l'estat de les operacions
     QString m_patientName, m_patientID, m_studyUID, m_studyID;

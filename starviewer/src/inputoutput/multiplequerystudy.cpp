@@ -17,7 +17,7 @@
 #include "series.h"
 #include "image.h"
 #include "status.h"
-#include "pacsparameters.h"
+#include "pacsdevice.h"
 #include "qquerystudythread.h"
 
 #include "errordcmtk.h"
@@ -27,7 +27,7 @@ namespace udg {
 MultipleQueryStudy::MultipleQueryStudy( QObject *parent )
  : QObject( parent )
 {
-    m_semaphoreActiveThreads = new QSemaphore( PacsParameters::getMaximumConnections() );
+    m_semaphoreActiveThreads = new QSemaphore( PacsDevice::getMaximumConnections() );
 }
 
 void MultipleQueryStudy::setMask( DicomMask mask )
@@ -35,7 +35,7 @@ void MultipleQueryStudy::setMask( DicomMask mask )
     m_searchMask = mask;
 }
 
-void MultipleQueryStudy::setPacsList( QList<PacsParameters> pacsListToQuery )
+void MultipleQueryStudy::setPacsList( QList<PacsDevice> pacsListToQuery )
 {
      m_pacsListToQuery = pacsListToQuery;
 }
@@ -54,7 +54,7 @@ Status MultipleQueryStudy::StartQueries()
 
     initializeResultsList();
 
-    foreach(PacsParameters pacsToQuery, m_pacsListToQuery)
+    foreach(PacsDevice pacsToQuery, m_pacsListToQuery)
     {
         QQueryStudyThread *thread = new QQueryStudyThread;
 
