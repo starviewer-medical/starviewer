@@ -1093,7 +1093,7 @@ void QLandmarkRegistrationExtension::sliceChanged2( int s )
 
 void QLandmarkRegistrationExtension::saveTransform(  )
 {
-    QString fileName = QFileDialog::getSaveFileName( this, tr("Save Transform file") , m_savingDirectory , tr("MetaImage Files (*.mhd)") );
+    QString fileName = QFileDialog::getSaveFileName( this, tr("Save Transform file") , m_savingDirectory , tr("Transform Files (*.tf)") );
     if ( !fileName.isEmpty() )
     {
         ofstream fout(qPrintable( fileName ));
@@ -1136,7 +1136,7 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         landmarkRegTransform = LandmarkRegTransformType::New();
     }
 
-    QString fileName = QFileDialog::getOpenFileName( this , tr("Chose a transform filename") , m_savingDirectory , tr("MetaImage Files (*.mhd)") );
+    QString fileName = QFileDialog::getOpenFileName( this , tr("Chose a transform filename") , m_savingDirectory , tr("Transform Files (*.tf)") );
     if ( !fileName.isEmpty() )
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
