@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop.
 # -------------------------------------------
 # Subdirectori relatiu al directori principal del projecte: ./src/core
-# L'objectiu � una biblioteca:
+# L'objectiu és una biblioteca:
 
 FORMS += qlogviewerbase.ui \
          qcustomwindowleveldialogbase.ui \
@@ -183,6 +183,7 @@ HEADERS += extensionfactory.h \
            toolrepresentation.h \
            settings.h \
            settingsregistry.h \
+           settingsparser.h \
            defaultsettings.h \
            coresettings.h \
            settingsaccesslevelxmlreader.h \
@@ -337,6 +338,7 @@ SOURCES += extensionmediator.cpp \
            toolrepresentation.cpp \
            settings.cpp \
            settingsregistry.cpp \
+           settingsparser.cpp \
            defaultsettings.cpp \
            coresettings.cpp \
            settingsaccesslevelxmlreader.cpp \
