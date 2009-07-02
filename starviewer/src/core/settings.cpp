@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "starviewerapplication.h"
 #include "settingsregistry.h"
+#include "settingsparser.h"
 
 #include <QTreeWidget>
 #include <QHeaderView> // pel restoreColumnsWidths
@@ -36,6 +37,14 @@ QVariant Settings::getValue( const QString &key ) const
         value = SettingsRegistry::instance()->getDefaultValue(key);
     }
 
+    // obtenir les propietats del setting
+    // TODO de moment només tractem "Parseable"
+    // si és Parseable, mirem de parsejar el valor, altrament el retornem tal qual
+    Settings::Properties properties = SettingsRegistry::instance()->getProperties(key);
+    if( properties & Settings::Parseable )
+    {
+        value = SettingsParser::instance()->parse( value.toString() );
+    }
     return value;
 }
 
