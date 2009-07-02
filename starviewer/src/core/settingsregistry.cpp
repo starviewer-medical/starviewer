@@ -17,14 +17,14 @@ SettingsRegistry::~SettingsRegistry()
 {
 }
 
-void SettingsRegistry::addSetting( const QString &key, const QVariant &defaultValue )
+void SettingsRegistry::addSetting( const QString &key, const QVariant &defaultValue, Settings::Properties properties )
 {
-    m_keyDefaultValueMap.insert( key, defaultValue );
+    m_keyDefaultValueAndPropertiesMap.insert( key, qMakePair(defaultValue,properties) );
 }
 
 QVariant SettingsRegistry::getDefaultValue( const QString &key )
 {
-    return m_keyDefaultValueMap.value(key);
+    return m_keyDefaultValueAndPropertiesMap.value(key).first;
 }
 
 Settings::AccessLevel SettingsRegistry::getAccessLevel( const QString &key ) const
@@ -37,6 +37,11 @@ Settings::AccessLevel SettingsRegistry::getAccessLevel( const QString &key ) con
     }
 
     return accessLevel;
+}
+
+Settings::Properties SettingsRegistry::getProperties( const QString &key )
+{
+    return m_keyDefaultValueAndPropertiesMap.value(key).second;
 }
 
 void SettingsRegistry::loadAccesLevelTable()

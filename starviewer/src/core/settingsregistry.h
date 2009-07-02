@@ -5,13 +5,14 @@
 #include "settings.h"
 #include <QMap>
 #include <QVariant>
+#include <QPair>
 
 namespace udg {
 
 class SettingsRegistry : public Singleton<SettingsRegistry> {
 public:
     /// Afegeix un setting al registre. Li donem la clau i valor que té per defecte
-    void addSetting( const QString &key, const QVariant &defaultValue );
+    void addSetting( const QString &key, const QVariant &defaultValue, Settings::Properties properties = Settings::None );
 
     /// Retorna el valor que tingui per defecte el setting amb clau "key"
     QVariant getDefaultValue( const QString &key );
@@ -20,6 +21,9 @@ public:
     /// Si no troba la definició per aquest clau, el valor 
     /// retornat per defecte és d'Usuari
     Settings::AccessLevel getAccessLevel( const QString &key ) const;
+
+    /// Ens retorna les propietats de la clau 'key'
+    Settings::Properties getProperties( const QString &key );
 
 protected:
     /// Cal declarar-ho friend perquè sinó hauríem de fer públics 
@@ -33,8 +37,10 @@ private:
     void loadAccesLevelTable();
 
 private:
-    /// Mapa que associa la clau del setting amb el seu valor per defecte si en té.
-    QMap<QString, QVariant> m_keyDefaultValueMap;
+    /// Mapa que associa la clau del setting amb el seu valor per defecte i les seves propietats.
+    // TODO s'ha optat per tenir-ho tot en un sol map, però es podria considerar la opció de mantenir dos maps
+    // ja que habitualment no tindrem cap propietat associada, de moment només en els casos de settings parsejables
+    QMap<QString, QPair<QVariant,Settings::Properties> > m_keyDefaultValueAndPropertiesMap;
 
     /// Mapa en el que guardem el nivell d'accés associat a cada setting
     QMap<QString, Settings::AccessLevel> m_accessLevelTable;

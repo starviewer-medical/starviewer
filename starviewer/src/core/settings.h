@@ -23,6 +23,9 @@ class Settings
 {
 public:
     enum AccessLevel{ UserLevel, SystemLevel };
+    enum PropertiesFlag{ None = 0x0, Parseable = 0x1 };
+    Q_DECLARE_FLAGS(Properties, PropertiesFlag)
+
     Settings();
     ~Settings();
 
@@ -43,6 +46,8 @@ public:
      * Mètodes per la manipulació de llistes de Settings
      */
 
+    // També existeix el tipus QSettings::SettingsMap que és QMap<QString, QVariant>
+    // TODO podríem fer typedef QSettings::SettingsMap en comptes d'això
     typedef QMap<QString, QVariant> KeyValueMapType;
     typedef QList< KeyValueMapType > SettingListType;
 
@@ -106,7 +111,7 @@ private:
     /// Objectes QSettings amb el que manipularem les configuracions
     QMap<int, QSettings *> m_settings;
 };
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(Settings::Properties)
 } // end namespace udg
 
 #endif
