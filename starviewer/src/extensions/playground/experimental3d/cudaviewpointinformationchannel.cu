@@ -190,9 +190,10 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
 
                 if (volume > 0.0f)
                 {
-                    int vx = (int) (pos.x * volumeDataDims.width);
-                    int vy = (int) (pos.y * volumeDataDims.height);
-                    int vz = (int) (pos.z * volumeDataDims.depth);
+                    // TODO de moment posem aquest min per controlar quan una coordenada és exactament 1, però potser hi ha una manera més bonica de fer-ho
+                    int vx = min((int) (pos.x * volumeDataDims.width), volumeDataDims.width - 1);
+                    int vy = min((int) (pos.y * volumeDataDims.height), volumeDataDims.height - 1);
+                    int vz = min((int) (pos.z * volumeDataDims.depth), volumeDataDims.depth - 1);
                     int offset = vx + vy * volumeDataDims.width + vz * volumeDataDims.width * volumeDataDims.height;
                     //int offset = (int)(pos.x * volumeDataDims.width) + (int)(pos.y * volumeDataDims.height) * volumeDataDims.width + (int)(pos.z * volumeDataDims.depth) * volumeDataDims.width + volumeDataDims.height;
 
