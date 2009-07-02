@@ -46,8 +46,8 @@ void InputOutputSettings::init()
 {
     SettingsRegistry *settingsRegistry = SettingsRegistry::instance();
     
-    settingsRegistry->addSetting( databaseAbsoluteFilePathKey, UserDataRootPath + "pacs/database/dicom.sdb" );
-    settingsRegistry->addSetting( cachePathKey, UserDataRootPath + "pacs/dicom/" );
+    settingsRegistry->addSetting( databaseAbsoluteFilePathKey, UserDataRootPath + "pacs/database/dicom.sdb", Settings::Parseable );
+    settingsRegistry->addSetting( cachePathKey, UserDataRootPath + "pacs/dicom/", Settings::Parseable );
 
     settingsRegistry->addSetting( deleteLeastRecentlyUsedStudiesInDaysCriteriaKey, true );
     settingsRegistry->addSetting( deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey, true );
@@ -62,7 +62,8 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( lastOpenedDICOMDIRPathKey, QDir::homePath() );
 
     settingsRegistry->addSetting( queryRetrieveLocalPortKey, 4006 );
-    settingsRegistry->addSetting( localAETitleKey, QHostInfo::localHostName() );
+    // TODO podríem definir-lo directament amb %HOSTNAME%
+    settingsRegistry->addSetting( localAETitleKey, QHostInfo::localHostName(), Settings::Parseable );
     settingsRegistry->addSetting( pacsConnectionTimeoutKey, 20 );
     settingsRegistry->addSetting( maximumPACSConnectionsKey, 3 );
 }
