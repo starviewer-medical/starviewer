@@ -24,6 +24,7 @@ HEADERS = qcrashreporter.h \
           crashreportersender.h \
           ../core/settingsregistry.h \
           ../core/settings.h \
+          ../core/settingsparser.h \
           ../core/defaultsettings.h \
           ../core/coresettings.h \
           ../core/settingsaccesslevelxmlreader.h \
@@ -34,6 +35,7 @@ SOURCES = crashreporter.cpp \
           qcrashreporter.cpp \
           ../core/settingsregistry.cpp \
           ../core/settings.cpp \
+          ../core/settingsparser.cpp \
           ../core/defaultsettings.cpp \
           ../core/coresettings.cpp \
           ../core/settingsaccesslevelxmlreader.cpp \
@@ -70,4 +72,4 @@ include(../corelibsconfiguration.inc)
 include(../compilationtype.inc)
 include(../log4cxx.inc)
 
-QT += xml
+QT += xml network
