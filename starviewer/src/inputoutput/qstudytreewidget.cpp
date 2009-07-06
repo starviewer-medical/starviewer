@@ -77,7 +77,6 @@ void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
         }
     }
 
-    m_insertedPatientList = patientList;
     m_studyTreeView->clearSelection();
 }
 
@@ -130,6 +129,8 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
 
         qtreeWidgetItemList.append(item);
     }
+
+    m_insertedPatientList.append(patient);
 
     return qtreeWidgetItemList;
 }
