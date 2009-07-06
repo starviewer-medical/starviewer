@@ -104,7 +104,7 @@ Status QueryPacs::query()
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,
                           foundMatchCallback , this ,
-                          DIMSE_BLOCKING , 0 ,
+                          DIMSE_NONBLOCKING , PacsDevice::getConnectionTimeout() ,
                           &rsp , &statusDetail );
 
     /* dump status detail information if there is some */
