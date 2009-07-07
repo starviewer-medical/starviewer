@@ -1,19 +1,8 @@
 #include "pacsdevice.h"
 
 #include "inputoutputsettings.h"
-#include <QHostInfo> // pel getLocalAETitle()
 
 namespace udg{
-
-PacsDevice::PacsDevice(const QString &address, const QString &port, const QString &myAEtitle, const QString &remoteServerAEtitle)
-{
-    m_pacsAddress = address;
-    m_pacsPort = port;
-    m_myAETitle = myAEtitle;
-    m_pacsAETitle = remoteServerAEtitle;
-    m_connectionTimeOut = 15; //establim que per defecte el timeout és de 15 ms
-    m_pacsID = "";
-}
 
 PacsDevice::PacsDevice()
 {
@@ -103,17 +92,13 @@ QString PacsDevice::getPacsID() const
 bool PacsDevice::operator ==(const PacsDevice &parameters)
 {
     return m_pacsAETitle == parameters.m_pacsAETitle
-        && m_myAETitle == parameters.m_myAETitle
         && m_pacsPort == parameters.m_pacsPort
         && m_pacsAddress == parameters.m_pacsAddress
-        && m_localPort == parameters.m_localPort
         && m_pacsDescription == parameters.m_pacsDescription
         && m_pacsInstitution == parameters.m_pacsInstitution
-        && m_pacsLocation == parameters.m_pacsLocation
         && isDefault() == parameters.isDefault()
         && m_pacsLocation == parameters.m_pacsLocation
-        && m_pacsID == parameters.m_pacsID
-        && m_connectionTimeOut == parameters.m_connectionTimeOut;
+        && m_pacsID == parameters.m_pacsID;
 }
 
 QString PacsDevice::getLocalAETitle()

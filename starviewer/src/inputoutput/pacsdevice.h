@@ -20,16 +20,6 @@ class PacsDevice
 {
 public:
 
-    /** Constructor ràpid de la classe. Aquest constructor inclou tots els paràmentres mínim requerits per connectar-nos amb el PACS.
-     *  IMPORTANT!!!! si l'objectiu de la connexió és descarregar imatges s'ha d'invocar la funció setLocalPort
-     * @param   adr Adreça de pacs al qual ens volem connectar
-     * @param   port Port en el qual el pacs esta escoltant les peticions
-     * @param   myAEtitle AETitle del PACS al qual ens volem connectar
-     * @param   remoteServerAEtitle AETitle de la nostra màquina. Cada màquina ha de tenir un AETitle únic. 
-     *          El PACS comprova al connectar-nos si la nostra IP correspont al nostre AETitle que li enviem
-    */
-    PacsDevice(const QString &address, const QString &port, const QString &myAEtitle, const QString &remoteServerAEtitle);
-
     /// Constructor buit de la classe
     PacsDevice();
 
@@ -74,9 +64,6 @@ public:
     static int getQueryRetrievePort();
 
 private:
-    /// Especifica el port pel qual rebrem imatges
-    QString m_localPort; 
-    QString m_myAETitle;
 
     QString m_pacsAETitle;
     QString m_pacsPort;
@@ -86,7 +73,6 @@ private:
     QString m_pacsLocation;
     bool m_isDefaultPACS;
     QString m_pacsID;
-    int m_connectionTimeOut;
 };
 
 };
