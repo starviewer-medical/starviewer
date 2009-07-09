@@ -353,4 +353,4 @@ include(../dcmtk.inc)
 include(../log4cxx.inc)
 include(../compilationtype.inc)
 include(../translations.inc)
-QT += xml
+QT += xml network
