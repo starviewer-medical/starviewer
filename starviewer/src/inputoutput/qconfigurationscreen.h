@@ -41,8 +41,8 @@ private slots:
     /// Slot que dona d'alta el PACS a la la base de dades
     void addPacs();
 
-    /// Slot que s'activa quant seleccionem un Pacs del PacsListView, emplena les caixes de texts amb les dades del Pacs
-    void selectedPacs( QTreeWidgetItem * item , int );
+    /// Slot que s'activa quant seleccionem un Pacs del PacsListView, omplint les caixes de texts amb les dades del Pacs seleccionat
+    void updateSelectedPACSInformation();
 
     /// Slot que updata les dades d'un pacs
     void updatePacs();
