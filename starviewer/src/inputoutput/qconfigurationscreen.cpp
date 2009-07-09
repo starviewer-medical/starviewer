@@ -76,7 +76,7 @@ void QConfigurationScreen::createConnections()
     connect( m_buttonDeletePacs , SIGNAL( clicked() ), SLOT( deletePacs() ) );
     connect( m_buttonUpdatePacs , SIGNAL( clicked() ), SLOT( updatePacs() ) );
     connect( m_buttonTestPacs , SIGNAL( clicked() ), SLOT( test() ) );
-    connect( m_PacsTreeView , SIGNAL( itemClicked ( QTreeWidgetItem * , int) ), SLOT( selectedPacs( QTreeWidgetItem * , int ) ) );
+    connect( m_PacsTreeView , SIGNAL( itemSelectionChanged() ), SLOT( updateSelectedPACSInformation() ) );
 }
 
 void QConfigurationScreen::configureInputValidator()
@@ -147,15 +147,19 @@ void QConfigurationScreen::addPacs()
     }
 }
 
-void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
+void QConfigurationScreen::updateSelectedPACSInformation()
 {
     QList<PacsDevice> pacsList;
     PacsDevice selectedPacs;
     PacsDeviceManager pacsDeviceManager;
 
-    if ( selectedItem != NULL )
+    QTreeWidgetItem *selectedItem = 0;
+    if( !m_PacsTreeView->selectedItems().isEmpty() )
     {
-        selectedPacs = pacsDeviceManager.queryPacs(selectedItem->text(0));// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
+        // només en podem tenir un de seleccionat
+        selectedItem = m_PacsTreeView->selectedItems().first();
+        // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
+        selectedPacs = pacsDeviceManager.queryPacs( selectedItem->text(0) );// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
 
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAEPacs() );
@@ -164,10 +168,12 @@ void QConfigurationScreen::selectedPacs( QTreeWidgetItem * selectedItem , int )
         m_textInstitution->setText( selectedPacs.getInstitution() );
         m_textLocation->setText( selectedPacs.getLocation() );
         m_textDescription->setText( selectedPacs.getDescription() );
-        m_selectedPacsID = selectedPacs.getPacsID();
         m_checkDefault->setChecked( selectedPacs.isDefault() );
+        // indiquem quin és l'ID del PACS seleccionat
+        m_selectedPacsID = selectedPacs.getPacsID();
     }
-    else m_selectedPacsID = "";
+    else 
+        m_selectedPacsID = "";
 }
 
 void QConfigurationScreen::updatePacs()
