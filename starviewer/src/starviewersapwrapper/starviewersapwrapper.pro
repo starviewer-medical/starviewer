@@ -9,7 +9,7 @@ macx {
     DESTDIR = $${DESTDIR}/$${TARGET_STARVIEWER}.app/Contents/MacOS
 }
 
-QT += xml network
+QT += network
 
 HEADERS = ../core/starviewerapplication.h \
           ../core/logging.h \
@@ -17,7 +17,7 @@ HEADERS = ../core/starviewerapplication.h \
           ../core/settings.h \
           ../core/settingsparser.h \
           ../core/defaultsettings.h \
-          ../core/settingsaccesslevelxmlreader.h \
+          ../core/settingsaccesslevelfilereader.h \
           ../inputoutput/inputoutputsettings.h \
           qstarviewersapwrapper.h
 
@@ -26,7 +26,7 @@ SOURCES = ../core/settingsregistry.cpp \
           ../core/settingsparser.cpp \
           ../core/defaultsettings.cpp \
           ../inputoutput/inputoutputsettings.cpp \
-          ../core/settingsaccesslevelxmlreader.cpp \
+          ../core/settingsaccesslevelfilereader.cpp \
           starviewersapwrapper.cpp \
           qstarviewersapwrapper.cpp
 

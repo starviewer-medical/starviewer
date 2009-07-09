@@ -1,7 +1,7 @@
 #include "settingsregistry.h"
 
 #include "logging.h"
-#include "settingsaccesslevelxmlreader.h"
+#include "settingsaccesslevelfilereader.h"
 
 #include <QApplication>
 #include <QFile>
@@ -47,9 +47,9 @@ Settings::Properties SettingsRegistry::getProperties( const QString &key )
 void SettingsRegistry::loadAccesLevelTable()
 {
     // Al directori on s'instal·la l'aplicació tenim una carpeta "config" on tindrem
-    // un xml que definirà els nivells d'accés de cada settings
+    // un .ini que definirà els nivells d'accés de cada settings
     // TODO aquesta ubicació encara no és definitiva
-    QString filePath = qApp->applicationDirPath() +  "/config/settingsAccessLevel.xml";
+    QString filePath = qApp->applicationDirPath() +  "/config/settingsAccessLevel.ini";
     QFile file(filePath);
     if( !file.exists() )
     {
@@ -58,17 +58,11 @@ void SettingsRegistry::loadAccesLevelTable()
     else
     {
         DEBUG_LOG("Llegim arxiu d'Access Level de settings: [" + filePath + "]");
-        // obrim l'arxiu
-        if( file.open(QFile::ReadOnly | QFile::Text) ) 
+        SettingsAccessLevelFileReader fileReader;
+        if( fileReader.read(filePath) )
         {
-            SettingsAccessLevelXMLReader xmlReader;
-            if( xmlReader.read( &file ) )
-            {
-                m_accessLevelTable = xmlReader.getAccessLevelTable();
-            }        
+            m_accessLevelTable = fileReader.getAccessLevelTable();
         }
-        else
-            DEBUG_LOG( "No s'ha pogut obrir l'arxiu XML" );
     }
 }
 

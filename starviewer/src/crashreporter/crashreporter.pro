@@ -27,7 +27,7 @@ HEADERS = qcrashreporter.h \
           ../core/settingsparser.h \
           ../core/defaultsettings.h \
           ../core/coresettings.h \
-          ../core/settingsaccesslevelxmlreader.h \
+          ../core/settingsaccesslevelfilereader.h \
           ../main/applicationtranslationsloader.h \
           ../core/starviewerapplication.h
           
@@ -38,7 +38,7 @@ SOURCES = crashreporter.cpp \
           ../core/settingsparser.cpp \
           ../core/defaultsettings.cpp \
           ../core/coresettings.cpp \
-          ../core/settingsaccesslevelxmlreader.cpp \
+          ../core/settingsaccesslevelfilereader.cpp \
           ../main/applicationtranslationsloader.cpp \
 
 TRANSLATIONS += crashreporter_ca_ES.ts \
@@ -72,4 +72,4 @@ include(../corelibsconfiguration.inc)
 include(../compilationtype.inc)
 include(../log4cxx.inc)
 
-QT += xml network
+QT += network
