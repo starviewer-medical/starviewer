@@ -44,3 +44,8 @@ unix {
     LIBS += -lssl \
 	    -lwrap
 }
+
+macx {
+    INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
+    LIBS += -lxml2
+}

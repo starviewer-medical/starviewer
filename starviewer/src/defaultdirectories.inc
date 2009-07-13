@@ -22,7 +22,7 @@ isEmpty(DCMTKINCLUDEDIR){
 VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
     unix:VTKLIBDIR = /usr/lib
-    macx:VTKLIBDIR = /usr/local/lib
+    macx:VTKLIBDIR = /usr/local/lib/vtk-5.0
     win32:VTKLIBDIR = C:\vtk\vtk5.0\lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
@@ -53,7 +53,7 @@ isEmpty(ITKINCLUDEDIR){
 LOG4CXXLIBDIR = $$(LOG4CXXLIBDIR)
 isEmpty(LOG4CXXLIBDIR){
     unix:LOG4CXXLIBDIR = /usr/lib
-    macx:LOG4CXXLIBDIR = /usr/local/lib
+    macx:LOG4CXXLIBDIR = /usr/local/lib/log4cxx
     win32:LOG4CXXLIBDIR = C:\log4cxx
 }
 LOG4CXXINCLUDEDIR = $$(LOG4CXXINCLUDEDIR)

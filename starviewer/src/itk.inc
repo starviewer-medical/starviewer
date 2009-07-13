@@ -48,3 +48,7 @@ win32 {
          -litkpng \
          -litkzlib
 }
+
+macx {
+ LIBS -= -litknetlib
+}
