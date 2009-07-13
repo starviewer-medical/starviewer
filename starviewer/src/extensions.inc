@@ -26,3 +26,8 @@ lite_version {
 	PLAYGROUND_EXTENSIONS = ''
 	MAIN_EXTENSIONS = q2dviewer	
 }
+
+#No s'inclou l'extensió perquè a l'hora de fer el lincatge dóna error per duplicació de simbols
+macx {
+        PLAYGROUND_EXTENSIONS -= perfusionmapreconstruction \
+}

@@ -20,6 +20,10 @@ win32 {
         CONFIG -= console
     }
 }
+
+macx {
+    DEFINES += VTK_QT_5_0_SUPPORT
+}
 	
 # definim que per sistemes de compilació windows basats en visual studio 
 # la compilació es faci en tants cores com sigui possible

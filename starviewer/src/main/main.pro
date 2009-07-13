@@ -77,3 +77,8 @@ CONFIG -= staticlib
 include(installextensions.inc)
 
 QT += xml opengl network
+
+#Temporal: Qt 4.5.2 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
+macx {
+INCLUDEPATH += ../../tmp/ui
+}
