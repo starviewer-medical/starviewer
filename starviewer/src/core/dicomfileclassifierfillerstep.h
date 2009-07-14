@@ -53,11 +53,6 @@ private:
     /// \TODO quin seria el criteri adequat per identificar un mateix pacient? només pel nom? només per l'ID? la concatenació de nom i d'ID?
     Patient *getPatient( QString patientName, QString patientID );
 
-    /// Crea un nou pacient/estudi/series/imatge a partir de les dades del fitxer que s'està tractant
-    Patient *createPatient();
-    Study *createStudy();
-    Series *createSeries();
-
 private:
     /// El lector de tags que anirem fent servir per analitzar les dades
     DICOMTagReader *m_dicomReader;
