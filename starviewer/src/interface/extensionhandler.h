@@ -72,7 +72,7 @@ private slots:
      * crear nous pacient, obrir finestres, afegir les dades al pacient actual, etc
      * @param inputFiles Els arxius a processar, que poden ser del tipus suportat per l'aplicació o no
      */
-    void processInput(QStringList inputFiles);
+    void processInput(const QStringList &inputFiles);
 
     /**
      * Donada una llista de pacients d'entrada, s'encarrega de posar a punt

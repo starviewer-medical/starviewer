@@ -166,8 +166,11 @@ void ExtensionHandler::createConnections()
     connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
 }
 
-void ExtensionHandler::processInput(QStringList inputFiles)
+void ExtensionHandler::processInput(const QStringList &inputFiles)
 {
+    if( inputFiles.isEmpty() )
+        return;
+
     QProgressDialog progressDialog( m_mainApp );
     progressDialog.setModal( true );
     progressDialog.setRange(0, 0);
@@ -245,18 +248,7 @@ void ExtensionHandler::processInput(QStringList inputFiles)
         if (!error)
         {
             /// Hem de fer el que feia l'step del volume perquè ja no es fa.
-            foreach(Study *study, patientsList.at(i)->getStudies() )
-            {
-                foreach(Series *series, study->getSeries() )
-                {
-                    // TODO ara el que fem és que 1 Series equival a 1 Volume, més endavant es podrien fer un tracte més elaborat
-                    Volume *volume = new Volume;
-                    volume->setImages( series->getImages() );
-                    volume->setNumberOfPhases( series->getNumberOfPhases() );
-                    series->addVolume(volume);
-                }
-            }
-
+            processInput( patientsList.at(i), QString() );
             correctlyLoadedPatients << i;
         }
     }
