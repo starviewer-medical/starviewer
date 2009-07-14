@@ -5,8 +5,10 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#ifndef UTILS
-#define UTILS
+#ifndef UDGUTILS_H
+#define UDGUTILS_H
+
+#include <QString>
 
 namespace udg {
 
@@ -14,15 +16,13 @@ namespace udg {
 Classe que conté utilitats vàries utilitzades per la classe inputoutput
 
 */
-class Utils{
+class Utils {
 
 public:
-
     ///Indica si el port passat per paràmetre està en ús
     static bool isPortInUse(int port);
 
-private:
-
+    static QString generateUID( const QString &prefix = QString() );
 
 };
 
