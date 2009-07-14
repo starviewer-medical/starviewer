@@ -651,10 +651,17 @@ bool Q3DViewer::rescale()
         //Desavantatge: ocupa més memòria
         rescaler->SetOutputScalarTypeToUnsignedShort();
         rescaler->ClampOverflowOn();
-        rescaler->Update();
-
-        m_imageData = rescaler->GetOutput(); m_imageData->Register( 0 );
-
+        try
+        {
+            rescaler->Update();
+            m_imageData = rescaler->GetOutput(); 
+            m_imageData->Register( 0 );
+        }
+        catch( std::exception &e )
+        {
+            ERROR_LOG( QString( "Excepció al voler fer rescale(): " ) + e.what() );
+            QMessageBox::warning( this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected.") );
+        }
         rescaler->Delete();
 
         emit scalarRange( 0, m_range );
