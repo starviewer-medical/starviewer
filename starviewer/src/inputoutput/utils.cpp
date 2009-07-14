@@ -1,5 +1,6 @@
 #include "utils.h"
 
+#include <dcuid.h>
 #include <QTcpServer>
 
 #include "logging.h"
@@ -26,6 +27,19 @@ bool Utils::isPortInUse(int port)
     }
 
     return portInUse;
+}
+
+QString Utils::generateUID( const QString &prefix )
+{
+    char uid[512];
+    if( prefix.isEmpty() )
+        dcmGenerateUniqueIdentifier(uid); // tindrà el prefix de dcmtk
+    else
+        dcmGenerateUniqueIdentifier(uid, qPrintable(prefix) );
+
+    DEBUG_LOG( "Obtained UID: " + QString( uid ) );
+
+    return QString(uid);
 }
 
 }; //end udg namespace
