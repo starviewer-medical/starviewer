@@ -28,7 +28,8 @@ public:
     void open();
 
     /// Obre el diàleg per poder obrir arxius d'un directori DICOM
-    void openDirectory();
+    /// Per defecte explora els continguts de forma recursiva, cercant en els subdirectoris
+    void openDirectory( bool recursively = true );
     
 signals:
     /// Senyal que s'emet quan s'han escollit un o més arxius que seran processats externament
@@ -40,7 +41,11 @@ private:
      * @param directory Nom del directori on es troben els arxius
      * @return La llista de noms de fitxers ordenada
      */
-    QStringList generateFilenames( QString dirPath );
+    QStringList generateFilenames( const QString &dirPath );
+
+    /// Donat un path arrel, escaneja tots els subdirectoris recursivament i ens els retorna en una llista incloent el path arrel
+    /// Tots els paths retornats, són absoluts
+    void scanDirectories( const QString &rootPath, QStringList &dirsList );
 
     /// llegeix escriu configuracions
     void readSettings();
