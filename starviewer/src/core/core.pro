@@ -69,6 +69,7 @@ HEADERS += extensionfactory.h \
            extensioncontext.h \
            keyimagenotefillerstep.h \
            temporaldimensionfillerstep.h \
+           createinformationmodelobject.h \
            dicomimagereader.h \
            dicomimagereaderitkgdcm.h \
            dicomimagereadervtk.h \
@@ -232,6 +233,7 @@ SOURCES += extensionmediator.cpp \
            extensioncontext.cpp \
            keyimagenotefillerstep.cpp \
            temporaldimensionfillerstep.cpp \
+           createinformationmodelobject.cpp \
            dicomimagereader.cpp \
            dicomimagereaderitkgdcm.cpp \
            dicomimagereadervtk.cpp \
