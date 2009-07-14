@@ -104,7 +104,7 @@ double Study::getHeight() const
 
 void Study::addModality(const QString &modality)
 {
-    if (!m_modalities.contains(modality))
+    if (!m_modalities.contains(modality) && !modality.isEmpty() )
     {
         m_modalities << modality;
     }
