@@ -17,12 +17,11 @@ class Image;
 class DICOMTagReader;
 
 /**
-  * Converteix Objects Dataset de dcmtg a objectes d'Starvieweer 
-*/
+ * Converteix Objects Dataset de dcmtk a objectes d'Starvieweer 
+ */
 class CreateInformationModelObject{
 
 public:
-
     ///Crea un patient a partir d'un DICOMTagReader
     static Patient* createPatient(DICOMTagReader *dicomTagReader);
 
@@ -34,11 +33,6 @@ public:
 
     ///Crea un Image a partir d'un DICOMTagReader
     static Image* createImage(DICOMTagReader *dicomTagReader);
-
-
-
-private:
-
 
 };
 
