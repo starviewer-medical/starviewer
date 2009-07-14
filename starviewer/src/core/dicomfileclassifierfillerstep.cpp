@@ -12,6 +12,7 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
+#include "createinformationmodelobject.h"
 
 #include <QApplication> //Per el process events, TODO Treure i fer amb threads.
 
@@ -96,7 +97,7 @@ void DICOMFileClassifierFillerStep::classifyFile()
     Patient *patient = m_input->getPatientByID( patientID );
     if( !patient )
     {
-        patient = createPatient();
+        patient = CreateInformationModelObject::createPatient(m_dicomReader);
         m_input->addPatient( patient );
     }
 
@@ -104,7 +105,7 @@ void DICOMFileClassifierFillerStep::classifyFile()
     Study *study = patient->getStudy( studyUID );
     if( !study )
     {
-        study = createStudy();
+        study = CreateInformationModelObject::createStudy(m_dicomReader);
         patient->addStudy( study );
     }
 
@@ -112,7 +113,7 @@ void DICOMFileClassifierFillerStep::classifyFile()
     Series *series = study->getSeries( seriesUID );
     if( !series )
     {
-        series = createSeries();
+        series = CreateInformationModelObject::createSeries(m_dicomReader);
         study->addSeries( series );
     }
     series->addFilePath( m_dicomReader->getFileName() );
@@ -127,59 +128,6 @@ Patient *DICOMFileClassifierFillerStep::getPatient( QString patientName, QString
         return patient;
     else
         return m_input->getPatientByID( patientID );
-}
-
-Patient *DICOMFileClassifierFillerStep::createPatient()
-{
-    Patient *patient = new Patient;
-
-    patient->setFullName( m_dicomReader->getAttributeByName( DCM_PatientsName ) );
-    patient->setID( m_dicomReader->getAttributeByName( DCM_PatientID ) );
-    patient->setBirthDate( m_dicomReader->getAttributeByName( DCM_PatientsBirthDate ) );
-    patient->setSex( m_dicomReader->getAttributeByName( DCM_PatientsSex ) );
-
-    return patient;
-}
-
-Study *DICOMFileClassifierFillerStep::createStudy()
-{
-    Study *study = new Study;
-
-    study->setInstanceUID( m_dicomReader->getAttributeByName( DCM_StudyInstanceUID ) );
-    study->setDate( m_dicomReader->getAttributeByName( DCM_StudyDate ) );
-    study->setTime( m_dicomReader->getAttributeByName( DCM_StudyTime ) );
-    study->setID( m_dicomReader->getAttributeByName( DCM_StudyID ) );
-    study->setAccessionNumber( m_dicomReader->getAttributeByName( DCM_AccessionNumber ) );
-    study->setDescription( m_dicomReader->getAttributeByName( DCM_StudyDescription ) );
-    study->setPatientAge( m_dicomReader->getAttributeByName( DCM_PatientsAge ) );
-    study->setHeight( m_dicomReader->getAttributeByName( DCM_PatientsSize ).toDouble() );
-    study->setWeight( m_dicomReader->getAttributeByName( DCM_PatientsWeight ).toDouble() );
-
-    return study;
-}
-
-Series *DICOMFileClassifierFillerStep::createSeries()
-{
-    Series *series = new Series;
-
-    series->setInstanceUID( m_dicomReader->getAttributeByName( DCM_SeriesInstanceUID ) );
-    series->setModality( m_dicomReader->getAttributeByName( DCM_Modality ) );
-    series->setSeriesNumber( m_dicomReader->getAttributeByName( DCM_SeriesNumber ) );
-    series->setDate( m_dicomReader->getAttributeByName( DCM_SeriesDate ) );
-    series->setTime( m_dicomReader->getAttributeByName( DCM_SeriesTime ) );
-    series->setInstitutionName( m_dicomReader->getAttributeByName( DCM_InstitutionName ) );
-    series->setPatientPosition( m_dicomReader->getAttributeByName( DCM_PatientPosition ) );
-    series->setProtocolName( m_dicomReader->getAttributeByName( DCM_ProtocolName ) );
-    series->setDescription( m_dicomReader->getAttributeByName( DCM_SeriesDescription ) );
-    series->setFrameOfReferenceUID( m_dicomReader->getAttributeByName( DCM_FrameOfReferenceUID ) );
-    series->setPositionReferenceIndicator( m_dicomReader->getAttributeByName( DCM_PositionReferenceIndicator ) );
-    series->setManufacturer( m_dicomReader->getAttributeByName( DCM_Manufacturer ) );
-
-    /// Atributs necessaris pels hanging protocols
-    series->setBodyPartExamined( m_dicomReader->getAttributeByName( DCM_BodyPartExamined ) );
-    series->setViewPosition( m_dicomReader->getAttributeByName( DCM_ViewPosition ) );
-
-    return series;
 }
 
 }
