@@ -41,10 +41,10 @@ public slots:
 
     /// Executa l'algorisme de segmetnació
     void applyMethod();
-    void applyCleanSkullMethod( );
-    void applyEdemaMethod( );
-    void applyVentriclesMethod( );
-    void applyFilterMainImage( );
+    void applyCleanSkullMethod();
+    void applyEdemaMethod();
+    void applyVentriclesMethod();
+    void applyFilterMainImage();
 private:
     /// crea les accions \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
     void createActions();
@@ -59,20 +59,8 @@ private:
     void initializeTools();
 
 private slots:
-     /// gestiona els events del m_2DView
-    void strokeEventHandler( unsigned long id );
-
-    /// gestiona els events del botó esquerre
-    void leftButtonEventHandler( );
-
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition(double x, double y, double z);
-
-     /// determina la llavor del mètode de segmentació
-    void setEditorPoint( );
-
-    /// desactiva el booleà que ens diu si està el botó esquerra apretat
-    void setLeftButtonOff( );
 
     /// actualitza el valor llindar baix
     void setLowerValue( int x );
@@ -83,32 +71,8 @@ private slots:
     /// Canvia la opacitat de la màscara
     void setOpacity(int op);
 
-    /// Canvia a la opció esborrar
-    void setErase();
-
-    /// Canvia a la opció pintar
-    void setPaint();
-
-    /// Canvia a la opció esborrar llesca
-    void setEraseSlice();
-
-    /// Canvia a la opció esborrar regió
-    void setEraseRegion();
-
-    /// Dibuixa el cursor en la forma del pinzell
-    void setPaintCursor( );
-
-    void eraseMask(int size);
-    void paintMask(int size);
-    void eraseSliceMask();
-    void eraseRegionMask();
-    void eraseRegionMaskRecursive(int a, int b, int c);
-
     /// Calcula el volum de la màscara
     double calculateMaskVolume();
-
-    /// Calcula el volum de la màscara suposant que la variable m_cont conté el nombre de vòxels != 0 de la màscara
-    double updateMaskVolume();
 
     /// Refresca el resultat del volum
     void updateVolume();
@@ -144,9 +108,7 @@ private:
     /// Membres de classe
     bool m_isSeed;
     bool m_isMask;
-
-    bool m_isLeftButtonPressed;
-    vtkActor *squareActor;
+    
     int m_cont;
     int m_edemaCont;
     int m_ventriclesCont;
@@ -156,18 +118,9 @@ private:
     double m_ventriclesVolume;
     double* m_activedVolume;
 
-    /// tipus d'edició dels models
-    enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
-    int m_editorTool;
-
     int m_minValue, m_maxValue;
     int m_insideValue, m_outsideValue;
     int m_lowerVentriclesValue, m_upperVentriclesValue;
-
-    QAction *m_paintEditorAction;
-    QAction *m_eraseEditorAction;
-    QAction *m_eraseSliceEditorAction;
-    QAction *m_eraseRegionEditorAction;
 
     QAction *m_lesionViewAction;
     QAction *m_edemaViewAction;
@@ -178,8 +131,6 @@ private:
 
     /// Grup de botons en format exclusiu
     QActionGroup *m_viewOverlayActionGroup;
-    QActionGroup* m_editorToolActionGroup;
-    QActionGroup* m_toolsActionGroup;
 
     /// ToolManager
     ToolManager *m_toolManager;
