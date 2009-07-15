@@ -18,6 +18,7 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "utils.h"
 
 namespace udg{
 
@@ -442,13 +443,28 @@ QString RetrieveImages::getCompositeInstanceFileName(DcmDataset *imageDataset)
     studyPath = LocalDatabaseManager::getCachePath() + text;
 
     //comprovem, si el directori de l'estudi ja està creat
-    if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
+    if ( !directory.exists( studyPath  ) ) 
+        directory.mkdir( studyPath );
 
-    imageDataset->findAndGetString( DCM_SeriesInstanceUID , text , false );
-    seriesPath = studyPath + "/" + text;
+    imageDataset->findAndGetString( DCM_NumberOfFrames, text, false ); 
+    if( QString(text).toInt() > 1 )
+    {
+        // En el cas d'imatges multiframe, creem una sèrie per cada imatge
+        // TODO de moment sempre li assignem un nou UID, quan en realitat només seria necessari 
+        // en el cas que tinguéssim diverses imatges multiframe
+        QString uid = Utils::generateUID();
+        // actualitzem l'UID
+        imageDataset->putAndInsertString( DCM_SeriesInstanceUID, qPrintable(uid) );
+    }
+    
+    const char *seriesUID;
+    imageDataset->findAndGetString( DCM_SeriesInstanceUID, seriesUID, false );
+
+    seriesPath = studyPath + "/" + seriesUID;
 
     //comprovem, si el directori de la sèrie ja està creat, sinó el creem
-    if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
+    if ( !directory.exists( seriesPath ) ) 
+        directory.mkdir( seriesPath );
 
     imageDataset->findAndGetString( DCM_SOPInstanceUID , text , false );
 
