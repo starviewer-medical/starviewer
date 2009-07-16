@@ -34,7 +34,12 @@ void QPopUpRisRequestsScreen::setAccessionNumber(QString accessionNumber)
     QString popUpText = tr("%1 has received a request from a RIS to retrieve the study with accession number").arg(ApplicationNameString);
     m_labelRisRequestDescription->setText(popUpText + " " + accessionNumber + ".");
 
-
+    /*HACK El timer hauria d'estar a showEvent, però si el popUp ja es mostra showEvent no dispara, per tant no es reinicia el timer
+           per això si el timer està actiu (el popUp s'està mostrant) el reiniciem*/
+    if (m_qTimer->isActive())
+    {
+        m_qTimer->start(5000);
+    }
 }
 
 void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
