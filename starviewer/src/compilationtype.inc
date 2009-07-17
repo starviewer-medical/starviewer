@@ -6,9 +6,6 @@ unix {
 }
 
 win32 {
-    # TODO: Treure al passar a versió vtk 5.0.x pura
-    DEFINES += VTK_QT_5_0_SUPPORT
-    
     # Per tenir glew integrada al codi. Només necessari a windows.
     DEFINES += GLEW_STATIC
     
@@ -19,10 +16,6 @@ win32 {
     release {
         CONFIG -= console
     }
-}
-
-macx {
-    DEFINES += VTK_QT_5_0_SUPPORT
 }
 	
 # definim que per sistemes de compilació windows basats en visual studio 

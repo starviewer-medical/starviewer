@@ -29,11 +29,7 @@ public:
 
 private slots:
     /// Es connectarà als events emesos pel widget per saber quan s'ha interactuat i així aplicar els plans de tall sobre el visor
-    void boundingBoxEventHandler(vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command);
-#ifdef VTK_QT_5_0_SUPPORT
-    /// \TODO Esborrar el metode. Metode de compatibilitat amb VTK 5.0 de vtkQtConnection
     void boundingBoxEventHandler(vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command);
-#endif
 
     /// Cada cop que s'hagi canviat l'input del visor hem de posar a punt 
     /// el widget d'acord amb el nou volum
