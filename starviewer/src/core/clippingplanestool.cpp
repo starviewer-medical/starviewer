@@ -31,15 +31,7 @@ ClippingPlanesTool::ClippingPlanesTool( QViewer *viewer, QObject *parent )
     
     // posem a punt la observació dels events del widget
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    m_vtkQtConnections->Connect( m_boundingBoxClipperWidget,
-                                 vtkCommand::InteractionEvent,
-                                 this,
-#ifdef VTK_QT_5_0_SUPPORT
-                                 SLOT( boundingBoxEventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
-#else
-                                 SLOT( boundingBoxEventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
-#endif
-                                 );
+    m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT( boundingBoxEventHandler(vtkObject*, unsigned long, void*, vtkCommand*) ));
 
     if( m_3DViewer->getInput() )
     {
@@ -59,7 +51,7 @@ void ClippingPlanesTool::handleEvent( long unsigned eventID )
     Q_UNUSED(eventID);
 }
 
-void ClippingPlanesTool::boundingBoxEventHandler(vtkObject *vtkNotUsed(obj), unsigned long event, void *vtkNotUsed(client_data), void *vtkNotUsed(call_data), vtkCommand *vtkNotUsed(command))
+void ClippingPlanesTool::boundingBoxEventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
 {
     switch(event)
     {
@@ -70,13 +62,6 @@ void ClippingPlanesTool::boundingBoxEventHandler(vtkObject *vtkNotUsed(obj), uns
         break;
     }
 }
-
-#ifdef VTK_QT_5_0_SUPPORT
-void ClippingPlanesTool::boundingBoxEventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
-{
-    this->boundingBoxEventHandler(obj, event, client_data, NULL, command);
-}
-#endif
 
 void ClippingPlanesTool::updateViewerClippingPlanes()
 {

@@ -159,7 +159,7 @@ ToolProxy *QViewer::getToolProxy() const
     return m_toolProxy;
 }
 
-void QViewer::eventHandler( vtkObject *vtkNotUsed(obj), unsigned long event, void *vtkNotUsed(client_data), void *vtkNotUsed(call_data), vtkCommand *vtkNotUsed(command) )
+void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
 {
     // quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. \TODO ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch( event )
@@ -187,13 +187,6 @@ void QViewer::eventHandler( vtkObject *vtkNotUsed(obj), unsigned long event, voi
     }
     emit eventReceived( event );
 }
-
-#ifdef VTK_QT_5_0_SUPPORT
-void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
-{
-    this->eventHandler(obj, event, client_data, NULL, command);
-}
-#endif
 
 void QViewer::setActive( bool active )
 {
@@ -269,15 +262,7 @@ void QViewer::setupInteraction()
 
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect( this->getInteractor(),
-                                 vtkCommand::AnyEvent,
-                                 this,
-#ifdef VTK_QT_5_0_SUPPORT
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
-#else
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
-#endif
-                                 );
+    m_vtkQtConnections->Connect(this->getInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*)));
 }
 
 bool QViewer::saveGrabbedViews( const QString &baseName , FileType extension )

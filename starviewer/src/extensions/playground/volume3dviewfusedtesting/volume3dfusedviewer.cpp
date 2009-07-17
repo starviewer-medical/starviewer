@@ -96,15 +96,7 @@ Volume3DFusedViewer::Volume3DFusedViewer( QWidget *parent )
 
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect( m_vtkWidget->GetRenderWindow()->GetInteractor(),
-                                 vtkCommand::AnyEvent,
-                                 this,
-#ifdef VTK_QT_5_0_SUPPORT
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*) )
-#else
-                                 SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*) )
-#endif
-                                 );
+    m_vtkQtConnections->Connect(m_vtkWidget->GetRenderWindow()->GetInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*)));
     // \TODO fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers( vtkCommand::LeftButtonPressEvent );
     this->getInteractor()->RemoveObservers( vtkCommand::RightButtonPressEvent );
