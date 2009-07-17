@@ -33,7 +33,6 @@ LIBS += -L$${ITKLIBDIR} \
         -litkjpeg12 \
         -litkjpeg16 \
         -litkjpeg8 \
-        -litknetlib \
         -litksys \
         -litkvcl \
         -litkvnl \
@@ -46,9 +45,6 @@ LIBS += -L$${ITKLIBDIR} \
 win32 {
  LIBS += -litktiff \
          -litkpng \
+         -litknetlib \
          -litkzlib
-}
-
-macx {
- LIBS -= -litknetlib
 }

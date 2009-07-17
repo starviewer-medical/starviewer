@@ -12,14 +12,6 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
     $${DCMTKINCLUDEDIR}/dcmsr \
     $${DCMTKINCLUDEDIR}/dcmjpeg
 
-win32 {
-INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
-LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
-
-INCLUDEPATH += C:\sqlite3
-LIBS += -LC:\sqlite3
-}
-
 LIBS += -L$${DCMTKLIBDIR} \
     -lsqlite3 \
     -ldcmnet \
@@ -35,17 +27,25 @@ LIBS += -L$${DCMTKLIBDIR} \
     -ldcmjpeg \
     -lijg8 \ 
     -lijg12 \ 
-    -lijg16
-
-
+    -lijg16 \
+    -lxml2
 
 unix {
     DEFINES += HAVE_CONFIG_H
     LIBS += -lssl \
-	    -lwrap
+            -lwrap
 }
 
 macx {
     INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
-    LIBS += -lxml2
 }
+
+win32 {
+    INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
+    LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
+
+    INCLUDEPATH += C:\sqlite3
+    LIBS += -LC:\sqlite3
+    LIBS -= -lxml2
+}
+
