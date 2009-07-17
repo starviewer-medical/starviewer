@@ -7,13 +7,10 @@
 
 #include "parsexmlrispierrequest.h"
 
-#if QT_VERSION >= 0x040300
-
 #include "dicommask.h"
 #include "logging.h"
 
-namespace udg
-{
+namespace udg {
 
 bool ParseXmlRisPIERRequest::error()
 {
@@ -145,4 +142,3 @@ void ParseXmlRisPIERRequest::setErrorParsing(bool errorParsing)
 
 }
 
-#endif

@@ -106,15 +106,10 @@ void QExperimental3DViewer::setCamera( const Vector3 &position, const Vector3 &f
 
 void QExperimental3DViewer::screenshot( const QString &fileName )
 {
-#if QT_VERSION >= 0x040400
     uchar *rawImage = reinterpret_cast<uchar*>( m_vtkWidget->cachedImage()->GetVoidPointer( 0 ) );
     QImage image( rawImage, m_vtkWidget->width(), m_vtkWidget->height(), QImage::Format_RGB888 );
     QImage mirroredImage = image.mirrored();
     mirroredImage.save( fileName );
-#else
-    Q_UNUSED( fileName );
-    return;
-#endif
 }
 
 

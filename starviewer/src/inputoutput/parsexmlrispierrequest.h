@@ -10,9 +10,6 @@
 
 
 #include <QObject>
-
-#if QT_VERSION >= 0x040300
-
 #include <QXmlStreamReader>
 
 namespace udg {
@@ -64,7 +61,5 @@ private :
 };
 
 }
-
-#endif
 
 #endif
