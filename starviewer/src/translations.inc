@@ -37,7 +37,7 @@ I18NPROJECTS_QMFILES += ../core/*.qm ../interface/*.qm ../inputoutput/*.qm ../cr
 unix {
 i18n_update.commands = @for directory in $$I18NPROJECTS; do \
                              cd \$$directory; \
-                             $$[QT_INSTALL_PREFIX]/bin/lupdate -noobsolete *.pro; \
+                             $$[QT_INSTALL_BINS]/lupdate -noobsolete *.pro; \
                              cd -; \
                          done
 }
@@ -45,7 +45,7 @@ win32 {
 i18n_update.commands = for %d in ($$I18NPROJECTS) do \
                              pushd . &\
                              cd %d & \
-                             $$[QT_INSTALL_PREFIX]\bin\lupdate -noobsolete %~nxd.pro & \
+                             $$[QT_INSTALL_BINS]\lupdate -noobsolete %~nxd.pro & \
                              popd
 }
 i18n_release.target = i18n_release
@@ -54,7 +54,7 @@ i18n_release.depends = $$I18NPROJECTS_TSFILES
 unix {
 i18n_release.commands = @for directory in $$I18NPROJECTS; do \
                              cd \$$directory; \
-                             $$[QT_INSTALL_PREFIX]/bin/lrelease *.pro; \
+                             $$[QT_INSTALL_BINS]/lrelease *.pro; \
                              cd -; \
                          done \
                          && touch $$i18n_release.target
@@ -63,7 +63,7 @@ win32 {
 i18n_release.commands = for %d in ($$I18NPROJECTS) do \
                              pushd . &\
                              cd %d & \
-                             $$[QT_INSTALL_PREFIX]\bin\lrelease %~nxd.pro & \
+                             $$[QT_INSTALL_BINS]\lrelease %~nxd.pro & \
                              popd &\
                              echo touch > $$i18n_release.target
 }
