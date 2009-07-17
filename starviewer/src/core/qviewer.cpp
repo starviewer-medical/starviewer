@@ -34,7 +34,10 @@
 // necessari pel zoom
 #include <vtkCamera.h>
 // per grabar el vídeo
+
+#ifndef Q_OS_LINUX
 #include <vtkMPEG2Writer.h>
+#endif
 
 namespace udg {
 
@@ -353,6 +356,8 @@ bool QViewer::saveGrabbedViews( const QString &baseName , FileType extension )
 
 bool QViewer::record( const QString &baseName, RecordFileFormatType format )
 {
+    //TODO Restaurar el poder grabar vídeos a Linux.
+#if !defined(Q_OS_LINUX)
     if( !m_grabList.empty() )
     {
         vtkGenericMovieWriter *videoWriter;
@@ -393,7 +398,8 @@ bool QViewer::record( const QString &baseName, RecordFileFormatType format )
         return true;
     }
     else
-        return false;    
+#endif
+        return false;
 }
 
 void QViewer::refresh()
