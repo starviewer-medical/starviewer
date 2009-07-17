@@ -71,6 +71,7 @@ include(../itk.inc)
 include(../log4cxx.inc)
 include(../cuda.inc)
 include(../compilationtype.inc)
+include(../threadweaver.inc)
 
 CONFIG -= staticlib
 
