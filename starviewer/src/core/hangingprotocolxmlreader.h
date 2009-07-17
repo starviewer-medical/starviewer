@@ -9,12 +9,10 @@
 
 #include <QObject>
 #include <QList>
+#include <QXmlStreamReader>
+
 #include "hangingprotocolimageset.h"
 #include "logging.h"
-
-#if QT_VERSION >= 0x040300
-
-#include <QXmlStreamReader>
 
 namespace udg {
 
@@ -55,35 +53,5 @@ private:
 };
 
 }
-
-#else
-
-namespace udg {
-
-class HangingProtocol;
-class HangingProtocolDisplaySet;
-
-/**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
- */
-class HangingProtocolXMLReader : public QObject
-{
-Q_OBJECT
-public:
-    HangingProtocolXMLReader(QObject *parent = 0):QObject(parent){};
-
-    ~HangingProtocolXMLReader(){};
-
-    /// llegeix els hanging protocols del fitxer
-    QList<HangingProtocol * > read( QString path )
-    {
-	INFO_LOG( QString("No es carreguen els hanging protocols, ja que la versió de qt és inferior a 4.3" ) );
-        return QList<HangingProtocol * >();
-    };
-
-};
-}
-
-#endif
 
 #endif

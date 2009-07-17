@@ -83,8 +83,6 @@ void ListenRISRequestThread::processRequest(QString risRequestData)
 
     INFO_LOG("S'intencarà processar la petició rebuda com a Xml");
 
-    #if QT_VERSION >= 0x040300
-
     ParseXmlRisPIERRequest parseXml;
 
     mask = parseXml.parseXml(risRequestData);
@@ -94,8 +92,6 @@ void ListenRISRequestThread::processRequest(QString risRequestData)
         INFO_LOG("Process correcte faig signal");
         emit requestRetrieveStudy(mask);
     }
-
-    #endif
 }
 
 void ListenRISRequestThread::networkError(QTcpServer *tcpServer)
