@@ -24,11 +24,12 @@
 #include <QList>
 #include <QHash>
 
+#include "assoc.h"
+#include "pacsdevice.h"
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 
 class DcmDataset;
 
-struct T_ASC_Association;
 struct T_DIMSE_C_FindRQ;
 struct T_DIMSE_C_FindRSP;
 
@@ -42,6 +43,7 @@ class Study;
 class Series;
 class Image;
 class DICOMTagReader;
+class PacsServer;
 
 class QueryPacs
 {
@@ -50,13 +52,19 @@ public:
 
     /** Estableix la connexió a utilitzar per comunicar-se amb el PACS
       */
-    void setConnection(QString pacsID, PacsConnection connection);
+    void setConnection(PacsServer pacsServer);
 
     /** màscara dicom a cercar
      * @param mask màscara
      * @return estat del mètode
      */
     Status query( DicomMask mask);
+
+    /**Indiquem que la consulta actual s'ha de cancel·lar. 
+      *La cancel·lació de la query no es fa immediatament quan s'invoca el mètode, aquest mètode actualitza un flag, que cada vegada
+      *que rebem un element DICOM que compleix la màscara es comprova, si el flag indica que s'ha demanat cancel·lar llavors es
+      *cancel·la la query*/
+    void cancelQuery();
 
     QList<Patient*> getQueryResultsAsPatientStudyList();
     QList<Series*> getQueryResultsAsSeriesList();
@@ -65,24 +73,24 @@ public:
     ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
     QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
 
-protected:
-
 private:
 
     T_ASC_Association *m_assoc; // request DICOM association;
+    T_ASC_PresentationContextID m_presId;
     DcmDataset *m_mask;
+    PacsDevice m_pacs;
 
     QList<Patient*> m_patientStudyList;
     QList<Series*> m_seriesList;
     QList<Image*> m_imageList;
-    QString m_pacsID;    ///Guarda el Id del pacs al qual fem la query
     /*TODO m_hashPacsIDOfStudyInstanceUID ara mateix no té gaire sentit perquè per defecte se li posa la ID del PACS el que fem la 
       cerca, però podem tenir el cas que les consultes es facin a un PACS i que aquest ens indiqui que l'estudi es troba guardat en 
       un altre PACS, tenir en compte per aquest cas que passa si tenim dos PACS amb el mateix nom
      */
     QHash<QString,QString> m_hashPacsIDOfStudyInstanceUID; //Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
 
-    QString m_institutionPacs;//Guarda la institució a la que pertany al PACS
+    bool m_cancelQuery;//flag que indica si s'ha de cancel·lar la query actual
+    bool m_cancelRequestSent;//indica si hem demanat la cancel·lació de la consulta actual
 
     //fa el query al pacs
     Status query();
@@ -96,6 +104,9 @@ private:
         T_DIMSE_C_FindRSP *rsp,
         DcmDataset *responseIdentifiers
         );
+
+    ///Cancel·la la consulta actual
+    void cancelQuery(T_DIMSE_C_FindRQ *request);
 
     ///Afegeix l'objecte a la llista d'estudis si no hi existeix
     void addPatientStudy( DICOMTagReader *dicomTagReader );

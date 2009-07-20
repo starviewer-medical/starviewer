@@ -8,8 +8,6 @@
 #define UDGQUERYSCREEN_H
 
 #include "ui_queryscreenbase.h"
-#include "listenrisrequestthread.h"
-#include "qpopuprisrequestsscreen.h"
 
 namespace udg {
 
@@ -18,6 +16,7 @@ class QCreateDicomdir;
 class DicomMask;
 class QOperationStateScreen;
 class StatsWatcher;
+class RISRequestManager;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -75,16 +74,6 @@ private slots:
      */
     void refreshTab( int index );
 
-    /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al connectar amb el pacs
-     * @param pacsID ID del pacs a la base de ades local
-     */
-    void errorConnectingPacs(QString pacsID);
-
-    /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al fer una query d'estudis amb el pacs
-     * @param id del PACS
-     */
-    void errorQueringStudiesPacs( QString PacsID );
-
     void updateOperationsInProgressMessage();
 
     /// Mostra/amaga els camps de cerca avançats
@@ -93,12 +82,6 @@ private slots:
     ///Mostra la pantalla QOperationStateScreen
     void showOperationStateScreen();
 
-    ///Ens mostra un message box indicant l'error produït mentre s'esperaven peticions del RIS
-    void showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError);
-
-    ///Passant-li la màscara resultant de parserjar la petició del RIS descarrega l'estudi que el RIS ha sol·licitat
-    void retrieveStudyFromRISRequest(DicomMask maskRisRequest);
-
     void viewPatients(QList<Patient*>);
 
     ///Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
@@ -106,6 +89,9 @@ private slots:
 
     ///Signal indicant que hi ha estudis que s'han de guardar al PACS
     void storeStudiesToPacs(QList<Study*> studiesToStore);
+
+    ///Slot que s'activa quan es rep una petició del RIS per descarregar un estudi d'un determinat PACS
+    void retrieveStudyFromRISRequest(QString pacsID, Study *study);
 
 private:
 
@@ -122,9 +108,6 @@ private:
      * @return retorna la màscara d'un objecte dicom
      */
     DicomMask buildDicomMask();
-
-    ///Cerca els estudis que compleixen la màscara de cerca als pacs passats per paràmetre
-    Status queryMultiplePacs(DicomMask searchMask, QList<PacsDevice> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
 
     ///Comprova els requeriments necessaris per poder utilitzar la QueryScreen
     void checkRequeriments();
@@ -164,9 +147,7 @@ private:
     QOperationStateScreen *m_operationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
 
-    ListenRISRequestThread *m_listenRISRequestThread;
-
-    QPopUpRisRequestsScreen *m_qpopUpRisRequestsScreen; //Popup que indica que el RIS ha fet una petició per descarregar un estudi
+    RISRequestManager *m_risRequestManager;
 
     StatsWatcher *m_statsWatcher;
 };

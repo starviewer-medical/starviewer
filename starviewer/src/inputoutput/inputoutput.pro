@@ -77,7 +77,10 @@ HEADERS += databaseconnection.h \
            inputoutputsettings.h \
            qinputoutputdicomdirwidget.h \
            qinputoutputlocaldatabasewidget.h \
-           qinputoutputpacswidget.h
+           qinputoutputpacswidget.h \
+           querypacsjob.h \
+           pacsmanager.h \
+           risrequestmanager.h
 
 SOURCES += databaseconnection.cpp \
            pacsconnection.cpp \
@@ -132,7 +135,10 @@ SOURCES += databaseconnection.cpp \
            inputoutputsettings.cpp \
            qinputoutputdicomdirwidget.cpp \
            qinputoutputlocaldatabasewidget.cpp \
-           qinputoutputpacswidget.cpp
+           qinputoutputpacswidget.cpp \
+           querypacsjob.cpp \
+           pacsmanager.cpp \
+           risrequestmanager.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
@@ -147,6 +153,7 @@ include(../itk.inc)
 include(../dcmtk.inc)
 include(../log4cxx.inc)
 include(../compilationtype.inc)
+include(../threadweaver.inc)
 
 QT += xml network
 

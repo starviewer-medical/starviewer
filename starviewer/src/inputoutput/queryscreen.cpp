@@ -22,11 +22,10 @@
 #include "localdatabasemanager.h"
 #include "patient.h"
 #include "starviewerapplication.h"
-#include "parsexmlrispierrequest.h"
 #include "utils.h"
 #include "statswatcher.h"
-#include "multiplequerystudy.h"
 #include "pacsdevice.h"
+#include "risrequestmanager.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -67,7 +66,10 @@ QueryScreen::QueryScreen( QWidget *parent )
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
     if (Settings().getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
-        m_listenRISRequestThread->listen(); 
+    {
+        m_risRequestManager->listen();
+    }
+
 #endif
 
     m_statsWatcher = new StatsWatcher("QueryScreen",this);
@@ -87,7 +89,7 @@ QueryScreen::~QueryScreen()
     this->close();
 
 #ifndef STARVIEWER_LITE
-    delete m_listenRISRequestThread;
+    delete m_risRequestManager;
 #endif
 }
 
@@ -120,10 +122,10 @@ void QueryScreen::initialize()
     refreshTab( LocalDataBaseTab );
     
 #ifndef STARVIEWER_LITE
-    Settings settings;
-    m_listenRISRequestThread = new ListenRISRequestThread(this);
-    if (settings.getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
-        m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
+    if (Settings().getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
+    {
+        m_risRequestManager = new RISRequestManager();
+    }
 #endif
 
 }
@@ -145,8 +147,7 @@ void QueryScreen::createConnections()
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
 
     #ifndef STARVIEWER_LITE
-    connect(m_listenRISRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(retrieveStudyFromRISRequest(DicomMask)));
-    connect(m_listenRISRequestThread, SIGNAL(errorListening(ListenRISRequestThread::ListenRISRequestThreadError)), SLOT(showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError)));
+    connect(m_risRequestManager, SIGNAL(retrieveStudyFromRISRequest(QString, Study*)), SLOT(retrieveStudyFromRISRequest(QString, Study*)));
     #endif
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
@@ -405,111 +406,12 @@ void QueryScreen::writeSettings()
     }
 }
 
-Status QueryScreen::queryMultiplePacs(DicomMask searchMask, QList<PacsDevice> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy)
+void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
 {
-    QList<PacsDevice> filledPacsDevice;
-
-    foreach(PacsDevice pacs, listPacsToQuery)
-    {
-        filledPacsDevice.append(pacs);
-    }
-
-    multipleQueryStudy->setMask( searchMask ); //assignem la mascara
-    multipleQueryStudy->setPacsList(filledPacsDevice);
-    return multipleQueryStudy->StartQueries();
-}
-
-void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
-{
-    MultipleQueryStudy multipleQueryStudy;
     DicomMask maskStudyToRetrieve;
-    Settings settings;
 
-    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRisRequest.getAccessionNumber()); //Mostrem el popUP amb l'accession number
-
-    m_qpopUpRisRequestsScreen->show();
-
-    connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
-    connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
-
-    Status state = queryMultiplePacs(maskRisRequest, PacsDeviceManager().queryDefaultPacs(), &multipleQueryStudy);
-
-    //Fem els connects per tracta els possibles errors que es poden donar
-
-    if (!state.good())
-    {
-        QMessageBox::critical(this , ApplicationNameString , tr("An error ocurred querying default PACS, can't process the RIS request."));
-        return;
-    }
-
-    if (multipleQueryStudy.getPatientStudyList().isEmpty())
-    {
-        QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(maskRisRequest.getAccessionNumber(), ApplicationNameString);
-        QMessageBox::information(this , ApplicationNameString , message);
-        return;
-    }
-
-    foreach (Patient *patient, multipleQueryStudy.getPatientStudyList())
-    {
-        foreach(Study *study, patient->getStudies())
-        {
-            QString pacsID = multipleQueryStudy.getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()];
-
-            maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
-            m_qInputOutputPacsWidget->retrieve( settings.getValue( InputOutputSettings::risRequestViewOnceRetrievedKey ).toBool(), pacsID, maskStudyToRetrieve, study);
-        }
-    }
-}
-
-void QueryScreen::errorConnectingPacs( QString IDPacs )
-{
-    PacsDeviceManager pacsDeviceManager;
-    PacsDevice errorPacs;
-    QString errorMessage;
-
-    errorPacs = pacsDeviceManager.queryPacs(IDPacs);
-
-    errorMessage = tr( "Can't connect to PACS %1 from %2.\nBe sure that the IP and AETitle of the PACS are correct." )
-        .arg( errorPacs.getAEPacs() )
-        .arg( errorPacs.getInstitution()
-    );
-
-    QMessageBox::critical( this , ApplicationNameString , errorMessage );
-}
-
-void QueryScreen::errorQueringStudiesPacs(QString PacsID)
-{
-    PacsDeviceManager pacsDeviceManager;
-    PacsDevice errorPacs;
-    QString errorMessage;
-
-    errorPacs = pacsDeviceManager.queryPacs(PacsID);
-    errorMessage = tr( "Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct" )
-        .arg( errorPacs.getAEPacs() )
-        .arg( errorPacs.getInstitution()
-    );
-
-    QMessageBox::critical( this , ApplicationNameString , errorMessage );
-}
-
-void QueryScreen::showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError error)
-{
-    QString message;
-    Settings settings;
-    int risPort = settings.getValue( InputOutputSettings::risRequestsPortKey ).toInt();
-    switch(error)
-    {
-        case ListenRISRequestThread::risPortInUse :
-            message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
-            message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
-            break;
-        case ListenRISRequestThread::unknowNetworkError :
-            message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
-            message += tr("\nIf the problem persist contact with an administrator.");
-            break;
-    }
-    
-    QMessageBox::critical(this, ApplicationNameString, message);
+    maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
+    m_qInputOutputPacsWidget->retrieve( Settings().getValue( InputOutputSettings::risRequestViewOnceRetrievedKey ).toBool(), pacsID, maskStudyToRetrieve, study);
 }
 
 };
