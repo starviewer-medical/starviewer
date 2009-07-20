@@ -32,8 +32,6 @@ HEADERS += databaseconnection.h \
            retrieveimages.h \
            status.h \
            struct.h \
-           multiplequerystudy.h \
-           qquerystudythread.h \
            operation.h \
            qexecuteoperationthread.h \
            converttodicomdir.h \
@@ -92,8 +90,6 @@ SOURCES += databaseconnection.cpp \
            processimagesingleton.cpp \
            retrieveimages.cpp \
            status.cpp \
-           multiplequerystudy.cpp \
-           qquerystudythread.cpp \
            operation.cpp \
            qexecuteoperationthread.cpp \
            converttodicomdir.cpp \
