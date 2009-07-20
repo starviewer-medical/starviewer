@@ -55,7 +55,7 @@ void QQueryStudyThread::run()
         //creem l'objecte fer la query
         QueryPacs queryPacsStudy;
 
-        queryPacsStudy.setConnection(m_param.getPacsID(), serverSCP.getConnection());
+        queryPacsStudy.setConnection(serverSCP);
         //busquem els estudis
         state = queryPacsStudy.query( m_mask );
 

@@ -18,48 +18,61 @@
 #include "createinformationmodelobject.h"
 #include "dicomtagreader.h"
 #include "pacsdevicemanager.h"
+#include "logging.h"
 
 namespace udg{
 
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 
-void QueryPacs::setConnection(QString pacsID, PacsConnection connection)
+void QueryPacs::setConnection(PacsServer pacsServer)
 {
-    m_assoc = connection.getPacsConnection();
-    m_pacsID = pacsID;
-
-    m_institutionPacs = PacsDeviceManager().queryPacs(pacsID).getInstitution();//Cerquem el nom de la Institució a la qual pertany el PACS
+    m_assoc = pacsServer.getConnection().getPacsConnection();
+    m_pacs = pacsServer.getPacs();
 }
 
 void QueryPacs::foundMatchCallback(
         void * callbackData ,
-        T_DIMSE_C_FindRQ * /*request*/ ,
+        T_DIMSE_C_FindRQ * request,
         int responseCount,
         T_DIMSE_C_FindRSP *rsp,
         DcmDataset *responseIdentifiers
         )
 {
     QueryPacs* queryPacsCaller = (QueryPacs*)callbackData;
-    DICOMTagReader *dicomTagReader = new DICOMTagReader("", responseIdentifiers);
-    QString queryRetrieveLevel = dicomTagReader->getAttributeByName( DCM_QueryRetrieveLevel );
 
-    //en el cas que l'objecte que cercàvem fos un estudi afegi
-    if ( queryRetrieveLevel == "STUDY" )
+    if (queryPacsCaller->m_cancelQuery)
     {
-        queryPacsCaller->addPatientStudy( dicomTagReader );
+        /*Hem de comprovar si ja haviem demanat cancel·lar la Query. És degut a que tot i que demanem cancel·lar la query actual
+          el PACS ens envia els dataset que havia posat a la pila de la xarxa just abans de rebre el cancel·lar la query, per això 
+         pot ser que tot i havent demanat cancel·lar la query rebem algun resultat més, per això comprovem si ja havíem demant
+         cancel·lar la query per tornar-la  demanar, quan rebem aquests resultats que ja s'havien posat a la pila de la xarxa.
+        http://forum.dcmtk.org/viewtopic.php?t=2143
+        */
+        if (!queryPacsCaller->m_cancelRequestSent)
+        {
+            queryPacsCaller->cancelQuery(request);
+            queryPacsCaller->m_cancelRequestSent = true;
+        }
+    }
+    else
+    {
+        DICOMTagReader *dicomTagReader = new DICOMTagReader("", responseIdentifiers);
+        QString queryRetrieveLevel = dicomTagReader->getAttributeByName( DCM_QueryRetrieveLevel );
 
-    } //si la query retorna un objecte sèrie
-    else if ( queryRetrieveLevel == "SERIES" )
-    {
-        queryPacsCaller->addPatientStudy( dicomTagReader );
-        queryPacsCaller->addSeries( dicomTagReader );
-    }// si la query retorna un objecte imatge
-    else if ( queryRetrieveLevel == "IMAGE" )
-    {
-        queryPacsCaller->addPatientStudy( dicomTagReader );
-        queryPacsCaller->addSeries( dicomTagReader );
-        queryPacsCaller->addImage( dicomTagReader );
+        //en el cas que l'objecte que cercàvem fos un estudi afegi
+        if ( queryRetrieveLevel == "STUDY" )
+        {
+            queryPacsCaller->addPatientStudy( dicomTagReader );
+        } //si la query retorna un objecte sèrie
+        else if ( queryRetrieveLevel == "SERIES" )
+        {
+            queryPacsCaller->addSeries( dicomTagReader );
+        }// si la query retorna un objecte imatge
+        else if ( queryRetrieveLevel == "IMAGE" )
+        {
+            queryPacsCaller->addImage( dicomTagReader );
+        }
     }
 }
 
@@ -69,7 +82,6 @@ static const char *     opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInfor
 Status QueryPacs::query()
 {
     DIC_US msgId = m_assoc->nextMsgID++;
-    T_ASC_PresentationContextID presId;
     T_DIMSE_C_FindRQ req;
     T_DIMSE_C_FindRSP rsp;
     DcmDataset *statusDetail = NULL;
@@ -88,8 +100,8 @@ Status QueryPacs::query()
     }
 
     /* figure out which of the accepted presentation contexts should be used */
-    presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_FINDStudyRootQueryRetrieveInformationModel );
-    if ( presId == 0 )
+    m_presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_FINDStudyRootQueryRetrieveInformationModel );
+    if ( m_presId == 0 )
     {
         return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
     }
@@ -102,7 +114,7 @@ Status QueryPacs::query()
     req.Priority = DIMSE_PRIORITY_LOW;
 
     /* finally conduct transmission of data */
-    OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,
+    OFCondition cond = DIMSE_findUser( m_assoc , m_presId , &req , m_mask ,
                           foundMatchCallback , this ,
                           DIMSE_NONBLOCKING , PacsDevice::getConnectionTimeout() ,
                           &rsp , &statusDetail );
@@ -119,9 +131,34 @@ Status QueryPacs::query()
 
 Status QueryPacs::query( DicomMask mask )
 {
+    m_cancelQuery = false;
+
     m_mask = mask.getDicomMask();
 
     return query();
+}
+
+void QueryPacs::cancelQuery()
+{
+    /*Indiquem que s'ha de cancel·lar la query, el mètode foundMatchCallback, comprova el flag cada vegada que rep un resultat DICOM
+     *que compleix amb la màscara de cerca*/
+    m_cancelQuery = true;
+}
+
+void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
+{
+    INFO_LOG(QString("Demanem cancel·lar al PACS %1 l'actual query").arg(m_pacs.getAEPacs()));
+
+    //Tots els PACS està obligats pel DICOM Conformance a implementar la cancel·lació
+    OFCondition cond = DIMSE_sendCancelRequest(m_assoc, m_presId, request->MessageID);
+    if (cond.bad())
+    {
+        ERROR_LOG("S'ha produït el següent error al cancel·lar la query: " + QString(cond.text()));
+        INFO_LOG(QString("Aborto la connexió amb el PACS %1").arg(m_pacs.getAEPacs()));
+
+        //Si hi hagut un error demanant el cancel·lar, abortem l'associació, d'aquesta manera segur que cancel·lem la query
+        ASC_abortAssociation(m_assoc);
+    }
 }
 
 void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
@@ -130,12 +167,12 @@ void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
 
     Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
     Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
-    study->setInstitutionName(m_institutionPacs);
+    study->setInstitutionName(m_pacs.getInstitution());
 
     patient->addStudy(study);
 
     m_patientStudyList.append(patient);
-    m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacsID;//Afegim a la taula de QHash de quin pacs és l'estudi
+    m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacs.getPacsID();//Afegim a la taula de QHash de quin pacs és l'estudi
 }
 
 void QueryPacs::addSeries( DICOMTagReader *dicomTagReader )

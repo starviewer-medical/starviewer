@@ -26,11 +26,10 @@ class Patient;
 class StatsWatcher;
 class Status;
 class PacsDevice;
-class MultipleQueryStudy;
-class PacsServer;
 class Study;
 class QOperationStateScreen;
 class ProcessImageSingleton;
+class PacsManager;
 
 /** 
  * Widget en el que controla les operacions d'entrada/sortida del PACS
@@ -80,18 +79,12 @@ signals:
     void studyWillBeDeletedFromDatabase(QString studyInstanceUID);
 
 private:
-    /// Ha de ser global, sino l'objecte es destrueix i QT no té temps d'atendre els signals dels threads
-    MultipleQueryStudy *m_multipleQueryStudy;
 
     ///Crea les connexions entre signals i slots
     void createConnections();
 
     ///Genera el menú contextual que apareix quan clickem amb el botó dret a sobre d'un item del StudyTreeWidget
     void createContextMenuQStudyTreeWidget();
-
-    ///Fa la consulta a diversos PACS
-    //TODO aquest mètode quan s'hagi fet el refactoring de pacsparameters hauria de desapareixer no tindrà sentit
-    Status queryMultiplePacs(DicomMask searchMask, QList<PacsDevice> listPacsToQuery, MultipleQueryStudy *multipleQueryStudy);
 
     /**Comprova que els paràmetres per la cerca siguin correctes, que no es tractir d'un consulta pesada i que ens hagin seleccionat
      * algun PACS per consultar 
@@ -100,12 +93,6 @@ private:
 
     ///Retorna l'ID del pacs al que pertany l'estudi passat per paràmetre, només té en compte els estudis que s'han consultat a la última query
     QString getPacsIDFromQueriedStudies(QString studyInstanceUID);
-
-    /** Donat un AETitle busca les dades del PACS a la configuració i prepara un objecte PACSERVER, per poder
-     * connectar al PACS
-     */
-    //TODO Aquest mètode ha de desapareixer quan s'hagi fet refactoring de PacsDevice i s'hagin tret els paràmetres que no li són propis
-    PacsServer getPacsServerByPacsID(QString pacsID);
 
     ///Construeix la màscara de cerca per cercar les sèries d'un estudi
     DicomMask buildSeriesDicomMask(QString studyInstanceUID);
@@ -126,18 +113,32 @@ private slots:
     ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
     void view();
 
-    /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al connectar amb el pacs
-     * @param pacsID ID del pacs a la base de ades local
-     */
-    void errorConnectingPacs(QString pacsID);
-
-    /** Slot que s'activa pel signal de la classe MultimpleQueryStudy, quan s'ha produit un error al fer una query d'estudis amb el pacs
-     * @param id del PACS
-     */
-    void errorQueringStudiesPacs(QString PacsID);
-
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
+
+    ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca d'estudis
+    void queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID);
+
+    ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca de series
+    void querySeriesResultsReceived(QString studyInstanceUID, QList<Series*> series);
+
+    ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca d'imatges
+    void queryImageResultsReceived(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> image);
+
+    ///Slot que s'activa quan les query finalitzen crida el mètode setQueryInProgress en false
+    void queryFinished();
+
+    ///Slot que s'activa quan s'ha produït un error al consultar els estudis d'un PACS
+    void errorQueryingStudy(PacsDevice pacsDevice);
+
+    ///Slot que s'activa quan s'ha produït un error al consultar les series d'un PACS
+    void errorQueryingSeries(QString studyInstanceUID, PacsDevice pacsDevice);
+
+    ///Slot que s'activa quan s'ha produït un error al consultar les imatges d'un PACS
+    void errorQueryingImage(QString studyInstanceUID, QString seriesInstanceUID, PacsDevice pacsDevice);
+
+    ///Cancel·la les consultes que s'estan executant en aquell moment
+    void cancelCurrentQueries();
 
 private:
     QMenu m_contextMenuQStudyTreeWidget;
@@ -145,8 +146,12 @@ private:
     QExecuteOperationThread m_qexecuteOperationThread;
     QOperationStateScreen *m_qoperationStateScreen;
     ProcessImageSingleton *m_processImageSingleton;
+    PacsManager *m_pacsManager;
 
     StatsWatcher *m_statsWatcher;
+
+    ///Amaga/mostra que hi ha una query en progress i habilitat/deshabilitat el botó de cancel·lar la query actual
+    void setQueryInProgress(bool queryInProgress);
 };
 
 };// end namespace udg
