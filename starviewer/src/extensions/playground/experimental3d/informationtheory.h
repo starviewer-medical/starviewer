@@ -44,7 +44,6 @@ private:
 
     static const int MIN_SIZE_TO_USE_THREADS = 100000;
 
-    template <class T> class EntropyThread;
     template <class T> class KullbackLeiblerDivergenceThread;
     template <class T> class ProbabilitiesMixThread;
 

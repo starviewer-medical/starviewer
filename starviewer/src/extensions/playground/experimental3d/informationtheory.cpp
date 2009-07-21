@@ -7,8 +7,29 @@
 #include <cmath>
 
 #include <QThread>
+#include <QtConcurrentMap>
 
 //#include "histogram.h"
+
+
+namespace {
+
+
+template <class T>
+T copy( const T &p )
+{
+    return p;
+}
+
+
+template <class T>
+void sumEntropy( double &entropy, const T &p )
+{
+    if ( p > 0.0 ) entropy -= p * log( p );
+}
+
+
+}
 
 
 namespace udg {
@@ -18,46 +39,7 @@ namespace udg {
 template <class T>
 double InformationTheory::entropy( const QVector<T> &probabilities )
 {
-    int size = probabilities.size();
-    double entropy = 0.0;
-
-    if ( size >= MIN_SIZE_TO_USE_THREADS )
-    {
-        int nThreads = QThread::idealThreadCount();
-        EntropyThread<T> **threads = new EntropyThread<T>*[nThreads];
-        int sizePerThread = size / nThreads + 1;
-        int start = 0, end = sizePerThread;
-
-        for ( int i = 0; i < nThreads; i++ )
-        {
-            threads[i] = new EntropyThread<T>( probabilities, start, end );
-            threads[i]->start();
-            start += sizePerThread;
-            end += sizePerThread;
-            if ( end > size ) end = size;
-        }
-
-        for ( int i = 0; i < nThreads; i++ )
-        {
-            threads[i]->wait();
-            entropy += threads[i]->entropy();
-            delete threads[i];
-        }
-
-        delete[] threads;
-    }
-    else
-    {
-        for ( int i = 0; i < size; i++ )
-        {
-            double p = probabilities.at( i );
-            if ( p > 0.0 ) entropy -= p * log( p );
-        }
-    }
-
-    entropy /= log( 2.0 );
-
-    return entropy;
+    return QtConcurrent::blockingMappedReduced( probabilities, copy<T>, sumEntropy<T> ) / log( 2.0 );
 }
 
 
@@ -179,27 +161,6 @@ double InformationTheory::jensenShannonDivergence( double pi1, double pi2, const
 
     return entropy( probabilitiesMix ) - ( pi1 * entropy( probabilitiesP1 ) + pi2 * entropy( probabilitiesP2 ) );
 }
-
-
-template <class T>
-class InformationTheory::EntropyThread : public QThread {
-    public:
-        EntropyThread( const QVector<T> &probabilities, int start, int end ) : m_probabilities( probabilities ), m_start( start ), m_end( end ) {}
-        virtual void run()
-        {
-            m_entropy = 0.0;
-            for ( int i = m_start; i < m_end; i++ )
-            {
-                double p = m_probabilities.at( i );
-                if ( p > 0.0 ) m_entropy -= p * log( p );
-            }
-        }
-        double entropy() const { return m_entropy; }
-    private:
-        const QVector<T> &m_probabilities;
-        int m_start, m_end;
-        double m_entropy;
-};
 
 
 template <class T>
