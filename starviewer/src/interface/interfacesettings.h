@@ -18,6 +18,8 @@ public:
     static const QString openDirectoryLastPathKey;
     static const QString openFileLastFileExtensionKey;
     static const QString applicationMainWindowGeometryKey;
+    // Indicarà si permetem tenir més d'una instància de cada extensió (true) o únicament una (false)
+    static const QString allowMultipleInstancesPerExtensionKey;
 };
 
 } // end namespace udg 
