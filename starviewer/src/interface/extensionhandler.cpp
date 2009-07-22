@@ -108,14 +108,16 @@ void ExtensionHandler::request( int who )
     }
 }
 
-void ExtensionHandler::request( const QString &who )
+bool ExtensionHandler::request( const QString &who )
 {
+    bool ok = true;
     ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(who);
     if( !mediator )
     {
         WARN_LOG( "No s'ha pogut crear el mediator per: " + who );
         DEBUG_LOG( "No s'ha pogut crear el mediator per: " + who );
-        return;
+        ok = false;
+        return ok;
     }
 
     bool createExtension = true;
@@ -151,6 +153,7 @@ void ExtensionHandler::request( const QString &who )
         }
         else
         {
+            ok = false;
             DEBUG_LOG( "Error carregant " + who );
         }
     }
@@ -160,6 +163,8 @@ void ExtensionHandler::request( const QString &who )
     }
 
     delete mediator;
+
+    return ok;
 }
 
 void ExtensionHandler::killBill()
@@ -384,8 +389,14 @@ void ExtensionHandler::openDefaultExtension()
 {
     if( m_mainApp->getCurrentPatient() )
     {
-        // TODO de moment simplement cridem el Q2DViewerExtension
-        request("Q2DViewerExtension");
+        Settings settings;
+        QString defaultExtension = settings.getValue( InterfaceSettings::defaultExtensionKey ).toString();
+        if( !request( defaultExtension ) )
+        {
+            WARN_LOG( "Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)" );
+            DEBUG_LOG( "Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)" );
+            request( "Q2DViewerExtension" );
+        }
     }
     else
     {

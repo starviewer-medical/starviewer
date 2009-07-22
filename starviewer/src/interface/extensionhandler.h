@@ -36,7 +36,7 @@ public:
 public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
     void request( int who );
-    void request( const QString &who );
+    bool request( const QString &who );
 
     /**
      * Elimina totes les extensions que contingui el workspace i allibera la memòria que

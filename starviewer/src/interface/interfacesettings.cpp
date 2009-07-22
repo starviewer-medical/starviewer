@@ -13,7 +13,10 @@ const QString InterfaceSettings::openDirectoryLastPathKey( openBaseKey + "workin
 const QString InterfaceSettings::openFileLastFileExtensionKey( openBaseKey + "defaultExtension" );
 
 const QString InterfaceSettings::applicationMainWindowGeometryKey("geometry");
-const QString InterfaceSettings::allowMultipleInstancesPerExtensionKey("Extensions/allowMultipleExtensionInstances");
+
+const QString extensionsBaseKey("Extensions/");
+const QString InterfaceSettings::allowMultipleInstancesPerExtensionKey( extensionsBaseKey + "allowMultipleExtensionInstances" );
+const QString InterfaceSettings::defaultExtensionKey( extensionsBaseKey + "defaultExtension" );
 
 InterfaceSettings::InterfaceSettings()
 {
@@ -30,6 +33,7 @@ void InterfaceSettings::init()
     settingsRegistry->addSetting( openDirectoryLastPathKey, QDir::homePath()  );
     settingsRegistry->addSetting( openFileLastFileExtensionKey, "MetaIO Image (*.mhd)" );
     settingsRegistry->addSetting( allowMultipleInstancesPerExtensionKey, false );
+    settingsRegistry->addSetting( defaultExtensionKey, "Q2DViewerExtension" );
 }
 
 } // end namespace udg 
