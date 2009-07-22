@@ -21,6 +21,7 @@
 #include "extensioncontext.h"
 #include "singleton.h"
 #include "starviewerapplication.h"
+#include "interfacesettings.h"
 
 // Espai reservat pels include de les mini-apps
 #include "appimportfile.h"
@@ -109,20 +110,56 @@ void ExtensionHandler::request( int who )
 
 void ExtensionHandler::request( const QString &who )
 {
-    QWidget *extension = ExtensionFactory::instance()->create(who);
-    ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create(who);
+    ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(who);
+    if( !mediator )
+    {
+        WARN_LOG( "No s'ha pogut crear el mediator per: " + who );
+        DEBUG_LOG( "No s'ha pogut crear el mediator per: " + who );
+        return;
+    }
 
-    if (mediator && extension)
+    bool createExtension = true;
+    int extensionIndex = 0;
+    QString requestedExtensionLabel = mediator->getExtensionID().getLabel();
+    if( !Settings().getValue( InterfaceSettings::allowMultipleInstancesPerExtensionKey ).toBool() )
     {
-        INFO_LOG("Activem extensió: " + who);
-        mediator->initializeExtension(extension, m_extensionContext );
-        m_mainApp->getExtensionWorkspace()->addApplication(extension, mediator->getExtensionID().getLabel() );
-		delete mediator;
+        // Només volem una instància per extensió
+        // Cal comprovar llavors que l'extensió que demanem no estigui ja creada
+        int count = m_mainApp->getExtensionWorkspace()->count();
+        bool found = false;
+        while( extensionIndex < count && !found )
+        {
+            if( m_mainApp->getExtensionWorkspace()->tabText(extensionIndex) == requestedExtensionLabel )
+                found = true;
+            else
+                extensionIndex++;
+        }
+        // Si la trobem, no caldrà crear-la de nou
+        if( found )
+            createExtension = false;
     }
-    else
+
+    // Segons la configuració i les extensions existents, haurem de crear o no l'extensió demanada
+    if( createExtension ) 
     {
-        DEBUG_LOG( "Error carregant " + who );
+        QWidget *extension = ExtensionFactory::instance()->create(who);
+        if (extension)
+        {
+            INFO_LOG("Activem extensió: " + who);
+            mediator->initializeExtension(extension, m_extensionContext );
+            m_mainApp->getExtensionWorkspace()->addApplication(extension, requestedExtensionLabel);
+        }
+        else
+        {
+            DEBUG_LOG( "Error carregant " + who );
+        }
     }
+    else // sinó mostrem l'extensió ja existent
+    {
+        m_mainApp->getExtensionWorkspace()->setCurrentIndex(extensionIndex);
+    }
+
+    delete mediator;
 }
 
 void ExtensionHandler::killBill()
