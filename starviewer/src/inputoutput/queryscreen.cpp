@@ -65,7 +65,7 @@ QueryScreen::QueryScreen( QWidget *parent )
      *perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
      *temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
      */
-    if (Settings().getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
+    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
     {
         m_risRequestManager->listen();
     }
@@ -122,7 +122,7 @@ void QueryScreen::initialize()
     refreshTab( LocalDataBaseTab );
     
 #ifndef STARVIEWER_LITE
-    if (Settings().getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
+    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
     {
         m_risRequestManager = new RISRequestManager();
     }
@@ -411,7 +411,7 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
     DicomMask maskStudyToRetrieve;
 
     maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
-    m_qInputOutputPacsWidget->retrieve( Settings().getValue( InputOutputSettings::risRequestViewOnceRetrievedKey ).toBool(), pacsID, maskStudyToRetrieve, study);
+    m_qInputOutputPacsWidget->retrieve( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool(), pacsID, maskStudyToRetrieve, study);
 }
 
 };

@@ -3,42 +3,42 @@
 
 #include "starviewerapplication.h"
 #include <QDir>
-#include <QLocale> // pel languageLocaleKey
+#include <QLocale> // pel LanguageLocale
 
 namespace udg {
 
 // Definició de les claus
-const QString screenShotToolBaseKey("ScreenshotTool/");
-const QString CoreSettings::screenShotToolFolderKey(screenShotToolBaseKey + "defaultSaveFolder");
-const QString CoreSettings::screenShotToolFileExtensionKey(screenShotToolBaseKey + "defaultSaveExtension");
-const QString CoreSettings::screenShotToolFilenameKey(screenShotToolBaseKey + "defaultSaveName");
+const QString ScreenShotToolBase("ScreenshotTool/");
+const QString CoreSettings::ScreenShotToolFolder(ScreenShotToolBase + "defaultSaveFolder");
+const QString CoreSettings::ScreenShotToolFileExtension(ScreenShotToolBase + "defaultSaveExtension");
+const QString CoreSettings::ScreenShotToolFilename(ScreenShotToolBase + "defaultSaveName");
 
-const QString CoreSettings::logViewerGeometryKey("logViewerDialogGeometry");
-const QString CoreSettings::userHangingProtocolsPathKey("Hanging-Protocols/path");
-const QString CoreSettings::registerStatLogsKey("LoggingPolicy/registerStatistics");
+const QString CoreSettings::LogViewerGeometry("logViewerDialogGeometry");
+const QString CoreSettings::UserHangingProtocolsPath("Hanging-Protocols/path");
+const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
 // Paràmetres d'obscurances
-const QString obscurancesBaseKey("3DViewer/obscurances/");
-const QString lowQualityObscurancesBaseKey( obscurancesBaseKey + "low/" );
-const QString mediumQualityObscurancesBaseKey( obscurancesBaseKey + "medium/" );
-const QString highQualityObscurancesBaseKey( obscurancesBaseKey + "high/" );
+const QString ObscurancesBase("3DViewer/obscurances/");
+const QString LowQualityObscurancesBase( ObscurancesBase + "low/" );
+const QString MediumQualityObscurancesBase( ObscurancesBase + "medium/" );
+const QString HighQualityObscurancesBase( ObscurancesBase + "high/" );
 
-const QString CoreSettings::numberOfDirectionsForLowQualityObscurancesKey( lowQualityObscurancesBaseKey + "numberOfDirections" );
-const QString CoreSettings::functionForLowQualityObscurancesKey( lowQualityObscurancesBaseKey + "function" );
-const QString CoreSettings::variantForLowQualityObscurancesKey( lowQualityObscurancesBaseKey + "variant" );
-const QString CoreSettings::gradientRadiusForLowQualityObscurancesKey( lowQualityObscurancesBaseKey + "gradientRadius" );
+const QString CoreSettings::NumberOfDirectionsForLowQualityObscurances( LowQualityObscurancesBase + "numberOfDirections" );
+const QString CoreSettings::FunctionForLowQualityObscurances( LowQualityObscurancesBase + "function" );
+const QString CoreSettings::VariantForLowQualityObscurances( LowQualityObscurancesBase + "variant" );
+const QString CoreSettings::GradientRadiusForLowQualityObscurances( LowQualityObscurancesBase + "gradientRadius" );
 
-const QString CoreSettings::numberOfDirectionsForMediumQualityObscurancesKey( mediumQualityObscurancesBaseKey + "numberOfDirections" );
-const QString CoreSettings::functionForMediumQualityObscurancesKey( mediumQualityObscurancesBaseKey + "function" );
-const QString CoreSettings::variantForMediumQualityObscurancesKey( mediumQualityObscurancesBaseKey + "variant" );
-const QString CoreSettings::gradientRadiusForMediumQualityObscurancesKey( mediumQualityObscurancesBaseKey + "gradientRadius" );
+const QString CoreSettings::NumberOfDirectionsForMediumQualityObscurances( MediumQualityObscurancesBase + "numberOfDirections" );
+const QString CoreSettings::FunctionForMediumQualityObscurances( MediumQualityObscurancesBase + "function" );
+const QString CoreSettings::VariantForMediumQualityObscurances( MediumQualityObscurancesBase + "variant" );
+const QString CoreSettings::GradientRadiusForMediumQualityObscurances( MediumQualityObscurancesBase + "gradientRadius" );
 
-const QString CoreSettings::numberOfDirectionsForHighQualityObscurancesKey( highQualityObscurancesBaseKey + "numberOfDirections" );
-const QString CoreSettings::functionForHighQualityObscurancesKey( highQualityObscurancesBaseKey + "function" );
-const QString CoreSettings::variantForHighQualityObscurancesKey( highQualityObscurancesBaseKey + "variant" );
-const QString CoreSettings::gradientRadiusForHighQualityObscurancesKey( highQualityObscurancesBaseKey + "gradientRadius" );
+const QString CoreSettings::NumberOfDirectionsForHighQualityObscurances( HighQualityObscurancesBase + "numberOfDirections" );
+const QString CoreSettings::FunctionForHighQualityObscurances( HighQualityObscurancesBase + "function" );
+const QString CoreSettings::VariantForHighQualityObscurances( HighQualityObscurancesBase + "variant" );
+const QString CoreSettings::GradientRadiusForHighQualityObscurances( HighQualityObscurancesBase + "gradientRadius" );
 
-const QString CoreSettings::languageLocaleKey("Starviewer-Language/languageLocale");
+const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale");
 
 CoreSettings::CoreSettings()
 {
@@ -51,11 +51,11 @@ CoreSettings::~CoreSettings()
 void CoreSettings::init()
 {
     SettingsRegistry *settingsRegistry = SettingsRegistry::instance();
-    settingsRegistry->addSetting( screenShotToolFolderKey, QDir::homePath() );
-    settingsRegistry->addSetting( screenShotToolFileExtensionKey, QObject::tr("PNG (*.png)") );
-    settingsRegistry->addSetting( userHangingProtocolsPathKey, UserHangingProtocolsPath );
-    settingsRegistry->addSetting( registerStatLogsKey, false );
-    settingsRegistry->addSetting( languageLocaleKey, QLocale::system().name() );
+    settingsRegistry->addSetting( ScreenShotToolFolder, QDir::homePath() );
+    settingsRegistry->addSetting( ScreenShotToolFileExtension, QObject::tr("PNG (*.png)") );
+    settingsRegistry->addSetting( UserHangingProtocolsPath, UserHangingProtocolsPath );
+    settingsRegistry->addSetting( RegisterStatLogs, false );
+    settingsRegistry->addSetting( LanguageLocale, QLocale::system().name() );
     
 }
 

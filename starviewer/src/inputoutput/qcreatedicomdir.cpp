@@ -44,7 +44,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     createConnections();
 
     Settings settings;
-    settings.restoreColumnsWidths(InputOutputSettings::createDicomdirStudyListColumnsWidthKey,m_dicomdirStudiesList);
+    settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
 
     //TODO:De manera temporal no es mostra la mida del dicomdir perquè no la sabem calcular correctament quan tenim imatges descarregades amb la transfer syntax JpegLossLess
     hideDicomdirSize();
@@ -596,7 +596,7 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
 void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::createDicomdirStudyListColumnsWidthKey, m_dicomdirStudiesList );
+    settings.saveColumnsWidths( InputOutputSettings::CreateDicomdirStudyListColumnsWidth, m_dicomdirStudiesList );
     ce->accept();
 }
 

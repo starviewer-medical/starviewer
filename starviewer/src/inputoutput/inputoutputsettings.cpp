@@ -7,32 +7,32 @@
 namespace udg {
 
 // Definició de les claus
-const QString cacheBaseKey("PACS/cache/");
-const QString InputOutputSettings::databaseAbsoluteFilePathKey( cacheBaseKey + "sdatabasePath");
-const QString InputOutputSettings::cachePathKey( cacheBaseKey + "imagePath");
-const QString InputOutputSettings::deleteLeastRecentlyUsedStudiesInDaysCriteriaKey( cacheBaseKey + "deleteOldStudiesHasNotViewedInDays");
-const QString InputOutputSettings::deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey( cacheBaseKey + "deleteOldStudiesIfNotEnoughSpaceAvailable");
-const QString InputOutputSettings::minimumDaysUnusedToDeleteStudyKey( cacheBaseKey + "MaximumDaysNotViewedStudy");
-const QString InputOutputSettings::minimumFreeGigaBytesForCacheKey( cacheBaseKey + "minimumSpaceRequiredToRetrieveInGbytes");
-const QString InputOutputSettings::minimumGigaBytesToFreeIfCacheIsFullKey( cacheBaseKey + "GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable");
+const QString CacheBase("PACS/cache/");
+const QString InputOutputSettings::DatabaseAbsoluteFilePath( CacheBase + "sdatabasePath");
+const QString InputOutputSettings::CachePath( CacheBase + "imagePath");
+const QString InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria( CacheBase + "deleteOldStudiesHasNotViewedInDays");
+const QString InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria( CacheBase + "deleteOldStudiesIfNotEnoughSpaceAvailable");
+const QString InputOutputSettings::MinimumDaysUnusedToDeleteStudy( CacheBase + "MaximumDaysNotViewedStudy");
+const QString InputOutputSettings::MinimumFreeGigaBytesForCache( CacheBase + "minimumSpaceRequiredToRetrieveInGbytes");
+const QString InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull( CacheBase + "GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable");
 
-const QString risBaseKey("PACS/risRequests/");
-const QString InputOutputSettings::listenToRISRequestsKey( risBaseKey + "listen");
-const QString InputOutputSettings::risRequestsPortKey( risBaseKey + "listenPort");
-const QString InputOutputSettings::risRequestViewOnceRetrievedKey( risBaseKey + "viewAutomaticallyAStudyRetrievedFromRisRequest");
+const QString RisBase("PACS/risRequests/");
+const QString InputOutputSettings::ListenToRISRequests( RisBase + "listen");
+const QString InputOutputSettings::RisRequestsPort( RisBase + "listenPort");
+const QString InputOutputSettings::RisRequestViewOnceRetrieved( RisBase + "viewAutomaticallyAStudyRetrievedFromRisRequest");
 
-const QString interfaceBaseKey("PACS/interface/");
-const QString InputOutputSettings::lastOpenedDICOMDIRPathKey( interfaceBaseKey + "lastOpenedDICOMDIRPath");  
-const QString InputOutputSettings::dicomdirStudyListColumnsWidthKey( interfaceBaseKey + "studyDicomdirList/");
-const QString InputOutputSettings::createDicomdirStudyListColumnsWidthKey( interfaceBaseKey + "qCreateDicomdir/");
-const QString InputOutputSettings::operationStateColumnsWidthKey( interfaceBaseKey + "qOperationState/");
-const QString InputOutputSettings::pacsStudyListColumnsWidthKey( interfaceBaseKey + "studyPacsList/");
+const QString InterfaceBase("PACS/interface/");
+const QString InputOutputSettings::LastOpenedDICOMDIRPath( InterfaceBase + "lastOpenedDICOMDIRPath");  
+const QString InputOutputSettings::DicomdirStudyListColumnsWidth( InterfaceBase + "studyDicomdirList/");
+const QString InputOutputSettings::CreateDicomdirStudyListColumnsWidth( InterfaceBase + "qCreateDicomdir/");
+const QString InputOutputSettings::OperationStateColumnsWidth( InterfaceBase + "qOperationState/");
+const QString InputOutputSettings::PacsStudyListColumnsWidth( InterfaceBase + "studyPacsList/");
 
-const QString pacsParamBaseKey("PACS/pacsparam/");
-const QString InputOutputSettings::queryRetrieveLocalPortKey( pacsParamBaseKey + "localPort");
-const QString InputOutputSettings::localAETitleKey( pacsParamBaseKey + "AETitle");
-const QString InputOutputSettings::pacsConnectionTimeoutKey( pacsParamBaseKey + "timeout");
-const QString InputOutputSettings::maximumPACSConnectionsKey( pacsParamBaseKey + "MaxConnects");
+const QString PacsParamBase("PACS/pacsparam/");
+const QString InputOutputSettings::QueryRetrieveLocalPort( PacsParamBase + "localPort");
+const QString InputOutputSettings::LocalAETitle( PacsParamBase + "AETitle");
+const QString InputOutputSettings::PacsConnectionTimeout( PacsParamBase + "timeout");
+const QString InputOutputSettings::MaximumPACSConnections( PacsParamBase + "MaxConnects");
 
 InputOutputSettings::InputOutputSettings()
 {
@@ -46,26 +46,26 @@ void InputOutputSettings::init()
 {
     SettingsRegistry *settingsRegistry = SettingsRegistry::instance();
     
-    settingsRegistry->addSetting( databaseAbsoluteFilePathKey, UserDataRootPath + "pacs/database/dicom.sdb", Settings::Parseable );
-    settingsRegistry->addSetting( cachePathKey, UserDataRootPath + "pacs/dicom/", Settings::Parseable );
+    settingsRegistry->addSetting( DatabaseAbsoluteFilePath, UserDataRootPath + "pacs/database/dicom.sdb", Settings::Parseable );
+    settingsRegistry->addSetting( CachePath, UserDataRootPath + "pacs/dicom/", Settings::Parseable );
 
-    settingsRegistry->addSetting( deleteLeastRecentlyUsedStudiesInDaysCriteriaKey, true );
-    settingsRegistry->addSetting( deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey, true );
-    settingsRegistry->addSetting( minimumDaysUnusedToDeleteStudyKey, 7 );
-    settingsRegistry->addSetting( minimumFreeGigaBytesForCacheKey, 5 );
-    settingsRegistry->addSetting( minimumGigaBytesToFreeIfCacheIsFullKey, 2 );
+    settingsRegistry->addSetting( DeleteLeastRecentlyUsedStudiesInDaysCriteria, true );
+    settingsRegistry->addSetting( DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria, true );
+    settingsRegistry->addSetting( MinimumDaysUnusedToDeleteStudy, 7 );
+    settingsRegistry->addSetting( MinimumFreeGigaBytesForCache, 5 );
+    settingsRegistry->addSetting( MinimumGigaBytesToFreeIfCacheIsFull, 2 );
 
-    settingsRegistry->addSetting( listenToRISRequestsKey, true );
-    settingsRegistry->addSetting( risRequestsPortKey, 11110 );
-    settingsRegistry->addSetting( risRequestViewOnceRetrievedKey, true );
+    settingsRegistry->addSetting( ListenToRISRequests, true );
+    settingsRegistry->addSetting( RisRequestsPort, 11110 );
+    settingsRegistry->addSetting( RisRequestViewOnceRetrieved, true );
 
-    settingsRegistry->addSetting( lastOpenedDICOMDIRPathKey, QDir::homePath() );
+    settingsRegistry->addSetting( LastOpenedDICOMDIRPath, QDir::homePath() );
 
-    settingsRegistry->addSetting( queryRetrieveLocalPortKey, 4006 );
+    settingsRegistry->addSetting( QueryRetrieveLocalPort, 4006 );
     // TODO podríem definir-lo directament amb %HOSTNAME%
-    settingsRegistry->addSetting( localAETitleKey, QHostInfo::localHostName(), Settings::Parseable );
-    settingsRegistry->addSetting( pacsConnectionTimeoutKey, 20 );
-    settingsRegistry->addSetting( maximumPACSConnectionsKey, 3 );
+    settingsRegistry->addSetting( LocalAETitle, QHostInfo::localHostName(), Settings::Parseable );
+    settingsRegistry->addSetting( PacsConnectionTimeout, 20 );
+    settingsRegistry->addSetting( MaximumPACSConnections, 3 );
 }
 
 } // end namespace udg 

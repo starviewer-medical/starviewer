@@ -26,7 +26,7 @@ ApplicationTranslationsLoader::~ApplicationTranslationsLoader()
 QLocale ApplicationTranslationsLoader::getDefaultLocale()
 {
     Settings settings;
-    QString defaultLocale = settings.getValue( CoreSettings::languageLocaleKey ).toString();
+    QString defaultLocale = settings.getValue( CoreSettings::LanguageLocale ).toString();
 
 	// configurem les locales de l'aplicació
 	// TODO ara està simplificat només als idiomes que nosaltres

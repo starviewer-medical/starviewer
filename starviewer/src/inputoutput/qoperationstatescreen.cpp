@@ -24,7 +24,7 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
     createConnections();
 
     Settings settings;
-    settings.restoreColumnsWidths(InputOutputSettings::operationStateColumnsWidthKey, m_treeRetrieveStudy);
+    settings.restoreColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
 }
 
 QOperationStateScreen::~QOperationStateScreen()
@@ -259,7 +259,7 @@ void QOperationStateScreen::setCancelledOperation(QString studyInstanceUID)
 void QOperationStateScreen::closeEvent( QCloseEvent* ce )
 {
     Settings settings;
-    settings.saveColumnsWidths(InputOutputSettings::operationStateColumnsWidthKey, m_treeRetrieveStudy);
+    settings.saveColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
     ce->accept();
 }
 

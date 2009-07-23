@@ -75,13 +75,13 @@ void QLogViewer::saveLogFileAs()
 void QLogViewer::writeSettings()
 {
     Settings settings;
-    settings.saveGeometry(CoreSettings::logViewerGeometryKey, this);
+    settings.saveGeometry(CoreSettings::LogViewerGeometry, this);
 }
 
 void QLogViewer::readSettings()
 {
     Settings settings;
-    settings.restoreGeometry(CoreSettings::logViewerGeometryKey, this);
+    settings.restoreGeometry(CoreSettings::LogViewerGeometry, this);
 }
 
 }

@@ -37,7 +37,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( InputOutputSettings::pacsStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreColumnsWidths( InputOutputSettings::PacsStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 
     m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
     m_processImageSingleton->setPath( LocalDatabaseManager::getCachePath());
@@ -60,7 +60,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 QInputOutputPacsWidget::~QInputOutputPacsWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::pacsStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths( InputOutputSettings::PacsStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputPacsWidget::createConnections()

@@ -20,7 +20,7 @@
 #include "statswatcher.h"
 #include "databaseinstallation.h"
 #include "interfacesettings.h"
-#include "coresettings.h" // pel languageLocaleKey
+#include "coresettings.h" // pel LanguageLocale
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
@@ -340,7 +340,7 @@ void QApplicationMainWindow::createLanguageMenu()
 QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
-    QString defaultLocale = settings.getValue( CoreSettings::languageLocaleKey ).toString();
+    QString defaultLocale = settings.getValue( CoreSettings::LanguageLocale ).toString();
 
     QAction *action = new QAction(this);
     action->setText(language);
@@ -354,7 +354,7 @@ QAction *QApplicationMainWindow::createLanguageAction(const QString &language, c
 void QApplicationMainWindow::switchToLanguage(QString locale)
 {
     Settings settings;
-    settings.setValue(CoreSettings::languageLocaleKey, locale);
+    settings.setValue(CoreSettings::LanguageLocale, locale);
 
     QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
 }
@@ -485,7 +485,7 @@ void QApplicationMainWindow::writeSettings()
 {
     Settings settings;
 
-    settings.saveGeometry(InterfaceSettings::applicationMainWindowGeometryKey, this);
+    settings.saveGeometry(InterfaceSettings::ApplicationMainWindowGeometry, this);
 }
 
 void QApplicationMainWindow::enableExtensions()
@@ -529,10 +529,10 @@ void QApplicationMainWindow::readSettings()
 {
     Settings settings;
 
-    if ( !settings.contains(InterfaceSettings::applicationMainWindowGeometryKey) )
+    if ( !settings.contains(InterfaceSettings::ApplicationMainWindowGeometry) )
         this->showMaximized();
     else
-        settings.restoreGeometry(InterfaceSettings::applicationMainWindowGeometryKey, this);
+        settings.restoreGeometry(InterfaceSettings::ApplicationMainWindowGeometry, this);
 }
 
 void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )

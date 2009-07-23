@@ -13,14 +13,14 @@ StatsWatcher::StatsWatcher( QObject *parent )
  : QObject(parent), m_context("*")
 {
     Settings settings;
-    m_registerLogs = settings.getValue(CoreSettings::registerStatLogsKey).toBool();
+    m_registerLogs = settings.getValue(CoreSettings::RegisterStatLogs).toBool();
 }
 
 StatsWatcher::StatsWatcher( const QString &context, QObject *parent )
  : QObject(parent), m_context(context)
 {
     Settings settings;
-    m_registerLogs = settings.getValue(CoreSettings::registerStatLogsKey).toBool();
+    m_registerLogs = settings.getValue(CoreSettings::RegisterStatLogs).toBool();
 }
 
 StatsWatcher::~StatsWatcher()
@@ -42,7 +42,7 @@ void StatsWatcher::addTriggerCounter( QMenu *menu )
 void StatsWatcher::log( const QString &message )
 {
     Settings settings;
-    if( settings.getValue(CoreSettings::registerStatLogsKey).toBool() ) 
+    if( settings.getValue(CoreSettings::RegisterStatLogs).toBool() ) 
     {
         INFO_LOG( QString("STAT: ") + message );
     }

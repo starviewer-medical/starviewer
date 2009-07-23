@@ -14,29 +14,29 @@ public:
     void init();
 
     /// Declaració de claus
-    static const QString screenShotToolFolderKey;
-    static const QString screenShotToolFileExtensionKey;
-    static const QString screenShotToolFilenameKey;
-    static const QString logViewerGeometryKey;
-    static const QString userHangingProtocolsPathKey;
-    static const QString registerStatLogsKey;
+    static const QString ScreenShotToolFolder;
+    static const QString ScreenShotToolFileExtension;
+    static const QString ScreenShotToolFilename;
+    static const QString LogViewerGeometry;
+    static const QString UserHangingProtocolsPath;
+    static const QString RegisterStatLogs;
     
-    static const QString numberOfDirectionsForLowQualityObscurancesKey;
-    static const QString functionForLowQualityObscurancesKey;
-    static const QString variantForLowQualityObscurancesKey;
-    static const QString gradientRadiusForLowQualityObscurancesKey;
+    static const QString NumberOfDirectionsForLowQualityObscurances;
+    static const QString FunctionForLowQualityObscurances;
+    static const QString VariantForLowQualityObscurances;
+    static const QString GradientRadiusForLowQualityObscurances;
 
-    static const QString numberOfDirectionsForMediumQualityObscurancesKey;
-    static const QString functionForMediumQualityObscurancesKey;
-    static const QString variantForMediumQualityObscurancesKey;
-    static const QString gradientRadiusForMediumQualityObscurancesKey;
+    static const QString NumberOfDirectionsForMediumQualityObscurances;
+    static const QString FunctionForMediumQualityObscurances;
+    static const QString VariantForMediumQualityObscurances;
+    static const QString GradientRadiusForMediumQualityObscurances;
 
-    static const QString numberOfDirectionsForHighQualityObscurancesKey;
-    static const QString functionForHighQualityObscurancesKey;
-    static const QString variantForHighQualityObscurancesKey;
-    static const QString gradientRadiusForHighQualityObscurancesKey;
+    static const QString NumberOfDirectionsForHighQualityObscurances;
+    static const QString FunctionForHighQualityObscurances;
+    static const QString VariantForHighQualityObscurances;
+    static const QString GradientRadiusForHighQualityObscurances;
 
-    static const QString languageLocaleKey;
+    static const QString LanguageLocale;
 };
 
 } // end namespace udg 

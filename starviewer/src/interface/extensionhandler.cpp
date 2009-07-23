@@ -123,7 +123,7 @@ bool ExtensionHandler::request( const QString &who )
     bool createExtension = true;
     int extensionIndex = 0;
     QString requestedExtensionLabel = mediator->getExtensionID().getLabel();
-    if( !Settings().getValue( InterfaceSettings::allowMultipleInstancesPerExtensionKey ).toBool() )
+    if( !Settings().getValue( InterfaceSettings::AllowMultipleInstancesPerExtension ).toBool() )
     {
         // Només volem una instància per extensió
         // Cal comprovar llavors que l'extensió que demanem no estigui ja creada
@@ -390,7 +390,7 @@ void ExtensionHandler::openDefaultExtension()
     if( m_mainApp->getCurrentPatient() )
     {
         Settings settings;
-        QString defaultExtension = settings.getValue( InterfaceSettings::defaultExtensionKey ).toString();
+        QString defaultExtension = settings.getValue( InterfaceSettings::DefaultExtension ).toString();
         if( !request( defaultExtension ) )
         {
             WARN_LOG( "Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)" );
