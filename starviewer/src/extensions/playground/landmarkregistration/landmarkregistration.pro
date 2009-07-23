@@ -7,11 +7,13 @@ FORMS += qlandmarkregistrationextensionbase.ui
 HEADERS += landmarkregistrator.h \
            leastsquareddistancecostfunction.h \
            qlandmarkregistrationextension.h \
+           landmarkregistrationsettings.h \
            reglandmark.h \
            landmarkregistrationextensionmediator.h 
 SOURCES += landmarkregistrator.cpp \
            leastsquareddistancecostfunction.cpp \
            qlandmarkregistrationextension.cpp \
+           landmarkregistrationsettings.cpp \
            reglandmark.cpp \
            landmarkregistrationextensionmediator.cpp 
 

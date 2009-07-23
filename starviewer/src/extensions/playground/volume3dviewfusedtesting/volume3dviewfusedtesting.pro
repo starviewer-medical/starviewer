@@ -7,6 +7,7 @@ FORMS += qvolume3dviewfusedtestingextensionbase.ui \
          qcluteditordialogbase.ui
 HEADERS += volume3dviewfusedtestingextensionmediator.h \
            qvolume3dviewfusedtestingextension.h \
+           volume3dviewfusedtestingsettings.h \
            qcluteditordialog.h \
            volume3dfusedviewer.h \
            vtkVolumeRayCastCompositeFunctionFx.h \
@@ -14,6 +15,7 @@ HEADERS += volume3dviewfusedtestingextensionmediator.h \
            fusionvoxelshader.h 
 SOURCES += volume3dviewfusedtestingextensionmediator.cpp \
            qvolume3dviewfusedtestingextension.cpp \
+           volume3dviewfusedtestingsettings.cpp \
            qcluteditordialog.cpp \
            volume3dfusedviewer.cpp \
            fusionvoxelshader.cpp \

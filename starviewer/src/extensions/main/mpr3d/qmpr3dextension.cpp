@@ -11,6 +11,7 @@
 #include "volume.h"
 #include "series.h"
 #include "windowlevelpresetstooldata.h"
+#include "mpr3dsettings.h"
 #include <QToolButton>
 #include <QAction>
 
@@ -20,6 +21,7 @@ QMPR3DExtension::QMPR3DExtension( QWidget *parent )
  : QWidget( parent )
 {
     setupUi( this );
+    MPR3DSettings().init();
 
     initializeTools();
     createConnections();

@@ -6,9 +6,11 @@
 FORMS += qrectumsegmentationextensionbase.ui 
 HEADERS += qrectumsegmentationextension.h \
            rectumsegmentationextensionmediator.h \
+           rectumsegmentationsettings.h \
            rectumSegmentationMethod.h 
 SOURCES += qrectumsegmentationextension.cpp \
            rectumsegmentationextensionmediator.cpp \
+           rectumsegmentationsettings.cpp \
            rectumSegmentationMethod.cpp 
 
 RESOURCES += rectumsegmentation.qrc

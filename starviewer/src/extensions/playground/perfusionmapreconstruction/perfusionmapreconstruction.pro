@@ -7,11 +7,13 @@ FORMS += qperfusionmapreconstructionextensionbase.ui \
          qgraphicplotwidgetbase.ui
 HEADERS += qperfusionmapreconstructionextension.h \
            perfusionmapreconstructionextensionmediator.h  \
+           perfusionmapreconstructionsettings.h \
            perfusionmapcalculatorthread.h \
            perfusionmapcalculatormainthread.h \
            qgraphicplotwidget.h
 SOURCES += qperfusionmapreconstructionextension.cpp \
            perfusionmapreconstructionextensionmediator.cpp  \
+           perfusionmapreconstructionsettings.cpp \
            perfusionmapcalculatorthread.cpp \
            perfusionmapcalculatormainthread.cpp \
            qgraphicplotwidget.cpp

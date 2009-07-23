@@ -14,7 +14,7 @@
 #include "toolproxy.h"
 #include "editortool.h"
 #include "editortooldata.h"
-#include "settings.h"
+#include "rectumsegmentationsettings.h"
 //Qt
 #include <QString>
 #include <QAction>
@@ -57,6 +57,7 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_lesionMaskVolume(0), m_imageThreshold(0), m_filteredVolume(0), m_isSeed(false), m_isMask(false),   m_isLeftButtonPressed(false), m_volume(0.0), m_isRegionSet(false), m_isRegionSetting(false)
 {
     setupUi( this );
+    RectumSegmentationSettings().init();
 
     m_segMethod = new rectumSegmentationMethod();
     squareRegionActor = vtkActor::New();
@@ -717,21 +718,19 @@ void QRectumSegmentationExtension::toolChanged( int but )
 void QRectumSegmentationExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-RectumSegmentation/";
 
-    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory").toString();
+    settings.restoreGeometry( RectumSegmentationSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.restoreGeometry( RectumSegmentationSettings::VerticalSplitterGeometry, m_verticalSplitter );
+    m_savingMaskDirectory = settings.getValue( RectumSegmentationSettings::SavedMaskPath ).toString();
 }
 
 void QRectumSegmentationExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-RectumSegmentation/";
 
-    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    settings.setValue( keyPrefix + "savingDirectory", m_savingMaskDirectory );
+    settings.saveGeometry( RectumSegmentationSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.saveGeometry( RectumSegmentationSettings::VerticalSplitterGeometry, m_verticalSplitter );
+    settings.setValue( RectumSegmentationSettings::SavedMaskPath, m_savingMaskDirectory );
 }
 
 }

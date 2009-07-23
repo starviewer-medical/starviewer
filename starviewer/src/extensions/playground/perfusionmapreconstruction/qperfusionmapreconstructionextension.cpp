@@ -20,7 +20,7 @@
 #include "hoverpoints.h"
 #include "mathtools.h" // pel PI
 #include "qgraphicplotwidget.h"
-#include "settings.h"
+#include "perfusionmapreconstructionsettings.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -65,6 +65,7 @@ QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWid
  : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_isLeftButtonPressed(false), m_mapCalculator(0), m_aifDrawPoint(0)
 {
     setupUi( this );
+    PerfusionMapReconstructionSettings().init();
 
     m_mapCalculator = new PerfusionMapCalculatorMainThread;
 
@@ -1127,19 +1128,17 @@ bool QPerfusionMapReconstructionExtension::findProbableSeries( )
 void QPerfusionMapReconstructionExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-PerfusionMapReconstruction/";
 
-    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
+    settings.restoreGeometry( PerfusionMapReconstructionSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.restoreGeometry( PerfusionMapReconstructionSettings::VerticalSplitterGeometry, m_verticalSplitter );
 }
 
 void QPerfusionMapReconstructionExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-PerfusionMapReconstruction/";
 
-    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
+    settings.saveGeometry( PerfusionMapReconstructionSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.saveGeometry( PerfusionMapReconstructionSettings::VerticalSplitterGeometry, m_verticalSplitter );
 }
 
 }

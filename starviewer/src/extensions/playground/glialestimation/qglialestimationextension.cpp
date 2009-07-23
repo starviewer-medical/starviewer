@@ -18,6 +18,7 @@
 // TODO Super guarrada!!! Estem vinculant una extensió amb una altre!!!!
 #include "../diffusionperfusionsegmentation/itkRegistre3DAffine.h"
 #include "strokesegmentationmethod.h"
+#include "glialestimationsettings.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -41,6 +42,7 @@ QGlialEstimationExtension::QGlialEstimationExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_T1Volume(0),  m_T1MaskVolume(0), m_perfuVolume(0), m_mapVolume(0), m_FLAIRVolume(0), m_difuVolume(0), m_spectrumVolume(0), m_registeredVolume(0), m_segmentationMethod(0), m_isLeftButtonPressed(false)
 {
     setupUi( this );
+    GlialEstimationSettings().init();
 
     m_viewersLayout->addViewer( "0.0\\1.0\\1.0\\0.0" );
     m_viewersLayout->setViewerSelected( m_viewersLayout->getViewerWidget(0) );

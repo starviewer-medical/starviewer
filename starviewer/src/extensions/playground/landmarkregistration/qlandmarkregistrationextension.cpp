@@ -13,7 +13,7 @@
 #include "series.h"
 #include "image.h"
 #include "toolmanager.h"
-#include "settings.h"
+#include "landmarkregistrationsettings.h"
 
 //QT
 #include <QString>
@@ -45,6 +45,7 @@ QLandmarkRegistrationExtension::QLandmarkRegistrationExtension(QWidget *parent)
  : QWidget(parent), m_firstVolume(0), m_secondVolume(0), m_registeredVolume(0), m_seedLastActor1(-1), m_seedLastActor2(-1), m_seedLastActorReg(-1), m_movingSeed(false)
 {
     setupUi( this );
+    LandmarkRegistrationSettings().init();
 
     m_seedList1.resize(0);
     m_seedSet1 = itk::VectorContainer<int, PointType>::New();
@@ -164,21 +165,19 @@ void QLandmarkRegistrationExtension::createConnections()
 void QLandmarkRegistrationExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-LandmarkRegistration/";
 
-    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    settings.restoreGeometry( keyPrefix + "verticalSplitter2", m_verticalSplitter2 );
-    m_savingDirectory = settings.getValue( keyPrefix + "savingDirectory" ).toString();
+    settings.restoreGeometry( LandmarkRegistrationSettings::VerticalSplitterGeometry, m_verticalSplitter );
+    settings.restoreGeometry( LandmarkRegistrationSettings::VerticalSplitter2Geometry, m_verticalSplitter2 );
+    m_savingDirectory = settings.getValue( LandmarkRegistrationSettings::SavedFilesPath ).toString();
 }
 
 void QLandmarkRegistrationExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-LandmarkRegistration/";
 
-    settings.saveGeometry( keyPrefix + "verticalSplitter" , m_verticalSplitter );
-    settings.saveGeometry( keyPrefix + "verticalSplitter2", m_verticalSplitter2 );
-    settings.setValue( keyPrefix + "savingDirectory", m_savingDirectory );
+    settings.saveGeometry( LandmarkRegistrationSettings::VerticalSplitterGeometry , m_verticalSplitter );
+    settings.saveGeometry( LandmarkRegistrationSettings::VerticalSplitter2Geometry, m_verticalSplitter2 );
+    settings.setValue( LandmarkRegistrationSettings::SavedFilesPath, m_savingDirectory );
 }
 
 void QLandmarkRegistrationExtension::setInput( Volume *input )

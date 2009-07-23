@@ -6,6 +6,7 @@
 FORMS += qgputestingextensionbase.ui 
 HEADERS += gputestingextensionmediator.h \
            qgputestingextension.h \
+           gputestingsettings.h \
            qgputestingviewer.h \
            camera.h \
            quaternion.h \
@@ -14,6 +15,7 @@ HEADERS += gputestingextensionmediator.h \
            gpuprogram.h 
 SOURCES += gputestingextensionmediator.cpp \
            qgputestingextension.cpp \
+           gputestingsettings.cpp \
            qgputestingviewer.cpp \
            camera.cpp \
            quaternion.cpp \

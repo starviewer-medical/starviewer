@@ -7,6 +7,7 @@ FORMS += qexperimental3dextensionbase.ui \
     qgraphictransferfunctioneditorbase.ui
 HEADERS += experimental3dextensionmediator.h \
     qexperimental3dextension.h \
+    experimental3dsettings.h \
     qexperimental3dviewer.h \
     experimental3dvolume.h \
     qviewpointdistributionwidget.h \
@@ -27,6 +28,7 @@ HEADERS += experimental3dextensionmediator.h \
     viewpointinformationchannel.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
+    experimental3dsettings.cpp \
     qexperimental3dviewer.cpp \
     experimental3dvolume.cpp \
     qviewpointdistributionwidget.cpp \

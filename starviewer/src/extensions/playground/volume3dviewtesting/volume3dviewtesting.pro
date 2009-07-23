@@ -6,9 +6,11 @@
 FORMS += qvolume3dviewtestingextensionbase.ui 
 HEADERS += volume3dviewtestingextensionmediator.h \
            qvolume3dviewtestingextension.h \
+           volume3dviewtestingsettings.h \
            renderingstyle.h 
 SOURCES += volume3dviewtestingextensionmediator.cpp \
            qvolume3dviewtestingextension.cpp \
+           volume3dviewtestingsettings.cpp \
            renderingstyle.cpp 
 RESOURCES += volume3dviewtesting.qrc
 

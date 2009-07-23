@@ -6,9 +6,11 @@
 FORMS += qvsireconstructionextensionbase.ui 
 HEADERS += vsireconstructionsettings.h \
            qvsireconstructionextension.h \
+           vsireconstructionsettings.h \
            vsireconstructionextensionmediator.h 
 SOURCES += vsireconstructionsettings.cpp \
            qvsireconstructionextension.cpp \
+           vsireconstructionsettings.cpp \
            vsireconstructionextensionmediator.cpp 
 
 RESOURCES += vsireconstruction.qrc
