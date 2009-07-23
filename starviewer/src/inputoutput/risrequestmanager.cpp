@@ -26,7 +26,7 @@ void RISRequestManager::initialize()
 
     m_listenRISRequestThread = new ListenRISRequestThread(this);
 
-    if (settings.getValue(InputOutputSettings::listenToRISRequestsKey).toBool()) 
+    if (settings.getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
         m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
 
     m_pacsManager = new PacsManager();
@@ -129,7 +129,7 @@ void RISRequestManager::showListenRISRequestThreadError(ListenRISRequestThread::
 {
     QString message;
     Settings settings;
-    int risPort = settings.getValue( InputOutputSettings::risRequestsPortKey ).toInt();
+    int risPort = settings.getValue( InputOutputSettings::RisRequestsPort ).toInt();
     switch(error)
     {
         case ListenRISRequestThread::risPortInUse :

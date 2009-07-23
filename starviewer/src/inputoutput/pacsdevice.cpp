@@ -104,25 +104,25 @@ bool PacsDevice::operator ==(const PacsDevice &parameters)
 QString PacsDevice::getLocalAETitle()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::localAETitleKey ).toString();
+    return settings.getValue( InputOutputSettings::LocalAETitle ).toString();
 }
 
 int PacsDevice::getMaximumConnections()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::maximumPACSConnectionsKey ).toInt();
+    return settings.getValue( InputOutputSettings::MaximumPACSConnections ).toInt();
 }
 
 int PacsDevice::getConnectionTimeout()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::pacsConnectionTimeoutKey ).toInt();
+    return settings.getValue( InputOutputSettings::PacsConnectionTimeout ).toInt();
 }
 
 int PacsDevice::getQueryRetrievePort()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::queryRetrieveLocalPortKey ).toInt();
+    return settings.getValue( InputOutputSettings::QueryRetrieveLocalPort ).toInt();
 }
 
 }

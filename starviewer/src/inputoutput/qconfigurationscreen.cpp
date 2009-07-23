@@ -397,26 +397,26 @@ void QConfigurationScreen::applyChangesPacs()
     if ( m_textAETitleMachine->isModified() )
     {
         INFO_LOG( "Modificació del AETitle de la màquina: " + m_textAETitleMachine->text() );
-        settings.setValue( InputOutputSettings::localAETitleKey, m_textAETitleMachine->text() );
+        settings.setValue( InputOutputSettings::LocalAETitle, m_textAETitleMachine->text() );
     }
 
     if ( m_textTimeout->isModified() )
     {
         INFO_LOG( "Modificació del valor del timeout " + m_textTimeout->text() );
-        settings.setValue(InputOutputSettings::pacsConnectionTimeoutKey, m_textTimeout->text());
+        settings.setValue(InputOutputSettings::PacsConnectionTimeout, m_textTimeout->text());
     }
 
     if ( m_textLocalPort->isModified() )
     {
         INFO_LOG( "Modificació del Port d'entrada dels estudis" + m_textLocalPort->text() );
-        settings.setValue( InputOutputSettings::queryRetrieveLocalPortKey, m_textLocalPort->text() );
+        settings.setValue( InputOutputSettings::QueryRetrieveLocalPort, m_textLocalPort->text() );
         m_textLocalPort->setModified(false);
     }
 
     if ( m_textMaxConnections->isModified() )
     {
         INFO_LOG( "Modificació del nombre màxim de connexions " + m_textMaxConnections->text() );
-        settings.setValue( InputOutputSettings::maximumPACSConnectionsKey, m_textMaxConnections->text() );
+        settings.setValue( InputOutputSettings::MaximumPACSConnections, m_textMaxConnections->text() );
     }
 
     m_buttonApplyPacs->setEnabled( false );

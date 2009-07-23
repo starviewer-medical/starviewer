@@ -141,18 +141,18 @@ void AppImportFile::readSettings()
 {
     Settings settings;
 
-    m_workingDirectory = settings.getValue( InterfaceSettings::openFileLastPathKey).toString();
-    m_workingDicomDirectory = settings.getValue( InterfaceSettings::openDirectoryLastPathKey).toString();
-    m_lastExtension = settings.getValue( InterfaceSettings::openFileLastFileExtensionKey).toString();
+    m_workingDirectory = settings.getValue( InterfaceSettings::OpenFileLastPath).toString();
+    m_workingDicomDirectory = settings.getValue( InterfaceSettings::OpenDirectoryLastPath).toString();
+    m_lastExtension = settings.getValue( InterfaceSettings::OpenFileLastFileExtension).toString();
 }
 
 void AppImportFile::writeSettings()
 {
     Settings settings;
 
-    settings.setValue( InterfaceSettings::openFileLastPathKey, m_workingDirectory );
-    settings.setValue( InterfaceSettings::openDirectoryLastPathKey, m_workingDicomDirectory );
-    settings.setValue( InterfaceSettings::openFileLastFileExtensionKey, m_lastExtension );
+    settings.setValue( InterfaceSettings::OpenFileLastPath, m_workingDirectory );
+    settings.setValue( InterfaceSettings::OpenDirectoryLastPath, m_workingDicomDirectory );
+    settings.setValue( InterfaceSettings::OpenFileLastFileExtension, m_lastExtension );
 }
 
 };  // end namespace udg

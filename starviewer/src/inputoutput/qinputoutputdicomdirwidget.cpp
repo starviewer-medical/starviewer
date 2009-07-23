@@ -30,7 +30,7 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( InputOutputSettings::dicomdirStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreColumnsWidths( InputOutputSettings::DicomdirStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget",this);
     m_statsWatcher->addClicksCounter( m_viewButton );
@@ -41,7 +41,7 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::dicomdirStudyListColumnsWidthKey, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths( InputOutputSettings::DicomdirStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputDicomdirWidget::createConnections()
@@ -77,7 +77,7 @@ void QInputOutputDicomdirWidget::openDicomdir()
     QString dicomdirPath;
     Status state;
 
-    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getValue( InputOutputSettings::lastOpenedDICOMDIRPathKey ).toString(), "DICOMDIR");
+    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getValue( InputOutputSettings::LastOpenedDICOMDIRPath ).toString(), "DICOMDIR");
 
     if (!dicomdirPath.isEmpty())//Si és buit no ens han seleccionat cap fitxer
     {
@@ -92,7 +92,7 @@ void QInputOutputDicomdirWidget::openDicomdir()
         else
         {
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
-            settings.setValue( InputOutputSettings::lastOpenedDICOMDIRPathKey, QFileInfo(dicomdirPath).dir().path() );
+            settings.setValue( InputOutputSettings::LastOpenedDICOMDIRPath, QFileInfo(dicomdirPath).dir().path() );
         }
 
         emit clearSearchTexts();//Netegem el filtre de cerca al obrir el dicomdir

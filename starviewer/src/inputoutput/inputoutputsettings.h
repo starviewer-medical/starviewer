@@ -15,34 +15,34 @@ public:
 
     /// Declaració de claus
     /// Path absolut de l'arxiu de base dades
-    static const QString databaseAbsoluteFilePathKey;
+    static const QString DatabaseAbsoluteFilePath;
     /// Path del directori de la cache
-    static const QString cachePathKey;
+    static const QString CachePath;
     /// Polítiques d'autogestió de cache
-    static const QString deleteLeastRecentlyUsedStudiesInDaysCriteriaKey;
-    static const QString deleteLeastRecentlyUsedStudiesNoFreeSpaceCriteriaKey;
-    static const QString minimumGigaBytesToFreeIfCacheIsFullKey;
-    static const QString minimumFreeGigaBytesForCacheKey;
-    static const QString minimumDaysUnusedToDeleteStudyKey;
+    static const QString DeleteLeastRecentlyUsedStudiesInDaysCriteria;
+    static const QString DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria;
+    static const QString MinimumGigaBytesToFreeIfCacheIsFull;
+    static const QString MinimumFreeGigaBytesForCache;
+    static const QString MinimumDaysUnusedToDeleteStudy;
 
     /// Paràmetres del RIS
-    static const QString risRequestsPortKey;
-    static const QString listenToRISRequestsKey;
-    static const QString risRequestViewOnceRetrievedKey;
+    static const QString RisRequestsPort;
+    static const QString ListenToRISRequests;
+    static const QString RisRequestViewOnceRetrieved;
 
     /// Últim path des del que hem obert un dicomdir
-    static const QString lastOpenedDICOMDIRPathKey;
+    static const QString LastOpenedDICOMDIRPath;
     /// Geometria de les columnes del llistat d'estudis d'un DICOMDIR/llista d'operacions
-    static const QString dicomdirStudyListColumnsWidthKey;
-    static const QString createDicomdirStudyListColumnsWidthKey;
-    static const QString operationStateColumnsWidthKey;
-    static const QString pacsStudyListColumnsWidthKey;
+    static const QString DicomdirStudyListColumnsWidth;
+    static const QString CreateDicomdirStudyListColumnsWidth;
+    static const QString OperationStateColumnsWidth;
+    static const QString PacsStudyListColumnsWidth;
 
     /// Paràmetres de connexió amb un PACS
-    static const QString localAETitleKey;
-    static const QString queryRetrieveLocalPortKey;
-    static const QString pacsConnectionTimeoutKey;
-    static const QString maximumPACSConnectionsKey;
+    static const QString LocalAETitle;
+    static const QString QueryRetrieveLocalPort;
+    static const QString PacsConnectionTimeout;
+    static const QString MaximumPACSConnections;
 };
 
 } // end namespace udg 

@@ -210,18 +210,18 @@ void ScreenShotTool::readSettings()
 {
     Settings settings;
     
-    m_lastScreenShotPath = settings.getValue( CoreSettings::screenShotToolFolderKey ).toString();
-    m_lastScreenShotExtensionFilter = settings.getValue( CoreSettings::screenShotToolFileExtensionKey ).toString();
-    m_lastScreenShotFileName = settings.getValue( CoreSettings::screenShotToolFilenameKey ).toString();
+    m_lastScreenShotPath = settings.getValue( CoreSettings::ScreenShotToolFolder ).toString();
+    m_lastScreenShotExtensionFilter = settings.getValue( CoreSettings::ScreenShotToolFileExtension ).toString();
+    m_lastScreenShotFileName = settings.getValue( CoreSettings::ScreenShotToolFilename ).toString();
 }
 
 void ScreenShotTool::writeSettings()
 {
     Settings settings;
 
-    settings.setValue( CoreSettings::screenShotToolFolderKey, m_lastScreenShotPath );
-    settings.setValue( CoreSettings::screenShotToolFileExtensionKey, m_lastScreenShotExtensionFilter );
-    settings.setValue( CoreSettings::screenShotToolFilenameKey, m_lastScreenShotFileName );
+    settings.setValue( CoreSettings::ScreenShotToolFolder, m_lastScreenShotPath );
+    settings.setValue( CoreSettings::ScreenShotToolFileExtension, m_lastScreenShotExtensionFilter );
+    settings.setValue( CoreSettings::ScreenShotToolFilename, m_lastScreenShotFileName );
 }
 
 }

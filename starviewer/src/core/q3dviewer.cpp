@@ -1065,24 +1065,24 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     switch ( quality )
     {
         case Low:
-            numberOfDirections = settings.getValue( CoreSettings::numberOfDirectionsForLowQualityObscurancesKey ).toInt();
-            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::functionForLowQualityObscurancesKey ).toInt() );
-            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::variantForLowQualityObscurancesKey ).toInt() );
-            gradientRadius = settings.getValue( CoreSettings::gradientRadiusForLowQualityObscurancesKey ).toUInt();
+            numberOfDirections = settings.getValue( CoreSettings::NumberOfDirectionsForLowQualityObscurances ).toInt();
+            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::FunctionForLowQualityObscurances ).toInt() );
+            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::VariantForLowQualityObscurances ).toInt() );
+            gradientRadius = settings.getValue( CoreSettings::GradientRadiusForLowQualityObscurances ).toUInt();
             break;
 
         case Medium:
-            numberOfDirections = settings.getValue( CoreSettings::numberOfDirectionsForMediumQualityObscurancesKey ).toInt();
-            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::functionForMediumQualityObscurancesKey ).toInt() );
-            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::variantForMediumQualityObscurancesKey ).toInt() );
-            gradientRadius = settings.getValue( CoreSettings::gradientRadiusForMediumQualityObscurancesKey ).toUInt();
+            numberOfDirections = settings.getValue( CoreSettings::NumberOfDirectionsForMediumQualityObscurances ).toInt();
+            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::FunctionForMediumQualityObscurances ).toInt() );
+            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::VariantForMediumQualityObscurances ).toInt() );
+            gradientRadius = settings.getValue( CoreSettings::GradientRadiusForMediumQualityObscurances ).toUInt();
             break;
 
         case High:
-            numberOfDirections = settings.getValue( CoreSettings::numberOfDirectionsForHighQualityObscurancesKey ).toInt();
-            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::functionForHighQualityObscurancesKey ).toInt() );
-            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::variantForHighQualityObscurancesKey ).toInt() );
-            gradientRadius = settings.getValue( CoreSettings::gradientRadiusForHighQualityObscurancesKey ).toUInt();
+            numberOfDirections = settings.getValue( CoreSettings::NumberOfDirectionsForHighQualityObscurances ).toInt();
+            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::FunctionForHighQualityObscurances ).toInt() );
+            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::VariantForHighQualityObscurances ).toInt() );
+            gradientRadius = settings.getValue( CoreSettings::GradientRadiusForHighQualityObscurances ).toUInt();
             break;
 
         default:
