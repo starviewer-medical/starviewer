@@ -34,9 +34,6 @@
 
 namespace udg {
 
-// Clau de settings de la query screen
-const QString queryScreenGeometrySettingKey("PACS/interface/queryscreen/geometry");
-
 QueryScreen::QueryScreen( QWidget *parent )
  : QDialog(parent )
 {
@@ -387,7 +384,7 @@ void QueryScreen::closeEvent( QCloseEvent* event )
 void QueryScreen::readSettings()
 {
     Settings settings;
-    settings.restoreGeometry(queryScreenGeometrySettingKey,this);
+    settings.restoreGeometry(InputOutputSettings::QueryScreenGeometry,this);
     // Aquesta clau substitueix les obsoletes "queryScreenWindowPositionX", "queryScreenWindowPositionY", "queryScreenWindowWidth" i "queryScreenWindowHeight"
     // que tenien les claus /interface/queryscreen/ + windowPositionX, windowPositionY, windowWidth i windowHeigth respectivament
     // TODO fer neteja d'aquestes claus antigues amb la migració de dades
@@ -402,7 +399,7 @@ void QueryScreen::writeSettings()
     if (this->isVisible())
     {
         Settings settings;
-        settings.saveGeometry(queryScreenGeometrySettingKey, this);
+        settings.saveGeometry(InputOutputSettings::QueryScreenGeometry, this);
     }
 }
 
