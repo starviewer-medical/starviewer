@@ -159,14 +159,14 @@ private:
     typedef itkRegistre3DAffine< ItkImageType, ItkImageType >::TransformType TransformType;
 
     /// Registration parameters
-    static const double REGISTRATION_FIXED_STANDARD_DEVIATION;
-    static const double REGISTRATION_MOVING_STANDARD_DEVIATION;
-    static const int REGISTRATION_NUMBER_OF_SPACIAL_SAMPLES;
-    static const int REGISTRATION_FIXED_VARIANCE;
-    static const int REGISTRATION_MOVING_VARIANCE;
-    static const int REGISTRATION_MAXIMUM_STEP;
-    static const double REGISTRATION_MINIMUM_STEP;
-    static const int REGISTRATION_NUMBER_OF_ITERATIONS;
+    static const double RegistrationFixedStandardDeviation;
+    static const double RegistrationMovingStandardDeviation;
+    static const int RegistrationNumberOfSpacialSamples;
+    static const int RegistrationFixedVariance;
+    static const int RegistrationMovingVariance;
+    static const int RegistrationMaximumStep;
+    static const double RegistrationMinimumStep;
+    static const int RegistrationNumberOfIterations;
 
     /// Volum d'entrada de difusió
     Volume *m_diffusionInputVolume;
