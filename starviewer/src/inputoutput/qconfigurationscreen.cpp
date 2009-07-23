@@ -21,9 +21,6 @@
 
 namespace udg {
 
-// Clau de settings del widget
-const QString qConfigurationScreenSettingKey("PACS/interface/qConfigurationPacsDevice/" );
-
 QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
 {
     setupUi( this );
@@ -39,7 +36,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
     configureInputValidator();
     
     Settings settings;
-    settings.restoreColumnsWidths(qConfigurationScreenSettingKey, m_PacsTreeView );
+    settings.restoreColumnsWidths( InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView );
     // amaguem la columna amb l'ID del PACS que és irrellevant per l'usuari
     m_PacsTreeView->setColumnHidden(0,true); 
 
@@ -49,7 +46,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
 QConfigurationScreen::~QConfigurationScreen()
 {
     Settings settings;
-    settings.saveColumnsWidths(qConfigurationScreenSettingKey, m_PacsTreeView );
+    settings.saveColumnsWidths( InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView );
 }
 
 void QConfigurationScreen::createConnections()

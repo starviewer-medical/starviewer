@@ -29,7 +29,6 @@
 namespace udg
 {
 //Nom de la llista de Settings que guardarà els estudis que tenim en aquell moment descarregant
-const QString LocalDatabaseManager::retrievingStudySettingKey = "/PACS/RetrievingStudy";
 QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
 
 LocalDatabaseManager::LocalDatabaseManager()
@@ -555,9 +554,9 @@ bool LocalDatabaseManager::setStudyRetrieving(const QString &studyInstanceUID)
 {
     Settings settings;
 
-    if (!settings.contains(retrievingStudySettingKey) && !studyInstanceUID.isEmpty())
+    if (!settings.contains(InputOutputSettings::RetrievingStudy) && !studyInstanceUID.isEmpty())
     {
-        settings.setValue(retrievingStudySettingKey, studyInstanceUID);
+        settings.setValue(InputOutputSettings::RetrievingStudy, studyInstanceUID);
         return true;
     }
     else return false;
@@ -567,7 +566,7 @@ void LocalDatabaseManager::setStudyRetrieveFinished()
 {
     Settings settings;
 
-    settings.remove(retrievingStudySettingKey);
+    settings.remove(InputOutputSettings::RetrievingStudy);
 }
 
 void LocalDatabaseManager::checkNoStudiesRetrieving()
@@ -578,7 +577,7 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
 
     if (isStudyRetrieving())
     {
-        QString studyNotFullRetrieved = settings.getValue(retrievingStudySettingKey).toString();
+        QString studyNotFullRetrieved = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
 
         INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la última execució de l'starviewer, per mantenir la integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
 
@@ -597,14 +596,14 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
                 deleteStudyFromHardDisk(studyNotFullRetrieved);
         }
 
-        settings.remove(retrievingStudySettingKey);
+        settings.remove(InputOutputSettings::RetrievingStudy);
     }
     else m_lastError = Ok;
 }
 
 bool LocalDatabaseManager::isStudyRetrieving()
 {
-    return Settings().contains(retrievingStudySettingKey);
+    return Settings().contains(InputOutputSettings::RetrievingStudy);
 }
 
 int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)

@@ -21,11 +21,6 @@
 
 namespace udg
 {
-// Clau dels settings del widget
-const QString localDatabaseSettingKey("PACS/interface/studyCacheList/");
-// TODO aquesta clau hauria de canviar de nom. No es farà fins que no tinguem a punt el tema de fer migració de dades
-// de moment conservem la mateixa clau
-const QString localDatabaseStudyTreeSeriesListQSplitterStateSettingKey("PACS/interface/queryscreen/StudyTreeSeriesListQSplitterState");
 
 QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent) : QWidget(parent)
 {
@@ -37,8 +32,8 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
-    settings.restoreGeometry(localDatabaseStudyTreeSeriesListQSplitterStateSettingKey, m_StudyTreeSeriesListQSplitter );
+    settings.restoreColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputLocalDatabaseWidget",this);
     m_statsWatcher->addClicksCounter(m_viewButton);
@@ -46,7 +41,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 {
-    Settings().saveColumnsWidths(localDatabaseSettingKey, m_studyTreeWidget->getQTreeWidget() );
+    Settings().saveColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputLocalDatabaseWidget::createConnections()
@@ -394,7 +389,7 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 
 void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
 {
-    Settings().saveGeometry(localDatabaseStudyTreeSeriesListQSplitterStateSettingKey, m_StudyTreeSeriesListQSplitter );
+    Settings().saveGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
 }
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)

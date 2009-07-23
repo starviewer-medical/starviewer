@@ -16,6 +16,8 @@ const QString InputOutputSettings::MinimumDaysUnusedToDeleteStudy( CacheBase + "
 const QString InputOutputSettings::MinimumFreeGigaBytesForCache( CacheBase + "minimumSpaceRequiredToRetrieveInGbytes");
 const QString InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull( CacheBase + "GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable");
 
+const QString InputOutputSettings::RetrievingStudy("/PACS/RetrievingStudy");
+
 const QString RisBase("PACS/risRequests/");
 const QString InputOutputSettings::ListenToRISRequests( RisBase + "listen");
 const QString InputOutputSettings::RisRequestsPort( RisBase + "listenPort");
@@ -27,6 +29,10 @@ const QString InputOutputSettings::DicomdirStudyListColumnsWidth( InterfaceBase 
 const QString InputOutputSettings::CreateDicomdirStudyListColumnsWidth( InterfaceBase + "qCreateDicomdir/");
 const QString InputOutputSettings::OperationStateColumnsWidth( InterfaceBase + "qOperationState/");
 const QString InputOutputSettings::PacsStudyListColumnsWidth( InterfaceBase + "studyPacsList/");
+const QString InputOutputSettings::ConfigurationScreenPACSList( InterfaceBase + "qConfigurationPacsDevice/");
+const QString InputOutputSettings::LocalDatabaseStudyList( InterfaceBase + "studyCacheList/");
+const QString InputOutputSettings::LocalDatabaseSplitterState( InterfaceBase + "queryscreen/StudyTreeSeriesListQSplitterState");
+const QString InputOutputSettings::QueryScreenGeometry( InterfaceBase + "queryscreen/geometry");
 
 const QString PacsParamBase("PACS/pacsparam/");
 const QString InputOutputSettings::QueryRetrieveLocalPort( PacsParamBase + "localPort");

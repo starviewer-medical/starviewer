@@ -24,6 +24,8 @@ public:
     static const QString MinimumGigaBytesToFreeIfCacheIsFull;
     static const QString MinimumFreeGigaBytesForCache;
     static const QString MinimumDaysUnusedToDeleteStudy;
+    /// Controlar quin estudi està baixant-se
+    static const QString RetrievingStudy;
 
     /// Paràmetres del RIS
     static const QString RisRequestsPort;
@@ -32,11 +34,15 @@ public:
 
     /// Últim path des del que hem obert un dicomdir
     static const QString LastOpenedDICOMDIRPath;
-    /// Geometria de les columnes del llistat d'estudis d'un DICOMDIR/llista d'operacions
+    /// Geometria de les columnes del llistat d'estudis d'un DICOMDIR/llista d'operacions/PACS
     static const QString DicomdirStudyListColumnsWidth;
     static const QString CreateDicomdirStudyListColumnsWidth;
     static const QString OperationStateColumnsWidth;
     static const QString PacsStudyListColumnsWidth;
+    static const QString ConfigurationScreenPACSList;
+    static const QString LocalDatabaseStudyList;
+    static const QString LocalDatabaseSplitterState;
+    static const QString QueryScreenGeometry;
 
     /// Paràmetres de connexió amb un PACS
     static const QString LocalAETitle;
