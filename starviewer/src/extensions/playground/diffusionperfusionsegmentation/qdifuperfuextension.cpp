@@ -34,14 +34,14 @@
 
 namespace udg {
 
-const double QDifuPerfuSegmentationExtension::REGISTRATION_FIXED_STANDARD_DEVIATION = 0.4;
-const double QDifuPerfuSegmentationExtension::REGISTRATION_MOVING_STANDARD_DEVIATION = 0.4;
-const int QDifuPerfuSegmentationExtension::REGISTRATION_NUMBER_OF_SPACIAL_SAMPLES = 200;
-const int QDifuPerfuSegmentationExtension::REGISTRATION_FIXED_VARIANCE = 2;
-const int QDifuPerfuSegmentationExtension::REGISTRATION_MOVING_VARIANCE = 2;
-const int QDifuPerfuSegmentationExtension::REGISTRATION_MAXIMUM_STEP = 1;
-const double QDifuPerfuSegmentationExtension::REGISTRATION_MINIMUM_STEP = 0.001;
-const int QDifuPerfuSegmentationExtension::REGISTRATION_NUMBER_OF_ITERATIONS = 300;
+const double QDifuPerfuSegmentationExtension::RegistrationFixedStandardDeviation = 0.4;
+const double QDifuPerfuSegmentationExtension::RegistrationMovingStandardDeviation = 0.4;
+const int QDifuPerfuSegmentationExtension::RegistrationNumberOfSpacialSamples = 200;
+const int QDifuPerfuSegmentationExtension::RegistrationFixedVariance = 2;
+const int QDifuPerfuSegmentationExtension::RegistrationMovingVariance = 2;
+const int QDifuPerfuSegmentationExtension::RegistrationMaximumStep = 1;
+const double QDifuPerfuSegmentationExtension::RegistrationMinimumStep = 0.001;
+const int QDifuPerfuSegmentationExtension::RegistrationNumberOfIterations = 300;
 
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * parent )
  : QWidget( parent ), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0)
@@ -616,12 +616,12 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
     itkRegistre3DAffine< ItkImageType, ItkImageType > registre;
     registre.SetInputImages( fixedImage, movingImage );
-    registre.SetParamatersMetric( REGISTRATION_FIXED_STANDARD_DEVIATION,
-                                  REGISTRATION_MOVING_STANDARD_DEVIATION,
-                                  REGISTRATION_NUMBER_OF_SPACIAL_SAMPLES );
-    registre.SetParamatersGaussian( REGISTRATION_FIXED_VARIANCE, REGISTRATION_MOVING_VARIANCE );
-    registre.SetParamatresOptimizer( REGISTRATION_MAXIMUM_STEP, REGISTRATION_MINIMUM_STEP,
-                                     REGISTRATION_NUMBER_OF_ITERATIONS );
+    registre.SetParamatersMetric( RegistrationFixedStandardDeviation,
+                                  RegistrationMovingStandardDeviation,
+                                  RegistrationNumberOfSpacialSamples );
+    registre.SetParamatersGaussian( RegistrationFixedVariance, RegistrationMovingVariance );
+    registre.SetParamatresOptimizer( RegistrationMaximumStep, RegistrationMinimumStep,
+                                     RegistrationNumberOfIterations );
 
     if ( registre.applyMethod() )
     {
