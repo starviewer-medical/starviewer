@@ -6,9 +6,11 @@
 FORMS += qmprextensionbase.ui
 
 HEADERS += qmprextension.h \
+           mprsettings.h \
            mprextensionmediator.h
 
 SOURCES += qmprextension.cpp \
+           mprsettings.cpp \
            mprextensionmediator.cpp
 
 RESOURCES += mpr.qrc

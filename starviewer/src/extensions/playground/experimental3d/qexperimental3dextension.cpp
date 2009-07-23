@@ -10,7 +10,7 @@
 #include "viewpointgenerator.h"
 #include "viewpointinformationchannel.h"
 #include "volumereslicer.h"
-#include "settings.h"
+#include "experimental3dsettings.h"
 
 #include <QButtonGroup>
 #include <QColorDialog>
@@ -28,6 +28,7 @@ QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
    m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 ), m_interactive( true )
 {
     setupUi( this );
+    Experimental3DSettings().init();
 
     createConnections();
 
@@ -95,7 +96,7 @@ void QExperimental3DExtension::saveViewedVolume( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "viewedVolumeDir", tr("Save viewed volume"), tr("Text files (*.txt);;All files (*)"), "txt" );
+        fileName = getFileNameToSave( Experimental3DSettings::ViewedVolumeDir, tr("Save viewed volume"), tr("Text files (*.txt);;All files (*)"), "txt" );
         if ( fileName.isNull() ) return;
     }
 
@@ -108,7 +109,7 @@ void QExperimental3DExtension::loadViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "viewpointEntropyDir", tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewPointEntropyDir, tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -121,7 +122,7 @@ void QExperimental3DExtension::saveViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "viewpointEntropyDir", tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::ViewPointEntropyDir, tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -138,7 +139,7 @@ void QExperimental3DExtension::loadEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "entropyDir", tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::EntropyDir, tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -151,7 +152,7 @@ void QExperimental3DExtension::saveEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName =getFileNameToSave( "entropyDir", tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName =getFileNameToSave( Experimental3DSettings::EntropyDir, tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -168,7 +169,7 @@ void QExperimental3DExtension::loadVmi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "vmiDir", tr("Load VMI"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointMutualInformationDir, tr("Load VMI"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -181,7 +182,7 @@ void QExperimental3DExtension::saveVmi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "vmiDir", tr("Save VMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::ViewpointMutualInformationDir, tr("Save VMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -198,7 +199,7 @@ void QExperimental3DExtension::loadMi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "miDir", tr("Load MI"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::MutualInformationDir, tr("Load MI"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -211,7 +212,7 @@ void QExperimental3DExtension::saveMi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "miDir", tr("Save MI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::MutualInformationDir, tr("Save MI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -228,7 +229,7 @@ void QExperimental3DExtension::loadViewpointUnstabilities( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "viewpointUnstabilitiesDir", tr("Load viewpoint unstabilities"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointUnstabilitiesDir, tr("Load viewpoint unstabilities"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -241,7 +242,7 @@ void QExperimental3DExtension::saveViewpointUnstabilities( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "viewpointUnstabilitiesDir", tr("Save viewpoint unstabilities"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::ViewpointUnstabilitiesDir, tr("Save viewpoint unstabilities"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -258,7 +259,7 @@ void QExperimental3DExtension::loadVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "vomiDir", tr("Load VoMI"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::VoxelMutualInformationDir, tr("Load VoMI"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -286,7 +287,7 @@ void QExperimental3DExtension::saveVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "vomiDir", tr("Save VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::VoxelMutualInformationDir, tr("Save VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -298,7 +299,7 @@ void QExperimental3DExtension::loadViewpointVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "viewpointVomiDir", tr("Load viewpoint VoMI"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointVoxelMutualInformationDir, tr("Load viewpoint VoMI"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -311,7 +312,7 @@ void QExperimental3DExtension::saveViewpointVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "viewpointVomiDir", tr("Save viewpoint VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::ViewpointVoxelMutualInformationDir, tr("Save viewpoint VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -328,7 +329,7 @@ void QExperimental3DExtension::loadColorVomiPalette( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "colorVomiPaletteDir", tr("Load color VoMI palette"), tr("Text files (*.txt);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ColorVoxelMutualInformationPaletteDir, tr("Load color VoMI palette"), tr("Text files (*.txt);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -380,7 +381,7 @@ void QExperimental3DExtension::loadColorVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "colorVomiDir", tr("Load color VoMI"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ColorVoxelMutualInformationDir, tr("Load color VoMI"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -409,7 +410,7 @@ void QExperimental3DExtension::saveColorVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "colorVomiDir", tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::ColorVoxelMutualInformationDir, tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -423,7 +424,7 @@ void QExperimental3DExtension::loadEvmiOpacityOtherTransferFunction( QString fil
 
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "transferFunctionDir", tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::TransferFunctionDir, tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -442,7 +443,7 @@ void QExperimental3DExtension::loadEvmiOpacity( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "evmiOpacityDir", tr("Load EVMI with opacity"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::EnhancedViewpointMutualInformationOpacityDir, tr("Load EVMI with opacity"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -455,7 +456,7 @@ void QExperimental3DExtension::saveEvmiOpacity( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "evmiOpacityDir", tr("Save EVMI with opacity"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::EnhancedViewpointMutualInformationOpacityDir, tr("Save EVMI with opacity"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -472,7 +473,7 @@ void QExperimental3DExtension::loadEvmiVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "evmiVomiDir", tr("Load EVMI with VoMI"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir, tr("Load EVMI with VoMI"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -485,7 +486,7 @@ void QExperimental3DExtension::saveEvmiVomi( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "evmiVomiDir", tr("Save EVMI with VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir, tr("Save EVMI with VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -502,7 +503,7 @@ void QExperimental3DExtension::loadBestViews( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "bestViewsDir", tr("Load best views"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::BestViewsDir, tr("Load best views"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -519,7 +520,7 @@ void QExperimental3DExtension::saveBestViews( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "bestViewsDir", tr("Save best views"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::BestViewsDir, tr("Save best views"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -536,7 +537,7 @@ void QExperimental3DExtension::loadGuidedTour( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "guidedTourDir", tr("Load guided tour"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::GuidedTourDir, tr("Load guided tour"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -553,7 +554,7 @@ void QExperimental3DExtension::saveGuidedTour( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "guidedTourDir", tr("Save guided tour"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::GuidedTourDir, tr("Save guided tour"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -570,7 +571,7 @@ void QExperimental3DExtension::loadExploratoryTour( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( "exploratoryTourDir", tr("Load exploratory tour"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ExploratoryTourDir, tr("Load exploratory tour"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -587,7 +588,7 @@ void QExperimental3DExtension::saveExploratoryTour( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( "exploratoryTourDir", tr("Save exploratory tour"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::ExploratoryTourDir, tr("Save exploratory tour"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -937,33 +938,28 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
 }
 
-
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
 {
     Settings settings;
-    QString keyPrefix = "Experimental3D/";
 
-    QString dir = settings.getValue( keyPrefix + settingsDirKey ).toString();
+    QString dir = settings.getValue( settingsDirKey ).toString();
     QString fileName = QFileDialog::getOpenFileName( this, caption, dir, filter );
 
     if ( !fileName.isNull() )
     {
         QFileInfo fileInfo( fileName );
-        settings.setValue( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
+        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
     }
 
     return fileName;
 }
 
-
 QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix )
 {
     QString fileName;
-
     Settings settings;
-    QString keyPrefix = "Experimental3D/";
 
-    QString dir = settings.getValue( keyPrefix + settingsDirKey ).toString();
+    QString dir = settings.getValue( settingsDirKey ).toString();
     QFileDialog saveDialog( this, caption, dir, filter );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
     saveDialog.setDefaultSuffix( defaultSuffix );
@@ -972,20 +968,17 @@ QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirK
     {
         fileName = saveDialog.selectedFiles().first();
         QFileInfo fileInfo( fileName );
-        settings.setValue( keyPrefix + settingsDirKey, fileInfo.absolutePath() );
+        settings.setValue( settingsDirKey, fileInfo.absolutePath() );
     }
-
 
     return fileName;
 }
 
-
 void QExperimental3DExtension::loadTransferFunction()
 {
-    QString transferFunctionFileName = getFileNameToLoad( "transferFunctionDir", tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
+    QString transferFunctionFileName = getFileNameToLoad( Experimental3DSettings::TransferFunctionDir, tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
     if ( !transferFunctionFileName.isNull() ) loadTransferFunction( transferFunctionFileName );
 }
-
 
 void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
 {
@@ -1011,7 +1004,7 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
 
 void QExperimental3DExtension::saveTransferFunction()
 {
-    QString transferFunctionFileName = getFileNameToSave( "transferFunctionDir", tr("Save transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml" );
+    QString transferFunctionFileName = getFileNameToSave( Experimental3DSettings::TransferFunctionDir, tr("Save transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml" );
 
     if ( !transferFunctionFileName.isNull() ) saveTransferFunction( transferFunctionFileName );
 }
@@ -1243,7 +1236,7 @@ void QExperimental3DExtension::setCamera()
 
 void QExperimental3DExtension::loadCamera()
 {
-    QString cameraFileName = getFileNameToLoad( "cameraDir", tr("Load camera parameters"), tr("Camera files (*.cam);;All files (*)") );
+    QString cameraFileName = getFileNameToLoad( Experimental3DSettings::CameraDir, tr("Load camera parameters"), tr("Camera files (*.cam);;All files (*)") );
     if ( !cameraFileName.isNull() ) loadCamera( cameraFileName );
 }
 
@@ -1296,7 +1289,7 @@ void QExperimental3DExtension::loadCamera( const QString &fileName )
 
 void QExperimental3DExtension::saveCamera()
 {
-    QString cameraFileName = getFileNameToSave( "cameraDir", tr("Save camera parameters"), tr("Camera files (*.cam);;All files (*)"), "cam" );
+    QString cameraFileName = getFileNameToSave( Experimental3DSettings::CameraDir, tr("Save camera parameters"), tr("Camera files (*.cam);;All files (*)"), "cam" );
 
     if ( !cameraFileName.isNull() )
     {
@@ -1465,7 +1458,7 @@ void QExperimental3DExtension::endCancelObscurance()
 
 void QExperimental3DExtension::loadObscurance()
 {
-    QString obscuranceFileName = getFileNameToLoad( "obscuranceDir", tr("Load obscurance"), tr("Data files (*.dat);;All files (*)") );
+    QString obscuranceFileName = getFileNameToLoad( Experimental3DSettings::ObscuranceDir, tr("Load obscurance"), tr("Data files (*.dat);;All files (*)") );
 
     if ( !obscuranceFileName.isNull() )
     {
@@ -1499,7 +1492,7 @@ void QExperimental3DExtension::loadObscurance()
 
 void QExperimental3DExtension::saveObscurance()
 {
-    QString obscuranceFileName = getFileNameToSave( "obscuranceDir", tr("Save obscurance"), tr("Data files (*.dat);;All files (*)"), "dat" );
+    QString obscuranceFileName = getFileNameToSave( Experimental3DSettings::ObscuranceDir, tr("Save obscurance"), tr("Data files (*.dat);;All files (*)"), "dat" );
 
     if ( !obscuranceFileName.isNull() )
     {
@@ -1907,7 +1900,7 @@ void QExperimental3DExtension::computeVomiGradient()
 
 void QExperimental3DExtension::loadAndRunProgram()
 {
-    QString programFileName = getFileNameToLoad( "programDir", tr("Load program"), tr("Text files (*.txt);;All files (*)") );
+    QString programFileName = getFileNameToLoad( Experimental3DSettings::ProgramDir, tr("Load program"), tr("Text files (*.txt);;All files (*)") );
 
     if ( programFileName.isNull() ) return;
 
@@ -2694,7 +2687,7 @@ void QExperimental3DExtension::setVmiOneViewpointMaximum( int maximum )
 
 void QExperimental3DExtension::getFileNameToSaveTour()
 {
-    QString fileName = getFileNameToSave( "tourDir", tr("Save tour"), tr("PNG files (*.png);;All files (*)"), "png" );
+    QString fileName = getFileNameToSave( Experimental3DSettings::TourDir, tr("Save tour"), tr("PNG files (*.png);;All files (*)"), "png" );
 
     if ( fileName.isNull() ) return;
 

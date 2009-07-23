@@ -11,7 +11,7 @@
 #include "transferfunctionio.h"
 #include "renderingstyle.h"
 #include "starviewerapplication.h"
-#include "settings.h"
+#include "volume3dviewtestingsettings.h"
 // qt
 #include <QAction>
 #include <QFileDialog>
@@ -28,6 +28,7 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
  : QWidget( parent )
 {
     setupUi( this );
+    Volume3DViewTestingSettings().init();
 
     // creem el temporitzador (s'ha de fer abans del createConnections())
     m_timer = new QTimer( this );
@@ -455,8 +456,8 @@ void QVolume3DViewTestingExtension::render()
 void QVolume3DViewTestingExtension::loadClut()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-3DTesting/";
-    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir" ).toString();
+    
+    QString customClutsDirPath = settings.getValue( Volume3DViewTestingSettings::CustomClutsDirPath ).toString();
 
     QString transferFunctionFileName =
             QFileDialog::getOpenFileName( this, tr("Load CLUT"),
@@ -471,15 +472,15 @@ void QVolume3DViewTestingExtension::loadClut()
         emit newTransferFunction();
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.setValue( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
+        settings.setValue( Volume3DViewTestingSettings::CustomClutsDirPath, transferFunctionFileInfo.absolutePath() );
     }
 }
 
 void QVolume3DViewTestingExtension::saveClut()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-3DTesting/";
-    QString customClutsDirPath = settings.getValue( keyPrefix + "customClutsDir" ).toString();
+    
+    QString customClutsDirPath = settings.getValue( Volume3DViewTestingSettings::CustomClutsDirPath ).toString();
 
     QFileDialog saveDialog( this, tr("Save CLUT"), customClutsDirPath, tr("Transfer function files (*.tf);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
@@ -492,7 +493,7 @@ void QVolume3DViewTestingExtension::saveClut()
         TransferFunctionIO::toFile( transferFunctionFileName, currentEditor->getTransferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.setValue( keyPrefix + "customClutsDir", transferFunctionFileInfo.absolutePath() );
+        settings.setValue( Volume3DViewTestingSettings::CustomClutsDirPath, transferFunctionFileInfo.absolutePath() );
     }
 }
 

@@ -14,7 +14,7 @@
 #include "logging.h"
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
-#include "settings.h"
+#include "mpr2dsettings.h"
 
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
@@ -46,6 +46,8 @@ QMPR2DExtension::QMPR2DExtension( QWidget *parent )
  : QWidget( parent ), m_axialZeroSliceCoordinate(.0)
 {
     setupUi( this );
+    MPR2DSettings().init();
+
     init();
     createActions();
     createConnections();
@@ -1408,37 +1410,32 @@ void QMPR2DExtension::updateThickSlab( int value )
 void QMPR2DExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-MPR/";
 
-    if( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray().isEmpty() )
+    if( settings.getValue( MPR2DSettings::HorizontalSplitterGeometry).toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().width()/2 << this->size().width()/2;
         m_horizontalSplitter->setSizes( list );
     }
     else
-        settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+        settings.restoreGeometry( MPR2DSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
 
-    if( settings.getValue( keyPrefix + "verticalSplitter").toByteArray().isEmpty() )
+    if( settings.getValue( MPR2DSettings::VerticalSplitterGeometry).toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().height()/2 << this->size().height()/2;
         m_verticalSplitter->setSizes( list );
     }
     else
-        settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-
-    m_defaultSaveDir = settings.getValue( keyPrefix + "defaultSaveDir").toString();
+        settings.restoreGeometry( MPR2DSettings::VerticalSplitterGeometry, m_verticalSplitter );
 }
 
 void QMPR2DExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-MPR/";
 
-    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    settings.setValue( keyPrefix + "defaultSaveDir", m_defaultSaveDir );
+    settings.saveGeometry( MPR2DSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.saveGeometry( MPR2DSettings::VerticalSplitterGeometry, m_verticalSplitter );
 }
 
 };  // end namespace udg

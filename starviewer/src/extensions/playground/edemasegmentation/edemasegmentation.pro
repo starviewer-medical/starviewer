@@ -5,8 +5,10 @@
 
 FORMS += qedemasegmentationextensionbase.ui 
 HEADERS += qedemasegmentationextension.h \
+           edemasegmentationsettings.h \
            edemasegmentationextensionmediator.h 
 SOURCES += qedemasegmentationextension.cpp \
+           edemasegmentationsettings.cpp \
            edemasegmentationextensionmediator.cpp 
 
 RESOURCES += edemasegmentation.qrc

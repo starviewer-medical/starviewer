@@ -13,7 +13,7 @@
 #include "toolproxy.h"
 #include "editortool.h"
 #include "editortooldata.h"
-#include "settings.h"
+#include "diffusionperfusionsegmentationsettings.h"
 // Qt
 #include <QMessageBox>
 #include <QFileDialog>
@@ -47,6 +47,7 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
  : QWidget( parent ), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0)
 {
     setupUi( this );
+    DiffusionPerfusionSegmentationSettings().init();
 
     m_squareActor = vtkActor::New();
     m_perfusionHueLut = vtkLookupTable::New();
@@ -251,23 +252,21 @@ void QDifuPerfuSegmentationExtension::createConnections()
 void QDifuPerfuSegmentationExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-DiffusionPerfusionSegmentation/";
 
-    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.restoreGeometry( keyPrefix + "viewerSplitter", m_viewerSplitter );
-    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory" ).toString();
+    settings.restoreGeometry( DiffusionPerfusionSegmentationSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.restoreGeometry( DiffusionPerfusionSegmentationSettings::VerticalSplitterGeometry, m_viewerSplitter );
+    m_savingMaskDirectory = settings.getValue( DiffusionPerfusionSegmentationSettings::SavedMaskPath ).toString();
 }
 
 void QDifuPerfuSegmentationExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-DiffusionPerfusionSegmentation/";
 
-    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+    settings.saveGeometry( DiffusionPerfusionSegmentationSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
     ///Movem l'splitter a la dreta pq quan es torni obrir només es vegi la difu
     //this->moveViewerSplitterToRight();
-    settings.saveGeometry( keyPrefix + "viewerSplitter", m_viewerSplitter );
-    settings.setValue( keyPrefix + "savingDirectory", m_savingMaskDirectory );
+    settings.saveGeometry( DiffusionPerfusionSegmentationSettings::VerticalSplitterGeometry, m_viewerSplitter );
+    settings.setValue( DiffusionPerfusionSegmentationSettings::SavedMaskPath, m_savingMaskDirectory );
 }
 
 void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )

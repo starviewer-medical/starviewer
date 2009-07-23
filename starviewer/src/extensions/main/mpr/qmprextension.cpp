@@ -15,7 +15,7 @@
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
 #include "drawer.h"
-#include "settings.h"
+#include "mprsettings.h"
 
 // qt
 #include <QSlider> // pel control m_axialSlider
@@ -40,6 +40,8 @@ QMPRExtension::QMPRExtension( QWidget *parent )
  : QWidget( parent ), m_axialZeroSliceCoordinate(.0)
 {
     setupUi( this );
+    MPRSettings().init();
+
     init();
     createActions();
     createConnections();
@@ -1368,34 +1370,32 @@ void QMPRExtension::updateThickSlab( int value )
 void QMPRExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-MPR/";
 
-    if( settings.getValue( keyPrefix + "horizontalSplitter").toByteArray().isEmpty() )
+    if( settings.getValue( MPRSettings::HorizontalSplitterGeometry).toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().width()/2 << this->size().width()/2;
         m_horizontalSplitter->setSizes( list );
     }
     else
-        settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
+        settings.restoreGeometry( MPRSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
 
-    if( settings.getValue( keyPrefix + "verticalSplitter").toByteArray().isEmpty() )
+    if( settings.getValue( MPRSettings::VerticalSplitterGeometry).toByteArray().isEmpty() )
     {
         QList<int> list;
         list << this->size().height()/2 << this->size().height()/2;
         m_verticalSplitter->setSizes( list );
     }
     else
-        settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
+        settings.restoreGeometry( MPRSettings::VerticalSplitterGeometry, m_verticalSplitter );
 }
 
 void QMPRExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-MPR/";
 
-    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
+    settings.saveGeometry( MPRSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.saveGeometry( MPRSettings::VerticalSplitterGeometry, m_verticalSplitter );
 }
 
 };  // end namespace udg

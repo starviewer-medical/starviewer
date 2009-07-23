@@ -5,12 +5,14 @@
 
 FORMS += qdifuperfuextensionbase.ui 
 HEADERS += qdifuperfuextension.h \
+           diffusionperfusionsegmentationsettings.h \
            itkRegistre3DAffine.h \
            udgPerfusionEstimator.h \
            udgBinaryMaker.h \
            diffusionperfusionsegmentationextensionmediator.h \
            volumecalculator.h
 SOURCES += qdifuperfuextension.cpp \
+           diffusionperfusionsegmentationsettings.cpp \
            itkRegistre3DAffine.cpp \
            udgPerfusionEstimator.cpp \
            udgBinaryMaker.cpp \

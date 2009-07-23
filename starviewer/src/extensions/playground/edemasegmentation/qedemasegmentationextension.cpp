@@ -14,7 +14,7 @@
 #include "toolproxy.h"
 #include "editortool.h"
 #include "editortooldata.h"
-#include "settings.h"
+#include "edemasegmentationsettings.h"
 //Qt
 #include <QString>
 #include <QAction>
@@ -32,6 +32,7 @@ QEdemaSegmentationExtension::QEdemaSegmentationExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_lesionMaskVolume(0), m_edemaMaskVolume(0), m_ventriclesMaskVolume(0), m_activedMaskVolume(0), m_imageThreshold(0), m_filteredVolume(0), m_isSeed(false), m_isMask(false), m_cont(0), m_edemaCont(0), m_ventriclesCont(0), m_volume(0.0), m_edemaVolume(0.0)
 {
     setupUi( this );
+    EdemaSegmentationSettings().init();
 
     m_seedPosition[0] = 0.0;
     m_seedPosition[1] = 0.0;
@@ -648,22 +649,20 @@ void QEdemaSegmentationExtension::saveActivedMaskVolume()
 void QEdemaSegmentationExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-EdemaSegmentation/";
 
-    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    m_savingMaskDirectory = settings.getValue( keyPrefix + "savingDirectory" ).toString();
+    settings.restoreGeometry( EdemaSegmentationSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.restoreGeometry( EdemaSegmentationSettings::VerticalSplitterGeometry, m_verticalSplitter );
+    m_savingMaskDirectory = settings.getValue( EdemaSegmentationSettings::SavedMaskPath ).toString();
     
 }
 
 void QEdemaSegmentationExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-EdemaSegmentation/";
 
-    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    settings.setValue( keyPrefix + "savingDirectory", m_savingMaskDirectory );
+    settings.saveGeometry( EdemaSegmentationSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.saveGeometry( EdemaSegmentationSettings::VerticalSplitterGeometry, m_verticalSplitter );
+    settings.setValue( EdemaSegmentationSettings::SavedMaskPath, m_savingMaskDirectory );
 }
 
 }

@@ -24,7 +24,7 @@
 // per poder fer screenshots desde menú
 #include "screenshottool.h" 
 #include "toolproxy.h"
-#include "settings.h"
+#include "q2dviewersettings.h"
 
 #include <QMenu>
 #include <QAction>
@@ -38,6 +38,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_patient(0), m_lastSelectedViewer(0) 
 {
     setupUi( this );
+    Q2DViewerSettings().init();
 
 #ifdef STARVIEWER_LITE
     
@@ -464,7 +465,7 @@ void Q2DViewerExtension::updateDICOMInformationButton( int view )
 void Q2DViewerExtension::readSettings()
 {
     Settings settings;
-    m_profile = settings.getValue("Starviewer-App-2DViewer/profile").toString();
+    m_profile = settings.getValue( Q2DViewerSettings::UserProfile ).toString();
 }
 
 void Q2DViewerExtension::writeSettings()

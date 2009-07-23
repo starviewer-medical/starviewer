@@ -43,6 +43,7 @@ QVSIReconstructionExtension::QVSIReconstructionExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_mapVolume(0), m_mapVolume2(0), m_isLeftButtonPressed(false)
 {
     setupUi( this );
+    VSIReconstructionSettings().init();
 
     createActions();
     createConnections();
