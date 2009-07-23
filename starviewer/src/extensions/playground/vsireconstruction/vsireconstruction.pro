@@ -4,9 +4,11 @@
 # L'objectiu � una biblioteca:  
 
 FORMS += qvsireconstructionextensionbase.ui 
-HEADERS += qvsireconstructionextension.h \
+HEADERS += vsireconstructionsettings.h \
+           qvsireconstructionextension.h \
            vsireconstructionextensionmediator.h 
-SOURCES += qvsireconstructionextension.cpp \
+SOURCES += vsireconstructionsettings.cpp \
+           qvsireconstructionextension.cpp \
            vsireconstructionextensionmediator.cpp 
 
 RESOURCES += vsireconstruction.qrc

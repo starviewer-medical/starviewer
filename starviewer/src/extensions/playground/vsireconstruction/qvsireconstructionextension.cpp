@@ -14,7 +14,7 @@
 #include "patient.h"
 #include "toolmanager.h"
 #include "patientbrowsermenu.h"
-#include "settings.h"
+#include "vsireconstructionsettings.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -2121,23 +2121,21 @@ bool QVSIReconstructionExtension::findProbableSeries( )
 void QVSIReconstructionExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    settings.restoreGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.restoreGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    settings.restoreGeometry( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter );
-    settings.restoreGeometry( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter );
+    settings.restoreGeometry( VSIReconstructionSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.restoreGeometry( VSIReconstructionSettings::VerticalSplitterGeometry, m_verticalSplitter );
+    settings.restoreGeometry( VSIReconstructionSettings::HorizontalImageSplitterGeometry, m_horizontalImageSplitter );
+    settings.restoreGeometry( VSIReconstructionSettings::VerticalImageSplitterGeometry, m_verticalImageSplitter );
 }
 
 void QVSIReconstructionExtension::writeSettings()
 {
     Settings settings;
-    QString keyPrefix = "StarViewer-App-VSIReconstruction/";
 
-    settings.saveGeometry( keyPrefix + "horizontalSplitter", m_horizontalSplitter );
-    settings.saveGeometry( keyPrefix + "verticalSplitter", m_verticalSplitter );
-    settings.saveGeometry( keyPrefix + "horizontalImageSplitter", m_horizontalImageSplitter );
-    settings.saveGeometry( keyPrefix + "verticalImageSplitter", m_verticalImageSplitter );
+    settings.saveGeometry( VSIReconstructionSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
+    settings.saveGeometry( VSIReconstructionSettings::VerticalSplitterGeometry, m_verticalSplitter );
+    settings.saveGeometry( VSIReconstructionSettings::HorizontalImageSplitterGeometry, m_horizontalImageSplitter );
+    settings.saveGeometry( VSIReconstructionSettings::VerticalImageSplitterGeometry, m_verticalImageSplitter );
 }
 
 }
