@@ -21,7 +21,7 @@
 namespace udg
 {
 
-const int ListenRISRequestThread::msTimeOutToReadData = 15000;
+const int ListenRISRequestThread::TimeOutToReadData = 15000;
 
 ListenRISRequestThread::ListenRISRequestThread(QObject *parent):QThread(parent)
 {
@@ -56,7 +56,7 @@ void ListenRISRequestThread::run()
         QString risRequestData;
 
         INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
-        if (tcpSocket->waitForReadyRead(msTimeOutToReadData))
+        if (tcpSocket->waitForReadyRead(TimeOutToReadData))
         {
             risRequestData= QString(tcpSocket->readAll());
             INFO_LOG("Dades rebudes: " + risRequestData);
@@ -103,10 +103,10 @@ void ListenRISRequestThread::networkError(QTcpServer *tcpServer)
     switch(tcpServer->serverError())
     {
         case QAbstractSocket::AddressInUseError :
-            emit errorListening(risPortInUse); 
+            emit errorListening(RisPortInUse); 
             break;
         default :
-            emit errorListening(unknowNetworkError);
+            emit errorListening(UnknownNetworkError);
             break;
     }
 }

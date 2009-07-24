@@ -28,7 +28,7 @@ class ListenRISRequestThread: public QThread
 Q_OBJECT
 public:
 
-    enum ListenRISRequestThreadError { risPortInUse, unknowNetworkError };
+    enum ListenRISRequestThreadError { RisPortInUse, UnknownNetworkError };
 
     ListenRISRequestThread(QObject *parent = 0);
     ~ListenRISRequestThread();
@@ -40,7 +40,6 @@ public:
     bool isListen();
 
 signals:
-
     ///Signal que indica que s'ha fet una petició per descarregar un estudi
     void requestRetrieveStudy(DicomMask mask);
     
@@ -48,13 +47,11 @@ signals:
     void errorListening(ListenRISRequestThread::ListenRISRequestThreadError );
 
 private slots:
-
     void run();
 
 private :
-
-	    ///Indiquem el temps d'espera per llegir la petició del RIS, sinó arriba en aquest temps fem time out
-    static const int msTimeOutToReadData;
+    /// Indiquem el temps d'espera (en mil·lisegons) per llegir la petició del RIS, sinó arriba en aquest temps fem time out
+    static const int TimeOutToReadData;
 
     ///Processa la petició rebuda del RIS
     void processRequest(QString risRequestData);
