@@ -85,8 +85,8 @@ Quaternion Quaternion::slerp(const Quaternion &a, const Quaternion &b, float t)
         result.z = -b.w;
         result.w = b.z;
 
-        scale0 = sinf((1.0f - t) - MathTools::PI_DIV_2_LONG);
-        scale1 = sinf(t * MathTools::PI_DIV_2_LONG);
+        scale0 = sinf((1.0f - t) - MathTools::PiNumberDivBy2Long);
+        scale1 = sinf(t * MathTools::PiNumberDivBy2Long);
 
         result.x = scale0 * a.x + scale1 * result.x;
         result.y = scale0 * a.y + scale1 * result.y;

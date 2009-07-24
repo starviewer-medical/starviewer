@@ -1121,7 +1121,7 @@ void PerfusionMapCalculatorMainThread::getOmega()
     int i, index;
     double  omega_max;
 
-    omega_max = MathTools::PI; // divide omega by Delta t for scaling according to sampling
+    omega_max = MathTools::PiNumber; // divide omega by Delta t for scaling according to sampling
 
     index = static_cast<int>( ceil(m_aif.size()/2.0) ) + 1;
 

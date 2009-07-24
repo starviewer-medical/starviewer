@@ -287,13 +287,13 @@ void SphereUniformPointCloudGenerator::createGeographicVertices()
         Vector3 gv;
         gv.x = v.length();
         // latitud
-        gv.y = 90.0 - acos( v.z / gv.x ) * 180.0 / MathTools::PI;
+        gv.y = 90.0 - acos( v.z / gv.x ) * 180.0 / MathTools::PiNumber;
         // longitud
         if ( v.x == 0.0 && v.y == 0.0 )
             gv.z = 0.0;
         else
         {
-            gv.z = acos( v.x / sqrt( v.x * v.x + v.y * v.y ) ) * 180.0 / MathTools::PI;
+            gv.z = acos( v.x / sqrt( v.x * v.x + v.y * v.y ) ) * 180.0 / MathTools::PiNumber;
             if ( v.y < 0.0 ) gv.z = -gv.z;
         }
         m_geographicVertices[i] = gv;
