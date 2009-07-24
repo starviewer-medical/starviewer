@@ -46,7 +46,7 @@ class Quaternion
     friend Quaternion operator*(float lhs, const Quaternion &rhs);
 
 public:
-    static const Quaternion IDENTITY;
+    static const Quaternion Identity;
 
     float w, x, y, z;
 

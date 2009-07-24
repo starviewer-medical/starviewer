@@ -43,7 +43,7 @@ class Matrix3
     friend Matrix3 operator*(float scalar, const Matrix3 &rhs);
 
 public:
-    static const Matrix3 IDENTITY;
+    static const Matrix3 Identity;
 
     Matrix3() {}
     Matrix3(float m11, float m12, float m13,

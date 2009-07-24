@@ -27,7 +27,7 @@
 namespace udg {
 
 
-const Quaternion Quaternion::IDENTITY(1.0f, 0.0f, 0.0f, 0.0f);
+const Quaternion Quaternion::Identity(1.0f, 0.0f, 0.0f, 0.0f);
 
 Quaternion Quaternion::slerp(const Quaternion &a, const Quaternion &b, float t)
 {

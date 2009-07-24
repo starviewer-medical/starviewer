@@ -76,7 +76,7 @@ double InformationTheory::kullbackLeiblerDivergence( const QVector<T> &probabili
             if ( probabilitiesQ.at( i ) > 0.0 ) sumP += probabilitiesP.at( i );
     }
 
-    if ( size >= MIN_SIZE_TO_USE_THREADS )
+    if ( size >= MinimumSizeToUseThreads )
     {
         int nThreads = QThread::idealThreadCount();
         KullbackLeiblerDivergenceThread<T> **threads = new KullbackLeiblerDivergenceThread<T>*[nThreads];
@@ -130,7 +130,7 @@ double InformationTheory::jensenShannonDivergence( double pi1, double pi2, const
     int size = probabilitiesP1.size();
     QVector<T> probabilitiesMix( size );
 
-    if ( size >= MIN_SIZE_TO_USE_THREADS )
+    if ( size >= MinimumSizeToUseThreads )
     {
         int nThreads = QThread::idealThreadCount();
         ProbabilitiesMixThread<T> **threads = new ProbabilitiesMixThread<T>*[nThreads];
