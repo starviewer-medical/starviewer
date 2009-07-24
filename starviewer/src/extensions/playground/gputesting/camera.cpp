@@ -28,20 +28,20 @@
 namespace udg {
 
 
-const float Camera::DEFAULT_ROTATION_SPEED = 0.3f;
-const float Camera::DEFAULT_FOVX = 90.0f;
-const float Camera::DEFAULT_ZNEAR = 0.1f;
-const float Camera::DEFAULT_ZFAR = 1000.0f;
+const float Camera::DefaultRotationSpeed = 0.3f;
+const float Camera::DefaultFOVX = 90.0f;
+const float Camera::DefaultZNear = 0.1f;
+const float Camera::DefaultZFar = 1000.0f;
 
-const float Camera::DEFAULT_ORBIT_MIN_ZOOM = DEFAULT_ZNEAR + 1.0f;
-const float Camera::DEFAULT_ORBIT_MAX_ZOOM = DEFAULT_ZFAR * 0.5f;
+const float Camera::DefaultOrbitMinimumZoom = DefaultZNear + 1.0f;
+const float Camera::DefaultOrbitMaximumZoom = DefaultZFar * 0.5f;
 
-const float Camera::DEFAULT_ORBIT_OFFSET_DISTANCE = DEFAULT_ORBIT_MIN_ZOOM +
-    (DEFAULT_ORBIT_MAX_ZOOM - DEFAULT_ORBIT_MIN_ZOOM) * 0.25f;
+const float Camera::DefaultOrbitOffsetDistance = DefaultOrbitMinimumZoom +
+    (DefaultOrbitMaximumZoom - DefaultOrbitMinimumZoom) * 0.25f;
 
-const Vector3 Camera::WORLD_XAXIS(1.0f, 0.0f, 0.0f);
-const Vector3 Camera::WORLD_YAXIS(0.0f, 1.0f, 0.0f);
-const Vector3 Camera::WORLD_ZAXIS(0.0f, 0.0f, 1.0f);
+const Vector3 Camera::WorldXAxis(1.0f, 0.0f, 0.0f);
+const Vector3 Camera::WorldYAxis(0.0f, 1.0f, 0.0f);
+const Vector3 Camera::WorldZAxis(0.0f, 0.0f, 1.0f);
 
 Camera::Camera()
 {
@@ -51,15 +51,15 @@ Camera::Camera()
     m_accumPitchDegrees = 0.0f;
     m_savedAccumPitchDegrees = 0.0f;
 
-    m_rotationSpeed = DEFAULT_ROTATION_SPEED;
-    m_fovx = DEFAULT_FOVX;
+    m_rotationSpeed = DefaultRotationSpeed;
+    m_fovx = DefaultFOVX;
     m_aspectRatio = 0.0f;
-    m_znear = DEFAULT_ZNEAR;
-    m_zfar = DEFAULT_ZFAR;
+    m_znear = DefaultZNear;
+    m_zfar = DefaultZFar;
 
-    m_orbitMinZoom = DEFAULT_ORBIT_MIN_ZOOM;
-    m_orbitMaxZoom = DEFAULT_ORBIT_MAX_ZOOM;
-    m_orbitOffsetDistance = DEFAULT_ORBIT_OFFSET_DISTANCE;
+    m_orbitMinZoom = DefaultOrbitMinimumZoom;
+    m_orbitMaxZoom = DefaultOrbitMaximumZoom;
+    m_orbitOffsetDistance = DefaultOrbitOffsetDistance;
 
     m_eye.set(0.0f, 0.0f, 0.0f);
     m_savedEye.set(0.0f, 0.0f, 0.0f);
@@ -151,7 +151,7 @@ void Camera::move(float dx, float dy, float dz)
         // z axis as doing so will cause the camera to move more slowly as the
         // camera's view approaches 90 degrees straight up and down.
 
-        forwards = Vector3::cross(WORLD_YAXIS, m_xAxis);
+        forwards = Vector3::cross(WorldYAxis, m_xAxis);
         forwards.normalize();
     }
     else
@@ -160,7 +160,7 @@ void Camera::move(float dx, float dy, float dz)
     }
 
     eye += m_xAxis * dx;
-    eye += WORLD_YAXIS * dy;
+    eye += WorldYAxis * dy;
     eye += forwards * dz;
 
     setPosition(eye);
@@ -278,7 +278,7 @@ void Camera::undoRoll()
     if (m_behavior == CAMERA_BEHAVIOR_ORBIT)
         lookAt(m_eye, m_target, m_targetYAxis);
     else
-        lookAt(m_eye, m_eye + m_viewDir, WORLD_YAXIS);
+        lookAt(m_eye, m_eye + m_viewDir, WorldYAxis);
 }
 
 void Camera::updatePosition(const Vector3 &direction, float elapsedTimeSec)
@@ -501,7 +501,7 @@ void Camera::setOrientation(const Quaternion &newOrientation)
     m_orientation = newOrientation;
 
     if (m_behavior == CAMERA_BEHAVIOR_FIRST_PERSON || m_behavior == CAMERA_BEHAVIOR_SPECTATOR)
-        lookAt(m_eye, m_eye + m_viewDir, WORLD_YAXIS);
+        lookAt(m_eye, m_eye + m_viewDir, WorldYAxis);
 
     updateViewMatrix();
 }
@@ -569,7 +569,7 @@ void Camera::rotateFirstPerson(float headingDegrees, float pitchDegrees)
     // Note the order the quaternions are multiplied. That is important!
     if (headingDegrees != 0.0f)
     {
-        rot.fromAxisAngle(WORLD_YAXIS, headingDegrees);
+        rot.fromAxisAngle(WorldYAxis, headingDegrees);
         m_orientation = rot * m_orientation;
     }
 
@@ -577,7 +577,7 @@ void Camera::rotateFirstPerson(float headingDegrees, float pitchDegrees)
     // Note the order the quaternions are multiplied. That is important!
     if (pitchDegrees != 0.0f)
     {
-        rot.fromAxisAngle(WORLD_XAXIS, pitchDegrees);
+        rot.fromAxisAngle(WorldXAxis, pitchDegrees);
         m_orientation = m_orientation * rot;
     }
 }
@@ -625,7 +625,7 @@ void Camera::rotateOrbit(float headingDegrees, float pitchDegrees, float rollDeg
 
         if (pitchDegrees != 0.0f)
         {
-            rot.fromAxisAngle(WORLD_XAXIS, pitchDegrees);
+            rot.fromAxisAngle(WorldXAxis, pitchDegrees);
             m_orientation = m_orientation * rot;
         }
     }

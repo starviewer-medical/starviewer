@@ -139,16 +139,16 @@ private:
     void updateVelocity(const Vector3 &direction, float elapsedTimeSec);
     void updateViewMatrix();
 
-    static const float DEFAULT_ROTATION_SPEED;
-    static const float DEFAULT_FOVX;
-    static const float DEFAULT_ZNEAR;
-    static const float DEFAULT_ZFAR;
-    static const float DEFAULT_ORBIT_MIN_ZOOM;
-    static const float DEFAULT_ORBIT_MAX_ZOOM;
-    static const float DEFAULT_ORBIT_OFFSET_DISTANCE;
-    static const Vector3 WORLD_XAXIS;
-    static const Vector3 WORLD_YAXIS;
-    static const Vector3 WORLD_ZAXIS;
+    static const float DefaultRotationSpeed;
+    static const float DefaultFOVX;
+    static const float DefaultZNear;
+    static const float DefaultZFar;
+    static const float DefaultOrbitMinimumZoom;
+    static const float DefaultOrbitMaximumZoom;
+    static const float DefaultOrbitOffsetDistance;
+    static const Vector3 WorldXAxis;
+    static const Vector3 WorldYAxis;
+    static const Vector3 WorldZAxis;
 
     CameraBehavior m_behavior;
     bool m_preferTargetYAxisOrbiting;

@@ -79,9 +79,9 @@ private:
     /// Tipus d'il·luminació.
     enum Lighting { Ambient, Diffuse, DiffuseSpecular };
 
-    static const float KEYBOARD_CAMERA_INCREMENT;
-    static const float MAX_CAMERA_DISTANCE_FACTOR;
-    static const int TRANSFER_FUNCTION_TEXTURE_SIZE = 4096;
+    static const float KeyboardCameraIncrement;
+    static const float MaximumCameraDistanceFactor;
+    static const int TransferFunctionTextureSize = 4096;
 
     /// Comprova si hi ha algun error d'OpenGL.
     void checkGLError( bool alert = false );
