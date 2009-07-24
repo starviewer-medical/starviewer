@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="es">
-<defaultcodec></defaultcodec>
+<!DOCTYPE TS>
+<TS version="2.0" language="es">
 <context>
     <name>QConfigurationDialogBase</name>
     <message>
@@ -85,7 +85,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="122"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+A</translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="123"/>
