@@ -19,16 +19,15 @@ namespace udg{
 class MathTools{
 
 public:
-
     enum Sign{ POSITIVE, NEGATIVE };
     enum Lines{ COINCIDENT, PARALLEL, SKEW, INTERSECT };
 
 /// Declaració de constants
-static const double LOGARITHM_BASE2_E;
-static const long double REVERS_PI_LONG;
-static const double PI;
-static const long double PI_LONG;
-static const long double PI_DIV_2_LONG;
+static const double NumberEBase2Logarithm;
+static const long double ReversePiNumberLong;
+static const double PiNumber;
+static const long double PiNumberLong;
+static const long double PiNumberDivBy2Long;
 
 
 /// Epsilon, nombre extremadament petit
@@ -118,12 +117,12 @@ inline static bool closeEnough(float f1, float f2)
 
 inline static float degreesToRadians(float degrees)
 {
-    return (degrees * PI) / 180.0f;
+    return (degrees * PiNumber) / 180.0f;
 }
 
 inline static float radiansToDegrees(float radians)
 {
-    return (radians * 180.0f) / PI;
+    return (radians * 180.0f) / PiNumber;
 }
 
 };

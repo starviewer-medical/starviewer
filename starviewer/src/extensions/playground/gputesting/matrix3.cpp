@@ -250,9 +250,9 @@ void Matrix3::toHeadPitchRoll(float &headDegrees, float &pitchDegrees, float &ro
     float thetaY = 0.0f;
     float thetaZ = 0.0f;
 
-    if (thetaX < MathTools::PI_DIV_2_LONG)
+    if (thetaX < MathTools::PiNumberDivBy2Long)
     {
-        if (thetaX > -MathTools::PI_DIV_2_LONG)
+        if (thetaX > -MathTools::PiNumberDivBy2Long)
         {
             thetaZ = atan2f(-mtx[1][0], mtx[1][1]);
             thetaY = atan2f(-mtx[0][2], mtx[2][2]);
