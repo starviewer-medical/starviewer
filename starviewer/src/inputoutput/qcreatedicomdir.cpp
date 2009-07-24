@@ -611,7 +611,7 @@ void QCreateDicomdir::deviceChanged( int index )
         case CreateDicomdir::HardDisk:
             m_stackedWidget->setCurrentIndex(1);
             // per gravar al disc no hi ha màxim TODO això no es del tot cert, caldria comprovar l'espai de disc
-            m_DiskSpaceBytes = m_hardDiskSizeBytes;
+            m_DiskSpaceBytes = HardDiskSizeBytes;
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
@@ -623,11 +623,11 @@ void QCreateDicomdir::deviceChanged( int index )
 
                 if (m_currentDevice == CreateDicomdir::CdRom) 
                 {
-                    maximumCapacity = m_cdRomSizeMb;
+                    maximumCapacity = CDRomSizeMb;
                 }
                 else
                 {
-                    maximumCapacity = m_dvdRomSizeMb;
+                    maximumCapacity = DVDRomSizeMb;
                 }
 
 /*              TODO: No comprovem la mida del dicomdir

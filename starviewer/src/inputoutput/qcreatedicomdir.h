@@ -131,13 +131,13 @@ private slots:
 
 private:
 
-    static const int m_cdRomSizeMb = 700;
-    static const int m_dvdRomSizeMb = 4800;
-    static const int m_hardDiskSizeMb = 9999999;
+    static const int CDRomSizeMb = 700;
+    static const int DVDRomSizeMb = 4800;
+    static const int HardDiskSizeMb = 9999999;
 
-    static const quint64 m_cdRomSizeBytes = ( quint64 ) m_cdRomSizeMb * ( quint64 ) ( 1024 * 1024 );
-    static const quint64 m_dvdRomSizeBytes = ( quint64 ) m_dvdRomSizeMb * ( quint64 ) ( 1024 * 1024 );
-    static const quint64 m_hardDiskSizeBytes = ( quint64 ) m_hardDiskSizeMb * ( quint64 ) ( 1024 * 1024 );
+    static const quint64 CDRomSizeBytes = ( quint64 ) CDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
+    static const quint64 DVDRomSizeBytes = ( quint64 ) DVDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
+    static const quint64 HardDiskSizeBytes = ( quint64 ) HardDiskSizeMb * ( quint64 ) ( 1024 * 1024 );
 
     quint64 m_dicomdirSizeBytes;
     quint64 m_DiskSpaceBytes;
