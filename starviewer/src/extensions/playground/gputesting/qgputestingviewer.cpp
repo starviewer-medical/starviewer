@@ -31,8 +31,8 @@
 namespace udg {
 
 
-const float QGpuTestingViewer::KEYBOARD_CAMERA_INCREMENT = 10.0f;
-const float QGpuTestingViewer::MAX_CAMERA_DISTANCE_FACTOR = 1000.0f;
+const float QGpuTestingViewer::KeyboardCameraIncrement = 10.0f;
+const float QGpuTestingViewer::MaximumCameraDistanceFactor = 1000.0f;
 
 
 QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
@@ -151,12 +151,12 @@ void QGpuTestingViewer::keyPressEvent( QKeyEvent *event )
 {
     switch ( event->key() )
     {
-        case Qt::Key_Left: m_camera->rotateSmoothly( KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
-        case Qt::Key_Right: m_camera->rotateSmoothly( -KEYBOARD_CAMERA_INCREMENT, 0.0f, 0.0f ); break;
-        case Qt::Key_Up: m_camera->rotateSmoothly( 0.0f, KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
-        case Qt::Key_Down: m_camera->rotateSmoothly( 0.0f, -KEYBOARD_CAMERA_INCREMENT, 0.0f ); break;
-        case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
-        case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR ); break;
+        case Qt::Key_Left: m_camera->rotateSmoothly( KeyboardCameraIncrement, 0.0f, 0.0f ); break;
+        case Qt::Key_Right: m_camera->rotateSmoothly( -KeyboardCameraIncrement, 0.0f, 0.0f ); break;
+        case Qt::Key_Up: m_camera->rotateSmoothly( 0.0f, KeyboardCameraIncrement, 0.0f ); break;
+        case Qt::Key_Down: m_camera->rotateSmoothly( 0.0f, -KeyboardCameraIncrement, 0.0f ); break;
+        case Qt::Key_Plus: m_camera->zoom( -m_keyboardZoomIncrement, m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MaximumCameraDistanceFactor ); break;
+        case Qt::Key_Minus: m_camera->zoom( m_keyboardZoomIncrement, m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MaximumCameraDistanceFactor ); break;
         case Qt::Key_R: resetCamera(); break;
         case Qt::Key_F10: loadShaders(); break;
         default: QWidget::keyPressEvent( event ); return;
@@ -187,7 +187,7 @@ void QGpuTestingViewer::mouseMoveEvent( QMouseEvent *event )
 
 void QGpuTestingViewer::wheelEvent( QWheelEvent *event )
 {
-    m_camera->zoom( -m_wheelZoomScale * event->delta(), m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MAX_CAMERA_DISTANCE_FACTOR );
+    m_camera->zoom( -m_wheelZoomScale * event->delta(), m_diagonalLength / 2.0f + 1.0f, m_biggestDimension * MaximumCameraDistanceFactor );
     updateGL();
 }
 
@@ -479,10 +479,10 @@ void QGpuTestingViewer::createTransferFunctionTexture()
 
 void QGpuTestingViewer::updateTransferFunctionTexture()
 {
-    struct { GLubyte r, g, b, a; } pixels[TRANSFER_FUNCTION_TEXTURE_SIZE];
-    double scale = 1.0 / ( TRANSFER_FUNCTION_TEXTURE_SIZE - 1 );
+    struct { GLubyte r, g, b, a; } pixels[TransferFunctionTextureSize];
+    double scale = 1.0 / ( TransferFunctionTextureSize - 1 );
 
-    for ( int i = 0; i < TRANSFER_FUNCTION_TEXTURE_SIZE; i++ )
+    for ( int i = 0; i < TransferFunctionTextureSize; i++ )
     {
         QColor color = m_transferFunction.get( i * scale );
         pixels[i].r = color.red();
@@ -492,7 +492,7 @@ void QGpuTestingViewer::updateTransferFunctionTexture()
     }
 
     glBindTexture( GL_TEXTURE_1D, m_transferFunctionTexture );
-    glTexImage1D( GL_TEXTURE_1D, 0, GL_RGBA, TRANSFER_FUNCTION_TEXTURE_SIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glTexImage1D( GL_TEXTURE_1D, 0, GL_RGBA, TransferFunctionTextureSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     checkGLError();
 }
 
