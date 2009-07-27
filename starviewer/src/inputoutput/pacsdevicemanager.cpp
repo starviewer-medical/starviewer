@@ -126,31 +126,31 @@ QList<PacsDevice> PacsDeviceManager::getConfiguredPacsList( bool onlyDefault )
     return configuredPacsList;
 }
 
-Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const PacsDevice &parameters )
+Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const PacsDevice &pacsDevice )
 {
     Settings::KeyValueMapType item;
         
-    item["ID"] = parameters.getPacsID();
-    item["AETitle"] = parameters.getAEPacs();
-    item["PacsPort"] = parameters.getPacsPort();
-    item["Location"] = parameters.getLocation();
-    item["Institution"] = parameters.getInstitution();
-    item["Default"] = parameters.isDefault() ? "S" : "N";//Guardem el camp en format string
-    item["PacsHostname"] = parameters.getPacsAddress();
-    item["Description"] = parameters.getDescription();
+    item["ID"] = pacsDevice.getPacsID();
+    item["AETitle"] = pacsDevice.getAEPacs();
+    item["PacsPort"] = pacsDevice.getPacsPort();
+    item["Location"] = pacsDevice.getLocation();
+    item["Institution"] = pacsDevice.getInstitution();
+    item["Default"] = pacsDevice.isDefault() ? "S" : "N";//Guardem el camp en format string
+    item["PacsHostname"] = pacsDevice.getPacsAddress();
+    item["Description"] = pacsDevice.getDescription();
 
     return item;
 }
 
 PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueMapType &item )
 {
-    PacsDevice parameters;
+    PacsDevice pacsDevice;
     // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
-    parameters.setPacsID( item.value("ID").toString() );
-    parameters.setAEPacs( item.value("AETitle" ).toString() );
-    parameters.setPacsPort( item.value("PacsPort" ).toString() );
-    parameters.setLocation( item.value("Location" ).toString() );
-    parameters.setInstitution( item.value("Institution" ).toString() );
+    pacsDevice.setPacsID( item.value("ID").toString() );
+    pacsDevice.setAEPacs( item.value("AETitle" ).toString() );
+    pacsDevice.setPacsPort( item.value("PacsPort" ).toString() );
+    pacsDevice.setLocation( item.value("Location" ).toString() );
+    pacsDevice.setInstitution( item.value("Institution" ).toString() );
     
     // TODO la clau "Default" s'hauria de renombrar per una altre ja que en el cas del 
     // registre de windows pot donar problemes, ja que ve a ser una paraula "reservada"
@@ -162,12 +162,12 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueM
         isDefault = item.value("Default").toString();
     else
         isDefault = item.value(".").toString();
-    parameters.setDefault( isDefault == "S" );
+    pacsDevice.setDefault( isDefault == "S" );
     
-    parameters.setPacsAddress( item.value("PacsHostname" ).toString() );
-    parameters.setDescription( item.value("Description" ).toString() );
+    pacsDevice.setPacsAddress( item.value("PacsHostname" ).toString() );
+    pacsDevice.setDescription( item.value("Description" ).toString() );
 
-    return parameters;
+    return pacsDevice;
 }
 
 };
