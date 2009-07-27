@@ -47,17 +47,17 @@ public:
     void setLocation(const QString &location);
     QString getLocation() const;
 
-    /// Assigna/Retorna al Pacs si és el Predeterminat. Si val 'S' voldrà di que és el pacs predeterminat per realitzar les cerques
+    /// Assigna/Retorna si aquest PACS és un predeterminat per fer les consultes.
     void setDefault(bool isDefault);
     bool isDefault() const;
 
-    /// Assigna/Retorna l'id del PACS, aquest és un camp clau per diferenciar els PACS que l'assigna l'aplicacio.
+    /// Assigna/Retorna l'ID del PACS, aquest és un camp clau per diferenciar els PACS que l'assigna l'aplicació.
     void setPacsID(QString ID);
     QString getPacsID() const;
 
     bool operator ==(const PacsDevice &parameters);
 
-    // TODO aquests mètodes poden desaparèixer quan estigui enllestit tot el tema de setting
+    // TODO aquests mètodes poden desaparèixer quan estigui enllestit tot el tema de settings
     static QString getLocalAETitle();
     static int getMaximumConnections();
     static int getConnectionTimeout();
