@@ -10,12 +10,9 @@
 #include <QResizeEvent>
 #include <QToolTip>
 
-
 namespace udg {
 
-
-const double QBasicGraphicTransferFunctionEditor::POINT_SIZE = 4.0;
-
+const double QBasicGraphicTransferFunctionEditor::PointSize = 4.0;
 
 QBasicGraphicTransferFunctionEditor::QBasicGraphicTransferFunctionEditor( QWidget *parent )
  : QWidget( parent ), m_minimum( -50000.0 ), m_maximum( 50000.0 ), m_dragging( false ), m_selecting( false )
@@ -38,23 +35,19 @@ QBasicGraphicTransferFunctionEditor::QBasicGraphicTransferFunctionEditor( QWidge
     updateColorGradient();
 }
 
-
 QBasicGraphicTransferFunctionEditor::~QBasicGraphicTransferFunctionEditor()
 {
 }
-
 
 double QBasicGraphicTransferFunctionEditor::minimum() const
 {
     return m_minimum;
 }
 
-
 double QBasicGraphicTransferFunctionEditor::maximum() const
 {
     return m_maximum;
 }
-
 
 void QBasicGraphicTransferFunctionEditor::setRange( double minimum, double maximum )
 {
@@ -72,12 +65,10 @@ void QBasicGraphicTransferFunctionEditor::setRange( double minimum, double maxim
     }
 }
 
-
 const TransferFunction& QBasicGraphicTransferFunctionEditor::transferFunction() const
 {
     return m_transferFunction;
 }
-
 
 void QBasicGraphicTransferFunctionEditor::setTransferFunction( const TransferFunction &transferFunction )
 {
@@ -87,12 +78,10 @@ void QBasicGraphicTransferFunctionEditor::setTransferFunction( const TransferFun
     update();
 }
 
-
 void QBasicGraphicTransferFunctionEditor::setTransferFunctionName( const QString &name )
 {
     m_transferFunction.setName( name );
 }
-
 
 void QBasicGraphicTransferFunctionEditor::adjustRangeToFunction()
 {
@@ -102,7 +91,6 @@ void QBasicGraphicTransferFunctionEditor::adjustRangeToFunction()
 
     setRange( points.first(), points.last() );
 }
-
 
 bool QBasicGraphicTransferFunctionEditor::event( QEvent *event )
 {
@@ -123,7 +111,6 @@ bool QBasicGraphicTransferFunctionEditor::event( QEvent *event )
     return QWidget::event(event);
 }
 
-
 void QBasicGraphicTransferFunctionEditor::keyPressEvent( QKeyEvent *event )
 {
     switch ( event->key() )
@@ -133,7 +120,6 @@ void QBasicGraphicTransferFunctionEditor::keyPressEvent( QKeyEvent *event )
         case Qt::Key_A: if ( event->modifiers().testFlag( Qt::ControlModifier ) ) selectAll(); break;
     }
 }
-
 
 void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
 {
@@ -199,7 +185,6 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent( QMouseEvent *event )
     }
 }
 
-
 void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
 {
     Qt::KeyboardModifiers modifiers = event->modifiers();
@@ -240,7 +225,6 @@ void QBasicGraphicTransferFunctionEditor::mouseMoveEvent( QMouseEvent *event )
     }
 }
 
-
 void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent( QMouseEvent *event )
 {
     Q_UNUSED( event );
@@ -272,7 +256,6 @@ void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent( QMouseEvent *event 
     QToolTip::hideText();
 }
 
-
 void QBasicGraphicTransferFunctionEditor::wheelEvent( QWheelEvent *event )
 {
     int zoom = event->delta() / 8;
@@ -288,7 +271,6 @@ void QBasicGraphicTransferFunctionEditor::wheelEvent( QWheelEvent *event )
     emit rangeChanged( m_minimum, m_maximum );
 }
 
-
 void QBasicGraphicTransferFunctionEditor::paintEvent( QPaintEvent *event )
 {
     Q_UNUSED( event );
@@ -298,7 +280,6 @@ void QBasicGraphicTransferFunctionEditor::paintEvent( QPaintEvent *event )
     if ( m_selecting ) drawSelectionRectangle();
 }
 
-
 void QBasicGraphicTransferFunctionEditor::resizeEvent( QResizeEvent *event )
 {
     Q_UNUSED( event );
@@ -306,7 +287,6 @@ void QBasicGraphicTransferFunctionEditor::resizeEvent( QResizeEvent *event )
     updateColorGradient();
     // l'update() ja es crida automàticament
 }
-
 
 void QBasicGraphicTransferFunctionEditor::updateColorGradient()
 {
@@ -340,7 +320,6 @@ void QBasicGraphicTransferFunctionEditor::updateColorGradient()
     }
 }
 
-
 void QBasicGraphicTransferFunctionEditor::drawBackground()
 {
     QImage background( size(), QImage::Format_ARGB32_Premultiplied );
@@ -359,7 +338,6 @@ void QBasicGraphicTransferFunctionEditor::drawBackground()
     QPainter painter( this );
     painter.drawImage( 0, 0, background );
 }
-
 
 void QBasicGraphicTransferFunctionEditor::drawFunction()
 {
@@ -387,11 +365,10 @@ void QBasicGraphicTransferFunctionEditor::drawFunction()
         if ( m_selectedPoints.contains( points.at( i ) ) ) painter.setBrush( QColor( 99, 39, 77, 189 ) );
         else painter.setBrush( QColor( 248, 248, 248, 202 ) );
 
-        QRectF rectangle( point.x() - POINT_SIZE, point.y() - POINT_SIZE, 2.0 * POINT_SIZE, 2.0 * POINT_SIZE );
+        QRectF rectangle( point.x() - PointSize, point.y() - PointSize, 2.0 * PointSize, 2.0 * PointSize );
         painter.drawEllipse( rectangle );
     }
 }
-
 
 void QBasicGraphicTransferFunctionEditor::drawSelectionRectangle()
 {
@@ -400,17 +377,16 @@ void QBasicGraphicTransferFunctionEditor::drawSelectionRectangle()
     painter.drawRect( m_selectionRectangle.normalized() );
 }
 
-
 double QBasicGraphicTransferFunctionEditor::nearestX( const QPoint &pixel, bool &found ) const
 {
     found = false;
 
     QPointF functionPoint = pixelToFunctionPoint( pixel );
-    double radiusX = ( m_maximum - m_minimum ) / ( width() - 1 ) * POINT_SIZE;
+    double radiusX = ( m_maximum - m_minimum ) / ( width() - 1 ) * PointSize;
 
     QList<double> nearPoints = m_transferFunction.getPointsNear( functionPoint.x(), radiusX );
     double nearestPointX = 0.0;
-    double nearestLength = 2.0 * POINT_SIZE;
+    double nearestLength = 2.0 * PointSize;
     int nPoints = nearPoints.size();
 
     for ( int i = 0; i < nPoints; i++ )
@@ -431,7 +407,6 @@ double QBasicGraphicTransferFunctionEditor::nearestX( const QPoint &pixel, bool 
     return nearestPointX;
 }
 
-
 QPointF QBasicGraphicTransferFunctionEditor::pixelToFunctionPoint( const QPoint &pixel ) const
 {
     double scaleX = ( m_maximum - m_minimum ) / ( width() - 1 );
@@ -441,7 +416,6 @@ QPointF QBasicGraphicTransferFunctionEditor::pixelToFunctionPoint( const QPoint 
 
     return QPointF( scaleX * pixel.x() + shiftX, scaleY * pixel.y() + shiftY );
 }
-
 
 QPointF QBasicGraphicTransferFunctionEditor::functionPointToGraphicPoint( const QPointF &functionPoint ) const
 {
@@ -453,7 +427,6 @@ QPointF QBasicGraphicTransferFunctionEditor::functionPointToGraphicPoint( const 
     return QPointF( ( functionPoint.x() + shiftX ) * scaleX, ( functionPoint.y() + shiftY ) * scaleY );
 }
 
-
 void QBasicGraphicTransferFunctionEditor::addPoint( double x, double y )
 {
     QColor color = Qt::black;
@@ -464,7 +437,6 @@ void QBasicGraphicTransferFunctionEditor::addPoint( double x, double y )
     update();
 }
 
-
 void QBasicGraphicTransferFunctionEditor::removePoint( double x )
 {
     m_transferFunction.removePoint( x );
@@ -472,7 +444,6 @@ void QBasicGraphicTransferFunctionEditor::removePoint( double x )
     updateColorGradient();
     update();
 }
-
 
 void QBasicGraphicTransferFunctionEditor::changePointColor( double x, QColor &color )
 {
@@ -482,7 +453,6 @@ void QBasicGraphicTransferFunctionEditor::changePointColor( double x, QColor &co
     updateColorGradient();
     update();
 }
-
 
 void QBasicGraphicTransferFunctionEditor::changeCurrentPoint( double x, double y )
 {
@@ -521,13 +491,11 @@ void QBasicGraphicTransferFunctionEditor::changeCurrentPoint( double x, double y
     update();
 }
 
-
 void QBasicGraphicTransferFunctionEditor::clearSelection()
 {
     m_selectedPoints.clear();
     update();
 }
-
 
 void QBasicGraphicTransferFunctionEditor::selectAll()
 {
@@ -535,6 +503,5 @@ void QBasicGraphicTransferFunctionEditor::selectAll()
     m_selectedPoints << m_transferFunction.getPoints();
     update();
 }
-
 
 }

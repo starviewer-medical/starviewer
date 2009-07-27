@@ -3,15 +3,10 @@
 
 
 #include <QWidget>
-
 #include <QLinearGradient>
-
 #include "transferfunction.h"
 
-
 namespace udg {
-
-
 /**
  * Editor de funcions de transferència gràfic en condicions.
  *
@@ -19,37 +14,33 @@ namespace udg {
  *       - Millorar la documentació.
  */
 class QBasicGraphicTransferFunctionEditor : public QWidget {
-
-    Q_OBJECT
-
+Q_OBJECT
 public:
-
     QBasicGraphicTransferFunctionEditor( QWidget *parent = 0 );
     ~QBasicGraphicTransferFunctionEditor();
 
     double minimum() const;
     double maximum() const;
+
     /// Assigna el rang de valors de la funció de transferència.
     void setRange( double minimum, double maximum );
-    /// Retorna la funció de transferència.
+    
+    /// Retorna/Assigna la funció de transferència.
     const TransferFunction& transferFunction() const;
-    /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
 public slots:
-
     /// Assigna el nom de la funció de transferència.
     void setTransferFunctionName( const QString &name );
+    
     /// Ajusta el mínim i el mínim i el màxim de manera que coincideixin amb els extrems de la funció.
     void adjustRangeToFunction();
 
 signals:
-
     /// S'emet quan canvia el rang.
     void rangeChanged( double minimum, double maximum );
 
 protected:
-
     virtual bool event( QEvent *event );
     virtual void keyPressEvent( QKeyEvent *event );
     virtual void mousePressEvent( QMouseEvent *event );
@@ -60,8 +51,7 @@ protected:
     virtual void resizeEvent( QResizeEvent *event );
 
 private:
-
-    static const double POINT_SIZE;
+    static const double PointSize;
 
     void updateColorGradient();
     void drawBackground();
@@ -82,7 +72,6 @@ private:
     void selectAll();
 
 private:
-
     /// Valor de propietat mínim.
     double m_minimum;
     /// Valor de propietat màxim.
@@ -101,11 +90,8 @@ private:
     QRect m_selectionRectangle;
     QList<double> m_selectedPoints;
     QList<double> m_selectedPointsCopy;         // còpia dels punts seleccionats necessària per arrossegar punts
-
 };
 
-
 }
-
 
 #endif
