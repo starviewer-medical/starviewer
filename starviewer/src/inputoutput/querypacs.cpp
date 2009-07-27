@@ -166,23 +166,24 @@ void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
 
 void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
 {
-    //Copiem a un altre dataset response pacs perquè dicomTagReader de DcmtkDatsetToStarviewerObject elimina l'objecte després de llegir-lo
+    if (!m_hashPacsIDOfStudyInstanceUID.contains(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID)))
+    {
+        Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
+        Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
+        study->setInstitutionName(m_pacs.getInstitution());
 
-    Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
-    Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
-    study->setInstitutionName(m_pacs.getInstitution());
+        patient->addStudy(study);
 
-    patient->addStudy(study);
-
-    m_patientStudyList.append(patient);
-    m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacs.getPacsID();//Afegim a la taula de QHash de quin pacs és l'estudi
+        m_patientStudyList.append(patient);
+        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacs.getPacsID();//Afegim a la taula de QHash de quin pacs és l'estudi
+    }
 }
 
 void QueryPacs::addSeries( DICOMTagReader *dicomTagReader )
 {
     Series *series = CreateInformationModelObject::createSeries(dicomTagReader);
 
-    m_seriesList.append(series);
+        m_seriesList.append(series);
 }
 
 void QueryPacs::addImage( DICOMTagReader *dicomTagReader )
