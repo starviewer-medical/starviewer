@@ -67,10 +67,13 @@ void QueryPacs::foundMatchCallback(
         } //si la query retorna un objecte sèrie
         else if ( queryRetrieveLevel == "SERIES" )
         {
+            queryPacsCaller->addPatientStudy( dicomTagReader );
             queryPacsCaller->addSeries( dicomTagReader );
         }// si la query retorna un objecte imatge
         else if ( queryRetrieveLevel == "IMAGE" )
         {
+            queryPacsCaller->addPatientStudy( dicomTagReader );
+            queryPacsCaller->addSeries( dicomTagReader );
             queryPacsCaller->addImage( dicomTagReader );
         }
     }
