@@ -49,6 +49,12 @@ public:
     static const QString QueryRetrieveLocalPort;
     static const QString PacsConnectionTimeout;
     static const QString MaximumPACSConnections;
+
+	/// Path del programa de gravació
+	static const QString burningApplicationPathKey;
+	/// Parameters del programa de gravació
+	static const QString burningApplicationParametersKey;
+
 };
 
 } // end namespace udg 
