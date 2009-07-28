@@ -12,6 +12,7 @@
 
 #include "qlocaldatabaseconfigurationscreen.h"
 #include "qlistenrisrequestsconfigurationscreen.h"
+#include "qburningapplicationconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -42,7 +43,14 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     connect(qListenRisRequestsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
     connect(m_okButton , SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
 #endif
-    
+
+
+	// configuració del programa de gravació
+    QBurningApplicationConfigurationScreen *burningApplicationScreen = new QBurningApplicationConfigurationScreen(this);
+    this->addConfigurationWidget(burningApplicationScreen, tr("Burning Application"), AdvancedConfiguration);
+    connect(burningApplicationScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
+    connect(m_okButton , SIGNAL(clicked()), burningApplicationScreen, SLOT(applyChanges()));
+
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
     m_optionsList->setCurrentRow(0);
