@@ -67,7 +67,7 @@ void QCreateDicomdir::createActions()
     m_cdromAction->setStatusTip( tr("Record DICOMDIR on a CD-ROM device") );
     m_cdromAction->setIcon( QIcon(":/images/cdrom.png") );
     m_cdromAction->setCheckable( true );
-    m_signalMapper->setMapping( m_cdromAction , CreateDicomdir::CdRom );
+	m_signalMapper->setMapping( m_cdromAction , CreateDicomdir::CdRom );
     connect( m_cdromAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
     m_cdromDeviceToolButton->setDefaultAction( m_cdromAction );
 
@@ -446,19 +446,20 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     progressBar->setCancelButton( 0 );
     progressBar->setValue( 7 );
 
-    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR/";
+    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
 
     //indiquem al directori i nom de la imatge a crear
-    isoPath = dicomdirPath + "dicomdir.iso";
+    isoPath = dicomdirPath + "/dicomdir.iso";
 
     processParameters <<  "-V STARVIEWER DICOMDIR";//indiquem que el label de la imatge és STARVIEWER DICOMDIR
-    processParameters << "-o" + isoPath;; //nom i directori on guardarem la imatge
-    processParameters << QDir::toNativeSeparators( dicomdirPath );//path a convertir en iso
+    processParameters << "-o" + isoPath;//QDir::toNativeSeparators( isoPath ); //nom i directori on guardarem la imatge
+	processParameters << QDir::toNativeSeparators( dicomdirPath );//path a convertir en iso
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     process.start( "mkisofs" , processParameters );
     process.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
     QApplication::restoreOverrideCursor();
+
 
     if( process.exitCode() != 0 ) // hi ha hagut problemes
     {
@@ -466,28 +467,44 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     }
     else
     {
-        processParameters.clear();
-        processParameters << "--nosplash";//que no s'engegui l'splash del k3b
+		//#ifdef _WIN32
+			
+			Settings settings;
+			processParameters.clear();			
+			processParameters << (settings.getValue(InputOutputSettings::burningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
+			cout<<processParameters.at(0).toStdString();
+			process.start((settings.getValue(InputOutputSettings::burningApplicationPathKey)).toString(), processParameters);
+			process.waitForFinished( -1 );
+			if( process.exitCode() != 0 ) // hi ha hagut problemes
+				showProcessErrorMessage(process, "Burning Application");
+			else
+				this->close();	
+		//#else
+			/*
+			processParameters.clear();
+			processParameters << "--nosplash";//que no s'engegui l'splash del k3b
 
-        switch( device )
-        {
-            case CreateDicomdir::CdRom :
-                processParameters << "--cdimage";
-                break;
+			switch( device )
+			{
+				case CreateDicomdir::CdRom :
+					processParameters << "--cdimage";
+					break;
 
-            case CreateDicomdir::DvdRom :
-                processParameters << "--dvdimage";
-                break;
-            default:
-                break;
-        }
-        processParameters << isoPath;
-        process.start( "k3b" , processParameters );
-        process.waitForFinished( -1 );
-        if( process.exitCode() != 0 ) // hi ha hagut problemes
-            showProcessErrorMessage(process, "k3b");
-        else
-            this->close();
+				case CreateDicomdir::DvdRom :
+					processParameters << "--dvdimage";
+					break;
+				default:
+					break;
+			}
+			processParameters << isoPath;
+			process.start( "k3b" , processParameters );
+			process.waitForFinished( -1 );
+			if( process.exitCode() != 0 ) // hi ha hagut problemes
+				showProcessErrorMessage(process, "k3b");
+			else
+				this->close();
+		*/
+		//#endif
     }
 
     progressBar->close();
@@ -615,9 +632,10 @@ void QCreateDicomdir::deviceChanged( int index )
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
-#ifdef _WIN32
-                dvdCdDicomdirDesactivatedOnWindows();
-#else
+//#ifdef _WIN32
+                //dvdCdDicomdirDesactivatedOnWindows();
+				
+//#else
                 m_stackedWidget->setCurrentIndex(0);
                 int maximumCapacity;
 
@@ -644,7 +662,7 @@ void QCreateDicomdir::deviceChanged( int index )
                     QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
                 }
 */
-#endif
+//#endif
             break;
     }
 
