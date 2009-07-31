@@ -30,6 +30,9 @@
 #include "nonclosedangletool.h"
 #include "clippingplanestool.h"
 
+#include "shortcutmanager.h"
+#include "shortcuts.h"
+
 #include <QAction>
 
 namespace udg {
@@ -142,30 +145,35 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Scroll") );
         toolAction->setStatusTip( tr("Enable/Disable scroll tool") );
         toolAction->setIcon( QIcon(":/images/slicing.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::SlicingTool ) );
     }
     else if( toolName == "WindowLevelTool" )
     {
         toolAction->setText( tr("WW/WL") );
         toolAction->setStatusTip( tr("Enable/Disable Window Level tool") );
         toolAction->setIcon( QIcon(":/images/windowLevel.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::WindowLevelTool ) );
     }
     else if( toolName == "ZoomTool" )
     {
         toolAction->setText( tr("Zoom") );
         toolAction->setStatusTip( tr("Enable/Disable Zoom tool") );
         toolAction->setIcon( QIcon(":/images/zoom.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ZoomTool ) );
     }
     else if( toolName == "TranslateTool" )
     {
         toolAction->setText( tr("Pan") );
         toolAction->setStatusTip( tr("Enable/Disable Move tool") );
         toolAction->setIcon( QIcon(":/images/move.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::TranslateTool ) );
     }
     else if( toolName == "SeedTool" )
     {
         toolAction->setText( tr("Seed") );
         toolAction->setStatusTip( tr("Put Seed tool") );
         toolAction->setIcon( QIcon(":/images/seed.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::SeedTool ) );
     }
     else if( toolName == "ScreenShotTool" )
     {
@@ -178,30 +186,35 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("3D Rotation") );
         toolAction->setStatusTip( tr("Enable/Disable 3D Rotation tool") );
         toolAction->setIcon( QIcon(":/images/rotate3d.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::Rotate3DTool ) );
     }
     else if( toolName == "DistanceTool" )
     {
         toolAction->setText( tr("Distance") );
         toolAction->setStatusTip( tr("Enable/Disable Distances tool") );
         toolAction->setIcon( QIcon(":/images/distance.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::DistanceTool ) );
     }
     else if( toolName == "ROITool" )
     {
         toolAction->setText( tr("ROI's") );
         toolAction->setStatusTip( tr("Enable/Disable ROI tool") );
         toolAction->setIcon( QIcon(":/images/roi.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ROITool ) );
     }
     else if( toolName == "ReferenceLinesTool" )
     {
         toolAction->setText( tr("Ref.Lines") );
         toolAction->setStatusTip( tr("Enable/Disable Reference Lines tool") );
         toolAction->setIcon( QIcon(":/images/referenceLines.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ReferenceLinesTool ) );
     }
     else if( toolName == "VoxelInformationTool" )
     {
         toolAction->setText( tr("Voxel Information") );
         toolAction->setStatusTip( tr("Enable voxel information over cursor") );
         toolAction->setIcon( QIcon(":/images/voxelInformation.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::VoxelInformationTool ) );
     }
     else if( toolName == "SynchronizeTool" )
     {
@@ -230,36 +243,42 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Erase") );
         toolAction->setStatusTip( tr("Enable/Disable eraser tool") );
         toolAction->setIcon( QIcon(":/images/eraser2.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::EraserTool ) );
     }
     else if( toolName == "Cursor3DTool" )
     {
         toolAction->setText( tr("Cursor 3D") );
         toolAction->setStatusTip( tr("Enable/Disable Cursor 3D tool") );
         toolAction->setIcon( QIcon(":/images/mouse.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::Cursor3DTool ) );
     }
     else if( toolName == "AngleTool" )
     {
         toolAction->setText( tr("Angle") );
         toolAction->setStatusTip( tr("Enable/Disable angle tool") );
         toolAction->setIcon( QIcon(":/images/angle.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::AngleTool ) );
     }
     else if( toolName == "EditorTool" )
     {
         toolAction->setText( tr("Editor") );
         toolAction->setStatusTip( tr("Enable/Disable editor tool") );
         toolAction->setIcon( QIcon(":/images/pencil.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::EditorTool ) );
     }
     else if( toolName == "NonClosedAngleTool" )
     {
         toolAction->setText( tr("Non Closed Angle") );
         toolAction->setStatusTip( tr("Enable/Disable non closed angle tool") );
         toolAction->setIcon( QIcon(":/images/nonClosedAngle.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::NonClosedAngleTool ) );
     }
     else if( toolName == "ClippingPlanesTool" )
     {
         toolAction->setText( tr("Clipping Planes") );
         toolAction->setToolTip( tr("Enable/Disable the clipping planes tool") );
         toolAction->setIcon( QIcon(":/images/clippingBox.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ClippingPlanesTool ) );
     }
     else
     {
@@ -278,6 +297,7 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
         action->setText( tr("Restore") );
         action->setStatusTip( tr("Restore to initial state") );
         action->setIcon( QIcon(":/images/restore.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::RestoreTool ) );
 
         slot = SLOT( restore() );
     }
@@ -294,6 +314,7 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
         action->setText( tr("Invert WL") );
         action->setStatusTip( tr("Invert window level") );
         action->setIcon( QIcon(":/images/invertWL.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::InvertWindowLevelTool ) );
 
         slot = SLOT( invertWindowLevel() );
     }
@@ -302,6 +323,7 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
         action->setText( tr("Axial") );
         action->setStatusTip( tr("Change Current View To Axial") );
         action->setIcon( QIcon(":/images/axial.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::AxialViewTool ) );
 
         slot = SLOT( resetViewToAxial() );
     }
@@ -310,6 +332,7 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
         action->setText( tr("Sagital") );
         action->setStatusTip( tr("Change Current View To Saggital") );
         action->setIcon( QIcon(":/images/sagital.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::SagitalViewTool ) );
 
         slot = SLOT( resetViewToSagital() );
     }
@@ -318,24 +341,25 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
         action->setText( tr("Coronal") );
         action->setStatusTip( tr("Change Current View To Coronal") );
         action->setIcon( QIcon(":/images/coronal.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CoronalViewTool ) );
 
         slot = SLOT( resetViewToCoronal() );
     }
     else if( actionToolName == "RotateClockWiseActionTool" )
     {
         action->setText( tr("Rotate") );
-        action->setShortcut( Qt::CTRL + Qt::Key_Plus );
         action->setStatusTip( tr("Rotate the image in clockwise direction") );
         action->setIcon( QIcon(":/images/rotateClockWise.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::RotateClockWiseTool ) );
 
         slot = SLOT( rotateClockWise() );
     }
     else if( actionToolName == "RotateCounterClockWiseActionTool" )
     {
         action->setText( tr("Rotate Counter Clockwise") );
-        action->setShortcut( Qt::CTRL + Qt::Key_Minus );
         action->setStatusTip( tr("Rotate the image in counter clockwise direction") );
         action->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::RotateCounterClockWiseTool ) );
 
         slot = SLOT( rotateCounterClockWise() );
     }
@@ -344,6 +368,7 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
         action->setText( tr("Horizontal Flip") );
         action->setStatusTip( tr("Flip the image horizontally") );
         action->setIcon( QIcon(":/images/flipHorizontal.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::HorizontalFlipTool ) );
 
         slot = SLOT( horizontalFlip() );
     }
@@ -352,6 +377,7 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
         action->setText( tr("Vertical Flip") );
         action->setStatusTip( tr("Flip the image vertically") );
         action->setIcon( QIcon(":/images/flipVertical.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::VerticalFlipTool ) );
 
         slot = SLOT( verticalFlip() );
     }
