@@ -19,6 +19,7 @@
 #include "coresettings.h"
 #include "inputoutputsettings.h"
 #include "interfacesettings.h"
+#include "shortcuts.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
@@ -121,10 +122,12 @@ int main(int argc, char *argv[])
     udg::CoreSettings coreSettings;
     udg::InputOutputSettings inputoutputSettings;
     udg::InterfaceSettings interfaceSettings;
+    udg::Shortcuts shortcuts;
     
     coreSettings.init();
     inputoutputSettings.init();
     interfaceSettings.init();
+    shortcuts.init();
     
     initQtPluginsDirectory();
     initializeTranslations(app);

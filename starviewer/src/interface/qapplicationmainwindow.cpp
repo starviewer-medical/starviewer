@@ -36,6 +36,10 @@
 #include <QLocale>
 #include <QProgressDialog>
 
+//Shortucts
+#include "shortcuts.h"
+#include "shortcutmanager.h"
+
 namespace udg{
 
 QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
@@ -118,14 +122,14 @@ void QApplicationMainWindow::createActions()
 
     m_newAction = new QAction( this );
     m_newAction->setText( tr("&New") );
-    m_newAction->setShortcut( tr("Ctrl+N") );
+    m_newAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::NewWindow ) );
     m_newAction->setStatusTip(tr("Open a new working window") );
     m_newAction->setIcon( QIcon(":/images/new.png") );
     connect( m_newAction , SIGNAL( triggered() ), SLOT( openBlankWindow() ) );
 
     m_openAction = new QAction( this );
     m_openAction->setText( tr("&Open file...") );
-    m_openAction->setShortcut( tr("Ctrl+O") );
+    m_openAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenFile ) );
     m_openAction->setStatusTip(tr("Open an existing volume file"));
     m_openAction->setIcon( QIcon(":/images/open.png") );
     m_signalMapper->setMapping( m_openAction , 1 );
@@ -133,6 +137,7 @@ void QApplicationMainWindow::createActions()
 
     m_openDirAction = new QAction( this );
     m_openDirAction->setText( tr("Open files from a directory...") );
+    m_openDirAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenDirectory ) );
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
     m_signalMapper->setMapping( m_openDirAction , 6 );
@@ -142,16 +147,16 @@ void QApplicationMainWindow::createActions()
     m_pacsAction = new QAction( this );
 #ifdef STARVIEWER_LITE // el menú "PACS" es dirà "Exams"
     m_pacsAction->setText(tr("&Exams...") );
-    m_pacsAction->setShortcut( tr("Ctrl+E") );
+    m_pacsAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenExams ) );
     m_pacsAction->setStatusTip( tr("Browse exams") );
 #else
     m_pacsAction->setText(tr("&PACS...") );
-    m_pacsAction->setShortcut( tr("Ctrl+P") );
+    m_pacsAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenPACS ) );
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
 
     m_localDatabaseAction = new QAction(this);
     m_localDatabaseAction->setText( tr("&Local Database Studies") );
-    m_localDatabaseAction->setShortcut( Qt::CTRL + Qt::Key_L );
+    m_localDatabaseAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenLocalDatabaseStudies ) );
     m_localDatabaseAction->setStatusTip( tr("Browse Local Database Studies") );
     m_localDatabaseAction->setIcon( QIcon(":/images/database.png") );
     m_signalMapper->setMapping( m_localDatabaseAction , 10 );
@@ -164,7 +169,7 @@ void QApplicationMainWindow::createActions()
 
     m_openDICOMDIRAction = new QAction( this );
     m_openDICOMDIRAction->setText(tr("Open DICOMDIR...") );
-    m_openDICOMDIRAction->setShortcut( tr("Ctrl+D") );
+    m_openDICOMDIRAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenDICOMDIR ) );
     m_openDICOMDIRAction->setStatusTip( tr("Open DICOMDIR from CD,DVD,Pendrive or HardDisk") );
     m_openDICOMDIRAction->setIcon( QIcon(":/images/openDICOMDIR.png") );
     m_signalMapper->setMapping( m_openDICOMDIRAction , 8 );
@@ -196,7 +201,7 @@ void QApplicationMainWindow::createActions()
     m_fullScreenAction = new QAction( this );
     m_fullScreenAction->setText( tr("Show Full Screen") );
     m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
-    m_fullScreenAction->setShortcut( Qt::CTRL + Qt::Key_Return );
+    m_fullScreenAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::FullScreen ) );
     m_fullScreenAction->setShortcutContext( Qt::ApplicationShortcut );
     m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
     m_fullScreenAction->setCheckable( true );
@@ -212,27 +217,27 @@ void QApplicationMainWindow::createActions()
 
     m_aboutAction = new QAction( this );
     m_aboutAction->setText(tr("&About") );
-    m_aboutAction->setShortcut( 0 );
     m_aboutAction->setStatusTip(tr("Show the application's About box"));
     m_aboutAction->setIcon( QIcon(":/images/info.png"));
     connect(m_aboutAction, SIGNAL(triggered()), SLOT(about()));
 
     m_closeAction = new QAction( this );
     m_closeAction->setText( tr("&Close") );
-    m_closeAction->setShortcut( tr("Ctrl+W") );
+    m_closeAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseViewer ) );
     m_closeAction->setStatusTip(tr("Close the current extension page"));
     m_closeAction->setIcon( QIcon(":/images/fileclose.png"));
     connect( m_closeAction, SIGNAL( triggered() ), m_extensionWorkspace , SLOT( closeCurrentApplication() ) );
 
     m_exitAction = new QAction( this );
     m_exitAction->setText( tr("E&xit") );
-    m_exitAction->setShortcut(tr("Ctrl+Q") );
+    m_exitAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseApp ) );
     m_exitAction->setStatusTip(tr("Exit the application"));
     m_exitAction->setIcon( QIcon(":/images/exit.png") );
     connect(m_exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 
     m_configurationAction = new QAction(this);
     m_configurationAction->setText(tr("&Configuration..."));
+    m_configurationAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::Preferences ) );
     m_configurationAction->setStatusTip(tr("Modify %1 configuration").arg(ApplicationNameString));
     m_configurationAction->setIcon( QIcon(":/images/preferences.png") );
     connect(m_configurationAction, SIGNAL(triggered()), SLOT(showConfigurationDialog()));

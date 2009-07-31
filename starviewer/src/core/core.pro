@@ -190,7 +190,9 @@ HEADERS += extensionfactory.h \
            settingsaccesslevelfilereader.h \
            glew.h \
            glxew.h \
-           wglew.h
+           wglew.h \
+           shortcuts.h \
+           shortcutmanager.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -344,7 +346,9 @@ SOURCES += extensionmediator.cpp \
            defaultsettings.cpp \
            coresettings.cpp \
            settingsaccesslevelfilereader.cpp \
-           glew.c
+           glew.c \
+           shortcuts.cpp \
+           shortcutmanager.cpp
 
 TEMPLATE = lib
 DESTDIR = ./
