@@ -90,6 +90,7 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
 
 void PacsManager::cancelCurrentQueries()
 {
+    m_queryWeaver->dequeue(); //Desencuem les consultes pendents de realitzar, el requestAbort només cancel.la les que s'estan executant
     m_queryWeaver->requestAbort();
 }
 
