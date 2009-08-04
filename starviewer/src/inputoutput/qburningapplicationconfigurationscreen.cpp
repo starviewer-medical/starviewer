@@ -5,22 +5,17 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qburningapplicationconfigurationscreen.h"
-
-
 //#include <QIntValidator>
 //#include <QDir>
 #include <QMessageBox>
 #include <QFileDialog>
-
 //#include "localdatabasemanager.h"
 #include "starviewerapplication.h"
 #include "inputoutputsettings.h"
 #include "logging.h"
-
 #include "settings.h"
 
 namespace udg {
-
 
 QBurningApplicationConfigurationScreen::QBurningApplicationConfigurationScreen( QWidget *parent ) : QWidget(parent)
 {
@@ -39,27 +34,26 @@ void QBurningApplicationConfigurationScreen::createConnections()
     connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateBurningApplication() ) );
 }
 
-
 void QBurningApplicationConfigurationScreen::loadBurningDefaults()
 {
-	Settings settings;
+    Settings settings;
 
-	m_textBurningApplicationPath->setText(settings.getValue(InputOutputSettings::burningApplicationPathKey).toString());
-	m_textBurningApplicationParameters->setText(settings.getValue(InputOutputSettings::burningApplicationParametersKey).toString());
+    m_textBurningApplicationPath->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString());
+    m_textBurningApplicationParameters->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString());
 }
 
 bool QBurningApplicationConfigurationScreen::validateChanges()
 {
     QDir dir;
     bool valid = true;
-		
+
     QString messageBoxText = tr("Some configuration options are not valid:\n");
 
     if ( m_textBurningApplicationPath->isModified() )
     {
         if ( !dir.exists(m_textBurningApplicationPath->text() )) // si el fitxer indicat no existeix
         {
-			QMessageBox::warning( this , ApplicationNameString , tr( "Invalid burning application path." ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Invalid burning application path." ) );
             return false;
         }
     }
@@ -73,13 +67,11 @@ bool QBurningApplicationConfigurationScreen::applyChanges()
 {
     if (validateChanges())
     {
-		applyChangesBurningApplication();
-
+        applyChangesBurningApplication();
         return true;
     }
     else 
-	return false;
-	
+    return false;
 }
 
 void QBurningApplicationConfigurationScreen::examinateBurningApplication()
@@ -96,7 +88,6 @@ void QBurningApplicationConfigurationScreen::examinateBurningApplication()
             m_textBurningApplicationPath->setModified( true );// indiquem que m_textDatabaseRoot ha modificat el seu valor
         }
     }
-
     delete dlg;
 }
 
@@ -104,14 +95,13 @@ void QBurningApplicationConfigurationScreen::applyChangesBurningApplication()
 {
     Settings settings;
 
-	settings.setValue(InputOutputSettings::burningApplicationPathKey, m_textBurningApplicationPath->text());
-	settings.setValue(InputOutputSettings::burningApplicationParametersKey, m_textBurningApplicationParameters->text());
+    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey, m_textBurningApplicationPath->text());
+    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey, m_textBurningApplicationParameters->text());
 
     if ( m_textBurningApplicationPath->isModified() )
     {
         INFO_LOG( "Es modificarà el path del programa de gravació per " + m_textBurningApplicationPath->text() );
     }
-
 
     if (m_textBurningApplicationParameters->isModified())
     {

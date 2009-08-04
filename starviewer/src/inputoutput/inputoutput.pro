@@ -21,7 +21,7 @@ FORMS += qconfigurationscreenbase.ui \
          qinputoutputdicomdirwidgetbase.ui \
          qinputoutputlocaldatabasewidgetbase.ui \
          qinputoutputpacswidgetbase.ui \
-	   qburningapplicationconfigurationscreenbase.ui
+         qburningapplicationconfigurationscreenbase.ui
 
 HEADERS += databaseconnection.h \
            pacsconnection.h \
@@ -53,7 +53,7 @@ HEADERS += databaseconnection.h \
            qcreatedicomdir.h \
            qoperationstatescreen.h \
            queryscreen.h \
- 	     errordcmtk.h \
+           errordcmtk.h \
            qadvancedsearchwidget.h \
            qbasicsearchwidget.h \
            localdatabasemanager.h \
@@ -78,7 +78,7 @@ HEADERS += databaseconnection.h \
            qinputoutputdicomdirwidget.h \
            qinputoutputlocaldatabasewidget.h \
            qinputoutputpacswidget.h \
-	     qburningapplicationconfigurationscreen.h \
+           qburningapplicationconfigurationscreen.h \
            querypacsjob.h \
            pacsmanager.h \
            risrequestmanager.h
@@ -134,7 +134,7 @@ SOURCES += databaseconnection.cpp \
            inputoutputsettings.cpp \
            qinputoutputdicomdirwidget.cpp \
            qinputoutputlocaldatabasewidget.cpp \
-	     qburningapplicationconfigurationscreen.cpp \
+           qburningapplicationconfigurationscreen.cpp \
            qinputoutputpacswidget.cpp \
            querypacsjob.cpp \
            pacsmanager.cpp \
