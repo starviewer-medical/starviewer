@@ -44,8 +44,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     connect(m_okButton , SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
-
-	// configuració del programa de gravació
+    // configuració del programa de gravació
     QBurningApplicationConfigurationScreen *burningApplicationScreen = new QBurningApplicationConfigurationScreen(this);
     this->addConfigurationWidget(burningApplicationScreen, tr("Burning Application"), AdvancedConfiguration);
     connect(burningApplicationScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));

@@ -40,11 +40,9 @@ const QString InputOutputSettings::LocalAETitle( PacsParamBase + "AETitle");
 const QString InputOutputSettings::PacsConnectionTimeout( PacsParamBase + "timeout");
 const QString InputOutputSettings::MaximumPACSConnections( PacsParamBase + "MaxConnects");
 
-
-const QString dicomdirBaseKey("DICOMDIR/");
-const QString InputOutputSettings::burningApplicationPathKey( dicomdirBaseKey + "BurningApplication");
-const QString InputOutputSettings::burningApplicationParametersKey( dicomdirBaseKey + "BurningApplicationParameters");
-
+const QString DICOMDIRBaseKey("DICOMDIR/");
+const QString InputOutputSettings::DICOMDIRBurningApplicationPathKey( DICOMDIRBaseKey + "DICOMDIRBurningApplication");
+const QString InputOutputSettings::DICOMDIRBurningApplicationParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationParameters");
 
 InputOutputSettings::InputOutputSettings()
 {
@@ -79,14 +77,13 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( PacsConnectionTimeout, 20 );
     settingsRegistry->addSetting( MaximumPACSConnections, 3 );
 
-	#ifdef _WIN32
-		settingsRegistry->addSetting( burningApplicationPathKey, "C:\\Archivos de programa\\ImgBurn" );
-		settingsRegistry->addSetting( burningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );
-	#else
-		settingsRegistry->addSetting( burningApplicationPathKey, "k3b" );
-		settingsRegistry->addSetting( burningApplicationParametersKey, "--nosplash --cdimage %1" );
-	#endif
-
+#ifdef _WIN32
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "C:\\Archivos de programa\\ImgBurn" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );
+#else
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "k3b" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "--nosplash --cdimage %1" );
+#endif
 }
 
 } // end namespace udg 

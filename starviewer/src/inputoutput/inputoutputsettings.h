@@ -50,11 +50,10 @@ public:
     static const QString PacsConnectionTimeout;
     static const QString MaximumPACSConnections;
 
-	/// Path del programa de gravació
-	static const QString burningApplicationPathKey;
-	/// Parameters del programa de gravació
-	static const QString burningApplicationParametersKey;
-
+    /// Path del programa de gravació
+    static const QString DICOMDIRBurningApplicationPathKey;
+    /// Parameters del programa de gravació
+    static const QString DICOMDIRBurningApplicationParametersKey;
 };
 
 } // end namespace udg 
