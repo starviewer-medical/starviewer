@@ -46,7 +46,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
     // configuració del programa de gravació
     QBurningApplicationConfigurationScreen *burningApplicationScreen = new QBurningApplicationConfigurationScreen(this);
-    this->addConfigurationWidget(burningApplicationScreen, tr("Burning Application"), AdvancedConfiguration);
+    this->addConfigurationWidget(burningApplicationScreen, tr("DICOMDIR"), AdvancedConfiguration);
     connect(burningApplicationScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
     connect(m_okButton , SIGNAL(clicked()), burningApplicationScreen, SLOT(applyChanges()));
 
