@@ -78,7 +78,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( MaximumPACSConnections, 3 );
 
 #ifdef _WIN32
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "C:\\Archivos de programa\\ImgBurn" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "C:\\Archivos de programa\\ImgBurn\\ImgBurn.exe" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );
 #else
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "k3b" );
