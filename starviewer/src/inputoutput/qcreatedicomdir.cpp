@@ -605,6 +605,7 @@ void QCreateDicomdir::deviceChanged( int index )
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
+                checkDICOMDIRBurningApplicationConfiguration();
                 m_stackedWidget->setCurrentIndex(0);
                 int maximumCapacity;
 
@@ -658,6 +659,20 @@ void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
 
     //Marquem la opció de crear el dicomdir al disc dur
     m_hardDiskAction->trigger();
+}
+
+void QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
+{
+    Settings settings;
+    if( !QFile::exists((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString()) )
+    {
+        QMessageBox::warning( this, ApplicationNameString, 
+                                tr( "Invalid DICOMDIR burning application configuration.\n" 
+                                    "It can be solved in Tools -> Configuration -> DICOMDIR menu.") );
+    
+        //Marquem la opció de crear el dicomdir al disc dur
+        m_hardDiskAction->trigger();
+    }
 }
 
 }

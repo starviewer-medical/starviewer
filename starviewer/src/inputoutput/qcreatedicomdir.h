@@ -165,6 +165,9 @@ private:
       *que es pot fer es crear el dicomdir al disc dur i després gravar-lo a cd, i s'activa per defecte la creació de dicomdir al disc dur
       */
     void dvdCdDicomdirDesactivatedOnWindows();
+
+    /// Permet comprovar si la configuració es correcte per poder gravar el dicomdir en un cd o dvd
+    void checkDICOMDIRBurningApplicationConfiguration();
 };
 
 }
