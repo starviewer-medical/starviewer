@@ -12,7 +12,7 @@
 
 #include "qlocaldatabaseconfigurationscreen.h"
 #include "qlistenrisrequestsconfigurationscreen.h"
-#include "qburningapplicationconfigurationscreen.h"
+#include "qdicomdirconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -45,10 +45,10 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 #endif
 
     // configuració del programa de gravació
-    QBurningApplicationConfigurationScreen *burningApplicationScreen = new QBurningApplicationConfigurationScreen(this);
-    this->addConfigurationWidget(burningApplicationScreen, tr("DICOMDIR"), AdvancedConfiguration);
-    connect(burningApplicationScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
-    connect(m_okButton , SIGNAL(clicked()), burningApplicationScreen, SLOT(applyChanges()));
+    QDICOMDIRConfigurationScreen *DICOMDIRScreen = new QDICOMDIRConfigurationScreen(this);
+    this->addConfigurationWidget(DICOMDIRScreen, tr("DICOMDIR"), AdvancedConfiguration);
+    connect(DICOMDIRScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
+    connect(m_okButton , SIGNAL(clicked()), DICOMDIRScreen, SLOT(applyChanges()));
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
