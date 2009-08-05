@@ -39,6 +39,25 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
 
     m_textBurningApplicationPath->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString());
     m_textBurningApplicationParameters->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString());
+
+    if( m_textBurningApplicationPath->text().endsWith("k3b") )
+    {
+        burningLabel->setText( "k3b web: <html><body><a href = http://k3b.plainblack.com> k3b.plainblack.com </a></body></html>" );
+    }     
+    else
+    {
+        if( m_textBurningApplicationPath->text().endsWith("ImgBurn.exe") )
+        {        
+            burningLabel->setText( "ImgBurn web: <html><body><a href = http://www.imgburn.com> www.imgburn.com </a></body></html>" );
+        }         
+        else
+        {
+            if( m_textBurningApplicationPath->text().endsWith("Burn") )
+            {            
+                burningLabel->setText( "Burn web: <html><body><a href = http://burn-osx.sourceforge.net/Pages/English/home.html> burn-osx.sourceforge.net </a></body></html>" );
+            }
+        }
+    }
 }
 
 bool QDICOMDIRConfigurationScreen::validateChanges()
