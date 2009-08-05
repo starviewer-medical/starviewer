@@ -466,46 +466,20 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     }
     else
     {
-        //#ifdef _WIN32
-
-            Settings settings;
-            processParameters.clear();			
-            processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
-            cout<<processParameters.at(0).toStdString();
-            process.start((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString(), processParameters);
-            process.waitForFinished( -1 );
-            if( process.exitCode() != 0 ) // hi ha hagut problemes
-                showProcessErrorMessage(process, "Burning Application");
-            else
-                this->close();	
-        //#else
-            /*
-            processParameters.clear();
-            processParameters << "--nosplash";//que no s'engegui l'splash del k3b
-
-            switch( device )
-            {
-                case CreateDicomdir::CdRom :
-                    processParameters << "--cdimage";
-                    break;
-
-                case CreateDicomdir::DvdRom :
-                    processParameters << "--dvdimage";
-                    break;
-                default:
-                    break;
-            }
-            processParameters << isoPath;
-            process.start( "k3b" , processParameters );
-            process.waitForFinished( -1 );
-            if( process.exitCode() != 0 ) // hi ha hagut problemes
-                showProcessErrorMessage(process, "k3b");
-            else
-                this->close();
-        */
-        //#endif
+        Settings settings;
+        processParameters.clear();			
+        processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
+        process.start((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString(), processParameters);
+        process.waitForFinished( -1 );
+        if( process.exitCode() != 0 ) // hi ha hagut problemes
+        {
+            showProcessErrorMessage(process, "DICOMDIR burning application");
+        }
+        else
+        {
+            this->close();
+        }
     }
-
     progressBar->close();
 }
 
@@ -631,10 +605,6 @@ void QCreateDicomdir::deviceChanged( int index )
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
-//#ifdef _WIN32
-                //dvdCdDicomdirDesactivatedOnWindows();
-
-//#else
                 m_stackedWidget->setCurrentIndex(0);
                 int maximumCapacity;
 
@@ -661,7 +631,6 @@ void QCreateDicomdir::deviceChanged( int index )
                     QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
                 }
 */
-//#endif
             break;
     }
 
