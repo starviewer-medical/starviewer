@@ -5,11 +5,10 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qdicomdirconfigurationscreen.h"
-//#include <QIntValidator>
-//#include <QDir>
+
 #include <QMessageBox>
 #include <QFileDialog>
-//#include "localdatabasemanager.h"
+
 #include "starviewerapplication.h"
 #include "inputoutputsettings.h"
 #include "logging.h"
@@ -85,7 +84,7 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIR()
         if ( !dlg->selectedFiles().empty() )
         {
             m_textBurningApplicationPath->setText( dlg->selectedFiles().takeFirst() );
-            m_textBurningApplicationPath->setModified( true );// indiquem que m_textDatabaseRoot ha modificat el seu valor
+            m_textBurningApplicationPath->setModified( true );// indiquem que m_textBurningApplicationPath ha modificat el seu valor
         }
     }
     delete dlg;
