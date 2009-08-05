@@ -81,8 +81,13 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "C:\\Archivos de programa\\ImgBurn\\ImgBurn.exe" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );
 #else
+#ifdef __APPLE__
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "/Applications/Burn.app/Contents/MacOS/Burn" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "%1" );
+#else
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "k3b" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "--nosplash --cdimage %1" );
+#endif
 #endif
 }
 
