@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "qburningapplicationconfigurationscreen.h"
+#include "qdicomdirconfigurationscreen.h"
 //#include <QIntValidator>
 //#include <QDir>
 #include <QMessageBox>
@@ -17,24 +17,24 @@
 
 namespace udg {
 
-QBurningApplicationConfigurationScreen::QBurningApplicationConfigurationScreen( QWidget *parent ) : QWidget(parent)
+QDICOMDIRConfigurationScreen::QDICOMDIRConfigurationScreen( QWidget *parent ) : QWidget(parent)
 {
     setupUi( this );
     loadBurningDefaults();
     createConnections();
 }
 
-QBurningApplicationConfigurationScreen::~QBurningApplicationConfigurationScreen()
+QDICOMDIRConfigurationScreen::~QDICOMDIRConfigurationScreen()
 {
 }
 
-void QBurningApplicationConfigurationScreen::createConnections()
+void QDICOMDIRConfigurationScreen::createConnections()
 {
     //connecta el boto examinar programa de gravació amb el dialog per escollir el path del programa
-    connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateBurningApplication() ) );
+    connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateDICOMDIR() ) );
 }
 
-void QBurningApplicationConfigurationScreen::loadBurningDefaults()
+void QDICOMDIRConfigurationScreen::loadBurningDefaults()
 {
     Settings settings;
 
@@ -42,7 +42,7 @@ void QBurningApplicationConfigurationScreen::loadBurningDefaults()
     m_textBurningApplicationParameters->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString());
 }
 
-bool QBurningApplicationConfigurationScreen::validateChanges()
+bool QDICOMDIRConfigurationScreen::validateChanges()
 {
     QDir dir;
     bool valid = true;
@@ -63,18 +63,18 @@ bool QBurningApplicationConfigurationScreen::validateChanges()
     return valid;
 }
 
-bool QBurningApplicationConfigurationScreen::applyChanges()
+bool QDICOMDIRConfigurationScreen::applyChanges()
 {
     if (validateChanges())
     {
-        applyChangesBurningApplication();
+        applyChangesDICOMDIR();
         return true;
     }
     else 
     return false;
 }
 
-void QBurningApplicationConfigurationScreen::examinateBurningApplication()
+void QDICOMDIRConfigurationScreen::examinateDICOMDIR()
 {
     //a la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
     QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , ApplicationNameString + " Burning Application (*.exe)" );
@@ -91,7 +91,7 @@ void QBurningApplicationConfigurationScreen::examinateBurningApplication()
     delete dlg;
 }
 
-void QBurningApplicationConfigurationScreen::applyChangesBurningApplication()
+void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
 {
     Settings settings;
 

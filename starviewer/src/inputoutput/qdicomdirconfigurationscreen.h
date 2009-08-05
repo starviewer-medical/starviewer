@@ -4,10 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGQBURNINGAPPLICATIONCONFIGURATIONSCREEN_H
-#define UDGQBURNINGAPPLICATIONCONFIGURATIONSCREEN_H
+#ifndef UDGQDICOMDIRCONFIGURATIONSCREEN_H
+#define UDGQDICOMDIRCONFIGURATIONSCREEN_H
 
-#include "ui_qburningapplicationconfigurationscreenbase.h"
+#include "ui_qdicomdirconfigurationscreenbase.h"
 
 namespace udg {
 
@@ -15,16 +15,16 @@ class Status;
 
 /** Widget en el que es configuren els paràmetres del programa de grabació
 */
-class QBurningApplicationConfigurationScreen : public QWidget, private ::Ui::QBurningApplicationConfigurationScreenBase
+class QDICOMDIRConfigurationScreen : public QWidget, private ::Ui::QDICOMDIRConfigurationScreenBase
 {
 Q_OBJECT
 
 public:
     /// Constructor de la classe
-    QBurningApplicationConfigurationScreen( QWidget *parent = 0 );
+    QDICOMDIRConfigurationScreen( QWidget *parent = 0 );
 
     ///Destructor de classe
-    ~QBurningApplicationConfigurationScreen();
+    ~QDICOMDIRConfigurationScreen();
 
 public slots:
     /// Aplica els canvis de la configuració
@@ -36,7 +36,7 @@ public slots:
 
 private slots:
     /// Mostra un QDialog per especificar on es troba el programa de grabació en el disc dur
-    void examinateBurningApplication();
+    void examinateDICOMDIR();
 
     /// Mostra un QDialog per especificar on s'han de guardar les imatges descarregades
     //void examinateCacheImagePath();
@@ -73,7 +73,7 @@ private:
     void loadBurningDefaults();
 
     ///  Aplica els canvis fets a la configuració de la cache
-    void applyChangesBurningApplication();
+    void applyChangesDICOMDIR();
 
     /** Valida que els canvis de la configuració siguin correctes
      *  Path de la base de dades i directori dicom's existeix
