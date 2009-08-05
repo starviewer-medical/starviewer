@@ -207,7 +207,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     Status state;
 
     // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
-    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
+    dicomdirPath = QDir::tempPath() + "/DICOMDIR";
     //si el directori dicomdir ja existeix al temporal l'esborrem
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
@@ -437,7 +437,6 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     // TODO comprovar primer si el device que ens passen és un CD o DVD, si no no pot funcionar
     QProcess process;
     QStringList processParameters;
-    QDir temporaryDirPath;
     QString dicomdirPath, isoPath;
 
     //com que de moment no hi ha comunicacio amb el mkisofs es crea aquest progress bar per donar algo de feeling a l'usuari, per a que no es pensi que s'ha penjat l'aplicació
@@ -446,7 +445,7 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     progressBar->setCancelButton( 0 );
     progressBar->setValue( 7 );
 
-    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
+    dicomdirPath = QDir::tempPath() + "/DICOMDIR";
 
     //indiquem al directori i nom de la imatge a crear
     isoPath = dicomdirPath + "/dicomdir.iso";
@@ -535,7 +534,7 @@ void QCreateDicomdir::clearTemporaryDir()
     QString dicomdirPath, logMessage;
     QDir temporaryDirPath;
 
-    dicomdirPath = temporaryDirPath.tempPath() + "/DICOMDIR";
+    dicomdirPath = QDir::tempPath() + "/DICOMDIR";
 
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
