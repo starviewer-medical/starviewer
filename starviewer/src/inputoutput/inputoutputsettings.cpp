@@ -3,6 +3,7 @@
 
 #include "starviewerapplication.h" // pel UserDataRootPath
 #include <QHostInfo> //pel "localhostName"
+#include <QDesktopServices>
 
 namespace udg {
 
@@ -78,11 +79,11 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( MaximumPACSConnections, 3 );
 
 #ifdef _WIN32
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "C:\\Archivos de programa\\ImgBurn\\ImgBurn.exe" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, QString::fromLocal8Bit(qgetenv("ProgramFiles")) + "\\ImgBurn\\ImgBurn.exe" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );
 #else
 #ifdef __APPLE__
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "/Applications/Burn.app/Contents/MacOS/Burn" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) + "/Burn.app/Contents/MacOS/Burn" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "%1" );
 #else
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "k3b" );
