@@ -450,14 +450,17 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     //indiquem al directori i nom de la imatge a crear
     isoPath = dicomdirPath + "/dicomdir.iso";
 
-    processParameters <<  "-V STARVIEWER DICOMDIR";//indiquem que el label de la imatge és STARVIEWER DICOMDIR
-    processParameters << "-o" + isoPath;//QDir::toNativeSeparators( isoPath ); //nom i directori on guardarem la imatge
-    processParameters << QDir::toNativeSeparators( dicomdirPath );//path a convertir en iso
+    processParameters << "-V"; 
+    processParameters << "STARVIEWER DICOMDIR"; //indiquem que el label de la imatge és STARVIEWER DICOMDIR
+    processParameters << "-o"; 
+    processParameters << isoPath; //nom i directori on guardarem la imatge
+    processParameters << dicomdirPath; //path a convertir en iso
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-    process.start( "mkisofs" , processParameters );
+    process.start( QCoreApplication::applicationDirPath() + "/mkisofs", processParameters );
     process.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
     QApplication::restoreOverrideCursor();
+    progressBar->close();
 
     if( process.exitCode() != 0 ) // hi ha hagut problemes
     {
@@ -479,7 +482,6 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
             this->close();
         }
     }
-    progressBar->close();
 }
 
 void QCreateDicomdir::showProcessErrorMessage( const QProcess &process, QString name )
