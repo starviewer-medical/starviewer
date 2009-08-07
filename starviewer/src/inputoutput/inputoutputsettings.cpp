@@ -86,7 +86,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) + "/Burn.app/Contents/MacOS/Burn" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "%1" );
 #else
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "k3b" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "/usr/bin/k3b" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "--nosplash --cdimage %1" );
 #endif
 #endif
