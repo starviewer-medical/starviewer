@@ -457,7 +457,13 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     processParameters << dicomdirPath; //path a convertir en iso
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-    process.start( QCoreApplication::applicationDirPath() + "/mkisofs", processParameters );
+
+#ifdef __linux__
+    process.start("mkisofs", processParameters );
+#else
+    process.start(QCoreApplication::applicationDirPath() + "/mkisofs", processParameters );
+#endif
+    
     process.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
     QApplication::restoreOverrideCursor();
     progressBar->close();
