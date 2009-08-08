@@ -77,7 +77,7 @@ void QInputOutputDicomdirWidget::openDicomdir()
     QString dicomdirPath;
     Status state;
 
-    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getValue( InputOutputSettings::LastOpenedDICOMDIRPath ).toString(), "DICOMDIR");
+    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getValue( InputOutputSettings::LastOpenedDICOMDIRPath ).toString(), "DICOMDIR (DICOMDIR dicomdir)");
 
     if (!dicomdirPath.isEmpty())//Si és buit no ens han seleccionat cap fitxer
     {
