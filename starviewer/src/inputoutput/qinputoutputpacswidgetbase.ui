@@ -1,98 +1,93 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>udg::QInputOutputPacsWidgetBase</class>
- <widget class="QWidget" name="udg::QInputOutputPacsWidgetBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="udg::QInputOutputPacsWidgetBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>819</width>
+    <width>1119</width>
     <height>431</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="leftMargin" >
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="margin">
     <number>0</number>
    </property>
-   <property name="topMargin" >
+   <property name="spacing">
     <number>0</number>
    </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
-   <property name="horizontalSpacing" >
-    <number>0</number>
-   </property>
-   <property name="verticalSpacing" >
-    <number>0</number>
-   </property>
-   <item row="0" column="0" >
-    <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidget" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+   <item row="0" column="0">
+    <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="topMargin" >
+   <item row="1" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="topMargin">
       <number>6</number>
      </property>
-     <property name="rightMargin" >
-      <number>0</number>
+     <property name="spacing">
+      <number>6</number>
      </property>
-     <item>
-      <widget class="QToolButton" name="m_viewButton" >
-       <property name="text" >
-        <string>View</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/view.png</iconset>
-       </property>
-       <property name="iconSize" >
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-      </widget>
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QToolButton" name="m_viewButton">
+         <property name="text">
+          <string>View</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../main/main.qrc">
+           <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_retrieveButton">
+         <property name="text">
+          <string>Retrieve</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../main/main.qrc">
+           <normaloff>:/images/retrieve.png</normaloff>:/images/retrieve.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item>
-      <widget class="QToolButton" name="m_retrieveButton" >
-       <property name="text" >
-        <string>Retrieve</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/retrieve.png</iconset>
-       </property>
-       <property name="iconSize" >
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
+     <item row="0" column="1">
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>371</width>
          <height>38</height>
@@ -100,39 +95,26 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <layout class="QHBoxLayout" >
+     <item row="0" column="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <layout class="QHBoxLayout" >
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="m_queryInProgressLabel" >
-           <property name="lineWidth" >
+          <widget class="QLabel" name="m_queryInProgressLabel">
+           <property name="lineWidth">
             <number>1</number>
            </property>
-           <property name="midLineWidth" >
+           <property name="midLineWidth">
             <number>0</number>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>Query in progress</string>
            </property>
           </widget>
          </item>
          <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QLabel" name="m_queryAnimationLabel" >
-           <property name="text" >
+          <widget class="QLabel" name="m_queryAnimationLabel">
+           <property name="text">
             <string>TextLabel</string>
            </property>
           </widget>
@@ -140,30 +122,18 @@
         </layout>
        </item>
        <item>
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="m_cancelQueryButton" >
-         <property name="enabled" >
+        <widget class="QPushButton" name="m_cancelQueryButton">
+         <property name="enabled">
           <bool>false</bool>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Cancel query</string>
          </property>
-         <property name="icon" >
-          <iconset resource="../main/main.qrc" >:/images/cancel.png</iconset>
+         <property name="icon">
+          <iconset resource="../main/main.qrc">
+           <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
@@ -185,7 +155,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../main/main.qrc" />
+  <include location="../main/main.qrc"/>
  </resources>
  <connections/>
 </ui>
