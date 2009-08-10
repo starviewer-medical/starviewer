@@ -81,6 +81,7 @@ HEADERS += databaseconnection.h \
            qdicomdirconfigurationscreen.h \
            querypacsjob.h \
            pacsmanager.h \
+           isoimagefilecreator.h \
            risrequestmanager.h
 
 SOURCES += databaseconnection.cpp \
@@ -138,6 +139,7 @@ SOURCES += databaseconnection.cpp \
            qinputoutputpacswidget.cpp \
            querypacsjob.cpp \
            pacsmanager.cpp \
+           isoimagefilecreator.cpp \
            risrequestmanager.cpp
 
 INCLUDEPATH += ../core
