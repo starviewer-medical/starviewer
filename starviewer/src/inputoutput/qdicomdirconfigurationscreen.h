@@ -48,10 +48,6 @@ private:
 
     /// Valida que els canvis de la configuració siguin correctes
     bool validateChanges();
-
-private:
-    bool m_configurationChanged;
-    bool m_createDatabase;
 };
 
 };// end namespace udg
