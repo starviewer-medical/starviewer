@@ -47,7 +47,6 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     // configuració del programa de gravació
     QDICOMDIRConfigurationScreen *DICOMDIRScreen = new QDICOMDIRConfigurationScreen(this);
     this->addConfigurationWidget(DICOMDIRScreen, tr("DICOMDIR"), AdvancedConfiguration);
-    connect(DICOMDIRScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
     connect(m_okButton , SIGNAL(clicked()), DICOMDIRScreen, SLOT(applyChanges()));
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
