@@ -24,6 +24,7 @@
 #include "patient.h"
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
+#include "isoimagefilecreator.h"
 
 namespace udg {
 
@@ -438,39 +439,16 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     QProcess process;
     QStringList processParameters;
     QString dicomdirPath, isoPath;
+    IsoImageFileCreator isoImageFileCreator;
 
-    //com que de moment no hi ha comunicacio amb el mkisofs es crea aquest progress bar per donar algo de feeling a l'usuari, per a que no es pensi que s'ha penjat l'aplicació
-    QProgressDialog *progressBar = new QProgressDialog( tr( "Creating DICOMDIR Image..." ) , "" , 0 , 10 );
-    progressBar->setMinimumDuration( 0 );
-    progressBar->setCancelButton( 0 );
-    progressBar->setValue( 7 );
-
+    //indiquem al directori del qual volem generar una imatge
     dicomdirPath = QDir::tempPath() + "/DICOMDIR";
-
     //indiquem al directori i nom de la imatge a crear
     isoPath = dicomdirPath + "/dicomdir.iso";
 
-    processParameters << "-V"; 
-    processParameters << "STARVIEWER DICOMDIR"; //indiquem que el label de la imatge és STARVIEWER DICOMDIR
-    processParameters << "-o"; 
-    processParameters << isoPath; //nom i directori on guardarem la imatge
-    processParameters << dicomdirPath; //path a convertir en iso
-
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
-#ifdef __linux__
-    process.start("mkisofs", processParameters );
-#else
-    process.start(QCoreApplication::applicationDirPath() + "/mkisofs", processParameters );
-#endif
-    
-    process.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
-    QApplication::restoreOverrideCursor();
-    progressBar->close();
-
-    if( process.exitCode() != 0 ) // hi ha hagut problemes
+    if( !isoImageFileCreator.createIsoImageFile(dicomdirPath, isoPath) ) // hi ha hagut problemes al crear la imatge ISO
     {
-        showProcessErrorMessage(process, "mkisofs");
+        QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the DICOMDIR") + "\n\n The process [ iso image file creator ] failed\n\n" + tr("Please, contact your system administrator to solve this problem.") );
     }
     else
     {
