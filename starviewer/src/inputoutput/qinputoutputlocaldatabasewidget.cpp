@@ -37,6 +37,9 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputLocalDatabaseWidget",this);
     m_statsWatcher->addClicksCounter(m_viewButton);
+
+    //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
+    m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
 }
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
@@ -132,7 +135,6 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
     else
     {
         m_studyTreeWidget->insertPatientList(patientStudyList);//es mostra la llista d'estudis
-        m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName); //ordenem pel nom
         QApplication::restoreOverrideCursor();
     }
 }

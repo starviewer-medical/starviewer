@@ -36,6 +36,9 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
     m_statsWatcher->addClicksCounter( m_viewButton );
     m_statsWatcher->addClicksCounter( m_retrieveButton );
     m_statsWatcher->addClicksCounter( m_openDICOMDIRToolButton );
+
+    //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
+    m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
 }
 
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
@@ -135,7 +138,6 @@ void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )
     else
     {
         m_studyTreeWidget->insertPatientList( patientStudyList );
-        m_studyTreeWidget->setSortColumn( QStudyTreeWidget::ObjectName );//ordenem pel nom
         QApplication::restoreOverrideCursor();
     }
 }
