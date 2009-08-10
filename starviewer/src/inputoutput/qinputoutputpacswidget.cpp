@@ -55,6 +55,9 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     operationAnimation->start();
 
     setQueryInProgress(false);
+
+    //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
+    m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
 }
 
 QInputOutputPacsWidget::~QInputOutputPacsWidget()
