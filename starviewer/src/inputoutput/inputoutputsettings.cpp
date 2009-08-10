@@ -78,17 +78,15 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( PacsConnectionTimeout, 20 );
     settingsRegistry->addSetting( MaximumPACSConnections, 3 );
 
-#ifdef _WIN32
+#if defined(Q_OS_WIN) //WINDOWS
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, QString::fromLocal8Bit(qgetenv("ProgramFiles")) + "\\ImgBurn\\ImgBurn.exe" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );
-#else
-#ifdef __APPLE__
+#elif defined(Q_OS_MAC) //MAC
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) + "/Burn.app/Contents/MacOS/Burn" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "%1" );
-#else
+#else // UNIX
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "/usr/bin/k3b" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "--nosplash --cdimage %1" );
-#endif
 #endif
 }
 

@@ -42,10 +42,10 @@ bool IsoImageFileCreator::createIsoImageFile( QString input, QString output )
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-#ifdef __linux__
-    process.start("mkisofs", processParameters );
-#else
+#if defined(Q_OS_WIN) || defined(Q_OS_MAC) //WINDOWS i MAC. Es presuposa que el mkisofs es troba a la mateixa carpeta que l'executable de l'starviewer
     process.start(QCoreApplication::applicationDirPath() + "/mkisofs", processParameters );
+#else //UNIX
+    process.start("mkisofs", processParameters );
 #endif
     
     process.waitForFinished( -1 ); //esperem que s'hagi generat la imatge
