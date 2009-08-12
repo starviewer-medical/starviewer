@@ -37,8 +37,8 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
 {
     Settings settings;
 
-    m_textBurningApplicationPath->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString());
-    m_textBurningApplicationParameters->setText(settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString());
+    m_textBurningApplicationPath->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString() );
+    m_textBurningApplicationParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString() );
 
     if( m_textBurningApplicationPath->text().endsWith("k3b") )
     {
@@ -68,7 +68,7 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
 
     if ( m_textBurningApplicationPath->isModified() )
     {
-        if ( !QFile::exists(m_textBurningApplicationPath->text() )) // si el fitxer indicat no existeix
+        if ( !QFile::exists(m_textBurningApplicationPath->text()) ) // Si el fitxer indicat no existeix
         {
             QMessageBox::warning( this , ApplicationNameString , tr( "Invalid burning application path." ) );
             return false;
@@ -82,20 +82,25 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
         }
     }
 
-    if (!valid) QMessageBox::information(this, ApplicationNameString, messageBoxText);
+    if ( !valid ) 
+    {
+        QMessageBox::information(this, ApplicationNameString, messageBoxText);
+    }
 
     return valid;
 }
 
 bool QDICOMDIRConfigurationScreen::applyChanges()
 {
-    if (validateChanges())
+    if ( validateChanges() )
     {
         applyChangesDICOMDIR();
         return true;
     }
-    else 
-    return false;
+    else
+    {
+        return false;
+    }
 }
 
 void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
@@ -129,17 +134,17 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
 {
     Settings settings;
 
-    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey, m_textBurningApplicationPath->text());
-    settings.setValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey, m_textBurningApplicationParameters->text());
+    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationPathKey, m_textBurningApplicationPath->text() );
+    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationParametersKey, m_textBurningApplicationParameters->text() );
 
     if ( m_textBurningApplicationPath->isModified() )
     {
         INFO_LOG( "Es modificarà el path del programa de gravació per " + m_textBurningApplicationPath->text() );
     }
 
-    if (m_textBurningApplicationParameters->isModified())
+    if ( m_textBurningApplicationParameters->isModified() )
     {
-        INFO_LOG("Es modificarà el parametres del programa de gravació per " + m_textBurningApplicationParameters->text() );
+        INFO_LOG( "Es modificarà el parametres del programa de gravació per " + m_textBurningApplicationParameters->text() );
     }
 }
 
