@@ -40,17 +40,17 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     m_dicomdirSizeBytes = 0;
     setDicomdirSize();
 
-    // crear les accions
+    // Crear les accions
     createActions();
     createConnections();
 
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
 
-    //TODO:De manera temporal no es mostra la mida del dicomdir perquè no la sabem calcular correctament quan tenim imatges descarregades amb la transfer syntax JpegLossLess
+    // TODO:De manera temporal no es mostra la mida del dicomdir perquè no la sabem calcular correctament quan tenim imatges descarregades amb la transfer syntax JpegLossLess
     hideDicomdirSize();
 
-    //Per defecte creem els dicomdir al discdur
+    // Per defecte creem els dicomdir al discdur
     m_hardDiskAction->trigger();
 }
 
@@ -158,7 +158,7 @@ void QCreateDicomdir::addStudy(Study *study)
             QMessageBox::warning( this , ApplicationNameString , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
         }
         else
-        {*/   //afegim la informació de l'estudi a la llista
+        {*/   // Afegim la informació de l'estudi a la llista
         QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
         m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
         setDicomdirSize();
@@ -191,9 +191,9 @@ void QCreateDicomdir::createDicomdir()
                 createDicomdirOnHardDiskOrFlashMemories();
                 break;
         case CreateDicomdir::DvdRom:
-        case CreateDicomdir::CdRom: //cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
+        case CreateDicomdir::CdRom: // Cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
                  state = createDicomdirOnCdOrDvd();
-                 //error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
+                 // Error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
                  if ( state.good() || ( !state.good() && state.code() == 4001 ) )
                     burnDicomdir( m_currentDevice );
                  break;
@@ -207,9 +207,9 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
     QString dicomdirPath;
     Status state;
 
-    // per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
+    // Per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
     dicomdirPath = QDir::tempPath() + "/DICOMDIR";
-    //si el directori dicomdir ja existeix al temporal l'esborrem
+    // Si el directori dicomdir ja existeix al temporal l'esborrem
     if ( temporaryDirPath.exists( dicomdirPath ) )
     {
         DeleteDirectory delDirectory;
@@ -218,7 +218,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
     INFO_LOG( "Iniciant la creació del DICOMDIR en cd-dvd al directori temporal " + dicomdirPath );
 
-    if ( !temporaryDirPath.mkpath( dicomdirPath ) )//Creem el directori temporal
+    if ( !temporaryDirPath.mkpath( dicomdirPath ) ) // Creem el directori temporal
     {
         QMessageBox::critical( this , ApplicationNameString , tr( "Can't create the temporary directory to create DICOMDIR. Please check users permission" ) );
         ERROR_LOG( "Error al crear directori " + dicomdirPath );
@@ -236,7 +236,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
     DeleteDirectory delDirectory;
     QDir directoryDicomdirPath( dicomdirPath );
 
-    //Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
+    // Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
 
     if ( m_lineEditDicomdirPath->text().length() == 0 )
     {
@@ -253,12 +253,12 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                 tr( "The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?" ) ,
                 tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
         {
-            case 0: // si vol sobreescriure, esborrem el contingut del directori
+            case 0: // Si vol sobreescriure, esborrem el contingut del directori
                 delDirectory.deleteDirectory( dicomdirPath , false );
                 break;
             case 1:
                 INFO_LOG( "El directori no està buit, i l'usuari no dona permís per esborrar el seu contingut") ;
-                return; //no fem res, l'usuari no vol sobreescriure el directori, cancel·lem l'operacio i tornem el control a l'usuari
+                return; // No fem res, l'usuari no vol sobreescriure el directori, cancel·lem l'operacio i tornem el control a l'usuari
                 break;
         }
     }
@@ -268,8 +268,8 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         return;
     }
     else
-    {   //el directori no és un dicomdir
-        if ( !directoryDicomdirPath.exists() )//si el directori no existiex, preguntem si el vol crear
+    {   // El directori no és un dicomdir
+        if ( !directoryDicomdirPath.exists() ) // Si el directori no existiex, preguntem si el vol crear
         {
                 switch ( QMessageBox::question( this ,
                         tr( "Create directory ?" ) ,
@@ -285,7 +285,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
                         break;
                     case 1:
                         INFO_LOG( "El directori especificat per l'usuari no existeix, i no el vol crear per tant cancel·lem la creació del DICOMDIR" );
-                        return; //cancel·lem;
+                        return; // Cancel·lem;
                         break;
                 }
         }
@@ -293,7 +293,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     startCreateDicomdir( dicomdirPath );
 
-    //Guardem la ruta de l'ultim directori on l'usuari ha creat el dicomdir
+    // Guardem la ruta de l'ultim directori on l'usuari ha creat el dicomdir
     m_lastDicomdirDirectory = dicomdirPath;
 }
 
@@ -302,7 +302,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     ConvertToDicomdir convertToDicomdir;
     Status state;
 
-    if ( !enoughFreeSpace( dicomdirPath ) )// comprovem si hi ha suficient espai lliure al disc dur
+    if ( !enoughFreeSpace( dicomdirPath ) )// Comprovem si hi ha suficient espai lliure al disc dur
     {
         QMessageBox::information( this , ApplicationNameString , tr( "Not enough free space to create DICOMDIR. Please free space." ) );
         ERROR_LOG( "Error al crear el DICOMDIR, no hi ha suficient espai al disc ERROR : " + state.text() );
@@ -312,7 +312,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( "*" , Qt::MatchWildcard, 0 ) );
     QTreeWidgetItem *item;
 
-    if ( dicomdirStudiesList.count() == 0 ) //Comprovem que hi hagi estudis seleccionats per crear dicomdir
+    if ( dicomdirStudiesList.count() == 0 ) // Comprovem que hi hagi estudis seleccionats per crear dicomdir
     {
         QMessageBox::information( this , ApplicationNameString , tr( "Please, first select the studies you want to create a DICOMDIR." ) );
         return state.setStatus( "No study selected to create the DICOMDIR", false , 3001 );
@@ -321,7 +321,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     for ( int i = 0; i < dicomdirStudiesList.count(); i++ )
     {
         item = dicomdirStudiesList.at( i );
-        convertToDicomdir.addStudy( item->text( 7 ) ); // indiquem a la classe convertToDicomdir, quins estudis s'ha de convertir a dicomdir, passant el UID de l'estudi
+        convertToDicomdir.addStudy( item->text( 7 ) ); // Indiquem a la classe convertToDicomdir, quins estudis s'ha de convertir a dicomdir, passant el UID de l'estudi
         INFO_LOG( "L'estudi " + item->text( 7 ) + " s'afegirà al DICOMDIR " );
     }
 
@@ -329,7 +329,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( !state.good() )
     {
-        if ( state.code() == 4001 ) //alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
+        if ( state.code() == 4001 ) // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
         {
             QApplication::restoreOverrideCursor();
             QMessageBox::information( this , ApplicationNameString, tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
@@ -358,7 +358,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
     m_lineEditDicomdirPath->clear();
 
     m_dicomdirSizeBytes = 0;
-    setDicomdirSize();//Reiniciem la barra de progrés
+    setDicomdirSize();// Reiniciem la barra de progrés
 }
 
 void QCreateDicomdir::examineDicomdirPath()
@@ -371,7 +371,7 @@ void QCreateDicomdir::examineDicomdirPath()
         if ( dicomdirPath.exists( m_lineEditDicomdirPath->text() ) )//si el directori existeix, serà el directori inicial al obrir
         {
             initialDirectory = m_lineEditDicomdirPath->text();
-        }//si no existeix directori entrat el directori inicial serà el home
+        }// Si no existeix directori entrat el directori inicial serà el home
         else initialDirectory = QDir::homePath();
     }
     else
@@ -446,9 +446,9 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     // TODO comprovar primer si el device que ens passen és un CD o DVD, si no no pot funcionar
     QString dicomdirPath, isoPath;
 
-    //indiquem al directori del qual volem generar una imatge
+    // Indiquem al directori del qual volem generar una imatge
     dicomdirPath = QDir::tempPath() + "/DICOMDIR";
-    //indiquem al directori i nom de la imatge a crear
+    // Indiquem al directori i nom de la imatge a crear
     isoPath = dicomdirPath + "/dicomdir.iso";
 
     IsoImageFileCreator isoImageFileCreator;
@@ -456,7 +456,7 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     isoImageFileCreator.setOutputIsoImageFilePath(isoPath);
     isoImageFileCreator.setIsoImageLabel("Starviewer DICOMDIR");
 
-    if( isoImageFileCreator.createIsoImageFile() ) // hi ha hagut problemes al crear la imatge ISO
+    if( isoImageFileCreator.createIsoImageFile() ) // Hi ha hagut problemes al crear la imatge ISO
     {
         QProcess process;
         QStringList processParameters;
@@ -466,7 +466,7 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
         processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
         process.start((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString(), processParameters);
         process.waitForFinished( -1 );
-        if( process.exitCode() != 0 ) // hi ha hagut problemes
+        if( process.exitCode() != 0 ) // Hi ha hagut problemes
         {
             showProcessErrorMessage(process, "DICOMDIR burning application");
         }

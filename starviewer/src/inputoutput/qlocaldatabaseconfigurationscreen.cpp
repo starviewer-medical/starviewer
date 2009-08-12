@@ -197,35 +197,35 @@ void QLocalDatabaseConfigurationScreen::configurationChangedDatabaseRoot()
 void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
 {
     //a la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , ApplicationNameString + " Database (*.sdb)" );
-    dlg->setFileMode( QFileDialog::ExistingFile );
+    QFileDialog *dialog = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , ApplicationNameString + " Database (*.sdb)" );
+    dialog->setFileMode( QFileDialog::ExistingFile );
 
-    if ( dlg->exec() == QDialog::Accepted )
+    if ( dialog->exec() == QDialog::Accepted )
     {
-        if ( !dlg->selectedFiles().empty() )
+        if ( !dialog->selectedFiles().empty() )
         {
-            m_textDatabaseRoot->setText( dlg->selectedFiles().takeFirst() );
+            m_textDatabaseRoot->setText( dialog->selectedFiles().takeFirst() );
             m_textDatabaseRoot->setModified( true );// indiquem que m_textDatabaseRoot ha modificat el seu valor
         }
     }
 
-    delete dlg;
+    delete dialog;
 }
 
 void QLocalDatabaseConfigurationScreen::examinateCacheImagePath()
 {
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Database Directory" ) );
+    QFileDialog *dialog = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Database Directory" ) );
     QString path;
 
-    dlg->setFileMode( QFileDialog::DirectoryOnly );
+    dialog->setFileMode( QFileDialog::DirectoryOnly );
 
-    if ( dlg->exec() == QDialog::Accepted )
+    if ( dialog->exec() == QDialog::Accepted )
     {
-        if ( !dlg->selectedFiles().empty() ) m_textCacheImagePath->setText( dlg->selectedFiles().takeFirst() );
+        if ( !dialog->selectedFiles().empty() ) m_textCacheImagePath->setText( dialog->selectedFiles().takeFirst() );
         cacheImagePathEditingFinish();//afegeix la '/' al final
     }
 
-    delete dlg;
+    delete dialog;
 }
 
 void QLocalDatabaseConfigurationScreen::applyChangesCache()

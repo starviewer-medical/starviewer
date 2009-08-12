@@ -23,33 +23,31 @@ public:
     /// Constructor de la classe
     QDICOMDIRConfigurationScreen( QWidget *parent = 0 );
 
-    ///Destructor de classe
+    /// Destructor de classe
     ~QDICOMDIRConfigurationScreen();
 
 public slots:
     /// Aplica els canvis de la configuració
     bool applyChanges();
 
-//signals:
-
 private slots:
     /// Mostra un QDialog per especificar on es troba el programa de gravació en el disc dur
-    void examinateDICOMDIR();
+    void examinateDICOMDIRBurningApplicationPath();
 
 private:
-    ///crea els connects dels signals i slots
+    /// Crea els connects dels signals i slots
     void createConnections();
 
     /// Carrega les dades de configuració del programa de gravació
     void loadBurningDefaults();
 
-    ///  Aplica els canvis fets a la configuració del programa de gravació
+    /// Aplica els canvis fets a la configuració del programa de gravació
     void applyChangesDICOMDIR();
 
     /// Valida que els canvis de la configuració siguin correctes
     bool validateChanges();
 };
 
-};// end namespace udg
+};// End namespace udg
 
 #endif
