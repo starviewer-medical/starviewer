@@ -105,7 +105,7 @@ bool IsoImageFileCreator::createIsoImageFile()
 
     // Es comprova que es diposi de permisos de escritura en el path on s'ha de crear el fitxer d'imatge ISO
     // Es a dir, es comproven els permisos del fitxer
-    if ( !outputIsoImageFilePathInfo.isWritable() )
+    if ( QFile::exists(outputIsoImageFilePathInfo.absoluteFilePath()) && !outputIsoImageFilePathInfo.isWritable() )
     {
         m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output iso image file path.");
         m_lastError = OutputIsoImageFilePathNotExist;
