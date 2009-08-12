@@ -74,6 +74,13 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
             QMessageBox::warning( this , ApplicationNameString , tr( "Invalid burning application path." ) );
             return false;
         }
+
+        QFileInfo burningApplicationPathInfo( m_textBurningApplicationPath->text() );
+        if ( !burningApplicationPathInfo.isExecutable() )
+        {
+            QMessageBox::warning( this , ApplicationNameString , tr( "Burning application path has to be an executable file." ) );
+            return false;
+        }
     }
 
     if (!valid) QMessageBox::information(this, ApplicationNameString, messageBoxText);
@@ -94,15 +101,25 @@ bool QDICOMDIRConfigurationScreen::applyChanges()
 
 void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
 {
+    Settings settings;
+
     // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
-    QFileDialog *dialog = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , ApplicationNameString + " Burning Application (*.exe)" );
+    QFileDialog *dialog = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString(), "" );
     dialog->setFileMode( QFileDialog::ExistingFile );
 
     if ( dialog->exec() == QDialog::Accepted )
     {
         if ( !dialog->selectedFiles().empty() )
         {
-            m_textBurningApplicationPath->setText( dialog->selectedFiles().takeFirst() );
+            QString burningApplicationPath = dialog->selectedFiles().takeFirst();
+            QFileInfo infoBurningApplicationFile( burningApplicationPath );
+            // Es comprova si es tracta d'una aplicació de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on és l'executable
+            if( infoBurningApplicationFile.isBundle() )
+            {
+                burningApplicationPath = burningApplicationPath + "/Contents/MacOS/" + infoBurningApplicationFile.bundleName();
+            }
+
+            m_textBurningApplicationPath->setText( burningApplicationPath );
             m_textBurningApplicationPath->setModified( true );// indiquem que m_textBurningApplicationPath ha modificat el seu valor
         }
     }
