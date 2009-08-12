@@ -108,7 +108,7 @@ bool IsoImageFileCreator::createIsoImageFile()
     if ( QFile::exists(outputIsoImageFilePathInfo.absoluteFilePath()) && !outputIsoImageFilePathInfo.isWritable() )
     {
         m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output iso image file path.");
-        m_lastError = OutputIsoImageFilePathNotExist;
+        m_lastError = OutputIsoImageFilePathNotPermissions;
         return false;
     }
 
