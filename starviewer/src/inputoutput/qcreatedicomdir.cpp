@@ -435,25 +435,34 @@ bool QCreateDicomdir::studyExists( QString studyUID )
 
 void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device )
 {
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    
+    // Com que de moment no hi ha comunicacio amb el mkisofs es crea aquest progress bar per donar algo de feeling a l'usuari, per a que no es pensi que s'ha penjat l'aplicaciÃ³
+    QProgressDialog *progressBar = new QProgressDialog( QObject::tr( "Creating DICOMDIR Image..." ), "", 0, 10 );
+    progressBar->setMinimumDuration( 0 );
+    progressBar->setCancelButton( 0 );
+    progressBar->setValue( 7 );
+
     // TODO comprovar primer si el device que ens passen és un CD o DVD, si no no pot funcionar
-    QProcess process;
-    QStringList processParameters;
     QString dicomdirPath, isoPath;
-    IsoImageFileCreator isoImageFileCreator;
 
     //indiquem al directori del qual volem generar una imatge
     dicomdirPath = QDir::tempPath() + "/DICOMDIR";
     //indiquem al directori i nom de la imatge a crear
     isoPath = dicomdirPath + "/dicomdir.iso";
 
-    if( !isoImageFileCreator.createIsoImageFile(dicomdirPath, isoPath) ) // hi ha hagut problemes al crear la imatge ISO
+    IsoImageFileCreator isoImageFileCreator;
+    isoImageFileCreator.setInputPath(dicomdirPath);
+    isoImageFileCreator.setOutputIsoImageFilePath(isoPath);
+    isoImageFileCreator.setIsoImageLabel("Starviewer DICOMDIR");
+
+    if( isoImageFileCreator.createIsoImageFile() ) // hi ha hagut problemes al crear la imatge ISO
     {
-        QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the DICOMDIR") + "\n\n The process [ iso image file creator ] failed\n\n" + tr("Please, contact your system administrator to solve this problem.") );
-    }
-    else
-    {
+        QProcess process;
+        QStringList processParameters;
         Settings settings;
-        processParameters.clear();			
+
+        processParameters.clear();
         processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
         process.start((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString(), processParameters);
         process.waitForFinished( -1 );
@@ -466,6 +475,13 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
             this->close();
         }
     }
+    else
+    {
+        QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the ISO image file. ") + isoImageFileCreator.getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
+        ERROR_LOG( "Error al crear ISO amb descripció: " + isoImageFileCreator.getLastErrorDescription() );
+    }
+    progressBar->close();
+    QApplication::restoreOverrideCursor();
 }
 
 void QCreateDicomdir::showProcessErrorMessage( const QProcess &process, QString name )
