@@ -11,7 +11,7 @@ PacsManager::PacsManager()
 {
     m_queryWeaver = NULL;
     m_queryWeaver = new Weaver();
-    m_queryWeaver->setMaximumNumberOfThreads(3);
+    m_queryWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
 
     connect ( m_queryWeaver,  SIGNAL ( jobDone ( ThreadWeaver::Job* ) ), SLOT ( queryJobFinished ( ThreadWeaver::Job* ) ) );
 }
