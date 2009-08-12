@@ -29,8 +29,8 @@ QDICOMDIRConfigurationScreen::~QDICOMDIRConfigurationScreen()
 
 void QDICOMDIRConfigurationScreen::createConnections()
 {
-    //connecta el boto examinar programa de gravació amb el dialog per escollir el path del programa
-    connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateDICOMDIR() ) );
+    // Connecta el boto examinar programa de gravació amb el dialog per escollir el path del programa
+    connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateDICOMDIRBurningApplicationPath() ) );
 }
 
 void QDICOMDIRConfigurationScreen::loadBurningDefaults()
@@ -92,21 +92,21 @@ bool QDICOMDIRConfigurationScreen::applyChanges()
     return false;
 }
 
-void QDICOMDIRConfigurationScreen::examinateDICOMDIR()
+void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
 {
-    //a la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
-    QFileDialog *dlg = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , ApplicationNameString + " Burning Application (*.exe)" );
-    dlg->setFileMode( QFileDialog::ExistingFile );
+    // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que te retornin directament el fitxer selccionat
+    QFileDialog *dialog = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , ApplicationNameString + " Burning Application (*.exe)" );
+    dialog->setFileMode( QFileDialog::ExistingFile );
 
-    if ( dlg->exec() == QDialog::Accepted )
+    if ( dialog->exec() == QDialog::Accepted )
     {
-        if ( !dlg->selectedFiles().empty() )
+        if ( !dialog->selectedFiles().empty() )
         {
-            m_textBurningApplicationPath->setText( dlg->selectedFiles().takeFirst() );
+            m_textBurningApplicationPath->setText( dialog->selectedFiles().takeFirst() );
             m_textBurningApplicationPath->setModified( true );// indiquem que m_textBurningApplicationPath ha modificat el seu valor
         }
     }
-    delete dlg;
+    delete dialog;
 }
 
 void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
