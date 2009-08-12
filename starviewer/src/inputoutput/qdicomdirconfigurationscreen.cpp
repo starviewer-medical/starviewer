@@ -62,14 +62,13 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
 
 bool QDICOMDIRConfigurationScreen::validateChanges()
 {
-    QDir dir;
     bool valid = true;
 
     QString messageBoxText = tr("Some configuration options are not valid:\n");
 
     if ( m_textBurningApplicationPath->isModified() )
     {
-        if ( !dir.exists(m_textBurningApplicationPath->text() )) // si el fitxer indicat no existeix
+        if ( !QFile::exists(m_textBurningApplicationPath->text() )) // si el fitxer indicat no existeix
         {
             QMessageBox::warning( this , ApplicationNameString , tr( "Invalid burning application path." ) );
             return false;
