@@ -54,6 +54,11 @@ public:
       */
     void createReadmeTxt();
 
+    /** Especifica/Retorna si les imatges amb les que crearan el dicomdir s'han de convertir a LittleEndian o han de mantenir
+      * la transfer syntax original, si no s'especifica per defecte les imatges mantenen la seva Transfer Syntax original*/
+    void setConvertDicomdirImagesToLittleEndian(bool convertDicomdirImagesToLittleEndian);
+    bool getConvertDicomdirImagesToLittleEndian();
+
 private:
     /** Estructura que conté la informació d'un estudi a convertir a dicomdir. 
       * És necessari guardar el Patient ID perquè segons la normativa de l'IHE, 
@@ -99,6 +104,7 @@ private:
 private:
     QList<StudyToConvert> m_studiesToConvert;
     QProgressDialog *m_progress;
+    bool m_convertDicomdirImagesToLittleEndian;
 
     QString m_dicomDirPath;
     QString m_dicomDirStudyPath;

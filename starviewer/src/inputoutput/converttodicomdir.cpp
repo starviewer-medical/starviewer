@@ -8,6 +8,7 @@
 
 #include <QProgressDialog>
 #include <QTextStream>
+#include <QFile>
 
 #include "logging.h"
 #include "status.h"
@@ -28,6 +29,8 @@ ConvertToDicomdir::ConvertToDicomdir(QObject *parent) : QObject(parent)
     m_series = 0;
     m_image = 0;
     m_patient = 0;
+
+    m_convertDicomdirImagesToLittleEndian = false;
 }
 
 ConvertToDicomdir::~ConvertToDicomdir()
@@ -176,6 +179,22 @@ Status ConvertToDicomdir::createDicomdir( const QString &dicomdirPath, CreateDic
     return state;
 }
 
+void ConvertToDicomdir::setConvertDicomdirImagesToLittleEndian(bool convertDicomdirImagesToLittleEndian)
+{
+    m_convertDicomdirImagesToLittleEndian = convertDicomdirImagesToLittleEndian;
+
+    if (convertDicomdirImagesToLittleEndian)
+    {
+        INFO_LOG("Les imatges del dicomdir es transformaran a LittleEndian");
+    }
+    else INFO_LOG("Les imatges del dicomdir mantindran la seva transfer syntax");
+}
+
+bool ConvertToDicomdir::getConvertDicomdirImagesToLittleEndian()
+{
+    return m_convertDicomdirImagesToLittleEndian;
+}
+
 Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
 {
     StudyToConvert studyToConvert;
@@ -293,9 +312,19 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 
     imageOutputPath = m_dicomDirSeriesPath + imageName;
 
-    //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
-    state = convertDicom.convert(imageInputPath, imageOutputPath );
-
+    if (getConvertDicomdirImagesToLittleEndian())
+    {
+        //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
+        state = convertDicom.convert(imageInputPath, imageOutputPath );
+    }
+    else
+    {
+        if (QFile::copy(imageInputPath, imageOutputPath))
+        {
+            state.setStatus("",true,0);
+        }
+        else state.setStatus(QString("Can't copy image %1 to %2").arg(imageInputPath,imageOutputPath), false, 3001);
+    }
     m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
     m_progress->repaint();
 
