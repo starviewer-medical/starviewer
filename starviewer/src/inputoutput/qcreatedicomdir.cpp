@@ -47,9 +47,6 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
 
-    // TODO:De manera temporal no es mostra la mida del dicomdir perquè no la sabem calcular correctament quan tenim imatges descarregades amb la transfer syntax JpegLossLess
-    hideDicomdirSize();
-
     // Per defecte creem els dicomdir al discdur
     m_hardDiskAction->trigger();
 }
@@ -118,7 +115,7 @@ void QCreateDicomdir::createConnections()
 //TODO: De manera temporal no es mostrarà la mida del dicomdir, degut a que les imatges descarregades amb la transfer synstax de JpegLossLess s'han de passar a LittleEndian i ocupen més espai, com ara de moment no està implementat un sistema per calcular que ocuparan les imatges a LittleEndian de moment no ho calculem
 void QCreateDicomdir::setDicomdirSize()
 {
-    /*QString sizeOfDicomdirText, sizeText;
+    QString sizeOfDicomdirText, sizeText;
     double sizeInMb;
 
     sizeInMb = m_dicomdirSizeBytes / ( 1024 * 1024 );//passem a Mb
@@ -135,7 +132,7 @@ void QCreateDicomdir::setDicomdirSize()
     sizeText.setNum( sizeInMb , 'f' , 0 );
 
     sizeOfDicomdirText = tr("%1 Mb").arg( sizeText );
-    m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );*/
+    m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
 }
 
 void QCreateDicomdir::addStudy(Study *study)
@@ -152,28 +149,29 @@ void QCreateDicomdir::addStudy(Study *study)
         studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + study->getInstanceUID() + "/");
 
         //només comprovem l'espai si gravem a un cd o dvd
-        /*if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
+        if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , ApplicationNameString , tr( "With this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "The study can be adde to Dicomdir list, with this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
         }
         else
-        {*/   // Afegim la informació de l'estudi a la llista
-        QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
-        m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
-        setDicomdirSize();
+        {  //Afegim la informació de l'estudi a la llista
+            QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
+            m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
+            setDicomdirSize();
+        
+            Patient *patient = study->getParentPatient();
+            item->setText( 0, patient->getFullName() );
+            item->setText( 1, patient->getID() );
+            item->setText( 2, study->getPatientAge() );
+            item->setText( 3, study->getDescription() );
+            item->setText( 4, study->getModalitiesAsSingleString() );
+            item->setText( 5, study->getDate().toString(Qt::ISODate) );
+            item->setText( 6, study->getTime().toString(Qt::ISODate) );
+            item->setText( 7, study->getInstanceUID() );
 
-        Patient *patient = study->getParentPatient();
-        item->setText( 0, patient->getFullName() );
-        item->setText( 1, patient->getID() );
-        item->setText( 2, study->getPatientAge() );
-        item->setText( 3, study->getDescription() );
-        item->setText( 4, study->getModalitiesAsSingleString() );
-        item->setText( 5, study->getDate().toString(Qt::ISODate) );
-        item->setText( 6, study->getTime().toString(Qt::ISODate) );
-        item->setText( 7, study->getInstanceUID() );
-
-        QApplication::restoreOverrideCursor();
+            QApplication::restoreOverrideCursor();
+        }
     }
     else QMessageBox::warning( this , ApplicationNameString , tr( "The study already exists in the DICOMDIR list" ) );
 }
@@ -619,36 +617,23 @@ void QCreateDicomdir::deviceChanged( int index )
                     maximumCapacity = DVDRomSizeMb;
                 }
 
-/*              TODO: No comprovem la mida del dicomdir
                 if( sizeInMB < maximumCapacity )
                 {
                     m_progressBarOcupat->setMaximum( maximumCapacity );
-*/
                     m_DiskSpaceBytes = maximumCapacity; // convertim a bytes capacaticat cd/dvd
-/*              
                     m_progressBarOcupat->repaint();
               }
                 else
                 {
                     QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
                 }
-*/
             break;
     }
 
-    /*if ( sizeInMB < m_progressBarOcupat->maximum() )
+    if ( sizeInMB < m_progressBarOcupat->maximum() )
         m_progressBarOcupat->setValue( int( sizeInMB ) );
     else
-        m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );*/
-}
-
-
-void QCreateDicomdir::hideDicomdirSize()
-{
-    m_progressBarOcupat->setVisible(false);
-    m_dicomdirSizeOnDiskLabel->setVisible(false);
-    m_labelMbCdDvdOcupat->setVisible(false);
-    m_DICOMDIRUsedSpaceLabel->setVisible(false);
+        m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
 }
 
 void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
