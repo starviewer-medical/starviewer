@@ -96,8 +96,8 @@ void InputOutputSettings::init()
 #else // UNIX
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "/usr/bin/k3b" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "--nosplash %1" );
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationCDParametersKey, "--cdimage" );
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationDVDParametersKey, "--dvdimage" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationCDParametersKey, "--nosplash --cdimage %1" );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationDVDParametersKey, "--nosplash --dvdimage %1" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey, true );
 #endif
 }
