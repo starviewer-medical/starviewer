@@ -452,7 +452,7 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
     IsoImageFileCreator isoImageFileCreator;
     isoImageFileCreator.setInputPath(dicomdirPath);
     isoImageFileCreator.setOutputIsoImageFilePath(isoPath);
-    isoImageFileCreator.setIsoImageLabel("Starviewer DICOMDIR");
+    isoImageFileCreator.setIsoImageLabel(QString("%1 DICOMDIR").arg(ApplicationNameString));
 
     if( isoImageFileCreator.createIsoImageFile() ) // Hi ha hagut problemes al crear la imatge ISO
     {
