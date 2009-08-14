@@ -133,6 +133,8 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
             // Es comprova si es tracta d'una aplicació de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on és l'executable
             if( infoBurningApplicationFile.isBundle() )
             {
+                // El path es treu una mica a lo "bruto". Per fer-ho bé s'hauria de llegir el Bundle i extreure'n
+                // la localització de l'executable (CFBundleExecutable): http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html
                 burningApplicationPath = burningApplicationPath + "/Contents/MacOS/" + infoBurningApplicationFile.bundleName();
             }
 
