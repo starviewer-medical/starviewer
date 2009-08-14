@@ -115,8 +115,12 @@ bool IsoImageFileCreator::createIsoImageFile()
     QProcess process;
     QStringList processParameters;
 
-    processParameters << "-V"; 
-    processParameters << "STARVIEWER DICOMDIR"; // Indiquem que el label de la imatge és STARVIEWER DICOMDIR
+    // Indiquem que el label de la imatge
+    if (!m_isoImageLabel.isEmpty())
+    {
+        processParameters << "-V"; 
+        processParameters << m_isoImageLabel;
+    }
     processParameters << "-o"; 
     processParameters << m_outputIsoImageFilePath; // Nom i directori on guardarem la imatge
     processParameters << m_inputPath; // Path a convertir en iso
