@@ -50,10 +50,17 @@ public:
     static const QString PacsConnectionTimeout;
     static const QString MaximumPACSConnections;
 
+    /// Paràmetres de la configuració DICOMDIR
     /// Path del programa de gravació
     static const QString DICOMDIRBurningApplicationPathKey;
     /// Parameters del programa de gravació
     static const QString DICOMDIRBurningApplicationParametersKey;
+    /// Paràmetres de gravació d'un CD quan són diferents amb els de DVD
+    static const QString DICOMDIRBurningApplicationCDParametersKey;
+    /// Paràmetres de gravació d'un DVD quan són diferents amb els de CD
+    static const QString DICOMDIRBurningApplicationDVDParametersKey;
+    /// CheckBox per saber si cal tenir o no en compte els paràmetres de gravació d'un CD o DVD
+    static const QString DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey;
 };
 
 } // end namespace udg 

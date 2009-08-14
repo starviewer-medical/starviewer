@@ -39,22 +39,33 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
 
     m_textBurningApplicationPath->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString() );
     m_textBurningApplicationParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey).toString() );
+    m_textBurningApplicationCDParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey).toString() );
+    m_textBurningApplicationDVDParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey).toString() );
+
+    bool differenciateCDDVDParameters = settings.getValue( InputOutputSettings::DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey).toBool();
+
+    m_textBurningApplicationCDParameters->setEnabled( differenciateCDDVDParameters );
+    m_textBurningApplicationDVDParameters->setEnabled( differenciateCDDVDParameters );
+    m_checkBoxDifferentiateBetweenCDDVDParameteres->setChecked( differenciateCDDVDParameters );
 
     if( m_textBurningApplicationPath->text().endsWith("k3b") )
     {
-        burningLabel->setText( "k3b web: <html><body><a href = http://k3b.plainblack.com> k3b.plainblack.com </a></body></html>" );
+        burningLabel->setText( "k3b web:" ); 
+        burningWebLabel->setText( "<html><body><a href = http://k3b.plainblack.com> k3b.plainblack.com </a></body></html>" );
     }     
     else
     {
         if( m_textBurningApplicationPath->text().endsWith("ImgBurn.exe") )
         {        
-            burningLabel->setText( "ImgBurn web: <html><body><a href = http://www.imgburn.com> www.imgburn.com </a></body></html>" );
+            burningLabel->setText( "ImgBurn web:" );
+            burningWebLabel->setText(  "<html><body><a href = http://www.imgburn.com> www.imgburn.com </a></body></html>" );
         }         
         else
         {
             if( m_textBurningApplicationPath->text().endsWith("Burn") )
             {            
-                burningLabel->setText( "Burn web: <html><body><a href = http://burn-osx.sourceforge.net/Pages/English/home.html> burn-osx.sourceforge.net </a></body></html>" );
+                burningLabel->setText( "Burn web:" );
+                burningWebLabel->setText( "<html><body><a href = http://burn-osx.sourceforge.net/Pages/English/home.html> burn-osx.sourceforge.net </a></body></html>" );
             }
         }
     }
@@ -136,6 +147,9 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
 
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationPathKey, m_textBurningApplicationPath->text() );
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationParametersKey, m_textBurningApplicationParameters->text() );
+    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey, m_textBurningApplicationCDParameters->text() );
+    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey, m_textBurningApplicationDVDParameters->text() );
+    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey, m_checkBoxDifferentiateBetweenCDDVDParameteres->isChecked() );
 
     if ( m_textBurningApplicationPath->isModified() )
     {
@@ -145,6 +159,16 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
     if ( m_textBurningApplicationParameters->isModified() )
     {
         INFO_LOG( "Es modificarà el parametres del programa de gravació per " + m_textBurningApplicationParameters->text() );
+    }
+    
+    if ( m_textBurningApplicationCDParameters->isModified() )
+    {
+        INFO_LOG( "Es modificarà el parametres del programa de gravació (referent a la gravació en CD) per " + m_textBurningApplicationCDParameters->text() );
+    }
+
+    if ( m_textBurningApplicationDVDParameters->isModified() )
+    {
+        INFO_LOG( "Es modificarà el parametres del programa de gravació (referent a la gravació en DVD) per " + m_textBurningApplicationDVDParameters->text() );
     }
 }
 

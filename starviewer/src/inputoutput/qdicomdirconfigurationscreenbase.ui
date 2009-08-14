@@ -36,14 +36,14 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <item row="1" column="0">
+   <item row="1" column="1">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Burning application:</string>
+      <string>Burning application configuration:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="3" column="1">
     <layout class="QHBoxLayout">
      <property name="spacing">
       <number>6</number>
@@ -59,6 +59,22 @@
        <property name="margin">
         <number>0</number>
        </property>
+       <item>
+        <widget class="QLabel" name="burningLabel">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="openExternalLinks">
+          <bool>false</bool>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="textLabel1_9">
          <property name="sizePolicy">
@@ -97,6 +113,26 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="labelCDParameters">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>CD parameters:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labelDVDParameteres">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>DVD parameters:</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -107,7 +143,7 @@
        <property name="spacing">
         <number>6</number>
        </property>
-       <item row="0" column="1">
+       <item row="1" column="1">
         <widget class="QPushButton" name="m_buttonExaminateBurningApplication">
          <property name="toolTip">
           <string>Examine disk to find the database</string>
@@ -121,67 +157,91 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <widget class="QLineEdit" name="m_textBurningApplicationParameters"/>
        </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="m_textBurningApplicationPath">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLineEdit" name="m_textBurningApplicationCDParameters">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLineEdit" name="m_textBurningApplicationDVDParameters">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
-        <widget class="QLineEdit" name="m_textBurningApplicationPath"/>
+        <widget class="QLabel" name="burningWebLabel">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="openExternalLinks">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="burningLabel">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::AutoText</enum>
-     </property>
-     <property name="openExternalLinks">
-      <bool>true</bool>
-     </property>
-     <property name="textInteractionFlags">
-      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>24</width>
-       <height>44</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0">
+   <item row="5" column="1">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <spacer name="verticalSpacer_2">
+   <item row="6" column="1">
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
-       <height>19</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="4" column="1">
+    <widget class="QCheckBox" name="m_checkBoxDifferentiateBetweenCDDVDParameteres">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="text">
+      <string>Differentiate between CD and DVD parameters</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -194,5 +254,38 @@
  <resources>
   <include location="../main/main.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>m_checkBoxDifferentiateBetweenCDDVDParameteres</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_textBurningApplicationDVDParameters</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>210</x>
+     <y>173</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>197</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBoxDifferentiateBetweenCDDVDParameteres</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_textBurningApplicationCDParameters</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>271</x>
+     <y>168</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>273</x>
+     <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
