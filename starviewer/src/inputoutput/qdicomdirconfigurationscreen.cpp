@@ -50,22 +50,24 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
 
     if( m_textBurningApplicationPath->text().endsWith("k3b") )
     {
-        burningLabel->setText( "k3b web:" ); 
-        burningWebLabel->setText( "<html><body><a href = http://k3b.plainblack.com> k3b.plainblack.com </a></body></html>" );
+        m_burningApplicationDownloadURL->setText("<a href='http://k3b.plainblack.com'> k3b.plainblack.com </a>");
     }     
     else
     {
         if( m_textBurningApplicationPath->text().endsWith("ImgBurn.exe") )
         {        
-            burningLabel->setText( "ImgBurn web:" );
-            burningWebLabel->setText(  "<html><body><a href = http://www.imgburn.com> www.imgburn.com </a></body></html>" );
+            m_burningApplicationDownloadURL->setText("<a href='http://www.imgburn.com'> www.imgburn.com </a>");
         }         
         else
         {
             if( m_textBurningApplicationPath->text().endsWith("Burn") )
             {            
-                burningLabel->setText( "Burn web:" );
-                burningWebLabel->setText( "<html><body><a href = http://burn-osx.sourceforge.net/Pages/English/home.html> burn-osx.sourceforge.net </a></body></html>" );
+                m_burningApplicationDownloadURL->setText("<a href='http://burn-osx.sourceforge.net'> burn-osx.sourceforge.net </a>");
+            }
+            else
+            {
+                m_burningApplicationDownloadURLLabel->setVisible(false);
+                m_burningApplicationDownloadURL->setVisible(false);
             }
         }
     }

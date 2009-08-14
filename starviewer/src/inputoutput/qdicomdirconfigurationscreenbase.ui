@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>848</width>
+    <width>589</width>
     <height>416</height>
    </rect>
   </property>
@@ -23,59 +23,37 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>DICOMDIR</string>
+   <string>DICOMDIR Configuration</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
     <normaloff>:/images/cdrom.png</normaloff>:/images/cdrom.png</iconset>
   </property>
-  <layout class="QGridLayout">
-   <property name="margin">
-    <number>9</number>
-   </property>
-   <property name="spacing">
-    <number>6</number>
-   </property>
-   <item row="1" column="1">
+  <layout class="QVBoxLayout">
+   <item>
     <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>Burning application configuration:</string>
+      <string>Burning application configuration</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
+   <item>
+    <layout class="QVBoxLayout">
+     <property name="leftMargin">
+      <number>10</number>
      </property>
-     <property name="margin">
-      <number>0</number>
+     <property name="topMargin">
+      <number>10</number>
      </property>
      <item>
-      <layout class="QVBoxLayout">
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="burningLabel">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="openExternalLinks">
-          <bool>false</bool>
-         </property>
-         <property name="textInteractionFlags">
-          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
-         </property>
-        </widget>
-       </item>
-       <item>
+      <layout class="QGridLayout">
+       <item row="1" column="0">
         <widget class="QLabel" name="textLabel1_9">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -90,7 +68,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Burning application path :</string>
+          <string>Application path :</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
@@ -100,7 +78,32 @@
          </property>
         </widget>
        </item>
-       <item>
+       <item row="1" column="1">
+        <layout class="QHBoxLayout">
+         <item>
+          <widget class="QLineEdit" name="m_textBurningApplicationPath">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_buttonExaminateBurningApplication">
+           <property name="toolTip">
+            <string>Examine disk to find the database</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../main/main.qrc">
+             <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
         <widget class="QLabel" name="textLabel1_8">
          <property name="minimumSize">
           <size>
@@ -109,119 +112,129 @@
           </size>
          </property>
          <property name="text">
-          <string>Burning application parameters :</string>
+          <string>Application parameters :</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="labelCDParameters">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="m_textBurningApplicationParameters"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="m_burningApplicationDownloadURLLabel">
          <property name="text">
-          <string>Burning application CD parameters:</string>
+          <string>Download from here:</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="labelDVDParameteres">
-         <property name="enabled">
+       <item row="0" column="1">
+        <widget class="QLabel" name="m_burningApplicationDownloadURL">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="openExternalLinks">
           <bool>true</bool>
          </property>
-         <property name="text">
-          <string>Burning application DVD parameters:</string>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QGridLayout">
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="m_buttonExaminateBurningApplication">
-         <property name="toolTip">
-          <string>Examine disk to find the database</string>
+      <layout class="QHBoxLayout">
+       <item>
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="text">
-          <string/>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
          </property>
-         <property name="icon">
-          <iconset resource="../main/main.qrc">
-           <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLineEdit" name="m_textBurningApplicationParameters"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLineEdit" name="m_textBurningApplicationPath">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLineEdit" name="m_textBurningApplicationCDParameters">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>16777215</width>
-           <height>16777215</height>
+           <width>40</width>
+           <height>20</height>
           </size>
          </property>
-        </widget>
+        </spacer>
        </item>
-       <item row="4" column="0">
-        <widget class="QLineEdit" name="m_textBurningApplicationDVDParameters">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="burningWebLabel">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="openExternalLinks">
-          <bool>true</bool>
-         </property>
-        </widget>
+       <item>
+        <layout class="QVBoxLayout">
+         <item>
+          <widget class="QCheckBox" name="m_checkBoxDifferentiateBetweenCDDVDParameteres">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>Use different parameters for CD and DVD burning:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="labelCDParameters">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>CD parameters:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="m_textBurningApplicationCDParameters">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="labelDVDParameteres">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>DVD parameters:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="m_textBurningApplicationDVDParameters">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
     </layout>
    </item>
-   <item row="5" column="1">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="1">
-    <spacer name="verticalSpacer">
+   <item>
+    <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -233,23 +246,12 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="1">
-    <widget class="QCheckBox" name="m_checkBoxDifferentiateBetweenCDDVDParameteres">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="text">
-      <string>Differentiate between CD and DVD parameters</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>m_textBurningApplicationPath</tabstop>
   <tabstop>m_buttonExaminateBurningApplication</tabstop>
-  <tabstop>m_textBurningApplicationParameters</tabstop>
  </tabstops>
  <resources>
   <include location="../main/main.qrc"/>
