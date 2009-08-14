@@ -136,7 +136,7 @@ bool IsoImageFileCreator::createIsoImageFile()
             // Si no existeix per cap sistema s'ha produit un error degut a que no s'ha pogut localitzar el mkisofs
             if ( !QFile::exists(mkisofsFilePath) )
             {
-                m_lastErrorDescription = QObject::tr("mkisofs can be found in the system and it is necessary. You need to install it.");
+                m_lastErrorDescription = QObject::tr("The mkisofs program cannot be found on the system.");
                 m_lastError = InternError;
             
                 return false;
