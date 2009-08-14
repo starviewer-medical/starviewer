@@ -462,6 +462,21 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
 
         processParameters.clear();
         processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
+        // Si està activada la opció d'entrar diferents paràmetres segons si es vol gravar un CD o un DVD caldrà afegir-los al processParameters
+        if( (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey)).toBool() )
+        {
+            switch ( m_currentDevice )
+            {
+                case CreateDicomdir::CdRom :
+                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey)).toString();
+                    break;
+                case CreateDicomdir::DvdRom :
+                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey)).toString();
+                    break;
+                default :
+                    break;
+            }
+        }
         process.start((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString(), processParameters);
         process.waitForFinished( -1 );
         if( process.exitCode() != 0 ) // Hi ha hagut problemes
