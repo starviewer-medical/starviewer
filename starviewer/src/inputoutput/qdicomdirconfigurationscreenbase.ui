@@ -119,7 +119,7 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>CD parameters:</string>
+          <string>Burning application CD parameters:</string>
          </property>
         </widget>
        </item>
@@ -129,7 +129,7 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>DVD parameters:</string>
+          <string>Burning application DVD parameters:</string>
          </property>
         </widget>
        </item>
@@ -262,12 +262,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>210</x>
-     <y>173</y>
+     <x>219</x>
+     <y>217</y>
     </hint>
     <hint type="destinationlabel">
-     <x>197</x>
-     <y>147</y>
+     <x>429</x>
+     <y>186</y>
     </hint>
    </hints>
   </connection>
@@ -278,12 +278,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>271</x>
-     <y>168</y>
+     <x>280</x>
+     <y>217</y>
     </hint>
     <hint type="destinationlabel">
-     <x>273</x>
-     <y>122</y>
+     <x>505</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkBoxDifferentiateBetweenCDDVDParameteres</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_textBurningApplicationParameters</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>206</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>237</x>
+     <y>113</y>
     </hint>
    </hints>
   </connection>
