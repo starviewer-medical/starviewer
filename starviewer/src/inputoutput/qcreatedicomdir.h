@@ -18,6 +18,7 @@ namespace udg {
 
 class Study;
 class Status;
+class Image;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -136,6 +137,9 @@ private:
     static const quint64 DVDRomSizeBytes = ( quint64 ) DVDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
     static const quint64 HardDiskSizeBytes = ( quint64 ) HardDiskSizeMb * ( quint64 ) ( 1024 * 1024 );
 
+    //Indiquem de mitjana que ocupa una capçalera dicom d'una imatga, en el ticket #766 indiquem com s'ha obtingut el càcul;
+    static const int dicomHeaderSizeBytes = 23000;
+
     quint64 m_dicomdirSizeBytes;
     quint64 m_DiskSpaceBytes;
     QMenu m_contextMenu;///<Menu contextual
@@ -165,6 +169,17 @@ private:
 
     /// Permet comprovar si la configuració es correcte per poder gravar el dicomdir en un cd o dvd
     void checkDICOMDIRBurningApplicationConfiguration();
+
+    /**Retorna la mida que l'estudi ocuparà en el dicomdir, al fer el càlcul ja té en compta si les imatges que s'afegiran al DICOMDIR
+      *han de conventir-se a transfer syntax LittleEndian o mantenen la seva transfer syntax, per calcular correctament la mida que ocuparà l'estudi.
+      *Si les imatges s'han de convertir a LittleEndian el resultat que dona aquesta funció és una estimació del que ocuparà l'estudi, si 
+      *conserva seva transfer syntax origina el càlcul del que ocuparà l'estudi és un càlcul real.
+      */
+    quint64 getStudySizeInBytes(bool transferSyntaxInLittleEndian, QString studyInstanceUID);
+
+    ///Retorna el que ocuparà la imatge passada per paràmetre en transfer syntax Little Endian, la mida que retorna és un càlcul aproximat del que ocuparà
+    quint64 getImageSizeInBytesInLittleEndianTransferSyntax(Image *image);
+
 };
 
 }
