@@ -25,6 +25,8 @@
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
 #include "isoimagefilecreator.h"
+#include "dicommask.h"
+#include "image.h"
 
 namespace udg {
 
@@ -146,7 +148,7 @@ void QCreateDicomdir::addStudy(Study *study)
 
         // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
         // "a quin directori està aquest study"?
-        studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + study->getInstanceUID() + "/");
+        studySizeBytes = getStudySizeInBytes(false, study->getInstanceUID());
 
         //només comprovem l'espai si gravem a un cd o dvd
         if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
@@ -402,15 +404,12 @@ void QCreateDicomdir::removeAllStudies()
 
 void QCreateDicomdir::removeSelectedStudy()
 {
-    qint64 studySizeBytes;
-
     if (m_dicomdirStudiesList->selectedItems().count() != 0)
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
-            studySizeBytes = HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + "/" + selectedStudy->text(7) + "/"); 
-            m_dicomdirSizeBytes = m_dicomdirSizeBytes - studySizeBytes;
+            m_dicomdirSizeBytes -= getStudySizeInBytes(false, selectedStudy->text(7));//La columna 7 de m_dicomdirStudiesList conté Study Instance UID
             setDicomdirSize();
 
             delete selectedStudy;
@@ -678,6 +677,51 @@ void QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
         //Marquem la opció de crear el dicomdir al disc dur
         m_hardDiskAction->trigger();
     }
+}
+
+quint64 QCreateDicomdir::getStudySizeInBytes(bool transferSyntaxInLittleEndian, QString studyInstanceUID)
+{
+    LocalDatabaseManager localDatabaseManager;
+
+    if (transferSyntaxInLittleEndian)
+    {
+        //Si les imatges es transformaran a transfer syntax LittleEndian fem un càlcul aproximat del que ocuparà el dicomdir
+        DicomMask imageMask;
+        quint64 studySizeInLittleEndianTransferSyntax = 0;
+        
+        imageMask.setStudyUID(studyInstanceUID);
+
+        QList<Image*> imagesOfStudy = localDatabaseManager.queryImage(imageMask);//Agafem les imatges de l'estudi per fer l'estimació del que ocuparà el dicomdir
+
+        foreach(Image *image, imagesOfStudy)
+        {
+            studySizeInLittleEndianTransferSyntax += getImageSizeInBytesInLittleEndianTransferSyntax(image); 
+        }
+        
+        return studySizeInLittleEndianTransferSyntax;
+    }
+    else
+    {
+        return HardDiskInformation::getDirectorySizeInBytes(localDatabaseManager.getStudyPath(studyInstanceUID));
+    }
+}
+
+quint64 QCreateDicomdir::getImageSizeInBytesInLittleEndianTransferSyntax(Image *image)
+{
+    /*Per calcular la mida que ocupa el pixel Data un estudi en LittleEndian és  
+        size = numberOfFrames * (bits-allocated / 8) * rows * columns * samples-per-pixel;
+        size += size % 2;
+      Llavors hem d'afegir la capçalera que és frame count * dicom header size */
+
+    quint64 imageSizeInBytesInLittleEndianTransferSyntax = 0;
+
+    imageSizeInBytesInLittleEndianTransferSyntax = image->getNumberOfFrames() * ( image->getBitsAllocated() / 8) * image->getRows() * image->getColumns() * image->getSamplesPerPixel();
+    imageSizeInBytesInLittleEndianTransferSyntax += imageSizeInBytesInLittleEndianTransferSyntax % 2;
+
+    //afegim el tamany de la capçalera
+    imageSizeInBytesInLittleEndianTransferSyntax += image->getNumberOfFrames() * dicomHeaderSizeBytes;
+
+    return imageSizeInBytesInLittleEndianTransferSyntax;
 }
 
 }
