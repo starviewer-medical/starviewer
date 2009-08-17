@@ -40,4 +40,5 @@ SOURCES += qimageprintextension.cpp \
 	     dicomprintmethod.cpp
 RESOURCES += imageprint.qrc
 
+EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
