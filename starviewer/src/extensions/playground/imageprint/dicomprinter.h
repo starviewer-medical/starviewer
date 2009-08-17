@@ -37,7 +37,7 @@ public:
     void setFileSize(const QString &_fileSize);	
 
     /// Posa els layouts disponibles per la impressió (\p _layout és una llista d'opcions separades per "\").
-    void setLayout(const QString &_layout);	
+    void setFilmLayout(const QString &_filmLayout);	
 
     /// Posa el Magnification type disponibles per la impressió (\p _magnificationType és una llista d'opcions separades per "\").
     void setMagnificationType(const QString &_magnificationType);	
@@ -55,7 +55,7 @@ public:
     void setMaxPreviewResolution(const int &_x, const int &_v);
 
     /// Posa si es suporta l'ús de TimBox o no.
-    void setSupportsTrim(bool _trim);
+    void setTrim(bool _trim);
 	
     /// Posa les densitats disponibles en el Border  (\p _borderDensity és una llista d'opcions separades per "\").
     void setBorderDensity(const QString &_borderDensity);
@@ -83,7 +83,7 @@ public:
     
     QString  getMediumType() const; 
     QString  getFileSize() const;
-    QString  getLayout() const;
+    QString  getFilmLayout() const;
     QString	 getMagnificationType() const;
 	int		 getDefaultReflection() const;
     int		 getMaxPrintResolutionH()const;
@@ -92,10 +92,22 @@ public:
 	int		 getMinPrintResolutionV()const;
 	int		 getMaxPreviewResolutionH()const;
 	int		 getMaxPreviewResolutionV()const;
-	bool     getSupportsTrim() const;
+	bool     getTrim() const;
     QString  getBorderDensity() const;
     QString  getEmptyImageDensity() const;
     QString  getFilmDestination() const;
+
+    ///Especifica/Retorna el smoothing type per defecte amb la que s'imprimirà
+    void setSmoothingType(const QString &smoothingType);
+    QString getSmoothingType() const;
+
+    ///Especifica/retorna la prioritat per defecte dels jobs que s'imprimeixin amb aquesta impressora
+    void DicomPrinter::setJobPriority(const QString &priority);
+    QString DicomPrinter::getJobPriority() const;
+
+    ///Especifica/retorna la polaritat per defecte de l'impressora
+    void DicomPrinter::setPolarity(const QString &polarity);
+    QString DicomPrinter::getPolarity() const;
 
 	DicomPrinter& operator= (const DicomPrinter&);
 
@@ -104,7 +116,7 @@ private:
     QString		m_description;
     QString		m_mediumType;
     QString		m_fileSize;
-    QString		m_layout;
+    QString		m_filmLayout;
     QString		m_magnificationType;
     int         m_defaultReflection;
     int         m_maxPrintResolutionH;
@@ -117,6 +129,9 @@ private:
     QString     m_borderDensity;
     QString     m_emptyImageDensity;
     QString     m_filmDestination;
+    QString     m_smoothingType;
+    QString     m_priority;
+    QString     m_polarity;
 };
 }; 
 #endif
