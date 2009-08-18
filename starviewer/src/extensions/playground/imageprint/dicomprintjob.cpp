@@ -23,22 +23,22 @@ int DicomPrintJob::getNumberCopies() const
    return m_numberCopies;
 }
 
-void DicomPrintJob::setPriority(const QString &_priority)
+void DicomPrintJob::setPrintPriority(const QString &_printPriority)
 {
-    m_priority=_priority;
+    m_printPriority=_printPriority;
 }
 
-QString DicomPrintJob::getPriority() const
+QString DicomPrintJob::getPrintPriority() const
 {
-    return m_priority;
+    return m_printPriority;
 }
 
-void DicomPrintJob::setMediumType(const int &_mediumType)
+void DicomPrintJob::setMediumType(const QString &_mediumType)
 {
     m_mediumType=_mediumType;
 }
 
-int DicomPrintJob::getMediumType() const
+QString DicomPrintJob::getMediumType() const
 {
     return m_mediumType;
 }
