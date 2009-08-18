@@ -92,6 +92,16 @@ QString DicomPrinter::getDefaultFilmLayout() const
     return m_defaultFilmLayout;
 }
 
+void DicomPrinter::setDefaultFilmOrientation(const QString &defaultFilmOrientation)
+{
+    m_defaultFilmOrientation = defaultFilmOrientation;
+}
+
+QString DicomPrinter::getDefaultFilmOrientation() const
+{
+    return m_defaultFilmOrientation;
+}
+
 void  DicomPrinter::setDefaultMagnificationType(const QString &_defaultMagnificationType)
 {
     m_defaultMagnificationType=_defaultMagnificationType;

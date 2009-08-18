@@ -40,6 +40,10 @@ public:
     /// Posa els layouts disponibles per la impressió (\p _layout és una llista d'opcions separades per "\").
     void setDefaultFilmLayout(const QString &_filmLayout);	
 
+    ///Especifica retorna la orientació (horitzontal/vertical) per defecte amb la que s'ha d'imprimir la placa
+    void setDefaultFilmOrientation(const QString &filmOrientation);	
+    QString getDefaultFilmOrientation() const;
+
     /// Posa el Magnification type disponibles per la impressió (\p _magnificationType és una llista d'opcions separades per "\").
     void setDefaultMagnificationType(const QString &_magnificationType);	
     
@@ -107,6 +111,7 @@ private:
     QString		m_defaultMediumType;
     QString		m_defaultFilmSize;
     QString		m_defaultFilmLayout;
+    QString m_defaultFilmOrientation;
     QString		m_defaultMagnificationType;
     bool        m_defaultTrim;
     QString     m_defaultBorderDensity;
