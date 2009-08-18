@@ -2,6 +2,7 @@
 #define UDGDICOMPRINTER_H
 
 #include <QString>
+
 #include "printer.h"
 
 ///Representació dels paràmetres d'una impressora DICOM.
