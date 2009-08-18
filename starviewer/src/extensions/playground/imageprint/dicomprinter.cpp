@@ -172,14 +172,14 @@ QString DicomPrinter::getDefaultSmoothingType() const
     return m_defaultSmoothingType;
 }
 
-void DicomPrinter::setDefaultJobPriority(const QString &defaultPriority)
+void DicomPrinter::setDefaultPrintPriority(const QString &defaultPrintPriority)
 {
-    m_defaultPriority = defaultPriority;
+    m_defaultPrintPriority = defaultPrintPriority;
 }
 
-QString DicomPrinter::getDefaultJobPriority() const
+QString DicomPrinter::getDefaultPrintPriority() const
 {
-    return m_defaultPriority;
+    return m_defaultPrintPriority;
 }
 
 void DicomPrinter::setDefaultPolarity(const QString &defaultPolarity)

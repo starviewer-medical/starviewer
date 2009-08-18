@@ -51,9 +51,6 @@ public:
     void setDefaultMinDensity(ushort minDensity);
     ushort getDefaultMinDensity();
     
-    /// Posa la resolució màxima de previsualització de la impressió.
-    void setDefaultMaxPreviewResolution(const int &_x, const int &_v);
-
     /// Posa si es suporta l'ús de TimBox o no.
     void setDefaultTrim(bool _trim);
 	
@@ -95,8 +92,8 @@ public:
     QString getDefaultSmoothingType() const;
 
     ///Especifica/retorna la prioritat per defecte dels jobs que s'imprimeixin amb aquesta impressora
-    void setDefaultJobPriority(const QString &priority);
-    QString getDefaultJobPriority() const;
+    void setDefaultPrintPriority(const QString &priority);
+    QString getDefaultPrintPriority() const;
 
     ///Especifica/retorna la polaritat per defecte de l'impressora
     void setDefaultPolarity(const QString &polarity);
@@ -116,7 +113,7 @@ private:
     QString     m_defaultEmptyImageDensity;
     QString     m_defaultFilmDestination;
     QString     m_defaultSmoothingType;
-    QString     m_defaultPriority;
+    QString     m_defaultPrintPriority;
     QString     m_defaultPolarity;
     ushort m_defaultMinDensity, m_defaultMaxDensity;
 };
