@@ -467,10 +467,10 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
             switch ( m_currentDevice )
             {
                 case CreateDicomdir::CdRom :
-                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
+                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey)).toString().arg(isoPath).split(" ");
                     break;
                 case CreateDicomdir::DvdRom :
-                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
+                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey)).toString().arg(isoPath).split(" ");
                     break;
                 default :
                     break;
@@ -478,7 +478,7 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
         }
         else
         {
-            processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
+            processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(isoPath).split(" ");
         }
         process.start((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString(), processParameters);
         process.waitForFinished( -1 );
