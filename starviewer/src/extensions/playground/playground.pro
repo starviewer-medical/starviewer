@@ -13,7 +13,8 @@ SUBDIRS += diffusionperfusionsegmentation \
            rectumsegmentation \
            volume3dviewtesting \
            experimental3d \
-           gputesting
+           gputesting \
+           imageprint
 include(../../extensions.inc)
 TEMPLATE = subdirs
 include(../../compilationtype.inc)
