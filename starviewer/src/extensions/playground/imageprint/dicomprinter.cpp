@@ -65,135 +65,135 @@ int DicomPrinter::getPort() const
     return m_port;
 }
 
-void DicomPrinter::setMediumType(const QString &_mediumType)
+void DicomPrinter::setDefaultMediumType(const QString &_defaultMediumType)
 {
-    m_mediumType=_mediumType;
+    m_defaultMediumType=_defaultMediumType;
 }
 
 
-QString DicomPrinter::getMediumType() const
+QString DicomPrinter::getDefaultMediumType() const
 {
-    return m_mediumType;
+    return m_defaultMediumType;
 }
 
-void DicomPrinter::setFilmSize(const QString &filmSize)
+void DicomPrinter::setDefaultFilmSize(const QString &defaultFilmSize)
 {
-    m_filmSize=filmSize;
+    m_defaultFilmSize = defaultFilmSize;
 }
 
-QString DicomPrinter::getFilmSize() const
+QString DicomPrinter::getDefaultFilmSize() const
 {
-    return m_filmSize;
+    return m_defaultFilmSize;
 }
 
-void DicomPrinter::setFilmLayout(const QString &_filmLayout)
+void DicomPrinter::setDefaultFilmLayout(const QString &_defaultFilmLayout)
 {
-    m_filmLayout=_filmLayout;
+    m_defaultFilmLayout=_defaultFilmLayout;
 }
 
-QString DicomPrinter::getFilmLayout() const
+QString DicomPrinter::getDefaultFilmLayout() const
 {
-    return m_filmLayout;
+    return m_defaultFilmLayout;
 }
 
-void  DicomPrinter::setMagnificationType(const QString &_magnificationType)
+void  DicomPrinter::setDefaultMagnificationType(const QString &_defaultMagnificationType)
 {
-    m_magnificationType=_magnificationType;
+    m_defaultMagnificationType=_defaultMagnificationType;
 }
 
-QString DicomPrinter::getMagnificationType() const
+QString DicomPrinter::getDefaultMagnificationType() const
 {
-    return m_magnificationType;
+    return m_defaultMagnificationType;
 }
 
-void DicomPrinter::setMaxDensity(ushort maxDensity)
+void DicomPrinter::setDefaultMaxDensity(ushort defaultMaxDensity)
 {
-    m_maxDensity = maxDensity;
+    m_defaultMaxDensity = defaultMaxDensity;
 }
 
-ushort DicomPrinter::getMaxDensity()
+ushort DicomPrinter::getDefaultMaxDensity()
 {
-    return m_maxDensity;
+    return m_defaultMaxDensity;
 }
 
-void DicomPrinter::setMinDensity(ushort minDensity)
+void DicomPrinter::setDefaultMinDensity(ushort defaultMinDensity)
 {
-    m_minDensity = minDensity;
+    m_defaultMinDensity = defaultMinDensity;
 }
 
-ushort DicomPrinter::getMinDensity()
+ushort DicomPrinter::getDefaultMinDensity()
 {
-    return m_minDensity;
+    return m_defaultMinDensity;
 }
 
-void DicomPrinter::setTrim(bool _trim)
+void DicomPrinter::setDefaultTrim(bool _defaultTrim)
 {
-    m_trim=_trim;
+    m_defaultTrim=_defaultTrim;
 }
 
-bool DicomPrinter::getTrim() const
+bool DicomPrinter::getDefaultTrim() const
 {
-    return m_trim;
+    return m_defaultTrim;
 }
 
-void  DicomPrinter::setBorderDensity(const QString &_borderDensity)
+void  DicomPrinter::setDefaultBorderDensity(const QString &_defaultBorderDensity)
 {
-    m_borderDensity=_borderDensity;
+    m_defaultBorderDensity=_defaultBorderDensity;
 }
 
-QString DicomPrinter::getBorderDensity() const
+QString DicomPrinter::getDefaultBorderDensity() const
 {
-    return m_borderDensity;
+    return m_defaultBorderDensity;
 }
 
-void  DicomPrinter::setEmptyImageDensity(const QString &_emptyImageDensity)
+void  DicomPrinter::setDefaultEmptyImageDensity(const QString &_defaultEmptyImageDensity)
 {
-    m_emptyImageDensity=_emptyImageDensity;
+    m_defaultEmptyImageDensity=_defaultEmptyImageDensity;
 }
 
-QString DicomPrinter::getEmptyImageDensity() const
+QString DicomPrinter::getDefaultEmptyImageDensity() const
 {
-    return m_emptyImageDensity;
+    return m_defaultEmptyImageDensity;
 }
 
-void  DicomPrinter::setFilmDestination(const QString &_filmDestination)
+void  DicomPrinter::setDefaultFilmDestination(const QString &_defaultFilmDestination)
 {
-    m_filmDestination=_filmDestination;
+    m_defaultFilmDestination=_defaultFilmDestination;
 }
 
-QString DicomPrinter::getFilmDestination() const
+QString DicomPrinter::getDefaultFilmDestination() const
 {
-    return m_filmDestination;
+    return m_defaultFilmDestination;
 }
 
-void DicomPrinter::setSmoothingType(const QString &smoothingType)
+void DicomPrinter::setDefaultSmoothingType(const QString &defaultSmoothingType)
 {
-    m_smoothingType = smoothingType;
+    m_defaultSmoothingType = defaultSmoothingType;
 }
 
-QString DicomPrinter::getSmoothingType() const
+QString DicomPrinter::getDefaultSmoothingType() const
 {
-    return m_smoothingType;
+    return m_defaultSmoothingType;
 }
 
-void DicomPrinter::setJobPriority(const QString &priority)
+void DicomPrinter::setDefaultJobPriority(const QString &defaultPriority)
 {
-    m_priority = priority;
+    m_defaultPriority = defaultPriority;
 }
 
-QString DicomPrinter::getJobPriority() const
+QString DicomPrinter::getDefaultJobPriority() const
 {
-    return m_priority;
+    return m_defaultPriority;
 }
 
-void DicomPrinter::setPolarity(const QString &polarity)
+void DicomPrinter::setDefaultPolarity(const QString &defaultPolarity)
 {
-    m_polarity = polarity;
+    m_defaultPolarity = defaultPolarity;
 }
 
-QString DicomPrinter::getPolarity() const
+QString DicomPrinter::getDefaultPolarity() const
 {
-    return m_polarity;
+    return m_defaultPolarity;
 }
 
 DicomPrinter& DicomPrinter::operator= (const DicomPrinter& _printer)
@@ -202,14 +202,14 @@ DicomPrinter& DicomPrinter::operator= (const DicomPrinter& _printer)
     m_hostname              =_printer.getHostname();
     m_port                  =_printer.getPort();
     m_description           =_printer.getDescription();
-    m_mediumType            =_printer.getMediumType();
-    m_filmSize              =_printer.getFilmSize();
-    m_filmLayout            =_printer.getFilmLayout();
-    m_magnificationType     =_printer.getMagnificationType();
-    m_trim                  =_printer.getTrim();
-    m_borderDensity         =_printer.getBorderDensity();
-    m_emptyImageDensity     =_printer.getEmptyImageDensity();
-    m_filmDestination       =_printer.getFilmDestination();
+    m_defaultMediumType            =_printer.getDefaultMediumType();
+    m_defaultFilmSize              =_printer.getDefaultFilmSize();
+    m_defaultFilmLayout            =_printer.getDefaultFilmLayout();
+    m_defaultMagnificationType     =_printer.getDefaultMagnificationType();
+    m_defaultTrim                  =_printer.getDefaultTrim();
+    m_defaultBorderDensity         =_printer.getDefaultBorderDensity();
+    m_defaultEmptyImageDensity     =_printer.getDefaultEmptyImageDensity();
+    m_defaultFilmDestination       =_printer.getDefaultFilmDestination();
 	return *this;
 }
 }
