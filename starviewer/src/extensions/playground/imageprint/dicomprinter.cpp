@@ -1,8 +1,4 @@
-
-#include "printer.h"
 #include "dicomprinter.h"
-#include "dcmtk/dcmdata/dctypes.h"    /* for Uint32 */
-#include <QString>
 
 namespace udg{
 
