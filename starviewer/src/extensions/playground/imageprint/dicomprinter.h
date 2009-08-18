@@ -4,7 +4,7 @@
 #include <QString>
 #include "printer.h"
 
-///Representació d'una impressora DICOM amb les eines DCMTK.
+///Representació dels paràmetres d'una impressora DICOM.
 
 namespace udg
 {   
@@ -31,39 +31,39 @@ public:
     void setPort(const int &_port);
 
     /// Posa els mitjans disponibles per la impressió (\p _mediumType és una llista d'opcions separades per "\").
-    void setMediumType(const QString &_mediumType);
+    void setDefaultMediumType(const QString &_mediumType);
     
     /// Posa les mides disponibles d'impressió (\p filmSize és una llista d'opcions separades per "\").
-    void setFilmSize(const QString &filmSize);	
+    void setDefaultFilmSize(const QString &filmSize);	
 
     /// Posa els layouts disponibles per la impressió (\p _layout és una llista d'opcions separades per "\").
-    void setFilmLayout(const QString &_filmLayout);	
+    void setDefaultFilmLayout(const QString &_filmLayout);	
 
     /// Posa el Magnification type disponibles per la impressió (\p _magnificationType és una llista d'opcions separades per "\").
-    void setMagnificationType(const QString &_magnificationType);	
+    void setDefaultMagnificationType(const QString &_magnificationType);	
     
     ///Especifica/retorna la resolució màxima de la impressió.
-    void setMaxDensity(ushort maxDensity);
-    ushort getMaxDensity();
+    void setDefaultMaxDensity(ushort maxDensity);
+    ushort getDefaultMaxDensity();
 
     ///Especifica/retorna la resolució mínima de la impressió
-    void setMinDensity(ushort minDensity);
-    ushort getMinDensity();
+    void setDefaultMinDensity(ushort minDensity);
+    ushort getDefaultMinDensity();
     
     /// Posa la resolució màxima de previsualització de la impressió.
-    void setMaxPreviewResolution(const int &_x, const int &_v);
+    void setDefaultMaxPreviewResolution(const int &_x, const int &_v);
 
     /// Posa si es suporta l'ús de TimBox o no.
-    void setTrim(bool _trim);
+    void setDefaultTrim(bool _trim);
 	
     /// Posa les densitats disponibles en el Border  (\p _borderDensity és una llista d'opcions separades per "\").
-    void setBorderDensity(const QString &_borderDensity);
+    void setDefaultBorderDensity(const QString &_borderDensity);
 
     /// Posa les densitats disponibles en la zona buida (EmptyImage) de la impressió  (\p _borderDensity és una llista d'opcions separades per "\").
-    void setEmptyImageDensity(const QString &_emptyImageDensity);
+    void setDefaultEmptyImageDensity(const QString &_emptyImageDensity);
 
     /// Posa els destins disponibles per la impressió  (\p _borderDensity és una llista d'opcions separades per "\").
-    void setFilmDestination(const QString &_filmDestination);
+    void setDefaultFilmDestination(const QString &_filmDestination);
 
     /// Retorna el nom de la impressora.
     QString  getName() const;
@@ -80,44 +80,44 @@ public:
     /// Retorna el Port de la impressora.
  	int		 getPort() const;
     
-    QString  getMediumType() const; 
-    QString  getFilmSize() const;
-    QString  getFilmLayout() const;
-    QString	 getMagnificationType() const;
-	bool     getTrim() const;
-    QString  getBorderDensity() const;
-    QString  getEmptyImageDensity() const;
-    QString  getFilmDestination() const;
+    QString  getDefaultMediumType() const; 
+    QString  getDefaultFilmSize() const;
+    QString  getDefaultFilmLayout() const;
+    QString	 getDefaultMagnificationType() const;
+	bool     getDefaultTrim() const;
+    QString  getDefaultBorderDensity() const;
+    QString  getDefaultEmptyImageDensity() const;
+    QString  getDefaultFilmDestination() const;
 
     ///Especifica/Retorna el smoothing type per defecte amb la que s'imprimirà
-    void setSmoothingType(const QString &smoothingType);
-    QString getSmoothingType() const;
+    void setDefaultSmoothingType(const QString &smoothingType);
+    QString getDefaultSmoothingType() const;
 
     ///Especifica/retorna la prioritat per defecte dels jobs que s'imprimeixin amb aquesta impressora
-    void DicomPrinter::setJobPriority(const QString &priority);
-    QString DicomPrinter::getJobPriority() const;
+    void setDefaultJobPriority(const QString &priority);
+    QString getDefaultJobPriority() const;
 
     ///Especifica/retorna la polaritat per defecte de l'impressora
-    void DicomPrinter::setPolarity(const QString &polarity);
-    QString DicomPrinter::getPolarity() const;
+    void setDefaultPolarity(const QString &polarity);
+    QString getDefaultPolarity() const;
 
 	DicomPrinter& operator= (const DicomPrinter&);
 
 private:		
 	
-    QString		m_description;
-    QString		m_mediumType;
-    QString		m_filmSize;
-    QString		m_filmLayout;
-    QString		m_magnificationType;
-    bool        m_trim;
-    QString     m_borderDensity;
-    QString     m_emptyImageDensity;
-    QString     m_filmDestination;
-    QString     m_smoothingType;
-    QString     m_priority;
-    QString     m_polarity;
-    ushort m_minDensity, m_maxDensity;
+    QString		m_defaultDescription;
+    QString		m_defaultMediumType;
+    QString		m_defaultFilmSize;
+    QString		m_defaultFilmLayout;
+    QString		m_defaultMagnificationType;
+    bool        m_defaultTrim;
+    QString     m_defaultBorderDensity;
+    QString     m_defaultEmptyImageDensity;
+    QString     m_defaultFilmDestination;
+    QString     m_defaultSmoothingType;
+    QString     m_defaultPriority;
+    QString     m_defaultPolarity;
+    ushort m_defaultMinDensity, m_defaultMaxDensity;
 };
 }; 
 #endif
