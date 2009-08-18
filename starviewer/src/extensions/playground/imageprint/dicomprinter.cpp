@@ -76,14 +76,14 @@ QString DicomPrinter::getMediumType() const
     return m_mediumType;
 }
 
-void DicomPrinter::setFileSize(const QString &_fileSize)
+void DicomPrinter::setFilmSize(const QString &filmSize)
 {
-    m_fileSize=_fileSize;
+    m_filmSize=filmSize;
 }
 
-QString DicomPrinter::getFileSize() const
+QString DicomPrinter::getFilmSize() const
 {
-    return m_fileSize;
+    return m_filmSize;
 }
 
 void DicomPrinter::setFilmLayout(const QString &_filmLayout)
@@ -106,63 +106,24 @@ QString DicomPrinter::getMagnificationType() const
     return m_magnificationType;
 }
 
-void DicomPrinter::setDefaultReflection(const int &_defaultReflection)
+void DicomPrinter::setMaxDensity(ushort maxDensity)
 {
-    m_defaultReflection=_defaultReflection;
+    m_maxDensity = maxDensity;
 }
 
-int DicomPrinter::getDefaultReflection() const
+ushort DicomPrinter::getMaxDensity()
 {
-    return m_defaultReflection;
+    return m_maxDensity;
 }
 
-void DicomPrinter::setMaxPrintResolution(const int &_x, const int &_v)
+void DicomPrinter::setMinDensity(ushort minDensity)
 {
-    m_maxPrintResolutionH=_x;
-    m_maxPrintResolutionV=_v;
+    m_minDensity = minDensity;
 }
 
-int DicomPrinter::getMaxPrintResolutionH() const
+ushort DicomPrinter::getMinDensity()
 {
-    return m_maxPrintResolutionH;
-}
-
-int DicomPrinter::getMaxPrintResolutionV()const
-{
-    return m_maxPrintResolutionV;
-}
-
-
-void DicomPrinter::setMinPrintResolution(const int &_x, const int &_v)
-{
-    m_minPrintResolutionH=_x;
-    m_minPrintResolutionV=_v;
-}
-
-int DicomPrinter::getMinPrintResolutionH()const
-{
-    return m_minPrintResolutionH;
-}
-
-int DicomPrinter::getMinPrintResolutionV()const
-{
-    return m_minPrintResolutionV;
-}
-
-void DicomPrinter::setMaxPreviewResolution(const int &_x, const int &_v)
-{
-    m_maxPreviewResolutionH=_x;
-    m_maxPreviewResolutionV=_v;
-}
-
-int DicomPrinter::getMaxPreviewResolutionH() const
-{
-    return m_maxPreviewResolutionH;
-}
-
-int DicomPrinter::getMaxPreviewResolutionV() const
-{
-    return m_maxPreviewResolutionV;
+    return m_minDensity;
 }
 
 void DicomPrinter::setTrim(bool _trim)
@@ -242,16 +203,9 @@ DicomPrinter& DicomPrinter::operator= (const DicomPrinter& _printer)
     m_port                  =_printer.getPort();
     m_description           =_printer.getDescription();
     m_mediumType            =_printer.getMediumType();
-    m_fileSize              =_printer.getFileSize();
+    m_filmSize              =_printer.getFilmSize();
     m_filmLayout            =_printer.getFilmLayout();
     m_magnificationType     =_printer.getMagnificationType();
-    m_defaultReflection     =_printer.getDefaultReflection();
-    m_maxPrintResolutionH   =_printer.getMaxPrintResolutionH();
-    m_maxPrintResolutionV   =_printer.getMaxPrintResolutionV();
-    m_minPrintResolutionH   =_printer.getMinPrintResolutionH();
-    m_minPrintResolutionV   =_printer.getMinPrintResolutionV();
-    m_maxPreviewResolutionH =_printer.getMaxPreviewResolutionH();
-    m_maxPreviewResolutionV =_printer.getMaxPreviewResolutionV();
     m_trim                  =_printer.getTrim();
     m_borderDensity         =_printer.getBorderDensity();
     m_emptyImageDensity     =_printer.getEmptyImageDensity();

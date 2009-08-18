@@ -33,8 +33,8 @@ public:
     /// Posa els mitjans disponibles per la impressió (\p _mediumType és una llista d'opcions separades per "\").
     void setMediumType(const QString &_mediumType);
     
-    /// Posa les mides disponibles d'impressió (\p _fileSize és una llista d'opcions separades per "\").
-    void setFileSize(const QString &_fileSize);	
+    /// Posa les mides disponibles d'impressió (\p filmSize és una llista d'opcions separades per "\").
+    void setFilmSize(const QString &filmSize);	
 
     /// Posa els layouts disponibles per la impressió (\p _layout és una llista d'opcions separades per "\").
     void setFilmLayout(const QString &_filmLayout);	
@@ -42,14 +42,13 @@ public:
     /// Posa el Magnification type disponibles per la impressió (\p _magnificationType és una llista d'opcions separades per "\").
     void setMagnificationType(const QString &_magnificationType);	
     
-    /// Posa la Reflecció per defecte.
-    void setDefaultReflection(const int &_defaultReflection);
+    ///Especifica/retorna la resolució màxima de la impressió.
+    void setMaxDensity(ushort maxDensity);
+    ushort getMaxDensity();
 
-    /// Posa la resolució màxima de la impressió.
-    void setMaxPrintResolution(const int &_x, const int &_v);
-
-    /// Posa la resolució mínima de la impressió.
-    void setMinPrintResolution(const int &_x, const int &_v);
+    ///Especifica/retorna la resolució mínima de la impressió
+    void setMinDensity(ushort minDensity);
+    ushort getMinDensity();
     
     /// Posa la resolució màxima de previsualització de la impressió.
     void setMaxPreviewResolution(const int &_x, const int &_v);
@@ -82,16 +81,9 @@ public:
  	int		 getPort() const;
     
     QString  getMediumType() const; 
-    QString  getFileSize() const;
+    QString  getFilmSize() const;
     QString  getFilmLayout() const;
     QString	 getMagnificationType() const;
-	int		 getDefaultReflection() const;
-    int		 getMaxPrintResolutionH()const;
-	int		 getMaxPrintResolutionV()const;
-	int		 getMinPrintResolutionH()const;
-	int		 getMinPrintResolutionV()const;
-	int		 getMaxPreviewResolutionH()const;
-	int		 getMaxPreviewResolutionV()const;
 	bool     getTrim() const;
     QString  getBorderDensity() const;
     QString  getEmptyImageDensity() const;
@@ -115,16 +107,9 @@ private:
 	
     QString		m_description;
     QString		m_mediumType;
-    QString		m_fileSize;
+    QString		m_filmSize;
     QString		m_filmLayout;
     QString		m_magnificationType;
-    int         m_defaultReflection;
-    int         m_maxPrintResolutionH;
-    int         m_maxPrintResolutionV;	
-    int         m_minPrintResolutionH;
-    int         m_minPrintResolutionV;
-    int         m_maxPreviewResolutionH;
-    int         m_maxPreviewResolutionV;
     bool        m_trim;
     QString     m_borderDensity;
     QString     m_emptyImageDensity;
@@ -132,6 +117,7 @@ private:
     QString     m_smoothingType;
     QString     m_priority;
     QString     m_polarity;
+    ushort m_minDensity, m_maxDensity;
 };
 }; 
 #endif
