@@ -25,6 +25,10 @@ public:
     /// Posa la descripció de la impressora.
     void setDescription(const QString &_description);	
     
+    ///Especifica/retorna el AETitle de la impressora
+    void setAETitle(const QString &aeTitle);
+    QString getAETitle() const;
+
     /// Posa el HostName (IP) de la impressora.
     void setHostname(const QString &_hostname);
     
@@ -107,6 +111,7 @@ public:
 
 private:		
 	
+    QString m_aeTitle;
     QString		m_defaultDescription;
     QString		m_defaultMediumType;
     QString		m_defaultFilmSize;

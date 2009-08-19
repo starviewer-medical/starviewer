@@ -41,6 +41,16 @@ QString DicomPrinter::getDescription() const
     return m_description;
 }
 
+void DicomPrinter::setAETitle(const QString &aeTitle)
+{
+    m_aeTitle = aeTitle;
+}
+
+QString DicomPrinter::getAETitle() const
+{
+    return m_aeTitle;
+}
+
 void DicomPrinter::setHostname(const QString &_hostname)
 {
     m_hostname=_hostname;
