@@ -9,10 +9,15 @@ namespace udg{
 
 class PrintJob
 {
- public:
+public:
     
-    virtual void setNumberCopies(const int &_numberCopies)=0;
-    virtual int getNumberCopies() const =0;
+    ///Especifica/retorna el número de pàgines que s'han d'implementar del JOB
+    void setNumberOfCopies(int numberOfCopies);
+    int getNumberOfCopies();
+
+private:
+
+    int m_numberOfCopies;
 };
 }; 
 #endif

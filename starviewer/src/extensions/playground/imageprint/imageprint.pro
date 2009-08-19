@@ -38,6 +38,7 @@ SOURCES += qimageprintextension.cpp \
 	     dicomprinter.cpp \
 	     qdicomprintingconfigurationwidget.cpp \
 	     qdicomjobcreatorwidget.cpp \
+	     printjob.cpp \
 	     dicomprintjob.cpp \
 	     dicomprintmethod.cpp \
 	     printpage.cpp \
