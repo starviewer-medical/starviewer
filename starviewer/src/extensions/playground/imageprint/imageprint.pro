@@ -24,7 +24,9 @@ HEADERS += qimageprintextension.h \
    	     printjob.h \
 	     dicomprintjob.h \
 	     printmethod.h \
-	     dicomprintmethod.h
+	     dicomprintmethod.h \
+	     printpage.h \
+	     dicomprintpage.h 
 SOURCES += qimageprintextension.cpp \					 		
            imageprintextensionmediator.cpp \
 	     dicomprintfactory.cpp \
@@ -37,7 +39,9 @@ SOURCES += qimageprintextension.cpp \
 	     qdicomprintingconfigurationwidget.cpp \
 	     qdicomjobcreatorwidget.cpp \
 	     dicomprintjob.cpp \
-	     dicomprintmethod.cpp
+	     dicomprintmethod.cpp \
+	     printpage.cpp \
+	     dicomprintpage.cpp  
 RESOURCES += imageprint.qrc
 
 EXTENSION_DIR = $$PWD
