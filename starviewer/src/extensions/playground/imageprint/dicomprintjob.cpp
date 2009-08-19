@@ -13,15 +13,7 @@ DicomPrintJob::~DicomPrintJob()
 {
 }
 
-void DicomPrintJob::setNumberCopies(const int &_numberCopies)
-{	
-    m_numberCopies=_numberCopies;
-}
 
-int DicomPrintJob::getNumberCopies() const
-{
-   return m_numberCopies;
-}
 
 void DicomPrintJob::setPrintPriority(const QString &_printPriority)
 {
