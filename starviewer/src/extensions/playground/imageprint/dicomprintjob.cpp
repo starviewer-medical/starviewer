@@ -1,5 +1,5 @@
 #include <QString>
-#include <QSettings>
+
 #include "dicomprintjob.h"
 
 namespace udg 
@@ -7,13 +7,10 @@ namespace udg
 DicomPrintJob::DicomPrintJob()
 {	
 }
-
  
 DicomPrintJob::~DicomPrintJob()
 {
 }
-
-
 
 void DicomPrintJob::setPrintPriority(const QString &_printPriority)
 {
@@ -54,4 +51,15 @@ QString DicomPrintJob::getFilmDestination() const
 {
     return m_filmDestination;
 }
+
+void DicomPrintJob::setPrintPage(DicomPrintPage dicomPrintPage)
+{
+    m_dicomPrintPage = dicomPrintPage;
+}
+
+DicomPrintPage DicomPrintJob::getPrintPage()
+{
+    return m_dicomPrintPage;
+}
+
 }
