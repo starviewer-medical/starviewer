@@ -223,14 +223,14 @@ void QApplicationMainWindow::createActions()
 
     m_closeAction = new QAction( this );
     m_closeAction->setText( tr("&Close") );
-    m_closeAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseViewer ) );
+    m_closeAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseCurrentExtension ) );
     m_closeAction->setStatusTip(tr("Close the current extension page"));
     m_closeAction->setIcon( QIcon(":/images/fileclose.png"));
     connect( m_closeAction, SIGNAL( triggered() ), m_extensionWorkspace , SLOT( closeCurrentApplication() ) );
 
     m_exitAction = new QAction( this );
     m_exitAction->setText( tr("E&xit") );
-    m_exitAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseApp ) );
+    m_exitAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseApplication ) );
     m_exitAction->setStatusTip(tr("Exit the application"));
     m_exitAction->setIcon( QIcon(":/images/exit.png") );
     connect(m_exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));

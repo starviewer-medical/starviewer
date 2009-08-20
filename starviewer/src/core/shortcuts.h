@@ -50,8 +50,8 @@ public:
     static const QString OpenPACS;
     static const QString OpenExams;
     static const QString Preferences;
-    static const QString CloseViewer;
-    static const QString CloseApp;
+    static const QString CloseCurrentExtension;
+    static const QString CloseApplication;
     static const QString FullScreen;
 
 
