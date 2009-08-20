@@ -27,6 +27,7 @@
 #include "isoimagefilecreator.h"
 #include "dicommask.h"
 #include "image.h"
+#include "dicomdirburningapplication.h"
 
 namespace udg {
 
@@ -455,40 +456,14 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
 
     if( isoImageFileCreator.createIsoImageFile() ) // Hi ha hagut problemes al crear la imatge ISO
     {
-        QProcess process;
-        QStringList processParameters;
-        Settings settings;
-
-        processParameters.clear();
-
-        // Si està activada la opció d'entrar diferents paràmetres segons si es vol gravar un CD o un DVD caldrà afegir-los al processParameters
-        if( (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey)).toBool() )
+        DICOMDIRBurningApplication dicomdirBurningApplication;
+        dicomdirBurningApplication.setCurrentDevice(device);
+        dicomdirBurningApplication.setIsoPath(isoPath);
+        
+        if( !dicomdirBurningApplication.burnIsoImageFile() )
         {
-            switch ( m_currentDevice )
-            {
-                case CreateDicomdir::CdRom :
-                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
-                    break;
-                case CreateDicomdir::DvdRom :
-                    processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
-                    break;
-                default :
-                    break;
-            }
-        }
-        else
-        {
-            processParameters << (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationParametersKey)).toString().arg(QDir::toNativeSeparators(isoPath)).split(" ");
-        }
-        process.start((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString(), processParameters);
-        process.waitForFinished( -1 );
-        if( process.exitCode() != 0 ) // Hi ha hagut problemes
-        {
-            showProcessErrorMessage(process, "DICOMDIR burning application");
-        }
-        else
-        {
-            this->close();
+            QMessageBox::critical(this, tr("DICOMDIR Burning Failure"), tr("There was an error during the burning of the ISO image file. ") + dicomdirBurningApplication.getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
+            ERROR_LOG( "Error al gravar la imatge ISO amb descripció: " + dicomdirBurningApplication.getLastErrorDescription() );
         }
     }
     else
