@@ -21,32 +21,32 @@ public:
     enum ImageFileCreationError { InputPathNotExist, OutputIsoImageFilePathNotExist, OutputIsoImageDirPathNotPermissions, OutputIsoImageFilePathNotPermissions, InternError };
 
     IsoImageFileCreator();
-    IsoImageFileCreator( QString inputPath, QString outputIsoImageFilePath );
+    IsoImageFileCreator( const QString &inputPath, const QString &outputIsoImageFilePath );
     ~IsoImageFileCreator();
 
     /// Estableix el label del fitxer d'imatge ISO que es vol crear
-    void setIsoImageLabel( QString isoImageLabel );
-
-    /// Estableix el path del fitxer o directori a partir del qual es vol crear el fitxer d'imatge ISO
-    void setInputPath( QString inputPath );
-
-    /// Estableix el path del fitxer d'imatge ISO que es vol crear
-    void setOutputIsoImageFilePath( QString outputIsoImageFilePath );
+    void setIsoImageLabel( const QString &isoImageLabel );
 
     /// Retorna el label del fitxer d'imatge ISO que es vol crear
-    QString getIsoImageLabel();
+    QString getIsoImageLabel() const;
+
+    /// Estableix el path del fitxer o directori a partir del qual es vol crear el fitxer d'imatge ISO
+    void setInputPath( const QString &inputPath );
 
     /// Retorna el path del fitxer o directori a partir del qual es vol crear el fitxer d'imatge ISO
-    QString getInputPath();
-    
+    QString getInputPath() const;
+
+    /// Estableix el path del fitxer d'imatge ISO que es vol crear
+    void setOutputIsoImageFilePath( const QString &outputIsoImageFilePath );
+
     /// Retorna el path del fitxer d'imatge ISO que es vol crear
-    QString getOutputIsoImageFilePath();
+    QString getOutputIsoImageFilePath() const;
 
     /// Retorna la descripció de l'últim error que s'ha produit
-    QString getLastErrorDescription();
+    QString getLastErrorDescription() const;
 
     /// Retorna l'últim error que s'ha produit
-    ImageFileCreationError getLastError();
+    ImageFileCreationError getLastError() const;
 
     /** Crea el fitxer d'imatge ISO a partir d'un directori o fitxer
      * El path del fitxer d'imatge ISO que es crearà es troba a l'atribut m_inputPath
