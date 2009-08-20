@@ -42,11 +42,11 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
     m_textBurningApplicationCDParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey).toString() );
     m_textBurningApplicationDVDParameters->setText( settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey).toString() );
 
-    bool differenciateCDDVDParameters = settings.getValue( InputOutputSettings::DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey).toBool();
+    bool hasDifferentCDDVDParameters = settings.getValue( InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey).toBool();
 
-    m_textBurningApplicationCDParameters->setEnabled( differenciateCDDVDParameters );
-    m_textBurningApplicationDVDParameters->setEnabled( differenciateCDDVDParameters );
-    m_checkBoxDifferentiateBetweenCDDVDParameteres->setChecked( differenciateCDDVDParameters );
+    m_textBurningApplicationCDParameters->setEnabled( hasDifferentCDDVDParameters );
+    m_textBurningApplicationDVDParameters->setEnabled( hasDifferentCDDVDParameters );
+    m_checkBoxHasDifferentCDDVDParameteres->setChecked( hasDifferentCDDVDParameters );
 
     if( m_textBurningApplicationPath->text().endsWith("k3b") )
     {
@@ -153,7 +153,7 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationParametersKey, m_textBurningApplicationParameters->text() );
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey, m_textBurningApplicationCDParameters->text() );
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey, m_textBurningApplicationDVDParameters->text() );
-    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey, m_checkBoxDifferentiateBetweenCDDVDParameteres->isChecked() );
+    settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, m_checkBoxHasDifferentCDDVDParameteres->isChecked() );
 
     if ( m_textBurningApplicationPath->isModified() )
     {

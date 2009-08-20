@@ -18,7 +18,7 @@ class IsoImageFileCreator {
 
 public:
 
-    enum ImageFileCreationError { InputPathNotExist, OutputIsoImageFilePathNotExist, OutputIsoImageDirPathNotPermissions, OutputIsoImageFilePathNotPermissions, InternError };
+    enum ImageFileCreationError { InputPathNotFound, OutputPathNotFound, OutputDirPathAccessDenied, OutputFilePathAccessDenied, InternalError };
 
     IsoImageFileCreator();
     IsoImageFileCreator( const QString &inputPath, const QString &outputIsoImageFilePath );

@@ -79,7 +79,7 @@ bool IsoImageFileCreator::createIsoImageFile()
     if( !QFile::exists(m_inputPath) )
     {
         m_lastErrorDescription = QObject::tr("The input path that we want to turn into an ISO image doesn't exist.");
-        m_lastError = InputPathNotExist;
+        m_lastError = InputPathNotFound;
         return false;
     }
 
@@ -90,7 +90,7 @@ bool IsoImageFileCreator::createIsoImageFile()
     if ( !outputIsoImageFilePathInfo.dir().exists() )
     {
         m_lastErrorDescription = QObject::tr("The directory where you want to save ISO image file doesn't exist.");
-        m_lastError = OutputIsoImageFilePathNotExist;
+        m_lastError = OutputPathNotFound;
         return false;
     }
 
@@ -99,7 +99,7 @@ bool IsoImageFileCreator::createIsoImageFile()
     if ( !outputIsoImageDirPathInfo.isWritable() )
     {
         m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output iso image directory path.");
-        m_lastError = OutputIsoImageDirPathNotPermissions;
+        m_lastError = OutputDirPathAccessDenied;
         return false;
     }
 
@@ -108,7 +108,7 @@ bool IsoImageFileCreator::createIsoImageFile()
     if ( QFile::exists(outputIsoImageFilePathInfo.absoluteFilePath()) && !outputIsoImageFilePathInfo.isWritable() )
     {
         m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output iso image file path.");
-        m_lastError = OutputIsoImageFilePathNotPermissions;
+        m_lastError = OutputFilePathAccessDenied;
         return false;
     }
 
@@ -141,7 +141,7 @@ bool IsoImageFileCreator::createIsoImageFile()
             if ( !QFile::exists(mkisofsFilePath) )
             {
                 m_lastErrorDescription = QObject::tr("The mkisofs program cannot be found on the system.");
-                m_lastError = InternError;
+                m_lastError = InternalError;
             
                 return false;
             }
@@ -155,7 +155,7 @@ bool IsoImageFileCreator::createIsoImageFile()
     if( process.exitCode() != 0 )
     {
         m_lastErrorDescription = QObject::tr("An error occurred with the iso image file create process.");
-        m_lastError = InternError;
+        m_lastError = InternalError;
 
         ERROR_LOG( "Error al crear ISO amb comanda: " + mkisofsFilePath + "; Amb paràmetres: " + processParameters.join(" ") + "; Exit code qprocess: " + process.exitCode() );
         return false;

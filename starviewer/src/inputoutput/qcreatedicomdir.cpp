@@ -462,7 +462,7 @@ void QCreateDicomdir::burnDicomdir( CreateDicomdir::recordDeviceDicomDir device 
         processParameters.clear();
 
         // Si està activada la opció d'entrar diferents paràmetres segons si es vol gravar un CD o un DVD caldrà afegir-los al processParameters
-        if( (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey)).toBool() )
+        if( (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey)).toBool() )
         {
             switch ( m_currentDevice )
             {

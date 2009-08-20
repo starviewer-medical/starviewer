@@ -162,7 +162,7 @@
        <item>
         <layout class="QVBoxLayout">
          <item>
-          <widget class="QCheckBox" name="m_checkBoxDifferentiateBetweenCDDVDParameteres">
+          <widget class="QCheckBox" name="m_checkBoxHasDifferentCDDVDParameteres">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -258,7 +258,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>m_checkBoxDifferentiateBetweenCDDVDParameteres</sender>
+   <sender>m_checkBoxHasDifferentCDDVDParameteres</sender>
    <signal>toggled(bool)</signal>
    <receiver>m_textBurningApplicationDVDParameters</receiver>
    <slot>setEnabled(bool)</slot>
@@ -274,7 +274,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>m_checkBoxDifferentiateBetweenCDDVDParameteres</sender>
+   <sender>m_checkBoxHasDifferentCDDVDParameteres</sender>
    <signal>toggled(bool)</signal>
    <receiver>m_textBurningApplicationCDParameters</receiver>
    <slot>setEnabled(bool)</slot>
@@ -290,7 +290,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>m_checkBoxDifferentiateBetweenCDDVDParameteres</sender>
+   <sender>m_checkBoxHasDifferentCDDVDParameteres</sender>
    <signal>toggled(bool)</signal>
    <receiver>m_textBurningApplicationParameters</receiver>
    <slot>setDisabled(bool)</slot>
