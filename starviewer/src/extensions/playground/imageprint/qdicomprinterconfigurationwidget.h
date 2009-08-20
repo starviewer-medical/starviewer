@@ -28,6 +28,7 @@ public:
 private:
     void createConnections();
     void createActions();
+	void createTranslation();
 };
 } 
 
