@@ -46,7 +46,7 @@ const QString InputOutputSettings::DICOMDIRBurningApplicationPathKey( DICOMDIRBa
 const QString InputOutputSettings::DICOMDIRBurningApplicationParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationParameters");
 const QString InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationCDParameters" );
 const QString InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationDVDParameters" );
-const QString InputOutputSettings::DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationDifferentiateCDDVDParameters" );
+const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationHasDifferentCDDVDParameters" );
 
 InputOutputSettings::InputOutputSettings()
 {
@@ -86,19 +86,19 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationCDParametersKey, "" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationDVDParametersKey, "" );
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey, false );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, false );
 #elif defined(Q_OS_MAC) //MAC
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) + "/Burn.app/Contents/MacOS/Burn" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "%1" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationCDParametersKey, "" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationDVDParametersKey, "" );
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey, false );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, false );
 #else // UNIX
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, "/usr/bin/k3b" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "--nosplash %1" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationCDParametersKey, "--nosplash --cdimage %1" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationDVDParametersKey, "--nosplash --dvdimage %1" );
-    settingsRegistry->addSetting( DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey, true );
+    settingsRegistry->addSetting( DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, true );
 #endif
 }
 

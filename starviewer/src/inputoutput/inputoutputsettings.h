@@ -60,7 +60,7 @@ public:
     /// Paràmetres de gravació d'un DVD quan són diferents amb els de CD
     static const QString DICOMDIRBurningApplicationDVDParametersKey;
     /// CheckBox per saber si cal tenir o no en compte els paràmetres de gravació d'un CD o DVD
-    static const QString DICOMDIRBurningApplicationDifferentiateCDDVDParametersKey;
+    static const QString DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey;
 };
 
 } // end namespace udg 
