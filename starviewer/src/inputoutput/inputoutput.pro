@@ -82,6 +82,7 @@ HEADERS += databaseconnection.h \
            querypacsjob.h \
            pacsmanager.h \
            isoimagefilecreator.h \
+           dicomdirburningapplication.h \
            risrequestmanager.h
 
 SOURCES += databaseconnection.cpp \
@@ -140,6 +141,7 @@ SOURCES += databaseconnection.cpp \
            querypacsjob.cpp \
            pacsmanager.cpp \
            isoimagefilecreator.cpp \
+           dicomdirburningapplication.cpp \
            risrequestmanager.cpp
 
 INCLUDEPATH += ../core
