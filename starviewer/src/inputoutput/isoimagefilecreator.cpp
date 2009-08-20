@@ -23,7 +23,7 @@ IsoImageFileCreator::IsoImageFileCreator()
 {
 }
 
-IsoImageFileCreator::IsoImageFileCreator(QString inputPath, QString outputIsoImageFilePath)
+IsoImageFileCreator::IsoImageFileCreator(const QString &inputPath, const QString &outputIsoImageFilePath)
 {
     m_inputPath = inputPath;
     m_outputIsoImageFilePath = outputIsoImageFilePath;
@@ -33,42 +33,42 @@ IsoImageFileCreator::~IsoImageFileCreator()
 {
 }
 
-void IsoImageFileCreator::setIsoImageLabel( QString isoImageLabel )
+void IsoImageFileCreator::setIsoImageLabel( const QString &isoImageLabel )
 {
     m_isoImageLabel = isoImageLabel;
 }
 
-void IsoImageFileCreator::setInputPath( QString inputPath )
-{
-    m_inputPath = inputPath;
-}
-
-void IsoImageFileCreator::setOutputIsoImageFilePath( QString outputIsoImageFilePath )
-{
-    m_outputIsoImageFilePath = outputIsoImageFilePath;
-}
-
-QString IsoImageFileCreator::getIsoImageLabel()
+QString IsoImageFileCreator::getIsoImageLabel() const
 {
     return m_isoImageLabel;
 }
 
-QString IsoImageFileCreator::getInputPath()
+void IsoImageFileCreator::setInputPath( const QString &inputPath )
+{
+    m_inputPath = inputPath;
+}
+
+QString IsoImageFileCreator::getInputPath() const
 {
     return m_inputPath;
 }
-    
-QString IsoImageFileCreator::getOutputIsoImageFilePath()
+
+void IsoImageFileCreator::setOutputIsoImageFilePath( const QString &outputIsoImageFilePath )
+{
+    m_outputIsoImageFilePath = outputIsoImageFilePath;
+}
+
+QString IsoImageFileCreator::getOutputIsoImageFilePath() const
 {
     return m_outputIsoImageFilePath;
 }
 
-IsoImageFileCreator::ImageFileCreationError IsoImageFileCreator::getLastError()
+IsoImageFileCreator::ImageFileCreationError IsoImageFileCreator::getLastError() const
 {
     return m_lastError;
 }
 
-QString IsoImageFileCreator::getLastErrorDescription()
+QString IsoImageFileCreator::getLastErrorDescription() const
 {
     return m_lastErrorDescription;
 }
