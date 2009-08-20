@@ -43,8 +43,8 @@ const QString Shortcuts::OpenLocalDatabaseStudies( ShortcutsBase + "OpenLocalDat
 const QString Shortcuts::OpenPACS( ShortcutsBase + "OpenPACS" );
 const QString Shortcuts::OpenExams( ShortcutsBase + "OpenExams" );
 const QString Shortcuts::Preferences( ShortcutsBase + "Preferences" );
-const QString Shortcuts::CloseViewer( ShortcutsBase + "CloseViewer" );
-const QString Shortcuts::CloseApp( ShortcutsBase + "CloseApp" );
+const QString Shortcuts::CloseCurrentExtension( ShortcutsBase + "CloseViewer" );
+const QString Shortcuts::CloseApplication( ShortcutsBase + "CloseApp" );
 const QString Shortcuts::FullScreen( ShortcutsBase + "FullScreen" );
 
 Shortcuts::Shortcuts()
@@ -201,11 +201,11 @@ void Shortcuts::init()
     
     shortcutsList.clear();
     shortcutsList.append( QKeySequence( QKeySequence::Close ).toString() );
-    settingsRegistry->addSetting( CloseViewer, shortcutsList );
+    settingsRegistry->addSetting( CloseCurrentExtension, shortcutsList );
     
     shortcutsList.clear();
     shortcutsList.append( QString("Ctrl+Q") );
-    settingsRegistry->addSetting( CloseApp, shortcutsList );
+    settingsRegistry->addSetting( CloseApplication, shortcutsList );
 
     shortcutsList.clear();
     shortcutsList.append( QString("Ctrl+Return") );
