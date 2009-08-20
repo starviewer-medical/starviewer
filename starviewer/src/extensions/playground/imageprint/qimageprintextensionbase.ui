@@ -23,41 +23,40 @@
    </size>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
-    <widget class="QGraphicsView" name="graphicsView"/>
-   </item>
    <item row="0" column="0">
     <widget class="QToolBox" name="m_tbToolBox">
+     <property name="minimumSize">
+      <size>
+       <width>350</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>350</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="page">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>371</width>
-        <height>358</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Page 1</string>
-      </attribute>
-     </widget>
      <widget class="QWidget" name="page_2">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>371</width>
-        <height>358</height>
+        <width>350</width>
+        <height>386</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Page 2</string>
+       <string/>
       </attribute>
      </widget>
     </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGraphicsView" name="graphicsView"/>
    </item>
   </layout>
  </widget>

@@ -22,9 +22,10 @@ QImagePrintExtension::QImagePrintExtension( QWidget *parent )
 
 	// Només per provar.
 	m_factory=new DicomPrintFactory();
+    m_tbToolBox->removeItem(0);
 	m_tbToolBox->addItem(m_factory->getPrinterConfigurationWidget(),"PrinterConfigurationWidget");
-	m_tbToolBox->addItem(m_factory->getPrintingConfigurationWidget(),"PrintingConfigurationWidget");
-	m_tbToolBox->addItem(m_factory->getPrintJobCreatorWidget(),"JobCreatorWidget");
+	//m_tbToolBox->addItem(m_factory->getPrintingConfigurationWidget(),"PrintingConfigurationWidget");
+	//m_tbToolBox->addItem(m_factory->getPrintJobCreatorWidget(),"JobCreatorWidget");
 }
 
 QImagePrintExtension::~QImagePrintExtension()
