@@ -24,24 +24,18 @@ public:
     IsoImageFileCreator( const QString &inputPath, const QString &outputIsoImageFilePath );
     ~IsoImageFileCreator();
 
-    /// Estableix el label del fitxer d'imatge ISO que es vol crear
+    /// Estableix/Retorna el label del fitxer d'imatge ISO que es vol crear
+    QString getIsoImageLabel() const;
     void setIsoImageLabel( const QString &isoImageLabel );
 
-    /// Retorna el label del fitxer d'imatge ISO que es vol crear
-    QString getIsoImageLabel() const;
-
-    /// Estableix el path del fitxer o directori a partir del qual es vol crear el fitxer d'imatge ISO
+    /// Estableix/Retorna el path del fitxer o directori a partir del qual es vol crear el fitxer d'imatge ISO
+    QString getInputPath() const;
     void setInputPath( const QString &inputPath );
 
-    /// Retorna el path del fitxer o directori a partir del qual es vol crear el fitxer d'imatge ISO
-    QString getInputPath() const;
-
-    /// Estableix el path del fitxer d'imatge ISO que es vol crear
-    void setOutputIsoImageFilePath( const QString &outputIsoImageFilePath );
-
-    /// Retorna el path del fitxer d'imatge ISO que es vol crear
+    /// Estableix/Retorna el path del fitxer d'imatge ISO que es vol crear
     QString getOutputIsoImageFilePath() const;
-
+    void setOutputIsoImageFilePath( const QString &outputIsoImageFilePath );
+  
     /// Retorna la descripció de l'últim error que s'ha produit
     QString getLastErrorDescription() const;
 
