@@ -33,19 +33,14 @@ IsoImageFileCreator::~IsoImageFileCreator()
 {
 }
 
-void IsoImageFileCreator::setIsoImageLabel( const QString &isoImageLabel )
-{
-    m_isoImageLabel = isoImageLabel;
-}
-
 QString IsoImageFileCreator::getIsoImageLabel() const
 {
     return m_isoImageLabel;
 }
 
-void IsoImageFileCreator::setInputPath( const QString &inputPath )
+void IsoImageFileCreator::setIsoImageLabel( const QString &isoImageLabel )
 {
-    m_inputPath = inputPath;
+    m_isoImageLabel = isoImageLabel;
 }
 
 QString IsoImageFileCreator::getInputPath() const
@@ -53,14 +48,19 @@ QString IsoImageFileCreator::getInputPath() const
     return m_inputPath;
 }
 
-void IsoImageFileCreator::setOutputIsoImageFilePath( const QString &outputIsoImageFilePath )
+void IsoImageFileCreator::setInputPath( const QString &inputPath )
 {
-    m_outputIsoImageFilePath = outputIsoImageFilePath;
+    m_inputPath = inputPath;
 }
 
 QString IsoImageFileCreator::getOutputIsoImageFilePath() const
 {
     return m_outputIsoImageFilePath;
+}
+
+void IsoImageFileCreator::setOutputIsoImageFilePath( const QString &outputIsoImageFilePath )
+{
+    m_outputIsoImageFilePath = outputIsoImageFilePath;
 }
 
 IsoImageFileCreator::ImageFileCreationError IsoImageFileCreator::getLastError() const
