@@ -143,6 +143,7 @@ void QCreateDicomdir::addStudy(Study *study)
 {
     qint64 studySizeBytes;
     Status state;
+    Settings settings;
 
     if ( !studyExists( study->getInstanceUID() ) )
     {
@@ -150,7 +151,7 @@ void QCreateDicomdir::addStudy(Study *study)
 
         // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
         // "a quin directori està aquest study"?
-        studySizeBytes = getStudySizeInBytes(false, study->getInstanceUID());
+        studySizeBytes = getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), study->getInstanceUID());
 
         //només comprovem l'espai si gravem a un cd o dvd
         if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
@@ -303,6 +304,9 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 {
     ConvertToDicomdir convertToDicomdir;
     Status state;
+    Settings settings;
+
+    convertToDicomdir.setConvertDicomdirImagesToLittleEndian( settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool() );
 
     if ( !enoughFreeSpace( dicomdirPath ) )// Comprovem si hi ha suficient espai lliure al disc dur
     {
@@ -406,12 +410,15 @@ void QCreateDicomdir::removeAllStudies()
 
 void QCreateDicomdir::removeSelectedStudy()
 {
+    Settings settings;
+
     if (m_dicomdirStudiesList->selectedItems().count() != 0)
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
-            m_dicomdirSizeBytes -= getStudySizeInBytes(false, selectedStudy->text(7));//La columna 7 de m_dicomdirStudiesList conté Study Instance UID
+            bool a = settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool();
+            m_dicomdirSizeBytes -= getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), selectedStudy->text(7));//La columna 7 de m_dicomdirStudiesList conté Study Instance UID
             setDicomdirSize();
 
             delete selectedStudy;
