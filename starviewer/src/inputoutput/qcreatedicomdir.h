@@ -13,12 +13,14 @@
 
 class QSignalMapper;
 class QProcess;
+class QProgressDialog;
 
 namespace udg {
 
 class Study;
 class Status;
 class Image;
+class IsoImageFileCreator;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -104,10 +106,10 @@ private:
      */
     bool dicomdirPathIsADicomdir( QString dicomdirPath );
 
-    /** genera una imatge iso i crida el k3b per gravar la imatge
-     * @param device dispositiu al que es grava, pot ser cd o dvd
+    /** Inicia la generació d'una imatge iso i connecta el signal de finalització de la creació de la imatge
+     *  amb l'slot que obrirà o no el programa de gravació segons l'èxit de la creació de la imatge ISO
      */
-    void burnDicomdir( CreateDicomdir::recordDeviceDicomDir device );
+    void burnDicomdir();
 
     /**
      * Mostra un msgbox amb el corresponent missatge d'error segons l'estat del procés
@@ -126,6 +128,9 @@ private:
 private slots:
     /// Es passa per paràmetre l'identificador del dispositiu i es fan les pertinents accions
     void deviceChanged( int value );
+
+    /// Slot que s'activa quan s'ha acabat de generar la imatge del dicomdir i per tant es pot executar el programa de gravació
+    void openBurningApplication(bool createIsoResult);
 
 private:
 
@@ -157,6 +162,13 @@ private:
     QAction *m_pendriveAction;
 
     QString m_lastDicomdirDirectory;//Guarda l'últim directori on s'ha creat el Dicomdir
+
+    /// Permet mostrar una barra de progrés
+    QProgressDialog *m_progressBar;
+    /// Timer 
+    QTimer *m_timer;
+    /// Permet genera fitxers d'imatge ISO
+    IsoImageFileCreator *m_isoImageFileCreator;
 
     /// Variable que ens diu quin és el dispositiu seleccionat en aquell moment
     CreateDicomdir::recordDeviceDicomDir m_currentDevice;
