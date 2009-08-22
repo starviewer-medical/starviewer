@@ -47,6 +47,7 @@ const QString InputOutputSettings::DICOMDIRBurningApplicationParametersKey( DICO
 const QString InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationCDParameters" );
 const QString InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationDVDParameters" );
 const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationHasDifferentCDDVDParameters" );
+const QString InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey( DICOMDIRBaseKey + "ConvertDICOMDIRImagesToLittleEndian" );
 
 InputOutputSettings::InputOutputSettings()
 {
@@ -81,6 +82,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( PacsConnectionTimeout, 20 );
     settingsRegistry->addSetting( MaximumPACSConnections, 3 );
 
+    settingsRegistry->addSetting( ConvertDICOMDIRImagesToLittleEndianKey, false );
 #if defined(Q_OS_WIN) //WINDOWS
     settingsRegistry->addSetting( DICOMDIRBurningApplicationPathKey, QString::fromLocal8Bit(qgetenv("ProgramFiles")) + "\\ImgBurn\\ImgBurn.exe" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationParametersKey, "/MODE write /SRC %1 /EJECT YES /VERIFY NO /CLOSESUCCESS /START" );

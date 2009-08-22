@@ -48,6 +48,8 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
     m_textBurningApplicationDVDParameters->setEnabled( hasDifferentCDDVDParameters );
     m_checkBoxHasDifferentCDDVDParameteres->setChecked( hasDifferentCDDVDParameters );
 
+    m_checkBoxConvertDICOMDIRImagesToLittleEndian->setChecked( settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool() );
+
     if( m_textBurningApplicationPath->text().endsWith("k3b") )
     {
         m_burningApplicationDownloadURL->setText("<a href='http://k3b.plainblack.com'> k3b.plainblack.com </a>");
@@ -154,6 +156,7 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey, m_textBurningApplicationCDParameters->text() );
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey, m_textBurningApplicationDVDParameters->text() );
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, m_checkBoxHasDifferentCDDVDParameteres->isChecked() );
+    settings.setValue( InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey, m_checkBoxConvertDICOMDIRImagesToLittleEndian->isChecked() );
 
     if ( m_textBurningApplicationPath->isModified() )
     {

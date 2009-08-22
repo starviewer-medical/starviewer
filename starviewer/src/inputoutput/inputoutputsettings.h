@@ -61,6 +61,8 @@ public:
     static const QString DICOMDIRBurningApplicationDVDParametersKey;
     /// CheckBox per saber si cal tenir o no en compte els paràmetres de gravació d'un CD o DVD
     static const QString DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey;
+    /// CheckBox per saber si cal convertir les imatges del DICOMDIR a little endian
+    static const QString ConvertDICOMDIRImagesToLittleEndianKey;
 };
 
 } // end namespace udg 
