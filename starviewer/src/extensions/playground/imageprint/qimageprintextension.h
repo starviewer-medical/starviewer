@@ -17,6 +17,10 @@ public:
     QImagePrintExtension( QWidget *parent = 0 );
     ~QImagePrintExtension();
 
+public slots:
+    void configurationPrinter();
+
+
 private:
 	void createConnections();
 	void createActions();

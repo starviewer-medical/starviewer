@@ -6,21 +6,77 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
-    <height>747</height>
+    <width>770</width>
+    <height>541</height>
    </rect>
   </property>
+  <property name="windowTitle">
+   <string>Configuració de les Impressores DICOM</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <item row="0" column="0">
-    <widget class="QComboBox" name="m_qcbChoosePrinter">
-     <item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QTreeWidget" name="m_qtwTeePrinterWidget">
+     <column>
       <property name="text">
-       <string>Impressora de Proves - 192.168.1.1</string>
+       <string>AETitle</string>
       </property>
-     </item>
+     </column>
+     <column>
+      <property name="text">
+       <string>HostName</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Port</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Description</string>
+      </property>
+     </column>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="m_qlConfiguracio">
+       <property name="text">
+        <string>Configuració d'una Impressora DICOM</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>188</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_qpbDelete">
+       <property name="text">
+        <string>Delete</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_qpbVerify">
+       <property name="text">
+        <string>Test</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
     <widget class="QGroupBox" name="m_qgbPrinter">
      <property name="title">
       <string>Printer</string>
@@ -68,7 +124,7 @@
       <item row="1" column="1" colspan="3">
        <widget class="QLineEdit" name="m_qleDescription">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -160,76 +216,12 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="1" rowspan="2">
     <widget class="QGroupBox" name="m_qgbDefaultPrinterSettings">
      <property name="title">
       <string>Default Printer Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="2" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="m_qhbSize">
-        <item>
-         <widget class="QLabel" name="m_qlSize">
-          <property name="text">
-           <string>Film Size</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="m_qcbSize">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>190</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>24CMX30CM</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="m_qhbDestination">
-        <item>
-         <widget class="QLabel" name="m_qlDestination">
-          <property name="text">
-           <string>Film Destination</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="m_qjcbDestination">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>190</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>BIN_3</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="4" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbMagnifaction">
         <item>
@@ -420,13 +412,6 @@
         </item>
        </layout>
       </item>
-      <item row="9" column="0">
-       <widget class="QCheckBox" name="m_qchbVisibleTrim">
-        <property name="text">
-         <string>Visible Trim</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhblOrientation">
         <item>
@@ -453,6 +438,77 @@
           <item>
            <property name="text">
             <string>LANDSCAPE</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="m_qhbSize">
+        <item>
+         <widget class="QLabel" name="m_qlSize">
+          <property name="text">
+           <string>Film Size</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="m_qcbSize">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>190</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>24CMX30CM</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="9" column="0">
+       <widget class="QCheckBox" name="m_qchbVisibleTrim">
+        <property name="text">
+         <string>Visible Trim</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="m_qhbDestination">
+        <item>
+         <widget class="QLabel" name="m_qlDestination">
+          <property name="text">
+           <string>Film Destination</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="m_qjcbDestination">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>190</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>BIN_3</string>
            </property>
           </item>
          </widget>
@@ -558,24 +614,21 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>17</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="0">
-    <layout class="QHBoxLayout" name="m_qhblButtons">
+   <item row="4" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>618</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
      <item>
       <widget class="QPushButton" name="m_qpbAdd">
        <property name="text">
@@ -590,40 +643,7 @@
        </property>
       </widget>
      </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_qpbDelete">
-       <property name="text">
-        <string>Delete</string>
-       </property>
-      </widget>
-     </item>
     </layout>
-   </item>
-   <item row="6" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>329</width>
-       <height>98</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
