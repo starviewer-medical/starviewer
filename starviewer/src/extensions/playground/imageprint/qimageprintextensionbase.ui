@@ -52,6 +52,19 @@
       <attribute name="label">
        <string/>
       </attribute>
+      <widget class="QPushButton" name="m_qpbConfiguracio">
+       <property name="geometry">
+        <rect>
+         <x>90</x>
+         <y>50</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Configuració</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </item>

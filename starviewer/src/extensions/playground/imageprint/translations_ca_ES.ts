@@ -2,126 +2,149 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ca_ES" sourcelanguage="ca_ES">
 <context>
+    <name>QDicomPrinterConfigurationWidgetBase</name>
+    <message>
+        <source>Description</source>
+        <translation type="obsolete">Descripció</translation>
+    </message>
+    <message utf8="true">
+        <source>Configuració d&apos;una Impressora DICOM</source>
+        <translation type="obsolete">Configuració d&apos;una impressora DICOM</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="obsolete">Esborrar</translation>
+    </message>
+    <message>
+        <source>Verify</source>
+        <translation type="obsolete">Testejar</translation>
+    </message>
+    <message>
+        <source>Printer</source>
+        <translation type="obsolete">Impressora</translation>
+    </message>
+    <message>
+        <source>Default Printer Settings</source>
+        <translation type="obsolete">Propietats per defecte de la Impressora</translation>
+    </message>
+    <message>
+        <source>Film Destination</source>
+        <translation type="obsolete">Destí del Film</translation>
+    </message>
+    <message>
+        <source>Maxim Density</source>
+        <translation type="obsolete">Densitat Màx</translation>
+    </message>
+    <message>
+        <source>Minium Denstiy</source>
+        <translation type="obsolete">Densitat Mín</translation>
+    </message>
+    <message>
+        <source>Layout</source>
+        <translation type="obsolete">Format</translation>
+    </message>
+    <message>
+        <source>Film Orientation</source>
+        <translation type="obsolete">Orientació del Film</translation>
+    </message>
+    <message>
+        <source>Visible Trim</source>
+        <translation type="obsolete">Visualitzar Trim</translation>
+    </message>
+    <message>
+        <source>Film Size</source>
+        <translation type="obsolete">Mida del Film</translation>
+    </message>
+    <message>
+        <source>Default Job Settings</source>
+        <translation type="obsolete">Propietats per defecte del Job</translation>
+    </message>
+    <message>
+        <source>Copies</source>
+        <translation type="obsolete">Número de Còpies</translation>
+    </message>
+    <message>
+        <source>Priority</source>
+        <translation type="obsolete">Prioritat</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="obsolete">Mitjà</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="obsolete">Afegir</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="obsolete">Actualitzar</translation>
+    </message>
+</context>
+<context>
     <name>udg::QDicomPrinterConfigurationWidget</name>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="32"/>
         <source>Printer</source>
-        <translation type="unfinished">Impressora</translation>
+        <translation type="obsolete">Impressora</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="33"/>
-        <source>AETitle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="34"/>
         <source>Description</source>
-        <translation type="unfinished">Descripció</translation>
+        <translation type="obsolete">Descripció</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="35"/>
-        <source>Hostname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="36"/>
-        <source>Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="38"/>
         <source>Default Printer Settings</source>
-        <translation type="unfinished">Propietats per defecte de la Impressora</translation>
+        <translation type="obsolete">Propietats per defecte de la Impressora</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="39"/>
         <source>Film Orientation</source>
-        <translation type="unfinished">Orientació del Film</translation>
+        <translation type="obsolete">Orientació del Film</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="40"/>
-        <source>Layout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="41"/>
         <source>Film Size</source>
-        <translation type="unfinished">Mida del Film</translation>
+        <translation type="obsolete">Mida del Film</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="42"/>
         <source>Max. Density</source>
-        <translation type="unfinished">Densitat Màx</translation>
+        <translation type="obsolete">Densitat Màx</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="43"/>
         <source>Min. Density</source>
-        <translation type="unfinished">Densitat Min</translation>
+        <translation type="obsolete">Densitat Min</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="44"/>
         <source>Destination</source>
-        <translation type="unfinished">Destí</translation>
+        <translation type="obsolete">Destí</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="45"/>
-        <source>Empty Density</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="46"/>
-        <source>Smoothing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="47"/>
-        <source>Magnifaction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="48"/>
-        <source>Border Density</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="49"/>
         <source>Visible Trim</source>
-        <translation type="unfinished">Visualitzar Trim</translation>
+        <translation type="obsolete">Visualitzar Trim</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="51"/>
         <source>Default Job Settings</source>
-        <translation type="unfinished">Propietats per defecte del Job</translation>
+        <translation type="obsolete">Propietats per defecte del Job</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="52"/>
         <source>Medium</source>
-        <translation type="unfinished">Mitjà</translation>
+        <translation type="obsolete">Mitjà</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="53"/>
         <source>Priority</source>
-        <translation type="unfinished">Prioritat</translation>
+        <translation type="obsolete">Prioritat</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="54"/>
         <source>Number of Copies</source>
-        <translation type="unfinished">Número de còpies</translation>
+        <translation type="obsolete">Número de còpies</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="56"/>
         <source>Add</source>
-        <translation type="unfinished">Afegir</translation>
+        <translation type="obsolete">Afegir</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="57"/>
         <source>Delete</source>
-        <translation type="unfinished">Esborrar</translation>
+        <translation type="obsolete">Esborrar</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="58"/>
         <source>Update</source>
-        <translation type="unfinished">Actualitzar</translation>
+        <translation type="obsolete">Actualitzar</translation>
     </message>
 </context>
 </TS>
