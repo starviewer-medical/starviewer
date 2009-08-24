@@ -23,6 +23,11 @@ public:
     void	  setPrinter(Printer& _printer);
     Printer *  getPrinter();
 
+private slots:
+
+    ///Test de la part d'impressió mentre s'està desenvolupant
+    void testPrinting();
+
 private:
     void createConnections();
     void createActions();
