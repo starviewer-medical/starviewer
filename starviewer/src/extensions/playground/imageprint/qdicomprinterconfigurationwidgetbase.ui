@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0" colspan="2">
-    <widget class="QTreeWidget" name="m_qtwTeePrinterWidget">
+    <widget class="QTreeWidget" name="m_listPrintersTreeWidget">
      <column>
       <property name="text">
        <string>AETitle</string>
@@ -41,7 +41,7 @@
    <item row="1" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="m_qlConfiguracio">
+      <widget class="QLabel" name="m_informacioLabel">
        <property name="text">
         <string>Configuració d'una Impressora DICOM</string>
        </property>
@@ -61,14 +61,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_qpbDelete">
+      <widget class="QPushButton" name="m_deletePrinterPushButton">
        <property name="text">
         <string>Delete</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="m_qpbVerify">
+      <widget class="QPushButton" name="m_VerifyPrinterPushButton">
        <property name="text">
         <string>Test</string>
        </property>
@@ -83,7 +83,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="m_qlAetitle">
+       <widget class="QLabel" name="m_printerAetitleLabel">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -93,7 +93,7 @@
        </widget>
       </item>
       <item row="0" column="1" colspan="3">
-       <widget class="QLineEdit" name="m_qleAetitle">
+       <widget class="QLineEdit" name="m_printerAetitleLineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -115,14 +115,14 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="m_qlDescription">
+       <widget class="QLabel" name="m_printerDescriptionLabel">
         <property name="text">
          <string>Description</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1" colspan="3">
-       <widget class="QLineEdit" name="m_qleDescription">
+       <widget class="QLineEdit" name="m_printerDescriptionLineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -144,14 +144,14 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="m_qlHostname">
+       <widget class="QLabel" name="m_printerHostnameLabel">
         <property name="text">
          <string>Hostname</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="m_qleHostname">
+       <widget class="QLineEdit" name="m_printerHostnameLineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -173,7 +173,7 @@
        </widget>
       </item>
       <item row="2" column="2">
-       <widget class="QLabel" name="m_qlPort">
+       <widget class="QLabel" name="m_printerPortLabel">
         <property name="minimumSize">
          <size>
           <width>20</width>
@@ -192,7 +192,7 @@
        </widget>
       </item>
       <item row="2" column="3">
-       <widget class="QLineEdit" name="m_qlePort">
+       <widget class="QLineEdit" name="m_printerPortLineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -222,49 +222,17 @@
       <string>Default Printer Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="4" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="m_qhbMagnifaction">
-        <item>
-         <widget class="QLabel" name="m_qlMagnifaction">
-          <property name="text">
-           <string>Magnification Type</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="m_qcbMagnifaction">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>190</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>BILINEAR</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="5" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbSmoothing">
         <item>
-         <widget class="QLabel" name="m_qlSmoothing">
+         <widget class="QLabel" name="m_smoothingTypeLabel">
           <property name="text">
            <string>Smoothing</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcbSmoothing">
+         <widget class="QComboBox" name="m_smoothingTypeComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -289,14 +257,14 @@
       <item row="6" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbBorderDensity">
         <item>
-         <widget class="QLabel" name="m_qlBorderDensity">
+         <widget class="QLabel" name="m_borderDensityLabel">
           <property name="text">
            <string>Border Density</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcbBorderDensity">
+         <widget class="QComboBox" name="m_borderDensityComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -321,14 +289,14 @@
       <item row="7" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbEmptyDensity">
         <item>
-         <widget class="QLabel" name="m_qlEmptyDensity">
+         <widget class="QLabel" name="m_emptyDensityLabel">
           <property name="text">
            <string>Empty Density</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcbEmptyDensity">
+         <widget class="QComboBox" name="m_emptyDensityComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -353,24 +321,24 @@
       <item row="8" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbDensity">
         <item>
-         <widget class="QLabel" name="m_qlMaximDensity">
+         <widget class="QLabel" name="m_maximDensityLabel">
           <property name="text">
            <string>Maxim Density</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="m_qsbMaximDensity"/>
+         <widget class="QSpinBox" name="m_maximDensitySpinBox"/>
         </item>
         <item>
-         <widget class="QLabel" name="m_qlMiniumDensity">
+         <widget class="QLabel" name="m_miniumDensityLabel">
           <property name="text">
            <string>Minium Denstiy</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="m_qsbMiniumDensity"/>
+         <widget class="QSpinBox" name="m_miniumDensitySpinBox"/>
         </item>
        </layout>
       </item>
@@ -415,14 +383,14 @@
       <item row="1" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhblOrientation">
         <item>
-         <widget class="QLabel" name="m_qlOrientation">
+         <widget class="QLabel" name="m_filmOrientationLabel">
           <property name="text">
            <string>Film Orientation</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcbOrientation">
+         <widget class="QComboBox" name="m_filmOrientationComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -447,14 +415,14 @@
       <item row="2" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbSize">
         <item>
-         <widget class="QLabel" name="m_qlSize">
+         <widget class="QLabel" name="m_filmSizeLabel">
           <property name="text">
            <string>Film Size</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcbSize">
+         <widget class="QComboBox" name="m_filmSizeComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -476,24 +444,17 @@
         </item>
        </layout>
       </item>
-      <item row="9" column="0">
-       <widget class="QCheckBox" name="m_qchbVisibleTrim">
-        <property name="text">
-         <string>Visible Trim</string>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbDestination">
         <item>
-         <widget class="QLabel" name="m_qlDestination">
+         <widget class="QLabel" name="m_filmDestinationLabel">
           <property name="text">
            <string>Film Destination</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qjcbDestination">
+         <widget class="QComboBox" name="m_filmDestinationComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -515,8 +476,47 @@
         </item>
        </layout>
       </item>
+      <item row="9" column="0">
+       <widget class="QCheckBox" name="m_visibleTrimCheckBox">
+        <property name="text">
+         <string>Visible Trim</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="m_qhbMagnifaction">
+        <item>
+         <widget class="QLabel" name="m_magnifactionLabel">
+          <property name="text">
+           <string>Magnification Type</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="m_magnifactionTypeComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>190</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>BILINEAR</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
-     <zorder>m_qchbVisibleTrim</zorder>
+     <zorder>m_visibleTrimCheckBox</zorder>
      <zorder></zorder>
     </widget>
    </item>
@@ -529,14 +529,14 @@
       <item row="0" column="0">
        <layout class="QHBoxLayout" name="m_qhblCopies">
         <item>
-         <widget class="QLabel" name="m_qcblCopies">
+         <widget class="QLabel" name="m_numberCopiesLabel">
           <property name="text">
            <string>Copies</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="m_qsbCopies">
+         <widget class="QSpinBox" name="m_numberCopiesSpinBox">
           <property name="minimumSize">
            <size>
             <width>190</width>
@@ -550,14 +550,14 @@
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="m_qhblPriority">
         <item>
-         <widget class="QLabel" name="m_qlPriority">
+         <widget class="QLabel" name="m_priorityLabel">
           <property name="text">
            <string>Priority</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcbPriority">
+         <widget class="QComboBox" name="m_priorityComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -582,14 +582,14 @@
       <item row="2" column="0">
        <layout class="QHBoxLayout" name="m_qhblMedium">
         <item>
-         <widget class="QLabel" name="m_qllMedium">
+         <widget class="QLabel" name="m_mediumTypeLabel">
           <property name="text">
            <string>Medium</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcblMedium">
+         <widget class="QComboBox" name="m_mediumTypeComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -630,14 +630,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_qpbAdd">
+      <widget class="QPushButton" name="m_addPrinterPushButton">
        <property name="text">
         <string>Add</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="m_qpbUpdate">
+      <widget class="QPushButton" name="m_updatePrinterPushButton">
        <property name="text">
         <string>Update</string>
        </property>
