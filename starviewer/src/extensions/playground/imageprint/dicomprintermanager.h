@@ -1,8 +1,8 @@
-#ifndef UDGDICOMPRINTERHANDLER_H
-#define UDGDICOMPRINTERHANDLER_H
+#ifndef UDGDICOMPRINTERMANAGER_H
+#define UDGDICOMPRINTERMANAGER_H
 
 #include <QList>
-#include "printerhandler.h"
+#include "printermanager.h"
 
 /**
 * Implementació per la Interfície PrinterHandler per impressores Dicom en DCMTK.
@@ -12,11 +12,11 @@ namespace udg
 {
     class Printer;
 
-class DicomPrinterHandler: public PrinterHandler
+class DicomPrinterManager: public PrinterManager
 {
  public:
-	 DicomPrinterHandler();
-	~DicomPrinterHandler();
+	 DicomPrinterManager();
+	~DicomPrinterManager();
 
     void addPrinter(Printer &_printer);
     void updatePrinter(Printer &_printer);

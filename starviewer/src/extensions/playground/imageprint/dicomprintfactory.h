@@ -12,7 +12,7 @@ namespace udg
 {
     class Printer;
     class PrintMethod;
-    class PrinterHandler;
+    class PrinterManager;
     class QPrinterConfigurationWidget;
     class QPrintingConfigurationWidget;
     class QPrintJobCreatorWidget;
@@ -27,15 +27,15 @@ public:
 	
     Printer						* getPrinter();
     PrintMethod					* getPrintMethod();
-    PrinterHandler              * getPrinterHandler();
+    PrinterManager              * getPrinterManager();
     QPrinterConfigurationWidget * getPrinterConfigurationWidget();
     QPrintingConfigurationWidget* getPrintingConfigurationWidget();
     QPrintJobCreatorWidget		* getPrintJobCreatorWidget();
 
 private:
-    Printer                     * m_printer;
-    PrintMethod                 * m_printMethod;
-    PrinterHandler              * m_printerHandler;
+    Printer * m_printer;
+    PrintMethod * m_printMethod;
+    PrinterManager * m_printerManager;
     QPrinterConfigurationWidget * m_qPrinterconfigurationWidget;
     QPrintingConfigurationWidget* m_qPrintingConfigurationWidget;
     QPrintJobCreatorWidget      * m_qPrintJobCreatorWidget;

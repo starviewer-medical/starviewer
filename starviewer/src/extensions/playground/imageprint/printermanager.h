@@ -1,5 +1,5 @@
-#ifndef UDGPRINTERHANDLER_H
-#define UDGPRINTERHANDLER_H
+#ifndef UDGPRINTERMANAGER_H
+#define UDGPRINTERMANAGER_H
 
 #include <QList>
 
@@ -11,7 +11,7 @@ namespace udg{
 
     class Printer;
 
-class PrinterHandler
+class PrinterManager
 {
  public:
 	virtual void addPrinter(Printer &_printer)=0;

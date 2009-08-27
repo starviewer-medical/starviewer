@@ -10,7 +10,7 @@ namespace udg {
 
     class Printer;
     class PrintMethod;
-    class PrinterHandler;
+    class PrinterManager;
     class QPrinterConfigurationWidget;
     class QPrintingConfigurationWidget;
     class QPrintJobCreatorWidget;
@@ -19,13 +19,13 @@ class ImagePrintFactory
 {	
 public:
     /// Retorna la impressora.
-    virtual Printer						* getPrinter()=0;
+    virtual Printer * getPrinter()=0;
     
     /// Retorna el mètode d'impressió
-    virtual PrintMethod					* getPrintMethod()=0;
+    virtual PrintMethod * getPrintMethod()=0;
     
-    /// Retorna el manipulador de la impressora (Afegir, Eliminar...).
-    virtual PrinterHandler              * getPrinterHandler()=0;
+     /// Retorna el manipulador de la impressora (Afegir, Eliminar...).
+    virtual PrinterManager  * getPrinterManager()=0;
     
     /// Retorna el Widget encarregat de manipular la impressora (Afegir, Elimnar...)
     virtual QPrinterConfigurationWidget * getPrinterConfigurationWidget()=0;
@@ -34,7 +34,7 @@ public:
     virtual QPrintingConfigurationWidget* getPrintingConfigurationWidget()=0;
     
     /// Retorna el widget encarregat de configurar el PrintJob per una impressió.
-    virtual QPrintJobCreatorWidget		* getPrintJobCreatorWidget() =0;
+    virtual QPrintJobCreatorWidget * getPrintJobCreatorWidget() =0;
 };
 } 
 #endif
