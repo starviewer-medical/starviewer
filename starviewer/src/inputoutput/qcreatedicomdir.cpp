@@ -416,7 +416,6 @@ void QCreateDicomdir::removeSelectedStudy()
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
-            bool a = settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool();
             m_dicomdirSizeBytes -= getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), selectedStudy->text(7));//La columna 7 de m_dicomdirStudiesList conté Study Instance UID
             setDicomdirSize();
 
