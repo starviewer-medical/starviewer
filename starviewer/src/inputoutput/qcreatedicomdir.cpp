@@ -402,9 +402,7 @@ void QCreateDicomdir::examineDicomdirPath()
 void QCreateDicomdir::removeAllStudies()
 {
     m_dicomdirSizeBytes = 0;
-    setDicomdirSize();
     m_dicomdirStudiesList->clear();
-    // TODO perquè es fa un segon setDicomdirSize?
     setDicomdirSize();
 }
 
