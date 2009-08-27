@@ -30,11 +30,13 @@ class CreateDicomPrintSpool
  private:
 	
 
-    void prepareForPrinting(Image *image);
+    void prepareImageForPrinting(Image *image);
+
+    void configureDcmtkDVPSStoredPrint();
 
     void createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio);
 	
-    void createStoredPrint();
+    void createStoredPrintDcmtkFile();
 
    // Versió xapusera. Demanar com millorar-ho.
 	char	m_tranformedImageToPrintUID[70];
