@@ -620,31 +620,31 @@ void QCreateDicomdir::deviceChanged( int index )
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
-                int maximumDeviceCapacity;
+            int maximumDeviceCapacity;
 
-                checkDICOMDIRBurningApplicationConfiguration();
-                
+            checkDICOMDIRBurningApplicationConfiguration();
+            
 
-                if (m_currentDevice == CreateDicomdir::CdRom) 
-                {
-                    maximumDeviceCapacity = CDRomSizeMb;
-                    m_DiskSpaceBytes = CDRomSizeBytes;
-                }
-                else
-                {
-                    maximumDeviceCapacity = DVDRomSizeMb;
-                    m_DiskSpaceBytes = DVDRomSizeBytes;
-                }
-                
-                m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
-                
-                m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
-                setDicomdirSize();//El cridem per refrescar la barra de progrés
+            if (m_currentDevice == CreateDicomdir::CdRom) 
+            {
+                maximumDeviceCapacity = CDRomSizeMb;
+                m_DiskSpaceBytes = CDRomSizeBytes;
+            }
+            else
+            {
+                maximumDeviceCapacity = DVDRomSizeMb;
+                m_DiskSpaceBytes = DVDRomSizeBytes;
+            }
+            
+            m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
+            
+            m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
+            setDicomdirSize();//El cridem per refrescar la barra de progrés
 
-                if (m_dicomdirSizeBytes > m_DiskSpaceBytes)
-                {
-                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumDeviceCapacity) );
-                }
+            if (m_dicomdirSizeBytes > m_DiskSpaceBytes)
+            {
+                QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumDeviceCapacity) );
+            }
             break;
     }
 }
