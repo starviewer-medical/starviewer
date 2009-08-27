@@ -116,7 +116,6 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
 }
 
-//TODO: De manera temporal no es mostrarà la mida del dicomdir, degut a que les imatges descarregades amb la transfer synstax de JpegLossLess s'han de passar a LittleEndian i ocupen més espai, com ara de moment no està implementat un sistema per calcular que ocuparan les imatges a LittleEndian de moment no ho calculem
 void QCreateDicomdir::setDicomdirSize()
 {
     QString sizeOfDicomdirText, sizeText;
@@ -132,6 +131,8 @@ void QCreateDicomdir::setDicomdirSize()
         m_progressBarOcupat->setValue( QString::number(sizeInMb).toInt() );
     else
         m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
+
+    m_progressBarOcupat->repaint();
 
     sizeText.setNum( sizeInMb , 'f' , 0 );
 
@@ -609,8 +610,6 @@ void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 
 void QCreateDicomdir::deviceChanged( int index )
 {
-    float sizeInMB = (m_dicomdirSizeBytes / ( 1024 * 1024 ) );
-
     m_currentDevice = (CreateDicomdir::recordDeviceDicomDir) index;
     switch( m_currentDevice )
     {
@@ -622,37 +621,33 @@ void QCreateDicomdir::deviceChanged( int index )
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
+                int maximumDeviceCapacity;
+
                 checkDICOMDIRBurningApplicationConfiguration();
-                m_stackedWidget->setCurrentIndex(0);
-                int maximumCapacity;
+                
 
                 if (m_currentDevice == CreateDicomdir::CdRom) 
                 {
-                    maximumCapacity = CDRomSizeMb;
+                    maximumDeviceCapacity = CDRomSizeMb;
                     m_DiskSpaceBytes = CDRomSizeBytes;
                 }
                 else
                 {
-                    maximumCapacity = DVDRomSizeMb;
+                    maximumDeviceCapacity = DVDRomSizeMb;
                     m_DiskSpaceBytes = DVDRomSizeBytes;
                 }
+                
+                m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
+                
+                m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
+                setDicomdirSize();//El cridem per refrescar la barra de progrés
 
-                if( sizeInMB < maximumCapacity )
+                if (m_dicomdirSizeBytes > m_DiskSpaceBytes)
                 {
-                    m_progressBarOcupat->setMaximum( maximumCapacity );
-                    m_progressBarOcupat->repaint();
-                }
-                else
-                {
-                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
+                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumDeviceCapacity) );
                 }
             break;
     }
-
-    if ( sizeInMB < m_progressBarOcupat->maximum() )
-        m_progressBarOcupat->setValue( int( sizeInMB ) );
-    else
-        m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
 }
 
 void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
