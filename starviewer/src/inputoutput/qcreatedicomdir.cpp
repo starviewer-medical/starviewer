@@ -158,7 +158,7 @@ void QCreateDicomdir::addStudy(Study *study)
         if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
         {
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , ApplicationNameString , tr( "The study can be adde to Dicomdir list, with this study the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "The study can't be added to Dicomdir list, the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR." ) );
         }
         else
         {  //Afegim la informació de l'estudi a la llista
