@@ -7,15 +7,17 @@
 #include "../inputoutput/dicommask.h"
 #include "../core/image.h"
 
+#include "logging.h"
+
 namespace udg{
 
-DicomPrinter FakeObjects::getDicomPrinterFake(QString AETitle, QString hostname, int port)
+DicomPrinter FakeObjects::getDicomPrinterFake()
 {
     DicomPrinter dicomPrinter;
 
-    dicomPrinter.setHostname(hostname);
-    dicomPrinter.setPort(port);
-    dicomPrinter.setAETitle(AETitle);
+    dicomPrinter.setHostname("localhost");
+    dicomPrinter.setPort(104);
+    dicomPrinter.setAETitle("STARVIEWER");
 
     return dicomPrinter;
 }
