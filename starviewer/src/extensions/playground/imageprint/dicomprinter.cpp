@@ -181,6 +181,16 @@ ushort DicomPrinter::getDefaultMaxDensity()
     return m_defaultMaxDensity;
 }
 
+void DicomPrinter::setAvailableMaxDensityValues(ushort maxDensityValues)
+{
+    m_maxDensityValues = maxDensityValues;
+}
+
+ushort DicomPrinter::getAvailableMaxDensityValues()
+{
+    return m_maxDensityValues;
+}
+
 void DicomPrinter::setDefaultMinDensity(ushort defaultMinDensity)
 {
     m_defaultMinDensity = defaultMinDensity;
@@ -191,14 +201,14 @@ ushort DicomPrinter::getDefaultMinDensity()
     return m_defaultMinDensity;
 }
 
-void DicomPrinter::setAvailableMaxDensityValues(QList<ushort> maxDensityValues)
+void DicomPrinter::setAvailableMinDensityValues(ushort minDensityValues)
 {
-    m_maxDensityValues = maxDensityValues;
+    m_minDensityValues = minDensityValues;
 }
 
-QList<ushort> DicomPrinter::getAvailableMaxDensityValues()
+ushort DicomPrinter::getAvailableMinDensityValues()
 {
-    return m_maxDensityValues;
+    return m_minDensityValues;
 }
 
 void DicomPrinter::setDefaultTrim(bool _defaultTrim)

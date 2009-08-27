@@ -18,7 +18,6 @@ class PrinterManager
     virtual void updatePrinter(Printer &_printer)=0;
     virtual void removePrinter(Printer &_printer)=0;
     virtual void removePrinter(QString &_reference)=0;
-    virtual Printer * getPrinter(QString &_reference)=0;
 };
 }; 
 #endif

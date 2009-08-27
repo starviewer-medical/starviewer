@@ -25,6 +25,9 @@ public:
     void modifyPrinter(Printer &_printer);
     void deletePrinter(char * _refernce);
 
+public slots:
+    void choosePrinter(const int &id);
+
 private:
     void createConnections();
     void createActions();
