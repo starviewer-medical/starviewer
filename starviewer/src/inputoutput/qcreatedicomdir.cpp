@@ -629,18 +629,19 @@ void QCreateDicomdir::deviceChanged( int index )
                 if (m_currentDevice == CreateDicomdir::CdRom) 
                 {
                     maximumCapacity = CDRomSizeMb;
+                    m_DiskSpaceBytes = CDRomSizeBytes;
                 }
                 else
                 {
                     maximumCapacity = DVDRomSizeMb;
+                    m_DiskSpaceBytes = DVDRomSizeBytes;
                 }
 
                 if( sizeInMB < maximumCapacity )
                 {
                     m_progressBarOcupat->setMaximum( maximumCapacity );
-                    m_DiskSpaceBytes = maximumCapacity; // convertim a bytes capacaticat cd/dvd
                     m_progressBarOcupat->repaint();
-              }
+                }
                 else
                 {
                     QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumCapacity) );
