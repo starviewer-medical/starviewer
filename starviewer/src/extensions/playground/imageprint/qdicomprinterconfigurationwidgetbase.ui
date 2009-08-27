@@ -68,7 +68,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="m_VerifyPrinterPushButton">
+      <widget class="QPushButton" name="m_verifyPrinterPushButton">
        <property name="text">
         <string>Test</string>
        </property>
@@ -222,38 +222,6 @@
       <string>Default Printer Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="5" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="m_qhbSmoothing">
-        <item>
-         <widget class="QLabel" name="m_smoothingTypeLabel">
-          <property name="text">
-           <string>Smoothing</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="m_smoothingTypeComboBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>190</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>MEDIUM</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="6" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbBorderDensity">
         <item>
@@ -345,14 +313,14 @@
       <item row="0" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhblLayout">
         <item>
-         <widget class="QLabel" name="m_qlLayout">
+         <widget class="QLabel" name="m_layoutLabel">
           <property name="text">
            <string>Layout</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="m_qcbLayout">
+         <widget class="QComboBox" name="m_layoutComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -476,13 +444,6 @@
         </item>
        </layout>
       </item>
-      <item row="9" column="0">
-       <widget class="QCheckBox" name="m_visibleTrimCheckBox">
-        <property name="text">
-         <string>Visible Trim</string>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbMagnifaction">
         <item>
@@ -509,6 +470,45 @@
           <item>
            <property name="text">
             <string>BILINEAR</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="9" column="0">
+       <widget class="QCheckBox" name="m_visibleTrimCheckBox">
+        <property name="text">
+         <string>Visible Trim</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="m_qhbSmoothing">
+        <item>
+         <widget class="QLabel" name="m_smoothingTypeLabel">
+          <property name="text">
+           <string>Smoothing</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="m_smoothingTypeComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>190</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>MEDIUM</string>
            </property>
           </item>
          </widget>

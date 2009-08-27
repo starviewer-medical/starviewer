@@ -74,14 +74,14 @@ public:
     ///Especifica/retorna la resolució màxima de la impressió.
     void setDefaultMaxDensity(ushort maxDensity);
     ushort getDefaultMaxDensity();
-    void setAvailableMaxDensityValues(QList<ushort> maxDensityValues);
-    QList<ushort> getAvailableMaxDensityValues();
+    void setAvailableMaxDensityValues(ushort maxDensityValues);
+    ushort getAvailableMaxDensityValues();
 
     ///Especifica/retorna la resolució mínima de la impressió
     void setDefaultMinDensity(ushort minDensity);
     ushort getDefaultMinDensity();
-    void setAvailableMinDensityValues(QList<ushort> minDensityValues);
-    QList<ushort> getAvailableMinDensityValues();
+    void setAvailableMinDensityValues(ushort minDensityValues);
+    ushort getAvailableMinDensityValues();
     
     /// Posa si es suporta l'ús de TimBox o no.
     void setDefaultTrim(bool trim);
@@ -140,9 +140,9 @@ private:
     QString	m_defaultMagnificationType;
     QStringList m_magnificationTypeValues;
     ushort m_defaultMaxDensity;
-    QList<ushort> m_maxDensityValues;
+    ushort m_maxDensityValues;
     ushort m_defaultMinDensity;
-    QList<ushort> m_minDensityValues;
+    ushort m_minDensityValues;
     bool m_defaultTrim;
     bool m_availableTrim;
     QString m_defaultBorderDensity;
