@@ -29,46 +29,106 @@ CreateDicomPrintSpool::CreateDicomPrintSpool()
     }
 }
 
-/*void StoredDCMTK::setVolume(Volume *p_volume)
-{
-	m_volume=p_volume;	
-	QStringList l_llistaImage=p_volume->getInputFiles();
-	m_pathImage=l_llistaImage.at(0);
-}*/
-
 void CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob)
 {
-
     m_dicomPrintJob = dicomPrintJob;
     m_dicomPrinter = dicomPrinter;
 
+    configureDcmtkDVPSStoredPrint();
+
     foreach(Image *image, dicomPrintJob.getPrintPage().getImagesToPrint())
     {
-        DEBUG_LOG(QString("UID DE LA IMATGE A IMPRIMIR %1").arg(image->getSOPInstanceUID()));
-        prepareForPrinting(image);
+        prepareImageForPrinting(image);
     }
+
+    size_t numImages = m_StoredPrint->getNumberOfImages();
+    for (size_t i=0; i<numImages; i++)
+    {
+        //TODO Assegurar que quan no s'han seleccionat aquests paràmetres tenen valor empty, podria ser que tinguessin valor NONE, funciona igualment ?
+        if (!m_dicomPrintJob.getPrintPage().getPolarity().isEmpty())
+        {
+            m_StoredPrint->setImagePolarity(i, qPrintable(m_dicomPrintJob.getPrintPage().getPolarity()));
+            //CERR << "warning: cannot set polarity for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_polarity << "', ignoring." << endl;
+        }
+        if (!m_dicomPrintJob.getPrintPage().getMagnificationType().isEmpty())
+        {
+            m_StoredPrint->setImageMagnificationType(i, qPrintable(m_dicomPrintJob.getPrintPage().getMagnificationType()));
+            //CERR << "warning: cannot set magnification type for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_magnification << "', ignoring." << endl;
+        }
+        if (!m_dicomPrintJob.getPrintPage().getSmoothingType().isEmpty())
+        {
+            m_StoredPrint->setImageSmoothingType(i, qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
+            //CERR << "warning: cannot set smoothing type for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_smoothing << "', ignoring." << endl;
+
+        }
+        
+        m_StoredPrint->setImageConfigurationInformation(i, NULL);
+          //CERR << "warning: cannot set configuration information for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_configuration << "', ignoring." << endl;*/
+      }
+
+    this->createStoredPrintDcmtkFile();
 }
 
-void CreateDicomPrintSpool::prepareForPrinting(Image *image)
+void CreateDicomPrintSpool::configureDcmtkDVPSStoredPrint()
+{
+    m_StoredPrint = new DVPSStoredPrint(2000 /*Valor per defecte a dcpstat.cfg getDefaultIlluminaton() */,10 /*Valor per defecte a dcpstat.cfg getDefaultReflection() */, qPrintable(m_dicomPrinter.getAETitle()));
+
+    m_StoredPrint->setLog(&OFConsole::instance(), true, true);
+    if (EC_Normal != m_StoredPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()))) DEBUG_LOG("FALLA setPrinterName");
+    //TODO: Cal ? Al inicialitzar DVPSStoredPrint ja li especifiquem el AETITLE
+    if (EC_Normal != m_StoredPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()))) DEBUG_LOG("FALLA set");
+    //m_StoredPrint->setOriginator("PROVA"); //TODO: Cal especificar l'origen?
+
+    //TODO Això està bé però s'ha de modificar quan s'esculli la impressora correctament.
+    if (EC_Normal != m_StoredPrint->setImageDisplayFormat(2,2)) DEBUG_LOG("FALLA setImageDisplayFormat");  // Aixo s'ha de mirar
+
+    //m_StoredPrint->setImageDisplayFormat(m_printer->getLayout());  // Aixo s'ha de mirar
+    if (EC_Normal != m_StoredPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()))) DEBUG_LOG("FALLA setFilmSize");
+
+    if (EC_Normal != m_StoredPrint->setMagnificationType("CUBIC")) DEBUG_LOG("FALLA setMagnificationType");
+    //if (EC_Normal != m_StoredPrint->setSmoothingType(qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()))) DEBUG_LOG("FALLA setSmoothingType");
+    if (EC_Normal != m_StoredPrint->setBorderDensity(qPrintable(m_dicomPrintJob.getPrintPage().getBorderDensity()))) DEBUG_LOG("FALLA setBorderDensity");
+    if (EC_Normal != m_StoredPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintJob.getPrintPage().getEmptyImageDensity()))) DEBUG_LOG("FALLA setEmptyImageDensity");
+    if (EC_Normal != m_StoredPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMaxDensity()))) ) DEBUG_LOG("FALLA setMaxDensity");
+    if (EC_Normal != m_StoredPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMinDensity())))) DEBUG_LOG("FALLA setMinDensity");
+    
+    if (m_dicomPrintJob.getPrintPage().getFilmOrientation() == "PORTRAIT")
+    {
+        if (EC_Normal != m_StoredPrint->setFilmOrientation(DVPSF_portrait)) DEBUG_LOG("FALLA setFilmOrientaion");    
+    }
+    else if (m_dicomPrintJob.getPrintPage().getFilmOrientation() == "LANDSCAPE")
+    {
+        if (EC_Normal != m_StoredPrint->setFilmOrientation(DVPSF_landscape)) DEBUG_LOG("FALLA setFilmOrientation");
+    }
+    
+    if (m_dicomPrintJob.getPrintPage().getTrim())
+    {
+        if (EC_Normal != m_StoredPrint->setTrim(DVPSH_trim_on)) DEBUG_LOG("FALLA setTrim");
+    }
+    else m_StoredPrint->setTrim(DVPSH_trim_off);   
+    
+    m_StoredPrint->setConfigurationInformation("");
+
+    //m_StoredPrint->setResolutionID(NULL);
+
+    if (EC_Normal != m_StoredPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate)) DEBUG_LOG("FALLA setRequestedDecimate.."); //Ob
+    if (EC_Normal != m_StoredPrint->setPrintIllumination(2000)) DEBUG_LOG("FALLA setPrintIllumination");
+    if (EC_Normal != m_StoredPrint->setPrintReflectedAmbientLight(10)) DEBUG_LOG("FALLA setPrintIllumination");
+
+    /*if ((opt_illumination != (OFCmdUnsignedInt)-1)&&(EC_Normal != dvi.getPrintHandler().setPrintIllumination((Uint16)opt_illumination)))
+      CERR << "warning: cannot set illumination to '" << opt_illumination << "', ignoring." << endl;
+    if ((opt_reflection != (OFCmdUnsignedInt)-1)&&(EC_Normal != dvi.getPrintHandler().setPrintReflectedAmbientLight((Uint16)opt_reflection)))
+      CERR << "warning: cannot set reflected ambient light to '" << opt_reflection << "', ignoring." << endl;*/
+}
+
+void CreateDicomPrintSpool::prepareImageForPrinting(Image *image)
 {
   // Inicialitzem l'StoredPrint
   //TODO Esbrinar els camps DefaultIllumination i getDefaultReflection, DicomPrint utilitzen els mateixos valors per defecte
-  m_StoredPrint = new DVPSStoredPrint(2000 /*Valor per defecte a dcpstat.cfg getDefaultIlluminaton() */,10 /*Valor per defecte a dcpstat.cfg getDefaultReflection() */, qPrintable(m_dicomPrinter.getAETitle()));
-  m_StoredPrint->setPrinterName(qPrintable(m_dicomPrinter.getName()));
-  //TODO: Cal ? Al inicialitzar DVPSStoredPrint ja li especifiquem el AETITLE
-  m_StoredPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle())); 
-
-  //TODO Això està bé però s'ha de modificar quan s'esculli la impressora correctament.
-  m_StoredPrint->setImageDisplayFormat(2,2);  // Aixo s'ha de mirar
-  
-  //m_StoredPrint->setImageDisplayFormat(m_printer->getLayout());  // Aixo s'ha de mirar
-  m_StoredPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()));
   
   DiDisplayFunction *l_displayFunction[DVPSD_max];
   //TODO Els valors per defecte són densitatMíninim H/V (MinPrintResolution) densitatMàxima H/V (MaxPrintResolution) i mida de previsualització de la imatge (PreviewSize)
   m_PresentationState = new DVPresentationState(OFstatic_cast(DiDisplayFunction **, l_displayFunction),1024 , 1024 , 8192 , 8192, 256, 256);
-
-  // Prova: No es pot agafar directament de l'objecte Volume??
   DcmFileFormat *imageFileFormat = NULL;
   DcmDataset	*imageToPrintDataset = NULL;
   
@@ -89,7 +149,6 @@ void CreateDicomPrintSpool::prepareForPrinting(Image *image)
   m_PresentationState->getPrintBitmap(pixelData, bitmapSize, false); 
 
   this->createHardcopyGrayscaleImage(image, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio);
-  this->createStoredPrint();
 }
 
 void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio)
@@ -172,16 +231,16 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 	m_StoredPrint->addImageBox(qPrintable(m_dicomPrinter.getAETitle()), m_tranformedImageToPrintUID, reqImageSize, NULL, presLUT, m_PresentationState->isMonochrome1Image());
 	
     DEBUG_LOG(QString("Imatge Creada %1").arg(m_tranformedImageToPrintUID));
+    DEBUG_LOG(qPrintable(m_dicomPrinter.getAETitle()));
 
     //TODO faltaran delete dels punters?
 }
 
 
-void CreateDicomPrintSpool::createStoredPrint()
+void CreateDicomPrintSpool::createStoredPrintDcmtkFile()
 {	
 	DcmFileFormat *fileformat = new DcmFileFormat();
 	DcmDataset *dataset	= fileformat->getDataset();	
-	dataset	= fileformat->getDataset();
     QString storedPrintPath = m_spoolDirectoryPath + QDir::separator() + "storedPrint.dcm";
 
     char storedPrintUID[70];
@@ -190,11 +249,8 @@ void CreateDicomPrintSpool::createStoredPrint()
 
 	m_StoredPrint->deleteAnnotations();	
 	m_StoredPrint->setInstanceUID(storedPrintUID);	
-	m_StoredPrint->write(*dataset, false, OFTrue, OFTrue, OFFalse);
+	OFCondition write = m_StoredPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
 	
-    //TODO Atenció amb la / del nom delStorePrint, s'hauria d'aplicar ToNativeSeparators
-	DVPSHelper::saveFileFormat(qPrintable(storedPrintPath), fileformat, true);
-	//m_printSession->setStoredPrint(dataset);
-    DEBUG_LOG(QString("Stored Creat %1").arg(m_tranformedImageToPrintUID));
+	write = DVPSHelper::saveFileFormat(qPrintable(storedPrintPath), fileformat, true);
 }
 } 
