@@ -16,8 +16,8 @@ class FakeObjects
 {
 public:
 
-    ///Retorna una impressora amb el AETitle, hostname i port especificat
-    DicomPrinter getDicomPrinterFake(QString AETitle, QString hostname, int port);
+    ///Retorna una impressora 
+    DicomPrinter getDicomPrinterFake();
 
     ///Retorna un DicomPrintjob amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
     DicomPrintJob getDicomPrintJobFake(QString studyUID, QString seriesUID, int numberOfImages);
