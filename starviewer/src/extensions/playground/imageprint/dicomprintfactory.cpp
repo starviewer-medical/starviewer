@@ -4,7 +4,7 @@
 #include "qdicomjobcreatorwidget.h"
 #include "dicomprinter.h"
 #include "dicomprintmethod.h"
-#include "dicomprinterhandler.h"
+#include "dicomprintermanager.h"
 
 namespace udg {
 
@@ -12,7 +12,7 @@ DicomPrintFactory::DicomPrintFactory()
 {
     m_printer                       =new DicomPrinter();
     m_printMethod                   =new DicomPrintMethod();
-    m_printerHandler                =new DicomPrinterHandler();
+    m_printerManager                =new DicomPrinterManager();
     m_qPrinterconfigurationWidget   =new QDicomPrinterConfigurationWidget();
     m_qPrintingConfigurationWidget  =new QDicomPrintingConfigurationWidget();
     m_qPrintJobCreatorWidget        =new QDicomJobCreatorWidget();
@@ -32,9 +32,9 @@ PrintMethod	* DicomPrintFactory::getPrintMethod()
     return m_printMethod;
 }
 
-PrinterHandler	* DicomPrintFactory::getPrinterHandler()
+PrinterManager	* DicomPrintFactory::getPrinterManager()
 {
-    return m_printerHandler;
+    return m_printerManager;
 }
 
 QPrinterConfigurationWidget * DicomPrintFactory::getPrinterConfigurationWidget()

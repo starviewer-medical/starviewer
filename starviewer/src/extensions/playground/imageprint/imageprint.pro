@@ -13,8 +13,8 @@ HEADERS += qimageprintextension.h \
 	     dicomprintfactory.h \
  	     qprinterconfigurationwidget.h \
 	     qdicomprinterconfigurationwidget.h \
-  	     printerhandler.h \
- 	     dicomprinterhandler.h \
+  	   printermanager.h \
+  	   dicomprintermanager.h \ 	     
 	     printer.h \
 	     dicomprinter.h \
 	     qprintingconfigurationwidget.h \
@@ -37,7 +37,7 @@ SOURCES += qimageprintextension.cpp \
 	     dicomprinterhandler.cpp \
 	     dicomprinter.cpp \
 	     qdicomprintingconfigurationwidget.cpp \
-	     dicomprinterhandler.cpp \
+	     dicomprintermanager.cpp \
 	     dicomprinter.cpp \
 	     qdicomprintingconfigurationwidget.cpp \
 	     qdicomjobcreatorwidget.cpp \
