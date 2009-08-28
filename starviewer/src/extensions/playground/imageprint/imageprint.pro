@@ -34,7 +34,6 @@ SOURCES += qimageprintextension.cpp \
            imageprintextensionmediator.cpp \
 	     dicomprintfactory.cpp \
 	     qdicomprinterconfigurationwidget.cpp \
-	     dicomprinterhandler.cpp \
 	     dicomprinter.cpp \
 	     qdicomprintingconfigurationwidget.cpp \
 	     dicomprintermanager.cpp \
