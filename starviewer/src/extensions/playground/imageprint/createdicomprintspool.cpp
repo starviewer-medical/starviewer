@@ -20,7 +20,7 @@ CreateDicomPrintSpool::CreateDicomPrintSpool()
 {
     QDir spoolDir;
     //TODO: Spool path hardcode, s'hauria de guardar al settings
-    m_spoolDirectoryPath = QDir::toNativeSeparators(UserDataRootPath + "/Spool");
+    m_spoolDirectoryPath = UserDataRootPath + QDir::separator() + "Spool";
     
     //TODO: S'ha de fer aquí ?
     if (!spoolDir.exists(m_spoolDirectoryPath))
@@ -111,6 +111,7 @@ void CreateDicomPrintSpool::configureDcmtkDVPSStoredPrint()
 
     //m_StoredPrint->setResolutionID(NULL);
 
+    //TODO: No sé si es guarden al fitxer StoredPrint potser s'han d'especificar en el moment d'imprimir ?
     if (EC_Normal != m_StoredPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate)) DEBUG_LOG("FALLA setRequestedDecimate.."); //Ob
     if (EC_Normal != m_StoredPrint->setPrintIllumination(2000)) DEBUG_LOG("FALLA setPrintIllumination");
     if (EC_Normal != m_StoredPrint->setPrintReflectedAmbientLight(10)) DEBUG_LOG("FALLA setPrintIllumination");
