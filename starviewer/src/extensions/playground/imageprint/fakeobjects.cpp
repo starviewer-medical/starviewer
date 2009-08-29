@@ -17,7 +17,7 @@ DicomPrinter FakeObjects::getDicomPrinterFake()
 
     dicomPrinter.setHostname("localhost");
     dicomPrinter.setPort(104);
-    dicomPrinter.setAETitle("STARVIEWER");
+    dicomPrinter.setAETitle("DVTK_TEST");
 
     return dicomPrinter;
 }
@@ -29,6 +29,20 @@ DicomPrintJob FakeObjects::getDicomPrintJobFake(QString studyUID, QString series
     dicomPrintJob.setFilmDestination("BIN_1");
     dicomPrintJob.setLabel("");
     dicomPrintJob.setMediumType("BLUE FILM");
+    dicomPrintJob.setNumberOfCopies(1);
+    dicomPrintJob.setPrintPriority("MED");
+    dicomPrintJob.setPrintPage(getDicomPrintPageFake(studyUID, seriesUID, numberOfImages));
+
+    return dicomPrintJob;
+}
+
+DicomPrintJob FakeObjects::getDicomPrintJobFakeDicomScope(QString studyUID, QString seriesUID, int numberOfImages)
+{
+    DicomPrintJob dicomPrintJob;
+
+    dicomPrintJob.setFilmDestination("STOREDPRINT");
+    dicomPrintJob.setLabel("");
+    dicomPrintJob.setMediumType("STOREDPRINT");
     dicomPrintJob.setNumberOfCopies(1);
     dicomPrintJob.setPrintPriority("MED");
     dicomPrintJob.setPrintPage(getDicomPrintPageFake(studyUID, seriesUID, numberOfImages));
