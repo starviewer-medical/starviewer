@@ -22,6 +22,9 @@ public:
     ///Retorna un DicomPrintjob amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
     DicomPrintJob getDicomPrintJobFake(QString studyUID, QString seriesUID, int numberOfImages);
 
+    ///Retorna un DicomPrintjob Per DicomScope amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
+    DicomPrintJob getDicomPrintJobFakeDicomScope(QString studyUID, QString seriesUID, int numberOfImages);
+
     ///Retorna un DicomPrintPage amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
     DicomPrintPage getDicomPrintPageFake(QString studyUID, QString seriesUID, int numberOfImages);
 
