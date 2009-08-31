@@ -39,6 +39,9 @@ private:
 
     //Crea un Film session
     Status printSCUcreateBasicFilmSession(DVPSPrintMessageHandler& printConnection);
+
+    ///Una vegada creada la FilmSession i FilmBox aquest mètode ens permet enviar una imatge a imprimir cap a la impressora
+    Status sendImageToPrint(DVPSPrintMessageHandler& printConnection, size_t imageNumber);
 };
 }; 
 #endif

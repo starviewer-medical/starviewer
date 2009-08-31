@@ -64,78 +64,50 @@ void PrintDicomSpool::print()
     if (EC_Normal != (result = m_storedPrintDcmtk->printSCUgetPrinterInstance(printConnection)))
     {
         //TODO: Request printer settings els podem obtenir ?
-        DEBUG_LOG("spooler: printer communication failed, unable to request printer settings.");;
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to request printer settings. %1").arg(result.text()));
     }
 
     if (EC_Normal==result) if (EC_Normal != (result = m_storedPrintDcmtk->printSCUpreparePresentationLUT(
     printConnection, true /*targetRequiresMatchingLUT*/, true/*targetPreferSCPLUTRendering*/, true/*targetSupports12bit*/)))
     {
-        DEBUG_LOG("spooler: printer communication failed, unable to create presentation LUT.");
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to create presentation LUT.").arg(result.text()));
     }
     if (!printSCUcreateBasicFilmSession(printConnection).good())
     {
-        DEBUG_LOG("spooler: printer communication failed, unable to create basic film session.");
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film session. %1").arg(result.text()));
     }
 
     if (EC_Normal != (result = m_storedPrintDcmtk->printSCUcreateBasicFilmBox(printConnection, true /*targetPLUTinFilmSession*/)))
     {
-        DEBUG_LOG("spooler: printer communication failed, unable to create basic film box.");
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film box. %1").arg(result.text()));
     }
 
-
-    // Process images
-    size_t numberOfImages = m_storedPrintDcmtk->getNumberOfImages();
-    //TODO FER DELETE
-    const char *studyUID = NULL;
-    const char *seriesUID = NULL;
-    const char *instanceUID = NULL;
-    DicomImage *dcmimage = NULL;
-    for (size_t currentImage=0; currentImage<numberOfImages; currentImage++)
+    for (size_t imageNumber = 0; imageNumber < m_storedPrintDcmtk->getNumberOfImages(); imageNumber++)
     {
-        result = m_storedPrintDcmtk->getImageReference(currentImage, studyUID, seriesUID, instanceUID);
-
-        if ((EC_Normal == result) && studyUID && seriesUID && instanceUID)
-        {
-            QString currentImageToPrintPath = m_spoolPath + QDir::separator() + instanceUID + ".dcm";
-
-            dcmimage = new DicomImage(qPrintable(QDir::toNativeSeparators(currentImageToPrintPath)));
-
-            if (dcmimage && (EIS_Normal == dcmimage->getStatus()))
-            {
-                // N-SET basic image box
-                if (EC_Normal != (result = m_storedPrintDcmtk->printSCUsetBasicImageBox(printConnection, currentImage, *dcmimage, true/*opt_Monochrome1*/)))
-                {
-                    DEBUG_LOG("spooler: printer communication failed, unable to transmit basic grayscale image box.");
-                }
-            } else 
-            {
-                DEBUG_LOG("spooler: unable to load image file " + currentImageToPrintPath );
-            }
-            delete dcmimage;
-        } 
+         sendImageToPrint(printConnection, imageNumber);
     }
 
     if (EC_Normal != (result = m_storedPrintDcmtk->printSCUprintBasicFilmSession(printConnection)))
     {
-        DEBUG_LOG("spooler: printer communication failed, unable to print (at film session level).");
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to print (at film session level). %1").arg(result.text()));
     } 
     else 
     {
         if (EC_Normal != (result = m_storedPrintDcmtk->printSCUprintBasicFilmBox(printConnection)))
         {
-            DEBUG_LOG("spooler: printer communication failed, unable to print.");
+            DEBUG_LOG(QString("spooler: printer communication failed, unable to print. %1").arg(result.text()));
         }
     }
 
     if (EC_Normal==result) if (EC_Normal != (result = m_storedPrintDcmtk->printSCUdelete(printConnection)))
     {
-        DEBUG_LOG("spooler: printer communication failed, unable to delete print objects.");
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to delete print objects %1.").arg(result.text()));
     }
 
     result = printConnection.releaseAssociation();
     if (result.bad())
     {
-        DEBUG_LOG("spooler: release of connection to printer failed.");
+        DEBUG_LOG(QString("spooler: release of connection to printer failed. %1").arg(result.text()));
     }
 }
 
@@ -202,6 +174,44 @@ Status PrintDicomSpool::printSCUcreateBasicFilmSession(DVPSPrintMessageHandler& 
     result = m_storedPrintDcmtk->printSCUcreateBasicFilmSession(printConnection, datasetBasicFilmSession, true /*plutInSession*/);
     
     return state.setStatus(result);
+}
+
+Status PrintDicomSpool::sendImageToPrint(DVPSPrintMessageHandler& printConnection, size_t imageNumber)
+{
+    OFCondition result;
+    const char *studyUID = NULL, *seriesUID = NULL, *instanceUID = NULL;
+
+    result = m_storedPrintDcmtk->getImageReference(imageNumber, studyUID, seriesUID, instanceUID);
+
+    if (result != EC_Normal || !studyUID || !seriesUID || !instanceUID)
+    {
+        ERROR_LOG(QString("No s'ha trobat la imatge número %1 per imprimir").arg(QString().setNum(imageNumber)));
+        return Status().setStatus(result);
+    }
+
+    QString currentImageToPrintPath = m_spoolPath + QDir::separator() + instanceUID + ".dcm";
+    DicomImage *dcmimage = new DicomImage(qPrintable(QDir::toNativeSeparators(currentImageToPrintPath)));
+
+    if (dcmimage && EIS_Normal == dcmimage->getStatus())
+    {
+        //Enviem la imatge
+        result = m_storedPrintDcmtk->printSCUsetBasicImageBox(printConnection, imageNumber, *dcmimage, true/*opt_Monochrome1*/);
+        if (EC_Normal != result)
+        {
+            DEBUG_LOG(QString("spooler: printer communication failed, unable to transmit basic grayscale image box. %1").arg(result.text()));
+        }
+    } 
+    else 
+    {
+        DEBUG_LOG("spooler: unable to load image file " + currentImageToPrintPath );
+    }
+    
+    delete dcmimage;
+    delete studyUID;
+    delete seriesUID;
+    delete instanceUID;
+
+    return Status().setStatus(result);
 }
 
 DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(QString pathStoredPrintDcmtkFile)
