@@ -179,7 +179,6 @@ void QRectumSegmentationExtension::createConnections()
 
 void QRectumSegmentationExtension::setInput( Volume *input )
 {
-    m_mainVolume = new Volume();
     m_mainVolume = input;
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
