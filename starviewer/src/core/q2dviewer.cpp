@@ -299,18 +299,17 @@ void Q2DViewer::rotateClockWise( int times )
 
 void Q2DViewer::rotateCounterClockWise( int times )
 {
-    // almenys ha de ser 1 ( +90º )
+    // almenys ha de ser 1 ( -90º )
     if( times <= 0 )
         return;
 
-    times += 3;
     if( m_isImageFlipped )
     {
-        m_rotateFactor = (m_rotateFactor-times) % 4 ;
+        m_rotateFactor = (m_rotateFactor+times) % 4 ;
     }
     else
     {
-        m_rotateFactor = (m_rotateFactor+times) % 4 ;
+        m_rotateFactor = (m_rotateFactor-times) % 4 ;
     }
     updateCamera();
 }
