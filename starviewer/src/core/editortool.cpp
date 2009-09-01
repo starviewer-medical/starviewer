@@ -49,7 +49,7 @@ EditorTool::~EditorTool()
     m_squareActor -> Delete();
 }
 
-void EditorTool::initialize(  )
+void EditorTool::initialize()
 {
     if(m_2DViewer->getOverlayInput()!=0)
     {
@@ -138,20 +138,20 @@ void EditorTool::handleEvent( unsigned long eventID )
 
 void EditorTool::increaseState()
 {
-        //Prova!!!!!!!!!!!!!!!!!1
 /*
-        itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
-    
-        minmaxCalc->SetImage(m_2DViewer->getOverlayInput()->getItkData());
-        minmaxCalc->SetRegion(m_2DViewer->getOverlayInput()->getItkData()->GetRequestedRegion());
-        minmaxCalc->Compute();
-    
-        m_outsideValue = minmaxCalc->GetMinimum();
-        m_insideValue  = minmaxCalc->GetMaximum();
+    // Prova!!!!!!!!!!!!!!!!!
+    itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
 
-        DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
-  */      //Prova!!!!!!!!!!!!!!!!!1
+    minmaxCalc->SetImage(m_2DViewer->getOverlayInput()->getItkData());
+    minmaxCalc->SetRegion(m_2DViewer->getOverlayInput()->getItkData()->GetRequestedRegion());
+    minmaxCalc->Compute();
 
+    m_outsideValue = minmaxCalc->GetMinimum();
+    m_insideValue  = minmaxCalc->GetMaximum();
+
+    DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
+    // Prova!!!!!!!!!!!!!!!!!
+*/
 
     switch( m_editorState )
     {
@@ -159,21 +159,25 @@ void EditorTool::increaseState()
         m_editorState = Erase;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/erasercursor.png") ) );
     break;
+
     case Erase:
         m_editorState = EraseRegion;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/eraseregioncursor.png") ) );
         m_squareActor->VisibilityOff();
         m_2DViewer->refresh();
     break;
+
     case EraseRegion:
         m_editorState = EraseSlice;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/slicecursor.png") ) );
     break;
+
     case EraseSlice:
         m_editorState = Paint;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
         this->setPaintCursor();
     break;
+
     default:
     break;
     }
@@ -188,20 +192,24 @@ void EditorTool::decreaseState()
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/erasercursor.png") ) );
         this->setPaintCursor();
     break;
+
     case EraseSlice:
         m_editorState = EraseRegion;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/eraseregioncursor.png") ) );
     break;
+
     case Paint:
         m_editorState = EraseSlice;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/slicecursor.png") ) );
         m_squareActor->VisibilityOff();
         m_2DViewer->refresh();
     break;
+
     case Erase:
         m_editorState = Paint;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
     break;
+
     default:
     break;
     }
@@ -227,7 +235,6 @@ void EditorTool::setEraseRegion()
 {
     m_editorState = EraseRegion;
 }
-
 
 void EditorTool::setEditorPoint(  )
 {
@@ -290,18 +297,15 @@ void EditorTool::setPaintCursor()
         points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2]-1);
         points->SetPoint(2, pos[0] + sizeView[0], pos[1] + sizeView[1], pos[2]-1);
         points->SetPoint(3, pos[0] - sizeView[0], pos[1] + sizeView[1], pos[2]-1);
-  
-  
+
         vtkIdType pointIds[4];
-  
         pointIds[0] = 0;
         pointIds[1] = 1;
         pointIds[2] = 2;
         pointIds[3] = 3;
   
-  
         vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
-  
+
         grid->Allocate(1);
         grid->SetPoints(points);
   
@@ -365,9 +369,7 @@ void EditorTool::eraseMask()
 
 void EditorTool::paintMask()
 {
-
     //DEBUG_LOG( QString( "Màxim = %1 // Mínim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
-
     int i,j;
     Volume::VoxelType *value;
     double pos[3];
