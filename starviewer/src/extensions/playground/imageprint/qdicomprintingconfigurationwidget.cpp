@@ -43,8 +43,8 @@ void QDicomPrintingConfigurationWidget::testPrinting()
     DicomPrint dicomPrint;
     DicomPrinter dicomPrinter;
 
-    dicomPrinter = fakeObjects.getDicomPrinterFake();
-    dicomPrintJob = fakeObjects.getDicomPrintJobFake("1.2.826.0.1.3680043.2.403.1.200.43.20090217212000.332603502", "1.3.12.2.1107.5.1.4.50736.30000009021706425592100008899", 4);
+    dicomPrinter = fakeObjects.getFakeDicomPrinter();
+    dicomPrintJob = fakeObjects.getFakeDicomPrintJob("1.2.826.0.1.3680043.2.403.1.200.43.20090217212000.332603502", "1.3.12.2.1107.5.1.4.50736.30000009021706425592100008899", 4);
 
     dicomPrint.print(dicomPrinter, dicomPrintJob);
 }
