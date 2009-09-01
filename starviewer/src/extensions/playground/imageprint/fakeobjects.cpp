@@ -11,7 +11,7 @@
 
 namespace udg{
 
-DicomPrinter FakeObjects::getDicomPrinterFake()
+DicomPrinter FakeObjects::getFakeDicomPrinter()
 {
     DicomPrinter dicomPrinter;
 
@@ -22,7 +22,7 @@ DicomPrinter FakeObjects::getDicomPrinterFake()
     return dicomPrinter;
 }
 
-DicomPrintJob FakeObjects::getDicomPrintJobFake(QString studyUID, QString seriesUID, int numberOfImages)
+DicomPrintJob FakeObjects::getFakeDicomPrintJob(QString studyUID, QString seriesUID, int numberOfImages)
 {
     DicomPrintJob dicomPrintJob;
 
@@ -31,12 +31,12 @@ DicomPrintJob FakeObjects::getDicomPrintJobFake(QString studyUID, QString series
     dicomPrintJob.setMediumType("BLUE FILM");
     dicomPrintJob.setNumberOfCopies(1);
     dicomPrintJob.setPrintPriority("MED");
-    dicomPrintJob.setPrintPage(getDicomPrintPageFake(studyUID, seriesUID, numberOfImages));
+    dicomPrintJob.setPrintPage(getFakeDicomPrintPage(studyUID, seriesUID, numberOfImages));
 
     return dicomPrintJob;
 }
 
-DicomPrintJob FakeObjects::getDicomPrintJobFakeDicomScope(QString studyUID, QString seriesUID, int numberOfImages)
+DicomPrintJob FakeObjects::getFakeDicomScopeDicomPrintJob(QString studyUID, QString seriesUID, int numberOfImages)
 {
     DicomPrintJob dicomPrintJob;
 
@@ -45,12 +45,12 @@ DicomPrintJob FakeObjects::getDicomPrintJobFakeDicomScope(QString studyUID, QStr
     dicomPrintJob.setMediumType("STOREDPRINT");
     dicomPrintJob.setNumberOfCopies(1);
     dicomPrintJob.setPrintPriority("MED");
-    dicomPrintJob.setPrintPage(getDicomPrintPageFake(studyUID, seriesUID, numberOfImages));
+    dicomPrintJob.setPrintPage(getFakeDicomPrintPage(studyUID, seriesUID, numberOfImages));
 
     return dicomPrintJob;
 }
 
-DicomPrintPage FakeObjects::getDicomPrintPageFake(QString studyUID, QString seriesUID, int numberOfImages)
+DicomPrintPage FakeObjects::getFakeDicomPrintPage(QString studyUID, QString seriesUID, int numberOfImages)
 {
     DicomPrintPage dicomPrintPage;
     DicomMask maskImagesToPrint;
