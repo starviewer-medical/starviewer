@@ -64,14 +64,19 @@ public:
     static int getQueryRetrievePort();
 
 private:
+    /// Ens retorna el KeyName que identifica el PACS
+    QString getKeyName() const;
+    
+    /// Ens retorna la llista de noms claus de PACS seleccionats per defecte
+    QStringList getDefaultPACSKeyNamesList() const;
 
+private:
     QString m_pacsAETitle;
     QString m_pacsPort;
     QString m_pacsAddress;
     QString m_pacsDescription;
     QString m_pacsInstitution;
     QString m_pacsLocation;
-    bool m_isDefaultPACS;
     QString m_pacsID;
 };
 

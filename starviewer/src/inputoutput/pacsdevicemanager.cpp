@@ -129,13 +129,12 @@ QList<PacsDevice> PacsDeviceManager::getConfiguredPacsList( bool onlyDefault )
 Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const PacsDevice &pacsDevice )
 {
     Settings::KeyValueMapType item;
-        
+
     item["ID"] = pacsDevice.getPacsID();
     item["AETitle"] = pacsDevice.getAEPacs();
     item["PacsPort"] = pacsDevice.getPacsPort();
     item["Location"] = pacsDevice.getLocation();
     item["Institution"] = pacsDevice.getInstitution();
-    item["Default"] = pacsDevice.isDefault() ? "S" : "N";//Guardem el camp en format string
     item["PacsHostname"] = pacsDevice.getPacsAddress();
     item["Description"] = pacsDevice.getDescription();
 
@@ -151,19 +150,6 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueM
     pacsDevice.setPacsPort( item.value("PacsPort" ).toString() );
     pacsDevice.setLocation( item.value("Location" ).toString() );
     pacsDevice.setInstitution( item.value("Institution" ).toString() );
-    
-    // TODO la clau "Default" s'hauria de renombrar per una altre ja que en el cas del 
-    // registre de windows pot donar problemes, ja que ve a ser una paraula "reservada"
-    // Un nom més adient seria isDefault o isADefaultPACS, per exemple
-    // cal fer aquest comprovació ja que depèn com s'hagin obtingut les dades per accedir a 
-    // "Default", s'hauria de fer amb la clau "."
-    QString isDefault;
-    if( item.contains("Default") )
-        isDefault = item.value("Default").toString();
-    else
-        isDefault = item.value(".").toString();
-    pacsDevice.setDefault( isDefault == "S" );
-    
     pacsDevice.setPacsAddress( item.value("PacsHostname" ).toString() );
     pacsDevice.setDescription( item.value("Description" ).toString() );
 

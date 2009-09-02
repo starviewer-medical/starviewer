@@ -1,6 +1,7 @@
 #include "pacsdevice.h"
 
 #include "inputoutputsettings.h"
+#include <QStringList>
 
 namespace udg{
 
@@ -71,12 +72,34 @@ QString PacsDevice::getDescription() const
 
 void PacsDevice::setDefault(bool isDefault)
 {
-    m_isDefaultPACS = isDefault;
+    QStringList pacsList = getDefaultPACSKeyNamesList();
+    QString keyName = getKeyName();
+    if( isDefault ) // afegir
+    {
+        if( !pacsList.contains( keyName ) ) // si no està marcat ja
+        {
+            Settings settings;
+            QString value = settings.getValue( InputOutputSettings::DefaultPACSListToQuery ).toString();
+            value += keyName + "//";
+            settings.setValue( InputOutputSettings::DefaultPACSListToQuery, value );
+        }
+    }
+    else // eliminar
+    {
+        Settings settings;
+        QString value = settings.getValue( InputOutputSettings::DefaultPACSListToQuery ).toString();
+        value.remove( keyName + "//" );
+        settings.setValue( InputOutputSettings::DefaultPACSListToQuery, value );
+    }
 }
 
 bool PacsDevice::isDefault() const
 {
-    return m_isDefaultPACS;
+    QStringList pacsList = getDefaultPACSKeyNamesList();
+    if( pacsList.contains( getKeyName() ) )
+        return true;
+    else
+        return false;
 }
 
 void PacsDevice::setPacsID(QString ID)
@@ -123,6 +146,20 @@ int PacsDevice::getQueryRetrievePort()
 {
     Settings settings;
     return settings.getValue( InputOutputSettings::QueryRetrieveLocalPort ).toInt();
+}
+
+QString PacsDevice::getKeyName() const
+{
+    return m_pacsAETitle + m_pacsAddress;
+}
+
+QStringList PacsDevice::getDefaultPACSKeyNamesList() const
+{
+    Settings settings;
+    QString value = settings.getValue( InputOutputSettings::DefaultPACSListToQuery ).toString();
+    QStringList pacsList = value.split("//",QString::SkipEmptyParts);
+
+    return pacsList;
 }
 
 }
