@@ -35,10 +35,13 @@ public:
     ~QPacsList();
 
 public slots:
-
     /// Carrega al ListView la Llista de Pacs disponibles
     void refresh();
 
+private slots:
+    /// Fa que el PACS que està en l'item del Tree Widget quedi com a un dels PACS per defecte
+    /// si aquest element està seleccionat per l'usuari
+    void setDefaultPACS(QTreeWidgetItem *item);
 };
 
 };
