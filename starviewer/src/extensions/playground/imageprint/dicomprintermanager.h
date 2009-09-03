@@ -24,7 +24,7 @@ public:
     void removePrinter(Printer &_printer);
     void removePrinter(QString &_reference);
     DicomPrinter  getPrinterByID(const int &id);
-    DicomPrinter getAvailableParametresValues(const QString &AETitlePrinter, const int &port);
+    DicomPrinter getAvailableParametersValues(const QString &AETitlePrinter, const int &port);
                                                             
 private:
     QStringList getAvailableMediumTypeValues();

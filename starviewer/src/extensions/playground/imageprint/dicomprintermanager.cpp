@@ -81,7 +81,7 @@ DicomPrinter DicomPrinterManager::getPrinterByID(const int &id)
 
 //TODO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació per obtenir les dades
 // directament de la impressora.
-DicomPrinter  DicomPrinterManager::getAvailableParametresValues(const QString &AETitlePrinter, const int &port)
+DicomPrinter  DicomPrinterManager::getAvailableParametersValues(const QString &AETitlePrinter, const int &port)
 {
     DicomPrinter dicomPrinter;
     
