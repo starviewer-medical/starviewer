@@ -21,16 +21,22 @@ public:
     QDicomPrinterConfigurationWidget();
     ~QDicomPrinterConfigurationWidget();
 	
-    void addPrinter(Printer &_printer);
-    void modifyPrinter(Printer &_printer);
-    void deletePrinter(char * _refernce);
-
 public slots:
-    void choosePrinter(const int &id);
+    void choosePrinter();
+    void addPrinter();
+    void updatePrinter();
+    void deletePrinter();
+    void testPrinter();
+    void getAvailableParameters();
 
 private:
     void createConnections();
     void createActions();
+    void fillPrintersList();
+    bool validatePrinterParameters();
+    void clearPrinterParameters();
+    
+    int selectedPrinterId;
 };
 } 
 

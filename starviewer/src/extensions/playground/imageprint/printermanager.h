@@ -14,10 +14,9 @@ namespace udg{
 class PrinterManager
 {
  public:
-	virtual void addPrinter(Printer &_printer)=0;
-    virtual void updatePrinter(Printer &_printer)=0;
-    virtual void removePrinter(Printer &_printer)=0;
-    virtual void removePrinter(QString &_reference)=0;
+	//virtual void addPrinter(Printer &printer)=0;
+    //virtual void updatePrinter(const int &printerID, Printer &newPrinter)=0;
+    //virtual void deletePrinter(const int &printerID)=0;
 };
 }; 
 #endif
