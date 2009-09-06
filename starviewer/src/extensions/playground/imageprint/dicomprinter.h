@@ -73,13 +73,13 @@ public:
 
     ///Especifica/retorna la resolució màxima de la impressió.
     void setDefaultMaxDensity(ushort maxDensity);
-    ushort getDefaultMaxDensity();
+    ushort getDefaultMaxDensity() const;
     void setAvailableMaxDensityValues(ushort maxDensityValues);
     ushort getAvailableMaxDensityValues();
 
     ///Especifica/retorna la resolució mínima de la impressió
     void setDefaultMinDensity(ushort minDensity);
-    ushort getDefaultMinDensity();
+    ushort getDefaultMinDensity() const;
     void setAvailableMinDensityValues(ushort minDensityValues);
     ushort getAvailableMinDensityValues();
     

@@ -3,6 +3,7 @@
 
 #include <QList>
 #include "printermanager.h"
+#include "settings.h"
 
 /**
 * Implementació per la Interfície PrinterHandler per impressores Dicom en DCMTK.
@@ -19,14 +20,22 @@ public:
     DicomPrinterManager();
     ~DicomPrinterManager();
 
-    void addPrinter(Printer &_printer);
-    void updatePrinter(Printer &_printer);
-    void removePrinter(Printer &_printer);
-    void removePrinter(QString &_reference);
-    DicomPrinter  getPrinterByID(const int &id);
+    bool addPrinter(DicomPrinter &printer);
+    bool updatePrinter(const int &printerID, DicomPrinter &newDicomPrinter);
+    void deletePrinter(const int &printerID);
+    
+    DicomPrinter getPrinterByID(const int &id);
+    QList<DicomPrinter> getDicomPrinterList();
     DicomPrinter getAvailableParametersValues(const QString &AETitlePrinter, const int &port);
                                                             
 private:
+    
+    // Configuració dels Settings
+    static const QString DicomPrinterListSectionName;
+    Settings::KeyValueMapType dicomPrinterToKeyValueMap( const DicomPrinter &dicomPrinter);
+    DicomPrinter keyValueMapToDicomPrinter(const Settings::KeyValueMapType &item);
+    int existPrinter(DicomPrinter &printer);
+    
     QStringList getAvailableMediumTypeValues();
     QStringList getAvailableFilmSizeValues();
     QStringList getAvailableFilmLayoutValues();	

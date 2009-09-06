@@ -18,6 +18,11 @@
     <widget class="QTreeWidget" name="m_listPrintersTreeWidget">
      <column>
       <property name="text">
+       <string>Id</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>AETitle</string>
       </property>
      </column>
@@ -222,38 +227,6 @@
       <string>Default Printer Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="6" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="m_qhbBorderDensity">
-        <item>
-         <widget class="QLabel" name="m_borderDensityLabel">
-          <property name="text">
-           <string>Border Density</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="m_borderDensityComboBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>190</width>
-            <height>0</height>
-           </size>
-          </property>
-          <item>
-           <property name="text">
-            <string>BLACK</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="7" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbEmptyDensity">
         <item>
@@ -476,13 +449,6 @@
         </item>
        </layout>
       </item>
-      <item row="9" column="0">
-       <widget class="QCheckBox" name="m_visibleTrimCheckBox">
-        <property name="text">
-         <string>Visible Trim</string>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="0" colspan="2">
        <layout class="QHBoxLayout" name="m_qhbSmoothing">
         <item>
@@ -509,6 +475,45 @@
           <item>
            <property name="text">
             <string>MEDIUM</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="9" column="0">
+       <widget class="QCheckBox" name="m_visibleTrimCheckBox">
+        <property name="text">
+         <string>Visible Trim</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="m_qhbBorderDensity">
+        <item>
+         <widget class="QLabel" name="m_borderDensityLabel">
+          <property name="text">
+           <string>Border Density</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="m_borderDensityComboBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>190</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>BLACK</string>
            </property>
           </item>
          </widget>
@@ -542,6 +547,9 @@
             <width>190</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="maximum">
+           <number>20</number>
           </property>
          </widget>
         </item>

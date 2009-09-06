@@ -14,10 +14,10 @@ class Printer;
 class QPrinterConfigurationWidget : public QWidget{
 Q_OBJECT
 
-public:
-    virtual void addPrinter(Printer &_printer) =0;
-    virtual void modifyPrinter(Printer &_printer) =0;
-    virtual void deletePrinter(char * _reference) =0; 
+public slots:
+    virtual void addPrinter() =0;
+    virtual void updatePrinter() =0;
+    virtual void deletePrinter() =0; 
 };
 }
 

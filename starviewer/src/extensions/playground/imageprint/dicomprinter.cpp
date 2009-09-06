@@ -176,7 +176,7 @@ void DicomPrinter::setDefaultMaxDensity(ushort defaultMaxDensity)
     m_defaultMaxDensity = defaultMaxDensity;
 }
 
-ushort DicomPrinter::getDefaultMaxDensity()
+ushort DicomPrinter::getDefaultMaxDensity() const
 {
     return m_defaultMaxDensity;
 }
@@ -196,7 +196,7 @@ void DicomPrinter::setDefaultMinDensity(ushort defaultMinDensity)
     m_defaultMinDensity = defaultMinDensity;
 }
 
-ushort DicomPrinter::getDefaultMinDensity()
+ushort DicomPrinter::getDefaultMinDensity() const
 {
     return m_defaultMinDensity;
 }
