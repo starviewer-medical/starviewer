@@ -164,6 +164,9 @@ public:
      */
     QPixmap getThumbnail(int resolution = 100);
 
+    /// Ens diu quin és el pla de projecció d'una imatge segons les etiquetes d'orientació (R/L,A/P,F/H)
+    /// El format serà "direccióFiles\\direccióColumnes"
+    /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     static QString getProjectionLabelFromPlaneOrientation( const QString &orientation );
 
 private:
