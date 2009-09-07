@@ -118,7 +118,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                 {
                     QStringList processParameters;
 
-                    // Indiquem que el label de la imatge
+                    // Afegim als paràmetres l'etiqueta de la imatge ISO en cas de que tingui valor vàlid
                     if (!m_isoImageLabel.isEmpty())
                     {
                         processParameters << "-V"; 
