@@ -214,19 +214,11 @@ private:
 
     double m_seedPosition[3];
 
-    /// tipus d'edició dels models
-    enum EditorType{ NoEditor , Paint , Erase , EraseSlice , EraseRegion };
-    int m_editorTool;
-
-    vtkActor *m_squareActor;
-
     /// Accions
-    QAction *m_rotateClockWiseAction;
     QAction *m_lesionViewAction;
     QAction *m_ventriclesViewAction;
 
     /// Grups de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
     QActionGroup *m_viewOverlayActionGroup;
 
     ///Directori on guardem les màscares

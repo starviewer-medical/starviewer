@@ -80,11 +80,6 @@ private:
     ///Inicialitza les tools que tindrà l'extensió
     void initializeTools();
 
-    /**
-     * Inicialitza les tools per defecte dels visors de l'extensió
-     */
-    void initializeDefaultTools();
-
     /// Actualitza valors dels plans i del reslice final \TODO: separar en dos mètodes diferenciats segons quin pla????
     void updatePlanes();
 

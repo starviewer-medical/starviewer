@@ -64,7 +64,7 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
 
     m_seedPosition = QVector<double> (3);
 
-    createActions();
+    initializeTools();
     createConnections();
     readSettings();
 
@@ -89,7 +89,7 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
     }
 }
 
-void QRectumSegmentationExtension::createActions()
+void QRectumSegmentationExtension::initializeTools()
 {
     m_regionAction = new QAction( 0 );
     m_regionAction->setText( tr("RegionTool") );
@@ -99,24 +99,34 @@ void QRectumSegmentationExtension::createActions()
     m_regionAction->setIcon( QIcon(":/images/roi.png") );
     m_regionToolButton->setDefaultAction( m_regionAction );
 
+    //Apanyo que hem de fer per tal de detectar quan s'activa una tool 
+    // que no es pugui fer servir amb l'eina de marcar regió (que no és una Tool estàndar)
+    m_toolsButtonGroup = new QButtonGroup( this );
+    m_toolsButtonGroup->setExclusive( false );
+    m_toolsButtonGroup->addButton( m_zoomToolButton, 1 );
+    m_toolsButtonGroup->addButton( m_slicingToolButton, 2 );
+    m_toolsButtonGroup->addButton( m_editorToolButton, 3 );
+    m_toolsButtonGroup->addButton( m_seedToolButton, 4 );
+    m_toolsButtonGroup->addButton( m_regionToolButton, 0 );
+
     // Tools
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
+    m_editorToolButton->setDefaultAction( m_toolManager->registerTool("EditorTool") );
+    m_toolManager->registerTool("SynchronizeTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
 
-    // Action Tools
-    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
-
-    // Tool d'slicing per teclat
-    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
-    slicingKeyboardTool->trigger();
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton 
+    QStringList defaultTools;
+    defaultTools << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "SlicingKeyboardTool";
+    m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -131,29 +141,12 @@ void QRectumSegmentationExtension::createActions()
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
-    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_moveToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
+    // inicialització de les tools
+    m_toolManager->setupRegisteredTools( m_2DView );
 
-    // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
-    m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
-
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "EditorTool" <<  "SlicingKeyboardTool"<<"SeedTool";
-
-    m_toolManager->setViewerTools( m_2DView, toolsList );
-    m_toolManager->enableActionTools( m_2DView, QStringList("RotateClockWiseActionTool") );
-
-    //Apanyo que hem de fer per tal de detectar quan s'activa una tool
-    m_toolsButtonGroup = new QButtonGroup( this );
-    m_toolsButtonGroup->setExclusive( false );
-    m_toolsButtonGroup->addButton( m_zoomToolButton, 1 );
-    m_toolsButtonGroup->addButton( m_slicingToolButton, 2 );
-    m_toolsButtonGroup->addButton( m_editorToolButton, 3 );
-    m_toolsButtonGroup->addButton( m_seedToolButton, 4 );
-    m_toolsButtonGroup->addButton( m_regionToolButton, 0 );
-
+    // Action Tools
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
+    m_toolManager->enableRegisteredActionTools( m_2DView );
 }
 
 void QRectumSegmentationExtension::createConnections()

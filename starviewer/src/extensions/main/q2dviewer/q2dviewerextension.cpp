@@ -259,16 +259,20 @@ void Q2DViewerExtension::initializeTools()
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_translateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_referenceLinesToolButton->setDefaultAction( m_toolManager->getToolAction("ReferenceLinesTool") );
-    m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
-    m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction( "DistanceTool" ) );
-    m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction( "EraserTool" ) );
-    m_cursor3DToolButton->setDefaultAction( m_toolManager->getToolAction("Cursor3DTool") );
-    m_angleToolButton->setDefaultAction( m_toolManager->getToolAction( "AngleTool" ) );
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_translateToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_referenceLinesToolButton->setDefaultAction( m_toolManager->registerTool("ReferenceLinesTool") );
+    m_polylineButton->setDefaultAction( m_toolManager->registerTool( "PolylineROITool" ) );
+    m_distanceToolButton->setDefaultAction( m_toolManager->registerTool( "DistanceTool" ) );
+    m_eraserToolButton->setDefaultAction( m_toolManager->registerTool( "EraserTool" ) );
+    m_cursor3DToolButton->setDefaultAction( m_toolManager->registerTool("Cursor3DTool") );
+    m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
+    // registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
+    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
+    m_toolManager->registerTool("SynchronizeTool");
 
     // registrem les "Action Tool"    
     m_sagitalViewAction = m_toolManager->registerActionTool( "SagitalViewActionTool" );
@@ -282,14 +286,6 @@ void Q2DViewerExtension::initializeTools()
     m_flipVerticalToolButton->setDefaultAction( m_toolManager->registerActionTool( "VerticalFlipActionTool" ) );
     m_restoreToolButton->setDefaultAction( m_toolManager->registerActionTool( "RestoreActionTool" ) );
     m_invertToolButton->setDefaultAction( m_toolManager->registerActionTool( "InvertWindowLevelActionTool" ) );
-
-    // activem l'eina de valors predefinits de window level
-    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
-    windowLevelPresetsTool->trigger();
-
-    // Tool d'slicing per teclat
-    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
-    slicingKeyboardTool->trigger();
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -305,21 +301,23 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_translateToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
+    QStringList defaultTools;
+    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "WindowLevelTool" << "TranslateTool";
+    m_toolManager->triggerTools(defaultTools);
 
-    // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
-    m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
+    //
+    // Casos especials de Tools
+    //
 
-    //TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
-    //sincronització no té el model de totes les tools
-    connect( m_cursor3DToolButton->defaultAction() , SIGNAL( triggered() ) , SLOT( disableSynchronization() ) );
+    // TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
+    // sincronització no té el model de totes les tools
+    connect( m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL( triggered() ), SLOT( disableSynchronization() ) );
 
     // SCREEN SHOT TOOL
     // activem l'eina d'screen shot, que sempre estarà activa
-    m_screenShotTriggerAction = m_toolManager->getToolAction("ScreenShotTool");
-    m_screenShotTriggerAction->setChecked(true);
+    // TODO tot això es podria convertir més endavant en dues Action Tools en comptes d'aquesta Tool
+    m_screenShotTriggerAction = m_toolManager->registerTool("ScreenShotTool");
+    m_toolManager->triggerTool("ScreenShotTool");
     // fem que l'screen shot sigui una mica més acessible afegint-li un menú en el que podem escollir quina acció realitzar
     // d'alguna manera tot això són una mica uns HACKS ja que el mecanisme de funcionament d'aquesta tool és una mica diferent
     // i caldria tenir en compte tools d'aquests tipus per donar-li cabuda en la infraestructura de tools.
@@ -344,10 +342,6 @@ void Q2DViewerExtension::initializeTools()
     m_screenShotToolButton->setIcon( m_screenShotTriggerAction->icon() );
     m_screenShotToolButton->setToolTip( m_screenShotTriggerAction->toolTip() );
     m_screenShotToolButton->setText( m_screenShotTriggerAction->text() );
-
-    // definim les tools disponibles
-    m_availableToolsList << "ZoomTool" << "SlicingTool" << "ReferenceLinesTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "PolylineROITool" << "DistanceTool" << "SlicingKeyboardTool" << "EraserTool" << "AngleTool" << "Cursor3DTool";
-    m_availableActionToolsList << "RestoreActionTool" << "AxialViewActionTool" << "SagitalViewActionTool" << "CoronalViewActionTool" << "RotateClockWiseActionTool" << "RotateCounterClockWiseActionTool" << "HorizontalFlipActionTool" << "VerticalFlipActionTool" << "InvertWindowLevelActionTool";
 }
 
 void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
@@ -361,7 +355,7 @@ void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
     connect( newViewerWidget, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
     // li indiquem les tools que li hem configurat per defecte a tothom
-    m_toolManager->setViewerTools( newViewerWidget->getViewer(), m_availableToolsList );
+    m_toolManager->setupRegisteredTools( newViewerWidget->getViewer() );
 }
 
 void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
@@ -384,7 +378,7 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
             disconnect( m_singleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( singleCapture() ) );
             disconnect( m_multipleShotAction, SIGNAL( triggered() ), screenShotTool, SLOT( completeCapture() ) );
             // desactivem les "ActionTool" pel visor que acaba de deseleccionar-se
-            m_toolManager->disableActionTools( m_lastSelectedViewer->getViewer(), m_availableActionToolsList );
+            m_toolManager->disableRegisteredActionTools( m_lastSelectedViewer->getViewer() );
         }
         m_lastSelectedViewer = viewerWidget;
         Q2DViewer *selected2DViewer = viewerWidget->getViewer();
@@ -410,7 +404,7 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
         updateDICOMInformationButton( selected2DViewer->getView() );
 
         // activem les "ActionTool" pel visor seleccionat
-        m_toolManager->enableActionTools( selected2DViewer, m_availableActionToolsList );
+        m_toolManager->enableRegisteredActionTools( selected2DViewer );
     }
 }
 
@@ -482,9 +476,10 @@ void Q2DViewerExtension::synchronization( Q2DViewerWidget * viewer, bool active 
         m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
         m_toolManager->activateTool("SynchronizeTool");
 
-        //TODO si el cursor 3d està seleccionat, el deseleccionem. Solució temporal
-        if( m_cursor3DToolButton->isChecked () )
-            m_slicingToolButton->defaultAction()->setChecked( true );
+        // TODO si el cursor 3d està seleccionat, el deseleccionem. 
+        // Solució temporal, hauríem d'incorporar algun mecanisme a ToolManager per gestionar aquests casos
+        if( m_cursor3DToolButton->isChecked () ) // TODO en comptes de comprovar si la tool està activada via "botó" es podria incorporar algun mecanisme a ToolManager que ens digués si una tool està activada o no
+            m_toolManager->triggerTool("SlicingTool");
     }
     else
     {
@@ -494,7 +489,7 @@ void Q2DViewerExtension::synchronization( Q2DViewerWidget * viewer, bool active 
 
 void Q2DViewerExtension::disableSynchronization()
 {
-    //TODO Mètode per desactivar l'eina i el boto de sincronització dels visualitzadors quan
+    // TODO Mètode per desactivar l'eina i el boto de sincronització dels visualitzadors quan
     // es selecciona l'eina de cursor3D, per solucionar-ho de forma xapussa perquè l'eina de
     // sincronització encara no té el mateix format que la resta
     int numViewer;

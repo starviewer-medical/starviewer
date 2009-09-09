@@ -66,20 +66,20 @@ void QGlialEstimationExtension::initializeTools()
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_translateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
-    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
-    m_polylineButton->setDefaultAction( m_toolManager->getToolAction( "PolylineROITool" ) );
-    m_cursor3DToolButton->setDefaultAction( m_toolManager->getToolAction("Cursor3DTool") );
-    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
-
-    // Tool d'slicing per teclat
-    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
-    slicingKeyboardTool->trigger();
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_translateToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
+    m_polylineButton->setDefaultAction( m_toolManager->registerTool( "PolylineROITool" ) );
+    m_cursor3DToolButton->setDefaultAction( m_toolManager->registerTool("Cursor3DTool") );
+    m_editorToolButton->setDefaultAction( m_toolManager->registerTool("EditorTool") );
+    // registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
+    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
+    m_toolManager->registerTool("SynchronizeTool");
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -95,29 +95,21 @@ void QGlialEstimationExtension::initializeTools()
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_translateToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
+    QStringList defaultTools;
+    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "WindowLevelTool" << "TranslateTool";
+    m_toolManager->triggerTools(defaultTools);
 
-    // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
-    m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
+    // TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
+    // sincronització no té el model de totes les tools
+    connect( m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL( triggered() ), SLOT( disableSynchronization() ) );
 
-    //TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
-    //sincronització no té el model de totes les tools
-    connect( m_cursor3DToolButton->defaultAction() , SIGNAL( triggered() ) , SLOT( disableSynchronization() ) );
-
-    // registrem al manager les tools que van amb el viewer principal
-    //initializeDefaultTools( m_selectedViewer->getViewer() );
-
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" <<  "SlicingKeyboardTool" << "SeedTool" << "PolylineROITool" << "Cursor3DTool" << "EditorTool" << "SeedTool";
-
-    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(0)->getViewer(), toolsList );
-    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(1)->getViewer(), toolsList );
-    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(2)->getViewer(), toolsList );
-    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(5)->getViewer(), toolsList );
-    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(3)->getViewer(), toolsList );
-    m_toolManager->setViewerTools( m_viewersLayout->getViewerWidget(4)->getViewer(), toolsList );
+    // Configurem els visors amb les tools configurades
+    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(0)->getViewer() );
+    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(1)->getViewer() );
+    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(2)->getViewer() );
+    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(5)->getViewer() );
+    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(3)->getViewer() );
+    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(4)->getViewer() );
 }
 
 void QGlialEstimationExtension::createConnections()
@@ -1567,7 +1559,6 @@ void QGlialEstimationExtension::changeLayout( QGlialEstimationExtension::LayoutD
 
 void QGlialEstimationExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget )
 {
-
      // i si cal, activem les annotacions
     if( m_viewerInformationToolButton->isChecked() )
         newViewerWidget->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
@@ -1582,14 +1573,15 @@ void QGlialEstimationExtension::synchronization( Q2DViewerWidget * viewer, bool 
     if( active )
     {
         // Per defecte sincronitzem només la tool de slicing
-        ToolConfiguration * synchronizeConfiguration = new ToolConfiguration();
+        ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
         synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
         m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
         m_toolManager->activateTool("SynchronizeTool");
 
-        //TODO si el cursor 3d està seleccionat, el deseleccionem. Solució temporal
-        if( m_cursor3DToolButton->isChecked () )
-            m_slicingToolButton->defaultAction()->setChecked( true );
+        // TODO si el cursor 3d està seleccionat, el deseleccionem. 
+        // Solució temporal, hauríem d'incorporar algun mecanisme a ToolManager per gestionar aquests casos
+        if( m_cursor3DToolButton->isChecked () ) // TODO en comptes de comprovar si la tool està activada via "botó" es podria incorporar algun mecanisme a ToolManager que ens digués si una tool està activada o no
+            m_toolManager->triggerTool("SlicingTool");
     }
     else
     {

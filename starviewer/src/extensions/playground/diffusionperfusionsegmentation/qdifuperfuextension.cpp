@@ -49,7 +49,6 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
     setupUi( this );
     DiffusionPerfusionSegmentationSettings().init();
 
-    m_squareActor = vtkActor::New();
     m_perfusionHueLut = vtkLookupTable::New();
 
     createActions();
@@ -79,8 +78,6 @@ QDifuPerfuSegmentationExtension::~QDifuPerfuSegmentationExtension()
 
     delete m_strokeSegmentationMethod;
 
-    m_squareActor->Delete();
-
     m_perfusionHueLut->Delete();
 }
 
@@ -89,21 +86,20 @@ void QDifuPerfuSegmentationExtension::initializeTools()
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
+    m_editorToolButton->setDefaultAction( m_toolManager->registerTool("EditorTool") );
+    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
 
-    // activem l'eina de valors predefinits de window level
-    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
-    windowLevelPresetsTool->trigger();
-
-    // Tool d'slicing per teclat
-    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
-    slicingKeyboardTool->trigger();
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    QStringList defaultTools;
+    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
+    m_toolManager->triggerTools( defaultTools );
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -118,17 +114,14 @@ void QDifuPerfuSegmentationExtension::initializeTools()
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
-    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_moveToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
-
     // inicialitzem totes les tools
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool" << "EditorTool";
+    m_toolManager->setupRegisteredTools( m_diffusion2DView );
+    m_toolManager->setupRegisteredTools( m_perfusion2DView );
 
-    m_toolManager->setViewerTools( m_diffusion2DView, toolsList );
-    m_toolManager->setViewerTools( m_perfusion2DView, toolsList );
+    // Action Tools
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
+    m_toolManager->enableRegisteredActionTools( m_diffusion2DView );
+    m_toolManager->enableRegisteredActionTools( m_perfusion2DView );
 }
 
 void QDifuPerfuSegmentationExtension::createActions()
@@ -137,16 +130,6 @@ void QDifuPerfuSegmentationExtension::createActions()
     m_splitterLeftButton->setIcon( QIcon( ":/images/back.png" ) );
     m_splitterCenterButton->setIcon( QIcon( ":/images/view_left_right.png" ) );
     m_splitterRightButton->setIcon( QIcon( ":/images/play.png" ) );
-
-    m_rotateClockWiseAction = new QAction( this );
-    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
-    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
-    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
-    m_rotateClockWiseAction->setIcon( QIcon( ":/images/rotateClockWise.png" ) );
-    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
-
-    connect( m_rotateClockWiseAction, SIGNAL( triggered() ), m_diffusion2DView, SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction, SIGNAL( triggered() ), m_perfusion2DView, SLOT( rotateClockWise() ) );
 
     m_lesionViewAction = new QAction( this );
     m_lesionViewAction->setText( tr("Lesion Overlay") );

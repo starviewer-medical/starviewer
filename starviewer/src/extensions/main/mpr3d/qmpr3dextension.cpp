@@ -44,24 +44,24 @@ void QMPR3DExtension::initializeTools()
 {
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
-    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
-
-    // activem l'eina de valors predefinits de window level
-    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
-    windowLevelPresetsTool->trigger();
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_rotate3DToolButton->setDefaultAction( m_toolManager->registerTool("Rotate3DTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
+    m_toolManager->registerTool("WindowLevelPresetsTool");
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_zoomToolButton->defaultAction()->trigger();
-    m_moveToolButton->defaultAction()->trigger();
-    m_rotate3DToolButton->defaultAction()->trigger();
+    // En aquest cas activem totes les registrades
+    m_toolManager->triggerTools( m_toolManager->getRegisteredToolsList() );
 
     // registrem al manager les tools que van amb el viewer principal
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool" << "WindowLevelPresetsTool";
-    m_toolManager->setViewerTools( m_mpr3DView, toolsList );
+    m_toolManager->setupRegisteredTools( m_mpr3DView );
+
+    // Action tools
+    m_axialOrientationButton->setDefaultAction( m_toolManager->registerActionTool( "AxialViewActionTool" ) );
+    m_sagitalOrientationButton->setDefaultAction( m_toolManager->registerActionTool( "SagitalViewActionTool" ) );
+    m_coronalOrientationButton->setDefaultAction( m_toolManager->registerActionTool( "CoronalViewActionTool" ) );
+    m_toolManager->enableRegisteredActionTools( m_mpr3DView );
 }
 
 void QMPR3DExtension::createConnections()
@@ -69,10 +69,6 @@ void QMPR3DExtension::createConnections()
     connect( m_axialViewEnabledButton , SIGNAL( toggled(bool) ) , m_mpr3DView , SLOT( setAxialVisibility(bool) ) );
     connect( m_sagitalViewEnabledButton , SIGNAL( toggled(bool) ) , m_mpr3DView , SLOT( setSagitalVisibility(bool) ) );
     connect( m_coronalViewEnabledButton , SIGNAL( toggled(bool) ) , m_mpr3DView , SLOT( setCoronalVisibility(bool) ) );
-
-    connect( m_sagitalOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToSagital() ) );
-    connect( m_coronalOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToCoronal() ) );
-    connect( m_axialOrientationButton , SIGNAL( clicked() ) , m_mpr3DView , SLOT( resetViewToAxial() ) );
 
     connect( m_mpr3DView, SIGNAL( volumeChanged(Volume *) ), SLOT( updateExtension(Volume *) ) );
 }

@@ -49,8 +49,7 @@ private:
     static const double TE;
     static const double TR;
 
-    /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
-    void createActions();
+    void initializeTools();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -98,7 +97,6 @@ private slots:
     void contextMenuEvent(QContextMenuEvent *event);
     void setSeries(Series *series);
 
-
 private:
     /// El volum principal
     Volume *m_mainVolume;
@@ -109,17 +107,6 @@ private:
     int m_minValue, m_maxValue;
     int m_insideValue, m_outsideValue;
     int m_mapMax, m_mapMin;
-
-    /// Accions
-    QAction *m_slicingAction;
-    QAction *m_windowLevelAction;
-    QAction *m_zoomAction;
-    QAction *m_moveAction;
-    QAction *m_rotateClockWiseAction;
-    QAction *m_voxelInformationAction;
-
-    /// Grup de botons en format exclusiu
-    QActionGroup *m_toolsActionGroup;
 
     /// Tool manager
     ToolManager *m_toolManager;

@@ -129,10 +129,6 @@ private:
     QAction *m_sagitalViewAction;
     QAction *m_coronalViewAction;
 
-    // llistes de tools
-    QStringList m_availableToolsList;
-    QStringList m_availableActionToolsList;
-
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 

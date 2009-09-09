@@ -47,9 +47,6 @@ public slots:
     void setSecondPhase( int phase );
 
 private:
-    /// crea les accions \TODO 'pujar' al pare com a mètode virtual com a Extensions? [hauria de ser protected]
-    void createActions();
-
     void initializeTools();
 
     /// Crea les connexions entre signals i slots
@@ -156,10 +153,6 @@ private:
     bool m_movingSeed;
     int m_idSelectedSeed;
     std::list<std::vector<double> >::iterator m_itListSelected;
-
-    /// Accions
-    QAction *m_rotateClockWiseAction;
-    QAction *m_rotateCounterClockWiseAction;
 
     ///Directori on guardem les dades
     QString m_savingDirectory;

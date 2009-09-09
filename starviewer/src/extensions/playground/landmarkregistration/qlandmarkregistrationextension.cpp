@@ -51,7 +51,6 @@ QLandmarkRegistrationExtension::QLandmarkRegistrationExtension(QWidget *parent)
     m_seedSet1 = itk::VectorContainer<int, PointType>::New();
     m_seedSet2 = itk::VectorContainer<int, PointType>::New();
 
-    createActions();
     createConnections();
     readSettings();
     initializeTools();
@@ -67,20 +66,19 @@ void QLandmarkRegistrationExtension::initializeTools()
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
-
-    // activem l'eina de valors predefinits de window level
-    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
-    windowLevelPresetsTool->trigger();
-
-    // Tool d'slicing per teclat
-    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
-    slicingKeyboardTool->trigger();
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
+    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
+    
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    QStringList defaultTools;
+    defaultTools << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool";
+    m_toolManager->triggerTools( defaultTools );
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -95,40 +93,15 @@ void QLandmarkRegistrationExtension::initializeTools()
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
-    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_moveToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
-
     // inicialitzem totes les tools
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "VoxelInformationTool" << "SeedTool";
+    m_toolManager->setupRegisteredTools( m_2DView );
+    m_toolManager->setupRegisteredTools( m_2DView_2 );
 
-    m_toolManager->setViewerTools( m_2DView, toolsList );
-    m_toolManager->setViewerTools( m_2DView_2, toolsList );
-}
-
-void QLandmarkRegistrationExtension::createActions()
-{
-    m_rotateClockWiseAction = new QAction( 0 );
-    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
-    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
-    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
-    m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
-    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
-
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView_2 , SLOT( rotateClockWise() ) );
-
-    m_rotateCounterClockWiseAction = new QAction( 0 );
-    m_rotateCounterClockWiseAction->setText( tr("Rotate Counter Clockwise") );
-    m_rotateCounterClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Minus );
-    m_rotateCounterClockWiseAction->setStatusTip( tr("Rotate the image in counter clockwise direction") );
-    m_rotateCounterClockWiseAction->setIcon( QIcon(":/images/rotateCounterClockWise.png") );
-    m_rotateCounterClockWiseToolButton->setDefaultAction( m_rotateCounterClockWiseAction );
-
-    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateCounterClockWise() ) );
-    connect( m_rotateCounterClockWiseAction , SIGNAL( triggered() ) , m_2DView_2 , SLOT( rotateCounterClockWise() ) );
+    // Action Tools
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
+    m_rotateCounterClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateCounterClockWiseActionTool") );
+    m_toolManager->enableRegisteredActionTools( m_2DView );
+    m_toolManager->enableRegisteredActionTools( m_2DView_2 );
 }
 
 void QLandmarkRegistrationExtension::createConnections()
