@@ -175,20 +175,18 @@ void QMPRExtension::initializeTools()
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
-    m_distanceToolButton->setDefaultAction( m_toolManager->getToolAction("DistanceTool") );
-    m_polylineROIToolButton->setDefaultAction( m_toolManager->getToolAction("PolylineROITool") );
-    m_angleToolButton->setDefaultAction( m_toolManager->getToolAction( "AngleTool" ) );
-    m_eraserToolButton->setDefaultAction( m_toolManager->getToolAction("EraserTool") );
-
-    // activem l'eina de valors predefinits de window level
-    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
-    windowLevelPresetsTool->trigger();
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
+    m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
+    m_polylineROIToolButton->setDefaultAction( m_toolManager->registerTool("PolylineROITool") );
+    m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
+    m_eraserToolButton->setDefaultAction( m_toolManager->registerTool("EraserTool") );
+    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -204,23 +202,17 @@ void QMPRExtension::initializeTools()
     m_toolManager->addExclusiveToolsGroup("RighttButtonGroup", rightButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_moveToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
-    m_screenShotToolButton->defaultAction()->trigger();
+    QStringList defaultTools;
+    defaultTools << "WindowLevelPresetsTool" << "SlicingTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
+    m_toolManager->triggerTools(defaultTools);
 
     // registrem al manager les tools que van als diferents viewers
-    initializeDefaultTools();
-}
-
-void QMPRExtension::initializeDefaultTools()
-{
-    QStringList toolsList1, toolsList2;
-    toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool";
-    toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool";
-    m_toolManager->setViewerTools( m_axial2DView, toolsList1 );
-    m_toolManager->setViewerTools( m_sagital2DView, toolsList2 );
-    m_toolManager->setViewerTools( m_coronal2DView, toolsList2 );
+    m_toolManager->setupRegisteredTools( m_axial2DView );
+    // als altres visors volem totes les registrades, excepte l'slicing
+    QStringList toolsList = m_toolManager->getRegisteredToolsList();
+    toolsList.removeAt( toolsList.indexOf("SlicingTool") );
+    m_toolManager->setViewerTools( m_sagital2DView, toolsList );
+    m_toolManager->setViewerTools( m_coronal2DView, toolsList );
 }
 
 void QMPRExtension::createConnections()

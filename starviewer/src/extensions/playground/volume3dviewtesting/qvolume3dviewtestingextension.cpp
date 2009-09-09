@@ -60,11 +60,12 @@ void QVolume3DViewTestingExtension::initializeTools()
 {
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_rotate3DToolButton->setDefaultAction( m_toolManager->getToolAction("Rotate3DTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_panToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_clippingBoxToolButton->setDefaultAction( m_toolManager->getToolAction("ClippingPlanesTool") );
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_rotate3DToolButton->setDefaultAction( m_toolManager->registerTool("Rotate3DTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_panToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_clippingBoxToolButton->setDefaultAction( m_toolManager->registerTool("ClippingPlanesTool") );
+    m_toolManager->registerTool("ScreenShotTool");
 
     // Action tools
     m_axialOrientationButton->setDefaultAction( m_toolManager->registerActionTool("AxialViewActionTool") );
@@ -72,20 +73,13 @@ void QVolume3DViewTestingExtension::initializeTools()
     m_coronalOrientationButton->setDefaultAction( m_toolManager->registerActionTool("CoronalViewActionTool") );
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_zoomToolButton->defaultAction()->trigger();
-    m_panToolButton->defaultAction()->trigger();
-    m_rotate3DToolButton->defaultAction()->trigger();
-    // afegim eina d'screen-shot TODO cal posar botó a la interfície???
-    m_toolManager->getToolAction("ScreenShotTool")->trigger();
+    QStringList defaultTools;
+    defaultTools << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "ScreenShotTool";
+    m_toolManager->triggerTools( defaultTools );
 
     // registrem al manager les tools que van amb el viewer principal
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "TranslateTool" << "Rotate3DTool" << "WindowLevelTool" << "ScreenShotTool" << "ClippingPlanesTool";
-    m_toolManager->setViewerTools( m_3DView, toolsList );
-
-    QStringList actionToolsList;
-    actionToolsList << "AxialViewActionTool" << "SagitalViewActionTool" << "CoronalViewActionTool";
-    m_toolManager->enableActionTools( m_3DView, actionToolsList );
+    m_toolManager->setupRegisteredTools( m_3DView );
+    m_toolManager->enableRegisteredActionTools( m_3DView );
 
     QStringList rightButtonExclusiveTools;
     rightButtonExclusiveTools << "Rotate3DTool" << "WindowLevelTool";

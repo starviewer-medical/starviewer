@@ -46,6 +46,11 @@ void ToolManager::setViewerTools( QViewer *viewer, const QStringList &toolsList 
     refreshConnections(); //TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
 }
 
+void ToolManager::setupRegisteredTools( QViewer *viewer )
+{
+    setViewerTools(viewer,getRegisteredToolsList());
+}
+
 void ToolManager::setViewerTool( QViewer *viewer, const QString &toolName, ToolConfiguration *configuration )
 {
     ViewerToolConfigurationPairType pair;
@@ -101,7 +106,7 @@ void ToolManager::addExclusiveToolsGroup( const QString &groupName, const QStrin
     foreach( QString toolName, tools )
     {
         // obtenim l'acció corresponent a aquella tool
-        QAction *toolAction = qobject_cast<QAction *>( m_toolsActionSignalMapper->mapping(toolName) );
+        QAction *toolAction = getRegisteredToolAction(toolName);
         if( toolAction )
             actionGroup->addAction( toolAction );
         else
@@ -129,6 +134,22 @@ QAction *ToolManager::registerActionTool( const QString &actionToolName )
     return pair.first;
 }
 
+void ToolManager::triggerTools( const QStringList &toolsList )
+{
+    foreach(QString toolName, toolsList )
+    {
+        triggerTool( toolName );
+    }
+}
+
+void ToolManager::triggerTool( const QString &toolName )
+{
+    if( m_toolsActionsRegistry.contains( toolName ) )
+    {
+        m_toolsActionsRegistry.value(toolName)->trigger();
+    }
+}
+
 void ToolManager::enableActionTools( QViewer *viewer, const QStringList &actionToolsList )
 {
     QPair<QAction *, QString> pair;
@@ -149,6 +170,16 @@ void ToolManager::disableActionTools( QViewer *viewer, const QStringList &action
     }
 }
 
+void ToolManager::enableRegisteredActionTools( QViewer *viewer )
+{
+    enableActionTools( viewer, m_actionToolRegistry.keys() );
+}
+
+void ToolManager::disableRegisteredActionTools( QViewer *viewer )
+{
+    disableActionTools( viewer, m_actionToolRegistry.keys() );
+}
+
 void ToolManager::disableAllToolsTemporarily()
 {
     QStringList toolsList = m_toolViewerMap.uniqueKeys();
@@ -165,15 +196,18 @@ void ToolManager::undoDisableAllToolsTemporarily()
 
 void ToolManager::activateTool( const QString &toolName )
 {
-    // TODO caldria comprovar si la tool es troba en un grup exclusiu per "fer fora" les altres tools? o es farà automàticament?
+    // TODO caldria comprovar si la tool es troba en un grup exclusiu per "fer fora" les altres tools 
+    // en el cas que prescindíssim del mecanisme que fem servir amb QActionToolGroup
     QList< ViewerToolConfigurationPairType > viewerConfigList = m_toolViewerMap.values( toolName );
 
     ToolData *data = m_sharedToolDataRepository.value( toolName );
+    // declarem aquestes variables per fer-ho més llegible
+    QViewer *viewer;
+    ToolConfiguration *configuration;
     foreach( ViewerToolConfigurationPairType pair, viewerConfigList )
     {
-        // declarem aquestes variables per fer-ho més llegible
-        QViewer *viewer = pair.first;
-        ToolConfiguration *configuration = pair.second;
+        viewer = pair.first;
+        configuration = pair.second;
         Tool *tool = 0;
 
         // hem de comprovar si el proxy ja té o no la tool,
@@ -189,7 +223,7 @@ void ToolManager::activateTool( const QString &toolName )
             // comprovem les dades per si cal donar-n'hi
             if( tool->hasSharedData() )
             {
-                if( !data ) // no hi són al respositori, les obtindrem de la pròpia tool i les registrarem al repositori
+                if( !data ) // no hi són al repositori, les obtindrem de la pròpia tool i les registrarem al repositori
                 {
                     data = tool->getToolData();
                     m_sharedToolDataRepository[ toolName ] = data;
@@ -198,11 +232,6 @@ void ToolManager::activateTool( const QString &toolName )
                     tool->setToolData( data ); // si ja les hem creat abans, li assignem les de la primera tool creada
             }
         }
-        else
-        {
-            // si la tool ja existeix no cal configurar-la ni donar-li dades específiques perquè ja les té
-            tool = viewer->getToolProxy()->getTool( toolName );
-        }        
     }
 }
 
@@ -225,7 +254,7 @@ void ToolManager::triggeredToolAction( const QString &toolName )
 {
     // TODO: Cal repassar tot això. Hauria d'anar amb llistes internes de tools activades/desactivades
     // obtenim l'acció que l'ha provocat
-    QAction *toolAction = qobject_cast<QAction *>( m_toolsActionSignalMapper->mapping(toolName) );
+    QAction *toolAction = getRegisteredToolAction(toolName);
     if( toolAction )
     {
         // si està checked és que s'ha d'activar, altrament desactivar
@@ -240,17 +269,45 @@ void ToolManager::triggeredToolAction( const QString &toolName )
     }
 }
 
-QAction *ToolManager::getToolAction( const QString &toolName )
+QAction *ToolManager::getRegisteredToolAction( const QString &toolName )
 {
-    QAction *toolAction = m_toolRegistry->getToolAction( toolName );
-    m_toolsActionSignalMapper->setMapping( toolAction, toolName );
-    connect( toolAction , SIGNAL( triggered() ) , m_toolsActionSignalMapper , SLOT( map() ) );
+    QAction *toolAction = 0;
+    if( m_toolsActionsRegistry.contains(toolName) )
+    {
+        // si ja existeix l'obtenim del registre de tools/acció
+        toolAction = m_toolsActionsRegistry.value(toolName);
+    }
     return toolAction;
+}
+
+QAction *ToolManager::registerTool( const QString &toolName )
+{
+    QAction *toolAction;
+    if( m_toolsActionsRegistry.contains(toolName) )
+    {
+        // si ja existeix l'obtenim del registre de tools/acció
+        toolAction = m_toolsActionsRegistry.value(toolName);
+    }
+    else
+    {
+        // altrament, creem l'acció associada, la connectem amb l'estructura interna i la registrem
+        toolAction = m_toolRegistry->getToolAction( toolName );
+        m_toolsActionSignalMapper->setMapping( toolAction, toolName );
+        connect( toolAction, SIGNAL( triggered() ), m_toolsActionSignalMapper, SLOT( map() ) );
+        m_toolsActionsRegistry.insert( toolName, toolAction );
+    }
+    // retornem l'acció associada
+    return toolAction;
+}
+
+QStringList ToolManager::getRegisteredToolsList() const
+{
+    return m_toolsActionsRegistry.uniqueKeys();
 }
 
 void ToolManager::refreshConnections()
 {
-    QStringList toolsList = m_toolViewerMap.uniqueKeys();
+    QStringList toolsList = getRegisteredToolsList();
     foreach( QString tool, toolsList )
     {
         triggeredToolAction( tool );

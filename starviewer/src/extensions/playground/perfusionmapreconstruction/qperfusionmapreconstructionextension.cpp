@@ -69,7 +69,7 @@ QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWid
 
     m_mapCalculator = new PerfusionMapCalculatorMainThread;
 
-    createActions();
+    initializeTools();
     createConnections();
     readSettings();
 
@@ -81,43 +81,33 @@ QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWid
 
 QPerfusionMapReconstructionExtension::~QPerfusionMapReconstructionExtension()
 {
-
     delete m_toolManager;
-    delete m_rotateClockWiseAction;
-
     writeSettings();
 }
 
-void QPerfusionMapReconstructionExtension::createActions()
+void QPerfusionMapReconstructionExtension::initializeTools()
 {
-
-    m_rotateClockWiseAction = new QAction( 0 );
-    m_rotateClockWiseAction->setText( tr("Rotate Clockwise") );
-    m_rotateClockWiseAction->setShortcut( Qt::CTRL + Qt::Key_Plus );
-    m_rotateClockWiseAction->setStatusTip( tr("Rotate the image in clockwise direction") );
-    m_rotateClockWiseAction->setIcon( QIcon(":/images/rotateClockWise.png") );
-    m_rotateClockWiseToolButton->setDefaultAction( m_rotateClockWiseAction );
-
-    connect( m_rotateClockWiseAction , SIGNAL( triggered() ) , m_2DView , SLOT( rotateClockWise() ) );
-
     // Tools
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_translateToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    m_screenShotToolButton->setDefaultAction( m_toolManager->getToolAction("ScreenShotTool") );
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_translateToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
+    m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
+    m_toolManager->registerTool("SynchronizeTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
 
-    // Tool d'slicing per teclat
-    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
-    slicingKeyboardTool->trigger();
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    QStringList defaultTools;
+    defaultTools << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "SlicingKeyboardTool";
+    m_toolManager->triggerTools( defaultTools );
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "ScreenShotTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -128,22 +118,12 @@ void QPerfusionMapReconstructionExtension::createActions()
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
-    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_translateToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
-
-    // La tool de sincronització sempre estarà activada, encara que no hi tingui cap visualitzador
-    m_toolManager->getToolAction("SynchronizeTool")->setChecked( true );
-
     // registrem al manager les tools que van amb el viewer principal
-    //initializeDefaultTools( m_selectedViewer->getViewer() );
+    m_toolManager->setupRegisteredTools( m_2DView );
 
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" <<  "SlicingKeyboardTool";
-
-    m_toolManager->setViewerTools( m_2DView, toolsList );
-
+    // Action Tools
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
+    m_toolManager->enableRegisteredActionTools( m_2DView );
 }
 
 void QPerfusionMapReconstructionExtension::createConnections()

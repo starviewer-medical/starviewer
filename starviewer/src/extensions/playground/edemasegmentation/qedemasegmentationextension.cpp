@@ -103,24 +103,21 @@ void QEdemaSegmentationExtension::initializeTools()
     // creem el tool manager
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
-    m_zoomToolButton->setDefaultAction( m_toolManager->getToolAction("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->getToolAction("SlicingTool") );
-    m_moveToolButton->setDefaultAction( m_toolManager->getToolAction("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->getToolAction("WindowLevelTool") );
-    m_seedToolButton->setDefaultAction( m_toolManager->getToolAction("SeedTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->getToolAction("VoxelInformationTool") );
-    m_editorToolButton->setDefaultAction( m_toolManager->getToolAction("EditorTool") );
+    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
+    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
+    m_editorToolButton->setDefaultAction( m_toolManager->registerTool("EditorTool") );
+    m_editorToolButton->setEnabled(false);
+    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
 
-    // Action Tools
-    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
-
-    // activem l'eina de valors predefinits de window level
-    QAction *windowLevelPresetsTool = m_toolManager->getToolAction("WindowLevelPresetsTool");
-    windowLevelPresetsTool->trigger();
-
-    // Tool d'slicing per teclat
-    QAction *slicingKeyboardTool = m_toolManager->getToolAction("SlicingKeyboardTool");
-    slicingKeyboardTool->trigger();
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    QStringList defaultTools;
+    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
+    m_toolManager->triggerTools( defaultTools );
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -135,17 +132,12 @@ void QEdemaSegmentationExtension::initializeTools()
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
-    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
-    m_slicingToolButton->defaultAction()->trigger();
-    m_moveToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
+    // posem a punt les tools
+    m_toolManager->setupRegisteredTools( m_2DView );
 
-    // inicialitzem totes les tools
-    QStringList toolsList;
-    toolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SeedTool" << "VoxelInformationTool" << "EditorTool";
-
-    m_toolManager->setViewerTools( m_2DView, toolsList );
-    m_toolManager->enableActionTools( m_2DView, QStringList("RotateClockWiseActionTool") );
+    // Action Tools
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
+    m_toolManager->enableRegisteredActionTools( m_2DView );
 }
 
 void QEdemaSegmentationExtension::createConnections()
@@ -372,7 +364,7 @@ void QEdemaSegmentationExtension::applyMethod()
     m_updateVolumeButton->setEnabled(true);
     m_applyVentriclesMethodButton->setEnabled(true);
     m_applyCleanSkullButton->setEnabled(true);
-    m_editorToolButton->defaultAction()->trigger();
+    m_toolManager->triggerTool("EditorTool");
 
     m_lesionViewAction->setEnabled( true );
     m_lesionViewAction->trigger();

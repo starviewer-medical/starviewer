@@ -43,8 +43,7 @@ public slots:
     void ApplyFilterMainImage( );
 
 private:
-    /// crea les accions \TODO 'pujar' al pare com a m?ode virtual com a Extensions? [hauria de ser protected]
-    void createActions();
+    void initializeTools();
 
     /// Crea les connexions entre signals i slots
     void createConnections();
