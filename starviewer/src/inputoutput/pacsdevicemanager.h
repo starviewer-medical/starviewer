@@ -8,62 +8,60 @@
 #define UDGPACSDEVICEMANAGER_H
 
 #include <QList>
-
 #include "pacsdevice.h"
 #include "settings.h"
 
 namespace udg {
 
-/** Aquesta classe implementa les accions necessaries per afegir nous pacs o modificar/consultar els paràmetres 
-  * dels PACS  que tenim disponible a l'aplicació, guardats en un fitxer de configuració.
-  * @author marc
+/** 
+  * Aquesta classe gestiona els servidors PACS configurats per l'aplicació. Permet afegir, eliminar, modificar i consultar
+  * les dades dels PACS configurats, que es guardaran com a Settings de l'aplicació.
   */
 class PacsDeviceManager{
 
 public:
-    ///Constructor de la classe
     PacsDeviceManager();
-
-    ///Destructor de la classe
     ~PacsDeviceManager();
 
-    /** Insereix els parametres d'un pacs a la base de dades, per a poder-hi cercar imatge. En un alta el camp PacsID, és assignat automàticament per l'aplicació!
-     * @param Objecte PacsDevice amb les dades del pacs
-     * @return true en el cas que s'hagi inserit correctament. False si el pacs ja existia.
+    /** 
+     * Afegeix un nou servidor PACS. En un alta, el camp PacsID, s'assigna automàticament per l'aplicació.
+     * @param Objecte PacsDevice amb les dades del PACS
+     * @return True en el cas que s'hagi afegit correctament, false si el PACS ja existia.
      */
-    bool insertPacs(const PacsDevice &pacs);
+    bool addPACS(const PacsDevice &pacs);
 
-    /** Retorna un objecte PacsList amb tots els Pacs que hi ha la taula PacsList odernats per AEtitle. Nomes selecciona els pacs vius, és a dir els que no tenen estat d'esborrats
-     * @param PacsList Conté tots els Pacs de la taula PacsList
+    /** 
+     * Actualitza les dades del PACS passat per paràmetre. TODO què fem amb el camp ID?
+     * @param pacs Objecte PacsDevice amb les noves dades del PACS
      */
-    QList<PacsDevice> queryPacsList();
+    void updatePACS(const PacsDevice &pacs);
 
-    ///Retorna una llista amb tots els Pacs que l'usuari té assenyalats el paràmetre Default a true, són els pacs que l'usuari té marcats per cercar per defecte al consultar estudis
-    QList<PacsDevice> queryDefaultPacs();
-
-    /** Permet actualitzar la informació d'un pacs, el PacsID camp clau no es pot canviar!
-     * @param Objecte PacsDevice amb les noves dades del PACS
+    /** 
+     * Elimina de la llista de PACS configurats el PACS amb l'ID passat per paràmetre.
+     * @param pacsID Identificador del PACS a donar de baixa
+     * @return True en cas d'eliminar-se el PACS amb èxit, false, si no existeix cap PACS a eliminar amb tal ID
      */
-    void updatePacs(const PacsDevice &pacs);
+    bool deletePACS( const QString &pacsID );
 
-    /** Es donarà de baixa el Pacs. No es dona de baixa físicament, sinó que es posa en estat donat de baixa
-     * @param  Objecte pacsID del pacs a donar de baixa
-     */
-    bool deletePacs( const QString &pacsID );
+    /// Ens retorna la llista de PACS configurats
+    /// @param onlyDefault Amb valor true, només inclou els que estiguin marcats a consultar per defecte
+    /// @return Llista de PACS configurats
+    QList<PacsDevice> getPACSList( bool onlyDefault = false );
 
-    /** Cerca la informació d'un pacs en concret.
-     * @param Conté la informació del pacs cercat
-     * @param pacs a cercar
+    /** 
+     * Donat un ID de PACS, ens retorna el corresponent PacsDevice amb la seva informació
+     * @param pacsID ID del PACS a cercar
+     * @return Les dades del PACS si existeix algun amb aquest ID, sinó tindrem un objecte buit
      */
-    PacsDevice queryPacs( const QString &pacsID );
+    PacsDevice getPACSDeviceByID( const QString &pacsID );
 
 private:
-    ///Ens indica si un Pacs ja està donat d'alta a partir del seu AETitle, IP i port
-    bool existPacs(const PacsDevice &pacsAETitle );
-
-    ///Mètode que s'ha de fer servir sempre que es vulgui accedir a la llista de pacs configurats.
-    ///S'encarrega d'omplir la llista en el cas que no s'hagi fet prèviament.
-    QList<PacsDevice> getConfiguredPacsList( bool onlyDefault = false );
+    /** 
+      * Comprova si el PACS passat per paràmetre es troba o no dins de la llista de PACS configurats
+      * @param pacs PACS a comprovar
+      * @return True si existeix, false en cas contrari
+      */
+    bool isPACSConfigured(const PacsDevice &pacs);
 
     /// Donat un objecte PacsDevice el transformem en un conjunt de claus-valor per una manipulació de settings més còmode
     Settings::KeyValueMapType pacsDeviceToKeyValueMap( const PacsDevice &parameters );

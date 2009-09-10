@@ -24,9 +24,9 @@ PacsDeviceManager::~PacsDeviceManager()
 {
 }
 
-bool PacsDeviceManager::insertPacs(const PacsDevice &pacs)
+bool PacsDeviceManager::addPACS(const PacsDevice &pacs)
 {
-    bool ok = !this->existPacs(pacs);
+    bool ok = !this->isPACSConfigured(pacs);
     if( ok )
     {
         Settings settings;
@@ -36,27 +36,48 @@ bool PacsDeviceManager::insertPacs(const PacsDevice &pacs)
     return ok;
 }
 
-void PacsDeviceManager::updatePacs(const PacsDevice &pacsToUpdate)
+void PacsDeviceManager::updatePACS(const PacsDevice &pacsToUpdate)
 {
     Settings settings;
     settings.setListItem( pacsToUpdate.getID().toInt(),PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacsToUpdate) );
 }
 
-QList<PacsDevice> PacsDeviceManager::queryPacsList()
+bool PacsDeviceManager::deletePACS( const QString &pacsIDString)
 {
-    // els tornem tots
-    return getConfiguredPacsList();
+    bool ok = false;
+    int pacsID = pacsIDString.toInt(&ok);
+
+    if(ok)
+    {
+        Settings settings;
+        settings.removeListItem( PacsListConfigurationSectionName, pacsID );
+    }
+
+    return ok;
 }
 
-QList<PacsDevice> PacsDeviceManager::queryDefaultPacs()
+QList<PacsDevice> PacsDeviceManager::getPACSList( bool onlyDefault )
 {
-    // només tornem els que estan per defecte
-    return getConfiguredPacsList(true);
+    QList<PacsDevice> configuredPacsList;
+    Settings settings;
+    Settings::SettingListType list = settings.getList(PacsListConfigurationSectionName);
+    foreach( Settings::KeyValueMapType item, list )
+    {
+        PacsDevice pacs;
+        pacs = keyValueMapToPacsDevice(item);
+        // depenent del paràmetre "onlyDefault" afegirem o no els pacs
+        if( (onlyDefault && pacs.isDefault()) || !onlyDefault )
+        {
+            configuredPacsList << pacs;
+        }
+    }
+
+    return configuredPacsList;
 }
 
-PacsDevice PacsDeviceManager::queryPacs( const QString &pacsIDString )
+PacsDevice PacsDeviceManager::getPACSDeviceByID( const QString &pacsIDString )
 {
-    QList<PacsDevice> pacsList = getConfiguredPacsList();
+    QList<PacsDevice> pacsList = getPACSList();
     bool ok = false;
     int pacsID = pacsIDString.toInt(&ok);
     PacsDevice pacs;
@@ -76,9 +97,9 @@ PacsDevice PacsDeviceManager::queryPacs( const QString &pacsIDString )
     return pacs;
 }
 
-bool PacsDeviceManager::existPacs(const PacsDevice &pacs)
+bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
 {
-    QList<PacsDevice> pacsList = getConfiguredPacsList();
+    QList<PacsDevice> pacsList = getPACSList();
 
     foreach(PacsDevice pacsDevice, pacsList)
     {
@@ -91,39 +112,6 @@ bool PacsDeviceManager::existPacs(const PacsDevice &pacs)
     }
 
     return false;
-}
-
-bool PacsDeviceManager::deletePacs( const QString &pacsIDString)
-{
-    bool ok = false;
-    int pacsID = pacsIDString.toInt(&ok);
-
-    if(ok)
-    {
-        Settings settings;
-        settings.removeListItem( PacsListConfigurationSectionName, pacsID );
-    }
-
-    return ok;
-}
-
-QList<PacsDevice> PacsDeviceManager::getConfiguredPacsList( bool onlyDefault )
-{
-    QList<PacsDevice> configuredPacsList;
-    Settings settings;
-    Settings::SettingListType list = settings.getList(PacsListConfigurationSectionName);
-    foreach( Settings::KeyValueMapType item, list )
-    {
-        PacsDevice pacs;
-        pacs = keyValueMapToPacsDevice(item);
-        // depenent del paràmetre "onlyDefault" afegirem o no els pacs
-        if( (onlyDefault && pacs.isDefault()) || !onlyDefault )
-        {
-            configuredPacsList << pacs;
-        }
-    }
-
-    return configuredPacsList;
 }
 
 Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const PacsDevice &pacsDevice )

@@ -39,7 +39,7 @@ void QPacsList::refresh()
 
     m_PacsTreeView->clear();
 
-    pacsList = pacsDeviceManager.queryPacsList();
+    pacsList = pacsDeviceManager.getPACSList();
 
     foreach(PacsDevice pacs, pacsList)
     {
@@ -58,19 +58,15 @@ void QPacsList::refresh()
 QList<PacsDevice> QPacsList::getSelectedPacs()
 {
     PacsDeviceManager pacsDeviceManager;
-
-    QList< QTreeWidgetItem * > qPacsList( m_PacsTreeView->selectedItems() );
-    QTreeWidgetItem *item;
-
     QList<PacsDevice> selectedPacsList;
+    QList< QTreeWidgetItem * > qPacsList( m_PacsTreeView->selectedItems() );
 
+    QTreeWidgetItem *item;
     for ( int i = 0; i < qPacsList.count(); i++ )
     {
-        item = qPacsList.at( i );
         PacsDevice pacs;
-
-        pacs = pacsDeviceManager.queryPacs(item->text(0)); //fem el query per cercar la informació del PACS
-
+        item = qPacsList.at( i );
+        pacs = pacsDeviceManager.getPACSDeviceByID(item->text(0)); //fem el query per cercar la informació del PACS
         selectedPacsList.append( pacs ); //inserim a la llista
     }
 
@@ -84,7 +80,7 @@ void QPacsList::setDefaultPACS(QTreeWidgetItem *item)
     PacsDeviceManager pacsDeviceManager;
 
     PacsDevice pacs;
-    pacs = pacsDeviceManager.queryPacs(item->text(0));
+    pacs = pacsDeviceManager.getPACSDeviceByID(item->text(0));
     pacs.setDefault( item->isSelected() );
 }
 
