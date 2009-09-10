@@ -39,7 +39,7 @@ bool PacsDeviceManager::insertPacs(const PacsDevice &pacs)
 void PacsDeviceManager::updatePacs(const PacsDevice &pacsToUpdate)
 {
     Settings settings;
-    settings.setListItem( pacsToUpdate.getPacsID().toInt(),PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacsToUpdate) );
+    settings.setListItem( pacsToUpdate.getID().toInt(),PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacsToUpdate) );
 }
 
 QList<PacsDevice> PacsDeviceManager::queryPacsList()
@@ -82,9 +82,9 @@ bool PacsDeviceManager::existPacs(const PacsDevice &pacs)
 
     foreach(PacsDevice pacsDevice, pacsList)
     {
-        if (pacsDevice.getAEPacs() == pacs.getAEPacs() && 
-            pacsDevice.getPacsPort() == pacs.getPacsPort() &&
-            pacsDevice.getPacsAddress() == pacs.getPacsAddress())
+        if (pacsDevice.getAETitle() == pacs.getAETitle() && 
+            pacsDevice.getPort() == pacs.getPort() &&
+            pacsDevice.getAddress() == pacs.getAddress())
         {
             return true;
         }
@@ -130,12 +130,12 @@ Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const Pacs
 {
     Settings::KeyValueMapType item;
 
-    item["ID"] = pacsDevice.getPacsID();
-    item["AETitle"] = pacsDevice.getAEPacs();
-    item["PacsPort"] = pacsDevice.getPacsPort();
+    item["ID"] = pacsDevice.getID();
+    item["AETitle"] = pacsDevice.getAETitle();
+    item["PacsPort"] = pacsDevice.getPort();
     item["Location"] = pacsDevice.getLocation();
     item["Institution"] = pacsDevice.getInstitution();
-    item["PacsHostname"] = pacsDevice.getPacsAddress();
+    item["PacsHostname"] = pacsDevice.getAddress();
     item["Description"] = pacsDevice.getDescription();
 
     return item;
@@ -145,12 +145,12 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueM
 {
     PacsDevice pacsDevice;
     // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
-    pacsDevice.setPacsID( item.value("ID").toString() );
-    pacsDevice.setAEPacs( item.value("AETitle" ).toString() );
-    pacsDevice.setPacsPort( item.value("PacsPort" ).toString() );
+    pacsDevice.setID( item.value("ID").toString() );
+    pacsDevice.setAETitle( item.value("AETitle" ).toString() );
+    pacsDevice.setPort( item.value("PacsPort" ).toString() );
     pacsDevice.setLocation( item.value("Location" ).toString() );
     pacsDevice.setInstitution( item.value("Institution" ).toString() );
-    pacsDevice.setPacsAddress( item.value("PacsHostname" ).toString() );
+    pacsDevice.setAddress( item.value("PacsHostname" ).toString() );
     pacsDevice.setDescription( item.value("Description" ).toString() );
 
     return pacsDevice;

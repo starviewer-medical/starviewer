@@ -203,7 +203,7 @@ void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
     PacsDevice pacsDevice = PacsDeviceManager().queryPacs(getPacsIDFromQueriedStudies(studyInstanceUID));
     QString pacsDescription;
 
-    pacsDescription = pacsDevice.getAEPacs() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getPacsAddress();
+    pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
 
     INFO_LOG("Cercant informacio de les sèries de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
 
@@ -217,7 +217,7 @@ void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QStr
     PacsDevice pacsDevice = PacsDeviceManager().queryPacs(getPacsIDFromQueriedStudies(studyInstanceUID));
     QString pacsDescription;
 
-    pacsDescription = pacsDevice.getAEPacs() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getPacsAddress();
+    pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
 
     m_pacsManager->queryImage(buildImageDicomMask(studyInstanceUID, seriesInstanceUID), pacsDevice);
     setQueryInProgress(true);
@@ -396,7 +396,7 @@ void QInputOutputPacsWidget::errorQueryingStudy(PacsDevice pacsDeviceError)
     QString errorMessage;
 
     errorMessage = tr("Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct")
-        .arg(pacsDeviceError.getAEPacs())
+        .arg(pacsDeviceError.getAETitle())
         .arg(pacsDeviceError.getInstitution());
 
     QMessageBox::critical(this, ApplicationNameString, errorMessage);
@@ -404,14 +404,14 @@ void QInputOutputPacsWidget::errorQueryingStudy(PacsDevice pacsDeviceError)
 
 void QInputOutputPacsWidget::errorQueryingSeries(QString studyInstanceUID, PacsDevice pacsDeviceError)
 {
-    QString errorMessage = tr("Error! Can't query series from study %1 of PACS %2 from %3.").arg(studyInstanceUID, pacsDeviceError.getAEPacs(), pacsDeviceError.getInstitution());
+    QString errorMessage = tr("Error! Can't query series from study %1 of PACS %2 from %3.").arg(studyInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
     
     QMessageBox::warning(this, ApplicationNameString, errorMessage);
 }
 
 void QInputOutputPacsWidget::errorQueryingImage(QString studyInstanceUID, QString seriesInstanceUID, PacsDevice pacsDeviceError)
 {
-    QString errorMessage = tr("Error! Can't query images from series %1 of PACS %2 from %3.").arg(seriesInstanceUID, pacsDeviceError.getAEPacs(), pacsDeviceError.getInstitution());
+    QString errorMessage = tr("Error! Can't query images from series %1 of PACS %2 from %3.").arg(seriesInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
     
     QMessageBox::warning(this, ApplicationNameString, errorMessage);
 }
@@ -425,7 +425,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
     {
         case QExecuteOperationThread::ErrorConnectingPacs :
             message = tr("Please review the operation list screen, ");
-            message += tr("%1 can't connect to PACS %2 trying to retrieve or store a study.\n").arg(ApplicationNameString, pacs.getAEPacs());
+            message += tr("%1 can't connect to PACS %2 trying to retrieve or store a study.\n").arg(ApplicationNameString, pacs.getAETitle());
             message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
@@ -433,13 +433,13 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
         case QExecuteOperationThread::ErrorRetrieving :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred retrieving a study.\n");
-            message += tr("\nPACS %1 doesn't respond correctly, be sure that your computer is connected on network and the PACS parameters are correct.").arg(pacs.getAEPacs());
+            message += tr("\nPACS %1 doesn't respond correctly, be sure that your computer is connected on network and the PACS parameters are correct.").arg(pacs.getAETitle());
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::MoveDestinationAETileUnknown:
             message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAEPacs(), PacsDevice::getLocalAETitle() );
+            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAETitle(), PacsDevice::getLocalAETitle() );
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
@@ -471,7 +471,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             break;
 	   case QExecuteOperationThread::MoveRefusedOutOfResources :
 			message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 is out of resources and can't process the request for retrieving a study.").arg(pacs.getAEPacs());
+            message += tr("PACS %1 is out of resources and can't process the request for retrieving a study.").arg(pacs.getAETitle());
             message += tr("\n\nTry later to retrieve the study, if the problem persists please contact with PACS administrator to solve the problem.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;

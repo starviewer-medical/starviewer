@@ -368,7 +368,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
 
     // set calling and called AE titles
     //el c_str, converteix l'string que ens retornen les funcions get a un char
-    ASC_setAPTitles( m_params , qPrintable( PacsDevice::getLocalAETitle() ) , qPrintable(m_pacs.getAEPacs()) , NULL );
+    ASC_setAPTitles( m_params , qPrintable( PacsDevice::getLocalAETitle() ) , qPrintable(m_pacs.getAETitle()) , NULL );
 
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
@@ -377,7 +377,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     cond = ASC_setTransportLayerType(m_params, OFFalse);
     if (!cond.good()) return state.setStatus( cond );
 
-    AdrServer = constructAdrServer( m_pacs.getPacsAddress(), m_pacs.getPacsPort() );
+    AdrServer = constructAdrServer( m_pacs.getAddress(), m_pacs.getPort() );
 
     //get localhost name TODO substituir per QHostInfo::localHostName()
     gethostname( adrLocal , 255 );

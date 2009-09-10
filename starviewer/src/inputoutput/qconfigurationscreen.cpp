@@ -120,10 +120,10 @@ void QConfigurationScreen::addPacs()
         // TODO de moment assignem l'ID segons el nombre de PACS configurats
         // TODO Caldria plantejar-se si realment el paràmetre "ID" tal i com s'està fent servir, és necessari o no
         QString pacsID = QString::number( m_PacsTreeView->topLevelItemCount() );
-        pacs.setPacsID( pacsID );
-        pacs.setAEPacs( m_textAETitle->text() );
-        pacs.setPacsPort( m_textPort->text() );
-        pacs.setPacsAddress( m_textAddress->text() );
+        pacs.setID( pacsID );
+        pacs.setAETitle( m_textAETitle->text() );
+        pacs.setPort( m_textPort->text() );
+        pacs.setAddress( m_textAddress->text() );
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
         pacs.setDescription( m_textDescription->text() );
@@ -159,15 +159,15 @@ void QConfigurationScreen::updateSelectedPACSInformation()
         selectedPacs = pacsDeviceManager.queryPacs( selectedItem->text(0) );// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
 
         //emplenem els textots
-        m_textAETitle->setText( selectedPacs.getAEPacs() );
-        m_textPort->setText( selectedPacs.getPacsPort() );
-        m_textAddress->setText( selectedPacs.getPacsAddress() );
+        m_textAETitle->setText( selectedPacs.getAETitle() );
+        m_textPort->setText( selectedPacs.getPort() );
+        m_textAddress->setText( selectedPacs.getAddress() );
         m_textInstitution->setText( selectedPacs.getInstitution() );
         m_textLocation->setText( selectedPacs.getLocation() );
         m_textDescription->setText( selectedPacs.getDescription() );
         m_checkDefault->setChecked( selectedPacs.isDefault() );
         // indiquem quin és l'ID del PACS seleccionat
-        m_selectedPacsID = selectedPacs.getPacsID();
+        m_selectedPacsID = selectedPacs.getID();
     }
     else 
         m_selectedPacsID = "";
@@ -186,13 +186,13 @@ void QConfigurationScreen::updatePacs()
 
     if ( validatePacsDevice() )
     {
-        pacs.setAEPacs( m_textAETitle->text() );
-        pacs.setPacsPort( m_textPort->text() );
-        pacs.setPacsAddress( m_textAddress->text() );
+        pacs.setAETitle( m_textAETitle->text() );
+        pacs.setPort( m_textPort->text() );
+        pacs.setAddress( m_textAddress->text() );
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
         pacs.setDescription( m_textDescription->text() );
-        pacs.setPacsID( m_selectedPacsID );
+        pacs.setID( m_selectedPacsID );
         pacs.setDefault( m_checkDefault->isChecked() );
 
         INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
@@ -237,10 +237,10 @@ void QConfigurationScreen::fillPacsListView()
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
 
-        item->setText(0, pacs.getPacsID());
-        item->setText(1, pacs.getAEPacs());
-        item->setText(2, pacs.getPacsAddress());
-        item->setText(3, pacs.getPacsPort());
+        item->setText(0, pacs.getID());
+        item->setText(1, pacs.getAETitle());
+        item->setText(2, pacs.getAddress());
+        item->setText(3, pacs.getPort());
         item->setText(4, pacs.getInstitution());
         item->setText(5, pacs.getLocation());
         item->setText(6, pacs.getDescription());
@@ -262,20 +262,20 @@ void QConfigurationScreen::test()
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
         //Agafem les dades del PACS que estan el textbox per testejar
-        pacs.setAEPacs( m_textAETitle->text() );
-        pacs.setPacsPort( m_textPort->text() );
-        pacs.setPacsAddress( m_textAddress->text() );
+        pacs.setAETitle( m_textAETitle->text() );
+        pacs.setPort( m_textPort->text() );
+        pacs.setAddress( m_textAddress->text() );
         pacsServer.setPacs( pacs );
 
         state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );
 
         if ( !state.good() )
         {
-            message = tr( "PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+            message = tr( "PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAETitle() );
 
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , ApplicationNameString , message );
-            INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds. PACS ERROR : " + state.text() );
+            INFO_LOG( "Doing echo PACS " + pacs.getAETitle() + " doesn't responds. PACS ERROR : " + state.text() );
         }
         else
         {
@@ -285,16 +285,16 @@ void QConfigurationScreen::test()
 
             if ( state.good() )
             {
-                message = tr( "Test of PACS \"%1\" is correct").arg( pacs.getAEPacs() );
+                message = tr( "Test of PACS \"%1\" is correct").arg( pacs.getAETitle() );
                 QMessageBox::information( this , ApplicationNameString , message );
                 // TODO realment cal fer un INFO LOG d'això?
-                INFO_LOG( "Test of PACS " + pacs.getAEPacs() + "is correct" );
+                INFO_LOG( "Test of PACS " + pacs.getAETitle() + "is correct" );
             }
             else
             {
-                message = tr( "PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAEPacs() );
+                message = tr( "PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAETitle() );
                 QMessageBox::warning( this , ApplicationNameString , message );
-                INFO_LOG( "Doing echo PACS " + pacs.getAEPacs() + " doesn't responds correctly. PACS ERROR : " + state.text() );
+                INFO_LOG( "Doing echo PACS " + pacs.getAETitle() + " doesn't responds correctly. PACS ERROR : " + state.text() );
             }
         }
     }

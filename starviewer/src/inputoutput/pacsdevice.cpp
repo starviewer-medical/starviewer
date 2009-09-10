@@ -7,67 +7,66 @@ namespace udg{
 
 PacsDevice::PacsDevice()
 {
-    m_pacsID = "";
 }
 
-void PacsDevice::setPacsAddress(const QString &address)
+void PacsDevice::setAddress(const QString &address)
 {
-    m_pacsAddress = address;
+    m_address = address;
 }
 
-QString PacsDevice::getPacsAddress() const
+QString PacsDevice::getAddress() const
 {
-    return m_pacsAddress;
+    return m_address;
 }
 
-void PacsDevice::setPacsPort(const QString &port)
+void PacsDevice::setPort(const QString &port)
 {
-    m_pacsPort = port;
+    m_port = port;
 }
 
-QString PacsDevice::getPacsPort() const
+QString PacsDevice::getPort() const
 {
-    return m_pacsPort;
+    return m_port;
 }
 
-void PacsDevice::setAEPacs(const QString &remoteServerAETitle)
+void PacsDevice::setAETitle(const QString &AETitle)
 {
-    m_pacsAETitle = remoteServerAETitle;
+    m_AETitle = AETitle;
 }
 
-QString PacsDevice::getAEPacs() const
+QString PacsDevice::getAETitle() const
 {
-    return m_pacsAETitle;
+    return m_AETitle;
 }
 
 void PacsDevice::setInstitution(const QString &institution)
 {
-    m_pacsInstitution = institution;
+    m_institution = institution;
 }
 
 QString PacsDevice::getInstitution() const
 {
-    return m_pacsInstitution;
+    return m_institution;
 }
 
 void PacsDevice::setLocation(const QString &location)
 {
-    m_pacsLocation = location;
+    m_location = location;
 }
 
 QString PacsDevice::getLocation() const
 {
-    return m_pacsLocation;
+    return m_location;
 }
 
 void PacsDevice::setDescription(const QString &description)
 {
-    m_pacsDescription = description;
+    m_description = description;
 }
 
 QString PacsDevice::getDescription() const
 {
-    return m_pacsDescription;
+    return m_description;
 }
 
 void PacsDevice::setDefault(bool isDefault)
@@ -102,26 +101,25 @@ bool PacsDevice::isDefault() const
         return false;
 }
 
-void PacsDevice::setPacsID(QString ID)
+void PacsDevice::setID(const QString &id)
 {
-    m_pacsID = ID;
+    m_id = id;
 }
 
-QString PacsDevice::getPacsID() const
+QString PacsDevice::getID() const
 {
-    return m_pacsID;
+    return m_id;
 }
 
-bool PacsDevice::operator ==(const PacsDevice &parameters)
+bool PacsDevice::operator ==(const PacsDevice &device)
 {
-    return m_pacsAETitle == parameters.m_pacsAETitle
-        && m_pacsPort == parameters.m_pacsPort
-        && m_pacsAddress == parameters.m_pacsAddress
-        && m_pacsDescription == parameters.m_pacsDescription
-        && m_pacsInstitution == parameters.m_pacsInstitution
-        && isDefault() == parameters.isDefault()
-        && m_pacsLocation == parameters.m_pacsLocation
-        && m_pacsID == parameters.m_pacsID;
+    return m_AETitle == device.m_AETitle
+        && m_port == device.m_port
+        && m_address == device.m_address
+        && m_description == device.m_description
+        && m_institution == device.m_institution
+        && m_location == device.m_location
+        && m_id == device.m_id;
 }
 
 QString PacsDevice::getLocalAETitle()
@@ -150,7 +148,7 @@ int PacsDevice::getQueryRetrievePort()
 
 QString PacsDevice::getKeyName() const
 {
-    return m_pacsAETitle + m_pacsAddress;
+    return m_AETitle + m_address;
 }
 
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const

@@ -150,14 +150,14 @@ void QueryPacs::cancelQuery()
 
 void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
 {
-    INFO_LOG(QString("Demanem cancel·lar al PACS %1 l'actual query").arg(m_pacs.getAEPacs()));
+    INFO_LOG(QString("Demanem cancel·lar al PACS %1 l'actual query").arg(m_pacs.getAETitle()));
 
     //Tots els PACS està obligats pel DICOM Conformance a implementar la cancel·lació
     OFCondition cond = DIMSE_sendCancelRequest(m_assoc, m_presId, request->MessageID);
     if (cond.bad())
     {
         ERROR_LOG("S'ha produït el següent error al cancel·lar la query: " + QString(cond.text()));
-        INFO_LOG(QString("Aborto la connexió amb el PACS %1").arg(m_pacs.getAEPacs()));
+        INFO_LOG(QString("Aborto la connexió amb el PACS %1").arg(m_pacs.getAETitle()));
 
         //Si hi hagut un error demanant el cancel·lar, abortem l'associació, d'aquesta manera segur que cancel·lem la query
         ASC_abortAssociation(m_assoc);
@@ -175,7 +175,7 @@ void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
         patient->addStudy(study);
 
         m_patientStudyList.append(patient);
-        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacs.getPacsID();//Afegim a la taula de QHash de quin pacs és l'estudi
+        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacs.getID();//Afegim a la taula de QHash de quin pacs és l'estudi
     }
 }
 
