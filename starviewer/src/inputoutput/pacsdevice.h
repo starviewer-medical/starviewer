@@ -5,59 +5,69 @@
 
 namespace udg{
 
-/** Aquesta classe ens permet configurar els paràmetres necessaris que l'usuari ens ha d'entrar per connectar-nos en el pacs. A més d'altres dades d'interés
- * Aquests paràmetres són :
- *            -IP o Adr. del Host
- *            - Port de connexió
- *            - AE title de la màquina local
- *            - AE title del PACS al que es vol connectar l'usuari
- *            - Institució al que pertany al PACS
- *            - Descripció del Pacs
- *            - Localitzacio del Pacs
- *            - Default, estableix si aquest PACS és el predeterminat per realitzar les cerques
+/** 
+ * Classe que encapsula els paràmetres necessaris per definir un servidor PACS al qual connectar-nos
+ * Aquests paràmetres són:
+ *
+ * Dades de connexió (imprescindibles)
+ *      - AETitle del PACS
+ *      - IP del servidor PACS
+ *      - Port de connexió del PACS
+ *
+ * Dades Descriptives (opcionals)
+ *      - Institució a la que pertany el PACS
+ *      - Descripció del PACS
+ *      - Ubicació del PACS
+ *
+ * Altres dades 
+ *      - AETitle de la màquina local
+ *      - Nombre màxim de connexions simultànies
+ *      - Timeout de la connexió
+ *      - Port Local de Query/Retrieve
+ * TODO aquestes dades s'haurien de reubicar en un lloc més adient ja que són
+ * les mateixes per a qualsevol connexió amb un PACS i per tant no haurien de formar part d'aquesta classe
+ *
  */
 class PacsDevice
 {
 public:
-
-    /// Constructor buit de la classe
     PacsDevice();
 
-    /// Assigna/Retorna l'adreça al pacs al qual ens volem connectar
-    void setPacsAddress(const QString &address);
-    QString getPacsAddress() const;
+    /// Assigna/Retorna l'adreça al PACS al qual ens volem connectar
+    void setAddress(const QString &address);
+    QString getAddress() const;
 
-    /// Assigna/Retorna el port del pacs al qual ens volem connectar
-    void setPacsPort(const QString &port);
-    QString getPacsPort() const;
+    /// Assigna/Retorna el port del PACS al qual ens volem connectar
+    void setPort(const QString &port);
+    QString getPort() const;
 
-    /// Assigna/Retorna l'AETitle del pacs al qual ens volem connectar
-    void setAEPacs(const QString &remoteServerAETitle);
-    QString getAEPacs() const;
+    /// Assigna/Retorna l'AETitle del PACS al qual ens volem connectar
+    void setAETitle(const QString &AETitle);
+    QString getAETitle() const;
 
     /// Assigna/Retorna la descripció del PACS
     void setDescription(const QString &description);
     QString getDescription() const;
 
-    /// Assigna/Retorna la institucio a la qual pertany el pacs
+    /// Assigna/Retorna la institucio a la qual pertany el PACS
     void setInstitution(const QString &institution);
     QString getInstitution() const;
 
-    /// Assigna/Retorna la localització del PACS
+    /// Assigna/Retorna la ubicació del PACS
     void setLocation(const QString &location);
     QString getLocation() const;
 
-    /// Assigna/Retorna si aquest PACS és un predeterminat per fer les consultes.
+    /// Assigna/Retorna si aquest PACS és un de predeterminat per fer les consultes.
     void setDefault(bool isDefault);
     bool isDefault() const;
 
-    /// Assigna/Retorna l'ID del PACS, aquest és un camp clau per diferenciar els PACS que l'assigna l'aplicació.
-    void setPacsID(QString ID);
-    QString getPacsID() const;
+    /// Assigna/Retorna l'ID del PACS. Camp clau assignat per l'aplicació. 
+    void setID(const QString &id);
+    QString getID() const;
 
-    bool operator ==(const PacsDevice &parameters);
+    bool operator ==(const PacsDevice &device);
 
-    // TODO aquests mètodes poden desaparèixer quan estigui enllestit tot el tema de settings
+    // TODO Aquests mètodes podrien desaparèixer. Caldria desvincular aquesta informació d'aquesta classe
     static QString getLocalAETitle();
     static int getMaximumConnections();
     static int getConnectionTimeout();
@@ -71,13 +81,13 @@ private:
     QStringList getDefaultPACSKeyNamesList() const;
 
 private:
-    QString m_pacsAETitle;
-    QString m_pacsPort;
-    QString m_pacsAddress;
-    QString m_pacsDescription;
-    QString m_pacsInstitution;
-    QString m_pacsLocation;
-    QString m_pacsID;
+    QString m_AETitle;
+    QString m_port;
+    QString m_address;
+    QString m_description;
+    QString m_institution;
+    QString m_location;
+    QString m_id;
 };
 
 };

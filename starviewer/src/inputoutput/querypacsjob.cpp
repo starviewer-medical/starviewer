@@ -38,7 +38,7 @@ void QueryPacsJob::run()
     //creem la connexió
     PacsServer pacsServer(m_pacsDevice);
 
-    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsDevice::getLocalAETitle() + "; AEPACS= " + m_pacsDevice.getAEPacs() + "; PACS Adr= " + m_pacsDevice.getPacsAddress() + "; PACS Port= " + m_pacsDevice.getPacsPort() + ";" );
+    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsDevice::getLocalAETitle() + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + m_pacsDevice.getPort() + ";" );
 
     //Establim a quin nivell farem la cerca en funció del Query Level que ens han especificat
     switch (getQueryLevel())
@@ -56,7 +56,7 @@ void QueryPacsJob::run()
 
     if ( !m_queryStatus.good() )
     {
-        ERROR_LOG( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_pacsDevice.getAEPacs() ).arg( state.text() ) );
+        ERROR_LOG( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_pacsDevice.getAETitle() ).arg( state.text() ) );
     }
     else
     {
@@ -66,10 +66,10 @@ void QueryPacsJob::run()
         if (! m_queryStatus.good() && !isAbortRequested() )
         {
             //En el cas que hem abortat la query, i per abortar s'hagi abortat l'assocació, retorna el missatge DIMSE Failed to receive message, per això comprovem si hem abortat, perquè no donem aquest missatge com error ja que és normal
-            ERROR_LOG( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_pacsDevice.getAEPacs() ).arg( m_queryStatus.text() ) );
+            ERROR_LOG( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_pacsDevice.getAETitle() ).arg( m_queryStatus.text() ) );
         }
 
-        INFO_LOG ( QString("Thread del PACS %1 finalitzant").arg( m_pacsDevice.getAEPacs() ) );
+        INFO_LOG ( QString("Thread del PACS %1 finalitzant").arg( m_pacsDevice.getAETitle() ) );
 
         //desconnectem
         pacsServer.disconnect();

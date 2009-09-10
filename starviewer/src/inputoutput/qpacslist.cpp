@@ -45,11 +45,11 @@ void QPacsList::refresh()
     {
         QTreeWidgetItem* item = new QTreeWidgetItem( m_PacsTreeView );
 
-        item->setText(0, pacs.getPacsID());
-        item->setText(1, pacs.getAEPacs());
+        item->setText(0, pacs.getID());
+        item->setText(1, pacs.getAETitle());
         item->setText(2, pacs.getInstitution());
         item->setText(3, pacs.getDescription());
-        item->setText(4, pacs.getPacsAddress());
+        item->setText(4, pacs.getAddress());
 
         item->setSelected(pacs.isDefault());
     }

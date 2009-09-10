@@ -124,7 +124,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     patientFiller.moveToThread( &fillersThread );
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
-    INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsDevice().getAEPacs() ) );
+    INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsDevice().getAETitle() ) );
 
     //creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
     createRetrieveStudyConnections(&localDatabaseManager, &localDatabaseManagerThreaded, &patientFiller, &fillersThread, sProcessImg);
@@ -138,11 +138,11 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
         {
             //si no hi ha prou espai cancel·lem les operacions de descàrrega
-            errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), NoEnoughSpace);
+            errorRetrieving(studyUID, operation.getPacsDevice().getID(), NoEnoughSpace);
             cancelAllPendingOperations(Operation::Retrieve);
             cancelAllPendingOperations(Operation::View);
         }
-        else errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), ErrorFreeingSpace);
+        else errorRetrieving(studyUID, operation.getPacsDevice().getID(), ErrorFreeingSpace);
 
         localDatabaseManager.setStudyRetrieveFinished();
         return;
@@ -151,7 +151,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     int localPort = PacsDevice::getQueryRetrievePort();
     if ( Utils::isPortInUse(localPort) )
     {
-        errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), IncomingConnectionsPortPacsInUse);
+        errorRetrieving(studyUID, operation.getPacsDevice().getID(), IncomingConnectionsPortPacsInUse);
         cancelAllPendingOperations(Operation::Retrieve);
         cancelAllPendingOperations(Operation::View);
         localDatabaseManager.setStudyRetrieveFinished();
@@ -165,9 +165,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     state = pacsConnection.connect(PacsServer::retrieveImages,PacsServer::studyLevel);
     if (!state.good())
     {
-        ERROR_LOG( "Error al connectar al pacs " + operation.getPacsDevice().getAEPacs() + ". PACS ERROR : " + state.text() );
+        ERROR_LOG( "Error al connectar al pacs " + operation.getPacsDevice().getAETitle() + ". PACS ERROR : " + state.text() );
 
-        errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), ErrorConnectingPacs);
+        errorRetrieving(studyUID, operation.getPacsDevice().getID(), ErrorConnectingPacs);
         localDatabaseManager.setStudyRetrieveFinished();
 
         return;
@@ -191,13 +191,13 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         if (retState.code() == 1300)
         {
-            errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), MoveDestinationAETileUnknown);
+            errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveDestinationAETileUnknown);
         }
 		else if( retState.code() == 1302)
 		{
-			errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), MoveRefusedOutOfResources);
+			errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveRefusedOutOfResources);
 		}
-        else errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), ErrorRetrieving);
+        else errorRetrieving(studyUID, operation.getPacsDevice().getID(), ErrorRetrieving);
     }
     else emit filesRetrieved();
 
@@ -209,7 +209,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         if ( localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok) //Comprovem si l'estudi s'ha inserit correctament a la BD
         {
-            INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsDevice().getAEPacs() );
+            INFO_LOG( "Ha finalitzat la descàrrega de l'estudi " + studyUID + "del pacs " + operation.getPacsDevice().getAETitle() );
 
             emit setOperationFinished( studyUID );// descarregat a QOperationStateScreen
             emit retrieveFinished( studyUID );//la queryscreen l'afageix a la llista QStudyTreeView d'estudis de la cache
@@ -222,9 +222,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::PatientInconsistent)
             {
                 //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
-                errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), PatientInconsistent);
+                errorRetrieving(studyUID, operation.getPacsDevice().getID(), PatientInconsistent);
             }
-            else errorRetrieving(studyUID, operation.getPacsDevice().getPacsID(), DatabaseError);
+            else errorRetrieving(studyUID, operation.getPacsDevice().getID(), DatabaseError);
         }
     }
 
@@ -242,7 +242,7 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     StarviewerProcessImageStored *storedProcessImage = new StarviewerProcessImageStored();
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
 
-    INFO_LOG( "Preparant les dades per moure estudi " + operation.getStudyUID() + " al PACS " + operation.getPacsDevice().getAEPacs() );
+    INFO_LOG( "Preparant les dades per moure estudi " + operation.getStudyUID() + " al PACS " + operation.getPacsDevice().getAETitle() );
 
     emit setOperating( operation.getStudyUID() );//Indiquem al QOperationState que comença l'enviament de les imatges
 
@@ -273,8 +273,8 @@ void QExecuteOperationThread::moveStudy( Operation operation )
 
     if ( !state.good() )
     {
-        ERROR_LOG( " S'ha produït un error al intentar connectar al PACS " + operation.getPacsDevice().getAEPacs() + ". PACS ERROR : " + state.text() );
-        emit errorConnectingPacs( operation.getPacsDevice().getPacsID() );
+        ERROR_LOG( " S'ha produït un error al intentar connectar al PACS " + operation.getPacsDevice().getAETitle() + ". PACS ERROR : " + state.text() );
+        emit errorConnectingPacs( operation.getPacsDevice().getID() );
         emit setErrorOperation( operation.getStudyUID() );
         return;
     }
