@@ -73,7 +73,7 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 
     m_qpopUpRisRequestsScreen->show();
 
-    m_pacsManager->queryStudy(maskRISRequest, PacsDeviceManager().queryDefaultPacs());
+    m_pacsManager->queryStudy(maskRISRequest, PacsDeviceManager().getPACSList(true));
 }
 
 void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)

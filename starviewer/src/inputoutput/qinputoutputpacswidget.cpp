@@ -200,7 +200,7 @@ void QInputOutputPacsWidget::setQOperationStateScreen(QOperationStateScreen *qop
 
 void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
 {
-    PacsDevice pacsDevice = PacsDeviceManager().queryPacs(getPacsIDFromQueriedStudies(studyInstanceUID));
+    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
     QString pacsDescription;
 
     pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
@@ -214,7 +214,7 @@ void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
 
 void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
 {
-    PacsDevice pacsDevice = PacsDeviceManager().queryPacs(getPacsIDFromQueriedStudies(studyInstanceUID));
+    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
     QString pacsDescription;
 
     pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
@@ -277,7 +277,7 @@ void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, Dicom
     QApplication::setOverrideCursor(QCursor (Qt::WaitCursor));
 
     //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    pacs = PacsDeviceManager().queryPacs(pacsIdToRetrieve);
+    pacs = PacsDeviceManager().getPACSDeviceByID(pacsIdToRetrieve);
 
     //definim l'operació
     operation.setPacsDevice(pacs);
@@ -419,7 +419,7 @@ void QInputOutputPacsWidget::errorQueryingImage(QString studyInstanceUID, QStrin
 void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error)
 {
     QString message;
-    PacsDevice pacs = PacsDeviceManager().queryPacs(pacsID);
+    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
 
     switch (error)
     {

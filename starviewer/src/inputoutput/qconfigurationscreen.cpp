@@ -131,7 +131,7 @@ void QConfigurationScreen::addPacs()
 
         INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
 
-        if ( !pacsDeviceManager.insertPacs(pacs) )
+        if ( !pacsDeviceManager.addPACS(pacs) )
         {
             QMessageBox::warning(this, ApplicationNameString, tr("This PACS already exists."));
         }
@@ -156,7 +156,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
         // només en podem tenir un de seleccionat
         selectedItem = m_PacsTreeView->selectedItems().first();
         // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
-        selectedPacs = pacsDeviceManager.queryPacs( selectedItem->text(0) );// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
+        selectedPacs = pacsDeviceManager.getPACSDeviceByID( selectedItem->text(0) );// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
 
         //emplenem els textots
         m_textAETitle->setText( selectedPacs.getAETitle() );
@@ -197,7 +197,7 @@ void QConfigurationScreen::updatePacs()
 
         INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
 
-        pacsDeviceManager.updatePacs(pacs);
+        pacsDeviceManager.updatePACS(pacs);
 
         fillPacsListView();
         clear();
@@ -217,7 +217,7 @@ void QConfigurationScreen::deletePacs()
 
     INFO_LOG( "Esborrant el PACS: " + m_textAETitle->text() );
 
-    pacsDeviceManager.deletePacs( m_selectedPacsID );
+    pacsDeviceManager.deletePACS( m_selectedPacsID );
 
     fillPacsListView();
     clear();
@@ -231,7 +231,7 @@ void QConfigurationScreen::fillPacsListView()
 
     m_PacsTreeView->clear();
 
-    pacsList = pacsDeviceManager.queryPacsList();
+    pacsList = pacsDeviceManager.getPACSList();
 
     foreach(PacsDevice pacs, pacsList)
     {
