@@ -38,33 +38,10 @@ void CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPri
 
     foreach(Image *image, dicomPrintJob.getPrintPage().getImagesToPrint())
     {
-        prepareImageForPrinting(image);
+        transformImageForPrinting(image);
     }
 
-    size_t numImages = m_StoredPrint->getNumberOfImages();
-    for (size_t i=0; i<numImages; i++)
-    {
-        //TODO Assegurar que quan no s'han seleccionat aquests paràmetres tenen valor empty, podria ser que tinguessin valor NONE, funciona igualment ?
-        if (!m_dicomPrintJob.getPrintPage().getPolarity().isEmpty())
-        {
-            m_StoredPrint->setImagePolarity(i, qPrintable(m_dicomPrintJob.getPrintPage().getPolarity()));
-            //CERR << "warning: cannot set polarity for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_polarity << "', ignoring." << endl;
-        }
-        if (!m_dicomPrintJob.getPrintPage().getMagnificationType().isEmpty())
-        {
-            m_StoredPrint->setImageMagnificationType(i, qPrintable(m_dicomPrintJob.getPrintPage().getMagnificationType()));
-            //CERR << "warning: cannot set magnification type for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_magnification << "', ignoring." << endl;
-        }
-        if (!m_dicomPrintJob.getPrintPage().getSmoothingType().isEmpty())
-        {
-            m_StoredPrint->setImageSmoothingType(i, qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
-            //CERR << "warning: cannot set smoothing type for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_smoothing << "', ignoring." << endl;
-
-        }
-        
-        m_StoredPrint->setImageConfigurationInformation(i, NULL);
-          //CERR << "warning: cannot set configuration information for image #" << i+1 << " (of " << numImages << ") to '" << opt_img_configuration << "', ignoring." << endl;*/
-      }
+    setImageBoxAttributes();
 
     this->createStoredPrintDcmtkFile();
 }
@@ -122,7 +99,7 @@ void CreateDicomPrintSpool::configureDcmtkDVPSStoredPrint()
       CERR << "warning: cannot set reflected ambient light to '" << opt_reflection << "', ignoring." << endl;*/
 }
 
-void CreateDicomPrintSpool::prepareImageForPrinting(Image *image)
+void CreateDicomPrintSpool::transformImageForPrinting(Image *image)
 {
   // Inicialitzem l'StoredPrint
   //TODO Esbrinar els camps DefaultIllumination i getDefaultReflection, DicomPrint utilitzen els mateixos valors per defecte
@@ -237,6 +214,35 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     //TODO faltaran delete dels punters?
 }
 
+void CreateDicomPrintSpool::setImageBoxAttributes()
+{
+    size_t numImages = m_StoredPrint->getNumberOfImages();
+    OFCondition result;
+
+    for (size_t i = 0; i < numImages; i++)
+    {
+        //TODO Assegurar que quan no s'han seleccionat aquests paràmetres tenen valor empty, podria ser que tinguessin valor NONE, funciona igualment ?
+        if (!m_dicomPrintJob.getPrintPage().getPolarity().isEmpty())
+        {
+            m_StoredPrint->setImagePolarity(i, qPrintable(m_dicomPrintJob.getPrintPage().getPolarity()));
+        }
+
+        //TODO: El podem especificar a nivell de FilmBox, potser seria millor ja que no ho deixem triar a nivell d'imatge
+        if (!m_dicomPrintJob.getPrintPage().getMagnificationType().isEmpty())
+        {
+            m_StoredPrint->setImageMagnificationType(i, qPrintable(m_dicomPrintJob.getPrintPage().getMagnificationType()));
+        }
+
+        //TODO: El podem especificar a nivell de FilmBox, potser seria millor ja que no ho deixem triar a nivell d'imatge
+        if (!m_dicomPrintJob.getPrintPage().getSmoothingType().isEmpty())
+        {
+            m_StoredPrint->setImageSmoothingType(i, qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
+        }
+     
+        //TODO: Fa falta especificar-lo si té valor null?
+        m_StoredPrint->setImageConfigurationInformation(i, NULL);
+    }
+}
 
 void CreateDicomPrintSpool::createStoredPrintDcmtkFile()
 {	
