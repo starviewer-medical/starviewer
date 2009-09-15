@@ -29,7 +29,7 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
     m_dicomPrintJob = dicomPrintJob;
     m_dicomPrinter = dicomPrinter;
 
-    configureDcmtkDVPSStoredPrint();
+    setBasicFilmBoxAttributes();
 
     foreach(Image *image, dicomPrintJob.getPrintPage().getImagesToPrint())
     {
@@ -38,12 +38,12 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
 
     setImageBoxAttributes();
 
-    this->createStoredPrintDcmtkFile(storedPrintDcmtkFilePath);
+    createStoredPrintDcmtkFile(storedPrintDcmtkFilePath);
 
     return storedPrintDcmtkFilePath;
 }
 
-void CreateDicomPrintSpool::configureDcmtkDVPSStoredPrint()
+void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
 {
     m_StoredPrint = new DVPSStoredPrint(2000 /*Valor per defecte a dcpstat.cfg getDefaultIlluminaton() */,10 /*Valor per defecte a dcpstat.cfg getDefaultReflection() */, qPrintable(m_dicomPrinter.getAETitle()));
 
@@ -121,8 +121,8 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *image, const QStrin
 
 void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
 {	
-	char tmp[70];
-	OFString tmpString;
+    char InstanceUIDOfTransformedImage[70];
+	OFString tmpString, requestedImageSizeAsOFString;
 	DcmFileFormat *transformedImageToPrint = new DcmFileFormat();
 	DcmDataset *transformedImageDatasetToPrint = transformedImageToPrint->getDataset();
     QString transformedImagePath;
@@ -146,8 +146,8 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 	// SOP Common Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPClassUID, UID_HardcopyGrayscaleImageStorage);
 	
-	dcmGenerateUniqueIdentifier(m_tranformedImageToPrintUID);    
-	transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, m_tranformedImageToPrintUID);		
+	dcmGenerateUniqueIdentifier(InstanceUIDOfTransformedImage);    
+	transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, InstanceUIDOfTransformedImage);		
 	
     //TODO:Prova de substiuir per mètode qt ? 
 	DVPSHelper::currentDate(tmpString);
@@ -170,8 +170,10 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
 	if(pixelAspectRatio!=1.0)
 	{
-	 sprintf(tmp, "%ld\\%ld", 1000L, OFstatic_cast(long, pixelAspectRatio*1000.0));
-     transformedImageDatasetToPrint->putAndInsertString(DCM_PixelAspectRatio, tmp);
+        char pixelAspectRatioAsChar[70];
+
+        sprintf(pixelAspectRatioAsChar, "%ld\\%ld", 1000L, OFstatic_cast(long, pixelAspectRatio*1000.0));
+        transformedImageDatasetToPrint->putAndInsertString(DCM_PixelAspectRatio, pixelAspectRatioAsChar);
 	} 
 
 	DcmPolymorphOBOW *pxData = new DcmPolymorphOBOW(DCM_PixelData);
@@ -188,17 +190,14 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 	}
 
     //TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
-    transformedImagePath = spoolDirectoryPath + QDir::separator() + m_tranformedImageToPrintUID + ".dcm";
+    transformedImagePath = spoolDirectoryPath + QDir::separator() + InstanceUIDOfTransformedImage + ".dcm";
 	OFCondition saveImageCondition = DVPSHelper::saveFileFormat(qPrintable(transformedImagePath), transformedImageToPrint, true);
 
-	DVPSPresentationLUT *presLUT = m_PresentationState->getPresentationLUTData();
-	const char *reqImageSize = NULL;
-	OFString reqImageTmp;
-	m_PresentationState->getPrintBitmapRequestedImageSize(reqImageTmp);
-	reqImageSize=reqImageTmp.c_str();
-	m_StoredPrint->addImageBox(qPrintable(m_dicomPrinter.getAETitle()), m_tranformedImageToPrintUID, reqImageSize, NULL, presLUT, m_PresentationState->isMonochrome1Image());
+	m_PresentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
+	m_StoredPrint->addImageBox(qPrintable(m_dicomPrinter.getAETitle()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
+                                          m_PresentationState->getPresentationLUTData(), m_PresentationState->isMonochrome1Image());
 	
-    DEBUG_LOG(QString("Imatge Creada %1").arg(m_tranformedImageToPrintUID));
+    DEBUG_LOG(QString("Imatge Creada %1").arg(InstanceUIDOfTransformedImage));
     DEBUG_LOG(qPrintable(m_dicomPrinter.getAETitle()));
 
     //TODO faltaran delete dels punters?
@@ -207,7 +206,6 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 void CreateDicomPrintSpool::setImageBoxAttributes()
 {
     size_t numImages = m_StoredPrint->getNumberOfImages();
-    OFCondition result;
 
     for (size_t i = 0; i < numImages; i++)
     {
@@ -238,13 +236,12 @@ void CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &storedPrin
 {	
 	DcmFileFormat *fileformat = new DcmFileFormat();
 	DcmDataset *dataset	= fileformat->getDataset();	
+    char storedPrintInstanceUID[70];
 
-    char storedPrintUID[70];
-
-    dcmGenerateUniqueIdentifier(storedPrintUID);
+    dcmGenerateUniqueIdentifier(storedPrintInstanceUID);
 
 	m_StoredPrint->deleteAnnotations();	
-	m_StoredPrint->setInstanceUID(storedPrintUID);	
+	m_StoredPrint->setInstanceUID(storedPrintInstanceUID);	
 	OFCondition write = m_StoredPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
 	
 	write = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileformat, true);
