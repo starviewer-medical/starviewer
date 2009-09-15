@@ -20,30 +20,22 @@
 
 #include "logging.h"
 #include "../inputoutput/pacsdevice.cpp"
-#include "../core/starviewerapplication.h"
-
 
 namespace udg{
 
-PrintDicomSpool::PrintDicomSpool()
-{
-    //TODO: Hardcoded també s'utilitza a CreateDicomPrintSpool, s'ha d'unificar en un sol lloc
-    m_spoolPath = UserDataRootPath + "Spool";
-}
-
-void PrintDicomSpool::printSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, QString pathStoredPrintDcmtkFile)
+void PrintDicomSpool::printSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath)
 {
     m_dicomPrinter = dicomPrinter;
     m_dicomPrintJob = dicomPrintJob;
 
-    m_storedPrintDcmtk = loadStoredPrintFileDcmtk(pathStoredPrintDcmtkFile);
+    m_storedPrintDcmtk = loadStoredPrintFileDcmtk(storedPrintDcmtkFilePath);
 
-    print();
+    print(spoolDirectoryPath);
 
     delete m_storedPrintDcmtk;
 }
 
-void PrintDicomSpool::print()
+void PrintDicomSpool::print(const QString &spoolDirectoryPath)
 {
     DVPSPrintMessageHandler printConnection;
     OFCondition result;
@@ -84,7 +76,7 @@ void PrintDicomSpool::print()
 
     for (size_t imageNumber = 0; imageNumber < m_storedPrintDcmtk->getNumberOfImages(); imageNumber++)
     {
-         sendImageToPrint(printConnection, imageNumber);
+        sendImageToPrint(printConnection, imageNumber, spoolDirectoryPath);
     }
 
     if (EC_Normal != (result = m_storedPrintDcmtk->printSCUprintBasicFilmSession(printConnection)))
@@ -176,10 +168,11 @@ Status PrintDicomSpool::printSCUcreateBasicFilmSession(DVPSPrintMessageHandler& 
     return state.setStatus(result);
 }
 
-Status PrintDicomSpool::sendImageToPrint(DVPSPrintMessageHandler& printConnection, size_t imageNumber)
+Status PrintDicomSpool::sendImageToPrint(DVPSPrintMessageHandler& printConnection, size_t imageNumber, const QString &spoolDirectoryPath)
 {
     OFCondition result;
     const char *studyUID = NULL, *seriesUID = NULL, *instanceUID = NULL;
+    QString imageToPrintPath;
 
     result = m_storedPrintDcmtk->getImageReference(imageNumber, studyUID, seriesUID, instanceUID);
 
@@ -189,8 +182,10 @@ Status PrintDicomSpool::sendImageToPrint(DVPSPrintMessageHandler& printConnectio
         return Status().setStatus(result);
     }
 
-    QString currentImageToPrintPath = m_spoolPath + QDir::separator() + instanceUID + ".dcm";
-    DicomImage *dcmimage = new DicomImage(qPrintable(QDir::toNativeSeparators(currentImageToPrintPath)));
+    //TODO:S'hauria de fer a un altre lloc el càlcul del path de la imatge perquè també s'utilitza a CreateDicomPrintSpool
+    imageToPrintPath = QDir::toNativeSeparators(spoolDirectoryPath + QDir::separator() + instanceUID + ".dcm");
+
+    DicomImage *dcmimage = new DicomImage(qPrintable(imageToPrintPath));
 
     if (dcmimage && EIS_Normal == dcmimage->getStatus())
     {
@@ -203,7 +198,7 @@ Status PrintDicomSpool::sendImageToPrint(DVPSPrintMessageHandler& printConnectio
     } 
     else 
     {
-        DEBUG_LOG("spooler: unable to load image file " + currentImageToPrintPath );
+        DEBUG_LOG("spooler: unable to load image file " + imageToPrintPath );
     }
     
     delete dcmimage;
@@ -214,7 +209,7 @@ Status PrintDicomSpool::sendImageToPrint(DVPSPrintMessageHandler& printConnectio
     return Status().setStatus(result);
 }
 
-DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(QString pathStoredPrintDcmtkFile)
+DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathStoredPrintDcmtkFile)
 {
     DcmFileFormat *storedPrintDcmtkFile = NULL;
     DcmDataset *datasetStoredPrintDcmtkFile = NULL;

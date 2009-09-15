@@ -11,26 +11,21 @@
 #include "dicomprinter.h"
 #include "image.h"
 #include "logging.h"
-#include "../core/starviewerapplication.h"
 
 namespace udg
 {
 
-CreateDicomPrintSpool::CreateDicomPrintSpool()
+QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &spoolDirectoryPath)
 {
     QDir spoolDir;
-    //TODO: Spool path hardcode, s'hauria de guardar al settings
-    m_spoolDirectoryPath = UserDataRootPath + QDir::separator() + "Spool";
-    
-    //TODO: S'ha de fer aquí ?
-    if (!spoolDir.exists(m_spoolDirectoryPath))
-    {
-        spoolDir.mkdir(m_spoolDirectoryPath);
-    }
-}
+    QString storedPrintDcmtkFilePath = spoolDirectoryPath + QDir::separator() + "storedPrint.dcm";
 
-void CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob)
-{
+    //TODO: S'ha de fer aquí ? Comprovem si existeix el directori on s'ha de generar l'spool
+    if (!spoolDir.exists(spoolDirectoryPath))
+    {
+        spoolDir.mkdir(spoolDirectoryPath);
+    }
+
     m_dicomPrintJob = dicomPrintJob;
     m_dicomPrinter = dicomPrinter;
 
@@ -38,12 +33,14 @@ void CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPri
 
     foreach(Image *image, dicomPrintJob.getPrintPage().getImagesToPrint())
     {
-        transformImageForPrinting(image);
+        transformImageForPrinting(image, spoolDirectoryPath);
     }
 
     setImageBoxAttributes();
 
-    this->createStoredPrintDcmtkFile();
+    this->createStoredPrintDcmtkFile(storedPrintDcmtkFilePath);
+
+    return storedPrintDcmtkFilePath;
 }
 
 void CreateDicomPrintSpool::configureDcmtkDVPSStoredPrint()
@@ -99,7 +96,7 @@ void CreateDicomPrintSpool::configureDcmtkDVPSStoredPrint()
       CERR << "warning: cannot set reflected ambient light to '" << opt_reflection << "', ignoring." << endl;*/
 }
 
-void CreateDicomPrintSpool::transformImageForPrinting(Image *image)
+void CreateDicomPrintSpool::transformImageForPrinting(Image *image, const QString &spoolDirectoryPath)
 {
   // Inicialitzem l'StoredPrint
   //TODO Esbrinar els camps DefaultIllumination i getDefaultReflection, DicomPrint utilitzen els mateixos valors per defecte
@@ -126,10 +123,10 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *image)
   //TODO que significa el false ?
   m_PresentationState->getPrintBitmap(pixelData, bitmapSize, false); 
 
-  this->createHardcopyGrayscaleImage(image, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio);
+  this->createHardcopyGrayscaleImage(image, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio, spoolDirectoryPath);
 }
 
-void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio)
+void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
 {	
 	char tmp[70];
 	OFString tmpString;
@@ -197,8 +194,8 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 		m_PresentationState->writePresentationLUTforPrint(*transformedImageDatasetToPrint);	
 	}
 
-    transformedImagePath = m_spoolDirectoryPath + QDir::separator() + m_tranformedImageToPrintUID + ".dcm";
-	// Temporal per provar!!!	
+    //TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
+    transformedImagePath = spoolDirectoryPath + QDir::separator() + m_tranformedImageToPrintUID + ".dcm";
 	OFCondition saveImageCondition = DVPSHelper::saveFileFormat(qPrintable(transformedImagePath), transformedImageToPrint, true);
 
 	DVPSPresentationLUT *presLUT = m_PresentationState->getPresentationLUTData();
@@ -244,11 +241,10 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
     }
 }
 
-void CreateDicomPrintSpool::createStoredPrintDcmtkFile()
+void CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &storedPrintDcmtkFilePath)
 {	
 	DcmFileFormat *fileformat = new DcmFileFormat();
 	DcmDataset *dataset	= fileformat->getDataset();	
-    QString storedPrintPath = m_spoolDirectoryPath + QDir::separator() + "storedPrint.dcm";
 
     char storedPrintUID[70];
 
@@ -258,6 +254,6 @@ void CreateDicomPrintSpool::createStoredPrintDcmtkFile()
 	m_StoredPrint->setInstanceUID(storedPrintUID);	
 	OFCondition write = m_StoredPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
 	
-	write = DVPSHelper::saveFileFormat(qPrintable(storedPrintPath), fileformat, true);
+	write = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileformat, true);
 }
 } 
