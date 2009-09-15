@@ -20,9 +20,7 @@ class PrintDicomSpool
 {
 public:
 
-    PrintDicomSpool();
-
-    void printSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintjob, QString pathStoredPrintDcmtkFile);
+    void printSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintjob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath);
 
 private:		
 	
@@ -31,17 +29,16 @@ private:
      *que les necessiti. Per exemple printSCUCreateBasicFilmSession necessita DicomPrintJob*/
     DicomPrinter m_dicomPrinter;
     DicomPrintJob m_dicomPrintJob;
-    QString m_spoolPath;
 
-    DVPSStoredPrint* loadStoredPrintFileDcmtk(QString pathStoredPrintDcmtkFile);
+    DVPSStoredPrint* loadStoredPrintFileDcmtk(const QString &pathStoredPrintDcmtkFile);
 
-    void print();
+    void print(const QString &spoolDirectoryPath);
 
     //Crea un Film session
     Status printSCUcreateBasicFilmSession(DVPSPrintMessageHandler& printConnection);
 
     ///Una vegada creada la FilmSession i FilmBox aquest mètode ens permet enviar una imatge a imprimir cap a la impressora
-    Status sendImageToPrint(DVPSPrintMessageHandler& printConnection, size_t imageNumber);
+    Status sendImageToPrint(DVPSPrintMessageHandler& printConnection, size_t imageNumber, const QString &spoolDirectoryPath);
 };
 }; 
 #endif

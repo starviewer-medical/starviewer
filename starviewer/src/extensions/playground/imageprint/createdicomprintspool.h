@@ -22,24 +22,20 @@ class CreateDicomPrintSpool
 {
  public:
 
-    CreateDicomPrintSpool();
-
 	//void setVolume(Volume *p_volume);
-	void createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJo);	
+	QString createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &spoolDirectoryPath);	
 
  private:
 	
-
-    void transformImageForPrinting(Image *image);
+    void transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
 
     void configureDcmtkDVPSStoredPrint();
 
-    void createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio);
-	
+    void createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath);
 
     void setImageBoxAttributes();
 
-    void createStoredPrintDcmtkFile();
+    void createStoredPrintDcmtkFile(const QString &pathStoredPrintDcmtkFile);
 
    // Versió xapusera. Demanar com millorar-ho.
 	char	m_tranformedImageToPrintUID[70];
@@ -48,8 +44,6 @@ class CreateDicomPrintSpool
     DicomPrinter m_dicomPrinter;
 	DVPSStoredPrint		* m_StoredPrint;
 	DVPresentationState * m_PresentationState;
-
-    QString m_spoolDirectoryPath;
 };
 };
 
