@@ -29,16 +29,13 @@ class CreateDicomPrintSpool
 	
     void transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
 
-    void configureDcmtkDVPSStoredPrint();
+    void setBasicFilmBoxAttributes();
 
     void createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath);
 
     void setImageBoxAttributes();
 
     void createStoredPrintDcmtkFile(const QString &pathStoredPrintDcmtkFile);
-
-   // Versió xapusera. Demanar com millorar-ho.
-	char	m_tranformedImageToPrintUID[70];
 
     DicomPrintJob m_dicomPrintJob;
     DicomPrinter m_dicomPrinter;
