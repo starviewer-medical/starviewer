@@ -39,8 +39,8 @@ class CreateDicomPrintSpool
 
     DicomPrintJob m_dicomPrintJob;
     DicomPrinter m_dicomPrinter;
-	DVPSStoredPrint		* m_StoredPrint;
-	DVPresentationState * m_PresentationState;
+	DVPSStoredPrint		* m_storedPrint;
+	DVPresentationState * m_presentationState;
 };
 };
 
