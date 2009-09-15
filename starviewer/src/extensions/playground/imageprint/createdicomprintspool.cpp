@@ -1,11 +1,11 @@
 #include "createdicomprintspool.h"
 
-#include <QDir>
 #include "dcmtk/dcmpstat/dviface.h"
 #include "dcmtk/dcmpstat/dvpssp.h"      /* for class DVPSStoredPrint */
 #include <dvpshlp.h>
 
-//#include "volume.h"
+#include <QDir>
+#include <QDateTime>
 #include "dicomprintjob.h"
 #include "dicomprintpage.h"
 #include "dicomprinter.h"
@@ -122,7 +122,7 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *image, const QStrin
 void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
 {
     char InstanceUIDOfTransformedImage[70];
-    OFString tmpString, requestedImageSizeAsOFString;
+    OFString requestedImageSizeAsOFString;
     DcmFileFormat *transformedImageToPrint = new DcmFileFormat();
     DcmDataset *transformedImageDatasetToPrint = transformedImageToPrint->getDataset();
     QString transformedImagePath;
@@ -150,12 +150,10 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, InstanceUIDOfTransformedImage);		
 
     //TODO:Prova de substiuir per mètode qt ? 
-    DVPSHelper::currentDate(tmpString);
-    transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationDate, tmpString.c_str());
+    transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationDate, qPrintable(QDateTime::currentDateTime().toString("yyyyMMdd")));
 
     //TODO:Prova de substiuir per mètode qt ? 
-    DVPSHelper::currentTime(tmpString);
-    transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationTime, tmpString.c_str());
+    transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationTime, qPrintable(QDateTime::currentDateTime().toString("hhmmss")));
 
     // Hardcopy Grayscale Image Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_PhotometricInterpretation, "MONOCHROME2");
@@ -195,7 +193,7 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
     m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
     m_storedPrint->addImageBox(qPrintable(m_dicomPrinter.getAETitle()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
-                                          m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
+                               m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
 
     DEBUG_LOG(QString("Imatge Creada %1").arg(InstanceUIDOfTransformedImage));
     DEBUG_LOG(qPrintable(m_dicomPrinter.getAETitle()));
