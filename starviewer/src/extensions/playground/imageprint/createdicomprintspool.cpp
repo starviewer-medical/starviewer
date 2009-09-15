@@ -47,53 +47,46 @@ void CreateDicomPrintSpool::configureDcmtkDVPSStoredPrint()
 {
     m_StoredPrint = new DVPSStoredPrint(2000 /*Valor per defecte a dcpstat.cfg getDefaultIlluminaton() */,10 /*Valor per defecte a dcpstat.cfg getDefaultReflection() */, qPrintable(m_dicomPrinter.getAETitle()));
 
-    m_StoredPrint->setLog(&OFConsole::instance(), true, true);
-    if (EC_Normal != m_StoredPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()))) DEBUG_LOG("FALLA setPrinterName");
+    m_StoredPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()));
     //TODO: Cal ? Al inicialitzar DVPSStoredPrint ja li especifiquem el AETITLE
-    if (EC_Normal != m_StoredPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()))) DEBUG_LOG("FALLA set");
+    m_StoredPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));
     //m_StoredPrint->setOriginator("PROVA"); //TODO: Cal especificar l'origen?
 
-    //TODO Això està bé però s'ha de modificar quan s'esculli la impressora correctament.
-    if (EC_Normal != m_StoredPrint->setImageDisplayFormat(2,2)) DEBUG_LOG("FALLA setImageDisplayFormat");  // Aixo s'ha de mirar
+    //TODO: El tamany del la placa està hardcoded
+    m_StoredPrint->setImageDisplayFormat(2,2);  // Aixo s'ha de mirar
 
-    //m_StoredPrint->setImageDisplayFormat(m_printer->getLayout());  // Aixo s'ha de mirar
-    if (EC_Normal != m_StoredPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()))) DEBUG_LOG("FALLA setFilmSize");
+    m_StoredPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()));
 
-    if (EC_Normal != m_StoredPrint->setMagnificationType("CUBIC")) DEBUG_LOG("FALLA setMagnificationType");
-    //if (EC_Normal != m_StoredPrint->setSmoothingType(qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()))) DEBUG_LOG("FALLA setSmoothingType");
-    if (EC_Normal != m_StoredPrint->setBorderDensity(qPrintable(m_dicomPrintJob.getPrintPage().getBorderDensity()))) DEBUG_LOG("FALLA setBorderDensity");
-    if (EC_Normal != m_StoredPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintJob.getPrintPage().getEmptyImageDensity()))) DEBUG_LOG("FALLA setEmptyImageDensity");
-    if (EC_Normal != m_StoredPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMaxDensity()))) ) DEBUG_LOG("FALLA setMaxDensity");
-    if (EC_Normal != m_StoredPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMinDensity())))) DEBUG_LOG("FALLA setMinDensity");
+    m_StoredPrint->setMagnificationType("CUBIC");
+    //m_StoredPrint->setSmoothingType(qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
+    m_StoredPrint->setBorderDensity(qPrintable(m_dicomPrintJob.getPrintPage().getBorderDensity()));
+    m_StoredPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintJob.getPrintPage().getEmptyImageDensity()));
+    m_StoredPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMaxDensity())));
+    m_StoredPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMinDensity())));
     
     if (m_dicomPrintJob.getPrintPage().getFilmOrientation() == "PORTRAIT")
     {
-        if (EC_Normal != m_StoredPrint->setFilmOrientation(DVPSF_portrait)) DEBUG_LOG("FALLA setFilmOrientaion");    
+        m_StoredPrint->setFilmOrientation(DVPSF_portrait);
     }
     else if (m_dicomPrintJob.getPrintPage().getFilmOrientation() == "LANDSCAPE")
     {
-        if (EC_Normal != m_StoredPrint->setFilmOrientation(DVPSF_landscape)) DEBUG_LOG("FALLA setFilmOrientation");
+        m_StoredPrint->setFilmOrientation(DVPSF_landscape);
     }
     
     if (m_dicomPrintJob.getPrintPage().getTrim())
     {
-        if (EC_Normal != m_StoredPrint->setTrim(DVPSH_trim_on)) DEBUG_LOG("FALLA setTrim");
+        m_StoredPrint->setTrim(DVPSH_trim_on);
     }
-    else m_StoredPrint->setTrim(DVPSH_trim_off);   
+    else m_StoredPrint->setTrim(DVPSH_trim_off);
     
     m_StoredPrint->setConfigurationInformation("");
 
     //m_StoredPrint->setResolutionID(NULL);
 
     //TODO: No sé si es guarden al fitxer StoredPrint potser s'han d'especificar en el moment d'imprimir ?
-    if (EC_Normal != m_StoredPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate)) DEBUG_LOG("FALLA setRequestedDecimate.."); //Ob
-    if (EC_Normal != m_StoredPrint->setPrintIllumination(2000)) DEBUG_LOG("FALLA setPrintIllumination");
-    if (EC_Normal != m_StoredPrint->setPrintReflectedAmbientLight(10)) DEBUG_LOG("FALLA setPrintIllumination");
-
-    /*if ((opt_illumination != (OFCmdUnsignedInt)-1)&&(EC_Normal != dvi.getPrintHandler().setPrintIllumination((Uint16)opt_illumination)))
-      CERR << "warning: cannot set illumination to '" << opt_illumination << "', ignoring." << endl;
-    if ((opt_reflection != (OFCmdUnsignedInt)-1)&&(EC_Normal != dvi.getPrintHandler().setPrintReflectedAmbientLight((Uint16)opt_reflection)))
-      CERR << "warning: cannot set reflected ambient light to '" << opt_reflection << "', ignoring." << endl;*/
+    m_StoredPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate); //TODO: Valor hardcoded estudiar, si és el més correcte
+    m_StoredPrint->setPrintIllumination(2000); //TODO: Valor hardcoded estudiar, si és el més correcte
+    m_StoredPrint->setPrintReflectedAmbientLight(10);//TODO: Valor hardcoded estudiar, si és el més correcte
 }
 
 void CreateDicomPrintSpool::transformImageForPrinting(Image *image, const QString &spoolDirectoryPath)
