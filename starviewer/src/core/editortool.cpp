@@ -39,7 +39,7 @@ EditorTool::EditorTool( QViewer *viewer, QObject *parent )
     m_2DViewer->setCursor( QCursor( QPixmap(":/images/pencilcursor.png") ) );
     this->initialize();
 
-    // \TODO:cada cop que canvïi l'input cal fer algunes inicialitzacions
+    // \TODO:cada cop que canvïi l'input a l'overlay cal fer algunes inicialitzacions
     connect( m_2DViewer, SIGNAL(overlayChanged() ), SLOT( initialize() ) );
 }
 
@@ -138,21 +138,6 @@ void EditorTool::handleEvent( unsigned long eventID )
 
 void EditorTool::increaseState()
 {
-/*
-    // Prova!!!!!!!!!!!!!!!!!
-    itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
-
-    minmaxCalc->SetImage(m_2DViewer->getOverlayInput()->getItkData());
-    minmaxCalc->SetRegion(m_2DViewer->getOverlayInput()->getItkData()->GetRequestedRegion());
-    minmaxCalc->Compute();
-
-    m_outsideValue = minmaxCalc->GetMinimum();
-    m_insideValue  = minmaxCalc->GetMaximum();
-
-    DEBUG_LOG( QString( "Initialize: Minim = %1 // Maxim = %2" ).arg( m_outsideValue ).arg( m_insideValue ) );
-    // Prova!!!!!!!!!!!!!!!!!
-*/
-
     switch( m_editorState )
     {
     case Paint:
@@ -290,8 +275,8 @@ void EditorTool::setPaintCursor()
         double spacing[3];
         m_2DViewer->getInput()->getSpacing(spacing);
         double sizeView[2];
-        sizeView[0]=(double)size*spacing[0];
-        sizeView[1]=(double)size*spacing[1];
+        sizeView[0]=(double)(size+0.5)*spacing[0];
+        sizeView[1]=(double)(size+0.5)*spacing[1];
   
         points->SetPoint(0, pos[0] - sizeView[0], pos[1] - sizeView[1], pos[2]-1);
         points->SetPoint(1, pos[0] + sizeView[0], pos[1] - sizeView[1], pos[2]-1);
@@ -347,8 +332,8 @@ void EditorTool::eraseMask()
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
-    centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
-    centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
+    centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
+    centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
     index[2]=m_2DViewer->getCurrentSlice();
 
     for(i=-m_editorSize;i<=m_editorSize;i++)
@@ -380,8 +365,8 @@ void EditorTool::paintMask()
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
-    centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
-    centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
+    centralIndex[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
+    centralIndex[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
     index[2]=m_2DViewer->getCurrentSlice();
     for(i=-m_editorSize;i<=m_editorSize;i++)
     {
@@ -403,18 +388,9 @@ void EditorTool::eraseSliceMask()
 {
     int i,j;
     Volume::VoxelType *value;
-    double pos[3];
-    double origin[3];
-    double spacing[3];
-    int centralIndex[3];
     int index[3];
     int ext[6];
     m_2DViewer->getInput()->getWholeExtent(ext);
-    m_2DViewer->getCurrentCursorImageCoordinate(pos);
-    m_2DViewer->getInput()->getSpacing(spacing);
-    m_2DViewer->getInput()->getOrigin(origin);
-    centralIndex[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
-    centralIndex[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
     index[2]=m_2DViewer->getCurrentSlice();
     for(i=ext[0];i<=ext[1];i++)
     {
@@ -443,8 +419,8 @@ void EditorTool::eraseRegionMask()
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getInput()->getSpacing(spacing);
     m_2DViewer->getInput()->getOrigin(origin);
-    index[0]=(int)(((double)pos[0]-origin[0])/spacing[0]);
-    index[1]=(int)(((double)pos[1]-origin[1])/spacing[1]);
+    index[0]=(int)((((double)pos[0]-origin[0])/spacing[0])+0.5);
+    index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
     index[2]=m_2DViewer->getCurrentSlice();
     eraseRegionMaskRecursive(index[0],index[1],index[2]);
 }

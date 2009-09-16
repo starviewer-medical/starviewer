@@ -85,6 +85,7 @@ private slots:
     double calculateMaskVolume();
 
     /// Refresca el resultat del volum
+	void updateVolumeForced();
     void updateVolume();
 
     /// Visualitza la màscara donats uns thresholds
