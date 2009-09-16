@@ -89,7 +89,10 @@ QStringList DicomPrinterManager::getAvailableFilmSizeValues()
 QStringList DicomPrinterManager::getAvailableFilmLayoutValues()
 {
     QStringList filmLayoutValuesTemp;
-    filmLayoutValuesTemp <<"1,1" << "1,2" << "2,2" << "2,3" << "3,3 " << "3,4" << "3,5" << "4,4" << "4,5";
+
+    filmLayoutValuesTemp <<"STANDARD\1,1" << "STANDARD\1,2" << "STANDARD\2,2" << "STANDARD\2,3" << "STANDARD\3,3 " << "STANDARD\3,4" 
+                         << "STANDARD\3,5" << "STANDARD\4,4" << "STANDARD\4,5" << "STANDARD\4,6" << "STANDARD\5,6" << "STANDARD\5,7";
+
     return filmLayoutValuesTemp;
 }
 
