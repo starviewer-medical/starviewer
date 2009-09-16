@@ -72,7 +72,7 @@ DicomPrintPage FakeObjects::getFakeDicomPrintPage(QString studyUID, QString seri
 
     dicomPrintPage.setBorderDensity("BLACK");
     dicomPrintPage.setEmptyImageDensity("WHITE");
-    dicomPrintPage.setFilmLayout("STANDARD\2,2");
+    dicomPrintPage.setFilmLayout("STANDARD\\2,2");
     dicomPrintPage.setFilmOrientation("PORTRAIT");
     dicomPrintPage.setFilmSize("8INX10IN");
     dicomPrintPage.setMagnificationType("CUBIC");
