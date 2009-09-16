@@ -163,7 +163,8 @@ void QRectumSegmentationExtension::createConnections()
   connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
   connect( m_2DView, SIGNAL( seedPositionChanged(double, double, double) ), SLOT( setSeedPosition(double, double, double) ) );
   connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
-  connect( m_2DView, SIGNAL( overlayChanged( ) ), SLOT( updateVolume() ) );
+  connect( m_2DView, SIGNAL( overlayChanged( ) ), SLOT( updateVolumeForced() ) );
+  connect( m_2DView, SIGNAL( overlayModified() ), SLOT( updateVolume() ) );
   connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
   connect( m_save3DPushButton, SIGNAL( clicked() ), SLOT( saveSegmentation3DVolume() ) );
   connect( m_viewROICheckBox, SIGNAL( stateChanged(int) ), SLOT( viewRegionState(int) ) );
@@ -517,6 +518,47 @@ void QRectumSegmentationExtension::setUpperValue( int x )
     }
 }
 
+///Aquesta funció l'usem quan la toole d'edició no sabem si està actualitzada
+/// Això passa quan inserim un nou overlay (per això està conectat amb el signal overlayChanged)
+void QRectumSegmentationExtension::updateVolumeForced()
+{
+    if(m_resultsLineEdit->isEnabled())
+    {
+        int ext[6];
+        int i,j,k;
+        int cont = 0;
+        m_2DView->getOverlayInput()->getWholeExtent(ext);
+    
+        Volume::VoxelType *value = m_2DView->getOverlayInput()->getScalarPointer();
+        for(i=ext[0];i<=ext[1];i++)
+        {
+            for(j=ext[2];j<=ext[3];j++)
+            {
+                for(k=ext[4];k<=ext[5];k++)
+                {
+                    if ((*value) == m_insideValue)
+                    {
+                        cont++;
+                    }
+                    value++;
+                }
+            }
+        }
+		double spacing[3];
+		m_lesionMaskVolume->getSpacing(spacing);
+		double volume = 1.0;
+
+		for(unsigned int i=0;i<Volume::VDimension;i++)
+		{
+			volume *= spacing[i];
+		}
+
+		m_volume = volume*(double)cont;
+        m_resultsLineEdit->clear();
+        m_resultsLineEdit->insert(QString("%1").arg(m_volume, 0, 'f', 2));
+    }
+}
+
 void QRectumSegmentationExtension::updateVolume()
 {
     if(m_resultsLineEdit->isEnabled())
@@ -570,6 +612,27 @@ double QRectumSegmentationExtension::calculateMaskVolume()
     if ( !m_lesionMaskVolume ) 
         return 0.0;
 
+    int cont;
+	EditorTool* edTool = static_cast<EditorTool*> (m_2DView->getToolProxy()->getTool("EditorTool"));
+    if(edTool!=0)
+    {
+		EditorToolData* edToolData = static_cast<EditorToolData*> ( m_2DView->getToolProxy()->getTool("EditorTool")->getToolData() );
+		if(edToolData!=0)
+		{
+			cont = edToolData->getVolumeVoxels();
+		}
+		else
+		{
+			DEBUG_LOG("No existeix la editor tool");
+			return 0.0;
+		}
+	}
+	else
+	{
+		DEBUG_LOG("No existeix la editor tool");
+		return 0.0;
+	}
+
     double spacing[3];
     m_lesionMaskVolume->getSpacing(spacing);
     double volume = 1.0;
@@ -579,23 +642,10 @@ double QRectumSegmentationExtension::calculateMaskVolume()
         volume *= spacing[i];
     }
 
-    int cont;
-    EditorToolData* edToolData = static_cast<EditorToolData*> ( m_2DView->getToolProxy()->getTool("EditorTool")->getToolData() );
-    if(edToolData!=0)
-    {
-        cont = edToolData->getVolumeVoxels();
-    }
-    else
-    {
-        DEBUG_LOG("No existeix la editor tool");
-        cont = 0;
-    }
-
     m_volume = volume*(double)cont;
 
     return m_volume;
 }
-
 
 void QRectumSegmentationExtension::saveActivedMaskVolume()
 {
