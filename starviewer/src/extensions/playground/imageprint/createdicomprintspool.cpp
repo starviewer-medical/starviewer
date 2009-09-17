@@ -53,7 +53,7 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     //m_storedPrint->setOriginator("PROVA"); //TODO: Cal especificar l'origen?
 
     //TODO: El tamany del la placa està hardcoded
-    m_storedPrint->setImageDisplayFormat(2, 2);  // Aixo s'ha de mirar
+    m_storedPrint->setImageDisplayFormat(m_dicomPrintJob.getPrintPage().getFilmLayoutColumns(), m_dicomPrintJob.getPrintPage().getFilmLayoutRows());  // Aixo s'ha de mirar
 
     m_storedPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()));
 
@@ -94,6 +94,7 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *image, const QStrin
     // Inicialitzem l'StoredPrint
     //TODO Esbrinar els camps DefaultIllumination i getDefaultReflection, DicomPrint utilitzen els mateixos valors per defecte
 
+    //TODO:m_presentationState cal que sigui global ? cada vegada li fem un new cal ?
     DiDisplayFunction *l_displayFunction[DVPSD_max];
     //TODO Els valors per defecte són densitatMíninim H/V (MinPrintResolution) densitatMàxima H/V (MaxPrintResolution) i mida de previsualització de la imatge (PreviewSize)
     m_presentationState = new DVPresentationState(OFstatic_cast(DiDisplayFunction **, l_displayFunction), 1024 , 1024 , 8192 , 8192, 256, 256);
