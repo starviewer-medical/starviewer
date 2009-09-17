@@ -43,7 +43,7 @@ void PrintDicomSpool::print(const QString &spoolDirectoryPath)
     //Connectem amb la impressora
     result = printConnection.negotiateAssociation(NULL/*tlayer només s'utilitza per ssl*/, qPrintable(PacsDevice::getLocalAETitle()),
                                                qPrintable(m_dicomPrinter.getAETitle()), qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(),
-                                               16384 /*targetMaxPDU*/, false /*targetSupportsPLUT*/, true /*targetSupportsAnnotation*/, true /*targetImplicitOnly*/);
+                                               ASC_DEFAULTMAXPDU, false /*targetSupportsPLUT*/, true /*targetSupportsAnnotation*/, true /*targetImplicitOnly*/);
     
     if (result.bad())
     {
