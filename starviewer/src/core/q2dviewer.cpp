@@ -515,7 +515,6 @@ void Q2DViewer::getSliceRange(int &min, int &max)
     {
         if( m_numberOfPhases == 1 ) // si és un volum 3D normal...
         {
-            m_mainVolume->updateInformation();
             int *extent = m_mainVolume->getWholeExtent();
             min = extent[m_lastView * 2];
             max = extent[m_lastView * 2 + 1];

@@ -694,7 +694,6 @@ void QMPRExtension::setInput( Volume *input )
     m_volume->setImages( input->getImages() );
     m_volume->setData( changeInfo->GetOutput() );
 
-    m_volume->updateInformation();
     m_volume->getSpacing( m_axialSpacing );
 
     m_sagitalReslice->SetInput( m_volume->getVtkData() );
@@ -739,7 +738,6 @@ void QMPRExtension::initOrientation()
     En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
 
 */
-    m_volume->updateInformation();
     int extent[6];
     m_volume->getWholeExtent(extent);
     double origin[3];
@@ -1002,7 +1000,6 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
     // Calculate appropriate pixel spacing for the reslicing
     //
-    m_volume->updateInformation();
     double spacing[3];
     m_volume->getSpacing( spacing );
 

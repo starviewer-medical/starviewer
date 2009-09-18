@@ -88,9 +88,6 @@ public:
     */
     ItkImageTypePointer getItkData();
 
-    /// Actualitza la informació del volum
-    void updateInformation();
-
     /// Obté l'origen del volum
     void getOrigin( double  xyz[3] );
     double *getOrigin();
