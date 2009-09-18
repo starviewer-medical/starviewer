@@ -113,12 +113,6 @@ public:
     Volume *getPhaseVolume( int index );
     QList<Image *> getPhaseImages( int index );
 
-    /// TODO: Repassar: això no hauria d'anar així.
-    /// Retorna un nou Volume on la Data és només del sub volume indicat
-    Volume *getSubVolume( int index );
-    /// Reordena les llesques: específic CardiacMPRExtension
-    Volume *orderSlices();
-
     /// Assignar/Obtenir el criteri d'ordenació de les imatges
     void setImageOrderCriteria( unsigned int orderCriteria );
     unsigned int getImageOrderCriteria() const;
