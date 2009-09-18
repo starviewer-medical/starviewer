@@ -1728,8 +1728,8 @@ void Q2DViewer::updateDisplayExtent()
 {
     Q_ASSERT( m_imageActor );
 
-    vtkImageData *input = m_mainVolume->getVtkData();
-    if( !input )
+    // Ens assegurem que tenim dades vàlides
+    if( !m_mainVolume->getVtkData() )
         return;
 
 	//TODO potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
@@ -1745,8 +1745,7 @@ void Q2DViewer::updateDisplayExtent()
     else
         sliceValue = m_currentSlice*m_numberOfPhases + m_currentPhase;
 
-    input->UpdateInformation();
-    int *wholeExtent = input->GetWholeExtent();
+    int *wholeExtent = m_mainVolume->getWholeExtent();
     switch( m_lastView )
     {
         case Axial:
