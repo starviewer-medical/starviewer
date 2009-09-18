@@ -5,8 +5,8 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#ifndef UDGSTOREDDCMTK_H
-#define UDGSTOREDDCMTK_H
+#ifndef UDGCREATEDICOMPRINTSPOOL_H
+#define UDGCREATEDICOMPRINTSPOOL_H
 
 #include "dicomprintjob.h"
 #include "dicomprinter.h"

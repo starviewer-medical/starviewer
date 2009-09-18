@@ -1,5 +1,5 @@
-#ifndef UDGFAKEOBJECTS_H
-#define UDGFAKEOBJECTS_H
+#ifndef UDGPRINTDICOMSPOOL_H
+#define UDGPRINTDICOMSPOOL_H
 
 #include <QString>
 
