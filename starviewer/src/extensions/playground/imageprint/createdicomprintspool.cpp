@@ -45,21 +45,37 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
 
 void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
 {
-    m_storedPrint = new DVPSStoredPrint(2000 /*Valor per defecte a dcpstat.cfg getDefaultIlluminaton() */,10 /*Valor per defecte a dcpstat.cfg getDefaultReflection() */, qPrintable(m_dicomPrinter.getAETitle()));
+    /*El constructor del DVPStoredPrint se li ha de passar com a paràmetres
+        1r El tag (2010,015E) Illumination de la Basic Film Box
+        2n El tag (2010,0160) Reflected Ambient Light de la Basic Film Box
+        3r AETitle del Starviewer
 
-    m_storedPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()));
-    //TODO: Cal ? Al inicialitzar DVPSStoredPrint ja li especifiquem el AETITLE
-    m_storedPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));
-    //m_storedPrint->setOriginator("PROVA"); //TODO: Cal especificar l'origen?
+        Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se 
+        suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
+        s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
+     */
+    //TODO preguntar perquè necessita el Illumination i Reflected Ambient Ligth, preguntar si realement són aquests tags
+    m_storedPrint = new DVPSStoredPrint(2000 ,10 , qPrintable(m_dicomPrinter.getAETitle()));
+    m_storedPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));//S'ha d'indicar el AETitle de la impressora
 
-    //TODO: El tamany del la placa està hardcoded
-    m_storedPrint->setImageDisplayFormat(m_dicomPrintJob.getPrintPage().getFilmLayoutColumns(), m_dicomPrintJob.getPrintPage().getFilmLayoutRows());  // Aixo s'ha de mirar
+    //Indiquem el layout de la placa
+    m_storedPrint->setImageDisplayFormat(m_dicomPrintJob.getPrintPage().getFilmLayoutColumns(), m_dicomPrintJob.getPrintPage().getFilmLayoutRows());
 
     m_storedPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()));
 
-    m_storedPrint->setMagnificationType("CUBIC");
-    //m_storedPrint->setSmoothingType(qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
+    //Interpolació que s'aplicarà si s'ha d'escalar o ampliar la imatge perquè càpiga a la cel·la
+    m_storedPrint->setMagnificationType(qPrintable(m_dicomPrintJob.getPrintPage().getMagnificationType()));
+
+    if (m_dicomPrintJob.getPrintPage().getMagnificationType().compare("CUBIC"))
+    {
+        /*El Smoothing Type, tag 2010,0080 del Basic Film Box, només se li pot donar valor sir el tag Magnification Type 2010,0060 té com a valor 'CUBIC'
+          Especifica el tipus de funció d'interpollació a aplicar*/
+        m_storedPrint->setSmoothingType(qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
+    }
+
+    //Densitat del marc que separa les imatges
     m_storedPrint->setBorderDensity(qPrintable(m_dicomPrintJob.getPrintPage().getBorderDensity()));
+    //Densitat de les cel·les buides
     m_storedPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintJob.getPrintPage().getEmptyImageDensity()));
     m_storedPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMaxDensity())));
     m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMinDensity())));
@@ -73,20 +89,30 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
         m_storedPrint->setFilmOrientation(DVPSF_landscape);
     }
     
-    if (m_dicomPrintJob.getPrintPage().getTrim())
-    {
-        m_storedPrint->setTrim(DVPSH_trim_on);
-    }
-    else m_storedPrint->setTrim(DVPSH_trim_off);
+    m_storedPrint->setTrim(m_dicomPrintJob.getPrintPage().getTrim() ? DVPSH_trim_on : DVPSH_trim_off);
     
-    m_storedPrint->setConfigurationInformation("");
+    /*Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions 
+      amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora*/
+    //m_storedPrint->setConfigurationInformation("");
 
+     /*Tag Requested Resolution ID (2020,0050) de Basic Film Box serveix per especificar amb quina resolució s'han d'imprimir les imatges, 
+      té dos valors STANTARD i HIGH.
+      No se li assigna valor, perquè mirant el dicom conformance de varies impressores, la majoria no accepten aquest tag i les que l'accepten 
+      només l'accepten amb el valor STANDARD, per tant no s'especifica.
+     */ 
     //m_storedPrint->setResolutionID(NULL);
 
     //TODO: No sé si es guarden al fitxer StoredPrint potser s'han d'especificar en el moment d'imprimir ?
-    m_storedPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate); //TODO: Valor hardcoded estudiar, si és el més correcte
-    m_storedPrint->setPrintIllumination(2000); //TODO: Valor hardcoded estudiar, si és el més correcte
-    m_storedPrint->setPrintReflectedAmbientLight(10);//TODO: Valor hardcoded estudiar, si és el més correcte
+    /* Tag Requested Decimate/Crop Behaviour (2020,0040) de Imagex Box Indica que s'ha de fer si la imatge excedeix el màxim de píxels que suporta la cel·la
+       Hi ha 3 comportaments :
+            - Decimate : Escala la imatge fins que hi càpiga
+            - Crop : El centra de la imatge es posa al centra de la cel·la i tot lo que no hi càpiga no s'imprimeix.
+            - Fail : La impressora ens ha d'indicar que no ha pogut imprimir
+
+       Aquest tag no s'especifica, perquè mirant el dicom conformance de les impressores, per defecte tenen ja establert el comportament més desitjat que és el 
+       del decimate, per això de moment no s'especifica, i la impressora es comportarà com estigui definida per defecte.
+     */
+    //m_storedPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate); 
 }
 
 void CreateDicomPrintSpool::transformImageForPrinting(Image *image, const QString &spoolDirectoryPath)
