@@ -155,48 +155,51 @@ void Volume::setData( VtkImageTypePointer vtkImage )
     m_dataLoaded = true;
 }
 
-void Volume::updateInformation()
-{
-    getVtkData()->UpdateInformation();
-}
-
 void Volume::getOrigin( double xyz[3] )
 {
+    getVtkData()->UpdateInformation();
     getVtkData()->GetOrigin( xyz );
 }
 
 double *Volume::getOrigin()
 {
+    getVtkData()->UpdateInformation();
     return getVtkData()->GetOrigin();
 }
 
 void Volume::getSpacing( double xyz[3] )
 {
+    getVtkData()->UpdateInformation();
     getVtkData()->GetSpacing( xyz );
 }
 
 double *Volume::getSpacing()
 {
+    getVtkData()->UpdateInformation();
     return getVtkData()->GetSpacing();
 }
 
 void Volume::getWholeExtent( int extent[6] )
 {
+    getVtkData()->UpdateInformation();
     getVtkData()->GetWholeExtent( extent );
 }
 
 int *Volume::getWholeExtent()
 {
+    getVtkData()->UpdateInformation();
     return getVtkData()->GetWholeExtent();
 }
 
 int *Volume::getDimensions()
 {
+    getVtkData()->UpdateInformation();
     return getVtkData()->GetDimensions();
 }
 
 void Volume::getDimensions( int dims[3] )
 {
+    getVtkData()->UpdateInformation();
     getVtkData()->GetDimensions( dims );
 }
 

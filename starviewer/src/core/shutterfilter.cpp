@@ -61,7 +61,6 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
             if( status.good() )
             {
                 // obtenim els paràmetres de les coordenades per mapejar bé els punts a l'espai
-                m_inputData->updateInformation();
                 double origin[3];
                 double spacing[3];
                 m_inputData->getOrigin( origin );
@@ -214,7 +213,6 @@ void ShutterFilter::setRectangularShutter( double leftVertical, double rightVert
 {
     DEBUG_LOG( QString("Coordenades shutter RECTANGULAR: [LV,RV,UH,LH] %1,%2,%3,%4")
                 .arg( leftVertical ).arg( rightVertical ).arg( upperHorizontal ).arg( lowerHorizontal ) );
-    m_inputData->updateInformation();
     double origin[3];
     m_inputData->getOrigin( origin );
 
@@ -257,7 +255,6 @@ void ShutterFilter::setPolygonalShutter( std::vector< double[2] > vtkNotUsed(ver
 void ShutterFilter::setCircularShutter( double center[2], double radius )
 {
     DEBUG_LOG( QString("CIRCULAR shutter, centre: %1,%2 radi: %3").arg( center[0] ).arg( center[1] ).arg( radius ) );
-    m_inputData->updateInformation();
     double origin[3];
     double spacing[3];
     m_inputData->getOrigin( origin );
@@ -296,7 +293,6 @@ void ShutterFilter::setBitmapShutter( unsigned char *data, unsigned int vtkNotUs
 
     // creem el vtkImageData a partir del bitmap del DICOM
     vtkImageData *bitmapShutter = vtkImageData::New();
-    m_inputData->updateInformation();
     bitmapShutter->SetDimensions( m_inputData->getDimensions() );
     bitmapShutter->SetWholeExtent( m_inputData->getWholeExtent() );
 //                 bitmapShutter->SetExtent( m_inputData->GetExtent() );
