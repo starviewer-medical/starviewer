@@ -10,6 +10,7 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "series.h"
+#include "image.h"
 #include "study.h"
 #include "patient.h"
 #include "toolmanager.h"
@@ -168,7 +169,7 @@ void QVSIReconstructionExtension::computeTTP( )
     start[1]=0;
     start[2]=0;
     Volume::ItkImageType::SizeType size = m_mainVolume->getItkData()->GetBufferedRegion().GetSize();
-    size[2]=m_mainVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_mainVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
     Volume::ItkImageType::Pointer mapImage = Volume::ItkImageType::New();
@@ -219,8 +220,8 @@ void QVSIReconstructionExtension::computeTTP( )
     unsigned int i,j,k,p;
     std::ofstream fout("perfu.dat", ios::out);
 
-    unsigned int kend=m_mainVolume->getSeries()->getNumberOfSlicesPerPhase();
-    unsigned int pend=m_mainVolume->getSeries()->getNumberOfPhases();
+    unsigned int kend=m_mainVolume->getNumberOfSlicesPerPhase();
+    unsigned int pend=m_mainVolume->getNumberOfPhases();
     mttIter.GoToBegin();
     for (k=0;k<kend;k++)
     {
@@ -355,7 +356,7 @@ void QVSIReconstructionExtension::computeTTP( )
                 }
                 else
                 {
-                   mapIter.Set(((int)(mttIter.Get()*255)/m_mainVolume->getSeries()->getNumberOfPhases()));//Ho escalem pq hi hagi tants valors com colors de la LuT
+                   mapIter.Set(((int)(mttIter.Get()*255)/m_mainVolume->getNumberOfPhases()));//Ho escalem pq hi hagi tants valors com colors de la LuT
                 }
                 if(mapIter.Get()>m_mapMax)
                 {
@@ -400,7 +401,7 @@ void QVSIReconstructionExtension::createColorMap( )
     //m_mapMax=155;
     //std::cout<<"Max Map:"<<m_mapMax<<", Min Map:"<<m_mapMin<<std::endl;
     /*mapMin=0;
-    mapMax=m_mainVolume->getSeries()->getNumberOfPhases();*/
+    mapMax=m_mainVolume->getNumberOfPhases();*/
     vtkLookupTable* mapHueLut = vtkLookupTable::New();
     mapHueLut->SetTableRange( m_mapMin, m_mapMax );
     mapHueLut->SetHueRange( 0.75, 0.0 );
@@ -447,7 +448,7 @@ void QVSIReconstructionExtension::createColorMap2( )
     //m_mapMax=155;
     //std::cout<<"Max Map:"<<m_mapMax<<", Min Map:"<<m_mapMin<<std::endl;
     /*mapMin=0;
-    mapMax=m_mainVolume->getSeries()->getNumberOfPhases();*/
+    mapMax=m_mainVolume->getNumberOfPhases();*/
     vtkLookupTable* mapHueLut = vtkLookupTable::New();
     mapHueLut->SetTableRange( m_mapMin, m_mapMax );
     mapHueLut->SetHueRange( 0.75, 0.0 );
@@ -537,7 +538,7 @@ void QVSIReconstructionExtension::computeCBV( )
     Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
     std::cout<<"DSC Volume Size: "<<size<<std::endl;
     std::cout<<"End DSC Volume"<<std::endl;
-    size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
     Volume::ItkImageType::Pointer mapImage = Volume::ItkImageType::New();
@@ -585,8 +586,8 @@ void QVSIReconstructionExtension::computeCBV( )
     long cont=0;
     unsigned int i,j,k,p;
 
-    unsigned int kend=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
-    unsigned int pend=m_DSCVolume->getSeries()->getNumberOfPhases();
+    unsigned int kend=m_DSCVolume->getNumberOfSlicesPerPhase();
+    unsigned int pend=m_DSCVolume->getNumberOfPhases();
     sbIter.GoToBegin();
     rCBVIter.GoToBegin();
     mapIter.GoToBegin();
@@ -956,7 +957,7 @@ void QVSIReconstructionExtension::computeVSI( )
     Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
     std::cout<<"DSC Volume Size: "<<size<<std::endl;
     std::cout<<"End DSC Volume"<<std::endl;
-    size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
     Volume::ItkImageType::Pointer mapImage = Volume::ItkImageType::New();
@@ -1051,8 +1052,8 @@ void QVSIReconstructionExtension::computeVSI( )
     long cont=0;
     unsigned int i,j,k,p;
 
-    unsigned int kend=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
-    unsigned int pend=m_DSCVolume->getSeries()->getNumberOfPhases();
+    unsigned int kend=m_DSCVolume->getNumberOfSlicesPerPhase();
+    unsigned int pend=m_DSCVolume->getNumberOfPhases();
     sbIter.GoToBegin();
     presbIter.GoToBegin();
     rCBVIter.GoToBegin();
@@ -1376,9 +1377,9 @@ void QVSIReconstructionExtension::computeVSI( )
     postsbIter.GoToBegin();
     postIter.GoToBegin();
     mapIter.GoToBegin();
-    kend=m_SEPreVolume->getSeries()->getNumberOfSlicesPerPhase();
-    pend=m_SEPreVolume->getSeries()->getNumberOfPhases();
-    std::cout<<"End getSlices: "<<pend<<" "<<Nbaseline<<" "<<m_SEPostVolume->getSeries()->getNumberOfPhases()<<"!!!"<<std::endl;
+    kend=m_SEPreVolume->getNumberOfSlicesPerPhase();
+    pend=m_SEPreVolume->getNumberOfPhases();
+    std::cout<<"End getSlices: "<<pend<<" "<<Nbaseline<<" "<<m_SEPostVolume->getNumberOfPhases()<<"!!!"<<std::endl;
     for (k=0;k<kend;k++)
     {
         initialMapIter = mapIter;
@@ -1420,15 +1421,15 @@ void QVSIReconstructionExtension::computeVSI( )
 //     mapWriter3->SetInput(mapImage);
 //     mapWriter3->Update();
 
-    kend=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
-    pend=m_DSCVolume->getSeries()->getNumberOfPhases();
+    kend=m_DSCVolume->getNumberOfSlicesPerPhase();
+    pend=m_DSCVolume->getNumberOfPhases();
     std::cout<<"End recorregut6: "<<std::endl;
-    std::cout<<"Init recorregut7: ["<<size[0]<<", "<<size[1]<<", "<<pend - m_SEPostVolume->getSeries()->getNumberOfPhases()<<" ("<<pend<<"), "<<kend<<"]"<<m_SEPreVolume->getSeries()->getNumberOfPhases()<<std::endl;
+    std::cout<<"Init recorregut7: ["<<size[0]<<", "<<size[1]<<", "<<pend - m_SEPostVolume->getNumberOfPhases()<<" ("<<pend<<"), "<<kend<<"]"<<m_SEPreVolume->getNumberOfPhases()<<std::endl;
     DSCiter.GoToBegin();
     preGEIter.GoToBegin();
     postGEIter.GoToBegin();
     mapIter.GoToBegin();
-    std::cout<<"End getSlices: "<<pend<<" "<<Nbaseline<<" "<<m_SEPostVolume->getSeries()->getNumberOfPhases()<<"!!!"<<std::endl;
+    std::cout<<"End getSlices: "<<pend<<" "<<Nbaseline<<" "<<m_SEPostVolume->getNumberOfPhases()<<"!!!"<<std::endl;
     for (k=0;k<kend;k++)
     {
         initialMapIter = mapIter;
@@ -1438,7 +1439,7 @@ void QVSIReconstructionExtension::computeVSI( )
         DSCiter.SetIndex(DSCslicestart);*/
         for (p=0;p<pend;p++)
         {
-            if(p<(unsigned int)m_SEPreVolume->getSeries()->getNumberOfPhases())//per fer les mitjanes entre els mateixos valors que l'SE
+            if(p<(unsigned int)m_SEPreVolume->getNumberOfPhases())//per fer les mitjanes entre els mateixos valors que l'SE
             {
                 for (j=0;j<size[1];j++)
                 {
@@ -1447,7 +1448,7 @@ void QVSIReconstructionExtension::computeVSI( )
                         value = DSCiter.Get();
                         valuesb = preGEIter.Get();
                         //Calculem la mitjana de totes les series valors
-                        preGEIter.Set(valuesb + ((double)value)/m_SEPreVolume->getSeries()->getNumberOfPhases());
+                        preGEIter.Set(valuesb + ((double)value)/m_SEPreVolume->getNumberOfPhases());
                         //mapIter.Set((int)presbIter.Get());
                         ++DSCiter;
                         ++preGEIter;
@@ -1455,7 +1456,7 @@ void QVSIReconstructionExtension::computeVSI( )
                         ++mapIter;
                     }
                 }
-            }else if(p>=pend-m_SEPreVolume->getSeries()->getNumberOfPhases()){
+            }else if(p>=pend-m_SEPreVolume->getNumberOfPhases()){
                 for (j=0;j<size[1];j++)
                 {
                     for (i=0;i<size[0];i++)
@@ -1463,7 +1464,7 @@ void QVSIReconstructionExtension::computeVSI( )
                         value = DSCiter.Get();
                         valuesb = postGEIter.Get();
                         //Calculem la mitjana de totes les series valors
-                        postGEIter.Set(valuesb + ((double)value)/m_SEPreVolume->getSeries()->getNumberOfPhases());
+                        postGEIter.Set(valuesb + ((double)value)/m_SEPreVolume->getNumberOfPhases());
                         mapIter.Set((int)(preGEIter.Get()-postGEIter.Get()));
                         ++DSCiter;
                         ++preGEIter;
@@ -1527,7 +1528,7 @@ void QVSIReconstructionExtension::computeVSI( )
                     rGEMeanIter.Set(0.0);
                 }
                 /*meanGE=rGEMeanIter.Get();
-                rGEMeanIter.Set(meanGE/(double)m_SEPostVolume->getSeries()->getNumberOfPhases());*/
+                rGEMeanIter.Set(meanGE/(double)m_SEPostVolume->getNumberOfPhases());*/
 
                 if( postsbIter.Get()!=0 && presbIter.Get()!=0){
                     rSEMeanIter.Set(-1.0*log(postsbIter.Get()/presbIter.Get())/TEdyn);
@@ -1537,7 +1538,7 @@ void QVSIReconstructionExtension::computeVSI( )
                     rSEMeanIter.Set(0.0);
                 }
                 /*meanSE=rSEMeanIter.Get();
-                rSEMeanIter.Set(meanSE/(double)m_SEPostVolume->getSeries()->getNumberOfPhases());*/
+                rSEMeanIter.Set(meanSE/(double)m_SEPostVolume->getNumberOfPhases());*/
                 mapIter.Set((int)rGEMeanIter.Get());
                 ++postsbIter;
                 ++presbIter;
@@ -1556,7 +1557,7 @@ void QVSIReconstructionExtension::computeVSI( )
 
     std::cout<<std::endl<<"End recorregut7: rse="<<rsecont<<" // rge="<<rgecont<<std::endl;
     std::cout<<"End recorregut7: min="<<minGE<<" // max="<<maxGE<<std::endl;
-    std::cout<<"Init recorregut8: ["<<size[0]<<", "<<size[1]<<", "<<pend - m_SEPostVolume->getSeries()->getNumberOfPhases()<<" ("<<pend<<"), "<<kend<<"]"<<std::endl;
+    std::cout<<"Init recorregut8: ["<<size[0]<<", "<<size[1]<<", "<<pend - m_SEPostVolume->getNumberOfPhases()<<" ("<<pend<<"), "<<kend<<"]"<<std::endl;
     psiIter.GoToBegin();
     rSEMeanIter.GoToBegin();
     rGEMeanIter.GoToBegin();
@@ -1668,9 +1669,9 @@ void QVSIReconstructionExtension::computeVSI( )
     m_2DView_2->resetWindowLevelToDefault();
 
     m_sliceViewSlider->setMinimum(0);
-    m_sliceViewSlider->setMaximum(m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase()-1);
+    m_sliceViewSlider->setMaximum(m_DSCVolume->getNumberOfSlicesPerPhase()-1);
     m_sliceSpinBox->setMinimum(0);
-    m_sliceSpinBox->setMaximum(m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase()-1);
+    m_sliceSpinBox->setMaximum(m_DSCVolume->getNumberOfSlicesPerPhase()-1);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
     int* ext= m_mapVolume->getWholeExtent();
@@ -1702,7 +1703,7 @@ void QVSIReconstructionExtension::applyFilterMapImage( )
         start[2]=0;
         std::cout<<"Init Filter Volume"<<std::endl;
         Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
-        size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+        size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
         region.SetSize(size);
         region.SetIndex(start);
         Volume::ItkImageType::Pointer auxImage = Volume::ItkImageType::New();
@@ -1816,7 +1817,7 @@ void QVSIReconstructionExtension::applyFilterMapImage2( )
         start[2]=0;
         std::cout<<"Init Filter Volume"<<std::endl;
         Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
-        size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+        size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
         region.SetSize(size);
         region.SetIndex(start);
         Volume::ItkImageType::Pointer auxImage = Volume::ItkImageType::New();
@@ -2012,7 +2013,13 @@ void QVSIReconstructionExtension::contextMenuEvent(QContextMenuEvent *event)
 
         QString seriesUID;
         if( m_mainVolume )
-            seriesUID = m_mainVolume->getSeries()->getInstanceUID();
+        {
+            // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
+            // del volum per poder eliminar el mètode Volume::getSeries()
+            // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
+            // Llavors no necessitarem especificar-li cap UID de Sèrie
+            seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
+        }
         patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
 
     //}

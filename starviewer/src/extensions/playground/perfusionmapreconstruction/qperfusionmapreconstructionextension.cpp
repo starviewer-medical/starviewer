@@ -11,6 +11,7 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "series.h"
+#include "image.h"
 #include "study.h"
 #include "patient.h"
 #include "toolmanager.h"
@@ -847,7 +848,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         start[1]=0;
         start[2]=0;
         Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
-        size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+        size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
         region.SetSize(size);
         region.SetIndex(start);
         Volume::ItkImageType::Pointer auxImage = Volume::ItkImageType::New();
@@ -1060,7 +1061,13 @@ void QPerfusionMapReconstructionExtension::contextMenuEvent(QContextMenuEvent *e
 
         QString seriesUID;
         if( m_mainVolume )
-            seriesUID = m_mainVolume->getSeries()->getInstanceUID();
+        {
+            // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
+            // del volum per poder eliminar el mètode Volume::getSeries()
+            // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
+            // Llavors no necessitarem especificar-li cap UID de Sèrie
+            seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
+        }
         patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
 
     //}
@@ -1068,17 +1075,9 @@ void QPerfusionMapReconstructionExtension::contextMenuEvent(QContextMenuEvent *e
 
 void QPerfusionMapReconstructionExtension::setSeries(Series *series)
 {
-    QString modality = series->getModality();
-    if( modality == "KO" || modality == "PR" || modality == "SR" )
-    {
-        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
-    }
-    else
-    {
-        m_DSCLineEdit->clear();
-        m_DSCLineEdit->insert(series->getDescription());
-        m_DSCVolume = series->getFirstVolume();
-    }
+    m_DSCLineEdit->clear();
+    m_DSCLineEdit->insert(series->getDescription());
+    m_DSCVolume = series->getFirstVolume();
 }
 
 bool QPerfusionMapReconstructionExtension::findProbableSeries( )

@@ -263,12 +263,12 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
     m_diffusionInputVolume = input;
 
     m_diffusionSliceSlider->setMinimum( 0 );
-    m_diffusionSliceSlider->setMaximum( m_diffusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() -1 );
+    m_diffusionSliceSlider->setMaximum( m_diffusionInputVolume->getNumberOfSlicesPerPhase() -1 );
     m_diffusionSliceSpinBox->setMinimum( 0 );
-    m_diffusionSliceSpinBox->setMaximum(m_diffusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() - 1 );
+    m_diffusionSliceSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfSlicesPerPhase() - 1 );
 
-    m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getSeries()->getNumberOfPhases() -1);
-    m_selectedDiffusionImageSpinBox->setValue(m_diffusionInputVolume->getSeries()->getNumberOfPhases() -1);
+    m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfPhases() -1);
+    m_selectedDiffusionImageSpinBox->setValue(m_diffusionInputVolume->getNumberOfPhases() -1);
 
     DEBUG_LOG("Fem el set diffusion");
     setDiffusionImage( m_selectedDiffusionImageSpinBox->value() );
@@ -331,16 +331,16 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
 
     m_perfusionInputVolume = input;
 
-    m_selectedPerfusionImageSpinBox->setMaximum(m_perfusionInputVolume->getSeries()->getNumberOfPhases() -1);
-    m_selectedPerfusionImageSpinBox->setValue(m_perfusionInputVolume->getSeries()->getNumberOfPhases() -1);
+    m_selectedPerfusionImageSpinBox->setMaximum(m_perfusionInputVolume->getNumberOfPhases() -1);
+    m_selectedPerfusionImageSpinBox->setValue(m_perfusionInputVolume->getNumberOfPhases() -1);
 
     DEBUG_LOG("Set Perfusion");
     setPerfusionImage( m_selectedPerfusionImageSpinBox->value() );
 
     m_perfusionSliceSlider->setMinimum( 0 );
-    m_perfusionSliceSlider->setMaximum( m_perfusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() -1  );
+    m_perfusionSliceSlider->setMaximum( m_perfusionInputVolume->getNumberOfSlicesPerPhase() -1  );
     m_perfusionSliceSpinBox->setMinimum( 0 );
-    m_perfusionSliceSpinBox->setMaximum( m_perfusionInputVolume->getSeries()->getNumberOfSlicesPerPhase() -1 );
+    m_perfusionSliceSpinBox->setMaximum( m_perfusionInputVolume->getNumberOfSlicesPerPhase() -1 );
 
     m_applyRegistrationPushButton->setEnabled( true );
 

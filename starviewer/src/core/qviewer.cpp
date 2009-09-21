@@ -762,7 +762,13 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
 
         QString seriesUID;
         if( m_mainVolume )
-            seriesUID = m_mainVolume->getSeries()->getInstanceUID();
+        {
+            // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
+            // del volum per poder eliminar el mètode Volume::getSeries()
+            // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
+            // Llavors no necessitarem especificar-li cap UID de Sèrie
+            seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
+        }
         patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
 
     }

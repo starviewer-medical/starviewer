@@ -712,7 +712,7 @@ void QMPR2DExtension::releasePushSagitalViewAxisActor()
 
 void QMPR2DExtension::setInput( Volume *input )
 {
-    if( input->getSeries()->getNumberOfPhases() > 1 )
+    if( input->getNumberOfPhases() > 1 )
         m_phasesAlertLabel->setVisible(true);
     else
         m_phasesAlertLabel->setVisible(false);

@@ -10,6 +10,7 @@
 #include "logging.h"
 #include "volume.h"
 #include "series.h"
+#include "image.h"
 #include "imageplane.h"
 #include "drawer.h"
 #include "drawerpolygon.h"
@@ -300,11 +301,13 @@ void ReferenceLinesTool::updateFrameOfReference()
     }
     else
     {
-        Series *series = m_2DViewer->getInput()->getSeries();
-        if( series )
+        // TODO assumim que totes les imatges són de la mateixa sèrie i per això agafem la informació de la primera imatge
+        // Ben fet (les imatges poden ser de diferents sèries), caldria obtenir el frame of reference de la imatge que s'està veient
+        Image *image = m_2DViewer->getInput()->getImage(0,0);
+        if( image )
         {
             // ens guardem el nostre
-            m_myFrameOfReferenceUID = series->getFrameOfReferenceUID();
+            m_myFrameOfReferenceUID = image->getParentSeries()->getFrameOfReferenceUID();
         }
         else
         {

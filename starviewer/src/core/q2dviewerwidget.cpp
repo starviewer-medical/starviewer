@@ -83,7 +83,7 @@ void Q2DViewerWidget::updateProjectionLabel()
 void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
-    m_2DView->setSeries( input->getSeries() );
+    m_2DView->setInput( input );
     updateProjectionLabel();
 }
 
@@ -157,7 +157,7 @@ bool Q2DViewerWidget::hasPhases()
     int phases = 0 ;
     if( m_mainVolume )
     {
-        phases = m_mainVolume->getSeries()->getNumberOfPhases();
+        phases = m_mainVolume->getNumberOfPhases();
     }
     return ( phases > 1 ) ;
 }
