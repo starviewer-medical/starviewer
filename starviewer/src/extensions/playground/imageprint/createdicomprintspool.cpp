@@ -64,13 +64,15 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
 
     m_storedPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()));
 
-    //Interpolació que s'aplicarà si s'ha d'escalar o ampliar la imatge perquè càpiga a la cel·la
+    /*Interpolació que s'aplicarà si s'ha d'escalar o ampliar la imatge perquè càpiga a la cel·la
+     Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
     m_storedPrint->setMagnificationType(qPrintable(m_dicomPrintJob.getPrintPage().getMagnificationType()));
 
     if (m_dicomPrintJob.getPrintPage().getMagnificationType().compare("CUBIC"))
     {
         /*El Smoothing Type, tag 2010,0080 del Basic Film Box, només se li pot donar valor sir el tag Magnification Type 2010,0060 té com a valor 'CUBIC'
-          Especifica el tipus de funció d'interpollació a aplicar*/
+          Especifica el tipus de funció d'interpollació a aplicar.
+          Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
         m_storedPrint->setSmoothingType(qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
     }
 
@@ -93,7 +95,8 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     m_storedPrint->setTrim(m_dicomPrintJob.getPrintPage().getTrim() ? DVPSH_trim_on : DVPSH_trim_off);
     
     /*Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions 
-      amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora*/
+      amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora.
+      Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
     //m_storedPrint->setConfigurationInformation("");
 
      /*Tag Requested Resolution ID (2020,0050) de Basic Film Box serveix per especificar amb quina resolució s'han d'imprimir les imatges, 
@@ -246,26 +249,14 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
 
     for (size_t i = 0; i < numImages; i++)
     {
-        //TODO Assegurar que quan no s'han seleccionat aquests paràmetres tenen valor empty, podria ser que tinguessin valor NONE, funciona igualment ?
+        /*Com atribut del Image Box només especifiquem la polaritat, ja que el Magnification Type (2010,0060), el Smoothing Type (2010,0080) i el Configuration
+          Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes les imatges del Film Box, 
+          s'especifica a nivell de Film Box, els altres tags del Image Box són emplenats per les dcmtk*/
+
         if (!m_dicomPrintJob.getPrintPage().getPolarity().isEmpty())
         {
             m_storedPrint->setImagePolarity(i, qPrintable(m_dicomPrintJob.getPrintPage().getPolarity()));
         }
-
-        //TODO: El podem especificar a nivell de FilmBox, potser seria millor ja que no ho deixem triar a nivell d'imatge
-        if (!m_dicomPrintJob.getPrintPage().getMagnificationType().isEmpty())
-        {
-            m_storedPrint->setImageMagnificationType(i, qPrintable(m_dicomPrintJob.getPrintPage().getMagnificationType()));
-        }
-
-        //TODO: El podem especificar a nivell de FilmBox, potser seria millor ja que no ho deixem triar a nivell d'imatge
-        if (!m_dicomPrintJob.getPrintPage().getSmoothingType().isEmpty())
-        {
-            m_storedPrint->setImageSmoothingType(i, qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
-        }
-     
-        //TODO: Fa falta especificar-lo si té valor null?
-        m_storedPrint->setImageConfigurationInformation(i, NULL);
     }
 }
 
